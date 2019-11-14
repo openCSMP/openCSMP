@@ -81,11 +81,14 @@ class VectorVariable<1U> {
     VectorVariable   CrossProduct( const VectorVariable& v ) const;
     VectorVariable   ProjectOnto( const std::vector<double64>& v ) const;
     VectorVariable   ProjectOnto( const VectorVariable& v ) const;
+  
+    /// normalize length to 1
+    void             EuclideanNormalize() { data = 1.; }
 
     void             In();
     void             Out() const;
-    bool             In( FILE* fp );
-    bool             Out( FILE* fp ) const;
+    bool             In( std::fstream& fp );
+    bool             Out( std::fstream& fp ) const;
     
     friend class TensorVariable<1U>;
 

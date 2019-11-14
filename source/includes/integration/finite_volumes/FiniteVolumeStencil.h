@@ -60,8 +60,8 @@ template<size_t dim>
 class FiniteVolumeStencil {
   public:
     explicit FiniteVolumeStencil( const char* csp_finite_element_type );
-    FiniteVolumeStencil( const FiniteVolumeStencil& fvs );
-    FiniteVolumeStencil& operator=( const FiniteVolumeStencil& fvs );
+    FiniteVolumeStencil( const FiniteVolumeStencil& );
+    FiniteVolumeStencil& operator=( const FiniteVolumeStencil& );
     ~FiniteVolumeStencil();
     void      Initialize( const char* csp_finite_element_type );
     void      Resize( size_t isrf, size_t srfs_per_node, size_t ivol, size_t spts, size_t vpts );
@@ -158,6 +158,7 @@ class FiniteVolumeStencil {
     
   private:
     FiniteVolumeStencil() { /* do not use this default constructor */ };
+    // TODO: flatten all these multidimensional arrays for faster access; use specific type for this
     std::vector<std::pair<size_t,size_t> >  edges_of_element;             ///< = facets
     std::vector<std::vector<size_t> >       facets_surrounding_node;      ///< [node][facet]
     std::vector<std::vector<Point<dim> > >  facet_integration_points;     ///< [isrf][spts][dim]

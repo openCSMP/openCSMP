@@ -4,56 +4,75 @@
 #include "Model.h"
 
 namespace csmp {
-
+/**
+       2D specialisation of ANSYS interface.
+ */
 class ANSYS_Model2D : public Model<2U> {
-  public:
+public:
 
-    /// input from ANSYS *.asc, *.dat, and *-variable.txt files.
-    /// also loads -regions file using prefix from the configuration file
-    ANSYS_Model2D( const char* icem_file_set,
+  /// input from ANSYS *.asc, *.dat, and *-variable.txt files.
+  /// also loads -regions file using prefix from the configuration file
+  ANSYS_Model2D(
+    const char* icem_file_set,
+    const char* regions_file_prefix,
+    const char* variable_file,
+    bool irregular_mesh = false,            /* true = non-box shaped model, false = box shaped model */
+    bool binary_file = true,                /* true = binary, false = ascii */
+    bool use_regions_file = true,           /* true = reduce regions according to regions file, false = does not redure regions */
+    bool create_boundaries = true,          /* true = creates boundaries around model, false = does not create boundaries */
+    bool create_splitboundaries = false );  /* true = creates splitboundaries around model, false = does not create splitboundaries */
+
+  /// ISO or NOT
+  /// input from ANSYS *.asc, *.dat and *-variable.txt files
+  ANSYS_Model2D(
+    bool isoparametric,
+    const char* icem_file_set,
+    const char* variable_file,
+    bool irregular_mesh = false,           /* true = non-box shaped model, false = box shaped model */
+    bool binary_file = true,               /* true = binary, false = ascii */
+    bool use_regions_file = true,          /* true = reduce regions according to regions file, false = does not redure regions */
+    bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
+    bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
+
+  /// input from ANSYS *.asc, *.dat and *-variable.txt files
+  ANSYS_Model2D(
+    const char* icem_file_set,
+    const char* variable_file,
+    bool irregular_mesh = false,           /* true = non-box shaped model, false = box shaped model */
+    bool binary_file = true,               /* true = binary, false = ascii */
+    bool use_regions_file = true,          /* true = reduce regions according to regions file, false = does not redure regions */
+    bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
+    bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
+
+  /// input from ANSYS *.asc, *.dat files; creates empty property database
+  ANSYS_Model2D(
+    const char* icem_file_set,
+    bool irregular_mesh = false,           /* true = non-box shaped model, false = box shaped model */
+    bool binary_file = true,               /* true = binary, false = ascii */
+    bool use_regions_file = true,          /* true = reduce regions according to regions file, false = does not redure regions */
+    bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
+    bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
+
+  virtual ~ANSYS_Model2D();
+
+private:
+
+  void Initialize( bool isoparametric,
+                   const char * mesh_file_set,
+                   const char * regions_file_prefix,
+                   bool irregular_mesh, bool binary_input_file,
+                   bool use_regions_file,
+                   bool create_boundaries,
+                   bool create_splitboundaries );
+
+  void Initialize( const char* mesh_file_set,
                    const char* regions_file_prefix,
-                   const char* variable_file,
-                   bool irregular_mesh    = false,  /* true = non-box shaped model, false = box shaped model */
-                   bool binary_file       = true,   /* true = binary, false = ascii */
-                   bool use_regions_file  = true,   /* true = reduce regions according to regions file, false = does not redure regions */
-                   bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
-	// ISO or NOT 												/// input from ANSYS *.asc, *.dat and *-variable.txt files
-	ANSYS_Model2D(
-		bool isoparametric,
-		const char* icem_file_set,
-		const char* variable_file,
-		bool irregular_mesh = false,  /* true = non-box shaped model, false = box shaped model */
-		bool binary_file = true,   /* true = binary, false = ascii */
-		bool use_regions_file = true,   /* true = reduce regions according to regions file, false = does not redure regions */
-		bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
-    /// input from ANSYS *.asc, *.dat and *-variable.txt files
-    ANSYS_Model2D( const char* icem_file_set,
-                   const char* variable_file,
-                   bool irregular_mesh    = false,  /* true = non-box shaped model, false = box shaped model */
-                   bool binary_file       = true,   /* true = binary, false = ascii */
-                   bool use_regions_file  = true,   /* true = reduce regions according to regions file, false = does not redure regions */
-                   bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
+                   bool irregular_mesh,
+                   bool binary_file,
+                   bool use_regions_file,
+                   bool create_boundaries,
+                   bool create_splitboundaries );
 
-    /// input from ANSYS *.asc, *.dat files
-    /// creates empty property database
-    ANSYS_Model2D( const char* icem_file_set,
-                   bool irregular_mesh    = false,  /* true = non-box shaped model, false = box shaped model */
-                   bool binary_file       = true,   /* true = binary, false = ascii */
-                   bool use_regions_file  = true,   /* true = reduce regions according to regions file, false = does not redure regions */
-                   bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
-
-    virtual ~ANSYS_Model2D();
-
-  private:
-
-	  void Initialize(bool isoparametric, const char * mesh_file_set, const char * regions_file_prefix, bool irregular_mesh, bool binary_input_file, bool use_regions_file, bool create_boundaries);
-
-	  void Initialize( const char* icem_file_set,
-                     const char* regions_file_prefix,
-                     bool irregular_mesh,
-                     bool binary_file,
-                     bool use_regions_file,
-                     bool create_boundaries);
 };
 
 } // end csmp

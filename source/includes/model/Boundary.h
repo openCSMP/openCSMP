@@ -10,33 +10,29 @@ class FiniteElementManager;
 template<size_t> class PropertyDatabase;
 template<size_t> class MeshManager;
 template<typename> class FEM_Data;
+class FaceConstructionData;
 template<size_t> class Point;
 template<size_t> class Node;
 template<size_t> class Element;
+template<size_t> class Face;
 template<size_t> class Region;
 
 
-/** 
+/**
 
-@brief Boundaries are lower dimensional regions=subdomains of the Model
-which consist of Face objects
+@brief Boundary is lower-dimensional subclass and specialisation of ModelSubDomain 
+which consist of Face objects.
 
-@author P. Lang
-@author S.K. Matthai
-@date 2010
-
-Boundaries are collections of Faces (interior and exterior model boundaries)
-made accessible for specific computations.
-Like Region objects, they are contructed from the master 
-region that contains all elements. 
-It must be initialized before boundary operations can proceed.
+Boundaries are collections of Faces covering interior and exterior model boundaries,
+and are made accessible through BoundaryInterface of the Model class.
 
 @section motivation Motivation
 
-To address and carry out computations at material interfaces or model
-boundaries.
+To apply conditions, carry out computations or monitor processes
+at material interfaces or model side boundaries.
 
-To avoid conditional processing of all elements of a model, by treating
+To distinguish surface elements by turning them into Face objects 
+for specific processing, and treating
 boundary-specific calculations separately.
 
 @section consequences Consequences
@@ -45,20 +41,23 @@ Through the use of boundaries essential conditions and coupling terms
 arising at material interfaces can be computed with greater ease and
 efficiency.
 
+Boundary adds an extra variable placement BOUNDARY, which permits
+targeting of variables like 'basal heat flow' etc.
 
-@todo (3) Shall we flag inner/outer parents (adjacent elements) as at boundary or depricate?
-@todo (3) Port any remaining AtBoundary functionality to new framework (EDGE ?) (A)
+@author S.K. Matthai
+@author P. Lang
+@date 2010
 
 */
 template<size_t dim>
-class Boundary : public ModelSubDomain<dim,Face> {
+class Boundary : public ModelSubDomain<dim, Face> {
   public:
-
     // ------------------------------------------------
     // construction of boundaries from scratch
     // ------------------------------------------------
+    Boundary() = delete; ///< there is no sensible default contruction
 
-    /// SKM new constructor: creating boundary from supplied vector of faces
+    /// constructor: creating boundary from supplied vector of faces
     Boundary( const std::string& boundary_name,
               const PropertyDatabase<dim>&,
               typename std::vector<Face<dim>*>::iterator facesBegin,
@@ -75,26 +74,34 @@ class Boundary : public ModelSubDomain<dim,Face> {
 
     Boundary<dim>&  operator=( const Boundary& );
 
+    virtual PLACEMENT Placement() const { return BOUNDARY; }
+    virtual bool      ValidVariable( const char* variableName ) const;
+
+
     // ------------------------------------------------
     // reconstruction of boundaries that existed before
     // ------------------------------------------------
-  
-    /// SKM new constructor: re-constructor of boundary from index data stored in SubDomainInfo
+
+    /// re-constructor of boundary from index data stored in SubDomainInfo
     Boundary( const PropertyDatabase<dim>&,
               MeshManager<dim>&,       ///< not constant since write access is granted to boundary
               const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
-              BOX_BOUNDARY=IRREGULAR );
+              BOX_BOUNDARY = IRREGULAR );
 
-    /// Local variable storage interface
-    virtual PLACEMENT Placement() const { return BOUNDARY; }
-    virtual bool      ValidVariable( const char* variableName ) const;
+    /// re-constructor of boundary from index data stored in SubDomainInfo and faces from the MeshManager
+    Boundary( const PropertyDatabase<dim>&,
+              const size_t&,
+              const std::deque<Node<dim>*>&,
+              const std::deque<Face<dim>*>&,
+              const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
+              BOX_BOUNDARY = IRREGULAR );
 
     /// Visitors
     virtual void Accept( Visitor<dim>& );
 
 
     // -----------------------------------------------
-    // binary input/output
+    //  input/output to binary file
     // -----------------------------------------------
 
     /// assigning the variable values from the FEM_DATA container to the corresponding property of the Boundary
@@ -104,11 +111,14 @@ class Boundary : public ModelSubDomain<dim,Face> {
     template<class Var>
     void OutputVariableTo( const char* property, FEM_Data<Var>& ) const;
 
+
     // ----------------------------------------
-    // building & modification
+    //  boundary initialisation & modification
     // ----------------------------------------
 
-// PHILIP's METHODS
+    /// reestablish nodes based on element container
+    void CreateNodePointerVector();
+  
     /// if parts of this boundary coincide with subsetRegion, this part will pasted to subsetBoundaryToForm
     bool Divide( const Region<dim>& subsetRegion,
                  Boundary<dim>& subsetBoundaryToForm );
@@ -122,7 +132,7 @@ class Boundary : public ModelSubDomain<dim,Face> {
     bool CreateFrom( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
                      const typename std::vector<Face<dim>*>::const_iterator facesEnd,
                      bool updateFaceConnectivity = true,
-                     bool updateIndexes = true);
+                     bool updateIndexes = true );
 
     /// create faces from lower dimensional region
     bool CreateFrom( MeshManager<dim>& meshManager,
@@ -130,6 +140,11 @@ class Boundary : public ModelSubDomain<dim,Face> {
                      const csmp::Index& mtrl_key,
                      BOX_BOUNDARY boxBoundary );
 
+    bool CreateFromForSplitBoundary( MeshManager<dim>& meshManager,
+                     const Region<dim>& region,
+                     const csmp::Index& mtrl_key,
+                     BOX_BOUNDARY boxBoundary );
+    
     /// creates surface / perimeter line of Faces around the region ( only for volume regions in 3D and surface regions in 2D )
     bool CreateAround( MeshManager<dim>&,
                        const FiniteElementManager&,
@@ -142,57 +157,52 @@ class Boundary : public ModelSubDomain<dim,Face> {
                         const Region<dim>&,
                         const Region<dim>& );
 
-    /// establishes connectivity, assigns boundary flags and initializes LVS
-    void Initialize( BOX_BOUNDARY boxBoundary = IRREGULAR , bool updateNeighborConnectivity = true, bool updateIndexes = true );
-
-    /// reestablish nodes based on element container
-    void CreateNodePointerVector();
 
     // ----------------------------------------
-    // various information output
+    //  geometric properties and integrals
     // ----------------------------------------
 
     /// surface area of the boundary
     double64  Area() const;
-  
-    /// length of the perimeter of the boundary
+
+    /// length of the boundary perimeter in 3D, else NaN
     double64  Perimeter() const;
-  
+
     /// surface integral over the variable of interest
     double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
+    
+    /// reports whether the boundary lies on the outside of the whole model
+    bool IsExternal() const;
 
     /// application of single-value Box boundary flagging
     // TODO: should this also do the flagging of the edges etc.
     void AtBoundary( BOX_BOUNDARY boxBoundary );
-  
+
     /// reports the flagging of the boundary with respect to csmp::Box boundary convention
     BOX_BOUNDARY AtBoundary() const { return boundaryFlag_; }
 
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in boundary
-    std::pair<int32,int32>  FaceSpatialDimensions() const;
+    std::pair<int32, int32>  FaceSpatialDimensions() const;
 
-    // ----------------------------------------
-    // screen output
-    // ----------------------------------------
     void Out() const;
 
   protected:
 
+    /// establishes connectivity, assigns boundary flags and initializes LVS
+    void Initialize( BOX_BOUNDARY boxBoundary = IRREGULAR, bool updateNeighborConnectivity = true, bool updateIndexes = true );
+
     /// returns local variables stored at face integration points
     IntegrationPointVariables FaceIntegrationPointVariables() const;
-  
+
     /// returns local variables stored at on the boundary faces
     LocalVariables FaceVariables() const;
 
-  private:
-
-    Boundary();
-
-    // auxilliary binary IO
+  protected:
+    // binary IO
     template<class Var>
-    bool Out( FILE* fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
+    bool Out( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
     template<class Var>
-    bool In( FILE* fp, PLACEMENT place, VARIABLE_TYPE vtype );
+    bool In( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype );
 
     BOX_BOUNDARY boundaryFlag_;
 };

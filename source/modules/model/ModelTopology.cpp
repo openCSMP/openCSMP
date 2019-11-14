@@ -843,9 +843,9 @@ meshes.
 
 The method reports if the input file cannot be opened or if one of the 
 target regions is not contained in the model topology. In the latter case
-a ERROR is raised.  
+a ERROR is raised. 
+ 
 */
-
 bool  isRegionsFileExist( const char* regions_file )
 {
     std::string  file_name(regions_file);
@@ -855,6 +855,8 @@ bool  isRegionsFileExist( const char* regions_file )
         return false;
     return true;
 }
+
+
 void  readDesiredRegions( const char* regions_file,
                           std::set<std::string>& desired_regions )
 {
@@ -1424,6 +1426,18 @@ template void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<2U>& );
 template void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<3U>& );
 
 
+/**
+	return names of regions in the model
+*/
+void ModelTopology::RegionNames(std::vector<std::string>& region_names) const
+{
+	std::string region_name;
+	size_t idx(0U);
+	for (std::map<std::string, std::pair<std::set<std::string>, std::vector<size_t> > >::const_iterator
+		it = model_regions.begin(); it != model_regions.end(); it++) {
+		region_names.push_back( (*it).first );
+	}
+}
 
 /*
     Region properties

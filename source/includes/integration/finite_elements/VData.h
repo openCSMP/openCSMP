@@ -61,9 +61,8 @@ class VData {
     void AddElementTypes( std::vector<int32>::const_iterator first,
                           std::vector<int32>::const_iterator last );
 
-  void AddElementTypes( std::vector<int32>::iterator first,
-                       std::vector<int32>::iterator last );
-  
+    void AddElementTypes( std::vector<int32>::iterator first,
+                          std::vector<int32>::iterator last );
 
     void Resize( size_t nodes_per_element, size_t nbors_per_element, int32 etype, size_t nodes, size_t elmts );
    
@@ -177,6 +176,9 @@ class VData {
     /// rescales vertex coordinate values in given spatial direction
     void ScaleCoordinateToRange( char coordinate_axis, double64 cmin, double64 cmax ); 
   
+    /// empties 'pfverts' container if the contained info is flaky so that later code is prompted to recreate it
+    void RemovePfverts() { pfverts.clear(); }
+  
     /// empties map which stores which nodes lie at boundary and what there BOX_BOUNDARY flag is
     void RemoveBflags();
 
@@ -204,7 +206,8 @@ class VData {
     std::deque<std::vector<long64> >::const_iterator   PfvertsBegin() const;
     std::deque<std::vector<long64> >::const_iterator   PfvertsEnd() const;
   
-    bool WithNeighbourConnectivity() const { return !pfverts.empty(); }
+    /// checks whether pfverts, has right size and contains plausible information (no guarantees!)
+    bool WithNeighbourConnectivity() const;
 
     std::vector<size_t>::const_iterator                PlistBegin( size_t eidx ) const;
     std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
@@ -238,10 +241,10 @@ class VData {
   
 
     /// write mesh to supplied binary file
-    void OutBinary( std::FILE* fp ) const;
+    void OutBinary( std::fstream& fp ) const;
   
     /// read mesh from supplied binary file
-    void InBinary( std::FILE* fp );
+    void InBinary( std::fstream& fp );
   
     /// initialise VData=mesh connectivity structures from binary file
     void InText( std::ifstream& ifs );

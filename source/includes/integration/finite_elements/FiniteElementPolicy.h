@@ -37,17 +37,23 @@ class FiniteElementPolicy {
     Point<dim> IntegrationPoint( size_t ip ) const;
     double64   WeightAtIntegrationPoint( size_t i ) const;
 
-    // DEPRECATE - or call XYZtoRST() in here
+    /// mapping of local points from local to global coordinates
+    Point<dim> RstToXYZ( Point<dim> rst ) const;
+
+    /// interpolation function values at local points
+    void       N_At( const Point<dim>& rst ) const;
+    void       N_At( const Point<dim>& rst, std::vector<double64>& N )  const;
+  
+     // DEPRECATE - or call XYZtoRST() in here
     void       N_AtGlobalPoint( std::vector<double64>& N, const std::vector<double64>& xyz ) const;
     // N_AtPoint();
     void       N_AtBaryCenter( std::vector<double64>& N ) const;
     void       N_AtIntegrationPoint( size_t ipoint, std::vector<double64>& N ) const;
 
-// ADD METHODS FOR AXISYMMETRIC CASES ?
     /// first (constant) derivatives of linear interpolation functions of analytically integrated simplex
-    void	   Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const;
+    void	     Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const;
 
-	void       dN( DenseMatrix<DM_MIN>& ) const;
+	  void       dN( DenseMatrix<DM_MIN>& ) const;
   
     /// first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j)
     double64   dN_AtNode( DenseMatrix<DM_MIN>&, size_t nd, size_t dof=1 ) const;
@@ -62,7 +68,6 @@ class FiniteElementPolicy {
     double64   det_JINV_AtIntegrationPoint( size_t ipoint ) const;
 
     /// interpolation function products matrix for analytically integrated element
-    // DEPRECATE
     void       IntegralNN( DenseMatrix<DM_MIN>& M ) const;
   
     /// initialises the nodes x dim matrix XY stored in the connected finite element class 
@@ -75,11 +80,16 @@ class FiniteElementPolicy {
     template<class Var>
     void       PropertyValueAt( const csmp::Index&,
                                 const std::vector<double64>& xyz, Var& ) const;
-
+    /// scalar version
+    double64   PropertyValueAt( const csmp::Index&, const std::vector<double64>& xyz ) const;
+  
     /// returns the value of any property interpolated to the element's center of gravity
     template<class Var>
     void       PropertyValueAtBaryCenter( const csmp::Index&, Var& ) const;
 
+    /// scalar version
+    double64   PropertyValueAtBaryCenter( const csmp::Index& ) const;
+  
     /// returns the value of any property interpolated to the integration point of interest
     template<class Var>
     void       PropertyValueAtIntegrationPoint( const csmp::Index&, size_t integration_point, Var& ) const;

@@ -1,4 +1,5 @@
 #include "TwoPhaseModel.h"
+#include "CSMP_physical_constants.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ TwoPhaseModel<dim>::TwoPhaseModel()
    k_(std::numeric_limits<double64>::quiet_NaN()),
    K_(PLAIN,std::numeric_limits<double64>::quiet_NaN()),
    ift_(0.05), // N m-1 Danesh (2003), p. 292
-   acc_gravity_(9.8066),
+   acc_gravity_(ACC_GRAVITY),
    tolerance_(numeric_limits<double64>::epsilon()),
    MAX_CAPILLARY_PRESSURE_(4e7), // maximum strength of a rock
    MAX_CAPILLARY_PRESSURE_SLOPE_(1e7), // maximum strength of a rock
@@ -47,7 +48,7 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
    k_(std::numeric_limits<double64>::quiet_NaN()),
    K_(PLAIN,std::numeric_limits<double64>::quiet_NaN()),
    ift_(0.05), // N m-1 Danesh (2003), p. 292
-   acc_gravity_(9.8066),
+   acc_gravity_(ACC_GRAVITY),
    tolerance_(1.0e-17),
    MAX_CAPILLARY_PRESSURE_(4e7), // maximum strength of a rock
    MAX_CAPILLARY_PRESSURE_SLOPE_(1e7),
@@ -119,7 +120,7 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
    muw_(std::numeric_limits<double64>::quiet_NaN()),
    rhn_(std::numeric_limits<double64>::quiet_NaN()),
    rhw_(std::numeric_limits<double64>::quiet_NaN()),
-   acc_gravity_(9.8066),
+   acc_gravity_(ACC_GRAVITY),
    tolerance_(1.0e-17),
    MAX_CAPILLARY_PRESSURE_(4e7), // maximum strength of a rock
    MAX_CAPILLARY_PRESSURE_SLOPE_(1e7),
@@ -358,7 +359,7 @@ void TwoPhaseModel<dim>::Initialize( const Element<dim>& e )
     non const version which allows to set parameters on element 
 */
 template<size_t dim>
-void TwoPhaseModel<dim>::Initialize( Element<dim>& e )
+void TwoPhaseModel<dim>::InitializeAndStore( Element<dim>& e )
  {
     swr_ = e.Read( swr_key_ );
     snr_ = e.Read( snr_key_ );

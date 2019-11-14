@@ -22,6 +22,7 @@
 #include "ConstantFactor.h"
 
 #include "PDE_IntegratorExperimental.h"
+#include "PDE_Integrator_UoM.h"
 #include "SteadyStateDiffusor.h"
 
 // PDE Operators
@@ -152,16 +153,15 @@ void LinearElasticity_Example::Run()
                                // which is needed for deformation simulations
     SAMG_Solver    samg_solver(&settings);
     PDE_IntegratorExperimental<2U,Region>  deformation(samg_solver);
+//    PDE_Integrator_UoM<2U,Region>  deformation(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     PDE_Integrator<2U,Region>  deformation(linear_solver);
 #endif
-    deformation.ScaleEssentialConditions(1.0e15);
 
     PT_op<2U,Element<2U> >     bforces( model.Database(), "force", "displacement" );
     NumIntegral_BT_D_B_dV<2U>  stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement");
     if ( with_plane_stress ) stiffness.PlaneStress();
-  // NB: there is a new policy for surface integration now that is no threaded through this example yet
     NumIntegral_PT_op_dS<2U>   bstresses( model.Database(), "Neumann stress", "displacement" );
     NumIntegral_PT_op_dV<2U>   bodyforce( model.Database(), "gravity force", "displacement");
     NumIntegral_BT_D_op_dV<2U> volstrain( model.Database(), "dilatation", "Young's modulus", "Poisson's ratio", "displacement");
@@ -173,9 +173,8 @@ void LinearElasticity_Example::Run()
     if ( with_volume_strains )    deformation.Add( &volstrain );
     if ( with_pore_pressure )     deformation.Add( &porepressure );
 
-    // XXX FIX ME
 #ifdef CSMP_WITH_SAMG_SOLVER
-    if ( with_boundary_stresses ) deformation.AddBoundaryIntegrals( &bstresses );
+    if ( with_boundary_stresses ) deformation.AddBoundaryIntegral( &bstresses );
 #endif
 
     const bool plane_strain(true);
@@ -186,7 +185,8 @@ void LinearElasticity_Example::Run()
      deformation.AddPostProcess( &postpro );
 
     if ( !restricted_to_rock ) deformation.IntegrateOver( model_domain );
-    else deformation.IntegrateOver( model.Region("rock") );
+    // note! - the model must be supplied here so that the algorithm can search for boundaries that touch the computational domain
+    else deformation.IntegrateOver( model, model.Region("rock") );
 
 
   // ---------------------------------------------------------------------------------------

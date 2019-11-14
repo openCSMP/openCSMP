@@ -116,7 +116,7 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
 /**
  
 @class TwoPhaseVelocityAndVolumeFlux
-@author S.K. Matthaei
+@author S.K. Matthai
 @date 2005
 
 @section motivation Motivation

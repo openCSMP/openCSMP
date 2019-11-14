@@ -30,9 +30,9 @@ public:
     const ostream* getStream() const;
     void setStream(ostream* osptr);
     
-    void addTest(Test* t) throw (TestSuiteError);
-    void addTest(const char* test_name, Test* t) throw(TestSuiteError);
-    void addTestSuite(const TestSuite&) throw(TestSuiteError);
+    void addTest(Test* t);
+    void addTest(const char* test_name, Test* t);
+    void addTestSuite(const TestSuite&);
 
     void run();     // Calls Test::run() repeatedly
     void RunSpecificTest(const char*);

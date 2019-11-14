@@ -735,13 +735,13 @@ void test_Create_SlitRectangle_VSet( VSet<2U> & vset, size_t x_dimension, size_t
      deqElementNeighbors[iElement].resize(4);
   	 
 	 	 //face 1
-     deqElementNeighbors[iElement][1]= j==0?BOTTOM_OUTSIDE:(1+ (iDim_i_-1)*(j-1)+i);
+     deqElementNeighbors[iElement][0]= j==0?BOTTOM_OUTSIDE:(1+ (iDim_i_-1)*(j-1)+i);
      //face 2
-     deqElementNeighbors[iElement][2]= i==iDim_i_-2?RIGHT_OUTSIDE:(1+ (iDim_i_-1)*j+i+1);
+     deqElementNeighbors[iElement][1]= i==iDim_i_-2?RIGHT_OUTSIDE:(1+ (iDim_i_-1)*j+i+1);
      //face iDim_k-1
-     deqElementNeighbors[iElement][3]= j==iDim_j_-2?TOP_OUTSIDE:(1+ (iDim_i_-1)*(j+1)+i);
+     deqElementNeighbors[iElement][2]= j==iDim_j_-2?TOP_OUTSIDE:(1+ (iDim_i_-1)*(j+1)+i);
      //face 4
-     deqElementNeighbors[iElement][4]= i==0?LEFT_OUTSIDE:(1+ (iDim_i_-1)*j+(i-1));
+     deqElementNeighbors[iElement][3]= i==0?LEFT_OUTSIDE:(1+ (iDim_i_-1)*j+(i-1));
      
      const bool over_slit  = (j == y_dimension/2       && i+1 >= x_dimension-depth_of_slit);
      const bool under_slit = (j == (y_dimension/2 - 1) && i+1 >= x_dimension-depth_of_slit);
@@ -888,7 +888,11 @@ void test_Create_SlitRectangle_VSet( VSet<2U> & vset, size_t x_dimension, size_t
 
 
 
-//adapted ??
+/**
+    Creates:
+    - 32 elements (26 hex + 6 pyramids)
+    - 64 nodes
+*/
 void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(32/*26 hexahedrons + 6 pyramids*/);
@@ -935,8 +939,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	}
   	for(size_t iElement = 26U; iElement < 32U; iElement++)
   	{
-      vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_PYRAMID;
-      etypes[iElement] = ISOPARAMETRIC_LINEAR_PRISM;
+      vecElementTypes[iElement] = ISOPARAMETRIC_LINEAR_PYRAMID;
+      etypes[iElement]          = ISOPARAMETRIC_LINEAR_PYRAMID;
   	}
 
     vset.Resize( etypes, npes, epes, nodes, 0, 0 );
@@ -1277,7 +1281,10 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
-
+/**
+    Generates 24 hexahedra + 6 prism elements.
+    The model can be distorted on demand.
+*/
 void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(30/*24 hexahedrons + 6 prisms*/);

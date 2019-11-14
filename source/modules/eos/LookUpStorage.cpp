@@ -102,8 +102,8 @@ bool   LookUpStorage<fT>::BinaryOut( const char* bin_name ) const
     strcpy( name, bin_name );
     strcpy( heading, "LookUpStorage<fT>::BinaryOut: fT grid as binary file");
  
-    FILE*  fp;
-    if ( (fp=fopen( name, "wb")) == NULL ) {
+    fstream fp (name, ios::in | ios::binary);
+    if ( !fp.is_open() ) {
         cout <<"\nLookUpStorage<fT>::BinaryOut: File: "<< bin_name << " could not be opened"<< endl;
         return false;
       }
@@ -123,7 +123,7 @@ bool   LookUpStorage<fT>::BinaryOut( const char* bin_name ) const
     
     skm_C_fwrite( fp, grid ); 
     
-    fclose( fp );
+    fp.close();
 
    cout <<"\n\n'" << bin_name <<"' written successfully..." << endl;
    
@@ -134,8 +134,8 @@ bool   LookUpStorage<fT>::BinaryOut( const char* bin_name ) const
 template<typename fT>
 bool LookUpStorage<fT>::BinaryIn( const char* bin_name )
  {
-    FILE*  fp;  
-    if ( (fp=fopen( bin_name, "rb")) == NULL ) {
+	 fstream fp(bin_name, ios::in | ios::binary);
+    if ( !fp.is_open() ) {
         cout <<"\nLookUpStorage<fT>::BinaryIn: File: "<< bin_name;
         cout <<" could not be opened"<< endl;
         return false;
@@ -159,7 +159,7 @@ bool LookUpStorage<fT>::BinaryIn( const char* bin_name )
     skm_C_fread( fp, input_data ); 
     grid = input_data;
 
-    fclose( fp );
+    fp.close();
     
     cout <<"\nLookUpStorage<double64>::BinaryIn: grid build successfully from binary file." << endl;
     cout.flush();

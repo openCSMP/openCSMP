@@ -46,7 +46,7 @@
 
 #include "PropertyDatabase_Test.h"
 #include "Index_Test.h"
-#include "PropertyData_Test.hpp"
+#include "PropertyData_Test.h"
 
 #include "InputDataManager_Test.h"
 #include "LocalVariableStorage_Test.h"
@@ -86,7 +86,7 @@
 #include "ExponentialTransferFunction_Test.h"
 
 #include "GenericFiniteVolumeTransport_Test.h"
-#include "FiniteVolumeTransportBasics_Test.h"
+//#include "FiniteVolumeTransportBasics_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
 
 // new tests from SKM
@@ -94,18 +94,25 @@
 
 #include "Vset_TestCase.h"
 
+//variable placement tests
+//#include "Placement_Test_2D.h"
+//#include "Placement_Test_3D.h"
+
+
 using namespace std;
 using namespace csmp;
 
 TEST_CASE("Development tests", "[Dev]") {
   // Operand_Test test;
   // PropertyAtPointVisitor_Test test(true);
-    // ModelSubDomain_Test test;
+    ModelSubDomain_Test test;
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
-  FiniteVolumeTransportBasics_Test test;
+  //FiniteVolumeTransportBasics_Test test;
     // FiniteVolumeStencil_Test test;
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
+    //Placement_Test_2D test; 
+    //Placement_Test_3D test;
   test.run();
 
  //   ANSYS_Model2D_Test test;

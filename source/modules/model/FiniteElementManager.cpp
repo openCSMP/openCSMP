@@ -1,6 +1,7 @@
 #include "FiniteElementManager.h"
 #include "Standard_IO_Handler.h"
 #include "Exception.h"
+#include "NameDemangler.h"
 
 #include "LinearLineElement.h"
 #include "IsoparametricQuadraticLineElement.h"
@@ -346,24 +347,23 @@ void  FiniteElementManager::Out() const
  {
      cout <<"\nFiniteElementManager::Out: ";
      
-     /// @todo (2-P) Remove typid by name fct
-     if ( hexa_ptr or pyra_ptr or pris_ptr or tetr_ptr ) 
+     if ( hexa_ptr or pyra_ptr or pris_ptr or tetr_ptr )
         cout <<"\n\tcurrent volume elements: ";
-     if ( hexa_ptr  ) cout << typeid(*hexa_ptr).name() <<" ";
-     if ( pyra_ptr ) cout << typeid(*pyra_ptr).name() <<" ";
-     if ( pris_ptr ) cout << typeid(*pris_ptr).name() <<" ";
-     if ( tetr_ptr ) cout << typeid(*tetr_ptr).name() <<" ";
+     if ( hexa_ptr  ) cout <<"\n\t\t"<< demangle(typeid(*hexa_ptr).name()) <<" ";
+     if ( pyra_ptr )  cout <<"\n\t\t"<< demangle(typeid(*pyra_ptr).name()) <<" ";
+     if ( pris_ptr )  cout <<"\n\t\t"<< demangle(typeid(*pris_ptr).name()) <<" ";
+     if ( tetr_ptr )  cout <<"\n\t\t"<< demangle(typeid(*tetr_ptr).name()) <<" ";
      
      if ( quad_ptr or tria_ptr ) 
        cout <<"\n\tcurrent surface elements: ";
-     if ( quad_ptr  ) cout << typeid(*quad_ptr).name() <<" ";
-     if ( tria_ptr ) cout << typeid(*tria_ptr).name() <<" ";
+     if ( quad_ptr  ) cout <<"\n\t\t"<< demangle(typeid(*quad_ptr).name()) <<" ";
+     if ( tria_ptr ) cout <<"\n\t\t"<< demangle(typeid(*tria_ptr).name()) <<" ";
 
      if ( line_ptr ) {
           cout <<"\n\tcurrent line elements: ";
-          cout << typeid(*line_ptr).name() <<" ";
+          cout <<"\n\t\t"<< demangle(typeid(*line_ptr).name()) <<" ";
        }
-     cout << endl;
+     cout << endl << endl;
  }
 
 

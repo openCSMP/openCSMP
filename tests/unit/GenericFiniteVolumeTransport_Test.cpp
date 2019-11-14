@@ -8,8 +8,8 @@
 
 // generic transport scheme
 #include "GenericFiniteVolumeTransport_Test.h"
-#include "finiteVolumeFunctions.h"
-#include "FacetFlux_TracerTransferExplicit.h"
+#include "finiteVolumeAuxiliaryFunctions.h"
+#include "FluxEvaluator.h"
 #include "TimeStepEvaluator.h"
 #include "ExplicitTransport.h"
 
@@ -97,8 +97,6 @@ void GenericFiniteVolumeTransport_Test::run()
     // TestBasics();
     BenchmarkGlobalVersusParametricIntegration();
    
-   
-   
  } // end run
 
 
@@ -152,8 +150,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      // ------------------------------------------------------------
      // 3. Building the transport scheme
      // ------------------------------------------------------------
-     ExplicitTransport<3>  transport_scheme( model, "Model", false );
-     model.InstantiateFiniteVolumes();
+     ExplicitTransport<3>  transport_scheme( model, "Model" );
 
 
       // optional visualization of the input permeability and boundary conditions
@@ -182,7 +179,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
                                                             "fluid volume source" );
     
       // postprocessing of pressure gradients and flow velocities
-      VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
+      VelocityAndVolumeFlux<3U>  postpro0( model, "conductivity", "porosity", "fluid pressure" );
       steady_state_pressure.AddPostProcess( &postpro0 );
 
       // the calculation of fluid pressure
@@ -396,20 +393,19 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
       vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
       vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       1 );
 
+      model.InstantiateFiniteVolumes();
+      const Region<3>& model_domain(model.Region("Model"));
+      const csmp::Index p_key(model.Database().StorageKey("fluid pressure")),
+                        K_key(model.Database().StorageKey("conductivity")),
+                        v_key(model.Database().StorageKey("velocity"));
+   
+      std::vector<double64> DNR, DNS, DNT;
+      std::vector<double64> cross_section(model_domain.Nodes());
+      std::vector<double64> velocity_magnitude(model_domain.Nodes());
+
      // -----------------------------------------------------------------------
      // 4. stepping over the model comparing facet by facet flux calculations
      // -----------------------------------------------------------------------
-     model.InstantiateFiniteVolumes();
-     const Region<3>& model_domain(model.Region("Model"));
-     const csmp::Index p_key(model.Database().StorageKey("fluid pressure")),
-                       K_key(model.Database().StorageKey("conductivity")),
-                       v_key(model.Database().StorageKey("velocity"));
-   
-     std::vector<double64> DNR, DNS, DNT;
-     
-     std::vector<double64> cross_section(model_domain.Nodes());
-     std::vector<double64> velocity_magnitude(model_domain.Nodes());
-
      for (auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it) {
          double64 csa = 0.0;
          double64 surface_area = 0.0;
@@ -581,7 +577,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                // 3. testing that the fluxes are the same
                // ---------------------------------------
                if (!at_boundary) {
-                   // _equal( flux_physical, flux_parametric, s_internal_flux_rel_err );
+                  _equal( flux_physical, flux_parametric, s_internal_flux_rel_err );
                }
            }
        }
@@ -1340,7 +1336,8 @@ void testSchemeAsComponent()
            - sector weight: sector pore volume / finite volume pore volume = weighting factor
       */
       Region<3U>&  flow_domain(model3D.Region("Model"));
-      initializeFiniteVolumeProperties( model3D, flow_domain );
+      const bool initialize_flux(true);
+      initializeFiniteVolumeProperties( model3D, flow_domain, initialize_flux );
     
 // TESTING SECTOR INTEGRATION POINT STORAGE
       const csmp::Index swt_key(model3D.Database().StorageKey("node number"));
@@ -1382,7 +1379,7 @@ void testSchemeAsComponent()
 
 
       // first order version only
-      ExplicitTransport<3U>  explicit_advector( model3D, "Model", false );
+      ExplicitTransport<3U>  explicit_advector( model3D, "Model" );
       printRangeOfVariable( model3D, "sector volume" );
       printRangeOfVariable( model3D, "sector pore volume" );
       printRangeOfVariable( model3D, "finite volume" );

@@ -3168,7 +3168,6 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
 
      // 7. writing POINT_DATA point-type data values
      // --------------------------------------------
-     size_t  line_break, offset(3); // offset for case where x,y,z are stored
      bool    first_iteration(true);
 
      // property after property
@@ -3178,7 +3177,6 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
        {
           if ( prop_key.type != ARRAY || prop_key.type != FLAGGEDARRAY )
             cout <<"\n\tWriting property: '"<< (*npit) <<"' to VTK file..."<< endl;
-          line_break = 1;
           // getting the property data, but only after first set was written
           if ( first_iteration ) {
                ofs <<"POINT_DATA "<< subdomain.PerimeterNodes() << endl;
@@ -3190,7 +3188,6 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
                variable = (*npit).c_str();
                replaceWhiteSpaceBy( variable, '_');
                // now only get data without coordinates
-               offset = 0;
             }
        
           // writing the property data
@@ -3255,6 +3252,65 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
    
  } // end outputRegionBoundaryToVTK(3D)
 
+
+
+
+
+// VTK STUFF
+
+template<size_t dim>
+void  outputPropertiesOfRegionToVTK( const Model<dim>& sg,
+                                     VTK_Interface<dim>& vtk,
+                                     const char* group, long output_time )
+{
+  // file output
+  vtk.OutputDataToVTK( sg, string( group ), string( "fluid-pressure" ), string( "fluid pressure" ), output_time );
+  vtk.OutputDataToVTK( sg, string( group ), string( "saturation-carbonic`" ), string( "saturation carbonic phase" ), output_time );
+  vtk.OutputDataToVTK( sg, string( group ), string( "velocity" ), string( "velocity" ), output_time );
+
+} // end outputPropertiesOfRegion
+
+
+template void  outputPropertiesOfRegionToVTK( const Model<2U>&, VTK_Interface<2U>&, const char* group, long );
+template void  outputPropertiesOfRegionToVTK( const Model<3U>&, VTK_Interface<3U>&, const char* group, long );
+
+
+
+
+
+
+/**
+    Reads binary model file and writes target variable in target region to VTK file
+    @attention the reading of variable names and region names takes into account that these
+    may contain whitespace.
+
+*/
+void csmpBinaryToVTK( const char* modelBinFIleName )
+{
+  string propertyName( "" );
+
+  cin.ignore( numeric_limits<streamsize>::max(), '\n' );
+  cout << "\n\ncsmpBinaryToVTK: Enter name of property to output: " << flush;
+  getline( cin, propertyName );
+
+  string regionName( "" );
+  cout << "\n\ncsmpBinaryToVTK: Enter name of region for which to output '" << propertyName << "': " << flush;
+  getline( cin, regionName );
+
+  Model<3> model( modelBinFIleName );
+
+  if ( !model.Database().IsDefined( propertyName.c_str() ) ) {
+    cerr << "\csmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";
+    return;
+  }
+  if ( !model.ContainsRegion( regionName.c_str() ) ) {
+    cerr << "\ncsmpBinaryToVTK: target region '" << regionName << "' is undefined. Check name and try again.\n";
+    return;
+  }
+
+  VTK_Interface<3> vtk;
+  vtk.OutputDataToVTK( model, regionName, propertyName, propertyName, 0 );
+}
 
 
 

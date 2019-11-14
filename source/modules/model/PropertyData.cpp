@@ -448,7 +448,7 @@ void PropertyData::TransformValues( double64 (*f)(double64) )
 
 
 /**
- @fn  void PropertyData::OutBinary( FILE* fp ) const
+ @fn  void PropertyData::OutBinary( fstream& fp ) const
 
  @brief Out binary. 
  
@@ -461,30 +461,32 @@ void PropertyData::TransformValues( double64 (*f)(double64) )
     std::vector<double64>       data_;         ///< variable values
 
  */
-bool PropertyData::OutBinary( FILE* fp ) const
+bool PropertyData::OutBinary( fstream& fp ) const
  {
      // writing the variable placement
      int32  var_placement = static_cast<int32>(place_);
-     fwrite( (void*) &var_placement, sizeof(int32), 1, fp );
+     fp.write( (char*) &var_placement, sizeof(int32));
 
      // writing the variable type
      int32  var_type = static_cast<int32>(type_);
-     fwrite( (void*) &var_type, sizeof(int32), 1, fp );
+     fp.write( (char*) &var_type, sizeof(int32));
 
      // writing the spatial dimension
      int32  var_dim = static_cast<int32>(dim_);
-     fwrite( (void*) &var_dim, sizeof(int32), 1, fp );
+     fp.write( (char*) &var_dim, sizeof(int32));
 
      // writing the flag stride
      int32  var_flag_stride = static_cast<int32>(flag_stride_);
-     fwrite( (void*) &var_flag_stride, sizeof(int32), 1, fp );
+     fp.write( (char*) &var_flag_stride, sizeof(int32));
 
      // writing the data stride
      int32  var_data_stride = static_cast<int32>(data_stride_);
-     fwrite( (void*) &var_data_stride, sizeof(int32), 1, fp );
+     fp.write( (char*) &var_data_stride, sizeof(int32));
    
      // writing the number of records followed by flag values
-     bool return_value = skm_C_fwrite( fp, flags_ );
+     std::vector<uint32>  flags; //VARIABLE_FLAG
+     std::transform( flags_.begin(), flags_.end(), std::back_inserter( flags ), []( VARIABLE_FLAG flag ) -> uint32 { return flag; } );
+     bool return_value = skm_C_fwrite( fp, flags );
    
      // writing the data values
      return_value = skm_C_fwrite( fp, data_ );
@@ -499,31 +501,31 @@ bool PropertyData::OutBinary( FILE* fp ) const
     Not a class member, this method constructs right-sized propery data container and returns it
     as an rvalue using the move constructor.
 */
-PropertyData inBinaryPropertyData( FILE* fp )
+PropertyData inBinaryPropertyData( fstream& fp )
  {
      // reading the variable placement
      int32  var_placement(UNSPECIFIED);
-     fread( (void*) &var_placement, sizeof(int32), 1, fp );
+     fp.read( (char*) &var_placement, sizeof(int32));
      //assert( place_ == static_cast<PLACEMENT>(var_placement) );
 
      // reading the variable type
      int32  var_type(UNSPECIFIED);
-     fread( (void*) &var_type, sizeof(int32), 1, fp );
+     fp.read( (char*) &var_type, sizeof(int32));
      //assert( type_ == static_cast<VARIABLE_TYPE>(var_type) );
 
      // reading the spatial dimension
      int32  var_dim(UNSPECIFIED);
-     fread( (void*) &var_dim, sizeof(int32), 1, fp );
+     fp.read( (char*) &var_dim, sizeof(int32));
      //assert( dim_ == static_cast<size_t>(var_dim) );
 
      // reading the flag stride
      int32  var_flag_stride(UNSPECIFIED);
-     fread( (void*) &var_flag_stride, sizeof(int32), 1, fp );
+     fp.read( (char*) &var_flag_stride, sizeof(int32));
      //assert( flag_stride_ == static_cast<size_t>(var_flag_stride) );
 
      // reading the data stride
      int32  var_data_stride(UNSPECIFIED);
-     fread( (void*) &var_data_stride, sizeof(int32), 1, fp );
+     fp.read( (char*) &var_data_stride, sizeof(int32));
      //assert( data_stride_ == static_cast<size_t>(var_data_stride) );
    
      // calculating the array length
@@ -532,7 +534,7 @@ PropertyData inBinaryPropertyData( FILE* fp )
      PropertyData data( static_cast<PLACEMENT>(var_placement), static_cast<VARIABLE_TYPE>(var_type), var_dim, array_length );
 
      // reading the number of records followed by flag values
-     std::vector<VARIABLE_FLAG>  flags;
+     std::vector<uint32>  flags; //VARIABLE_FLAG
      skm_C_fread( fp, flags );
    
      // reading the data values
@@ -540,8 +542,10 @@ PropertyData inBinaryPropertyData( FILE* fp )
      skm_C_fread( fp, values );
    
      // pushing the data into Property record
-     data.Reserve( flags.size(), values.size() );
-     for ( auto it=flags.begin(); it!=flags.end(); ++it ) data.PushBack( (*it) );
+     std::vector<VARIABLE_FLAG>  flags_tr;
+     std::transform( flags.begin(), flags.end(), std::back_inserter( flags_tr ), []( uint32 flag ) -> VARIABLE_FLAG { return static_cast<VARIABLE_FLAG>(flag); } );
+     data.Reserve( flags_tr.size(), values.size() );
+     for ( auto it= flags_tr.begin(); it!= flags_tr.end(); ++it ) data.PushBack( (*it) );
      for ( auto it=values.begin(); it!=values.end(); ++it ) data.PushBack( (*it) );
    
      return data;

@@ -28,6 +28,8 @@
 #include "CSMP_mathUtilities.h"
 #include "binaryReadWrite.h"
 
+#include "CSMP_highLevelUtilities.h"
+
 //#define MODEL_SUBDOMAIN_DEBUG
 
 using namespace std;
@@ -35,11 +37,11 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim, template<size_t> class CELL>
-ModelSubDomain<dim,CELL>::ModelSubDomain( const string& subdomain_name,
-                                             const PropertyDatabase<dim>& pref )
- :  pref_(pref),
-    subdomain_name_(subdomain_name),
-    verbose_(true)
+ModelSubDomain<dim, CELL>::ModelSubDomain(const string& subdomain_name,
+	const PropertyDatabase<dim>& pref)
+	: pref_(pref),
+	subdomain_name_(subdomain_name),
+	verbose_(true)
  {
  }
 
@@ -76,75 +78,11 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 
 
 
-
-/* DOES NOT WORK BECAUSE "All Elements" region gets sorted before
-
-template<size_t dim, template<size_t> class CELL>
-ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
-                                             const ModelSubDomain<dim,CELL>& mesh, "All Elements"
-                                             const SubDomainInfo& info )
- : pref_(pref),
-   first_bd_node_(info.interior_nodes.size()),
-   subdomain_name_(info.name),
-   verbose_(true)
- {
-    // building the element vector
-    // ---------------------------
-    elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-    // assigning pointers to the interior elements
-    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it )
-      elmt_vec_.push_back( mesh.elmt_vec_[ (*it) ] );
-    // assigning pointers to the perimeter elements
-    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it )
-      elmt_vec_.push_back( mesh.elmt_vec_[ (*it) ] );
-    // sorting the subvectors for future searching
-    const auto perimeterElementsBegin( next(elmt_vec_.begin(), info.interior_elmts.size()) );
-    sort( elmt_vec_.begin(), perimeterElementsBegin );
-    sort( perimeterElementsBegin, elmt_vec_.end() );
-
-    // building the vector of vectors of those faces of the simplices that lie on the subdomain perimeter
-    // --------------------------------------------------------------------------------------------------
-    bd_face_vec_.reserve( info.perimeter_faces.size() );
-    //std::vector<std::vector<int8 > > perimeter_faces
-    for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
-          const size_t perimeter_faces((*it).size());
-          std::vector<ONE_BYTE_NUMBER> face_vec;
-          face_vec.reserve(perimeter_faces);
-          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
-          this->bd_face_vec_.emplace_back( face_vec );
-      }
-
-    // building the node vector
-    // ------------------------
-    node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
-    // assigning pointers to the interior nodes
-    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )
-      node_vec_.push_back( mesh.node_vec_[ (*it) ] );
-
-    // assigning pointers to the perimeter nodes
-    this->first_bd_node_ = info.interior_nodes.size();
-    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
-      node_vec_.push_back( mesh.node_vec_[ (*it) ] );
-
-    // sorting the subvectors for future searching
-    const auto perimeterNodesBegin( next(node_vec_.begin(), info.interior_nodes.size()) );
-    sort( node_vec_.begin(), perimeterNodesBegin );
-    sort( perimeterNodesBegin, node_vec_.end() );
-
-    // allocating the storage for subdomain properties
-    // -----------------------------------------------
-    this->ResizePropertyStorage( pref.LocalVariablesAt( parsePlacement<dim,CELL>() ) );
- 
- } // end constructor
-*/
-
-
-
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::~ModelSubDomain()
  {
  }
+
 
 
 template<size_t dim, template<size_t> class CELL>
@@ -450,7 +388,12 @@ bool ModelSubDomain<dim,CELL>::Empty() const
   }
 
 
-/// returns how many faces of the target element lie on the subdomain boundary
+/**
+    @return returns how many faces of the target element lie on the subdomain boundary
+ 
+    @attention the element index that is supplied as a method argument has to
+    range between e = interior elements and elements-1.
+*/
 template<size_t dim, template<size_t> class CELL>
 size_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t e ) const
  {
@@ -459,7 +402,14 @@ size_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t e ) const
     return bd_face_vec_[e-InteriorElements()].size();
  }
 
-/// returns the elements local face number of the n'th face that is on the subdomain boundary
+
+/**
+    @return returns elements local element face number (0..faces-1) for
+    the n'th face that is on the subdomain boundary.
+
+    @attention the element index that is supplied as a method argument has to
+    range between e = interior elements and elements-1.
+*/
 template<size_t dim, template<size_t> class CELL>
 size_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t e, size_t face ) const
  {
@@ -613,9 +563,9 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
     if ( with_volume_elements )  counter++;
     if ( with_surface_elements ) counter++;
     if ( with_line_elements )    counter++;
-    int32 highest_spatial_dim(1);
-    if      ( with_volume_elements )  highest_spatial_dim = 3;
-    else if ( with_surface_elements ) highest_spatial_dim = 2;
+    int32 highest_spatial_dim(LINE);
+    if      ( with_volume_elements )  highest_spatial_dim = VOLUME;
+    else if ( with_surface_elements ) highest_spatial_dim = SURFACE;
 
     return make_pair( counter, highest_spatial_dim );
 
@@ -632,18 +582,20 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
     Connects the simplices with their equidimensional neighbors
 */
 template<size_t dim, template<size_t> class CELL>
-void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
+void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity( bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( elmt_vec_.empty() ) {
          csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
          return;
       }
-    cout << "\nModelSubDomain<"<< dim <<",CELL>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
+    if (verbose)
+      cout << "\nModelSubDomain<"<< dim <<",CELL>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
  
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "  Building a list of the faces of the cells...\n";
+    if (verbose)
+      cout << "  Building a list of the faces of the cells...\n";
     //       key             face number,neighbor
     multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
                                                            surface_neighbor_keys, 
@@ -681,7 +633,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
     // 2. (re)building element neigborhoods
     // ------------------------------------
     // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "  (Re)building neighbor connectivity...";
+    if (verbose)
+      cout << "  (Re)building neighbor connectivity...";
 
     // 2.1 line elements
     // -----------------
@@ -690,7 +643,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
         CELL<dim>* e1Ptr(nullptr);
         CELL<dim>* e2Ptr(nullptr);
 
-        cout << "\n\t\tline elements...";
+        if (verbose)
+          cout << "\n\t\tline elements...";
         //                key                  n-face, neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(line_neighbor_keys.begin()),
                                                                                  it2(line_neighbor_keys.begin());
@@ -728,7 +682,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
     // --------------------
     if ( dim >= 2U and !surface_neighbor_keys.empty() )
       {
-        cout << "\n\t\tsurface elements...";
+        if (verbose)
+          cout << "\n\t\tsurface elements...";
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
                                                                                  it2(surface_neighbor_keys.begin());
@@ -765,7 +720,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
         CELL<dim>* e1Ptr(nullptr);
         CELL<dim>* e2Ptr(nullptr);
 
-        cout << "\n\t\tvolume elements...\n";
+        if (verbose)
+          cout << "\n\t\tvolume elements...\n";
         //                key             n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
                                                                                  it2(volume_neighbor_keys.begin());
@@ -886,6 +842,9 @@ cerr << endl;
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
  {
+    // 0. recreate Pfverts information for testing
+    //EstablishNeighborConnectivity();
+   
     // 1. putting the perimeter elements at the end of the elmt_vec and sorting
     //    interior and perimeter cell ranges subsequently
     // ----------------------------------------------------
@@ -896,6 +855,64 @@ void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
 
 
 
+
+
+
+/**
+     Method for reconstruction of model  subdomains from binary file.
+     
+         @author  SKM
+         @date 11/10/2019
+*/
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elements )
+  {
+     assert( interior_elements > 0 );
+     
+     // verification of suitable model state
+     if ( elmt_vec_.empty() )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+                              Name(), "model subdomain: CELL vector not initialised yet.");
+                              
+     if ( interior_elements > elmt_vec_.size() ) {
+           cerr <<"\ninterior cells: "<< interior_elements;
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+                                  Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
+       }
+
+     if ( !is_sorted( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_elements)) ) {
+          cerr <<"\ninterior cells: "<< interior_elements;
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+                                 Name(), "model subdomain: supplied CELL vector not sorted.");
+       }
+       
+     // (re)setting the CELL face vector; note: size must already be correct else Contains(eptr) function used below will fail
+     this->bd_face_vec_.resize( elmt_vec_.size() - interior_elements );
+
+     const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(this->elmt_vec_.begin(),interior_elements) );
+     const typename vector<CELL<dim>*>::const_iterator elementsEnd( this->elmt_vec_.end() );
+     vector<ONE_BYTE_NUMBER>  boundary_faces;
+     size_t                   counter(0U);
+
+     for ( typename vector<CELL<dim>*>::const_iterator it = perimeterElementsBegin; it != elementsEnd; ++it ) {
+         assert( (*it)->Faces() == (*it)->Neighbors() );
+         // for all faces of the CELLs that are located on the domain boundary
+         const size_t faces( (*it)->Faces() );
+         boundary_faces.reserve( faces );
+         for ( size_t face(0U); face<faces; ++face )
+           // TODO: see whether this costly search (=Contains()) can be avoided
+           if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
+             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+         // storing the boundary face vector for the current element
+         if ( boundary_faces.size() == faces ) {
+              cerr <<"\n\tBuildPerimeterFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
+           }
+         this->bd_face_vec_[counter] = boundary_faces;
+         boundary_faces.clear();
+         counter++;
+      }
+      
+  } // end BuildPerimeterFaceVector
 
 
 
@@ -938,46 +955,45 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     //   (at this point the elements and nodes are already known)
     // -----------------------------------------------------------------
     set<CELL<dim>*> interior_elmts, boundary_elmts;
-    set<Node<dim>*>                   boundary_nodes;
-    set<pair<CELL<dim>*,size_t> >  boundary_faces;
-    vector<size_t>  fnids;
+    set<Node<dim>*>                 boundary_nodes;
+    set<pair<CELL<dim>*,size_t> >   boundary_faces;
+    vector<size_t>                  fnids;
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
-    if ( elmt_dim.first == 1 )
-      {
-        for ( typename vector<CELL<dim>*>::const_iterator
-              eit=this->elmt_vec_.begin(); eit!=this->elmt_vec_.end(); eit++ )
-           {
-             // identifying the boundary faces and their nodes
-             // (each face potentially has a neighbor element)
-             long  nbors_that_belong_to_group((*eit)->Neighbors());
-             for ( size_t i=0U; i<(*eit)->Faces(); i++ )
-               // if the face is at a model boundary or has a neighbor that does not belong to the region
-               if ( (*eit)->Neighbor(i) == NULL  or  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i) ) )
-                 {
-                    // boundary faces
-                    boundary_faces.insert( make_pair( (*eit), i ) );
-                    // boundary nodes
-                    assert( (*eit)->FE() != NULL );
-                    (*eit)->FE()->NodesOfFace( i, fnids );
-                    for ( size_t j=0U; j<fnids.size(); ++j )
-                      boundary_nodes.insert( (*eit)->N(fnids[j]) );
-                    // counting neighbors
-                    nbors_that_belong_to_group--;
-                 }
-
-             // storing the distinguished elements in the respective vectors
-             // ------------------------------------------------------------
-             // interior elements
-             if ( nbors_that_belong_to_group == (*eit)->Neighbors() )
-                 interior_elmts.insert( (*eit) );
-             // elements with at least one face on the region boundary
-             else
-                 boundary_elmts.insert( (*eit) );
+	if (elmt_dim.first == 1)
+	{
+		for (typename vector<CELL<dim>*>::const_iterator
+			eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++)
+		{
+			// identifying the boundary faces and their nodes
+			// (each face potentially has a neighbor element)			 
+			long  nbors_that_belong_to_group((*eit)->Neighbors());
+			for (size_t i = 0U; i<(*eit)->Faces(); i++)
+				// if the face is at a model boundary or has a neighbor that does not belong to the region
+				if ( (*eit)->Neighbor(i) == nullptr or !binary_search(this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i)) )
+          {
+            // boundary faces
+            boundary_faces.insert( make_pair((*eit),i) );
+            // boundary nodes
+            assert( (*eit)->FE() != nullptr );
+            (*eit)->FE()->NodesOfFace(i, fnids);
+            for (size_t j = 0U; j<fnids.size(); ++j)
+              boundary_nodes.insert((*eit)->N(fnids[j]));
+            // counting neighbors
+            nbors_that_belong_to_group--;
           }
-       }
 
+			// storing the distinguished elements in the respective vectors
+			// ------------------------------------------------------------
+			// interior elements
+				if ( nbors_that_belong_to_group == (*eit)->Neighbors() )
+					interior_elmts.insert((*eit));
+				// elements with at least one face on the region boundary
+				else
+					boundary_elmts.insert((*eit));
+		}
+	}
     // 1.2 If there are elements with different spatial dimensions
     // -----------------------------------------------------------
     //     the ones with highest dimensions are used to define perimeter
@@ -987,7 +1003,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
         // a. identify the boundary elements among the highest dimensional elements,
         //    also collecting all their node pointers into a set.
         set<CELL<dim>*> lesser_dim_elmts;
-        set<Node<dim>*>    highest_dim_elmt_nodes;
+        set<Node<dim>*> highest_dim_elmt_nodes;
 
         for ( typename vector<CELL<dim>*>::const_iterator
               eit=this->elmt_vec_.begin(); eit!=this->elmt_vec_.end(); eit++ )
@@ -1115,8 +1131,8 @@ cout.flush();
               // do some additional diagnostics on these elements
               // ------------------------------------------------
               cerr <<"\n\tdetached elements: "<< lesser_dim_elmts_detached.size() <<":";
-              for ( typename set<CELL<dim>*>::const_iterator
-                    it=lesser_dim_elmts_detached.begin(); it!=lesser_dim_elmts_detached.end(); ++it ) cerr <<" "<< (*it)->Idx();
+              //for ( typename set<CELL<dim>*>::const_iterator
+              //      it=lesser_dim_elmts_detached.begin(); it!=lesser_dim_elmts_detached.end(); ++it ) cerr <<" "<< (*it)->Idx();
               cerr << endl;
            }
 
@@ -1152,7 +1168,7 @@ set<CELL<dim>*> elmts_with_bfaces;
 for ( typename set<pair<CELL<dim>*,size_t> >::const_iterator it=boundary_faces.begin(); it!=boundary_faces.end(); ++it ) {
       if ( boundary_elmts.find( (*it).first ) == boundary_elmts.end() ) {
            if ( no_error_yet ) {
-                cerr <<"\nboundary face parent elements vx. boundary elements:\n";
+                cerr <<"\nboundary face parent elements vs. boundary elements:\n";
                 no_error_yet=false;
              }
            cerr <<" "<< (*it).first->Idx() <<": "<< parseFiniteElementType( (*it).first->FE_Type() );
@@ -1168,30 +1184,37 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // 3. creating the boundary face vector
     // --------------------------------------------------
     if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
-    this->bd_face_vec_.reserve( this->elmt_vec_.size() - boundary_elmts.size() );
-    //       parent element of face, face
-    typename set<pair<CELL<dim>*,size_t> >::const_iterator  bfit( boundary_faces.begin() );
-    typename set<pair<CELL<dim>*,size_t> >::const_iterator  ffit( boundary_faces.begin() );
-    vector<ONE_BYTE_NUMBER>  bface_data;
-    bface_data.reserve(3);
-    size_t counter(0U);
+    // bd_face_vec_ is only available if there are boundary elements
+    if (boundary_elmts.size() > 0)
+      {
+        this->bd_face_vec_.reserve(this->elmt_vec_.size() - boundary_elmts.size());
+        //       parent element of face, face
+        typename set<pair<CELL<dim>*, size_t> >::const_iterator  bfit(boundary_faces.begin());
+        typename set<pair<CELL<dim>*, size_t> >::const_iterator  ffit(boundary_faces.begin());
+        vector<ONE_BYTE_NUMBER>  bface_data;
+        size_t                   counter(0U);
 
-    while ( bfit != boundary_faces.end() ) {
-         assert( (*ffit).first == this->elmt_vec_[counter + interior_elmts.size()] );
-         while ( (*bfit).first == (*ffit).first ) {
-              bface_data.push_back( static_cast<ONE_BYTE_NUMBER>( (*bfit).second ) );
-              bfit++;
-              if ( bfit == boundary_faces.end() )
-                  break;
-           }
-         ffit = bfit;
-         counter++;
-         this->bd_face_vec_.push_back( bface_data );
-         bface_data.clear();
-      }
-    vector<vector<ONE_BYTE_NUMBER> >( this->bd_face_vec_ ).swap( this->bd_face_vec_ );
-
-    assert( this->bd_face_vec_.size() == this->Elements() - this->InteriorElements() );
+        while ( bfit != boundary_faces.end() ) {
+            assert((*ffit).first == this->elmt_vec_[counter + interior_elmts.size()]);
+            bface_data.reserve(3);
+            // as long as we considering faces of the same element
+            while ( (*bfit).first == (*ffit).first ) {
+                bface_data.push_back(static_cast<ONE_BYTE_NUMBER>((*bfit).second));
+                bfit++;
+                if ( bfit == boundary_faces.end() ) break;
+              }
+            ffit = bfit;
+            assert( bface_data.size() > 0 );
+            this->bd_face_vec_.push_back(bface_data);
+            bface_data.clear();
+            counter++;
+          }
+        vector<vector<ONE_BYTE_NUMBER> >(this->bd_face_vec_).swap(this->bd_face_vec_);
+        // debug checks
+        for ( auto it=bd_face_vec_.begin(); it!=bd_face_vec_.end(); ++it )
+          assert( (*it).size() >= 1 );
+        assert(this->bd_face_vec_.size() == this->Elements() - this->InteriorElements());
+     }
 
 
     // --------------------------------------------------
@@ -1227,6 +1250,44 @@ cout.flush();
 
 
 
+
+
+
+
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interior_nodes )
+  {
+    assert( interior_cells > 0 );
+    assert( interior_nodes > 0 );
+
+    // verification of suitable model state
+    if ( elmt_vec_.empty() )
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                             Name(), "model subdomain: CELL vector not initialised yet.");
+                             
+    if ( interior_cells > elmt_vec_.size() ) {
+          cerr <<"\ninterior cells: "<< interior_cells;
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                 Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
+      }
+   if ( node_vec_.empty() )
+     throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                            Name(), "model subdomain: node vector not initialised yet.");
+                            
+   if ( interior_nodes > node_vec_.size() ) {
+         cerr <<"\ninterior cells: "<< interior_nodes;
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                Name(), "model subdomain: less nodes in node vector than interior nodes specified.");
+     }
+   
+   // sorting
+   sort( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_cells) );
+   sort( next(elmt_vec_.begin(),interior_cells), elmt_vec_.end() );
+
+   sort( node_vec_.begin(), next(node_vec_.begin(),interior_nodes) );
+   sort( next(node_vec_.begin(),interior_nodes), node_vec_.end() );
+
+  } // end SortVectors
 
 
 
@@ -1392,24 +1453,17 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
 
 // ACCESSORY
 
-///// looks for simplex with provided index
-//template<size_t dim, template<size_t> class CELL>
-//bool ModelSubDomain<dim,CELL>::Contains( size_t eidx ) const
-//  {
-//    const typename vector<CELL<dim>*>::const_iterator simplexEnd( this->elmt_vec_.end() );
-//    for( typename vector<CELL<dim>*>::const_iterator simplex( this->elmt_vec_.begin() ); simplex != simplexEnd; ++simplex )
-//      if( (*simplex)->Idx() == eidx )
-//        return true;
-//    return false;
-//  } // end
-
+/**
+    Uses binary_search on both ranges of the sorted element vector to find the element in question.
+    returns true or false.
+*/
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* e ) const
+bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* eptr ) const
  {
-    if ( binary_search( elmt_vec_.begin(), elmt_vec_.begin() + static_cast<long>(InteriorElements()), e ) )
+    if ( binary_search( elmt_vec_.begin(), next(elmt_vec_.begin(),InteriorElements()), eptr ) )
        return true;
 
-    if ( binary_search( elmt_vec_.begin() + static_cast<long>(InteriorElements()), elmt_vec_.end(), e ) )
+    if ( binary_search( next(elmt_vec_.begin(),InteriorElements()), elmt_vec_.end(), eptr ) )
        return true;
 
     return false;
@@ -1417,15 +1471,19 @@ bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* e ) const
  } // end
 
 
+/**
+    Uses binary_search on both ranges of the sorted node vector to find the node in question.
+    returns true or false.
+*/
 template<size_t dim, template<size_t> class CELL>
 bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
  {
     assert( nptr != NULL );
 
-    if ( binary_search( node_vec_.begin(), node_vec_.begin() + static_cast<long>(InteriorNodes()), nptr ) )
+    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), InteriorNodes()), nptr ) )
        return true;
 
-    if ( binary_search( node_vec_.begin() + static_cast<long>(InteriorNodes()), node_vec_.end(), nptr ) )
+    if ( binary_search( next(node_vec_.begin(), InteriorNodes()), node_vec_.end(), nptr ) )
        return true;
 
     return false;
@@ -5376,8 +5434,14 @@ template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::Out() const
  {
     cout <<"\nModelSubDomain<dim,CELL>::Out(): name: '"<< subdomain_name_ <<"'";
-    cout <<" member elements: interior="<< InteriorElements();
-    cout <<", boundary="<< elmt_vec_.size()-InteriorElements() <<": "<< endl;
+    cout <<"\n\tmember elements("<< elmt_vec_.size() <<"): interior="<< InteriorElements();
+    cout <<", perimeter="<< elmt_vec_.size()-InteriorElements();
+    cout <<"\n\tmember nodes ("<< node_vec_.size() <<"): interior nodes="<< node_vec_.size() - PerimeterNodes();
+    cout <<", perimeter nodes="<< PerimeterNodes();
+    size_t perimeter_faces(0U);
+    for ( size_t i=0U; i<bd_face_vec_.size(); ++i ) perimeter_faces += bd_face_vec_[i].size();
+    cout <<"\n\tperimeter faces="<< perimeter_faces;
+    cout <<"\n\tdetailed listing of elements and nodes:";
 
     for ( typename vector<CELL<dim>*>::const_iterator
           it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) {
@@ -5387,7 +5451,7 @@ void ModelSubDomain<dim,CELL>::Out() const
 //         else (*it)->Out();
       }
 
-    cout <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
+    cout <<"\n\n perimeter elements and their perimeter faces (current local numbering): "<< endl;
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(bd_face_vec_.begin());
     for ( size_t i=InteriorElements(); i<elmt_vec_.size(); i++, bit++ ) {
          cout <<"\nelement "<< i <<": edge face numbers: ";
@@ -5395,7 +5459,7 @@ void ModelSubDomain<dim,CELL>::Out() const
                ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
       }
 
-    cout <<"\n\n edge nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
+    cout <<"\n\n perimeter nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=first_bd_node_; i<node_vec_.size(); i++ ) {
          if ( node_vec_[i] == NULL )
            throw csmp::Exception( ERROR, "ModelSubDomain<dim>::Out", "member node pointer not initialised.");
@@ -5403,7 +5467,8 @@ void ModelSubDomain<dim,CELL>::Out() const
       }
 
     cout << endl;
- }
+   
+ } // Out
 
 
 
@@ -5414,10 +5479,8 @@ void ModelSubDomain<dim,CELL>::Out() const
     @note template template parameters for functions are not allowed
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
+void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
  {
-    assert( fp != nullptr );
-   
     // 1. writing name of the region
     skm_C_fwrite( fp, Name().c_str() );
    
@@ -5433,7 +5496,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    
-    // 4. writing the boundary faces
+    // 4. writing the boundary faces (not done because pointer locations will change in reconstruction)
     // -----------------------------
     /* 
         since this is vector of vectors predominated by single value entries,
@@ -5444,26 +5507,15 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
                     ^^^          marking the 2 local face indices that relate to an element that has
         2 faces on the model boundary.
     */
-    std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
-    faceIDs.reserve( PerimeterElements() );
-    for ( size_t eid(InteriorElements()); eid<Elements(); ++eid ) {
-         const size_t perimeter_faces(PerimeterFaces(eid));
-         // writing the number of perimeter faces as negative number, but only if there are more than 1 perimeter faces
-         if ( perimeter_faces > 1 ) faceIDs.push_back( static_cast<int8>(-perimeter_faces) );
-         // writing the perimeter face ids
-         for ( size_t j=0U; j<perimeter_faces; ++j )
-           faceIDs.push_back( static_cast<int8>(PerimeterFace(eid,j)) );
-      }
-    skm_C_fwrite( fp, faceIDs );
 
     // 5. writing the interior nodes
-    IDs.resize( distance(NodesBegin(), PerimeterNodesBegin()) );
+    IDs.resize( InteriorNodes() );
     transform( NodesBegin(), PerimeterNodesBegin(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    
     // 6. writing the perimeter nodes
-    IDs.resize( distance(PerimeterNodesBegin(), NodesEnd()) );
+    IDs.resize( PerimeterNodes() );
     transform( PerimeterNodesBegin(), NodesEnd(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
@@ -5471,9 +5523,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
  } // end WriteDomainIndexesToBinaryFile
 
 
-/*
-
-
+/* TESTING (code snippet)
 cerr <<"\n\n\nregion: "<< Name() <<"\n";
 cerr <<"interior nodes";
 out( IDs );
@@ -5486,10 +5536,14 @@ out( IDs );
 
 /**
     Reads all the data required to fully reconstruct a ModelSubDomain (without search operations)
+ 
+@note SKM: refactored 23/8/2018: no longer uses boundary face vector because the
+    the sorting of the element vectors during the model reconstruction invalidates
+    this vector. It is therefore cheaper to rebuild the vector from scratch
+    during the reconstruction.
 */
-void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info )
+void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& info )
  {
-    assert( fp != nullptr );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // 1. reading name of the region
@@ -5500,51 +5554,19 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
    
     // 2. reading the interior element records of the region
     skm_C_fread( fp, info.interior_elmts );
-#if 0
-    // XXX AJB  Is this test correct?
     if (dim > 2 && info.interior_elmts.empty() ) {
-        csmp_error.notice( ERROR, "readDomainIndexesFromBinaryFile:",
+        csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior elements: ", name );
     }
-#endif
-   
+
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
-    assert( !info.perimeter_elmts.empty() );
+//    assert( !info.perimeter_elmts.empty() );
    
-    // 4. reading the boundary faces
-    // -----------------------------
-    /* 
-        expects flat vector in which all entries that refer to
-        multiple values per element are prefaced by a negative numer that indicates
-        how many multiple faces per element follow, for example
-        1 5  5 3 -2 6 2 3 3 5 6
-                    ^^^          marking the 2 local face indices that relate to an element that has
-        2 faces on the model boundary.
-        where there is no negative number, a single entry is assumed
-    */
-    std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
-    skm_C_fread( fp, faceIDs );
-    assert( !faceIDs.empty() );
- 
-    if ( !info.perimeter_faces.empty() ) info.perimeter_faces.clear();
-    info.perimeter_faces.reserve( faceIDs.size() );
-    for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) {
-         const size_t perimeter_faces = ((*it) < 0) ? abs( (*it) ) : 1;
-         std::vector<int8> face_ids;
-         face_ids.reserve(3);
-         for ( size_t i=0U; i<perimeter_faces; ++i ) {
-              if ( perimeter_faces > 1 ) it++;
-              assert( it != faceIDs.end() );
-              face_ids.push_back( (*it) );
-           }
-         info.perimeter_faces.push_back( move(face_ids) );
-      }
-
-    // 5. reading the interior nodes
+    // 4. reading the interior nodes
     skm_C_fread( fp, info.interior_nodes );
   
-    // 6. reading the perimeter nodes
+    // 5. reading the perimeter nodes
     skm_C_fread( fp, info.perimeter_nodes );
     assert( !info.perimeter_nodes.empty() );
    
@@ -5559,7 +5581,7 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
 */
 template<size_t dim, template<size_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
-                                                          typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
+                                                       typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
  {
     if ( start == end ) return 0U;
  

@@ -224,6 +224,28 @@ template long findNode( const Model<3U>&, const Point<3U>&, double64, bool );
 
 
 
+/// prints sorted global element node numbers in a compact way
+template<size_t dim, template<size_t> class CELL>
+void printNodes( const CELL<dim>& c )
+ {
+    set<size_t> nodes;
+    for ( size_t i=0U; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
+    cout <<" "<< c.Idx() <<": ";
+    for ( auto it : nodes ) cout << it <<",";
+    cout <<" ";
+ }
+
+template void printNodes( const Element<1U>& );
+template void printNodes( const Element<2U>& );
+template void printNodes( const Element<3U>& );
+template void printNodes( const Face<1U>& );
+template void printNodes( const Face<2U>& );
+template void printNodes( const Face<3U>& );
+template void printNodes( const InterFace<1U>& );
+template void printNodes( const InterFace<2U>& );
+template void printNodes( const InterFace<3U>& );
+
+
 
 
 size_t  renumberElementNodes( vector<Element<1U>*>::iterator first,
@@ -1553,6 +1575,267 @@ template double64 maximumResidual( const Model<2U>&, const char*, const char*, b
 template double64 maximumResidual( const Model<3U>&, const char*, const char*, bool );
 
 
+/**
+
+Explores all the nodes and the elements from the mesh by mesh traversal from the starting root nodes, 
+and returns the explored nodes and elements.
+
+The method depends on correct neighbor information.
+
+@param mesh: MeshMananger pointer
+@param nodes, elmts: the method returns deques of pointers to the nodes and the elements
+
+@section application Application
+
+*/
+template<size_t dim>
+void exploreNodesAndElementsFromMesh(MeshManager<dim>* mesh, std::deque<Node<dim>*>& nodes, std::deque<Element<dim>*>& elmts)
+{
+	// traversal of the existing mesh nodes to find all nodes and elements
+	set<Element<dim>*>		explored_elements;
+	set<Node<dim>*>	discovered_nodes;
+	deque<Node<dim>*>	current_nodes;
+	for (size_t g = 0U; g < mesh->NodeGroups(); g++) {
+		auto root_node = mesh->RootNode(g);
+		// starting at the root node
+		discovered_nodes.insert(root_node);
+		current_nodes.push_back(root_node);
+		while (!current_nodes.empty()) {
+			Node<dim>*  n_ptr(*current_nodes.begin());
+			// for all parent elements of the current node
+			for (size_t i = 0U; i < n_ptr->Parents(); i++) {
+				// for all the nodes of each parent element
+				for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++)
+					// if this node is not the one from which we started
+					if (j != n_ptr->ParentNodeNumber(i)) {
+						auto new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
+						if (new_node.second) current_nodes.push_back(n_ptr->Parent(i)->N(j));
+					}
+				// storing the explored element
+				explored_elements.insert(n_ptr->Parent(i));
+			}
+			// removing the node from the discovered (but not yet explored) deque
+			current_nodes.pop_front();
+		}
+	}
+
+	// assigning the explored nodes and elements from the node and element pointer vectors	
+	nodes.assign(discovered_nodes.begin(), discovered_nodes.end());
+	elmts.assign(explored_elements.begin(), explored_elements.end());
+}
+
+template void exploreNodesAndElementsFromMesh(MeshManager<1U>*, std::deque<Node<1U>*>&, std::deque<Element<1U>*>&);
+template void exploreNodesAndElementsFromMesh(MeshManager<2U>*, std::deque<Node<2U>*>&, std::deque<Element<2U>*>&);
+template void exploreNodesAndElementsFromMesh(MeshManager<3U>*, std::deque<Node<3U>*>&, std::deque<Element<3U>*>&);
+
+template<size_t dim>
+void exploreNodesAndElementsFromMesh(const MeshManager<dim>* mesh, std::deque<const Node<dim>*>& nodes, std::deque<Element<dim>*>& elmts)
+{
+	// traversal of the existing mesh nodes to find all nodes and elements
+	set<Element<dim>*>		explored_elements;
+	set<const Node<dim>*>	discovered_nodes;
+	deque<const Node<dim>*>	current_nodes;
+	for (size_t g = 0U; g < mesh->NodeGroups(); g++) {
+		auto root_node = mesh->RootNode(g);
+		// starting at the root node
+		discovered_nodes.insert(root_node);
+		current_nodes.push_back(root_node);
+		while (!current_nodes.empty()) {
+			auto n_ptr(*current_nodes.begin());
+			// for all parent elements of the current node
+			for (size_t i = 0U; i < n_ptr->Parents(); i++) {
+				// for all the nodes of each parent element
+				for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++)
+					// if this node is not the one from which we started
+					if (j != n_ptr->ParentNodeNumber(i)) {
+						auto new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
+						if (new_node.second) current_nodes.push_back(n_ptr->Parent(i)->N(j));
+					}
+				// storing the explored element
+				explored_elements.insert(n_ptr->Parent(i));
+			}
+			// removing the node from the discovered (but not yet explored) deque
+			current_nodes.pop_front();
+		}
+	}
+
+	// assigning the explored nodes and elements from the node and element pointer vectors	
+	nodes.assign(discovered_nodes.begin(), discovered_nodes.end());
+	elmts.assign(explored_elements.begin(), explored_elements.end());
+}
+
+template void exploreNodesAndElementsFromMesh(const MeshManager<1U>*, std::deque<const Node<1U>*>&, std::deque<Element<1U>*>&);
+template void exploreNodesAndElementsFromMesh(const MeshManager<2U>*, std::deque<const Node<2U>*>&, std::deque<Element<2U>*>&);
+template void exploreNodesAndElementsFromMesh(const MeshManager<3U>*, std::deque<const Node<3U>*>&, std::deque<Element<3U>*>&);
+
+
+/**
+
+Explores all the faces from the mesh by mesh traversal from the starting root faces,
+and returns the explored faces.
+
+The method depends on correct neighbor information.
+
+@param mesh: MeshMananger pointer
+@param faces: the method returns deques of pointers to the faces
+
+@section application Application
+
+*/
+/// retrieves and returns the faces that are explored by mesh traversal from the starting root faces
+template<size_t dim>
+void exploreFacesFromMesh(MeshManager<dim>* mesh, std::deque<Face<dim>*>& faces)
+{
+	// traversal of the existing mesh root faces to find all faces	
+	set<Face<dim>*>	discovered_faces;
+	deque<Face<dim>*>	current_faces;
+
+	for (size_t g = 0U; g < mesh->FaceGroups(); g++) {
+		auto root_face = mesh->RootFace(g);
+		// starting at the first face
+		discovered_faces.insert(root_face);
+		current_faces.push_back(root_face);
+		while (!current_faces.empty()) {
+			Face<dim>*  n_ptr(*current_faces.begin());
+			// for all neighbor faces of the current face
+			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
+				if (n_ptr->Neighbor(i) == NULL) continue;
+
+				// if this neighbor is new one					
+				auto new_face = discovered_faces.insert(n_ptr->Neighbor(i));
+				if (new_face.second) current_faces.push_back(n_ptr->Neighbor(i));
+			}
+			// removing the face from the discovered (but not yet explored) deque
+			current_faces.pop_front();
+		}
+	}
+	
+	// assigning the explored faces from the face pointer vectors	
+	faces.assign(discovered_faces.begin(), discovered_faces.end());
+}
+
+template void exploreFacesFromMesh(MeshManager<1U>*, std::deque<Face<1U>*>&);
+template void exploreFacesFromMesh(MeshManager<2U>*, std::deque<Face<2U>*>&);
+template void exploreFacesFromMesh(MeshManager<3U>*, std::deque<Face<3U>*>&);
+
+template<size_t dim>
+void exploreFacesFromMesh(const MeshManager<dim>* mesh, std::deque<const Face<dim>*>& faces)
+{
+	// traversal of the existing mesh root faces to find all faces	
+	set<const Face<dim>*>	discovered_faces;
+	deque<const Face<dim>*>	current_faces;
+
+	for (size_t g = 0U; g < mesh->FaceGroups(); g++) {
+		auto root_face = mesh->RootFace(g);
+		// starting at the first face
+		discovered_faces.insert(root_face);
+		current_faces.push_back(root_face);
+		while (!current_faces.empty()) {
+			auto n_ptr(*current_faces.begin());
+			// for all neighbor faces of the current face
+			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
+				if (n_ptr->Neighbor(i) == NULL) continue;
+
+				// if this neighbor is new one					
+				auto new_face = discovered_faces.insert(n_ptr->Neighbor(i));
+				if (new_face.second) current_faces.push_back(n_ptr->Neighbor(i));
+			}
+			// removing the face from the discovered (but not yet explored) deque
+			current_faces.pop_front();
+		}
+	}
+
+	// assigning the explored faces from the face pointer vectors	
+	faces.assign(discovered_faces.begin(), discovered_faces.end());
+}
+
+template void exploreFacesFromMesh(const MeshManager<1U>*, std::deque<const Face<1U>*>&);
+template void exploreFacesFromMesh(const MeshManager<2U>*, std::deque<const Face<2U>*>&);
+template void exploreFacesFromMesh(const MeshManager<3U>*, std::deque<const Face<3U>*>&);
+
+/**
+
+Explores all the interfaces from the mesh by mesh traversal from the starting root interfaces,
+and returns the explored interfaces.
+
+The method depends on correct neighbor information.
+
+@param mesh: MeshMananger pointer
+@param interfaces: the method returns deques of pointers to the interfaces
+
+@section application Application
+
+*/
+/// retrieves and returns the interfaces that are explored by mesh traversal from the starting root interfaces
+template<size_t dim>
+void exploreInterFacesFromMesh(MeshManager<dim>* mesh, std::deque<InterFace<dim>*>& interfaces)
+{
+	// traversal of the existing mesh root interfaces to find all interfaces	
+	set<InterFace<dim>*>	discovered_interfaces;
+	deque<InterFace<dim>*>	current_interfaces;
+
+	for (size_t g = 0U; g < mesh->InterFaceGroups(); g++) {
+		auto root_interface = mesh->RootInterFace(g);
+		// starting at the first interface
+		discovered_interfaces.insert(root_interface);
+		current_interfaces.push_back(root_interface);
+		while (!current_interfaces.empty()) {
+			InterFace<dim>*  n_ptr(*current_interfaces.begin());
+			// for all neighbor interfaces of the current interface
+			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
+				if (n_ptr->Neighbor(i) == NULL) continue;
+
+				// if this neighbor is new one					
+				auto new_interface = discovered_interfaces.insert(n_ptr->Neighbor(i));
+				if (new_interface.second) current_interfaces.push_back(n_ptr->Neighbor(i));
+			}
+			// removing the interface from the discovered (but not yet explored) deque
+			current_interfaces.pop_front();
+		}
+	}
+
+	// assigning the explored interfaces from the interface pointer vectors	
+	interfaces.assign(discovered_interfaces.begin(), discovered_interfaces.end());
+}
+
+template void exploreInterFacesFromMesh(MeshManager<1U>*, std::deque<InterFace<1U>*>&);
+template void exploreInterFacesFromMesh(MeshManager<2U>*, std::deque<InterFace<2U>*>&);
+template void exploreInterFacesFromMesh(MeshManager<3U>*, std::deque<InterFace<3U>*>&);
+
+template<size_t dim>
+void exploreInterFacesFromMesh(const MeshManager<dim>* mesh, std::deque<const InterFace<dim>*>& interfaces)
+{
+	// traversal of the existing mesh root interfaces to find all interfaces	
+	set<const InterFace<dim>*>		discovered_interfaces;
+	deque<const InterFace<dim>*>	current_interfaces;
+
+	for (size_t g = 0U; g < mesh->InterFaceGroups(); g++) {
+		auto root_interface = mesh->RootInterFace(g);
+		// starting at the first interface
+		discovered_interfaces.insert(root_interface);
+		current_interfaces.push_back(root_interface);
+		while (!current_interfaces.empty()) {
+			auto n_ptr(*current_interfaces.begin());
+			// for all neighbor interfaces of the current interface
+			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
+				if (n_ptr->Neighbor(i) == NULL) continue;
+
+				// if this neighbor is new one					
+				auto new_interface = discovered_interfaces.insert(n_ptr->Neighbor(i));
+				if (new_interface.second) current_interfaces.push_back(n_ptr->Neighbor(i));
+			}
+			// removing the interface from the discovered (but not yet explored) deque
+			current_interfaces.pop_front();
+		}
+	}
+
+	// assigning the explored interfaces from the interface pointer vectors	
+	interfaces.assign(discovered_interfaces.begin(), discovered_interfaces.end());
+}
+
+template void exploreInterFacesFromMesh(const MeshManager<1U>*, std::deque<const InterFace<1U>*>&);
+template void exploreInterFacesFromMesh(const MeshManager<2U>*, std::deque<const InterFace<2U>*>&);
+template void exploreInterFacesFromMesh(const MeshManager<3U>*, std::deque<const InterFace<3U>*>&);
 
 
 /**
@@ -1819,7 +2102,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
 // CONNECTIVITY BETWEEN ELEMENTS
 
 template<size_t dim>
-void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside )
+void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
@@ -1831,7 +2114,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
  
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "  Building element face list...\n";
+    if (verbose) cout << "  Building element face list...\n";
 
     //       key             face number neighbor
     multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >  volume_neighbor_keys,
@@ -1862,9 +2145,24 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
                line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
            key.clear();
 
-           // unassign neirghbors outside of the provided vector range
-           if( unassign_neighbors_outside )
-               (*it)->UnassignNeighbors();
+           // unassign neirghbors outside of the provided vector range		   
+           if ( unassign_neighbors_outside )
+           {
+             // remove element from neighbor list of its neighbors
+             const size_t neighbors( (*it)->Neighbors() );
+             for ( size_t neighbor = 0; neighbor < neighbors; ++neighbor )
+               if ( (*it)->Neighbor( neighbor ) != NULL ) {
+                 const size_t neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
+                 for ( size_t i = 0; i < neighbor_neighbors; i++ )
+                   if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
+                     if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
+                       (*it)->NeighborElementVector()[i] = NULL;
+                     }
+                 
+                 (*it)->NeighborElementVector()[neighbor] = NULL;
+               }
+             (*it)->NeighborElementVector().clear();
+           }
         }
 
 
@@ -1872,7 +2170,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
     // ------------------------------------
     // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
 
-    cout << "  Building element neighbor connectivity...";
+    if (verbose) cout << "  Building element neighbor connectivity...";
 
     // 2.1 line elements
     // -----------------
@@ -1881,7 +2179,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
         Element<dim>* e1Ptr(NULL);
         Element<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tline elements...";
+        if (verbose) cout << "\n\t\tline elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >::iterator it1(line_neighbor_keys.begin()),
@@ -1922,7 +2220,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
         Element<dim>* e1Ptr(NULL);
         Element<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tsurface elements...";
+        if (verbose) cout << "\n\t\tsurface elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
@@ -1963,7 +2261,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
         Element<dim>* e1Ptr(NULL);
         Element<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tvolume elements...\n";
+        if (verbose) cout << "\n\t\tvolume elements...\n";
 
         //                key             n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
@@ -2000,172 +2298,15 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
  } // end establishNeighborConnectivity
 
 // explicit instantiations
-template void establishNeighborConnectivity<1U>( std::vector<csmp::Element<1U>*>&, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::Element<2U>*>&, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>&, bool );
-
-
-
-
-
-
-// CONNECTIVITY BETWEEN FACES
-
-/*
-template<size_t dim>
-void  establishNeighborConnectivity( std::vector<csmp::Face<dim>*>& simplexVector, bool unassign_neighbors_outside )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( simplexVector.empty() ) {
-         csmp_error.notice( WARNING, "establishNeighborConnectivity( Face )", "supplied element vector is empty; nothing was done" );
-         return;
-      }
-
-    cout << "\nestablishNeighborConnectivity( Face ): Establishing CSMP FE neighbor connectivity...\n";
-
-    // 1. making separate search vectors of face keys for surface and line elements
-    // ----------------------------------------------------------------------------
-    cout << "  Building element face list...\n";
-
-    //       key             face number neighbor
-    multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >  surface_neighbor_keys,
-                                                        line_neighbor_keys;
-    vector<size_t>                 fnids;
-    typename std::set<Node<dim>*>  key;
-
-    for ( typename vector<Face<dim>*>::const_iterator it = simplexVector.begin(); it!=simplexVector.end(); it++ )
-      for ( size_t face=0U; face<(*it)->Faces(); face++ )
-        {
-           if ( (*it) == NULL ) {
-                csmp_error.notice( ERROR, "establishNeighborConnectivity( Face )",
-                                  "supplied element contains NULL pointer to elements; nothing was done" );
-                return;
-             }
-           // creating face key from idx's of face
-           (*it)->FE()->NodesOfFace( face, fnids );
-           for ( size_t j=0U; j<fnids.size(); j++ )
-               key.insert( (*it)->N( fnids[j] ) );
-
-           // inserting newly generated key into multimap
-           if ( (*it)->FE()->IsSurfaceElement() )
-               surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else if ( (*it)->FE()->IsLineElement() )
-               line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else{
-               csmp_error.notice( ERROR, "establishNeighborConnectivity( Face )", "supplied element vector contains volumetric element! nothing was done" );
-               return;
-           }
-           key.clear();
-
-           // unassign neighbors outside of the provided vector range
-           if( unassign_neighbors_outside )
-               (*it)->UnassignNeighbors();
-        }
-
-
-    // 2. (re)building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "  Building element neighbor connectivity...";
-
-    // 2.1 line elements
-    // -----------------
-    if ( !line_neighbor_keys.empty() ) {
-
-        Face<dim>* e1Ptr(NULL);
-        Face<dim>* e2Ptr(NULL);
-
-        cout << "\n\t\tline elements...";
-
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                              it2(line_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != line_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning eachothers faces
-                   //                          face pointer                   nbor face idx        neighbor pointer
-                   (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                   (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
-
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // dim=1
-
-    // 2.2 surface elements
-    // --------------------
-    cout << "surface elements...";
-
-    if ( dim >= 2U and !surface_neighbor_keys.empty() ) {
-
-        Face<dim>* e1Ptr(NULL);
-        Face<dim>* e2Ptr(NULL);
-
-        cout << "\n\t\tsurface elements...";
-
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
-                                                                              it2(surface_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != surface_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                    // assigning eachothers faces
-                    //                          face pointer                   nbor face idx        neighbor pointer
-                    (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                    (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
-
-
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // surfaces
-
-
- } // end establishNeighborConnectivity
-
-template void establishNeighborConnectivity<1U>( std::vector<csmp::Face<1U>*>&, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::Face<2U>*>&, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::Face<3U>*>&, bool );
-*/
+template void establishNeighborConnectivity<1U>( std::vector<csmp::Element<1U>*>&, bool, bool );
+template void establishNeighborConnectivity<2U>( std::vector<csmp::Element<2U>*>&, bool, bool );
+template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>&, bool, bool );
 
 
 // CONNECTIVITY BETWEEN INTERFACES
 
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside )
+void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
@@ -2173,11 +2314,11 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
          return;
       }
 
-    cout << "\nestablishNeighborConnectivity( InterFace ): Establishing CSMP FE neighbor connectivity...\n";
+    if (verbose) cout << "\nestablishNeighborConnectivity( InterFace ): Establishing CSMP FE neighbor connectivity...\n";
 
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "  Building element face list...\n";
+    if (verbose)  cout << "  Building element face list...\n";
 
     //       key             face number neighbor
     multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >  surface_neighbor_keys,
@@ -2214,27 +2355,40 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
            }
            key.clear();
 
-           // unassign neirghbors outside of the provided vector range
-           if( unassign_neighbors_outside )
-               (*it)->UnassignNeighbors();
+           // unassign neirghbors outside of the provided vector range		   
+           if ( unassign_neighbors_outside )
+           {
+             // remove element from neighbor list of its neighbors
+             const size_t neighbors( (*it)->Neighbors() );
+             for ( size_t neighbor = 0; neighbor < neighbors; ++neighbor )
+               if ( (*it)->Neighbor( neighbor ) != NULL ) {
+                 const size_t neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
+                 for ( size_t i = 0; i < neighbor_neighbors; i++ )
+                   if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
+                     if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
+                       (*it)->NeighborElementVector()[i] = NULL;
+                     }
+
+                 (*it)->NeighborElementVector()[neighbor] = NULL;
+               }
+             (*it)->NeighborElementVector().clear();
+           }
         }
 
 
     // 2. (re)building element neigborhoods
     // ------------------------------------
     // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "  Building element neighbor connectivity...";
+    if (verbose) cout << "  Building element neighbor connectivity...";
 
     // 2.1 line elements
     // -----------------
-    cout << "line elements...";
-
     if ( !line_neighbor_keys.empty() ) {
 
         InterFace<dim>* e1Ptr(NULL);
         InterFace<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tline elements...";
+        if (verbose) cout << "\n\t\tline elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >::iterator it1(line_neighbor_keys.begin()),
@@ -2270,14 +2424,12 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
     // 2.2 surface elements
     // --------------------
-    cout << "surface elements...";
-
     if ( dim >= 2U and !surface_neighbor_keys.empty() ) {
 
         InterFace<dim>* e1Ptr(NULL);
         InterFace<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tsurface elements...";
+        if (verbose) cout << "\n\t\tsurface elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
@@ -2315,9 +2467,9 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
  } // end establishNeighborConnectivity
 
-template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, bool );
+template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, bool, bool );
+template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, bool, bool );
+template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, bool, bool );
 
 
 
@@ -2785,18 +2937,58 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
     if ( !interface_elmt_pairs.empty() ) interface_elmt_pairs.clear();
     // searching
     for ( auto it=element_face_keys.begin(); it!=element_face_keys.end(); ++it ) {
-         // multimap iterator containing the range of shared keys
+         // multimap iterator pair containing the range of shared keys
+         //  face search key (point set), element(Element*), face number (size_t)
          auto result = element_face_keys.equal_range( (*it).first );
          // if more than one value was found
-//cerr << distance( result.first, result.second ) <<" ";
          if ( distance( result.first, result.second ) > 1U ) {
-             // there should not be any manyfolds
-             assert( distance( result.first, result.second ) == 2U );
-             // advancing the result range iterator as necessary to find an Element different from (*it).second.first
-             while ( (*result.first).second.first != (*it).second.first ) {
-                  result.first++;
+           // if there are any manyfolds, then stop this process and return false.
+           //if ( distance( result.first, result.second ) == 2U ) continue;
+           // advancing the result range iterator as necessary to find an Element different from (*it).second.first
+           do result.first++;
+           while ( (*result.first).second.first == (*it).second.first );
+           
+           // building search maps that we will use to find the shared interfaces
+           // key=pointset   face iD
+           map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
+           vector<size_t>  nids;
+           // first element
+           Element<dim>* e1 = (*it).second.first;
+           for ( size_t face = 0U; face<e1->Faces(); ++face ) {
+             e1->FE()->NodesOfFace( face, nids );
+             set<Point<dim> >  face_key;
+             for ( size_t j = 0U; j<nids.size(); ++j )
+               face_key.insert( e1->N( nids[j] )->Coordinate() );
+             outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
+           }
+           // second element
+           Element<dim>* e2 = (*result.first).second.first;
+           for ( size_t face = 0U; face<e2->Faces(); ++face ) {
+             e2->FE()->NodesOfFace( face, nids );
+             set<Point<dim> >  face_key;
+             for ( size_t j = 0U; j<nids.size(); ++j )
+               face_key.insert( e2->N( nids[j] )->Coordinate() );
+             inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
+           }
+
+           // 2. finding the shared faces
+           bool found( false );
+           long64 inner_face_id(-1), outer_face_id(-1);
+           for ( auto inner_face : inner_elmt_faces ) {
+             for ( auto outer_face : outer_elmt_faces ) {
+               if ( inner_face.first == outer_face.first ) {
+                 inner_face_id = inner_face.second.second;
+                 outer_face_id = outer_face.second.second;
+                 found = true;
+                 break;
                }
+             }
+             if ( found ) break;
+           }
+
            // we store the matching element pair
+           // set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >
+           if ( found )
            interface_elmt_pairs.insert( make_pair(
                                         make_pair( (*it).second.first, (*it).second.second ),
                                         make_pair( (*result.first).second.first, (*result.first).second.second ) )
@@ -3157,6 +3349,23 @@ Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& qu
 
       return 0;
     }
+
+
+
+/// Utility that tokenises string into substrings using the supplied delimiter(s).
+std::vector<std::string> splitString( std::string str, char delimiter )
+{
+  size_t pos = 0U;
+  string token, s = str;
+  vector<string> items;
+  while ( (pos = s.find( delimiter )) != std::string::npos ) {
+    token = s.substr( 0, pos );
+    items.push_back( token );
+    s.erase( 0, pos + 1 );
+  }
+  if ( !s.empty() ) items.push_back( s );
+  return items;
+}
 
 
 } // end namespace csmp

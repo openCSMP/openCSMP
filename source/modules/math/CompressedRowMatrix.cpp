@@ -13,136 +13,14 @@ using namespace std;
 
 namespace csmp {
 
-	void CompressedRowMatrix::Resize(size_t rows) {
-		JV.clear();
-		ia.clear();
-		ja.clear();
-		 a.clear();
-		 Dirich_.clear();
-		 mapDirich.clear();
-		JV.resize(rows);
-		nnzi = 0;
-		for (size_t i = 0; i < rows; ++i)
-		{
-			JV[i].reserve(100);
-			// For CRM we always need diagonal in the begining!
-			JV[i].push_back(Entry(i, 0.0));
-		}
-	}
+/*! \file CSMP_mathUtilities.cpp */
 
-	void CompressedRowMatrix::AddToCRM(Entry& JVelem) {
-		ja.push_back(mapDirich[JVelem.ind] + 1); // Plus one is for SAMG (index starts from 1 not 0)
-		a.push_back(JVelem.val);
-		++nnzi;
-	}
-	/*
-	JVmap is a matrix! each row contaions a map that makes pair of col index (ind)
-	and val(row,col). For compressed row storage we do a need diagonal element in the begining
-	Already RHS and LHS are multipled by scale_factore_.
-	*/
-	void CompressedRowMatrix::Set_Dirichelet_RHS_CRM(vector<double64>& rhs, vector<Entry>& dirich)
-	{
-		size_t ii(0), kk(0), Entries(0), Rows(JV.size());
+/**
+@addtogroup CSMPglobalFunctions
+@{
+*/
 
-		mapDirich.resize(Rows, 1);
-		for (auto x : dirich) {
-			mapDirich[x.ind] = -1; 
-			Dirich_.insert(make_pair(x.ind, x.val));
-		}
-
-		kk = 0;
-		for (ii = 0; ii < Rows; ++ii) {
-			if (mapDirich[ii] == 1)	mapDirich[ii] = kk++;
-			Entries += JV[ii].size();
-		}
-
-		ia.reserve(Rows + 1);
-		ja.reserve(Entries);
-		 a.reserve(Entries);
-		ia.push_back(1);
-		nnzi = 1;
-
-		vector<double64> rh(Rows);
-		map<size_t, double64>::iterator itD;
-		for (ii = 0; ii < Rows; ++ii) {
-			if (mapDirich[ii] == -1) continue; // Dirchlet row
-			double64 sumi(0.);
-			vector<Entry>& JVrow(JV[ii]);
-			for (auto itJV : JVrow)
-  			  if (mapDirich[itJV.ind] != -1) AddToCRM(itJV);  // If it's in Local Matrix:
-			  else if (( itD = Dirich_.find(itJV.ind)) != Dirich_.end()) sumi += itD->second * itJV.val;
-			ia.push_back(nnzi);
-			rh[mapDirich[ii]] = rhs[ii] - sumi;
-		}
-
-		rhs.swap(rh);
-	}
-
-	void CompressedRowMatrix::mapToGlobal(vector<double64>& sol, vector<Entry>& dirich)
-	{
-		size_t Rows(mapDirich.size()), isol(0), idirich(0);
-		vector<double64> xg(Rows);
-		for (size_t ii = 0; ii < Rows; ++ii)
-			if (mapDirich[ii] == -1)
-				xg[ii] = dirich[idirich++].val;
-			else
-				xg[ii] = sol[isol++];
-		sol.swap(xg);
-	}
-
-	void CompressedRowMatrix::Add(std::vector<size_t>& rows, std::vector<size_t>& cols, DenseMatrix<DM_MIN>& vals, double64 factor)
-	{
-		double64 Zero_(0.),valij;
-		bool isNew(false);
-		size_t colj(0), sizeJVi;
-		for (size_t i = 0; i < vals.Rows(); ++i) {
-			vector<Entry>& JVi(JV[rows[i]]); // Just for renaming
-			sizeJVi = JVi.size();
-			for (size_t j = 0; j < vals.Cols(); ++j) {
-				if ((valij = vals(i, j)*factor) != Zero_) {
-					isNew = true;
-					colj = cols[j];
-					for (size_t ii = 0; ii < sizeJVi; ++ii)
-						if (JVi[ii].ind == colj) {
-							JVi[ii].val += valij;
-							isNew = false;
-							break;
-						}
-					if (isNew) JVi.push_back(Entry(colj, valij));
-				}
-			}
-		}
-	}
-
-	void CompressedRowMatrix::set_indicator_UBA(int32 nsys, vector<int32>& iu)
-	{
-		uint32 k(0),g(0),rows(mapDirich.size());
-		for (int32 j = 0; j<nsys; j++)
-			for (int32 i = 0; i<(rows / nsys); i++)
-				 if(mapDirich[g++] != -1) iu[k++] = j + 1;
-	}
-
-	void CompressedRowMatrix::Set_PBA(int32 nsys, std::vector<double64>& u_, std::vector<double64>& f_, std::vector<double64>& x, std::vector<double64>& b) 
-	{
-		uint32 k(0), rows(mapDirich.size());
-		for (int32 i = 0U; i < rows; i++) 
-			if(mapDirich[i] != -1){
-				u_[k] = x[i%nsys*(rows / nsys) + i / nsys]; // initial guess for the solution vector
-				f_[k] = b[i%nsys*(rows / nsys) + i / nsys]; // right-hand side
-				k++;
-			}
-	}
-
-	void CompressedRowMatrix::set_indicator_PBA(int32 nsys, vector<int32>& iu)
-	{
-		uint32 k(0), g(0), rows(mapDirich.size());
-		for (int32 i = 0; i<(rows / nsys); i++)
-			for (int32 j = 0; j<nsys; j++)
-				if (mapDirich[g++] != -1) iu[k++] = j + 1;
-	}
-
-
-	void print(  vector<pair<pair<uint32,uint32>,vector<bool> > >&  v )
+void print(  vector<pair<pair<uint32,uint32>,vector<bool> > >&  v )
  {
        cout <<"\nvector of off-diagonal elements:\n";
        int32 n(0);
@@ -158,54 +36,32 @@ namespace csmp {
                 cout << endl << endl;
             }
   }
+/**
+@}
+*/
 
-
-	CompressedRowMatrix::CompressedRowMatrix()
+CompressedRowMatrix::CompressedRowMatrix()
  {
-
  }
 
 
-	CompressedRowMatrix::CompressedRowMatrix( csmp::SparseMatrix& spmat )
+
+CompressedRowMatrix::CompressedRowMatrix( csmp::SparseMatrix& spmat )
  {
     Initialize( spmat );
  }
 
 
-	CompressedRowMatrix::~CompressedRowMatrix()
+CompressedRowMatrix::~CompressedRowMatrix()
  {
  }
 
-
-	CompressedRowMatrix::CompressedRowMatrix( const CompressedRowMatrix& crm )
+CompressedRowMatrix::CompressedRowMatrix( const CompressedRowMatrix& crm )
  {
       *this = crm;
  }
 
-	CompressedRowMatrix::CompressedRowMatrix(std::string & CRMfname)
-	{
-		ifstream ifs(CRMfname);
-		assert(ifs.is_open());
-		int32 ias, jas;
-		ifs >> dof_ >> ias >> jas;
-		ia.resize(ias);
-		ja.resize(jas);
-		a.resize(jas);
-		mapDirich.resize(ias-1);
-		trh_.resize(ias-1);
-		tx_.resize(ias - 1);
-
-		cout << "To construct a CRM object: Reading from " << CRMfname << endl;
-		for (size_t i = 0; i < ias; ++i) ifs >> ia[i];
-		for (size_t i = 0; i < jas; ++i) ifs >> ja[i];
-		for (size_t i = 0; i < jas; ++i) ifs >> a[i];
-		for (size_t i = 0; i < ias - 1; ++i) ifs >> trh_[i];
-		for (size_t i = 0; i < ias - 1; ++i) ifs >> mapDirich[i];
-		cout << "Reading from " << CRMfname << " finished completely." << endl;
-	}
-
-
-	CompressedRowMatrix&  CompressedRowMatrix::operator=( const CompressedRowMatrix& crm )
+CompressedRowMatrix&  CompressedRowMatrix::operator=( const CompressedRowMatrix& crm )
   {
        if ( &crm != this ) {
              ia = crm.ia;
@@ -214,6 +70,8 @@ namespace csmp {
          }
        return *this;
   }
+
+
 
 /*
  Julian Mindel:  I proceeded to comment out the old code which contained the version of the () operator used before
@@ -236,8 +94,7 @@ double64  CompressedRowMatrix::operator()( uint32 i, uint32 j ) const
 }
 */
 
-
-	double64  CompressedRowMatrix::operator()( uint32 i, uint32 j ) const
+double64  CompressedRowMatrix::operator()( uint32 i, uint32 j ) const
 {
 	assert( i < ia.size()-1U );
 	assert( j < ia.size()-1U );
@@ -249,6 +106,9 @@ double64  CompressedRowMatrix::operator()( uint32 i, uint32 j ) const
 
 	return 0.;
 }
+
+
+
 
 /**
  
@@ -287,8 +147,7 @@ Transfer of the global solution matrix to conventional solvers.
 Reports if the solution matrix contains zero diagonal entries.  
 */
 
-
-	void CompressedRowMatrix::Initialize( const SparseMatrix& A ) 
+void CompressedRowMatrix::Initialize( const SparseMatrix& A ) 
  {
       ia.resize( (A.Rows() + 1U) ); vector<int32>( ia ).swap( ia );
       // ja is constructed with zero diagonal entries
@@ -352,6 +211,11 @@ Reports if the solution matrix contains zero diagonal entries.
 
 }  // end Initialize
 
+
+
+
+
+
 /**
  
 Initialises the public CompressedRowMatrix vectors ia, ja, a for given 
@@ -409,16 +273,24 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
 
 }  // end InitializePointBased
 
+
+
+
+
+
+
+
+
 /** Outputs matrix to screen.
 */
 void CompressedRowMatrix::Out() const
  {
     cout << flush <<"\nCompressedRowMatrix::Out: "<< endl;
     cout <<"\nrow index vector 'ia' with size = "<<ia.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ )
+    for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
       cout << *it <<" ";
     cout <<"\ncolumn index vector 'ja' with size = "<<ja.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ )
+    for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
       cout << *it <<" ";
     cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
     for ( size_t n=0U; n<ja.size(); n++ ) {
@@ -429,6 +301,8 @@ void CompressedRowMatrix::Out() const
     cout.flush();   
  }
 
+
+
 /** Outputs matrix to text file.
 */
 void CompressedRowMatrix::Out( const string& outfile ) const
@@ -437,10 +311,10 @@ void CompressedRowMatrix::Out( const string& outfile ) const
     assert( ofs.is_open() );
     ofs << flush <<"\nCompressedRowMatrix::Out: "<< endl;
     ofs <<"\nrow index vector 'ia' with size = "<<ia.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ )
+    for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
       ofs << *it <<" ";
     cout <<"\ncolumn index vector 'ja' with size = "<<ja.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ )
+    for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
       ofs << *it <<" ";
     cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
     const long precision = ofs.precision();
@@ -453,6 +327,7 @@ void CompressedRowMatrix::Out( const string& outfile ) const
     ofs << endl;
     ofs.flush();
  }
+
 
 } // end csmp
 

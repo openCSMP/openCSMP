@@ -1,5 +1,6 @@
 #include "BrooksCoreyWithHysteresis.h"
 #include "BrooksCoreyFrontVelocity.h"
+#include "LinearTwoPhaseModel.h"
 #include "PropertyDatabase.h"
 
 using namespace std;
@@ -98,11 +99,6 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
 
 
 
-template<size_t dim>
-BrooksCoreyWithHysteresis<dim>::~BrooksCoreyWithHysteresis()
- {
- }
- 
  
  
 
@@ -111,7 +107,7 @@ BrooksCoreyWithHysteresis<dim>::~BrooksCoreyWithHysteresis()
 
 /// not constant as it sets the saturation inflection point
 template<size_t dim>
-void BrooksCoreyWithHysteresis<dim>::Initialize( Element<dim>& e )
+void BrooksCoreyWithHysteresis<dim>::InitializeAndStore( Element<dim>& e )
  {
     TwoPhaseModel<dim>::k_   = e.Read( TwoPhaseModel<dim>::perm_key_ );
     TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );

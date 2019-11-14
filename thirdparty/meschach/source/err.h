@@ -59,15 +59,13 @@ extern  int err_list_free();		/* freeing a list of errors */
 static void	float_error(int	num);
 void	catch_FPE();
 
-extern	int ev_err(char *,int,int,char *,int);  /* main error handler */
-extern	int set_err_flag(int flag);         /* for different ways of handling
+int ev_err(const char*,int,int,const char*,int);  /* main error handler, SKM: introduced 'const' as fix 20/7/19 */
+int set_err_flag(int flag);         /* for different ways of handling
                                                 errors, returns old value */
-extern  int count_errs(int true_false);     /* to avoid "too many errors" */
-extern  int err_list_attach(int list_num, int list_len,
-	       char **err_ptr,int warn);  /* for attaching a list of errors */
-extern  int err_is_list_attached(int list_num);  /* checking if a list 
-						    is attached */
-extern  int err_list_free(int list_num);   /* freeing a list of errors */
+int count_errs(int true_false);     /* to avoid "too many errors" */
+int err_list_attach(int list_num, int list_len, const char** err_ptr,int warn );  /* for attaching a list of errors */
+int err_is_list_attached(int list_num);  /* checking if a list is attached */
+int err_list_free(int list_num);   /* freeing a list of errors */
 
 #endif
 

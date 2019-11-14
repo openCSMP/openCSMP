@@ -21,72 +21,48 @@ FaceConstructionData  higherDimensionalNeighbors( const csmp::Element<dim>&, con
 template<size_t dim>
 const csmp::Element<dim>* const  higherDimensionalNeighbor( const csmp::Element<dim>&, const csmp::Index&,
                                                             size_t& local_face_number_of_e, double64& material_ID  );
+template<size_t dim>
+bool  higherDimensionalNeighbors( const Element<dim>& , std::vector<Element<dim>*>& );
 
 /**
 
-@brief Policy of the Model class for the management of its internal and external
-boundaries which are of a lower spatial dimensional and consist of Face objects.
-
-@author P. Lang
-@author S.K. Matthai
-@date 2010
+@brief Policy of Model class for the management of internal and external
+boundaries which are of a lower spatial dimensional than the model and consist of Face objects.
 
 The BoundaryInterface manages the boundaries of the model, including 
 their construction and removal.
 
-@section motivation Motivation
-
-The BoundaryInterface has been designed as a policy of the model providing
-access and the technology to work with boundaries in CSMP computations.
-
-@section consequences Consequences
-
 @section implementation Implementation
 
-By contrast with the RegionInterface whose creational operations
-rely on a Master Region that encompasses all elements, no such 
-region exists for the boundaries, but they are constructed from 
-pre-existing regions whose existance will always precede that of 
-the boundaries.
+By contrast with the RegionInterface whose interfaces for Region creation
+rely on the existance of a master region that contains all elements of the model, no such 
+region exists for the boundaries, but boundaries are typically constructed from lower-dimensional
+regions tagged via the name string 'BOUNDARY' as future boundaries in the geomodelling process.
 
-@note the BoundaryInterface is not responsible for the management of the Face objects
-which are handled by the MeshManager. 
-By contrast, the BoundaryInterface only manages boundaries=vectors of pointers to the 
-faces.
+@note the BoundaryInterface is not responsible for the management of Face objects.
+These are handled by the MeshManager. 
+The only thing that the BoundaryInterface does is to allow the creation / modification of Boundaries
+and to give access to them. 
 
-@section applications Applications
-
-@todo (3) storage in binary models
-@todo (3) Include Edges into the boundaries
+@author S.K. Matthai
+@author P. Lang
+@date 2010, 2017
 
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 class BoundaryInterface {
   public:
     BoundaryInterface();
+    BoundaryInterface( const BoundaryInterface& ) = delete;
     virtual ~BoundaryInterface();
+    
+    friend class Boundary_Test;
+    friend class BoundaryInterface_Test; ///< to gain access to protected member functions for testing
 
     csmp::Boundary<dim>&        Boundary( const std::string& bName );
     const csmp::Boundary<dim>&  Boundary( const std::string& bName ) const;
     bool                        ContainsBoundary( const std::string& bName ) const;
-  
-    /// searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string ('\0') if not found
-    std::string  FindBoundaryName( const std::set<std::string>& intersected_regions ) const;
-
-    /// searches for the boundaries whose name contains the supplied strings (region names etc.)
-    size_t  FindBoundaryNames( const std::set<std::string>& intersected_regions,
-                               std::set<std::string>& region_patches_found ) const;
-
-    /// checks whether name contains the strings BOUNDARY or any of the predefined boundary names
-    bool IsBoundaryName( const std::string& regionName ) const;
-    
-    /// checks whether the model contain the BOX_BOUNDARY=equivalent boundaries TOP, BOTTOM etc.
-    bool BoxShaped() const;
-
-    // ----------------------------------------------------------------
-    // Boundaries access and manipulations with the list of Boundaries
-    // ----------------------------------------------------------------
-
+      
     typedef typename std::map<std::string,csmp::Boundary<dim> >::iterator         boundaryIterator;
     typedef typename std::map<std::string,csmp::Boundary<dim> >::const_iterator   boundaryConstIterator;
 
@@ -97,39 +73,70 @@ class BoundaryInterface {
     boundaryIterator       Boundary( const csmp::Boundary<dim>& );
     size_t                 Boundaries() const;
 
-    /// Switches names of boundaries
-    void SwitchBoundaryNames( csmp::Boundary<dim> const& b1, csmp::Boundary<dim> const& b2 );
+    /// combines strings (including 'BOUNDARY') into a unique name of the boundary
+    std::string CreateBoundaryNameFrom( const FaceConstructionData&, const std::vector<std::string>& region_names ) const;
 
-    /// Removes boundary
-    void RemoveBoundary( csmp::Boundary<dim>& boundary, bool deleteElements = false );
+    /// searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string ('\0') if not found
+    std::string  FindBoundaryName( const std::set<std::string>& intersected_regions ) const;
 
-    // -----------------------------------------------
-    // Boundaries creation
-    // -----------------------------------------------
-    /// create boundary from already interconnected faces that also know their parent elements
-    bool AddBoundary( const char* name,
-                      typename std::vector<Face<dim>*>::iterator facesBegin,
-                      typename std::vector<Face<dim>*>::iterator facesEnd,
-                      BOX_BOUNDARY );
+    /// searches for the boundaries whose name contains the supplied strings (region names etc.)
+    size_t  FindBoundaryNames( const std::set<std::string>& intersected_regions,
+                               std::set<std::string>& region_patches_found ) const;
+
+    /// checks whether name contains the strings BOUNDARY or any of the predefined boundary names
+    bool IsBoundaryName( const std::string& regionName ) const;
     
-    /// returns number of created boundary segments = to region juxtapositions encountered
+    /// checks whether the model contains the BOX_BOUNDARY=equivalent boundaries TOP, BOTTOM etc.
+    bool BoxShaped() const;
+
+
+    // -----------------------------------------------
+    // Boundary creation, modification & removal
+    // -----------------------------------------------
+    
+    /// creates  uniquely named boundary patches, returning their number; the patches are created from meshed surface inside of model which will be removed by default  (3D only)
     size_t  CreateInternalBoundaryFrom( const char* dimension_minus1_region, bool remove_dim_minus1_region=true );
-
-// ==============================================================================================
-// PHILLIP'S METHODS- CHECK
-// ==============================================================================================
-    /// construct Boundary<Face> from lower dimensional boundary flagged elements of given region
-    bool InsertBoundary( BOX_BOUNDARY boxBoundary, const char* region = "Model" );
-
-    /// DOES NOT WORK: Boundary<Face> from lower dimensional Region<Element> in model
-    bool InsertBoundary( const char* region, BOX_BOUNDARY boxBoundary = IRREGULAR, bool deleteRegionAndItsElements = false );
 
     /// insert Boundary<Face> between two equidimensional unique regions, first on the inside by convention
     bool InsertBoundary( const char* region1, const char* region2, bool createRegionBetween = false );
 
-    /// Creates new boundary from existing faces
+    /// construct Boundary<Face> from lower dimensional boundary flagged elements of given region
+    bool InsertBoundary( BOX_BOUNDARY boxBoundary, const char* region = "Model" );
+
+    /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
+    bool EstablishBoxBoundariesFromOrientation();
+    
+    /// using the assigned box boundary flags, tries to create corresponding Boundary objects
+    bool EstablishBoxBoundariesFromFlags();
+    
+    /// Removes boundary with optional deletion of its faces by the MeshManager
+    void RemoveBoundary( csmp::Boundary<dim>& boundary, bool deleteElements = false );
+
+    // -----------------------------------------------
+    //  input/output
+    // -----------------------------------------------
+    
+    /// prints boundary names and other stats to screen 
+    void BoundariesOut() const;
+
+    /// method used in the storage of a model to binary file
+    bool OutputAllBoundariesToBinary( const char* file_name ) const;
+  
+    /// reads boundaries stored in CSMP native binary file written by OutputAllBoundariesToBinary; it can also read only a subset of variables
+    void InputAllBoundariesFromBinary( const char* file_name, const std::set<std::string>* subset_variables = nullptr );
+
+
+ protected:
+ 
+    /// creates boundary from already interconnected faces that also know their parent elements
+    bool AddBoundary( const char* name,
+                      typename std::vector<Face<dim>*>::iterator facesBegin,
+                      typename std::vector<Face<dim>*>::iterator facesEnd,
+                      BOX_BOUNDARY );
+
+    /// creates new boundary from existing faces
     bool InsertBoundary( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                         const typename std::vector<Face<dim>*>::const_iterator facesEnd, 
+                         const typename std::vector<Face<dim>*>::const_iterator facesEnd,
                          const std::string& bName );
 
     /// inserts csmp::Boundary for box boundaries
@@ -142,39 +149,26 @@ class BoundaryInterface {
     bool EstablishEdgeRegionsOfBoxShapedModel( const VSet<dim>&  );
 
     /// inserts irregular csmp::Boundary for all eligible regions in the model
-    bool EstablishBoundaries(bool remove_original_lower_dimensional_regions);
+    bool EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
 
-    // -----------------------------------------------
-    // Binary input/output
-    // -----------------------------------------------
+    /// inserts irregular csmp::Boundary for all eligible regions in the discontiguous model
+    bool EstablishBoundariesFromDiscontiguousModel(bool remove_original_lower_dimensional_regions);
 
-    /// method used in the storage of a model to binary file
-    bool OutputAllBoundariesToBinary( const char* file_name ) const;
-  
-    /// reads boundaries stored in CSMP native binary file written by OutputAllBoundariesToBinary
-    void InputAllBoundariesFromBinary( const char* file_name );
-
-  protected:
-    std::map<std::string,csmp::Boundary<dim> >   faceBoundaryMap_; ///< storage of the boundaries
-
-  private:
-    BoundaryInterface( const BoundaryInterface& );
-
-  // TO DEPRECATE
-  public:
     /// construct Boundary<Face> objects around a region
-    bool AddFaces( const char* region );
+    bool AddFaces(const char* region);
 
     /// Splits boundary based on regions into new boundaries
-    bool DivideBoundary( typename std::map<std::string,csmp::Boundary<dim> >::iterator boundary,
-                         const typename std::map<std::string,Region<dim> >::const_iterator subRegion );
+    bool DivideBoundary( typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
+                         const typename std::map<std::string, Region<dim> >::const_iterator subRegion );
 
     /// Splits boundary into remainder and new name with parameter name
-    bool DivideBoundary( typename std::map<std::string,csmp::Boundary<dim> >::iterator boundary,
-                         const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                         const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                         const std::string& bName );
- };
+    bool DivideBoundary(  typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
+                          const typename std::vector<Face<dim>*>::const_iterator facesBegin,
+                          const typename std::vector<Face<dim>*>::const_iterator facesEnd,
+                          const std::string& bName );
+ protected:
+   std::map<std::string,csmp::Boundary<dim> >   faceBoundaryMap_; ///< storage of the boundaries
+};
 
 } // csmp
 

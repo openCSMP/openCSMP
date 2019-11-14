@@ -18,6 +18,15 @@ namespace csmp {
 
 const double64 PI( 3.14159265358979324 );
 
+/**
+@}
+*/
+
+/**
+@addtogroup CSMPglobalFunctions
+@{
+*/
+
 /// all trigonomic functions in C++ take arguments in radians
 inline double64 degreesToRadians( double64 deg ) { return deg * PI/180.; }
 inline double64 radiansToDegrees( double64 rad ) { return rad * 180./PI; }
@@ -38,24 +47,15 @@ inline double64 quantiseToScale(double64 x, double64 scale)
 } 
 
 
-/**
-@}
-*/
-
-/**
-@addtogroup CSMPglobalFunctions
-@{
-*/
-
 /// sign function to determine a positive or negative multiplier= -1 0 1 extracting the sign of a number
 template <typename T>
-T sign( T val ) {
+inline T sign( T val ) {
     return static_cast<T>((T(0) < val) - (val < T(0)));
 }
 
 /// Square function
 template<typename T>
-T square( T val ) {
+inline T square( T val ) {
     return val*val;
 }
 
@@ -89,6 +89,31 @@ void  dN_To2DOF( size_t nodes, DenseMatrix<DM_MIN>& DN );
 
 /// FEM matrix transformations, for the case where the solution variable is a vector in 3D, Zienkewicz, volume 1, p. 133
 void  dN_To3DOF( size_t nodes, DenseMatrix<DM_MIN>& DN );
+
+
+/// auxiliary functions for spline interpolation
+double64 splineValue( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
+double64 splineDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
+double64 splineSecondDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
+  
+
+// ROOT FINDING
+
+/// finding root of function f(x) by Secant method within the x range [xmin,xmax]
+double64 secant_method( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance);
+
+/// in the range [xmin,xmax], finds the intersection of the nonlinear function (flinear) with a linear function (fnonlinear) with the given x-axis intercept
+double64 secant_line( double64 x_intercept, double64 xmin, double64 xmax, double64 (*flinear)( double64 ), double64 (*fnonlinear)( double64 ), double64 tolerance );
+  
+/// finding the x value, in the range [xmin,xmax],  where function f(x) is maximum by using golden-section search
+double64 maximum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance);
+
+/// finding the x value, in the range [xmin,xmax],  where function f(x) is minimum by using golden-section search
+double64 minimum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance);
+
+/// finding the x value, in the range [xmin,xmax],  where function the "df(x)/dx=(f(x)-f(x1))/(x-x1)".. this line is the secant and tangent to f(x) at that point
+double64 g( double64 x, double64 x1, double64 (*function)( double64 ), double64 (*dfunction)( double64 ) );
+  
 
 /**
 @}

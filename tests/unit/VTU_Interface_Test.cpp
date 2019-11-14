@@ -64,7 +64,7 @@ void VTU_Interface_Test::run()
   Region<DIM>& rref1( model.Region( "LAYER1" ) );
   Region<DIM>& rref2( model.Region( "LAYER2" ) );
   rref1.InputPropertyValue( "element variable", makeScalar( PLAIN, 1.0E-13 ) );
-  rref1.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 0.7 ) );
+  rref1.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 0.1234567890123456 ) ); // to check loss of double precision
 
   // regions
   _test( vtu.OmitZeroInFileName() == true );

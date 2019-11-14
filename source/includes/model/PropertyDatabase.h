@@ -4,6 +4,7 @@
 #define CSMP_PROPERTY_DATABASE_H
 
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <unordered_map>
 #include <string>
@@ -15,6 +16,11 @@
 
 namespace csmp {
 
+class ScalarVariable;
+template<size_t> class VectorVariable;
+template<size_t> class TensorVariable;
+class ArrayVariable;
+class FlaggedArrayVariable;
                                         
 /**
  
@@ -172,17 +178,11 @@ template<size_t dim>
 class PropertyDatabase  {
  public:
    PropertyDatabase();
-   explicit PropertyDatabase( const char* variablesFileName, bool isBinary = false );
+   /// it reads a full of variables in the variables text file; it can also read only a subset of variables from the binary file
+   PropertyDatabase( const char* variablesFileName, bool isBinary = false, const std::set<std::string>* subset_variables = nullptr );
+   PropertyDatabase( const PropertyDatabase<dim>& );
    ~PropertyDatabase();
-  
    PropertyDatabase<dim>& operator=( const PropertyDatabase<dim>& p );
-   void Initialize( const char* variables_file );
-   void DeepCopy( const PropertyDatabase<dim>& );
-
-   bool BinaryOut( const char* fileName ) const;
-   bool BinaryOut( FILE* fp ) const;
-   bool BinaryIn( const char* fileName );
-   bool BinaryIn( FILE* fp );
 
    const char*    VariablesFile() const;
    csmp::Index    StorageKey( const char* property_name ) const;
@@ -192,12 +192,29 @@ class PropertyDatabase  {
    VARIABLE_TYPE  Type( const char* property_name ) const;
    size_t         Components( const char* property_name ) const;
    const char*    Name( const csmp::Index& idx ) const;
+   const char*    Unit( const char* property_name ) const;
    const char*    Usage( const char* property_name ) const;
    bool           IsDefined( const char* property_name ) const;
    bool           IsDefined( const csmp::Index& idx ) const;
    void           RangeOf( const char* property_name, double64& min, double64& max ) const;
+   void           SetRangeOf( const char* property_name, double64 vmin, double64 vmax );
+
+   // range checking
+   /// prints details of the range check to screen and terminates program is value is out of range
    void           CheckRange( const char* property_name, double64& var ) const;
-   const char*    Unit( const char* property_name ) const;
+  
+   /// checks value against the range specified in the database; @note not fast; use only for selected values
+   bool           CheckRange( const char* property_name, const ScalarVariable& ) const;
+  
+   /// checks whether the magnitude of the specified variable value is within database range
+   bool           CheckRange( const char* property_name, const VectorVariable<dim>& ) const;
+  
+   /// checks whether the determinant of the tensor is within range assuming that it is symmetric, diagonally dominant
+   bool           CheckRange( const char* property_name, const TensorVariable<dim>& ) const;
+  
+   /// L1 norm of the supplied arrays
+   bool           CheckRange( const char* property_name, const ArrayVariable& ) const;
+   bool           CheckRange( const char* property_name, const FlaggedArrayVariable& ) const;
   
    LocalVariables             LocalVariablesAt( PLACEMENT within ) const;
    IntegrationPointVariables  IntegrationPointVariablesAt( PLACEMENT within ) const;
@@ -210,12 +227,12 @@ class PropertyDatabase  {
                                         const char* desired_system, 
                                         const char* unit ) const;
 
-   /// adding a property at runtime from the command line (NB: you should call method of model to do this)
+   /// adding a property at runtime from the command line (NB: you should call method CreateProperty() of model to do this)
    csmp::Index    AddProperty();    
 
-   csmp::Index    AddProperty(const char* property_name, const char* unit, size_t last_max_index,
+   csmp::Index    AddProperty( const char* property_name, const char* unit, size_t last_max_index,
                                VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
-                               double64 vmin=-1.0e+30 , double64 vmax=1.0e+30 , std::string usage="???");
+                               double64 vmin=-1.0e+30 , double64 vmax=1.0e+30 , std::string usage="???" );
 
    csmp::Index    AddProperty( const char* property_name, const char* unit,
                                VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
@@ -223,8 +240,8 @@ class PropertyDatabase  {
                                    
    void           DeleteProperty( const char* property_name ); 
    
-   std::unordered_map<std::string,csmp::Parameter>::const_iterator  Begin() const;
-   std::unordered_map<std::string,csmp::Parameter>::const_iterator  End() const;
+   std::map<std::string,csmp::Parameter>::const_iterator  Begin() const;
+   std::map<std::string,csmp::Parameter>::const_iterator  End() const;
 
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator  VariableCountBegin() const; 
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator  VariableCountEnd() const; 
@@ -255,6 +272,11 @@ class PropertyDatabase  {
 
    void   Out() const;
 
+   bool   BinaryOut( const char* fileName ) const;
+   bool   BinaryOut( std::fstream& fp ) const;
+   bool   BinaryIn( const char* fileName, const std::set<std::string>* subset_variables = nullptr );
+   bool   BinaryIn( std::fstream& fp, const std::set<std::string>* subset_variables = nullptr );
+
    void   Verbose(bool verbose) { this->verbose_=verbose; }
    bool   Verbose() { return this->verbose_; }
 
@@ -263,10 +285,10 @@ class PropertyDatabase  {
    bool verbose_;
    std::string  physvarsFile;
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> > variableCount_; ///< all placements and variable types in here
-   std::unordered_map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
+   std::map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
    IndexTracker indexTracker_; ///< used to keep track of all index references and update indices after runtime changes
-
-   PropertyDatabase( const PropertyDatabase<dim>& );
+  
+   void   Initialize( const char* variables_file );
    void   InitializeCount();
    void   InitializeVariableTypeCount( std::map<VARIABLE_TYPE,size_t>& );
    void   UpdateParametersAndDatabase();
@@ -275,7 +297,6 @@ class PropertyDatabase  {
    void   UpdateIndexReferences();
    void   DetachIndices( std::string parameterName );
    void   AssignVariableIndices();
-   void   UpdateIndicesAfterDelete();
    void   TextToBinaryFile( const char* text_database_file, bool echo_to_screen=false );
    void   EstablishIndexLocalAndIntegrationPointVariables();
    void   EstablishIndexOffsets();

@@ -64,6 +64,21 @@ Face<dim>::Face( const Element<dim>& elmt,
     else if ( dim == 2 ) assert( elmt.IsLineElement() );
     assert( innerParent_ != nullptr );
    
+    // 0. verification that the lower-dimensional element and the element that will be transformed
+    //    into a face have indeed matching nodes
+    const size_t     nodes_to_match(elmt.Nodes());
+    set<Node<dim>*>  elmt_nodes;
+    for ( size_t j=0U; j<nodes_to_match; ++j )
+      elmt_nodes.insert( elmt.N(j) );
+    // checking
+    size_t matching_nodes(0U);
+    for ( size_t j=0U; j<innerParent_->Nodes(); ++j ) {
+          assert( innerParent_->N(j) != nullptr );
+          if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
+            matching_nodes++;
+      }
+    assert( matching_nodes == nodes_to_match );
+
     // 1. creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
@@ -72,25 +87,11 @@ Face<dim>::Face( const Element<dim>& elmt,
 
     // 2. connecting the nodes of the face with those of the lower-dimensional element
     //   from which it was created
-    const size_t nodes(elmt.Nodes());
-    const size_t inner_elmt_nodes(innerParent_->Nodes());
+    const size_t nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
     for ( size_t i=0U; i<nodes; ++i ) {
          // assignig the node
          assert( elmt.N(i) != nullptr );
          Assign( i, elmt.N(i) );
-    
-#ifndef NDEBUG // the node match with the higher-dimensional parent element is verified
-         bool matching_node_exists(false);
-         for ( size_t j=0U; j<inner_elmt_nodes; ++j ) {
-              assert( innerParent_->N(j) != nullptr );
-              // assigning parent element node numbers when the pointers match
-              if ( elmt.N(i) == innerParent_->N(j) ) {
-                  matching_node_exists = true;
-                  break;
-                }
-           }
-         assert( matching_node_exists );
-#endif
     }
    
  } // end constructor
@@ -388,8 +389,8 @@ template<size_t dim>
 Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
  {
     if ( &fc != this ) {
-        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
-        FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
+		if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+		if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
         idx_                  = fc.idx_;
         face_connector_       = fc.face_connector_;
         node_connector_       = fc.node_connector_;
@@ -411,8 +412,8 @@ Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
  {
     assert( &fc != this );
 
-    FiniteElementPolicy<dim,csmp::Face>::Assign(move(fc.FE()));
-    FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(move(fc.FV()));
+    if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(move(fc.FE()));
+    if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(move(fc.FV()));
    
     idx_             = move(fc.idx_ );
     face_connector_  = move(fc.face_connector_);
@@ -443,8 +444,8 @@ template<size_t dim>
 void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
  {
     assert( nd_ptr != nullptr );
-    assert( i < Nodes() );
-    assert( node_connector_.size() == this->FE()->Nodes() );
+    assert( i < Nodes()*2U );
+    assert( !node_connector_.empty() );
 
     node_connector_[i] = nd_ptr;
  }
@@ -462,6 +463,51 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  }
 
 
+template<size_t dim>
+bool Face<dim>::DisconnectNeighbor(Face<dim>* f_ptr)
+{
+	assert(f_ptr != nullptr);	
+	assert(face_connector_.size() == this->FE()->Neighbors());
+	for (size_t i(0); i < face_connector_.size(); ++i)
+		if (f_ptr == face_connector_[i])
+		{
+			face_connector_.erase(face_connector_.begin() + i);
+			face_connector_.swap(face_connector_);
+			return true;
+		}
+	return false;
+} // end DisconnectNeighbor
+
+
+
+template<size_t dim>
+size_t  Face<dim>::Nodes() const
+{
+	return node_connector_.size();
+}
+
+template<size_t dim>
+size_t  Face<dim>::Neighbors() const
+{
+	return face_connector_.size();
+}
+
+
+template<size_t dim>
+size_t  Face<dim>::ConnectedNeighbors() const
+{
+	size_t nulls(0);
+	for (auto f : face_connector_)
+		if (!f) nulls++;
+	return (face_connector_.size() - nulls);
+}
+
+
+template<size_t dim>
+size_t  Face<dim>::Faces() const
+{
+	return face_connector_.size();
+}
 
 
 /**
@@ -512,8 +558,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
     // 3. matching the lower-dimensional face to a face of the higher-dimensional element
     // -----------------------------------------------------------------------------------
-    if ( (dim == 3U and this->IsSurfaceElement() ) or // Face is either a triangle or a quadrilateral in 3D
-         (dim == 2U and this->IsLineElement()) )      // Face is a line in 2D
+    if ( ((dim == 3U) && this->IsSurfaceElement() ) || // Face is either a triangle or a quadrilateral in 3D
+         ((dim == 2U) && this->IsLineElement()) )      // Face is a line in 2D
       {
          // searching the matching Face of the inner parent element
          bool             matching_face_found(false);
@@ -531,8 +577,7 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
                     break;
                 }
               parent_nds.clear();
-           }
-         assert( matching_face_found );
+           }         
          return;
       }
     
@@ -557,7 +602,6 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
             }
           parent_nds.clear();
        }
-     assert( matching_segment_found );
 
  } // end assign
 
@@ -1054,9 +1098,13 @@ void  Face<dim>::Out() const
 template<size_t dim>
 bool  Face<dim>::operator==( const Face<dim>& fc ) const
  {
-    if ( &fc != this )
-      if ( innerParent_ != fc.innerParent_ || outerParent_ != fc.outerParent_ ) return false;
-    return true;
+	 if (&fc != this) {
+		 if (node_connector_.size() != fc.node_connector_.size()) return false;
+		 if (innerParent_ != fc.innerParent_ || outerParent_ != fc.outerParent_) return false;
+		 for (size_t i = 0U; i < node_connector_.size(); i++)
+			 if (node_connector_[i]->Idx() != fc.node_connector_[i]->Idx()) return false;
+	 }
+     return true;
  }
 
 

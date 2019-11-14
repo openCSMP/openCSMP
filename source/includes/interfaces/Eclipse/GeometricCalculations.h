@@ -1,14 +1,10 @@
-#ifndef GEOMETRIC_CALCULATIONS_H
-#define GEOMETRIC_CALCULATIONS_H
+#ifndef GEOMETRIC_CALCULATIONS_UOM_H
+#define GEOMETRIC_CALCULATIONS_UOM_H
 
-#include "CSMP_definitions.h"
-#include "CSMP_ElementSpecifications.h"
+#include <map>
 #include "Point.h"
-#include "PolygonGrid.h"
 
 namespace csmp {
-
-// TODO: student code: needs refactoring and elimination of duplicate functionality, used by EclipseInterface
 
 /// axes ( 1D )
 template<size_t dim>
@@ -36,12 +32,13 @@ double unsignedLength( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2 );
 /// point in bar
 bool   isPointInsideTheBar( const csmp::Point<1U>& pt, const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2 );
 bool   isPointInsideTheBar( const csmp::Point<2U>& pt, const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2 );
-bool   isPointInsideTheBar( const csmp::Point<2U>& pt, const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2 );
+bool   isPointInsideTheBar( const csmp::Point<3U>& pt, const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2 );
 
 /// triangle ( area )
 double unsignedArea( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3 );
 double unsignedArea( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3 );
 double unsignedArea( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3 );
+
 double signedArea( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3 );
 double signedArea( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3 );
 double signedArea( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3 );
@@ -54,7 +51,7 @@ bool   isCounterClockWiseOrientation( const csmp::Point<3U>& pt1, const csmp::Po
 /// point in triangle
 bool   isPointInsideTheTriangle( const csmp::Point<1U>& pt, const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3 );
 bool   isPointInsideTheTriangle( const csmp::Point<2U>& pt, const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3 );
-bool   isPointInsideTheTriangle( const csmp::Point<2U>& pt, const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3 );
+bool   isPointInsideTheTriangle( const csmp::Point<3U>& pt, const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3 );
 
 /// point with respect to line
 bool   isSameSide( const csmp::Point<2U>& pt, const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3 );
@@ -65,6 +62,7 @@ bool   isSameSide( const csmp::Point<3U>& pt, const csmp::Point<3U>& pt1, const 
 double unsignedArea( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4 );
 double unsignedArea( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3, const csmp::Point<2U>& pt4 );
 double unsignedArea( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3, const csmp::Point<3U>& pt4 );
+
 double signedArea( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4 );
 double signedArea( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3, const csmp::Point<2U>& pt4 );
 double signedArea( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3, const csmp::Point<3U>& pt4 );
@@ -85,6 +83,7 @@ bool   isCounterClockWiseOrientation( const csmp::Point<3U>& pt1, const csmp::Po
 double dihedralDegAngle( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4 );
 double dihedralDegAngle( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3, const csmp::Point<2U>& pt4 );
 double dihedralDegAngle( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3, const csmp::Point<3U>& pt4 );
+
 double dihedralRadAngle( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4 );
 double dihedralRadAngle( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3, const csmp::Point<2U>& pt4 );
 double dihedralRadAngle( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3, const csmp::Point<3U>& pt4 );
@@ -93,12 +92,10 @@ double dihedralRadAngle( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2,
 bool   isTetra( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4 );
 bool   isTetra( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3, const csmp::Point<2U>& pt4 );
 bool   isTetra( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3, const csmp::Point<3U>& pt4 );
+
 bool   isTetra( const csmp::Point<1U>& pt1, const csmp::Point<1U>& pt2, const csmp::Point<1U>& pt3, const csmp::Point<1U>& pt4, std::map<size_t,size_t>& order );
 bool   isTetra( const csmp::Point<2U>& pt1, const csmp::Point<2U>& pt2, const csmp::Point<2U>& pt3, const csmp::Point<2U>& pt4, std::map<size_t,size_t>& order );
 bool   isTetra( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const csmp::Point<3U>& pt3, const csmp::Point<3U>& pt4, std::map<size_t,size_t>& order );
-
-
-/// point in tetrahedron
 
 /**
 

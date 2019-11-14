@@ -5,8 +5,6 @@
 #include "Box.h"
 #include "Point.h"
 #include "LocalVariableStorage.h"
-#include "PrimitiveContainer.h"
-#include "FiniteVolumeDiscretisationPolicy.h"
 
 namespace csmp {
 
@@ -43,19 +41,16 @@ Elements are registered as parents, Faces and InterFaces are not.
  
 */
 template<size_t dim>
-class Node : public LocalVariableStorage<dim,Node<dim> >,
-             public FiniteVolumeDiscretisationPolicy<dim>
-
-// TODO: class Node : public LocalVariableStorage<dim,Node>
-  {
+class Node : public LocalVariableStorage<dim,Node<dim> > {
   public:
     Node();
     /// custom constructor used when model is reconstructed from binary file
-    Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY=NOT );
+    Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
     ~Node();
-    Node( const Node& nd );
-    Node( Node&& nd );
+    Node( const Node& );
+    Node( Node&& );
     Node& operator=( const Node& );
+    Node& operator=( Node&& );
 
     /// relation operators
     bool operator==( const Node<dim>& );
@@ -104,25 +99,12 @@ class Node : public LocalVariableStorage<dim,Node<dim> >,
     BOX_BOUNDARY     AtBoundary() const;
 
   private:
-    friend struct PrimitiveTraits<Node>;
     mutable size_t                 idx_;                      ///< 0..n-1
     BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     Point<dim>                     xyz_;                      ///< coordinate array
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     std::vector<Element<dim>*>     parent_element_pointers_;  ///< parent element pointers
 };
-
-
-template<size_t dim>
-struct PrimitiveTraits<Node<dim>>
-{
-  void Clear(Node<dim>* n)
-  {
-    decltype(n->parent_node_indexes_)().swap(n->parent_node_indexes_);
-    decltype(n->parent_element_pointers_)().swap(n->parent_element_pointers_);
-  }
-};
-
 
 } // csmp
 

@@ -12,12 +12,12 @@
 
 namespace csmp {
 
+enum { WETTING_PHASE = 1U, NONWETTING_PHASE = 2U };
+
 /** base class for 2-phase flow models
 
 base class for 2-phase flow models (Linear, Brooks Corey, Van Genuchten, Richards)
 now you can inherit BrooksCoreyWetting, BrooksCoreyNonWetting... 
-
-@todo (3) To improve calculation speed, change relperm models from dynamic to static polymorphism (C)
  
  */
 template<size_t dim>
@@ -51,7 +51,7 @@ class TwoPhaseModel {
     virtual void Initialize( const Element<dim>& e );
  
     /// read and modify element properties when the saturation functions are history dependent
-    virtual void Initialize( Element<dim>& e );
+    virtual void InitializeAndStore( Element<dim>& e );
 
     /// interpolates node properties to element barycenter
     virtual void InitializeForBaryCenter( const Element<dim>& e );

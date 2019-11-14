@@ -5,17 +5,17 @@
 
 namespace csmp {
 
-template<template<size_t> class SIMPLEX>
-FiniteVolumePolicy<2U,SIMPLEX>::FiniteVolumePolicy( const csmp::FiniteVolumeStencil<2U>* fvptr )
+template<template<size_t> class CELL>
+FiniteVolumePolicy<2U,CELL>::FiniteVolumePolicy( const csmp::FiniteVolumeStencil<2U>* fvptr )
  : fvptr_(fvptr)
  {
  }
 
 
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::AssignFiniteVolume( const csmp::FiniteVolumeStencil<2U>* fvptr )
+template<template<size_t> class CELL>
+void FiniteVolumePolicy<2U,CELL>::AssignFiniteVolume( const csmp::FiniteVolumeStencil<2U>* fvptr )
  {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( fvptr != nullptr );
     assert( e     != nullptr );
     assert( fvptr->Geometry() == parseFiniteElementDimension( e->FE_Type() ) );
@@ -25,64 +25,45 @@ void FiniteVolumePolicy<2U,SIMPLEX>::AssignFiniteVolume( const csmp::FiniteVolum
 
 // FV STENCIL INFO
 
-template<template<size_t> class SIMPLEX>
-const FiniteVolumeStencil<2U>* const FiniteVolumePolicy<2U,SIMPLEX>::FV() const
+template<template<size_t> class CELL>
+const FiniteVolumeStencil<2U>* const FiniteVolumePolicy<2U,CELL>::FV() const
  {
     return fvptr_;
  }
 
 
 /// Returns number of sectors, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class SIMPLEX>
-size_t FiniteVolumePolicy<2U,SIMPLEX>::Sectors() const
+template<template<size_t> class CELL>
+size_t FiniteVolumePolicy<2U,CELL>::Sectors() const
   {
     if( fvptr_ != nullptr ) return fvptr_->Sectors();
     return 0;
   }
 
 /// Returns number of facets, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class SIMPLEX>
-size_t FiniteVolumePolicy<2U,SIMPLEX>::Facets() const
+template<template<size_t> class CELL>
+size_t FiniteVolumePolicy<2U,CELL>::Facets() const
   {
     if( fvptr_ != nullptr ) return fvptr_->Facets();
     return 0;
   }
 
 /// Returns number of integration points per sector, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class SIMPLEX>
-size_t FiniteVolumePolicy<2U,SIMPLEX>::IntegrationPointsPerSector() const
+template<template<size_t> class CELL>
+size_t FiniteVolumePolicy<2U,CELL>::IntegrationPointsPerSector() const
   {
     if( fvptr_ != nullptr ) return fvptr_->IntegrationPointsPerSector();
     return 0;
   }
 
 /// Returns number of integration points per facet, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class SIMPLEX>
-size_t FiniteVolumePolicy<2U,SIMPLEX>::IntegrationPointsPerFacet() const
+template<template<size_t> class CELL>
+size_t FiniteVolumePolicy<2U,CELL>::IntegrationPointsPerFacet() const
   {
     if( fvptr_ != nullptr ) return fvptr_->IntegrationPointsPerFacet();
     return 0;
   }
 
-
-// MAPPING BETWEEN LOCAL AND GLOBAL COORDINATES
-
-template<template<size_t> class SIMPLEX>
-Point<2U>  FiniteVolumePolicy<2U,SIMPLEX>::RstToXYZ( const Point<2U>& rst ) const
-{
-   const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
-   N_At( rst );
-  
-   assert( e  != nullptr );
-   double64 sumx(0.), sumy(0.);
-   const size_t nodes(e->Nodes());
-   for ( size_t i=0U; i<nodes; i++ ) {
-       sumx += e->FE()->NRST[i] * e->N(i)->x();
-       sumy += e->FE()->NRST[i] * e->N(i)->y();
-    }
-   // standard RVO
-   return Point<2U>(sumx,sumy);
-}
 
 
 
@@ -90,38 +71,10 @@ Point<2U>  FiniteVolumePolicy<2U,SIMPLEX>::RstToXYZ( const Point<2U>& rst ) cons
 
 // SHAPE FUNCTIONS AT DIFFERENT POINTS
 
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::N_At( const Point<2U>& rst ) const
+template<template<size_t> class CELL>
+void FiniteVolumePolicy<2U,CELL>::N_AtFacetIntegrationPoint( size_t iFacet, size_t ip ) const
  {
-   const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
-   assert( e != nullptr );
-    if ( e->IsSurfaceElement() ) {
-         e->FE()->Nrs( rst[0], rst[1], e->FE()->NRST );
-         return;
-      }
-    // line element
-    e->FE()->Nr( rst[0], e->FE()->NRST );
- }
-
-
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::N_At( const Point<2U>& rst,
-                                           std::vector<double64>& IPOL ) const
- {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
-    assert( e != nullptr );
-    if ( e->IsSurfaceElement() ) {
-         e->FE()->Nrs( rst[0], rst[1], IPOL );
-         return;
-      }
-    // line element
-    e->FE()->Nr( rst[0], IPOL );
- }
-
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::N_AtFacetIntegrationPoint( size_t iFacet, size_t ip ) const
- {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iFacet < fvptr_->Facets());
     assert( ip < fvptr_->IntegrationPointsPerFacet());
 
@@ -140,10 +93,10 @@ void FiniteVolumePolicy<2U,SIMPLEX>::N_AtFacetIntegrationPoint( size_t iFacet, s
 
 
 
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const
+template<template<size_t> class CELL>
+void FiniteVolumePolicy<2U,CELL>::N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const
  {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iSector < fvptr_->Sectors());
     assert( ip < fvptr_->IntegrationPointsPerSector());
 
@@ -165,10 +118,10 @@ void FiniteVolumePolicy<2U,SIMPLEX>::N_AtSectorIntegrationPoint( size_t iSector,
 // DERIVATIVES OF SHAPE FUNCTIONS AT DIFFERENT POINTS
 
 
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::Local_dN_At( const Point<2U>& rst ) const
+template<template<size_t> class CELL>
+void FiniteVolumePolicy<2U,CELL>::Local_dN_At( const Point<2U>& rst ) const
  {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( e != nullptr );
     if ( e->IsSurfaceElement() ) {
          e->FE()->dNr( rst[0], rst[1], e->FE()->DNR );
@@ -181,11 +134,11 @@ void FiniteVolumePolicy<2U,SIMPLEX>::Local_dN_At( const Point<2U>& rst ) const
 
 
 
-template<template<size_t> class SIMPLEX>
-double64 FiniteVolumePolicy<2U,SIMPLEX>::dN_At( const Point<2U>& rst,
+template<template<size_t> class CELL>
+double64 FiniteVolumePolicy<2U,CELL>::dN_At( const Point<2U>& rst,
                                                 DenseMatrix<DM_MIN>& DN ) const
  {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( e != nullptr );
     e->CoordinateMatrix();
     if ( e->IsSurfaceElement() ) {
@@ -207,7 +160,7 @@ double64 FiniteVolumePolicy<2U,SIMPLEX>::dN_At( const Point<2U>& rst,
 // NOT DONE YET
     // line element
     e->FE()->dNr( rst[0], e->FE()->DNR );
-    std::cout <<"\nFiniteVolumePolicy<2U,SIMPLEX>::dN_At: 1D->2D Jacobian is required to get this right."<< std::endl;
+    std::cout <<"\nFiniteVolumePolicy<2U,CELL>::dN_At: 1D->2D Jacobian is required to get this right."<< std::endl;
     e->FE()->Jacobian( e->FE()->DNR );
     return e->FE()->JacobianInverse();
 
@@ -218,17 +171,17 @@ double64 FiniteVolumePolicy<2U,SIMPLEX>::dN_At( const Point<2U>& rst,
 // PROPERTIES AT FACET AND SECTOR INTEGRATION POINTS
 
 // only for scalars
-template<template<size_t> class SIMPLEX>
-double64 FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
+template<template<size_t> class CELL>
+double64 FiniteVolumePolicy<2U,CELL>::PropertyValueAtFacetIntegrationPoint(
                                                  size_t iFacet,
                                                  size_t ip,
                                                  const csmp::Index& prop_key ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iFacet < fvptr_->Facets());
     assert( ip < fvptr_->IntegrationPointsPerFacet());
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
   if ( prop_key.place == ELEMENT ) return e->Read( prop_key );
 
@@ -249,17 +202,17 @@ double64 FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
 
 
 // only for scalars
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::PropertyValueAtSectorIntegrationPoint(
                                                             size_t iSector,
                                                             size_t ip,
                                                             const csmp::Index& prop_key ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iSector < fvptr_->Sectors());
     assert( ip < fvptr_->IntegrationPointsPerSector());
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place == NODE );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
     if ( prop_key.place == ELEMENT ) return e->Read( prop_key );
 
@@ -275,27 +228,36 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
 
  } // end PropertyValueAtVolumeIntegrationPoint
 
-template<template<size_t> class SIMPLEX>
+
+
+
+/**
+    TODO: test for all relevant cases
+*/
+template<template<size_t> class CELL>
 template<class Var>
-void FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
+void FiniteVolumePolicy<2U,CELL>::PropertyValueAtFacetIntegrationPoint(
                                                  const csmp::Index& prop_key,
                                                  size_t iFacet,
                                                  size_t ip,
                                                  Var& var ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iFacet < fvptr_->Facets());
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
-    if ( prop_key.place == ELEMENT ) return e->Read( prop_key, var );
+    if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
+         e->Read( prop_key, var );
+         return;
+      }
 
     // get integration point location and corresponding shape function values
     N_AtFacetIntegrationPoint( iFacet, ip );
 
-    // interppolating property to integration point
+    // interpolating property to integration point
     Var temp;
-    temp.Size( prop_key.dataDepth );
-    var.Size( prop_key.dataDepth );
+    temp.Resize( prop_key.dataDepth );
+    var.Resize( prop_key.dataDepth, 0. );
     var = 0;
     assert( e != nullptr );
     const size_t nodes(e->Nodes());
@@ -306,25 +268,51 @@ void FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
 
 } // end PropertyValueAtFacetIntegrationPoint
 
-template<template<size_t> class SIMPLEX>
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<2U>& ) const;
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<2U>& ) const;
+
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<2U>& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<2U>& ) const;
+
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<2U>& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<2U>& ) const;
+
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+
+
+
+
+template<template<size_t> class CELL>
 template<class Var>
-void  FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
+void  FiniteVolumePolicy<2U,CELL>::PropertyValueAtSectorIntegrationPoint(
                                                             const csmp::Index& prop_key,
                                                             size_t iSector,
                                                             size_t ip,
                                                             Var& var ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iSector<fvptr_->Sectors());
     assert( ip<fvptr_->IntegrationPointsPerSector());
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
-    if ( prop_key.place == ELEMENT ) return e->Read( prop_key, var );
+    if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
+         e->Read( prop_key, var );
+         return;
+      }
 
     N_AtSectorIntegrationPoint( iSector, ip );
     Var temp;
-    temp.Size( prop_key.dataDepth );
-    var.Size( prop_key.dataDepth );
+    temp.Resize( prop_key.dataDepth );
+    var.Resize( prop_key.dataDepth, 0. );
     var = 0;
   
     assert( e != nullptr );
@@ -337,19 +325,39 @@ void  FiniteVolumePolicy<2U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
 
  } // end PropertyValueAtVolumeIntegrationPoint
 
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<2U>& ) const;
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<2U>& ) const;
+
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<2U>& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<2U>& ) const;
+
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<2U>& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<2U>& ) const;
+
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+
+template void FiniteVolumePolicy<2U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+
 
 
 
 // FACET AND SECTOR INTEGRALS
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::FacetIntegral( size_t iSector,
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::FacetIntegral( size_t iSector,
                                                          const csmp::Index& prop_key ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iSector < fvptr_->Sectors());
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
     assert( e != nullptr );
     e->CoordinateMatrix();
@@ -372,14 +380,14 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::FacetIntegral( size_t iSector,
 
 
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::SectorIntegral( size_t iSector,
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::SectorIntegral( size_t iSector,
                                                           const csmp::Index& prop_key ) const
  {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iSector < fvptr_->Sectors());
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
     assert( e != nullptr );
     e->CoordinateMatrix();
@@ -401,8 +409,8 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::SectorIntegral( size_t iSector,
 
 // PROJECTION ON FACET NORMAL
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::ProjectionOnFacetNormal(
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::ProjectionOnFacetNormal(
                                                  size_t iFacet,
                                                  const VectorVariable<2U>& vc
                                                  ) const
@@ -415,11 +423,11 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::ProjectionOnFacetNormal(
 
 
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::ProjectionOnFacetNormal( size_t iFacet,
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::ProjectionOnFacetNormal( size_t iFacet,
                                                                    const csmp::Index& prop_key ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iFacet < fvptr_->Facets());
     assert( prop_key.type  == VECTOR );
     assert( prop_key.place != INTER_FACE  and prop_key.place != ELEMENT_INTEGRATION_POINT );
@@ -437,7 +445,7 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::ProjectionOnFacetNormal( size_t iFacet
     // node properties are nterpolated to facet integration points
     const size_t ip(0U);
     fvptr_->FacetIntegrationPoint( iFacet, ip, e->FE()->NRST );
-    N_At( Point<2U>(e->FE()->NRST) );
+    e->N_At( Point<2U>(e->FE()->NRST) );
 
     assert( e != nullptr );
     double64  sum0(0.);
@@ -461,10 +469,10 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::ProjectionOnFacetNormal( size_t iFacet
 
 // SECTOR VOLUME
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::SectorVolume( size_t iSector ) const
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::SectorVolume( size_t iSector ) const
  {
-     const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+     const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
      assert( iSector < fvptr_->Sectors());
 
      assert( e != nullptr );
@@ -487,15 +495,15 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::SectorVolume( size_t iSector ) const
 
 // FACET AREA AND NORMAL
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::FacetArea( size_t iFacet ) const
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::FacetArea( size_t iFacet ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iFacet < fvptr_->Facets());
 
     assert( e != nullptr );
     if ( e->IsSurfaceElement() )
-      return RstToXYZ(fvptr_->FacetPoint(iFacet,0U)).DistanceTo( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
+      return e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)).DistanceTo( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
     
     return 1.; // if it is a line element
 } // end FacetArea
@@ -503,10 +511,10 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::FacetArea( size_t iFacet ) const
 
 
 
-template<template<size_t> class SIMPLEX>
-Point<2U> FiniteVolumePolicy<2U,SIMPLEX>::FacetNormal( size_t iFacet ) const
+template<template<size_t> class CELL>
+Point<2U> FiniteVolumePolicy<2U,CELL>::FacetNormal( size_t iFacet ) const
 {
-  const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+  const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
   assert( iFacet < fvptr_->Facets());
 
   if ( e->IsSurfaceElement() ) {
@@ -538,32 +546,32 @@ Point<2U> FiniteVolumePolicy<2U,SIMPLEX>::FacetNormal( size_t iFacet ) const
 
 
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::FacetAreaMapped( size_t iFacet ) const
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::FacetAreaMapped( size_t iFacet ) const
 {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iFacet < fvptr_->Facets());
 
     if(e->IsLineElement()) return 1.;
 
-    const Point<2U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
-    const Point<2U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
+    const Point<2U> fp0( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
+    const Point<2U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
 
     return fp0.DistanceTo(fp1);
 
 } // end FacetArea
 
 
-template<template<size_t> class SIMPLEX>
-Point<2U> FiniteVolumePolicy<2U,SIMPLEX>::FacetNormalMapped( size_t iFacet ) const
+template<template<size_t> class CELL>
+Point<2U> FiniteVolumePolicy<2U,CELL>::FacetNormalMapped( size_t iFacet ) const
 {
-   const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
+   const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
    assert( iFacet < fvptr_->Facets());
 
   if(e->IsLineElement()) return Point<2U>(1.,0);
 
-  const Point<2U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
-  const Point<2U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
+  const Point<2U> fp0( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
+  const Point<2U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
 
   // const double64 detJ ( 0.5 * sqrt( pow(fp0[0]-fp1[0],2) + pow(fp0[1]-fp1[1],2) ) );
     
@@ -572,8 +580,8 @@ Point<2U> FiniteVolumePolicy<2U,SIMPLEX>::FacetNormalMapped( size_t iFacet ) con
 }
 
 
-template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<2U,SIMPLEX>::ParametricFacetArea( size_t iFacet ) const
+template<template<size_t> class CELL>
+double64  FiniteVolumePolicy<2U,CELL>::ParametricFacetArea( size_t iFacet ) const
 {
   assert(iFacet<fvptr_->Facets());
 
@@ -587,8 +595,8 @@ double64  FiniteVolumePolicy<2U,SIMPLEX>::ParametricFacetArea( size_t iFacet ) c
 } // end ParametricFacetArea
 
 
-template<template<size_t> class SIMPLEX>
-Point<2U>  FiniteVolumePolicy<2U,SIMPLEX>::ParametricFacetNormal( size_t iFacet ) const
+template<template<size_t> class CELL>
+Point<2U>  FiniteVolumePolicy<2U,CELL>::ParametricFacetNormal( size_t iFacet ) const
 {
    assert( iFacet < fvptr_->Facets());
 

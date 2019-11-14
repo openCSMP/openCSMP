@@ -76,20 +76,20 @@ void BrittleFailureVisitor<dim>::InitializeInputProperties( Element<dim>* eptr )
      if ( Stress_key_.place == ELEMENT )
        eptr->Read( Stress_key_, Cartesian_stress_ );
 
-     mprops_.E  = eptr->Read( Youngs_key_ );          // Young's modulus
-     mprops_.nu = eptr->Read( Poissons_key_ );        // Poisson's ratio
+     mprops_.E_  = eptr->Read( Youngs_key_ );          // Young's modulus
+     mprops_.nu_ = eptr->Read( Poissons_key_ );        // Poisson's ratio
      // friction coefficient computed from friction angle
-     mprops_.mu = tan(degreesToRadians(eptr->Read( Friction_key_)));
-     if ( Biot_key_.place != UNDEFINED ) mprops_.alpha = eptr->Read( Biot_key_ );
-     else mprops_.alpha = (0.6);                      // Biot coefficient phi <= alpha <= 1
-     mprops_.UCS = 0.1 * mprops_.E;                   // Hoek-Brown criterion inferred value
-     mprops_.TS = tensileStrengthFromUCS_Griffith( mprops_.UCS, mprops_.mu );
-     mprops_.pstar = 0.6 * mprops_.E;                 // about 5-7 times of the UCS of the rock
-     mprops_.C = eptr->Read( Cohesion_key_ );         // cohesion = inherent shear strength
+     mprops_.mu_ = tan(degreesToRadians(eptr->Read( Friction_key_)));
+     if ( Biot_key_.place != UNDEFINED ) mprops_.alpha_ = eptr->Read( Biot_key_ );
+     else mprops_.alpha_ = (0.6);                      // Biot coefficient phi <= alpha <= 1
+     mprops_.UCS_ = 0.1 * mprops_.E_;                   // Hoek-Brown criterion inferred value
+     mprops_.TS_ = tensileStrengthFromUCS_Griffith( mprops_.UCS_, mprops_.mu_ );
+     mprops_.pstar_ = 0.6 * mprops_.E_;                 // about 5-7 times of the UCS of the rock
+     mprops_.C_ = eptr->Read( Cohesion_key_ );         // cohesion = inherent shear strength
 
      // calculated using E and nu from relations between elastic moduli
-     mprops_.G = (0.5 * mprops_.E)/(1 + mprops_.nu);
-     mprops_.B = (2./3.) * mprops_.G * (1. + mprops_.nu)/(1. - 2. * mprops_.nu); // K_dry
+     mprops_.G_ = (0.5 * mprops_.E_)/(1 + mprops_.nu_);
+     mprops_.B_ = (2./3.) * mprops_.G_ * (1. + mprops_.nu_)/(1. - 2. * mprops_.nu_); // K_dry
 
      if ( Pressure_key_.place != UNDEFINED )
        eptr->PropertyValueAtBaryCenter( Pressure_key_, fluid_pressure_ );

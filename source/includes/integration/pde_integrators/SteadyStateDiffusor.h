@@ -6,7 +6,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 #include "PointSource_rhsop.h"
-#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator.h"
 
 namespace csmp {
 
@@ -19,17 +19,15 @@ template<size_t> class Model;
     @todo (3) Make generic so that it can take both numerically and analytically integrated FEs
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-class SteadyStateDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
-
+class SteadyStateDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
   public:
+    typedef typename COMPUTATION_DOMAIN<dim>::CellType  ComputationCell;
 
-    typedef typename COMPUTATION_DOMAIN<dim>::Simplex ComputationCell;
-
-	SteadyStateDiffusor(Model<dim>& sg,
-		const char* diffusivity,
-		const char* diffusing_variable,
-		const char* spatial_source_variable,
-		bool LumpedRHS);
+	  SteadyStateDiffusor(  Model<dim>&,
+                          const char* diffusivity,
+                          const char* diffusing_variable,
+                          const char* spatial_source_variable,
+                          bool LumpedRHS);
 
     SteadyStateDiffusor( Model<dim>&, 
                                 const char* diffusivity,

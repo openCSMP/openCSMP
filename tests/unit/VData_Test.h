@@ -276,13 +276,12 @@ void VData_Test::run()
   // .)IN/OUT
   // ..)binary
   VData orphanVDataCopy2 = orphanVData;
-  std::FILE* fp;
-  fp = std::fopen( "VData", "w" );
+  std::fstream fp( "VData", std::ios::out | std::ios::binary );
   orphanVDataCopy2.OutBinary( fp );
-  std::fclose( fp );
-  fp = std::fopen( "VData", "r" );
+  fp.close();
+  fp.open( "VData", std::ios::in | std::ios::binary);
   dummyVData.InBinary( fp );
-  std::fclose( fp );
+  fp.close();
   _test( dummyVData == orphanVDataCopy2 );
   // ..)ascii
   orphanVDataCopy2.OutASCII( "ASCII" );

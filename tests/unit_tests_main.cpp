@@ -5,19 +5,15 @@
 #include <string>
 
 #define CATCH_CONFIG_RUNNER
-#include "catch.hpp"
+#define RUNNING_UNDER_CATCH // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
 
+#include "Test.h" // includes catch.hpp
+#include "TestSuite.h"
 #include "CSMP_definitions.h"
 #include "Exception.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Exception.h"
 #endif
-
-#include "Test.h"
-#include "TestSuite.h"
-
-// read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/  as a tutorial how to use with XCode
-// #include "catch.h"
 
 #include "ScalarVar_Test.h"
 #include "VectorVar_Test.h"
@@ -45,6 +41,7 @@
 #include "Node_Test.h"
 #include "Element_Test.h"
 #include "Face_Test.h"
+#include "MeshManager_Test.h"
 
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test.h"
@@ -53,6 +50,7 @@
 #include "IsoparametricQuadraticTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTriangle.h"
+#include "LinearCuboid_Test.h"
 
 #include "FiniteVolumeStencil_Test.h"
 #include "FiniteVolumePolicy_Test.h"
@@ -62,7 +60,7 @@
 
 #include "PropertyDatabase_Test.h"
 #include "Index_Test.h"
-#include "PropertyData_Test.hpp"
+#include "PropertyData_Test.h"
 #include "ColorPalette_Test.h"
 
 #include "InputDataManager_Test.h"
@@ -80,6 +78,7 @@
 #include "Region_Test.h"
 #include "Box_Test.h"
 #include "SplitBoundary_Test.h"
+#include "ANSYS_SplitBoundaryMatch_Test.h"
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 
@@ -104,7 +103,10 @@
 #include "CSMP_VariableBenchmarking_Test.h"
 #include "GenericFiniteVolumeTransport_Test.h"
 
-#include "DirichletPressureBoxModel_VVCase.h"
+// new tests 2017 onwards
+#include "LinearCuboid_Test.h"
+
+//#include "DirichletPressureBoxModel_VVCase.h"
 
 
 using namespace std;
@@ -155,26 +157,18 @@ using namespace csmp;
      - after Boundary construction, the parent regions are moved to non-unique, but are kept, is this what we want?
 */
 
-TEST_CASE("Unported tests", "[Unported]") {
-  
+// TODO: why is this suite called 'unported'? - change as necessary
+TEST_CASE("Unported tests", "[Unported]")
+ {
   const bool verbose(false);
 
-// /* STANDARD
   const bool test_fundamentals(true),
   test_interdependent1(true),
   test_interdependent2(true),
   test_composite(true),
-  test_refactoring(false),
-  test_new_developments(false);
-// */
-/* TESTING
-  const bool test_fundamentals(false),
-  test_interdependent1(false),
-  test_interdependent2(false),
-  test_composite(false),
   test_refactoring(true),
   test_new_developments(false);
-*/
+
   long fails_fundamentals(0),
   fails_interdependent1(0),
   fails_interdependent2(0),
@@ -215,7 +209,7 @@ TEST_CASE("Unported tests", "[Unported]") {
       basic.addTest( new TensorVariable_Test1());
       basic.addTest( new TensorVariable_Test2());
       basic.addTest( new ArrayVariable_Test());
-      // basic.addTest( new Variables_TestCase("FracBox")); - requires refactoring of InterFace / SplitBoundary functionality
+      basic.addTest( new Variables_Test("FracBox")); //- requires refactoring of InterFace / SplitBoundary functionality
       
       // utilities tests
       basic.addTest( new Matrix_Test(verbose) );
@@ -237,6 +231,12 @@ TEST_CASE("Unported tests", "[Unported]") {
       basic.addTest( new VSet_Test() );
       basic.addTest( new ColorPalette_Test() );
       
+	  //mesh manager	  
+	  basic.addTest(new MeshManager_Test(true));
+	  basic.addTest(new BoundaryInterface_Test(true));
+	  basic.addTest(new Boundary_Test());
+	  basic.addTest(new ANSYS_SplitBoundaryMatch_Test(true));
+
       // Running unit tests and reporting errors
       basic.run();
       fails_fundamentals = basic.report();
@@ -262,12 +262,16 @@ TEST_CASE("Unported tests", "[Unported]") {
       interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) ); // FAIL - flux balance on constant velocity projected on sides
       // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
+      // straight sided analytically integrated elements
+      interdependent1.addTest( new LinearCuboid_Test(false) );  // TODO: add automatic test of interpolation function derivative matrix
       // math operators etc.
       interdependent1.addTest( new Operand_Test() );
       interdependent1.addTest( new MathOperatorLHS_Test());
       interdependent1.addTest( new MathOperatorRHS_Test());
       // TODO: add test of assembly of matrix for systems, elimination of boundary conditions etc.
       interdependent1.addTest( new PDE_Integrator_Test() );
+      interdependent1.addTest( new LinearCuboid_Test(false) );
+      
       // running unit tests and reporting errors
       interdependent1.run();
       fails_interdependent1 = interdependent1.report();
@@ -304,8 +308,9 @@ TEST_CASE("Unported tests", "[Unported]") {
       TestSuite composite("CSMP-dependent-unit test suite", &cout );
       // misc
       composite.addTest( new RegionMonitor_Test() );
-      // constitutive relationships
-      composite.addTest( new ExponentialTransferFunction_Test() );
+      composite.addTest( new Variables_Test("FracBox") );
+
+      // constitutive relationships TODO: create a separate test section for this
       
       /// Property data search tests
       Visitor_TestSuite visitorTests( composite );
@@ -315,6 +320,7 @@ TEST_CASE("Unported tests", "[Unported]") {
       /// Two phase flow tests
       TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
       twoPhaseModelTests.run();
+      composite.addTest( new ExponentialTransferFunction_Test() );
       
       // running unit tests and reporting errors
       composite.run();
@@ -329,14 +335,13 @@ TEST_CASE("Unported tests", "[Unported]") {
       TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
       
       // TODO: review and get these tests to run (in this sequence)
-      // refactored.addTest( new Boundary_Test() );
-      // composite.addTest( new SplitBoundary_Test() );
+      refactored.addTest( new Boundary_Test() );
+      refactored.addTest( new SplitBoundary_Test() );
       // update composite.addTest( new ModelComparator_Test() ); // crashes on PropertyData
       // basic.addTest( new VariableBenchmarking_Test() ); - needs redesign, tests tensor with random numbers
       // basic.addTest( new PropertyStorageSpeed_Test( &cout )); // needs redesign, calls Eigenvectors on random numbers
-      
-//      refactored.addTest( new DirichletPressureBoxModel_VVCase("hex2_10") );
-      refactored.addTest( new DirichletPressureBoxModel_VVCase() );
+      // refactored.addTest( new DirichletPressureBoxModel_VVCase("hex2_10") );
+      // refactored.addTest( new DirichletPressureBoxModel_VVCase() );
 
       refactored.run();
       long nFail = refactored.report();
@@ -444,8 +449,13 @@ TEST_CASE("Unported tests", "[Unported]") {
   
   std::exit(total_failures);
 
-}
+} // end TEST_CASE
 
+
+
+// -----------------------------------------
+// RUNNING THE SUITES OF TESTS THROUGH CATCH
+// -----------------------------------------
 int main(int argc, char* argv[])
 {
   Catch::Session session;

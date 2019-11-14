@@ -218,8 +218,8 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "elements10to100", "conductivity", "conductivity", 1, true );
 
 
-   // assimilation this regions into a new region of elements 110 to 200 (O.K.)
-   transform( element_ids.begin(), element_ids.end(), element_ids.begin(), bind2nd(plus<size_t>(),101U) );
+   // assimilating this regions into a new region of elements 110 to 200, using a lambda function
+   transform( element_ids.begin(), element_ids.end(), element_ids.begin(), [&]( auto elmt ){ return elmt + 101U; } );
    model.FormRegionFrom( "elements110to200", element_ids );
    // test 11: O.K.
    cout <<"\n\n\nmain: AssimilateRegion()  assimilating this regions into FRACS region."<< endl;
@@ -395,7 +395,7 @@ void Region_Example::Run()
    cout <<"\n\tinterior elements: "<< gref.InteriorElements(); // test: O.K.
    cout <<"\n\tIs empty?          "<< gref.Empty() << endl; // test: O.K.
 
-   const Element<DIM>&  e1(model.Mesh().RootElement());
+   const Element<DIM>&  e1(*(model.Mesh().RootElement(0)));
    cout <<"\nmain: Does the model contain a certain element? "<< model.Region("Model").Contains( &e1 ) << endl; // test: O.K.
    //                                                                                  ^^^^^^^^
    cout <<"\nmain: At its boundary? "<< model.Region("Model").IsPerimeterElement( &e1 ) << endl; // test: O.K.

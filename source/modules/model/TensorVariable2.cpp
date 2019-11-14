@@ -260,17 +260,33 @@ VectorVariable<2U> TensorVariable<2U>::Column( size_t iCol ) const
 }
 
 
- bool TensorVariable<2>::Out( FILE* fp ) const
-  {
-  fwrite( (void*)this, sizeof(TensorVariable<2>), 1, fp );
+bool TensorVariable<2U>::Out( std::fstream& fp ) const
+{
+  const int32 flag_0( this->flag[0] );
+  const int32 flag_1( this->flag[1] );
+  const size_t flag_size = sizeof( int32 );
+  fp.write( (char*)&flag_0, flag_size );
+  fp.write( (char*)&flag_1, flag_size );
+  const size_t data_size = sizeof( double64 );
+  fp.write( (char*)&this->data[0][0], data_size );
+  fp.write( (char*)&this->data[1][0], data_size );
+  fp.write( (char*)&this->data[0][1], data_size );
+  fp.write( (char*)&this->data[1][1], data_size );
   return true;
-  }
+}
 
- bool TensorVariable<2>::In( FILE* fp )
-  {
-  fread( (void*)this, sizeof(TensorVariable<2>), 1, fp );
+bool TensorVariable<2U>::In( std::fstream& fp )
+{
+  const size_t flag_size = sizeof( int32 );
+  fp.read( (char*)&this->flag[0], flag_size );
+  fp.read( (char*)&this->flag[1], flag_size );
+  const size_t data_size = sizeof( double64 );
+  fp.read( (char*)&this->data[0][0], data_size );
+  fp.read( (char*)&this->data[1][0], data_size );
+  fp.read( (char*)&this->data[0][1], data_size );
+  fp.read( (char*)&this->data[1][1], data_size );  
   return true;
-  }
+}
 
 
 

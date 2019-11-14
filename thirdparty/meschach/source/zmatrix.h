@@ -172,7 +172,7 @@ extern  ZMAT     *bzm_finput(FILE *fp,ZMAT *mat);
 extern  ZMAT     *izm_finput(FILE *fp,ZMAT *mat);
 extern  ZVEC     *izv_finput(FILE *fp,ZVEC *vec);
 extern  ZVEC     *bzv_finput(FILE *fp,ZVEC *vec);
-extern  char	*setzformat(char *f_string);
+const char* setzformat(const char* f_string );
 
 
 complex	zmake(double real, double imag);

@@ -45,10 +45,11 @@
 #include "Geothermal_Example.h"
 #include "LinearSolver_Example.h"
 #include "EclipseMeshInterface_Example.h"
-#include "DESAdvectionOfTracer2D_Example.h"
-#include "DESAdvectionOfTracer3D_Example.h"
-#include "DESTwoPhaseFlow2D_Example.h"
-#include "MelbourneTransportScheme_Example.h"
+#include "DESAdvectionDiffusion2D_Example.h"
+#include "DESAdvectionDiffusion3D_Example.h"
+#include "DES2PhaseSlightlyCompressibleFlow2D_Example.h"
+#include "DES2PhaseSlightlyCompressibleFlow3D_Example.h"
 #include "Variables_Example.h"
+#include "SlopeMechanics_Example.h" // developed for UoM SMD course, pore-pressure and gravitational loading
 
 #endif

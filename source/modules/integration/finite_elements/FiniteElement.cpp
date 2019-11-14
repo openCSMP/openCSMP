@@ -973,23 +973,8 @@ void  FiniteElement::Out() const
  
  
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
- {
-     if ( etype == LINEAR_CUBOID) return VOLUME;
-	 if ( etype == LINEAR_RECTANGLE) return SURFACE;
-	 if ( etype == LINEAR_BAR ) return LINE;    										
-     if ( etype == QUADRATIC_BAR ) return LINE;
-     if ( etype == CUBIC_BAR ) return LINE;										   
-     if ( etype == LINEAR_TRIANGLE ) return SURFACE;   
-     if ( etype == LINEAR_TRIANGLE3D ) return SURFACE; 									
-     if ( etype == BARYCENTRIC_LINEAR_TRIANGLE ) return SURFACE; 			    	 
-     if ( etype == QUADRATIC_TRIANGLE ) return SURFACE; 								
-     if ( etype == BARYCENTRIC_QUADRATIC_TRIANGLE ) return SURFACE; 					
-     if ( etype == CUBIC_TRIANGLE ) return SURFACE;
-     if ( etype == LINEAR_TETRAHEDRON ) return VOLUME; 								
-     if ( etype == QUADRATIC_TETRAHEDRON ) return VOLUME; 								
-     if ( etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return VOLUME;                  
-     if ( etype == CUBIC_TETRAHEDRON ) return VOLUME;
-     if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return LINE;    						
+  {
+     if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return LINE;
      if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return LINE; 						
      if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return LINE; 
      if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return SURFACE;  					
@@ -1019,6 +1004,21 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return VOLUME;       		
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return VOLUME; 				
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return VOLUME;
+     if ( etype == LINEAR_CUBOID) return VOLUME;
+     if ( etype == LINEAR_RECTANGLE) return SURFACE;
+     if ( etype == LINEAR_BAR ) return LINE;
+     if ( etype == QUADRATIC_BAR ) return LINE;
+     if ( etype == CUBIC_BAR ) return LINE;
+     if ( etype == LINEAR_TRIANGLE ) return SURFACE;
+     if ( etype == LINEAR_TRIANGLE3D ) return SURFACE;
+     if ( etype == BARYCENTRIC_LINEAR_TRIANGLE ) return SURFACE;
+     if ( etype == QUADRATIC_TRIANGLE ) return SURFACE;
+     if ( etype == BARYCENTRIC_QUADRATIC_TRIANGLE ) return SURFACE;
+     if ( etype == CUBIC_TRIANGLE ) return SURFACE;
+     if ( etype == LINEAR_TETRAHEDRON ) return VOLUME;
+     if ( etype == QUADRATIC_TETRAHEDRON ) return VOLUME;
+     if ( etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return VOLUME;
+     if ( etype == CUBIC_TETRAHEDRON ) return VOLUME;
 
      cerr <<"\nparseFiniteElementDimension: Could not identify dimension of element type: "<< etype << endl;
      return static_cast<ELEMENT_DIMENSION>(0);
@@ -1151,8 +1151,8 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  const char* parseFiniteElementType( int32 etype )
   {
      if ( etype == UNKNOWN ) return "UNKNOWN";
-	 if ( etype == LINEAR_RECTANGLE) return "LINEAR_RECTANGLE";
-	 if ( etype == LINEAR_CUBOID) return "LINEAR_CUBOID";
+	   if ( etype == LINEAR_RECTANGLE) return "LINEAR_RECTANGLE";
+	   if ( etype == LINEAR_CUBOID) return "LINEAR_CUBOID";
      if ( etype == LINEAR_BAR ) return "LINEAR_BAR";    										                                    // BAR_2     =2,
      if ( etype == QUADRATIC_BAR ) return "QUADRATIC_BAR";
      if ( etype == CUBIC_BAR ) return "CUBIC_BAR";										                                            // BAR_4  

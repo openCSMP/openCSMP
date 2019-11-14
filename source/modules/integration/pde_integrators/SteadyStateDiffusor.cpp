@@ -19,10 +19,10 @@ namespace csmp {
 		:
 #ifdef CSMP_WITH_SAMG_SOLVER
 		settings_(),
-		PDE_Integrator_CRM<dim, COMPUTATION_DOMAIN>(new SAMG_Solver(&settings_)),
+		PDE_Integrator<dim, COMPUTATION_DOMAIN>(new SAMG_Solver(&settings_)),
 #else
 		/// add extra functionality for alternative solver if needed
-		PDE_Integrator_CRM<dim, COMPUTATION_DOMAIN>(new CSMP_DEFAULT_LINEAR_SOLVER()),
+		PDE_Integrator<dim, COMPUTATION_DOMAIN>(new CSMP_DEFAULT_LINEAR_SOLVER()),
 #endif
 		conductance_(sg.Database(), diffusivity, diffusing_variable, diffusing_variable),
 		source_(new NumIntegral_NT_op_N_dV<dim, ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable)),
@@ -74,7 +74,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
   settings_(),
-  PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+  PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
    /// add extra functionality for alternative solver if needed
    PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
@@ -134,10 +134,10 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-     PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+     PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
@@ -199,10 +199,10 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(0),
@@ -255,10 +255,10 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
@@ -326,10 +326,10 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),

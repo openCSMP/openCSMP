@@ -1,8 +1,8 @@
 #ifndef CSMP_IMPLICIT_TRANSPORT_H
 #define CSMP_IMPLICIT_TRANSPORT_H
 
-#include "Variables_TracerTransfer.h"
-#include "FacetFlux_TracerTransferExplicit.h"
+#include "VariableSet_TracerTransfer.h"
+#include "FluxEvaluator.h"
 #include "Equation_TracerTransferImplicit.h"
 #include "TimeStepEvaluator.h"
 #include "DenseMatrix.h"
@@ -18,8 +18,8 @@ template<size_t> class TwoPhaseModel;
 template<size_t> class LinearSystemAccumulator;
 
 template<size_t dim>
-class ImplicitTransport : public variables::Variables_TracerTransfer,
-                          public FacetFlux_TracerTransferExplicit<dim,ImplicitTransport>,
+class ImplicitTransport : public variables::VariableSet_TracerTransfer,
+                          public FluxEvaluator<dim,ImplicitTransport>,
                           public Equation_TracerTransferImplicit<dim>,
                           public TimeStepEvaluator<dim,ImplicitTransport> {
   public:
@@ -35,7 +35,10 @@ class ImplicitTransport : public variables::Variables_TracerTransfer,
 
     /// gets the model
     const Model<dim>& GetModel() const;
-  
+ 
+    csmp::Index  key_acc_;     ///< accumulated interim result on the FV (scalar)
+    csmp::Index  key_out_;     ///< accumulated interim result on the FV (scalar)
+
   private:
     /// 2. calculates optimal time increment, flux balance, and in- and out flows for each FV
     double64 TimeIncrementAndFluxBalance( double64 max_time_increment );

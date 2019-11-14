@@ -242,7 +242,10 @@ void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, const char*
   } // end finite_element_mesh 
 
 
-
+/**
+    @attention x_nodes actually refers to the number of rows in the matrix, i.e. nodes along the Y (vertical) axes,
+    y_nodes are the number of nodes in the horizontal=x direction.
+*/
 void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_extend, double64 y_extend, size_t x_nodes, size_t y_nodes )
   {
     cout << "\nQuadrilaterator< dim>::QuadrilateralsFromRegularGrid: Generating Vset for finite element mesh... " << endl;

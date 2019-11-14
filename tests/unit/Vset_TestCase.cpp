@@ -93,7 +93,6 @@ void Vset_TestCase::run()
     ArrayVariable ba( "boundary array",  modelOutput2.Database() );
     ArrayVariable baPlain( "boundary array",  modelOutput2.Database() );
     ba = 99.;
-    const size_t elementCount2( modelOutput2.Region("Model").Elements() );
     const size_t nodeCount2( modelOutput2.Region("Model").Nodes() );
     const size_t regionCount2( modelOutput2.Regions() );
     const size_t boundaryCount2( modelOutput2.Boundaries() );

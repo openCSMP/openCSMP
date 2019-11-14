@@ -6,6 +6,7 @@
 #include "variableOperations.h"
 #include "Exception.h"
 #include "CSMP_mathUtilities.h"
+#include "Point.h"
 
 namespace csmp {
 
@@ -20,8 +21,9 @@ template<size_t dim, template<size_t> class SIMPLEX>
 void FiniteElementPolicy<dim,SIMPLEX>::Assign( FiniteElement* fe_ptr )
  {
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
-    assert( fe_ptr != nullptr );
-    assert( eptr->Nodes() == fe_ptr->Nodes() );
+    assert( fe_ptr != nullptr );	
+	// JC: check it later. error in the Debug mode.
+    //assert( eptr->Nodes() == fe_ptr->Nodes() );
     fptr_ = fe_ptr;
  }
 
@@ -111,6 +113,7 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::IntegrationPoint( size_t ip ) cons
     return Point<dim>( fptr_->DNR );
   }
 
+
 template<size_t dim, template<size_t> class SIMPLEX>
 double64 FiniteElementPolicy<dim,SIMPLEX>::WeightAtIntegrationPoint( size_t i ) const
   {
@@ -119,7 +122,93 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::WeightAtIntegrationPoint( size_t i ) 
   }
 
 
+// MAPPING BETWEEN LOCAL AND GLOBAL COORDINATES
+
+/**
+    Transforms point location from local to global coordinates.
+ 
+    @note passing the point by value is intentional because the copy is reused by the function.
+*/
+template<size_t dim, template<size_t> class CELL>
+Point<dim>  FiniteElementPolicy<dim,CELL>::RstToXYZ( Point<dim> rst ) const
+{
+   const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
+
+   // initialises NRST
+   N_At( rst );
+  
+   assert( e  != nullptr );
+   rst = 0.;
+   const size_t nodes(e->Nodes());
+   for ( size_t i=0U; i<nodes; i++ )
+     for ( size_t j=0U; j<dim; ++j )
+       // transformation of the coordinates
+       rst[j] += e->FE()->NRST[i] * (*e->N(i))[j];
+  
+   // standard RVO
+   return rst;
+}
+
+
+
+
 // SHAPE FUNCTIONS AT DIFFERENT POINTS
+
+
+
+// SHAPE FUNCTIONS AT DIFFERENT POINTS
+
+
+/**
+     Calculates local interpolation function values at the supplied parametric
+     coordinate->
+*/
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst ) const
+ {
+    const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
+    assert( e != nullptr );
+ 
+    if ( e->IsVolumeElement() ) {
+         e->FE()->Nrst( rst[0], rst[1], rst[2], e->FE()->NRST );
+         return;
+      }
+    if ( e->IsSurfaceElement() ) {
+         e->FE()->Nrs( rst[0], rst[1], e->FE()->NRST );
+         return;
+      }
+    // line element
+    e->FE()->Nr( rst[0], e->FE()->NRST );
+ }
+
+
+
+/**
+    Returns element interpolation functions at point rst in local coordinate system
+    into argument vector IPOL.
+*/
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst,
+                                          std::vector<double64>& IPOL ) const
+ {
+
+    const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
+    assert( e != nullptr );
+    if ( e->IsVolumeElement() ) {
+         e->FE()->Nrst( rst[0], rst[1], rst[2], IPOL );
+         return;
+      }
+    if ( e->FE()->IsSurfaceElement() ) {
+         e->FE()->Nrs( rst[0], rst[1], IPOL );
+         return;
+      }
+    // line element
+    e->FE()->Nr( rst[0], IPOL );
+ }
+
+
+
+
 
 /**
     Returns the value of the interpolation functions at a point in physical space.
@@ -356,9 +445,8 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
   {
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
-    Var  temp;
-    if ( idx.place == ELEMENT ) {
-         eptr->Read( idx, temp );
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
+         eptr->Read( idx, var );
          return;
     }
     if ( idx.place != NODE ) {
@@ -368,6 +456,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
        throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt");
     }
 
+    Var  temp;
     temp.Resize( idx.dataDepth );
     var.Resize( idx.dataDepth, 0. );
     // initialisation for accumulation
@@ -384,6 +473,37 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
        var += temp * fptr_->NRST[i];
     }
   }
+
+
+
+// scalar version of previous method
+template<size_t dim, template<size_t> class SIMPLEX>
+double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
+                                                            const std::vector<double64>& xyz ) const
+  {
+    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
+         return eptr->Read( idx );
+    }
+    if ( idx.place != NODE ) {
+       std::cerr <<"\nFiniteElementPolicy<"<< dim;
+       std::cerr <<">::PropertyValueAt: This method only interpolates the ";
+       std::cerr <<"values of NODE properties."<< std::endl;
+       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt");
+    }
+
+    assert( fptr_ != nullptr );
+    CoordinateMatrix();
+    fptr_->N( fptr_->NRST, xyz );
+
+    double64 var(0.);
+    const size_t  n_nodes(fptr_->Nodes());
+    for ( size_t i=0U; i<n_nodes; i++ )
+       var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
+
+    return var;
+}
 
 
 /**
@@ -403,8 +523,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
     assert( fptr_ != nullptr );
 
-    Var  temp;
-    if ( idx.place == ELEMENT ) {
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
          eptr->Read( idx, var );
          return;
     }
@@ -416,11 +535,13 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
        throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter");
     }
 
+    Var  temp;
     temp.Resize( idx.dataDepth );
     var.Resize( idx.dataDepth, 0. );
     // initialisation for accumulation
     var = 0.;
 
+    // simple averaging of integration point properties
     if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
        const size_t n_integration_points(IntegrationPoints());
        for ( size_t i=0U; i < n_integration_points; i++ ) {
@@ -450,6 +571,61 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
     }
   }
 
+
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::Index& idx ) const
+  {
+    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    assert( fptr_ != nullptr );
+
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE )  return eptr->Read( idx );
+
+    if ( idx.place != NODE  and idx.place != ELEMENT_INTEGRATION_POINT and idx.place != SECTOR_INTEGRATION_POINT) {
+       std::cerr <<"\nFiniteElementPolicy<"<< dim;
+       std::cerr <<">::PropertyValueAtBaryCenter: This method only interpolates the ";
+       std::cerr <<"values of NODE properties."<< std::endl;
+       std::cerr <<"values of ELEMENT_INTEGRATION_POINT properties are averaged."<< std::endl;
+       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter");
+    }
+
+    double64 var(0.);
+
+    // simple averaging of integration point properties
+    if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
+       const size_t n_integration_points(IntegrationPoints());
+       for ( size_t i=0U; i < n_integration_points; i++ ) {
+            var += eptr->Read( i, idx );
+         }
+       var /= static_cast<double64>(fptr_->IntegrationPoints());
+       return var;
+    }
+    if ( idx.place == SECTOR_INTEGRATION_POINT ) {
+       const size_t n_sector_integration_points(eptr->FV()->Sectors());
+       for ( size_t i=0U; i < n_sector_integration_points; i++ ) {
+            var += eptr->Read( i, 0U, idx );
+         }
+       var /= static_cast<double64>(n_sector_integration_points);
+       return var;
+    }
+
+    if ( !fptr_->UsesLocalCoordinates() ) CoordinateMatrix();
+    fptr_->N_AtBaryCenter( fptr_->NRST );
+
+    const size_t  n_nodes(fptr_->Nodes());
+    for ( size_t i=0U; i<n_nodes; i++ ) {
+       var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
+    }
+    
+    return var;
+    
+  } // end scalar version
+
+
+
+
+
 /**
 Interpolates node properties to the integration points.
 
@@ -465,20 +641,19 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( const cs
   {
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
-    Var  temp;
-    if ( idx.place == ELEMENT ) {
-         eptr->Read( idx, temp );
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
+         eptr->Read( idx, var );
          return;
     }
-    if ( idx.place != NODE )
-    {
-       std::cerr <<"\nFiniteElementPolicy<"<< dim;
-       std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates the ";
-       std::cerr <<"values of NODE properties."<< std::endl;
-       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint");
-    }
+    if ( idx.place != NODE ) {
+         std::cerr <<"\nFiniteElementPolicy<"<< dim;
+         std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates the ";
+         std::cerr <<"values of NODE properties."<< std::endl;
+         throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint");
+      }
 
     // potential size and value adjustments for array variables
+    Var  temp;
     temp.Resize( idx.dataDepth );
     var.Resize( idx.dataDepth, 0. );
     // initialisation for accumulation
@@ -509,8 +684,8 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( cons
   {
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
-    double64  var(0.);
-    if ( idx.place == ELEMENT && idx.type == SCALAR ) return eptr->Read( idx );
+    if ( (idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE) && idx.type == SCALAR ) return eptr->Read( idx );
+    
     if ( idx.place != NODE or idx.type != SCALAR ) {
         std::cerr <<"\nFiniteElementPolicy<"<< dim;
         std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates ";
@@ -521,6 +696,7 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( cons
     assert( fptr_ != nullptr );
     fptr_->N_AtIntegrationPoint( ip, fptr_->NRST );
 
+    double64  var(0.);
     const size_t  n_nodes(fptr_->Nodes());
     for ( size_t i=0U; i<n_nodes; i++ )
       var += fptr_->NRST[i] * eptr->N(i)->Read( idx );

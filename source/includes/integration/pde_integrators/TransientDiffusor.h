@@ -8,7 +8,7 @@
 #include "PointSource_rhsop.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
-#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator.h"
 
 namespace csmp {
 
@@ -28,11 +28,9 @@ template<size_t> class Model;
    
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-class TransientDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
-
+class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
   public:
-
-    typedef typename COMPUTATION_DOMAIN<dim>::Simplex ComputationCell;
+    typedef typename COMPUTATION_DOMAIN<dim>::CellType  ComputationCell;
 
     TransientDiffusor( Model<dim>&,
                               const char* diffusivity,
@@ -46,6 +44,14 @@ class TransientDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
                               const char* storage_variable,
                               const char* element_source_variable,
                               const char* point_source_variable );
+                              
+    TransientDiffusor( Model<dim>&, 
+                              const char* lhs_diffusivity,
+                              const char* rhs_diffusivity,
+                              const char* diffusing_variable,
+                              const char* storage_variable,
+                              const char* spatial_source_variable,
+                              const char* point_source_variable );                               
     
     // including gravity
     TransientDiffusor( Model<dim>&, 
@@ -62,6 +68,15 @@ class TransientDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
                               const char* storage_variable,
                               const char* spatial_source_variable,
                               const char* gradient_variable, double64 gradient_multiplier );
+                              
+    TransientDiffusor( Model<dim>&, 
+                              const char* lhs_diffusivity,
+                              const char* rhs_diffusivity,
+                              const char* diffusing_variable,
+                              const char* storage_variable,
+                              const char* spatial_source_variable,
+                              const char* point_source_variable,
+                              const char* gradient_variable, double64 gradient_multiplier );                              
 
     virtual ~TransientDiffusor();
   

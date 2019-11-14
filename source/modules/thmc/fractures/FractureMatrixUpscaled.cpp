@@ -140,7 +140,7 @@ void FractureMatrixUpscaled<dim>::Initialize( const Element<dim>& e )
     // relative permeability parameters (Brooks-Corey)
     pd_                        = e.Read( pd_key_ );
     lambda_                    = e.Read( lambda_key_ );
-    assert( lambda_ > 0. );
+    assert( lambda_ >= 0. );
     phim_                      = e.Read( phim_key_ );
     // fracture matrix parameters
     Af_                        = e.Read( Af_key_ );

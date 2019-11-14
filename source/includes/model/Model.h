@@ -9,7 +9,7 @@
 #include "MeshManager.h"
 #include "RegionInterface.h"
 #include "BoundaryInterface.h"
-#include "SplitBoundaryInterface18.h"
+#include "SplitBoundaryInterface.h"
 #include "LocalVariableStorage.h"
 
 namespace csmp {
@@ -24,11 +24,12 @@ template<size_t> class Interrelation;
 template<size_t> class Visitor;
 template<size_t> class FiniteVolumeStencilManager;
 
-template<size_t,template<size_t> class> class PDE_Integrator;
-template<size_t,template<size_t> class> class PDE_Integrator_CRM;
+template<size_t, template<size_t> class> class PDE_Integrator;
+template<size_t, template<size_t> class> class PDE_Integrator_UoM;
 
 
-/** @brief Model the playground for the physics of interest
+/**
+@brief Model the playground for the physics of interest
 
 @author S.K. Matthai
 @author Stephen G. Roberts
@@ -177,263 +178,284 @@ model.OutputDataToHDF ( "computed_temperature", "temperature" );
 @endcode
 
 
-@todo (3) Put Apply(PDE_Int) back into domain classes (from Model to Boundaries etc...) 
+@todo (3) Put Apply(PDE_Int) back into domain classes (from Model to Boundaries etc...)
 @todo (3) Replace references to groupMap_ and uniqueGroupMap_ in Model.cpp by corresponding Interface functionality
 @todo (3) Test binary IO of SplitBoundaries
 */
 template<size_t dim>
-class Model : public RegionInterface<dim,Model>,
-              public BoundaryInterface<dim,Model>,
-              public SplitBoundaryInterface18<dim,Model>,
-              public LocalVariableStorage<dim,Model<dim> > ///< @todo FIX TEMPLATE-TEMPLATE parameter
+class Model : public RegionInterface<dim, Model>,
+  public BoundaryInterface<dim, Model>,
+  public SplitBoundaryInterface<dim, Model>,
+  public LocalVariableStorage<dim, Model<dim> > ///< @todo FIX TEMPLATE-TEMPLATE parameter
 {
 
 public:
 
-    /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
-    Model( VSet<dim>&, const char* var_file, bool isoparametric=false, bool binaryVariablesFile=false );
-  
-    /// using the supplied polygonal data constructs unnamed single-domain model without regions, boundaries nor variable storage
-    Model( VSet<dim>&, bool isoparametric=false );
-  
-    /// constructs model with regions supplied as labeled element lists; @note 2/2/17: boundary creation still under construction
-    Model( ModelTopology&, VSet<dim>&, const char* var_file,
-           bool binaryVariablesFile=false, bool create_boundary_objects=false, bool box_shaped=true );
-  
-    /// constructs model with regions supplied as labeled element lists; @note 2/2/17: boundary creation still under construction
-    Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects=false, bool box_shaped=true );
+  /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
+  Model( VSet<dim>&, const char* var_file, bool isoparametric = false, bool binaryVariablesFile = false );
 
-    /// to read model from set of CSMP native binary files
-    explicit Model( const std::string& binaryFiles );
+  /// using the supplied polygonal data constructs unnamed single-domain model without regions, boundaries nor variable storage
+  Model( VSet<dim>&, bool isoparametric = false );
 
-    /// to read model from set of CSMP native binary files
-    Model( const std::string& varFile, bool binary );
+  /// constructs model with regions supplied as labeled element lists
+  Model( ModelTopology&, VSet<dim>&, const char* var_file,
+         bool binaryVariablesFile = false, bool create_boundary_objects = false, bool box_shaped = true );
 
-    /// destructor that needs to be overloaded when a subclass is derived from model
-    virtual ~Model();
+  /// constructs model with regions supplied as labeled element lists
+  Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects = false, bool box_shaped = true );
 
-    /// returns const (read-only) reference to database object where all variable access and type specifications are stored
-    const PropertyDatabase<dim>&  Database() const;
+  /// to read model from set of CSMP native binary files
+  explicit Model( const std::string& binaryFiles );
 
-    /// returns reference to database object where all variable access and type specifications are stored
-    PropertyDatabase<dim>&  Database();
+  /// to read model from set of CSMP native binary files; but only with a subset of variables
+  Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
-    /// read-only access the mesh container (nodes, elements, faces, interfaces and associated variable storage)
-    const MeshManager<dim>&  Mesh() const;
-  
-    /// access the mesh container (nodes, elements, faces, interfaces and associated variable storage)
-    MeshManager<dim>&  Mesh();
+  /// destructor that needs to be overloaded when a subclass is derived from model
+  virtual ~Model();
 
-    /// read-only access to the finite element types that are needed to support the current mesh
-    const  FiniteElementManager&  FE_Manager() const;
+  /// returns const (read-only) reference to database object where all variable access and type specifications are stored
+  const PropertyDatabase<dim>&  Database() const;
 
-    /// access to the finite element types that are needed to support the current mesh
-    FiniteElementManager&  FE_Manager();
-  
-    /// read only access to low-level finite volume functionality
-    const  FiniteVolumeStencilManager<dim>*  FV_Manager() const;
+  /// returns reference to database object where all variable access and type specifications are stored
+  PropertyDatabase<dim>&  Database();
 
-    /// access to low-level finite volume functionality
-    FiniteVolumeStencilManager<dim>*  FV_Manager();
+  /// read-only access the mesh container (nodes, elements, faces, interfaces and associated variable storage)
+  const MeshManager<dim>&  Mesh() const;
 
-    PLACEMENT Placement() const { return MODEL; }
+  /// access the mesh container (nodes, elements, faces, interfaces and associated variable storage)
+  MeshManager<dim>&  Mesh();
 
-    /// connects the finite-volume stencil pointers of the elements to the stencils after initialising them
-    void InstantiateFiniteVolumes();
+  /// read-only access to the finite element types that are needed to support the current mesh
+  const  FiniteElementManager&  FE_Manager() const;
 
-    // -----------------------------------------------
-    // Binary input/output
-    // -----------------------------------------------
+  /// access to the finite element types that are needed to support the current mesh
+  FiniteElementManager&  FE_Manager();
 
-    // NEW output and input interfaces
-    /// writes entire model with associated properties to disk; non-constant because this involves region creation
-    void OutputToBinaryFile( const char* ) const;
-  
-    // NEW
-    /// reads model written by OutputToDisk() including all associated properties
-    void InputFromBinaryFile( const char* );
+  /// read only access to low-level finite volume functionality
+  const  FiniteVolumeStencilManager<dim>*  FV_Manager() const;
 
-    /// writes discretised variable to generic variable container
-    template<class Var>
-    void OutputVariableTo( const char* var, FEM_Data<Var>& ) const;
-  
-    /// initialised the input property using the data supplied via the VSet
-    template<class T>
-    void InputVariableFrom( const char* input_prop, const FEM_Data<T>& );
-  
-    /// inputs all discretised variables stored in the supplied VSet into the model
-    void InputVariablesFrom( const VSet<dim>& );
+  /// access to low-level finite volume functionality
+  FiniteVolumeStencilManager<dim>*  FV_Manager();
 
-    // ------------------------------------------------------------------------
-    // Property interface
-    // ------------------------------------------------------------------------
+  PLACEMENT Placement() const { return MODEL; }
 
-    /// inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized
-    csmp::Index  CreateProperty( const char* new_prop, const char* unit,
-                                 VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE,
-                                 size_t vsize=1 , double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
-                                 std::string usage = "???");
+  /// connects the finite-volume stencil pointers of the elements to the stencils after initialising them
+  void InstantiateFiniteVolumes();
 
-    /// deletes property from the database and the distributed containers all across the model
-    void DeleteProperty( const char* property );
+  // -----------------------------------------------
+  // Binary input/output
+  // -----------------------------------------------
 
-    /// renumbers everything, starting face and interface numbers after element index max; TODO: deprecate
-    size_t UpdateIndices() const;
+  // NEW output and input interfaces
+  /// writes entire model with associated properties to disk; non-constant because this involves region creation
+  void OutputToBinaryFile( const char* ) const;
 
-    /// sets the values of the distributed variable all across the model; to enter scalar value use makeScalar(flag,value) helper function
-    template<class T>
-    void InputPropertyValue( const char* input_prop, const T& value );
+  // NEW
+  /// reads model written by OutputToDisk() including all associated properties; it can also read only a subset of variables
+  void InputFromBinaryFile( const char* model_name, const std::set<std::string>* subset_variables = nullptr );
 
-    /// sets the value of the property on those sites (nodes, elements) whose AtBoundary() function matches the BOX_BOUNDARY value
-    template<class T>
-    void InputBoundaryValue( BOX_BOUNDARY, const char* input_prop, const T& value );
+  /// writes discretised variable to generic variable container
+  template<class Var>
+  void OutputVariableTo( const char* var, FEM_Data<Var>& ) const;
 
-    /// uses the vector of variable flags (ANY, DIRICH etc.) to change the status of the target variable at the given BOX_BOUNDARY
-    void InputBoundaryFlags( BOX_BOUNDARY, const char* property, const std::vector<VARIABLE_FLAG>& flags );
+  /// initialised the input property using the data supplied via the VSet
+  template<class T>
+  void InputVariableFrom( const char* input_prop, const FEM_Data<T>& );
 
-    /// the supplied 4 scalar node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model
-    void InterpolateBoundaryValues( BOX_BOUNDARY, const char* input_prop, const std::vector<ScalarVariable>& bvalues );
+  /// inputs all discretised variables stored in the supplied VSet into the model
+  void InputVariablesFrom( const VSet<dim>& );
 
-    /// the supplied 4 vector node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model
-    void InterpolateBoundaryValues( BOX_BOUNDARY, const char* input_prop, const std::vector<VectorVariable<dim> >& bvalues );
+  // ------------------------------------------------------------------------
+  // Property interface
+  // ------------------------------------------------------------------------
 
-    /// replaces the values of the target propery (to) with the values of property (from); both variables must have the same type and placement
-    void CopyReplace( const char* from, const char* to );
+  /// inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized
+  csmp::Index  CreateProperty( const char* new_prop, const char* unit,
+                               VARIABLE_TYPE type = SCALAR, PLACEMENT place = NODE,
+                               size_t vsize = 1, double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
+                               std::string usage = "???" );
 
-    /// computes the (constant valued) first spatial derivative of the node property and assigns it to the element property / barycenter of the element
-    bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
+  /// deletes property from the database and the distributed containers all across the model
+  void DeleteProperty( const char* property );
 
-    /// linearly interpolates the value of the integration point property to the barycentre of element; result is stored as element property
-    void InterpolateIntegrationPointToElementProperty( const char* ipoint_prop, const char* eprop );
+  /// renumbers everything, starting face and interface numbers after element index max; TODO: deprecate
+  size_t UpdateIndices() const;
 
-    /// interpolates node property values to the barycentre of element and stores results in element property
-    void InterpolateNodeToElementProperty( const char* nprop, const char* eprop, bool verbose = true );
+  /// renumbers everything, starting face and interface numbers after element index max in the subdomain; TODO: deprecate
+  size_t UpdateIndices( const char* region_name ) const;
 
-    /// interpolates distributed node property values the quadrature points of numerically integrated finite elements
-    void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* ipoint_prop );
-  
-    /// linearly extrapolates the values of the integration point variable to the element nodes where an averaging with the neighbor elements is performed
-    void ExtrapolateIntegrationPointToNodeProperty( const char* ipoint_prop, const char* eprop );
-  
-    /// piecewise constant element property values are extrapolated to nodes using a choice of averaging schemes (1/distance vs. element-volume weighted)
-    void ExtrapolateElementToNodeProperty( const char* eprop, const char* nprop, bool by_distance = true );
+  /// sets the values of the distributed variable all across the model; to enter scalar value use makeScalar(flag,value) helper function
+  template<class T>
+  void InputPropertyValue( const char* input_prop, const T& value );
 
-    /// changes the flags of the target variable all across the model
-    void ChangePropertyStatus( const char* input_prop, VARIABLE_FLAG new_status );
+  /// sets the value of the property on those sites (nodes, elements) whose AtBoundary() function matches the BOX_BOUNDARY value
+  template<class T>
+  void InputBoundaryValue( BOX_BOUNDARY, const char* input_prop, const T& value );
 
-    /// where the values of the target property are within the given range the flag of the target variables are changed to the new status
-    void ChangePropertyStatusWhere( const char* var, double64 min, double64 max, VARIABLE_FLAG new_status );
+  /// uses the vector of variable flags (ANY, DIRICH etc.) to change the status of the target variable at the given BOX_BOUNDARY
+  void InputBoundaryFlags( BOX_BOUNDARY, const char* property, const std::vector<VARIABLE_FLAG>& flags );
 
-    /// returns the opposite corners of the bounding box that encloses the model
-    void MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
+  /// the supplied 4 scalar node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model
+  void InterpolateBoundaryValues( BOX_BOUNDARY, const char* input_prop, const std::vector<ScalarVariable>& bvalues );
 
-    /// returns the value range of the target property within the entire model
-    void MinMaxOf( const char* prop, double64& min, double64& max ) const;
+  /// the supplied 4 vector node variable values (2 in 2D) are linearly interpolated across the square (line) boundary of the box-shaped model
+  void InterpolateBoundaryValues( BOX_BOUNDARY, const char* input_prop, const std::vector<VectorVariable<dim> >& bvalues );
 
-    /// permits to transfer node coordinate components to the target scalar node variable; char options are 'x', 'y', 'z'
-    void AssignNodeCoordinatesTo( const char* scalar_variable, char coord ); // x, y, z
+  /// replaces the values of the target propery (to) with the values of property (from); both variables must have the same type and placement
+  void CopyReplace( const char* from, const char* to );
 
-    /// transfers the node coordinates to the target VectorVariable<dim>
-    void AssignNodeCoordinatesTo( const char* vector_variable );
+  /// computes the (constant valued) first spatial derivative of the node property and assigns it to the element property / barycenter of the element
+  bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
 
-    /// shifts the node coordinates by an amount that is determined by the value of the target VectorVariable<dim>
-    void MoveNodeCoordinatesBy( const char* vector_variable );
+  /// linearly interpolates the value of the integration point property to the barycentre of element; result is stored as element property
+  void InterpolateIntegrationPointToElementProperty( const char* ipoint_prop, const char* eprop );
 
-    /// 'characteristic' options are: volume, inner radius, and aspect ratio
-    void AssignElementCharacteristicsTo( const char* characteristic, const char* var );
+  /// interpolates node property values to the barycentre of element and stores results in element property
+  void InterpolateNodeToElementProperty( const char* nprop, const char* eprop, bool verbose = true );
 
-    // ------------------------------------------------------------------------
-    // Interrelations, Visitors and Algorithms
-    // (to apply these to specific regions or boundaries access these directly)
-    // ------------------------------------------------------------------------
-  
-    /// prompts the region-by-region, element-by-element or node-by-node calculation of the target variable via the interrelation
-    void Apply( Interrelation<dim>& relation, const char* region="Model" );
+  /// interpolates distributed node property values the quadrature points of numerically integrated finite elements
+  void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* ipoint_prop );
 
-    /// support of the visitor pattern giving visitors access to the model
-    void Accept( csmp::Visitor<dim>& );
+  /// linearly extrapolates the values of the integration point variable to the element nodes where an averaging with the neighbor elements is performed
+  void ExtrapolateIntegrationPointToNodeProperty( const char* ipoint_prop, const char* eprop );
 
-    /// application of integration scheme to model, subregions thereof or boundary or split-boundary objects
-    void Apply( PDE_Integrator<dim,csmp::Region>&, bool debug=false );
-    void Apply( PDE_Integrator<dim,csmp::Boundary>&, bool debug=false );
-    void Apply( PDE_Integrator<dim,csmp::SplitBoundary>&, bool debug=false );
+  /// piecewise constant element property values are extrapolated to nodes using a choice of averaging schemes (1/distance vs. element-volume weighted)
+  void ExtrapolateElementToNodeProperty( const char* eprop, const char* nprop, bool by_distance = true );
 
-    /// application of integration scheme to a particular region, boundary of split-boundary identified by name
-    void Apply( PDE_Integrator<dim,csmp::Region>&, const char* region_name, bool debug=false );
-    void Apply( PDE_Integrator<dim,csmp::Boundary>&, const std::string& boundary_name, bool debug=false );
-    void Apply( PDE_Integrator<dim,csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug=false );
-  
-    /// TODO: fix - for ongoing developments for any of region, boundary or splitboundary
-    void Apply( PDE_Integrator_CRM<dim,csmp::Region>&, bool debug=false );
-    void Apply( PDE_Integrator_CRM<dim,csmp::Boundary>&, bool debug=false );
-    void Apply( PDE_Integrator_CRM<dim,csmp::SplitBoundary>&, bool debug=false );
+  /// changes the flags of the target variable all across the model
+  void ChangePropertyStatus( const char* input_prop, VARIABLE_FLAG new_status );
 
-    /// TODO: fix - application of integration scheme to a particular region, boundary of split-boundary identified by name
-    void Apply( PDE_Integrator_CRM<dim,csmp::Region>&, const char* region_name, bool debug=false );
-    void Apply( PDE_Integrator_CRM<dim,csmp::Boundary>&, const std::string& boundary_name, bool debug=false );
-    void Apply( PDE_Integrator_CRM<dim,csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug=false );
+  /// where the values of the target property are within the given range the flag of the target variables are changed to the new status
+  void ChangePropertyStatusWhere( const char* var, double64 min, double64 max, VARIABLE_FLAG new_status );
 
-    // ----------------------------------------
-    // Screen output
-    // ----------------------------------------
+  /// returns the opposite corners of the bounding box that encloses the model
+  void MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
 
-    /// the name of the computational model
-    const char* Name() const;
-    void        Name( const char* );
+  /// returns the value range of the target property within the entire model
+  void MinMaxOf( const char* prop, double64& min, double64& max ) const;
 
-    /// console output
-    void OutputVariableToScreen( const char* prop ) const;
-    void Out() const;
+  /// permits to transfer node coordinate components to the target scalar node variable; char options are 'x', 'y', 'z'
+  void AssignNodeCoordinatesTo( const char* scalar_variable, char coord ); // x, y, z
 
-    void Verbose(bool verbose);
-    bool Verbose();
+  /// transfers  node coordinates to  target VectorVariable<dim>
+  void AssignNodeCoordinatesTo( const char* vector_variable );
 
-  protected:
+  /// shifts the node coordinates by an amount that is determined by the value of the target VectorVariable<dim>
+  void MoveNodeCoordinatesBy( const char* vector_variable );
 
-    Model();
+  /// 'characteristic' options are: volume, inner radius, and aspect ratio
+  void AssignElementCharacteristicsTo( const char* characteristic, const char* var );
 
-    /// build model from scratch
-    void Initialize( bool isoparametric_elements,
-                     VSet<dim>& vset,
-                     bool create_boundaries,
-                     bool non_box_shaped_model);
+  // ------------------------------------------------------------------------
+  // Interrelations, Visitors and Algorithms
+  // (to apply these to specific regions or boundaries access these directly)
+  // ------------------------------------------------------------------------
 
-    /// builds model from scratch including region information from file (this method is used by ANSYS_Model3D) 
-    void Initialize( const char* regions_file_prefix,
-                     ModelTopology& mesh_topology,
-                     VSet<dim>& vset,
-                     bool create_boundaries,
-                     bool non_box_shaped_model );
+  /// prompts the region-by-region, element-by-element or node-by-node calculation of the target variable via the interrelation
+  void Apply( Interrelation<dim>& relation, const char* region = "Model" );
 
-    /// builds model from scratch without any region information; the only (unique) region will be 'Model'
-    void Initialize( ModelTopology& mesh_topology,
-                     VSet<dim>& vset,
-                     bool create_boundaries,
-                     bool non_box_shaped_model);
+  /// support of the visitor pattern giving visitors access to the model
+  void Accept( csmp::Visitor<dim>& );
 
-    void InitializeLocalVariableStorage();
-    bool UpdateSubdomainPropertyStorage();
+  /// application of integration scheme to model, subregions thereof or boundary or split-boundary objects
+  void Apply( PDE_Integrator<dim, csmp::Region>&, bool debug = false );
+  void Apply( PDE_Integrator<dim, csmp::Boundary>&, bool debug = false );
+  void Apply( PDE_Integrator<dim, csmp::SplitBoundary>&, bool debug = false );
 
-    static std::string BinaryVsetFileName( const char* base_file_name );
-    static std::string BinaryRegionsFileName( const char* base_file_name );
-    static std::string BinaryBoundariesFileName( const char* base_file_name );
-    static std::string BinarySplitBoundariesFileName( const char* base_file_name );
-    static std::string BinaryVariablesFileName( const char* base_file_name );
+  /// application of integration scheme to a particular region, boundary of split-boundary identified by name
+  void Apply( PDE_Integrator<dim, csmp::Region>&, const char* region_name, bool debug = false );
+  void Apply( PDE_Integrator<dim, csmp::Boundary>&, const std::string& boundary_name, bool debug = false );
+  void Apply( PDE_Integrator<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug = false );
 
-  private:
+  /// TODO: fix - for ongoing developments for any of region, boundary or splitboundary
+  void Apply( PDE_Integrator_UoM<dim, csmp::Region>& );
+  void Apply( PDE_Integrator_UoM<dim, csmp::Boundary>& );
+  void Apply( PDE_Integrator_UoM<dim, csmp::SplitBoundary>& );
 
-    /// prevent accidential copy construction of large object
-    Model( const Model& );
-    Model& operator=( const Model& );
+  /// TODO: fix - application of integration scheme to a particular region, boundary of split-boundary identified by name
+  void Apply( PDE_Integrator_UoM<dim, csmp::Region>&, const char* region_name );
+  void Apply( PDE_Integrator_UoM<dim, csmp::Boundary>&, const std::string& boundary_name );
+  void Apply( PDE_Integrator_UoM<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name );
 
-    void CheckElementsAfterBuilding();
-  
-    std::string                       model_name_;       ///< name of simulation model
-    PropertyDatabase<dim>             database_;         ///< where variable specifications are stored
-    FiniteElementManager              fem_manager_;      ///< current FiniteElement objects in model
-    MeshManager<dim>                  mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
-    FiniteVolumeStencilManager<dim>*  fvStencilManager_; ///< current finite volume specifications
-    bool                              verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
+  // ----------------------------------------
+  // Screen output
+  // ----------------------------------------
+
+  /// the name of the computational model
+  const char* Name() const;
+  void        Name( const char* );
+
+  /// console output
+  void OutputVariableToScreen( const char* prop ) const;
+  void Out() const;
+
+  void Verbose( bool verbose );
+  bool Verbose();
+
+protected:
+
+  Model();
+
+  /// to read model from set of CSMP native binary files; boolean whether a binary variable file with same name as model is available or not
+  Model( const std::string& modelName, bool with_binary_variables_file );
+
+  /// build model from scratch
+  void Initialize( bool isoparametric_elements,
+                   VSet<dim>& vset,
+                   bool create_boundaries,
+                   bool non_box_shaped_model );
+
+  /// builds model from scratch including region information from file (this method is used by ANSYS_Model3D) 
+  void Initialize( const char* regions_file_prefix,
+                   ModelTopology& mesh_topology,
+                   VSet<dim>& vset,
+                   bool create_boundaries,
+                   bool non_box_shaped_model );
+
+  /// builds model from scratch without any region information; the only (unique) region will be 'Model'
+  void Initialize( ModelTopology& mesh_topology,
+                   VSet<dim>& vset,
+                   bool create_boundaries,
+                   bool non_box_shaped_model );
+
+  /// builds model for split boundaries from scratch including region information from file (this method is used by ANSYS_Model3D) 
+  void Initialize( const char* regions_file_prefix,
+                   ModelTopology& mesh_topology,
+                   VSet<dim>& vset,
+                   bool create_boundaries,
+                   bool create_splitboundaries,
+                   bool non_box_shaped_model );
+
+  /// builds model for split boundaries from scratch without any region information; the only (unique) region will be 'Model'
+  void Initialize( ModelTopology& mesh_topology,
+                   VSet<dim>& vset,
+                   bool create_boundaries,
+                   bool create_splitboundaries,
+                   bool non_box_shaped_model );
+
+  void InitializeLocalVariableStorage();
+  bool UpdateSubdomainPropertyStorage();
+
+  static std::string BinaryVsetFileName( const char* base_file_name );
+  static std::string BinaryRegionsFileName( const char* base_file_name );
+  static std::string BinaryBoundariesFileName( const char* base_file_name );
+  static std::string BinarySplitBoundariesFileName( const char* base_file_name );
+  static std::string BinaryVariablesFileName( const char* base_file_name );
+
+private:
+
+  /// prevent accidential copy construction of large object
+  Model( const Model& );
+  Model& operator=( const Model& );
+
+  void CheckElementsAfterBuilding();
+
+  std::string                       model_name_;       ///< name of simulation model
+  PropertyDatabase<dim>             database_;         ///< where variable specifications are stored
+  FiniteElementManager              fem_manager_;      ///< current FiniteElement objects in model
+  MeshManager<dim>                  mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
+  FiniteVolumeStencilManager<dim>*  fvStencilManager_; ///< current finite volume specifications
+  bool                              verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
 };
 
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
@@ -442,5 +464,3 @@ std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y,
 } // end namespace csmp
 
 #endif
-
-

@@ -52,8 +52,9 @@ macro(GenerateVariables structname source_csv target_header)
     INSTALL(FILES "${GEN_INCLUDES_DIR}/${target_header}" DESTINATION include)
 endmacro()
 
-GenerateVariables(Variables_TracerTransfer ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv Variables_TracerTransfer.h)
-GenerateVariables(Variables_TwoPhaseFlow ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TwoPhaseFlow.csv Variables_TwoPhaseFlow.h)
+GenerateVariables(VariableSet_TracerTransfer ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv VariableSet_TracerTransfer.h)
+GenerateVariables(VariablesSet_TwoPhaseFlow ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TwoPhaseFlow.csv VariableSet_TwoPhaseFlow.h)
+GenerateVariables(VariableSet_CO2GeoSequestration ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_CO2GeoSequestration.csv VariableSet_CO2GeoSequestration.h)
 
 
 
@@ -66,8 +67,12 @@ FILE(GLOB CSMP_CORE_SOURCE_EXCLUSIONS
 	${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
-	${MODULES_DIR}/model/SplitBoundaryInterface.cpp
 	${MODULES_DIR}/run_control/ExampleSuiteMainWindow.cpp
+#	${MODULES_DIR}/eos/h2o_nacl_co2/PVTX_Calculator_H2O_CO2_NaCl.cpp
+#	${MODULES_DIR}/integration/finite_volumes/DES_transport_scheme/SlightlyCompressible2PhaseDESTransport.cpp
+	${MODULES_DIR}/integration/pde_integrators/PDE_Integrator_CRM.cpp
+#	${MODULES_DIR}/integration/pde_integrators/PDE_Integrator_UoM.cpp
+#	${MODULES_DIR}/thmc/two_phase_flow/BrooksCoreySaturationFunctionswithHysteresis.cpp
 )
 LIST(REMOVE_ITEM CSMP_CORE_SOURCE_FILES ${CSMP_CORE_SOURCE_EXCLUSIONS} ${CSMP_CORE_SOURCE_EXCLUSIONS_OLD} ${CSMP_CORE_SOURCE_EXCLUSIONS_NEW})
 
@@ -133,7 +138,6 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${INCLUDES_DIR}/interfaces/ANSYS
     ${INCLUDES_DIR}/interfaces/CGNS
     ${INCLUDES_DIR}/interfaces/Eclipse
-    ${INCLUDES_DIR}/interfaces/Eclipse_UoM
     ${INCLUDES_DIR}/interfaces/Fracman
     ${INCLUDES_DIR}/interfaces/GeoModeller
     ${INCLUDES_DIR}/interfaces/gOcad_SKUA
@@ -184,7 +188,6 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${MODULES_DIR}/interfaces/ANSYS
     ${MODULES_DIR}/interfaces/CGNS
     ${MODULES_DIR}/interfaces/Eclipse
-    ${MODULES_DIR}/interfaces/Eclipse_UoM
     ${MODULES_DIR}/interfaces/Fracman
     ${MODULES_DIR}/interfaces/GeoModeller
     ${MODULES_DIR}/interfaces/gOcad_SKUA

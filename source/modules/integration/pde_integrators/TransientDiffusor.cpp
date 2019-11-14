@@ -18,10 +18,10 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    settings_(),
-   PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), element_source_variable, diffusing_variable) ),
@@ -95,7 +95,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
       PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
@@ -165,6 +165,91 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
+                                                                            const char* lhs_diffusivity,
+                                                                            const char* rhs_diffusivity,
+                                                                            const char* diffusing_variable,
+                                                                            const char* storage_variable,
+                                                                            const char* spatial_source_variable,
+                                                                            const char* point_source_variable )
+                                     
+ :
+   #ifdef CSMP_WITH_SAMG_SOLVER
+      settings_(),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+   #else
+      /// add extra functionality for alternative solver if needed
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+   #endif
+   conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
+   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
+   capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
+   nodal_source_(new PointSource_rhsop<dim,ComputationCell>(sg.Database(), point_source_variable, diffusing_variable) ),
+   gravity_(0),
+   grad_multiplier_(1.),
+   dep_var_name_(diffusing_variable)
+ {
+    if ( !isoparametricElementMesh( sg ) )
+          throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
+                                              "elements are not isoparametric; use other Algorithm" );
+
+    const PropertyDatabase<dim>&   p_ref = sg.Database();
+    
+    csmp::Index  lhs_diffusivity_key = p_ref.StorageKey(lhs_diffusivity);
+    if ( lhs_diffusivity_key.place != ELEMENT  and  lhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             lhs_diffusivity, "lefthand variable must be placed on element or constraint point" ); 
+
+    csmp::Index  rhs_diffusivity_key = p_ref.StorageKey(rhs_diffusivity);
+    if ( rhs_diffusivity_key.place != ELEMENT  and  rhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             rhs_diffusivity, "righthand variable must be placed on element or constraint point" ); 
+
+    csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
+    if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             diffusing_variable, "variable must be a scalar placed on the node" ); 
+
+    csmp::Index  storage_variable_key = p_ref.StorageKey(storage_variable);
+    if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
+         storage_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             storage_variable, "variable must be a scalar placed on element or constraint point" ); 
+
+    csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
+    if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
+         source_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             spatial_source_variable, "variable must be a scalar placed on element or constraint point" ); 
+
+    csmp::Index  nsource_variable_key = p_ref.StorageKey(point_source_variable);
+    if ( nsource_variable_key.place != NODE  and  nsource_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             point_source_variable, "variable must be a scalar placed on the node" ); 
+
+   // setting the PDE operators up for transient computation
+    capacitance_lhs_.MultiplyWithTimeIncrement(true);
+    capacitance_lhs_.LumpedFormulation(true);
+    capacitance_rhs_.MultiplyWithTimeIncrement(true);
+    source_->AddAccumulateLater();
+    nodal_source_->AddAccumulateLater();
+    
+    // initializing the algorithm  
+    this->Add( &conductance_ );
+    this->Add(  source_ );
+    this->Add(  nodal_source_ );
+    this->Add( &capacitance_lhs_ );
+    this->Add( &capacitance_rhs_ );
+     
+    // basic SAMG solver settings for hybrid element meshes
+#ifdef CSMP_WITH_SAMG_SOLVER
+    if ( dim != 1U )  AdjustSolverSettings(); 
+#endif
+
+} // end constructor
+
 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
@@ -177,7 +262,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
       PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
@@ -249,6 +334,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
+// TODO: fix: rhs_diffusivity is never used
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* lhs_diffusivity,
@@ -262,7 +348,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
       PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
@@ -285,12 +371,12 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
     csmp::Index  lhs_diffusivity_key = p_ref.StorageKey(lhs_diffusivity);
     if ( lhs_diffusivity_key.place != ELEMENT  and  lhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             lhs_diffusivity, "lefthand variable must be placed on element or constraint point" ); 
+                             lhs_diffusivity, "lefthand variable must be placed on element or integration point" );
 
     csmp::Index  rhs_diffusivity_key = p_ref.StorageKey(rhs_diffusivity);
     if ( rhs_diffusivity_key.place != ELEMENT  and  rhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             rhs_diffusivity, "righthand variable must be placed on element or constraint point" ); 
+                             rhs_diffusivity, "righthand variable must be placed on element or integration point" );
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
@@ -301,13 +387,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
     if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          storage_variable_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             storage_variable, "variable must be a scalar placed on element or constraint point" ); 
+                             storage_variable, "variable must be a scalar placed on element or integration point" );
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          source_variable_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             spatial_source_variable, "variable must be a scalar placed on element or constraint point" ); 
+                             spatial_source_variable, "variable must be a scalar placed on element or integration point" );
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
     if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
@@ -336,6 +422,105 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 } // end constructor (gravity)
 
+
+
+
+
+// TODO: fix: rhs_diffusivity is never used
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
+                                                                            const char* lhs_diffusivity,
+                                                                            const char* rhs_diffusivity,
+                                                                            const char* diffusing_variable,
+                                                                            const char* storage_variable,
+                                                                            const char* spatial_source_variable,
+                                                                            const char* point_source_variable,
+                                                                            const char* gradient_variable, 
+                                                                            double64 gradient_multiplier )
+                                     
+ :
+   #ifdef CSMP_WITH_SAMG_SOLVER
+      settings_(),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+   #else
+      /// add extra functionality for alternative solver if needed
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+   #endif
+   conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
+   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
+   capacitance_rhs_( sg.Database(), storage_variable, diffusing_variable ),
+   nodal_source_(new PointSource_rhsop<dim,ComputationCell>(sg.Database(), point_source_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
+   grad_multiplier_(gradient_multiplier),
+   dep_var_name_(diffusing_variable)
+ {
+    if ( !isoparametricElementMesh( sg ) )
+          throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
+                                              "elements are not isoparametric; use other Algorithm" );
+
+    const PropertyDatabase<dim>&   p_ref = sg.Database();
+    
+    csmp::Index  lhs_diffusivity_key = p_ref.StorageKey(lhs_diffusivity);
+    if ( lhs_diffusivity_key.place != ELEMENT  and  lhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             lhs_diffusivity, "lefthand variable must be placed on element or integration point" );
+
+    csmp::Index  rhs_diffusivity_key = p_ref.StorageKey(rhs_diffusivity);
+    if ( rhs_diffusivity_key.place != ELEMENT  and  rhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             rhs_diffusivity, "righthand variable must be placed on element or integration point" );
+
+    csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
+    if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             diffusing_variable, "variable must be a scalar placed on the node" ); 
+
+    csmp::Index  storage_variable_key = p_ref.StorageKey(storage_variable);
+    if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
+         storage_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             storage_variable, "variable must be a scalar placed on element or integration point" );
+
+    csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
+    if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
+         source_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             spatial_source_variable, "variable must be a scalar placed on element or integration point" );
+                             
+    csmp::Index  nsource_variable_key = p_ref.StorageKey(point_source_variable);
+    if ( nsource_variable_key.place != NODE  and  nsource_variable_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+                             point_source_variable, "variable must be a scalar placed on the node" );                              
+
+    csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
+    if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
+      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
+                             gradient_variable, 
+                            "variable must be a vector placed on element or integration point" ); 
+
+   // setting the PDE operators up for transient computation
+    capacitance_lhs_.MultiplyWithTimeIncrement(true);
+    capacitance_lhs_.LumpedFormulation(true);
+    capacitance_rhs_.MultiplyWithTimeIncrement(true);
+    source_->AddAccumulateLater();
+    nodal_source_->AddAccumulateLater();
+    
+    // initializing the algorithm  
+    this->Add( &conductance_ );
+    this->Add(  source_ );
+    this->Add(  nodal_source_ );
+    this->Add( &capacitance_lhs_ );
+    this->Add( &capacitance_rhs_ );
+    this->Add(  gravity_ );
+    gravity_->AddAccumulateLater();
+     
+    // basic SAMG solver settings for hybrid element meshes
+#ifdef CSMP_WITH_SAMG_SOLVER
+    if ( dim != 1U )  AdjustSolverSettings(); 
+#endif
+
+} // end constructor (gravity, point source)
 
 
 

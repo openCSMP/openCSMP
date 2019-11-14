@@ -1,33 +1,12 @@
 #ifndef CSMP_INPUT_DATA_MANAGER_H
 #define CSMP_INPUT_DATA_MANAGER_H
 
-#include "Exception.h"
-#include "ErrorHandler.h"
-
-#include <iostream>
-#include <string>
-#include <set>
-#include <map>
-
-#include "Model.h"
-#include "Region.h"
-#include "BoundaryInterface.h"
-#include "Box.h"
-
-#include "Node.h"
-#include "Element.h"
-#include "Face.h"
-#include "InterFace.h"
-
-#include "ScalarVariable.h"
-#include "VectorVariable.h"
-#include "TensorVariable.h"
-#include "ArrayVariable.h"
-#include "FlaggedArrayVariable.h"
-
-#include "ComputationalSettings.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
+
+class ComputationalSettings;
+template<size_t> class Model;
 
 /** @brief input of parameter values from block-structured text file.
  
@@ -211,10 +190,20 @@ class  InputDataManager {
     void Help() const;
   
     /// reads data for blocks 1-5, assigning them to box-shaped models
-    bool ConfigureFromFile( Model<dim>& sg, const char* fname );
+    bool ConfigureFromFile( Model<dim>&, const char* fname );
 
     /// key generic configuration method for time-dependent models that can contain Boundary objects
-    bool ConfigureFromFile( Model<dim>& sg, const char* fname,
+    bool ConfigureFromFile( Model<dim>&, const char* fname,
+                            bool block1,            ///< region name from parameter range
+                            bool block2,            ///< default property values
+                            bool block3,            ///< regional property values
+                            bool block4,            ///< boundary conditions for box-shaped model
+                            bool block5,            ///< essential conditions for regions
+                            bool block6,            ///< boundary conditions for arbitrary-shaped model
+                            ComputationalSettings& settings );
+
+    /// costumized configuration of CSMP models including a particualr configuration file
+    bool ConfigureFromSpecificFile( Model<dim>&, const char* configuration_fname,
                             bool block1,            ///< region name from parameter range
                             bool block2,            ///< default property values
                             bool block3,            ///< regional property values
@@ -224,7 +213,7 @@ class  InputDataManager {
                             ComputationalSettings& settings );
 
     /// as above but without runtime information
-    bool ConfigureFromFile( Model<dim>& sg, const char* fname,
+    bool ConfigureFromFile( Model<dim>&, const char* fname,
                             bool block1,            ///< region name from parameter range
                             bool block2,            ///< default property values
                             bool block3,            ///< regional property values
@@ -233,22 +222,22 @@ class  InputDataManager {
                             bool block6 = false );  ///< boundary conditions for arbitrary-shaped model
 
     /// configuration restricted to unique regions in the input model
-    bool ConfigureRegionsFromFile( Model<dim>& sg, const char* fname, std::set<std::string>& groups );
+    bool ConfigureRegionsFromFile( Model<dim>&, const char* fname, std::set<std::string>& groups );
 
     /// FRED was a FRACMAN consortium of Golder Associates, this interface is used in the Fracman GUI
-    bool ConfigureFRED_ModelFromFile( Model<dim>& sg, const char* fname,
+    bool ConfigureFRED_ModelFromFile( Model<dim>&, const char* fname,
                                       std::map<std::string,std::vector<double64> >& well_data,
                                       ComputationalSettings& settings );
 
     /// configures box-shaped ANSYS models output using ANSYS' csp input interface
-    bool Configure_ANSYS_ModelFromFile( Model<dim>& sg, const char* fname );
+    bool Configure_ANSYS_ModelFromFile( Model<dim>&, const char* fname );
 
     /// configures arbitrarily shaped ANSYS models output to CSMP, recognising boundaries if their name contains BOUNDARY
-    bool ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& sg, const char* fname );
+    bool ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>&, const char* fname );
 
 private:
-    bool ReadBlocks( Model<dim>& model,
-                     std::ifstream& ifs,
+    bool ReadBlocks( Model<dim>&,
+                     std::ifstream&,
                      std::set<std::string>& groups,
                      std::map<std::string,std::vector<double64> >& well_data,
                      ComputationalSettings& settings,

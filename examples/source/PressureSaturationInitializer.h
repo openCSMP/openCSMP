@@ -41,8 +41,7 @@ public:
       double64 WaterSaturationFromPhasePressures(double64 oil_pressure, 
                                                  double64 water_pressure);
     
-      virtual void Visit(Node<dim>* node);
-      virtual void Visit(Model<dim>* model);
+      virtual void Visit(Node<dim>* node);      
     
 private:
       const PropertyDatabase<dim>&  prop_ref_;

@@ -2,6 +2,7 @@
 #define CSMP_INDEX_H
 
 #include <iostream>
+#include <fstream>
 #include <climits>
 #include <cstdio>
 #include <set>
@@ -87,10 +88,12 @@ class IndexTracker;
 */
 struct Index {
     Index(); 
-    Index( VARIABLE_TYPE, PLACEMENT, size_t idx ); 
+    Index( VARIABLE_TYPE, PLACEMENT, size_t idx );
+  
     Index( VARIABLE_TYPE, PLACEMENT, size_t idx, size_t dataDepth, size_t flagDepth, size_t dataOffset, size_t flagOffset, 
-      const LocalVariables&, const IntegrationPointVariables& = IntegrationPointVariables(), size_t offsetFactorSimplex = 0, 
-      size_t offsetFactorSector = 0, size_t ipFactorSimplex = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 ); 
+           const LocalVariables&, const IntegrationPointVariables& = IntegrationPointVariables(), size_t offsetFactorSimplex = 0,
+           size_t offsetFactorSector = 0, size_t ipFactorSimplex = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 );
+  
     Index( const csmp::Index& );
     Index( csmp::Index&& );
     ~Index();
@@ -107,8 +110,8 @@ struct Index {
     void UpdateData( const csmp::Index& idx );
 
     void Out() const;
-    bool Out( FILE* fp ) const;
-    bool In( FILE* fp );
+    bool Out( std::fstream& fp ) const;
+    bool In( std::fstream& fp );
 
 
     VARIABLE_TYPE               type;
@@ -129,12 +132,21 @@ struct Index {
  };
 
 
-  /// Templatized version with allows for compile-time type selection
+  /// Templatized version allowing for compile-time type selection
 template<VARIABLE_TYPE ty,PLACEMENT pl>
 struct INDEX : public Index {
    static constexpr VARIABLE_TYPE VariableType = ty;
    static constexpr PLACEMENT VariablePlacement = pl;
 
+   /// compile time construction of index to be used in factory implementations
+   INDEX( size_t idx, size_t dataDepth, size_t flagDepth, size_t dataOffset, size_t flagOffset,
+          const LocalVariables& localVariables, const IntegrationPointVariables& integrationPointVariables, size_t offsetFactorElement,
+          size_t offsetFactorSector, size_t ipFactorSimplex, size_t ipFactorSector, size_t ipFactorFacet )
+    : Index( ty, pl, idx, dataDepth, flagDepth, dataOffset,
+             flagOffset, offsetFactorSimplex, offsetFactorSector,
+             ipFactorSimplex, ipFactorSector, ipFactorFacet,
+             localVariables, integrationPointVariables, indexTracker(nullptr) ) {}
+  
    explicit INDEX( ) : Index() {}
    explicit INDEX( size_t i ) : Index(ty,pl,i) {}
    explicit INDEX( csmp::Index&& idx ) : Index(idx) {}

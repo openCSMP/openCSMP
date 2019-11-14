@@ -1,0 +1,11 @@
+DFM box flagged model featuring two regions - PL Aug 2011
+no properties
+MATRIX_LEFT
+MATRIX_RIGHT
+HALF
+RIGHT
+TOP
+BOTTOM
+LEFT
+FRONT
+BACK

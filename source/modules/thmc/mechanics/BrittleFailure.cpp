@@ -50,13 +50,13 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // 1. if maximum compressive stress is tensile, opening and tensile failure are considered first
     if ( invars.MaximumPrincipalStress1() > 0. ) {
           // evaluating tensile fracture
-          if ( invars.LeastPrincipalStress3() >= props.TS ) return MODE1_FRACTURE;
+          if ( invars.LeastPrincipalStress3() >= props.TS_ ) return MODE1_FRACTURE;
           // just tensile opening
           return TENSILE_OPENING;
       }
    
     // establishing input parameters
-    const double64 alpha(degreesToRadians(frictionAngle(props.mu)));
+    const double64 alpha(degreesToRadians(frictionAngle(props.mu_)));
     const double64 meanstress(invars.MeanStress());
     const double64 devstress(invars.DeviatoricStress());
    
@@ -67,7 +67,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     if ( devstress < bar ) {
          // evaluation of the yield cap (Wong et al. 97, JGR) for isostatic state of stress
          // eqn. 2.29, Fjaer et al. 08', p. 68
-         if ( (meanstress*meanstress + devstress*devstress) > (props.pstar*props.pstar) )
+         if ( (meanstress*meanstress + devstress*devstress) > (props.pstar_* props.pstar_) )
            return COMPRESSIVE;
       }
    
@@ -77,7 +77,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // - material is described only in terms of its friction angle and cohesion.
     // (yielding occurs when Fmc >= 0)
     double64 FMC1 = meanstress * sin(alpha);
-    FMC1         -= props.C * cos(alpha);
+    FMC1         -= props.C_ * cos(alpha);
     FMC1         += devstress * invars.SmoothMohrCoulombYieldEnvelope( radiansToDegrees(alpha) );
     if ( FMC1 > 0. ) return SHEAR_FRACTURE;
 
@@ -121,18 +121,18 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // 1. if even the maximum compressive stress + fluid pressure is tensile (=positive),
     //    a frictional / shear strength failure analysis does not apply and
     //    opening and tensile failure are considered first.
-    if ( invars.MaximumPrincipalStress1() + props.alpha * pf > 0. ) {
-          const double64 S3_eff(invars.LeastPrincipalStress3() + props.alpha * pf);
+    if ( invars.MaximumPrincipalStress1() + props.alpha_ * pf > 0. ) {
+          const double64 S3_eff(invars.LeastPrincipalStress3() + props.alpha_ * pf);
           // evaluating tensile fracture
-          if ( S3_eff >= props.TS ) return MODE1_FRACTURE;
+          if ( S3_eff >= props.TS_ ) return MODE1_FRACTURE;
           // tensile opening
           return TENSILE_OPENING;
       }
    
     // 2. establishing input parameters for frictional analysis of failure
-    const double64 alpha(degreesToRadians(frictionAngle(props.mu)));
+    const double64 alpha(degreesToRadians(frictionAngle(props.mu_)));
     // fluid pressure is added to meanstress because tension is positive
-    const double64 meanstress(invars.MeanStress() + props.alpha * pf);
+    const double64 meanstress(invars.MeanStress() + props.alpha_ * pf);
     const double64 devstress(invars.DeviatoricStress());
    
     // 3. If the stress is essentially isostatic, failure may still occur
@@ -142,7 +142,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     if ( devstress < bar ) {
          // evaluation of the yield cap (Wong et al. 97, JGR) for isostatic state of stress
          // eqn. 2.29, Fjaer et al. 08', p. 68
-         if ( (meanstress*meanstress + devstress*devstress) > (props.pstar*props.pstar) )
+         if ( (meanstress*meanstress + devstress*devstress) > (props.pstar_* props.pstar_) )
            return COMPRESSIVE;
       }
    
@@ -152,7 +152,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // only taking into account the friction angle and the cohesion.
     // (yielding occurs when Fmc >= 0)
     double64 FMC1 = meanstress * sin(alpha);
-    FMC1         -= props.C * cos(alpha);
+    FMC1         -= props.C_ * cos(alpha);
     FMC1         += devstress * invars.SmoothMohrCoulombYieldEnvelope( radiansToDegrees(alpha) );
     if ( FMC1 > 0. ) return SHEAR_FRACTURE;
 

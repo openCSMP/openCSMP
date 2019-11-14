@@ -37,119 +37,7 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-class PDE_Integrator {
-
-  public:
-
-    typedef typename std::map<Parameter,size_t>::const_iterator operandsConstIterator;
-    typedef typename std::map<Parameter,size_t>::iterator       operandsIterator;
-
-    PDE_Integrator();
-    explicit PDE_Integrator( Solver& );
-    /// accepts a pointer to a Solver object that is managed somewhere else
-    explicit PDE_Integrator( Solver* );
-    virtual ~PDE_Integrator();
-
-  protected:
-
-    PDE_Integrator( const PDE_Integrator& );
-    PDE_Integrator& operator=( const PDE_Integrator& );
-
-  public:
-
-    void          Add( MathOperatorLHS<dim>* );
-    void          Add( MathOperatorRHS<dim>* );
-    void          AddPostProcess( MathOperatorLHS<dim>* );
-
-    void          TimeIncrement( double64 dt );
-    bool          Transient() const;
-    
-    void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
-
-    void          SetSolver( Solver* new_solver );
-    Solver*       GetSolver() const;
-    virtual void  AdjustSolverSettings();
-  
-    /// applies scale factor to Dirichlet matrix-diagonal entries as applied by AssignEssentialConditions() and the rhs entries
-    void          ScaleEssentialConditions( double64 scale_factor);
-
-    virtual void  Reset( bool delete_math_operators=true );
-
-    void          ListMathOperatorsLHS() const;
-    void          ListMathOperatorsRHS() const;
-    void          SolutionVector( std::vector<double64>& ) const;
-    void          FirstGuess( const std::vector<double64>& );
-    void          RetainGlobalSolutionMatrix( bool yes_or_no );
-    void          WriteGlobalMatrixBitMapToText( const char* file_name );
-    void          OutputGlobals( int precision=1 );
-    void          Out() const;
-    void          Verbose(bool verbose){ verbose_=verbose;}
-    bool          GetVerbose(){ return verbose_;}
-
-  protected:
-
-    virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
-
-    virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
-
-    /// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
-    virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
-
-    virtual void  Accumulate( const COMPUTATION_DOMAIN<dim>& );
-
-    virtual void  LateAccumulate( const COMPUTATION_DOMAIN<dim>& );
-
-    virtual void  Solve();
-
-    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
-
-    virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
-
-  protected:
-
-    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;
-    std::map<std::string,MathOperatorLHS<dim>*>  postpro_operators_;
-    std::map<Parameter,size_t>                   basic_operands_;
-    std::map<Parameter,size_t>                   test_operands_;
-
-    SparseMatrix            G_;
-    std::vector<double64>   rh_;
-    std::vector<double64>   x_;
-    Solver*                 solver_;
-
-    const size_t            dim2_;
-    size_t                  dof_per_node_;
-    bool                    setup_established_, retain_matrix_;
-    bool                    newed_Solver_object;
-    double64                time_increment_;
-
-    struct SIZES {
-        size_t nodes;
-        size_t elements;
-    } target_;
-
-  private:
-
-    double64                scale_factor_; ///< for essential conditions
-    bool                    verbose_;
-#if defined(_OPENMP )
-    std::vector<FiniteElementManager> femgrs_; // one manager per thread
-    std::vector<std::map<std::string,MathOperatorLHS<dim>*> > thread_lhs_operators_;
-    std::vector<std::map<std::string,MathOperatorRHS<dim>*> > thread_rhs_operators_;
-    std::vector<SparseMatrix> thread_G_;
-    std::vector<std::vector<double64> > thread_rh_;
-#endif
-};
-
-
-/**
-@class PDE_Integrator PDE_Integrator "main_library/PDE_Integrator.h"
-
-@author S.K. Matthaei
-@author Stephen G. Roberts
-@date 1997
+/** @brief Integrator for partial differential equations 
 
 @attention By default(if not explicitly specified otherwise), this uses the LUdcmp_Solver as default to circumvent 3rd party dependence
 
@@ -369,12 +257,123 @@ done in the following example:
 
 @section outlook Future Implementations
 
+ @author S.K. Matthaei
+ @author Stephen G. Roberts
+ @date 1997
+
 @todo (1) Implement AssignNonEssentialConditions( const COMPUTATION_DOMAIN<SIMPLEX<dim> >& );
 
 @todo !!! SKM: Implement the automatic integration over boundaries in the case where surface integrals are present
       (design approved: Garmisch and Colleoli)
 
 */
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+class PDE_Integrator {
+
+  public:
+
+    typedef typename std::map<Parameter,size_t>::const_iterator operandsConstIterator;
+    typedef typename std::map<Parameter,size_t>::iterator       operandsIterator;
+
+    PDE_Integrator();
+    explicit PDE_Integrator( Solver& );
+    /// accepts a pointer to a Solver object that is managed somewhere else
+    explicit PDE_Integrator( Solver* );
+    virtual ~PDE_Integrator();
+
+  protected:
+
+    PDE_Integrator( const PDE_Integrator& );
+    PDE_Integrator& operator=( const PDE_Integrator& );
+
+  public:
+
+    void          Add( MathOperatorLHS<dim>* );
+    void          Add( MathOperatorRHS<dim>* );
+    void          AddPostProcess( MathOperatorLHS<dim>* );
+
+    void          TimeIncrement( double64 dt );
+    bool          Transient() const;
+    
+    void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
+
+    void          SetSolver( Solver* new_solver );
+    Solver*       GetSolver() const;
+    virtual void  AdjustSolverSettings();
+  
+    /// applies scale factor to Dirichlet matrix-diagonal entries as applied by AssignEssentialConditions() and the rhs entries
+    void          ScaleEssentialConditions( double64 scale_factor);
+
+    virtual void  Reset( bool delete_math_operators=true );
+
+    void          ListMathOperatorsLHS() const;
+    void          ListMathOperatorsRHS() const;
+    void          SolutionVector( std::vector<double64>& ) const;
+    void          FirstGuess( const std::vector<double64>& );
+    void          RetainGlobalSolutionMatrix( bool yes_or_no );
+    void          WriteGlobalMatrixBitMapToText( const char* file_name );
+    void          OutputGlobals( int precision=1 );
+    void          Out() const;
+    void          Verbose(bool verbose){ verbose_=verbose;}
+    bool          GetVerbose(){ return verbose_;}
+
+  protected:
+
+    virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
+
+    virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
+
+    /// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
+    virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
+
+    virtual void  Accumulate( const COMPUTATION_DOMAIN<dim>& );
+
+    virtual void  LateAccumulate( const COMPUTATION_DOMAIN<dim>& );
+
+    virtual void  Solve();
+
+    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
+
+    virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
+
+  protected:
+
+    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;
+    std::map<std::string,MathOperatorLHS<dim>*>  postpro_operators_;
+    std::map<Parameter,size_t>                   basic_operands_;
+    std::map<Parameter,size_t>                   test_operands_;
+
+    SparseMatrix            G_;
+    std::vector<double64>   rh_;
+    std::vector<double64>   x_;
+    Solver*                 solver_;
+
+    const size_t            dim2_;
+    size_t                  dof_per_node_;
+    bool                    setup_established_, retain_matrix_;
+    bool                    newed_Solver_object;
+    double64                time_increment_;
+
+    struct SIZES {
+        size_t nodes;
+        size_t elements;
+    } target_;
+
+  private:
+
+    double64                scale_factor_; ///< for essential conditions
+    bool                    verbose_;
+#if defined(_OPENMP )
+    std::vector<FiniteElementManager> femgrs_; // one manager per thread
+    std::vector<std::map<std::string,MathOperatorLHS<dim>*> > thread_lhs_operators_;
+    std::vector<std::map<std::string,MathOperatorRHS<dim>*> > thread_rhs_operators_;
+    std::vector<SparseMatrix> thread_G_;
+    std::vector<std::vector<double64> > thread_rh_;
+#endif
+};
+
+
 
 } // csmp
 

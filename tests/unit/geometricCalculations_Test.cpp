@@ -7,13 +7,11 @@
 //
 
 #include "geometricCalculations_Test.h"
-#include "geometricCalculations_UoM.h"
+#include "GeometricCalculations.h"
 
 using namespace std;
 
 namespace csmp {
-
-namespace eclipse {
 
 void geometricCalculations_Test::run()
  {
@@ -29,7 +27,7 @@ void geometricCalculations_Test::run()
 
 
 
-/*
+/* TO TEST
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 );
 
 /// axes ( 2D )
@@ -119,7 +117,5 @@ bool   isTetra( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const cs
 */
  
  } // end run
-
-} // eclipse
 
 } // end csmp

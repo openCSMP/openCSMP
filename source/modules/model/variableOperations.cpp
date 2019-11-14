@@ -25,67 +25,67 @@ template double64 dotProduct<3U>( const vector<double64>&, const vector<double64
 // addition
 template<>
 Point<1U> operator+(const Point<1U>& p, const VectorVariable<1U>& v ) {
-     return std::move(Point<1U>(p[0]+v[0]));
+     return Point<1U>(p[0]+v[0]);
   }
 
 template<>
 Point<2U> operator+(const Point<2U>& p, const VectorVariable<2U>& v ) {
-     return std::move(Point<2U>(p[0]+v[0],p[1]+v[1]));
+     return Point<2U>(p[0]+v[0],p[1]+v[1]);
   }
 
 template<>
 Point<3U> operator+(const Point<3U>& p, const VectorVariable<3U>& v ) {
-     return std::move(Point<3U>(p[0]+v[0],p[1]+v[1],p[2]+v[2]));
+     return Point<3U>(p[0]+v[0],p[1]+v[1],p[2]+v[2]);
   }
 
 // subtraction
 template<>
 Point<1U> operator-(const Point<1U>& p, const VectorVariable<1U>& v ) {
-     return std::move(Point<1U>(p[0]-v[0]));
+     return Point<1U>(p[0]-v[0]);
   }
 
 template<>
 Point<2U> operator-(const Point<2U>& p, const VectorVariable<2U>& v ) {
-     return std::move(Point<2U>(p[0]-v[0],p[1]-v[1]));
+     return Point<2U>(p[0]-v[0],p[1]-v[1]);
   }
 
 template<>
 Point<3U> operator-(const Point<3U>& p, const VectorVariable<3U>& v ) {
-     return std::move(Point<3U>(p[0]-v[0],p[1]-v[1],p[2]-v[2]));
+     return Point<3U>(p[0]-v[0],p[1]-v[1],p[2]-v[2]);
   }
 
 
 // multiplication
 template<>
 Point<1U> operator*(const Point<1U>& p, const VectorVariable<1U>& v ) {
-     return std::move(Point<1U>(p[0]*v[0]));
+     return Point<1U>(p[0]*v[0]);
   }
 
 template<>
 Point<2U> operator*(const Point<2U>& p, const VectorVariable<2U>& v ) {
-     return std::move(Point<2U>(p[0]*v[0],p[1]*v[1]));
+     return Point<2U>(p[0]*v[0],p[1]*v[1]);
   }
 
 template<>
 Point<3U> operator*(const Point<3U>& p, const VectorVariable<3U>& v ) {
-     return std::move(Point<3U>(p[0]*v[0],p[1]*v[1],p[2]*v[2]));
+     return Point<3U>(p[0]*v[0],p[1]*v[1],p[2]*v[2]);
   }
 
 
 // division result = p / v
 template<>
 Point<1U> operator/(const Point<1U>& p, const VectorVariable<1U>& v ) {
-     return std::move(Point<1U>(p[0]/v[0]));
+     return Point<1U>(p[0]/v[0]);
   }
 
 template<>
 Point<2U> operator/(const Point<2U>& p, const VectorVariable<2U>& v ) {
-     return std::move(Point<2U>(p[0]/v[0],p[1]/v[1]));
+     return Point<2U>(p[0]/v[0],p[1]/v[1]);
   }
 
 template<>
 Point<3U> operator/(const Point<3U>& p, const VectorVariable<3U>& v ) {
-     return std::move(Point<3U>(p[0]/v[0],p[1]/v[1],p[2]/v[2]));
+     return Point<3U>(p[0]/v[0],p[1]/v[1],p[2]/v[2]);
   }
 
 
@@ -131,15 +131,15 @@ VectorVariable<1U> crossProduct(  const VectorVariable<1U>& v,  const csmp::Poin
 
 VectorVariable<2U> crossProduct(  const VectorVariable<2U>& v1,  const csmp::Point<2U>& p )
 {
-    return std::move(VectorVariable<2U>(v1.Flag(0),v1.Flag(1),0.0,v1[0]*p[1]-v1[1]*p[0]));
+    return VectorVariable<2U>(v1.Flag(0),v1.Flag(1),0.0,v1[0]*p[1]-v1[1]*p[0]);
 }
 
 VectorVariable<3U> crossProduct(  const VectorVariable<3U>& v1,  const csmp::Point<3U>& p ) {
 
-    return std::move(VectorVariable<3U>( v1.Flag(0), v1.Flag(1), v1.Flag(2),
+    return VectorVariable<3U>( v1.Flag(0), v1.Flag(1), v1.Flag(2),
                                         (v1[1]*p[2]-v1[2]*p[1]),
                                         (v1[2]*p[0] - v1[0]*p[2]),
-                                        (v1[0]*p[1] - v1[1]*p[0])) );
+                                        (v1[0]*p[1] - v1[1]*p[0]));
 }
 
 
@@ -153,9 +153,9 @@ VectorVariable<2U> crossProduct(  const VectorVariable<2U>& v1,  const VectorVar
 
 VectorVariable<3U> crossProduct(  const VectorVariable<3U>& v1,  const VectorVariable<3U>& v2 ) {
 
-    return std::move(VectorVariable<3U>( v1.Flag(0), v1.Flag(1), v1.Flag(2),
+    return VectorVariable<3U>( v1.Flag(0), v1.Flag(1), v1.Flag(2),
                                          (v1[1]*v2[2]-v1[2]*v2[1]),(v1[2]*v2[0] - v1[0]*v2[2]),
-                                         (v1[0]*v2[1] - v1[1]*v2[0])));
+                                         (v1[0]*v2[1] - v1[1]*v2[0]));
 }
 
 /**

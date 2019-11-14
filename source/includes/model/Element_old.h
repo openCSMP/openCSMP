@@ -5,7 +5,6 @@
 #include "FiniteElement.h"
 #include "FiniteElementTraits.h"
 #include "FiniteVolumeTraits.h"
-#include "ElementRemeshingTraits.h"
 
 #include "Box.h"
 
@@ -130,8 +129,7 @@ the mesh.
 
 */
 template<size_t dim>
-class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo is this really needed? - else deprecate
-                public FiniteElementTraits<dim,Element>,       ///< TODO: @todo have this policy own the FE pointer and initialise always
+class Element : public FiniteElementTraits<dim,Element>,       ///< TODO: @todo have this policy own the FE pointer and initialise always
                 public FiniteVolumeTraits<dim,Element>,        ///< TODO: @todo have this policy own the FV pointer and initialise always
                 public LocalVariableStorage<dim,Element<dim> > ///< TODO: @todo fix template - template parameter
   {

@@ -1,20 +1,34 @@
-#ifndef _EOS_CO2H2ONaCl_Spycher04_SPYCHER_2004_H
-#define _EOS_CO2H2ONaCl_Spycher04_SPYCHER_2004_H
+#ifndef EOS_CO2_H2O_NACL_SPYCHER_2004_H
+#define EOS_CO2_H2O_NACL_SPYCHER_2004_H
 
 #include <valarray>
 #include <complex>
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include"CSMP_mathUtilities.h"
+#include"CSMP_definitions.h"
 
 using namespace std;
 
 namespace csmp {
 
-class EOS_CO2H2ONaCl_Spycher04 {
+    double64  psiToPa( double64 pressureInPsi );
 
-public:
+    double64  paToPsi( double64 pressureInPa );
+
+    double64  paTobar( double64 pressureInPa );
+
+    double64  barTopa( double64 pressureInbar );
+
+    double64  degreeCToKelvin( double64 temperatureInC );
+
+    double64  KelvinTodegreeC( double64 temperatureInK );
+
+
+
+
+class EOS_CO2H2ONaCl_Spycher04 {
+  public:
     EOS_CO2H2ONaCl_Spycher04();
     ~EOS_CO2H2ONaCl_Spycher04();
 
@@ -40,7 +54,7 @@ public:
     /// mole fraction of salt from salt molality in aqueous phase (may contain CO2 : molality)
     double64  x_salt( double64 molalityCO2, double64 msalt );
 
-    /// mass fraction (0..1) of salt in aqueous phase
+    /// mass fraction (0..1) of salt in aqueous phase (weight percent)
     double64  X_salt(double64 pressure,double64 temperature, double64 msalt );
 
     /// mass fraction of CO2 in carbonic phase (weight percent)
@@ -94,7 +108,7 @@ public:
     /// compressibility of the carbonic phase
     double64  C_CarbonicPhase(double64 pressure,double64 temperature );
 
-    /// Z compressbility factor for carbonic phase
+    /// Z compressibility factor for carbonic phase
     double64  Z_CarbonicPhase(double64 pressure,double64 temperature);
 
     /// molecular diffusion coefficient of CO2 in brine
@@ -120,61 +134,25 @@ public:
 
 //  unit conversions
 
-    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
+    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // input NaCl molality
 
-    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
+    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // input XNaCl
 
-    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
+    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// input XNaCl
 
-    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
+    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt); // input NaCl molality
 
     double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
 
     double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
 
-    double64  psiToPa( double64 pressureInPsi );
+    double64           CompressedVolumeCo2( double64 pressure, double64 temperature );
 
-    double64  paToPsi( double64 pressureInPa );
-
-    double64  paTobar( double64 pressureInPa );
-
-    double64  barTopa( double64 pressureInbar );
-
-    double64  degreeCToKelvin( double64 temperatureInC );
-
-    double64  KelvinTodegreeC( double64 temperatureInK );
-
-
-    double64 temp( double64 depth );
-
-    double64 pres( double64 depth );
-
-
-    void plot_brine();
-
-    void plot_AqueousPhase();
-
-    void plot_CarbonicPhase();
-
-    void plot_thermodynamics();
-
-private:
-    // constants
-    const double64 R,a_h2oco2, b_co2, b_h2o, b_mix,
-                   stoichio,p0,vH2o, vCo2,
-                   molarMassH2o, molarMassCo2, molarMassNacl,
-                   pSC,tSC,therm_grad,pres_grad,temp_surface,pres_surface,max_depth;
-
-    // plotting
-    const double64 Tmax,Tmin,Pmax,Pmin,msaltmin,msaltmax,nTP,nmsalt;
-
-    double64           compressedVolumeCo2( double64 pressure, double64 temperature );
-
-    double64           fugacityCo2( double64 pressure,
+    double64           FugacityCo2( double64 pressure,
                                     double64 temperature,
                                     double64 phaseVolumeCo2 );
 
-    double64           fugacityH2o( double64 pressure,
+    double64           FugacityH2o( double64 pressure,
                                     double64 temperature,
                                     double64 phaseVolumeH2o );
 
@@ -322,6 +300,25 @@ private:
     double64           GasFormationVolumeFactor( double64 pressure, double64 temperature );
 
     double64           WaterFormationVolumeFactor( double64 pressure, double64 temperature ,double64 msalt);
+
+
+
+    // plotting
+    void plot_brine();
+
+    void plot_AqueousPhase();
+
+    void plot_CarbonicPhase();
+
+    void plot_thermodynamics();
+
+    const double64 R, molarMassH2o, molarMassCo2, molarMassNacl;
+
+  private:
+    // constants
+    const double64 a_h2oco2, b_co2, b_h2o, b_mix,
+                   stoichio,p0,vH2o, vCo2,
+                   pSC,tSC;
 };
 
 

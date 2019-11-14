@@ -128,20 +128,19 @@ private:
                        const Point<dim>& destination = Point<dim>() );
 
     /// Building blocks
-
+    
     /// creates an uniform mesh
     void UniformMesh( VSet<dim>& vset,
                       double64 length,
                       size_t n_elements );
 
-
     /// creates a refined mesh based on errf
     void RefinedMesh( VSet<dim>& vset,
-                     double64 length,
-                     double64 dx_min,
-                     double64 dx_max,
-                     double64 width_of_transition_zone,
-                     MeshDensity* density);
+                      double64 length,
+                      double64 dx_min,
+                      double64 dx_max,
+                      double64 width_of_transition_zone,
+                      MeshDensity* density );
 
     /// creates a custom mesh with vector( 1D node coordinates )
     void CustomMesh( VSet<dim>& vset,
@@ -150,6 +149,7 @@ private:
     /// creates a custom mesh with vector( 1D, 2D or 3D node coordinates )
     void CustomMesh( VSet<dim>& vset,
                      const std::vector<Point<dim> >& node_coordinates );
+
 
     void EstablishConnectivity( VSet<dim>& vset );
 

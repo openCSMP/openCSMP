@@ -52,8 +52,8 @@ class FEM_Data {
     void DecadicLogarithmOfValues();
     void SquareRootOfValues();
 */
-    bool OutBinary( std::FILE* fp ) const;
-    void InBinary( std::FILE* fp );
+    bool OutBinary( std::fstream& fp ) const;
+    void InBinary( std::fstream& fp );
     void Out() const;
 
 protected:

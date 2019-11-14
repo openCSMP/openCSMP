@@ -439,7 +439,7 @@ void SAMG_Settings::Set_nrd( int32 nrd ) {
     nrd_ = nrd;
     if ( nrd > 999 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nrd",
-                               "nrd must have a value only three values. Read the samg manual" );
+                               "nrd must have one of three possible values. Read the samg manual" );
 }
 
 int32 SAMG_Settings::Get_nrd() const {
@@ -447,10 +447,10 @@ int32 SAMG_Settings::Get_nrd() const {
 }
 
 void SAMG_Settings::Set_nru( int32 nru ) {
-    nrd_ = nru;
+    nru_ = nru;
     if ( nru > 999 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nru",
-                               "nru must have a value only three values. Read the samg manual" );
+                               "nru must have one of three possible values. Read the samg manual" );
 }
 
 int32 SAMG_Settings::Get_nru() const {
@@ -636,7 +636,7 @@ void SAMG_Settings::Set_iswit( int32 iswit ) {
                dimensioning have been reached
 
           0	SAMG returns with error code
-          1	SAMG allocates ext. memory and continues (if no core space,
+          1	SAMG allocates extra memory and continues (if no core space,
                writes prev. allocated data to disk
           2	SAMG allocates ext. memory and continues (if no core space,
                SAMG terminates)
@@ -664,7 +664,8 @@ void SAMG_Settings::Set_iextent( int32 iextent ) {
 tested: */
 void SAMG_Settings::Set_ndefault( int32 ndefault ) {
     ndefault_ = ndefault;
-    if ( !( ndefault >= 10 && ndefault <= 13 ) &&
+    if ( !(ndefault == 0)  &&
+         !( ndefault >= 10 && ndefault <= 13 ) &&
          !( ndefault >= 15 && ndefault <= 18 ) &&
          !( ndefault >= 20 && ndefault <= 23 ) &&
          !( ndefault >= 25 && ndefault <= 28 ) &&
@@ -1017,6 +1018,23 @@ void SAMG_Settings::Set_npcol( int32 npcol ) {
     ExplicitSecondary( true );
 }
 
+
+/**
+    Deals with the handling of negative values in the diagonal of the solution matrix
+    (SAMG manual on Galerkin coarse-;eve; matrices.
+ 
+    Integer. Defines the maximum number of non‐positive diagonal entries allowed in computing the Galerkin operators before SAMG gives up its attempts to modify interpolation and continues without further checks.
+    If neg_diag<0, checking of the diagonal is completely de‐activated. Warning: In the latter case you should know what you are doing!
+*/
+void SAMG_Settings::Set_neg_diag( int neg_diag )
+ {
+    neg_diag_ = neg_diag;
+ }
+
+
+
+
+
 /** Switch levelx
 
 @section arguments Hidden Input Arguments
@@ -1115,6 +1133,7 @@ void SAMG_Settings::SetNegative_iout( bool negative_iout ) {
 void SAMG_Settings::ExplicitSecondary( bool explicit_secondary ) {
     explicit_secondary_ = explicit_secondary;
 }
+
 void SAMG_Settings::SetSolverInstance( int32 instance ) {
     solver_instance_ = instance;
 

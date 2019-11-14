@@ -4,7 +4,7 @@
 #include "binaryReadWrite.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
-#include "TextFileInterface.h"
+#include "TextFileIO.h"
 
 using namespace std;
 
@@ -994,15 +994,15 @@ void VData::EstablishZeroBasedNumbering()
 /** 
     Writes VData into a binary output file.
 */ 
-void VData::OutBinary( FILE* fp ) const
+void VData::OutBinary( fstream& fp ) const
  {
     size_t n0(0), n1(1), records;
     double64*  ptr(0);
     
     // 1. writing whether we are dealing with a mixed mesh
     // ---------------------------------------------------
-    if ( hybrid_mesh_ ) fwrite( (void*) &n1, sizeof(size_t), 1, fp );
-    else                fwrite( (void*) &n0, sizeof(size_t), 1, fp );
+    if ( hybrid_mesh_ ) fp.write( (char*) &n1, sizeof(size_t));
+    else                fp.write( (char*) &n0, sizeof(size_t));
     
     // 2. writing all the p,c arrays or length identifiers = 0
     // -------------------------------------------------------
@@ -1011,24 +1011,24 @@ void VData::OutBinary( FILE* fp ) const
      // px
     if ( (records=px.size()) > 0 && (ptr=const_cast<double64*>( &(*px.begin()) )) != NULL ) 
       {
-         fwrite( (void*) &records, sizeof(size_t), 1, fp );
-         fwrite( (void*) ptr, sizeof(double64), records, fp );
+         fp.write( (char*) &records, sizeof(size_t));
+         fp.write( (char*) ptr, sizeof(double64) * records );
       }
-    else fwrite( (void*) &n0, sizeof(size_t), 1, fp );
+    else fp.write( (char*) &n0, sizeof(size_t));
     // py
     if ( (records=py.size()) > 0 && (ptr=const_cast<double64*>( &(*py.begin()) )) != NULL ) 
       {
-         fwrite( (void*) &records, sizeof(size_t), 1, fp );
-         fwrite( (void*) ptr, sizeof(double64), records, fp );
+         fp.write( (char*) &records, sizeof(size_t));
+         fp.write( (char*) ptr, sizeof(double64) * records );
       }
-    else fwrite( (void*) &n0, sizeof(size_t), 1, fp );
+    else fp.write( (char*) &n0, sizeof(size_t));
     // pz
     if ( (records=pz.size()) > 0 && (ptr=const_cast<double64*>( &(*pz.begin()) )) != NULL ) 
       {
-         fwrite( (void*) &records, sizeof(size_t), 1, fp );
-         fwrite( (void*) ptr, sizeof(double64), records, fp );
+         fp.write( (char*) &records, sizeof(size_t));
+         fp.write( (char*) ptr, sizeof(double64) * records );
       }
-    else fwrite( (void*) &n0, sizeof(size_t), 1, fp );
+    else fp.write( (char*) &n0, sizeof(size_t));
    }
 
     // 3. writing pelmt, plist, pfverts, bflags
@@ -1052,8 +1052,8 @@ void VData::OutBinary( FILE* fp ) const
    
     // 4. offsets for faces and interfaces
     // -----------------------------------
-    fwrite( (void*) &first_face_, sizeof(size_t), 1, fp );
-    fwrite( (void*) &first_interface_, sizeof(size_t), 1, fp );
+    fp.write( (char*) &first_face_, sizeof(size_t));
+    fp.write( (char*) &first_interface_, sizeof(size_t));
    
     cout <<"\nVData::OutBinary: Mesh has been successfully written to file."<< endl;
 
@@ -1066,13 +1066,13 @@ void VData::OutBinary( FILE* fp ) const
 /** 
      Initialises VData from binary input file.
 */
-void VData::InBinary( FILE* fp )
+void VData::InBinary( fstream& fp )
  {
     size_t mixed(0U), records(0U);
     
     // 1. reading whether we are dealing with a mixed mesh
     // ---------------------------------------------------
-    fread( (void*) &mixed, sizeof(size_t), 1, fp );
+    fp.read( (char*) &mixed, sizeof(size_t));
     if ( mixed ) hybrid_mesh_ = true;
     else         hybrid_mesh_ = false;
     
@@ -1082,27 +1082,27 @@ void VData::InBinary( FILE* fp )
      BinaryFileSectionRead sect(fp, "VSETCORD");
 
     // px
-    fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t));
     if ( records > 0U ) {
          px.resize( records );
          vector<double64>( px ).swap( px );
-         fread( (void*) &(*px.begin()), sizeof(double64), records, fp );
+         fp.read( (char*) &(*px.begin()), sizeof(double64) * records );
       }
 
     // py
-    fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t));
     if ( records > 0U ) {
          py.resize( records );
          vector<double64>( py ).swap( py );
-         fread( (void*) &(*py.begin()), sizeof(double64), records, fp );
+         fp.read( (char*) &(*py.begin()), sizeof(double64) * records );
       }
 
     // pz
-    fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t));
     if ( records > 0U ) {
          pz.resize( records );
          vector<double64>( pz ).swap( pz );
-         fread( (void*) &(*pz.begin()), sizeof(double64), records, fp );
+         fp.read( (char*) &(*pz.begin()), sizeof(double64) * records );
       }
    }
 
@@ -1127,8 +1127,8 @@ void VData::InBinary( FILE* fp )
     
     // 4. offsets for faces and interfaces
     // -----------------------------------
-    fread( (void*) &first_face_, sizeof(size_t), 1, fp );
-    fread( (void*) &first_interface_, sizeof(size_t), 1, fp );
+    fp.read( (char*) &first_face_, sizeof(size_t));
+    fp.read( (char*) &first_interface_, sizeof(size_t));
     cout <<"\nVData::InBinary: Mesh has been successfully read from file."<< endl;
         
  } // end InBinary
@@ -1273,7 +1273,7 @@ void VData::Out() const
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
           cout << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t";
+          for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t ";
           cout << endl;
        }
 
@@ -1899,6 +1899,37 @@ size_t  VData::OrderOfFiniteElementInterpolationFunctions() const
     return 0;
        
  } // end 
+
+
+
+/**
+    Runs a series of tests to establish whether there is a plausible PFverts array
+    without checking the actual inter-element connectivity.
+    Certainty is built via negative discrimination.
+*/
+bool VData::WithNeighbourConnectivity() const
+ {
+     // empty
+     if ( pfverts.empty() ) return false;
+     // correct size
+     if ( pfverts.size() != plist.size() ) return false;
+     // negative and positive elements
+     size_t boundary_faces(0U);
+     const size_t elements_minus1(pfverts.size()-1U);
+     for ( deque<std::vector<long64> >::const_iterator
+           it=pfverts.begin(); it!=pfverts.end(); ++it )
+       for ( size_t i=0U; i<(*it).size(); ++i ) {
+            // recording elements at the model boundaries
+            if ( (*it)[i] < 0 ) boundary_faces++;
+            // nbor element number too large
+            else if ( (*it)[i] > elements_minus1 )
+              return false;
+         }
+   
+    // there should be elements at the model boundary
+    if ( boundary_faces == 0U ) return false;
+    return true;
+ }
 
 
  

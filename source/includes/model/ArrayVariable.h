@@ -153,9 +153,9 @@ class ScalarVariable;
       void           Out( long digits=3 ) const;
       bool           Out( const char* filename, size_t precision = 9 ) const;
       
-      /// SKM: DO NOT USE C-STYLE I/O - for internal csmp binary IO
-      bool           Out( std::FILE* ) const;
-      bool           In( std::FILE* );
+      /// printing values to filestream
+      bool           Out( std::fstream& ) const;
+      bool           In( std::fstream& );
 
       ArrayContainer::const_iterator Begin() const;
       ArrayContainer::const_iterator End()   const;

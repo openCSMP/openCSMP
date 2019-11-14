@@ -416,7 +416,7 @@ bool ArrayVariable::Out( const char* filename, size_t precision ) const
 
 
 /**
- @fn  bool ArrayVariable::Out( std::FILE* fp ) const
+ @fn  bool ArrayVariable::Out( std::fstream& fp ) const
 
  @brief Outs the array to given file pointer (binary format)
 
@@ -432,38 +432,38 @@ bool ArrayVariable::Out( const char* filename, size_t precision ) const
 
  @return  true if it succeeds, false if it fails.
  */
-bool ArrayVariable::Out( std::FILE* fp ) const
+bool ArrayVariable::Out( std::fstream& fp ) const
   {
-    if (!fp)
+    if (!fp.is_open())
       {
         std::cout <<"\nArrayVariable::Out(): invalid file pointer."<< std::endl;
         return false;
       }    
 
     // flag
-    const VARIABLE_FLAG flag(flag_);
-    fwrite( (void*) &flag, sizeof(VARIABLE_FLAG), 1, fp );
+    const int32 flag(flag_);
+    fp.write( (char*) &flag, sizeof(int32));  // VARIABLE_FLAG
 
     // size
     const size_t depth( Size() );
-    fwrite( (void*) &depth, sizeof(size_t), 1, fp );
+    fp.write( (char*) &depth, sizeof(size_t));
 
     // data
     const size_t bytes(sizeof(double64));
     vector<double>::const_iterator dataEnd( data_.end() );
     for ( vector<double>::const_iterator it( data_.begin() ); it != dataEnd; ++it )
-      std::fwrite( (void*) &(*it), bytes, 1, fp );
+      fp.write( (char*) &(*it), bytes);
 
     return true;
   }
 
 
 /**
- @fn  bool ArrayVariable::In( std::FILE* fp )
+ @fn  bool ArrayVariable::In( std::fstream& fp )
 
  @brief Reads the array from given file pointer (binary format)
 
- See bool ArrayVariable::Out( std::FILE* fp ) const
+ See bool ArrayVariable::Out( std::fstream& fp ) const
 
  @author  P. Lang
  @date  9/28/2012
@@ -472,23 +472,23 @@ bool ArrayVariable::Out( std::FILE* fp ) const
 
  @return  true if it succeeds, false if it fails.
  */
-bool ArrayVariable::In( std::FILE* fp )
+bool ArrayVariable::In( std::fstream& fp )
   {
-    if (!fp)
+    if (!fp.is_open())
       {
         std::cout <<"\nArrayVariable::In(): invalid file pointer."<< std::endl;
         return false;
       }
 
     // flag
-    if ( !std::fread( (void*) &flag_, sizeof(VARIABLE_FLAG), 1, fp ) ) {
+    if ( !fp.read( (char*) &flag_, sizeof(int32)) ) {  // VARIABLE_FLAG
         std::cout <<"\nArrayVariable::In(): Not able to read binary record flag"<< std::endl;
         return false;
     }
 
     // depth
     size_t depth(0);
-    if ( !std::fread( (void*) &depth, sizeof(size_t), 1, fp ) ) {
+    if ( !fp.read( (char*) &depth, sizeof(size_t)) ) {
       std::cout <<"\nArrayVariable::In(): could not read bindary record depth"<< std::endl;
       return false;
       }
@@ -498,7 +498,7 @@ bool ArrayVariable::In( std::FILE* fp )
     const size_t  bytes( sizeof(double64) );
     for ( size_t i(0); i < depth; ++i )
       {
-        if( !std::fread( (void*) &data_[i], bytes, 1, fp ) )
+        if( !fp.read( (char*) &data_[i], bytes) )
           {
           std::cout <<"\nArrayVariable::In(): could not read binary data record"<< std::endl;
           return false;

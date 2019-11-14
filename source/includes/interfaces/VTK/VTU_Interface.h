@@ -35,6 +35,12 @@ double64 yCoordinate( Point<3> const& );
 double64 yCoordinate( Point<2> const& );
 double64 yCoordinate( Point<1> const& );
 
+/// writes model boundaries to a binary file
+void outputBoundariesToVTU( const char* modelBinFIleName );
+
+/// interactive, reads csmp binary model file and writes user-specified variable to VTU file.
+void csmpBinaryToVTU( const char* modelBinFIleName );
+
 // we need this since VTK_Interface does not support 1D; definitions in VTU_Interface.hpp
 namespace vtuInterfaceDispatch
 {

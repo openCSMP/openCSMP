@@ -24,6 +24,7 @@ foreach(I ${PLATFORM_EXTERNAL_LIBRARIES})
         PATHS ${PLATFORM_LIBS}
     )
     message(STATUS "Found library ${L}")
+	message(STATUS "libraries: ${SAMG_LIBRARIES}")
     list(APPEND SAMG_LIBRARIES "${L}")
 endforeach()
 

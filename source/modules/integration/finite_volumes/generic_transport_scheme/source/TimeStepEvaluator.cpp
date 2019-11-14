@@ -59,47 +59,21 @@ double64 TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
  }
 
 
+
+
+
 /** 
     Computes 1) volumetric flow-based time-increment that ascertains that the amount of tracer that leaves the FV
     is less than is stored in its pore volume.
  
-    This is robust criterion in the presence of fluid sources and sinks
-    
-    The method also computes and stores the 2) flux balance (=divergence of flow field) on the current
-    FV for later used for correction.
-    
-    3) the flux concentration products are accumulated into the new concentration variable
+    This is robust criterion in the presence of fluid sources and sinks.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>& n ) const
+double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>* const nptr, double64 outflow ) const
  {
-     double64 flux_balance(0.), outflow(0.), flux_concentration_products(0.);
-
-   if (n.Idx() == 186) {
-     std::cerr << "This is the interesting case\n";
-   }
-   size_t i = 0;
-     for (auto fip : n.AllFacetIntegrationPoints()) {
-       const double64 ffc = fip.Read(User()->key_ffC);
-       const double64 sign = fip.FromInside() ? 1. : -1.;
-       // accumulation of volumetric facet flow into flux balance
-       const double64 facet_flux = sign * fip.Read( User()->key_ff );
-       auto w = fip.IntegrationWeight();
-       if ( facet_flux > 0. ) outflow += facet_flux * w;
-       flux_balance += facet_flux * w;
-       // temporary accumulation of flux-concentration products into the variable 'new concentration'
-       flux_concentration_products += sign * ffc * w;
-     }
-
      // 1. (phi * V) / q_out = dt
-     double64 time_increment = n.Read( User()->key_FVPV ) / outflow;
+     double64 time_increment = nptr->Read( User()->key_FVPV ) / outflow;
      assert( time_increment > 0. );
-
-     // 2. recording the flux balance
-     n.Store( User()->key_FB, makeScalar(n.Status(User()->key_FB),flux_balance) );
-   
-     // 3. recording the flux concentration product balance
-     n.Store( User()->key_NC, makeScalar(n.Status(User()->key_NC),flux_concentration_products) );
 
      return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
  
@@ -109,36 +83,43 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
 
 
 /**
-    Special case where the inflow or outflow needs to be established but the FV may be sliced
+    Special case where inflow or outflow needs to be established, differently because the FV is sliced
     by the model boundary.
+ 
+    2 boundary cases are considered:
+ 
+      1. No-flow boundary where flux balance is known because no in- or outflow should occur
+ 
+      2. Dirichlet in- or outflow boundary where balance has to be guessed and compensation
+         is necessary, else there is a saturation buildup at out-flow boundaries.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( Node<dim>& n ) const
- {
-    const double64 pore_volume = n.Read( User()->key_FVPV );
-   
-    // 1. if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance
-    if ( n.AtBoundary() != NOT ) {
-         // 1.0 (Q) checking sources because these will not be picked up in the fluxes correctly if the FV is truncated
-         const double64 fluid_source = ( n.Read(User()->key_NQV) > 0. ) ? n.Read(User()->key_NQV) : 0.;
-         // 1.1 (phi * V) / q_out = dt
-         const double64 flux_balance = std::max( fabs( n.Read( User()->key_FB )), fluid_source );
-         if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-         return std::min( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
+double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr, double64 outflow ) const
+  {
+     assert( nptr != NULL );
+ 
+     // 0. COMPUTING THE FLUX BALANCE
+     const double64 pore_volume  = nptr->Read( User()->key_FVPV );
+     double64       flux_balance = nptr->Read( User()->key_FB );
+
+    // 1. FINITE VOLUMES TRUNCATED BY MODEL BOUNDARY
+    //    if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance.
+    //    however, if we are at a no-flow boundary of the model, there should be no inflow or outflow through the missing facets
+    //    and any flux balance will therefore be correctly computed.
+    if ( nptr->AtBoundary() != NOT ) {
+         if ( nptr->Status( User()->key_PF ) == DIRICH ) {
+               // if we are at an outflow boundary, no outflow was recorded as all FV facet normals point into the model domaim
+               // in this the flux-balance is equivalent to the outflow
+               if ( flux_balance < 0. ) outflow = fabs(flux_balance);
+           }
+         // for no-flow boundary cases, the outflow and the flux balances are recorded correctly
       }
  
-    // 2. for a perimeter FV that is intact, the volumetric outflow needs to be calculated 
-     double64 outflow(0.);
-
-     for (auto fip : n.AllFacetIntegrationPoints()) {
-       const double64 sign = fip.FromInside() ? 1. : -1.;
-       // accumulation of volumetric outflow
-       const double64 facet_flux = sign * fip.Read( User()->key_ff );
-       if ( facet_flux > 0. ) outflow += facet_flux * fip.IntegrationWeight();
-     }
+    // 2. INTACT PERIMETER FINITE VOLUMES
+    //    if the perimeter of the FV at the boundary is intact because it lies inside of the model,
+    //    the volumetric outflow is calculated and used to limit the time increment
 
      // (phi * V) / q_out = dt
-     if ( outflow < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
      return std::min( pore_volume / outflow, max_time_increment_ ) * step_size_reduction_factor_;
  
  } // OutFlowLessThanContentIncrementBoundary
@@ -189,45 +170,38 @@ input max_time_increment which may be the case if there is no flow at all
 in the domain. Equally, the user is informed if the CFL increment is 
 less than a millisecond (usually a prohibitively small increment).  
 
-TODO: implement streamline CFL
-
 */
 template<size_t dim, template<size_t> class USER>
-double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& ) const
+double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const eit ) const
  {
-    static DenseMatrix<DM_MIN>  DN;
     vector<double64>            gradPc(dim);
     VectorVariable<dim>         vc;
-    double64                    velocity,
-                                courant_increment(max_time_increment_);
+    double64                    velocity, courant_increment(max_time_increment_);
     const double64              millisecond(1.0e-3);
     const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
-    const bool                  unless_has_equal_dimension(dim!=1U);
 
-/*
-           // 1. limit imposed by advection
-           // -----------------------------
-           (*eit)->Read( User()->key_V, vc );
-           velocity = vc.Length();
+   // 1. limit imposed by advection
+   // -----------------------------
+   eit->Read( User()->key_V, vc );
+   velocity = vc.Length();
 
 
-           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->key_PHI );
-           if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->key_THI );
+   double64 cell_diameter = eit->LengthInDirection(vc) * eit->Read( User()->key_PHI );
+   if ( multiply_with_cell_thickess ) cell_diameter *= eit->Read( User()->key_THI );
 
 
-           // 4. calculating the CFL criterion from the cell diameter
-           // -------------------------------------------------------
-           // guarding against degenerate cases
-           if ( velocity > numeric_limits<double64>::epsilon() and cell_diameter > numeric_limits<double64>::epsilon() ) {
-                courant_increment = std::min( courant_increment, cell_diameter / velocity );
-             }
-        }
+   // 4. calculating the CFL criterion from the cell diameter
+   // -------------------------------------------------------
+   // guarding against degenerate cases
+   if ( velocity > numeric_limits<double64>::epsilon() and cell_diameter > numeric_limits<double64>::epsilon() ) {
+        courant_increment = std::min( courant_increment, cell_diameter / velocity );
+     }
 
-    if ( courant_increment >= max_time_increment ) { 
+    if ( courant_increment >= max_time_increment_ ) {
          cout <<"\nINFO, TimeStepEvaluator<dim>::StreamlineCFL (2-phase flow):";
          cout <<" calculated courant increment is larger than maximum permitted increment, there may be no flow in the model domain !";
-         cout <<"\n\tCFL is set to "<< fixed << setprecision(0) << max_time_increment << endl;
-         return max_time_increment;
+         cout <<"\n\tCFL is set to "<< fixed << setprecision(0) << max_time_increment_ << endl;
+         return max_time_increment_;
       }
     if ( courant_increment <= millisecond ) {
          throw csmp::Exception( WARNING, "TimeStepEvaluator<dim>::StreamlineCFL (2-phase flow):",
@@ -237,7 +211,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& ) const
          cout <<"\nTimeStepEvaluator<dim>::StreamlineCFL (2-phase flow): ";
          cout << fixed << setprecision(0) << courant_increment <<" secs.\n";
       }
- */
+
     return courant_increment * step_size_reduction_factor_;
    
  } // end StreamlineCFL (multiphase case)
@@ -249,6 +223,8 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& ) const
 
 /** multiphase flow version
 
+*/
+/* TODO: port this to new relperm framework
 template<size_t dim, template<size_t> class USER>
 double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64 max_time_increment ) const
  {
@@ -274,7 +250,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
 
            // 1. limit imposed by advection
            // -----------------------------
-           (*eit)->Read( User()->key_V, vc );
+           (*eit)->Read( User()->vD_key, vc );
            velocity = vc.Length();
 
            // NB: This may be a too conservative estimate for the implicit scheme but is necessary for the explicit one
@@ -282,8 +258,8 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
            // thus for implicit scheme is better:
            velocity *= relperm.dfds();
 
-           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->key_PHI );
-           if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->key_THI );
+           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->phi_key );
+           if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->thi_key );
 
            // 2. additional buoyancy-related flow
            // -------------------------------------
@@ -300,7 +276,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
                      fill( gradPc.begin(), gradPc.end(), 0. );
                      (*(*eit)).dN_AtBaryCenter( DN );
                      for ( size_t j=0U; j<(*eit)->Nodes(); j++ ) {
-                         const double64 sn = (*eit)->N(j)->Read( User()->key_C );
+                         const double64 sn = (*eit)->N(j)->Read( User()->C0_key );
                          relperm.SaturationWettingPhase( 1. - sn );
                          relperm.EffectiveSaturation();
                          const double64 pc = relperm.pc_Phase();
@@ -309,7 +285,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
                      // getting the maximum capillary flux (G= lambda overbar)
                      double64  magnitude_grad_pc(gradPc[0]); // 1D
                      if      ( dim == 3U ) magnitude_grad_pc = sqrt(gradPc[0]*gradPc[0]+gradPc[1]*gradPc[1]+gradPc[2]*gradPc[2]);
-                     else if ( dim == 2U ) magnitude_grad_pc = hypot(gradPc[0],gradPc[1]);
+                     else if ( dim == 2U ) magnitude_grad_pc = sqrt(gradPc[0]*gradPc[0]+gradPc[1]*gradPc[1]);
 
                      // use data from barycenter: O.K. as long as grad_pc does not increase during iterations
                      velocity += fabs( magnitude_grad_pc * k_lambda_overbar );
@@ -342,16 +318,10 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
     return courant_increment;
    
  } // end StreamlineCFL (multiphase case)
-
-
 */
 
-template class TimeStepEvaluator<1U,ExplicitTransport>;
-template class TimeStepEvaluator<2U,ExplicitTransport>;
-template class TimeStepEvaluator<3U,ExplicitTransport>;
 
-template class TimeStepEvaluator<1U,ImplicitTransport>;
-template class TimeStepEvaluator<2U,ImplicitTransport>;
+template class TimeStepEvaluator<3U,ExplicitTransport>;
 template class TimeStepEvaluator<3U,ImplicitTransport>;
 
 } // end csmp

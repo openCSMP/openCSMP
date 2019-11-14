@@ -3,6 +3,7 @@
 
 #include "Solver.h"
 #include "SparseMatrix.h"
+#include "CompressedRowMatrix.h"
 
 namespace csmp {
 
@@ -15,30 +16,30 @@ with csmp::SparseMatrix, STL and according functionality
 @date 2010
 
 */
-  class GaussJordan_Solver : public Solver {
-    public:
-      GaussJordan_Solver();
-      virtual ~GaussJordan_Solver();
+class GaussJordan_Solver : public Solver {
+public:
+  GaussJordan_Solver();
+  virtual ~GaussJordan_Solver();
 
-    protected:
-      virtual void SolveMatrixEquation( SparseMatrix& A,
-                                        std::vector<double64>& b,
-                                        std::vector<double64>& x,
-                                        size_t no_unknowns );
+protected:
+  virtual void SolveMatrixEquation( SparseMatrix& A,
+                                    std::vector<double64>& b,
+                                    std::vector<double64>& x,
+                                    size_t no_unknowns );
 
-	  virtual void SolveMatrixEquation(CompressedRowMatrix& A,
-		  std::vector<double64>& b,
-		  std::vector<double64>& x,
-		  size_t no_unknowns) {};
+  virtual void SolveMatrixEquation( CompressedRowMatrix& A,
+                                    std::vector<double64>& b,
+                                    std::vector<double64>& x,
+                                    size_t no_unknowns );
 
-    private:
-      void GaussJordan( SparseMatrix& A, std::vector<double64>& b );
+private:
+  void GaussJordan( SparseMatrix& A, std::vector<double64>& b );
 
-      void SwapSparseMatrixElements( SparseMatrix& M,
-                                     long row1,
-                                     long col1,
-                                     long row2,
-                                     long col2 ) const;
+  void SwapSparseMatrixElements( SparseMatrix& M,
+                                 long row1,
+                                 long col1,
+                                 long row2,
+                                 long col2 ) const;
 };
 
 } // end namespace csmp

@@ -2,6 +2,9 @@
 #ifdef _OPENMP
 #include "omp.h"
 #endif
+
+#include <cassert>
+
 using namespace std;
 
 namespace csmp {
@@ -763,7 +766,8 @@ void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double64 x, double6
     else if (sub==INTERIOR)
         nodes_end=this->GetSS()->GetModel()->Region("Model").PerimeterNodesBegin();
     double64 mind(10e50),distance(0.);
-    Node<dim>* n;
+
+    Node<dim>* n(nullptr);
     for (typename vector<Node<dim>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++) {
         distance=pow((pow(((*npit)->x()-x),2.0)+pow(((*npit)->y()-y),2.0)+pow(((*npit)->z()-z),2.0)),0.5);
         if (distance<mind) {
@@ -771,6 +775,8 @@ void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double64 x, double6
             mind=distance;
         }
     }
+  
+    assert( n != nullptr );
     n->Store(key,makeScalar(flag,value));
 }
 

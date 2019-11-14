@@ -21,7 +21,11 @@ namespace csmp {
     assigned and flagged as NEUMANN elsewhere. To do this it needs material parameters
     from the corresponding flow law, for instance the hydraulic conductivity
     in the case of Darcy's law.
-    
+ 
+    @attention the nodal term gets applied as many times as the node is a member of an element, i.e.
+    n.Parents() times. Therefore the value should be divided by the number of parent elements of the node.
+    This is already accounted for by the method GetOperands().
+ 
     @attention when applying this term, remember that model must have 
     at least one Dirichlet constraint assigned to make solution unique.
 

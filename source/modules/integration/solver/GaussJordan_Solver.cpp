@@ -1,4 +1,5 @@
 #include "GaussJordan_Solver.h"
+#include "Exception.h"
 #include <cmath>
 
 using namespace std;
@@ -20,9 +21,17 @@ void GaussJordan_Solver::SolveMatrixEquation( SparseMatrix& A,
                                               vector<double64>& b,
                                               vector<double64>& x,
                                               size_t )
- {
+{
     (*this).GaussJordan( A, b );
     x = b;
+}
+
+void GaussJordan_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
+                                              vector<double64>& b,
+                                              vector<double64>& x,
+                                              size_t )
+{
+  throw csmp::Exception( ERROR, "GaussJordan_Solver::SolveMatrixEquation", "Method not implemented for CompressedSparseRowMatrix yet" );
 }
 
 
@@ -45,7 +54,7 @@ void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double64>& b )
 
     for (j=0;j<n;j++) ipiv[j]=0;
     for (i=0;i<n;i++) {
-        cout<<" i : "<<i<<endl;
+//        cout<<" i : "<<i<<endl;
         big = 0.;
         for (j=0;j<n;j++)
             if (ipiv[j] != 1)

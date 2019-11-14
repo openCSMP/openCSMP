@@ -162,9 +162,14 @@ class MathOperatorRHS {
     virtual void  AssignToGlobal( const Face<dim>&,      std::vector<double64>& rhs );
     virtual void  AssignToGlobal( const InterFace<dim>&, std::vector<double64>& rhs );
 
-    virtual MathOperatorRHS<dim>* clone() const = 0;
-  protected:
+    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
+    virtual void  AssignToGlobal(const Element<dim>&, std::vector<double64>& rhs, const std::vector<size_t>&  );
+    virtual void  AssignToGlobal(const Face<dim>&, std::vector<double64>& rhs, const std::vector<size_t>&  );
+    virtual void  AssignToGlobal(const InterFace<dim>&, std::vector<double64>& rhs, const std::vector<size_t>& );
 
+    virtual MathOperatorRHS<dim>* clone() const = 0;
+
+  protected:
     std::string                         name_;               ///< name of operator
 
     Parameter                           op;                  ///< material property operand

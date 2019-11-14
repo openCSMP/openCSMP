@@ -147,7 +147,7 @@ class PropertyData {
     void TransformValues( double64 (*f)(double64) );
 
     /// writing stored flag and data values to file
-    bool OutBinary( std::FILE* fp ) const;
+    bool OutBinary( std::fstream& fp ) const;
 
     void Out() const;
 
@@ -166,7 +166,7 @@ class PropertyData {
 
 
 /// reading stored flag and data vaues from file
-PropertyData inBinaryPropertyData( std::FILE* fp );
+PropertyData inBinaryPropertyData( std::fstream& fp );
 
 /// calculating the distance bwetween consecutive data entries in the container
 size_t flagOffset( VARIABLE_TYPE, size_t spatial_dimension, size_t array_length );

@@ -38,7 +38,6 @@ NodeCenteredFiniteVolumeMonitor<dim>::NodeCenteredFiniteVolumeMonitor( const cha
 */
 template<size_t dim>
 void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model<dim>& sg, 
-                                                                     const NodeCenteredFiniteVolumeTransport<dim>& fvt,
                                                                      bool consider_porosity,
                                                                      bool normalize_by_initial_integral,
                                                                      bool write_output )
@@ -46,30 +45,15 @@ void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model
     double64& model_time( ModelTime::Instance().modelTime );
     
     // 0. integrating the property
-    if ( !group_by_group ) {
-         double64 integratedPropertyValue = fvt.VolumeIntegrateScalarFiniteVolumeVariable( output_variable.c_str(), consider_porosity );
-         assert( !isnan( integratedPropertyValue) );
-         integrals.push_back( make_pair( model_time, integratedPropertyValue ) );
-      }
-    else {
-         if ( sg.UniqueRegionsBegin() == sg.UniqueRegionsEnd() ) {
-              throw csmp::Exception( WARNING, "NodeCenteredFiniteVolumeMonitor::MonitorPropertyIntegrals", "No regions have been defined yet.");
-              return;
-           }
-         list<double64>  values;
-         for ( typename map<string,Region<dim> >::const_iterator 
-               it=sg.UniqueRegionsBegin(); it!=sg.UniqueRegionsEnd(); it++ )
-           values.push_back( fvt.VolumeIntegrateScalarFiniteVolumeVariable( (*it).first.c_str(), sg, output_variable.c_str(), consider_porosity ) );
-                                                                           
-         group_integrals.push_back( make_pair( model_time, values ) );
-      }
-    
+    const Region<dim>&  domain(sg.Region("Model"));
+    double64 integratedPropertyValue = domain.VolumeIntegral_x_Thickness( output_variable.c_str(), consider_porosity );
+    assert( !isnan( integratedPropertyValue) );
+    integrals.push_back( make_pair( model_time, integratedPropertyValue ) );
+
     // 1. simple case: property is integrated and output for the entire model
     if ( write_output ) SaveToFile( sg, normalize_by_initial_integral );
 
  } // end MonitorNodePropertyIntegrals
-
-
 
 
 

@@ -5,8 +5,8 @@
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#ifndef BOUNDARY_FUNCTIONALITY_TEST_H
-#define BOUNDARY_FUNCTIONALITY_TEST_H
+#ifndef BOUNDARY_INTERFACE_TEST_H
+#define BOUNDARY_INTERFACE_TEST_H
 
 #include "Test.h"
 #include "Model.h"
@@ -33,7 +33,7 @@ class BoundaryInterface_Test : public Test {
   private:
     /// checks whether the contact surface of 2 contacting regions is recovered correctly
     bool TestRegionContactDetection( const Model<3U>& );
-  
+
   private:
     bool verbose_; ///< turn off to supress output of files etc.
 };
@@ -49,10 +49,6 @@ size_t countAndLabelRegions( Model<3U>&, std::vector<std::string>& region_names 
 size_t labelRegionPatches( Model<3U>& model, const char* dim_1_region, const char* diagnostic_elmt_variable,
                            const std::vector<std::string>& region_names );
 
-/// converts region into Boundarie(s) of faces, decomposed into patches; region is moved from "Model" to non-unique, connectivity is updated 
-// add to BoundaryInterface
-size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const char* dim_1_region, const char* diagnostic_elmt_variable,
-                                                         const std::vector<std::string>& region_names );
 
 
 /// establishes neighbors of lower dimensional element

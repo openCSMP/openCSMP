@@ -9,8 +9,7 @@
 #ifndef CSMP_SKUA_INTERFACE_H
 #define CSMP_SKUA_INTERFACE_H
 
-#include <iostream>
-#include <set>
+#include "CSMP_definitions.h"
 
 namespace csmp {
 
@@ -18,7 +17,20 @@ template<size_t> class Model;
 
 class SKUA_Interface {
   public:
-    /// exports element variable from selected regions to SKUA barycenter-point cloud (ASCII table) format 
+  
+  // IMPORT INTERFACES
+  
+    /// region-by-region property assignment from column-based texfile (Kuncho Kurtev)
+    template<size_t dim>
+    bool ImportElementPropertyValuesFromSKUA( Model<dim>& );
+
+
+  // OUTPUT INTERFACES FOR POINT DATA (DOIMOI FAULT MODELLING 2011-2013)
+
+    /// output of element barycentre points transformed into SKUA (lefthanded) coordinate system for property interpolation and transfer to CSMP
+    void OutputElementNumbersAndBaryCentresRegionByRegion( const Model<3U>& );
+
+    /// exports element variable from selected regions to SKUA barycenter-point cloud (ASCII table) format
     void VariableToPointCloud( const Model<3U>&,
                                const std::set<std::string>& regions_of_interest,
                                const char* filename, const char* element_var ) const;
@@ -32,6 +44,22 @@ class SKUA_Interface {
     void SurfaceArrayVariableToPointCloud( const Model<3U>&,
                                            const std::set<std::string>& regions_of_interest,
                                            const char* filename, const char* element_var ) const;
+  
+  // MISC OPERATIONS
+
+    /// For each rock type the elements will be converted into regions with the corresponding name
+    void ConvertRockTypesIntoRegions( Model<3U>&, const std::string& rocktype_info_file );
+
+    void Remove_NO_DATA_ElementsInModel( Model<3U>&, const std::string& target_region, std::set<long>& no_data_elmt_numbers );
+
+  private:
+  
+  // HELPER METHODS
+  
+    /// Enlists 'element number's of elements with NO_DATA values (-9999, -99999) in the target region
+    bool Detect_NO_DATA_ElementsInDatasetFromSKUA( const std::string& input_txt_file, const std::string& target_region,
+                                                   std::set<long>& no_data_elmt_numbers );
+
 };
 
 

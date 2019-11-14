@@ -1,5 +1,5 @@
-#ifndef ECLIPSE_MODEL_H
-#define ECLIPSE_MODEL_H
+#ifndef ECLIPSE_MODEL_UOM_H
+#define ECLIPSE_MODEL_UOM_H
 
 #include <unordered_map>
 
@@ -23,49 +23,53 @@ element types like prisms and tetrahedra.
 @revised SKM 12/04/2018
 
 */
-template<size_t dim>
-class EclipseModel : public csmp::Model<dim> {
+class EclipseModel : public csmp::Model<3U> {
   public:
       /// CSMP model construction from Eclipse files; property database is created from "variables_file.txt"
-      EclipseModel( const std::string& model_name,
+      EclipseModel( EclipseModelSettings& settings,
+                    const std::string& model_name,
                     const std::string& variables_file );
 
       /// CSMP model construction from mesh files; empty property database
-      EclipseModel( const std::string& model_name );
+      EclipseModel( EclipseModelSettings& settings, const std::string& model_name );
 
       virtual ~EclipseModel();
 
-      /// MOST IMPORTANT METHOD!- but should be private and part of constructor (TODO: move EclipseModelSettings out of class)
-      void BuildModel();
-  
-      /// access of elements generated from corner-point cells by their i(W->E),j(S->N),k(top->bottom) grid indices
-      const Element<dim>* operator()( size_t i, size_t j, size_t k ) const;
-      Element<dim>*       operator()( size_t i, size_t j, size_t k );
-
-      /// access to the settings of the Eclipse interface
-      EclipseModelSettings&  EclipseModelSetup();
-
-      /// existing special regions
+      /// volumetric model subdomains if any
       template<class Container>  void GetRegions( Container& data );
   
+      /// lower-dimensional element regions representing geological faults
       template<class Container>  void GetFaults( Container& data );
   
+      /// wells which do not have a discrete representation inside of Eclipse
       template<class Container>  void GetWells( Container& data );
 
-      /// processing special regions
+      /// JC: remove it later - processing special regions
       void CreateBoundariesAroundFaults( bool keep_fault_regions = false );
+  
+      /// JC: remove it later - TODO: not implemented yet
       void CreateSplitBoundariesAroundFaults( bool delete_fault_regions = false );
   
-      /// BOX flag nodes and elements of volumetric target region
+	  /// JC: remove it later -  BOX flag nodes and elements of volumetric target region
       void AssignBoxBoundaryFlagsWherePossible( const char* target_region );
   
+      /// Get ijk coordinates of corner-point grid cell that corresponds to csmp::Element
+      ijk EclipseCoordinates( Element<3u>* e ) const { return elmt_to_ijk_.find(e)->second; }
+  
+	  /// inserts a well path that penetrates the centers of the faces of the supplied cells
+	  void AddWell(const std::string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point);
+
   public: // SKM accessors
       /// the dimensions of the original corner-point grid
-      void GridDimensions( size_t& max_I, size_t& max_J, size_t& max_K ) const { max_I=grid_dim_I_; max_J=grid_dim_J_; max_K=grid_dim_K_; }
+      void GridDimensions( size_t& max_I, size_t& max_J, size_t& max_K ) const
+        { max_I=grid_dim_I_; max_J=grid_dim_J_; max_K=grid_dim_K_; }
 
   private:
+      /// Master method to build the model
+      void Initialize();
 
       // PROPS and other specs from RUNSPECS file
+	  EclipseInterface			mesh_interface;
       EclipseModelSettings      eclipse_model_settings_;
       std::set<std::string>     regions_;
       std::set<std::string>     faults_;
@@ -74,11 +78,9 @@ class EclipseModel : public csmp::Model<dim> {
       // Eclipse grid dimensions
       size_t  grid_dim_I_, grid_dim_J_, grid_dim_K_;
   
-      std::unordered_map<ijk,size_t>  IJK_map_; ///< stores mapping from i,j,k to elements
+      std::unordered_multimap<ijk,Element<3u>*>  ijk_to_elmt_; ///< stores mapping from i,j,k to elements
+      std::unordered_map<Element<3u>*,ijk>       elmt_to_ijk_; ///< stores mapping from elements to i,j,k
 };
 
 } // csmp
-
-
-
 #endif

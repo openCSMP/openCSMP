@@ -14,10 +14,10 @@
 #include "VanGenuchten.h"
 #include "TwoPhaseFileBased.h"
 //#include "ToddQuadraticModel.h"
-#include "Experimental2PhaseModel.h"
 #include "GenericTransferFunction.h"
 #include "FractureMatrixUpscaled.h"
 #include "FourarLenormand.h"
+#include "ExperimentalRT.h"
 
 // auxiliary functions called by this main program
 #include "PropertyHandle.h"
@@ -157,8 +157,7 @@ void RelativePermeabilityModel_Test::run()
         pc_data <<"0. 5.0e7\n0.2 1.0e6\n0.4 1.0e5\n0.6 1.0e4\n0.8 0.5e4\n1. 0."<< endl;
         pc_data.close();
 
-        relperm_model = new Experimental2PhaseModel<DIM>( model_ptr_->Database(),
-                                                         "krw_data", "kro_data", "pc_data" );
+        relperm_model = new ExperimentalRT<DIM>( model_ptr_->Database(), "krw_data", "kro_data", "pc_data" );
         Test( *relperm_model, true );
         delete relperm_model;
 

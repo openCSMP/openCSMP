@@ -13,7 +13,8 @@ template<size_t dim>
 class Event {
   public:
     //constructor
-    Event(Node<dim>* nd);
+    explicit Event(Node<dim>* nd);
+    Event() = delete;
     //getting node
     csmp::Node<dim>* getNode() const {return node_;}
     bool valid() const {return valid_;}
@@ -24,6 +25,8 @@ class Event {
     void inQueue(bool boolean) {inQueue_ = boolean;}    
     double64 t_schedule() const {return t_schedule_;}
     void t_schedule(double64 time) {t_schedule_ = time;}
+    std::vector<double64> facetAreaCollection;
+    std::vector<Point<dim>> facetNormalCollection;
 
   private:
     csmp::Node<dim>*	node_;

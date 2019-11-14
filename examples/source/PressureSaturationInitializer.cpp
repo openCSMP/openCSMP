@@ -156,15 +156,6 @@ void PressureSaturationInitializer<dim>::Visit(Node<dim>* node)
 
 } // end Visit
 
-
-template<size_t dim>
-void PressureSaturationInitializer<dim>::Visit(Model<dim>* model)
-{
-    std::cout << "\nPressureSaturationInitializer::Visit(Model): Visiting model.\n";
-    model->Accept( *this );
-    std::cout << "\nPressureSaturationInitializer::Visit(Model): Pressures and saturations initialized successfully!\n";
-}
-
 template class PressureSaturationInitializer<1U>;
 template class PressureSaturationInitializer<2U>;
 template class PressureSaturationInitializer<3U>;

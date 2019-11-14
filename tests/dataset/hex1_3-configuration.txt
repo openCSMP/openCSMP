@@ -1,0 +1,45 @@
+'hex1_3-configuration.txt' example configuration file for Lingli's models
+
+# (2) global material properties, i.e. for the MATRIX
+permeability						1.0e-14
+porosity						0.25
+fluid pressure						0.
+
+# (3) local material properties (of a fracture)
+IN_FRACTURE		complete	permeability	1.0e-12
+IN_FRACTURE		complete	porosity	0.7
+
+# (4) essential conditions on model boundaries
+# initial pressure 5MPa, min pressure at producer = 1MPa
+# horizontal injector well at lower left edge
+EDGE5	Dirichlet	fluid pressure		5.0e6	5.0e6	5.0e6	5.0e6
+EDGE7	Dirichlet	fluid pressure		1.0e6	1.0e6	1.0e6	1.0e6
+
+# (5) computational settings (try to do some better estimates on the basis
+# of Darcy's law based calculations
+time stepping	aggressive
+duration		15934436.
+output time		10.
+output time		50.
+output time		100.
+output time		500.
+output time		1000.
+output time		5000.
+output time		10000.
+output time		100000.
+output time		318688.
+output time		400000.
+output time		500000.
+output time		600000.
+output time		700000.
+output time		800000.
+output time		900000.
+output time		1000000.
+output time		2000000.
+output time		3000000.
+output time		4000000.
+output time		5000000.
+output time		6000000.
+output time		7000000.
+output time		8000000.
+output time		9000000.

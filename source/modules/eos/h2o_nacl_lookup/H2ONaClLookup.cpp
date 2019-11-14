@@ -356,7 +356,7 @@ namespace csmp
     else if(x <= 5.0e-2){ x_res = 5.0e-3; myix = 19+static_cast<long>((x-1.0e-2)/x_res); }
     else if(x <= 2.0e-1){ x_res = 1.0e-2; myix = 27+static_cast<long>((x-5.0e-2)/x_res); }
     else if(x <= 1.0e0 ){ x_res = 0.02e0; myix = 42+static_cast<long>((x-2.0e-1)/x_res); } 
-    else{ ix =  82; }//                x_res = 0.02e0; myix = 42+static_cast<long>((x-2.0e-1)/x_res); /* throw out of range ? */ }
+    else{ myix =  82; }//                x_res = 0.02e0; myix = 42+static_cast<long>((x-2.0e-1)/x_res); /* throw out of range ? */ }
     return myix;
   }
   
@@ -805,12 +805,10 @@ namespace csmp
 
   void H2ONaClLookup::BuildSimpleTable( const long& i, std::vector<double64>& table )
   {
-    table_id   = i;
-    
-    FILE* infile;
-    infile = fopen(filename[table_id],"rb");
-	
-    if(infile == NULL)
+    table_id   = i;    
+	fstream infile(filename[table_id], ios::in | ios::binary);
+
+    if(!infile.is_open())
       {
         cerr << "H2ONaClLookup : Lookup file \"" << filename[table_id] << "\" missing, computing ...\n\n";
         it = 0;
@@ -873,9 +871,9 @@ namespace csmp
                   } // x-loop
               } // p-loop
           } // t_loop
-        FILE* outfile;
-        outfile = fopen( filename[table_id], "wb");
-        if( outfile == NULL )
+        
+		fstream outfile (filename[table_id], ios::out | ios::binary);
+        if( !outfile.is_open() )
           {
             cerr << "could not even find it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -886,7 +884,7 @@ namespace csmp
           {
             cerr << "writing file " << filename[table_id] << " ... ";
             skm_C_fwrite( outfile, table );
-            fclose(outfile);
+			outfile.close();
             cerr << "done!\n";
           }
       }
@@ -894,7 +892,7 @@ namespace csmp
       {
         cerr << "reading file " << filename[table_id] << " ... ";
         skm_C_fread( infile, table );
-        fclose( infile );
+		infile.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildSimpleTable" << table_id << " ...\n\n";
@@ -908,10 +906,9 @@ namespace csmp
     table_id   = 1;
     state      = L;
     
-    FILE* infile1;
-    infile1=fopen( filename[1], "rb");
+    fstream infile1( filename[1], ios::in | ios::binary );
     
-    if ( infile1 == NULL ) 
+    if ( !infile1.is_open() ) 
       {
         cerr << "H2ONaClLookup : Lookup file " << filename[1] << " missing, computing ...\n\n";
         it = 0;
@@ -1121,9 +1118,9 @@ namespace csmp
                   } // p-loop
               }
           }
-        FILE* outfile1;
-        outfile1 = fopen( filename[1], "wb");
-        if( outfile1 == NULL )
+        fstream outfile1( filename[1], ios::out | ios::binary );
+
+        if( !outfile1.is_open() )
           {
             cerr << "could not even it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -1134,7 +1131,7 @@ namespace csmp
           {
             cerr << "writing file " << filename[1] << " ... ";
             skm_C_fwrite( outfile1, table1 );
-            fclose(outfile1);
+			outfile1.close();
             cerr << "done!\n";
           }
       }
@@ -1142,7 +1139,7 @@ namespace csmp
       {
         cerr << "reading file " << filename[1] << " ... ";
         skm_C_fread( infile1, table1 );
-        fclose( infile1 );
+		infile1.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable1 ...\n\n";
@@ -1156,10 +1153,9 @@ namespace csmp
     table_id   = 2;
     state      = L;
     
-    FILE* infile2;
-    infile2=fopen( filename[2], "rb");
+    fstream infile2( filename[2], ios::in | ios::binary );
     
-    if ( infile2 == NULL ) 
+    if ( !infile2.is_open() ) 
       {
         cerr << "H2ONaClLookup : Lookup file " << filename[2] << " missing, computing ...\n\n";
 	
@@ -1504,9 +1500,8 @@ namespace csmp
                   } // p-loop    
               }
           }
-        FILE* outfile2;
-        outfile2 = fopen( filename[2], "wb");
-        if( outfile2 == NULL )
+        fstream outfile2( filename[2], ios::out | ios::binary );
+        if( !outfile2.is_open() )
           {
             cerr << "could not even open file for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -1517,7 +1512,7 @@ namespace csmp
           {
             cerr << "writing file " << filename[2] << " ... ";
             skm_C_fwrite( outfile2, table2 );
-            fclose(outfile2);
+			outfile2.close();
             cerr << "done!\n";
           }
       }
@@ -1525,7 +1520,7 @@ namespace csmp
       {
         cerr << "reading file " << filename[2] << " ... ";
         skm_C_fread( infile2, table2 );
-        fclose( infile2 );
+		infile2.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable2 ...\n\n";
@@ -1559,10 +1554,9 @@ namespace csmp
     table_id   = 0;
     state      = V;
     
-    FILE* infile0;
-    infile0=fopen( filename[0], "rb");
+    fstream infile0( filename[0], ios::in | ios::binary );
     
-    if ( infile0 == NULL ) 
+    if ( !infile0.is_open() ) 
       {
         cerr << "H2ONaClLookup : Lookup file " << filename[0] << " missing, computing ...\n\n";
         it = 0;
@@ -1729,9 +1723,8 @@ namespace csmp
                   }
               }
           }
-        FILE* outfile0;
-        outfile0 = fopen( filename[0], "wb");
-        if( outfile0 == NULL )
+        fstream outfile0( filename[0], ios::out | ios::binary );
+        if( !outfile0.is_open() )
           {
             cerr << "could not even it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -1742,7 +1735,7 @@ namespace csmp
           {
             cerr << "writing file " << filename[0] << " ... ";
             skm_C_fwrite( outfile0, table0 );
-            fclose(outfile0);
+			outfile0.close();
             cerr << "done!\n";
           }
       }
@@ -1750,7 +1743,7 @@ namespace csmp
       {
         cerr << "reading file " << filename[0] << " ... ";
         skm_C_fread( infile0, table0 );
-        fclose( infile0 );
+		infile0.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable0 ...\n\n";

@@ -476,4 +476,17 @@ VARIABLE_FLAG  parseCondition( std::string& s )
     return PLAIN;
 }
 
+
+
+/**
+    To print enum INTERFACE_SIDE.
+*/
+string parseSide( INTERFACE_SIDE side )
+ {
+    if ( side == INSIDE )  return "INSIDE";
+    if ( side == OUTSIDE ) return "OUTSIDE";
+    if ( side == MIDDLE )  return "MIDDLE";
+    return "UNDEFINED";
+ }
+
 } // end csmp

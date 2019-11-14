@@ -83,6 +83,7 @@ namespace csmp {
       void Set_nred( int32 nred );
       void Set_nredlev( int32 nredlev );
       void Set_nxf_clean( int32 nxf_clean );
+      void Set_neg_diag( int neg_diag );
       void Set_npcol( int32 npcol );
       void Set_levelx( int32 levelx );
       void Set_ioform( std::string ioform );
@@ -94,6 +95,7 @@ namespace csmp {
       void SetNegative_ncyc( bool negative_ncyc );
       void SetNegative_idump( bool negative_idump );
       void SetNegative_iout( bool negative_iout );
+      /// if this is not set 'true' all attempts to set secondary parameters will fail (default=false)
       void ExplicitSecondary( bool explicit_secondary );
       void SetSolverInstance(  int32 instance  );
 
@@ -141,6 +143,7 @@ namespace csmp {
       std::string filnam_dump_;
       int32       filnam_dump_length_;
       int         filnam_dump_Array_[50];
+      int         neg_diag_;
       int32       nred_;
       int32       nredlev_;
       int32       nxf_clean_;
@@ -154,7 +157,6 @@ namespace csmp {
       bool negative_idump_;
       bool negative_iout_;
       bool explicit_secondary_;
-
   };
 
 /**

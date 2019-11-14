@@ -5,7 +5,7 @@
 
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
-#include "CompressedRowMatrix.h"
+//#include "CompressedSparseRowMatrix.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -13,8 +13,8 @@
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
 
-namespace csmp {
 
+namespace csmp {
 
 template<size_t> class Element;
 template<size_t> class Face;
@@ -38,18 +38,18 @@ template<size_t dim>
 class MathOperatorLHS {
   public:
 
-    MathOperatorLHS( const PropertyDatabase<dim>& pref, 
+    MathOperatorLHS( const PropertyDatabase<dim>&,
                      const char* basic, 
                      const char* test );
 
-    MathOperatorLHS( const PropertyDatabase<dim>& pref, 
+    MathOperatorLHS( const PropertyDatabase<dim>&,
                      const char* oper, 
                      const char* basic, 
                      const char* test );
     
     MathOperatorLHS( const MathOperatorLHS& mo );
     
-    MathOperatorLHS& operator=( const MathOperatorLHS& mo );
+    MathOperatorLHS& operator=( const MathOperatorLHS& );
     
     virtual ~MathOperatorLHS();
     
@@ -143,17 +143,17 @@ class MathOperatorLHS {
     /// multiply with time increment if this is desired
     virtual void  MultiplyWithTimeFactor( double64 dt );
 
-	virtual void AssignToGlobal(const Element<dim>& e, CompressedRowMatrix& G);
-	virtual void AssignToGlobal(const InterFace<dim>& f, CompressedRowMatrix & G);
-	virtual void AssignToGlobal(const Face<dim>& e, CompressedRowMatrix & G);
-
-	/// assigment to the left hand side global matrix (after everything was calculated )
-    virtual void  AssignToGlobal( const Element<dim>&,   SparseMatrix& );
-    virtual void  AssignToGlobal( const Face<dim>&,      SparseMatrix & );
+    /// assigment to the left hand side global matrix (after everything was calculated )
+    virtual void  AssignToGlobal( const Element<dim>&, SparseMatrix& );
+    virtual void  AssignToGlobal( const Face<dim>&, SparseMatrix & );
     virtual void  AssignToGlobal( const InterFace<dim>&, SparseMatrix& );
 
-//    virtual MathOperatorLHS<dim>* clone() const { return new MathOperatorLHS<dim>(*this); }
-    virtual MathOperatorLHS<dim>* clone() const =0;
+    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
+    virtual void AssignToGlobal( const Element<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const Face<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
+
+    virtual MathOperatorLHS<dim>* clone() const = 0;
 
   protected:
 
@@ -163,8 +163,8 @@ class MathOperatorLHS {
     std::string                         name_;   ///< name of operator
 
     Parameter                           op;      ///< material property operand
-    std::pair<Parameter, size_t >       bop;     ///< basic function operand
-    std::pair<Parameter, size_t >       top;     ///< test function operand
+    std::pair<Parameter, size_t >       bop;     ///< basic function operand and calculation offset
+    std::pair<Parameter, size_t >       top;     ///< test function operand and calculation offset
 
     DenseMatrix<DM_MIN>                 LHS;     ///< solution matrix to be accumulated
     std::vector<size_t>                 IDT;     ///< node-ID & global constraint points vector ( test operand )

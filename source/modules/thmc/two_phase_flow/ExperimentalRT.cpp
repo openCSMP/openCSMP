@@ -94,7 +94,7 @@ void ExperimentalRT<dim>::ConstructRTs(const char* rt_file_name)
                     >> krw_start_derivative >> krw_end_derivative
                     >> pc_start_derivative >> pc_end_derivative;
             
-            std::cout << "Derivaties:\t" << kro_start_derivative << "\t" << kro_end_derivative
+            std::cout << "Derivatives:\t" << kro_start_derivative << "\t" << kro_end_derivative
                       << "\t" << krw_start_derivative << "\t" << krw_end_derivative
                       << "\t" << pc_start_derivative << "\t" << pc_end_derivative << "\n";
             

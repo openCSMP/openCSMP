@@ -30,13 +30,13 @@ namespace csmp {
                             "The current pressure variable must be SCALAR and placed on NODE"  );
   } // end constructor
   
-  
   template<size_t dim>
   void CompressiblePressureSourceLHS<dim>::AccumulateStencil( Element<dim>& fe, SparseMatrix& mat ) const
   {
     const double64 phi = fe.Read( key_PHI );
     const double64 ct = fe.Read( key_CT );
     const double64 dt = this->MultiplyWithTimeIncrement() ? this->dt_ : 1.0;
+    /*
     for (auto sip: fe.AllSectorIntegrationPoints()) {
       const double64 sector_volume = sip.SectorVolume();
       const double64 pore_volume = phi * sector_volume;
@@ -46,6 +46,18 @@ namespace csmp {
       auto node_idx = sip.NodeIdx();
       mat.Add(node_idx,node_idx,pore_volume*ct*(pf1-pf0)*dt);
     }
+    */
+
+    const size_t sectors(fe.Sectors());
+    for ( size_t i=0U; i<sectors; ++i ) {
+        const double64 sector_volume = fe.SectorVolume(i);
+        const double64 pore_volume = phi * sector_volume;
+        const double64 pf0 = fe.PropertyValueAtBaryCenter(key_PF0);
+        const double64 pf1 = fe.PropertyValueAtBaryCenter(key_PF1);
+        auto node_idx = fe.N(i)->Idx();
+        mat.Add(node_idx,node_idx,pore_volume*ct*(pf1-pf0)*dt);
+    }
+
   } // end AccumulateStencil
   
   
@@ -53,6 +65,7 @@ namespace csmp {
   void CompressiblePressureSourceLHS<dim>::AccumulateFiniteVolume( Node<dim>& fv, SparseMatrix& mat ) const
   {
     const double64 dt = this->MultiplyWithTimeIncrement() ? this->dt_ : 1.0;
+    /*
     for (auto sip: fv.AllSectorIntegrationPoints()) {
       const double64 sector_volume = sip.SectorVolume();
       const double64 pf0 = sip.Obtain(key_PF0);
@@ -64,6 +77,23 @@ namespace csmp {
       auto node_idx = sip.NodeIdx();
       mat.Add(node_idx,node_idx,pore_volume*ct*(pf1-pf0)*dt);
     }
+    */
+    const double64 pf0 = fv.Read(key_PF0);
+    const double64 pf1 = fv.Read(key_PF1);
+    const double64 ct = fv.Read( key_CT );
+    auto node_idx = fv.Idx();
+    const size_t parent_elements(fv.Parents());
+    for ( size_t i=0U; i<parent_elements; ++i ) {
+        Element<dim>* const eptr = fv.Parent(i);
+        const size_t sectors(eptr->Sectors());
+        for ( size_t j=0U; j<sectors; ++j ) {
+            const double64 sector_volume = eptr->SectorVolume(j);  
+            const double64 phi = eptr->Read( key_PHI );
+            const double64 pore_volume = phi * sector_volume;
+            mat.Add(node_idx,node_idx,pore_volume*ct*(pf1-pf0)*dt);
+        }          
+    }
+
   } // end AccumulateFiniteVolume
   
   template class CompressiblePressureSourceLHS<1U>;

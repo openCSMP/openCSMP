@@ -7,9 +7,9 @@
 #include "OS_Utilities.h"
 
 
-using namespace csmp;
+using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 /**
     constructor taking a reference to the model to be handled(and an optional title to the output)
@@ -3963,6 +3963,60 @@ double yCoordinate( Point<2> const& p )
 { return p[1]; }
 double yCoordinate( Point<1> const& )
 { return 0.; }
+
+
+
+/**
+    Reads binary model file and writes target variable to VTU file.
+ 
+    @author SKM
+    @date 2008
+*/
+void outputBoundariesToVTU( const char* modelBinFIleName )
+{
+  Model<3> model( modelBinFIleName );
+  VTU_Interface<3> vtu( model );
+
+  cin.ignore( numeric_limits<streamsize>::max(), '\n' );
+  cout << "\n\noutputBoundariesToVTU::Enter name of boundary property to output: " << flush;
+  string propertyName( "" );
+  getline( cin, propertyName );
+
+  for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); it++ )
+    //for ( map<boundaryName,Boundary<3U> >::const_iterator
+    //it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
+    vtu.OutputDataToVTU( modelBinFIleName,     // file name
+                         propertyName.c_str(), // propertyName
+                         (*it).second, 0. );   // ModelSubDomain<dim,SIMPLEX>& subDomain
+}
+
+
+
+
+
+/**
+    Reads binary model file and writes desired variable to VTU file.
+ 
+    Interactive: user is prompted for the name of the property.
+ 
+    @author SKM
+    @date 2008
+ 
+*/
+void csmpBinaryToVTU( const char* modelBinFIleName )
+{
+  cin.ignore( numeric_limits<streamsize>::max(), '\n' );
+  cout << "\n\ncsmpBinaryToVTU::Enter name of property to output: " << flush;
+  string propertyName( "" );
+  getline( cin, propertyName );
+
+  Model<3> model( modelBinFIleName );
+  VTU_Interface<3> vtu( model );
+
+  vtu.OutputDataToVTU( propertyName, propertyName, string( "Model" ), 0 );
+}
+
+
 
 
 template class VTU_Interface<1U>;

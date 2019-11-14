@@ -50,38 +50,26 @@ struct SubDomainInfo {
     - Internal boundaries are named by regions they interface which each other
     - External boundaries have names corresponding to the sides of box-shaped
       models or other unique names.
-
-      @todo (3) SKM complete switch statements for the new variable types
-      @todo (3) Check for redundant inherited and non-inherited methods in subdomains (i.e. OutputVariableTo)
-      @todo (1) Test whether Region properties are used correctly (A)
-      @todo (2-C) Declare members as virtual if they are
-
 */
 template<size_t dim,template<size_t> class CELL>
 class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> > {
   public:
     // any kind of finite elements; simplex or other types
-    typedef CELL<dim>               Simplex;
-    typedef std::vector<Simplex*>   SimplexContainer;
-
+    typedef CELL<dim>                                  CellType;
     // vertices
-    typedef Node<dim>               Vertex;
-    typedef std::vector<Vertex*>    VertexContainer;
-    typedef std::vector<Node<dim>*> NodeContainer;
-
-    // iterators
-    typedef typename SimplexContainer::iterator        simplexIterator;
+    typedef Node<dim>                                  Vertex;
+    typedef std::vector<Vertex*>                       VertexContainer;
+    typedef std::vector<Node<dim>*>                    NodeContainer;
     typedef typename VertexContainer::iterator         vertexIterator;
-
-    // const iterators
-    typedef typename SimplexContainer::const_iterator  simplexConstIterator;
     typedef typename VertexContainer::const_iterator   vertexConstIterator;
 
   public:
     /// constructs incomplete subregion for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
+
     ModelSubDomain( const ModelSubDomain& );
     ModelSubDomain( ModelSubDomain&& );
+  
     virtual ~ModelSubDomain();
     ModelSubDomain<dim,CELL>&  operator=( const ModelSubDomain& );
 
@@ -96,10 +84,16 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     void Apply( Interrelation<dim>& );
 
     /// connects simplices (=cells) with their equidimensional neighbors
-    void EstablishNeighborConnectivity();
+    void EstablishNeighborConnectivity( bool verbose = true );
 
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
+    
+    /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
+    void SortVectors( size_t interior_cells, size_t interior_nodes );
+    
+    /// assuming that a partitioned (and sorted) element vector is in place, constructs the bd_face_vec_ by checking whether neighbor elements belong to the domain or not
+    void BuildPerimeterFaceVector( size_t interior_elements );
 
     // ----------------------------------------
     // Indexes
@@ -121,7 +115,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     typename std::vector<CELL<dim>*>&  SimplexVector();
   
     /// reference to Node pointer vector
-    typename std::vector<Node<dim>*>&     NodeVector();
+    typename std::vector<Node<dim>*>&  NodeVector();
   
     // TODO: remove this proliferation of names! - if needed put into subclasses
     typename std::vector<CELL<dim>*>&  ElementVector();
@@ -180,7 +174,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     /// pointer to node #n in subdomain; @attention node can vary from initialization to initialization
     csmp::Node<dim>*  N( size_t n ) const;
     /// pointer to element #n of model subdomain
-    CELL<dim>*     E( size_t n ) const;
+    CELL<dim>*        E( size_t n ) const;
 
     // access via object indexes( note: use with caution )
     /// is the node located on the surface of the model subdomain?
@@ -289,7 +283,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     // ----------------------------------------
 
     /// writes complete ModelSubDomain specifications in terms of unique indices as block to binary file
-    void WriteDomainIndexesToBinaryFile( FILE* ) const;
+    void WriteDomainIndexesToBinaryFile( std::fstream& ) const;
     // see non-member function readDomainIndexesFromBinaryFile() to read the indices back
 
     void      OutputVariableToScreen( const char* prop ) const;
@@ -305,7 +299,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
 
     const PropertyDatabase<dim>&                pref_;
     std::string                                 subdomain_name_; ///< passed down when region is created so that it can be referred to
-    std::vector<CELL<dim>*>                  elmt_vec_;       ///< doubly sorted, interior elements first
+    std::vector<CELL<dim>*>                     elmt_vec_;       ///< doubly sorted, interior elements first
     std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;    ///< as in second segment of elmt_vec_
     std::vector<csmp::Node<dim>*>               node_vec_;       ///< doubly sorted, interior nodes first
     size_t                                      first_bd_node_;
@@ -325,7 +319,7 @@ template<size_t dim,template<size_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
-void readDomainIndexesFromBinaryFile( size_t dim, FILE*, SubDomainInfo& );
+void readDomainIndexesFromBinaryFile( size_t dim, std::fstream&, SubDomainInfo& );
 
 
 } // end namespace

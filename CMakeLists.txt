@@ -14,6 +14,8 @@ include(CsmpDependencies)
 
 add_subdirectory(source)
 add_subdirectory(thirdparty)
+#JC: skip temperally since some examples related to pde_integrator_uom need to be updated
+#QS: should be fixed now
 add_subdirectory(examples)
 add_subdirectory(tests)
 

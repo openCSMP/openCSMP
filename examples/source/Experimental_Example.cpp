@@ -59,7 +59,7 @@ void Experimental_Example::Specifications()
      SetTitle( "Experimental_Example" );
      SetDifficulty( 1 );
      SetCategory( "Software Functionality" );
-     AddAuthor( "Irina Sin" );
+     AddAuthor( "You!" );
      AddDescription( "source in: Experimental_Example.cpp" );
      AddDescription( "Empty example for the user to experiment with" );
      AddRequirement( "none" );
@@ -68,139 +68,8 @@ void Experimental_Example::Specifications()
 
 // OTHER RELATIONSHIPS
 
-/**
-    Since fluid pressure is a node property we are looking
-    for the dilatation at the node which is computed using the 
-    finite volume framework.
-*/
-void dilatationInducedChangeInPorePressure( Model<DIM>& model )
- {
-    const csmp::Index dil_key(model.Database().StorageKey("dilatation"));
-    const csmp::Index pf_key(model.Database().StorageKey("fluid pressure"));
-    const csmp::Index bf_key(model.Database().StorageKey("fluid compressibility"));
- 
-    Region<DIM>& model_domain(model.Region("Model"));
-    ScalarVariable fluid_compressibility;
-
-    // TODO: we need to get the nodal dilatation using the FVM discretisation
-    // volume-weighted average of the dilatation of the FV sectors surrounding the node
-   
-    for ( auto it=model_domain.NodesBegin(); it!=model_domain.NodesEnd(); ++it )
-      {
-         // get the inputs
-         double64 pf         = (*it)->Read( pf_key );
-         double64 fluid_compressibility = (*it)->Read(bf_key);
-         // finite volume average dilatation
-         double64 fv_dilatation(0.), fv_volume(0.);
-         for ( size_t i=0U; i<(*it)->Parents(); ++i ) {
-             // needed: sector volumes and elemental dilatation values
-             Element<DIM>*  eptr((*it)->Parent(i));
-             double64 sector_dilatation = eptr->Read( dil_key );
-             size_t esector = (*it)->ParentNodeNumber(i);
-             double64 sector_volume  = eptr->SectorVolume(esector);
-             fv_dilatation += sector_dilatation * sector_volume;
-             fv_volume     += sector_volume;
-           }
-         fv_dilatation /= fv_volume;
-        
-         // compute pressure change and store the new pore pressure
-         (*it)->Store( pf_key, makeScalar((*it)->Status(pf_key), pf + fv_dilatation / fluid_compressibility) );
-      }
- 
- } // end dilatationInducedChangeInPorePressure
-
-
-
-
-void permeabilityPorosityCorrelation( Model<DIM>& model )
- {
-    const csmp::Index phi_key(model.Database().StorageKey("porosity"));
-    const csmp::Index k_key(model.Database().StorageKey("permeability"));
- 
-    Region<DIM>& model_domain(model.Region("Model"));
-   
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
-      {
-         double64 porosity = (*it)->Read( phi_key );
-         // TODO: introduce proper relationship here
-         double64 permeability = porosity * 1.0e-12;
-         (*it)->Store( k_key, makeScalar((*it)->Status(k_key), permeability) );
-      }
- 
- } // end permeabilityPorosityCorrelation
-
-
-
-
-
-/**
-    Computes the product of the Biot coefficient alpha with the pore pressure 
-    for assignment to the pre-stress term in the governing equation
-    
-    The result is returned into the scalar element variable 'Biot term'
-    
-    @attention the fluid pressure effect is averaged on the element barycenter
-*/
-template<size_t dim>
-void porePressureBiotAlphaProduct( Model<dim>& model, const char* target_region )
- {
-    const csmp::Index pf_key    = model.Database().StorageKey("fluid pressure");
-    const csmp::Index alpha_key = model.Database().StorageKey("Biot alpha");
-    assert( alpha_key.place == ELEMENT );
-    assert( alpha_key.type  == SCALAR );
-    // result
-    const csmp::Index res_key = model.Database().StorageKey("Biot term");
-    assert( res_key.place == ELEMENT );
-    assert( res_key.type  == SCALAR );
-
-    csmp::Region<dim>& ref = model.Region(target_region);
-    ScalarVariable sc;
-    
-    for ( typename vector<Element<dim>*>::iterator
-          it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
-      {
-         const double64 alpha((*it)->Read( alpha_key ));
-         if ( alpha < 0. or alpha > 1. ) {
-              cerr <<"\n\tBiot coefficient alpha (1 - K_dry/K_grain): "<< alpha;
-              throw csmp::Exception( ERROR, "porePressureBiotAlphaProduct:", "Biot coefficient alpha is out of range." );
-           }
-         (*it)->PropertyValueAtBaryCenter( pf_key, sc );
-         sc *= alpha;
-         (*it)->Store( res_key, makeScalar( (*it)->Status(res_key), sc() ) );
-      }
-      
- } // end porePressureBiotAlphaProduct
-
-template void porePressureBiotAlphaProduct( Model<DIM>&, const char* );
-
-
-
-/**
-    Computing the specific gravity force that acts on the rock skeleton from the "dry rock density"
-*/
-void gravityForce( Model<DIM>& model, double64 acc_gravity )
- {
-    csmp::Region<DIM>& ref = model.Region("Model");
-
-    const csmp::Index drd_key = model.Database().StorageKey("dry rock density");
-    const csmp::Index gf_key  = model.Database().StorageKey("gravity force");
-   
-    VectorVariable<DIM> gforce(ANY,0. );
-    model.InputPropertyValue( "gravity force", gforce );
-   
-    for ( typename vector<Element<DIM>*>::iterator
-          it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
-      {
-         (*it)->Read( gf_key, gforce );
-         gforce(1) += (*it)->Read( drd_key ) * acc_gravity;
-         (*it)->Store( gf_key, gforce );
-      }
-   
- } // end gravity force
-
-
-
-
+// helper
+void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const Region<2>& domain );
 
 /**
      Put CSMP code that you would like to test here and run it as part of the 
@@ -214,262 +83,96 @@ void gravityForce( Model<DIM>& model, double64 acc_gravity )
 */
 void Experimental_Example::Run()
 {
-  // ----------------------------------------------------------
-  // 1. building and configering model from ANSYS - csp dataset
-  // ----------------------------------------------------------
-   string input_file("cylinder");
-   // ANSYS_Model2D   model( input_file.c_str(), "CSMP_field_scale_mechanics_variables.txt" );
-   ANSYS_Model3D  model( input_file.c_str(), "cylinder-configuration.txt");
-   Region<DIM>& model_domain(model.Region("Model"));
+  // 0. converting ANSYS input file set into a CSMP model and save it to binary file
+  // -------------------------------------------------------------------------------
+  const bool irregular_mesh(false);         /* true = non-box shaped model, false = box shaped model */
+  const bool binary_file(true);             /* true = binary, false = ascii */
+  const bool use_regions_file(true);        /* true = reduce regions according to regions file, false = does not redure regions */
+  const bool create_boundaries(true);       /* true = creates boundaries around model, false = does not create boundaries */
+  const bool create_splitboundaries(false); // FAIL /* true = creates splitboundaries around model, false = does not create splitboundaries */
+  // Ansys model
+  const string model_name("BoxHalfs2D");
+  ANSYS_Model2D ansys_model("BoxHalfs2D", "BoxHalfs2D", "THMC_shear_zone-variables.txt",
+                             irregular_mesh, binary_file, use_regions_file, create_boundaries, create_splitboundaries );
+                             
+  // testing region insertion here
+  Region<2> region1_before(ansys_model.Region("MATRIX_RIGHT"));
+//  printNeigboursOfPerimeterElements( ansys_model.Database(), region1_before );
+//  ansys_model.InsertSplitBoundary( "MATRIX_RIGHT", "MATRIX_LEFT" );
 
-   printModelDimensions( model, true );
+  // saving model into CSMP native file format
+  ansys_model.OutputToBinaryFile( model_name.c_str() );
 
-   InputDataManager<DIM>  model_configuration;
-   ComputationalSettings settings;
+  // 1. starting the simulation with the creation of a SplitBoundary
+  // -------------------------------------------------------------------------------
+  // read model model from file and get started with SplitBoundary code
+  Model<2> model( model_name );
+  model.RegionsOut();
+  model.BoundariesOut();
+  // checking the regions of the model (visualising their perimeter)
+  VTU_Interface<2>  vtk_out( model );
+  model.InputPropertyValue( "test variable", makeScalar(ANY,0.) );
+  model.Region("MATRIX_LEFT").InputPropertyValue( "test variable", makeScalar(ANY,1.), PERIMETER );
+  model.Region("MATRIX_RIGHT").InputPropertyValue( "test variable", makeScalar(ANY,1.), PERIMETER );
+  vtk_out.OutputDataToVTU( "region-flag", "test variable", "MATRIX_LEFT", 1 );
+  vtk_out.OutputDataToVTU( "region-flag", "test variable", "MATRIX_RIGHT", 2 );
 
-   model_configuration.ConfigureFromFile( model, input_file.c_str(),
-                                          false,           ///< region name from parameter range
-                                          true,            ///< default property values
-                                          true,            ///< regional property values
-                                          true,            ///< boundary conditions for box-shaped model
-                                          true,           ///< essential conditions for regions
-                                          true,           ///< boundary conditions for arbitrary-shaped model
-                                          settings );
-
+  // create SplitBoundary between the model regions
+  Region<2> region1_after(model.Region("MATRIX_RIGHT"));
+//  printNeigboursOfPerimeterElements( ansys_model.Database(), region1_before );
   
-  // ----------------------------------------------------------
-  // 2. computing initial steady state temperature distribution
-  // ----------------------------------------------------------
-    {
-      SteadyStateDiffusor<DIM,Region>  temperature( model, "thermal conductivity", "temperature", "energy source");
-      printRangeOfVariable( model, "thermal conductivity" );
-      printRangeOfVariable( model, "energy source");
-      // TODO: consider potential stress changes due to insolation of slope etc.
-      model.InputBoundaryValue( TOP, "temperature", makeScalar(DIRICH,15.));
-      //model.InputBoundaryValue( BOTTOM, "temperature", makeScalar(DIRICH,80.));
-      temperature.ComputeSteadyState( model.Region("Model") );
-      printRangeOfVariable( model, "temperature");
-    }
-   VTK_Interface<DIM>  vtk_output;
-   vtk_output.OutputDataToVTK( model, "temperature", "temperature", 0, true );
-
-
-  
-  // -------------------------------------------------------------------------
-  // 3. computing initial hydrostatic pressure (no loading via grain skeleton)
-  // -------------------------------------------------------------------------
-  //  Visitor computes thermodynamic properties of water; density is interpolated to
-  //     element barycentre for later vertical integration
-  // --------------------------------------------------------------------------------------
-  IAPWS_H2OPropertiesVisitor<DIM>  properties_visitor( model, "fluid pressure" ,"fluid density", "fluid viscosity");
-  // computing fluid density and viscosity
-  model.Accept( properties_visitor );
-  printRangeOfVariable( model, "fluid density");
-  printRangeOfVariable( model, "fluid viscosity");
-
-  // hydraulic conductivity K = k/mu
-  const csmp::Index perm_key(model.Database().StorageKey("permeability"));
-  const csmp::Index visc_key(model.Database().StorageKey("fluid viscosity"));
-  const csmp::Index cond_key(model.Database().StorageKey("conductivity"));
-  ScalarVariable  visc;
-  for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-       (*it)->PropertyValueAtBaryCenter( visc_key, visc );
-       (*it)->Store( cond_key, makeScalar( (*it)->Status(cond_key), (*it)->Read(perm_key) / visc() ) );
-    }
-  printRangeOfVariable( model, "conductivity" );
-
-  model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
-  
-  // Setting up the FE algorithm to compute the initial hydrostatic fluid pressure and 
-#ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Settings  samg_settings;
-  // minimizing screen output
-  samg_settings.Set_iout1(0);
-  samg_settings.Set_iout2(0);
-  samg_settings.Set_idmp(-1);
-  samg_settings.SetSolverInstance(2);
-
-  SAMG_Solver    samg_solver(&samg_settings);
-#else
-  Gauss_Solver  samg_solver;
-#endif
-  PDE_Integrator<DIM,Region>  hydrostatic_pressure(samg_solver);
-
-  NumIntegral_dNT_op_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
-                                                         "conductivity",
-                                                         "fluid pressure", "fluid pressure" );
-
-  // cin >> "\nmain: Enter the acceleration of gravity (kg/m.s2): in the area of interest: ";
-  double64 acc_gravity(9.81);
-  // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
-  NumIntegral_NT_op_dNi_dV<DIM>  hydrostatic_gravity( model.Database(), "element fluid density",
-                                                                 "conductivity", "fluid pressure", acc_gravity );
-  hydrostatic_pressure.Add( &hydrostatic_conductance );
-  hydrostatic_pressure.Add( &hydrostatic_gravity );
-
-  // "\nmain: Enter the amount of total dissolved solids (ppm = g/tonne; normal seawater=12000 g/t): ";
-  double64 total_dissolved_solids(0.); // g->kg (157500-ppm = 157kg salt)
-  total_dissolved_solids /= 1000.; // gets kg/m3
-  printRangeOfVariable( model, "element fluid density" );
-  PropertyHandle<DIM>  rhof( model, "element fluid density", SCALAR, ELEMENT );
-  rhof.OutputCondition(ANY);
-  rhof += total_dissolved_solids/1000.;
-  printRangeOfVariable( model, "element fluid density" );
-  vtk_output.OutputDataToVTK( model, "element-fluid-density", "element fluid density", 0, true );
-  
-  cout <<"\nmain: initial guess of fluid pressure.";
-  printRangeOfVariable( model, "fluid pressure" );
-/*
-  cout << "\n\n\nmain: Iterating fluid pressure to find correct fluid density and viscosity... " << endl;
-  for ( uint32 i=0; i<=5U; i++ ) {
-       cout <<"\n\titeration "<< i+1U <<":"<< endl;
-       model.Apply( hydrostatic_pressure );
-//printRangeOfVariable( model, "fluid pressure" );
-//vtk_output.OutputDataToVTK( model, "fluid pressure", "fluid pressure", 0, true );
-       model.Accept( properties_visitor );
-       for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-            (*it)->PropertyValueAtBaryCenter( visc_key, visc );
-            (*it)->Store( cond_key, makeScalar( (*it)->Status(cond_key), (*it)->Read(perm_key) / visc() ) );
-         }
-       model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
-       rhof += total_dissolved_solids;
-       printRangeOfVariable( model, "fluid pressure" );
-       printRangeOfVariable( model, "element fluid density" );
-    }
-   vtk_output.OutputDataToVTK( model, "fluid pressure", "fluid pressure", 0, true );
-*/
-
-
-
-  // -----------------------------------------------------------
-  // 4. initial rock effective stress due to gravitional loading
-  // -----------------------------------------------------------
-  // mechanical properties are placed on the element integration points
-  // computes the increase in pore-pressure due to the gravitational loading
-#ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings  samg_mechanics_settings;
-    samg_mechanics_settings.Set_napproach(2); // sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
-    samg_mechanics_settings.SetSolverInstance(2);
-                               // which is needed for deformation simulations
-    SAMG_Solver                 samg_solver2(&samg_mechanics_settings);
-#else
-    Gauss_Solver samg_solver2;
-#endif
-    PDE_Integrator<DIM,Region>  deformation(samg_solver2);
-    deformation.ScaleEssentialConditions(1.0e15);
-
-    // this will also include boundary stresses translated into nodal forces
-    const bool principal_vectors(true), plane_strain(false);
-    PT_op<DIM>                  bforces( model.Database(), "force", "displacement" );
-    NumIntegral_BT_D_B_dV<DIM>  stiffness( model.Database(),
-                                          "Youngs modulus", "Poissons ratio", "displacement", "displacement", plane_strain);
-    NumIntegral_PT_op_dV<DIM>   bodyforce( model.Database(), "gravity force", "displacement");
-    NumIntegral_BT_D_op_dV<DIM> volstrain( model.Database(),
-                                          "fluid volume source", "Youngs modulus", "Poissons ratio", "displacement");
-    NumIntegral_BT_op_dV<DIM>   porepressure( model.Database(), "Biot term", "displacement");
-
-    // computes the 'Biot term'
-    porePressureBiotAlphaProduct( model, "Model" );
-    cout <<"\nmain: taking into account (in the displacement equation), the effects of pore pressure.";
-    printRangeOfVariable( model, "Biot alpha" );
-    printRangeOfVariable( model, "Biot term" );
-  
-    // computing the gravity force
-    gravityForce( model, acc_gravity );
-    printRangeOfVariable( model, "gravity force" );
-  
-    deformation.Add( &porepressure );
-    deformation.Add( &stiffness );
-    deformation.Add( &bforces );  // force vector must always be there so that Dirichlet conditions are accumulated
-    deformation.Add( &bodyforce );
-    deformation.Add( &volstrain );
-    deformation.Add( &porepressure );
-
-    //StressesAndStrains<DIM>  postpro( model, "Youngs modulus", "Poissons ratio", "displacement", principal_vectors );
-    StressesAndStrains<DIM>  postpro( model, "Youngs modulus", "Poissons ratio", "displacement", plane_strain, principal_vectors );
-    deformation.AddPostProcess( &postpro );
- 
-    // -------------------------------------------
-    // displacement, strain and stress computation
-    // -------------------------------------------
-    printRangeOfVariable( model, "Youngs modulus" );
-    printRangeOfVariable( model, "Poissons ratio" );
-    printRangeOfVariable( model, "gravity force" );
-    deformation.IntegrateOver( model_domain );
-    // among other things the stresses and strains operator computes the (FE-based) (elastic) dilatation
-    printRangeOfVariable( model, "displacement" );
-  
-  
-   // ---------------------------------------------------------------------------------------
-   // extracting the vertical stress component
-   // ---------------------------------------------------------------------------------------
-    if ( DIM == 2 ) {
-         ExtractTensorVariableComponent<DIM>  ystress(   model.Database(), "stress", "stress-y",  1,1 );
-         ExtractTensorVariableComponent<DIM>  stress_xy( model.Database(), "stress", "stress-xy", 0,1 );
-         model.Apply( ystress );
-         model.Apply( stress_xy );
-      }
-    model.MoveNodeCoordinatesBy("displacement");
-  
-    vtk_output.OutputDataToVTK( model, "displacement", "displacement", 1, true );
-    vtk_output.OutputDataToVTK( model, "strain",       "strain",       1, true );
-    vtk_output.OutputDataToVTK( model, "stress",       "stress",       1, true );
-    vtk_output.OutputDataToVTK( model, "mean-stress",  "mean stress",  1, true );
-    vtk_output.OutputDataToVTK( model, "dilatation",   "dilatation",   1, true );
-    vtk_output.OutputDataToVTK( model, "sigma1_",      "sigma1",       1, true );
-    vtk_output.OutputDataToVTK( model, "sigma2_",      "sigma2",       1, true );
-    vtk_output.OutputDataToVTK( model, "strain1_",     "strain1",      1, true );
-    vtk_output.OutputDataToVTK( model, "strain2_",     "strain2",      1, true );
-    vtk_output.OutputDataToVTK( model, "stress-y",     "stress-y",     1, true );
-    vtk_output.OutputDataToVTK( model, "stress-xy",    "stress-xy",    1, true );
-  
-   // from the dilatation (compression) we compute the change in pore pressure, fluid flow and then
-    model.InstantiateFiniteVolumes();
-   // get the divergence
-    dilatationInducedChangeInPorePressure( model );
-    printRangeOfVariable( model, "fluid pressure" );
-  
-    SinglePhaseVelocityVisitor<DIM>  velo( model, "porosity", "conductivity",
-                                          "fluid density", "fluid pressure", "total velocity" );
-    model.Accept( velo );
-    printRangeOfVariable( model, "total velocity" );
-
-  // divergence of fluid flow to get volume strains (none yet)
-  // ---------------------------------------------------------
-  // loop over the finite volumes and measure the divergence of the facet fluxes
-  // ignoring the FV at the model boundaries
-   const bool second_order_in_space(false);
-   const bool second_order_in_time(false);
-   NodeCenteredFiniteVolumeTransport<DIM>  ncfvt( "Model", model, "porosity", "concentration", "total velocity",
-                                                  "nodal fluid volume source",
-                                                   second_order_in_space, second_order_in_time );
-   // the divergence is assigned to the fvs
-   ncfvt.Divergence( "total velocity", "nodal fluid volume source");
-
-   model.MoveNodeCoordinatesBy("displacement");
-  
-   // NOTE:
-   /*
-       1. Loading the rock skeleton results in an increase in pore pressure.
-       2. the corresponding velocity field is no longer divergence free
-       3. computing ensuing fluxes over the time-interval of interest, reveals
-          how much fluid is leaving the rock
-       4. the rock volume must be reduced accordingly, but without creating a stress response
-   */
-
-
-
-  // -------------------------------------------------------
-  // 6. UNDRAINED SPLIT COMPACTION COMPUTATION
-  // --------------------------------------------------------
-
-
-
+  model.InsertSplitBoundary( "MATRIX_RIGHT", "MATRIX_LEFT" );
+  // putting a lower dimensional region inside of all split boundaries
+  set<string>  newly_created_regions;
+  model.RegionsFromSplitBoundaries( newly_created_regions );
+  assert( !newly_created_regions.empty() );
+  model.RegionsOut();
+  // getting a reference to the split boundary
+  SplitBoundary<2>  interface( model.SplitBoundary("SPLITBOUNDARY_MATRIX_RIGHT_MATRIX_LEFT") );
+  // getting a reference to the newly created region
+  Region<2>  detached_surface( model.Region( (*newly_created_regions.begin()) ) );
 
   cout <<"\nExperimental_Example: That's it!\n";
   
 } // end Run
 
 
+void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const Region<2>& domain )
+ {
+     const csmp::Index key(pbase.StorageKey("element number"));
+     map<long,Element<2>*>  ordered_elmts;
+     
+     for ( auto it=domain.PerimeterElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
+           ordered_elmts.insert( make_pair( (*it)->Read(key), (*it) ) );
+       }
+       
+     // printint the neighbours
+     cout <<"\nprintNeigboursOfPerimeterElements: of region '"<< domain.Name() <<"'\t";
+     for ( auto it=ordered_elmts.begin(); it!=ordered_elmts.end(); ++it ) {
+          cout <<"\n"<< (*it).first <<": ";
+          for ( size_t i=0U; i<(*it).second->Faces(); ++i )
+            if ( (*it).second->Neighbor(i) == nullptr )
+              cout <<"NONE ";
+            else
+              cout << (*it).second->Neighbor(i)->Read(key) <<" ";
+       }
+       
+ } // printNeigboursOfPerimeterElements
+
+
+/* TODO: get 3D approach to work in 2D, see below
+ // create Boundary
+ InsertBoundary( const char* region1, const char* region2,
+ const bool remove_dim_minus1_region(true);
+ model.CreateInternalBoundaryFrom( "STANDARD", remove_dim_minus1_region );
+ set<string> strings_in_bundary_name({"STANDARD"});
+ string boundary_name = model.FindBoundaryName( strings_in_bundary_name );
+ model.BoundariesOut();
+ // create SplitBoundary from boundary
+ Boundary<2>& boundary_domain(model.Boundary(boundary_name));
+ model.CreateSplitBoundaryFrom( boundary_domain );
+ model.SplitBoundariesOut();
+
+*/
 
 } // csmp

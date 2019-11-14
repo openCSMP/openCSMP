@@ -100,8 +100,8 @@ class TensorVariable<2U> {
  		
     void             	In();
     void             	Out() const;
-    bool              In( FILE* fp );
-    bool              Out( FILE* fp ) const;
+    bool              In( std::fstream& fp );
+    bool              Out( std::fstream& fp ) const;
 
   private:
     std::array<VARIABLE_FLAG,2U>            flag;

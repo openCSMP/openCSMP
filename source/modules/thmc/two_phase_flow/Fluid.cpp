@@ -7,92 +7,82 @@
 //
 
 #include "Fluid.h"
-#include "FlowFunctions.h"
-// this specific incarnation
-#include "EOS_CO2H2ONaCl_Spycher2004.h"
-#include "FiniteElementPlacement.h"
-#include "FiniteVolumePlacement.h"
+#include "FlowFunctionsModule.h"
 
 namespace csmp {
 
-EOS_CO2H2ONaCl_Spycher04  eos;
-
 template<size_t dim, template<size_t> class USER>
 Fluid<dim,USER>::Fluid()
-{
-}
+ {
+ }
 
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::Viscosity( TARGET_PLACEMENT& p, size_t phase ) const
+double64 Fluid<dim,USER>::Viscosity( Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
-    /*uncomment to compute from PTX properties*/
-    //if ( phase == 0U ) return eos.mu_brine( Pressure(p), Temperature(p), Salinity(p) );
-    //return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) ); 
-    
-    /*direct interpolation*/
-    if ( phase == 0U ) return p.Obtain( User()->key_muH2O );
-    return p.Obtain( User()->key_muCO2 );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return n->Read( User()->key_muH2O );
+    return n->Read( User()->key_muCO2 );     
  }
 
-template double64 Fluid<1U,FlowFunctions>::Viscosity( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,FlowFunctions>::Viscosity( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<1U,FlowFunctions>::Viscosity( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,FlowFunctions>::Viscosity( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<1U,FlowFunctions>::Viscosity( FiniteVolumePlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,FlowFunctions>::Viscosity( FiniteVolumePlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteVolumePlacement<3U,NODE>&, size_t ) const;
 
-template double64 Fluid<2U,FlowFunctions>::Viscosity( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,NODE>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-
-
- 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::Density( TARGET_PLACEMENT& p, size_t phase ) const
+double64 Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t node, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
-    /*uncomment to compute from PTX properties*/
-    //if ( phase == 0U ) return eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) );
-    //return eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
-    
-    /*direct interpolation*/
-    if ( phase == 0U ) return p.Obtain( User()->key_rhoH2O );
-    return p.Obtain( User()->key_rhoCO2 );
+    assert( node < e->Nodes() );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return e->N(node)->Read( User()->key_muH2O );
+    return e->N(node)->Read( User()->key_muCO2 );
  }
 
-template double64 Fluid<1U,FlowFunctions>::Density( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,FlowFunctions>::Density( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Density( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
- 
-template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,NODE>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t phase ) const
+ {
+    assert( phase == 0U or phase == 1U );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return e->PropertyValueAtBaryCenter( User()->key_muH2O );
+    return e->PropertyValueAtBaryCenter( User()->key_muCO2 );      
+ }
+
+ 
+
+  
 
  
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::DensityMixture( TARGET_PLACEMENT& p, double64 msalt ) const
+double64 Fluid<dim,USER>::Density( Node<dim>* const n, size_t phase ) const
  {
-    return p.Obtain( User()->key_sH2O ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
-          (1. - p.Obtain(User()->key_sH2O)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
+    assert( phase == 0U or phase == 1U );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return n->Read( User()->key_rhoH2O );
+    return n->Read( User()->key_rhoCO2 );
  }
 
-template double64 Fluid<3U,FlowFunctions>::DensityMixture( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::DensityMixture( FiniteElementPlacement<3U,NODE>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::DensityMixture( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::Density( Element<dim>* const e, size_t node, size_t phase ) const
+ {
+    assert( phase == 0U or phase == 1U );
+    assert( node < e->Nodes() );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return e->N(node)->Read( User()->key_rhoH2O );
+    return e->N(node)->Read( User()->key_rhoCO2 );
+ }
+
+
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::Density( Element<dim>* const e, size_t phase ) const
+ {
+    assert( phase == 0U or phase == 1U );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return e->PropertyValueAtBaryCenter( User()->key_rhoH2O );
+    return e->PropertyValueAtBaryCenter( User()->key_rhoCO2 );     
+ }
+
+  
 
 
 
@@ -100,57 +90,103 @@ template double64 Fluid<3U,FlowFunctions>::DensityMixture( FiniteElementPlacemen
      aqueous phase viscosity / carbonic phase viscosity
 */
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::ViscosityRatio( TARGET_PLACEMENT& p, double64 salinity ) const
+double64 Fluid<dim,USER>::ViscosityRatio( Node<dim>* const n ) const
  {
-    return eos.mu_AqueousPhase( Pressure(p), Temperature(p), Salinity(p) ) / eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
+    assert( n != nullptr );
+    return n->Read(User()->key_muH2O) / n->Read(User()->key_muCO2);
  }
 
-template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( FiniteElementPlacement<3U,NODE>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
 
-
-
-/*
-    // versions that account for dissolved CO2; TODO: check where the XCO2 and YH2) can be taken into account
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Viscosity( double64 pf, double64 T, double64 msalt, double64 XCO2, double64 YH2O, size_t phase ) const
+double64 Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e, size_t node ) const
  {
-    assert( phase <= 1U );
-    if ( phase == 0U ) return eos.mu_AqueousPhase( Pressure(p), Temperature(p), msalt );
-    return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
+    assert( e != nullptr );
+    const double64 muw = e->N(node)->Read( User()->key_muH2O );
+    const double64 mun = e->N(node)->Read( User()->key_muCO2 );
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    return muw / mun;
  }
- 
- 
- 
+
+
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Density( double64 pf, double64 T, double64 msalt, double64 XCO2, double64 YH2O, size_t phase ) const
+double64 Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e ) const
  {
-    assert( phase <= 1U );  // TODO: check how to get XCO2, YH2O accounted for?
-    if ( phase == 0U ) return eos.Rho_AqueousPhase( pf, T, msalt );
-    return eos.Rho_CarbonicPhase( pf, T );
+    assert( e != nullptr );
+    const double64 muw = e->PropertyValueAtBaryCenter( User()->key_muH2O );
+    const double64 mun = e->PropertyValueAtBaryCenter( User()->key_muCO2 );
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    return muw / mun;
  }
- 
- 
- 
+
+
+
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::DensityMixture( double64 pf, double64 T, double64 sw, double64 msalt, double64 XCO2, double64 YH2O ) const
+double64 Fluid<dim,USER>::MixtureDensity( Node<dim>* const n ) const
  {
-    // TODO: check how to get XCO2, YH2O accounted for?
-    return sw * eos.Rho_AqueousPhase( pf, T, msalt ) + (1. - sw) * eos.Rho_CarbonicPhase( pf, T );
+    assert( n != nullptr );
+    const double64 sw = n->Read( User()->key_sH2O );
+    return sw * n->Read(User()->key_rhoH2O) + (1.-sw) * n->Read(User()->key_rhoCO2);
  }
-*/
- 
- 
 
 
-template class Fluid<1U,FlowFunctions>;
-template class Fluid<2U,FlowFunctions>;
-template class Fluid<3U,FlowFunctions>;
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::MixtureDensity( Element<dim>* const e, size_t node ) const
+ {
+    const double64 sw = e->N(node)->Read( User()->key_sH2O );
+    assert( e != nullptr );
+    const double64 rhow = e->N(node)->Read( User()->key_rhoH2O );
+    const double64 rhon = e->N(node)->Read( User()->key_rhoCO2 );
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    return sw * rhow + (1. - sw) * rhon;
+ }
 
 
-// conversions
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::MixtureDensity( Element<dim>* const e ) const
+ {
+    const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert( e != nullptr );
+    const double64 rhow = e->PropertyValueAtBaryCenter( User()->key_rhoH2O );
+    const double64 rhon = e->PropertyValueAtBaryCenter( User()->key_rhoCO2 );
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    return sw * rhow + (1. - sw) * rhon;
+ }
+
+
+
+
+template class Fluid<1U,FlowFunctionsModule1>;
+template class Fluid<2U,FlowFunctionsModule1>;
+template class Fluid<3U,FlowFunctionsModule1>;
+
+template class Fluid<1U,FlowFunctionsModule2>;
+template class Fluid<2U,FlowFunctionsModule2>;
+template class Fluid<3U,FlowFunctionsModule2>;
+
+template class Fluid<1U,FlowFunctionsModule3>;
+template class Fluid<2U,FlowFunctionsModule3>;
+template class Fluid<3U,FlowFunctionsModule3>; 
+
+template class Fluid<1U,FlowFunctionsModule4>;
+template class Fluid<2U,FlowFunctionsModule4>;
+template class Fluid<3U,FlowFunctionsModule4>; 
+
+template class Fluid<1U,FlowFunctionsModule5>;
+template class Fluid<2U,FlowFunctionsModule5>;
+template class Fluid<3U,FlowFunctionsModule5>; 
+
+template class Fluid<1U,FlowFunctionsModule6>;
+template class Fluid<2U,FlowFunctionsModule6>;
+template class Fluid<3U,FlowFunctionsModule6>; 
+
+
+
+
+// unit conversions
 
 
 const double64 molarMassH2o ( 18.01528e-3);  // Kilograms per mole
@@ -199,8 +235,7 @@ double64 molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt)
 
 double64 molalNaClToPpmInAqueousPhase( double64 mSalt )
 {
-    double64
-            conversion( molalNaClToMassFracNaClInAqueousPhase( mSalt) );
+    double64 conversion( molalNaClToMassFracNaClInAqueousPhase( mSalt) );
 
     conversion  *=  1.e-2*1.e6; //  ppm \in [0, 1.e6] ,1.e-2 because mass fraction is in %
 
@@ -255,7 +290,6 @@ double64 KelvinTodegreeC( double64 temperatureInK )
 {
    return  temperatureInK - 273.15;
 }
-
 
 
 

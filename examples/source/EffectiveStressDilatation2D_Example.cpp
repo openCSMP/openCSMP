@@ -12,7 +12,7 @@
 #include "SplitBoundary.h"
 #include "Region.h"
 #include "ModelTime.h"
-#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator.h"
 #include "TransientDiffusor.h"
 #include "ConstantFactor.h"
 
@@ -136,8 +136,7 @@ void EffectiveStressDilatation2D_Example::Run()
   // 2.1 split Boundaries
   model.InsertSplitBoundary("SET1");
   model.InsertSplitBoundary("SET2");
-  bool delete_underlying_region(true);
-  model.InsertSplitBoundary("WELL_FRACTURE",delete_underlying_region);
+  model.InsertSplitBoundary("WELL_FRACTURE");
   
   cout <<"\nmain: created split boundaries: ";
   for ( Model<2>::splitBoundaryConstIterator it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); it++ )
@@ -356,7 +355,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
 
 
     // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
-    PDE_Integrator_CRM<2U,SplitBoundary>  transient_pressure;
+    PDE_Integrator<2U,SplitBoundary>  transient_pressure;
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);

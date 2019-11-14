@@ -33,9 +33,9 @@ void BoundaryInterface_Test::run()
   {
       TestBoxShapedModel();
   
-      string  input_file("fault_boundary_test");
-      // input_file = "hex2_s"; // hexahedral element test model
-      //input_file = "prism_test"; // hexahedral element test model
+      string  input_file("fault_boundary_test");	  
+      //input_file = "hex2_s"; // hexahedral element test model
+      //input_file = "prism_test"; // hexahedral element test model	  
       const size_t dim(3);
 
       // ------------------------------
@@ -65,7 +65,123 @@ void BoundaryInterface_Test::run()
       if ( verbose_ ) cout <<"\nBoundaryInterface_Test::run: identified "<< subregions <<" region patches in region NORMAL_FAULT touching "<< regions <<" model regions.\n";
       if ( verbose_ ) vtu.OutputDataToVTU( "test", patch_tag, string("NORMAL_FAULT"), 0 );
     
-    
+	  VTU_Interface<3> vtu_boundary(model);
+	  {
+		  std::string boundary_name("LEFT");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if(model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }	  
+	  {
+		  std::string boundary_name("RIGHT");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("FRONT");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("BACK");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("TOP");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("BOTTOM");		  
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+
+	  
 
       /// discerning patches by values for the region in terms of the diagnostic element variable
       // -------------------------------------------------------------
@@ -102,10 +218,11 @@ void BoundaryInterface_Test::run()
         }
       if ( verbose_ ) cout << endl;
 
+// TODO: JC: check this!!!
       // testing whether boundary segments can be found by combined search criteria
-      const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
-      string patch_name = findBoundary( model, intersected_regions );
-      _test( patch_name == "NORMAL_FAULT_BOUNDARY4_LAYER_BOTTOM_LAYER_TOP" );
+      //const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
+      //string patch_name = findBoundary( model, intersected_regions );	  
+      //_test( patch_name == "NORMAL_FAULT_BOUNDARY3_LAYER_BOTTOM_LAYER_TOP" );
       const set<string> search_strings{ "BOUNDARY", "NORMAL", "FAULT" };
       set<string> region_patches_found;
       const size_t patches_found = model.FindBoundaryNames( search_strings, region_patches_found );
@@ -116,24 +233,7 @@ void BoundaryInterface_Test::run()
       // 3. testing supporting functionality
       // -----------------------------------
       _test( TestRegionContactDetection(model) );
-    
-    
-      // REDESIGN TEST - REGION WAS ALREADY REMOVED
-      /*
-      const size_t model_elements(model.Region("Model").Elements());
-      const size_t test_region_elements(model.Region(test_region.c_str()).Elements());
-      model.RemoveFromRegion( "Model", test_region.c_str() );
-      const size_t model_elements_after(model.Region("Model").Elements());
-      _test( (model_elements - test_region_elements) == model_elements_after );
-
-      vtu.OutputDataToVTU( "BoundaryInterface_Test_without_fault", region_tag, string("Model"), 0 );
-    
-      // moving a region
-      model.MoveToNonUniqueRegions( test_region.c_str() );
-      _test( model.ContainsRegion( test_region.c_str() ) );
-      _test( !model.IsUnique( test_region.c_str() ) );
-      */
-    
+        
   } // end run
   
   
@@ -537,120 +637,6 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const cs
 
 
 
-/* WORKING PROOF OF CONCEPT METHOD
-
-void higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key,
-                                 pair<size_t,size_t>& nbors, pair<long,long>& materials )
-// TESTING void higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key, const csmp::Index& node_key,
-//                                 pair<size_t,size_t>& nbors, pair<long,long>& materials )
- {
-     assert( e.IsSurfaceElement() );
-
-     // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
-     // -----------------------------------------------------------------------------------------------------------------------------
-     // making a set of element nodes to later identify faces by comparison
-     set<size_t>   node_set, test_set;
-     const size_t  nodes(e.Nodes());
-     for ( size_t i=0U; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
-     map<const Element<3U>*,size_t>  nbor_elmts;
-     vector<size_t> fnids;
-     for ( size_t i=0U; i<nodes; i++ ) {
-          const size_t parents(e.N(i)->Parents());
-          for ( size_t j=0U; j<parents; ++j ) {
-               const Element<3U>* const eptr(e.N(i)->Parent(j));
-               const size_t faces(eptr->Faces());
-               for ( size_t k=0U; k<faces; ++k ) {
-                     eptr->FE()->NodesOfFace( k, fnids );
-                     size_t fnodes(fnids.size());
-                     for ( size_t l=0U; l<fnodes; ++l )
-                       test_set.insert( eptr->N( fnids[l])->Idx() );
-                     // if the face is shared the element and its face are recorded
-                     if ( node_set == test_set ) {
-                          // storing a pointer to this element and its local face number
-                          // making sure that no duplicate is received
-                          nbor_elmts.insert( make_pair(eptr,k) );
-                       }
-                     test_set.clear();
-                 }
-            }
-       }
-    assert( nbor_elmts.size() == 2U );
-   
-    // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
-    // -------------------------------------------------------------------------------------------------------------
-    vector<double64>  enrml, fnrml;
-    e.UnitNormal( enrml );
-    map<const Element<3U>*,size_t>::const_iterator  nbit(nbor_elmts.begin());
-    bool inside_elmt_found(false);
-    bool outside_elmt_found(false);
-
-// TESTING
-// prints the face normals scaled by element size to file
-//outputNodeDataToVTK( e, node_key, "FE-with-normals0_node_", "test variable" );
-//outputFaceNormalsToVTK( e, "FE-with-normals0_face_" );
-
-// TESTING
-//cerr <<"\ndim-1 element: "<< e.Idx() <<", unit normal: ";
-//out(enrml);
-   
-    // first element
-    // -------------
-    assert( (*nbit).first != nullptr );
-    (*nbit).first->UnitNormalToFace( (*nbit).second, fnrml );
-    double64 dotproduct = enrml[0] * fnrml[0] + enrml[1] * fnrml[1] + enrml[2] * fnrml[2];
-   
-// TESTING
-//cerr <<"\nelement (1): "<< (*nbit).first->Idx() <<", dotproduct: "<< dotproduct;
-//out(fnrml);
-//outputNodeDataToVTK( *(*nbit).first, node_key, "FE-with-normals1_node_", "test variable" );
-//outputFaceNormalsToVTK( *(*nbit).first, "FE-with-normals1_face_" );
-//outputIntegrationPointsToVTK( *(*nbit).first, "FE-with-normals1_ip_" );
-
-    // if the projection is negative, the first element lies on the outside
-    if ( dotproduct < 0. ) {
-         nbors.second       = (*nbit).first->Idx();
-         materials.second   = static_cast<long>((*nbit).first->Read( mtrl_key ));
-         outside_elmt_found = true;
-      }
-    else {
-         nbors.first        = (*nbit).first->Idx();
-         materials.first    = static_cast<long>((*nbit).first->Read( mtrl_key ));
-         inside_elmt_found  = true;
-      }
-    nbit++;
-
-
-// TODO: see whether this can be done without 2 normal projections for speedup
-
-    // second element
-    // --------------
-    assert( (*nbit).first != nullptr );
-    (*nbit).first->UnitNormalToFace( (*nbit).second, fnrml );
-    dotproduct = enrml[0] * fnrml[0] + enrml[1] * fnrml[1] + enrml[2] * fnrml[2];
-
-// TESTING
-//cerr <<"\nelement (2): "<< (*nbit).first->Idx() <<", dotproduct: "<< dotproduct;
-//out(fnrml);
-//outputNodeDataToVTK( *(*nbit).first, node_key, "FE-with-normals2_node_", "test variable" );
-//outputFaceNormalsToVTK( *(*nbit).first, "FE-with-normals2_face_" );
-//outputIntegrationPointsToVTK( *(*nbit).first, "FE-with-normals2_ip_" );
-
-    // if the projection is negative, the second element lies on the outside
-    if ( dotproduct < 0. ) {
-         // checking that we have no duplication here
-         assert( outside_elmt_found == false );
-         nbors.second     = (*nbit).first->Idx();
-         materials.second = static_cast<long>((*nbit).first->Read( mtrl_key ));
-      }
-    else {
-         assert( inside_elmt_found == false );
-         nbors.first      = (*nbit).first->Idx();
-         materials.first  = static_cast<long>((*nbit).first->Read( mtrl_key ));
-      }
-   
- } // end higherDimensionalNeighbors
-*/
-
 
 /**
     Assuming a dim-1 = 2 dimensional region, this function,
@@ -796,382 +782,6 @@ for ( auto it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it) {
 
 
 
-
-/** 
-     Converts region into Boundarie(s) of faces, decomposed into patches; region is moved from "Model" to non-unique, connectivity is updated.
-     
-     Uses node-to-parent relationship to find the higher dimensional elements that will share a face with the Face:  use    higherDimensionalNeighbors()
-     
-     Algorithmic steps:
-
-     1. Verify input lower-dimensional region object from which the boundary shall be created: must be lower dimensional and must lie inside of model
- 
-     2. Determines the number of boundary segments (sub-boundaries) that the new boundary will consist of. 
-        The output of this step will be a map of FaceConstructionData in which the names of the new boundary segments are the keys.
- 
-     3. In the MeshManager object, 
- 
-        3.1 create all required face objects
-        3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( std::vector<Face<dim>*>& ); this is important because any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
-      
-     4. Create the Boundary segments, one-by-one from the map<bname, FaceConstructionData>; this involves connecting the faces to their higher dimensional neighbours.
- 
-     5. If the Face objects were constructed from lower-dimensional Elements - for nodes located on the new boundary,
-        update / recreate the parent element vectors so that these no longer include neither the elements from which the Boundary was created nor the new faces.
- 
-     6. Remove parent region of the boundary from “Model” and into the non-unique list of regions so that it does not get included into computations.
-      
-     7. Assign BOX_BOUNDARY flags to new nodes if any.
-     
-     8. (optional) remove parent region (including its elements) if no longer required.
-
-*/
-// TODO: add to BoundaryInterface
-size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const char* dim_1_region, bool remove_original_region=true )
- {
-    cout <<"\ncreateInternalBoundaryFromLowerDimensionalRegion: forming boundary(ies) from region: '"<< dim_1_region <<"'...\n";
-    // ------------------------------------------------------------------------------------------------------------------------------------------------
-    // 1. Verify input lower-dimensional region object from which the boundary shall be created: must be lower dimensional and must lie inside of model
-    // ------------------------------------------------------------------------------------------------------------------------------------------------
-    // does the parent region exist
-    if ( model.ContainsRegion(dim_1_region) == false ) {
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "does not exist; nothing was done." );
-          return 0;
-      }
-    // do such boundaries already exist ?
-    const set<string> intersected_regions{dim_1_region};
-    set<string> pre_exisiting_boundaries;
-    if ( findBoundaries( model, intersected_regions, pre_exisiting_boundaries ) > 0 ) {
-          string error_info;
-          for ( auto it=pre_exisiting_boundaries.begin(); it!=pre_exisiting_boundaries.end(); ++it ) {
-               error_info += (*it);
-               error_info +=", ";
-            }
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:",
-                                           error_info.c_str(), "boundaries are already contained in this model." );
-          return 0;
-      }
-    // does the model contain unique regions
-    if ( model.UniqueRegions() < 1 ) {
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", "model contains no unique regions; cannot proceed." );
-          return 0;
-      }
-    // verifying that we are indeed dealing with a region of surface elements only and that their normals all point into same direction
-    Region<3U>&  subdomain(model.Region(dim_1_region));
-    if ( checkNeighborNormalsForConsistentOrientation( subdomain ) == false ) {
-         ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region,
-                                         "region appears to have inconstent surface-normal orientations; nothing was done." );
-         return 0;
-      }
-    size_t boundary_elements(0);
-    for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) {
-         // TODO: improve these diagnostics
-         if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL ) boundary_elements++;
-      }
-    if ( boundary_elements > 0 ) {
-         ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
-         return 0;
-      }
-    // creating region labels and tagging the regions with unique integer indentifiers
-    const string region_tag("region identifier");
-    if ( !model.Database().IsDefined(region_tag.c_str()) )
-      model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
-    const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
-    vector<string>  region_names;
-    const size_t model_regions = countAndLabelRegions( model, region_tag.c_str(), region_names );
-   
-// TESTING
-//cerr <<"\nregion names and identifiers: ";
-//for ( size_t i=0U; i<region_names.size(); i++ )
-//  cerr <<"\n\t\t"<< region_names[i] <<"  "<< i;
-//cerr << endl;
-   
-    if ( model_regions == 1 )
-       ErrorHandler::Instance().notice( INFO, "Boundary::FormInternalFromDim_m1_Region:", region_tag.c_str(), "is single valued; so there is only one patch." );
-
- 
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 2. Determine number of boundary segments (sub-boundaries) that the new boundary will consist of.
-    //    The output of this step will be a map of FaceConstructionData in which the names of the new boundary segments are the keys.
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // renumbering nodes and elements
-    model.Region("Model").UpdateMemberIndexes();
-   
-    // looping over the region, identifying and recording the juxtaposition relationships
-    map<pair<long,long>,size_t>   patches;
-    vector<FaceConstructionData>  face_construction_data;
-    map<size_t,string>            patch_names;
-    string                        patch_name;
-    size_t                        n_juxtapositions(0);
-
-    // 2.1 looping over lower dimensional region identifying juxtaposition relationships
-    // ----------------------------------------------------------------------------------------
-    face_construction_data.reserve(subdomain.Elements());
-    for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
-      {
-          // 2.1.1 identifying neighbors, facing relations, and juxtaposed materials for current element
-          FaceConstructionData  fdata(higherDimensionalNeighbors( *(*eit), mtrl_key ));
-        
-          // 2.1.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
-          pair<map<pair<long,long>,size_t>::iterator,bool>  it=patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
-          // incrementing number of juxtapositions and corresponding patch names
-          if ( it.second == true ) {
-               fdata.PatchNumber( (*it.first).second );
-               patch_name = internalBoundaryNameFrom( fdata, region_names );
-// cout <<"\n\t\tidentified new patch: "<< patch_name <<"\n";
-               patch_names.insert( make_pair(n_juxtapositions,patch_name) );
-               n_juxtapositions++;
-            }
-          fdata.PatchNumber( (*it.first).second );
-        
-          // 2.1.3 recording the data for the element that will later be used to construct the face from
-          face_construction_data.push_back( fdata );
-      }
-    assert( face_construction_data.size() == subdomain.Elements() );
- 
-// TESTING
-//cerr <<"\nface construction data:";
-//for ( auto pit=face_construction_data.begin(); pit!=face_construction_data.end(); ++pit )
-//  cerr << (*pit).PatchNumber() <<"  ";
-//cerr << endl;
-   
-   
-    // 2.2 creating labeled boundary patches from the face-defining data
-    // -----------------------------------------------------------------
-    // 2.2.1 making a map 'patch_numbers' from 'patch_names' to search for patch identifiers
-    map<string,size_t>  patch_numbers;
-    for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it )
-      patch_numbers.insert( make_pair( (*it).second, (*it).first ) );
-
-// TESTING (correct number of faces)
-//cerr <<"\npatch names and numbers:";
-//for ( auto pit=patch_numbers.begin(); pit!=patch_numbers.end(); ++pit )
-//  cerr <<"\n\t"<< (*pit).first <<":  "<< (*pit).second;
-//cerr << endl;
-   
-    // 2.2.2 building new map where the patch faces are organised by patch names
-    map<string,vector<FaceConstructionData> > patch_simplexes;
-    vector<FaceConstructionData>              empty_vec;
-    for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it )
-      patch_simplexes.insert( make_pair( (*it).second, empty_vec ) );
-   
-    // 2.2.3 inserting the patch identifiers into the vectors in the map
-    for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
-      {
-         assert( patch_numbers.find((*pit).first) != patch_numbers.end() );
-         const size_t patch_number((*patch_numbers.find((*pit).first)).second);
-         // reserving storage
-         (*pit).second.reserve(face_construction_data.size());
-         // looping over all face data assigning the ones that are suitable
-         for ( auto it=face_construction_data.begin(); it!=face_construction_data.end(); ++it )
-           if ( (*it).PatchNumber() == patch_number )
-             (*pit).second.push_back( (*it) );
-      }
-    // 2.2.4 trimming excess storage of the face-data vectors
-    for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
-      vector<FaceConstructionData>( (*pit).second ).swap( (*pit).second );
- 
-// TESTING (correct number of faces)
-//cerr <<"\npatches recorded and their number of elements:";
-//for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
-//  cerr <<"\n\t"<< (*pit).first <<":  "<< (*pit).second.size();
-//cerr << endl;
- 
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 3. Creating faces in the MeshManager object for all boundary patches at the same time
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    //  3.1 creating the required face objects
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    Region<3U>&  model_domain(model.Region("Model"));
-    const size_t new_faces_required(subdomain.Elements());
-    vector<Face<3U>*> face_vector;
-    face_vector.reserve(new_faces_required);
-    const size_t original_faces(model.Mesh().Faces());
-
-    // establish the storage requirements for face variables
-    const LocalVariables             lvsFaces( model.Database().LocalVariablesAt(FACE) );
-    const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
-    vector<vector<Face<3U>*> >       face_ptr_per_patch(patch_simplexes.size());
-   
-    size_t  patch_counter(0);
-    for ( map<string,vector<FaceConstructionData> >::const_iterator
-          it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it ) {
-        face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
-        // for each of the new patches
-        for ( vector<FaceConstructionData>::const_iterator
-              pit=(*it).second.begin(); pit!=(*it).second.end(); ++pit ) {
-             // creating the faces
-             // ------------------
-             // storing pointers to the new faces in the vector from which the boundary will be constructed
-             face_vector.push_back( model.Mesh().PushBack( Face<3U>( *model_domain.E( (*pit).Element() ),
-                                                                      model_domain.E( (*pit).InnerElement() ),
-                                                                      model_domain.E( (*pit).OuterElement() ),
-                                                                      lvsFaces,
-                                                                      lvsIntegrationPoints ) ) );
-             // remembering which faces make up the patch
-             face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
-           }
-         patch_counter++;
-      }
-    patch_simplexes.clear();
-    cout << "\n\tAdded "<< model.Mesh().Faces() - original_faces <<" to mesh.\n";
-
-   
-    //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( std::vector<Face<dim>*>& ); this is important because
-    //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    cout << "\n\tEstablishing neighbor connectivity among faces as it is needed to build the boundaries...\n";
-    // 3.2.1 building search map for face neighbors
-    // --------------------------------------------
-    //       key             face number neighbor
-    multimap<set<Node<3U>*>,pair<size_t,Face<3U>*> >  surface_neighbor_keys, line_neighbor_keys;
-    vector<size_t>  fnids;
-    set<Node<3U>*>  key;
-
-    for ( vector<Face<3U>*>::const_iterator it=face_vector.begin(); it!= face_vector.end(); ++it )
-      for ( size_t face=0U; face<(*it)->Faces(); face++ ) 
-        {
-           // creating face key from idx's of face
-           (*it)->FE()->NodesOfFace( face, fnids ); 
-           for ( size_t j=0U; j<fnids.size(); j++ ) key.insert( (*it)->N( fnids[j] ) );
-           // inserting newly generated keys into multimap
-           if ( (*it)->IsSurfaceElement() )
-             surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else // for all line elements
-             line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           key.clear();
-        }
-
-    // 3.2.2 building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "\n\tBuilding face neighbor connectivity...";
-
-    // 3.2.2.1 line elements
-    // ---------------------
-    if ( !line_neighbor_keys.empty() ) {
-        Face<3U>* e1Ptr(nullptr);
-        Face<3U>* e2Ptr(nullptr);
-        cout << "\n\t\tline elements...";
-        //                key              n-face neighbor
-        typename multimap<set<Node<3U>*>,pair<size_t,Face<3U>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                            it2(line_neighbor_keys.begin());
-        it2++;
-        while ( it2 != line_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-                   // assigning eachothers faces
-                   //     face pointer                   nbor face idx  neighbor pointer
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // line elements
-    
-    // 3.2.2.2 surface elements
-    // ------------------------
-    if ( !surface_neighbor_keys.empty() ) {
-        Face<3U>* e1Ptr(NULL);
-        Face<3U>* e2Ptr(NULL);
-        cout << "\n\t\tsurface elements...";
-        //                key              n-face neighbor
-        typename multimap<set<Node<3U>*>,pair<size_t,Face<3U>*> >::iterator it1(surface_neighbor_keys.begin()),
-                                                                            it2(surface_neighbor_keys.begin());
-        it2++;
-        while ( it2 != surface_neighbor_keys.end() ) {
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   ++it1;
-                   ++it2;
-                }
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // etablish neighbors of surface elements
-   
-   
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // using map<size_t,string>  patch_names   from above
-    for ( size_t i=0U; i<patch_names.size(); ++i )
-       // creating the boundary patch
-       model.AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
-
-    face_ptr_per_patch.clear();
-   
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 5. If the Face objects were constructed from lower-dimensional Elements - for nodes located on the new boundary,
-    //    update / recreate the parent element vectors of the nodes on the boundary so that these no longer include
-    //    neither the elements from which the Boundary was created nor the new faces.
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    map<Element<3U>*,size_t>  parents_to_keep;
-    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
-         const size_t parent_elements((*nit)->Parents());
-         // copying those node parent pointers to the temporary vector which shall be kept
-         for ( size_t i=0U; i<parent_elements; ++i ) {
-              if ( (*nit)->Parent(i)->IsSurfaceElement() and
-                   subdomain.Contains( (*nit)->Parent(i) ) )
-                continue;
-              else
-                parents_to_keep.insert( make_pair( (*nit)->Parent(i), (*nit)->ParentNodeNumber(i) ) );
-           }
-         // resetting the parent element storage of current node
-         (*nit)->EraseParents();
-      
-         // rebuilding parent element storage of current node
-         for ( auto it=parents_to_keep.begin(); it!=parents_to_keep.end(); ++it )
-           // parent element node-number, parent element
-           (*nit)->Assign( (*it).second, (*it).first  );
-         parents_to_keep.clear();
-      }
-   
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 6. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) (*nit)->AtBoundary(INTERNAL);
- 
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 7. Remove parent region of the boundary from “Model” and into the non-unique list of regions so that it does not get included into computations.
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    model.RemoveFromRegion( "Model", dim_1_region );
-    model.MoveToNonUniqueRegions( dim_1_region );
-   
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 8. (optional) remove parent region (including its elements) if no longer required.
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    if ( remove_original_region ) {
-         // NOTE: works, but then the VTU interface cannot output the boundary anymore
-         for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) model.Mesh().Erase( *(*eit) );
-         model.RemoveRegion( dim_1_region, false );
-      }
-   
-    return patch_names.size();
-
- } // end createInternalBoundaryFromLowerDimensionalRegion
 
 
 } // end csmp

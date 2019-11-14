@@ -2,76 +2,82 @@
 #define SPLIT_BOUNDARY_INTERFACE_H
 
 #include "SplitBoundary.h"
-#include "Region.h"
-#include "ErrorHandler.h"
 
-#include <map>
+namespace csmp {
 
-namespace csmp
-{
-
+/**
+    Creation, management and deletion of SplitBoundary objects.
+ 
+    Split boundaries can be created for:
+      1. internal model boundaries
+      2. node-matched disconnected boundaries of the mesh
+*/
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-class SplitBoundaryInterface
-  {
+class SplitBoundaryInterface {
   public:
-
     SplitBoundaryInterface();
-    virtual ~SplitBoundaryInterface();
-
-    csmp::SplitBoundary<dim>&             SplitBoundary( const std::string& spbName );
-    const csmp::SplitBoundary<dim>&       SplitBoundary( const std::string& spbName ) const;
-    bool                                  ContainsSplitBoundary( const std::string& bname ) const;
-
+    ~SplitBoundaryInterface();
 
     // -----------------------------------------------
-    // Binary input/output
+    // Access of SplitBoundaries objects
     // -----------------------------------------------
-
-    bool OutputSplitBoundariesToBinary( const char* fileName ) const;
-    bool InputSplitBoundariesFromBinary( const char* fileName );
-
-
-    // -------------------------------------------------------------------------
-    // SplitBoundaries access and manipulations with the list of SplitBoundaries
-    // -------------------------------------------------------------------------
+    csmp::SplitBoundary<dim>&         SplitBoundary( const std::string& spbName );
+    const csmp::SplitBoundary<dim>&   SplitBoundary( const std::string& spbName ) const;
+    bool                              ContainsSplitBoundary( const std::string& bname ) const;
 
     typedef typename std::map<std::string,csmp::SplitBoundary<dim> >::iterator         splitBoundaryIterator;
     typedef typename std::map<std::string,csmp::SplitBoundary<dim> >::const_iterator   splitBoundaryConstIterator;
 
-    splitBoundaryIterator                 SplitBoundariesBegin();
-    splitBoundaryIterator                 SplitBoundariesEnd();
-    splitBoundaryConstIterator            SplitBoundariesBegin() const;
-    splitBoundaryConstIterator            SplitBoundariesEnd() const;
+    splitBoundaryIterator        SplitBoundariesBegin();
+    splitBoundaryIterator        SplitBoundariesEnd();
+    splitBoundaryConstIterator   SplitBoundariesBegin() const;
+    splitBoundaryConstIterator   SplitBoundariesEnd() const;
+    size_t                       SplitBoundaries() const;
 
-    size_t                                SplitBoundaries() const;
+    // -----------------------------------------------
+    // SplitBoundary creation and deletion
+    // -----------------------------------------------
+    // TODO: make consistent with Boundary (line 302-318 .cpp file)
+    std::string  CreateSplitBoundaryName( const std::pair<std::string,std::string>& juxtaposed_regions ) const;
+        
+    /// Creates SplitBoundary detecting and connecting node-matched disconnected perimeter element faces in mesh; these are grouped and named for regions
+    // TODO: check name generation, use material ID
+    bool DetectAndCreateSplitBoundaries();
+
+    ///  one-to-one conversion of a model Boundary into a SplitBoundary, Boundary gets removed
+    bool CreateSplitBoundaryFrom( Boundary<dim>& );
+
+    /// Creation of SplitBoundary around region
+    bool InsertSplitBoundary( const std::string& region );
+
+    /// Creation of SplitBoundary between regions
+    bool InsertSplitBoundary( const std::string& region1, const std::string& region2, bool createRegionBetween = false );
+
+    /// Creates lower-dimensional regions that lie in between the mesh patches that are separated by the split boundaries; creates unique names indicating region juxtaposition
+    // TODO: think of new names for these regions like INTERFACE...
+    bool RegionsFromSplitBoundaries( std::set<std::string>& newly_created_regions );
 
     /// Removes splitboundary
     void RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary, bool deleteElements = false );
 
-    // -----------------------------------------------
-    // SplitBoundaries creation
-    // -----------------------------------------------
+    // -----------------------------------------------------------
+    // Input/output
+    // The properties can also be read from a subset of variables
+    // -----------------------------------------------------------
+    
+    /// prints current split boundaries to screen
+    void SplitBoundariesOut() const;
+    
+    bool OutputSplitBoundariesToBinary( const char* fileName ) const;
+    bool InputSplitBoundariesFromBinary( const char* fileName, const std::set<std::string>* subset_variables = nullptr );
 
-    /// Creation of SplitBoundary around region
-    bool InsertSplitBoundary( const std::string& group, bool deleteRegionAndItsElements = false );
-
-    /// Creation of SplitBoundary between regions
-    bool InsertSplitBoundary( const std::string& group1, const std::string& group2, bool createRegionBetween = false );
-
-    // -----------------------------------------------
-    // Manipulations with already existed SplitBoundaries
-    // -----------------------------------------------
-    bool IsEligibleSplitBoundaryRegionName( const std::string& regionName ) const;
 
   protected:
-
-    std::map<std::string,csmp::SplitBoundary<dim> >   interFaceSplitBoundaryMap_;
+    std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs
 
   private:
-
     SplitBoundaryInterface( const SplitBoundaryInterface& bd );
-
-  };
+};
 
 } // csmp
 

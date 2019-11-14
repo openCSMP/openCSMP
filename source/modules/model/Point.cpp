@@ -35,14 +35,14 @@ void  Point<dim>::NormalizeLengthTo( double64 len )
 
 ostream&  operator<<( ostream& stream, const Point<1U>& pt )
  {
-     stream <<"\ncsmp::Point<1> "<< pt[0U]; 
+     stream <<"csmp::Point<1> "<< pt[0U];
      return stream;
  }
 
 
 ostream&  operator<<( ostream& stream, const Point<2U>& pt )
  {
-     stream <<"\ncsmp::Point<2> ";
+     stream <<"csmp::Point<2> ";
      stream << pt[0U] <<" "<< pt[1U]; 
      return stream;
  }
@@ -50,7 +50,7 @@ ostream&  operator<<( ostream& stream, const Point<2U>& pt )
 
 ostream&  operator<<( ostream& stream, const Point<3U>& pt )
  {
-     stream <<"\ncsmp::Point<3> ";
+     stream <<"csmp::Point<3> ";
      stream << pt[0U] <<" "<< pt[1U] <<" "<< pt[2U]; 
      return stream;
  }

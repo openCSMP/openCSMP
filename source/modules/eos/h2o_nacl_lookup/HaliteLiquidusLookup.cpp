@@ -92,12 +92,11 @@ namespace csmp
     char filename[60], statefilename[60];
     strcpy( filename, "HaliteLiquidusPropertiesLookupTable.bin" );
     strcpy( statefilename, "HaliteLiquidusStateLookupTable.bin" );
-    FILE* infile1;
-    FILE* infile2;
-    infile1 = fopen( filename, "rb" );
-    infile2 = fopen( statefilename, "rb" );
-	
-    if( (infile1 == NULL) || (infile2 == NULL) )
+    
+	fstream infile1(filename, ios::in | ios::binary);
+	fstream infile2(statefilename, ios::in | ios::binary);
+
+    if( !infile1.is_open() || !infile2.is_open() )
       {
         cout << "HaliteLiquidusLookup : at least one lookup file missing, computing ...\n\n";
         it = 0;
@@ -169,9 +168,8 @@ namespace csmp
               }
           }
 	
-        FILE* outfile1;
-        outfile1 = fopen( filename, "wb");
-        if( outfile1 == NULL )
+		fstream outfile1(filename, ios::out | ios::binary);
+        if( !outfile1.is_open() )
           {
             cout << "could not even it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -182,13 +180,12 @@ namespace csmp
           {
             cout << "writing file " << filename << " ... ";
             skm_C_fwrite( outfile1, storage_vector );
-            fclose(outfile1);
+			outfile1.close();
             cout << "done!\n";
           }
 
-        FILE* outfile2;
-        outfile2 = fopen( statefilename, "wb");
-        if( outfile2 == NULL )
+        fstream outfile2(statefilename, ios::out | ios::binary);
+        if( !outfile2.is_open() )
           {
             cout << "could not even it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -199,7 +196,7 @@ namespace csmp
           {
             cout << "writing file " << statefilename << " ... ";
             skm_C_fwrite( outfile2, state_vector );
-            fclose(outfile2);
+			outfile2.close();
             cout << "done!\n";
           }
 
@@ -209,12 +206,12 @@ namespace csmp
       {
         cout << "reading file " << filename << " ... ";
         skm_C_fread( infile1, storage_vector );
-        fclose( infile1 );
+		infile1.close();
         cout << "done!\n";
 
         cout << "reading file " << statefilename << " ... ";
         skm_C_fread( infile2, state_vector );
-        fclose( infile2 );
+		infile2.close();
         cout << "done!\n";
 	    
       }

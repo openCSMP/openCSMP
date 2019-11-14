@@ -1,5 +1,5 @@
-#ifndef CORNER_POINT_CELL_H
-#define CORNER_POINT_CELL_H
+#ifndef CORNER_POINT_CELL_UOM_H
+#define CORNER_POINT_CELL_UOM_H
 
 #include "PolygonGrid.h"
 #include "PolygonCell.h"
@@ -65,7 +65,7 @@ std::string toString( CORNER_POINT_CELL_CATEGORY );
 ///         6              7
 ///
 
-enum CORNER_POINT_CELL_FACE_INDEX {
+  enum CORNER_POINT_CELL_FACE_INDEX {
     CORNER_POINT_CELL_FACE_Xplus  = 4,
     CORNER_POINT_CELL_FACE_Xminus = 2,
     CORNER_POINT_CELL_FACE_Yplus  = 3,
@@ -82,38 +82,44 @@ std::string toString( CORNER_POINT_CELL_FACE_INDEX );
 @brief CornerPointCell  provides the necessary functionality
 to construct valid Finite Elements out of distorted hexahedrons.
 
+@attention the CornerPoint cell is inherited from the PolygonCell !
+
 @author R. Manasipov
 @date 2015
 
 */
-template<size_t dim>
-class CornerPointCell: public PolygonCell<dim>
+class CornerPointCell: public PolygonCell
 {
 public:
-
-    CornerPointCell( PolygonGridManager<dim>* pgm );
+    explicit CornerPointCell( PolygonGridManager& );
     CornerPointCell( const CornerPointCell& poly );
     CornerPointCell& operator=( const CornerPointCell& poly );
     ~CornerPointCell();
 
     /// initialization of cell ( assign nodes, define topology )
-    void   AssignNode( size_t local_nid, const csmp::Point<dim>& pt );
+    void   AssignNode( size_t local_nid, const csmp::Point<3U>& pt );
     void   InitializeCornerPointCell( );
 
     /// define cell which contains well
     void   AddCornerPointWellCell( size_t face_id_org, size_t face_id_dst );
 
     /// resolve mesh conflicts for cells
-    void   ResolveCornerPointCellConflicts( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges );
+    void   ResolveCornerPointCellConflicts( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges );
 
     /// process cells
-    void   ProcessCornerPointCell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
-    void   ProcessCornerPointRegularCell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
-    void   ProcessCornerPointDegenerateCell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
-    void   ProcessCornerPointDegenerateVolumetricCell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
-    void   ProcessCornerPointDegenerateVolumetricNonOverlappingCell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
-    void   ProcessCornerPointDegenerateVolumetricOverlappingCell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
-    void   ProcessCornerPointDegenerateLowDimensionalCell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
+    void   ProcessCornerPointCell( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
+  
+    void   ProcessCornerPointRegularCell( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
+  
+    void   ProcessCornerPointDegenerateCell( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
+  
+    void   ProcessCornerPointDegenerateVolumetricCell( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
+  
+    void   ProcessCornerPointDegenerateVolumetricNonOverlappingCell( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
+  
+    void   ProcessCornerPointDegenerateVolumetricOverlappingCell( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
+    
+    void   ProcessCornerPointDegenerateLowDimensionalCell( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element = false, bool tetra_mesh = false );
 
     /// returns the number of faces that make up the corner-point cell (only in degenerate cells can this be less than 6!)
     size_t GetNumFaces( size_t fid ) const;
@@ -132,33 +138,31 @@ public:
     /// wells info
     size_t GetNumWellSections() const;
     size_t GetNumWellSectionNodes( size_t eid ) const;
-    const csmp::Point<dim>& GetWellSectionNode( size_t eid, size_t nid ) const;
+    const csmp::Point<3U>& GetWellSectionNode( size_t eid, size_t nid ) const;
     size_t GetWellSectionNodeGlobalId( size_t eid, size_t nid ) const;
 
     /// pillar nodes
     size_t GetPillarNodeGlobalIdOriginalOrder( size_t nid ) const;
     size_t GetPillarNodeGlobalIdCustomOrder( size_t nid ) const;
-    const csmp::Point<dim>& GetPillarPointOriginalOrder( size_t nid ) const;
-    const csmp::Point<dim>& GetPillarPointCustomOrder( size_t nid ) const;
-    csmp::GridNode<dim>* GetPillarNodeOriginalOrder( size_t nid );
-    csmp::GridNode<dim>* GetPillarNodeCustomOrder( size_t nid );
+    const csmp::Point<3U>& GetPillarPointOriginalOrder( size_t nid ) const;
+    const csmp::Point<3U>& GetPillarPointCustomOrder( size_t nid ) const;
+    GridNode* GetPillarNodeOriginalOrder( size_t nid );
+    GridNode* GetPillarNodeCustomOrder( size_t nid );
   
     /// prints object state to screen
     void Out() const;
 
 protected:
 
-    CornerPointCell();
-
     /// add new well
-    void AddWell( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points );
-    void AddWell( csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1 );
+    void AddWell( std::map<std::set<size_t>,GridNode*>& additional_points );
+    void AddWell( GridNode* n0, GridNode* n1 );
 
     /// initialize elements ( renumber node and eliminate duplicates )
 
     void AssignPillarNodesOrder( );
 
-    void InitializeNodes( std::map<csmp::Point<dim>,size_t>& cell_nodes );
+    void InitializeNodes( std::map<csmp::Point<3U>,size_t>& cell_nodes );
     void CheckNodeOrder();
 
     void InitializeFaces();
@@ -166,32 +170,32 @@ protected:
 
     void InitializePoly8Element( );
 
-    void InitializePoly7Element( const std::map<csmp::Point<dim>,size_t>&               cell_nodes,
-                                 const std::vector<std::vector<csmp::Point<dim> > >&    face_ordered_points,
+    void InitializePoly7Element( const std::map<csmp::Point<3U>,size_t>&               cell_nodes,
+                                 const std::vector<std::vector<csmp::Point<3U> > >&    face_ordered_points,
                                  const std::vector<size_t>&                             tri_faces,
                                  const std::vector<size_t>&                             quad_faces,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_tri_faces,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_quad_faces,
-                                 const std::vector<std::vector<csmp::Point<dim> > >&    edge_ordered_points,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_edges );
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_tri_faces,
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_quad_faces,
+                                 const std::vector<std::vector<csmp::Point<3U> > >&    edge_ordered_points,
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_edges );
 
-    void InitializePoly6Element( const std::map<csmp::Point<dim>,size_t>&               cell_nodes,
-                                 const std::vector<std::vector<csmp::Point<dim> > >&    face_ordered_points,
+    void InitializePoly6Element( const std::map<csmp::Point<3U>,size_t>&               cell_nodes,
+                                 const std::vector<std::vector<csmp::Point<3U> > >&    face_ordered_points,
                                  const std::vector<size_t>&                             tri_faces,
                                  const std::vector<size_t>&                             quad_faces,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_tri_faces,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_quad_faces,
-                                 const std::vector<std::vector<csmp::Point<dim> > >&    edge_ordered_points,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_edges );
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_tri_faces,
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_quad_faces,
+                                 const std::vector<std::vector<csmp::Point<3U> > >&    edge_ordered_points,
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_edges );
 
-    void InitializePoly5Element( const std::map<csmp::Point<dim>,size_t>&               cell_nodes,
-                                 const std::vector<std::vector<csmp::Point<dim> > >&    face_ordered_points,
+    void InitializePoly5Element( const std::map<csmp::Point<3U>,size_t>&               cell_nodes,
+                                 const std::vector<std::vector<csmp::Point<3U> > >&    face_ordered_points,
                                  const std::vector<size_t>&                             tri_faces,
                                  const std::vector<size_t>&                             quad_faces,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_tri_faces,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_quad_faces,
-                                 const std::vector<std::vector<csmp::Point<dim> > >&    edge_ordered_points,
-                                 const std::map<csmp::Point<dim>,std::vector<size_t> >& point_edges );
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_tri_faces,
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_quad_faces,
+                                 const std::vector<std::vector<csmp::Point<3U> > >&    edge_ordered_points,
+                                 const std::map<csmp::Point<3U>,std::vector<size_t> >& point_edges );
 
     void InitializePoly4Element( const std::vector<size_t>& tri_faces,
                                  const std::vector<size_t>& quad_faces );
@@ -202,32 +206,32 @@ protected:
 
     void InitializePoly1Element( );
 
-    void GetTopologycalInfo(    std::map<csmp::Point<dim>,size_t>&               cell_nodes,
-                                std::set<std::set<csmp::Point<dim> > >&          unique_faces,
-                                std::vector<std::vector<csmp::Point<dim> > >&    face_ordered_points,
-                                std::vector<std::set<csmp::Point<dim> > >&       face_unique_points,
+    void GetTopologycalInfo(    std::map<csmp::Point<3U>,size_t>&               cell_nodes,
+                                std::set<std::set<csmp::Point<3U> > >&          unique_faces,
+                                std::vector<std::vector<csmp::Point<3U> > >&    face_ordered_points,
+                                std::vector<std::set<csmp::Point<3U> > >&       face_unique_points,
                                 std::vector<size_t>&                             tri_faces,
                                 std::vector<size_t>&                             quad_faces,
-                                std::map<csmp::Point<dim>,std::vector<size_t> >& point_tri_faces,
-                                std::map<csmp::Point<dim>,std::vector<size_t> >& point_quad_faces,
-                                std::set<std::set<csmp::Point<dim> > >&          unique_edges,
-                                std::vector<std::vector<csmp::Point<dim> > >&    edge_ordered_points,
-                                std::vector<std::set<csmp::Point<dim> > >&       edge_unique_points,
-                                std::map<csmp::Point<dim>,std::vector<size_t> >& point_edges );
+                                std::map<csmp::Point<3U>,std::vector<size_t> >& point_tri_faces,
+                                std::map<csmp::Point<3U>,std::vector<size_t> >& point_quad_faces,
+                                std::set<std::set<csmp::Point<3U> > >&          unique_edges,
+                                std::vector<std::vector<csmp::Point<3U> > >&    edge_ordered_points,
+                                std::vector<std::set<csmp::Point<3U> > >&       edge_unique_points,
+                                std::map<csmp::Point<3U>,std::vector<size_t> >& point_edges );
 
     /// process cells
-    void AddQuadFaceCentroids( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges );
-    void ProcessPolyElement(  std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element );
-    void ProcessPolyNonWellElement( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool add_edge_centroids, bool add_face_centroids, bool add_cell_centroids );
-    void ProcessPolyWellElement( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges );
-    void ProcessPoly8Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
-    void ProcessPoly7Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
-    void ProcessPoly6Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
-    void ProcessPoly5Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
-    void ProcessPoly4Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
-    void ProcessPoly3Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
-    void ProcessPoly2Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
-    void ProcessPoly1Element( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void AddQuadFaceCentroids( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges );
+    void ProcessPolyElement(  std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element );
+    void ProcessPolyNonWellElement( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool add_edge_centroids, bool add_face_centroids, bool add_cell_centroids );
+    void ProcessPolyWellElement( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges );
+    void ProcessPoly8Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void ProcessPoly7Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void ProcessPoly6Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void ProcessPoly5Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void ProcessPoly4Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void ProcessPoly3Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void ProcessPoly2Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
+    void ProcessPoly1Element( std::map<std::set<size_t>,GridNode*>& additional_points, std::set<std::set<size_t> >& additional_edges, bool well_element, bool tetra_mesh );
     void FinishMeshing();
 
 private:
@@ -238,16 +242,13 @@ private:
     size_t                           num_quad_faces_;
     size_t                           num_tri_faces_;
     int                              meshing_cycle_;
-
     /// pillar nodes data
-    std::vector<csmp::GridNode<dim>*> pillar_nodes_;
+    std::vector<GridNode*>     pillar_nodes_;
     std::vector<size_t>              pillar_nodes_order_;
-
     /// wells
     long                             well_face_org_;
     long                             well_face_dst_;
-    std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >    wells_;
-
+    std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >    wells_;
 };
 
 }// end namespace csmp

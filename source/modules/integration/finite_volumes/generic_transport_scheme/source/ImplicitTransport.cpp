@@ -8,7 +8,7 @@
 #include "ImplicitTransport.h"
 #include "Region.h"
 #include "Model.h"
-#include "finiteVolumeFunctions.h"
+#include "finiteVolumeAuxiliaryFunctions.h"
 #include "CSMP_mathUtilities.h"
 #include "VTK_Interface.h"
 #include "LinearSystemAccumulator.h"
@@ -28,23 +28,29 @@ ImplicitTransport<dim>::GetModel() const
 
 template<size_t dim>
 ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const char* target_region, bool second_order )
-  : variables::Variables_TracerTransfer(m.Database()),
+  : variables::VariableSet_TracerTransfer(m.Database()),
     Equation_TracerTransferImplicit<dim>( m, target_region ),
     solver_(solver),
     model_(m),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.),
-    second_order_(second_order)
+    second_order_(second_order),
+    key_acc_(m.CreateProperty("accumulation","node")),
+    key_out_(m.CreateProperty("outflow","node"))
  {
     m.InstantiateFiniteVolumes();
      m.Region(target_region).InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
 
-    initializeFiniteVolumeProperties( m, m.Region(target_region) );
+    const bool initialise_flux(true);
+    initializeFiniteVolumeProperties( m, m.Region(target_region), initialise_flux );
     // 0. model-wide initialisation: results will be accumulated into this variable
    
     // retrieving the physically meaningful upper and lower solution limit from database
-    m.Database().RangeOf( m.Database().Name(this->key_C), lower_limit_, upper_limit_ );
+    m.Database().RangeOf( m.Database().Name(this->key_C0), lower_limit_, upper_limit_ );
  }
+  
+  
+  
   
 /**
     Computation of time increment, flux balance, and temporary new concentration.
@@ -55,12 +61,13 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      double64 dt_min(max_time_increment);
  
      // 1. processing interior and FVs for which all facet fluxes have been initialised
-     auto interior_nodes_end(gref_.InteriorNodesEnd());
+     auto interior_nodes_end(gref_.PerimeterNodesBegin());
      for ( auto nit=gref_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
+          const double64 out_flow = this->FluxBalanceAndOutFlow( (*nit) );
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( **nit );
+          const double64 time_increment = this->OutFlowLessThanContentIncrement( *nit, out_flow );
           dt_min = std::min( dt_min, time_increment );
        }
 
@@ -69,8 +76,9 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      for ( typename vector<Node<dim>*>::const_iterator
            nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
+          const double64 out_flow = this->FluxBalanceAndOutFlow( (*nit) );
           // boundary fluxes must be part of the time-increment calculation
-          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( **nit ) );
+          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( *nit, out_flow ) );
        }
    
     return dt_min;
@@ -124,11 +132,11 @@ double64 ImplicitTransport<dim>::TimeIncrement()
     for ( auto nit = gref_.PerimeterNodesBegin(); nit != nodes_end; ++nit ) {
       const auto i = (*nit)->Idx();
       
-      const auto status = (*nit)->Status( key_C );
+      const auto status = (*nit)->Status( this->key_C0 );
       
       // Dirichlet boundary condition: concentration should be unaltered.
       if (status == DIRICH) {
-        const auto c0 = (*nit)->Read( key_C );
+        const auto c0 = (*nit)->Read( this->key_C0 );
         LHS_.ZeroRow(i);
         LHS_.Assign(i, i, 1.0);
         RHS_[i] = c0;
@@ -138,7 +146,7 @@ double64 ImplicitTransport<dim>::TimeIncrement()
       // Calculate flow through boundary
       double64 inflow = 0.0;
       double64 influx = 0.0;
-      const auto c0 = (*nit)->Read( key_C );
+      const auto c0 = (*nit)->Read( this->key_C0 );
 
       const size_t iNrParents = (*nit)->Parents();
       for ( size_t iParent = 0; iParent < iNrParents; ++iParent ) {
@@ -152,8 +160,8 @@ double64 ImplicitTransport<dim>::TimeIncrement()
           const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
           const double64 ff = eptr->Read( iFacet, 0u, key_ff );
           
-          const double64 C_upstream = (ff < 0.) ? eptr->N(outside_node)->Read( key_C ) :
-          eptr->N(inside_node)->Read( key_C );
+          const double64 C_upstream = (ff < 0.) ? eptr->N(outside_node)->Read( this->key_C0 ) :
+          eptr->N(inside_node)->Read( this->key_C0 );
           if ( pnid == inside_node ) {
             inflow += ff;
             influx += ff * C_upstream;
@@ -201,7 +209,7 @@ double64 ImplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
     const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
     for ( auto nit = gref_.NodesBegin(); nit != nodes_end; ++nit )
     {
-      const VARIABLE_FLAG status((*nit)->Status( this->key_C ));
+      const VARIABLE_FLAG status((*nit)->Status( this->key_C0 ));
       if ( status != DIRICH )
       {
         // reading the newly computed saturation values
@@ -210,17 +218,17 @@ double64 ImplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
         amax = std::max( amax, c1 );
         
         // reading the previous values and calculating the maximum change per node
-        const double64 C0 = (*nit)->Read( this->key_C );
+        const double64 C0 = (*nit)->Read( this->key_C0 );
 
         difference_to_last_output = std::max( difference_to_last_output, fabs(c1 - C0) );
         
         // result checking and assignment
-        if ( c1 <= upper_limit_ && c1 >= lower_limit_ ) (*nit)->Store( this->key_C, makeScalar(status, c1) );
+        if ( c1 <= upper_limit_ && c1 >= lower_limit_ ) (*nit)->Store( this->key_C0, makeScalar(status, c1) );
         else {
           cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
           cerr <<"value: "<< c1 <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-          if ( c1 > upper_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, upper_limit_ ) );
-          else if ( c1 < lower_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, lower_limit_ ) );
+          if ( c1 > upper_limit_ ) (*nit)->Store( this->key_C0, makeScalar( status, upper_limit_ ) );
+          else if ( c1 < lower_limit_ ) (*nit)->Store( this->key_C0, makeScalar( status, lower_limit_ ) );
           error_counter++;
         }
       }
@@ -262,7 +270,7 @@ void ImplicitTransport<dim>::AdvectVariable( double64 time_interval )
  {
    // 1. computing (velocity and) facet fluxes as necessary
    const bool reuse_previous_velocity = false;
-   this->FacetFluxes(gref_, reuse_previous_velocity, second_order_);
+   //this->FacetFluxes(gref_, reuse_previous_velocity, second_order_);
    
    // 2. evaluation of time increment
    double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
@@ -308,7 +316,7 @@ void ImplicitTransport<dim>::AdvectVariable( double64 time_interval )
      time += time_increment;
      
      const bool reuse_previous_velocity = true;
-     this->FacetFluxes(gref_, reuse_previous_velocity, second_order_);
+     //this->FacetFluxes(gref_, reuse_previous_velocity, second_order_);
      
      time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
      
@@ -322,8 +330,8 @@ void ImplicitTransport<dim>::AdvectVariable( double64 time_interval )
 
 
 
-  template class ImplicitTransport<1U>;
-  template class ImplicitTransport<2U>;
+//  template class ImplicitTransport<1U>;
+//  template class ImplicitTransport<2U>;
   template class ImplicitTransport<3U>;
 
 } // end csmp

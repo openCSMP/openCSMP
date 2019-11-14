@@ -30,10 +30,15 @@ class Quadrilaterator {
     Quadrilaterator( bool harmonic_permeability_averaging=false ); 
     ~Quadrilaterator(); 
 
+    /// prompts user for color-coded permeability values (0..256) matrix in ascii text file and creates a regular quadrilateral mesh from this data
     void QuadrilateralsFromRegularGrid( VSet<2U>& vset, bool from_bitmap=true );
-    void QuadrilateralsFromRegularGrid( VSet<2U>& vset, const char* file_name, 
+  
+    /// reads 0..256 valued point matrix of color-coded permeability values from ascii text file and creates a regular, yet scaled quadrilateral mesh from it
+    void QuadrilateralsFromRegularGrid( VSet<2U>& vset, const char* file_name,
                                         double64 x_extend, double64 y_extend, bool from_bitmap=true );
-    void QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_extend, double64 y_extend, size_t x_nodes, size_t y_nodes );
+  
+    /// creates a regular quadrilateral mesh with row_nodes-1 elements in the vertical, anr column_nodes-1 elements in the horizontal direction
+    void QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_extend, double64 y_extend, size_t row_nodes, size_t column_nodes );
 
   private:
      double64  HarmonicPermeabilityAverage( unsigned int m, unsigned int n, const csmp::Matrix& perm ) const;

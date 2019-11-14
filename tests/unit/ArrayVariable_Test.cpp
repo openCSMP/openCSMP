@@ -44,22 +44,24 @@ namespace csmp{
        // bin IO
        ArrayVariable avBinO( 500, 999., ANY );
        _test( av3 == av4 );
-       FILE*  fp;  
-       if ( (fp=fopen( "ArrayVariableBinaryIO", "wb")) == NULL ) {
+       fstream fp ("ArrayVariableBinaryIO", ios::out | ios::binary);
+       if ( !fp.is_open() ) {
          cerr <<"\nArrayVariable_Test: Bindary file could not be created.";
          _test(false);
          return;
          }
        avBinO.Out(fp);
-       fclose(fp);
-       if ( (fp=fopen( "ArrayVariableBinaryIO", "rb")) == NULL ) {
+	   fp.close();
+	   
+	   fp.open("ArrayVariableBinaryIO", ios::in | ios::binary);
+	   if (!fp.is_open()) {
          cerr <<"\nArrayVariable_Test: Bindary file could not be opened.";
          _test(false);
          return;
          }
        ArrayVariable avBinI;
        avBinI.In(fp);
-       fclose(fp);
+	   fp.close();
        _test( avBinI == avBinO );
 
     }

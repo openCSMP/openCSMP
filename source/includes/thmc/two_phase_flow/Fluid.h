@@ -9,98 +9,83 @@
 #ifndef CSMP_FLUID_H
 #define CSMP_FLUID_H
 
-#include "CSMP_definitions.h"
-#include "VariablePlacement.h"
+#include "Node.h"
+#include "PVTX_Calculator_H2O_CO2_NaCl.h"
 
 namespace csmp {
 
-//  unit conversions
-
-    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
-
-    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
-
-    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
-
-    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
-
-    double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
-
-    double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
-
-    double64  psiToPa( double64 pressureInPsi );
-
-    double64  paToPsi( double64 pressureInPa );
-
-    double64  paTobar( double64 pressureInPa );
-
-    double64  barTopa( double64 pressureInbar );
-
-    double64  degreeCToKelvin( double64 temperatureInC );
-
-    double64  KelvinTodegreeC( double64 temperatureInK );
-
 /**
-    blueprint for any specific Fluid property class to be used in the generic transport scheme.
+    Blueprint for any specific Fluid property class to be used in the generic transport scheme.
+    This generic one is not associated with any particular equation of state, but derived ones
+    in this implementation of static polymorphism may well be.
+ 
+    When properties are requested for the element, the methods of the class performs
+    a smart interpolation of fluid properties dependent on their existance
+    as indicated by the phase state.
+    Else,the method just reads the properties from the model.
+ 
+    @attention the fluid properties must be initialised elsewhere by an equation of state.
 */
 template<size_t dim, template<size_t> class USER>
 class Fluid {
   public:
-    /// temperature oC at current initialisation point in Element
-    template<class TARGET_PLACEMENT>
-    double64 Temperature( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_T); }
-  
-    /// fluid pressure (Pa) at current initialisation point in Element
-    template<class TARGET_PLACEMENT>
-    double64 Pressure( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_pf); }
-  
-    /// salinity, mSalt (molality = moles/kg)
-    template<class TARGET_PLACEMENT>
-    double64 Salinity( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_msalt); }
-  
-    /// salinity, mass fraction
-    template<class TARGET_PLACEMENT>
-    double64 MassFractionNaCl( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xSalt); }
+    /// default constructor that tests the phase-state key
+    Fluid();
 
-    /// composition: mass fraction (0..1) of CO2 in the aqueous phase
-    template<class TARGET_PLACEMENT>
-    double64 XCO2_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xCO2); }
+    /// the node property fluid viscosity (Pa.s) returned has been interpolated to the user-specified target placement (argument parameter)
+    double64 Viscosity( Node<dim>* const, size_t phase ) const;
+    /// the node property fluid viscosity (Pa.s) interpolated to element barycentre
+    double64 Viscosity( Element<dim>* const, size_t phase ) const;
+    /// the node property fluid viscosity (Pa.s) at the node i of the element
+    double64 Viscosity( Element<dim>* const, size_t node, size_t phase ) const;
 
-    /// composition: mass fraction (0..1) of water in the aqueous phase
-    template<class TARGET_PLACEMENT>
-    double64 XH2O_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xH2O); }
+    /// the returned node property fluid density (of phase) (kg/m3) interpolated to the user-specified target placement (argument parameter)
+    double64 Density( Node<dim>* const, size_t phase ) const;
+    double64 Density( Element<dim>* const, size_t phase ) const;
+    double64 Density( Element<dim>* const, size_t node, size_t phase ) const;
 
-    /// composition: mass fraction (0..1) of CO2 in the carbonic phase
-    template<class TARGET_PLACEMENT>
-    double64 YCO2_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_YCO2); }
+    /// returns saturation-weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement
+    double64 MixtureDensity( Node<dim>* const ) const;
+    double64 MixtureDensity( Element<dim>* const ) const;
+    double64 MixtureDensity( Element<dim>* const, size_t node ) const;
 
-    /// composition: mass fraction (0..1) of water in the carbonic phase
-    template<class TARGET_PLACEMENT>
-    double64 YH2O_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_YH2O); }
-  
-    // with or without dissolved CO2
-    template<class TARGET_PLACEMENT>
-    double64 Viscosity( TARGET_PLACEMENT&, size_t phase=0 ) const;
-
-    template<class TARGET_PLACEMENT>
-    double64 Density( TARGET_PLACEMENT&, size_t phase=0 ) const;
-
-    template<class TARGET_PLACEMENT>
-    double64 DensityMixture( TARGET_PLACEMENT&, double64 salinity=0. ) const;
-  
-    template<class TARGET_PLACEMENT>
-    double64 ViscosityRatio( TARGET_PLACEMENT&, double64 salinity=0. ) const;
+    /// returns the ratio of the phase viscosities at the target placement
+    double64 ViscosityRatio( Node<dim>* const ) const;
+    double64 ViscosityRatio( Element<dim>* const ) const;
+    double64 ViscosityRatio( Element<dim>* const, size_t node ) const;
 
   protected:
-    Fluid();
-  
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-  
-    // member is EOS module
 };
 
-}
+//  unit conversions
+
+inline double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
+
+inline double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
+
+inline double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
+
+inline double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
+
+inline double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
+
+inline double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
+
+inline double64  psiToPa( double64 pressureInPsi );
+
+inline double64  paToPsi( double64 pressureInPa );
+
+inline double64  paTobar( double64 pressureInPa );
+
+inline double64  barTopa( double64 pressureInbar );
+
+inline double64  degreeCToKelvin( double64 temperatureInC );
+
+inline double64  KelvinTodegreeC( double64 temperatureInK );
+
+} // end csmp
 
 #endif /* CSMP_FLUID_H */
