@@ -49,13 +49,11 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Specifications()
 
     Use models 'fracs4' (.dat, .asc, -regions.txt, -configuration.txt) as input file suites.
 */
-
 void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
 {
     // -------------------------------------
     // 0.0 Set variables used throughout the simulation
     // -------------------------------------
-
     double64 model_time =  0.0; // time
 
     // ---------------------------------------------------
@@ -75,8 +73,7 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
     bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?"); 
     bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?"); 
     
-    ANSYS_Model3D                model( input_file.c_str(), "DES_2phase_variables.txt" );
-    const PropertyDatabase<3>&   p_ref = model.Database();  
+    ANSYS_Model3D model( input_file.c_str(), "DES_2phase_variables.txt" );
 
     // give the model dimensions
     printModelDimensions( model, true );
