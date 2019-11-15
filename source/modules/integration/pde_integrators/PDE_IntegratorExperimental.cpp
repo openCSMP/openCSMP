@@ -1681,11 +1681,11 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
     fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
 
     if (!this->setup_established_)
-      throw csmp::Exception(ERROR, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+      throw csmp::Exception(ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
         "please call EstablishMatrixSetup() prior to this method.");
 
     if (this->basic_operands_.empty())
-      throw csmp::Exception(ERROR, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+      throw csmp::Exception(ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
         "No (basic) operands have been specified...");
 
 
@@ -1699,7 +1699,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
           size_t      offset = (*it).second;
 
           if (prop_key.place != NODE)
-            throw csmp::Exception(ERROR, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+            throw csmp::Exception(ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
               "So far no conditions are assigned to elements, faces, segments");
 
           size_t  position(0);
@@ -1786,7 +1786,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
              break;
               default:
                 throw csmp::Exception(FATAL_ERROR,
-                  "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+                  "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
                   "Variable type not recognised by this method");
               }
           

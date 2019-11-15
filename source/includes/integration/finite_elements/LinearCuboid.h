@@ -1,9 +1,3 @@
-/**
-@class LinearCuboid
-@author Hani Akbari (Jan. 2017)
-This class implements linear cuboid element, so each element has 8 nodes.
-*/
-
 #ifndef LINEAR_CUBOID_H
 #define LINEAR_CUBOID_H
 
@@ -11,6 +5,11 @@ This class implements linear cuboid element, so each element has 8 nodes.
 
 namespace csmp {
 
+/**
+    @class LinearCuboid
+    @author Hani Akbari (Jan. 2017)
+    This class implements linear cuboid element, so each element has 8 nodes.
+*/
 class LinearCuboid : public FiniteElement {
 public:
 	LinearCuboid();
@@ -43,5 +42,7 @@ private:
 	DenseMatrix<DM12> M1_, M2_, M3_; // Auxiliary Dense Matrix
 	std::vector<double64> V_; // Auxiliary vector
 };
-}
-#endif // !Linear Hexahedron
+
+} // end csmp
+
+#endif // LINEAR_CUBOID_H
