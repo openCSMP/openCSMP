@@ -399,10 +399,12 @@ struct CRC3_RockType8 {
   // Krw_ave= C1_krw * Sw(ux)^C2_krw 
   double64 Krw( double64 Sw, double64 ux ) const {
   // =============================================
+throw csmp::Exception( ERROR, "CRC3_RockType8:Krw", "method not implemented yet.");
     }
 
   double64 Krnw( double64 Sw, double64 ux ) const {
   // ==============================================
+throw csmp::Exception( ERROR, "CRC3_RockType8:Krnw", "method not implemented yet.");
     }
     
   // Krw_VL = (Sw(ux)^0.5)*(1-(1-Sw(ux)^C1)^C2)
@@ -561,10 +563,12 @@ const double64 k_low_=3.48e-14, k_high_=2.50e-12,
 // Krw_ave= C1_krw * Sw(ux)^C2_krw 
 double64 Krw( double64 Sw, double64 ux ) const {
 // =============================================
+throw csmp::Exception( ERROR, "CRC3_RockType12::Krw", "method not implemented yet.");
   }
 
 double64 Krnw( double64 Sw, double64 ux ) const {
 // ==============================================
+throw csmp::Exception( ERROR, "CRC3_RockType12::Krnw", "method not implemented yet.");
   }
 
   // Krw_VL = (Sw(ux)^0.5)*(1-(1-Sw(ux)^C1)^C2)
