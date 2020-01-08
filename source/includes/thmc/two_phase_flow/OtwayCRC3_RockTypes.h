@@ -396,16 +396,15 @@ struct CRC3_RockType8 {
                  dPc=4250., // NOT SPECIFIED: capillary pressure difference between high_k and low_k layer at connate water saturation
                  VL_ux = 1.0e-5, CL_ux = 8e-8;
   
-  // Krw_ave= C1_krw * Sw(ux)^C2_krw 
-  double64 Krw( double64 Sw, double64 ux ) const {
-  // =============================================
-return std::numeric_limits<double64>::quiet_NaN();
-    }
+// Krw_ave= C1_krw * Sw(ux)^C2_krw 
+double64 Krw( double64 Sw, double64 ux ) const {
+     // =============================================
+     return std::numeric_limits<double64>::quiet_NaN();
+  }
 
-  double64 Krnw( double64 Sw, double64 ux ) const {
-  // ==============================================
-return std::numeric_limits<double64>::quiet_NaN();
-    }
+double64 Krnw( double64 Sw, double64 ux ) const {
+     return std::numeric_limits<double64>::quiet_NaN();
+  }
     
   // Krw_VL = (Sw(ux)^0.5)*(1-(1-Sw(ux)^C1)^C2)
   double64 Krw_VL( double64 Sw, double64 ux ) const {
@@ -562,13 +561,12 @@ const double64 k_low_=3.48e-14, k_high_=2.50e-12,
 
 // Krw_ave= C1_krw * Sw(ux)^C2_krw 
 double64 Krw( double64 Sw, double64 ux ) const {
-// ============================================= 
-return std::numeric_limits<double64>::quiet_NaN();
+    // ============================================= 
+    return std::numeric_limits<double64>::quiet_NaN();
   }
 
 double64 Krnw( double64 Sw, double64 ux ) const {
-// ==============================================
-return std::numeric_limits<double64>::quiet_NaN();
+     return std::numeric_limits<double64>::quiet_NaN();
   }
 
   // Krw_VL = (Sw(ux)^0.5)*(1-(1-Sw(ux)^C1)^C2)
