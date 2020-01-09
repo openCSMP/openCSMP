@@ -7,8 +7,14 @@
 namespace csmp {
 
 /**
-     Old test conceived by Roman Manasipov in 2013,
-     ported to 2016 version by SKM.
+    SplitBoundary_Test of the functionality of individual SpitBoundary objects
+    as opposed to their creation (see SplitBoundaryInterface_Test) or that of the InterFace
+    objects that the SplitBoundary objects consist of (see InterFace_Test).
+
+
+     @author Revised testst originally conceived by Roman Manasipov in 2013,
+     @author refactored by Junchul Kim (2019).
+     @date ported to 2016 version by SKM.
  */
   class SplitBoundary_Test : public Test
     {
@@ -38,9 +44,11 @@ namespace csmp {
       template<size_t dim>
       void CheckRemovedLowDimParents( csmp::Boundary<dim>& boundary );
       
+      /// tests whether all InterFace elements of the SplitBoundary have both higher-dimensional neighbors
       template<size_t dim>
       bool NoNeighborNull( const csmp::InterFace<dim>& interFace );
 
+      /// tests whether the splitted nodes share parent elements, located on different sides of interfaces
       template<size_t dim>
       void TestSplitNodeAssignment( const csmp::Model<dim>& );
 

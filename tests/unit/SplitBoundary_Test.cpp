@@ -406,7 +406,7 @@ bool isLowDim( Element<2>* ePtr )
   return ePtr->FE()->IsLineElement();
 }
 
-
+// OK
 template<size_t dim>
 bool SplitBoundary_Test::NoNeighborNull( const csmp::InterFace<dim>& interFace )
 {
