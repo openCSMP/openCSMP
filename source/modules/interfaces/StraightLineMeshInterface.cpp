@@ -1,6 +1,7 @@
 #include "StraightLineMeshInterface.h"
 #include "LineElementMesher.h"
 #include "ErrorHandler.h"
+#include "TextFileIO.h"
 #include "EclipseTextFileInterface.h"
 
 using namespace std;
@@ -187,7 +188,7 @@ void StraightLineMeshInterface<dim>
     csmp::readFileHeader( ifs, file_header, error_handler.Verbose() );
 
     // 2. Read the data
-    csmp::EclipseTextFileInterface<StraightLineMeshInterface<dim> > reader( line_length );
+    EclipseTextFileInterface<StraightLineMeshInterface<dim> > reader( line_length );
 
     reader.AddKeyword("UNIFORM_MESH" );
     reader.AddKeyword("REFINED_MESH" );

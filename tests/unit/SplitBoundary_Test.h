@@ -6,14 +6,10 @@
 
 namespace csmp {
 
-  //template<size_t> class Element;
-  //template<size_t> class Face;
-  //template<size_t> class InterFace;
-  //template<size_t> class Region;
-  //template<size_t> class Boundary;
-  //template<size_t> class SplitBoundary;
-  //template<size_t> class Model;
-
+/**
+     Old test conceived by Roman Manasipov in 2013,
+     ported to 2016 version by SKM.
+ */
   class SplitBoundary_Test : public Test
     {
     public:
