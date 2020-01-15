@@ -2,33 +2,22 @@
 #define SPLIT_BOUNDARY_TEST_H
 
 #include "Test.h"
-#include "SplitBoundary.h"
+#include "SplitBoundaryInterface.h"
 
 namespace csmp {
 
 /**
-    SplitBoundary_Test of the functionality of individual SpitBoundary objects
-    as opposed to their creation (see SplitBoundaryInterface_Test) or that of the InterFace
-    objects that the SplitBoundary objects consist of (see InterFace_Test).
-    
-    @attention this also performs test on SplitBoundary objects created in ANSYS
-    
-    @section Tests Performed Here (2D and 3D)
-    
-    - do all interfaces have higher dimensional neighbors
-    - do correspoding nodes coincide
-    - is there only a single node along the perimeter of a split boundary
-    - are all of the above operations still valid for a SplitBoundary read from binary file?
-
+    SplitBoundaryInterface_Test unit test tests all functionality related to the creation and destruction of SplitBoundary objects.
+    Refer to SplitBoundaryInterface_Test for tests of the functionality of the SplitBoundary itself.
 
      @author Revised testst originally conceived by Roman Manasipov in 2013,
      @author refactored by Junchul Kim (2019).
      @date ported to 2016 version by SKM.
  */
-  class SplitBoundary_Test : public Test
+  class SplitBoundaryInterface_Test : public Test
     {
     public:
-      explicit SplitBoundary_Test( bool verbose=false ) : verbose_(verbose) {}
+      explicit SplitBoundaryInterface_Test( bool verbose=false ) : verbose_(verbose) {}
     
       virtual void run();
 

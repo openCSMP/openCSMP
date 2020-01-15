@@ -867,8 +867,6 @@ void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elements )
   {
-     assert( interior_elements > 0 );
-     
      // verification of suitable model state
      if ( elmt_vec_.empty() )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
@@ -1253,39 +1251,52 @@ cout.flush();
 
 
 
-
+/**
+      SKM - September 2019.
+      Jan 2020, updated for the case where there are no interior nodes or elements
+ */
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interior_nodes )
   {
-    assert( interior_cells > 0 );
-    assert( interior_nodes > 0 );
-
-    // verification of suitable model state
-    if ( elmt_vec_.empty() )
-      throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                             Name(), "model subdomain: CELL vector not initialised yet.");
-                             
-    if ( interior_cells > elmt_vec_.size() ) {
-          cerr <<"\ninterior cells: "<< interior_cells;
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                                 Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
-      }
-   if ( node_vec_.empty() )
-     throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                            Name(), "model subdomain: node vector not initialised yet.");
-                            
-   if ( interior_nodes > node_vec_.size() ) {
-         cerr <<"\ninterior cells: "<< interior_nodes;
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                                Name(), "model subdomain: less nodes in node vector than interior nodes specified.");
-     }
-   
-   // sorting
-   sort( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_cells) );
-   sort( next(elmt_vec_.begin(),interior_cells), elmt_vec_.end() );
-
-   sort( node_vec_.begin(), next(node_vec_.begin(),interior_nodes) );
-   sort( next(node_vec_.begin(),interior_nodes), node_vec_.end() );
+      // verification of suitable model state
+      if ( elmt_vec_.empty() )
+        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                               Name(), "model subdomain: CELL vector not initialised yet.");
+                               
+      if ( interior_cells > elmt_vec_.size() ) {
+            cerr <<"\ninterior cells: "<< interior_cells;
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                   Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
+        }
+     if ( node_vec_.empty() )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                              Name(), "model subdomain: node vector not initialised yet.");
+                              
+     if ( interior_nodes > node_vec_.size() ) {
+           cerr <<"\ninterior cells: "<< interior_nodes;
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                  Name(), "model subdomain: less nodes in node vector than interior nodes specified.");
+       }
+       
+     // sorting
+     // -------
+     // dealing with the case where all elements and nodes are located on the regions perimeter,
+     // i.e. there are no interior nodes or elements so that there is only a single sorted range
+     if ( interior_nodes == 0 ) {
+          sort( node_vec_.begin(), node_vec_.end() );
+       }
+     else {
+         sort( node_vec_.begin(), next(node_vec_.begin(),interior_nodes) );
+         sort( next(node_vec_.begin(),interior_nodes), node_vec_.end() );
+       }
+     
+     if ( interior_cells == 0 ) {
+          sort( elmt_vec_.begin(), elmt_vec_.end() );
+       }
+     else {
+         sort( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_cells) );
+         sort( next(elmt_vec_.begin(),interior_cells), elmt_vec_.end() );
+       }
 
   } // end SortVectors
 
