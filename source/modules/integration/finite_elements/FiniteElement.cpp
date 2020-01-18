@@ -856,18 +856,20 @@ double64 FiniteElement::JacobianDeterminant()
 */
 double64  FiniteElement::JacobianInverse()
  {
-    if ( dim == 1U ) return JAC(0,0);
+    JINV.Resize(dim,dim);
+    if ( dim == 1U ) {
+         JINV(0,0) = JAC(0,0);
+         return JAC(0,0);
+      }
     
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    double64 detJ;
-    
     if ( dim == 2U ) {
          // compute determinant  
-         detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
+         double64 detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
     
          // inversion of J
-         double64 dum = JAC(0,0) / detJ;
+         const double64 dum = JAC(0,0) / detJ;
          JINV(0,0)  =  JAC(1,1) / detJ;
          JINV(0,1)  = -JAC(0,1) / detJ;
          JINV(1,0)  = -JAC(1,0) / detJ;
@@ -894,9 +896,9 @@ double64  FiniteElement::JacobianInverse()
       }
       
      // 3D case
-     detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
-            JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
-            JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
+     const double64 detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
+                           JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
+                           JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
 
      if ( detJ <= 0. ) {
           std::cerr <<"\n\nFiniteElement::JacobianInverse(3D): element "<< CurrentID() <<": erroneous determinant of 3D Jacobian matrix: ";
