@@ -167,6 +167,23 @@ inline double64 lambdaFrom_VG( double64 m ) {
      return 0.5e-1 * std::exp(5.8 * m) + 1.;
   }
 
+
+/// log10 slope for logarithmic extension of pc following Webb (2000), Pc0(sw=0)=PC_MAX, Pc_star is Pc(Sw_star) = tangent poin where extension meets standard pc curve
+inline double pc_Slope( double64 Pc0, double64 Pc_star, double64 Sw_star ) {
+     const double64 t1 = log10(Pc0);
+     const double64 t2 = std::log10(Pc_star);
+     return -0.1e1 / Sw_star * (t1 - t2);
+  }
+
+
+/// logarithmic extension of PC following Webb (2000); Sw=actual water saturation, Pc0(sw=0)=PC_MAX, Pc_star is Pc(Sw_star) = tangent poin where log extension starts
+inline double pc_LogExtension( double64 Sw, double64 Sw_star, double64 Pc_star ) {
+     const double64 MAX_CAPILLARY_PRESSURE(4e7),
+                    slope_pc(pc_Slope(MAX_CAPILLARY_PRESSURE,Pc_star,Sw_star)),
+                    t3 = std::log10(Pc_star);
+     return std::pow(0.10e2, slope_pc * (Sw - Sw_star) + t3);
+  }
+
 /**
     Brooks-Corey capillary pressure correlation for drainage of a water wet medium.
     
@@ -176,22 +193,24 @@ inline double64 lambdaFrom_VG( double64 m ) {
 inline double64 pc_BC( double64 Sw, double swr, double64 pd, double64 bcp ) {
      assert( bcp > 0. );
      assert( Sw >= 0. );
-     const double64 Seff = seff(Sw,swr), MAX_CAPILLARY_PRESSURE(4e7);
+     const double64 Seff = seff(Sw,swr);
      if ( Seff >= 0.01 )
        return pd * std::pow( Seff, -1. / bcp ); 
        
      // linear extension from Sw to Sw=0 at pc_max
-     const double64 pc01  = pd * std::pow( 0.01, -1. / bcp ),
-                    sw01  = (-0.01 * swr + 0.01 + swr),
-                    slope = (pc01 - MAX_CAPILLARY_PRESSURE) / sw01;
+     const double64 pc01     = pd * std::pow( 0.01, -1. / bcp ),
+                    sw_star  = -0.01 * swr + 0.01 + swr;
                     
-     return (Sw - sw01) * slope + pc01;
+     return pc_LogExtension( Sw, sw_star, pc01 );
   }
 
+
+/// curve fitting polynomial with 2 coefficients used by Maartje for water relperms
 inline double64 polyC2( double64 Sw, double64 C1, double64 C2 ) {
-     return std::sqrt(Sw) * (1. - std::pow(1. - std::pow(Sw,C1), C2));
+     return std::sqrt(Sw) * (1. - std::pow( 1. - std::pow(Sw,C1), C2));
   }
 
+/// curve fitting polynomial with 3 coefficients used by Maartje for CO2 relperms
 inline double64 polyC3( double64 Sw, double64 C1, double64 C2, double64 C3 ) {
 
      return C1 * std::pow(1. - Sw, C2) * std::pow(1. - Sw, C3);
@@ -249,12 +268,12 @@ struct CRC3_RockType1 {
   /// Water relative permeability
   double64 Krw( double64 Sw ) const {
       const double64 C1(11.73), C2(0.3316);
-      return polyC2( Sw, C1, C2 );
+      return polyC2( seffL(Sw,Swi_), C1, C2 );
    }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
        const double64 C1(2.848), C2(2.042), C3(3.892);
-       return polyC3( Sw, C1, C2, C3 );
+       return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
     }
     
   const std::string name = "H-Mst";        
@@ -314,12 +333,12 @@ struct CRC3_RockType3 {
   /// Water relative permeability
   double64 Krw( double64 Sw ) const {
       const double64 C1(16.6), C2(0.3374);
-      return polyC2( Sw, C1, C2 );
+      return polyC2( seffL(Sw,Swi_), C1, C2 );
    }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
        const double64 C1(5.458), C2(2.051), C3(5.558);
-       return polyC3( Sw, C1, C2, C3 );
+       return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
     }
   const std::string name = "H-CbSst";  
   const int      rocktype_ = 3;
@@ -344,12 +363,12 @@ struct CRC3_RockType10 {
   /// Water relative permeability
   double64 Krw( double64 Sw ) const {
      const double64 C1(6.337), C2(0.4387);
-     return polyC2( Sw, C1, C2 );
+     return polyC2( seffL(Sw,Swi_), C1, C2 );
   }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
       const double64 C1(1.522), C2(2.027), C3(2.695);
-      return polyC3( Sw, C1, C2, C3 );
+      return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
    }
   const std::string name = "H-Slt";  
   const int      rocktype_ = 10;
@@ -371,12 +390,12 @@ struct CRC3_RockType13 {
    /// Water relative permeability
    double64 Krw( double64 Sw ) const {
        const double64 C1(4.936), C2(0.5563);
-       return polyC2( Sw, C1, C2 );
+       return polyC2( seffL(Sw,Swi_), C1, C2 );
     }
    /// CO2 relative permeability:
    double64 Krn( double64 Sw ) const {
         const double64 C1(1.442), C2(2.022), C3(2.594);
-        return polyC3( Sw, C1, C2, C3 );
+        return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
      }
   const std::string name = "H-FSlt";
   const int      rocktype_ = 13;
@@ -399,12 +418,12 @@ struct CRC3_RockType15 {
   /// Water relative permeability
   double64 Krw( double64 Sw ) const {
      const double64 C1(3.755), C2(0.6705);
-     return polyC2( Sw, C1, C2 );
+     return polyC2( seffL(Sw,Swi_), C1, C2 );
   }
   /// CO2 relative permeability
   double64 Krn( double64 Sw ) const {
       const double64 C1(1.26), C2(2.012), C3(2.362);
-      return polyC3( Sw, C1, C2, C3 );
+      return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
    }
   const std::string name = "H-CSst"; ///< carbonate-cemented sandstones
   const int      rocktype_ = 15;

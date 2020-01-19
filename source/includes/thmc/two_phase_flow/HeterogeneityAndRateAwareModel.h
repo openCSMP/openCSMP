@@ -128,9 +128,10 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     long     rocktype_;
     bool     is_composite_;
     double64 K_flow_direction_, k_low_, k_high_, K_reduction_in_flow_direction_,
-             L_low_, L_high_,       ///< permeability in flow direction; smallest over highest permeability
+             L_low_, L_high_,                ///< permeability in flow direction; smallest over highest permeability
              vt_magnitude_,
-             krw_parallel_, krw_crossflow_,
+             krw_, krn_,                     ///< for standard rocktypes 
+             krw_parallel_, krw_crossflow_,  ///< for composites 
              krn_parallel_, krn_crossflow_,
              phi_, pd_, pd_high_, pd_low_,
              m_VG_, bcp_, bcp_high_, bcp_low_, Swi_pc_, dPc_,

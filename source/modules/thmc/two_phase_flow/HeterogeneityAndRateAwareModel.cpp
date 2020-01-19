@@ -34,6 +34,8 @@ HeterogeneityAndRateAwareModel<dim>::HeterogeneityAndRateAwareModel( const Prope
    L_low_(numeric_limits<double64>::quiet_NaN()), 
    L_high_(numeric_limits<double64>::quiet_NaN()),       ///< permeability in flow direction; smallest over highest permeability
    vt_magnitude_(numeric_limits<double64>::quiet_NaN()),
+   krw_(numeric_limits<double64>::quiet_NaN()), 
+   krn_(numeric_limits<double64>::quiet_NaN()),
    krw_parallel_(numeric_limits<double64>::quiet_NaN()), 
    krw_crossflow_(numeric_limits<double64>::quiet_NaN()),
    krn_parallel_(numeric_limits<double64>::quiet_NaN()), 
@@ -145,6 +147,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              // these are not used in any of the underlying functions of the 2-phase model
              TwoPhaseModel<dim>::swr_ = get<0>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<0>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<0>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<0>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 1: // H_Mst
              phi_                     = get<1>(Otway_.rocktype_).phi_;
@@ -154,6 +158,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<1>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<1>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<1>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<1>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 2: // M_CbSst_Mst
              phi_                     = get<2>(Otway_.rocktype_).phi_;
@@ -163,6 +169,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<2>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<2>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<2>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<2>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 3: // H_CbSst
              phi_                     = get<3>(Otway_.rocktype_).phi_;
@@ -172,6 +180,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<3>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<3>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<3>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<3>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 4: // P_Mst_Slt: COMPOSITE
              is_composite_ = true;
@@ -306,6 +316,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<10>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<10>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<10>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<10>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 11: // P_Slt_FSst: COMPOSITE 
              is_composite_ = true;
@@ -355,6 +367,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<13>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<13>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<13>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<13>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 14: // X_CSst_FSst: COMPOSITE
              is_composite_ = true;
@@ -384,6 +398,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<15>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<15>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<15>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<15>(Otway_.rocktype_).Krn(Sw_);
            break;
          default:
            cerr <<"\n\t rocktype: "<< rocktype_;
@@ -500,6 +516,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              // these are not used in any of the underlying functions of the 2-phase model
              TwoPhaseModel<dim>::swr_ = get<0>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<0>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<0>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<0>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 1: // H_Mst
              TwoPhaseModel<dim>::k_   = get<1>(Otway_.rocktype_).k_;
@@ -510,6 +528,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<1>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<1>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<1>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<1>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 2: // M_CbSst_Mst
              TwoPhaseModel<dim>::k_   = get<2>(Otway_.rocktype_).k_;
@@ -520,6 +540,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<2>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<2>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<2>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<2>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 3: // H_CbSst
              TwoPhaseModel<dim>::k_   = get<3>(Otway_.rocktype_).k_;
@@ -530,6 +552,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<3>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<3>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<3>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<3>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 4: // P_Mst_Slt: COMPOSITE
              is_composite_ = true;
@@ -665,6 +689,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<10>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<10>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<10>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<10>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 11: // P_Slt_FSst: COMPOSITE 
              is_composite_ = true;
@@ -715,6 +741,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<13>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<13>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<13>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<13>(Otway_.rocktype_).Krn(Sw_);
            break;
          case 14: // X_CSst_FSst: COMPOSITE
              is_composite_ = true;
@@ -745,6 +773,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              bcp_                     = lambdaFrom_VG( m_VG_);
              TwoPhaseModel<dim>::swr_ = get<15>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<15>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<15>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<15>(Otway_.rocktype_).Krn(Sw_);
            break;
          default:
            cerr <<"\n\t rocktype: "<< rocktype_;
@@ -902,7 +932,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::EffectiveSaturation() const
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
  {
-    if ( !is_composite_ ) return krw_VG( Sw_, m_VG_ );
+    if ( !is_composite_ ) return krw_; // krw_VG( Sw_, m_VG_ );
    
     // to get the ensemble krw for the composite, the parallel and perpendicular values are blended
     // taking into account the flow direction 
@@ -923,7 +953,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
  {
-     if ( !is_composite_ ) return krn_BC( Sw_ );
+     if ( !is_composite_ ) return krn_; // krn_BC( Sw_ );
 
      const double64 krn = krn_parallel_ * vt_normalised_[0] + krn_crossflow_ * vt_normalised_[1];
 
@@ -966,6 +996,7 @@ TODO: extend capillary pressure curve beyond saturation endpoints.
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
  {
+    // Maartje's continous not directionally dependent function (NAN at high CO2 saturations)
     // return pc_VG( Sw_, pd_, m_VG_, Swi_pc_ );
 
     if ( !is_composite_ ) {
@@ -973,6 +1004,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
          if ( bcp_ <= numeric_limits<double64>::epsilon() ) return pd_; 
          return min( pc_BC( Sw_, Swi_pc_, pd_, bcp_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
       }
+
     
     // if any BC-lambda = 0, pc is assumed to be pd, ie. constant
     const double64 pc_low  = (bcp_low_  == 0.) ? pd_low_  : pc_BC( Sw_, Swi_pc_, pd_low_, bcp_low_ );
