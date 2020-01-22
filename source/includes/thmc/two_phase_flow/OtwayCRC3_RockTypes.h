@@ -273,7 +273,7 @@ struct CRC3_RockType1 {
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
        const double64 C1(2.848), C2(2.042), C3(3.892);
-       return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
+       return std::min( polyC3( seffL(Sw,Swi_), C1, C2, C3 ), 1. );
     }
     
   const std::string name = "H-Mst";        
@@ -303,7 +303,7 @@ struct CRC3_RockType2 {
     }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
-       return krn_BC( seffL(Sw,Swi_) );
+       return std::min( krn_BC( seffL(Sw,Swi_) ), 1. );
     }
   const std::string name = "M-CbSst-Mst";        
   const int      rocktype_ = 2;
@@ -338,7 +338,7 @@ struct CRC3_RockType3 {
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
        const double64 C1(5.458), C2(2.051), C3(5.558);
-       return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
+       return std::min( polyC3( seffL(Sw,Swi_), C1, C2, C3 ), 1. );
     }
   const std::string name = "H-CbSst";  
   const int      rocktype_ = 3;
@@ -368,7 +368,7 @@ struct CRC3_RockType10 {
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
       const double64 C1(1.522), C2(2.027), C3(2.695);
-      return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
+      return std::min( polyC3( seffL(Sw,Swi_), C1, C2, C3 ), 1. );
    }
   const std::string name = "H-Slt";  
   const int      rocktype_ = 10;
@@ -395,7 +395,7 @@ struct CRC3_RockType13 {
    /// CO2 relative permeability:
    double64 Krn( double64 Sw ) const {
         const double64 C1(1.442), C2(2.022), C3(2.594);
-        return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
+        return std::min( polyC3( seffL(Sw,Swi_), C1, C2, C3 ), 1. );
      }
   const std::string name = "H-FSlt";
   const int      rocktype_ = 13;
@@ -423,7 +423,7 @@ struct CRC3_RockType15 {
   /// CO2 relative permeability
   double64 Krn( double64 Sw ) const {
       const double64 C1(1.26), C2(2.012), C3(2.362);
-      return polyC3( seffL(Sw,Swi_), C1, C2, C3 );
+      return std::min( polyC3( seffL(Sw,Swi_), C1, C2, C3 ), 1. );
    }
   const std::string name = "H-CSst"; ///< carbonate-cemented sandstones
   const int      rocktype_ = 15;
@@ -637,7 +637,9 @@ struct CRC3_RockType6 {
    double64 Krn_ParallelDrainage( double64 Sw, double64 ux ) const {
         if ( ux >= 1.0e-2 ) return 0.4 * krn_BC( seffL(Sw,Swi_));
         if ( ux <= 1.0e-5 ) return 0.87 * krn_BC( seffL(Sw,Swi_));
-        const double64 Krnw_ave = 3.904 * pow( ux, -0.01475 ) - 3.756;
+        const double64 C1_krn   = poly_abc( 3.904, -0.01475, -3.756 ),
+                       temp     = 1. - seffL(Sw,0.496),
+                       Krnw_ave = C1_krn * temp * temp;
         // limiting value to >=0
         return std::max( Krnw_ave, 0. );
      }
@@ -748,8 +750,8 @@ struct CRC3_RockType8 {
   bool IsComposite() const { return true; }
   
   double64 Krw_ParallelDrainage( double64 Sw, double64 ux ) const {
-       if ( ux <= 5.0e-5 ) return 0.75 * std::pow( seffL(Sw,Swi_), 5.08 );
-       if ( ux >= 4.0e-2 ) return 0.728 * std::pow( seffL(Sw,Swi_), 3.47 );
+       if ( ux <= 5.0e-5 ) return 0.848 * std::pow( seffL(Sw,Swi_), 4.475 );
+       if ( ux >= 4.0e-2 ) return 0.824 * std::pow( seffL(Sw,Swi_), 3.176 );
        // between CL and VL
        const double64 C1_krw = poly_abc( 0.0001377, -0.5243, 0.8232 );
        const double64 C2_krw = poly_abc( 0.775, -0.114, 2.078 );
@@ -757,8 +759,8 @@ struct CRC3_RockType8 {
     }
 
   double64 Krn_ParallelDrainage( double64 Sw, double64 ux ) const {
-       if ( ux <= 5.0e-5 ) return 0.87 * krn_BC( seffL(Sw, Swi_) );
-       if ( ux >= 4.0e-2 ) return 0.4 * krn_BC( seffL(Sw, Swi_) );
+       if ( ux <= 5.0e-5 ) return std::min( 1.07 * krn_BC( seffL(Sw, Swi_) ), 0.43 );
+       if ( ux >= 4.0e-2 ) return std::min( 0.53 * krn_BC( seffL(Sw, Swi_) ), 0.43 );
        // between CL and VL
        const double64 C1_krn = poly_abc( 0.755, -0.06682, -0.3927 );
        // limiting range between 0. and 0.43
@@ -881,12 +883,12 @@ struct CRC3_RockType11 {
  
  /// CO2 relative permeability:
  double64 Krn_ParallelDrainage( double64 Sw, double64 ux  ) const {
-     if ( ux >= 3.0e-2 ) return 0.545 * krn_BC( seffL(Sw,Swi_) );
+     if ( ux >= 3.0e-2 ) return std::min( 0.545 * krn_BC( seffL(Sw,Swi_) ), 0.49 );
      if ( ux <= 1.0e-5 ) return std::min( 1.33 * krn_BC( seffL(Sw,Swi_) ), 0.49 );    
      const double64 C1_krn = poly_abc( -30.39, 0.003259, 30.6 );
      // Krnw_ave=
      const double64 Krnw_ave = C1_krn * krn_BC( seffL(Sw,Swi_) );
-     return std::min( std::max( Krnw_ave, 0. ), 0.43 );
+     return std::min( std::max( Krnw_ave, 0. ), 0.49 );
   }
 
   /// Water relative permeability
@@ -952,7 +954,7 @@ struct CRC3_RockType12 {
        if ( ux >= ux_VL_ ) return std::min( 0.637 * krn_BC( seffL(Sw,Swi_) ), 0.43 );
        if ( ux <= ux_CL_ ) return std::min( 2.094 * krn_BC( seffL(Sw,Swi_) ), 0.43 );
        const double64 C1_krn = poly_abc( -6.277, 0.03536, 6.239 );
-       const double64 Krn_ave = C1_krn * krn_BC( seffL(Sw,Swi_) );
+       const double64 Krn_ave = C1_krn * krn_BC( seffL(Sw,Swi_,Sgr_) );
        return std::min( Krn_ave, 0.43 );
     }
 

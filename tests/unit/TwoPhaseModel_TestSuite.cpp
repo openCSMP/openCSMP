@@ -314,8 +314,7 @@ void TwoPhaseModel_TestSuite::run()
 
   const bool transport_variables_on_nodes(true);
   suite_.addTest( new TwoPhaseModel_Test( rock_model_,
-                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(),
-                                                                                 "rocktype", "total velocity", "entry pressure", transport_variables_on_nodes ),
+                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(), transport_variables_on_nodes ),
                                           "csmp::TwoPhaseModel_HeterogeneityAndRateAwareModel_Test",
                                           "nodal relative permeability oil",
                                           "nodal relative permeability water",

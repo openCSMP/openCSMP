@@ -1098,7 +1098,7 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
     const double64 original_sw(Sw_);
     
     ofs <<"rocktype="<< rocktype <<"="<< RT <<"\n";
-    ofs <<"sw\t krw(sw,Nc="<< Nc_ <<"),\t krnw(sw,Nc) \t pc(sw,Nc)\n";
+    ofs <<"sw\t krw(sw,Nc="<< Nc <<"),\t krnw(sw,Nc) \t pc(sw,Nc)\n";
     for ( double64 sw(0.); sw<1.05; sw+=0.05 )
       {
          // dynamic parameters
