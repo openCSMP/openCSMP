@@ -219,13 +219,14 @@ inline double64 pc_BC( double64 Sw, double swr, double64 pd, double64 bcp ) {
 
 /// curve fitting polynomial with 2 coefficients used by Maartje for water relperms
 inline double64 polyC2( double64 Sw, double64 C1, double64 C2 ) {
+     if ( Sw > 1. ) return 1.;
      return std::sqrt(Sw) * (1. - std::pow( 1. - std::pow(Sw,C1), C2));
   }
 
 /// curve fitting polynomial with 3 coefficients used by Maartje for CO2 relperms
 inline double64 polyC3( double64 Sw, double64 C1, double64 C2, double64 C3 ) {
-
-     return C1 * std::pow(1. - Sw, C2) * std::pow(1. - Sw, C3);
+     if ( Sw > 1. ) return 0.;
+     return C1 * std::pow(1. - Sw, C2) * (1. - std::pow(Sw, C3));
   }
 
 inline double64 poly_abc( double64 ux, double64 a, double64 b, double64 c ) {
@@ -279,15 +280,14 @@ struct CRC3_RockType1 {
   bool IsComposite() const { return false; }
   /// Water relative permeability
   double64 Krw( double64 Sw ) const {
+      if ( Sw < Swi_ ) return 0.;
       const double64 C1(11.73), C2(0.3316);
-      // return polyC2( seffL(Sw,Swi_), C1, C2 );
       return polyC2( Sw, C1, C2 );
    }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
-       if ( Sw <= Swi_ ) return 0.; // otherwise Krn will have a value sighltly above zero 
+       if ( Sw < Swi_ ) return 1.; // otherwise Krn will have a value sighltly above zero 
        const double64 C1(2.848), C2(2.042), C3(3.892);
-       // return std::min( polyC3( seffL(Sw,Swi_), C1, C2, C3 ), 1. );
        return std::min( polyC3( Sw, C1, C2, C3 ), 1. );
     }
     
@@ -316,10 +316,12 @@ struct CRC3_RockType2 {
   
   /// Water relative permeability (CL)
   double64 Krw( double64 Sw ) const {
+       if ( Sw < Swi_ ) return 0.;
        return krw_VG( seffL(Sw,Swi_), m_ave_ );
     }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
+       if ( Sw < Swi_ ) return 1.;  
        return seffL_Product(Sw,Swi_);
     }
   const std::string name = "M-CbSst-Mst";        
@@ -349,12 +351,13 @@ struct CRC3_RockType3 {
   bool IsComposite() const { return false; }
   /// Water relative permeability
   double64 Krw( double64 Sw ) const {
+      if ( Sw < Swi_ ) return 0.;
       const double64 C1(16.6), C2(0.3374);
       return polyC2( Sw, C1, C2 );
    }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
-       if ( Sw <= Swi_ ) return 0.;
+       if ( Sw < Swi_ ) return 0.;
        const double64 C1(5.458), C2(2.051), C3(5.558);
        return std::min( polyC3( Sw, C1, C2, C3 ), 1. );
     }
@@ -379,13 +382,14 @@ struct CRC3_RockType3 {
 struct CRC3_RockType10 {
   bool IsComposite() const { return false; }
   /// Water relative permeability
-  double64 Krw( double64 Sw ) const {
+     double64 Krw( double64 Sw ) const {
+     if ( Sw < Swi_ ) return 0.;
      const double64 C1(6.337), C2(0.4387);
      return polyC2( Sw, C1, C2 );
   }
   /// CO2 relative permeability:
   double64 Krn( double64 Sw ) const {
-      if ( Sw <= Swi_ ) return 0.;
+      if ( Sw < Swi_ ) return 0.;
       const double64 C1(1.522), C2(2.027), C3(2.695);
       return std::min( polyC3( Sw, C1, C2, C3 ), 1. );
    }
@@ -408,12 +412,13 @@ struct CRC3_RockType13 {
    bool IsComposite() const { return false; }
    /// Water relative permeability
    double64 Krw( double64 Sw ) const {
+       if ( Sw < Swi_ ) return 0.;
        const double64 C1(4.936), C2(0.5563);
        return polyC2( Sw, C1, C2 );
     }
    /// CO2 relative permeability:
    double64 Krn( double64 Sw ) const {
-        if ( Sw <= Swi_ ) return 0.;
+        if ( Sw < Swi_ ) return 0.;
         const double64 C1(1.442), C2(2.022), C3(2.594);
         return std::min( polyC3( Sw, C1, C2, C3 ), 1. );
      }
@@ -437,12 +442,13 @@ struct CRC3_RockType15 {
   bool IsComposite() const { return false; }
   /// Water relative permeability
   double64 Krw( double64 Sw ) const {
+     if ( Sw < Swi_ ) return 0.;
      const double64 C1(3.755), C2(0.6705);
      return polyC2( Sw, C1, C2 );
   }
   /// CO2 relative permeability
   double64 Krn( double64 Sw ) const {
-      if ( Sw <= Swi_ ) return 0.;
+      if ( Sw < Swi_ ) return 0.;
       const double64 C1(1.26), C2(2.012), C3(2.362);
       return std::min( polyC3( Sw, C1, C2, C3 ), 1. );
    }

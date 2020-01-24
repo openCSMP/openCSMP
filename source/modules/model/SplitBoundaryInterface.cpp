@@ -271,7 +271,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
   fp.read( (char*)&records, sizeof( size_t ) );
 
   std::cout << "\nSplitBoundaryInterface<dim>::InputSplitBoundariesFromBinary: reading " << csCache << " containing "
-    << records << " splitboundaries\n" << std::endl;
+    << records << " split boundaries.\n" << std::endl;
 
   for ( size_t i( 0 ); i < records; ++i )
   {

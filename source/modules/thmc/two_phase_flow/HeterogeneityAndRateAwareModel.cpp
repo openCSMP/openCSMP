@@ -4,7 +4,7 @@
 #include "OtwayCRC3_RockTypes.h"
 
 
-//#define DEBUG_HETEROGENEITY_AWARE_MODEL
+#define DEBUG_HETEROGENEITY_AWARE_MODEL
 
 
 using namespace std;
@@ -457,10 +457,14 @@ for ( long i=0; i<=15; i++ )
   WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc6", i, vt  );
 
 // vertical flow, Ncap=1.0e-6
-vt_(0) = 0.;
-vt_(1) = 1.0e-4;
+vt(0) = 0.;
+vt(1) = 1.0e-4;
 for ( long i=0; i<=15; i++ )
   WriteRelativePermeabilityTable( "Maartje2_layer_perpendicular_Nc6", i, vt );
+  
+// MISC tests
+cerr <<"\npoly2C: "<< polyC2( 1.05, 11.73, 0.3316 );
+cerr <<"\npow() with negative value: "<< pow( -0.05, 2 );    
   
 throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
                        "written relative permeability curves to file for testing.");
@@ -796,9 +800,6 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
          K_reduction_in_flow_direction_ = K_flow_direction_ / k_parallel_; 
       }
 
-    // communicating assigned values to base class to get information for testing
-    TwoPhaseModel<dim>::seff_ = EffectiveSaturation(); // NOT USED
-
 } // end Initialise (testing & plotting)
 
 
@@ -1103,6 +1104,7 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
       {
          // dynamic parameters
          Initialize(RT,sw,vt);
+         assert( !isnan(Sw_) );
          ofs << sw << "\t"<< krw_Phase();
          ofs <<"\t"<< krn_Phase();
          ofs <<"\t"<< pc_Phase();
@@ -1110,7 +1112,7 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
       }
    
     // restoring current saturation
-    Sw_    = original_sw;
+    Sw_ = original_sw;
 
  } // end WriteRelativePermeabilityTable
   
