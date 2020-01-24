@@ -4,7 +4,7 @@
 #include "OtwayCRC3_RockTypes.h"
 
 
-#define DEBUG_HETEROGENEITY_AWARE_MODEL
+//#define DEBUG_HETEROGENEITY_AWARE_MODEL
 
 
 using namespace std;

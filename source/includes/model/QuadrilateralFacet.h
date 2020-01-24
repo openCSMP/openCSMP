@@ -44,15 +44,12 @@ double64 facetArea1( const Point<3U>&,
                      const Point<3U>&, 
                      const Point<3U>& );
 
+/// analytical calculation of the area of a quadrilateral
 double64 facetArea1( const Point<2U>&,
                      const Point<2U>&,
                      const Point<2U>&,
                      const Point<2U>& );
 
-double64 facetArea1( const Point<1U>&,
-                     const Point<1U>&,
-                     const Point<1U>&,
-                     const Point<1U>& );
 
 /**
 

@@ -863,6 +863,10 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::SegmentMidPoint( size_t segm ) con
 
 // FACES
 
+// STUB FOR 1D normalOfTriangle
+inline double64 triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
+     return 1.;
+  }
 
 /**
 

@@ -2628,6 +2628,12 @@ double64  Region<dim>::Volume( bool multiply_with_porosity ) const
 } // end Volume
 
 
+
+// STUB FOR 1D CALCULATION
+inline double64 triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
+     return 1.;
+  }
+
 /**
 Computes the perimeter (2D) or the surface area (3D) of a model subdomain object.
 To compute the surface area, only elements of dim-1 are considered.
