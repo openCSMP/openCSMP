@@ -805,6 +805,16 @@ size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 
 // GEOMETRY
 
+// STUB FOR 1D CALCULATION
+inline double64 triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
+     return 1.;
+  }
+
+// STUB FOR 1D normalOfTriangle
+inline Point<1U> normalOfTriangle( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
+     return Point<1U>();
+  }
+
 
 /**
     Computes the interface area from scratch and not using the CoordinateMatrix / InterFace FEM machinery.
@@ -883,6 +893,8 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc ) const
 {
   UnitNormal( vc, current_side_ );
 }
+
+
 
 
 /**

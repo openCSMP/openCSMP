@@ -120,21 +120,24 @@ double64  facetArea1( const Point<3U>& pt0,
   
 } // end facetArea1
 
+
+
+// area of the 2D quadrilateral
 double64  facetArea1( const Point<2U>& pt0,
                       const Point<2U>& pt1,
                       const Point<2U>& pt2,
                       const Point<2U>& pt3 )
 {
-    return 1.;
+   const double64 a(pt0.DistanceTo(pt3)), b(pt0.DistanceTo(pt1)), // left triangle
+                  c(pt2.DistanceTo(pt3)), d(pt2.DistanceTo(pt1)), // righ triangle
+                  ab(pt3.DistanceTo(pt1)); // shared edge
+   const double64 theta_ab = 2*atan( sqrt( (ab*ab - (a - b)*(a - b) )/( (b+a)*(b+a) - ab*ab) ) );
+   const double64 theta_bc = 2*atan( sqrt( (ab*ab - (c - d)*(c - d) )/( (c+d)*(c+d) - ab*ab) ) );
+
+   return /* Area */ 0.5*a*b*sin(theta_ab) + 0.5*b*c*sin(theta_bc);
 }
 
-double64  facetArea1( const Point<1U>& pt0,
-                      const Point<1U>& pt1,
-                      const Point<1U>& pt2,
-                      const Point<1U>& pt3 )
-{
-    return 1.;
-}
+
 
 /**
 

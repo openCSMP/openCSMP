@@ -2,9 +2,6 @@
 #define AVERAGING_EXAMPLE_H
 
 #include "Example.h"
-#include "Model.h"
-#include "PropertyHandle.h"
-
 
 namespace csmp {
 

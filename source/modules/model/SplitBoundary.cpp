@@ -322,6 +322,8 @@ We use the following order her:
 template<size_t dim>
 bool SplitBoundary<dim>::Out( std::fstream& fp ) const
 {
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
   // split-boundary variables
   domainVariablesOut( fp, *this, this->pref_ ); /// @todo (3-D) Use FEM_Data instead?
 
@@ -330,18 +332,21 @@ bool SplitBoundary<dim>::Out( std::fstream& fp ) const
   const size_t interfaceCount( this->Elements() );
   fp.write( (char*)&interfaceCount, bytes );
 
-  // fem type of interfaces
+  // fem types of interfaces
   CSMP_FEM_TYPE interfaceType;
   bytes = sizeof( int32 ); //CSMP_FEM_TYPE
-  InterFace<dim>* interface(NULL);
+  InterFace<dim>* interface(nullptr);
   for ( size_t f( 0 ); f < interfaceCount; ++f )
-  {
-    interface = this->elmt_vec_[f];
-    if ( !interface ) // we check in this loop only for nullptrs
-      return false;
-    interfaceType = interface->FE()->ElementType();
-    fp.write( (char*)&interfaceType, bytes );
-  }
+    {
+      interface = this->elmt_vec_[f];
+      if ( interface == nullptr ) {// we check in this loop only for nullptrs
+           cerr <<"\n\tinterface: "<< f;
+           csmp_error.notice( ERROR, "SplitBoundary<dim>::Out:", "InterFace object invalid (nullptr)." );
+           return false;
+        }
+      interfaceType = interface->FE()->ElementType();
+      fp.write( (char*)&interfaceType, bytes );
+    }
 
   // interface parents
   size_t idx( NULL_IDX );
@@ -350,43 +355,44 @@ bool SplitBoundary<dim>::Out( std::fstream& fp ) const
   // higher-dimensional elements will be present on the inside and the outside of the interface
   // because interfaces can only be created from internal model boundaries
   for ( size_t f( 0 ); f < interfaceCount; ++f )
-  {
-    interface = this->elmt_vec_[f];
-
-    assert( interface->Parent( INSIDE ) != nullptr );
-    assert( interface->Parent( OUTSIDE ) != nullptr );
-
-    idx = interface->Parent( INSIDE )->Idx();
-    fp.write( (char*)&idx, bytes );
-    const size_t innerParentFaceId( interface->ParentFaceID( INSIDE ) );
-    fp.write( (char*)&innerParentFaceId, bytes );
-
-    idx = interface->Parent( OUTSIDE )->Idx();
-    fp.write( (char*)&idx, bytes );
-    const size_t outerParentFaceId( interface->ParentFaceID( OUTSIDE ) );
-    fp.write( (char*)&outerParentFaceId, bytes );
-
-    if ( interface->BaseElement() )
     {
-      idx = interface->BaseElement()->Idx();
-      fp.write( (char*)&idx, bytes );
-    }
-    else
-    {
-      idx = NULL_IDX;
-      fp.write( (char*)&idx, bytes );
-    }
-    //const size_t nodesCount( interface->Nodes() );
-    //fp.write( (char*)&nodesCount, bytes );
-    //for ( size_t fn( 0 ); fn < nodesCount; ++fn )
-    //{
-    //  const size_t localInnerNodeIdx( interface->ParentNodeNumber( fn, INSIDE ) );
-    //  fp.write( (char*)&localInnerNodeIdx, bytes );
+      interface = this->elmt_vec_[f];
 
-    //  const size_t localOuterNodeIdx( interface->ParentNodeNumber( fn, OUTSIDE ) );
-    //  fp.write( (char*)&localOuterNodeIdx, bytes );
-    //}
-  }
+      assert( interface->Parent( INSIDE ) != nullptr );
+      assert( interface->Parent( OUTSIDE ) != nullptr );
+      
+      // writing higher-dim parent IDs and face numbers for inside and outside
+      idx = interface->Parent( INSIDE )->Idx();
+      fp.write( (char*)&idx, bytes );
+      const size_t innerParentFaceId( interface->ParentFaceID( INSIDE ) );
+      fp.write( (char*)&innerParentFaceId, bytes );
+
+      idx = interface->Parent( OUTSIDE )->Idx();
+      fp.write( (char*)&idx, bytes );
+      const size_t outerParentFaceId( interface->ParentFaceID( OUTSIDE ) );
+      fp.write( (char*)&outerParentFaceId, bytes );
+
+      // writing IDs of intervening lower-dimensional elements if any
+      if ( interface->BaseElement() != nullptr ) {
+          idx = interface->BaseElement()->Idx();
+          fp.write( (char*)&idx, bytes );
+        }
+      else {
+          idx = NULL_IDX;
+          fp.write( (char*)&idx, bytes );
+        }
+      // TODO: store node connectivity rather than recreating it from scratch  
+      //const size_t nodesCount( interface->Nodes() );
+      //fp.write( (char*)&nodesCount, bytes );
+      //for ( size_t fn( 0 ); fn < nodesCount; ++fn )
+      //{
+      //  const size_t localInnerNodeIdx( interface->ParentNodeNumber( fn, INSIDE ) );
+      //  fp.write( (char*)&localInnerNodeIdx, bytes );
+
+      //  const size_t localOuterNodeIdx( interface->ParentNodeNumber( fn, OUTSIDE ) );
+      //  fp.write( (char*)&localOuterNodeIdx, bytes );
+      //}
+    }
 
   // interface variable count: scalar, vector, tensor, array, flagged array
   this->RenumberElements();
@@ -431,23 +437,23 @@ bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
     fp.read( (char*)&interfaceTypes[f], bytes );
 
   // interface parents
-  bytes = sizeof( size_t );
-  std::vector<std::vector<size_t> >                     interfaceParents( interfaceCount );
-  std::vector<std::vector<std::pair<size_t, size_t> > > interfaceParentNodes( interfaceCount );
+  std::vector<std::vector<size_t> >                    interfaceParents( interfaceCount );
+  std::vector<std::vector<std::pair<size_t,size_t> > > interfaceParentNodes( interfaceCount );
 
   for ( size_t f( 0 ); f < interfaceCount; ++f )
   {
-    interfaceParents[f].resize( 5, NULL_IDX );
-
+    interfaceParents[f].resize( 5 );
+    
+    // reading higher-dim parent element IDs and face numbers on inside and outside
     fp.read( (char*)&interfaceParents[f][0], bytes );
     fp.read( (char*)&interfaceParents[f][1], bytes );
-
     fp.read( (char*)&interfaceParents[f][2], bytes );
     fp.read( (char*)&interfaceParents[f][3], bytes );
-
+    // reading ID of intervening element if any
     fp.read( (char*)&interfaceParents[f][4], bytes );
   }
 
+  // TODO: store this information in file and re-read it rather than creating it from scratch
   std::map<size_t, Element<dim>*> elementIdPtr;
   deque<const csmp::Node<dim>*>	nodes;
   deque<csmp::Element<dim>*>		elmts;
@@ -457,7 +463,7 @@ bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
     elementIdPtr[e->Idx()] = e;
   }
 
-  // creating splitboundary
+  // creating splitboundary: TODO: write re-constructor rather than using this method
   CreateFrom( meshManager, femManager, elementIdPtr, interfaceTypes, interfaceParents, interfaceParentNodes );
 
   return true;
@@ -619,7 +625,7 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
 template<size_t dim>
 bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                                  meshManager,
                                      const FiniteElementManager&                        femManager,
-                                     const std::map<size_t, csmp::Element<dim>*>&        elementIdPtr,
+                                     const std::map<size_t, csmp::Element<dim>*>&       elementIdPtr,
                                      const std::vector<CSMP_FEM_TYPE>&                  interfaceTypes,
                                      const std::vector<std::vector<size_t> >&           interfaceParents,
                                      const std::vector<std::vector<std::pair<size_t, size_t> > >&  interfaceParentNodes )

@@ -311,11 +311,11 @@ void TwoPhaseModel_TestSuite::run()
   rock_model_->InputPropertyValue( "viscosity oil",    makeScalar(PLAIN,0.000022959) );
   rock_model_->InputPropertyValue( "density water",    makeScalar(PLAIN,991.86) );
   rock_model_->InputPropertyValue( "density oil",      makeScalar(PLAIN,282.5 ) );
+  rock_model_->InputPropertyValue( "rock type",        makeScalar(PLAIN,2 ) ); // not a rate dependent rock
 
   const bool transport_variables_on_nodes(true);
   suite_.addTest( new TwoPhaseModel_Test( rock_model_,
-                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(),
-                                                                                 "rocktype", "total velocity", "entry pressure", transport_variables_on_nodes ),
+                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(), transport_variables_on_nodes ),
                                           "csmp::TwoPhaseModel_HeterogeneityAndRateAwareModel_Test",
                                           "nodal relative permeability oil",
                                           "nodal relative permeability water",

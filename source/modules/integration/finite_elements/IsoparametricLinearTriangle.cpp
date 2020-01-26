@@ -1186,34 +1186,30 @@ IsoparametricLinearTriangle::dN_AtNode(
 }
 
 
-double64 IsoparametricLinearTriangle::dN_AtBarycenter(
-                                                        DenseMatrix<
-                                                        DM_MIN>& B
-                                                      )
+double64 IsoparametricLinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 {
-  double64   det;
   const double64 OneThird=1./3.0;
 
-  if ( use2Dto3Djacobi ){
-   vector<double64> EFG(dim);
-   RS[0] = OneThird;
-   RS[1] = OneThird;
+  if ( use2Dto3Djacobi ) {
+     vector<double64> EFG(dim);
+     RS[0] = OneThird;
+     RS[1] = OneThird;
 
-   det = Jacobi( RS, EFG, JMAT );
-   double64 det_inverse = 1.0 / ( det * det );
+     double64 det = Jacobi( RS, EFG, JMAT );
+     double64 det_inverse = 1.0 / ( det * det );
 
-   B.Resize(dim,npe);
+     B.Resize(dim,npe);
 
-     for ( size_t i=0; i<npe; i++ ){
-       B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
-       B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
-       B(1,i)  = det_inverse * JMAT(0,1) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
-       B(1,i) += det_inverse * JMAT(1,1) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
-       B(2,i)  = det_inverse * JMAT(0,2) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
-       B(2,i) += det_inverse * JMAT(1,2) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
-     }
-   return det;
-  }
+       for ( size_t i=0; i<npe; i++ ){
+         B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
+         B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
+         B(1,i)  = det_inverse * JMAT(0,1) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
+         B(1,i) += det_inverse * JMAT(1,1) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
+         B(2,i)  = det_inverse * JMAT(0,2) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
+         B(2,i) += det_inverse * JMAT(1,2) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
+       }
+     return det;
+    }
 
     // 2D case
     // ----------------------------------------------------
@@ -1222,7 +1218,7 @@ double64 IsoparametricLinearTriangle::dN_AtBarycenter(
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS );
-    det = JacobianInverse();
+    double64 det = JacobianInverse();
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
@@ -1487,10 +1483,9 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
          double64 detJ=sqrt( EFG[0] * EFG[2] - EFG[1] * EFG[1] );
          double64 det1 = 1.0 / detJ;
 
-
          //Standard inverse Jacobian definition with 3rd stroka all 1.0
          //JAC(2,0)=JAC(2,1)=JAC(2,2)=1.0;
-
+         JINV.Resize( 3, 3 );
          JINV(0,0) = ( JAC(1,1) * 1.0 - JAC(1,2) * 1.0 ) *  det1;
          JINV(1,0) = ( JAC(1,0) * 1.0 - JAC(1,2) * 1.0 ) * -det1;
          JINV(2,0) = ( JAC(1,0) * 1.0 - JAC(1,1) * 1.0 ) *  det1;
@@ -1500,7 +1495,6 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
          JINV(0,2) = ( JAC(0,1) * JAC(1,2) - JAC(0,2) * JAC(1,1) ) *  det1;
          JINV(1,2) = ( JAC(0,0) * JAC(1,2) - JAC(0,2) * JAC(1,0) ) * -det1;
          JINV(2,2) = ( JAC(0,0) * JAC(1,1) - JAC(0,1) * JAC(1,0) ) *  det1;
-
 
           // compute J'
           return detJ;
@@ -1512,6 +1506,7 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
 
     // inversion of J
     double64 dum = JAC(0,0) / detJ;
+    JINV.Resize( 2, 2 );
     JINV(0,0)  =  JAC(1,1) / detJ;
     JINV(0,1)  = -JAC(0,1) / detJ;
     JINV(1,0)  = -JAC(1,0) / detJ;
@@ -1523,7 +1518,7 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
          throw std::range_error("IsoparametricLinearTriangle::JacobianInverse");
     }
 
- return detJ;
+   return detJ;
 }
 
 
