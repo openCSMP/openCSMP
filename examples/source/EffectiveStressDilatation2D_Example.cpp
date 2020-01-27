@@ -133,10 +133,10 @@ void EffectiveStressDilatation2D_Example::Run()
   mesh_container.Erase();
   mesh_topology.Erase();
   
-  // 2.1 split Boundaries
-  model.InsertSplitBoundary("SET1");
-  model.InsertSplitBoundary("SET2");
-  model.InsertSplitBoundary("WELL_FRACTURE");
+  // 2.1 create Boundaries and convert them into SplitBoundary objects
+  model.CreateSplitBoundaryFrom("SET1");
+  model.CreateSplitBoundaryFrom("SET2");
+  model.CreateSplitBoundaryFrom("WELL_FRACTURE");
   
   cout <<"\nmain: created split boundaries: ";
   for ( Model<2>::splitBoundaryConstIterator it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); it++ )

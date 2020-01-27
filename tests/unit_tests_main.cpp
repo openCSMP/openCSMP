@@ -41,6 +41,7 @@
 #include "Node_Test.h"
 #include "Element_Test.h"
 #include "Face_Test.h"
+#include "InterFace_Test.h"
 #include "MeshManager_Test.h"
 
 #include "FiniteElement_Test.h"
@@ -77,7 +78,6 @@
 #include "Boundary_Test.h"
 #include "Region_Test.h"
 #include "Box_Test.h"
-#include "SplitBoundary_Test.h"
 #include "ANSYS_SplitBoundaryMatch_Test.h"
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
@@ -105,9 +105,8 @@
 
 // new tests 2017 onwards
 #include "LinearCuboid_Test.h"
-
-//#include "DirichletPressureBoxModel_VVCase.h"
-
+#include "SplitBoundary_Test.h"
+#include "SplitBoundaryInterFace_Test.h"
 
 using namespace std;
 using namespace csmp;
@@ -157,8 +156,7 @@ using namespace csmp;
      - after Boundary construction, the parent regions are moved to non-unique, but are kept, is this what we want?
 */
 
-// TODO: why is this suite called 'unported'? - change as necessary
-TEST_CASE("Unported tests", "[Unported]")
+TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
  {
   const bool verbose(false);
 
@@ -198,6 +196,16 @@ TEST_CASE("Unported tests", "[Unported]")
       basic.addTest( new Node_Test() );
       basic.addTest( new Element_Test(verbose));
       basic.addTest( new Face_Test() );
+      basic.addTest( new InterFace_Test() );
+      basic.addTest( new ModelSubDomain_Test() );       
+      basic.addTest( new Region_Test(false) );          
+      basic.addTest( new BoundaryInterface_Test(false) ); 
+      //mesh manager    
+      basic.addTest(new MeshManager_Test(true));
+      basic.addTest(new BoundaryInterface_Test(true));
+      basic.addTest(new Boundary_Test());
+      basic.addTest(new SplitBoundaryInterface_Test());
+      basic.addTest(new SplitBoundary_Test());
       
       // Variable tests
       basic.addTest( new Point_Test());
@@ -231,10 +239,6 @@ TEST_CASE("Unported tests", "[Unported]")
       basic.addTest( new VSet_Test() );
       basic.addTest( new ColorPalette_Test() );
       
-	  //mesh manager	  
-	  basic.addTest(new MeshManager_Test(true));
-	  basic.addTest(new BoundaryInterface_Test(true));
-	  basic.addTest(new Boundary_Test());
 // FAILS TO RUN	  basic.addTest(new ANSYS_SplitBoundaryMatch_Test(true));
 
       // Running unit tests and reporting errors
@@ -285,9 +289,6 @@ TEST_CASE("Unported tests", "[Unported]")
       interdependent2.addTest( new ModelTopology_Test() );
       // model
       interdependent2.addTest( new Box_Test() );                  // XCode OK (SKM) but does not test hexahedral or prism element meshes
-      interdependent2.addTest( new ModelSubDomain_Test() );       // XCode OK (SKM)
-      interdependent2.addTest( new Region_Test(false) );          // XCode OK (SKM)
-      interdependent2.addTest( new BoundaryInterface_Test(false) ); // XCode OK (SKM) but tests only the boundary creation from lower-dimensional internal objects
       interdependent2.addTest( new ANSYS_Model2D_Test() );        // XCode OK (SKM)
       interdependent2.addTest( new InputDataManager_Test());      // XCode OK (SKM)
       interdependent2.addTest( new ANSYS_Model3D_Test() );        // XCode OK (SKM)
@@ -335,13 +336,9 @@ TEST_CASE("Unported tests", "[Unported]")
       TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
       
       // TODO: review and get these tests to run (in this sequence)
-      refactored.addTest( new Boundary_Test() );
-      refactored.addTest( new SplitBoundary_Test() );
       // update composite.addTest( new ModelComparator_Test() ); // crashes on PropertyData
       // basic.addTest( new VariableBenchmarking_Test() ); - needs redesign, tests tensor with random numbers
       // basic.addTest( new PropertyStorageSpeed_Test( &cout )); // needs redesign, calls Eigenvectors on random numbers
-      // refactored.addTest( new DirichletPressureBoxModel_VVCase("hex2_10") );
-      // refactored.addTest( new DirichletPressureBoxModel_VVCase() );
 
       refactored.run();
       long nFail = refactored.report();

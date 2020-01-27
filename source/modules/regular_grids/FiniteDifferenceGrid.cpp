@@ -1901,7 +1901,7 @@ double64 FiniteDifferenceGrid::InterpolateOutside( double64 x, double64 y ) cons
          return p1 + delta * ((p2-p1)/yresolution);
       }
     std::cerr <<"\nFiniteDifferenceGrid:InterpolateOutside: could not handle point: "<< x <<","<< y << std::endl;
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
     
 } // end InterpolateOutside
 

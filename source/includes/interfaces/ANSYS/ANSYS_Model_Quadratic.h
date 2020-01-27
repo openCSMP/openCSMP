@@ -4,33 +4,48 @@
 #include "ANSYS_Interface.h"
 #include "ANSYS_ElementSpecifications.h"
 
-#include "Box.h"
-#include "Region.h"
-#include "Element.h"
-#include "FiniteElement.h"
-#include "FiniteElementManager.h"
-
-#include "Model.h"
-#include "ModelTopology.h"
-#include "ModelTime.h"
-
-#include "Exception.h"
-#include "PL_Utilities.h"
-
-#include <string>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-
-namespace csmp 
-{
+namespace csmp {
 
   class FiniteElementManager;
   class LocalVariables;
   template<size_t> class Point;
+  template<size_t> class Node;
+  template<size_t> class Element;
+  
 
+  /** ANSYS interface for quadratic isoparametric elements
+ 
+  Motivation behind creating this kind of redundant class is that ANSYS_Model2D is not able to read
+  quadratic meshes from Icem input files and I gave up debugging. It performs nicely for smaller models,
+  for larger models it's slower than ANSYS_Model2D or ANSYS_Model3D, mostly due to the limitation to ascii
+  outputs. Instead of a '...-regions.txt' file it requires a '...-subdomains.txt' file which is supposed
+  to look as such
 
+  @code
+  regions
+  MATRIX
+  boundaries
+  LEFT
+  RIGHT
+  split
+  FRACTURE
+  eof
+  @endcode
+
+  where MATRIX, LEFT, RIGHT and FRACTURE are families listed in the '...asc' file. Here, 'MATRIX' becomes
+  a Region, 'LEFT' and 'RIGHT' a Boundary and 'FRACTURE' a SplitBoundary.
+  
+  @author P. Lang
+  @date 2012
+
+  @attention This reads from ascii '.dat' files only and is hence slow for larger models.
+
+  @todo  Relies on counter clockwise ordering in ANSYS
+  @todo  Allows for single element type regions only
+  @todo  Mesh either all linear, all quadratic or all cubic
+  @todo  ASCII .dat files only
+  @todo  'eof' tag
+  */
   template<size_t dim>
   class ANSYS_Model_Quadratic : public Model<dim>
     {
@@ -41,7 +56,7 @@ namespace csmp
       /// input from ANSYS *.asc, *.dat, *-variable.txt and *-regions.txt files.
       ANSYS_Model_Quadratic( const std::string& mesh_file_set,
                              const std::string& regions_file_prefix,
-                             const std::string& variable_file);
+                             const std::string& variable_file );
 
       virtual ~ANSYS_Model_Quadratic();
 
@@ -96,41 +111,6 @@ namespace csmp
       std::vector<std::string>          splitBoundaries_;
 
     };
-
-  /**
-  @class ANSYS_Model_Quadratic ANSYS_Model_Quadratic "interfaces/ANSYS_Model_Quadratic.h"
-
-  @author P. Lang
-  @date 2012
-
-  @attention This reads from ascii '.dat' files only and is hence slow for larger models.
-
-  Motivation behind creating this kind of redundant class is that ANSYS_Model2D is not able to read
-  quadratic meshes from Icem input files and I gave up debugging. It performs nicely for smaller models,
-  for larger models it's slower than ANSYS_Model2D or ANSYS_Model3D, mostly due to the limitation to ascii
-  outputs. Instead of a '...-regions.txt' file it requires a '...-subdomains.txt' file which is supposed
-  to look as such
-
-  @code
-  regions
-  MATRIX
-  boundaries
-  LEFT
-  RIGHT
-  split
-  FRACTURE
-  eof
-  @endocde
-
-  where MATRIX, LEFT, RIGHT and FRACTURE are families listed in the '...asc' file. Here, 'MATRIX' becomes
-  a Region, 'LEFT' and 'RIGHT' a Boundary and 'FRACTURE' a SplitBoundary.
-
-  @todo  Relies on counter clockwise ordering in ANSYS
-  @todo  Allows for single element type regions only
-  @todo  Mesh either all linear, all quadratic or all cubic
-  @todo  ASCII .dat files only
-  @todo  'eof' tag
-  */
 
 } // csmp
 

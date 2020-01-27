@@ -1243,12 +1243,12 @@ double64  PropertyDatabase<dim>::UnitConversionFactor( const char* sys_in,
               {
                 cerr <<"\nPropertyDatabase::convert_unit: Failure to convert " << unit;
                 cerr <<" from CGS to SI" << endl;
-                return std::numeric_limits<double64>::quiet_NaN();
+                return std::numeric_limits<double64>::signaling_NaN();
               }
            }
       } // end if SI
  
-   return std::numeric_limits<double64>::quiet_NaN();
+   return std::numeric_limits<double64>::signaling_NaN();
 
  } // end ConvertUnit
 

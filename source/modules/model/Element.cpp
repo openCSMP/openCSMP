@@ -151,12 +151,12 @@ Element<dim>::Element( size_t idx,
 template<size_t dim>
 Element<dim>::Element( const Element<dim>& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
-  FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-  at_boundary_( el.at_boundary_ ),
-  idx_( el.idx_ ),
-  elmt_connector_( el.elmt_connector_ ), // watch out where the pointers point to
-  node_connector_( el.node_connector_ ),  // watch out where the pointers point to
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
+    at_boundary_( el.at_boundary_ ),
+    idx_( el.idx_ ),
+    elmt_connector_( el.elmt_connector_ ), // watch out where the pointers point to
+    node_connector_( el.node_connector_ ),  // watch out where the pointers point to
+    material_id_(el.material_id_)
 {
   assert( !node_connector_.empty() /* detected unitialized element*/ );
   assert( !elmt_connector_.empty() /* detected unitialized element*/ );
@@ -170,12 +170,12 @@ Element<dim>::Element( const Element<dim>& el )
 template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
   : FiniteElementPolicy<dim, csmp::Element>( move( el.FE() ) ),
-  FiniteVolumePolicy<dim, csmp::Element>( move( el.FV() ) ),
-  at_boundary_( move( el.at_boundary_ ) ),
-  idx_( move( el.idx_ ) ),
-  elmt_connector_( move( el.elmt_connector_ ) ),
-  node_connector_( move( el.node_connector_ ) ),
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, csmp::Element>( move( el.FV() ) ),
+    at_boundary_( move( el.at_boundary_ ) ),
+    idx_( move( el.idx_ ) ),
+    elmt_connector_( move( el.elmt_connector_ ) ),
+    node_connector_( move( el.node_connector_ ) ),
+    material_id_(el.material_id_)
 {
   this->LVS( move( el.LVS() ) );
   el.AssignFiniteElementNullPtr();
@@ -277,6 +277,9 @@ bool  Element<dim>::operator==( const Element<dim>& el )
   }
   return true;
 }
+
+
+
 
 
 /**

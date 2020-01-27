@@ -150,7 +150,7 @@ double64 IsoparametricQuadraticLineElement::WeightAtIntegrationPoint( size_t i )
     if      ( i == 0 ) return W[0];
     else if ( i == 1 ) return W[1];
     
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
 

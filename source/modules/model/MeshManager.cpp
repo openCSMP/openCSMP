@@ -152,11 +152,11 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   assert( n_faces_ == 0 );
   assert( n_interfaces_ == 0 );
 
-  // temperal local deques to handel primitives
-  deque<Node<dim>*>			node_connector;
-  deque<Element<dim>*>		elmt_connector;
-  deque<Face<dim>*>			face_connector;
-  deque<InterFace<dim>*>		interface_connector;
+  // temporary deques to handel primitives
+  deque<Node<dim>*>			 node_connector;
+  deque<Element<dim>*>	 elmt_connector;
+  deque<Face<dim>*>			 face_connector;
+  deque<InterFace<dim>*> interface_connector;
 
   hybrid_element_mesh_ = vset.HybridElementTypeMesh();
 
@@ -195,59 +195,64 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
     cout << "\nMeshManager<" << dim << ">::Initialize: building storage and assigning nodes to elements..." << endl;
 
   size_t idx( 0U );
+
   /// Variable storage for nodes
-  const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
-  for ( size_t i = 0U; i < vset.Vertices(); ++i )
-  {
-    vector<double64> coord( dim );
-    for ( size_t j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
-    Node<dim>* node = new Node<dim>( idx, Point<dim>( coord ), nvars, NOT );
-    node_connector.push_back( node );
-    idx++;
-  }
-  n_nodes_ = node_connector.size();
-
+   {
+      vector<double64> coord( dim );
+      const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
+      for ( size_t i = 0U; i < vset.Vertices(); ++i )
+        {
+          for ( size_t j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
+          Node<dim>* node = new Node<dim>( idx, Point<dim>( coord ), nvars, NOT );
+          node_connector.push_back( node );
+          idx++;
+        }
+      n_nodes_ = node_connector.size();
+    }
+     
   /// Variable storage for elements and integration points
-  const LocalVariables evars( phys_vars.LocalVariablesAt( ELEMENT ) );
-  const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
-  typename deque<vector<size_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
+   {
+      const LocalVariables evars( phys_vars.LocalVariablesAt( ELEMENT ) );
+      const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
+      typename deque<vector<size_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
-  idx = 0U;
-  // 2.1 If the MeshManager contains only one element type
-  if ( !vset.HybridElementTypeMesh() ) {
-    const int32 csmpElementType = vset.ElementType( 0U );
+      idx = 0U;
+      // 2.1 If the MeshManager contains only one element type
+      if ( !vset.HybridElementTypeMesh() ) {
+          const int32 csmpElementType = vset.ElementType( 0U );
 
-    while ( first != last )
-    {
-      Element<dim>* elmt = new Element<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars, NOT );
-      const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
-      for ( size_t j = 0U; j < nodes; j++ )
-      {
-        elmt->Assign( j, node_connector[vset.Plist( elmt->Idx(), j )] );
-      }
-      elmt_connector.push_back( elmt );
-      idx++;
-      first++;
-    }
-  }
-  // 2.2 If there are multiple element types
-  else {
-    while ( first != last )
-    {
-      const int32 csmpElementType = vset.ElementType( idx );
-      Element<dim>* elmt = new Element<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars, NOT );
-      const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
-      for ( size_t j = 0U; j < nodes; j++ )
-      {
-        elmt->Assign( j, node_connector[vset.Plist( elmt->Idx(), j )] );
-      }
-      elmt_connector.push_back( elmt );
-      idx++;
-      first++;
-    }
-  }
-  n_elmts_ = elmt_connector.size();
-
+          while ( first != last )
+            {
+              Element<dim>* elmt = new Element<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars, NOT );
+              const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
+              for ( size_t j = 0U; j < nodes; j++ )
+              {
+                elmt->Assign( j, node_connector[vset.Plist( elmt->Idx(), j )] );
+              }
+              elmt_connector.push_back( elmt );
+              idx++;
+              first++;
+            }
+        }
+        // 2.2 If there are multiple element types
+        else {
+          while ( first != last )
+            {
+              const int32 csmpElementType = vset.ElementType( idx );
+              Element<dim>* elmt = new Element<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars, NOT );
+              const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
+              for ( size_t j = 0U; j < nodes; j++ )
+              {
+                elmt->Assign( j, node_connector[vset.Plist( elmt->Idx(), j )] );
+              }
+              elmt_connector.push_back( elmt );
+              idx++;
+              first++;
+            }
+        }
+      n_elmts_ = elmt_connector.size();
+   }
+  
   // ----------------------------------------------------------------
   // 2. Assigning neighbor elements to elements, faces and interfaces
   // ----------------------------------------------------------------
@@ -442,7 +447,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       const size_t nodes( inter_face->Nodes() );
       for ( size_t j = 0U; j<nodes; ++j ) {
         // assigning node indices
-        inter_face->Assign( j, node_connector[vset.Plist( inter_face->Idx(), j )], INSIDE );
+        inter_face->Assign( j, node_connector[ vset.Plist( inter_face->Idx(), j )], INSIDE );
       }
       interface_connector.push_back( inter_face );
       ++idx;
@@ -1337,13 +1342,58 @@ InterFace<dim>* MeshManager<dim>::AddIfUnique( InterFace<dim>& interface )
 
 
 /**
+   Duplicates existing node inside of the MeshManager
+*/
+template<size_t dim>
+Node<dim>* MeshManager<dim>::Duplicate( const Node<dim>& node )
+  {
+    Node<dim>* new_node = new Node<dim>( node );
+    n_nodes_++;
+
+    if ( root_node_group_.size() == 0 )
+      root_node_group_.push_back( new_node );
+
+    return new_node;
+  }
+
+
+/**
+   Duplicates the corresponding element
+*/
+template<size_t dim>
+Element<dim>* MeshManager<dim>::Duplicate( const Element<dim>& elmt )
+{
+  Element<dim>* new_elmt = new Element<dim>( elmt );
+  n_elmts_++;
+
+  // delete the element's nodes which are not connected to any other elements
+  deque<Node<dim>*> neighbor_nodes;
+  for ( auto n : new_elmt->NodeVector() ) {
+    neighbor_nodes.push_back( n );
+  }
+
+  // update node-to-element pointers in remaining node objects
+  for ( auto n : neighbor_nodes )
+    if ( n != NULL ) {
+      n->ResizeParentStorage( n->Parents() + 1 );
+      n->Assign( n->Parents() - 1, new_elmt );
+    }
+  neighbor_nodes.clear();
+
+  if ( root_elmt_group_.size() == 0 )
+    root_elmt_group_.push_back( new_elmt );
+
+  return new_elmt;
+}
+
+
+/**
 Inserts the corresponding node
 */
 template<size_t dim>
-Node<dim>* MeshManager<dim>::Add( Node<dim>& node )
+Node<dim>* MeshManager<dim>::Add( Node<dim>&& node )
 {
   Node<dim>* new_node = new Node<dim>( node );
-  *new_node = node;
   n_nodes_++;
 
   if ( root_node_group_.size() == 0 )
@@ -1357,10 +1407,9 @@ Node<dim>* MeshManager<dim>::Add( Node<dim>& node )
 Inserts the corresponding element
 */
 template<size_t dim>
-Element<dim>* MeshManager<dim>::Add( Element<dim>& elmt )
+Element<dim>* MeshManager<dim>::Add( Element<dim>&& elmt )
 {
   Element<dim>* new_elmt = new Element<dim>( elmt );
-  *new_elmt = elmt;
   n_elmts_++;
 
   // delete the element's nodes which are not connected to any other elements
@@ -1388,10 +1437,9 @@ Element<dim>* MeshManager<dim>::Add( Element<dim>& elmt )
 Inserts the corresponding face
 */
 template<size_t dim>
-Face<dim>* MeshManager<dim>::Add( Face<dim>& face )
+Face<dim>* MeshManager<dim>::Add( Face<dim>&& face )
 {
   Face<dim>* new_face = new Face<dim>( face );
-  *new_face = face;
   n_faces_++;
 
   if ( root_face_group_.size() == 0 )
@@ -1405,10 +1453,9 @@ Face<dim>* MeshManager<dim>::Add( Face<dim>& face )
 Inserts the corresponding interface
 */
 template<size_t dim>
-InterFace<dim>* MeshManager<dim>::Add( InterFace<dim>& interface )
+InterFace<dim>* MeshManager<dim>::Add( InterFace<dim>&& interface )
 {
   InterFace<dim>* new_interface = new InterFace<dim>( interface );
-  *new_interface = interface;
   n_interfaces_++;
 
   if ( root_interface_group_.size() == 0 )

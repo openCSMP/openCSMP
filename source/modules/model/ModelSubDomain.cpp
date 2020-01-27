@@ -431,7 +431,7 @@ CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::SimplexVector()
+typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector()
  { return elmt_vec_; }
 
 template<size_t dim, template<size_t> class CELL>
@@ -1299,8 +1299,6 @@ void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interi
        }
 
   } // end SortVectors
-
-
 
 
 
@@ -2279,7 +2277,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
          }
      } // end sector integration points for any element, face or interface
 
-    vmin = vmax = std::numeric_limits<double64>::quiet_NaN();
+    vmin = vmax = std::numeric_limits<double64>::signaling_NaN();
 
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
     csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
@@ -4801,7 +4799,7 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
             throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RegionAverage:", "property placement not handled yet.");
        }
 
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
 
  } // end Average
 

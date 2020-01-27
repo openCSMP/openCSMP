@@ -4,7 +4,7 @@
 #include "OtwayCRC3_RockTypes.h"
 
 
-#define DEBUG_HETEROGENEITY_AWARE_MODEL
+// #define DEBUG_HETEROGENEITY_AWARE_MODEL
 
 
 using namespace std;
@@ -831,13 +831,16 @@ double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminat
     From the permeability tensor and the flow direction, this method calculates and returns the permeability in the flow direction.
     
         @attention the normalized velocity vt_normalised must be initiaised.
+        
+        @attention if the flow velocity is zero, horizontal flow is assumed.
     
 */
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const VectorVariable<dim>& vt_normalised ) const
  {
     assert( is_composite_ );
-    assert( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double64>::epsilon() );
+    if ( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double64>::epsilon() )
+      return KK_(0,0);
 
     // finding the permeability in the direction of the velocity vector
     vc_ = KK_ * vt_normalised;
@@ -1150,10 +1153,16 @@ void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
     else 
       cout <<"- dominantly vertical flow.";
     cout <<"\n                           capillary number, Nc: "<< Nc_;
-    cout <<"\n               layer-parellel permeability (m2): "<< PermeabilityParallelToLaminations();
-    cout <<"\n          layer-perpendicular permeability (m2): "<< PermeabilityPerpendicularToLaminations();
-    cout <<"\nratio between viscous and capillary forces, RVC: "<< RVC( Nc_ );
-    cout <<"\n      average water saturation in composite, sw: "<< Sw_;
+    if ( is_composite_ ) {
+         cout <<"\n               layer-parallel permeability (m2): "<< PermeabilityParallelToLaminations();
+         cout <<"\n          layer-perpendicular permeability (m2): "<< PermeabilityPerpendicularToLaminations();
+         cout <<"\nratio between viscous and capillary forces, RVC: "<< RVC( Nc_ );
+         cout <<"\n      average water saturation in composite, sw: "<< Sw_;
+      }
+    else {
+        cout <<"\n                              permeability (m2): "<< KK_(0,0);
+        cout <<"\n       average water saturation in rocktype, sw: "<< Sw_;
+      }
     cout <<"\n                                        krw(sw): "<< krw_Phase();
     cout <<"\n                                        krn(sw): "<< krn_Phase();
     cout <<"\n                                         pc(sw): "<< pc_Phase();

@@ -622,7 +622,7 @@ double64 parseDataValue( const std::string& value )
  {
     if ( value == "nodata" || value == "NO_DATA" || value == "no data" ||
          value == "NaN" || value == "NAN" )
-      return numeric_limits<double64>::quiet_NaN();
+      return numeric_limits<double64>::signaling_NaN();
    
     return atof( value.c_str() );
  }

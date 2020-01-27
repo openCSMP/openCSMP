@@ -19,7 +19,7 @@ template<size_t> class FiniteVolumeStencilManager;
 @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
 internal application is hidden and may vary between models (tree-storage is default).
 
-@author S.K. Matthaei
+@author S.K. Matthai
 @date 2007
 
 @remark gain access via Mesh() public interface of Model.
@@ -81,52 +81,56 @@ public:
   size_t InterFaceGroups() const;
 
   /// the node's root pointer at the basis of node tree for contiguous regions
-  Node<dim>*			RootNode( size_t group_idx );
+  Node<dim>*		 RootNode( size_t group_idx );
 
   /// assigns node's root pointer at the basis of node tree for contiguous regions
-  void				SetRootNode( Node<dim>* );
+  void				   SetRootNode( Node<dim>* );
 
   /// the element's root pointer at the basis of element tree for contiguous regions
-  Element<dim>*		RootElement( size_t group_idx );
+  Element<dim>*	 RootElement( size_t group_idx );
 
   /// assigns element's root pointer at the basis of element tree for contiguous regions
-  void				SetRootElement( Element<dim>* );
+  void				   SetRootElement( Element<dim>* );
 
   /// the face's root pointer at the basis of face tree for multiple boundaries
-  Face<dim>*			RootFace( size_t group_idx );
+  Face<dim>*		 RootFace( size_t group_idx );
 
   /// assigns face's root pointer at the basis of face tree for multiple boundaries
-  void				SetRootFace( Face<dim>* );
+  void				   SetRootFace( Face<dim>* );
 
   /// the interface's root pointer at the basis of interface tree for multiple split boundaries
-  InterFace<dim>*		RootInterFace( size_t group_idx );
+  InterFace<dim>*  RootInterFace( size_t group_idx );
 
   /// assigns interface's root pointer at the basis of interface tree for multiple split boundaries
-  void				SetRootInterFace( InterFace<dim>* );
+  void				     SetRootInterFace( InterFace<dim>* );
 
   /// the node's root pointer at the basis of node tree for contiguous regions
   const Node<dim>*	RootNode( size_t group_idx ) const;
 
   /// the element's root pointer at the basis of element tree for contiguous regions
-  const Element<dim>*	RootElement( size_t group_idx ) const;
+  const Element<dim>*	  RootElement( size_t group_idx ) const;
 
   /// the face's root pointer at the basis of face tree for multiple boundaries
-  const Face<dim>*	RootFace( size_t group_idx ) const;
+  const Face<dim>*	    RootFace( size_t group_idx ) const;
 
   /// the interface's root pointer at the basis of interface tree for multiple split boundaries
   const InterFace<dim>* RootInterFace( size_t group_idx ) const;
 
-  /// inserts new primitive if it does not already exist in the tree, otherwise returns the pointer of the existing one.
+  /// inserts new root object if it does not already exist in the tree, otherwise returns pointer to existing one.
   Node<dim>*			AddIfUnique( Node<dim>& );
   Element<dim>*		AddIfUnique( Element<dim>& );
   Face<dim>*			AddIfUnique( Face<dim>& );
-  InterFace<dim>*		AddIfUnique( InterFace<dim>& );
+  InterFace<dim>*	AddIfUnique( InterFace<dim>& );
 
-  /// inserts new primitive without checking whether it does not already exist in the tree and its connectivity is valid
-  Node<dim>*			Add( Node<dim>& );
-  Element<dim>*		Add( Element<dim>& );
-  Face<dim>*			Add( Face<dim>& );
-  InterFace<dim>*		Add( InterFace<dim>& );
+  /// inserts new root object if it does not already exist in the tree, otherwise returns pointer to existing one.
+  Node<dim>*      Duplicate( const Node<dim>& );
+  Element<dim>*   Duplicate( const Element<dim>& );
+
+  // TODO: whole approach used here is wrong: MeshManager should carry the responsibility to create node etc. from the required input data
+  Node<dim>*			Add( Node<dim>&& );
+  Element<dim>*		Add( Element<dim>&& );
+  Face<dim>*			Add( Face<dim>&& );
+  InterFace<dim>*	Add( InterFace<dim>&& );
 
   /// removes primitive after checking its connectivities
   void Erase( Node<dim>& );
@@ -166,15 +170,15 @@ private:
   /// access is via root node or element only    
   bool								hybrid_element_mesh_;	///< true if the mesh consists of different FE types
 
-  size_t								n_nodes_;				///< total number of nodes
-  size_t								n_elmts_;				///< total number of elements
-  size_t								n_faces_;				///< total number of faces
-  size_t								n_interfaces_;			///< total number of interfaces
+  size_t							n_nodes_;				      ///< total number of nodes
+  size_t							n_elmts_;				      ///< total number of elements
+  size_t							n_faces_;				      ///< total number of faces
+  size_t							n_interfaces_;        ///< total number of interfaces
 
-  std::deque<Node<dim>*>				root_node_group_;		///< pointers to root nodes for contiguous regions
-  std::deque<Element<dim>*>			root_elmt_group_;		///< pointers to root elements for contiguous regions
-  std::deque<Face<dim>*>				root_face_group_;		///< pointers to root faces for multiple boundaries
-  std::deque<InterFace<dim>*>			root_interface_group_;	///< pointers to root interfaces for multiple split boundaries
+  std::deque<Node<dim>*>				root_node_group_;		    ///< pointers to root nodes for contiguous regions
+  std::deque<Element<dim>*>			root_elmt_group_;		    ///< pointers to root elements for contiguous regions
+  std::deque<Face<dim>*>				root_face_group_;		    ///< pointers to root faces for multiple boundaries
+  std::deque<InterFace<dim>*>		root_interface_group_;	///< pointers to root interfaces for multiple split boundaries
 };
 
 } // end namespace csmp

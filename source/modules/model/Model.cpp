@@ -626,9 +626,8 @@ void Model<dim>::InstantiateFiniteVolumes()
 template<size_t dim>
 Model<dim>::~Model()
 {
-  if ( fvStencilManager_ )
-    delete fvStencilManager_;
-} // end
+   delete fvStencilManager_;
+}
 
 
 

@@ -45,8 +45,10 @@ IsoparametricLinearLineElement::IsoparametricLinearLineElement( size_t dimension
     }
     else if(ips==2)
      {
-        IP[0]   = -1. / sqrt(3.), IP[1]     = 1. / sqrt(3.);
-        W[0]    =  1.,            W[1]      = 1.; // since length = 2.0 (-1,1)
+        IP[0]   = -1. / sqrt(3.);
+        IP[1]   = 1. / sqrt(3.);
+        W[0]    =  1.;            
+        W[1]    = 1.; // since length = 2.0 (-1,1)
      }
     else
         cout<<" IsoparametricLinearLineElement::IsoparametricLinearLineElement "<<ips<<" integration points not supported " <<endl;
@@ -165,7 +167,7 @@ double64 IsoparametricLinearLineElement::WeightAtIntegrationPoint( size_t i ) co
      else if ( i == 1 ) return W[1];
     }
 
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
 
@@ -700,8 +702,9 @@ double64 IsoparametricLinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& D
 void  IsoparametricLinearLineElement::UnitNormal( vector<double64>& vc ) const
  {
     if ( dim == 1 ) {
-         double64 vc0 = 1.;
-         vc.push_back( vc0 );
+         const double64 vc0(1.);
+         vc.resize(1U);
+         vc[0] = vc0;
          return;
       }
 
@@ -710,19 +713,17 @@ void  IsoparametricLinearLineElement::UnitNormal( vector<double64>& vc ) const
     if ( dim == 2 ) {
          // finding tangent at mid-point node
          dNr( rAtBaryCenter, DNR );
-         double64 vc0 = JacobianFor( DNR, 0 ); // dx
-         double64 vc1 = JacobianFor( DNR, 1 ); // dy
-         //                 origin             destination
- // SKM FIX        mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc[0],vc[1]) );
+         const double64 vc0 = JacobianFor( DNR, 0 ); // dx
+         const double64 vc1 = JacobianFor( DNR, 1 ); // dy
+         //                      origin             destination
          mjl::Edge  normal( mjl::Point(vc0,vc1), mjl::Point(0.,0.) );
-         // rotating tangent edge counter-clockwise to find normal to face
+         // rotating tangent edge clockwise to find normal to face
          normal.Rot();
          normal.NormalizeTo( 1. );
-         // SKM FIX: TODO: for normal to be pointing outside of 2D models, multiplication with -1. is needed
-         vc0 = normal.Destination()[0];
-         vc1 = normal.Destination()[1];
-         vc.push_back( vc0 );
-         vc.push_back( vc1 );
+         vc.resize(2U);
+         // flipping normal so that it will be outward pointing 
+         vc[0] = -normal.Destination()[0];
+         vc[1] = -normal.Destination()[1];
          return;
       }
 
@@ -732,16 +733,15 @@ void  IsoparametricLinearLineElement::UnitNormal( vector<double64>& vc ) const
          double64 vc0 = JacobianFor( DNR, 0 ); // dx
          double64 vc1 = JacobianFor( DNR, 1 ); // dy
          double64 vc2 = JacobianFor( DNR, 2 ); // dz
-         double64 sum = vc0 + vc1 + vc2;
+         const double64 sum = vc0 + vc1 + vc2;
          // normalizing the normal
          vc0 /= sum;
          vc1 /= sum;
          vc2 /= sum;
-         vc.push_back( vc0 ); // dx
-         vc.push_back( vc1 ); // dy
-         vc.push_back( vc2 ); // dz
-         std::cerr <<"\nIsoparametricLinearLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
-         return;
+         vc.resize(3U);
+         vc[0] = vc0; // dx
+         vc[1] = vc1; // dy
+         vc[2] = vc2; // dz
       }
 
  } // end UnitNormal

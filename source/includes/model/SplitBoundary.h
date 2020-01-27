@@ -75,10 +75,14 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
   public:
     SplitBoundary() = delete;
     /// constroctor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
-    SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
+    SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, 
+                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
+                   
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
+    
     SplitBoundary( const SplitBoundary& );
     SplitBoundary( SplitBoundary&& );
+    
     /// re-constructor of split boundaries from csmp native file format
     SplitBoundary( const PropertyDatabase<dim>&,
                    MeshManager<dim>&,       ///< not constant since write access is granted to boundary
@@ -152,16 +156,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
                        const std::vector<std::vector<size_t> >&           interfaceParents,
                        const std::vector<std::vector<std::pair<size_t,size_t> > >&  interfaceParentNodes );
 
-      /// establishes connectivity and initializes LVS
-      void Initialize( bool updateNeighborConnectivity = true, bool updateIndexes = true );
-
   protected:
     /// return physical variable count at given integration points
-    IntegrationPointVariables InterFaceIntegrationPointVariables() const;
-    LocalVariables InterFaceVariables() const;
-
-    // TODO: move to the SplitBoundaryInterface
-    void Split( Model<dim>& , Boundary<dim>& );
+    IntegrationPointVariables  InterFaceIntegrationPointVariables() const;
+    LocalVariables             InterFaceVariables() const;
 };
 
 

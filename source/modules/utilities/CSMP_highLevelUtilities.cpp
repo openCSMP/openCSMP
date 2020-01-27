@@ -414,7 +414,7 @@ double64 printRangeOfVariable( const Model<dim>& sg,
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
-          return std::numeric_limits<double64>::quiet_NaN();
+          return std::numeric_limits<double64>::signaling_NaN();
        }
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
      cout << var <<"' in subdomain of model '"<< group <<"': "<< pmin <<" to "<< pmax << endl;
@@ -443,7 +443,7 @@ double64 printRangeOfVariable( const Model<dim>& sg,
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
-          return std::numeric_limits<double64>::quiet_NaN();
+          return std::numeric_limits<double64>::signaling_NaN();
        }
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax <<" in subdomain of model '"<< group <<"'"<< endl;
@@ -2097,9 +2097,9 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
     The assumption is made that all nodes have a unique numbering.
     
     @author SKM 2012
+    
+        @todo deal with manifolds, disambiguating them on the basis of element orientation (only elements int the same plane or aligned elements should be neighbors)
 */
-
-// CONNECTIVITY BETWEEN ELEMENTS
 
 template<size_t dim>
 void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
@@ -2305,6 +2305,7 @@ template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>
 
 // CONNECTIVITY BETWEEN INTERFACES
 
+// TODO: also establish connectivity between lower-dimensional middle elements if there are any
 template<size_t dim>
 void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {

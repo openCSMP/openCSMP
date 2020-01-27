@@ -657,7 +657,7 @@ double64 TwoPhaseModel<dim>::krw_Phase() const
     cout <<"\nTwoPhaseModel<dim>::krw_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::krw_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
 
@@ -668,7 +668,7 @@ double64 TwoPhaseModel<dim>::krn_Phase() const
     cout <<"\nTwoPhaseModel<"<< dim <<">::krn_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::krn_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
 /// derivatives of relative permeabilities
@@ -693,7 +693,7 @@ double64 TwoPhaseModel<dim>::pc_Phase() const
     cout <<"\nTwoPhaseModel<"<< dim <<">::pc_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::pc_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
 /// inverse capillary pressure function
@@ -703,7 +703,7 @@ double64 TwoPhaseModel<dim>::Sw_Phase(double64 ) const
     cout <<"\nTwoPhaseModel<"<< dim <<">::SwFromPc(base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::SwFromPc: Method not defined in subclass");
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
     /// capillary pressure derivatives
@@ -720,7 +720,7 @@ double64 TwoPhaseModel<dim>::dsdpc_Phase( double64 ) const
     cout <<"\nTwoPhaseModel<"<<  dim <<">::dpcdsw_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::dpcdsw_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
 // linearized diffusion multiplier for large-timestep calculations
@@ -729,7 +729,7 @@ double64 TwoPhaseModel<dim>::DiffusionCharacteristic( size_t ) const
 {
 cout <<"\nTwoPhaseModel<"<<  dim <<">::DiffusionCharacteristic (base class): ";
 cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
-return std::numeric_limits<double64>::quiet_NaN();
+return std::numeric_limits<double64>::signaling_NaN();
 }
 
 

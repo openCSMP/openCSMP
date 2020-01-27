@@ -94,13 +94,14 @@ class BoundaryInterface {
     // Boundary creation, modification & removal
     // -----------------------------------------------
     
-    /// creates  uniquely named boundary patches, returning their number; the patches are created from meshed surface inside of model which will be removed by default  (3D only)
-    size_t  CreateInternalBoundaryFrom( const char* dimension_minus1_region, bool remove_dim_minus1_region=true );
+    /// creates uniquely named boundary patches, returning their names if successful; the patches are created from meshed surface inside of model which will be removed by default
+    std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region, 
+                                                                       bool remove_dim_minus1_region=true );
 
-    /// insert Boundary<Face> between two equidimensional unique regions, first on the inside by convention
-    bool InsertBoundary( const char* region1, const char* region2, bool createRegionBetween = false );
+    /// insert Boundary<Face> between two equidimensional unique regions, first on inside by convention returns name
+    std::pair<std::string,bool>  InsertBoundary( const char* region1, const char* region2, bool createRegionBetween = false );
 
-    /// construct Boundary<Face> from lower dimensional boundary flagged elements of given region
+    /// converts lower dimensional element regions surrounding the target region and containing strings like BOUNDARY in their name into a Boundary<Face> object
     bool InsertBoundary( BOX_BOUNDARY boxBoundary, const char* region = "Model" );
 
     /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags

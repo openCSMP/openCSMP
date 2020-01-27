@@ -111,8 +111,8 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     // access
     // ----------------------------------------
 
-    /// reference to container of simplices that may be either of pointer to Element, Face or InterFace objects
-    typename std::vector<CELL<dim>*>&  SimplexVector();
+    /// reference to container of finite element pointers to either Element, Face or InterFace objects
+    typename std::vector<CELL<dim>*>&  CellVector();
   
     /// reference to Node pointer vector
     typename std::vector<Node<dim>*>&  NodeVector();

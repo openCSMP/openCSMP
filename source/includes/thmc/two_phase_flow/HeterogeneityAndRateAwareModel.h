@@ -124,7 +124,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     mutable double64 Sw_;
 
     // composite is modelled as a dual of two rock types
-    const OtwayRockTypes Otway_;
+    OtwayRockTypes Otway_;
     long     rocktype_;
     bool     is_composite_;
     double64 K_flow_direction_, k_low_, k_high_, K_reduction_in_flow_direction_,

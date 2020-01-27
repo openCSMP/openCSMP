@@ -2592,7 +2592,7 @@ double64  Region<dim>::Volume( bool multiply_with_porosity ) const
 
   if ( this->Empty() ) {
     csmp_error.notice( WARNING, "Region<dim>::Volume:", "region is empty; returning NaN." );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
   double64  volume( 0. ), area( 0. ), length( 0. );
 
@@ -2652,7 +2652,7 @@ double64  Region<dim>::SurfaceArea() const
   if ( dim == 1U ) {
     csmp_error.notice( WARNING, "Region<1U>::SurfaceArea:",
                        "is not defined in one-dimensional model; returning NaN" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
 
   vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
@@ -2726,16 +2726,16 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
   if ( prop_key.type == TENSOR ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral:",
                        "No rule to integrate tensor properties. Nothing was done" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
   if ( prop_key.type == VECTOR and prop_key.place != ELEMENT ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral:",
                        "Vector properties can only be integrated if they are placed on the element. Nothing was done" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
   if ( this->elmt_vec_.empty() ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral", "Region is empty; returning NaN." );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
 
   if ( verbose ) {
@@ -2759,7 +2759,7 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
       this->Read( prop_key, vc );
       return vc.Length() * Volume( multiply_with_porosity );
     }
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
 
   double64  integral( 0. );
@@ -2823,7 +2823,7 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
     return integral;
   }
 
-  return std::numeric_limits<double64>::quiet_NaN();
+  return std::numeric_limits<double64>::signaling_NaN();
 
 } // end VolumeIntegral
 
@@ -2849,16 +2849,16 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
   if ( prop_key.type == TENSOR ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                        "No rule to integrate tensor properties. Nothing was done" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
   if ( prop_key.type == VECTOR and prop_key.place != ELEMENT ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                        "Vector properties can only be integrated if they are placed on the element. Nothing was done" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
   if ( this->elmt_vec_.empty() ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness", "Region is empty" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
 
   // region properties (no thickness multiplier is accounted for)
@@ -2871,7 +2871,7 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
       this->Read( prop_key, vc );
       return vc.Length() * Volume( multiply_with_porosity );
     }
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
 
   double64  integral( 0. );
@@ -2897,7 +2897,7 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
     else {
       throw csmp::Exception( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                              "only node, integration point or element properties can be integrated over the region" );
-      return std::numeric_limits<double64>::quiet_NaN();
+      return std::numeric_limits<double64>::signaling_NaN();
     }
   }
 
@@ -2935,7 +2935,7 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
     return integral;
   }
 
-  return std::numeric_limits<double64>::quiet_NaN();
+  return std::numeric_limits<double64>::signaling_NaN();
 
 } // end VolumeIntegral_x_Thickness
 

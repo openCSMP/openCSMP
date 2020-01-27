@@ -1,5 +1,5 @@
-#ifndef SPLIT_BOUNDARY_TEST_H
-#define SPLIT_BOUNDARY_TEST_H
+#ifndef SPLIT_BOUNDARY_INTERFACE_TEST_H
+#define SPLIT_BOUNDARY_INTERFACE_TEST_H
 
 #include "Test.h"
 #include "SplitBoundaryInterface.h"
@@ -21,17 +21,19 @@ namespace csmp {
     
       virtual void run();
 
+      // testing split boundary creation methods 
+      
       template<size_t dim>
-      void test_splitboundary_between_regions( const std::string& model_name );
+      void Test_splitboundary_between_regions( const std::string& model_name );
 
       template<size_t dim>
-      void test_splitboundary_around_regions( const std::string& model_name );
+      void Test_splitboundary_around_regions( const std::string& model_name );
 
       template<size_t dim>
-      void detect_and_create_splitboundaries( const std::string& model_name );
+      void Detect_and_create_splitboundaries( const std::string& model_name );
 
       template<size_t dim>
-      void detect_and_create_splitboundaries_from_constructor( const std::string& model_name );
+      void Detect_and_create_splitboundaries_from_constructor( const std::string& model_name );
 
       template<size_t dim>
       void NodeParents( const csmp::Region<dim>& region, size_t minParentCount = 2 );
@@ -41,7 +43,7 @@ namespace csmp {
 
       template<size_t dim>
       void CheckRemovedLowDimParents( csmp::Boundary<dim>& boundary );
-      
+
       /// tests whether all InterFace elements of the SplitBoundary have both higher-dimensional neighbors
       template<size_t dim>
       bool NoNeighborNull( const csmp::InterFace<dim>& interFace );
@@ -51,10 +53,10 @@ namespace csmp {
       void TestSplitNodeAssignment( const csmp::Model<dim>& );
 
       template<size_t dim>
-      void VisualiseSplitBoundaries( csmp::Model<dim>&, const std::string&test_name  );
+      void TestUnitNormals( csmp::Model<dim>&, const std::string& test_name  );
 
       template<size_t dim>
-      void TestUnitNormals( csmp::Model<dim>&, const std::string& test_name  );
+      void VisualiseSplitBoundaries( csmp::Model<dim>&, const std::string&test_name  );
 
       template<size_t dim>
       void PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& fractures, double64 displacement );
@@ -72,21 +74,21 @@ namespace csmp {
       void LoadContiguousModel( const std::string& model_name, std::vector<std::string>& fractures );
 
       template<size_t dim>
-      void etablishContiguosRegionsList( Model<dim>& model,
-                                         const std::set<std::string>& fractures_basic_set,
-                                         std::set<std::string>& fractures );
+      void EstablishContiguousRegionsList( Model<dim>& model,
+                                           const std::set<std::string>& fractures_basic_set,
+                                           std::set<std::string>& fractures );
 
       /// reading fault modeling input data
-      void inputFromFile( const char* file_name,
+      void InputFromFile( const char* file_name,
                           std::set<std::string>& fractures_basic_set );
 
-      void inputFromFile( const char* file_name,
+      void InputFromFile( const char* file_name,
                           std::vector<std::string>& fractures );
 
       /// writing fault modeling input data into text file
-      void outputToFile( const char* file_name,
+      void OutputToFile( const char* file_name,
                          const std::vector<std::string>& fractures );
-      void outputToFile( const char* file_name,
+      void OutputToFile( const char* file_name,
                          const std::set<std::string>& fractures );
       private:
         const bool verbose_;
@@ -94,4 +96,4 @@ namespace csmp {
 
   } // csmp
 
-#endif
+#endif /* SPLIT_BOUNDARY_INTERFACE_TEST_H */

@@ -29,8 +29,12 @@ void Variables_Example::Run()
 
     // creating the model and split boundary
     const size_t D(3);
-    ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true );    
-    model.InsertSplitBoundary( "FRACTURE" );
+    ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true ); 
+    
+    const bool remove_dim_minus1_region(true);
+    model.CreateInternalBoundaryFrom( "FRACTURE", remove_dim_minus1_region );  
+    Boundary<D>& fractureBoundary = model.Boundary( "FRACTURE_BOUNDARY" ); 
+    model.CreateSplitBoundaryFrom( fractureBoundary );
 
 
     // getting keys from database
