@@ -264,18 +264,17 @@ class VData {
   protected:
 
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );
- 
-    std::vector<int32>                pelmt;            ///< CSMP element type info, needed to read plist & pfverts
 
   private:
 
     bool                              hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double64>             px, py, pz;        ///< node coordinates
-    std::deque<std::vector<size_t> >  plist;             ///< nodes of each element
+    std::vector<int32>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
+    std::deque<std::vector<size_t> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
     std::unordered_map<size_t,long64> bflags;            ///< flags for those nodes that lie on model boundary
-    size_t                            first_interface_;  ///< faces come after elements; if none this is equal to elements
-    size_t                            first_face_;       ///< interfaces come after faces; if none this is equal to elements 
+    size_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
+    size_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements 
 
     friend class VData_Test;
 };

@@ -88,6 +88,7 @@ namespace csmp {
       /// writing fault modeling input data into text file
       void OutputToFile( const char* file_name,
                          const std::vector<std::string>& fractures );
+                         
       void OutputToFile( const char* file_name,
                          const std::set<std::string>& fractures );
       private:
