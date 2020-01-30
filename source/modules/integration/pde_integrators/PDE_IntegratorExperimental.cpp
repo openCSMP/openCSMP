@@ -1064,7 +1064,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryInte
                (*it_rhs).second->ComputeContribution( *(*git) );
                if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                  (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
              }
    
  } // AccumulateBoundaryIntegrals
@@ -1099,7 +1099,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundar
                (*it_rhs).second->ComputeContribution( *(*git) );
                if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                  (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
              }
    
  } // AccumulateSplitBoundaryIntegrals

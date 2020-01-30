@@ -244,7 +244,7 @@ struct CRC3_RockType0 {
 
   /// Linear relative permeability: water
   double64 Krw( double64 Sw ) const {
-      Sw = std::max( std::max(Sw,1.), 0. );
+      Sw = std::max( std::min(Sw,1.), 0. );
       return Sw;
    }
   /// Linear relative permeability: CO2 
@@ -254,22 +254,25 @@ struct CRC3_RockType0 {
     }
   /// capillary pressure that does not depend on Sw but on radius of well completion  
   double64 Pc( double64 /* Sw */ ) const {
-       const double64 IFT = 0.05; // interfacial tension (N/m) 
+       const double64 IFT = 0.035; // interfacial tension water/CO2 (N/m) 
+std::cerr << IFT / diameter_ << "\n";
        return IFT / diameter_;
     }
 
   const std::string name = "well";        
   const int      rocktype_ = 0;
   const int      subtypes_ = 1;
-  const double64 k_        = 1.0e-7,  
+  const double64 diameter_ = 0.2,
+                 k_        = 1.0e-7,  
                  phi_      = 1.,
                  Swi_pc_   = 0.,
                  Swi_      = 0.,
                  Sgr_      = 0.,
                  m_        = 0.1,
-                 pd_       = Pc(1.),
-                 diameter_ = 0.2;     // of the sandface section
+                 pd_       = Pc(1.);  // of the sandface section
 };
+
+
 
 
 

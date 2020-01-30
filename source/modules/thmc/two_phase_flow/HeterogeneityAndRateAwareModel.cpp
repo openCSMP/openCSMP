@@ -3,7 +3,6 @@
 #include "ErrorHandler.h"
 #include "OtwayCRC3_RockTypes.h"
 
-
 // #define DEBUG_HETEROGENEITY_AWARE_MODEL
 
 
