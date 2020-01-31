@@ -134,6 +134,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     is_composite_ = false;
     TwoPhaseModel<dim>::tensor_permeability_ = false;
     TwoPhaseModel<dim>::ift_  = 0.035; // 35 mN/m water - CO2
+    dPc_ = 0.;
 
     switch( rocktype_ ) {
          case 0: // WELL
@@ -428,20 +429,25 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     grad_p_magnitude_ = PressureGradientMagnitude(e); // TODO: fix seg-fault: 
     Nc_               = Nc_kgradP_Version( grad_p_magnitude_ ); // capillary number
 
-// DEBUGGING
-#ifdef DEBUG_HETEROGENEITY_AWARE_MODEL
-if ( isnan(TwoPhaseModel<dim>::TotalMobility()) )
-  throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
-                        "mobt = NaN.");
+    const double64 lambda_t = TwoPhaseModel<dim>::TotalMobility();
+    if ( isnan(lambda_t) ) {
+         Out(1); // 1=wetting phase
+         throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
+                                      "mobt = NaN.");
+      }
 
-if ( TwoPhaseModel<dim>::TotalMobility() < 0. )
-  throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
-                        "mobt is negative.");
+    if ( lambda_t < 0. ) {
+         Out(1);
+         throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
+                                      "mobt is negative.");
+      }
+    if ( lambda_t <= numeric_limits<double64>::epsilon() ) {
+         Out(1);
+         throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
+                                      "mobt is zero.");
+      }
 
-if ( TwoPhaseModel<dim>::TotalMobility() <= numeric_limits<double64>::epsilon() )
-  throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
-                        "mobt is zero.");
-Out(1);
+ #ifdef DEBUG_HETEROGENEITY_AWARE_MODEL
 
 // no flow = Ncap=0
 VectorVariable<dim> vt; vt=0.;
@@ -862,7 +868,7 @@ template<size_t dim>
 typename HeterogeneityAndRateAwareModel<dim>::FLOW_DIRECTION 
 HeterogeneityAndRateAwareModel<dim>::ProminentFlowDirection( const VectorVariable<dim>& vt ) const
  {
-     if ( fabs(vt[0]+vt[1]) <= numeric_limits<double64>::epsilon() ) return HORIZONTAL;
+     if ( fabs(vt[0])+fabs(vt[1]) <= numeric_limits<double64>::epsilon() ) return HORIZONTAL;
      // comparing the vertical component with the horizontal magnitude of the flow
      const double64 horizontal_magnitude = ( dim == 2U ) ? vt[0] : sqrt( vt[0]*vt[0] + vt[2]*vt[2] );
      FLOW_DIRECTION direction = ( fabs(vt[1]) > horizontal_magnitude ) ? VERTICAL : HORIZONTAL;
@@ -1014,9 +1020,10 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
     const double64 pc_high = (bcp_high_ == 0.) ? pd_high_ : pc_BC( Sw_, Swi_pc_, pd_high_, bcp_high_ );
     
     // for composites the flow direction and the low and high-k layers are taken into account
-    // if prominent flow direction is vertical, harmonic mean is used    
+    // if prominent flow direction is vertical, the pd-difference between the laminations, dPc,
+    // is added to the entry pressure    
     if ( ProminentFlowDirection( vt_ ) == VERTICAL ) {
-         cerr <<"\nHeterogeneityAndRateAwareModel<dim>::pc_Phase: vertical pc(sw) not implemented yet.\n";
+         return min( pc_BC( Sw_, Swi_pc_, pd_+dPc_, bcp_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
       } 
     
     // for horizontal flow, weighted average is used
@@ -1146,26 +1153,26 @@ void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nHeterogeneityAndRateAwareModel<"<< dim << ">::Out(rocktype="<< rocktype_ <<"): return values of functions: "<< endl;
     cout <<"\nelement properties:";
-    cout <<"\n                                 velocity (m/s): "<< vt_;
+    cout <<"\n                                 velocity (m/s): "<< scientific << vt_;
     if ( ProminentFlowDirection( vt_ ) == HORIZONTAL ) 
       cout <<"- dominantly horizontal flow.";
     else 
       cout <<"- dominantly vertical flow.";
-    cout <<"\n                           capillary number, Nc: "<< Nc_;
+    cout <<"\n                           capillary number, Nc: "<< scientific << Nc_;
     if ( is_composite_ ) {
-         cout <<"\n               layer-parallel permeability (m2): "<< PermeabilityParallelToLaminations();
-         cout <<"\n          layer-perpendicular permeability (m2): "<< PermeabilityPerpendicularToLaminations();
-         cout <<"\nratio between viscous and capillary forces, RVC: "<< RVC( Nc_ );
-         cout <<"\n      average water saturation in composite, sw: "<< Sw_;
+         cout <<"\n      average water saturation in composite, sw: "<< defaultfloat << Sw_;
+         cout <<"\n               layer-parallel permeability (m2): "<< scientific << PermeabilityParallelToLaminations();
+         cout <<"\n          layer-perpendicular permeability (m2): "<< scientific << PermeabilityPerpendicularToLaminations();
+         cout <<"\nratio between viscous and capillary forces, RVC: "<< defaultfloat << RVC( Nc_ );
       }
     else {
-        cout <<"\n                              permeability (m2): "<< KK_(0,0);
-        cout <<"\n       average water saturation in rocktype, sw: "<< Sw_;
+        cout <<"\n       average water saturation in rocktype, sw: "<< defaultfloat << Sw_;
+        cout <<"\n                              permeability (m2): "<< scientific << KK_(0,0);
       }
-    cout <<"\n                                        krw(sw): "<< krw_Phase();
-    cout <<"\n                                        krn(sw): "<< krn_Phase();
-    cout <<"\n                                         pc(sw): "<< pc_Phase();
-    cout <<"\n                                     dpc/ds_max: "<< TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_ << endl << endl;
+    cout <<"\n                                        krw(sw): "<< defaultfloat << krw_Phase();
+    cout <<"\n                                        krn(sw): "<< defaultfloat << krn_Phase();
+    cout <<"\n                                         pc(sw): "<< scientific << pc_Phase();
+    cout <<"\n                                     dpc/ds_max: "<< scientific << TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_ << endl << endl;
 
  } // end Out
  
