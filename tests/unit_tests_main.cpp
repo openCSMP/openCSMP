@@ -205,8 +205,8 @@ TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
       basic.addTest(new MeshManager_Test(true));
       basic.addTest(new BoundaryInterface_Test(true));
       basic.addTest(new Boundary_Test());
-      basic.addTest(new SplitBoundaryInterface_Test());
-      basic.addTest(new SplitBoundary_Test());
+//      basic.addTest(new SplitBoundaryInterface_Test());
+//      basic.addTest(new SplitBoundary_Test());
       
       // Variable tests
       basic.addTest( new Point_Test());

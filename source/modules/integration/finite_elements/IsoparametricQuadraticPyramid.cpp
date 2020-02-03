@@ -187,19 +187,31 @@ For this element, the faces are numbered such that the lower left closest is 1 -
 void
 IsoparametricQuadraticPyramid::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
-    // base plane
-    if ( face_id == 0 )
+    // base plane (fromn the outside looking in)
+    if ( face_id == 4)
       {
         fnids.resize(8);
+        // corner nodes
         fnids[0] = 0;
         fnids[1] = 3;
         fnids[2] = 2;
         fnids[3] = 1;
-        fnids[4] = 2;
-        fnids[5] = 5;
-        fnids[6] = 8;
-        fnids[7] = 7;
-        fnids[8] = 6;
+        // midside nodes
+        fnids[4] = 5;
+        fnids[5] = 8;
+        fnids[6] = 7;
+        fnids[7] = 6;
+      }
+    else if ( face_id == 0 )
+      {
+         fnids.resize(6);
+         fnids[0] = 0;
+         fnids[1] = 1;
+         fnids[2] = 4;
+         // midsides
+         fnids[3] = 5;
+         fnids[4] = 10;
+         fnids[5] = 9;
       }
     else if ( face_id == 1 )
       {
@@ -207,9 +219,11 @@ IsoparametricQuadraticPyramid::NodesOfFace( size_t face_id, std::vector<size_t>&
          fnids[0] = 1;
          fnids[1] = 2;
          fnids[2] = 4;
+         // midside nodes
          fnids[3] = 6;
          fnids[4] = 11;
          fnids[5] = 10;
+
       }
     else if ( face_id == 2 )
       {
@@ -217,20 +231,22 @@ IsoparametricQuadraticPyramid::NodesOfFace( size_t face_id, std::vector<size_t>&
          fnids[0] = 2;
          fnids[1] = 3;
          fnids[2] = 4;
+         // midside nodes
          fnids[3] = 7;
          fnids[4] = 12;
          fnids[5] = 11;
-
       }
     else if ( face_id == 3 )
       {
          fnids.resize(6);
+         // corner nodes
          fnids[0] = 0;
-         fnids[1] = 1;
-         fnids[2] = 4;
-         fnids[3] = 5;
-         fnids[4] = 10;
-         fnids[5] = 9;
+         fnids[1] = 4;
+         fnids[2] = 3;
+         // midside nodes
+         fnids[3] = 9;
+         fnids[4] = 12;
+         fnids[5] = 8;
       }
     else
     std::cout <<"\nIsoparametricQuadraticPyramid::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;

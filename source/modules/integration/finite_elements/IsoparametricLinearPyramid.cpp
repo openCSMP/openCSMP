@@ -447,8 +447,8 @@ void IsoparametricLinearPyramid::NodesOfFace( size_t face_id, std::vector<size_t
       {
          fnids.resize(3);
          fnids[0] = 0;
-         fnids[1] = 1;
-         fnids[2] = 4;
+         fnids[1] = 4;
+         fnids[2] = 3;
       }
     else
     std::cout <<"\nIsoparametricLinearPyramid::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
