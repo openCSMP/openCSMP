@@ -132,7 +132,7 @@ VSet<2U> test_CreateVSet()
 
 
 
-void test_Create_One_Square_VSet(VSet<2U> & vset, double64 length_of_sides, bool bSkewed )
+void test_Create_One_Square_VSet(VSet<2U>& vset, double64 length_of_sides, bool bSkewed )
 {    
   	IsoparametricLinearQuadrilateral iso_quad;
   	
@@ -212,7 +212,7 @@ void test_Create_One_Square_VSet(VSet<2U> & vset, double64 length_of_sides, bool
 
 
 
-void test_Create_TrianglePatch_VSet( VSet<2U> & vset )
+void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
 {    
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -342,7 +342,7 @@ void test_Create_TrianglePatch_VSet( VSet<2U> & vset )
 
 
 
-void test_Create_One_Hexahedra_VSet(VSet<3U> & vset, bool bSkewed )
+void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 {    
   	IsoparametricLinearHexahedron iso_hexahedron;
   	
@@ -436,7 +436,7 @@ void test_Create_One_Hexahedra_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
-void test_Create_Hexahedra_VSet(VSet<3U> & vset, bool bSkewed )
+void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
 {
     const size_t iNrOfElements(27);
     
@@ -651,7 +651,7 @@ void test_Create_Square_VSet( VSet<2U>& vset, size_t size_sides, double64 dimens
 
 
 
-void test_Create_SlitRectangle_VSet( VSet<2U> & vset, size_t x_dimension, size_t y_dimension, 
+void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t y_dimension, 
                                      double64 x_length, double64 y_length, size_t depth_of_slit, bool bSkewed )
 {
   assert(x_dimension>0);

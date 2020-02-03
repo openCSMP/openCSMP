@@ -5,6 +5,7 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "TextFileIO.h"
+#include "CSMP_mathUtilities.h"
 
 using namespace std;
 
@@ -185,7 +186,7 @@ size_t VData::Faces() const { return first_interface_ - first_face_; }
 size_t VData::InterFaces() const { return plist.size() - first_interface_; }
 
 /// the plist contains all: elements, faces and interfaces
-size_t VData::Simplices() const { return plist.size(); }
+size_t VData::TotalNumberOfCells() const { return plist.size(); }
 
 size_t VData::ElementTypes() const { return pelmt.size(); }
 
@@ -932,7 +933,15 @@ bool VData::CheckFix()
         if ( counter > 0 ) 
 	      cout <<"\nVData::CheckFix: Replaced "<< counter <<" 'bflags' by REGION_BOUNDARY flag.\n";
      }
-     
+
+   // creating consistent element orientations and connectivity
+   // TODO: place this appropriately
+   if ( HybridElementTypeMesh() ) {
+        RenumberElementsCounterClockwise2D();
+        EstablishConnectivityOfEquidimensionalElements2D();
+        CreateConsistentLineElementOrientations2D();
+     }
+
    return ok;
 
  } // end Check
@@ -1930,6 +1939,644 @@ bool VData::WithNeighbourConnectivity() const
     if ( boundary_faces == 0U ) return false;
     return true;
  }
+
+
+
+/// range of the X coordinate (increasing to the east)
+pair<double64,double64>  VData::X_Range() const
+ {
+   if ( px.empty() ) return make_pair(0.,0.);
+   vector<double64>::const_iterator xt_max = max_element(px.begin(), px.end());
+   vector<double64>::const_iterator xt_min = min_element(px.begin(), px.end());
+   return make_pair( (*xt_min), (*xt_max) );
+ }
+
+/// range of the Y coordinate (increasing upward and often indicating elevation above sealevel)
+pair<double64,double64>  VData::Y_Range() const
+ {
+    if ( py.empty() ) return make_pair(0.,0.);
+    vector<double64>::const_iterator yt_max = max_element(py.begin(), py.end());
+    vector<double64>::const_iterator yt_min = min_element(py.begin(), py.end());
+    return make_pair( (*yt_min), (*yt_max) ); 
+    //bool y_zero = ( fabs( (*yt_max)-(*yt_min) ) <= numeric_limits<double64>::epsilon() ) ? true : false; 
+ }
+
+/// range of the Z coordinate (from north to south)
+pair<double64,double64>  VData::Z_Range() const
+ {
+   if ( pz.empty() ) return make_pair(0.,0.);
+   vector<double64>::const_iterator zt_max = max_element(pz.begin(), pz.end());
+   vector<double64>::const_iterator zt_min = min_element(pz.begin(), pz.end());
+   return make_pair( (*zt_min), (*zt_max) );
+   //bool z_zero = ( fabs( (*zt_max)-(*zt_min) ) <= numeric_limits<double64>::epsilon() ) ? true : false; 
+ }
+
+
+
+
+/** 
+   Flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
+   
+      @attention method expects elements to be of CSMP_FEM_TYPE
+      
+      @attention works only for linear and quadratic elements
+*/
+size_t VData::RenumberElementsCounterClockwise2D()
+ {
+    size_t orientation_changes(0U);
+    CSMP_FEM_TYPE   etype = (HybridElementTypeMesh()==false) ? parseFiniteElementTypeEnum( ElementType(0) ) : UNKNOWN;
+    bool      is_triangle = (etype != UNKNOWN) ? isTriangularElement( etype ) : false;
+    bool is_quadrilateral = (etype != UNKNOWN) ? isQuadrilateralElement( etype ) : false;
+    
+    // 1. processing the elements that have the same dimension as the 2D mesh (with at least 3 nodes)
+    // ----------------------------------------------------------------------------------------------
+    const vector<int32>::const_iterator end = PelmtEnd();
+    vector<int32>::const_iterator       eit = PelmtBegin();
+    deque<vector<size_t> >::iterator    pls = PlistBegin();
+    deque<vector<long64> >::iterator    pfv = PfvertsBegin();
+    
+    while( eit != end ) {
+         // if this is a triangle or quadrilateral
+         if ( HybridElementTypeMesh() ) {
+              etype = parseFiniteElementTypeEnum(*eit);
+              assert ( etype != CUBIC_TRIANGLE );
+              assert ( etype != ISOPARAMETRIC_CUBIC_TRIANGLE );
+              assert ( etype != CUBIC_BAR );
+              assert ( etype != ISOPARAMETRIC_CUBIC_BAR );
+              assert ( etype != ISOPARAMETRIC_CUBIC_QUADRILATERAL );
+              is_triangle      = isTriangularElement( etype );
+              is_quadrilateral = isQuadrilateralElement( etype ); 
+           }
+         if ( is_triangle or is_quadrilateral ) {
+              // computing (signed) cross product=normal of vector from origin node to next (clockwise) and origin backwards (ccw)
+              const double64 v1x = px[ (*pls)[2] ] - px[ (*pls)[1] ];
+              const double64 v1y = py[ (*pls)[2] ] - py[ (*pls)[1] ];
+              const double64 v2x = px[ (*pls)[0] ] - px[ (*pls)[1] ];
+              const double64 v2y = py[ (*pls)[0] ] - py[ (*pls)[1] ];
+              const double64 crossProduct = v1x * v2y - v1y * v2x;
+              // if this product is not positive, the element node numbering must be flipped
+              if ( crossProduct < 0. ) {
+                   // linear elements (less than or equal to 4 nodes)
+                   const size_t nodes = (*pls).size();
+                   // reverse plist and pfverts
+                   if ( nodes <= 4 ) {
+                        reverse( (*pls).begin(), (*pls).end() );  
+                     }
+                   // else quadratic triangles or quads thus far 
+                   else {
+                        if ( is_triangle ) {
+                             // reverse corner nodes, then midside nodes, bubble node stays in barycentric element 
+                             assert( nodes <= 7 );
+                             reverse( (*pls).begin(), next((*pls).begin(),3) ); 
+                             reverse( next((*pls).begin(),4), next((*pls).begin(),6) ); // TODO: check offsets
+                          }
+                        else { // quadratic quadrilateral with and without bubble node
+                             assert( nodes <= 9 );
+                             reverse( (*pls).begin(), next((*pls).begin(),8) );  
+                          }
+                     }
+                   // in all cases, the neighbor numbering has to be reversed   
+                   if ( !(*pfv).empty() ) reverse( (*pfv).begin(), (*pfv).end() );
+                   orientation_changes++;  
+                }         
+           }
+         eit++;
+         pls++;
+         pfv++;
+      } 
+
+
+    // 2. making the line elements at model boundary comply with the numbering of the boundary faces
+    // ---------------------------------------------------------------------------------------------    
+    // 3. aligning the elements of internal line element regions if any
+    // ----------------------------------------------------------------
+    if ( HybridElementTypeMesh() ) CreateConsistentLineElementOrientations2D();
+    
+    return orientation_changes;
+ 
+ } // end RenumberElementsCounterClockwise2D
+ 
+ 
+ 
+ 
+ 
+ 
+ /**
+   Line elements are oriented in a consistent way for internal 1D regions within a 2D domain.
+   
+   @brief To ensure that the normals pointing out of a lower (1D) dimensional regions located at the model boundary,
+   and that they all point in the same direction for internal boundaries, their nodes must be locally ordered consistently;
+   meaning these line elements are aligned with the node-numbering of the faces of the surface elements located at the 
+   model boundary whose nodes are numbered counter clockwise.
+      The normals of the line elements are found by 90degrees clockwise rotation of the tangent vector of the line elements,
+   which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
+   
+   @attention assumes node numbering in Plist follows the convention Exterior nodes first, then Interior nodes.
+   
+   @attention method assumes that all manifolds (connections of more than 2 line elements at a node have been removed
+   =disambiguated before. Thus it relies on a valid neighbor connectivity of the line elements, which should be stored in pfverts.
+   
+   @note algorithmic procedure: 1) all chains of connected line elements are found and stored in a map, using their "root" nodes as keys.
+   2) these are traversed, flipping nodes whenever successive elements are not aligned. 3) at the model boundaries,  the fixed chains of 
+   line elements are flipped if their direction is not matched with that of the faces of the surface elements at the model boundary.
+   4) line element chains inside of the model are kept in whichever, yet consistent orientation.
+   
+  @author SKM
+  @date 3/22020
+  
+  */
+ void VData::CreateConsistentLineElementOrientations2D()
+   {
+      if ( bflags.empty() ) {
+            throw csmp::Exception( ERROR, "VData::CreateConsistentLineElementOrientations2D",
+                                  "Method relies on correct flagging of boundary nodes. This is not present in VData.");
+        }
+      if ( pfverts.empty() ) {
+            cerr <<"\nVData::CreateConsistentLineElementOrientations2D: 'pfverts' is empty; nothing could be done.\n";
+            return;
+         }
+      assert( plist.size() == pfverts.size() ); 
+       
+      // assuming that the mesh consists of surface and line elements
+      assert( HybridElementTypeMesh()==true ); 
+       
+      // 1. Finding chains of line elements and storing them in a map
+      // ------------------------------------------------------------
+      // (if a root node already exists in the map, the other end of the chain is used as root node)
+      // elmt-idx - of line elements where at least one neighbor is missing 
+      set<size_t>  polyline_ends;
+      // recording the corner-node ids of the surface elements for later searching
+      //  face-nd-ids,       elmt, face
+      map<set<size_t>,pair<size_t,size_t> > surf_elmt_face_nd_ids;
+
+      const vector<int32>::const_iterator  end = PelmtEnd();
+      vector<int32>::const_iterator        eit = PelmtBegin();
+      size_t elmt_idx(0U);
+
+       while( eit != end ) {
+            // if this is a line element
+            CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
+            if ( isLineElement( etype ) ) {
+                  if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 ) 
+                    polyline_ends.insert( elmt_idx ); 
+              }
+            // if this is a surface element  
+            else {
+                 if ( isTriangularElement( etype ) ) {
+                      const set<size_t> face1({ plist[elmt_idx][1], plist[elmt_idx][2] });
+                      const set<size_t> face2({ plist[elmt_idx][2], plist[elmt_idx][0] });
+                      const set<size_t> face3({ plist[elmt_idx][0], plist[elmt_idx][1] });
+                      // inserting the faces
+                      surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair(elmt_idx,0U) ) );
+                      surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair(elmt_idx,1U) ) );
+                      surf_elmt_face_nd_ids.insert( make_pair( face3, make_pair(elmt_idx,2U) ) );
+                   }
+                 else if ( isQuadrilateralElement( etype ) ) {
+                      pfverts[elmt_idx].resize(4U,IRREGULAR);
+                      // see CSMP fem specifications for these conventions 
+                      const set<size_t> face1({ plist[elmt_idx][0], plist[elmt_idx][1] });
+                      const set<size_t> face2({ plist[elmt_idx][1], plist[elmt_idx][2] });
+                      const set<size_t> face3({ plist[elmt_idx][2], plist[elmt_idx][3] });
+                      const set<size_t> face4({ plist[elmt_idx][3], plist[elmt_idx][0] });
+                      // inserting the faces
+                      surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair(elmt_idx,0U) ) );
+                      surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair(elmt_idx,1U) ) );
+                      surf_elmt_face_nd_ids.insert( make_pair( face3, make_pair(elmt_idx,2U) ) );
+                      surf_elmt_face_nd_ids.insert( make_pair( face4, make_pair(elmt_idx,3U) ) );
+                   }
+                 else {
+                      cerr <<"\n\telement "<< elmt_idx <<": type "<< parseFiniteElementType(*eit) <<" cannot be processed.\n";
+                      throw csmp::Exception( ERROR, "VData::CreateConsistentLineElementOrientations2D", "element type not recognised");
+                   }
+              }
+            elmt_idx++;
+            eit++;
+         }
+         
+      // 2. following chains until the end, re-orientating the line element orientations if necessary
+      // --------------------------------------------------------------------------------------------
+      // root-elmt, numbers of interconnected line elements in chain
+      map<size_t,vector<size_t> > polylines;
+      
+      for ( set<size_t>::const_iterator it=polyline_ends.begin(); it!= polyline_ends.end(); ++it ) {
+           // starting line-element chain traversal
+           elmt_idx           = (*it);
+           bool   flip        = ( pfverts[elmt_idx][0] < 0 ) ? false : true;
+           BOX_BOUNDARY bflag = (flip == false) ? intToBOX_BOUNDARY( pfverts[*it][0] ) : intToBOX_BOUNDARY( pfverts[*it][1] );
+           if ( flip == true ) {
+                const size_t node0 = plist[elmt_idx][0];
+                const size_t node1 = plist[elmt_idx][1];
+                plist[elmt_idx][0] = node1;
+                plist[elmt_idx][1] = node0;
+                pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
+                pfverts[elmt_idx][0] = bflag;
+             }
+          // storing the element in the chain
+          pair<map<size_t,vector<size_t> >::iterator,bool> chain_it=polylines.insert( make_pair( elmt_idx, vector<size_t>(1,elmt_idx) ) );
+          // making sure that the element was inserted (else it is a duplicate)
+          assert( chain_it.second == true );
+          // traversing the chains in the direction of the available neighbor, node0 is the one with no neighbor
+          bool end_of_polyline(false);
+          while ( end_of_polyline == false ) {
+               // is the neighbor element is correctly oriented (forming a chain with its first node against the second node of the previous one)
+               flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true; 
+               elmt_idx = pfverts[elmt_idx][1];
+               // flipping the elements nodes and neighbors if necessary
+               if ( flip == true ) {
+                    const size_t node0 = plist[elmt_idx][0];
+                    const size_t node1 = plist[elmt_idx][1];
+                    plist[elmt_idx][0] = node1;
+                    plist[elmt_idx][1] = node0;
+                    long swap            = pfverts[elmt_idx][1];
+                    pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
+                    pfverts[elmt_idx][0] = swap;
+                 }
+               // storing the element in the chain (polyline)
+               (*chain_it.first).second.push_back( elmt_idx );
+               // exit condition
+               if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 ) {
+                    // TODO: does box boundary have to be treated?
+                    end_of_polyline = true;
+                 }
+            }
+        }
+        
+      // 3. Reordering chains that are located on the model boundary to make them consistent with the counter-clockwise element numbering
+      // --------------------------------------------------------------------------------------------------------------------------------
+      for ( map<size_t,vector<size_t> >::const_iterator it=polylines.begin(); it!=polylines.end(); ++it ) {
+           // 3.1 If the chain is located on the model boundary, asserting that all of its nodes are too
+           // ------------------------------------------------------------------------------------------
+           assert( BFlags() > 0 );
+           if ( bflags.find( plist[(*it).first][0] ) != bflags.end() ) {
+                bool all_nodes_on_boundary(true);
+                for ( vector<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit )
+                  for ( vector<size_t>::const_iterator 
+                        nit=plist[*bit].begin(); nit!=plist[*bit].end(); ++nit ) 
+                    if ( bflags.find( *nit ) == bflags.end() ) {    
+                         all_nodes_on_boundary = false;
+                         break;
+                      }
+                if ( all_nodes_on_boundary == false ) {
+                      cerr <<"\n\tproblematic chain of line elements with ids: ";
+                      for ( vector<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit )
+                        cerr << (*bit) <<" ";
+                      throw csmp::Exception( WARNING, "VData::CreateConsistentLineElementOrientations2D:",
+                                            "found chain of line elements with some nodes on boundary and some not." );
+                  }
+
+                // 3.2 Reorienting all elements in the boundary polyline if the first is not aligned with nodes of surface element face that it matches
+                // ------------------------------------------------------------------------------------------------------------------------------------
+                // (reason: else their unit normals do not point to the outside of the model)
+                map<set<size_t>,pair<size_t,size_t> >::const_iterator fit = surf_elmt_face_nd_ids.find( set<size_t>({ plist[(*it).first][0], plist[(*it).first][1] }) );
+                assert( fit != surf_elmt_face_nd_ids.end() );
+                // checking the line element orientation
+                elmt_idx = (*fit).second.first;
+                const CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( pelmt[elmt_idx] );
+                // does it match the nodes of the surface element face
+                bool match(false);
+                if ( isTriangularElement( etype ) ) {
+                     // face 1
+                     if ( (*fit).second.second == 0U ) {
+                          if ( plist[elmt_idx][1] == plist[(*it).first][0] and plist[elmt_idx][2] == plist[(*it).first][1] ) match = true;
+                       }
+                     // face 2
+                     else if ( (*fit).second.second == 1U ) {
+                          if ( plist[elmt_idx][2] == plist[(*it).first][0] and plist[elmt_idx][0] == plist[(*it).first][1] ) match = true;
+                       }
+                     // face 3
+                     else if ( (*fit).second.second == 2U ) {
+                         if ( plist[elmt_idx][0] == plist[(*it).first][0] and plist[elmt_idx][1] == plist[(*it).first][1] ) match = true;
+                      }
+                  }
+                else { // quadrilateral
+                     assert( plist[elmt_idx].size() >= 4U ); 
+                     // face 1
+                     if ( (*fit).second.second == 0U ) {
+                          if ( plist[elmt_idx][0] == plist[(*it).first][0] and plist[elmt_idx][1] == plist[(*it).first][1] ) match = true;
+                       }
+                     // face 2
+                     else if ( (*fit).second.second == 1U ) {
+                          if ( plist[elmt_idx][1] == plist[(*it).first][0] and plist[elmt_idx][2] == plist[(*it).first][1] ) match = true;
+                       }
+                     // face 3
+                     else if ( (*fit).second.second == 2U ) {
+                          if ( plist[elmt_idx][2] == plist[(*it).first][0] and plist[elmt_idx][3] == plist[(*it).first][1] ) match = true;
+                       }
+                     // face 4
+                     else if ( (*fit).second.second == 3U ) {
+                          if ( plist[elmt_idx][3] == plist[(*it).first][0] and plist[elmt_idx][0] == plist[(*it).first][1] ) match = true;
+                       }
+                  }
+                // if the numbering does not match, node-numbers and neighbors must be flipped for the entire polyline
+                if ( match == false ) {
+                     // for all line elements in the patch
+                     for ( vector<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit ) {
+                          elmt_idx = (*bit);
+                          // swapping nodes
+                          const size_t node_swap = plist[elmt_idx][0];
+                          plist[elmt_idx][0] = plist[elmt_idx][1];
+                          plist[elmt_idx][1] = node_swap;
+                          // swapping neighbors
+                          const long nbor_swap = pfverts[elmt_idx][0];
+                          pfverts[elmt_idx][0] = pfverts[elmt_idx][1];
+                          pfverts[elmt_idx][1] = nbor_swap;
+                       }
+                  }
+
+             } // end polylines on boundary
+          
+        } // end for all polylines
+              
+  } // end of CreateConsistentLineElementOrientations
+
+
+
+
+
+ 
+ /// finds angle between 2 line elements determined by their number in the plist                                            
+ double64 VData::AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 )
+  {
+     assert( elmt1 < pelmt.size() );
+     assert( elmt2 < pelmt.size() );
+     assert( isLineElement( parseFiniteElementTypeEnum( pelmt[elmt1] ) ) );
+     assert( isLineElement( parseFiniteElementTypeEnum( pelmt[elmt2] ) ) );
+     
+     // representing line elements as vectors
+     const double64 v1x = px[ plist[elmt1][1U] ] - px[ plist[elmt1][0U] ];  
+     const double64 v1y = py[ plist[elmt1][1U] ] - py[ plist[elmt1][0U] ];  
+     const double64 v2x = px[ plist[elmt2][1U] ] - px[ plist[elmt2][0U] ];  
+     const double64 v2y = py[ plist[elmt2][1U] ] - py[ plist[elmt2][0U] ];  
+     
+     // cos theta = dot-product over cross-product (length1 * length2)
+     double64 cos_theta = (v1x*v2x + v1y*v2y) / (sqrt(v1x*v1x+v1y*v1y) * sqrt(v2x*v2x+v2y*v2y));     
+
+     return radiansToDegrees( acos(cos_theta) );
+     
+  } // end angleBetweenLineSegments
+ 
+ 
+ 
+
+/**
+   (Re)bBuild 'pfverts' container in the case it is empty or may contain unreliable information.
+   computes 'pfverts' connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
+   
+   @attention this method assumes that all elements are numbered in counter-clockwise direction
+   
+  @author SKM
+  @date 2/2/2020
+  
+*/
+void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbor line elements too */ )
+ {
+   if ( !pfverts.empty() ) {
+         cout <<"\nVData::EstablishConnectivityOfEquidimensionalElements2D: 'pfverts' not empty; deleting original content before reconstruction.\n";
+         pfverts.clear();
+         assert( !plist.empty() );
+         pfverts.resize( plist.size() );
+      }
+    
+   CSMP_FEM_TYPE   etype = (HybridElementTypeMesh()==false) ? parseFiniteElementTypeEnum( ElementType(0) ) : UNKNOWN;
+   bool      is_triangle = (etype != UNKNOWN) ? isTriangularElement( etype ) : false;
+   bool is_quadrilateral = (etype != UNKNOWN) ? isQuadrilateralElement( etype ) : false;
+   
+   // 1. Processing single (surface) element-type mesh
+   // ------------------------------------------------
+   // building face keys for surface and line element types and collecting them into maps including the elements that they belong to with corresponding face ID
+   //  face-nd-ids    elmt-id, face-of-element  
+   map<set<size_t>,map<size_t,size_t> >  surf_elmt_nbors;
+   map<size_t,map<size_t,size_t> >       line_elmt_nbors;
+
+   const deque<vector<size_t> >::iterator end = PlistEnd();
+   deque<vector<size_t> >::iterator       eit = PlistBegin();
+   size_t elmt_idx(0U);
+
+   if ( !plist.empty() ) {
+        // 1. establishing connectivity
+        // ----------------------------
+        while( eit != end ) {
+             // if this is a triangle or quadrilateral
+              if ( HybridElementTypeMesh() ) {
+                   etype = parseFiniteElementTypeEnum( pelmt[elmt_idx] );
+                   assert ( etype != CUBIC_TRIANGLE );
+                   assert ( etype != ISOPARAMETRIC_CUBIC_TRIANGLE );
+                   assert ( etype != CUBIC_BAR );
+                   assert ( etype != ISOPARAMETRIC_CUBIC_BAR );
+                   assert ( etype != ISOPARAMETRIC_CUBIC_QUADRILATERAL );
+                   is_triangle      = isTriangularElement( etype );
+                   is_quadrilateral = isQuadrilateralElement( etype ); 
+                }
+             // triangular elements have their faces opposite of the nodes 
+             // and the corner nodes are sufficient to identify them
+             if ( is_triangle ) {
+                  pfverts[elmt_idx].resize(3U,IRREGULAR);
+                  const set<size_t> face1({ (*eit)[1], (*eit)[2] });
+                  const set<size_t> face2({ (*eit)[2], (*eit)[0] });
+                  const set<size_t> face3({ (*eit)[0], (*eit)[1] });
+                  // inserting the faces
+                  // face 1
+                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face1_it =
+                    surf_elmt_nbors.insert( make_pair( face1, map<size_t,size_t>({{elmt_idx,{0}}}) ) );
+                  // if the face already is in the map, the element ID is added
+                  if ( face1_it.second == false ) (*face1_it.first).second.insert( make_pair( elmt_idx, 0 ) );
+                  // face 2
+                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face2_it =
+                    surf_elmt_nbors.insert( make_pair( face2, map<size_t,size_t>({{elmt_idx,{1}}}) ) );
+                  if ( face2_it.second == false ) (*face2_it.first).second.insert( make_pair( elmt_idx, 1 ) );
+                  // face 3
+                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face3_it =
+                    surf_elmt_nbors.insert( make_pair( face3, map<size_t,size_t>({{elmt_idx,{2}}}) ) );
+                  if ( face3_it.second == false ) (*face3_it.first).second.insert( make_pair( elmt_idx, 2 ) );
+               }
+             else if ( is_quadrilateral ) {
+                  pfverts[elmt_idx].resize(4U,IRREGULAR);
+                  // see CSMP fem specifications for these conventions 
+                  const set<size_t> face1({ (*eit)[0], (*eit)[1] });
+                  const set<size_t> face2({ (*eit)[1], (*eit)[2] });
+                  const set<size_t> face3({ (*eit)[2], (*eit)[3] });
+                  const set<size_t> face4({ (*eit)[3], (*eit)[0] });
+                  // inserting the faces
+                  // face 1
+                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face1_it =
+                    surf_elmt_nbors.insert( make_pair( face1, map<size_t,size_t>({{elmt_idx,{0}}}) ) );
+                  // if the face already is in the map, the element ID is added
+                  if ( face1_it.second == false ) (*face1_it.first).second.insert( make_pair( elmt_idx, 0 ) );
+                  // face 2
+                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face2_it =
+                    surf_elmt_nbors.insert( make_pair( face2, map<size_t,size_t>({{elmt_idx,{1}}}) ) );
+                  if ( face2_it.second == false ) (*face2_it.first).second.insert( make_pair( elmt_idx, 1 ) );
+                  // face 3
+                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face3_it =
+                    surf_elmt_nbors.insert( make_pair( face3, map<size_t,size_t>({{elmt_idx,{2}}}) ) );
+                  if ( face3_it.second == false ) (*face3_it.first).second.insert( make_pair( elmt_idx, 2 ) );               
+                  // face 4
+                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face4_it =
+                    surf_elmt_nbors.insert( make_pair( face4, map<size_t,size_t>({{elmt_idx,{3}}}) ) );
+                  if ( face4_it.second == false ) (*face4_it.first).second.insert( make_pair( elmt_idx, 3 ) );               
+               }
+             // any line elements only have a single node at their end-points, so they go into separate map  
+             else {
+                  pfverts[elmt_idx].resize(2U,IRREGULAR);
+                  pair<map<size_t,map<size_t,size_t> >::iterator,bool> face1_it = 
+                    line_elmt_nbors.insert( make_pair( (*eit)[0], map<size_t,size_t>({{elmt_idx,{0}}}) ) );
+                  if ( face1_it.second == false ) (*face1_it.first).second.insert( make_pair( elmt_idx, 0 ) );
+                  pair<map<size_t,map<size_t,size_t> >::iterator,bool> face2_it = 
+                    line_elmt_nbors.insert( make_pair( (*eit)[0], map<size_t,size_t>({{elmt_idx,{1}}}) ) );
+                  if ( face2_it.second == false ) (*face2_it.first).second.insert( make_pair( elmt_idx, 1 ) );                  
+               }
+             elmt_idx++;
+             eit++;
+          }
+ 
+        // 2. reconnecting surface type elements
+        // -------------------------------------
+        // where there is no neighbor an attempt is made to assign a face to a particular boundary,
+        // based on its alignment with boundary normal
+        size_t node0(NULL_IDX),   node1(NULL_IDX);
+        map<size_t,BOX_BOUNDARY>  bflags_revised; // node number 0..n-1 and boundary flag
+        for ( map<set<size_t>,map<size_t,size_t> >::const_iterator 
+              it=surf_elmt_nbors.begin(); it!=surf_elmt_nbors.end(); ++it ) {
+             // there should be no more than 2 entries per face
+             assert( (*it).second.size() <= 2U );
+             // if there is only a single entry, the face is at the model boundary
+             // ------------------------------------------------------------------ 
+             if ( (*it).second.size() == 1U ) {
+                  elmt_idx    = (*(*it).second.begin()).first;
+                  size_t face = (*(*it).second.begin()).second;
+                  // nodes of face
+                  etype = (HybridElementTypeMesh()==false) ? parseFiniteElementTypeEnum( ElementType(0) ) : 
+                                                             parseFiniteElementTypeEnum( ElementType(elmt_idx) );
+                  is_triangle      = isTriangularElement( etype );
+                  is_quadrilateral = isQuadrilateralElement( etype );
+                  assert( is_triangle || is_quadrilateral );
+                  if ( is_triangle ) {
+                       if      ( face==0 ) { node0=1; node1=2; }
+                       else if ( face==1 ) { node0=2; node1=0; }
+                       else if ( face==2 ) { node0=0; node1=1; }
+                    }
+                  else if ( is_quadrilateral ) {
+                       if      ( face==0 ) { node0=0; node1=1; }
+                       else if ( face==1 ) { node0=1; node1=2; }
+                       else if ( face==2 ) { node0=2; node1=3; }
+                       else if ( face==3 ) { node0=3; node1=0; }
+                    }
+                  // creating face unit normal
+                  const double64 dx = px[ plist[elmt_idx][node1] ] - px[ plist[elmt_idx][node0] ]; // dx=x2-x1 
+                  const double64 dy = py[ plist[elmt_idx][node1] ] - py[ plist[elmt_idx][node0] ]; // dy=y2-y1, 
+                  const double64 length = sqrt( dx*dx + dy*dy );
+                  // normals are (-dy, dx)=clockwise(USED HERE) and (dy, -dx)=counter-clockwise
+                  const double64 unrml[2U] = { -dy/length, dx/length };
+                  // determining BOX_BOUNDARY
+                  BOX_BOUNDARY boundary(IRREGULAR);
+                  // bottom (within +/-20o of side-boundary normal (dot-product >=0.94)
+                  double64 dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * -1.;
+                  if ( dotproduct >= 0.94 ) boundary = BOTTOM;
+                  // right
+                  else dotproduct = unrml[0U] * 1. /* + unrml[1U] * 0. */;
+                  if ( dotproduct >= 0.94 ) boundary = RIGHT;
+                  // top
+                  else dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * 1.;
+                  if ( dotproduct >= 0.94 ) boundary = TOP;
+                  // left
+                  else dotproduct = unrml[0U] * -1. /* + unrml[1U] * 0. */;
+                  if ( dotproduct >= 0.94 ) boundary = LEFT;
+                  // all other cases remain IRREGULAR
+                  
+                  // assigning boundary to the face without neighbor
+                  pfverts[elmt_idx][face] = boundary;
+                  // recording the boundary nodes (TODO: this does not deal with corners yet)
+                  bflags_revised.insert( make_pair( plist[elmt_idx][node0], boundary ) );
+                  bflags_revised.insert( make_pair( plist[elmt_idx][node1], boundary ) );
+               }
+             // if there are 2 elements that share the face
+             // -------------------------------------------
+             else {
+                  // the neighbors are recorded in the 'pfverts' map
+                  const size_t elmt1      = (*(*it).second.begin()).first;
+                  const size_t face_elmt1 = (*(*it).second.begin()).second;
+                  const size_t elmt2      = (*next((*it).second.begin(),2)).first;
+                  const size_t face_elmt2 = (*next((*it).second.begin(),2)).second;
+                  pfverts[elmt1][face_elmt1] = elmt2;
+                  pfverts[elmt2][face_elmt2] = elmt1;
+               } 
+          }
+        
+        // detecting elements with more than one face on boundary (these need to be fixed)
+        elmt_idx = 0U;
+        for ( deque<vector<long64> >::const_iterator pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx ) {
+             size_t boundaries_per_element(0U);
+             for ( vector<long64>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
+               // the face is on the boundary
+               if ( (*pt) < 0 ) boundaries_per_element++;
+             if ( boundaries_per_element > 1U ) {
+                  cerr <<"\nVData::EstablishConnectivityOfEquidimensionalElements2D: WARNING: element "<< elmt_idx;
+                  cerr <<" has "<< boundaries_per_element <<" faces on the model boundary.\n";
+               } 
+          }
+        
+        // 3. reconnecting line elements
+        // -----------------------------
+        map<size_t,map<size_t,size_t> >  line_elmt_nbors;
+        for ( map<size_t,map<size_t,size_t> >::iterator
+              it=line_elmt_nbors.begin(); it!=line_elmt_nbors.end(); ++it ) {
+             // dealing with line elements where these end in the interior or the perimeter of the model
+             if ( (*it).second.size() == 1U ) {
+                  elmt_idx          = (*(*it).second.begin()).first;
+                  const size_t face = (*(*it).second.begin()).second;
+                  // the boundary flags are found in 
+                  map<size_t,BOX_BOUNDARY>::iterator bit = bflags_revised.find( (*it).first );
+                  BOX_BOUNDARY boundary = ( bit != bflags_revised.end() ) ? (*bit).second : INTERNAL;
+                  pfverts[elmt_idx][face] = boundary;
+               }
+             // case where each line element has just one neighbor
+             else if ( (*it).second.size() == 2U ) {
+                  const size_t elmt1      = (*(*it).second.begin()).first;
+                  const size_t face_elmt1 = (*(*it).second.begin()).second;
+                  const size_t elmt2      = (*next((*it).second.begin(),2)).first;
+                  const size_t face_elmt2 = (*next((*it).second.begin(),2)).second;
+                  pfverts[elmt1][face_elmt1] = elmt2;
+                  pfverts[elmt2][face_elmt2] = elmt1;
+               }
+             // disambiguating manifolds
+             else {
+                  cout <<"\nVData::EstablishConnectivityOfEquidimensionalElements2D:";
+                  cout <<"\n found line-element manifold at node "<< (*it).first;
+                  cout <<". Disambiguating it by using most closely aligned neighbor.\n";
+                  while( (*it).second.size() >= 2U ) {
+                      //  angle,      element, face
+                      map<double64,pair<size_t,size_t> > angles;
+                      map<size_t,size_t>::const_iterator lt=(*it).second.begin();
+                      size_t elmt1 = (*lt).first, // first=element number
+                             face1 = (*lt).second;
+                      lt++;
+                      // finding the angle between the first and all the other elemts
+                      while( lt != (*it).second.end() ) {
+                           const size_t elmt = (*lt).first,
+                                        face = (*lt).second;
+                           angles.insert( make_pair( AngleBetweenLineElements2D( elmt1, elmt ), make_pair(elmt,face ) ) );
+                        }
+                      // assigning the neighbor
+                      // (smallest angle element is at the beginning of map)
+                      size_t elmt2 = (*angles.begin()).second.first,
+                             face2 = (*angles.begin()).second.second;
+                      pfverts[elmt1][face1] = elmt2;
+                      pfverts[elmt2][face2] = elmt1;
+                      // removing the element pair, which was already processed
+                      (*it).second.erase( elmt1 );
+                      (*it).second.erase( elmt2 );
+                   }
+               }
+          } // processing the line element neighbors
+          
+        // 4. reorienting line-element chains (done in other method)
+        // CreateConsistentLineElementOrientations2D()
+
+        return;
+     } // single-element type meshes
+        
+ } // end EstablishConnectivityOfEquidimensionalElements2D
+
 
 
  

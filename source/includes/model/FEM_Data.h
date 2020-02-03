@@ -43,15 +43,6 @@ class FEM_Data {
     /// add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes)
     void OffsetRangeBy( csp_type df );
 
-/*  DEPRECATED - but might be brought back
-    /// checks whether variable has already been taken the log of
-    bool Logarithmitized() const { return logarithmitized; };
-    /// convert values to their natural logarithm
-    void LogarithmOfValues();
-    /// convert values to base 10 logarithm
-    void DecadicLogarithmOfValues();
-    void SquareRootOfValues();
-*/
     bool OutBinary( std::fstream& fp ) const;
     void InBinary( std::fstream& fp );
     void Out() const;

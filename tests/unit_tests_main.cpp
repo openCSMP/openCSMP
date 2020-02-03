@@ -87,6 +87,7 @@
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"
 #include "VSet_Test.h"
+#include "VSet_TestCase.h"
 #include "PropertyHandle_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
 #include "ModelComparator_Test.h"
@@ -237,6 +238,7 @@ TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
       basic.addTest( new FEM_Data_Test());
       basic.addTest( new PropertyData_Test() );
       basic.addTest( new VSet_Test() );
+//      basic.addTest( new Vset_TestCase("UnitSquareFracs_irregular",true /* verbose */) );
       basic.addTest( new ColorPalette_Test() );
       
 // FAILS TO RUN	  basic.addTest(new ANSYS_SplitBoundaryMatch_Test(true));

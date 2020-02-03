@@ -102,7 +102,7 @@ bool isTriangularElement( CSMP_FEM_TYPE etype )
 bool isQuadrilateralElement( CSMP_FEM_TYPE etype )
  {
     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return true;
-	if ( etype == LINEAR_RECTANGLE) return true;
+	  if ( etype == LINEAR_RECTANGLE ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return true;
     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return true;

@@ -1911,9 +1911,10 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
 
     // 4. correct surface mesh orientation
     // ---------------------------------------
-    if( dim == 2U && correct_orientation_of_surface_elements )
-        if( InterpolationOrder() == 1 )
-            CorrectSurfaceElementOrientations( vset );
+    // SKM_FIX : this code is ill-placed and superseded by functionality in the VSet
+//    if( dim == 2U && correct_orientation_of_surface_elements )
+//        if( InterpolationOrder() == 1 )
+//            CorrectSurfaceElementOrientations( vset );
 
     // 5. assigning properties to regions
     // ----------------------------------
@@ -1979,9 +1980,10 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
 
     // 4. correct surface mesh orientation
     // ---------------------------------------
-    if ( dim == 2U && correct_orientation_of_surface_elements )
-      if ( InterpolationOrder() == 1 )
-        CorrectSurfaceElementOrientations( vset );
+// SKM_FIX : this code is ill-placed and superseded by functionality in the VSet
+//    if ( dim == 2U && correct_orientation_of_surface_elements )
+//      if ( InterpolationOrder() == 1 )
+//        CorrectSurfaceElementOrientations( vset );
 
     return checks_passed;
 }
