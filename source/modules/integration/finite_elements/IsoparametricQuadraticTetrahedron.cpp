@@ -424,9 +424,9 @@ void IsoparametricQuadraticTetrahedron::NodesOfFace( size_t face_id,
          fnids[0] = 0;
          fnids[1] = 3;
          fnids[2] = 2;
-         fnids[3] = 6;
-         fnids[4] = 7;
-         fnids[5] = 9;
+         fnids[3] = 7;
+         fnids[4] = 9;
+         fnids[5] = 6;
       }
     else if ( face_id == 2 ) { // opposite node 2
          fnids[0] = 0;
@@ -440,9 +440,9 @@ void IsoparametricQuadraticTetrahedron::NodesOfFace( size_t face_id,
          fnids[0] = 0;
          fnids[1] = 2;
          fnids[2] = 1;
-         fnids[3] = 4;
-         fnids[4] = 6;
-         fnids[5] = 5;
+         fnids[3] = 6;
+         fnids[4] = 5;
+         fnids[5] = 4;
       }
     else std::cerr <<"\nQuadraticTetrahedron::NodesOfFace: Face ID not identified: "<< face_id << std::endl;
  }
