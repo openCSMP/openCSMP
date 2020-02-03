@@ -363,11 +363,11 @@ IsoparametricLinearHexahedron::NodesOfSegment( size_t segm_id, std::vector<size_
 
 */
 void
-IsoparametricLinearHexahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+IsoparametricLinearHexahedron::NodesOfFace( size_t face_id, vector<size_t>& fnids ) const
  {
     fnids.resize(4);
 
-    if      ( face_id == 0 )
+    if ( face_id == 0 )
       {
          fnids[0] = 0;
          fnids[1] = 3;

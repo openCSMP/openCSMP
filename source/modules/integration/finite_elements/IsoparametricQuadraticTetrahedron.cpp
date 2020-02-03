@@ -392,7 +392,7 @@ node 1 etc. These faces are of the type QuadraticTriangle (TRI_6),
 as is also present in library.
 
 The nodes of each face are numbered counter-clockwise, looking from the
-inside of the tetrahedron at each face.
+outside of the tetrahedron at each face.
 
 @section arguments Input Arguments
 
@@ -414,35 +414,35 @@ void IsoparametricQuadraticTetrahedron::NodesOfFace( size_t face_id,
     fnids.resize(6);
     if      ( face_id == 0 ) { // opposite node 0
          fnids[0] = 1;
-         fnids[1] = 3;
-         fnids[2] = 2;
-         fnids[3] = 8;
+         fnids[1] = 2;
+         fnids[2] = 3;
+         fnids[3] = 5;
          fnids[4] = 9;
-         fnids[5] = 5;
+         fnids[5] = 8;
       }
     else if ( face_id == 1 ) { // opposite node 1
          fnids[0] = 0;
-         fnids[1] = 2;
-         fnids[2] = 3;
+         fnids[1] = 3;
+         fnids[2] = 2;
          fnids[3] = 6;
          fnids[4] = 7;
          fnids[5] = 9;
       }
     else if ( face_id == 2 ) { // opposite node 2
          fnids[0] = 0;
-         fnids[1] = 3;
-         fnids[2] = 1;
-         fnids[3] = 8;
-         fnids[4] = 7;
-         fnids[5] = 4;
+         fnids[1] = 1;
+         fnids[2] = 3;
+         fnids[3] = 4;
+         fnids[4] = 8;
+         fnids[5] = 7;
       }
     else if ( face_id == 3 ) { // opposite node 3
          fnids[0] = 0;
-         fnids[1] = 1;
-         fnids[2] = 2;
+         fnids[1] = 2;
+         fnids[2] = 1;
          fnids[3] = 4;
-         fnids[4] = 5;
-         fnids[5] = 6;
+         fnids[4] = 6;
+         fnids[5] = 5;
       }
     else std::cerr <<"\nQuadraticTetrahedron::NodesOfFace: Face ID not identified: "<< face_id << std::endl;
  }

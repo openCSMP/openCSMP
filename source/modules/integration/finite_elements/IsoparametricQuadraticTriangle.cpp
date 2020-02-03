@@ -500,8 +500,8 @@ void IsoparametricQuadraticTriangle::NodesOfFace( size_t face_id,
       }
     else if ( face_id == 1 )
       {
-         fnids[0] = 0;
-         fnids[1] = 2;
+         fnids[0] = 2;
+         fnids[1] = 0;
          fnids[2] = 5;
       }
     else if ( face_id == 2 )
@@ -1786,8 +1786,8 @@ void IsoparametricQuadraticTriangle::UnitNormal( std::vector<double64>& vc ) con
               Z31 = XY(0,2) - XY(2,2);
 
   // normal to triangle (but not unit normal!)
-    vc[0]  = -Y12*Z31 + Z12*Y31,
-    vc[1]  = -Z12*X31 + X12*Z31,
+    vc[0]  = -Y12*Z31 + Z12*Y31;
+    vc[1]  = -Z12*X31 + X12*Z31;
     vc[2]  = -X12*Y31 + Y12*X31;
     // normalization to unit length
     double64 length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);

@@ -235,7 +235,8 @@ void IsoparametricLinearLineElement::NodesOfSegment( size_t segm_id, std::vector
        - node 0 corresponds to first face 0
        - node 1 corresponds to second face 1
 */
-void  IsoparametricLinearLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+void  IsoparametricLinearLineElement::NodesOfFace( size_t face_id, 
+                                                   vector<size_t>& fnids ) const
  {
     assert( face_id <= 1U );
     fnids.resize(1U);

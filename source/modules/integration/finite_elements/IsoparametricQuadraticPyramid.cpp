@@ -187,86 +187,55 @@ For this element, the faces are numbered such that the lower left closest is 1 -
 void
 IsoparametricQuadraticPyramid::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
-
-    fnids.resize(9);
-    if      ( face_id == 0 )
+    // base plane
+    if ( face_id == 0 )
       {
-        fnids.resize(9);
+        fnids.resize(8);
         fnids[0] = 0;
-        fnids[1] = 8;
-        fnids[2] = 1;
-        fnids[3] = 9;
+        fnids[1] = 3;
+        fnids[2] = 2;
+        fnids[3] = 1;
         fnids[4] = 2;
-        fnids[5] = 10;
-        fnids[6] = 3;
-        fnids[7] = 11;
-        fnids[8] = 20;
+        fnids[5] = 5;
+        fnids[6] = 8;
+        fnids[7] = 7;
+        fnids[8] = 6;
       }
     else if ( face_id == 1 )
       {
-         fnids[0] = 0;
-         fnids[1] = 8;
-         fnids[2] = 1;
-         fnids[3] = 13;
-         fnids[4] = 5;
-         fnids[5] = 16;
-         fnids[6] = 4;
-         fnids[7] = 12;
-         fnids[8] = 21;
+         fnids.resize(6);
+         fnids[0] = 1;
+         fnids[1] = 2;
+         fnids[2] = 4;
+         fnids[3] = 6;
+         fnids[4] = 11;
+         fnids[5] = 10;
       }
     else if ( face_id == 2 )
       {
-         fnids[0] = 1;
-         fnids[1] = 9;
-         fnids[2] = 2;
-         fnids[3] = 14;
-         fnids[4] = 6;
-         fnids[5] = 17;
-         fnids[6] = 5;
-         fnids[7] = 13;
-         fnids[8] = 22;
+         fnids.resize(6);
+         fnids[0] = 2;
+         fnids[1] = 3;
+         fnids[2] = 4;
+         fnids[3] = 7;
+         fnids[4] = 12;
+         fnids[5] = 11;
+
       }
     else if ( face_id == 3 )
       {
-         fnids[0] = 2;
-         fnids[1] = 14;
-         fnids[2] = 6;
-         fnids[3] = 18;
-         fnids[4] = 7;
-         fnids[5] = 15;
-         fnids[6] = 3;
-         fnids[7] = 10;
-         fnids[8] = 23;
-      }
-    else if ( face_id == 4 )
-      {
+         fnids.resize(6);
          fnids[0] = 0;
-         fnids[1] = 11;
-         fnids[2] = 3;
-         fnids[3] = 15;
-         fnids[4] = 7;
-         fnids[5] = 19;
-         fnids[6] = 4;
-         fnids[7] = 12;
-         fnids[8] = 24;
-      }
-    else if ( face_id == 5 )
-      {
-         fnids[0] = 4;
-         fnids[1] = 16;
-         fnids[2] = 5;
-         fnids[3] = 17;
-         fnids[4] = 6;
-         fnids[5] = 18;
-         fnids[6] = 7;
-         fnids[7] = 19;
-         fnids[8] = 25;
+         fnids[1] = 1;
+         fnids[2] = 4;
+         fnids[3] = 5;
+         fnids[4] = 10;
+         fnids[5] = 9;
       }
     else
     std::cout <<"\nIsoparametricQuadraticPyramid::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
 
-/// @todo (3) Check ANSYS face numbering convention
 CSMP_FEM_TYPE
 IsoparametricQuadraticPyramid::ElementTypeOfFace( size_t face )  const
  {

@@ -311,7 +311,7 @@ IsoparametricLinearTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size
 
 
 
-/// local node ids in clockwise order from the outside looking into the faces
+/// local node ids in counter-clockwise order from the outside looking into the faces
 void IsoparametricLinearTetrahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
     fnids.resize(3);
