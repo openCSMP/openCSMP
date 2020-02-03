@@ -210,12 +210,15 @@ IsoparametricQuadraticPrism::NodesOfFace( size_t face_id, std::vector<size_t>& f
  {
     fnids.resize(9);
 
-    if      ( face_id == 0 )
+    // triangular face at base
+    if ( face_id == 0 )
       {
         fnids.resize(6);
+         // corner nodes
          fnids[0] = 0;
          fnids[1] = 2;
          fnids[2] = 1;
+         // midside nodes
          fnids[3] = 8;
          fnids[4] = 7;
          fnids[5] = 6;
@@ -227,6 +230,7 @@ IsoparametricQuadraticPrism::NodesOfFace( size_t face_id, std::vector<size_t>& f
          fnids[1] = 1;
          fnids[2] = 4;
          fnids[3] = 3;
+         //
          fnids[4] = 6;
          fnids[5] = 10;
          fnids[6] = 12;
@@ -239,10 +243,11 @@ IsoparametricQuadraticPrism::NodesOfFace( size_t face_id, std::vector<size_t>& f
          fnids[1] = 2;
          fnids[2] = 5;
          fnids[3] = 4;
-         fnids[4] = 10;
-         fnids[5] = 7;
-         fnids[6] = 11;
-         fnids[7] = 13;
+         //
+         fnids[4] = 7;
+         fnids[5] = 11;
+         fnids[6] = 13;
+         fnids[7] = 10;
       }
     else if ( face_id == 3 )
       {
@@ -251,11 +256,13 @@ IsoparametricQuadraticPrism::NodesOfFace( size_t face_id, std::vector<size_t>& f
          fnids[1] = 3;
          fnids[2] = 5;
          fnids[3] = 2;
-         fnids[4] = 8;
-         fnids[5] = 9;
-         fnids[6] = 14;
-         fnids[7] = 11;
+         //
+         fnids[4] = 9;
+         fnids[5] = 14;
+         fnids[6] = 11;
+         fnids[7] = 8;
       }
+    // triangular face at top
     else if ( face_id == 4 )
       {
       fnids.resize(6);
