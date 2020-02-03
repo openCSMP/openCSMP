@@ -353,7 +353,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              Swi_pc_        = get<12>(Otway_.rocktype_).Swi_pc_;
              dPc_           = get<12>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<12>(Otway_.rocktype_).Swi_;
-             TwoPhaseModel<dim>::snr_ = get<12>(Otway_.rocktype_).Sgr_;
+             TwoPhaseModel<dim>::snr_ = 0.; // get<12>(Otway_.rocktype_).Sgr_;
              krw_parallel_  = get<12>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
              krw_crossflow_ = get<12>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
              krn_parallel_  = get<12>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
@@ -735,7 +735,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              Swi_pc_        = get<12>(Otway_.rocktype_).Swi_pc_;
              dPc_           = get<12>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<12>(Otway_.rocktype_).Swi_;
-             TwoPhaseModel<dim>::snr_ = get<12>(Otway_.rocktype_).Sgr_;
+             TwoPhaseModel<dim>::snr_ = 0.; // get<12>(Otway_.rocktype_).Sgr_;
              krw_parallel_  = get<12>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
              krw_crossflow_ = get<12>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
              krn_parallel_  = get<12>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
@@ -946,7 +946,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
     // to get the ensemble krw for the composite, the parallel and perpendicular values are blended
     // taking into account the flow direction 
     // --------------------------------------
-    const double64 krw = krw_parallel_ * vt_normalised_[0] + krw_crossflow_ * vt_normalised_[1];
+    const double64 krw = krw_parallel_ * fabs(vt_normalised_[0]) + krw_crossflow_ * fabs(vt_normalised_[1]);
 
     // scaling the relative permeability by the vertical permeability
     return max( krw * K_reduction_in_flow_direction_, 0. );
@@ -964,7 +964,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
  {
      if ( !is_composite_ ) return krn_; // krn_BC( Sw_ );
 
-     const double64 krn = krn_parallel_ * vt_normalised_[0] + krn_crossflow_ * vt_normalised_[1];
+     const double64 krn = krn_parallel_ * fabs(vt_normalised_[0]) + krn_crossflow_ * fabs(vt_normalised_[1]);
 
      // scaling the relative permeability by the vertical permeability
      return max( krn * K_reduction_in_flow_direction_, 0. );
@@ -1023,11 +1023,11 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
     // if prominent flow direction is vertical, the pd-difference between the laminations, dPc,
     // is added to the entry pressure    
     if ( ProminentFlowDirection( vt_ ) == VERTICAL ) {
-         return min( pc_BC( Sw_, Swi_pc_, pd_+dPc_, bcp_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
+         return min( pc_BC( Sw_, Swi_pc_, pd_+dPc_, bcp_low_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
       } 
     
     // for horizontal flow, weighted average is used
-    const double64 pc =  pc_high * vt_normalised_[0] + pc_low * vt_normalised_[1];
+    const double64 pc =  pc_high * fabs(vt_normalised_[0]) + pc_low * fabs(vt_normalised_[1]);
                         
     return min( pc, TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
 
@@ -1169,8 +1169,8 @@ void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
         cout <<"\n       average water saturation in rocktype, sw: "<< defaultfloat << Sw_;
         cout <<"\n                              permeability (m2): "<< scientific << KK_(0,0);
       }
-    cout <<"\n                                        krw(sw): "<< defaultfloat << krw_Phase();
-    cout <<"\n                                        krn(sw): "<< defaultfloat << krn_Phase();
+    cout <<"\n                                        krw(sw): "<< scientific << krw_Phase();
+    cout <<"\n                                        krn(sw): "<< scientific << krn_Phase();
     cout <<"\n                                         pc(sw): "<< scientific << pc_Phase();
     cout <<"\n                                     dpc/ds_max: "<< scientific << TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_ << endl << endl;
 

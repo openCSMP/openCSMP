@@ -500,15 +500,18 @@ struct CRC3_RockType16 {
 
 // ==============================================
 
+const double64 sw_for_krw_eq1(0.99);
+
 ///< Planar bedding mudstone - silt
 struct CRC3_RockType4 {
    bool IsComposite() const { return true; }
 
    /// Water relative permeability
    double64 Krw_ParallelDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        if ( ux >= 6e-3 ) return 0.61 * pow( seffL(Sw,Swi_), 4.06 );
        if ( ux <= 1e-5 ) return 0.626 * pow( seffL(Sw,Swi_), 5.11 );
-       const double64 C1_krw = 1.; // TODO: verify with Maartje
+       const double64 C1_krw = poly_abc(ux,0.2485,0.01877,0.3717);
        const double64 a2 =  0.1286,
                       b2 = -0.2088,
                       c2 =  3.691,
@@ -535,8 +538,9 @@ struct CRC3_RockType4 {
    
    /// Water relative permeability
    double64 Krw_CrossDrainage( double64 Sw, double64 ux ) const {
-       if ( ux >= 1.0e-4 ) return 0.581 * std::pow( seffL(Sw,Swi_), 5.26 );
-       if ( ux <= 1.0e-7 ) return 0.559 * std::pow( seffL(Sw,Swi_), 3.15 );
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
+       if ( ux >= ux_VL_cross_ ) return 0.581 * std::pow( seffL(Sw,Swi_), 5.26 );
+       if ( ux <= ux_CL_cross_ ) return 0.559 * std::pow( seffL(Sw,Swi_), 3.15 );
        const double64 a1 =  0.2485,
                       b1 =  0.01877,
                       c1 =  0.3717,
@@ -554,8 +558,8 @@ struct CRC3_RockType4 {
    double64 Krn_CrossDrainage( double64 Sw, double64 ux ) const {
         // making sure that for the VL case Krn>Sgr = 0
         if ( Sw >= 1. - 0.0153 ) return 0.;
-        if ( ux >= 1.0e-4 ) return std::max( 0.267 * seffL_Product(Sw,Swi_,0.0153), 0. );
-        if ( ux <= 1.0e-7 ) return std::max( 0.0794 * seffL_Product(Sw,Swi_,0.0206), 0. );
+        if ( ux > ux_VL_cross_ ) ux = ux_VL_cross_; // return std::max( 0.267 * seffL_Product(Sw,Swi_,0.0153), 0. );
+        if ( ux < ux_CL_cross_ ) ux = ux_CL_cross_; // return std::max( 0.0794 * seffL_Product(Sw,Swi_,0.0206), 0. );
         if ( Sw <= Swi_ ) Sw = Swi_; // to keep curves to constant values down to Sw=0
         const double64 Sgr_ux = poly_abc(ux,0.0075237,-0.05069,0.002388); // between 1-2%, not sure what this means for drainage
         const double64 C1_krn = poly_abc(ux,3.612,0.3236,0.06067);
@@ -578,6 +582,8 @@ struct CRC3_RockType4 {
                  m_       = 0.431, // for pc calculation
                  pd_low_  = 5000., pd_high_ = 3000.,  // capillary (drainage) entry pressure of low and high
                  pd_      = 3000.,
+                 ux_VL_cross_ = 1.0e-4,
+                 ux_CL_cross_ = 1.0e-7,
                  dPc_     = 2000.; // UNSPECIFIED: guess of pc difference between high_k and low_k layer at swc
 
 }; // end CRC3_RockType4
@@ -599,6 +605,7 @@ struct CRC3_RockType5 {
   bool IsComposite() const { return true; } 
   /// Water relative permeability
   double64 Krw_ParallelDrainage( double64 Sw ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        const double64 m_ave(0.493), Swi(0.5);
        return krw_VG( seffL(Sw,Swi), m_ave );
     }
@@ -611,6 +618,7 @@ struct CRC3_RockType5 {
 
   /// Water relative permeability (capillary limit)
   double64 Krw_CrossDrainage( double64 Sw ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        const double64 m_ave(0.636), Swi(0.359);
        return krw_VG( seffL(Sw,Swi), m_ave );
     }
@@ -651,6 +659,7 @@ struct CRC3_RockType6 {
   bool IsComposite() const { return true; }
   
   double64 Krw_ParallelDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        // viscous limit approximation
        if ( ux >= 1.0e-2 ) return 0.728 * pow( seffL(Sw,Swi_), 3.47 );
        // capillary limit approximation
@@ -675,6 +684,7 @@ struct CRC3_RockType6 {
      }
 
   double64 Krw_CrossDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        // viscous limit approximation
        if ( ux >= 7.0e-4 ) return 0.557 * pow( seffL(Sw,Swi_), 5.74 );
        // capillary limit approximation
@@ -728,6 +738,7 @@ struct CRC3_RockType7 {
   bool IsComposite() const { return true; }
   /// Water relative permeability
   double64 Krw_ParallelDrainage( double64 Sw ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        const double64 m_ave(0.6), Swi(0.47);
        return krw_VG( seffL(Sw,Swi), m_ave );
     }
@@ -740,6 +751,7 @@ struct CRC3_RockType7 {
 
   /// Water relative permeability
   double64 Krw_CrossDrainage( double64 Sw ) const {
+      if ( Sw >= sw_for_krw_eq1 ) return 1.;
       const double64 m_ave(0.593), Swi(0.46);
       return krw_VG( seffL(Sw,Swi), m_ave );
    }
@@ -782,6 +794,7 @@ struct CRC3_RockType8 {
   bool IsComposite() const { return true; }
   
   double64 Krw_ParallelDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        if ( ux <= 5.0e-5 ) return 0.848 * std::pow( seffL(Sw,Swi_), 4.475 );
        if ( ux >= 4.0e-2 ) return 0.824 * std::pow( seffL(Sw,Swi_), 3.176 );
        // between CL and VL
@@ -800,6 +813,7 @@ struct CRC3_RockType8 {
     }
 
   double64 Krw_CrossDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        if ( ux >= 2e-4 ) return 0.492 * std::pow( seffL(Sw,Swi_), 4.19 );
        if ( ux <= 5e-7 ) return std::min( 2.98  * std::pow( seffL(Sw,Swi_), 1.66 ), 0.4921 );
        // between CL and VL
@@ -849,6 +863,7 @@ struct CRC3_RockType9 {
   
   /// Water relative permeability
   double64 Krw_ParallelDrainage( double64 Sw ) const {
+      if ( Sw >= sw_for_krw_eq1 ) return 1.;
       const double64 m_ave(0.7), Swi(0.44);
       return krw_VG( seffL(Sw,Swi), m_ave );
    }
@@ -862,7 +877,8 @@ struct CRC3_RockType9 {
 
   /// Water relative permeability
   double64 Krw_CrossDrainage( double64 Sw ) const {
-      const double64 m_ave(4.69), Swi(0.45); // really high m_ave, just to get curvefit
+      if ( Sw >= sw_for_krw_eq1 ) return 1.;
+      const double64 m_ave(4.29), Swi(0.4 ); // really high m_ave, just to get curvefit
       return krw_VG( seffL(Sw,Swi), m_ave );
    }
   
@@ -870,7 +886,7 @@ struct CRC3_RockType9 {
   double64 Krn_CrossDrainage( double64 Sw ) const {
        const double64 Swi(0.275);
        if ( Sw < Swi ) return 1.;
-       return seffL_Product(Sw,Swi);
+       return seffL_Product(Sw,Swi,0.55);
     }
 
   const std::string name = "M-CbSst-CSst";  
@@ -908,6 +924,7 @@ struct CRC3_RockType11 {
 
  /// Water relative permeability
  double64 Krw_ParallelDrainage( double64 Sw, double64 ux ) const {
+     if ( Sw >= sw_for_krw_eq1 ) return 1.;
      if ( ux >= 3.0e-2 ) return 0.731 * std::pow( seffL(Sw,Swi_), 4.17 ); // VL;
      if ( ux <= 1.0e-5 ) return 0.739 * std::pow( seffL(Sw,Swi_), 5.95 ); // CL;     
      const double64 C1_krw = poly_abc( ux, 0.00273, -0.1325, 0.7263 );
@@ -928,6 +945,7 @@ struct CRC3_RockType11 {
 
   /// Water relative permeability
   double64 Krw_CrossDrainage( double64 Sw, double64 ux ) const {
+      if ( Sw >= sw_for_krw_eq1 ) return 1.;
       if ( ux >= 3.0e-2 ) return 0.6197 * std::pow( seffL(Sw,Swi_), 4.74 ); // VL;
       if ( ux <= 1.0e-5 ) return std::min( 0.993 * std::pow( seffL(Sw,Swi_), 3.26 ), 0.6197 ); // CL;     
       const double64 C1_krw = poly_abc( ux, 0.0066, -0.2977, 0.5443 );
@@ -979,6 +997,7 @@ struct CRC3_RockType12 {
   bool IsComposite() const { return true; }
 
   double64 Krw_ParallelDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        if ( ux >= ux_VL_ ) return 0.83  * std::pow( seffL(Sw,Swi_), 3.44 );
        if ( ux <= ux_CL_ ) return 0.869 * std::pow( seffL(Sw,Swi_), 6.14 );
        const double64 C1_krw = poly_abc( ux, 0.002649, -0.2458, 0.8242 );
@@ -990,12 +1009,14 @@ struct CRC3_RockType12 {
   double64 Krn_ParallelDrainage( double64 Sw, double64 ux ) const {
        if ( ux >= ux_VL_ ) return std::min( 0.637 * seffL_Product(Sw,Swi_), 0.43 );
        if ( ux <= ux_CL_ ) return std::min( 2.094 * seffL_Product(Sw,Swi_), 0.43 );
+       // NB: Sgr=0 for parallel flow
        const double64 C1_krn = poly_abc( ux, -6.277, 0.03536, 6.239 );
-       const double64 Krn_ave = C1_krn * seffL_Product(Sw,Swi_,Sgr_);
+       const double64 Krn_ave = C1_krn * seffL_Product(Sw,Swi_);
        return std::min( Krn_ave, 0.43 );
     }
 
   double64 Krw_CrossDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        if ( ux >= ux_cross_VL_ ) return 0.544966  * std::pow( seffL(Sw,Swi_), 4.437 );
        if ( ux <= ux_cross_CL_ ) return std::min( 2.55 * std::pow( seffL(Sw,Swi_), 3.066 ), 0.545 );
        const double64 C1_krw = poly_abc( ux, 2.036, -0.06943, -3.025 );
@@ -1023,7 +1044,6 @@ struct CRC3_RockType12 {
                  LY_low_=0.25, LY_high_=0.25,
                  Swi_low_=0.18, Swi_high_=0.104, 
                  Swi_pc_ =0.134,
-                 Sgr_    = 0.382,    
                  m_low_=0.5, m_high_=0.7,        // van Genuchten exponents for the 2 different layers
                  m_=0.394,
                  pd_low_=3000., pd_high_=750.,  // capillary (drainage) entry pressure of low and high
@@ -1044,6 +1064,7 @@ struct CRC3_RockType14 {
   bool IsComposite() const { return true; }
 
   double64 Krw_ParallelDrainage( double64 Sw, double64 ux ) const {
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
        if ( ux >= ux_VL_ ) return 0.82 * std::pow( seffL(Sw,Swi_), 3.69 );
        if ( ux <= ux_CL_ ) return 0.86 * std::pow( seffL(Sw,Swi_), 4.64 );
        const double64 C1_krw = poly_abc( ux, 0.008275, -0.1924, 0.811 );
@@ -1061,8 +1082,9 @@ struct CRC3_RockType14 {
     }
 
   double64 Krw_CrossDrainage( double64 Sw, double64 ux ) const {
-       if ( ux >= ux_VL_ ) return 0.756 * std::pow( seffL(Sw,Swi_), 4.22 );
-       if ( ux <= ux_CL_ ) return std::min( 0.715 * std::pow( seffL(Sw,Swi_), 2.944 ), 0.7557 );
+       if ( Sw >= sw_for_krw_eq1 ) return 1.;
+       if ( ux >= ux_cross_VL_ ) return 0.756 * std::pow( seffL(Sw,Swi_), 4.22 );
+       if ( ux <= ux_cross_CL_ ) return std::min( 0.715 * std::pow( seffL(Sw,Swi_), 2.944 ), 0.7557 );
        const double64 C1_krw = poly_abc( ux, 0.8557, 0.5453, 0.7148 );
        const double64 C2_krw = poly_abc( ux, 4.545, 0.1916, 2.662 );
        // Krw_ave =
@@ -1071,8 +1093,8 @@ struct CRC3_RockType14 {
 
   double64 Krn_CrossDrainage( double64 Sw, double64 ux ) const {
        if ( Sw >= 1. - 0.0516 ) return 0.;
-       if ( ux >= ux_VL_ ) return std::max( 0.793 * seffL_Product(Sw,Swi_,0.436), 0. );
-       if ( ux <= ux_CL_ ) return std::max( 0.316 * seffL_Product(Sw,Swi_,0.0516), 0. );
+       if ( ux >= ux_cross_VL_ ) return std::max( 0.793 * seffL_Product(Sw,Swi_,0.436), 0. );
+       if ( ux <= ux_cross_CL_ ) return std::max( 0.316 * seffL_Product(Sw,Swi_,0.0516), 0. );
        if ( Sw < Swi_ ) Sw = Swi_;
        const double64 Sgr_ux = poly_abc( ux, 0.0175, -0.03539, 0.02231 ),
                       C1_krn = poly_abc( ux, 3.329, 0.3396, 0.2929 );
@@ -1094,8 +1116,8 @@ struct CRC3_RockType14 {
                  pd_low_=1000., pd_high_=750., 
                  pd_=750., 
                  dPc_=250., // NOT SPECIFIED: pc difference between high_k and low_k layer at swc
-                 ux_VL_ = 5.0e-1, ux_CL_ = 1e-4,
-                 ux_cross_VL_ = 4.0e-3, ux_cross_CL_ = 5e-7,
+                 ux_VL_ = 0.5, ux_CL_ = 1.0e-4,
+                 ux_cross_VL_ = 4.0e-3, ux_cross_CL_ = 5.0e-7,
                  Swi_ = 0.262;
 };
 
