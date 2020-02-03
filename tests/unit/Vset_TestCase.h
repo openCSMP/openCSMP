@@ -8,6 +8,11 @@ namespace csmp {
 
 template<size_t> class Model;
 
+/**
+       Tests the use of VSet in model construction 
+       storage to disk,
+       and reconstruction from binary file.
+*/
 class Vset_TestCase : public Test
   {
     public:
@@ -16,6 +21,10 @@ class Vset_TestCase : public Test
       ~Vset_TestCase();
       virtual void run();
     
+    private:
+      void TestModelConstructionAndSaving2D();
+      void TestModelConstructionAndSaving3D();
+      
     private:
       const std::string model_file_;
       const bool verbose_;

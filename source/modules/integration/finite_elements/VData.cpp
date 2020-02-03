@@ -934,14 +934,6 @@ bool VData::CheckFix()
 	      cout <<"\nVData::CheckFix: Replaced "<< counter <<" 'bflags' by REGION_BOUNDARY flag.\n";
      }
 
-   // creating consistent element orientations and connectivity
-   // TODO: place this appropriately
-   if ( HybridElementTypeMesh() ) {
-        RenumberElementsCounterClockwise2D();
-        EstablishConnectivityOfEquidimensionalElements2D();
-        CreateConsistentLineElementOrientations2D();
-     }
-
    return ok;
 
  } // end Check
@@ -2495,8 +2487,8 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
                   // the neighbors are recorded in the 'pfverts' map
                   const size_t elmt1      = (*(*it).second.begin()).first;
                   const size_t face_elmt1 = (*(*it).second.begin()).second;
-                  const size_t elmt2      = (*next((*it).second.begin(),2)).first;
-                  const size_t face_elmt2 = (*next((*it).second.begin(),2)).second;
+                  const size_t elmt2      = (*next((*it).second.begin(),1)).first;
+                  const size_t face_elmt2 = (*next((*it).second.begin(),1)).second;
                   pfverts[elmt1][face_elmt1] = elmt2;
                   pfverts[elmt2][face_elmt2] = elmt1;
                } 
@@ -2533,8 +2525,8 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
              else if ( (*it).second.size() == 2U ) {
                   const size_t elmt1      = (*(*it).second.begin()).first;
                   const size_t face_elmt1 = (*(*it).second.begin()).second;
-                  const size_t elmt2      = (*next((*it).second.begin(),2)).first;
-                  const size_t face_elmt2 = (*next((*it).second.begin(),2)).second;
+                  const size_t elmt2      = (*next((*it).second.begin(),1)).first;
+                  const size_t face_elmt2 = (*next((*it).second.begin(),1)).second;
                   pfverts[elmt1][face_elmt1] = elmt2;
                   pfverts[elmt2][face_elmt2] = elmt1;
                }

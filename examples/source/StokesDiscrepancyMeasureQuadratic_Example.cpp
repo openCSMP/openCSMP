@@ -53,7 +53,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
 
-  const size_t   dim(3U);
+    const size_t   dim(3U);
     const string   model_name("one_sphere_0.45_tetra");
 
     // read ANSYS model data and build model
