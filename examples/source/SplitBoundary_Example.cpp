@@ -124,8 +124,7 @@ void SplitBoundary_Example::Run()
   
   model.InsertSplitBoundary( "MATRIX_RIGHT", "MATRIX_LEFT" );
   // putting a lower dimensional region inside of all split boundaries
-  set<string>  newly_created_regions;
-  model.RegionsFromSplitBoundaries( newly_created_regions );
+  set<string>  newly_created_regions = model.RegionsFromSplitBoundaries();  
   assert( !newly_created_regions.empty() );
   model.RegionsOut();
   // getting a reference to the split boundary

@@ -13,12 +13,12 @@ template<size_t> class Model;
        storage to disk,
        and reconstruction from binary file.
 */
-class Vset_TestCase : public Test
+class VSet_TestCase : public Test
   {
     public:
-      explicit Vset_TestCase( const char* prefix,
+      explicit VSet_TestCase( const char* prefix,
                               bool verbose );
-      ~Vset_TestCase();
+      ~VSet_TestCase();
       virtual void run();
     
     private:

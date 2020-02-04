@@ -1,4 +1,4 @@
-#include "Vset_TestCase.h"
+#include "VSet_TestCase.h"
 #include "Boundary.h"
 #include "Region.h"
 #include "ANSYS_Interface.h"
@@ -14,16 +14,16 @@
 using namespace std;
 
 namespace csmp {
-Vset_TestCase::Vset_TestCase( const char* prefix,
+VSet_TestCase::VSet_TestCase( const char* prefix,
                               bool verbose )
  : model_file_(prefix),
    verbose_(verbose)
 {
-    this->setName("Vset_TestCase");
+    this->setName("VSet_TestCase");
 }
 
 
-Vset_TestCase::~Vset_TestCase()
+VSet_TestCase::~VSet_TestCase()
 {
 }
 
@@ -32,18 +32,18 @@ Vset_TestCase::~Vset_TestCase()
       Testing whether processing of the VSet produces valid model with correct line-element normal
       orientations etc.
 */
-void Vset_TestCase::run()
+void VSet_TestCase::run()
 {
    TestModelConstructionAndSaving2D();
     
-} // end Vset_TestCase
+} // end VSet_TestCase
 
 
 
 
 
 
-void Vset_TestCase::TestModelConstructionAndSaving2D()
+void VSet_TestCase::TestModelConstructionAndSaving2D()
   {
     string input_file_name(model_file_);
     enum{DIM=2U};
@@ -68,7 +68,7 @@ void Vset_TestCase::TestModelConstructionAndSaving2D()
     // processing the (deliberately) inconsistent VSet 
     const size_t rotated_elements = vset.RenumberElementsCounterClockwise2D();
     if ( rotated_elements == 0U )
-      throw csmp::Exception( ERROR, "Vset_TestCase::TestModelConstructionAndSaving2D",
+      throw csmp::Exception( ERROR, "VSet_TestCase::TestModelConstructionAndSaving2D",
                              "element orientations were already correct.");
   
     // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
@@ -92,7 +92,7 @@ void Vset_TestCase::TestModelConstructionAndSaving2D()
  
   
   
-void Vset_TestCase::TestModelConstructionAndSaving3D()
+void VSet_TestCase::TestModelConstructionAndSaving3D()
   {
     //------------------------------------
     // Parameters section
@@ -198,9 +198,9 @@ void Vset_TestCase::TestModelConstructionAndSaving3D()
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
         }
-    modelOutput3.OutputToBinaryFile("Vset_TestCase_modelOutput3");
+    modelOutput3.OutputToBinaryFile("VSet_TestCase_modelOutput3");
     
-    Model<3> modelInput3("Vset_TestCase_modelOutput3");
+    Model<3> modelInput3("VSet_TestCase_modelOutput3");
     
     ePtr = *modelInput3.Region("Model").ElementsBegin();
     size_t ctr(0);
