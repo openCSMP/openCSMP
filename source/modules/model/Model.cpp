@@ -687,6 +687,16 @@ string Model<dim>::BinaryVariablesFileName( const char* base_file_name )
 
 
 
+
+/// attempts to return the spatial dimension of the model stored in the file (1-3D)
+size_t dimensionModelInBinaryFile( const char* csmp_binary )
+ {
+    return 3U;
+    
+ } // end dimensionModelInBinaryFile
+
+
+
 /**
 OutputVariableTo() is an overloaded method which will output any kind
 of property to the supplied FEM_Data object.

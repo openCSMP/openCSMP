@@ -246,11 +246,9 @@ public:
   // Binary input/output
   // -----------------------------------------------
 
-  // NEW output and input interfaces
   /// writes entire model with associated properties to disk; non-constant because this involves region creation
   void OutputToBinaryFile( const char* ) const;
 
-  // NEW
   /// reads model written by OutputToDisk() including all associated properties; it can also read only a subset of variables
   void InputFromBinaryFile( const char* model_name, const std::set<std::string>* subset_variables = nullptr );
 
@@ -457,6 +455,9 @@ private:
   FiniteVolumeStencilManager<dim>*  fvStencilManager_; ///< current finite volume specifications
   bool                              verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
 };
+
+/// attempts to return the spatial dimension of the model stored in the file (1-3D)
+size_t dimensionModelInBinaryFile( const char* csmp_binary );
 
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
 std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z );

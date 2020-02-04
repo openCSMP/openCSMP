@@ -160,7 +160,7 @@ void QuadrilateratorToCSMPbinary_Example::Run()
 /**
     Robust detection of NO_DATA vales
 */
-bool is_NO_DATA_Value( double value )
+inline bool is_NO_DATA_Value( double value )
  {
     // checking the value range, including no-data values
     assert( !isnan(value) );
