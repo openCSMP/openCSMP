@@ -469,7 +469,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
         const long64 index( vset.Pfvert( e->Idx(), j ) );
         if ( index >= 0 ) {
           assert( index >= elements + faces );
-          assert( index < elements + faces + interfaces ); // (-) because interface container is numbered from 0..n-1
+          assert( index < elements + faces + n_interfaces_ ); // (-) because interface container is numbered from 0..n-1
           e->Assign( j, interface_connector[static_cast<size_t>(index) - elements - faces] );
         }
       }
