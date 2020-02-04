@@ -415,11 +415,12 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
          // TwoPhaseModel<dim>::tensor_permeability_ = true; // anisotropy is not communicated to base class
          const double64 k_crossflow_ = PermeabilityPerpendicularToLaminations();
          const double64 k_parallel_  = PermeabilityParallelToLaminations();
-         KK_ = 0.;
          // assuming that layers are horizontal and that the stored K is the horizontal one
+         KK_ = 0.; // all entries = zero
          KK_(0,0)          = k_parallel_;
          KK_(1,1)          = k_crossflow_;
-         K_flow_direction_ = PermeabilityInFlowDirection( vt_normalised_ );
+         // uses KK(0,0) internally
+         K_flow_direction_ = PermeabilityInFlowDirection( KK_, vt_normalised_ );
          TwoPhaseModel<dim>::k_         = k_parallel_;
          K_reduction_in_flow_direction_ = K_flow_direction_ / k_parallel_; 
       }
@@ -796,11 +797,11 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
          // TwoPhaseModel<dim>::tensor_permeability_ = true; // anisotropy is not communicated to base class
          const double64 k_crossflow_ = PermeabilityPerpendicularToLaminations();
          const double64 k_parallel_  = PermeabilityParallelToLaminations();
-         KK_ = 0.;
          // assuming that layers are horizontal and that the stored K is the horizontal one
+         KK_ = 0.;
          KK_(0,0)          = k_parallel_;
          KK_(1,1)          = k_crossflow_;
-         K_flow_direction_ = PermeabilityInFlowDirection( vt_normalised_ );
+         K_flow_direction_ = PermeabilityInFlowDirection( KK_, vt_normalised_ );
          TwoPhaseModel<dim>::k_         = k_parallel_;
          K_reduction_in_flow_direction_ = K_flow_direction_ / k_parallel_; 
       }
@@ -841,16 +842,21 @@ double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminat
     
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const VectorVariable<dim>& vt_normalised ) const
+double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const TensorVariable<dim>& KK,
+                                                                           const VectorVariable<dim>& vt_normalised ) const
  {
     assert( is_composite_ );
+    assert( KK(0,0) > 0. );
+    assert( KK(1,1) > 0. );
+    
     if ( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double64>::epsilon() )
-      return KK_(0,0);
+      // horizontal permeability
+      return KK(0,0);
 
     // finding the permeability in the direction of the velocity vector
-    vc_ = KK_ * vt_normalised;
+    vc_ = KK * vt_normalised;
 
-    // the length of vc_ is equal to the magnitude of permeability in the tarfet direction
+    // the length of vc_ is equal to the magnitude of permeability in the target direction
     return vc_.Length();
    
  } // end PermeabilityInFlowDirection

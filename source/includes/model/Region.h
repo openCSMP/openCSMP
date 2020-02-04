@@ -261,7 +261,7 @@ public:
   /// Local variable storage interface
   virtual PLACEMENT Placement() const { return REGION; }
 
-  // TODO: trivial and unclear
+  /// checks whether variable placement is compatible with placement on a region
   virtual bool  ValidVariable( const char* variableName ) const;
 
 protected:

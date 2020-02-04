@@ -152,7 +152,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   assert( n_faces_ == 0 );
   assert( n_interfaces_ == 0 );
 
-  // temporary deques to handel primitives
+  // temporary deques to handle primitives
   deque<Node<dim>*>			 node_connector;
   deque<Element<dim>*>	 elmt_connector;
   deque<Face<dim>*>			 face_connector;
@@ -223,6 +223,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
 
           while ( first != last )
             {
+              // TODO: this Element and all other primitives should be constructed directly in the MeshManager
               Element<dim>* elmt = new Element<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars, NOT );
               const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; j++ )
@@ -234,8 +235,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
               first++;
             }
         }
-        // 2.2 If there are multiple element types
-        else {
+      // 2.2 If there are multiple element types
+      else {
           while ( first != last )
             {
               const int32 csmpElementType = vset.ElementType( idx );
@@ -367,7 +368,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       e->Assign( innerElement, outerElement );
     }
 
-    // traversal of the existing mesh nodes to find all its faces
+    // traversal of the existing mesh to find all its faces
     deque<set<Face<dim>*>>	explored_face_groups;
     set<Face<dim>*>			discovered_faces;
     deque<Face<dim>*>		current_faces;
@@ -459,7 +460,6 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
     const size_t elements( elmt_connector.size() );
     const size_t faces( face_connector.size() );
-    const size_t interfaces( interface_connector.size() );
     // connecting interfaces to their higher-dimensional neighbors
     for ( auto& e : interface_connector ) {
       // equidimensional neighbors first
@@ -499,9 +499,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
         InterFace<dim>*  n_ptr( *current_interfaces.begin() );
         // for all neighbor interfaces of the current interface
         for ( size_t i = 0U; i < n_ptr->Neighbors(); i++ ) {
-          if ( n_ptr->Neighbor( i ) == NULL ) continue;
+          if ( n_ptr->Neighbor( i ) == nullptr ) continue;
 
-          // if this neighbor is new one					
+          // if this neighbor is a new one					
           auto new_interface = discovered_interfaces.insert( n_ptr->Neighbor( i ) );
           if ( new_interface.second ) {
             current_interfaces.push_back( n_ptr->Neighbor( i ) );
@@ -709,13 +709,17 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
     return false;
   }
   return true;
-}
+  
+} // end Initialise
+
+
+
+
 
 
 /**
-Update the root pointers of the mesh after modifying the mesh.
+    Update  root pointers of the mesh after modifying the mesh.
 */
-
 template<size_t dim>
 void MeshManager<dim>::Update( std::deque<Node<dim>*> nodes, std::deque<Element<dim>*> elmts )
 {
@@ -821,6 +825,10 @@ void MeshManager<dim>::Update( std::deque<Node<dim>*> nodes, std::deque<Element<
     }
   } // end elements
 }
+
+
+
+
 
 template<size_t dim>
 void MeshManager<dim>::Update()
@@ -1094,6 +1102,9 @@ void MeshManager<dim>::Update()
 }
 
 
+
+
+
 /**
 Rebuilds the storage of parents of each element from the model and assigns their relationships.
 */
@@ -1115,6 +1126,9 @@ void MeshManager<dim>::RebuildParentRelationships( typename vector<Node<dim>*>::
     parents.clear();
   }
 }
+
+
+
 
 
 /**
@@ -1190,7 +1204,7 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
   const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt( ELEMENT ) );
 
   for ( auto e : elmts ) {
-    if ( e->FV() == NULL )
+    if ( e->FV() == nullptr )
     {
       e->AssignFiniteVolume( fvs_manager.Stencil( e->FE_Type() ) );
       e->ResizePropertyStorage( lvs, ipvs );
