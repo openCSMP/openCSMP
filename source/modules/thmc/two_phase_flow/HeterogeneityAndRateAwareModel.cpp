@@ -1019,18 +1019,22 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
          if ( bcp_ <= numeric_limits<double64>::epsilon() ) return pd_; 
          return min( pc_BC( Sw_, Swi_pc_, pd_, bcp_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
       }
-
     
     // if any BC-lambda = 0, pc is assumed to be pd, ie. constant
     const double64 pc_low  = (bcp_low_  == 0.) ? pd_low_  : pc_BC( Sw_, Swi_pc_, pd_low_, bcp_low_ );
     const double64 pc_high = (bcp_high_ == 0.) ? pd_high_ : pc_BC( Sw_, Swi_pc_, pd_high_, bcp_high_ );
     
+if ( pc_low <= numeric_limits<double64>::epsilon() )
+  cerr <<" pc_low:"<< pc_low;
+if ( pc_low <= numeric_limits<double64>::epsilon() )
+    cerr <<" pc_high:"<< pc_high;
+
     // for composites the flow direction and the low and high-k layers are taken into account
     // if prominent flow direction is vertical, the pd-difference between the laminations, dPc,
     // is added to the entry pressure    
-    if ( ProminentFlowDirection( vt_ ) == VERTICAL ) {
-         return min( pc_BC( Sw_, Swi_pc_, pd_+dPc_, bcp_low_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
-      } 
+//    if ( ProminentFlowDirection( vt_ ) == VERTICAL ) {
+//         return min( pc_BC( Sw_, Swi_pc_, pd_+dPc_, bcp_low_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
+//      } 
     
     // for horizontal flow, weighted average is used
     const double64 pc =  pc_high * fabs(vt_normalised_[0]) + pc_low * fabs(vt_normalised_[1]);

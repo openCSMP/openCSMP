@@ -13,6 +13,8 @@
 
 namespace csmp {
 
+template<size_t> class Model;
+
 enum SMOOTHING_TYPE { MEAN, HARMONIC_MEAN, LOG10_MEAN, HORIZONTAL_MEAN };
 
 /**
@@ -24,11 +26,13 @@ enum SMOOTHING_TYPE { MEAN, HARMONIC_MEAN, LOG10_MEAN, HORIZONTAL_MEAN };
     
     @parameter horizontal_direction_only restricts operation to the horizontal
 */
-void smoothElementData( const std::string& model, 
+template<size_t dim>
+void smoothElementData( Model<dim>&, 
                         const std::string& region_to_be_smoothed, 
                         const std::string& variable_name,
-                        int smoothing_passes = 1, 
-                        bool log10_smoothing = false, bool in_plane_smoothing = false );
+                        int smoothing_passes = 1,          ///< usually sufficient
+                        bool log10_smoothing = false,      ///< creates a more patchy pattern with emphasis on the high values
+                        bool in_plane_smoothing = false ); ///< only in the horizontal plane in as much as algorithm can resolve
 
 } // end csmp
 

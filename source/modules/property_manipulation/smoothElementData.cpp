@@ -66,22 +66,23 @@ inline bool isSubvertical( const Element<2U>* const eptr, size_t face )
 
 
 /**
+       Smoothes the target (element property) using a variaty of approaches and writes the model to disk afterwards.
+         
        @attention variables file is assumed to be part of the binary file set.
        
        @todo perhaps use sqrt() of values for a milder form of value compression
 */
-void smoothElementData( const std::string& model_name, 
+template<size_t dim>
+void smoothElementData( Model<dim>& model, 
                         const std::string& region_to_be_smoothed, 
                         const std::string& variable_name,
                         int number_of_smoothing_cycles, 
                         bool log10_smoothing, bool in_plane_smoothing )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-     const size_t dim(2U);
  
      // 1. reading CSMP binary_native model from file
      // ---------------------------------------------
-     Model<dim>    model( model_name );
      Region<dim>&  domain(model.Region(region_to_be_smoothed));
      csmp::Index   key = model.Database().StorageKey(variable_name.c_str());
      double64      min_val_database, max_val_database;
@@ -113,10 +114,12 @@ void smoothElementData( const std::string& model_name,
            TensorVariable<dim>  ts;
            string log_prop_name( string("log10 of ") + variable_name );
            created_log_prop = !model.Database().IsDefined( log_prop_name.c_str() );
+           min_val_database = log10(min_val_database);
+           max_val_database = log10(max_val_database);
            const csmp::Index log_key = model.CreateProperty( log_prop_name.c_str(), "SI", key.type, key.place, key.dataDepth,
-                                                             min_val_database, max_val_database );
+                                                             log10(min_val_database), log10(max_val_database) );
            // taking the decadic logarithm of values
-           for ( vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+        for ( typename vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
                  if ( key.type == SCALAR ) {
                       (*it)->Store( log_key, makeScalar( (*it)->Status(key), log10( (*it)->Read(key)) ) );
                    }
@@ -165,7 +168,7 @@ void smoothElementData( const std::string& model_name,
           for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ )
             {
               size_t elmt(0U);
-              for ( vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it,  ++elmt )
+            for ( typename vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it,  ++elmt )
                 {
                   // the new value taken is the volume-weighted mean average of the element neighbors and its own value
                   // current element
@@ -221,7 +224,7 @@ void smoothElementData( const std::string& model_name,
           TensorVariable<dim>  ts;
 
           // taking the decadic logarithm of values
-          for ( vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+       for ( typename vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
                 if ( key.type == SCALAR ) {
                      (*it)->Store( original_key, makeScalar( (*it)->Status(key), pow( 10., (*it)->Read(key)) ) );
                   }
@@ -247,8 +250,8 @@ void smoothElementData( const std::string& model_name,
 
     // 5. saving the model to disk  (using the extension -smoothed#, where # is the number of iterations
     // -------------------------------------------------------------------------------------------------
-    string  output_fileset( model_name );
-    if ( log10_smoothing ) output_fileset +="-log10-";
+    string  output_fileset( model.Name() );
+    if ( log10_smoothing ) output_fileset +="log10-";
     output_fileset +="-smoothed";
     output_fileset += to_string(number_of_smoothing_cycles);
     
@@ -257,6 +260,6 @@ void smoothElementData( const std::string& model_name,
 
  } // end smoothElementData
 
-
+template void smoothElementData( Model<2U>&, const string&, const string&, int, bool, bool );
 
 } // end csmp

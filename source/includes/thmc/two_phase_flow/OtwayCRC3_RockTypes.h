@@ -907,7 +907,7 @@ struct CRC3_RockType9 {
                  pd_low_   = 10000.,    
                  pd_high_  = 750.,
                  pd_       = 750.,
-                 dPc_      = 9250; // TODO: pre-compute    
+                 dPc_      = 9250.; // TODO: pre-compute    
 };
 
 
