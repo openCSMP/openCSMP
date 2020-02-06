@@ -161,16 +161,26 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              krw_                     = get<1>(Otway_.rocktype_).Krw(Sw_);
              krn_                     = get<1>(Otway_.rocktype_).Krn(Sw_);
            break;
-         case 2: // M_CbSst_Mst
-             phi_                     = get<2>(Otway_.rocktype_).phi_;
-             pd_                      = get<2>(Otway_.rocktype_).pd_;
-             m_VG_                    = get<2>(Otway_.rocktype_).m_; 
-             Swi_pc_                  = get<2>(Otway_.rocktype_).Swi_pc_;
-             bcp_                     = lambdaFrom_VG( m_VG_);
-             TwoPhaseModel<dim>::swr_ = get<2>(Otway_.rocktype_).Swi_;
+         case 2: // M_CbSst_Mst (composite but not rate-dependent)
+             is_composite_ = true;
+             L_low_ = get<2>(Otway_.rocktype_).LY_low_; L_high_ = get<2>(Otway_.rocktype_).LY_high_;
+             k_low_ = get<2>(Otway_.rocktype_).k_low_;  k_high_ = get<2>(Otway_.rocktype_).k_high_;
+             pd_high_       = get<2>(Otway_.rocktype_).pd_high_;
+             pd_low_        = get<2>(Otway_.rocktype_).pd_low_;
+             bcp_high_      = lambdaFrom_VG( get<2>(Otway_.rocktype_).m_high_ );
+             bcp_low_       = lambdaFrom_VG( get<2>(Otway_.rocktype_).m_low_ );
+             phi_           = get<2>(Otway_.rocktype_).phi_; 
+             pd_            = get<2>(Otway_.rocktype_).pd_;
+             m_VG_          = get<2>(Otway_.rocktype_).m_; 
+             Swi_pc_        = get<2>(Otway_.rocktype_).Swi_pc_;
+             dPc_           = get<2>(Otway_.rocktype_).dPc_;
+             TwoPhaseModel<dim>::swr_ = get<2>(Otway_.rocktype_).Swi_pc_; // for this type Swi=Swi_pc
              TwoPhaseModel<dim>::snr_ = get<2>(Otway_.rocktype_).Sgr_;
-             krw_                     = get<2>(Otway_.rocktype_).Krw(Sw_);
-             krn_                     = get<2>(Otway_.rocktype_).Krn(Sw_);
+             // no rate dependence for this carbonate cemented rocktype
+             krw_parallel_  = get<2>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_ );
+             krw_crossflow_ = get<2>(Otway_.rocktype_).Krw_CrossDrainage( Sw_ );
+             krn_parallel_  = get<2>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_ );
+             krn_crossflow_ = get<2>(Otway_.rocktype_).Krn_CrossDrainage( Sw_ );
            break;
          case 3: // H_CbSst
              phi_                     = get<3>(Otway_.rocktype_).phi_;
@@ -541,17 +551,26 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              krw_                     = get<1>(Otway_.rocktype_).Krw(Sw_);
              krn_                     = get<1>(Otway_.rocktype_).Krn(Sw_);
            break;
-         case 2: // M_CbSst_Mst
-             TwoPhaseModel<dim>::k_   = get<2>(Otway_.rocktype_).k_;
-             phi_                     = get<2>(Otway_.rocktype_).phi_;
-             pd_                      = get<2>(Otway_.rocktype_).pd_;
-             m_VG_                    = get<2>(Otway_.rocktype_).m_; 
-             Swi_pc_                  = get<2>(Otway_.rocktype_).Swi_pc_;
-             bcp_                     = lambdaFrom_VG( m_VG_);
-             TwoPhaseModel<dim>::swr_ = get<2>(Otway_.rocktype_).Swi_;
+         case 2: // M_CbSst_Mst (composite but not rate-dependent)
+             is_composite_ = true;
+             L_low_ = get<2>(Otway_.rocktype_).LY_low_; L_high_ = get<2>(Otway_.rocktype_).LY_high_;
+             k_low_ = get<2>(Otway_.rocktype_).k_low_;  k_high_ = get<2>(Otway_.rocktype_).k_high_;
+             pd_high_       = get<2>(Otway_.rocktype_).pd_high_;
+             pd_low_        = get<2>(Otway_.rocktype_).pd_low_;
+             bcp_high_      = lambdaFrom_VG( get<2>(Otway_.rocktype_).m_high_ );
+             bcp_low_       = lambdaFrom_VG( get<2>(Otway_.rocktype_).m_low_ );
+             phi_           = get<2>(Otway_.rocktype_).phi_; 
+             pd_            = get<2>(Otway_.rocktype_).pd_;
+             m_VG_          = get<2>(Otway_.rocktype_).m_; 
+             Swi_pc_        = get<2>(Otway_.rocktype_).Swi_pc_;
+             dPc_           = get<2>(Otway_.rocktype_).dPc_;
+             TwoPhaseModel<dim>::swr_ = get<2>(Otway_.rocktype_).Swi_pc_; // for this type Swi=Swi_pc
              TwoPhaseModel<dim>::snr_ = get<2>(Otway_.rocktype_).Sgr_;
-             krw_                     = get<2>(Otway_.rocktype_).Krw(Sw_);
-             krn_                     = get<2>(Otway_.rocktype_).Krn(Sw_);
+             // no rate dependence for this carbonate cemented rocktype
+             krw_parallel_  = get<2>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_ );
+             krw_crossflow_ = get<2>(Otway_.rocktype_).Krw_CrossDrainage( Sw_ );
+             krn_parallel_  = get<2>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_ );
+             krn_crossflow_ = get<2>(Otway_.rocktype_).Krn_CrossDrainage( Sw_ );
            break;
          case 3: // H_CbSst
              TwoPhaseModel<dim>::k_   = get<3>(Otway_.rocktype_).k_;
@@ -997,11 +1016,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::MaxFractionalFlowDerivative() cons
 
 /**
 
-Pc_drain_high = Pd_high*((Sw_star_high)^(-1/m_high)-1)^(1-m_high); % capillary pressure curve high permeable layer
-
-Pc_drain_low = Pd_low*((Sw_star_low)^(-1/m_low)-1)^(1-m_low);      % capillary pressure curve low permeable layer
-
-Apply averaging to get vertical flow.
+Not directionally dependent.
 
 @attention pc covers the full saturation range, pc(sw) is capped based on maximum dpcds.
 
@@ -1019,25 +1034,10 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
          if ( bcp_ <= numeric_limits<double64>::epsilon() ) return pd_; 
          return min( pc_BC( Sw_, Swi_pc_, pd_, bcp_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
       }
-    
-    // if any BC-lambda = 0, pc is assumed to be pd, ie. constant
-    const double64 pc_low  = (bcp_low_  == 0.) ? pd_low_  : pc_BC( Sw_, Swi_pc_, pd_low_, bcp_low_ );
-    const double64 pc_high = (bcp_high_ == 0.) ? pd_high_ : pc_BC( Sw_, Swi_pc_, pd_high_, bcp_high_ );
-    
-if ( pc_low <= numeric_limits<double64>::epsilon() )
-  cerr <<" pc_low:"<< pc_low;
-if ( pc_low <= numeric_limits<double64>::epsilon() )
-    cerr <<" pc_high:"<< pc_high;
-
-    // for composites the flow direction and the low and high-k layers are taken into account
-    // if prominent flow direction is vertical, the pd-difference between the laminations, dPc,
-    // is added to the entry pressure    
-//    if ( ProminentFlowDirection( vt_ ) == VERTICAL ) {
-//         return min( pc_BC( Sw_, Swi_pc_, pd_+dPc_, bcp_low_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
-//      } 
-    
+        
     // for horizontal flow, weighted average is used
-    const double64 pc =  pc_high * fabs(vt_normalised_[0]) + pc_low * fabs(vt_normalised_[1]);
+    const double64 pc_low  = (bcp_low_  == 0.) ? pd_low_  : pc_BC( Sw_, Swi_pc_, pd_low_, bcp_low_ );
+    const double64 pc =  pc_low * (vt_normalised_[0]*vt_normalised_[0]) + pc_low * (vt_normalised_[1] * vt_normalised_[1]);
                         
     return min( pc, TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
 
