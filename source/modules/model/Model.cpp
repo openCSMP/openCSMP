@@ -689,8 +689,9 @@ string Model<dim>::BinaryVariablesFileName( const char* base_file_name )
 
 
 /// attempts to return the spatial dimension of the model stored in the file (1-3D)
-size_t dimensionModelInBinaryFile( const char* csmp_binary )
+size_t spatialDimensionOfModel( const char* csmp_binary )
  {
+    throw csmp::Exception( ERROR, "spatialDimensionOfModel(binary file)", "method not implemented yet.");
     return 3U;
     
  } // end dimensionModelInBinaryFile

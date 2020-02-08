@@ -440,9 +440,15 @@ struct CRC3_RockType15 {
 struct CRC3_RockType16 {
    bool IsComposite() const { return false; }
    /// Linear water relative permeability for drainage
-   double64 Krw( double64 Sw ) const { return (Sw - Swi_) / (1. - Swi_); }
+   double64 Krw( double64 Sw ) const { 
+        if ( Sw < Swi_ ) return 0.;
+        return seffL(Sw,Swi_);       
+     }
    /// Linear CO2 relative permeability for drainage
-   double64 Krn( double64 Sw ) const { return ((1.-Sw) - Swi_) / (1. - Swi_); }
+   double64 Krn( double64 Sw ) const { 
+        if ( Sw < Swi_ ) return 0.8;
+        return 1. - seffL(Sw,Swi_,Sgr_);  
+     }
 
    const std::string name = "baffle"; 
    const int      rocktype_ = 16;
@@ -451,9 +457,9 @@ struct CRC3_RockType16 {
                   phi_      = 0.09,     // porosity
                   Swi_      = 0.3,      // irreducible saturation
                   Swi_pc_   = 0.3,      // irreducible saturation for pc calc; same as Swi for noncomposites
-                  Sgr_      = 0.4,      // guestimate
+                  Sgr_      = 0.1,      // guestimate
                   m_        = 0.7,      // van Genuchten exponent
-                  pd_       = 1.0e-6;   // capillary (drainage) entry pressure of low and high
+                  pd_       = 1.0e+6;   // capillary (drainage) entry pressure
 };
 
 

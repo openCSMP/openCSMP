@@ -66,7 +66,9 @@ HeterogeneityAndRateAwareModel<dim>::~HeterogeneityAndRateAwareModel()
 
 template<size_t dim>
 int32 HeterogeneityAndRateAwareModel<dim>::RockType( const Element<dim>& e ) const {
-     return static_cast<int32>( e.Read(RRT_key_) );
+     const double64 rock_type = e.Read(RRT_key_);
+     assert( !isnan(rock_type) );
+     return static_cast<int32>( rock_type );
   }
 
 
@@ -410,6 +412,17 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              TwoPhaseModel<dim>::snr_ = get<15>(Otway_.rocktype_).Sgr_;
              krw_                     = get<15>(Otway_.rocktype_).Krw(Sw_);
              krn_                     = get<15>(Otway_.rocktype_).Krn(Sw_);
+           break;
+         case 16: // BAFFLE
+             phi_                     = get<16>(Otway_.rocktype_).phi_;
+             pd_                      = get<16>(Otway_.rocktype_).pd_;
+             m_VG_                    = get<16>(Otway_.rocktype_).m_; 
+             Swi_pc_                  = get<16>(Otway_.rocktype_).Swi_pc_;
+             bcp_                     = lambdaFrom_VG( m_VG_);
+             TwoPhaseModel<dim>::swr_ = get<16>(Otway_.rocktype_).Swi_;
+             TwoPhaseModel<dim>::snr_ = get<16>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<16>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<16>(Otway_.rocktype_).Krn(Sw_);
            break;
          default:
            cerr <<"\n\t rocktype: "<< rocktype_;
@@ -805,6 +818,17 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              krw_                     = get<15>(Otway_.rocktype_).Krw(Sw_);
              krn_                     = get<15>(Otway_.rocktype_).Krn(Sw_);
            break;
+         case 16: // BAFFLE
+             phi_                     = get<16>(Otway_.rocktype_).phi_;
+             pd_                      = get<16>(Otway_.rocktype_).pd_;
+             m_VG_                    = get<16>(Otway_.rocktype_).m_; 
+             Swi_pc_                  = get<16>(Otway_.rocktype_).Swi_pc_;
+             bcp_                     = lambdaFrom_VG( m_VG_);
+             TwoPhaseModel<dim>::swr_ = get<16>(Otway_.rocktype_).Swi_;
+             TwoPhaseModel<dim>::snr_ = get<16>(Otway_.rocktype_).Sgr_;
+             krw_                     = get<16>(Otway_.rocktype_).Krw(Sw_);
+             krn_                     = get<16>(Otway_.rocktype_).Krn(Sw_);
+           break;         
          default:
            cerr <<"\n\t rocktype: "<< rocktype_;
            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "rocktype not recognized");
@@ -971,7 +995,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
     // to get the ensemble krw for the composite, the parallel and perpendicular values are blended
     // taking into account the flow direction 
     // --------------------------------------
-    const double64 krw = krw_parallel_ * fabs(vt_normalised_[0]) + krw_crossflow_ * fabs(vt_normalised_[1]);
+    const double64 krw = krw_parallel_ * (vt_normalised_[0]*vt_normalised_[0]) + krw_crossflow_ * (vt_normalised_[1]*vt_normalised_[1]);
 
     // scaling the relative permeability by the vertical permeability
     return max( krw * K_reduction_in_flow_direction_, 0. );
@@ -989,7 +1013,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
  {
      if ( !is_composite_ ) return krn_; // krn_BC( Sw_ );
 
-     const double64 krn = krn_parallel_ * fabs(vt_normalised_[0]) + krn_crossflow_ * fabs(vt_normalised_[1]);
+     const double64 krn = krn_parallel_ * (vt_normalised_[0]*vt_normalised_[0]) + krn_crossflow_ * (vt_normalised_[1]*vt_normalised_[1]);
 
      // scaling the relative permeability by the vertical permeability
      return max( krn * K_reduction_in_flow_direction_, 0. );

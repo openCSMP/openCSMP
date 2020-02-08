@@ -457,7 +457,7 @@ private:
 };
 
 /// attempts to return the spatial dimension of the model stored in the file (1-3D)
-size_t dimensionModelInBinaryFile( const char* csmp_binary );
+size_t spatialDimensionOfModel( const char* csmp_binary );
 
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
 std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z );
