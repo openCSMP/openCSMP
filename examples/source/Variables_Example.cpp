@@ -17,6 +17,8 @@ void Variables_Example::Specifications()
     AddAuthor( "P. Lang" );
     AddDescription( "source in: Variables_Example.cpp" );
     AddDescription( "basic operations with csmp variables" );
+    AddRequirement( "input model: 'FracBox'");
+    AddRequirement( "VariablesTutorial.txt");
   }
 
 
