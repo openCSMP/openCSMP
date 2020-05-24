@@ -903,7 +903,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
              boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
          // storing the boundary face vector for the current element
          if ( boundary_faces.size() == faces ) {
-              cerr <<"\n\tBuildPerimeterFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
+              cerr <<"\n\tModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
+              (*it)->Out();
            }
          this->bd_face_vec_[counter] = boundary_faces;
          boundary_faces.clear();

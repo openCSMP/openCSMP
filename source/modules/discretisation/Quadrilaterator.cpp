@@ -269,6 +269,7 @@ void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_
 
     // scale the vset to the physical property range
     ScaleModelRange( vset, x_extend, y_extend );
+    cout <<"\nQuadrilaterator::QuadrilateralsFromRegularGrid: adjusted coordinates of the nodes of "<< vset.Elements() <<" elements.\n";
 
     vset.EstablishZeroBasedNumbering();
   }

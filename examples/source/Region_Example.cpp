@@ -42,28 +42,19 @@ void Region_Example::Specifications()
 
 void Region_Example::Run()
 {
-  // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
-
-  // -----------------------------------------------------------------------
-  //
-  //  Setup: Demonstrate how to create a model from ANSYS mesh
-  //         and configure it from file
-  //
-  // -----------------------------------------------------------------------
+  //  Create a model from ANSYS mesh and configure it from file
    const char* model_name="fracs4";
    ANSYS_Model3D  model( model_name, "CSMP-1phase-variables.txt");
-
    printModelDimensions( model, true );
 
-   // testing whether the model contains the right regions and another not contained one
+   // testing whether model contains the desired regions
    cout <<"\nmain: Does the model contain FRACS and MATRIX regions? ";
    cout << model.ContainsRegion("FRACS") <<" "<< model.ContainsRegion("MATRIX") << endl;
    cout <<"or a non-existing one called 'dummy'? - "<< model.ContainsRegion("dummy");
    cout <<"\nmain: Are they unique (have no overlap)? ";
    cout << model.IsUnique("FRACS") <<" "<< model.IsUnique("MATRIX") << endl;
 
-   // configure model from file 'fracs4-configuration.txt'
+   // configure model / regions from file 'fracs4-configuration.txt'
    InputDataManager<DIM>().ConfigureFromFile( model, model_name,
                                               false, true, true, true, false );
 
@@ -188,7 +179,6 @@ void Region_Example::Run()
   
    // removal of new partitions
    cout <<"\n\n\nmain: removing the previously created subregions of FRACS:\n";
-   // TODO: SKM this step does not work at the moment (8/10/2014)
    cout <<"\n\tsubregions removed: "<<  model.RemoveRegionPartitionsFor("FRACS");
    //                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -218,7 +208,7 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "elements10to100", "conductivity", "conductivity", 1, true );
 
 
-   // assimilating this regions into a new region of elements 110 to 200, using a lambda function
+   // assimilating this regions into a new region of elements 110 to 200, using a C++ lambda function
    transform( element_ids.begin(), element_ids.end(), element_ids.begin(), [&]( auto elmt ){ return elmt + 101U; } );
    model.FormRegionFrom( "elements110to200", element_ids );
    // test 11: O.K.
@@ -254,8 +244,8 @@ void Region_Example::Run()
 
    cout <<"\n\n\nmain: RegionIntersection() between FRACS and MATRIX."<< endl;
    // test: O.K.
-   cout <<"\nmain: Does region FRACS1 overlap with MATRIX? (no): ";
-   cout << model.RegionIntersection( "FRACS1", "MATRIX", "empty_group" );
+   cout <<"\nmain: Does region FRACS overlap with MATRIX? (no): ";
+   cout << model.RegionIntersection( "FRACS", "MATRIX", "empty_group" );
    //            ^^^^^^^^^^^^^^^^^^             empty_region will not be formed
    cout <<"\nmain: Does region FRACS overlap with Model? (yes): ";
    cout << model.RegionIntersection( "FRACS", "Model", "fractures" );
@@ -343,7 +333,7 @@ void Region_Example::Run()
 
    PropertyHandle<DIM>  cpoint_k( model, "cpoint permeability", TENSOR, ELEMENT_INTEGRATION_POINT );
    TensorVariable<DIM> ts;
-   ts=1.0e-12;
+   ts      = 1.0e-12;
    ts(0,0) = ts(1,1) = 2.;
    ts(2,2) = 3.;
    ts.Out();

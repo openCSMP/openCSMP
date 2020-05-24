@@ -775,6 +775,8 @@ if ( dim == 2 && nbor_elmt->IsLineElement() ) {
      Uses node-to-parent relationship to find the higher dimensional elements that will 
      share a face with the Face:  usng    higherDimensionalNeighbors()
      
+     @return pair of the set oof boundary patches that were created from the region and boolean that tells whether the operation was completely successful.
+     
      Algorithmic steps:
 
      1. Verify input lower-dimensional region object from which the boundary shall be created: 

@@ -41,7 +41,12 @@ public:
       double64 WaterSaturationFromPhasePressures(double64 oil_pressure, 
                                                  double64 water_pressure);
     
-      virtual void Visit(Node<dim>* node);      
+      virtual void Visit( Model<dim>* m ) const 
+        { std::cout <<"\nPressureSaturationInitializer:Visit(Model): "<< m->Name() <<"\n"; } 
+            
+      virtual void Visit( Node<dim>* );    
+      // for all other targets the method stubs in the base class are used
+      // this may will prompt some warnings  
     
 private:
       const PropertyDatabase<dim>&  prop_ref_;

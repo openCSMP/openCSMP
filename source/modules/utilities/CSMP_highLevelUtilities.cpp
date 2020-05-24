@@ -2090,11 +2090,11 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
 
 
 /**
-    Connects Element objects up to their same-dimensional neighbors
-    in as much as is possible. Where there are no neighbors the neighbor pointers 
-    will be nulled.
+    Connects Element objects to their same-dimensional neighbors in as much as is possible. 
     
-    The assumption is made that all nodes have a unique numbering.
+    Where there are no neighbors the neighbor pointers will be nulled.
+    
+    @attention The assumption is made that all nodes in the model have a unique numbering.
     
     @author SKM 2012
     

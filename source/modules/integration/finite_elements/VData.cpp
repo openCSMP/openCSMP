@@ -353,6 +353,26 @@ void VData::AddBFlag( size_t node_id, long64 bflag )
  { bflags[ node_id ] = bflag; }
  
  
+/**
+      Finds boundary identifier if any.
+*/
+long64 VData::BoundaryFlag( size_t vertex ) const
+ {
+    if (bflags.empty() ) {
+         cerr <<"\nVData::ABoundaryFlag: cannot determine boundary flag because VData contains no boundary identifiers.\n";
+         return NOT;
+      }
+      
+    unordered_map<size_t,long64>::const_iterator bflag_it = bflags.find(vertex);
+    if ( bflag_it != bflags.end() ) return (*bflag_it).second;
+    
+    return NOT;
+ }
+
+ 
+ 
+ 
+ 
 // FACE AND INTERFACE-RELATED ITERATORS
 
 // specific element, face and interface iterators
@@ -2570,6 +2590,158 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
  } // end EstablishConnectivityOfEquidimensionalElements2D
 
 
+
+
+/**
+       Creates 'pfverts' array from 'plist' and 'bflag' collections.
+       
+       @attention works for mono-element linear triangle meshes only. 
+       
+       @author SKM
+       @date 25/4/2020
+*/
+void VData::EstablishNeighborConnectivity2D()
+ {
+    if ( plist.empty() )
+     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method requires a valid 'plist' in the input VSet.");
+    
+    if ( bflags.empty() )
+     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method requires a valid 'bflags' map in the input VSet.");
+    
+    if ( !pfverts.empty() )
+     cout <<"\nVData::EstablishNeighborConnectivity2D: WARNING, existing 'pfverts' record in Vdata is being deleted.\n";
+    
+    if ( HybridElementTypeMesh() )
+     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method only works for single-element-type 2D meshes.");
+    
+    if ( OrderOfFiniteElementInterpolationFunctions() != 1U )
+     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method only works for linear finite elements.");
+    
+    if ( ElementType(0U) != LINEAR_TRIANGLE and 
+         ElementType(0U) != ISOPARAMETRIC_LINEAR_TRIANGLE and 
+         ElementType(0U) != LINEAR_QUADRILATERAL and 
+         ElementType(0U) != ISOPARAMETRIC_LINEAR_QUADRILATERAL )
+     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method only works for 2D surface elements.");
+
+    
+    // 1. generating map of faces from plist
+    // -------------------------------------
+    // search map for element faces
+    multimap<set<size_t>,pair<size_t,size_t> > surface_elmt_nbor_key;    
+    // NOTE: the number of faces is inferred from number of nodes! 3=triangle, 4=quadrilateral
+    const size_t elmt_faces(plist[0].size());
+    size_t       elmt_count(0);
+
+    for ( deque<vector<size_t> >::const_iterator it=PlistBegin(); it!= PlistEnd(); ++it ) 
+      {
+         for ( size_t face=0U; face<elmt_faces; face++ ) 
+           {
+              // creating face key from idx's of face, assigning boundary keys for faces located at the model boundary 
+              set<size_t> key;
+              // linear triangle
+              if ( elmt_faces == 3U ) {            
+                  if ( face == 0 ) {
+                       key.insert( plist[elmt_count][1] );
+                       key.insert( plist[elmt_count][2] );
+                    }
+                  else if ( face == 1 ) {
+                       key.insert( plist[elmt_count][2] );
+                       key.insert( plist[elmt_count][0] );
+                    }
+                  else if ( face == 2 ) {
+                       key.insert( plist[elmt_count][0] );
+                       key.insert( plist[elmt_count][1] );
+                    }    
+                }
+              // quadrilateral
+              else if ( elmt_faces == 4U ) {            
+                  if ( face == 0 ) {
+                       key.insert( plist[elmt_count][0] );
+                       key.insert( plist[elmt_count][1] );
+                    }
+                  else if ( face == 1 ) {
+                       key.insert( plist[elmt_count][1] );
+                       key.insert( plist[elmt_count][2] );
+                    }
+                  else if ( face == 2 ) {
+                       key.insert( plist[elmt_count][2] );
+                       key.insert( plist[elmt_count][3] );
+                    }    
+                  else if ( face == 3 ) {
+                       key.insert( plist[elmt_count][3] );
+                       key.insert( plist[elmt_count][0] );
+                    }    
+                }   
+              else throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", 
+                                          "number of faces is incompatible with triangle or quadrilateral." );
+              
+              // inserting newly generated surface element keys into multimap          
+              surface_elmt_nbor_key.insert( make_pair( key, make_pair( face, elmt_count ) ) );
+              key.clear();
+           }
+         elmt_count++;
+
+      } // end loop
+
+
+    // 2. finding matching faces and assigning neighbor element numbers where these are present
+    // ----------------------------------------------------------------------------------------
+    deque<vector<long64> > nbors(Elements(),vector<long64>({IRREGULAR_OUTSIDE,IRREGULAR_OUTSIDE,IRREGULAR_OUTSIDE}) );
+    //    nodes-of-face      face-id elmt-id
+    multimap<set<size_t>,pair<size_t,size_t> >::iterator it1(surface_elmt_nbor_key.begin()),
+                                                         it2(surface_elmt_nbor_key.begin());
+    it2++;
+    while ( it2 != surface_elmt_nbor_key.end() )
+      { 
+          // if there is a pair of valid neighbor elements, neighbor assignments are made
+          if ( (*it1).first == (*it2).first ) 
+            {
+               const size_t e1 = (*it1).second.second;
+               const size_t e2 = (*it2).second.second;
+               assert( e1 != e2 ); // avoid self-assignment
+
+                // assigning eachothers faces
+                //             face                  neighbor
+                nbors[ e1 ][ (*it1).second.first ] = e2;
+                nbors[ e2 ][ (*it2).second.first ] = e1;
+               
+               // both iterators are advanced (so that with the second increment a new pair of faces is reached)
+               ++it1;
+               ++it2;
+            }
+          // if the element face is located on a model boundary we need to find out which one and assign the corresponding flag  
+          else {
+              // getting the node numbers of the boundary face
+              const size_t node1((*(*it1).first.begin())), node2((*(*it1).first.rbegin()));
+              // finding them in them bflags map (both must be present)
+              const BOX_BOUNDARY bflag1(static_cast<BOX_BOUNDARY>(BoundaryFlag(node1))), 
+                                 bflag2(static_cast<BOX_BOUNDARY>(BoundaryFlag(node2)));
+              // determining which boundary the face is on
+              BOX_BOUNDARY face_boundary(NOT);
+              if      ( isBOTTOM(bflag1) and isBOTTOM(bflag2) ) face_boundary = BOTTOM;
+              else if ( isRIGHT(bflag1)  and isRIGHT(bflag2) )  face_boundary = RIGHT;
+              else if ( isTOP(bflag1)    and isTOP(bflag2) )    face_boundary = TOP;
+              else if ( isLEFT(bflag1)   and isLEFT(bflag2) )   face_boundary = LEFT;
+              else {
+                   cerr <<"\n\telement "<< (*it1).second.second <<": face "<< (*it1).second.first <<": ";
+                   cerr <<"bflags of face nodes: "<< parseBoundary(bflag1) <<" "<< parseBoundary(bflag2) <<"\n";
+                   throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", 
+                                         "boundary that face is located on could not be identified.");
+                }
+              // assigning the boundary identifier to neighbor of face 'pfverts'
+              nbors[ (*it1).second.second ][ (*it1).second.first ] = face_boundary;
+            }
+
+          // both iterators are advanced (again -if nbors were found)
+          if ( it2 == surface_elmt_nbor_key.end() ) break;
+          ++it1;
+          ++it2;
+      }
+      
+    // overwriting existing neighbor connectivity info with new one   
+    pfverts = nbors;
+       
+ } // end EstablishNeighborConnectivity2D
 
  
 } // end namespace csmp

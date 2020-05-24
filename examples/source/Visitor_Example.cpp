@@ -63,6 +63,7 @@ void Visitor_Example::Run()
   vtk_output.OutputDataToVTK( reservoir_model, "water-pressure", "water pressure", 0 );
   vtk_output.OutputDataToVTK( reservoir_model, "saturation-oil", "saturation oil", 0 );
   vtk_output.OutputDataToVTK( reservoir_model, "saturation-water", "saturation water", 0 );
+  
 } // Run()
 
 } // csmp

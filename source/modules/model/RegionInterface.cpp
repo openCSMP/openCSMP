@@ -1311,12 +1311,18 @@ bool RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopology&
 } // end FormRegionsFrom
 
 
+
+
+
 /**
 Tests whether the elements of the region are connected to each-other.
 
 @attention This test cannot be performed if the region has elements of different spatial
 dimensions since these are not interconnected. Therefore, this method returns false if
 the region consists of elements from different spatial dimensions.
+
+@note This method is based on the floofFill() algorithm implemented in CSMP. 
+
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& region_name ) const
@@ -1347,39 +1353,33 @@ bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& regi
 
 
 /**
-Breaks non-contiguous Regions into contiguous subregions that carry the name
-of the region but have a number as suffix to their name to denote the
-partition.
 
-@return The method returns the number of subgregions that were created.
+Breaks non-contiguous Region into contiguous subregions that carry the name
+of the original region, but have a number as a suffix to their name to distinguish each partition.
+All elements and the original region are retained, but the original region is moved into the 
+non-unique regions storage.
 
-@attention The master region that was successfully partitioned is removed.
+@return The method returns the number of subgregions that were created, if any.
 
 @param group The name of the region that may be non-contiguous.
-If so, new sbregions will be created to the name of which integers
-will be appended that correspond to the number of subdomains
-that are created in this process.
-
-@return The method returns the number of contiguous subdomains which it
-created.
 
 @section implementation Implementation
 
-The method uses the union-find algorithm, using neighbours to determine
-components.
+The method uses the union-find algorithm, using element neighbours to determine
+which parts of it are contiguous.
+
+@attention this method is implemented using UnionFind  as opposed to standard floodfill operations. This might cause performance issues.
 
 @section application Application
 
-To automatically partition groups that consist of a multitude of
-non-contiguous model subdomains so that the latter can be addressed
-individually in computations.
+To  partition regions  into contiguous subdomains such as fractures so that these 
+can be processed one-by-one by various algorithms. 
 
 @section messages Messages
 
-The method will report if the group is already contiguous in which
-case no changes are made.
+The method will report if the region is  contiguous to start with. In this case no subregions will be created.
 
-@attention this method cannot be applied to the region model or the master region
+@attention it makes no sense to apply this method to region "Model" or complex non-unique regions.
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* group )
@@ -1470,7 +1470,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
 
   // if the region has been partitioned succesfully and its name is not model, it will be removed
   if ( IsUnique( group ) )
-    RemoveRegion( group, false );
+    MoveToNonUniqueRegions( group );
 
   return subgroupNum;
 
@@ -1483,9 +1483,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
 
 
 /**
-As previous method but using element Idx information to find the elements.
 
-@attention The master region that was successfully partitioned is removed.
+Similiar to PartitionRegionIntoContiguousSubRegions(), but using element indices to find the elements.
 
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
@@ -1567,7 +1566,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   }
 
   if ( IsUnique( group ) && !(strncmp( group, "Model", NAME_STRING ) == 0) )
-    RemoveRegion( group, false );
+    MoveToNonUniqueRegions( group );
 
   return n_subgroups;
 

@@ -214,10 +214,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              TwoPhaseModel<dim>::swr_ = get<4>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<4>(Otway_.rocktype_).Sgr_; // make rate dependent?
              // relative permeability parallel and perpendicular to layers
-             krw_parallel_  = get<4>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<4>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<4>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<4>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<4>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<4>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<4>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<4>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 5: // M_CbSst_Slt: COMPOSITE - not rate dependent
              is_composite_ = true;
@@ -255,10 +255,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              dPc_           = get<6>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<6>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<6>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<6>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<6>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<6>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<6>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<6>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<6>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<6>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<6>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 7: // M_CbSst_FSst: COMPOSITE - not rate dependent
              is_composite_ = true;
@@ -295,10 +295,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              dPc_           = get<8>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<8>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<8>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<8>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<8>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<8>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<8>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<8>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<8>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<8>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<8>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 9: // M_CbSst_CSst: COMPOSITE - not rate dependent 
              is_composite_ = true;
@@ -346,10 +346,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              dPc_           = get<11>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<11>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<11>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<11>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<11>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<11>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<11>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<11>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<11>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<11>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<11>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 12: // P_Slt_CSst: COMPOSITE
              is_composite_ = true;
@@ -366,10 +366,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              dPc_           = get<12>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<12>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = 0.; // get<12>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<12>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<12>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<12>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<12>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<12>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<12>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<12>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<12>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 13: // H_FSst
              phi_                     = get<13>(Otway_.rocktype_).phi_;
@@ -397,10 +397,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
              dPc_           = get<14>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<14>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<14>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<14>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<14>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<14>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<14>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<14>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<14>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<14>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<14>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 15: // H_CSst  
              phi_                     = get<15>(Otway_.rocktype_).phi_;
@@ -614,12 +614,12 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              dPc_           = get<4>(Otway_.rocktype_).dPc_;
              // saturation endpoints        
              TwoPhaseModel<dim>::swr_ = get<4>(Otway_.rocktype_).Swi_;
-             TwoPhaseModel<dim>::snr_ = get<4>(Otway_.rocktype_).Sgr_; // make rate dependent?
+             TwoPhaseModel<dim>::snr_ = get<4>(Otway_.rocktype_).Sgr_; 
              // relative permeability parallel and perpendicular to layers
-             krw_parallel_  = get<4>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<4>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<4>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<4>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<4>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<4>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<4>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<4>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 5: // M_CbSst_Slt: COMPOSITE - not rate dependent
              is_composite_ = true;
@@ -657,10 +657,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              dPc_           = get<6>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<6>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<6>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<6>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<6>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<6>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<6>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<6>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<6>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<6>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<6>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 7: // M_CbSst_FSst: COMPOSITE - not rate dependent
              is_composite_ = true;
@@ -697,10 +697,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              dPc_           = get<8>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<8>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<8>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<8>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<8>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<8>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<8>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<8>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<8>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<8>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<8>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 9: // M_CbSst_CSst: COMPOSITE - not rate dependent 
              is_composite_ = true;
@@ -749,10 +749,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              dPc_           = get<11>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<11>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<11>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<11>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<11>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<11>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<11>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<11>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<11>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<11>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<11>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 12: // P_Slt_CSst: COMPOSITE
              is_composite_ = true;
@@ -769,10 +769,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              dPc_           = get<12>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<12>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = 0.; // get<12>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<12>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<12>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<12>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<12>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<12>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<12>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<12>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<12>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 13: // H_FSst
              TwoPhaseModel<dim>::k_   = get<13>(Otway_.rocktype_).k_;
@@ -801,10 +801,10 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
              dPc_           = get<14>(Otway_.rocktype_).dPc_;
              TwoPhaseModel<dim>::swr_ = get<14>(Otway_.rocktype_).Swi_;
              TwoPhaseModel<dim>::snr_ = get<14>(Otway_.rocktype_).Sgr_;
-             krw_parallel_  = get<14>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, vt_magnitude_ );
-             krw_crossflow_ = get<14>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, vt_magnitude_ );
-             krn_parallel_  = get<14>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, vt_magnitude_ );
-             krn_crossflow_ = get<14>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, vt_magnitude_ );
+             krw_parallel_  = get<14>(Otway_.rocktype_).Krw_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krw_crossflow_ = get<14>(Otway_.rocktype_).Krw_CrossDrainage( Sw_, fabs(vt_[1]) );
+             krn_parallel_  = get<14>(Otway_.rocktype_).Krn_ParallelDrainage( Sw_, fabs(vt_[0]) );
+             krn_crossflow_ = get<14>(Otway_.rocktype_).Krn_CrossDrainage( Sw_, fabs(vt_[1]) );
            break;
          case 15: // H_CSst  
              TwoPhaseModel<dim>::k_   = get<15>(Otway_.rocktype_).k_;

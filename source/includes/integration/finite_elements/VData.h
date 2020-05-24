@@ -219,6 +219,9 @@ class VData {
     std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
     std::vector<long64>::const_iterator                PfvertsBegin( size_t eidx ) const;
     std::vector<long64>::const_iterator                PfvertsEnd( size_t eidx ) const;
+    
+    /// returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT
+    long64 BoundaryFlag( size_t vertex ) const;
   
     // specific element, face and interface iterators
     /// iterator to CSMP finite element type of first face stored in mesh
@@ -256,6 +259,9 @@ class VData {
     
     /// computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
     void   EstablishConnectivityOfEquidimensionalElements2D();
+    
+    /// (re)creates 'pfverts' = neighbor connectivity for a mesh that only consists of a single type of surface elements
+    void   EstablishNeighborConnectivity2D();
 
     /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
     void   CreateConsistentLineElementOrientations2D();
