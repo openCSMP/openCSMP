@@ -210,63 +210,67 @@ IsoparametricQuadraticPrism::NodesOfFace( size_t face_id, std::vector<size_t>& f
  {
     fnids.resize(9);
 
-    if      ( face_id == 0 )
+    // triangular face at base
+    if ( face_id == 0 )
       {
         fnids.resize(6);
+         // corner nodes
          fnids[0] = 0;
-         fnids[1] = 6;
+         fnids[1] = 2;
          fnids[2] = 1;
-         fnids[3] = 7;
-         fnids[4] = 2;
-         fnids[5] = 8;
+         // midside nodes
+         fnids[3] = 8;
+         fnids[4] = 7;
+         fnids[5] = 6;
      }
     else if ( face_id == 1 )
       {
-      fnids.resize(9);
+      fnids.resize(8);
          fnids[0] = 0;
-         fnids[1] = 6;
-         fnids[2] = 1;
-         fnids[3] = 10;
-         fnids[4] = 4;
-         fnids[5] = 12;
-         fnids[6] = 3;
+         fnids[1] = 1;
+         fnids[2] = 4;
+         fnids[3] = 3;
+         //
+         fnids[4] = 6;
+         fnids[5] = 10;
+         fnids[6] = 12;
          fnids[7] = 9;
-         fnids[8] = 15;
       }
     else if ( face_id == 2 )
       {
-      fnids.resize(9);
+      fnids.resize(8);
          fnids[0] = 1;
-         fnids[1] = 7;
-         fnids[2] = 2;
-         fnids[3] = 11;
-         fnids[4] = 5;
-         fnids[5] = 13;
-         fnids[6] = 4;
-         fnids[7] = 11;
-         fnids[8] = 16;
+         fnids[1] = 2;
+         fnids[2] = 5;
+         fnids[3] = 4;
+         //
+         fnids[4] = 7;
+         fnids[5] = 11;
+         fnids[6] = 13;
+         fnids[7] = 10;
       }
     else if ( face_id == 3 )
       {
-      fnids.resize(9);
+      fnids.resize(8);
          fnids[0] = 0;
-         fnids[1] = 8;
-         fnids[2] = 2;
-         fnids[3] = 11;
-         fnids[4] = 5;
+         fnids[1] = 3;
+         fnids[2] = 5;
+         fnids[3] = 2;
+         //
+         fnids[4] = 9;
          fnids[5] = 14;
-         fnids[6] = 3;
-         fnids[7] = 9;
-         fnids[8] = 17;
+         fnids[6] = 11;
+         fnids[7] = 8;
       }
+    // triangular face at top
     else if ( face_id == 4 )
       {
       fnids.resize(6);
          fnids[0] = 3;
-         fnids[1] = 12;
-         fnids[2] = 4;
-         fnids[3] = 13;
-         fnids[4] = 5;
+         fnids[1] = 4;
+         fnids[2] = 5;
+         fnids[3] = 12;
+         fnids[4] = 13;
          fnids[5] = 14;
       }
     else

@@ -171,8 +171,9 @@ A pointer to the parent Element which shall be added.
 template<size_t dim>
 void Node<dim>::Assign( size_t pnode, Element<dim>* element )
  {
-    assert( element != NULL );
+    assert( element != nullptr );
     assert( parent_node_indexes_.size() == parent_element_pointers_.size() );
+    assert( pnode <= FIFTY );
     
     for ( size_t parent=0U; parent<parent_node_indexes_.size(); parent++ )
       if ( parent_node_indexes_[parent] == NOT_INITIALIZED ) {
@@ -182,6 +183,9 @@ void Node<dim>::Assign( size_t pnode, Element<dim>* element )
         }
 
  } // end Assign
+
+
+
 
 /// Removes the provided element as parent and returns true, false if not found
 template<size_t dim>
@@ -299,7 +303,7 @@ void  Node<dim>::ResizeParentStorage( size_t n )
   {
      parent_node_indexes_.resize( n, NOT_INITIALIZED );
      std::vector<ONE_BYTE_NUMBER>( parent_node_indexes_ ).swap( parent_node_indexes_ );
-     parent_element_pointers_.resize( n, NULL );
+     parent_element_pointers_.resize( n, nullptr );
      std::vector<Element<dim>*>( parent_element_pointers_ ).swap( parent_element_pointers_ );
   }
 

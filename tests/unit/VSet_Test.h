@@ -31,6 +31,8 @@ void VSet_Test::run()
   npe.push_back( 8 ); npe.push_back( 8 ); npe.push_back( 5 );
   std::deque<size_t> epe;
   epe.push_back( 6 ); epe.push_back( 6 ); epe.push_back( 5 );
+  _test( vset1.MeshDimension() == 3 );
+
   VSet<3U> vset2( npe, epe, 13 );
   _test( vset2.Elements() == 3 );
   _test( vset2.Vertices() == 13 );
@@ -162,31 +164,6 @@ void VSet_Test::run()
   _test( vset4.Pfvert( 2, 0 ) == 1 );  _test( vset4.Pfvert( 2, 1 ) == 99 );  _test( vset4.Pfvert( 2, 2 ) == 99 );
   _test( vset4.Pfvert( 2, 3 ) == 99 );  _test( vset4.Pfvert( 2, 4 ) == 99 );
 
-// TODO: new tests for PropertyData are missing
-// ============================================
-  ScalarVariable scalarVariable( PLAIN, 1. );
-  std::vector<ScalarVariable> scalarData; scalarData.push_back( scalarVariable ); scalarData.push_back( scalarVariable ); scalarData.push_back( scalarVariable );
-  FEM_Data<ScalarVariable> femDataScalar( ELEMENT, scalarData );
-//  vset4.AddData( "scalar data", femDataScalar );
-  TensorVariable<3U> tensorVariable( PLAIN, 1. );
-  std::vector<TensorVariable<3U> > tensorData; tensorData.push_back( tensorVariable ); tensorData.push_back( tensorVariable ); tensorData.push_back( tensorVariable );
-  FEM_Data<TensorVariable<3U> > femDataTensor( ELEMENT, tensorData );
-//  vset4.AddData( "tensor data", femDataTensor );
-  VectorVariable<3U> vectorVariable( PLAIN, 1. );
-  std::vector<VectorVariable<3U> > vectorData; vectorData.push_back( vectorVariable ); vectorData.push_back( vectorVariable ); vectorData.push_back( vectorVariable );
-  FEM_Data<VectorVariable<3U> > femDataVector( ELEMENT, vectorData );
-//  vset4.AddData( "vector data", femDataVector );
-  FEM_Data<ScalarVariable> femDataScalarTest;
-//  vset4.Data( "scalar data", femDataScalarTest );
-//  _test( femDataScalarTest == femDataScalar );
-  FEM_Data<VectorVariable<3U> > femDataVectorTest;
-//  vset4.Data( "vector data", femDataVectorTest );
-//  _test( femDataVectorTest == femDataVector );
-  FEM_Data<TensorVariable<3U> > femDataTensorTest;
-//  vset4.Data( "tensor data", femDataTensorTest );
-//  _test( femDataTensorTest == femDataTensor );
-
-
   // BOUNDARY FLAGS
   std::unordered_map<size_t,long64> bfmap;
   for( size_t i = 0; i < 13; ++i )
@@ -194,14 +171,6 @@ void VSet_Test::run()
   vset4.AddBFlags( bfmap.begin(), bfmap.end() );
   for( auto it = vset4.BFlagsBegin(); it != vset4.BFlagsEnd(); ++it )
     _test( it->second == 99 );
-
-  // .)ITERATORS
-//  _test( vset4.ScalarPropertiesBegin() == vset4.vdata_scalar.begin() );
-//  _test( vset4.ScalarPropertiesEnd() == vset4.vdata_scalar.end() );
-//  _test( vset4.VectorPropertiesBegin() == vset4.vdata_vector.begin() );
-//  _test( vset4.VectorPropertiesEnd() == vset4.vdata_vector.end() );
-//  _test( vset4.TensorPropertiesBegin() == vset4.vdata_tensor.begin() );
-//  _test( vset4.TensorPropertiesEnd() == vset4.vdata_tensor.end() );
 
 
   // .)IO
@@ -233,20 +202,17 @@ void VSet_Test::run()
 
   // .)REMOVEDATA
   vset4.RemoveBflags();
-  //vset4.RemoveData( "scalar data" );	// jc: not implemented yet.
-  //vset4.RemoveData( "vector data" );	// jc: not implemented yet.
-  //vset4.RemoveData( "tensor data" );	// jc: not implemented yet.
-//  _test( vset4.ScalarPropertiesBegin() == vset4.vdata_scalar.end() );
-//  _test( vset4.ScalarPropertiesEnd() == vset4.vdata_scalar.end() );
-//  _test( vset4.VectorPropertiesBegin() == vset4.vdata_vector.end() );
-//  _test( vset4.VectorPropertiesEnd() == vset4.vdata_vector.end() );
-//  _test( vset4.TensorPropertiesBegin() == vset4.vdata_tensor.end() );
-//  _test( vset4.TensorPropertiesEnd() == vset4.vdata_tensor.end() );
+  vset4.RemoveData( "scalar data" );	
+  vset4.RemoveData( "vector data" );	
+  vset4.RemoveData( "tensor data" );	
+  _test( vset4.DataEmpty() == true );
+  _test( vset4.PropertyValuesBegin() == vset4.PropertyValuesEnd() );
 
 // NEW TESTS BY SKM
 // comparitor test
   VSet<3U> vset6;
   test_Create_Prism_Hexa_VSet( vset6, false /* bSkewed */ );
+  _test( vset6.MeshDimension() == 3 );
   vset6.OutputTo( "vsetBIN", 0. );
   VSet<3U> vset7;
   vset7.InputFrom( "vsetBIN", time );

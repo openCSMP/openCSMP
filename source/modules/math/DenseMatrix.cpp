@@ -1387,7 +1387,7 @@ double64 DenseMatrix<mn_max>::NormL_Infinity() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::NormL_Infinity: empty matrix!\n";
-         return std::numeric_limits<double>::quiet_NaN();
+         return std::numeric_limits<double>::signaling_NaN();
       }
 
 	double64  maxval(static_cast<double64>(0.0)), sum;
@@ -1464,7 +1464,7 @@ double64 DenseMatrix<mn_max>::NormL1() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::NormL1: empty matrix!\n";
-         return std::numeric_limits<double>::quiet_NaN();
+         return std::numeric_limits<double>::signaling_NaN();
       }
 
 	double64  maxval(static_cast<double64>(0.0)), sum;

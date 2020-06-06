@@ -626,9 +626,8 @@ void Model<dim>::InstantiateFiniteVolumes()
 template<size_t dim>
 Model<dim>::~Model()
 {
-  if ( fvStencilManager_ )
-    delete fvStencilManager_;
-} // end
+   delete fvStencilManager_;
+}
 
 
 
@@ -685,6 +684,17 @@ string Model<dim>::BinaryVariablesFileName( const char* base_file_name )
   fullFileName.append( "_variables.dat" );
   return fullFileName;
 }
+
+
+
+
+/// attempts to return the spatial dimension of the model stored in the file (1-3D)
+size_t spatialDimensionOfModel( const char* csmp_binary )
+ {
+    throw csmp::Exception( ERROR, "spatialDimensionOfModel(binary file)", "method not implemented yet.");
+    return 3U;
+    
+ } // end dimensionModelInBinaryFile
 
 
 

@@ -28,7 +28,7 @@ void RegionProperties_Example::Specifications()
    AddDescription( "source in: RegionProperties_Example.cpp" );
    AddDescription( "application of interrelations that use REGION variables etc." );
    AddRequirement( "'b25' .dat, .asc, -regions & -configuration .txt");
-   AddRequirement( "example1_regions.txt" );
+   AddRequirement( "example1.txt" );
 } 
 
 
@@ -78,11 +78,13 @@ void RegionProperties_Example::Run()
     cout <<"\nmain: creating and initialising the 'hydraulic conductivity' K as constraint point property:\n";
     PropertyHandle<DIM>  K( model, "hydraulic conductivity", SCALAR, ELEMENT_INTEGRATION_POINT );
     
+    // step by step initialisation of the new 'hydraulic conductivity' variable that lives on the element integratioon points
     cout <<"\nmain: setting K to to permeability:\n";
+    // assign element property 'permeability' to integration points
     ArithmeticMean<DIM,ScalarVariable>  avg( model.Database(), "hydraulic conductivity", "permeability" );
     model.Apply( avg );
     printRangeOfVariable( model, "hydraulic conductivity", true );
-    
+    // divide it by the node variable 'viscosity' to obtain 'hydraulic conductivity' on integration points
     cout <<"\nmain: dividing it by a constant viscosity:\n";    
     const double64  viscosity(1.6e-3);
     ConstantFactor<DIM,divides>  Kdiv_mu( model.Database(), "hydraulic conductivity", "hydraulic conductivity", viscosity );

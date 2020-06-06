@@ -192,7 +192,8 @@ void BoundaryInterface_Test::run()
       const size_t elmts_original_region(test_subdomain.Elements());
       // will remove the original region
       const size_t model_faces_before(model.Mesh().Faces());
-      _test( model.CreateInternalBoundaryFrom( "NORMAL_FAULT" ) == subregions );
+      std::pair<std::set<std::string>,bool> boundaries = model.CreateInternalBoundaryFrom( "NORMAL_FAULT" );
+      _test( boundaries.first.size() == subregions );
       _test( model.ContainsRegion("NORMAL_FAULT") == false );
       const size_t model_faces_after(model.Mesh().Faces());
       _test( (model_faces_after - model_faces_before) == elmts_original_region );

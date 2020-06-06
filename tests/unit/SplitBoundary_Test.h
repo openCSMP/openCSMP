@@ -20,10 +20,8 @@ namespace csmp {
     - is there only a single node along the perimeter of a split boundary
     - are all of the above operations still valid for a SplitBoundary read from binary file?
 
-
-     @author Revised testst originally conceived by Roman Manasipov in 2013,
-     @author refactored by Junchul Kim (2019).
-     @date ported to 2016 version by SKM.
+     @author SKM
+     @date 26/1/2020
  */
   class SplitBoundary_Test : public Test
     {
@@ -31,47 +29,41 @@ namespace csmp {
       explicit SplitBoundary_Test( bool verbose=false ) : verbose_(verbose) {}
     
       virtual void run();
-
-      template<size_t dim>
-      void test_splitboundary_between_regions( const std::string& model_name );
-
-      template<size_t dim>
-      void test_splitboundary_around_regions( const std::string& model_name );
-
-      template<size_t dim>
-      void detect_and_create_splitboundaries( const std::string& model_name );
-
-      template<size_t dim>
-      void detect_and_create_splitboundaries_from_constructor( const std::string& model_name );
-
-      template<size_t dim>
-      void NodeParents( const csmp::Region<dim>& region, size_t minParentCount = 2 );
-
-      template<size_t dim>
-      void ElementNodes( const csmp::Region<dim>& region );
-
-      template<size_t dim>
-      void CheckRemovedLowDimParents( csmp::Boundary<dim>& boundary );
       
-      /// tests whether all InterFace elements of the SplitBoundary have both higher-dimensional neighbors
-      template<size_t dim>
-      bool NoNeighborNull( const csmp::InterFace<dim>& interFace );
+      // TESTING of public methods in the order in which they appear in SplitBoundary
+      // ----------------------------------------------------------------------------
+      // SplitBoundary creation gets tested by SplitBoundaryInterface_Test
+        
+      bool Test_InputNodePropertyValue();
 
-      /// tests whether the splitted nodes share parent elements, located on different sides of interfaces
-      template<size_t dim>
-      void TestSplitNodeAssignment( const csmp::Model<dim>& );
+      /// returns location of split boundary relative to adjacent region
+      bool Test_FacingDirection();
 
-      template<size_t dim>
-      void VisualiseSplitBoundaries( csmp::Model<dim>&, const std::string&test_name  );
+      /// output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced
+      bool Test_Area();
+      
+      /// outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models
+      bool Test_PerimeterCalculation();
+      
+        /// integrates the property over the boundary line or surface
+      bool Test_SurfaceIntegral();
 
-      template<size_t dim>
-      void TestUnitNormals( csmp::Model<dim>&, const std::string& test_name  );
-
-      template<size_t dim>
-      void PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& fractures, double64 displacement );
-
-      template<size_t dim>
-      void PullApartSplitboundaries( Model<dim>& model, double64 displacement );
+      /// do all interfaces have higher dimensional neighbors
+      bool Test_HigherDimensionalNeighbors();
+    
+      /// do correspoding nodes coincide
+      bool Test_NodeCorrespondance();
+      
+      bool Test_Manifolds();
+      
+      /// is there only a single node along the perimeter of a split boundary
+      bool Test_SingleParameterNode();
+      
+      /// are all of the above operations still valid for a SplitBoundary read from binary file?
+      bool Test_IntegrityOfSplitBoundaryFromBinaryFile();
+      
+      // TEST SETUP
+      // ----------------------------------------------------------------------------
 
       template<size_t dim>
       void LoadModel( const std::string& model_name );
@@ -82,23 +74,23 @@ namespace csmp {
       template<size_t dim>
       void LoadContiguousModel( const std::string& model_name, std::vector<std::string>& fractures );
 
-      template<size_t dim>
-      void etablishContiguosRegionsList( Model<dim>& model,
-                                         const std::set<std::string>& fractures_basic_set,
-                                         std::set<std::string>& fractures );
-
       /// reading fault modeling input data
-      void inputFromFile( const char* file_name,
+      void InputFromFile( const char* file_name,
                           std::set<std::string>& fractures_basic_set );
 
-      void inputFromFile( const char* file_name,
+      void InputFromFile( const char* file_name,
                           std::vector<std::string>& fractures );
 
       /// writing fault modeling input data into text file
-      void outputToFile( const char* file_name,
+      void OutputToFile( const char* file_name,
                          const std::vector<std::string>& fractures );
-      void outputToFile( const char* file_name,
+      void OutputToFile( const char* file_name,
                          const std::set<std::string>& fractures );
+                         
+      template<size_t dim>
+      void EstablishContiguousRegionsList( Model<dim>& model, 
+                                           const std::set<std::string>& interface_basic_set,
+                                           std::set<std::string>& interface_sets );
       private:
         const bool verbose_;
   };

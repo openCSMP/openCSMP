@@ -10,7 +10,7 @@ namespace csmp {
 /// line element with linear interpolation functions for 1D, 2D and 3D models and variable number of integration points
 class IsoparametricLinearLineElement : public FiniteElement {
   public:
-    explicit IsoparametricLinearLineElement( size_t dimensions = 2, size_t ips = 1  );
+    explicit IsoparametricLinearLineElement( size_t dimensions = 2, size_t ips = 2  );
     ~IsoparametricLinearLineElement();
 
     virtual double64  Volume();

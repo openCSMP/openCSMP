@@ -98,7 +98,7 @@ double64 SparseMatrix::operator()( size_t i, size_t j ) const
     if ( i >= data.size() ) {
          std::cerr <<"\nSparseMatrix::operator("<< i <<","<< j <<") const: ";
          std::cerr <<"Row access index out of range."<< std::endl;
-         return std::numeric_limits<double64>::quiet_NaN();
+         return std::numeric_limits<double64>::signaling_NaN();
       }
     std::map<size_t,double64>::const_iterator ditc = data[i].find(j);
     if ( ditc == data[i].end() ) return static_cast<double64>(0.0);

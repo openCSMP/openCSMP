@@ -38,7 +38,8 @@ void Element_Test::run()
   
   UnitNormalTest();
   
-  PointInVolumeElementTest();
+  // A. Bromage test that does not rely of FE functionality (takes very long)
+  //PointInVolumeElementTest();
 }
 	
   

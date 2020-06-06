@@ -206,7 +206,7 @@ void EclipseModel::AddWell(const std::string& well_name, const Point<3U>& well_s
 }
 
 /// processing special regions
-void EclipseModel::CreateBoundariesAroundFaults(bool keep_fault_regions)
+void EclipseModel::CreateBoundariesAroundFaults( bool keep_fault_regions )
 {
 	this->MergeRegions(faults_, "FAULTS");
 	faults_.insert("FAULTS");
@@ -219,11 +219,11 @@ void EclipseModel::CreateBoundariesAroundFaults(bool keep_fault_regions)
 }
 
 
-void EclipseModel::CreateSplitBoundariesAroundFaults(bool delete_fault_regions)
+void EclipseModel::CreateSplitBoundariesAroundFaults( bool delete_fault_regions )
 {
 	this->MergeRegions(faults_, "FAULTS");
 	faults_.insert("FAULTS");
-	this->InsertSplitBoundary("FAULTS");
+	this->CreateSplitBoundaryFrom("FAULTS");
 
 	// create splitboundaries
 	//for( std::set<std::string>::const_iterator
@@ -234,115 +234,6 @@ void EclipseModel::CreateSplitBoundariesAroundFaults(bool delete_fault_regions)
 }
 
 
-// trial versions
-BOX_BOUNDARY  whichEdge(BOX_BOUNDARY side1, BOX_BOUNDARY side2)
-{
-	// dealing with the case where the 2 flags are the same so that this is not an EDGE
-	if (side1 == side2) return side1;
-
-	if (side1 == LEFT and side2 == BOTTOM) return EDGE1;
-	if (side1 == LEFT and side2 == RIGHT)  return EDGE2;
-	if (side1 == LEFT and side2 == TOP)    return EDGE3;
-	if (side1 == LEFT and side2 == FRONT)  return EDGE4;
-
-	if (side1 == BOTTOM and side2 == FRONT) return EDGE5;
-	if (side1 == BOTTOM and side2 == LEFT) return EDGE1;
-	if (side1 == BOTTOM and side2 == BACK) return EDGE6;
-	if (side1 == BOTTOM and side2 == TOP) return EDGE7;
-
-	if (side1 == TOP and side2 == FRONT) return EDGE8;
-	if (side1 == TOP and side2 == LEFT) return EDGE3;
-	if (side1 == TOP and side2 == BACK) return EDGE7;
-	if (side1 == TOP and side2 == RIGHT) return EDGE12;
-
-	if (side1 == FRONT and side2 == BOTTOM) return EDGE5;
-	if (side1 == FRONT and side2 == LEFT) return EDGE4;
-	if (side1 == FRONT and side2 == TOP) return EDGE8;
-	if (side1 == FRONT and side2 == RIGHT) return EDGE12;
-
-	if (side1 == RIGHT and side2 == BOTTOM) return EDGE9;
-	if (side1 == RIGHT and side2 == BACK) return EDGE10;
-	if (side1 == RIGHT and side2 == TOP) return EDGE11;
-	if (side1 == RIGHT and side2 == FRONT) return EDGE12;
-	return NOT;
-}
-
-
-BOX_BOUNDARY  whichCorner(BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY side3)
-{
-	set<BOX_BOUNDARY> sides({ side1,side2,side3 });
-	auto s3 = (*sides.begin());
-	auto s2 = (*(next(sides.begin(), 1)));
-	auto s1 = (*sides.rbegin());
-
-	if (sides.empty()) return NOT;
-
-	if (sides.size() == 1U) return (*sides.begin());
-
-	// dealing with duplicates (there will only be 1 or 2 entries so this can only be a corner if the entries are edges)
-	if (sides.size() == 2U) {
-		// 2 edges EDGE12, EDGE11... EDGE1
-		if (side1 == EDGE12 and side2 == EDGE11) return CNR8;
-		if (side1 == EDGE12 and side2 == EDGE9) return CNR5;
-
-		if (side1 == EDGE11 and side2 == EDGE10) return CNR7;
-
-		if (side1 == EDGE10 and side2 == EDGE9) return CNR6;
-		if (side1 == EDGE10 and side2 == EDGE6) return CNR6;
-
-		if (side1 == EDGE9 and side2 == EDGE6) return CNR6;
-		if (side1 == EDGE9 and side2 == EDGE5) return CNR5;
-
-		if (side1 == EDGE8 and side2 == EDGE4) return CNR4;
-		if (side1 == EDGE8 and side2 == EDGE3) return CNR4;
-
-		if (side1 == EDGE7 and side2 == EDGE3) return CNR3;
-		if (side1 == EDGE7 and side2 == EDGE2) return CNR3;
-
-		if (side1 == EDGE6 and side2 == EDGE2) return CNR2;
-		if (side1 == EDGE6 and side2 == EDGE1) return CNR2;
-
-		if (side1 == EDGE5 and side2 == EDGE4) return CNR1;
-		if (side1 == EDGE5 and side2 == EDGE1) return CNR1;
-
-		if (side1 == EDGE4 and side2 == EDGE3) return CNR4;
-		if (side1 == EDGE4 and side2 == EDGE1) return CNR1;
-
-		if (side1 == EDGE3 and side2 == EDGE2) return CNR3;
-
-		if (side1 == EDGE2 and side2 == EDGE1) return CNR2;
-
-		// not a corner
-		if (side1 == BACK and side2 == TOP) return EDGE7;
-		if (side1 == BACK and side2 == BOTTOM) return EDGE6;
-		if (side1 == BACK and side2 == RIGHT) return EDGE10;
-		if (side1 == BACK and side2 == LEFT) return EDGE2;
-
-		if (side1 == FRONT and side2 == TOP) return EDGE8;
-		if (side1 == FRONT and side2 == BOTTOM) return EDGE5;
-		if (side1 == FRONT and side2 == RIGHT) return EDGE12;
-		if (side1 == FRONT and side2 == LEFT) return EDGE4;
-
-		if (side1 == TOP and side2 == RIGHT) return EDGE11;
-		if (side1 == TOP and side2 == LEFT) return EDGE3;
-
-		if (side1 == BOTTOM and side2 == LEFT) return EDGE1;
-		if (side1 == BOTTOM and side2 == RIGHT) return EDGE9;
-	}
-
-	// obeying increasing value constraint: BACK, FRONT, TOP, BOTTOM, RIGHT, LEFT
-	if (s1 == FRONT and s2 == BOTTOM and s3 == LEFT) return CNR1;
-	if (s1 == BACK  and s2 == BOTTOM and s3 == LEFT) return CNR2;
-	if (s1 == BACK  and s2 == TOP    and s3 == BOTTOM) return CNR3;
-	if (s1 == FRONT and s2 == TOP    and s3 == LEFT) return CNR4;
-
-	if (s1 == FRONT and s2 == BOTTOM and s3 == RIGHT) return CNR5;
-	if (s1 == BACK  and s2 == BOTTOM and s3 == RIGHT) return CNR6;
-	if (s1 == BACK  and s2 == TOP    and s3 == RIGHT) return CNR7;
-	if (s1 == FRONT and s2 == TOP    and s3 == RIGHT) return CNR5;
-
-	return NOT;
-}
 
 
 /**

@@ -103,7 +103,7 @@ class VData {
     size_t InterFaces() const;
   
     /// combined number of any entities: elements + faces + interfaces
-    size_t Simplices() const;
+    size_t TotalNumberOfCells() const;
 
     /// CSMP types of the elements, faces and interfaces contained in the mesh
     size_t ElementTypes() const;
@@ -119,7 +119,7 @@ class VData {
 
     /// number of neighbors stored for element, face or interface
     size_t PfvertsSize( size_t eidx ) const;
-  
+    
     /// get type; a mesh is of hybrid-element type if it contains multiple element types
     bool   HybridElementTypeMesh() const;
   
@@ -129,9 +129,6 @@ class VData {
     /// if numbering is not 0..n-1, this method establishes thos
     void   EstablishZeroBasedNumbering();
   
-    /// remove any gaps in the numbering of nodes and elements
-    bool   CheckFix();
-
     /// x-coordinate of node i
     void      Px( size_t i, double64 );
     void      Py( size_t i, double64 );
@@ -139,7 +136,22 @@ class VData {
     double64  Px( size_t i ) const;
     double64  Py( size_t i ) const;
     double64  Pz( size_t i ) const;
+ 
+    /// range of the X coordinate (increasing to the east)
+    std::pair<double64,double64>  X_Range() const;
+
+    /// range of the Y coordinate (increasing upward and often indicating elevation above sealevel)
+    std::pair<double64,double64>  Y_Range() const;
+
+    /// range of the Z coordinate (from north to south)
+    std::pair<double64,double64>  Z_Range() const;
   
+    /// calculates min-max vertex coordinate values of mesh stored in VData
+    void CoordinateRange( char coordinate_axis, double64& cmin, double64& cmax ) const;
+  
+    /// rescales vertex coordinate values in given spatial direction
+    void ScaleCoordinateToRange( char coordinate_axis, double64 cmin, double64 cmax ); 
+    
     /// to set vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
     void      P( size_t coordinate_axis, size_t i, double64 );
 
@@ -169,12 +181,6 @@ class VData {
 
     /// adds id (0..n-1) of boundary node and its BOX_BOUNDARY flag (negative integer)
     void AddBFlag( size_t node_id, long64 bflag );
-  
-    /// calculates min-max vertex coordinate values of mesh stored in VData
-    void CoordinateRange( char coordinate_axis, double64& cmin, double64& cmax ) const;
-  
-    /// rescales vertex coordinate values in given spatial direction
-    void ScaleCoordinateToRange( char coordinate_axis, double64 cmin, double64 cmax ); 
   
     /// empties 'pfverts' container if the contained info is flaky so that later code is prompted to recreate it
     void RemovePfverts() { pfverts.clear(); }
@@ -213,6 +219,9 @@ class VData {
     std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
     std::vector<long64>::const_iterator                PfvertsBegin( size_t eidx ) const;
     std::vector<long64>::const_iterator                PfvertsEnd( size_t eidx ) const;
+    
+    /// returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT
+    long64 BoundaryFlag( size_t vertex ) const;
   
     // specific element, face and interface iterators
     /// iterator to CSMP finite element type of first face stored in mesh
@@ -238,8 +247,28 @@ class VData {
     std::deque<std::vector<long64> >::const_iterator    PfvertsFacesBegin() const;
     /// neighbor iterator for first interface plist; equivalent to PlistFacesEnd; use PlistEnd() for last one
     std::deque<std::vector<long64> >::const_iterator    PfvertsInterfaceBegin() const;
-  
+ 
+ 
+    // EXTRA DATA, MESH MODIFICATION AND REPAIR 
 
+    /// remove any gaps in the numbering of nodes and elements
+    bool   CheckFix();
+
+    /// flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
+    size_t RenumberElementsCounterClockwise2D();
+    
+    /// computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
+    void   EstablishConnectivityOfEquidimensionalElements2D();
+    
+    /// (re)creates 'pfverts' = neighbor connectivity for a mesh that only consists of a single type of surface elements
+    void   EstablishNeighborConnectivity2D();
+
+    /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
+    void   CreateConsistentLineElementOrientations2D();
+
+    
+    // PERSISTANCE (storing mesh in binary file)
+  
     /// write mesh to supplied binary file
     void OutBinary( std::fstream& fp ) const;
   
@@ -263,19 +292,21 @@ class VData {
 
   protected:
 
+    /// angle between line elements in degrees
+    double64 AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );
+    
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );
- 
-    std::vector<int32>                pelmt;            ///< CSMP element type info, needed to read plist & pfverts
 
   private:
 
     bool                              hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double64>             px, py, pz;        ///< node coordinates
-    std::deque<std::vector<size_t> >  plist;             ///< nodes of each element
+    std::vector<int32>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
+    std::deque<std::vector<size_t> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
     std::unordered_map<size_t,long64> bflags;            ///< flags for those nodes that lie on model boundary
-    size_t                            first_interface_;  ///< faces come after elements; if none this is equal to elements
-    size_t                            first_face_;       ///< interfaces come after faces; if none this is equal to elements 
+    size_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
+    size_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements 
 
     friend class VData_Test;
 };

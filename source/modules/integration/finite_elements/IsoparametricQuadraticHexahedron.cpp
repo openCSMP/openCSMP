@@ -346,79 +346,73 @@ IsoparametricQuadraticHexahedron::NodesOfSegment( size_t segm_id, std::vector<si
 void
 IsoparametricQuadraticHexahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
-    fnids.resize(9);
+    fnids.resize(8);
 
-    if      ( face_id == 0 )
+    if ( face_id == 0 )
       {
          fnids[0] = 0;
-         fnids[1] = 8;
-         fnids[2] = 1;
-         fnids[3] = 9;
-         fnids[4] = 2;
-         fnids[5] = 10;
-         fnids[6] = 3;
-         fnids[7] = 11;
-         fnids[8] = 20;
+         fnids[1] = 3;
+         fnids[2] = 2;
+         fnids[3] = 1;
+         fnids[4] = 8;
+         fnids[5] = 11;
+         fnids[6] = 10;
+         fnids[7] = 9;
       }
     else if ( face_id == 1 )
       {
          fnids[0] = 0;
-         fnids[1] = 8;
-         fnids[2] = 1;
-         fnids[3] = 13;
-         fnids[4] = 5;
-         fnids[5] = 16;
-         fnids[6] = 4;
-         fnids[7] = 12;
-         fnids[8] = 21;
+         fnids[1] = 1;
+         fnids[2] = 5;
+         fnids[3] = 4;
+         fnids[4] = 12;
+         fnids[5] = 8;
+         fnids[6] = 10;
+         fnids[7] = 15;
       }
     else if ( face_id == 2 )
       {
          fnids[0] = 1;
-         fnids[1] = 9;
-         fnids[2] = 2;
-         fnids[3] = 14;
-         fnids[4] = 6;
-         fnids[5] = 17;
-         fnids[6] = 5;
-         fnids[7] = 13;
-         fnids[8] = 22;
+         fnids[1] = 2;
+         fnids[2] = 6;
+         fnids[3] = 5;
+         fnids[4] = 10;
+         fnids[5] = 9;
+         fnids[6] = 14;
+         fnids[7] = 17;
       }
     else if ( face_id == 3 )
       {
          fnids[0] = 2;
-         fnids[1] = 14;
-         fnids[2] = 6;
-         fnids[3] = 18;
-         fnids[4] = 7;
-         fnids[5] = 15;
-         fnids[6] = 3;
-         fnids[7] = 10;
-         fnids[8] = 23;
+         fnids[1] = 3;
+         fnids[2] = 7;
+         fnids[3] = 6;
+         fnids[4] = 14;
+         fnids[5] = 13;
+         fnids[6] = 15;
+         fnids[7] = 18;
       }
     else if ( face_id == 4 )
       {
          fnids[0] = 0;
-         fnids[1] = 11;
-         fnids[2] = 3;
-         fnids[3] = 15;
-         fnids[4] = 7;
-         fnids[5] = 19;
-         fnids[6] = 4;
-         fnids[7] = 12;
-         fnids[8] = 24;
+         fnids[1] = 4;
+         fnids[2] = 7;
+         fnids[3] = 3;
+         fnids[4] = 11;
+         fnids[5] = 12;
+         fnids[6] = 19;
+         fnids[7] = 15;
       }
     else if ( face_id == 5 )
       {
          fnids[0] = 4;
-         fnids[1] = 16;
-         fnids[2] = 5;
-         fnids[3] = 17;
-         fnids[4] = 6;
-         fnids[5] = 18;
-         fnids[6] = 7;
-         fnids[7] = 19;
-         fnids[8] = 25;
+         fnids[1] = 5;
+         fnids[2] = 6;
+         fnids[3] = 7;
+         fnids[4] = 19;
+         fnids[5] = 16;
+         fnids[6] = 17;
+         fnids[7] = 18;
       }
     else
     std::cerr <<"\nIsoparametricQuadraticHexahedron::NodesOfFace: Invalid Face ID requested: "<< face_id <<std::endl;

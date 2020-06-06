@@ -453,7 +453,7 @@ namespace csmp
                         "ip_p_max_low != ip_p_max_high.missed both if-statements.\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
 
 
-        return std::numeric_limits<double>::quiet_NaN();
+        return std::numeric_limits<double>::signaling_NaN();
       }
   }
 

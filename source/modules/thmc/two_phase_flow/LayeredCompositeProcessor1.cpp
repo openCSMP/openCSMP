@@ -175,7 +175,7 @@ double64 LayeredCompositeProcessor1::krw( double64 sw, double64 Nc, int rocktype
      }
   
    // in case an error occurred
-   return std::numeric_limits<double64>::quiet_NaN();
+   return std::numeric_limits<double64>::signaling_NaN();
   
 } // end krw
 
@@ -218,7 +218,7 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
      }
   
    // in case an error occurred
-   return std::numeric_limits<double64>::quiet_NaN();
+   return std::numeric_limits<double64>::signaling_NaN();
  }
  
  
@@ -271,7 +271,7 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
      }
   
    // in case an error occurred
-   return make_pair( std::numeric_limits<double64>::quiet_NaN(), std::numeric_limits<double64>::quiet_NaN() );
+   return make_pair( std::numeric_limits<double64>::signaling_NaN(), std::numeric_limits<double64>::signaling_NaN() );
   
 } // end RelativePermeability
 

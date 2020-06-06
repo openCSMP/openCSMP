@@ -21,7 +21,7 @@ typedef std::vector<std::pair<double64,double64> > HistogramBins;
 template<size_t dim>
 class StatisticalAnalyzer {
   public:
-    StatisticalAnalyzer( const Model<dim>& sg );
+    StatisticalAnalyzer( const Model<dim>& );
     ~StatisticalAnalyzer();
     
     /// specify via ascii input file, the x-axis range of the histogram columns, i.e. the bin size

@@ -699,7 +699,12 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary, bool updateNeighborCon
 
 
 
-
+/**
+      If one of the Face objects in the boundary has no outer higher-dim neighbor,
+      the boundary is located on the model boundary.
+      
+      @return returns true when part or all of the boundary is located on the model boundary.
+*/
 template<size_t dim>
 bool csmp::Boundary<dim>::IsExternal() const
 {
@@ -832,17 +837,15 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
     std::vector<csmp::Element<dim>*> inner_outter_elements;
 
     if( !higherDimensionalNeighbors( *(*it), inner_outter_elements ) ) continue;
-    if( inner_outter_elements.size() == 2){
+    if( inner_outter_elements.size() == 2) {
       // created a new face
-      Face<dim> new_face( *(*it), inner_outter_elements[0], inner_outter_elements[1], lvsFaces, lvsIntegrationPoints );
-      faceObj = meshManager.Add( new_face );
+      faceObj = meshManager.Add( Face<dim>( *(*it), inner_outter_elements[0], inner_outter_elements[1], lvsFaces, lvsIntegrationPoints ) );
       // push back into face container
       this->elmt_vec_.emplace_back( faceObj );
     }
     else {
       // created a new face
-      Face<dim> new_face( *(*it), const_cast<csmp::Element<dim>*>(inner_outter_elements[0]), nullptr, lvsFaces, lvsIntegrationPoints );
-      faceObj = meshManager.Add( new_face );
+      faceObj = meshManager.Add( Face<dim>( *(*it), const_cast<csmp::Element<dim>*>(inner_outter_elements[0]), nullptr, lvsFaces, lvsIntegrationPoints ) );
       // push back into face container
       this->elmt_vec_.emplace_back( faceObj );
     }
@@ -936,8 +939,11 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
     for ( size_t j = 0U; j<perimeter_faces; ++j )
     {
       // create the new face using the variables prepared above ( FV Stencil = NULL)
-      Face<dim> new_face( *region.E( i ), finiteElementManager.E( region.E( i )->FE()->ElementTypeOfFace( region.PerimeterFace( i, j ) ) ), region.PerimeterFace( i, j ), lvsFaces, lvsIntegrationPoints );
-      Face<dim>* faceObj = meshManager.Add( new_face );
+      Face<dim>* faceObj = meshManager.Add( Face<dim>( *region.E( i ),
+                                            finiteElementManager.E( region.E( i )->FE()->ElementTypeOfFace( region.PerimeterFace( i, j ) ) ),
+                                            region.PerimeterFace( i, j ),
+                                            lvsFaces, lvsIntegrationPoints )
+                                          );
       // push back into face container
       this->elmt_vec_.push_back( faceObj );
 
@@ -960,6 +966,9 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
   return true;
 
 } // CreateAround
+
+
+
 
 
 /**
@@ -1120,12 +1129,12 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
   if ( prop_key.place == ELEMENT_INTEGRATION_POINT or prop_key.place == REGION ) {
     throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
                            property, "placed on IntegrationPoint or Region cannot be assigned on boundary" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
   if ( prop_key.type == TENSOR ) {
     throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
                            property, "is a tensor property; this method does not know how to integrate it" );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
   }
 
   double64  property_integral( 0. );

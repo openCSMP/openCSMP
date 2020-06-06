@@ -108,6 +108,9 @@ class VSet : public VData {
   
     /// deletes all content of the VSet
     void  Erase();
+    
+    /// uses the node coordinates to infer the model dimension: if Z-range=zero, dim=2, if Y-range=2, dim=1, else dim=3
+    int32 MeshDimension( bool check_coordinates = false ) const;
   
     /// prints the VSet to the console
     void  Out( bool data_as_well=true ) const;

@@ -812,314 +812,6 @@ void RegionInterface<dim, REGION_COMPLEX>::InputAllRegionsFromBinary( const char
 
 
 
-/**
-Creates a new binary file into which the region is stored.
-*/
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::OutputRegionToBinary( const char* region_name, const char* file_name ) const
-{
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  // does this region already exist
-  if ( !ContainsRegion( region_name ) ) {
-    csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary:",
-                       region_name, "region does not exist; nothing was done." );
-    return;
-  }
-
-  const REGION_COMPLEX<dim>& regionComplex( static_cast<const REGION_COMPLEX<dim>& >(*this) );
-  const PropertyDatabase<dim>& database( regionComplex.Database() );
-
-  std::string bin_file( file_name );
-  std::string heading( "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary: output region '" );
-  heading += region_name;
-  heading += "' of Model '";
-  heading += regionComplex.Name();
-  heading += "' to file: ";
-  heading += bin_file;
-  heading += "'.";
-
-  std::fstream fp( bin_file.c_str(), std::ios::out | std::ios::binary );
-  if ( !fp.is_open() ) {
-    csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary:",
-                       bin_file, "file could not be opened; nothing was done." );
-    return;
-  }
-
-  // 1. writing the file header
-  skm_C_fwrite( fp, heading.c_str() );
-
-  // 2. writing number of regions=1
-  const size_t records( 1U );
-  fp.write( (char*)&records, sizeof( size_t ) );
-
-  // 3. writing the name of region
-  skm_C_fwrite( fp, region_name );
-
-  // 4. writing the element records of the region
-  const csmp::Region<dim>& subdomain( Region( region_name ) );
-  std::vector<size_t>  elmtIDs;
-  subdomain.MemberElementIndexes( elmtIDs );
-  skm_C_fwrite( fp, elmtIDs );
-
-  // 5. writing the variable values associated with the region to file
-  domainVariablesOut( fp, subdomain, database );
-
-  // 6. cleaning up
-  fp.close();
-  std::cout << "\nRegionInterface<" << dim << ",REGION_COMPLEX>::OutputRegionToBinary:: region '";
-  std::cout << region_name << "' has been successfully written to: '";
-  std::cout << bin_file << "'" << std::endl;
-
-} // end OutputRegionToBinary
-
-
-
-
-/**
-For all regions in the current model, this method writes name and
-contained elements into a binary file with the name 'file_name'. The
-extension '.dat' is appended.
-
-The data in the file are organised as follows:
-
-1. header line
-2. number of region
-3. for each region, name followed by array of the indexes of the elements
-stored in this region (correct=unique numbering is expected).
-end of file
-
-*/
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::AppendRegionsToBinary( const char* file_name ) const
-{
-  const REGION_COMPLEX<dim>& regionComplex( static_cast<const REGION_COMPLEX<dim>& >(*this) );
-  const PropertyDatabase<dim>& database( regionComplex.Database() );
-
-  std::string bin_file( file_name );
-  std::fstream fp( bin_file.c_str(), std::ios::out | std::ios::app | std::ios::binary );
-  if ( !fp.is_open() ) {
-    std::cerr << "\nRegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary: file: '" << bin_file;
-    std::cerr << "' could not be opened." << std::endl;
-    return;
-  }
-
-  std::vector<size_t>  elmtIDs;
-
-  // --------------------------
-  // writing the unique regions
-  // --------------------------
-  // writing number of unique regions
-  size_t records( this->UniqueRegions() );
-  fp.write( (char*)&records, sizeof( size_t ) );
-
-  for ( typename std::map<std::string, csmp::Region<dim> >::const_iterator
-        git = UniqueRegionsBegin(); git != UniqueRegionsEnd(); ++git )
-  {
-    // writing name of the region
-    skm_C_fwrite( fp, (*git).first.c_str() );
-    // writing the element records of the region
-    (*git).second.MemberElementIndexes( elmtIDs );
-    skm_C_fwrite( fp, elmtIDs );
-    // writing the values ofthe variables associated with the region
-    domainVariablesOut( fp, (*git).second, database );
-  }
-
-  // --------------------------
-  // writing non-unique regions
-  // --------------------------
-  records = this->Regions() - this->UniqueRegions();
-  fp.write( (char*)&records, sizeof( size_t ) );
-
-  for ( auto git = RegionsBegin(); git != RegionsEnd(); git++ ) {
-    // avoiding the region which is the master region since it was already written before
-    skm_C_fwrite( fp, (*git).first.c_str() );
-    (*git).second.MemberElementIndexes( elmtIDs );
-    skm_C_fwrite( fp, elmtIDs );
-    domainVariablesOut( fp, (*git).second, database );
-  }
-
-  // writing the Model variables here TODO: check for correctness
-  domainVariablesOut( fp, regionComplex, database );
-
-  // cleaning up
-  fp.close();
-  std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary: regions have been successfully written to: '";
-  std::cout << bin_file << "'" << std::endl;
-
-} // end AppendRegionsToBinary
-
-
-
-
-/**
-Reads a single non-unique region from the supplied binary file.
-
-@author SKM
-@date 5/4/2016
-*/
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::InputRegionFromBinary( const char* region_name, bool is_unique, const char* file_name )
-{
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  std::string bin_file( file_name );
-
-  std::fstream fp( bin_file.c_str(), std::ios::in | std::ios::binary );
-  if ( !fp.is_open() ) {
-    csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary:",
-                       bin_file, "file could not be opened; nothing was done." );
-    return;
-  }
-
-  // reading the file header and printing it to screen
-  char  text[500U];
-  skm_C_fread( fp, text );
-  std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary: Reading file header:\n\t" << text << std::endl;
-
-  // reading how many records will follow (should be 1 for this method)
-  size_t  records( 0 );  // region records
-  fp.read( (char*)&records, sizeof( size_t ) );
-
-  // there should just be the region of interest, else something is wrong
-  if ( records == 1 ) {
-    // region name
-    skm_C_fread( fp, text );
-    assert( std::strcmp( text, region_name ) == 0 );
-    // element ids
-    std::vector<size_t>  elmtIDs; // unsigned integer element identifiers to be read
-    skm_C_fread( fp, elmtIDs );
-    // creating the region
-    const bool reestablishNeighborConnectivity( true );
-    CreateRegionFromRootNode( region_name, is_unique, reestablishNeighborConnectivity );
-    // reading the associated variable values
-    const PropertyDatabase<dim>& database( static_cast<const REGION_COMPLEX<dim>& >(*this).Database() );
-    csmp::Region<dim> binRegion( text, database );
-    // elements were already accumulated so only the region variables need to be read
-    domainVariablesIn( fp, this->Region( region_name ), database );
-  }
-  else csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary:",
-                          region_name, "inconsistent binary record for region; no data could be read." );
-
-} // end InputRegionFromBinary
-
-
-
-
-
-/**
-Adds regions to an existing Model using the information from file.
-*/
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* file_name )
-{
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
-  const PropertyDatabase<dim>& database( static_cast<const REGION_COMPLEX<dim>& >(*this).Database() );
-
-  std::string bin_file( file_name );
-  size_t               records( 0 );
-  std::vector<size_t>  elmtIDs;
-
-  std::fstream fp( bin_file.c_str(), std::ios::in | std::ios::binary );
-  if ( !fp.is_open() ) {
-    std::cerr << "\nRegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary: file: '" << bin_file;
-    std::cerr << "' could not be opened." << std::endl;
-    return;
-  }
-
-  // skipping header and the first "master region"
-  char  text[256U];
-  skm_C_fread( fp, text );
-  fp.read( (char*)&records, sizeof( size_t ) ); // record
-  assert( records == 1 );
-  skm_C_fread( fp, text );    // name of region
-  skm_C_fread( fp, elmtIDs ); // element indices
-                              // TODO: deal with this redundant step although it does not affect many variable values
-
-                              // XXX AJB FIXME
-  domainVariablesIn( fp, this->Region( "Model" ), database );
-
-  auto& mesh = regionComplex.Mesh();
-
-  // ------------------
-  // unique regions
-  // ------------------
-  fp.read( (char*)&records, sizeof( size_t ) );
-  if ( records > 0 )
-    // reading the regions sequentially
-    for ( size_t i = 0U; i<records; i++ )
-    {
-      // reading name and element indices for each unique region
-      skm_C_fread( fp, text );
-      skm_C_fread( fp, elmtIDs );
-      csmp::Region<dim> binRegion( text, database );
-      domainVariablesIn( fp, binRegion, database );
-      // if the region is not empty it is assembled
-      if ( !elmtIDs.empty() ) {
-        // adding the regions to Model object
-        std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
-          it = uniqueGroupMap_.insert( std::make_pair( text, binRegion ) );
-        //   ^^^^^^^^^^^^^^^
-        if ( it.second )
-          (*it.first).second.AccumulateByNumber( mesh, elmtIDs );
-
-        if ( (*it.first).second.Elements() == 0U ) {
-          uniqueGroupMap_.erase( it.first );
-          throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                                 text, "Region could not be formed; dataset contained no elements." );
-        }
-      }
-    }
-  else csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                          bin_file, "does not contain any unique region descriptions; none were initialised." );
-
-  // ------------------
-  // non-unique regions
-  // ------------------
-  fp.read( (char*)&records, sizeof( size_t ) );
-  if ( records > 0U )
-    for ( size_t i = 0U; i<records; i++ )
-    {
-      skm_C_fread( fp, text );
-      skm_C_fread( fp, elmtIDs );
-      csmp::Region<dim> binRegion( text, database );
-      // the master region should not have been stored to disk via the corresponding append to binary function
-      domainVariablesIn( fp, binRegion, database );
-
-      if ( !elmtIDs.empty() ) {
-        std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
-          it = groupMap_.insert( std::make_pair( text, binRegion ) );
-        //   ^^^^^^^^^
-        if ( it.second )
-          (*it.first).second.AccumulateByNumber( mesh, elmtIDs );
-
-        if ( (*it.first).second.Elements() == 0U ) {
-          this->groupMap_.erase( it.first );
-          throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                                 text, "Region could not be formed; dataset contained no elements." );
-        }
-      }
-    }
-  else csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                          bin_file, "does not contain any non-unique region descriptions; none were initialised." );
-
-  /// @todo (3-D) We misuse the regions file here to store Model variables
-  domainVariablesIn( fp, regionComplex, database );
-
-  fp.close();
-
-  if ( Regions() == records ) {
-    std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary: " << records;
-    if ( UniqueRegions() == 1U ) std::cout << " unique region read successfully from '";
-    else std::cout << " unique regions read successfully from '";
-    std::cout << bin_file << "'" << std::endl;
-    std::cout.flush();
-  }
-
-} // end inputRegionsFromBinary
-
-
 
 
 
@@ -1619,12 +1311,18 @@ bool RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopology&
 } // end FormRegionsFrom
 
 
+
+
+
 /**
 Tests whether the elements of the region are connected to each-other.
 
 @attention This test cannot be performed if the region has elements of different spatial
 dimensions since these are not interconnected. Therefore, this method returns false if
 the region consists of elements from different spatial dimensions.
+
+@note This method is based on the floofFill() algorithm implemented in CSMP. 
+
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& region_name ) const
@@ -1655,39 +1353,33 @@ bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& regi
 
 
 /**
-Breaks non-contiguous Regions into contiguous subregions that carry the name
-of the region but have a number as suffix to their name to denote the
-partition.
 
-@return The method returns the number of subgregions that were created.
+Breaks non-contiguous Region into contiguous subregions that carry the name
+of the original region, but have a number as a suffix to their name to distinguish each partition.
+All elements and the original region are retained, but the original region is moved into the 
+non-unique regions storage.
 
-@attention The master region that was successfully partitioned is removed.
+@return The method returns the number of subgregions that were created, if any.
 
 @param group The name of the region that may be non-contiguous.
-If so, new sbregions will be created to the name of which integers
-will be appended that correspond to the number of subdomains
-that are created in this process.
-
-@return The method returns the number of contiguous subdomains which it
-created.
 
 @section implementation Implementation
 
-The method uses the union-find algorithm, using neighbours to determine
-components.
+The method uses the union-find algorithm, using element neighbours to determine
+which parts of it are contiguous.
+
+@attention this method is implemented using UnionFind  as opposed to standard floodfill operations. This might cause performance issues.
 
 @section application Application
 
-To automatically partition groups that consist of a multitude of
-non-contiguous model subdomains so that the latter can be addressed
-individually in computations.
+To  partition regions  into contiguous subdomains such as fractures so that these 
+can be processed one-by-one by various algorithms. 
 
 @section messages Messages
 
-The method will report if the group is already contiguous in which
-case no changes are made.
+The method will report if the region is  contiguous to start with. In this case no subregions will be created.
 
-@attention this method cannot be applied to the region model or the master region
+@attention it makes no sense to apply this method to region "Model" or complex non-unique regions.
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* group )
@@ -1778,7 +1470,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
 
   // if the region has been partitioned succesfully and its name is not model, it will be removed
   if ( IsUnique( group ) )
-    RemoveRegion( group, false );
+    MoveToNonUniqueRegions( group );
 
   return subgroupNum;
 
@@ -1791,9 +1483,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
 
 
 /**
-As previous method but using element Idx information to find the elements.
 
-@attention The master region that was successfully partitioned is removed.
+Similiar to PartitionRegionIntoContiguousSubRegions(), but using element indices to find the elements.
 
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
@@ -1875,7 +1566,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   }
 
   if ( IsUnique( group ) && !(strncmp( group, "Model", NAME_STRING ) == 0) )
-    RemoveRegion( group, false );
+    MoveToNonUniqueRegions( group );
 
   return n_subgroups;
 

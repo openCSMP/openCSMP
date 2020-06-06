@@ -735,7 +735,7 @@ namespace csmp
                 csmp_error.notice( FATAL_ERROR, 
                                    "TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index) - ",
                                    "p < vlh_pmax (in cell ip_p_max+1) but neither tcurrent<vlh_tmax nor tcurrent>vlh_tmax condition worked!\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
-                return std::numeric_limits<double>::quiet_NaN();
+                return std::numeric_limits<double>::signaling_NaN();
              }
           }
       }
@@ -782,7 +782,7 @@ namespace csmp
             csmp_error.notice( FATAL_ERROR, 
                                "TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index) - ",
                                "p < vlh_pmax (in cell ip_p_max) but neither tcurrent<vlh_tmax nor tcurrent>vlh_tmax condition worked!\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
-            return std::numeric_limits<double>::quiet_NaN();
+            return std::numeric_limits<double>::signaling_NaN();
          }
       }
     else
@@ -791,7 +791,7 @@ namespace csmp
                            "TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index) - ",
                            "Missed ALL if-statements!\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
 
-        return std::numeric_limits<double>::quiet_NaN();
+        return std::numeric_limits<double>::signaling_NaN();
       }
   }
     

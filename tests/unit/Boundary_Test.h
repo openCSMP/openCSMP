@@ -5,9 +5,13 @@
 #include "Model.h"
 #include "VTU_Interface.h"
 
-namespace csmp{
+namespace csmp {
 
-// P. Lang 2011
+/** tests integrity of boundary also after retrieval from CSMP native binary model
+ 
+        @author P. Lang
+        @date 2011
+ */
 class Boundary_Test : public Test {
 public:
   Boundary_Test( bool verbose=false ) : verbose_(verbose) {}

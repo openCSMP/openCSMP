@@ -1,6 +1,8 @@
-#include "Vset_TestCase.h"
+#include "VSet_TestCase.h"
 #include "Boundary.h"
 #include "Region.h"
+#include "ANSYS_Interface.h"
+#include "ModelTopology.h"
 #include "CSMP_highLevelUtilities.h"
 #include "ScalarVariable.h"
 #include "ArrayVariable.h"
@@ -12,25 +14,86 @@
 using namespace std;
 
 namespace csmp {
-Vset_TestCase::Vset_TestCase( const char* prefix,
+VSet_TestCase::VSet_TestCase( const char* prefix,
                               bool verbose )
  : model_file_(prefix),
    verbose_(verbose)
 {
-    this->setName("Vset_TestCase");
+    this->setName("VSet_TestCase");
 }
 
 
-Vset_TestCase::~Vset_TestCase()
+VSet_TestCase::~VSet_TestCase()
 {
 }
 
 
 /**
-    TODO: @todo the VSet test should not be dependent on the Model functionality ! - refactor
+      Testing whether processing of the VSet produces valid model with correct line-element normal
+      orientations etc.
 */
-void Vset_TestCase::run()
+void VSet_TestCase::run()
 {
+   TestModelConstructionAndSaving2D();
+    
+} // end VSet_TestCase
+
+
+
+
+
+
+void VSet_TestCase::TestModelConstructionAndSaving2D()
+  {
+    string input_file_name(model_file_);
+    enum{DIM=2U};
+    if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
+    
+    // read ANSYS model data and build model
+    ANSYS_Interface mesh_interface(true); // true = isoparametric elements
+    ModelTopology   mesh_topology(true);
+    VSet<DIM>       vset;
+
+    const bool binary_file( true );
+    const bool irregular_mesh( false );
+    mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, irregular_mesh );
+
+    // keep all mesh regions from topology and vset
+    mesh_topology.ReduceToRegions( input_file_name.c_str() );
+    map<size_t,size_t>  old_and_new_elmtids;
+    mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+    vset.ReduceTo( old_and_new_elmtids );
+    old_and_new_elmtids.clear();
+
+    // processing the (deliberately) inconsistent VSet 
+    const size_t rotated_elements = vset.RenumberElementsCounterClockwise2D();
+    if ( rotated_elements == 0U )
+      throw csmp::Exception( ERROR, "VSet_TestCase::TestModelConstructionAndSaving2D",
+                             "element orientations were already correct.");
+  
+    // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
+    vset.EstablishConnectivityOfEquidimensionalElements2D();
+
+    // aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
+    vset.CreateConsistentLineElementOrientations2D();
+
+    // build model from mesh
+    Model<DIM>  model( mesh_topology, vset, "pore_flow_quadratic-variables" );
+    
+    // turn line-element region into SplitBoundary
+
+    printModelDimensions( model, true );
+    
+
+  } // end
+ 
+ 
+ 
+ 
+  
+  
+void VSet_TestCase::TestModelConstructionAndSaving3D()
+  {
     //------------------------------------
     // Parameters section
     string input_file_name(model_file_);
@@ -135,9 +198,9 @@ void Vset_TestCase::run()
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
         }
-    modelOutput3.OutputToBinaryFile("Vset_TestCase_modelOutput3");
+    modelOutput3.OutputToBinaryFile("VSet_TestCase_modelOutput3");
     
-    Model<3> modelInput3("Vset_TestCase_modelOutput3");
+    Model<3> modelInput3("VSet_TestCase_modelOutput3");
     
     ePtr = *modelInput3.Region("Model").ElementsBegin();
     size_t ctr(0);
@@ -175,8 +238,11 @@ void Vset_TestCase::run()
       }
     
     if ( verbose_ ) cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
-    
-} // end Vset_TestCase
+
+  } // end 
+
+
+
 
 
 } // namespace csmp

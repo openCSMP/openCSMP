@@ -174,6 +174,13 @@ bool hasAllSideBoundaries( const Model<3U>& );
 bool isStrictlyBoxShaped( const Model<2U>& );
 bool isStrictlyBoxShaped( const Model<3U>& );
 
+/// returns the dim-2 edge  (if any) that lies between the sides of the box that are given as arguments
+BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 );
+
+/// returns the corner of the BOX (1-6) that is shared by the side boundaries
+BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY side3 );
+
+
 /// reports the range of property values on the nodes flagged with the BOX_BOUNDARY identifier
 template<size_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,

@@ -100,64 +100,62 @@ and perform the actions that are desired for the visitation.
 template<size_t dim>
 void Visitor<dim>::Visit( Face<dim>* f )
  {
-    cerr<<"\nVisitor::Visit(Face<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr <<"\nVisitor::Visit(Face<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
  }
 
 template<size_t dim>
 void Visitor<dim>::Visit( InterFace<dim>* )
  {
-    cerr<<"\nVisitor::Visit(InterFace<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr <<"\nVisitor::Visit(InterFace<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
  }
  
 template<size_t dim>
 void Visitor<dim>::Visit( Node<dim>* )
  {
-    cerr<<"\nVisitor::Visit(Node<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr <<"\nVisitor::Visit(Node<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
  }
 
 template<size_t dim>
 void Visitor<dim>::Visit( Element<dim>* )
  {
-    cerr<<"\nVisitor::Visit(Element<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr <<"\nVisitor::Visit(Element<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
  }
  
 template<size_t dim>
 void Visitor<dim>::Visit( Region<dim>* )
  {
-    cerr<<"\nVisitor::Visit(Region<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr <<"\nVisitor::Visit(Region<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
  }
 
 template<size_t dim>
 void Visitor<dim>::Visit( Boundary<dim>* )
  {
-    cerr<<"\nVisitor::Visit(Boundary<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr <<"\nVisitor::Visit(Boundary<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
  }
  
 template<size_t dim>
 void Visitor<dim>::Visit( SplitBoundary<dim>* )
  {
-    cerr<<"\nVisitor::Visit(Boundary<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr <<"\nVisitor::Visit(Boundary<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
+    cerr << endl;
  }
  
 template<size_t dim>
 void Visitor<dim>::Visit( Model<dim>* )
  {
-    cerr<<"\nVisitor::Visit(Model<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr<<"\nVisitor::Visit(Model<dim>*): Method not implemented in the subclass of the Visitor class that you are using."<< endl;
  }
 
 template<size_t dim>
 void Visitor<dim>::SetInitialProperties( Model<dim>* )
  {
-    cerr<<"\nVisitor::SetInitialProperties(Model<dim>*): Method not implemented in base class for the ";
-    cerr<<"object you are using."<< endl;
+    cerr<<"\nVisitor::SetInitialProperties(Model<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr<<" Press <enter> to continue."<<endl;
     cin.get();
  }

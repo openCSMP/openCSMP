@@ -411,7 +411,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion_2D()
 	_test(model2d_->Mesh().Elements() == discovered_elmts.size());
 
 	// 2. add an element into the model
-	model2d_->Mesh().Add(first_element);
+	model2d_->Mesh().Add( csmp::Element<2U>(first_element) );
 
 	discovered_elmts.clear();
 	discovered_nodes.clear();
@@ -440,23 +440,17 @@ bool MeshManager_Test::TestElementDeletionAndInsertion_2D()
 	LocalVariables				elmt_vars = model2d_->Database().LocalVariablesAt(ELEMENT);
 	IntegrationPointVariables	intp_vars = model2d_->Database().IntegrationPointVariablesAt(ELEMENT);
 
-	size_t elmt_id = model2d_->Mesh().Elements(); // new element's id is equal to the number of the existing elements in the model
-
-	csmp::Element<2U> new_element1(elmt_id, &fe, elmt_vars, intp_vars, NOT);
 	Node<2U>&	n1 = *(model2d_->Mesh().RootNode(0));
-	Node<2U>	n2(model2d_->Mesh().Nodes() + 1, Point<2U>(26., 27.), node_vars, NOT);
-	Node<2U>	n3(model2d_->Mesh().Nodes() + 1, Point<2U>(29., 30.), node_vars, NOT);
-	Node<2U>	n4(model2d_->Mesh().Nodes() + 1, Point<2U>(31., 32.), node_vars, NOT);
-	Node<2U>	n5(model2d_->Mesh().Nodes() + 1, Point<2U>(34., 35.), node_vars, NOT);
 
 	Node<2U>*		ptr_n1 = model2d_->Mesh().AddIfUnique(n1); // if it is already in the mesh, returns the existing node's pointer
-	Node<2U>*		ptr_n2 = model2d_->Mesh().Add(n2); // otherwise, create new node and return its pointer
-	Node<2U>*		ptr_n3 = model2d_->Mesh().Add(n3);
-	Node<2U>*		ptr_n4 = model2d_->Mesh().Add(n4);
-	Node<2U>*		ptr_n5 = model2d_->Mesh().Add(n5);
+	Node<2U>*		ptr_n2 = model2d_->Mesh().Add( Node<2U>(model2d_->Mesh().Nodes() + 1, Point<2U>(26., 27.), node_vars, NOT) ); // otherwise, create new node and return its pointer
+	Node<2U>*		ptr_n3 = model2d_->Mesh().Add( Node<2U>(model2d_->Mesh().Nodes() + 1, Point<2U>(29., 30.), node_vars, NOT) );
+	Node<2U>*		ptr_n4 = model2d_->Mesh().Add( Node<2U>(model2d_->Mesh().Nodes() + 1, Point<2U>(31., 32.), node_vars, NOT) );
+	Node<2U>*		ptr_n5 = model2d_->Mesh().Add( Node<2U>(model2d_->Mesh().Nodes() + 1, Point<2U>(34., 35.), node_vars, NOT) );
 
 	// 3.1 add the new element with its new nodes
-	Element<2U>*	ptr_e1 = model2d_->Mesh().Add(new_element1);
+  size_t elmt_id = model2d_->Mesh().Elements(); // new element's id is equal to the number of the existing elements in the model
+	Element<2U>*	ptr_e1 = model2d_->Mesh().Add( csmp::Element<2U>(elmt_id, &fe, elmt_vars, intp_vars, NOT) );
 
 	// assign node connectivity where it is connected one of the last element's nodes
 	ptr_n1->ResizeParentStorage(ptr_n1->Parents() + 1);
@@ -576,30 +570,24 @@ bool MeshManager_Test::TestElementDeletionAndInsertion_3D()
 	model3d_->Mesh().Erase(*it);
 	_test(model3d_->Mesh().Elements() == discovered_elmts.size() - 1);
 
-	model3d_->Mesh().Add(first_element);
+	model3d_->Mesh().Add( csmp::Element<3U>(first_element) );
 	_test(model3d_->Mesh().Elements() == discovered_elmts.size());
 
 	// 2. create a new element with its nodes
 	IsoparametricLinearPyramid fe;
-	LocalVariables				node_vars = model3d_->Database().LocalVariablesAt(NODE);
-	LocalVariables				elmt_vars = model3d_->Database().LocalVariablesAt(ELEMENT);
-	IntegrationPointVariables	intp_vars = model3d_->Database().IntegrationPointVariablesAt(ELEMENT);
+	LocalVariables				     node_vars = model3d_->Database().LocalVariablesAt(NODE);
+	LocalVariables				     elmt_vars = model3d_->Database().LocalVariablesAt(ELEMENT);
+	IntegrationPointVariables	 intp_vars = model3d_->Database().IntegrationPointVariablesAt(ELEMENT);
 
-	size_t elmt_id = model3d_->Mesh().Elements(); // new element's id is equal to the number of the existing elements in the model
-
-	csmp::Element<3U> new_element1(elmt_id, &fe, elmt_vars, intp_vars, NOT);
 	Node<3U>&	n1 = *(model3d_->Mesh().RootNode(0));
-	Node<3U>	n2(model3d_->Mesh().Nodes() + 1, Point<3U>(26., 27., 0.0), node_vars, NOT);
-	Node<3U>	n3(model3d_->Mesh().Nodes() + 1, Point<3U>(29., 30., 0.0), node_vars, NOT);
-	Node<3U>	n4(model3d_->Mesh().Nodes() + 1, Point<3U>(31., 32., 0.0), node_vars, NOT);
-	Node<3U>	n5(model3d_->Mesh().Nodes() + 1, Point<3U>(34., 35., 0.0), node_vars, NOT);
-
 	Node<3U>*		ptr_n1 = model3d_->Mesh().AddIfUnique(n1); // if it is already in the mesh, returns the existing node's pointer
-	Node<3U>*		ptr_n2 = model3d_->Mesh().Add(n2); // otherwise, create new node and return its pointer
-	Node<3U>*		ptr_n3 = model3d_->Mesh().Add(n3);
-	Node<3U>*		ptr_n4 = model3d_->Mesh().Add(n4);
-	Node<3U>*		ptr_n5 = model3d_->Mesh().Add(n5);
-	Element<3U>*	ptr_e1 = model3d_->Mesh().Add(new_element1);
+	Node<3U>*		ptr_n2 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(26., 27., 0.0), node_vars, NOT) ); // otherwise, create new node and return its pointer
+	Node<3U>*		ptr_n3 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(29., 30., 0.0), node_vars, NOT) );
+	Node<3U>*		ptr_n4 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(31., 32., 0.0), node_vars, NOT) );
+	Node<3U>*		ptr_n5 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(34., 35., 0.0), node_vars, NOT) );
+
+  size_t elmt_id = model3d_->Mesh().Elements(); // new element's id is equal to the number of the existing elements in the model
+	Element<3U>*	ptr_e1 = model3d_->Mesh().Add( csmp::Element<3U>(elmt_id, &fe, elmt_vars, intp_vars, NOT) );
 
 	// assign node connectivity where it is connected one of the last element's nodes
 	ptr_n1->ResizeParentStorage(ptr_n1->Parents() + 1);

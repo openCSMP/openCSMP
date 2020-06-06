@@ -273,6 +273,9 @@ bool VSet<dim>::AddData(const char* s, const PropertyData& data)
 } // end AddData
 
 
+
+
+
 /**
    To delete a dataset
 */
@@ -282,6 +285,9 @@ void VSet<dim>::RemoveData( const char* s )
    property_map_.erase(s);
 
 } // end RemoveData
+
+
+
 
 
 /**
@@ -708,6 +714,33 @@ void VSet<dim>::Erase()
 	property_map_.clear();
 
 } // end Erase
+
+
+
+/**
+   uses the node coordinates to infer the model dimension: if Z-range=zero, dim=2, if Y-range=2, dim=1, else dim=3
+*/
+template<size_t dim>
+int32  VSet<dim>::MeshDimension( bool check_coordinates ) const
+ {
+    if ( !check_coordinates ) return dim;
+    
+    // if they are not empty but all coordinate values are zero, the model has no extent in these directions
+    pair<double64,double64> z_range = Z_Range(), y_range = Y_Range();
+    bool z_zero = ( fabs( z_range.second - z_range.first ) <= numeric_limits<double64>::epsilon() ) ? true : false; 
+    bool y_zero = ( fabs( y_range.second = y_range.first ) <= numeric_limits<double64>::epsilon() ) ? true : false; 
+    
+    if ( z_zero and  y_zero ) return 1;
+    if ( z_zero and !y_zero ) return 2;
+    
+    // if there is nothing that allows a diagnosis
+    return UNSPECIFIED;
+    
+ } // MeshDimension
+
+
+
+
 
 
 template class VSet<1U>;

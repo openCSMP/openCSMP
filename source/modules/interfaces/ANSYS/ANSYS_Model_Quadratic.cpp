@@ -1,4 +1,17 @@
 #include "ANSYS_Model_Quadratic.h"
+#include "Box.h"
+#include "Region.h"
+#include "Element.h"
+#include "FiniteElement.h"
+#include "FiniteElementManager.h"
+
+#include "Model.h"
+#include "ModelTopology.h"
+#include "ModelTime.h"
+
+#include "Exception.h"
+#include "PL_Utilities.h"
+
 
 using namespace std;
 
@@ -446,19 +459,19 @@ and the regions file prefix is used to read the regions file.
         cout << endl;
 
       for( size_t sb(0); sb < splitBoundaries_.size(); ++sb )
-          this->InsertSplitBoundary( splitBoundaries_[sb] );
+        this->CreateSplitBoundaryFrom( splitBoundaries_[sb].c_str() );
     }
 
 
   template<size_t dim>
   void ANSYS_Model_Quadratic<dim>::CreateRegion( const std::string& regionName, typename std::vector<Element<dim>*>::const_iterator elementsBegin,
-                                       typename std::vector<Element<dim>*>::const_iterator elementsEnd )
+                                                 typename std::vector<Element<dim>*>::const_iterator elementsEnd )
     {
       pair<typename map<string,csmp::Region<dim> >::iterator,bool>
         it = this->uniqueGroupMap_.insert( make_pair( regionName, csmp::Region<dim>( regionName, this->Database() ) ) );
       if ( it.second )
         {
-          (*it.first).second.SimplexVector().assign( elementsBegin, elementsEnd );
+          (*it.first).second.CellVector().assign( elementsBegin, elementsEnd );
           (*it.first).second.CreateNodePointerVector();
           (*it.first).second.IdentifyPerimeter( );
         }

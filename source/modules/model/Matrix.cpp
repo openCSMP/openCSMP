@@ -510,7 +510,7 @@ double64 Matrix::NormL_Infinity() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nMatrix<double>::NormL_Infinity: empty matrix!\n";
-         return std::numeric_limits<double64>::quiet_NaN();
+         return std::numeric_limits<double64>::signaling_NaN();
       }
 
 	double64  maxval(static_cast<double64>(0.0)), sum;
@@ -583,7 +583,7 @@ double64 Matrix::NormL1() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nMatrix<double>::NormL1: empty matrix!\n";
-         return std::numeric_limits<double64>::quiet_NaN();
+         return std::numeric_limits<double64>::signaling_NaN();
       }
 
 	double64  maxval(static_cast<double64>(0.0)), sum;

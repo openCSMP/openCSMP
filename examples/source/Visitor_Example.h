@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-class  Visitor_Example : public Example{
+class  Visitor_Example : public Example {
 public:
   virtual void Run();
   virtual void Specifications();

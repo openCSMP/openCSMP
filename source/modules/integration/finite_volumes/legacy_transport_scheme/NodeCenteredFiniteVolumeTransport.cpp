@@ -2027,7 +2027,7 @@ double64  NodeCenteredFiniteVolumeTransport<dim>::TransportPhase( TwoPhaseModel<
     cout <<" be used for two-phase flow. You need to call specific subclasses in stead."<< endl;
     ff.Out();
     gref_.Nodes();
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
 }
 
 

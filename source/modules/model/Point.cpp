@@ -1005,7 +1005,7 @@ template<size_t dim>
 Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
   {
      cerr <<"\ncrossProduct<dim>: not defined for generic case."<< endl;
-     return std::numeric_limits<double64>::quiet_NaN();
+     return std::numeric_limits<double64>::signaling_NaN();
   }
 
 } // end namespace csmp

@@ -44,7 +44,7 @@ double64 magnitude( const PLACE<dim>& site, const csmp::Index& prop_key )
     csmp_error.notice( ERROR, "propertyMagnitude:", parseType(prop_key.type).c_str(),
                       "method for calculating magnitude of this variable type undefined; returning NaN.");
 
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double64>::signaling_NaN();
  }
 
 template double64 magnitude( const Region<3>&, const csmp::Index& );

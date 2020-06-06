@@ -63,9 +63,9 @@ void PermeabilityTensor_Example::Run()
   // dPHI / dX
   grad( 0 ) = 10.;
   // dPHI / dY
-  grad( 0 ) = 0.;
+  grad( 1 ) = 0.;
   // dPHI / dZ
-  grad( 0 ) = 0.1;
+  grad( 2 ) = 0.1;
 
   // calculating flow vector
   for( size_t i = 0; i < 3; ++i )

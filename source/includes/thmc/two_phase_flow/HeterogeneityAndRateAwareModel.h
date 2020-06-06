@@ -97,7 +97,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     /// harmonic mean
     double64  PermeabilityPerpendicularToLaminations() const;
     /// tensor decomposition
-    double64  PermeabilityInFlowDirection( const VectorVariable<dim>& normalised_mixture_velocity ) const;
+    double64  PermeabilityInFlowDirection( const TensorVariable<dim>& perm, const VectorVariable<dim>& normalised_mixture_velocity ) const;
     /// Prominent direction of flow
     FLOW_DIRECTION ProminentFlowDirection( const VectorVariable<dim>& vt ) const;
     /// volume averaged irreducible water saturation
@@ -124,7 +124,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     mutable double64 Sw_;
 
     // composite is modelled as a dual of two rock types
-    const OtwayRockTypes Otway_;
+    OtwayRockTypes Otway_;
     long     rocktype_;
     bool     is_composite_;
     double64 K_flow_direction_, k_low_, k_high_, K_reduction_in_flow_direction_,
