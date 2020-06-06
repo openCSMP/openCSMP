@@ -80,10 +80,31 @@ void Experimental_Example::Specifications()
 */
 void Experimental_Example::Run()
 {
-  cout <<"\nExperimental_Example: put your own code here!";
+    ///==========================================================================================
+    /// Elasticity with Central Crack VV_Case
+    ///==========================================================================================
+    // Defining constants
+      enum{dim=2};
+      const double ym (1000.0), pr(0.3), P0(10.0);
+      bool quarterpoint = false;
   
-  cout <<"\nExperimental_Example: That's it!\n";
+      // Model configuration:
+      ANSYS_Model2D  model( "SneddonCrack_10cm", false, true, false, true, false);    // Constractor for empty variables
+      for ( auto E : model.Region("FRACTURE").ElementVector()){
+          std::cout << "Nbrs -> " << E->ConnectedNeighbors() << std::endl;
+          if (E->ConnectedNeighbors() == 1){
+              E->Out();
+          }
+      }
   
+      model.CreateInternalBoundaryFrom("FRACTURE", true);
+      model.Boundary("FRACTURE_BOUNDARY0_MATRIX_INTERSECTION" ).UpdateMemberIndexes();
+      model.BoundariesOut();
+      model.Boundary("FRACTURE_BOUNDARY0_MATRIX_INTERSECTION").Out();
+  
+      model.CreateSplitBoundaryFrom( model.Boundary("FRACTURE_BOUNDARY0_MATRIX_INTERSECTION"));
+      model.SplitBoundariesOut();
+
 } // end Run
 
 } // csmp

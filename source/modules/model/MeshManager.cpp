@@ -1391,7 +1391,7 @@ template<size_t dim>
 Face<dim>* MeshManager<dim>::Add( Face<dim>& face )
 {
   Face<dim>* new_face = new Face<dim>( face );
-  *new_face = face;
+ // *new_face = face;
   n_faces_++;
 
   if ( root_face_group_.size() == 0 )

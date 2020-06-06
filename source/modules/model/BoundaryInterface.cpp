@@ -980,7 +980,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
          patch_counter++;
       }
     patch_simplexes.clear();
-    cout << "\n\tAdded "<< model.Mesh().Faces() - original_faces <<" to mesh.\n";
+    cout << "\n\tAdded "<< model.Mesh().Faces() - original_faces <<" faces to mesh.\n";
 
    
     //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( std::vector<Face<dim>*>& ); this is important because
