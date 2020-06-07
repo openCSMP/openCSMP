@@ -2851,6 +2851,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
           if ( dim == 3 ) cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
        }
      cout << endl << endl;
+     cout.flush();
  }
 
 

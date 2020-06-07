@@ -77,7 +77,8 @@ their faces coincides with the region boundary.
 
 */
 template<size_t dim>
-class Region : public ModelSubDomain<dim, Element> {
+class Region : public ModelSubDomain<dim, Element>,
+               public LocalVariableStorage<dim, Region> {
 
 public:
 
@@ -113,6 +114,14 @@ public:
  // --------------------------------------------
  // Property input/output
  // --------------------------------------------
+
+  /// for the assignment of properties that are unique to the instance of this subclass
+  template<typename Var>
+  void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+    
+  /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
+  template<typename Var>
+  void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
   /// outputs region into VSet polygonal data container; all properties may be output as well
   void OutputTo( VSet<dim>& vset, bool with_properties = true ) const;

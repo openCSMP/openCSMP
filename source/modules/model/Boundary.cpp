@@ -2,6 +2,7 @@
 #include "Box.h"
 #include "Region.h"
 
+#include "writeVariableIf.h"
 #include "Node.h"
 #include "Element.h"
 #include "Face.h"
@@ -45,6 +46,7 @@ Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& 
 template<size_t dim>
 Boundary<dim>::Boundary( const Boundary& ed )
   : ModelSubDomain<dim, Face>( ed ),
+    LocalVariableStorage<dim,Boundary>(ed),
     boundaryFlag_( ed.boundaryFlag_ )
 {
 }
@@ -54,6 +56,7 @@ Boundary<dim>::Boundary( const Boundary& ed )
 template<size_t dim>
 Boundary<dim>::Boundary( Boundary&& ed )
   : ModelSubDomain<dim, Face>( ed ),
+    LocalVariableStorage<dim,Boundary>(ed),
     boundaryFlag_( ed.boundaryFlag_ )
 {
 }
@@ -233,25 +236,24 @@ Boundary<dim>::~Boundary()
 template<size_t dim>
 Boundary<dim>& Boundary<dim>::operator=( const Boundary<dim>& ed )
 {
-  if ( &ed != this )
-  {
-    *this = ed;
-    boundaryFlag_ = ed.boundaryFlag_;
-  }
+  if ( &ed != this ) {
+      ModelSubDomain<dim,Face>::operator=( ed ); 
+      this->LVS( ed.LVS() );
+      boundaryFlag_ = ed.boundaryFlag_;
+    }
   return *this;
 }
 
 // LOCAL VARIABLE STORAGE INTERFACE
 
-// TODO: replace with non-member function
 template<size_t dim>
 bool Boundary<dim>::ValidVariable( const char* variableName ) const
-{
-  const PLACEMENT p( this->pref_.Placement( variableName ) );
-  if ( p == NODE || p == FACE || p == BOUNDARY )
-    return true;
-  return false;
-}
+  {
+    const PLACEMENT p( this->pref_.Placement( variableName ) );
+    if ( p == NODE || p == FACE || p == BOUNDARY )
+      return true;
+    return false;
+  }
 
 
 // VISITORS INTERFACE
@@ -296,6 +298,106 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
   // -----------------------------------------------
   // Binary input/output
   // -----------------------------------------------
+
+
+/**
+   for the assignment of properties that are unique to the instance of this subclass
+   
+      @author SKM
+      @date 7/6/2020
+*/
+template<size_t dim>
+template<typename Var>
+void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
+  {
+      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+      const csmp::Index prop_key(this->pref_.StorageKey(input_prop));
+      if ( prop_key.place == BOUNDARY ) {
+           if ( sd != COMPLETE )
+             csmp_error.notice( WARNING, "Boundary<dim>::InputPropertyValue",
+                                          input_prop, "is a BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
+           this->Store( prop_key, new_value );
+           return;
+        }
+      
+      // incorrect applications of method  
+      if ( prop_key.place == REGION || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL || 
+           prop_key.place == ELEMENT || prop_key.place == INTER_FACE )
+        csmp_error.notice( ERROR, "Boundary<dim>::InputPropertyValue",
+                           input_prop, "must be a BOUNDARY, FACE/IP or NODE property for this method call to work" );        
+    
+     // for any different property placement, the method of the base-class is called
+     ModelSubDomain<dim,Face>::InputPropertyValue( input_prop, new_value, sd );
+      
+  } // end InputPropertyValue
+
+// explicit instantiations
+template void Boundary<1U>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const VectorVariable<1U>&, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const VectorVariable<2U>&, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const VectorVariable<3U>&, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const TensorVariable<1U>&, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const TensorVariable<2U>&, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const TensorVariable<3U>&, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const ArrayVariable&, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const ArrayVariable&, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const ArrayVariable&, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, SUBDOMAIN_PART );
+
+
+
+
+template<size_t dim>
+template<typename Var>
+void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
+  {
+      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+      const csmp::Index key(this->pref_.StorageKey(input_prop));
+      
+      if ( key.place == BOUNDARY ) {
+           if ( sd != COMPLETE )
+             csmp_error.notice( WARNING, "Boundary<dim>::InputPropertyValue",
+                                input_prop, "is a BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
+                                
+           // only overwriting those variable components / rows that are not flagged 'do_not_overwrite' 
+           writeVariableIf( this, key, new_value, do_not_overwrite );
+           return;
+        }
+      
+      // incorrect applications of method  
+      if ( key.place == REGION  || key.place == SPLIT_BOUNDARY || key.place == MODEL || 
+           key.place == ELEMENT || key.place == INTER_FACE )
+        csmp_error.notice( ERROR, "Boundary<dim>::InputPropertyValue",
+                           input_prop, "must be a BOUNDARY, FACE/IP or NODE property for this method call to work" );        
+    
+     // for any different property placement, the method of the base-class is called
+     ModelSubDomain<dim,Face>::InputPropertyValue( input_prop, new_value, do_not_overwrite, sd );
+      
+  } // end InputPropertyValue
+
+// explicit instantiations
+template void Boundary<1U>::InputPropertyValue( const char*, const ScalarVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const ScalarVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const ScalarVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const VectorVariable<1U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const VectorVariable<2U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const VectorVariable<3U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const TensorVariable<1U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const TensorVariable<2U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const TensorVariable<3U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const ArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const ArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const ArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<1U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<2U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Boundary<3U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+
 
 
 

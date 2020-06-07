@@ -1943,7 +1943,10 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   }
   else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
   {
-      subDomain.Read( key, scalarVariable );
+      if ( key.place == REGION ) dynamic_cast<const Region<dim>&>(subDomain).Read( key, scalarVariable );
+      else if ( key.place == BOUNDARY ) dynamic_cast<const Boundary<dim>&>(subDomain).Read( key, scalarVariable );
+      else if ( key.place == SPLIT_BOUNDARY ) dynamic_cast<const SplitBoundary<dim>&>(subDomain).Read( key, scalarVariable );
+
       WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
   }
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
@@ -2056,7 +2059,10 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   }
   else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
   {
-      subDomain.Read( key, vectorVariable );
+      if ( key.place == REGION ) dynamic_cast<const Region<dim>&>(subDomain).Read( key, vectorVariable );
+      else if ( key.place == BOUNDARY ) dynamic_cast<const Boundary<dim>&>(subDomain).Read( key, vectorVariable );
+      else if ( key.place == SPLIT_BOUNDARY ) dynamic_cast<const SplitBoundary<dim>&>(subDomain).Read( key, vectorVariable );
+
       WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
   }
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
@@ -2172,7 +2178,10 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   }
   else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
   {
-      subDomain.Read( key, tensorVariable );
+      if ( key.place == REGION ) dynamic_cast<const Region<dim>&>(subDomain).Read( key, tensorVariable );
+      else if ( key.place == BOUNDARY ) dynamic_cast<const Boundary<dim>&>(subDomain).Read( key, tensorVariable );
+      else if ( key.place == SPLIT_BOUNDARY ) dynamic_cast<const SplitBoundary<dim>&>(subDomain).Read( key, tensorVariable );
+
       WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
   }
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
@@ -2300,7 +2309,10 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       }
       else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
       {
-          subDomain.Read( key, arrayVariable );
+          if ( key.place == REGION ) dynamic_cast<const Region<dim>&>(subDomain).Read( key, arrayVariable );
+          else if ( key.place == BOUNDARY ) dynamic_cast<const Boundary<dim>&>(subDomain).Read( key, arrayVariable );
+          else if ( key.place == SPLIT_BOUNDARY ) dynamic_cast<const SplitBoundary<dim>&>(subDomain).Read( key, arrayVariable );
+
           WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
       }
       else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
@@ -2428,7 +2440,10 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       }
       else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
       {
-          subDomain.Read( key, flaggedArrayVariable );
+          if ( key.place == REGION ) dynamic_cast<const Region<dim>&>(subDomain).Read( key, flaggedArrayVariable );
+          else if ( key.place == BOUNDARY ) dynamic_cast<const Boundary<dim>&>(subDomain).Read( key, flaggedArrayVariable );
+          else if ( key.place == SPLIT_BOUNDARY ) dynamic_cast<const SplitBoundary<dim>&>(subDomain).Read( key, flaggedArrayVariable );
+
           WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
       }
       else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )

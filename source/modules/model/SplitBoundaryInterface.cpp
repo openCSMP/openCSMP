@@ -856,9 +856,11 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
   cout << "\nSplitBoundaryInterface::SplitBoundariesOut: current split boundaries in the model: " << splitBoundaryMap_.size();
   // std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_
   for ( auto it = splitBoundaryMap_.begin(); it != splitBoundaryMap_.end(); ++it ) {
-    cout << "\n\n\tSplitBoundary: " << (*it).first << "\n";
-    (*it).second.Out();
-  }
+      cout << "\n\n\tSplitBoundary: " << (*it).first << "\n";
+      (*it).second.Out();
+    }
+  cout << endl;
+  cout.flush();
 
 } // end Out
 

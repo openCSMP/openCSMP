@@ -28,13 +28,18 @@ TODO: use VTK mesh and contouring of variables to perform a flux-adapted griddin
 */
 class ModelPreProcessor2D {
   public:
+    /// reads CSMP native model from file to perform the preprocessing on
     explicit ModelPreProcessor2D( const std::string& csmp_model );
     ~ModelPreProcessor2D();
     
     /// writes log10 of permeability to regular grid; works only or quadrilateral (regular) meshes
-    void ModelToMatrix( const std::string& output_file_name /* model.Name()-matrix".txt" */ ) const;
+    void ModelToMatrix( const std::string& output_file_name /* model.Name()-matrix".txt" */,
+                        size_t rows, size_t columns ) const;
     
   // UTILITIES FOR PROPERTY MANIPULATION
+  private:
+    /// computes an average grid-spacing from the distance beween cell centers in a given coordinate direction
+//    double64 AverageGridSpacing( char x_or_y ) const;
     
   private:
     Model<2U>*  model_ptr_ = 0;

@@ -13,10 +13,6 @@
 
 namespace csmp {
 
-//template<size_t> class Element;
-//template<size_t> class Face;
-//template<size_t> class InterFace;
-
 // CRT calls for elements/faces/interfaces
 #define FE_SES static_cast<const STOREE*>(this)->Sectors()                                  ///< sectors of simplex storee
 #define FE_FAS static_cast<const STOREE*>(this)->Facets()                                   ///< facets of simplex storee
@@ -30,7 +26,7 @@ namespace csmp {
 /** CSMP local/physical variable storage
 
 @author P. Lang
-@author S.K. Matthaei
+@author S.K. Matthai
 @date 2007-2012
 
 @attention CSMP runs should be performed at least once in DEBUG mode with conceptual models to check validity of Read/Store calls. For performance, these checks are omitted in RELEASE.
@@ -57,11 +53,12 @@ At integration points this holds, whith all ELEMENT_INTEGRATION_POINT variables 
 We perform validity checks on Read/Store etc in debug mode only, that is with no 'NDEBUG' symbol. Additional checks are activated if 'VARIABLE_STORAGE_DEBUG' is set.
 
 @attention The variable storage is implicitly coupled with the PropertyDatabase through the Index and its offset calculation performed there
+
 @todo (3-D) We could now even go for a single Read/Write function templatized on the Variable type. Variable placement would then be needed to be available in variables.
 @note It's probably not sensible to merge duplicated functionality here for performance reasons
 @todo (2-D) DocMe (index arithmetic)
 */
-template<size_t dim,class STOREE>
+template<size_t dim, template<size_t> class STOREE>
 class LocalVariableStorage {
   public:
     // ctors, dtor and assignment
@@ -161,7 +158,16 @@ class LocalVariableStorage {
           { if ( &d != this ) 
              { flags = d.flags; data = d.data; }
           return *this; }
-#else
+#else // a lot more information is kept in storage to allow debugging
+        size_t  scalars,            ///< scalar variables stored at the site this policy is associated with
+                vectors,            ///< vector variables at this site
+                tensors,            ///< tensor variables at this site
+                arrays,             ///< array variables at this site
+                flaggedArrays;      ///< flagged array variables at this site
+        
+        size_t  arrayLength,        ///< length of array variables associated with this site @todo only one size?
+                flaggedArrayLength; ///< length of flagged array variables @todo only one size?
+
         Data() :
             flags              (0U),
             data               (0U),
@@ -186,19 +192,6 @@ class LocalVariableStorage {
             flaggedArrayLength  ( d.flaggedArrayLength )
         {}
 
-        // SKM ADDITION
-        Data( Data&& d ) :
-            flags{ d.flags },
-            data{ d.data },
-            scalars{ d.scalars },
-            vectors{ d.vectors },
-            tensors{ d.tensors },
-            arrays{ d.arrays },
-            flaggedArrays{ d.flaggedArrays },
-            arrayLength{ d.arrayLength },
-            flaggedArrayLength{ d.flaggedArrayLength }
-        {}
-
         Data& operator=( const Data& d )
           {
             if ( &d != this ) {
@@ -214,16 +207,6 @@ class LocalVariableStorage {
              }
             return *this;
          }
-
-        // local variable state
-        size_t  scalars,            ///< scalar variables stored at the site this policy is associated with
-                vectors,            ///< vector variables at this site
-                tensors,            ///< tensor variables at this site
-                arrays,             ///< array variables at this site
-                flaggedArrays;      ///< flagged array variables at this site
-        
-        size_t  arrayLength,        ///< length of array variables associated with this site @todo only one size?
-                flaggedArrayLength; ///< length of flagged array variables @todo only one size?
 #endif
       };
 
@@ -233,7 +216,6 @@ class LocalVariableStorage {
     const Data LVS() const { return data_; }
   
   private:
-
     Data data_; ///< data and flag containers
 };
 

@@ -1012,7 +1012,7 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
         (*eit)->AddProperty( prop_key );
   }
   else if ( vplace == MODEL ) {
-    LocalVariableStorage<dim, Model<dim> >::AddProperty( prop_key );
+     LocalVariableStorage<dim,Model>::AddProperty( prop_key );
   }
   else if ( vplace == REGION ) {
     // each region has its unique property value even if they are overlapping!
@@ -1091,7 +1091,7 @@ void  Model<dim>::DeleteProperty( const char* property )
         (*eit)->DeleteProperty( prop_key );
   }
   else if ( prop_key.place == MODEL ) {
-    LocalVariableStorage<dim, Model<dim> >::DeleteProperty( prop_key );
+     LocalVariableStorage<dim,Model>::DeleteProperty( prop_key );
   }
   else if ( prop_key.place == REGION ) {
     // each region has its unique property value even if they are overlapping!
@@ -1358,14 +1358,13 @@ void Model<dim>::Accept( csmp::Visitor<dim>& v )
 
 
 /**
-Allows the input of properties via the basic CSP variable types
-ScalarVariable, VectorVariable and TensorVariable. Any previous
-values are overwritten irrespective of the flags that the current
-values had. Thus, boundary conditions need to be reassigned after this
-method has been called.
+
+Allows assignment of uniform property values  for all CSMP variable types.
+Any previous values are overwritten irrespective of their flags and will receive the flag of the input variable.
+It follows that  potential boundary conditions need to be reassigned after this method has been called.
 
 Note that the method checks the input variables against the ranges
-specified in the variables database '*.txt' file. If the values
+specified in the variables database (see '*-variables.txt' file). If the values
 fall out of these ranges, the method will reset values to the
 nearest range bound.
 
@@ -1382,41 +1381,79 @@ the method will report errors.
 Similarly when the property placement (i.e. element, node etc.) is
 not recognized, an error will be reported.
 
-@todo (1-F) New placements not supported?
 */
 template<size_t dim>
 template<class T>
 void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
 {
-  csmp::Index prop_key = this->database_.StorageKey( input_prop );
-  if ( prop_key.place == FACE || prop_key.place == BOUNDARY || prop_key.place == FACE_INTEGRATION_POINT ||
+  const csmp::Index prop_key = this->database_.StorageKey( input_prop );
+  // properties stored on the model
+  if ( prop_key.place == MODEL ) {
+       this->Store( prop_key, value );
+       return;
+    }
+    
+  // all regions
+  if ( prop_key.place == REGION ) {
+      for ( typename map<string, csmp::Region<dim> >::iterator
+            it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
+        (*it).second.Store( prop_key, value );
+      for ( typename map<string, csmp::Region<dim> >::iterator
+            it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
+        (*it).second.Store( prop_key, value );
+      return;
+    }
+    
+  // all boundaries  
+  if ( prop_key.place == BOUNDARY ) {
+       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
+             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+         (*it).second.Store( prop_key, value );
+      return;
+   }
+  
+  // split boundaries 
+  if ( prop_key.place == SPLIT_BOUNDARY ) {
+       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
+             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+         (*it).second.Store( prop_key, value );
+      return;
+   }
+   
+  // node and element properties are handled by direct access to model domain 
+  if ( prop_key.place == ELEMENT || prop_key.place == ELEMENT_INTEGRATION_POINT ||
+       prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == SECTOR_INTEGRATION_POINT ||
+       prop_key.place == NODE ) {
+      this->Region( "Model" ).InputPropertyValue( input_prop, value, COMPLETE );
+      return;
+   }
+  
+  // properties discretised only on boundaries
+  if ( prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT )
-  {
-    for ( typename map<std::string, csmp::Boundary<dim> >::iterator
-          it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
-      (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
-  }
-  else if ( prop_key.place == INTER_FACE || prop_key.place == SPLIT_BOUNDARY || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
-            prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
-  {
-    throw csmp::Exception( ERROR, "Model<dim>::InputPropertyValue", "SplitBoundary/InterFace properties not supported here yet" );
-  }
-  else if ( prop_key.place == MODEL )
-  {
-    this->Store( prop_key, value );
-  }
-  else if ( prop_key.place == REGION )
-  {
-    for ( typename map<string, csmp::Region<dim> >::iterator
-          it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
-      (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
-    for ( typename map<string, csmp::Region<dim> >::iterator
-          it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
-      (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
-  }
-  else
-    this->Region( "Model" ).InputPropertyValue( input_prop, value, COMPLETE );
+    {
+       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
+             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+         (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
+       return;
+    }
+  
+  // properties discretised on split boundaries  
+  if ( prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
+       prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
+    {
+       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
+             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+         (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
+       return;
+    }
+  
+  // if something fell through the cracks
+  throw csmp::Exception( ERROR, "Model<dim>::InputPropertyValue", input_prop,
+                        "placement was not recognised. No assignments were made");
+  
 } // end InputPropertyValue
+
 
 
   // instantiations of extra member function templates
@@ -2884,7 +2921,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  // 0. IO & resetting of indices
+  // 0. reporting
   double64& model_time( ModelTime::Instance().modelTime );
   cout << "\nModel<" << dim << ">::OutputToBinaryFile: Saving model '" << Name();
   cout << "' at current time level, t = " << model_time << " secs." << endl;

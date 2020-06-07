@@ -1,8 +1,7 @@
 #ifndef LOCAL_VARIABLES_H
 #define LOCAL_VARIABLES_H
 
-namespace csmp{
-
+namespace csmp {
 
 /// Data class to store physical variable count at given placement
 struct LocalVariables {

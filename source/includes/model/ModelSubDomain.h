@@ -52,7 +52,7 @@ struct SubDomainInfo {
       models or other unique names.
 */
 template<size_t dim,template<size_t> class CELL>
-class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> > {
+class ModelSubDomain {
   public:
     // any kind of finite elements; simplex or other types
     typedef CELL<dim>                                  CellType;
@@ -77,8 +77,8 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     void Name( const std::string& );
 
     /// local variable storage interface
-    virtual PLACEMENT Placement() const { return UNDEFINED; }
-    virtual bool      ValidVariable( const char* variableName ) const = 0;
+    virtual PLACEMENT Placement() const = 0;
+    virtual bool      ValidVariable( const char* variableName ) const;
 
     virtual void Accept( Visitor<dim>& );
     void Apply( Interrelation<dim>& );

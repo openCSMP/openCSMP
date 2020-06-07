@@ -50,7 +50,9 @@ targeting of variables like 'basal heat flow' etc.
 
 */
 template<size_t dim>
-class Boundary : public ModelSubDomain<dim, Face> {
+class Boundary : public ModelSubDomain<dim, Face>,
+                 public LocalVariableStorage<dim, Boundary>
+ {
   public:
     // ------------------------------------------------
     // construction of boundaries from scratch
@@ -74,6 +76,7 @@ class Boundary : public ModelSubDomain<dim, Face> {
 
     Boundary<dim>&  operator=( const Boundary& );
 
+    /// methods required for the LocalVariableStorage
     virtual PLACEMENT Placement() const { return BOUNDARY; }
     virtual bool      ValidVariable( const char* variableName ) const;
 
@@ -103,6 +106,14 @@ class Boundary : public ModelSubDomain<dim, Face> {
     // -----------------------------------------------
     //  input/output to binary file
     // -----------------------------------------------
+
+    /// for the assignment of properties that are unique to the instance of this subclass
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+
+    /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
     /// assigning the variable values from the FEM_DATA container to the corresponding property of the Boundary
     template<class Var>

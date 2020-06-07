@@ -361,7 +361,7 @@ ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::~ExplicitNodeCenteredFiniteV
  }
 
 
-
+/*
 template<size_t dim,template<size_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
 {
@@ -419,8 +419,37 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryCondi
     }
     
 } // end AssignFluxBoundaryConditions
+*/
 
 
+/**
+         Luat's fix 4/6/2020
+*/
+template<size_t dim,template<size_t> class STP>
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
+  {
+      double64        inflow, flux_balance;
+      const double64  zero(0.);
+
+      if (this->adv1_key_.type != SCALAR)
+      {
+          throw "advective is not scalar variable";
+      }
+      
+      // loop over the boundary cells and adjust fluxes
+      for ( auto nit=this->gref_.PerimeterNodesBegin(); nit!=this->gref_.NodesEnd(); ++nit)
+      {
+          this->FluxThroughBoundaryFiniteVolume( (*nit), inflow, flux_balance ) ;
+          if(inflow != zero)
+          {
+              RESULT[ (*nit)->Idx() ] += (*nit)->Read( this->adv1_key_ ) * -inflow;
+          }
+          else
+          {
+              RESULT[ (*nit)->Idx() ] += (*nit)->Read( this->adv1_key_ ) * flux_balance;
+          }
+      }
+  } // end AssignFluxBoundaryConditions
 
 
    

@@ -4,6 +4,8 @@
 #include "PropertyData.h"
 #include "FEM_Data.h"
 #include "LocalVariableStorage.h"
+
+#include "writeVariableIf.h"
 #include "Node.h"
 #include "Element.h"
 #include "Boundary.h"
@@ -37,14 +39,16 @@ Region<dim>::Region( std::string regionname, const PropertyDatabase<dim>& p )
 
 template<size_t dim>
 Region<dim>::Region( const Region& g )
-  : ModelSubDomain<dim, Element>( g )
+  : ModelSubDomain<dim, Element>( g ),
+    LocalVariableStorage<dim,Region>(g)
 {
 }
 
 
 template<size_t dim>
 Region<dim>::Region( Region&& g )
-  : ModelSubDomain<dim, Element>( g )
+  : ModelSubDomain<dim, Element>( g ),
+    LocalVariableStorage<dim,Region>(g)
 {
 }
 
@@ -58,7 +62,8 @@ template<size_t dim>
 Region<dim>&  Region<dim>::operator=( const Region& g )
 {
   if ( &g != this ) {
-    *this = g;
+     ModelSubDomain<dim,Element>::operator=( g ); 
+     this->LVS( g.LVS() );
   }
   return *this;
 } // end assignment
@@ -275,6 +280,106 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
 // -----------------------------------------------
 
 
+/**
+   for the assignment of properties that are unique to the instance of this subclass
+   
+      @author SKM
+      @date 7/6/2020
+*/
+template<size_t dim>
+template<typename Var>
+void Region<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
+  {
+      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+      const csmp::Index prop_key(this->pref_.StorageKey(input_prop));
+      if ( prop_key.place == REGION ) {
+           if ( sd != COMPLETE )
+             csmp_error.notice( WARNING, "Region<dim>::InputPropertyValue",
+                                          input_prop, "is a Region property and no distinction between INTERIOR and PERIMETER can be made" );
+           this->Store( prop_key, new_value );
+           return;
+        }
+      
+      // incorrect applications of method  
+      if ( prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL ||
+           prop_key.place == FACE || prop_key.place == INTER_FACE )
+        csmp_error.notice( ERROR, "Region<dim>::InputPropertyValue",
+                           input_prop, "must be a REGION, ELEMENT/IP or NODE property for this method call to work" );        
+    
+     // for any different property placement, the method of the base-class is called
+     ModelSubDomain<dim,Element>::InputPropertyValue( input_prop, new_value, sd );
+      
+  } // end InputPropertyValue
+
+template void Region<1U>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const VectorVariable<1U>&, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const VectorVariable<2U>&, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const VectorVariable<3U>&, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const TensorVariable<1U>&, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const TensorVariable<2U>&, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const TensorVariable<3U>&, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const ArrayVariable&, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const ArrayVariable&, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const ArrayVariable&, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, SUBDOMAIN_PART );
+
+
+
+
+template<size_t dim>
+template<typename Var>
+void Region<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
+  {
+      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+      const csmp::Index key(this->pref_.StorageKey(input_prop));
+      
+      if ( key.place == REGION ) {
+           if ( sd != COMPLETE )
+             csmp_error.notice( WARNING, "Region<dim>::InputPropertyValue",
+                                input_prop, "is a REGION property and no distinction between INTERIOR and PERIMETER can be made" );
+                                
+           // only overwriting those variable components / rows that are not flagged 'do_not_overwrite' 
+           writeVariableIf( this, key, new_value, do_not_overwrite );
+           return;
+        }
+      
+      // incorrect applications of method  
+      if ( key.place == BOUNDARY  || key.place == SPLIT_BOUNDARY || key.place == MODEL || 
+           key.place == FACE || key.place == INTER_FACE )
+        csmp_error.notice( ERROR, "Region<dim>::InputPropertyValue",
+                           input_prop, "must be a REGION, ELEMENT/IP or NODE property for this method call to work" );        
+    
+     // for any different property placement, the method of the base-class is called
+     ModelSubDomain<dim,Element>::InputPropertyValue( input_prop, new_value, do_not_overwrite, sd );
+      
+  } // end InputPropertyValue
+
+// explicit instantiations
+template void Region<1U>::InputPropertyValue( const char*, const ScalarVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const ScalarVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const ScalarVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const VectorVariable<1U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const VectorVariable<2U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const VectorVariable<3U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const TensorVariable<1U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const TensorVariable<2U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const TensorVariable<3U>&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const ArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const ArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const ArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<1U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<2U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+template void Region<3U>::InputPropertyValue( const char*, const FlaggedArrayVariable&, VARIABLE_FLAG, SUBDOMAIN_PART );
+
+
+
+
 
 /**
 Outputs geometry and property data from the region to a vset.
@@ -282,8 +387,6 @@ The data of the region is copied as is. Boundary conditions will be copied if pr
 For unresolved boundaries, the flag IRREGULAR is set.
 
 @attention Relies on consecutively numbered indices
-
-@return The vset which has the geometry that corresponds to the group.
 
 @section implementation Implementation
 

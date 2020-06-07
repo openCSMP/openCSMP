@@ -29,7 +29,7 @@ struct IndexTrackerTestStruct
 void Variables_Test::run()
   {
     // Run Test for 3D Model constructed by ANSYS mesh reader
-	string variables_filename = (string)(this->getName() + ".txt");
+	  string variables_filename = (string)(this->getName() + ".txt");
     ANSYS_Model3D m0(prefix_, variables_filename.c_str(), true, true, true, true );
     m0.OutputToBinaryFile("Variables_Test_BinaryModel");
     runModel(m0);
@@ -383,7 +383,7 @@ void Variables_Test::runModel( Model<3>& model )
       // PLACEMENT: Subdomain ( Region, Boundary )
       // TYPE: Vector
       model.InputPropertyValue( "region vector 1",          fourV );
-      // TYPE: Tensor
+      // TYPE: Tensor (placed on boundary)
       model.Boundary("BOUNDARY2").InputPropertyValue( "boundary tensor 1", sevenT );
 
       // PLACEMENT: Node
@@ -461,6 +461,7 @@ void Variables_Test::runModel( Model<3>& model )
       model.InputPropertyValue( "eip flagged array 1",      eipFlaggedArray1 );
       model.InputPropertyValue( "eip flagged array 2",      eipFlaggedArray2 );
       model.InputPropertyValue( "eip flagged array 3",      eipFlaggedArray3 );
+      
       // PLACEMENT: Face Integration Point
       // TYPE: Scalar
       model.InputPropertyValue( "fip scalar 1",             oneS );

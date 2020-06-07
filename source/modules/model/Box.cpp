@@ -1247,8 +1247,9 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element
                                                typename std::deque<csmp::Element<dim>* >::iterator last_elmt )
 {
   assert( it != last_elmt );
-  while ( it != last_elmt ) {
-
+  while ( it != last_elmt ) 
+  {
+    assert( (*it) != nullptr );
     // the bflags of each element are stored in a set
     SmallSet<BOX_BOUNDARY>  eflags;
     const size_t nodes( (*it)->Nodes() );

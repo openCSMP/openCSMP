@@ -2488,52 +2488,52 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     data.Reserve( flag_capacity, data_capacity );
 
     switch ( (*pit).second.type )
-    {
-      case SCALAR: {
-        // estimating the storage required
-        ScalarVariable value;
-        for ( auto it : nodes ) {
-          (*it).Read( (*pit).second, value );
-          pushBack( data, value );
-        }
+      {
+        case SCALAR: {
+          // estimating the storage required
+          ScalarVariable value;
+          for ( auto it : nodes ) {
+                (*it).Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            }
+          break;
+        case VECTOR: {
+          VectorVariable<dim> value;
+          for ( auto it : nodes ) {
+                (*it).Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            }
+           break;
+        case TENSOR: {
+          TensorVariable<dim> value;
+          for ( auto it : nodes ) {
+                (*it).Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            }
+          break;
+        case ARRAY: {
+          ArrayVariable value( (*pit).second.dataDepth );
+          for ( auto it : nodes ) {
+                (*it).Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            }
+          break;
+        case FLAGGEDARRAY: {
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
+          for ( auto it : nodes ) {
+                (*it).Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            }
+          break;
+        default:
+          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                             (*pit).first, "type of node variable not recognized." );
       }
-                   break;
-      case VECTOR: {
-        VectorVariable<dim> value;
-        for ( auto it : nodes ) {
-          (*it).Read( (*pit).second, value );
-          pushBack( data, value );
-        }
-      }
-                   break;
-      case TENSOR: {
-        TensorVariable<dim> value;
-        for ( auto it : nodes ) {
-          (*it).Read( (*pit).second, value );
-          pushBack( data, value );
-        }
-      }
-                   break;
-      case ARRAY: {
-        ArrayVariable value;
-        for ( auto it : nodes ) {
-          (*it).Read( (*pit).second, value );
-          pushBack( data, value );
-        }
-      }
-                  break;
-      case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
-        for ( auto it : nodes ) {
-          (*it).Read( (*pit).second, value );
-          pushBack( data, value );
-        }
-      }
-                         break;
-      default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                           (*pit).first, "type of node variable not recognized." );
-    }
     // storing the data in the VSet
     vset.AddData( (*pit).first.c_str(), data );
   }
@@ -2581,7 +2581,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( (*pit).second.dataDepth );
         for ( auto it : elmts ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
@@ -2589,7 +2589,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( (*pit).second.dataDepth );
         for ( auto it : elmts ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
@@ -2655,7 +2655,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : elmts ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
@@ -2666,7 +2666,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : elmts ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
@@ -2745,7 +2745,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : elmts ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
@@ -2759,7 +2759,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : elmts ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
@@ -2841,7 +2841,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : elmts ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
@@ -2855,7 +2855,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : elmts ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
@@ -2920,7 +2920,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( (*pit).second.dataDepth );
         for ( auto it : faces ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
@@ -2928,7 +2928,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( (*pit).second.dataDepth );
         for ( auto it : faces ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
@@ -2994,7 +2994,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : faces ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
@@ -3005,7 +3005,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : faces ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
@@ -3085,7 +3085,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : faces ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
@@ -3099,7 +3099,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : faces ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
@@ -3182,7 +3182,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : faces ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
@@ -3196,7 +3196,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : faces ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
@@ -3261,7 +3261,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( (*pit).second.dataDepth );
         for ( auto it : interfaces ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
@@ -3269,7 +3269,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( (*pit).second.dataDepth );
         for ( auto it : interfaces ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
@@ -3332,7 +3332,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : interfaces ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
@@ -3343,7 +3343,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : interfaces ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
@@ -3421,7 +3421,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : interfaces ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
@@ -3435,7 +3435,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : interfaces ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
@@ -3516,7 +3516,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                      break;
         case ARRAY: {
-          ArrayVariable value;
+          ArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : interfaces ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
@@ -3530,7 +3530,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         }
                     break;
         case FLAGGEDARRAY: {
-          FlaggedArrayVariable value;
+          FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( auto it : interfaces ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
@@ -3553,6 +3553,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   }
 
 } // end OutputStoredVariablesTo
+
+
+
 
 
   /**
@@ -3626,7 +3629,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto n : nodes ) {
           read( (*pit).second, i++, value );
@@ -3635,7 +3638,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto n : nodes ) {
           read( (*pit).second, i++, value );
@@ -3667,7 +3670,6 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
     {
       case SCALAR: {
         ScalarVariable value;
-        size_t i( 0U );
         for ( auto e : elmts ) {
           read( (*pit).second, e->Idx(), value );
           e->Store( key, value );
@@ -3693,7 +3695,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto e : elmts ) {
           read( (*pit).second, i++, value );
@@ -3702,7 +3704,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto e : elmts ) {
           read( (*pit).second, i++, value );
@@ -3769,7 +3771,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : elmts ) {
           const size_t integration_points( e->IntegrationPoints() );
@@ -3782,7 +3784,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : elmts ) {
           const size_t integration_points( e->IntegrationPoints() );
@@ -3865,7 +3867,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : elmts ) {
           if ( e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
@@ -3882,7 +3884,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : elmts ) {
           if ( e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
@@ -3969,7 +3971,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : elmts ) {
           if ( e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
@@ -3986,7 +3988,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : elmts ) {
           if ( e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
@@ -4056,7 +4058,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto f : faces ) {
           read( (*pit).second, i++, value );
@@ -4065,7 +4067,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto f : faces ) {
           read( (*pit).second, i++, value );
@@ -4132,7 +4134,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : faces ) {
           const size_t integration_points( e->IntegrationPoints() );
@@ -4145,7 +4147,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : faces ) {
           const size_t integration_points( e->IntegrationPoints() );
@@ -4225,7 +4227,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : faces ) {
           const size_t sectors( e->Sectors() );
@@ -4241,7 +4243,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : faces ) {
           const size_t sectors( e->Sectors() );
@@ -4324,7 +4326,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : faces ) {
           const size_t facets( e->Facets() );
@@ -4340,7 +4342,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : faces ) {
           const size_t facets( e->Facets() );
@@ -4411,7 +4413,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto e : interfaces ) {
           read( (*pit).second, i, value );
@@ -4421,7 +4423,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t i( 0U );
         for ( auto e : interfaces ) {
           read( (*pit).second, i, value );
@@ -4489,7 +4491,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : interfaces ) {
           const size_t integration_points( e->IntegrationPoints() );
@@ -4502,7 +4504,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : interfaces ) {
           const size_t integration_points( e->IntegrationPoints() );
@@ -4582,7 +4584,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : interfaces ) {
           const size_t sectors( e->Sectors() );
@@ -4598,7 +4600,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : interfaces ) {
           const size_t sectors( e->Sectors() );
@@ -4681,7 +4683,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                    break;
       case ARRAY: {
-        ArrayVariable value;
+        ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : interfaces ) {
           const size_t facets( e->Facets() );
@@ -4697,7 +4699,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
                   break;
       case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
+        FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto e : interfaces ) {
           const size_t facets( e->Facets() );

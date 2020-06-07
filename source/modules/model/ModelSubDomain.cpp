@@ -6,6 +6,7 @@
  *
  */
 #include <type_traits>
+#include "writeVariableIf.h"
 #include "ModelSubDomain.h"
 #include "Region.h"
 #include "Boundary.h"
@@ -56,7 +57,6 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
    subdomain_name_(ed.subdomain_name_),
    verbose_(true)
  {
-   this->LVS( ed.LVS() );
  }
 
 
@@ -71,8 +71,6 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
    subdomain_name_{ed.subdomain_name_},
    verbose_{true}
  {
-   this->LVS( move(ed.LVS()) );
-   cout <<"\nModelSubDomain<dim,CELL>::ModelSubDomain: called MOVE constructor.\n";
  }
 
 
@@ -95,7 +93,6 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
           bd_face_vec_    = ed.bd_face_vec_;
           verbose_        = ed.verbose_;
           subdomain_name_ = ed.subdomain_name_;
-          this->LVS( ed.LVS() );
        }
      return *this;
  }
@@ -125,221 +122,6 @@ bool ModelSubDomain<dim,CELL>::Verbose()
 {
     return this->verbose_;
 }
-
-
-/**
-    Helper functions that checks complex boundary flags of a variable that shall be assigned.
-    They functions only transfer values to it if the variable has not got the specified flag.
-    
-    Generic version for variables that are placed on the Node, Element, Face etc.
-    
-    @TODO: make this part of new PDE_Intetgrator class
-    
-    @author SKM 10/9/2014
-*/
-template<size_t dim, template<size_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, const csmp::Index&, const Var&, VARIABLE_FLAG )
- {
- } // end generic specification
-
-
-/// write guard for scalar variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             const csmp::Index& idx,
-                             const ScalarVariable& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    if ( ptr->Status(idx) != dont_overwrite )
-      ptr->Store( idx, var );
- } // end version for scalars
- 
-
-/// write guard for vector variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             const csmp::Index& idx,
-                             const VectorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    VectorVariable<dim> vc;
-    ptr->Read( idx, vc );
-    for ( size_t i=0U; i<dim; i++ )
-      // the component gets overwritten
-      if ( ptr->Status(idx,i) != dont_overwrite ) {
-           vc.Flag(i) = var.Flag(i);
-           vc(i)      = var[i];
-        }
-    ptr->Store( idx, vc );
- } // end version for vector variables
-
-
-/**
-     Write guard for tensor variables
-    (where only the diagonal values have flags
-     so that only those rows get written where the 
-     flag permits this)
-*/
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             const csmp::Index& idx,
-                             const TensorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    TensorVariable<dim> ts;
-    ptr->Read( idx, ts );
-    for ( size_t i=0U; i<dim; i++ )
-      if ( ptr->Status(idx,i) != dont_overwrite ) {
-           ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
-             ts(i,j) = var(i,j);
-        }
-    ptr->Store( idx, ts );
- } // end version for tensors
-
-
-
-/**
-    Helper functions that checks a complex varboundary flags of a variable that shall be assigned
-    and only transfers values to it if the variable has not got the specified flag.
-    
-    Generic version for variables that are placed on Element/Face/Interface integration points.
-*/
-template<size_t dim, template<size_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
- {
- } // end generic specification
-
-/// write guard for scalar variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const ScalarVariable& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    if ( ptr->Status(ip,idx) != dont_overwrite )
-      ptr->Store( ip, idx, var );
- } // end version for scalars
- 
-
-/// write guard for vector variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const VectorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    VectorVariable<dim> vc;
-    ptr->Read( ip, idx, vc );
-    for ( size_t i=0U; i<dim; i++ )
-      // the component gets overwritten
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           vc.Flag(i) = var.Flag(i);
-           vc(i)      = var[i];
-        }
-    ptr->Store( ip, idx, vc );
- } // end version for vector variables
-
-
-/**
-     Write guard for tensor variables
-    (where only the diagonal values have flags
-     so that only those rows get written where the 
-     flag permits this)
-*/
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const TensorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    TensorVariable<dim> ts;
-    ptr->Read( ip, idx, ts );
-    for ( size_t i=0U; i<dim; i++ )
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
-             ts(i,j) = var(i,j);
-        }
-    ptr->Store( ip, idx, ts );
- } // end version for tensors
-
-
-
-/**
-    Helper functions that checks a complex varboundary flags of a variable that shall be assigned
-    and only transfers values to it if the variable has not got the specified flag.
-    
-    Generic version for finite volume-related integration points.
-*/
-template<size_t dim, template<size_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, size_t sector_or_facet,
-                      size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
- {
- } // end generic specification
-
-/// write guard for scalar variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t sector_or_facet,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const ScalarVariable& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    if ( ptr->Status(ip,idx) != dont_overwrite )
-      ptr->Store( ip, idx, var );
- } // end version for scalars
- 
-
-/// write guard for vector variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t sector_or_facet,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const VectorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    VectorVariable<dim> vc;
-    ptr->Read( sector_or_facet, ip, idx, vc );
-    for ( size_t i=0U; i<dim; i++ )
-      // the component gets overwritten
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           vc.Flag(i) = var.Flag(i);
-           vc(i)      = var[i];
-        }
-    ptr->Store( sector_or_facet, ip, idx, vc );
- } // end version for vector variables
-
-
-/**
-     Write guard for tensor variables
-    (where only the diagonal values have flags
-     so that only those rows get written where the 
-     flag permits this)
-*/
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t sector_or_facet,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const TensorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    TensorVariable<dim> ts;
-    ptr->Read( sector_or_facet, ip, idx, ts );
-    for ( size_t i=0U; i<dim; i++ )
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
-             ts(i,j) = var(i,j);
-        }
-    ptr->Store( sector_or_facet, ip, idx, ts );
- } // end version for tensors
 
 
 
@@ -1330,6 +1112,24 @@ std::string parseSubdomainPart( SUBDOMAIN_PART ssubdomain )
 }
 
 
+/*
+template<size_t dim, template<size_t> class CELL>
+PLACEMENT ModelSubDomain<dim,CELL>::Placement() const 
+ { 
+    throw csmp::Exception( ERROR, "ModelSubdomain<>::Placement:", "erratic call"); 
+    return UNDEFINED; 
+ }
+*/
+
+template<size_t dim, template<size_t> class CELL>
+bool ModelSubDomain<dim,CELL>::ValidVariable( const char* variableName ) const
+  {
+    const PLACEMENT p( this->pref_.Placement( variableName ) );
+    if ( p == NODE || p == ELEMENT )
+      return true;
+    return false;
+  }
+
 
 // INTERRELATIONS INTERFACE
 
@@ -1851,7 +1651,12 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64&
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& vmin, double64& vmax ) const
  {
+     if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf",
+                             "Region/SplitBoundary/Boundary property placements imply single-values within model subdomains.");
+
     // properties / variables placed on the model
+    /*
     if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY ) {
           if ( prop_key.type == SCALAR ) vmin = vmax = this->Read( prop_key );
           else if ( prop_key.type == VECTOR ) {
@@ -1876,7 +1681,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             }
           return;
       }
-
+   */
 
    // node properties of any kind
    if ( prop_key.place == NODE ) {
@@ -2307,22 +2112,18 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
 template<size_t dim, template<size_t> class CELL>
 template<typename Var>
 void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
-                                                      const Var& var,
-                                                      SUBDOMAIN_PART sdp )
+                                                   const Var& var,
+                                                   SUBDOMAIN_PART sdp )
  {
-     csmp::Index prop_key = pref_.StorageKey(input_prop);
+     const csmp::Index prop_key = pref_.StorageKey(input_prop);
 
-     if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
+     if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                             input_prop, "placed on Region cannot be assigned just on perimeter");
-          return;
-       }
 
      if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
-       {
-        this->Store( prop_key, var );
-        return;
-       }
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
+                            input_prop, "use Store() to assign Region/SplitBoundary/Boundary values");
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
@@ -2510,11 +2311,11 @@ template void ModelSubDomain<3U,InterFace>::InputPropertyValue( const char*, con
 template<size_t dim, template<size_t> class CELL>
 template<typename Var>
 void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
-                                                      const Var& var,
-                                                      VARIABLE_FLAG do_not_overwrite,
-                                                      SUBDOMAIN_PART sdp )
+                                                   const Var& var,
+                                                   VARIABLE_FLAG do_not_overwrite,
+                                                   SUBDOMAIN_PART sdp )
  {
-     csmp::Index prop_key = pref_.StorageKey(input_prop);
+     const csmp::Index prop_key = pref_.StorageKey(input_prop);
 
      if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
@@ -2523,10 +2324,8 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
        }
 
      if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
-       {
-        this->Store( prop_key, var );
-        return;
-       }
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
+                            input_prop, "use Store() to assign Region/SplitBoundary/Boundary valuese");
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
@@ -2719,13 +2518,16 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
         csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::PropertyStatus", property, "is undefined; nothing could be done" );
         return ANY;
     }
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
     string cache(to_string(dim));
     src += cache;
     src += ",";
     src += typeid(CELL<dim>).name();
     src +=">::PropertyStatus";
+
+    if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION/BOUNDARY/SPLIT_BUNDARY variables.");
 
     if ( prop_key.place == FACET_INTEGRATION_POINT ||
          prop_key.place == SECTOR_INTEGRATION_POINT ||
@@ -2748,9 +2550,6 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
     {
         // if all the flags in the region shall be changed
         if ( group_flag == COMPLETE ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                return this->Status( prop_key );
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
@@ -2778,9 +2577,6 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
         }
         // if the property shall only be changed on the Subdomain boundary
         else if ( group_flag == PERIMETER ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                return this->Status( prop_key );
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
@@ -2807,9 +2603,6 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
             }
         }
         else if ( group_flag == INTERIOR ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                return this->Status( prop_key );
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
@@ -2845,12 +2638,6 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
 
         // if all the flags in the region shall be changed
         if ( group_flag == COMPLETE ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                VARIABLE_FLAG  status0(this->Status(prop_key,component));
-                for ( size_t n=1U; n<length; n++ )
-                    if ( status0 != this->Status(prop_key,n) ) return ANY;
-                return status0;
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
@@ -2881,12 +2668,6 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
         }
         // if the property shall only be changed on the Subdomain boundary
         else if ( group_flag == PERIMETER ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                VARIABLE_FLAG  status0(this->Status(prop_key,component));
-                for ( size_t n=1U; n<length; n++ )
-                    if ( status0 != this->Status(prop_key,n) ) return ANY;
-                return status0;
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
@@ -2916,12 +2697,6 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
             }
         }
         else if ( group_flag == INTERIOR ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                VARIABLE_FLAG  status0(this->Status(prop_key,component));
-                for ( size_t n=1U; n<length; n++ )
-                    if ( status0 != this->Status(prop_key,n) ) return ANY;
-                return status0;
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
@@ -2986,16 +2761,18 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
 /// changes the variable flag to status for those group members which carry the group_flag.
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
-                                                        const std::vector<VARIABLE_FLAG>& status,
-                                                        SUBDOMAIN_PART group_flag )
+                                                     const std::vector<VARIABLE_FLAG>& status,
+                                                     SUBDOMAIN_PART group_flag )
  {
-    /// @todo (2-P) Rm rtti
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
     src += to_string(dim);
     src += ",";
     src += "Element/Face/Interface";
     src +=">::ChangePropertyStatus:";
+
+    if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION/BOUNDARY/SPLIT_BUNDARY variables.");
 
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
@@ -3014,10 +2791,6 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    this->Status( prop_key, status[0U] );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
@@ -3101,11 +2874,6 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    for ( size_t n=0U; n<status.size(); n++ )
-                        this->Status( prop_key, n, status[n] );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
@@ -3210,14 +2978,16 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                                                         VARIABLE_FLAG status,
                                                         SUBDOMAIN_PART group_flag )
  {
-    /// @todo (2-P) Rm rtti
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
     string cache(to_string(dim));
     src += cache;
     src += ",";
     src += typeid(CELL<dim>).name();
     src +=">::ChangePropertyStatus";
+
+    if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION/BOUNDARY/SPLIT_BUNDARY variables.");
 
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
@@ -3233,10 +3003,6 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    this->Status( prop_key, status );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
@@ -3319,10 +3085,6 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    this->Status( prop_key, position, status );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
@@ -4648,39 +4410,22 @@ or elements that belong to the region, depending on where the target property is
 template<size_t dim, template<size_t> class CELL>
 double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
  {
-    csmp::Index  idx = pref_.StorageKey(prop);
-    size_t       counter(0U);
+    const csmp::Index  idx = pref_.StorageKey(prop);
+    size_t             counter(0U);
 
      if ( (elmt_vec_.empty()) ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RegionPropertyAverage",
                                         "Region is empty");
        }
 
+    if ( idx.place == REGION or idx.place == BOUNDARY or idx.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::Average", "REGION/BOUNDARY/SPLIT_BOUNDARY variables have only a single value in a model subdomain.");
+
     switch( idx.place )
       {
-        case REGION:
-        case BOUNDARY:
-        case SPLIT_BOUNDARY:
-            if ( idx.type == SCALAR ) {
-                 return this->Read( idx );
-              }
-            if ( idx.type == VECTOR ) {
-                 VectorVariable<dim>  vc;
-                 this->Read( idx, vc );
-                 return vc.Length();
-              }
-            if ( idx.type == TENSOR ) {
-                 VectorVariable<dim>  evals;
-                 TensorVariable<dim>  ts;
-                 this->Read( idx, ts );
-                 ts.EigenValues( evals );
-                 double64  avg(0.);
-                 for ( size_t j=0U; j<dim; j++ ) avg += evals[j];
-                 return avg / static_cast<double64>(dim);
-              }
-            break;
-
         case ELEMENT:
+        case FACE:
+        case INTER_FACE:
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
                  double64  avg(0.);
@@ -5191,10 +4936,11 @@ by the variable flags and values.
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
  {
-     csmp::Index          prop_key = pref_.StorageKey(prop);
-     ScalarVariable       sc;
-     VectorVariable<dim>  vc;
-     TensorVariable<dim>  ts;
+     const csmp::Index  prop_key = pref_.StorageKey(prop);
+
+     if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen",
+                             "Use direct variable access to display Region/Boundary/SplitBoundary properties.");
 
      string place_name = parsePlacement(prop_key.place);
 
@@ -5216,6 +4962,9 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
            return;
       }
      cout << prop <<"' placed on the: "<< place_name << endl;
+     
+     VectorVariable<dim> vc;
+     TensorVariable<dim> ts;
 
      switch( prop_key.place )
        {
@@ -5228,8 +4977,7 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
                   switch (prop_key.type)
                     {
                        case SCALAR:
-                           (*nit)->Read( prop_key, sc );
-                           cout << sc;
+                           cout << (*nit)->Read( prop_key );
                          break;
                        case VECTOR:
                            (*nit)->Read( prop_key, vc );
@@ -5266,7 +5014,7 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
                     switch (prop_key.type)
                       {
                          case SCALAR:
-                             (*eit)->Read( i, prop_key, sc ); cout << i <<":"<< sc;
+                             cout << i <<": "<< (*eit)->Read( i, prop_key );
                            break;
                          case VECTOR:
                              (*eit)->Read( i, prop_key, vc ); cout << i <<":"<< vc;
@@ -5301,7 +5049,7 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
                   //cout << string(parseBoundary((*eit)->AtBoundary())) <<" ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: (*eit)->Read( prop_key, sc ); cout << sc;
+                       case SCALAR: cout << (*eit)->Read( prop_key );
                          break;
                        case VECTOR: (*eit)->Read( prop_key, vc ); cout << vc;
                          break;
@@ -5325,94 +5073,9 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
                     }
                 }
               break;
-           case SPLIT_BOUNDARY:
-                  cout <<"\nSplitBoundary: ";
-                  switch (prop_key.type)
-                    {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
-                         break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
-                         break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
-                         break;
-                       case ARRAY: {
-                            ArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                          }
-                         break;
-                       case FLAGGEDARRAY: {
-                            FlaggedArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                         }
-                         break;
-                       default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
-                                               "type of split boundary variable not recognized." );
-                    }
-                  break;
-           case BOUNDARY:
-                {
-                  cout <<"\nRegion: ";
-                  switch (prop_key.type)
-                    {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
-                         break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
-                         break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
-                         break;
-                       case ARRAY: {
-                            ArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                          }
-                         break;
-                       case FLAGGEDARRAY: {
-                            FlaggedArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                         }
-                         break;
-                       default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
-                                               "type of boundary variable not recognized." );
-                    }
-                }
-              break;
-           case REGION:
-                {
-                  cout <<"\nRegion: ";
-                  switch (prop_key.type)
-                    {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
-                         break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
-                         break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
-                         break;
-                       case ARRAY: {
-                            ArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                          }
-                         break;
-                       case FLAGGEDARRAY: {
-                            FlaggedArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                         }
-                         break;
-                       default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
-                                               "type of region variable not recognized." );
-                    }
-                }
-              break;
           default:
-               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: The property ";
-               cerr << prop <<"  "<< place_name <<" could not be retrieved from the Region";
+               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: Property ";
+               cerr << prop <<"  "<< place_name <<" cannot be retrieved from Region/Boundary/SplitBoundary objects; use Read().";
                break;
        }
     cout << endl;

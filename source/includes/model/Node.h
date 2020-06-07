@@ -41,7 +41,7 @@ Elements are registered as parents, Faces and InterFaces are not.
  
 */
 template<size_t dim>
-class Node : public LocalVariableStorage<dim,Node<dim> > {
+class Node : public LocalVariableStorage<dim,Node> {
   public:
     Node();
     /// custom constructor used when model is reconstructed from binary file

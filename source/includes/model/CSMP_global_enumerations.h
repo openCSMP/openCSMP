@@ -156,7 +156,7 @@ bool           faceVariable( PLACEMENT );
 bool           interFaceVariable( PLACEMENT );
 
 /// determine from the element type whether the placement of the variable is Region, Boundary or SplitBoundary
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class PLACE>
 PLACEMENT      parsePlacement();
 
 bool           isPlacedOnIntegrationPoint( PLACEMENT );

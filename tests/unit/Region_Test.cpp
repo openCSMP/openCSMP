@@ -415,7 +415,8 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     _test( n_perimeter_faces == n_perimeter_faces2 );
 
     // test 5: is the content of the perimeter face vectors actually the same ?
-	_test( equal(perimeter_faces2.begin(), perimeter_faces2.end(), perimeter_faces.begin(), perimeter_faces.end() ) );
+    // TODO: could the occassional failure of this test have anything to do with the short enum proplem (Edoardo Pezzuli)?
+	  _test( equal(perimeter_faces2.begin(), perimeter_faces2.end(), perimeter_faces.begin(), perimeter_faces.end() ) );
 
     // test 6: verifying that the outer surface area and volume of in the re-read CSMP native model is the same
     // region surface area

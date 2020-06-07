@@ -147,7 +147,7 @@ VARIABLE_TYPE variableType<csmp::FlaggedArrayVariable>()
 // VARIABLE PLACEMENT
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class PLACE>
 PLACEMENT parsePlacement() {
     return UNDEFINED;
  }
@@ -180,6 +180,9 @@ template<>  PLACEMENT parsePlacement<1U,SplitBoundary>() { return SPLIT_BOUNDARY
 template<>  PLACEMENT parsePlacement<2U,SplitBoundary>() { return SPLIT_BOUNDARY; }
 template<>  PLACEMENT parsePlacement<3U,SplitBoundary>() { return SPLIT_BOUNDARY; }
 
+template<>  PLACEMENT parsePlacement<1U,Model>() { return MODEL; }
+template<>  PLACEMENT parsePlacement<2U,Model>() { return MODEL; }
+template<>  PLACEMENT parsePlacement<3U,Model>() { return MODEL; }
 
 PLACEMENT  parsePlacement( const char* placement )
  {

@@ -77,7 +77,7 @@ class ElementOnly {
 
 
 template<size_t dim>
-class ElementWithVariableStorage : public LocalVariableStorage<dim,Element<dim> > {
+class ElementWithVariableStorage : public LocalVariableStorage<dim,Element> {
   public:
     // as above?
     /// returns property values at the nodes
@@ -86,7 +86,7 @@ class ElementWithVariableStorage : public LocalVariableStorage<dim,Element<dim> 
 };
 
 template<size_t dim>
-class ElementWithStorageAndFEM : public LocalVariableStorage<dim,Element<dim> >,
+class ElementWithStorageAndFEM : public LocalVariableStorage<dim,Element>,
                                  public FiniteElementPolicy<dim,Element> {
 };
 

@@ -61,7 +61,7 @@ to an intervening lower-dimensional element mesh once the InterFace has been cre
 template<size_t dim>
 class InterFace : public FiniteElementPolicy<dim,InterFace>,
                   public FiniteVolumePolicy<dim,InterFace>,
-                  public LocalVariableStorage<dim,InterFace<dim> >
+                  public LocalVariableStorage<dim,InterFace>
 {
   public:
 
@@ -140,7 +140,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// to apply visitors whose application level is Boundary and target is Face
     void Accept( csmp::Visitor<dim>& vis );
 
-    /// of variables that are discretised on interfaces
+    /// of variables that are discretised on interfaces; required by LocalVariableStorage
     PLACEMENT Placement() const { return INTER_FACE; }
 
     /// node_connector_.size() = total nodes on both sides of InterFace

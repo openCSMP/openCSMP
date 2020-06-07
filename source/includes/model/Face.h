@@ -39,7 +39,7 @@ template<size_t> class Visitor;
 template<size_t dim>
 class Face : public FiniteElementPolicy<dim,Face>,
              public FiniteVolumePolicy<dim,Face>,
-             public LocalVariableStorage<dim,Face<dim> >
+             public LocalVariableStorage<dim,Face>
 {
   public:
   
@@ -117,7 +117,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     //  User interface of Face
     // ------------------------------------------------------------------------
 
-    /// Local variable storage interface
+    /// Local variable storage interface; required by LocalVariableStorage
     PLACEMENT Placement() const { return FACE; }
 
     size_t  Nodes() const;

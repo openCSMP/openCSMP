@@ -44,7 +44,7 @@ void PassiveAdvectionOfTracer_Example::Specifications()
     AddDescription( "3D passive tracer advection, choice of different advection schemes" );
     AddRequirement( "source files: 'PassiveAdvectionOfTracer_Example.cpp' and '*.h'" );
     AddRequirement( "prism_test: files .dat, .asc, -regions.txt, -configuration.txt.");
-    AddRequirement( "variables(example15.txt)" );
+    AddRequirement( "variables(example25.txt)" );
   }
 
 

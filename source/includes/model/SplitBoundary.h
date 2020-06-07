@@ -71,7 +71,9 @@ efficiency.
 
 */
 template<size_t dim>
-class SplitBoundary : public ModelSubDomain<dim,InterFace> {
+class SplitBoundary : public ModelSubDomain<dim,InterFace>,
+                      public LocalVariableStorage<dim, SplitBoundary>
+ {
   public:
     SplitBoundary() = delete;
     /// constroctor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
@@ -94,6 +96,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     /// applies visitor to split boundary
     virtual void Accept( Visitor<dim>& );
     
+    /// methods required for the LocalVariableStorage
     virtual PLACEMENT Placement() const { return SPLIT_BOUNDARY; }
     virtual bool ValidVariable( const char* variableName ) const;
 
@@ -111,6 +114,14 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     // ----------------------------------------
     // user interface
     // ----------------------------------------
+
+    /// for the assignment of properties that are unique to the instance of this subclass
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+
+    /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
     /// input node variable values on specific side of split boundary
     template<class Var>

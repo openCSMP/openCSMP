@@ -2130,12 +2130,12 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
       // 3b. property name and type
 
       // 3b. property value
-      VARIABLE_TYPE  prop_type = sg.Database().Type( prop_name.c_str() );
+      const VARIABLE_TYPE  prop_type = sg.Database().Type( prop_name.c_str() );
       size_t  length = sg.Database().Components( prop_name.c_str() );
       string  unit( " [" ); unit += sg.Database().Unit( prop_name.c_str() ); unit += "] ";
 
       // overwrite protection flag
-      VARIABLE_FLAG do_not_overwrite = parseStatus( prop_flag.c_str() );
+      const VARIABLE_FLAG do_not_overwrite = parseStatus( prop_flag.c_str() );
 
       if ( prop_type == SCALAR )
       {
