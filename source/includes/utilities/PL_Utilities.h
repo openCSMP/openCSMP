@@ -80,39 +80,6 @@ inline void vectorOut( const std::vector<T>& v, std::string message = "" )
     std::cout << v.at( i ) << std::endl;
  }
 
-/// extrapolation for volume relative element variables to nodal variable
-template<size_t dim>
-void extrapolateElementToNodalVariable( Model<dim>& mref,
-                                        const char* region,
-                                        const char* eprop,
-                                        const char* nprop )
-{
-  Region<dim>& rref = mref.Region( region );
-  PropertyHandle<dim> targetProp( mref, nprop );
-  targetProp = 0.;
-  const Index eKey( mref.Database().StorageKey( eprop ) );
-  Index nKey( mref.Database().StorageKey( nprop ) );
-
-  ScalarVariable elementContribution( PLAIN, 0. ), nodeValue( PLAIN, 0. ) ;
-  const typename std::vector<Element<dim>* >::const_iterator elementsEnd( rref.ElementsEnd() );
-  for( typename std::vector<Element<dim>* >::iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
-  {
-    elementContribution() = (*it)->Read( eKey ) * (*it)->Volume() / (*it)->Nodes();
-
-    for( typename std::vector<Node<dim>* > ::iterator iit = (*it)->NodesBegin(); iit != (*it)->NodesEnd(); ++iit )
-    {
-      (*iit)->Read( nKey, nodeValue );
-      nodeValue += elementContribution;
-      (*iit)->Store( nKey, nodeValue );
-    }
-  }
-
-  std::cout << "extrapolateElementToNodalVariable<" << dim << "> extrapolated "
-            << eprop << " to " << nprop << " in " << region << std::endl;
-
-} // extrapolateElementToNodalVariable
-
-
 /// discards given number of istream objects
 void ignoreIstream( std::istream& iStream, size_t noOfTerms );
 

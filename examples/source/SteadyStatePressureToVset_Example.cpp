@@ -206,6 +206,7 @@ void SteadyStatePressureToVset_Example::Run()
     // 8. Pass the FE algorithm to the Region and solve [K]{p} = {Q}
     // --------------------------------------------------------------------
     model->Apply( total_pressure_quadratic );
+    model->ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
 
 
     // 9. Output the range of the variables "fluid pressure", "velocity",
@@ -213,6 +214,7 @@ void SteadyStatePressureToVset_Example::Run()
     // -------------------------------------------------------------------
     printRangeOfVariable( *model, "fluid pressure" );
     printRangeOfVariable( *model, "velocity" );
+    printRangeOfVariable( *model, "nodal velocity" );
     printRangeOfVariable( *model, "pore velocity" );
     printRangeOfVariable( *model, "volume flux" );
     printRangeOfVariable( *model, "conductivity" );
@@ -222,6 +224,7 @@ void SteadyStatePressureToVset_Example::Run()
     // --------------------------------------------
     vtk_output.OutputDataToVTK( *model, "fluid-pressure", "fluid pressure",    1 );
     vtk_output.OutputDataToVTK( *model, "velocity",       "velocity",          1 );
+    vtk_output.OutputDataToVTK( *model, "nvelocity",      "nodal velocity",    1 );
     vtk_output.OutputDataToVTK( *model, "volume-flux",    "volume flux",       1 );
 
 
@@ -243,7 +246,7 @@ void SteadyStatePressureToVset_Example::Run()
     // 13. Change Dirichlet boundary condition on the left side and assing pressure
     //     that varies linearly from 1.0e+02 to 1.0e+05
     // ---------------------------------------------------------------------------
-    model->InputBoundaryValue( LEFT, "fluid pressure", makeScalar(DIRICH,1.0e+5) );
+    model_from_vset.InputBoundaryValue( LEFT, "fluid pressure", makeScalar(DIRICH,1.0e+5) );
 
 
     // 14. Reuse the fluid pressure algorithm and compute new fluid pressure
@@ -257,6 +260,8 @@ void SteadyStatePressureToVset_Example::Run()
     // --------------------------------------------------------------------
     printRangeOfVariable( model_from_vset, "fluid pressure" );
     printRangeOfVariable( model_from_vset, "velocity" );
+    model_from_vset.ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
+    printRangeOfVariable( model_from_vset, "nodal velocity" );
     printRangeOfVariable( model_from_vset, "pore velocity" );
     printRangeOfVariable( model_from_vset, "volume flux" );
     printRangeOfVariable( model_from_vset, "conductivity" );

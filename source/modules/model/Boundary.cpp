@@ -812,6 +812,7 @@ bool csmp::Boundary<dim>::IsExternal() const
 {
     for ( typename vector<Face<dim>*>::const_iterator
           it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )
+      // perhaps create method inside of Face to check whether it lies on the outside of the model
       if ( (*it)->OuterParent() == nullptr ) return true;
     return false;
 }
