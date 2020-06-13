@@ -138,6 +138,9 @@ bool isFRONT( BOX_BOUNDARY );
 /// returns whether boundary flag belongs to boundary BACK (3D only)
 bool isBACK( BOX_BOUNDARY );
 
+/// prints a summary of the current flags of the nodes and elements to screen.
+template<size_t dim> void printBoxBoundaryFlags( const Model<dim>& );
+
 /// gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 1D model
 void boundaryMinMaxCoordinates( BOX_BOUNDARY,
                                 csmp::Point<1U>& model_coord_min,
@@ -156,6 +159,12 @@ bool isDiagnosticBoxBoundaryClassifier( const std::string& );
 void recreateBoxBoundaryFlags( Model<1U>& );
 void recreateBoxBoundaryFlags( Model<2U>& );
 void recreateBoxBoundaryFlags( Model<3U>& );
+
+/// boundary flags for 2D models consisting of quadrilaterals only; since these models are regular method is rather fast
+void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& );
+
+/// boundary flags for 3D models consisting of hexahedra only; since these models are regular method is rather fast
+void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& );
 
 /// using the nodal BOX_BOUNDARY flag values, the elements are flagged accordingly
 template<size_t dim>

@@ -121,6 +121,55 @@ bool isLineElement( CSMP_FEM_TYPE etype )
  }
 
 
+
+bool isTriangular( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ||
+         etype == LINEAR_TRIANGLE || 
+         etype == LINEAR_TRIANGLE3D || 
+         etype == BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == QUADRATIC_TRIANGLE ||
+         etype == BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == CUBIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_CUBIC_TRIANGLE  )
+      return true;
+
+    return false;
+ }
+
+
+bool isQuadrilateral( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL || 
+         etype == LINEAR_QUADRILATERAL || 
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
+         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
+      return true;
+
+    return false;
+ }
+
+
+bool isHexahedral( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || 
+         etype == LINEAR_QUADRILATERAL || 
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ||
+         etype == LINEAR_CUBOID )
+      return true;
+
+    return false;
+ } 
+
+
 void    FiniteElement::CurrentID( size_t id ) { object_id = id; }
 size_t  FiniteElement::CurrentID() const      { return object_id; }
 

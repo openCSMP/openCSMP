@@ -92,6 +92,9 @@ enum FV_FACET_TYPE {
 bool isTriangularElement( CSMP_FEM_TYPE );
 bool isQuadrilateralElement( CSMP_FEM_TYPE );
 bool isLineElement( CSMP_FEM_TYPE );
+bool isTriangular( CSMP_FEM_TYPE );
+bool isQuadrilateral( CSMP_FEM_TYPE );
+bool isHexahedral( CSMP_FEM_TYPE );
 
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE );
 CSMP_FEM_TYPE      parseFiniteElementTypeEnum( int32 csp_etype );

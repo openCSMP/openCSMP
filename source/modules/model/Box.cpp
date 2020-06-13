@@ -596,6 +596,46 @@ bool isDiagnosticBoxBoundaryClassifier( const string& i )
 
 
 /**
+prints a summary of the current flags of the nodes and elements to screen.
+*/
+template<size_t dim>
+void printBoxBoundaryFlags( const Model<dim>& model )
+ {
+    const Region<dim>& modeldomain(model.Region("Model"));
+    
+    cout <<"\n\nprintBoxBoundaryFlags: Current flags and numbers assigned to node and element objects:\n";
+    size_t equal_entries(0);
+    multiset<BOX_BOUNDARY> node_flags;
+    for ( typename vector<Node<dim>*>::const_iterator 
+          nit=modeldomain.NodesBegin(); nit!=modeldomain.NodesEnd(); ++nit ) 
+      node_flags.insert( (*nit)->AtBoundary() );
+    multiset<BOX_BOUNDARY>::const_iterator it=node_flags.begin();
+    while( it!=node_flags.end() ) {
+         cout <<"\n\t"<< parseBoundary( (*it) ) <<": "<<  (equal_entries=node_flags.count( (*it) )) <<" nodes.";
+         // avoiding printing of duplicates
+         advance( it, equal_entries );
+      }
+    cout << endl;  
+      
+    multiset<BOX_BOUNDARY> elmt_flags;
+    for ( typename vector<Element<dim>*>::const_iterator 
+          eit=modeldomain.ElementsBegin(); eit!=modeldomain.ElementsEnd(); ++eit ) 
+      elmt_flags.insert( (*eit)->AtBoundary() );
+    it = elmt_flags.begin();
+    while( it!=elmt_flags.end() ) {
+         cout <<"\n\t"<< parseBoundary( (*it) ) <<": "<<  (equal_entries=elmt_flags.count( (*it) )) <<" elements.";
+         advance( it, equal_entries );
+      }
+    cout << endl;  
+ }
+
+template void printBoxBoundaryFlags( const Model<1U>& );
+template void printBoxBoundaryFlags( const Model<2U>& );
+template void printBoxBoundaryFlags( const Model<3U>& );
+
+
+
+/**
 */
 void recreateBoxBoundaryFlags( Model<1U>& )
 {
@@ -1234,6 +1274,301 @@ void recreateBoxBoundaryFlags( Model<3>& model )
 
 
 
+
+
+/**
+       Establishes the BOX_BOUNDARY flagging for a 2D model consisting out of quadrilateral elements. 
+       
+       @note this method is quick.
+*/ 
+void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& model )
+ { 
+    Region<2U>&  modeldomain(model.Region("Model"));
+    for ( vector<Element<2U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+      {  // current version only works for linear quadrilaterals
+         assert( (*it)->Nodes() <= 5 );
+         
+         if ( !isQuadrilateral( (*it)->FE_Type() ) )
+           throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForQuadrilateralModel", "this method only works for quadrilateral elements");
+           
+         (*it)->AtBoundary( NOT );
+         for ( size_t i=0; i<(*it)->Nodes(); ++i )
+           (*it)->N(i)->AtBoundary( NOT );
+        // BOTTOM 
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->AtBoundary( BOTTOM );
+              (*it)->N(0)->AtBoundary( BOTTOM );
+              (*it)->N(1)->AtBoundary( BOTTOM );
+              continue;
+           }
+         // RIGHT 
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->AtBoundary( RIGHT );
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(2)->AtBoundary( RIGHT );
+              continue;
+           }
+         // TOP 
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->AtBoundary( TOP );
+              (*it)->N(2)->AtBoundary( TOP );
+              (*it)->N(3)->AtBoundary( TOP );
+              continue;
+           }
+         // LEFT 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->AtBoundary( LEFT );
+              (*it)->N(0)->AtBoundary( LEFT );
+              (*it)->N(3)->AtBoundary( LEFT );
+              continue;
+           }
+         // CORNERS 
+         // CNR1
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->AtBoundary( CNR1 );
+              (*it)->N(0)->AtBoundary( CNR1 );
+              (*it)->N(1)->AtBoundary( BOTTOM );
+              (*it)->N(3)->AtBoundary( LEFT );
+              continue;
+           } 
+         // CNR2
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr ) {
+              (*it)->AtBoundary( CNR2 );
+              (*it)->N(1)->AtBoundary( CNR2 );
+              (*it)->N(0)->AtBoundary( BOTTOM );
+              (*it)->N(2)->AtBoundary( RIGHT );
+              continue;
+           } 
+         // CNR3
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr ) {
+              (*it)->AtBoundary( CNR3 );
+              (*it)->N(2)->AtBoundary( CNR3 );
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(3)->AtBoundary( TOP );
+              continue;
+           } 
+         // CNR4
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->AtBoundary( CNR4 );
+              (*it)->N(3)->AtBoundary( CNR4 );
+              (*it)->N(2)->AtBoundary( TOP );
+              (*it)->N(0)->AtBoundary( LEFT );
+              continue;
+           } 
+      }
+      
+    // testing nodes and elements
+    printBoxBoundaryFlags( model ); 
+       
+ } // end recreateBoxBoundaryFlagsForQuadrilateralModel
+
+
+
+
+
+
+
+
+/**
+       Establishes the BOX_BOUNDARY flagging for a 3D model consisting out of hexahedral elements. 
+       
+       @note this method is quick.
+*/ 
+void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
+ { 
+    Region<3U>&    modeldomain(model.Region("Model"));
+    vector<size_t> fnids;
+    
+    for ( vector<Element<3U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+      {
+         // current version only works for linear hexahedra
+         assert( (*it)->Nodes() <= 9 );
+
+         if ( !isHexahedral( (*it)->FE_Type() ) )
+           throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for quadrilateral elements");
+           
+         // DEFAULT (not at any boundary)
+         (*it)->AtBoundary( NOT );
+         for ( size_t i=0; i<(*it)->Nodes(); ++i )
+           (*it)->N(i)->AtBoundary( NOT );
+           
+         // BOTTOM 
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->AtBoundary( BOTTOM );
+              (*it)->FE()->NodesOfFace( 0U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( BOTTOM );
+              continue;
+           }
+         // RIGHT 
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->AtBoundary( RIGHT );
+              (*it)->FE()->NodesOfFace( 2U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( RIGHT );
+              continue;
+           }
+         // TOP 
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->AtBoundary( TOP );
+              (*it)->FE()->NodesOfFace( 5U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( TOP );
+              continue;
+           }
+         // LEFT 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->AtBoundary( LEFT );
+              (*it)->FE()->NodesOfFace( 4U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( LEFT );
+              continue;
+           }
+         // FRONT 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->AtBoundary( FRONT );
+              (*it)->FE()->NodesOfFace( 1U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( FRONT );
+              continue;
+           }
+         // BACK 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->AtBoundary( BACK );
+              (*it)->FE()->NodesOfFace( 3U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( BACK );
+              continue;
+           }
+         // BACK CORNERS 
+         // CNR1
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->AtBoundary( CNR1 );
+              (*it)->N(3)->AtBoundary( CNR1 );
+              // sides
+              (*it)->N(1)->AtBoundary( BOTTOM );
+              (*it)->N(2)->AtBoundary( BACK );
+              (*it)->N(4)->AtBoundary( LEFT );
+              // edges
+              (*it)->N(0)->AtBoundary( EDGE5 );
+              (*it)->N(2)->AtBoundary( EDGE1 );
+              (*it)->N(7)->AtBoundary( EDGE4 );
+              continue;
+           } 
+         // CNR2
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr ) {
+              (*it)->AtBoundary( CNR2 );
+              (*it)->N(2)->AtBoundary( CNR2 );
+              // sides
+              (*it)->N(0)->AtBoundary( BOTTOM );
+              (*it)->N(5)->AtBoundary( RIGHT );
+              (*it)->N(7)->AtBoundary( BACK );
+              // edges
+              (*it)->N(1)->AtBoundary( EDGE6 );
+              (*it)->N(3)->AtBoundary( EDGE1 );
+              (*it)->N(6)->AtBoundary( EDGE2 );
+              continue;
+           } 
+         // CNR3
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr ) {
+              (*it)->AtBoundary( CNR3 );
+              (*it)->N(6)->AtBoundary( CNR3 );
+              // sides
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(3)->AtBoundary( BACK );
+              (*it)->N(4)->AtBoundary( TOP );
+              // edges
+              (*it)->N(2)->AtBoundary( EDGE2 );
+              (*it)->N(5)->AtBoundary( EDGE7 );
+              (*it)->N(7)->AtBoundary( EDGE3 );
+              continue;
+           } 
+         // CNR4
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->AtBoundary( CNR4 );
+              (*it)->N(7)->AtBoundary( CNR4 );
+              // sides
+              (*it)->N(2)->AtBoundary( BACK );
+              (*it)->N(0)->AtBoundary( LEFT );
+              (*it)->N(5)->AtBoundary( TOP );
+              // edges
+              (*it)->N(3)->AtBoundary( EDGE4 );
+              (*it)->N(6)->AtBoundary( EDGE3 );
+              (*it)->N(4)->AtBoundary( EDGE8 );
+              continue;
+           } 
+         // FRONT CORNERS 
+         // CNR5
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(4) == nullptr ) {
+              (*it)->AtBoundary( CNR5 );
+              (*it)->N(0)->AtBoundary( CNR5 );
+              // sides
+              (*it)->N(2)->AtBoundary( BOTTOM );
+              (*it)->N(5)->AtBoundary( FRONT );
+              (*it)->N(7)->AtBoundary( LEFT );
+              // edges
+              (*it)->N(1)->AtBoundary( EDGE9 );
+              (*it)->N(3)->AtBoundary( EDGE5 );
+              (*it)->N(4)->AtBoundary( EDGE12 );
+              continue;
+           } 
+         // CNR6
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr ) {
+              (*it)->AtBoundary( CNR6 );
+              (*it)->N(1)->AtBoundary( CNR6 );
+              // sides
+              (*it)->N(3)->AtBoundary( BOTTOM );
+              (*it)->N(6)->AtBoundary( RIGHT );
+              (*it)->N(4)->AtBoundary( FRONT );
+              // edges
+              (*it)->N(0)->AtBoundary( EDGE9 );
+              (*it)->N(2)->AtBoundary( EDGE6 );
+              (*it)->N(5)->AtBoundary( EDGE10 );
+              continue;
+           } 
+         // CNR7
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(5) == nullptr ) {
+              (*it)->AtBoundary( CNR7 );
+              (*it)->N(5)->AtBoundary( CNR7 );
+              // sides
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(0)->AtBoundary( FRONT );
+              (*it)->N(7)->AtBoundary( TOP );
+              // edges
+              (*it)->N(1)->AtBoundary( EDGE10 );
+              (*it)->N(6)->AtBoundary( EDGE7 );
+              (*it)->N(4)->AtBoundary( EDGE11 );
+              continue;
+           } 
+         // CNR8
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(4) == nullptr && (*it)->Neighbor(5) == nullptr ) {
+              (*it)->AtBoundary( CNR8 );
+              (*it)->N(4)->AtBoundary( CNR8 );
+              // sides
+              (*it)->N(1)->AtBoundary( FRONT );
+              (*it)->N(3)->AtBoundary( LEFT );
+              (*it)->N(6)->AtBoundary( TOP );
+              // edges
+              (*it)->N(0)->AtBoundary( EDGE12 );
+              (*it)->N(5)->AtBoundary( EDGE11 );
+              (*it)->N(7)->AtBoundary( EDGE8 );
+              continue;
+           } 
+      }
+      
+    // testing nodes and elements
+    printBoxBoundaryFlags( model ); 
+       
+ } // end recreateBoxBoundaryFlagsForHexahedralModel
+
+
+
+
+
+
+
+
+
 /**
 Assuming that the nodes of the box-shaped model are flagged correctly,
 this method considers the existing combinations of node flags and assign
@@ -1258,12 +1593,14 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element
          if ( (*it)->N( i )->AtBoundary() != NOT && (*it)->N( i )->AtBoundary() >= INTERNAL )
            eflags.insert( (*it)->N( i )->AtBoundary() );
       }
-    // if only a non-descript identifier could be found the boundary is set to irregular
+    // if no identifier could be found the boundary flag is set to NOT
     if ( eflags.empty() )
-      (*it)->AtBoundary( IRREGULAR );
+      (*it)->AtBoundary( NOT );
+      
     // if only a single flag is contained the decision is easy
     else if ( eflags.size() == 1U )
       (*it)->AtBoundary( (*eflags.begin()) );
+      
     // if there are 2 flags and one of them is IRREGULAR, it is removed
     else if ( eflags.size() == 2U )
     {

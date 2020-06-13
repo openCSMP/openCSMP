@@ -8,7 +8,7 @@
 #include "SplitBoundary.h"
 #include "Model.h"
 
-#define VARIABLE_STORAGE_DEBUG
+// #define VARIABLE_STORAGE_DEBUG
 
 namespace csmp {
 
@@ -443,8 +443,9 @@ LocalVariableStorage<dim, STOREE>::LocalVariableStorage( const LocalVariableStor
 template<size_t dim, template<size_t> class STOREE>
 LocalVariableStorage<dim, STOREE>& LocalVariableStorage<dim, STOREE>::operator=( const LocalVariableStorage& ps )
 {
-    if (&ps != this)
-        data_.data = ps.data_.data;
+    if ( &ps != this )
+      data_.data = ps.data_.data;
+
     return *this;
 }
 
@@ -456,6 +457,7 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
   {
     ResizePropertyStorage( lv.totalDataDepth , lv.totalFlagDepth );
 
+// initialise auxiliary parameters for debugging
 #ifndef NDEBUG
     StoreLocalState(lv);
 #endif
@@ -466,10 +468,10 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
 template<size_t dim, template<size_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariables& lv, const IntegrationPointVariables& ipv )
   {
-    const STOREE<dim>* const parent_class_ptr = static_cast<const STOREE<dim>*>(this);
     const std::pair<size_t, size_t> newContainerSize = lvsCompileTimeDispatch::containerNewSize( static_cast<const STOREE<dim>*>(this), lv, ipv );
     ResizePropertyStorage(newContainerSize.first, newContainerSize.second);
 
+// initialise auxiliary parameters for debugging
 #ifndef NDEBUG
     StoreLocalState(lv);
 #endif

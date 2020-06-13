@@ -2028,7 +2028,7 @@ without modifying the target property and it will report a warning.
  */
 void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
  {
-     csmp::Index  prop_key = sg.Database().StorageKey(el_prop);
+     const csmp::Index  prop_key = sg.Database().StorageKey(el_prop);
 
      if ( prop_key.place != ELEMENT )
        throw csmp::Exception( FATAL_ERROR, "stripDomainEdgesFor<2U>::StripDomainEdgesFor", 
@@ -2059,13 +2059,17 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                // 1. counting the surrounding values that are different from el-value
                double64     sc_sum(0U);
                unsigned int counter(0U);
-               for ( size_t i=0U; i<super_group.E(n)->Neighbors(); i++ ) 
-                 if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) { 
-                      sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
-                      counter++;
-                   }
+               for ( size_t i=0U; i<super_group.E(n)->Neighbors(); i++ ) {
+                   assert( super_group.E(n)->Neighbor(i) != nullptr );
+                   if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ||
+                        sc() < super_group.E(n)->Neighbor(i)->Read( prop_key ) ) { 
+                        sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
+                        counter++;
+                     }
+                 }
                // if more than 2 neighbors have a different property value, this value
                // is assigned to the element
+               // TODO: if were are not dealing with triangular elements, this number (2U) is not correct
                if ( counter >= 2U ) sc = sc_sum / static_cast<double64>(counter);
           
                // storing the new values of only those elements that must be changed
@@ -2079,8 +2083,8 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
            sc_it=new_sc_data.begin(); sc_it!=new_sc_data.end(); sc_it++ )
        super_group.E( (*sc_it).first )->Store( prop_key, (*sc_it).second );
        
-     cout <<"\nstripDomainEdgesFor<2U>::StripDomainEdgesFor: ";
-     cout <<"Boundaries of property regions have been modified..."<< endl;  
+     cout <<"\n\nstripDomainEdgesFor<2U>::StripDomainEdgesFor: "<< new_sc_data.size() <<" '"<< el_prop;
+     cout <<"' domain-edge elements have been modified to create a smoother boundary."<< endl;  
             
    } // end StripRoughDomainEdgesFor
 
@@ -2145,7 +2149,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
                line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
            key.clear();
 
-           // unassign neirghbors outside of the provided vector range		   
+           // unassign neighbors outside of the provided vector range		   
            if ( unassign_neighbors_outside )
            {
              // remove element from neighbor list of its neighbors
