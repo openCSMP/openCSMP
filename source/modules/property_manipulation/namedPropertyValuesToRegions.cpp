@@ -146,41 +146,4 @@ template void replaceElement_NAN_ValuesWith( Model<1U>&, const char*, double64 )
 template void replaceElement_NAN_ValuesWith( Model<2U>&, const char*, double64 );
 template void replaceElement_NAN_ValuesWith( Model<3U>&, const char*, double64 );
 
-
-
-
-/// transforms rational (-1,0..5..n) property values into material IDs stored on the elements
-template<size_t dim>
-void material_IDs_FromPropertyValues( Model<dim>& model, const std::string& elmt_prop_name )
- {
-    const csmp::Index key(model.Database().StorageKey(elmt_prop_name.c_str()));
-    if ( key.type!= SCALAR || key.place != ELEMENT )
-      csmp::Exception( ERROR, "material_IDs_FromPropertyValues", "material identifier property must be a scalar placed on the element");
-
-    Region<dim>& model_domain(model.Region("Model"));
-    int32 mtrl_min(INT_MAX), mtrl_max(INT_MIN);
-    
-    for ( typename vector<Element<dim>*>::iterator 
-          it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-        const double64 value = (*it)->Read(key);
-        // checking that the property value can indeed be converted into an integer in a meaningful range
-        // using the modulus operator % to determine whether the number has a decimal fraction
-        if ( fmod( value, 1. ) != 0 ) {
-             cerr <<"\n\tproperty value: "<< value << endl;
-             csmp::Exception( ERROR, "material_IDs_FromPropertyValues", "material ID contains decimal places and can therefore not be converted to integer.");
-          }
-        const int32 material_identifier = static_cast<int32>(value);
-        mtrl_min = min( mtrl_min, material_identifier );
-        mtrl_max = max( mtrl_max, material_identifier ); 
-        (*it)->Material_ID( material_identifier );
-      }
-  
-    cout <<"\nmaterial_IDs_FromPropertyValues: successfully initialised material ID values in the range "<< mtrl_min <<" to "<< mtrl_max << endl;
-    
- } // end material_IDs_FromPropertyValues
-
-template void material_IDs_FromPropertyValues( Model<1U>&, const string& );
-template void material_IDs_FromPropertyValues( Model<2U>&, const string& );
-template void material_IDs_FromPropertyValues( Model<3U>&, const string& );
-
 } // end csmp
