@@ -2,7 +2,8 @@
 #define HETEROGENEITY_AND_RATE_AWARE_MODEL_H
 
 #include "TwoPhaseModel.h"
-#include "OtwayCRC3_RockTypes.h"
+//#include "OtwayCRC3_RockTypes.h"
+#include "OtwayCRC3_RockTypes_Version_2.h" 
 
 namespace csmp {
 
@@ -79,9 +80,11 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
   
     /// capillary pressure of the non-wetting phase
     virtual double64 pc_Phase() const;
+    double64 pc_Phase_at(double64 sw) const; 
   
     /// numeric implementation of capillary pressure derivative
     virtual double64 dpcds_Phase() const;
+    double64 dpcds_Phase_at(double64 sw) const;
     
     // maximum absolute value returned by dfdS
     virtual double64 MaxFractionalFlowDerivative() const;
@@ -130,6 +133,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     double64 K_flow_direction_, k_low_, k_high_, K_reduction_in_flow_direction_,
              L_low_, L_high_,                ///< permeability in flow direction; smallest over highest permeability
              vt_magnitude_,
+             vt_magnitude_x_, vt_magnitude_y_, 
              krw_, krn_,                     ///< for standard rocktypes 
              krw_parallel_, krw_crossflow_,  ///< for composites 
              krn_parallel_, krn_crossflow_,

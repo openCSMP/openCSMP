@@ -1582,6 +1582,10 @@ template class H2O_CO2_NaCl_FlowFunctions<1U,FlowFunctionsModule6>;
 template class H2O_CO2_NaCl_FlowFunctions<2U,FlowFunctionsModule6>;
 template class H2O_CO2_NaCl_FlowFunctions<3U,FlowFunctionsModule6>;
 
+template class H2O_CO2_NaCl_FlowFunctions<1U,FlowFunctionsModule7>;
+template class H2O_CO2_NaCl_FlowFunctions<2U,FlowFunctionsModule7>;
+template class H2O_CO2_NaCl_FlowFunctions<3U,FlowFunctionsModule7>;
+
 
 } // end namespace csmp
 

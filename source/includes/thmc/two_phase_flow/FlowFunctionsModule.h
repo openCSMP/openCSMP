@@ -15,6 +15,7 @@
 #include "ExperimentalSaturationFunctions.h"
 #include "TwoPhaseFlowFunctions.h"
 #include "H2O_CO2_NaCl_FlowFunctions.h"
+#include "HeterogeneityAndRateAwareSaturationFunctions.h"
 #include "Fluid.h"
 
 namespace csmp {
@@ -135,6 +136,21 @@ class FlowFunctionsModule6 : public variables::VariableSet_CO2GeoSequestration,
 };
 
 typedef FlowFunctionsModule6<3U>  ACGSS_Experimental_Compositional_H2O_CO2_NaCl_FlowFunctions;
+
+
+
+template<size_t dim>
+class FlowFunctionsModule7 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+    public HeterogeneityAndRateAwareSaturationFunctions<dim,FlowFunctionsModule7>,  ///< saturation function model
+    public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule7>,      ///< mobilities etc.
+    public Fluid<dim,FlowFunctionsModule7> {                          ///< fluids module / EOS interface
+      
+   public:
+     FlowFunctionsModule7( const PropertyDatabase<dim>&, double64 acc_gravity );
+     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
+};
+
+typedef FlowFunctionsModule7<3U>  ACGSS_HeterogeneityAndRateAware_Compositional_H2O_CO2_NaCl_FlowFunctions;
 
 } // end csmp
 

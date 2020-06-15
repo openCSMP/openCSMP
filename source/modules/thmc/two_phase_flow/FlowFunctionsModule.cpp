@@ -53,6 +53,13 @@ FlowFunctionsModule6<dim>::FlowFunctionsModule6( PropertyDatabase<dim>& db, doub
     db.SetRangeOf( "rocktype", 0., this->RockTypes() );
  }
 
+template<size_t dim>
+FlowFunctionsModule7<dim>::FlowFunctionsModule7( const PropertyDatabase<dim>& db, double64 acc_gravity )
+ : variables::VariableSet_CO2GeoSequestration(db),
+   acceleration_of_gravity_(acc_gravity)
+ {
+ }
+ 
 
 template class FlowFunctionsModule1<1U>;
 template class FlowFunctionsModule1<2U>;
@@ -77,6 +84,10 @@ template class FlowFunctionsModule5<3U>;
 template class FlowFunctionsModule6<1U>;
 template class FlowFunctionsModule6<2U>;
 template class FlowFunctionsModule6<3U>;
+
+template class FlowFunctionsModule7<1U>;
+template class FlowFunctionsModule7<2U>;
+template class FlowFunctionsModule7<3U>;
 
 
 } // end namespace csmp

@@ -183,6 +183,9 @@ template class Fluid<1U,FlowFunctionsModule6>;
 template class Fluid<2U,FlowFunctionsModule6>;
 template class Fluid<3U,FlowFunctionsModule6>; 
 
+template class Fluid<1U,FlowFunctionsModule7>;
+template class Fluid<2U,FlowFunctionsModule7>;
+template class Fluid<3U,FlowFunctionsModule7>;
 
 
 

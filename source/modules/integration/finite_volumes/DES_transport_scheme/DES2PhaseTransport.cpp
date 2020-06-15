@@ -285,6 +285,10 @@ template class DES2PhaseTransport<1U,FlowFunctionsModule6>;
 template class DES2PhaseTransport<2U,FlowFunctionsModule6>;
 template class DES2PhaseTransport<3U,FlowFunctionsModule6>;
 
+template class DES2PhaseTransport<1U,FlowFunctionsModule7>;
+template class DES2PhaseTransport<2U,FlowFunctionsModule7>;
+template class DES2PhaseTransport<3U,FlowFunctionsModule7>;
+
 } // end csmp  
     
     
