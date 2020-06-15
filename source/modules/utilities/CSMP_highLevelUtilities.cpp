@@ -2061,8 +2061,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                unsigned int counter(0U);
                for ( size_t i=0U; i<super_group.E(n)->Neighbors(); i++ ) {
                    assert( super_group.E(n)->Neighbor(i) != nullptr );
-                   if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ||
-                        sc() < super_group.E(n)->Neighbor(i)->Read( prop_key ) ) { 
+                   if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) { 
                         sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
                         counter++;
                      }

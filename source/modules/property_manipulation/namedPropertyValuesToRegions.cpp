@@ -87,9 +87,9 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
 
   cout << "\nnamedPropertyValuesToRegions: generating model regions from 'property' integer codes using data from file: " << file_name;
   for ( auto it = prop_value_region_name_mapping.begin(); it != prop_value_region_name_mapping.end(); ++it ) {
-    cout << "\n\t" << it->second.c_str();
-    model.FormRegionFrom( it->second.c_str(), prop_name.c_str(), it->first, it->first, unique );
-  }
+       cout << "\n\t" << it->second.c_str();
+       model.FormRegionFrom( it->second.c_str(), prop_name.c_str(), it->first, it->first, unique );
+    }
   cout << "\n\n";
 
   set<int32>   region_identifiers_without_name;
@@ -110,10 +110,10 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
       region_identifiers_without_name.insert( region_identifier );
   }
   if ( !region_identifiers_without_name.empty() ) {
-    for ( auto p : region_identifiers_without_name ) cerr << p << " ";
-    csmp_error.notice( WARNING, "namedPropertyValuesToRegions:",
-                       "there were elements with unrecognized property identifiers; they were ignored." );
-  }
+       for ( auto p : region_identifiers_without_name ) cerr << p << " ";
+       csmp_error.notice( WARNING, "namedPropertyValuesToRegions:",
+                         "there were elements with unrecognized property identifiers; they were ignored." );
+    }
 
 } // end namedPropertyValuesToRegions
 
@@ -123,27 +123,42 @@ template void namedPropertyValuesToRegions( Model<3U>&, const string&, const str
 
 
 
-
-/// to remove NO_DATA values which were converted to NAN.
+/**
+      To remove NO_DATA values which were converted to NAN.
+*/
 template<size_t dim>
-void replaceElement_NAN_ValuesWith( Model<dim>& model, const char* element_var, double64 replacement_val )
+size_t replaceElement_NAN_ValuesWith( Model<dim>& model, const std::string& element_var, double64 replacement_val )
  {
-    const csmp::Index key(model.Database().StorageKey(element_var));
-    if ( key.type!= SCALAR || key.place != ELEMENT )
-      csmp::Exception( ERROR, "replaceElement_NAN_ValuesWith", "region identifier property must be a scalar placed on the element");
-    
+    const csmp::Index key(model.Database().StorageKey(element_var.c_str()));
+
+     if ( key.type != SCALAR )
+       throw csmp::Exception( ERROR, "smoothElementData", "method works only for scalar variables; not done");
+
+     if ( key.place != ELEMENT )
+       throw csmp::Exception( ERROR, "smoothElementData", "for the smoothing, the property variables must be placed on the element");
+
     Region<dim>& model_domain(model.Region("Model"));
     
+    size_t NANs_detected(0U);
     for ( typename vector<Element<dim>*>::iterator 
           it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-        if ( isnan( (*it)->Read(key) ) )
-          (*it)->Store( key, makeScalar(ANY,replacement_val) );
+        if ( isnan( (*it)->Read(key) ) ) {
+             (*it)->Store( key, makeScalar(ANY,replacement_val) );
+          }
       }
+      
+    if ( NANs_detected > 0 ) {
+         cout <<"\n\nreplaceElement_NAN_ValuesWith: detected "<< NANs_detected;
+         cout <<" '"<< element_var <<"' element property values, replacing them by "<< replacement_val;
+         cout << endl;
+      }
+    
+    return NANs_detected;
     
  } // end replaceElement_NAN_ValuesWith
 
-template void replaceElement_NAN_ValuesWith( Model<1U>&, const char*, double64 );
-template void replaceElement_NAN_ValuesWith( Model<2U>&, const char*, double64 );
-template void replaceElement_NAN_ValuesWith( Model<3U>&, const char*, double64 );
+template size_t replaceElement_NAN_ValuesWith( Model<1U>&, const std::string&, double64 );
+template size_t replaceElement_NAN_ValuesWith( Model<2U>&, const std::string&, double64 );
+template size_t replaceElement_NAN_ValuesWith( Model<3U>&, const std::string&, double64 );
 
 } // end csmp

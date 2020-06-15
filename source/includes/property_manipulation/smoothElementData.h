@@ -34,6 +34,10 @@ void smoothElementData( Model<dim>&,
                         bool log10_smoothing = false,      ///< creates a more patchy pattern with emphasis on the high values
                         bool in_plane_smoothing = false ); ///< only in the horizontal plane in as much as algorithm can resolve
 
+/// smoothes porosity and permeability distributions in current model
+template<size_t dim>
+void smoothPorosityAndPermeabilityDistribution( Model<dim>& );
+
 } // end csmp
 
 #endif /* CSMP_SMOOTH_ELEMENT_DATA_H */

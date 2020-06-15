@@ -22,7 +22,7 @@ class SKUA_Interface {
   
     /// region-by-region property assignment from column-based texfile (Kuncho Kurtev)
     template<size_t dim>
-    bool ImportElementPropertyValuesFromSKUA( Model<dim>& );
+    bool ImportElementPropertyValuesFromSKUA( Model<dim>&, const std::string& data_file=std::string() );
 
 
   // OUTPUT INTERFACES FOR POINT DATA (DOIMOI FAULT MODELLING 2011-2013)

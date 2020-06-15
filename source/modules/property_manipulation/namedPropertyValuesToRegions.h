@@ -19,9 +19,9 @@ template<size_t> class Model;
 template<size_t dim>
 void  namedPropertyValuesToRegions( Model<dim>&, const std::string& prop_name, const std::string& region_identifier_file );
 
-/// to remove NO_DATA values converted to NAN (not a number).
+/// to remove NO_DATA values converted to NAN (not a number), but only for scalar element property values.
 template<size_t dim>
-void replaceElement_NAN_ValuesWith( Model<dim>&, const char* element_var, double64 replacement_val );
+size_t replaceElement_NAN_ValuesWith( Model<dim>&, const std::string& element_var, double64 replacement_val );
 
 } // end csmp
 

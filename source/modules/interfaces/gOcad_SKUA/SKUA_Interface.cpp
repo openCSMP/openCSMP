@@ -94,11 +94,13 @@ void SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion( const Mod
      @author SKM
 */
 template<size_t dim>
-bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
+bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, const std::string& data_file )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     string  bc_file_name( model.Name() );
     bc_file_name += "-element_barycentre_properties.txt";
+    // overwrite the default file name if a name argument was supplied to method
+    if ( !data_file.empty() ) bc_file_name = data_file;
 
     ifstream  bc_ifs( bc_file_name );
     if ( !bc_ifs.is_open() ) {
@@ -152,7 +154,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
     map<string,deque<pair<size_t,vector<pair<bool,double64> > > > > region_data;
     // keeping statistics of range checks that failed and which properties were affected
     // property name, number of failures
-    map<string,size_t> range_ckeck_failures;
+    map<string,size_t> range_check_failures;
    
     // start to read properties
     bc_ifs.getline( text_line, LMAX );
@@ -177,11 +179,9 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
                    if ( static_cast<long>(prop_value) != -9999 && static_cast<long>(prop_value) != -99999 ) {
                         cerr <<"\nOut-of-range value of '"<< properties[i] <<"' = "<< std::scientific << prop_value;
                         cerr <<" (region "<< region_name <<", element "<< elmt_num <<"), will be ignored.\n";
-                     }
-                   else {
-                        pair<map<string,size_t>::iterator,bool> it=range_ckeck_failures.insert( make_pair(properties[i],1) );
+                        pair<map<string,size_t>::iterator,bool> it=range_check_failures.insert( make_pair(properties[i],1) );
                         if ( it.second == false ) (*it.first).second++; // incrementing the failure count
-                     }
+                     }                                             // false means that value will not be mapped
                    elmt_prop_values.second[i-first_prop] = make_pair( false, prop_value );
                 }
               else elmt_prop_values.second[i-first_prop] = make_pair( true, prop_value );
@@ -259,10 +259,10 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
       } // end loop over the regions
    
    // reporting
-   if ( !range_ckeck_failures.empty() ) {
+   if ( !range_check_failures.empty() ) {
         csmp_error.notice( WARNING, "importElementPropertyValuesFromSKUA:",
                               "range checks failed for several variable values." );
-        for ( auto it=range_ckeck_failures.begin(); it!=range_ckeck_failures.end(); ++it )
+        for ( auto it=range_check_failures.begin(); it!=range_check_failures.end(); ++it )
           cerr <<"\n\t"<< (*it).second <<" range check failures occured for variable '"<< (*it).first <<"'";
         cerr << endl;
         return false;
@@ -274,8 +274,8 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
    
 } // end ImportElementPropertyValuesFromSKUA
 
-template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<2U>&  );
-template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<3U>&  );
+template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<2U>&, const std::string& );
+template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<3U>&, const std::string& );
 
 
 

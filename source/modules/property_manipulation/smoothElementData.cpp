@@ -10,6 +10,7 @@
 #include "Model.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
+#include "VTU_Interface.h"
 
 using namespace std;
 
@@ -261,5 +262,37 @@ void smoothElementData( Model<dim>& model,
  } // end smoothElementData
 
 template void smoothElementData( Model<2U>&, const string&, const string&, int, bool, bool );
+template void smoothElementData( Model<3U>&, const string&, const string&, int, bool, bool );
+
+
+
+/**
+     Smoothing of porosity and permeability values by extrapolation to the node and interpolation back to the elements.
+           - a single smoothing pass is applied.
+           
+     (other methods were tested with less success, see function body)
+
+    developed for SMOOTHING OF CRC3-CRC2 2D CROSS-SECTION (SKM5/2/2020)
+*/
+template<size_t dim>
+void smoothPorosityAndPermeabilityDistribution( Model<dim>& model )
+  {
+     const int  smoothing_passes(1);
+     const bool log10_smoothing(false);  // creates more patchy pattern
+     const bool in_plane_smoothing(false);
+
+     smoothElementData( model, "Model", "permeability",  smoothing_passes, log10_smoothing, in_plane_smoothing );
+     smoothElementData( model, "Model", "porosity",  smoothing_passes, log10_smoothing, in_plane_smoothing );
+     
+     printRangeOfVariable( model, "permeability" );
+     printRangeOfVariable( model, "porosity" );
+ 
+ } // end smooth data
+
+template void smoothPorosityAndPermeabilityDistribution( Model<2U>& );
+template void smoothPorosityAndPermeabilityDistribution( Model<3U>& );
+
+
+
 
 } // end csmp
