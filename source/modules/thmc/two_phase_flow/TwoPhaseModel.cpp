@@ -18,8 +18,8 @@ TwoPhaseModel<dim>::TwoPhaseModel()
    ift_(0.05), // N m-1 Danesh (2003), p. 292
    acc_gravity_(ACC_GRAVITY),
    tolerance_(numeric_limits<double64>::epsilon()),
-   MAX_CAPILLARY_PRESSURE_(4e7), // maximum strength of a rock
-   MAX_CAPILLARY_PRESSURE_SLOPE_(1e7), // maximum strength of a rock
+   MAX_CAPILLARY_PRESSURE_(4e7),       // maximum tensile strength of a rock
+   MAX_CAPILLARY_PRESSURE_SLOPE_(1e7), // maximum slope of the capillary pressure curve
    interpolate_fluid_properties_(false),
    sw_ro_mu_placement_(true)
  {
