@@ -27,7 +27,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( Element<
     assert( sH2O <= 1. );
     const double64 seff = (sH2O - e->Read(User()->key_srH2O)) /
                           (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
-    return seff;
+    
+    return max( min( seff, 1. ), 0. );
   }
 
 
@@ -41,7 +42,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( Eleme
     assert( sw >= 0. );
     assert( sw <= 1. );
 
-     return (sw - e->Read(User()->key_srH2O)) / (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    const double64 seff = (sw - e->Read(User()->key_srH2O)) / (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    return max( min( seff, 1. ), 0. );
   }
 
 

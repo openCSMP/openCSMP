@@ -128,6 +128,7 @@ TARGET_LINK_LIBRARIES(csmpcore ${SAMG_LIBRARIES})
 
 # XXX We shouldn't depend on the examples directory.
 TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${GEN_INCLUDES_DIR}
     ${INCLUDES_DIR}/analysis
     ${INCLUDES_DIR}/thmc/fractures
