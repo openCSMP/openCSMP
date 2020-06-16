@@ -13,9 +13,17 @@ namespace csmp {
 /**
    The default constructor of Brooks Corey Saturation Functions class
 */
-template<size_t dim, template<size_t> class USER> HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::HeterogeneityAndRateAwareSaturationFunctions()
+template<size_t dim, template<size_t> class USER> 
+HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::HeterogeneityAndRateAwareSaturationFunctions()
 {
 }
+
+
+template<size_t dim, template<size_t> class USER> 
+HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::~HeterogeneityAndRateAwareSaturationFunctions()
+ {
+ }
+
 
 
 template<size_t dim, template<size_t> class USER>

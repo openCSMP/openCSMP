@@ -16,6 +16,8 @@ template<size_t dim, template<size_t> class USER>
 class HeterogeneityAndRateAwareSaturationFunctions {
   public:
         HeterogeneityAndRateAwareSaturationFunctions();
+        
+        virtual ~HeterogeneityAndRateAwareSaturationFunctions();
   
         // pc, kri, and derivative methods that use a user supplied saturation value
         
