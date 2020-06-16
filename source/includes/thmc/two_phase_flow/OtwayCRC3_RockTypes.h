@@ -1142,8 +1142,11 @@ struct CRC3_RockType14 {
 
 /// Tuple container to return rocktype by number (std::get<1>(rocktypes_);
 struct OtwayRockTypes {
-    template<int RT>
-    bool IsComposite() const { return get<RT>(rocktype_).IsComposite(); }
+    bool IsComposite( int RT ) const {
+         if ( RT == 2 || RT == 4 || RT == 5 || RT == 6 || 
+              RT == 7 || RT == 8 || RT == 9 || RT == 11 || RT == 12 || RT == 14 ) return true;
+         return false;
+      }
     
     std::tuple<CRC3_RockType0, // well
                CRC3_RockType1,CRC3_RockType2,CRC3_RockType3,

@@ -15,6 +15,7 @@
 // HARDCODED ROCK PROPERTIES FOR SIMULATION OF CRC3-CRC2 CROSS SECTION
 // based on data compiled by Maartje Boon (23/9/2019)
 // SKM 24/9/19 - replaced layer thicknesses with volume fractions
+// Qi Shao - updated to represent M. Boons, June-2020, Chirichi curve fits of rocktypes
 
 namespace csmp {
 
@@ -1275,9 +1276,9 @@ struct CRC3_RockType14 {
 /// Tuple container to return rocktype by number (std::get<1>(rocktypes_);
 struct OtwayRockTypes {
     bool IsComposite( int RT ) const {
-         // TODO: update if changes are made
-         if ( RT <= 3 || RT == 10 || RT == 13 || RT == 15 ) return false;
-         return true;
+         if ( RT == 2 || RT == 4 || RT == 5 || RT == 6 || 
+              RT == 7 || RT == 8 || RT == 9 || RT == 11 || RT == 12 || RT == 14 ) return true;
+         return false;
       }
     
     std::tuple<CRC3_RockType0, // well

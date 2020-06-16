@@ -1,7 +1,7 @@
 #include "HeterogeneityAndRateAwareModel.h"
 #include "PropertyDatabase.h"
 #include "ErrorHandler.h"
-//#include "OtwayCRC3_RockTypes.h"
+//#include "OtwayCRC3_RockTypes.h" - March 2020 version of Maartje's curve fits for drainage relperms and pc(sw)
 #include "OtwayCRC3_RockTypes_Version_2.h" 
 
 //#define DEBUG_HETEROGENEITY_AWARE_MODEL
