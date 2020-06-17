@@ -211,7 +211,7 @@ void LinearTriangle::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) c
          fnids[1] = 1;
       }
     else
-    std::cout <<"\nLinearTriangle::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
+    std::cerr <<"\nLinearTriangle::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
 
 
@@ -326,9 +326,9 @@ void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
                                                   vector<size_t>& fnids )
  {
      if ( bnodes.size() < 2 ) {
-           cout <<"\n\tnodes at boundary: ";
-           for ( size_t j=0; j<bnodes.size(); j++ ) cout << bnodes[j] <<" ";
-           cout << endl;
+           cerr <<"\n\tnodes at boundary: ";
+           for ( size_t j=0; j<bnodes.size(); j++ ) cerr << bnodes[j] <<" ";
+           cerr << endl;
            throw csmp::Exception( ERROR, "LinearTriangle::ConsecutiveNodesAtBoundary",
                                       "Two nodes should be located at a boundary ! -",
                                       "correct input to meet this criterion." );
@@ -413,8 +413,8 @@ void LinearTriangle::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nLinearTriangle::OutputNodeDataToVTK "; 
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nLinearTriangle::OutputNodeDataToVTK "; 
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }  
        

@@ -1661,8 +1661,7 @@ IsoparametricQuadraticHexahedron::InnerRadius()
 
    // Function will produce unrelible value for high aspect ratio elements
    if(AspectRatio()>4.0)
-   cout<<" IsoparametricLinearHexahedron::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
-
+     cerr<<"\nIsoparametricLinearHexahedron::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
    return Volume() / (sum/6.);
 }

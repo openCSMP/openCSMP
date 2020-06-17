@@ -1570,9 +1570,9 @@ IsoparametricLinearHexahedron::InnerRadius()
    EdgeLengths( segms );
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
 
-   // Function will produce unrelible value for high aspect ratio elements
-   if(AspectRatio()>4.0)
-   cout<<" IsoparametricLinearHexahedron::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+   // Function will produce unreliable value for high aspect ratio elements
+   if (AspectRatio()>4.0)
+     cerr<<"\nIsoparametricLinearHexahedron::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
     // Originally sum/2.
    return Volume() / (sum/6.);
@@ -1588,7 +1588,7 @@ for the element.
 void
 IsoparametricLinearHexahedron::MidSideNodes(std::vector<size_t>& ids) const
  {
-    cout<<" IsoparametricLinearHexahedron::MidSideNodes WARNING: MidSideNodes not present "<<endl;
+    cerr<<"\nIsoparametricLinearHexahedron::MidSideNodes: WARNING: MidSideNodes not present.\n"<<endl;
     ids[0]=0;
  }
 

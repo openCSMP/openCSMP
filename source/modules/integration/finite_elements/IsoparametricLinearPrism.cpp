@@ -1292,7 +1292,7 @@ IsoparametricLinearPrism::InnerRadius()
    //cout<<" IsoparametricLinearPrism::InnerRadius: WARNING: function not tetsted"<<endl;
 
    if(AspectRatio()>4.0)
-   cout<<" IsoparametricLinearPrism::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+     cerr<<"\nIsoparametricLinearPrism::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
 
    return Volume() / (sum/6.);
@@ -1311,7 +1311,7 @@ for the element.
 void
 IsoparametricLinearPrism::MidSideNodes(std::vector<size_t>& ids) const
  {
-    cout<<" IsoparametricLinearPrism::MidSideNodes WARNING: MidSideNodes not present "<<endl;
+    cerr<<"\nIsoparametricLinearPrism::MidSideNodes WARNING: MidSideNodes not present.\n"<<endl;
     ids[0]=0;
  }
 
@@ -1463,8 +1463,8 @@ IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricLinearPrism::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricLinearPrism::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 

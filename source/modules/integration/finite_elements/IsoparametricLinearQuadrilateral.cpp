@@ -275,7 +275,7 @@ IsoparametricLinearQuadrilateral::NodesOfFace( size_t face_id,
 
       }
     else
-    std::cout <<"\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
+    std::cerr <<"\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
 
 
@@ -301,7 +301,7 @@ IsoparametricLinearQuadrilateral::NodesOfSegment( size_t segm_id, std::vector<si
          snids[1] = 0;
       }
     else
-    std::cout <<"\nIsoparametricLinearQuadrilateral::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
+    std::cerr <<"\nIsoparametricLinearQuadrilateral::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
 
  } // end NodesOfSegment
 
@@ -1686,8 +1686,8 @@ double64  IsoparametricLinearQuadrilateral::JacobianInverse()
     JINV(1,1)  =  dum;
 
     if ( detJ <= 0 ) {
-         std::cout <<"\nIsoparametricLinearQuadrilateral::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
-         std::cout << detJ << std::endl;
+         std::cerr <<"\nIsoparametricLinearQuadrilateral::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
+         std::cerr << detJ << std::endl;
          throw std::range_error("IsoparametricLinearQuadrilateral::JacobianInverse");
       }
 

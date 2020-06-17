@@ -56,7 +56,7 @@ void  LinearLineElement::CornerNodes( std::vector<size_t>& ids ) const
 void LinearLineElement::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
  {
     if ( segm_id > 1 )
-      std::cout <<"\nLinearLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
+      std::cerr <<"\nLinearLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
     snids.resize(2);
     snids[0] = 0;
     snids[1] = 1;
@@ -342,7 +342,7 @@ double64 LinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN )
       }
 */
     if ( dim == 3 ) {
-         cout <<"LinearLineElement::dN_AtNode: Method not implemented for 3D case. "<< endl;
+         cerr <<"LinearLineElement::dN_AtNode: Method not implemented for 3D case. "<< endl;
          terminate();
       }
 
@@ -506,8 +506,8 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nLinearLineElement::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nLinearLineElement::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 

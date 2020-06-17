@@ -1314,7 +1314,7 @@ IsoparametricLinearPyramid::InnerRadius()
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
 
    if(AspectRatio()>4.0)
-   cout<<" IsoparametricLinearPyramid::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+      cerr<<"\nIsoparametricLinearPyramid::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
    return Volume() / (sum/6.);
 }
@@ -1332,8 +1332,7 @@ for the element.
 void
 IsoparametricLinearPyramid::MidSideNodes(std::vector<size_t>& ids) const
  {
-    cout<<
-    " IsoparametricLinearPyramid::MidSideNodes ***WARNING: For linear element MidSideNodes not present... "<<endl;
+    cerr<<"\nIsoparametricLinearPyramid::MidSideNodes WARNING: linear element has no MidSideNodes.\n"<<endl;
     ids[0]=0;
  }
  

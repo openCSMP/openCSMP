@@ -377,7 +377,7 @@ IsoparametricQuadraticTetrahedron::NodesOfSegment( size_t segm_id, std::vector<s
          snids[2] = 9;
       }
     else
-    std::cout <<"\nIsoparametricQuadraticTetrahedron::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
+    std::cerr <<"\nIsoparametricQuadraticTetrahedron::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
 
  } // end NodesOfSegment
 
@@ -1498,8 +1498,8 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricQuadraticTetrahedron::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricQuadraticTetrahedron::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 

@@ -80,7 +80,7 @@ void LinearTriangle3D::NodesOfFace( size_t face_id, std::vector<size_t>& fnids )
          fnids[1] = 1;
       }
     else
-    std::cout <<"\nLinearTriangle3D::NodesOfFace: Erratic face ID: "<< face_id << std::endl;
+    std::cerr <<"\nLinearTriangle3D::NodesOfFace: Erratic face ID: "<< face_id << std::endl;
  }
 
 
@@ -621,8 +621,8 @@ void LinearTriangle3D::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nLinearTriangle3D::OutputNodeDataToVTK "; 
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nLinearTriangle3D::OutputNodeDataToVTK "; 
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }  
        
@@ -723,8 +723,8 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nLinearTriangle3D::OutputToVTK "; 
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nLinearTriangle3D::OutputToVTK "; 
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }  
        

@@ -901,7 +901,7 @@ IsoparametricLinearTetrahedron::InnerRadius()
    for ( size_t i=0; i<spe; i++ ) sum += NRST[i];
 
    if(AspectRatio()>4.)
-   cout<<" IsoparametricLinearTetrahedron::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+     cerr<<"\nIsoparametricLinearTetrahedron::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
    return Volume() / (sum/2.);
 }

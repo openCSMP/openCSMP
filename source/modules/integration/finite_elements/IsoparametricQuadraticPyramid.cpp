@@ -172,7 +172,7 @@ IsoparametricQuadraticPyramid::NodesOfSegment( size_t segm_id, std::vector<size_
          snids[2] = 12;
       }
     else
-    std::cout <<"\nIsoparametricQuadraticPyramid::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
+    std::cerr <<"\nIsoparametricQuadraticPyramid::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
 
  } // end NodesOfSegment
 
@@ -249,7 +249,7 @@ IsoparametricQuadraticPyramid::NodesOfFace( size_t face_id, std::vector<size_t>&
          fnids[5] = 8;
       }
     else
-    std::cout <<"\nIsoparametricQuadraticPyramid::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
+    std::cerr <<"\nIsoparametricQuadraticPyramid::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
 
 CSMP_FEM_TYPE
@@ -321,8 +321,8 @@ IsoparametricQuadraticPyramid::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricQuadraticPyramid::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricQuadraticPyramid::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 
@@ -1500,7 +1500,7 @@ IsoparametricQuadraticPyramid::InnerRadius()
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
 
    if(AspectRatio()>4.0)
-   cout<<" IsoparametricQuadraticPyramid::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+     cerr<<"\nIsoparametricQuadraticPyramid:::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
    return Volume() / (sum/6.);
 }

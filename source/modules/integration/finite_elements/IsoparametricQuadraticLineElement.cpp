@@ -199,7 +199,7 @@ void  IsoparametricQuadraticLineElement::MidSideNodes( std::vector<size_t>& ids 
 void IsoparametricQuadraticLineElement::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
  {
     if ( segm_id > 1U )
-      std::cout <<"\nIsoparametricQuadraticLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
+      std::cerr <<"\nIsoparametricQuadraticLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
     snids.resize(3);
     snids[0] = 0;
     snids[1] = 1;  
@@ -215,7 +215,7 @@ void IsoparametricQuadraticLineElement::NodesOfSegment( size_t segm_id, std::vec
 void  IsoparametricQuadraticLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
     if ( face_id > 1U )
-      std::cout <<"\nIsoparametricQuadraticLineElement::NodesOfFace: There are only 2 faces present."<< std::endl;
+      std::cerr <<"\nIsoparametricQuadraticLineElement::NodesOfFace: There are only 2 faces present."<< std::endl;
     fnids.resize(1U);
     fnids[0] = face_id;
  }
@@ -565,7 +565,7 @@ void  IsoparametricQuadraticLineElement::UnitNormal( vector<double64>& vc ) cons
          vc[0] /= sum;
          vc[1] /= sum;
          vc[2] /= sum;
-         cout <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
+         cerr <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
          return;
       }
 
@@ -741,8 +741,8 @@ void IsoparametricQuadraticLineElement::OutputNodeDataToVTK( const char* file_na
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricQuadraticLineElement::OutputNodeDataToVTK "; 
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricQuadraticLineElement::OutputNodeDataToVTK "; 
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }  
        

@@ -1532,8 +1532,8 @@ void IsoparametricQuadraticTriangle::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nQuadraticTriangle::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nQuadraticTriangle::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 

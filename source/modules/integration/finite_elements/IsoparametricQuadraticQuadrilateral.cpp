@@ -160,7 +160,7 @@ IsoparametricQuadraticQuadrilateral::NodesOfFace( size_t face_id,
          fnids[2] = 0;
       }
     else
-    std::cout <<"\nIsoparametricQuadraticQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
+    std::cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
 
 
@@ -191,7 +191,7 @@ IsoparametricQuadraticQuadrilateral::NodesOfSegment( size_t segm_id, std::vector
          snids[2] = 7;
       }
     else
-    std::cout <<"\nIsoparametricQuadraticQuadrilateral::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
+    std::cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
 
  } // end NodesOfSegment
 
@@ -346,7 +346,7 @@ double64  IsoparametricQuadraticQuadrilateral::InnerRadius()
    vol  = Volume();
    vol /= sum;
 
-   cout<<" IsoparametricQuadraticQuadrilateral::InnerRadius():  ***WARNING: Approximate radius - not valid for HAR elements"<<endl;
+   cerr<<"\nIsoparametricQuadraticQuadrilateral::InnerRadius: WARNING: Approximate radius - not valid for high-aspect ratio elements.\n"<<endl;
 
    return vol;
 }
@@ -1471,8 +1471,8 @@ IsoparametricQuadraticQuadrilateral::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricQuadraticQuadrilateral3D::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricQuadraticQuadrilateral3D::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 
@@ -1654,8 +1654,8 @@ IsoparametricQuadraticQuadrilateral::JacobianInverse()
     JINV(1,1)  =  dum;
 
     if ( detJ <= 0 ) {
-         std::cout <<"\nIsoparametricQuadraticQuadrilateral::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
-         std::cout << detJ << std::endl;
+         std::cerr <<"\nIsoparametricQuadraticQuadrilateral::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
+         std::cerr << detJ << std::endl;
          throw std::range_error("IsoparametricQuadraticQuadrilateral::JacobianInverse");
       }
 

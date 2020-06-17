@@ -863,7 +863,7 @@ void  IsoparametricLinearLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
         return;
      }
      else
-       cout<<" IsoparametricLinearLineElement::IntegralN: dim="<<dim<<" is not supported."<<endl;
+       cerr<<"\nIsoparametricLinearLineElement::IntegralN: dim="<<dim<<" is not supported."<<endl;
 
  } // end IntegralN
 
@@ -986,8 +986,8 @@ void IsoparametricLinearLineElement::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricLinearLineElement::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricLinearLineElement::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 

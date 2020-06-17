@@ -76,7 +76,7 @@ IsoparametricLinearTriangle::IsoparametricLinearTriangle( size_t dimensions,
     }
     else
     {
-        cout<<" IsoparametricLinearTriangle::IsoparametricLinearTriangle Number of integration points not supported: "<<ipoints<<endl;
+        cerr<<" IsoparametricLinearTriangle::IsoparametricLinearTriangle Number of integration points not supported: "<<ipoints<<endl;
         throw std::range_error
         ("***ERROR: IsoparametricLinearTriangle::IsoparametricLinearTriangle N of integration points should be 1,3 or 4");
     }
@@ -236,7 +236,7 @@ IsoparametricLinearTriangle::NodesOfSegment( size_t segm_id, std::vector<size_t>
          snids[1] = 0;
       }
     else
-    std::cout <<"IsoparametricLinearTriangle::NodesOfSegment: Segment ID out of range: "<< segm_id << std::endl;
+    std::cerr <<"IsoparametricLinearTriangle::NodesOfSegment: Segment ID out of range: "<< segm_id << std::endl;
  }
 
 
@@ -314,7 +314,7 @@ elements in the mesh).
 */
 void  IsoparametricLinearTriangle::MidSideNodes( std::vector<size_t>& ) const
  {
-     std::cout <<"\nIsoparametricLinearTriangle::MidSideNodes Not present..."<<std::endl;
+     std::cerr <<"\nIsoparametricLinearTriangle::MidSideNodes Not present..."<<std::endl;
  }
 
 
@@ -447,7 +447,7 @@ double64  IsoparametricLinearTriangle::InnerRadius()
     for ( size_t i=0; i<spe; i++ ) sum += NRST[i];
 
     if(AspectRatio()>4.)
-    cout<<" IsoparametricLinearTetrahedron::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+     cerr<<"\nIsoparametricLinearTriangle::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
     return Volume() / (sum/2.);
 
@@ -1309,8 +1309,8 @@ IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricLinearTriangle3D::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricLinearTriangle3D::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 
@@ -1513,8 +1513,8 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
     JINV(1,1)  =  dum;
 
     if ( detJ <= 0 ) {
-         std::cout <<"\nIsoparametricLinearTriangle::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
-         std::cout << detJ << std::endl;
+         std::cerr <<"\nIsoparametricLinearTriangle::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
+         std::cerr << detJ << std::endl;
          throw std::range_error("IsoparametricLinearTriangle::JacobianInverse");
     }
 
