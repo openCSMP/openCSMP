@@ -78,7 +78,8 @@ void smoothElementData( Model<dim>& model,
                         const std::string& region_to_be_smoothed, 
                         const std::string& variable_name,
                         int number_of_smoothing_cycles, 
-                        bool log10_smoothing, bool in_plane_smoothing )
+                        bool log10_smoothing, bool in_plane_smoothing,
+                        bool output_model_to_binary )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
  
@@ -251,18 +252,19 @@ void smoothElementData( Model<dim>& model,
 
     // 5. saving the model to disk  (using the extension -smoothed#, where # is the number of iterations
     // -------------------------------------------------------------------------------------------------
-    string  output_fileset( model.Name() );
-    if ( log10_smoothing ) output_fileset +="log10-";
-    output_fileset +="-smoothed";
-    output_fileset += to_string(number_of_smoothing_cycles);
-    
-    // file output
-    model.OutputToBinaryFile( output_fileset.c_str() );
+    if ( output_model_to_binary ) {
+         string  output_fileset( model.Name() );
+         if ( log10_smoothing ) output_fileset +="log10-";
+         output_fileset +="-smoothed";
+         output_fileset += to_string(number_of_smoothing_cycles);
+         // CSMP-native file output
+         model.OutputToBinaryFile( output_fileset.c_str() );
+      }
 
  } // end smoothElementData
 
-template void smoothElementData( Model<2U>&, const string&, const string&, int, bool, bool );
-template void smoothElementData( Model<3U>&, const string&, const string&, int, bool, bool );
+template void smoothElementData( Model<2U>&, const string&, const string&, int, bool, bool, bool );
+template void smoothElementData( Model<3U>&, const string&, const string&, int, bool, bool, bool );
 
 
 

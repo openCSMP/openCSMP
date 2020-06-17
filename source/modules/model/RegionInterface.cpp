@@ -586,7 +586,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputAllRegionsToBinary( const char*
     std::string heading( "RegionInterface::OutputAllRegionsToBinary: " );
     heading += "region information for Model '";
     heading += regionComplex.Name();
-    heading += "' to file: ";
+    heading += "' written to file: ";
     heading += bin_file;
     heading += "'.";
 

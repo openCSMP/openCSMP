@@ -78,11 +78,11 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     virtual double64 krw_Phase() const;
     virtual double64 krn_Phase() const;
   
-    /// capillary pressure of the non-wetting phase
+    /// capillary pressure of the non-wetting phase; cap value is applied
     virtual double64 pc_Phase() const;
     double64 pc_Phase_at(double64 sw) const; 
   
-    /// numeric implementation of capillary pressure derivative
+    /// numeric implementation of capillary pressure derivative; cap value is applied
     virtual double64 dpcds_Phase() const;
     double64 dpcds_Phase_at(double64 sw) const;
     
@@ -95,12 +95,14 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     virtual void Out( size_t phase ) const;
   
   private:
+    /// takes permeability values (from Model or Rocktypes) and initialises scalar permeability k and tensor K in TwoPhaseModel base class
+    void InitialisePermeability( const Element<dim>& e, bool k_from_rocktypes );
     /// weighted average
     double64  PermeabilityParallelToLaminations() const;
     /// harmonic mean
     double64  PermeabilityPerpendicularToLaminations() const;
-    /// tensor decomposition
-    double64  PermeabilityInFlowDirection( const TensorVariable<dim>& perm, const VectorVariable<dim>& normalised_mixture_velocity ) const;
+    /// kv, kh tensor decomposition
+    double64  PermeabilityInFlowDirection( const VectorVariable<dim>& normalised_mixture_velocity ) const;
     /// Prominent direction of flow
     FLOW_DIRECTION ProminentFlowDirection( const VectorVariable<dim>& vt ) const;
     /// volume averaged irreducible water saturation
@@ -115,11 +117,14 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     // TODO: add function that assesses whether we are dealing with imbibition or drainage
   
   private:
-    const csmp::Index  RRT_key_, pf_key_, k_key_, vt_key_;
+    const csmp::Index  RRT_key_,         ///<  reservoir rock type
+                       pf_key_,          ///<  (absolute) fluid pressure
+                       kh_key_, kv_key_, ///<  horizontal and vertical permeability values
+                       phi_key_,         ///< porosity (only used to write values if the RT values are to be used)
+                       vt_key_;          ///<  total velocity of the fluid mixture
   
-    mutable DenseMatrix<DM_MIN>  DN_; ///< for gradient computations
-    TensorVariable<dim>          KK_; ///< tensor permeability
-    VectorVariable<dim>          vt_; ///< velocity
+    mutable DenseMatrix<DM_MIN>  DN_; ///<  for gradient computations
+    VectorVariable<dim>          vt_; ///<  velocity
     VectorVariable<dim>          vt_normalised_; ///< to unit length
     mutable VectorVariable<dim>  vc_; ///< for all kinds of purposes
     
