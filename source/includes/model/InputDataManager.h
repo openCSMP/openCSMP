@@ -155,10 +155,10 @@ left fault zone		tab  	boundary 		tab		porosity	tab   0.25
 @endcode
 
 blank line (thereafter essential conditions, 'TOP' or 'top' will both work,
-so will 'Dirichlet' or 'DIRICH', or 'DIRICHLET')
+so will 'Dirichlet' or 'DIRICH', or 'DIRICHLET'). Conditions only apply to boundaries flagged using the mechanism for box-shaped models
 
 @code
-# Block 4: Dirichlet boundary conditions
+# Block 4: Dirichlet boundary conditions assigned to box-shaped models via BOX_BOUNDARY flags
 top		tab		Dirichlet	tab		fluid pressure		tab		1.0 1.0 4.3 4.7
 bottom	tab		Dirichlet	tab		fluid pressure		tab		1.0 1.0 1.0 1.0
 bottom	tab		Dirichlet	tab		displacement		tab		1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 DIRICH PLAIN
