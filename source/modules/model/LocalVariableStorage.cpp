@@ -1,3 +1,4 @@
+#include <type_traits>
 #include "LocalVariableStorage.h"
 #include "Node.h"
 #include "Element.h"
@@ -1215,27 +1216,8 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ===================================
-// SIMPLEX INTEGRATION POINT VARIABLES
+// ELEMENT INTEGRATION POINT VARIABLES
 // ===================================
 
 #include "LocalVariableStorageIndexArithmetic.h"
@@ -2099,6 +2081,9 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( size_t sector_or_facet, si
     std::cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
     return false;
   }
+  
+  
+
 
 template class LocalVariableStorage<1U,Node>;
 template class LocalVariableStorage<1U,Element>;

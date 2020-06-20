@@ -10,7 +10,7 @@
  * Header files are generally okay.
  */
 
-// The CSV processor is distributed under the BSD 3-clause licence.
+// The CSV processor is distributed under the BSD 3-clause license.
 // This means that documentation will need to be updated if it is
 // ever used as part of the distribution.
 //
