@@ -105,7 +105,6 @@ The data input manager requires a Model to act on- and
 interacts with the ComputationalSettings object that is used to 
 store runtime information. 
  
- 
 @section consequences Consequences
  
 The decision that CSMP variable names may contain white space forced us
@@ -118,7 +117,6 @@ To write a comment, start the line with a # sign.
 The data input manager allows the user to configure CSMP models without
 the need for compilation of a program.
  
- 
 @section examples Application Examples
 
 An example configuration file as would be used to configure a model
@@ -127,44 +125,61 @@ in the following (the CSMP Example suite contains many others):
 
  @code
 'mymodel-configuration.txt' file created X/X/X - this is its title
+@endcode
 
 blank line (thereafter region identifications in terms of their permeability
 and in alphabetical order)
 
-# Block 1: creating a group called joint containing all finite elements whose
+@code
+# Block 1: creating a region called joint containing all finite elements whose
 # permeability ranges between 1.0e-8 and 1.0e-8 m2.
 joint				tab		permeability	tab		1.0e-8 1.0e-8
 left fault zone		tab		permeability	tab		1.0e-12 1.0e-11
+@endcode
 
-blank line (thereafter properties assigned to whole model)
+blank line (thereafter default properties and initial conditions assigned to whole model)
 
+@code
 # Block 2: default properties for the entire the model
 permeability   	tab   1.0e-13
 storativity    	tab   1.0e-9
+@endcode
 
 blank line (thereafter region descriptions and assigned properties)
 discriminators here are: 'complete', 'interior', or 'boundary'
 
+@code
 # Block 3: specific properties of certain model subregions
 left fault zone		tab  	interior 		tab		porosity	tab   0.25
 left fault zone		tab  	boundary 		tab		porosity	tab   0.25
+@endcode
 
 blank line (thereafter essential conditions, 'TOP' or 'top' will both work,
 so will 'Dirichlet' or 'DIRICH', or 'DIRICHLET')
 
+@code
 # Block 4: Dirichlet boundary conditions
 top		tab		Dirichlet	tab		fluid pressure		tab		1.0 1.0 4.3 4.7
 bottom	tab		Dirichlet	tab		fluid pressure		tab		1.0 1.0 1.0 1.0
 bottom	tab		Dirichlet	tab		displacement		tab		1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 DIRICH PLAIN
 # (here the model will know whether to read either 2(2D) or 4(3D) values
+@endcode
 
-optional: blank line (thereafter regional condition flags: 'Dirichlet' or 'Neumann')
+blank line (thereafter regional condition flags: 'Dirichlet' or 'Neumann')
 
-# Block 5: essential conditions assigned to groups
+@code
+# Block 5: essential conditions assigned to regions
 well 	tab		interior	tab 	fluid pressure 	tab 	Dirichlet
 @endcode
 
-This file could be read configuring a Model object either with the
+blank line (thereafter boundary condition flags for free-form boundaries)
+
+@code
+# Block 6: conditions applied to CSMP Boundary objects, which can have any shale
+BOUNDARY_.. 	tab		interior	tab 	fluid pressure 	tab 	Dirichlet
+@endcode
+
+The configuration file could be read configuring a Model object either with the
 specific method:  
 
  @code
@@ -179,7 +194,8 @@ Or with the generic method, but the specific settings:
                             bool block2,
                             bool block3,
                             bool block4,
-                            bool block5 );
+                            bool block5,
+                            bool block6 );
 @endcode
 
 */
@@ -222,7 +238,7 @@ class  InputDataManager {
                             bool block6 = false );  ///< boundary conditions for arbitrary-shaped model
 
     /// configuration restricted to unique regions in the input model
-    bool ConfigureRegionsFromFile( Model<dim>&, const char* fname, std::set<std::string>& groups );
+    bool ConfigureRegionsFromFile( Model<dim>&, const char* fname, std::set<std::string>& regions );
 
     /// FRED was a FRACMAN consortium of Golder Associates, this interface is used in the Fracman GUI
     bool ConfigureFRED_ModelFromFile( Model<dim>&, const char* fname,
@@ -238,10 +254,10 @@ class  InputDataManager {
 private:
     bool ReadBlocks( Model<dim>&,
                      std::ifstream&,
-                     std::set<std::string>& groups,
+                     std::set<std::string>& regions,
                      std::map<std::string,std::vector<double64> >& well_data,
                      ComputationalSettings& settings,
-                     bool region_specifications,      // groupname from parameter range
+                     bool region_specifications,      // region name from parameter range
                      bool default_property_values,    // default property values
                      bool region_property_values,     // regional property values
                      bool region_property_conditions, // regional property conditions

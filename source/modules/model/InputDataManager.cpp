@@ -631,6 +631,7 @@ reported to stdout.
 @param [in] region_property_conditions block5 Essential conditions for Regions
 @param [in] boundary_conditions block6 Properties & Essential conditions for Boundary
 @param [in] settings Computational settings
+
 */
 template<size_t dim>
 bool InputDataManager<dim>
