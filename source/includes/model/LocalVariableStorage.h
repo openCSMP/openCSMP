@@ -8,7 +8,7 @@
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
-#include "TypeMatchesVariablePlacement.h"
+#include "enumTypeCompatibilityChecks.h"
 
 namespace csmp {
 

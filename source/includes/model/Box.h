@@ -51,7 +51,8 @@ enum {
   FRONT_RIGHT = -25, ///< FRONT and RIGHT
   FRONT_TOP = -26, ///< FRONT and TOP
   FRONT_LEFT = -27, ///< FRONT and LEFT
-  REGION_BOUNDARY = -28
+  REGION_BOUNDARY = -28, ///
+  MULTIPLE_BOUNDARIES = -29
 };
 
 /// @enum BOX_BOUNDARY uniquely identifies the placement of nodes and elements on the boundary of a box-shaped model
@@ -84,7 +85,8 @@ enum BOX_BOUNDARY {
   EDGE10 = FRONT_RIGHT,
   EDGE11 = FRONT_TOP,
   EDGE12 = FRONT_LEFT,
-  INTERNAL = REGION_BOUNDARY  ///< internal model boundary (usually inside bounding box, with neighbors on either side)
+  INTERNAL = REGION_BOUNDARY,  ///<  internal model boundary (usually inside bounding box, with neighbors on either side)
+  MULTIPLE = MULTIPLE_BOUNDARIES ///<  can result when an element is at the front and back at the same time because model is only a single element thick or similar
 };
 
 /**
@@ -168,8 +170,8 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& );
 
 /// using the nodal BOX_BOUNDARY flag values, the elements are flagged accordingly
 template<size_t dim>
-void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator,
-                                               typename std::deque<csmp::Element<dim>* >::iterator );
+void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator,
+                                                typename std::deque<csmp::Element<dim>* >::iterator );
 
 /// permits to create variables values from BOX_BOUNDARY flag enumeration values
 template<size_t dim>

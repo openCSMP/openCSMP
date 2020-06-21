@@ -558,7 +558,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   // ---------------------------------------------------------------------
   // 4. Flagging the elements using boundary flags from the nodes
   // ---------------------------------------------------------------------
-  flagElementUsingNodal_BOX_BOUNDARY_Flags<dim>( elmt_connector.begin(), elmt_connector.end() );
+  flagElementsUsingNodal_BOX_BOUNDARY_Flags<dim>( elmt_connector.begin(), elmt_connector.end() );
 
   // ------------------------------------------------------------------------------
   // 5. Assigning parent elements (these are the elements that share the node) and
@@ -2341,7 +2341,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
     else {
       // if there is no neighbor, the inner element parent should be at the model boundary
       if ( f->InnerParent()->AtBoundary() == NOT ) {
-        f->Out();
+        f->InnerParent()->Out();
         csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
                            "inner dim+1 element should be at model boundary because Face has no outer element." );
         f->InnerParent()->AtBoundary( IRREGULAR );

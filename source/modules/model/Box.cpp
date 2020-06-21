@@ -1578,121 +1578,134 @@ Furthermore the methods assumes that provided iterator range encompasses
 all elements.
 */
 template<size_t dim>
-void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator it,
-                                               typename std::deque<csmp::Element<dim>* >::iterator last_elmt )
+void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator it,
+                                                typename std::deque<csmp::Element<dim>* >::iterator last_elmt )
 {
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   assert( it != last_elmt );
   while ( it != last_elmt ) 
-  {
-    assert( (*it) != nullptr );
-    // the bflags of each element are stored in a set
-    SmallSet<BOX_BOUNDARY>  eflags;
-    const size_t nodes( (*it)->Nodes() );
-    for ( size_t i = 0U; i<nodes; ++i ) {
-        assert( (*it)->N(i) != nullptr );                // NB: negative numbers !
-         if ( (*it)->N( i )->AtBoundary() != NOT && (*it)->N( i )->AtBoundary() >= INTERNAL )
-           eflags.insert( (*it)->N( i )->AtBoundary() );
-      }
-    // if no identifier could be found the boundary flag is set to NOT
-    if ( eflags.empty() )
-      (*it)->AtBoundary( NOT );
-      
-    // if only a single flag is contained the decision is easy
-    else if ( eflags.size() == 1U )
-      (*it)->AtBoundary( (*eflags.begin()) );
-      
-    // if there are 2 flags and one of them is IRREGULAR, it is removed
-    else if ( eflags.size() == 2U )
     {
-      // if one of the 2 flags is IRREGULAR, it is removed
-      if ( eflags.count( IRREGULAR ) ) {
-        eflags.erase( IRREGULAR );
+      assert( (*it) != nullptr );
+      // the bflags of each element are stored in a set
+      SmallSet<BOX_BOUNDARY>  eflags;
+      const size_t nodes( (*it)->Nodes() );
+      for ( size_t i = 0U; i<nodes; ++i ) {
+          assert( (*it)->N(i) != nullptr );                // NB: negative numbers !
+           if ( (*it)->N( i )->AtBoundary() != NOT && (*it)->N( i )->AtBoundary() >= INTERNAL )
+             eflags.insert( (*it)->N( i )->AtBoundary() );
+        }
+      // if no identifier could be found the boundary flag is set to NOT
+      if ( eflags.empty() )
+        (*it)->AtBoundary( NOT );
+        
+      // if only a single flag is contained the decision is easy
+      else if ( eflags.size() == 1U )
         (*it)->AtBoundary( (*eflags.begin()) );
-      }
-      else {
-        // 12 possibilities relating to edge elements
-        auto sit = eflags.begin();
-        const BOX_BOUNDARY flag1 = (*sit); sit++;
-        const BOX_BOUNDARY flag2 = (*sit);
-        // BACK_BOTTOM
-        if ( flag1 == BACK and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE1 );
-        // BACK_RIGHT
-        else if ( flag1 == BACK and flag2 == RIGHT ) (*it)->AtBoundary( EDGE2 );
-        // BACK_TOP
-        else if ( flag1 == BACK and flag2 == TOP ) (*it)->AtBoundary( EDGE3 );
-        // BACK_LEFT
-        else if ( flag1 == BACK and flag2 == LEFT ) (*it)->AtBoundary( EDGE4 );
-        // BOTTOM_RIGHT
-        else if ( flag1 == BOTTOM and flag2 == RIGHT ) (*it)->AtBoundary( EDGE5 );
-        // TOP_RIGHT
-        else if ( flag1 == TOP and flag2 == RIGHT ) (*it)->AtBoundary( EDGE6 );
-        // TOP_LEFT
-        else if ( flag1 == TOP and flag2 == LEFT ) (*it)->AtBoundary( EDGE7 );
-        // BOTTOM_LEFT
-        else if ( flag1 == BOTTOM and flag2 == LEFT ) (*it)->AtBoundary( EDGE8 );
-        // FRONT_BOTTOM
-        else if ( flag1 == FRONT and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE9 );
-        // FRONT_RIGHT
-        else if ( flag1 == FRONT and flag2 == RIGHT ) (*it)->AtBoundary( EDGE10 );
-        // FRONT_TOP
-        else if ( flag1 == FRONT and flag2 == TOP ) (*it)->AtBoundary( EDGE11 );
-        // FRONT_LEFT
-        else if ( flag1 == FRONT and flag2 == LEFT ) (*it)->AtBoundary( EDGE12 );
-        // if a corner is contained that corner flag is choosen
-        else if ( flag1 <= CNR1 and flag1 >= CNR8 ) (*it)->AtBoundary( flag1 );
-        else if ( flag2 <= CNR1 and flag2 >= CNR8 ) (*it)->AtBoundary( flag2 );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( flag1 <= EDGE1 and flag1 > INTERNAL ) (*it)->AtBoundary( flag1 );
-        else if ( flag2 <= EDGE1 and flag2 > INTERNAL ) (*it)->AtBoundary( flag2 );
-        else {
-          cerr << "\n\tmissed case: " << parseBoundary( flag1 ) << ", " << parseBoundary( flag2 ) << endl;
+        
+      // if there are 2 flags and one of them is IRREGULAR, it is removed
+      else if ( eflags.size() == 2U )
+        {
+          // if one of the 2 flags is IRREGULAR, it is removed
+          if ( eflags.count( IRREGULAR ) ) {
+              eflags.erase( IRREGULAR );
+              (*it)->AtBoundary( (*eflags.begin()) );
+            }
+          else {
+              // 12 possibilities relating to edge elements
+              auto sit = eflags.begin();
+              const BOX_BOUNDARY flag1 = (*sit); sit++;
+              const BOX_BOUNDARY flag2 = (*sit);
+              // BACK_BOTTOM
+              if ( flag1 == BACK and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE1 );
+              // BACK_RIGHT
+              else if ( flag1 == BACK and flag2 == RIGHT ) (*it)->AtBoundary( EDGE2 );
+              // BACK_TOP
+              else if ( flag1 == BACK and flag2 == TOP ) (*it)->AtBoundary( EDGE3 );
+              // BACK_LEFT
+              else if ( flag1 == BACK and flag2 == LEFT ) (*it)->AtBoundary( EDGE4 );
+              // BOTTOM_RIGHT
+              else if ( flag1 == BOTTOM and flag2 == RIGHT ) (*it)->AtBoundary( EDGE5 );
+              // TOP_RIGHT
+              else if ( flag1 == TOP and flag2 == RIGHT ) (*it)->AtBoundary( EDGE6 );
+              // TOP_LEFT
+              else if ( flag1 == TOP and flag2 == LEFT ) (*it)->AtBoundary( EDGE7 );
+              // BOTTOM_LEFT
+              else if ( flag1 == BOTTOM and flag2 == LEFT ) (*it)->AtBoundary( EDGE8 );
+              // FRONT_BOTTOM
+              else if ( flag1 == FRONT and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE9 );
+              // FRONT_RIGHT
+              else if ( flag1 == FRONT and flag2 == RIGHT ) (*it)->AtBoundary( EDGE10 );
+              // FRONT_TOP
+              else if ( flag1 == FRONT and flag2 == TOP ) (*it)->AtBoundary( EDGE11 );
+              // FRONT_LEFT
+              else if ( flag1 == FRONT and flag2 == LEFT ) (*it)->AtBoundary( EDGE12 );
+              // if a corner is contained that corner flag is choosen
+              else if ( flag1 <= CNR1 and flag1 >= CNR8 ) (*it)->AtBoundary( flag1 );
+              else if ( flag2 <= CNR1 and flag2 >= CNR8 ) (*it)->AtBoundary( flag2 );
+              // if the first integer entry in the set is an edge, that flag is chosen
+              else if ( flag1 <= EDGE1 and flag1 > INTERNAL ) (*it)->AtBoundary( flag1 );
+              else if ( flag2 <= EDGE1 and flag2 > INTERNAL ) (*it)->AtBoundary( flag2 );
+              else  cerr << "\n\tmissed case: " << parseBoundary( flag1 ) << ", " << parseBoundary( flag2 ) << endl;
+          }
         }
-      }
-    }
-    else if ( eflags.size() > 2U ) {
-      // erase the basic boundary options
-      eflags.erase( LEFT );
-      eflags.erase( RIGHT );
-      eflags.erase( TOP );
-      eflags.erase( BOTTOM );
-      eflags.erase( BACK );
-      eflags.erase( FRONT );
+      else if ( eflags.size() > 2U ) 
+        {
+          if ( dim == 2 && isTriangular( (*it)->FE_Type() ) ) {
+               (*it)->Out();
+               csmp_error.notice( ERROR, "flagElementUsingNodalAtBoundaryFlags", "all nodes of 2D triangular element appear to be located on boundary");
+            }
+          // case when all boundary flags ware the same was already considered
+            
+          // erase the basic boundary options
+          eflags.erase( LEFT );
+          eflags.erase( RIGHT );
+          eflags.erase( TOP );
+          eflags.erase( BOTTOM );
+          eflags.erase( BACK );
+          eflags.erase( FRONT );
 
-      if ( !eflags.empty() ) {
-        const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
-        const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
+          if ( !eflags.empty() ) 
+            {
+              const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
+              const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
 
-        // if a corner is contained that corner flag is choosen
-        if ( flag_max <= CNR1 and flag_max >= CNR8 ) (*it)->AtBoundary( flag_max );
-        else if ( flag_min <= CNR1 and flag_min >= CNR8 ) (*it)->AtBoundary( flag_min );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( flag_max <= EDGE1 and flag_max > INTERNAL ) (*it)->AtBoundary( flag_max );
-        else if ( flag_min <= EDGE1 and flag_min > INTERNAL ) (*it)->AtBoundary( flag_min );
-        // if a corner is contained that corner flag is choosen
-        else if ( (*eflags.begin()) <= CNR1 and
-                  (*eflags.begin()) >= CNR8 ) (*it)->AtBoundary( (*eflags.begin()) );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( (*eflags.begin()) >= EDGE1 and
-                  (*eflags.begin()) <  INTERNAL ) (*it)->AtBoundary( (*eflags.begin()) );
-        else if ( (*eflags.begin()) == IRREGULAR ) (*it)->AtBoundary( IRREGULAR );
-        else {
-          cerr << "\n\n\nflagElementUsingNodalAtBoundaryFlags: unable to determine box boundary flag for element:\n";
-          for ( auto boundary : eflags )
-            cout << parseBoundary( boundary ) << " ";
-          cout << endl;
-          (*it)->Out();
+              // if a corner is contained that corner flag is choosen
+              if ( flag_max <= CNR1 and flag_max >= CNR8 ) (*it)->AtBoundary( flag_max );
+              else if ( flag_min <= CNR1 and flag_min >= CNR8 ) (*it)->AtBoundary( flag_min );
+              // if the first integer entry in the set is an edge, that flag is chosen
+              else if ( flag_max <= EDGE1 and flag_max > INTERNAL ) (*it)->AtBoundary( flag_max );
+              else if ( flag_min <= EDGE1 and flag_min > INTERNAL ) (*it)->AtBoundary( flag_min );
+              // if a corner is contained that corner flag is choosen
+              else if ( (*eflags.begin()) <= CNR1 and
+                        (*eflags.begin()) >= CNR8 ) (*it)->AtBoundary( (*eflags.begin()) );
+              // if the first integer entry in the set is an edge, that flag is chosen
+              else if ( (*eflags.begin()) >= EDGE1 and
+                        (*eflags.begin()) <  INTERNAL ) (*it)->AtBoundary( (*eflags.begin()) );
+              else if ( (*eflags.begin()) == IRREGULAR ) (*it)->AtBoundary( IRREGULAR );
+              else {
+                  cerr << "\n\n\nflagElementUsingNodalAtBoundaryFlags: unable to determine box boundary flag for element:\n";
+                  for ( auto boundary : eflags )
+                    cout << parseBoundary( boundary ) << " ";
+                  cout << endl;
+                  (*it)->Out();
+                }
+             }
+           else  {
+                cerr << "\n\tmissed case: ";
+                (*it)->Out();
+                (*it)->AtBoundary( MULTIPLE );
+                csmp_error.notice( ERROR, "flagElementUsingNodalAtBoundaryFlags", "could not discern which boundary elemnt is located on");
+             }
         }
-      }
+      ++it;
     }
-    ++it;
-  }
 
 } // end flagElementUsingNodalAtBoundaryFlags
 
 
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<1U>( typename std::deque<csmp::Element<1U>*>::iterator, typename std::deque<csmp::Element<1U>*>::iterator );
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<2U>( typename std::deque<csmp::Element<2U>*>::iterator, typename std::deque<csmp::Element<2U>*>::iterator );
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<3U>( typename std::deque<csmp::Element<3U>*>::iterator, typename std::deque<csmp::Element<3U>*>::iterator );
+template void flagElementsUsingNodal_BOX_BOUNDARY_Flags<1U>( typename std::deque<csmp::Element<1U>*>::iterator, typename std::deque<csmp::Element<1U>*>::iterator );
+template void flagElementsUsingNodal_BOX_BOUNDARY_Flags<2U>( typename std::deque<csmp::Element<2U>*>::iterator, typename std::deque<csmp::Element<2U>*>::iterator );
+template void flagElementsUsingNodal_BOX_BOUNDARY_Flags<3U>( typename std::deque<csmp::Element<3U>*>::iterator, typename std::deque<csmp::Element<3U>*>::iterator );
 
 
 
