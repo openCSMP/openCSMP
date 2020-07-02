@@ -2341,11 +2341,12 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
     else {
       // if there is no neighbor, the inner element parent should be at the model boundary
       if ( f->InnerParent()->AtBoundary() == NOT ) {
-        f->InnerParent()->Out();
-        csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
-                           "inner dim+1 element should be at model boundary because Face has no outer element." );
-        f->InnerParent()->AtBoundary( IRREGULAR );
-      }
+          csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
+                            "inner dim+1 neighbor element of Face should be flagged as model boundary because Face has no outer element; flagging element as irregular" );
+          cerr <<"\nDiagnostics:";
+          f->InnerParent()->Out();
+          f->InnerParent()->AtBoundary( IRREGULAR );
+        }
       vset.Pfvert( eidx, neighbors + 1U, f->InnerParent()->AtBoundary() );
     }
     ++eidx;

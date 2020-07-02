@@ -196,13 +196,13 @@ namespace femDataBinaryDispatch {
   template<typename csp_type>
   bool outBinary( fstream& fp, const vector<csp_type>& cntr )
     {
-      return skm_C_fwrite( fp, cntr );
+      return binaryFileWrite( fp, cntr );
     }
 
   template<typename csp_type>
   bool inBinary( fstream& fp, vector<csp_type>& cntr )
     {
-      return skm_C_fread( fp, cntr );
+      return binaryFileRead( fp, cntr );
     }
 
   template<>

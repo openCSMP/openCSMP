@@ -1270,7 +1270,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
       heading +="' to file: ";
       heading += bin_file;
       heading +="'.";
-      skm_C_fwrite( fp, heading.c_str() );
+      binaryFileWrite( fp, heading.c_str() );
    }
 
      std::cout <<"\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: boundaries written to binary file: ";
@@ -1343,7 +1343,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
      BinaryFileSectionRead sect(fp, "BNDFHEDR");
 
      char  text[500U];
-     skm_C_fread( fp, text );
+     binaryFileRead( fp, text );
      std::cout <<"\nBoundaryInterface<"<< dim <<">::InputAllBoundariesFromBinary: Reading file header:\n\t"<< text << std::endl;
    }
      std::cout <<"\n\timporting the boundaries: ";

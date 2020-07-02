@@ -146,8 +146,8 @@ namespace csmp
         else
           {
             cout << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile1, storage_vector );
-			outfile1.close();
+            binaryFileWrite( outfile1, storage_vector );
+			      outfile1.close();
             cout << "done!\n";
           }
 	    
@@ -162,7 +162,7 @@ namespace csmp
         else
           {
             cout << "writing file " << statefilename << " ... ";
-            skm_C_fwrite( outfile2, state_vector );
+            binaryFileWrite( outfile2, state_vector );
             outfile2.close();
             cout << "done!\n";
           }
@@ -172,13 +172,13 @@ namespace csmp
     else
       {
         cout << "reading file " << filename << " ... ";
-        skm_C_fread( infile1, storage_vector );
+        binaryFileRead( infile1, storage_vector );
         infile1.close();
         cout << "done!\n";
 
         cout << "reading file " << statefilename << " ... ";
-        skm_C_fread( infile2, state_vector );
-		infile2.close();
+        binaryFileRead( infile2, state_vector );
+        infile2.close();
         cout << "done!\n";
 	    
       }

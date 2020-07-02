@@ -1590,8 +1590,8 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
       SmallSet<BOX_BOUNDARY>  eflags;
       const size_t nodes( (*it)->Nodes() );
       for ( size_t i = 0U; i<nodes; ++i ) {
-          assert( (*it)->N(i) != nullptr );                // NB: negative numbers !
-           if ( (*it)->N( i )->AtBoundary() != NOT && (*it)->N( i )->AtBoundary() >= INTERNAL )
+          assert( (*it)->N(i) != nullptr );                
+           if ( (*it)->N(i)->AtBoundary() != NOT && (*it)->N(i)->AtBoundary() != INTERNAL )
              eflags.insert( (*it)->N( i )->AtBoundary() );
         }
       // if no identifier could be found the boundary flag is set to NOT
@@ -1605,7 +1605,8 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
       // if there are 2 flags and one of them is IRREGULAR, it is removed
       else if ( eflags.size() == 2U )
         {
-          // if one of the 2 flags is IRREGULAR, it is removed
+          // 1. case handled already: if all not-NOT boundary flags are IRREGULAR so should be the element 
+          // 2. if one of the 2 flags is IRREGULAR, it is removed
           if ( eflags.count( IRREGULAR ) ) {
               eflags.erase( IRREGULAR );
               (*it)->AtBoundary( (*eflags.begin()) );

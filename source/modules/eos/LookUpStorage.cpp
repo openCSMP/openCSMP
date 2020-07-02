@@ -107,7 +107,7 @@ bool   LookUpStorage<fT>::BinaryOut( const char* bin_name ) const
         cout <<"\nLookUpStorage<fT>::BinaryOut: File: "<< bin_name << " could not be opened"<< endl;
         return false;
       }
-    skm_C_fwrite( fp, heading );  
+    binaryFileWrite( fp, heading );  
 
     // stores dimensions of grid
     std::vector<fT>    dim_fT(4);
@@ -119,9 +119,9 @@ bool   LookUpStorage<fT>::BinaryOut( const char* bin_name ) const
     dim_fT[2] = xresolution;
     dim_fT[3] = yresolution; 
     
-    skm_C_fwrite( fp, dim_fT ); 
+    binaryFileWrite( fp, dim_fT ); 
     
-    skm_C_fwrite( fp, grid ); 
+    binaryFileWrite( fp, grid ); 
     
     fp.close();
 
@@ -141,7 +141,7 @@ bool LookUpStorage<fT>::BinaryIn( const char* bin_name )
         return false;
      }
     char heading[200];
-    skm_C_fread( fp, heading ); 
+    binaryFileRead( fp, heading ); 
     cout <<"\nLookUpStorage<fT>::BinaryIn: Reading: "<< heading << endl;
 
     // read dimensions of grid
@@ -150,13 +150,13 @@ bool LookUpStorage<fT>::BinaryIn( const char* bin_name )
     std::vector<fT>    input_data;
 
     // read info about dimension
-    skm_C_fread( fp, dim_fT ); 
+    binaryFileRead( fp, dim_fT ); 
 
     // rebuild grid
     Initialize( dim_fT[0], dim_fT[1], dim_fT[2], dim_fT[3] );
     
     // read data and transfer to grid
-    skm_C_fread( fp, input_data ); 
+    binaryFileRead( fp, input_data ); 
     grid = input_data;
 
     fp.close();

@@ -429,7 +429,7 @@ bool Boundary<dim>::Out( fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) con
     FEM_Data<Var> femData;
     for ( set<string>::const_iterator it( propList.begin() ); it != propList.end(); ++it )
     {
-      if ( !skm_C_fwrite( fp, it->c_str() ) )
+      if ( !binaryFileWrite( fp, it->c_str() ) )
         return false;
       OutputVariableTo( it->c_str(), femData );
       femData.OutBinary( fp );
@@ -570,7 +570,7 @@ bool Boundary<dim>::In( fstream& fp, PLACEMENT, VARIABLE_TYPE )
   for ( size_t i( 0 ); i < vCount; ++i )
   {
     char propertyName[200];
-    if ( !skm_C_fread( fp, propertyName ) )
+    if ( !binaryFileRead( fp, propertyName ) )
       return false;
     femData.InBinary( fp );
     InputVariableFrom( propertyName, femData );

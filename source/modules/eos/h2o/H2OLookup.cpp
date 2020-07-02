@@ -66,14 +66,14 @@ H2OLookup::H2OLookup()
     // ... 
     cout << "now reading newly built file " << vpname << " ... ";
     vp.open( vpname, ios::in | ios::binary );
-    skm_C_fread( vp, satvap );
+    binaryFileRead( vp, satvap );
     vp.close();
     cout << "done!\n";
   }
   else
   {
     cout << "reading file " << vpname << " ... ";
-    skm_C_fread( vp, satvap );
+    binaryFileRead( vp, satvap );
     vp.close();
     cout << "done!\n";
   }
@@ -87,14 +87,14 @@ H2OLookup::H2OLookup()
     // ...
     cout << "now reading newly built file " << lpname << " ... ";
     lp.open( lpname, ios::in | ios::binary );
-    skm_C_fread( lp, satliq );
+    binaryFileRead( lp, satliq );
     lp.close();
     cout << "done!\n";
   }
   else
   {
     cout << "reading file " << lpname << " ... ";
-    skm_C_fread( lp, satliq );
+    binaryFileRead( lp, satliq );
     lp.close();
     cout << "done !\n";
   }
@@ -111,14 +111,14 @@ H2OLookup::H2OLookup()
     // ...
     cout << "now reading newly built file " << spname << " ... ";
     sp.open( spname, ios::in | ios::binary );
-    skm_C_fread( sp, singlephase );
+    binaryFileRead( sp, singlephase );
     sp.close();
     cout << "done!\n";
   }
   else
   {
     cout << "reading file " << spname << " ... ";
-    skm_C_fread( sp, singlephase );
+    binaryFileRead( sp, singlephase );
     sp.close();
     cout << "done!\n";
   }
@@ -927,7 +927,7 @@ void H2OLookup::BuildTable0And1()
   if ( !vp.is_open() )
     cout << "\nH2OLookup::BinaryOut: File: " << filename[0] << " could not be opened" << endl;
   cout << "writing file " << vname << endl;
-  skm_C_fwrite( vp, vap_vector );
+  binaryFileWrite( vp, vap_vector );
   vp.close();
 
   char lname[200];
@@ -936,7 +936,7 @@ void H2OLookup::BuildTable0And1()
   if ( !lp.is_open() )
     cout << "\nH2OLookup::BinaryOut: File: " << filename[1] << " could not be opened" << endl;
   cout << "writing file " << lname << endl;
-  skm_C_fwrite( lp, liq_vector );
+  binaryFileWrite( lp, liq_vector );
   lp.close();
 
 }
@@ -1069,7 +1069,7 @@ void H2OLookup::BuildTable2()
   if ( sp.is_open() )
     cout << "\nH2OLookup::BinaryOut: File: " << filename[2] << " could not be opened" << endl;
   cout << "writing file " << sname << endl;
-  skm_C_fwrite( sp, singlephase_vector );
+  binaryFileWrite( sp, singlephase_vector );
   sp.close();
 
 }

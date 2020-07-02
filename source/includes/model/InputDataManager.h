@@ -175,8 +175,9 @@ well 	tab		interior	tab 	fluid pressure 	tab 	Dirichlet
 blank line (thereafter boundary condition flags for free-form boundaries)
 
 @code
-# Block 6: conditions applied to CSMP Boundary objects, which can have any shale
-BOUNDARY_.. 	tab		interior	tab 	fluid pressure 	tab 	Dirichlet
+# Block 6: boundart conditions applied to CSMP Boundary objects (that can have arbitrary shape)
+# Boundary name       part of       flag           variable name      uniform value on boundary
+BOUNDARY_TOP     tab  complete tab  Dirichlet  tab fluid pressure tab 16495146.
 @endcode
 
 The configuration file could be read configuring a Model object either with the

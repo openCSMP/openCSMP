@@ -253,8 +253,8 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile1, storage_vector );
-			outfile1.close();
+            binaryFileWrite( outfile1, storage_vector );
+			      outfile1.close();
             cerr << "done!\n";
           }
 
@@ -269,8 +269,8 @@ namespace csmp
         else
           {
             cerr << "writing file " << statefilename << " ... ";
-            skm_C_fwrite( outfile2, state_vector );
-			outfile2.close();
+            binaryFileWrite( outfile2, state_vector );
+			     outfile2.close();
             cerr << "done!\n";
           }
 
@@ -279,15 +279,14 @@ namespace csmp
     else
       {
         cerr << "reading file " << filename << " ... ";
-        skm_C_fread( infile1, storage_vector );
-		infile1.close();		
+        binaryFileRead( infile1, storage_vector );
+		    infile1.close();		
         cerr << "done!\n";
 
         cerr << "reading file " << statefilename << " ... ";
-        skm_C_fread( infile2, state_vector );
-		infile2.close();
+        binaryFileRead( infile2, state_vector );
+		    infile2.close();
         cerr << "done!\n";
-	    
       }
     cerr << "TwophaseVaporLookup, leaving constructor ...\n\n";
   }

@@ -624,7 +624,7 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32 tstep, bool 
         cout <<"\nFiniteDifferenceGrid::BinaryOut: File: "<< bin_name << " could not be opened"<< endl;
         return false;
       }
-    skm_C_fwrite( fp, heading );  
+    binaryFileWrite( fp, heading );  
 
     // stores dimensions of grid
     std::vector<double64>    dim_fT(8);
@@ -658,8 +658,8 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32 tstep, bool 
         dim_int[3] = 0;  
       }
     
-    skm_C_fwrite( fp, dim_fT ); 
-    skm_C_fwrite( fp, dim_int ); 
+    binaryFileWrite( fp, dim_fT ); 
+    binaryFileWrite( fp, dim_int ); 
     
     // writing grid data to storage vector
     if ( !with_frame )
@@ -677,7 +677,7 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32 tstep, bool 
              }
         }
     
-   skm_C_fwrite( fp, grid_data ); 
+   binaryFileWrite( fp, grid_data ); 
    fp.close();
 
    cout <<"\n\n'" << bin_name <<"' written successfully..." << endl;
@@ -696,7 +696,7 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
         return false;
      }
     char heading[200];
-    skm_C_fread( fp, heading ); 
+    binaryFileRead( fp, heading ); 
     cout <<"\nFiniteDifferenceGrid::BinaryIn: Reading: "<< heading << endl;
 
     // read dimensions of grid
@@ -708,8 +708,8 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
     size_t counter(0);
 
     // read info about dimension
-    skm_C_fread( fp, dim_fT ); 
-    skm_C_fread( fp, dim_int ); 
+    binaryFileRead( fp, dim_fT ); 
+    binaryFileRead( fp, dim_int ); 
 
     if ( dim_int[2] != dim_int[3] ) {
          cout <<"\nFiniteDifferenceGrid::BinaryIn:  Cannot handle different X & Y frame sizes."<< endl;
@@ -720,7 +720,7 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
     Initialize( dim_fT[2], dim_fT[3], dim_fT[4], dim_fT[5], dim_fT[6], dim_fT[7], xfr );
 
     // read data and transfer to grid
-    skm_C_fread( fp, grid_data ); 
+    binaryFileRead( fp, grid_data ); 
     for ( int32 i=-dim_int[3]; i<dim_int[1]+dim_int[3]; i++ ) {
         for ( int32 j=-dim_int[2]; j<dim_int[0]+dim_int[2]; j++ ) {
             (*this)(i,j) = grid_data[counter];
@@ -728,7 +728,7 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
           }
       }  
 
-	fp.close();
+ 	  fp.close();
     
     cout <<"\nFiniteDifferenceGrid<double64>::BinaryIn: grid build successfully from binary file." << endl;
     cout.flush();

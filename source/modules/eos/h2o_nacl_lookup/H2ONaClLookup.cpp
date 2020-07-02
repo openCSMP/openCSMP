@@ -883,16 +883,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[table_id] << " ... ";
-            skm_C_fwrite( outfile, table );
-			outfile.close();
+            binaryFileWrite( outfile, table );
+			      outfile.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[table_id] << " ... ";
-        skm_C_fread( infile, table );
-		infile.close();
+        binaryFileRead( infile, table );
+		    infile.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildSimpleTable" << table_id << " ...\n\n";
@@ -1130,16 +1130,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[1] << " ... ";
-            skm_C_fwrite( outfile1, table1 );
-			outfile1.close();
+            binaryFileWrite( outfile1, table1 );
+			      outfile1.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[1] << " ... ";
-        skm_C_fread( infile1, table1 );
-		infile1.close();
+        binaryFileRead( infile1, table1 );
+		    infile1.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable1 ...\n\n";
@@ -1511,16 +1511,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[2] << " ... ";
-            skm_C_fwrite( outfile2, table2 );
-			outfile2.close();
+            binaryFileWrite( outfile2, table2 );
+			      outfile2.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[2] << " ... ";
-        skm_C_fread( infile2, table2 );
-		infile2.close();
+        binaryFileRead( infile2, table2 );
+		    infile2.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable2 ...\n\n";
@@ -1734,16 +1734,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[0] << " ... ";
-            skm_C_fwrite( outfile0, table0 );
-			outfile0.close();
+            binaryFileWrite( outfile0, table0 );
+			      outfile0.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[0] << " ... ";
-        skm_C_fread( infile0, table0 );
-		infile0.close();
+        binaryFileRead( infile0, table0 );
+		    infile0.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable0 ...\n\n";

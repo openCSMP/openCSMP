@@ -98,7 +98,7 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
          FEM_Data<ScalarVariable >  scalar_data;
          sg.OutputVariableTo( var_name, scalar_data );
 	     if ( scalar_data.Size() != 0 ) {
-	          skm_C_fwrite( fp, var_name );
+	          binaryFileWrite( fp, var_name );
 	          scalar_data.OutBinary( fp );
 	       }
          // writing that there is no such data
@@ -108,7 +108,7 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
          FEM_Data<VectorVariable<dim> > vector_data;
          sg.OutputVariableTo( var_name, vector_data );
 	     if ( vector_data.Size() != 0 ) {
-	          skm_C_fwrite( fp, var_name );
+	          binaryFileWrite( fp, var_name );
 	          vector_data.OutBinary( fp );   
 	       }
          else write_error = true;
@@ -117,7 +117,7 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
          FEM_Data<TensorVariable<dim> > tensor_data;
          sg.OutputVariableTo( var_name, tensor_data );
 	     if ( tensor_data.Size() != 0 ) {
-	          skm_C_fwrite( fp, var_name );
+	          binaryFileWrite( fp, var_name );
 	          tensor_data.OutBinary( fp );   
 	       }
          else write_error = true;
@@ -126,7 +126,7 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
          FEM_Data<ArrayVariable > array_data;
          sg.OutputVariableTo( var_name, array_data );
          if ( array_data.Size() != 0 ) {
-              skm_C_fwrite( fp, var_name );
+              binaryFileWrite( fp, var_name );
               array_data.OutBinary( fp );
            }
          else write_error = true;
@@ -135,7 +135,7 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
          FEM_Data<FlaggedArrayVariable > flaggedarray_data;
          sg.OutputVariableTo( var_name, flaggedarray_data );
          if ( flaggedarray_data.Size() != 0 ) {
-              skm_C_fwrite( fp, var_name );
+              binaryFileWrite( fp, var_name );
               flaggedarray_data.OutBinary( fp );
            }
          else write_error = true;
@@ -182,10 +182,10 @@ string  BinaryFileInterface<dim>::ReadVariableName( const char* file_name ) cons
      char  variable[NAME_STRING] = "undefined variable";
 
      // 2. reading the file header
-     skm_C_fread( fp, variable );
+     binaryFileRead( fp, variable );
 
      // 3. cleaning up
-	 fp.close();
+	   fp.close();
 
      return string(variable);
 
@@ -215,7 +215,7 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
        
      // verifying the existance of the variable in the database
      char  variable[200] = "undefined variable"; 
-     skm_C_fread( fp, variable );
+     binaryFileRead( fp, variable );
      if ( !pref.IsDefined(variable) ) {
           throw csmp::Exception( ERROR, "BinaryFileInterface<dim>::ReadDataFrom<Var>",
                          "Variable is not defined in model database:", variable );

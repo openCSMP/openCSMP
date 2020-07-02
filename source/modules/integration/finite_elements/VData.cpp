@@ -1056,19 +1056,19 @@ void VData::OutBinary( fstream& fp ) const
     // ----------------------------------------
    {
      BinaryFileSectionWrite sect(fp, "VSETPELT");
-    skm_C_fwrite( fp, pelmt );
+     binaryFileWrite( fp, pelmt );
    }
    {
      BinaryFileSectionWrite sect(fp, "VSETPLST");
-    skm_C_fwrite( fp, plist );
+     binaryFileWrite( fp, plist );
    }
    {
      BinaryFileSectionWrite sect(fp, "VSETPFVT");
-    skm_C_fwrite( fp, pfverts );
+     binaryFileWrite( fp, pfverts );
    }
    {
      BinaryFileSectionWrite sect(fp, "VSETBFLG");
-     skm_C_fwrite( fp, bflags );
+     binaryFileWrite( fp, bflags );
    }
    
     // 4. offsets for faces and interfaces
@@ -1130,20 +1130,20 @@ void VData::InBinary( fstream& fp )
     // 3. reading pelmt, plist, pfverts, bflags
     // ----------------------------------------
    {
-     BinaryFileSectionRead sect(fp, "VSETPELT");
-    skm_C_fread( fp, pelmt );
+      BinaryFileSectionRead sect(fp, "VSETPELT");
+      binaryFileRead( fp, pelmt );
    }
    {
-     BinaryFileSectionRead sect(fp, "VSETPLST");
-    skm_C_fread( fp, plist );
+      BinaryFileSectionRead sect(fp, "VSETPLST");
+      binaryFileRead( fp, plist );
    }
-  {
-       BinaryFileSectionRead sect(fp, "VSETPFVT");
-    skm_C_fread( fp, pfverts );
-  }
    {
-     BinaryFileSectionRead sect(fp, "VSETBFLG");
-    skm_C_fread( fp, bflags );
+      BinaryFileSectionRead sect(fp, "VSETPFVT");
+      binaryFileRead( fp, pfverts );
+   }
+   {
+      BinaryFileSectionRead sect(fp, "VSETBFLG");
+      binaryFileRead( fp, bflags );
    }
     
     // 4. offsets for faces and interfaces

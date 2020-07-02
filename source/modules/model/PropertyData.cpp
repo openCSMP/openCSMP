@@ -486,10 +486,10 @@ bool PropertyData::OutBinary( fstream& fp ) const
      // writing the number of records followed by flag values
      std::vector<uint32>  flags; //VARIABLE_FLAG
      std::transform( flags_.begin(), flags_.end(), std::back_inserter( flags ), []( VARIABLE_FLAG flag ) -> uint32 { return flag; } );
-     bool return_value = skm_C_fwrite( fp, flags );
+     bool return_value = binaryFileWrite( fp, flags );
    
      // writing the data values
-     return_value = skm_C_fwrite( fp, data_ );
+     return_value = binaryFileWrite( fp, data_ );
    
      return return_value;
  }
@@ -535,11 +535,11 @@ PropertyData inBinaryPropertyData( fstream& fp )
 
      // reading the number of records followed by flag values
      std::vector<uint32>  flags; //VARIABLE_FLAG
-     skm_C_fread( fp, flags );
+     binaryFileRead( fp, flags );
    
      // reading the data values
      std::vector<double64> values;
-     skm_C_fread( fp, values );
+     binaryFileRead( fp, values );
    
      // pushing the data into Property record
      std::vector<VARIABLE_FLAG>  flags_tr;

@@ -134,7 +134,7 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile, storage_vector );
+            binaryFileWrite( outfile, storage_vector );
             outfile.close();
             cerr << "done!\n";
           }
@@ -142,8 +142,8 @@ namespace csmp
     else
       {
         cerr << "reading file " << filename << " ... ";
-        skm_C_fread( infile, storage_vector );
-		infile.close();
+        binaryFileRead( infile, storage_vector );
+	    	infile.close();
         cerr << "done!\n";
       }
     cerr << "NaClMeltingCurveHaliteLookup, leaving constructor ...\n\n";

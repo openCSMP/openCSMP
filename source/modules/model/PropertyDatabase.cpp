@@ -420,7 +420,7 @@ bool PropertyDatabase<dim>::BinaryOut( fstream& fp ) const
 
   for( auto& prop : propList_ )
     {
-      skm_C_fwrite( fp, prop.first.c_str() );
+      binaryFileWrite( fp, prop.first.c_str() );
       prop.second.Out(fp);
     }
 
@@ -466,7 +466,7 @@ bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_var
   char buf[255];
   for( size_t i(0); i < parameterCount; ++i )
   {
-    skm_C_fread( fp, buf );
+    binaryFileRead( fp, buf );
     string parameterName(buf);
     csmp::Parameter parameter;
     parameter.In( fp );

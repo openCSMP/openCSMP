@@ -382,7 +382,7 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 		strcat(heading, bin_file);
 		strcat(heading, " saved at time: ");
 		strcat(heading, num);
-		skm_C_fwrite(fp, heading);
+		binaryFileWrite(fp, heading);
 	}
 
 	// 3. Writing the mesh connectivity to file
@@ -401,7 +401,7 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 			// individual records
 			for (auto it = property_map_.begin(); it != property_map_.end(); ++it) {
 				// writing the property name
-				skm_C_fwrite(fp, (*it).first.c_str());
+				binaryFileWrite(fp, (*it).first.c_str());
 				// writing the dataset
 				(*it).second.OutBinary(fp);
 			}
@@ -450,7 +450,7 @@ bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<strin
 		BinaryFileSectionRead sect(fp, "VSETHEDR");
 		char heading[INFO_STRING];
 
-		skm_C_fread(fp, heading);
+		binaryFileRead(fp, heading);
 		cout << "\nVSet<dim>::InputFrom: Reading: " << heading << endl;
 		strtok(heading, ":");
 		strtok(NULL, ":");
@@ -478,7 +478,7 @@ bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<strin
 			{
 				// reading the property name
 				char heading[INFO_STRING];
-				skm_C_fread(fp, heading);
+				binaryFileRead(fp, heading);
 				dname = heading;
 
         auto prop = make_pair( dname, inBinaryPropertyData( fp ) );
@@ -548,7 +548,7 @@ bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t fi
 		return false;
 	}
 	// 2. writing the file header   
-	skm_C_fwrite(fp, heading);
+	binaryFileWrite(fp, heading);
 
 	// 3. Writing the mesh connectivity to file
 	OutBinary(fp);
@@ -584,7 +584,7 @@ bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t&
 		return false;
 	}
 	// 2. reading the file header and extracting time
-	skm_C_fread(fp, heading);
+	binaryFileRead(fp, heading);
 	cout << "\nVSet<dim>::ParallelInputFrom: Reading: " << heading << endl;
 	strtok(heading, ":");
 	strtok(NULL, ":");

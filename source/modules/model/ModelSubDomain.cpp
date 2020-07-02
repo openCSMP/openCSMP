@@ -5157,19 +5157,19 @@ template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
  {
     // 1. writing name of the region
-    skm_C_fwrite( fp, Name().c_str() );
+    binaryFileWrite( fp, Name().c_str() );
    
     // 2. writing the interior element records of the region
     std::vector<size_t> IDs( distance(InteriorElementsBegin(), InteriorElementsEnd() ) );
     transform( InteriorElementsBegin(), InteriorElementsEnd(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
 
     // 3. writing the perimeter element records of the region
     IDs.resize( distance(PerimeterElementsBegin(), PerimeterElementsEnd()) );
     transform( PerimeterElementsBegin(), PerimeterElementsEnd(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
    
     // 4. writing the boundary faces (not done because pointer locations will change in reconstruction)
     // -----------------------------
@@ -5187,13 +5187,13 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
     IDs.resize( InteriorNodes() );
     transform( NodesBegin(), PerimeterNodesBegin(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
    
     // 6. writing the perimeter nodes
     IDs.resize( PerimeterNodes() );
     transform( PerimeterNodesBegin(), NodesEnd(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
    
  } // end WriteDomainIndexesToBinaryFile
 
@@ -5223,26 +5223,26 @@ void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& in
    
     // 1. reading name of the region
     char name[INFO_STRING];
-    skm_C_fread( fp, name );
+    binaryFileRead( fp, name );
     info.name = name;
     assert( !info.name.empty() );
    
     // 2. reading the interior element records of the region
-    skm_C_fread( fp, info.interior_elmts );
+    binaryFileRead( fp, info.interior_elmts );
     if (dim > 2 && info.interior_elmts.empty() ) {
         csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior elements: ", name );
     }
 
     // 3. reading the perimeter element records of the region
-    skm_C_fread( fp, info.perimeter_elmts );
+    binaryFileRead( fp, info.perimeter_elmts );
 //    assert( !info.perimeter_elmts.empty() );
    
     // 4. reading the interior nodes
-    skm_C_fread( fp, info.interior_nodes );
+    binaryFileRead( fp, info.interior_nodes );
   
     // 5. reading the perimeter nodes
-    skm_C_fread( fp, info.perimeter_nodes );
+    binaryFileRead( fp, info.perimeter_nodes );
     assert( !info.perimeter_nodes.empty() );
    
  } // end readRegionIndexesFromBinaryFile

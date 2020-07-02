@@ -138,8 +138,8 @@ namespace csmp
         else
           {
             cout << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile, storage_vector );
-			outfile.close();
+            binaryFileWrite( outfile, storage_vector );
+			      outfile.close();
             cout << "done!\n";
           }
       }
@@ -147,8 +147,8 @@ namespace csmp
     else
       {
         cout << "reading file " << filename << " ... ";
-        skm_C_fread( infile, storage_vector );
-		infile.close();
+        binaryFileRead( infile, storage_vector );
+		    infile.close();
         cout << "done!\n";
       }
     cout << "VLH_HaliteLookup, leaving constructor ...\n\n";

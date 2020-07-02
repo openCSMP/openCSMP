@@ -298,7 +298,7 @@ bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim
     Index key( pref.StorageKey( it->c_str() ) );
     femDataOutputDispatch::initVariable( key, var );
     domain.Read( key, var );
-    skm_C_fwrite( fp, it->c_str() );
+    binaryFileWrite( fp, it->c_str() );
     if ( !var.Out( fp ) )
       return false;
   }
@@ -315,7 +315,7 @@ bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref
   {
     V var;
     char propName[200];
-    skm_C_fread( fp, propName );
+    binaryFileRead( fp, propName );
     if ( pref.IsDefined( propName ) ) {
       Index key( pref.StorageKey( propName ) );
       femDataOutputDispatch::initVariable( key, var );

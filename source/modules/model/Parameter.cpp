@@ -147,15 +147,15 @@ void Parameter::Out() const
 
 bool Parameter::Out( std::fstream& fp ) const
   {
-  skm_C_fwrite( fp,  name.c_str() );
-  skm_C_fwrite( fp,  notation.c_str() );
-  skm_C_fwrite( fp,  unit.c_str() );
+  binaryFileWrite( fp,  name.c_str() );
+  binaryFileWrite( fp,  notation.c_str() );
+  binaryFileWrite( fp,  unit.c_str() );
   key.Out(fp);
   fp.write( (char*) &min, sizeof(double64) );
   fp.write( (char*) &max, sizeof(double64) );
-  skm_C_fwrite( fp,  usage.c_str() );
-  skm_C_fwrite( fp,  explanation.c_str() );
-  skm_C_fwrite( fp,  reference.c_str() );
+  binaryFileWrite( fp,  usage.c_str() );
+  binaryFileWrite( fp,  explanation.c_str() );
+  binaryFileWrite( fp,  reference.c_str() );
 
   return true; /// @todo (1-C) Meaningless return statement
   }
@@ -164,20 +164,20 @@ bool Parameter::Out( std::fstream& fp ) const
 bool Parameter::In( fstream& fp )
   {
   char buf[399];
-  skm_C_fread( fp,  buf );
+  binaryFileRead( fp,  buf );
   name = buf;
-  skm_C_fread( fp,  buf );
+  binaryFileRead( fp,  buf );
   notation = buf;
-  skm_C_fread( fp,  buf );
+  binaryFileRead( fp,  buf );
   unit = buf;
   key.In(fp);
   fp.read( (char*) &min, sizeof(double64) );
   fp.read( (char*) &max, sizeof(double64) );
-  skm_C_fread( fp,  buf );
+  binaryFileRead( fp,  buf );
   usage = buf;
-  skm_C_fread( fp,  buf );
+  binaryFileRead( fp,  buf );
   explanation = buf;
-  skm_C_fread( fp,  buf );
+  binaryFileRead( fp,  buf );
   reference = buf;
 
   return true; /// @todo (1-C) Meaningless return statement

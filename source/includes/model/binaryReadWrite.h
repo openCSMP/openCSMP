@@ -43,50 +43,53 @@ private:
 @addtogroup CSMPglobalFunctions
 */
 
+/// checks whether the integer value fits within the range of a size_t  and returns it
+size_t checkContainerSize( std::fstream& fp );
 
 template<class T>
-bool skm_C_fwrite(std::fstream& fp, const std::vector<T>& stl_ctner);
+bool binaryFileWrite(std::fstream& fp, const std::vector<T>& stl_ctner);
 
 template<class T>
-bool skm_C_fread(std::fstream& fp, std::vector<T>& stl_ctner);
+bool binaryFileRead(std::fstream& fp, std::vector<T>& stl_ctner);
 
 template<typename T>
-bool skm_C_fwrite(std::fstream& fp, const std::deque<T>& stl_ctner);
+bool binaryFileWrite(std::fstream& fp, const std::deque<T>& stl_ctner);
 
 template<typename T>
-bool skm_C_fread(std::fstream& fp, std::deque<T>& stl_ctner);
+bool binaryFileRead(std::fstream& fp, std::deque<T>& stl_ctner);
 
 template<class T>
-bool skm_C_fwrite(std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner);
+bool binaryFileWrite(std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner);
 
 template<class T>
-bool skm_C_fread(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner);
+bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner);
 
 // maps
 
 template<class M, class T>
-bool skm_C_fwrite(std::fstream& fp, const std::map<M, T>& stl_ctner);
+bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner);
 
 template<class M, class T>
-bool skm_C_fwrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner);
+bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner);
 
 template<class M, class T>
-bool skm_C_fread(std::fstream& fp, std::map<M, T>& stl_ctner);
+bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner);
 
 // maps of vectors
 
 template<class M, class T>
-bool skm_C_fwrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner);
+bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner);
 
 template<class M, class T>
-bool skm_C_fread(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner);
+bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner);
 
 
 // character strings
 
-bool skm_C_fwrite(std::fstream& fp, const char* str);
+bool binaryFileWrite( std::fstream& fp, const char* str);
 
-bool skm_C_fread(std::fstream& fp, char str[]);
+bool binaryFileRead( std::fstream& fp, char str[]);
+
 
 
 
@@ -118,46 +121,46 @@ To efficiently write deque data to a binary file.
 If the file pointer is invalid, method will quit, reporting an error.
 */
 template<class T>
-bool skm_C_fwrite(std::fstream& fp, const std::vector<T>& stl_ctner)
+bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 {
-	if (!fp.is_open())
-	{
-		std::cerr << "\nbool skm_C_fwrite: ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	typename std::vector<T>::const_iterator  it;
-	size_t	bytes = sizeof(T);
-	size_t	elements = stl_ctner.size();
+	if (!fp.is_open()) {
+      std::cerr << "\nbool binaryFileWrite: ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
+
+	const size_t	bytes = sizeof(T);
+	const size_t	elements(stl_ctner.size());
 
 	// writing the size of the object
-	fp.write((char*)&elements, sizeof(size_t));
+	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-	for (it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-		fp.write((char*)&(*it), bytes);
+	for ( typename std::vector<T>::const_iterator 
+        it = stl_ctner.begin(); it != stl_ctner.end(); it++)
+		fp.write( reinterpret_cast<const char*>(&(*it)), bytes );
 
 	return true;
 }
 
+
 /// deque version
 template<typename T>
-bool skm_C_fwrite(std::fstream& fp, const std::deque<T>& stl_ctner)
+bool binaryFileWrite( std::fstream& fp, const std::deque<T>& stl_ctner )
 {
-	if (!fp.is_open())
-	{
-		std::cerr << "\nbool skm_C_fwrite: ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	typename std::deque<T>::const_iterator  it;
-	size_t                     bytes = sizeof(T);
-	size_t                  elements = stl_ctner.size();
+	if (!fp.is_open()) {
+      std::cerr << "\nbool binaryFileWrite( deque<T>& ): ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
+
+	const size_t  bytes = sizeof(T);
+	const size_t  elements = stl_ctner.size();
 
 	// writing the size of the object
-	fp.write((char*)&elements, sizeof(size_t));
+	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-	for (it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-		fp.write((char*)&(*it), bytes);
+	for ( typename std::deque<T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
+		fp.write(reinterpret_cast<const char*>(&(*it)), bytes);
 
 	return true;
 }
@@ -197,83 +200,77 @@ the number of data records cannot be read correctly, and (3) if this
 number does not match the number of records which were actually read.
 */
 template<class T>
-bool skm_C_fread(std::fstream& fp, std::vector<T>& stl_ctner)
+bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
 {
-	if (!stl_ctner.empty())
-		stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-
-	if (!fp.is_open())
-	{
-		std::cerr << "\nbool skm_C_fread: ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	size_t bytes = sizeof(T), counter(0);
-	size_t elements(0), i;
-	T val;
+	if (!fp.is_open()) {
+      std::cerr << "\nbool binaryFileRead( vector<T> ): ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
+    
+	const size_t bytes = sizeof(T);
+	size_t       counter(0);
+	T            val;
 
 	// read size of the record and check it 
-	if (!fp.read((char*)&elements, sizeof(size_t))) {
-		std::cerr << "\nbool skm_C_fread: ERROR: could not read record length." << std::endl;
-		return false;
-	}
-	if (elements > 0) {
-		stl_ctner.reserve(elements);
-		// writing all elements
-		for (i = 0; i<elements; i++) {
-			// counting the successfully read elements
-			fp.read((char*)&val, bytes);
-			counter += 1;
-			stl_ctner.push_back(val);
-		}
-	}
-	if (counter != elements)
-	{
-		std::cerr << "\nbool skm_C_fread: ERROR: incorrect number of records were read: ";
-		std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-		return false;
-	}
+  const size_t elements = checkContainerSize( fp );
+
+	if ( elements > 0 ) {
+        if (!stl_ctner.empty())
+          stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
+        stl_ctner.reserve(elements);
+        // writing all elements
+        for ( size_t i = 0; i<elements; i++ ) {
+          // counting the successfully read elements
+          fp.read( reinterpret_cast<char*>(&val), bytes );
+          counter += 1;
+          stl_ctner.push_back(val);
+      }
+    }
+	if (counter != elements) {
+      std::cerr << "\nbool binaryFileRead: ERROR: incorrect number of records were read: ";
+      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
+      return false;
+    }
+    
 	return true;
 }
 
 
 /// deque version
 template<typename T>
-bool skm_C_fread(std::fstream& fp, std::deque<T>& stl_ctner)
+bool binaryFileRead(std::fstream& fp, std::deque<T>& stl_ctner)
 {
-	if (!stl_ctner.empty())
-		stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-
 	if (!fp.is_open()) {
-		std::cerr << "\nbool skm_C_fread: ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	size_t bytes = sizeof(T), counter(0);
-	size_t elements(0), i;
-	T val;
+      std::cerr << "\nbool binaryFileRead: ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
+	const size_t bytes = sizeof(T);
+  size_t counter(0);
 
 	// read size of the record and assert this 
-	if (!fp.read((char*)&elements, sizeof(size_t)))
-	{
-		std::cout << "\nbool skm_C_fread: ERROR: could not read record length." << std::endl;
-		return false;
-	}
-	if (elements > 0)
-	{
-		// writing all elements
-		for (i = 0; i<elements; i++)
-		{
-			// counting the successfully read elements
-			fp.read((char*)&val, bytes);
-			counter += 1;
-			stl_ctner.push_back(val);
-		}
-	}
-	if (counter != elements)
-	{
-		std::cerr << "\nbool skm_C_fread: ERROR: incorrect number of records were read: ";
-		std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-		return false;
-	}
+  size_t elements = checkContainerSize( fp );
+
+	if ( elements > 0 )
+    {
+      if (!stl_ctner.empty())
+        stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
+        
+    	T val;
+      // writing all elements
+      for ( size_t i = 0U; i<elements; i++ )
+        {
+          // counting the successfully read elements
+          fp.read( reinterpret_cast<char*>(&val), bytes );
+          counter += 1;
+          stl_ctner.push_back(val);
+        }
+    }
+	if ( counter != elements )
+    {
+      std::cerr << "\nbool binaryFileRead: ERROR: incorrect number of records were read: ";
+      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
+      return false;
+    }
 	return true;
 }
 
@@ -308,22 +305,22 @@ To efficiently write vector data to a binary file.
 If the file pointer is invalid, method will quit, reporting an error.
 */
 template<class T>
-bool skm_C_fwrite(std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner)
+bool binaryFileWrite(std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner)
 {
 	if (!fp.is_open()) {
-		std::cerr << "\nbool skm_C_fwrite(const deque<vector<T> >&): ";
-		std::cerr << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
+      std::cerr << "\nbool binaryFileWrite(const deque<vector<T> >&): ";
+      std::cerr << "ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
 
 	// writing the number of vector objects
-	size_t  elements(stl_ctner.size());
-	fp.write((char*)&elements, sizeof(size_t));
+	const size_t  elements(stl_ctner.size());
+	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-	for (typename std::deque<std::vector<T> >::const_iterator
-		it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-		skm_C_fwrite(fp, (*it));
+	for ( typename std::deque<std::vector<T> >::const_iterator
+		    it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
+		binaryFileWrite(fp, (*it) );
 
 	return true;
 }
@@ -364,43 +361,38 @@ the number of data records cannot be read correctly, and (3) if this
 number does not match the number of records which were actually read.
 */
 template<class T>
-bool skm_C_fread(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
+bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
 {
-	if (!stl_ctner.empty())
-		stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-
 	if (!fp.is_open()) {
-		std::cout << "\nbool skm_C_fread(deque<vector<T> >&): ";
-		std::cout << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	size_t counter(0);
-	size_t elements(0), i;
-	std::vector<T>  val;
+      std::cerr << "\nbool binaryFileRead(deque<vector<T> >&): ";
+      std::cerr << "ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
 
 	// 1. reading number of vector records and assert this reading
-	if (!fp.read((char*)&elements, sizeof(size_t))) {
-		std::cerr << "\nbool skm_C_fread(deque<vector<T> >&): ";
-		std::cerr << "ERROR: could not read record length." << std::endl;
-		return false;
-	}
-	if (elements > 0U) {
-		//stl_ctner.reserve( elements );
-		// 2. reading all the vector records
-		for (i = 0; i<elements; i++) {
-			// counting the successfully read elements
-			if (skm_C_fread(fp, val)) {
-				counter++;
-				stl_ctner.push_back(val);
-			}
-		}
+  const size_t elements = checkContainerSize( fp );
+
+	size_t counter(0);
+	if ( elements > 0U ) {
+      if (!stl_ctner.empty())
+        stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
+      //stl_ctner.reserve( elements );
+      std::vector<T>  val;
+      // 2. reading all the vector records
+      for ( size_t i = 0; i<elements; i++ ) {
+        // counting the successfully read elements
+        if (binaryFileRead(fp, val)) {
+          counter++;
+          stl_ctner.push_back(val);
+        }
+     }
 	}
 	if (counter != elements) {
-		std::cerr << "\nbool skm_C_fread(deque<vector<T> >&): ";
-		std::cerr << "ERROR: incorrect number of records were read: ";
-		std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-		return false;
-	}
+      std::cerr << "\nbool binaryFileRead(deque<vector<T> >&): ";
+      std::cerr << "ERROR: incorrect number of records were read: ";
+      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
+      return false;
+    }
 
 	return true;
 }
@@ -439,32 +431,32 @@ To efficiently write map data to a binary file.
 If the file pointer is invalid, method will quit, reporting an error.
 */
 template<class M, class T>
-bool skm_C_fwrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
+bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
 {
 	if (!fp.is_open())
-	{
-		std::cerr << "\nbool skm_C_fwrite(const map<M,T,less<M> >&): ";
-		std::cerr << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	typename std::map<M, T>::const_iterator  it;
-	size_t elements = stl_ctner.size();
-	size_t bytesM = sizeof(M);
-	size_t bytesT = sizeof(T);
+    {
+      std::cerr << "\nbool binaryFileWrite(const map<M,T,less<M> >&): ";
+      std::cerr << "ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
+
+	const size_t elements = stl_ctner.size();
+	const size_t bytesM = sizeof(M);
+	const size_t bytesT = sizeof(T);
 	M      key;
 	T      val;
 
 	// writing the number of vector objects
-	fp.write((char*)&elements, sizeof(size_t));
+	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all key-value pairs
-	for (it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-	{
-		key = (*it).first;
-		val = (*it).second;
-		fp.write((char*)&key, bytesM);
-		fp.write((char*)&val, bytesT);
-	}
+	for ( typename std::map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
+    {
+      key = (*it).first;
+      val = (*it).second;
+      fp.write( reinterpret_cast<const char*>(&key), bytesM );
+      fp.write( reinterpret_cast<const char*>(&val), bytesT );
+    }
 	return true;
 }
 
@@ -483,7 +475,7 @@ the dataset.
 A pointer to a binary file opened in read binary mode ("rb"), and a
 reference to an STL map.
 
-@return skm_C_fread() returns the boolean 'true' if the number of data records
+@return binaryFileRead() returns the boolean 'true' if the number of data records
 which precedes the dataset in the file has been read correctly. If the
 file pointer is invalid or less data are read, the function returns false.
 
@@ -505,46 +497,43 @@ the number of data records cannot be read correctly, and (3) if this
 number does not match the number of records which were actually read.
 */
 template<class M, class T>
-bool skm_C_fread(std::fstream& fp, std::map<M, T>& stl_ctner)
+bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner)
 {
 	if (!stl_ctner.empty())
 		stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
 
 	if (!fp.is_open())
 	{
-		std::cerr << "\nbool skm_C_fread(map<M,T>&): ";
+		std::cerr << "\nbool binaryFileRead(map<M,T>&): ";
 		std::cerr << "ERROR: invalid file pointer." << std::endl;
 		return false;
 	}
-	size_t bytesM = sizeof(M), bytesT = sizeof(T), counterM(0), counterT(0);
-	size_t elements(0), i;
-	M      key;
-	T      val;
+	const size_t bytesM = sizeof(M), bytesT = sizeof(T);
+  size_t  counterM(0), counterT(0);
+	M       key;
+	T       val;
 
 	// 1. read number of record in the map and assert reading
-	if (!fp.read((char*)&elements, sizeof(size_t))) {
-		std::cout << "\nbool skm_C_fread(map<M,T>&): ";
-		std::cout << "ERROR: could not read record length." << std::endl;
-		return false;
-	}
+  const size_t elements = checkContainerSize( fp );
+
 	if (elements > 0) {
 		// 2. reading all map records
-		for (i = 0; i<elements; i++)
+		for ( size_t i = 0; i<elements; i++ )
 		{
 			// reading key
-			if (fp.read((char*)&key, bytesM)) counterM++;
+			if (fp.read( reinterpret_cast<char*>(&key), bytesM )) counterM++;
 			// reading value
-			if (fp.read((char*)&val, bytesT)) counterT++;
+			if (fp.read( reinterpret_cast<char*>(&val), bytesT )) counterT++;
 			// storing value in map after key
 			stl_ctner[key] = val;
 		}
 	}
 	if (counterM != elements || counterT != elements) {
-		std::cerr << "\nbool skm_C_fread(vector<map<M,T>&): ";
-		std::cerr << "ERROR: incorrect number of map records were read: ";
-		std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counterM << std::endl;
-		return false;
-	}
+      std::cerr << "\nbool binaryFileRead(vector<map<M,T>&): ";
+      std::cerr << "ERROR: incorrect number of map records were read: ";
+      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counterM << std::endl;
+      return false;
+    }
 	return true;
 }
 
@@ -581,32 +570,31 @@ To efficiently write map data to a binary file.
 If the file pointer is invalid, method will quit, reporting an error.
 */
 template<class M, class T>
-bool skm_C_fwrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner)
+bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner)
 {
 	if (!fp.is_open())
 	{
-		std::cerr << "\nbool skm_C_fwrite(const map<M,T,less<M> >&): ";
+		std::cerr << "\nbool binaryFileWrite(const unordered_map<M,T,less<M> >&): ";
 		std::cerr << "ERROR: invalid file pointer." << std::endl;
 		return false;
 	}
-	typename std::unordered_map<M, T>::const_iterator it;
-	size_t elements = stl_ctner.size();
-	size_t bytesM = sizeof(M);
-	size_t bytesT = sizeof(T);
+	const size_t elements = stl_ctner.size();
+	const size_t bytesM = sizeof(M);
+	const size_t bytesT = sizeof(T);
 	M      key;
 	T      val;
 
 	// writing the number of vector objects
-	fp.write((char*)&elements, sizeof(size_t));
+	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
 
 	// writing all key-value pairs
-	for (it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-	{
-		key = (*it).first;
-		val = (*it).second;
-		fp.write((char*)&key, bytesM);
-		fp.write((char*)&val, bytesT);
-	}
+	for ( typename std::unordered_map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
+    {
+      key = (*it).first;
+      val = (*it).second;
+      fp.write( reinterpret_cast<const char*>(&key), bytesM );
+      fp.write( reinterpret_cast<const char*>(&val), bytesT );
+    }
 	return true;
 }
 
@@ -625,7 +613,7 @@ the dataset.
 A pointer to a binary file opened in read binary mode ("rb"), and a
 reference to an STL map.
 
-@return skm_C_fread() returns the boolean 'true' if the number of data records
+@return binaryFileRead() returns the boolean 'true' if the number of data records
 which precedes the dataset in the file has been read correctly. If the
 file pointer is invalid or less data are read, the function returns false.
 
@@ -647,42 +635,38 @@ the number of data records cannot be read correctly, and (3) if this
 number does not match the number of records which were actually read.
 */
 template<class M, class T>
-bool skm_C_fread(std::fstream& fp, std::unordered_map<M, T>& stl_ctner)
+bool binaryFileRead(std::fstream& fp, std::unordered_map<M, T>& stl_ctner)
 {
-	if (!stl_ctner.empty())
-		stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-
 	if (!fp.is_open())
-	{
-		std::cerr << "\nbool skm_C_fread(map<M,T>&): ";
-		std::cerr << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	size_t bytesM = sizeof(M), bytesT = sizeof(T), counterM(0), counterT(0);
-	size_t elements(0), i;
-	M      key;
-	T      val;
+    {
+      std::cerr << "\nbool binaryFileRead(unordered_map<M,T>&): ";
+      std::cerr << "ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
+	const size_t bytesM = sizeof(M), bytesT = sizeof(T);
+	size_t  counterM(0), counterT(0);
+	 M      key;
+	 T      val;
 
 	// 1. read number of record in the map and assert reading
-	if (!fp.read((char*)&elements, sizeof(size_t))) {
-		std::cout << "\nbool skm_C_fread(map<M,T>&): ";
-		std::cout << "ERROR: could not read record length." << std::endl;
-		return false;
-	}
+  const size_t elements = checkContainerSize( fp );
+
 	if (elements > 0) {
-		// 2. reading all map records
-		for (i = 0; i<elements; i++)
-		{
-			// reading key
-			if (fp.read((char*)&key, bytesM)) counterM++;
-			// reading value
-			if (fp.read((char*)&val, bytesT)) counterT++;
-			// storing value in map after key
-			stl_ctner[key] = val;
-		}
-	}
+      if (!stl_ctner.empty())
+        stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
+      // 2. reading all map records
+      for ( size_t i = 0; i<elements; i++)
+        {
+          // reading key
+          if (fp.read( reinterpret_cast<char*>(&key), bytesM)) counterM++;
+          // reading value
+          if (fp.read( reinterpret_cast<char*>(&val), bytesT)) counterT++;
+          // storing value in map after key
+          stl_ctner[key] = val;
+        }
+    }
 	if (counterM != elements || counterT != elements) {
-		std::cerr << "\nbool skm_C_fread(vector<map<M,T>&): ";
+		std::cerr << "\nbool binaryFileRead(vector<map<M,T>&): ";
 		std::cerr << "ERROR: incorrect number of map records were read: ";
 		std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counterM << std::endl;
 		return false;
@@ -725,28 +709,28 @@ To efficiently write a map of vector data to a binary file.
 If the file pointer is invalid, method will quit, reporting an error.
 */
 template<class M, class T>
-bool skm_C_fwrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner)
+bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner)
 {
 	if (!fp.is_open()) {
-		std::cerr << "\nbool skm_C_fwrite(const map<M,vector<T>,less<M> >&): ";
+		std::cerr << "\nbool binaryFileWrite(const map<M,vector<T>,less<M> >&): ";
 		std::cerr << "ERROR: invalid file pointer." << std::endl;
 		return false;
 	}
-	typename std::map<M, std::vector<T> >::const_iterator it;
-	size_t elements = stl_ctner.size();
-	size_t bytes = sizeof(M);
-	M      val;
+
+	const size_t elements = stl_ctner.size();
+	const size_t bytes = sizeof(M);
+	M            val;
 
 	// writing the number of vector objects
-	fp.write((char*)&elements, sizeof(size_t));
+	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
 
 	// writing all elements
-	for (it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-	{
-		val = (*it).first;
-		fp.write((char*)&val, bytes);
-		skm_C_fwrite(fp, (*it).second);
-	}
+	for ( typename std::map<M, std::vector<T> >::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
+    {
+      val = (*it).first;
+      fp.write( reinterpret_cast<const char*>(&val), bytes );
+      binaryFileWrite(fp, (*it).second );
+    }
 	return true;
 }
 
@@ -786,46 +770,42 @@ the number of data records cannot be read correctly, and (3) if this
 number does not match the number of records which were actually read.
 */
 template<class M, class T>
-bool skm_C_fread(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner)
+bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner)
 {
-	if (!stl_ctner.empty())
-		stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-
 	if (!fp.is_open()) {
-		std::cerr << "\nbool skm_C_fread(map<M,vector<T>,less<M> >&): ";
-		std::cerr << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	size_t bytes(sizeof(M)), counter(0);
-	size_t elements(0), i;
+      std::cerr << "\nbool binaryFileRead(map<M,vector<T>,less<M> >&): ";
+      std::cerr << "ERROR: invalid file pointer." << std::endl;
+      return false;
+    }
+	const size_t   bytes(sizeof(M));
+	size_t         counter(0);
 	std::vector<T> val;
 	M              key;
 
 	// 1. read number of record in the map and assert reading
-	if (!fp.read((char*)&elements, sizeof(size_t))) {
-		std::cout << "\nbool skm_C_fread(map<M,vector<T> >&): ";
-		std::cout << "ERROR: could not read record length." << std::endl;
-		return false;
-	}
+  const size_t elements = checkContainerSize( fp );
+
 	if (elements > 0) {
+    if (!stl_ctner.empty())
+      stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
 		// 2. reading all map records
-		for (i = 0; i<elements; i++)
-		{
-			// reading key
-			fp.read((char*)&key, bytes);
-			// reading vector and counting the successfully read records
-			if (skm_C_fread(fp, val)) {
-				counter++;
-				stl_ctner[key] = val;
-			}
-		}
+		for ( size_t i = 0; i<elements; i++)
+      {
+        // reading key
+        fp.read( reinterpret_cast<char*>(&key), bytes);
+        // reading vector and counting the successfully read records
+        if (binaryFileRead(fp, val)) {
+          counter++;
+          stl_ctner[key] = val;
+        }
+      }
 	}
 	if (counter != elements) {
-		std::cerr << "\nbool skm_C_fread(vector<map<M,vector<T> >&): ";
-		std::cerr << "ERROR: incorrect number of map records were read: ";
-		std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-		return false;
-	}
+      std::cerr << "\nbool binaryFileRead(vector<map<M,vector<T> >&): ";
+      std::cerr << "ERROR: incorrect number of map records were read: ";
+      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
+      return false;
+    }
 	return true;
 }
 

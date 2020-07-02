@@ -239,7 +239,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
     return false;
   }
   // writing the file header
-  skm_C_fwrite( fp, heading.c_str() );
+  binaryFileWrite( fp, heading.c_str() );
 
   // writing number of splitboundaries
   size_t records( this->SplitBoundaries() );
@@ -249,7 +249,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
   for ( auto bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); bit++ )
   {
     // writing name of splitboundary
-    skm_C_fwrite( fp, bit->first.c_str() );
+    binaryFileWrite( fp, bit->first.c_str() );
     std::cout << (*bit).first << " ";
     // splitboundary
     if ( !bit->second.Out( fp ) )
@@ -280,7 +280,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
 
   // reading the file header
   char csCache[255];
-  skm_C_fread( fp, csCache );
+  binaryFileRead( fp, csCache );
 
   // reading number of splitboundaries
   size_t records( 0 );
@@ -293,7 +293,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
   {
     std::string bName;
     // reading name of splitboundary
-    skm_C_fread( fp, csCache );
+    binaryFileRead( fp, csCache );
     bName = csCache;
     // inserting splitboundary if not existing yet
     std::pair<typename std::map<std::string, csmp::SplitBoundary<dim> >::iterator, bool>

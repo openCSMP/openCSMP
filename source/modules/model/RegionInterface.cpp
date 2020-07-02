@@ -590,7 +590,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputAllRegionsToBinary( const char*
     heading += bin_file;
     heading += "'.";
 
-    skm_C_fwrite( fp, heading.c_str() );
+    binaryFileWrite( fp, heading.c_str() );
   }
 
   std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary: regions written to binary file: ";
@@ -694,7 +694,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputAllRegionsFromBinary( const char
     BinaryFileSectionRead hdr( fp, "REGFHEDR" );
     char  text[500U];
 
-    skm_C_fread( fp, text );
+    binaryFileRead( fp, text );
     std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary: Reading file header:\n\t" << text << std::endl;
   }
   std::cout << "\n\timporting the regions: ";
