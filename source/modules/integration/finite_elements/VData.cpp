@@ -349,8 +349,20 @@ std::unordered_map<size_t,long64>::const_iterator VData::BFlagsBegin() const
 std::unordered_map<size_t,long64>::const_iterator VData::BFlagsEnd() const
  { return bflags.end(); }
 
+
 void VData::AddBFlag( size_t node_id, long64 bflag )
- { bflags[ node_id ] = bflag; }
+ { 
+    // if the boundary flag integer value is outside of the range of defined values
+    if ( bflag < MULTIPLE ) {
+         cerr <<"\nVData::AddBFlag: boundary flag "<< bflag <<" is uninterpretable; no assignment was made.\n";
+         return;
+      }
+    if ( intToBOX_BOUNDARY(bflag) == NOT ) {
+         cerr <<"\nVData::AddBFlag: boundary flag "<< bflag <<" = NOT (at boundary); no assignment was made.\n";
+         return;
+      }
+    bflags.insert( make_pair( node_id, bflag ) ); 
+ }
  
  
 /**

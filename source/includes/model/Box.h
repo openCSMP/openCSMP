@@ -57,22 +57,22 @@ enum {
 
 /// @enum BOX_BOUNDARY uniquely identifies the placement of nodes and elements on the boundary of a box-shaped model
 enum BOX_BOUNDARY {
-  NOT,                            ///< not located on a model boundary
+  NOT       = 0,                  ///< not located on a model boundary
   IRREGULAR = IRREGULAR_OUTSIDE,  ///< located on a not-specified outside boundary of model (usually in the bounding box)
-  TOP = TOP_OUTSIDE,
-  BOTTOM = BOTTOM_OUTSIDE,
-  LEFT = LEFT_OUTSIDE,
+  TOP       = TOP_OUTSIDE,
+  BOTTOM    = BOTTOM_OUTSIDE,
+  LEFT   = LEFT_OUTSIDE,
   RIGHT = RIGHT_OUTSIDE,
   FRONT = FRONT_OUTSIDE,
-  BACK = BACK_OUTSIDE,
-  CNR1 = CNR_MIN,
-  CNR2 = CNR_MIN_MAXX,
-  CNR3 = CNR_MAX_MAXX,
-  CNR4 = CNR_MAX_MINXZ,
-  CNR5 = CNR_MIN_MAXZ,
-  CNR6 = CNR_MIN_MAXXZ,
-  CNR7 = CNR_MAX,
-  CNR8 = CNR_MAX_MAXZ,
+  BACK  = BACK_OUTSIDE,
+  CNR1  = CNR_MIN,
+  CNR2  = CNR_MIN_MAXX,
+  CNR3  = CNR_MAX_MAXX,
+  CNR4  = CNR_MAX_MINXZ,
+  CNR5  = CNR_MIN_MAXZ,
+  CNR6  = CNR_MIN_MAXXZ,
+  CNR7  = CNR_MAX,
+  CNR8  = CNR_MAX_MAXZ,
   EDGE1 = BACK_BOTTOM,
   EDGE2 = BACK_RIGHT,
   EDGE3 = BACK_TOP,
@@ -85,7 +85,7 @@ enum BOX_BOUNDARY {
   EDGE10 = FRONT_RIGHT,
   EDGE11 = FRONT_TOP,
   EDGE12 = FRONT_LEFT,
-  INTERNAL = REGION_BOUNDARY,  ///<  internal model boundary (usually inside bounding box, with neighbors on either side)
+  INTERNAL = REGION_BOUNDARY,    ///<  internal model boundary (usually inside bounding box, with neighbors on either side)
   MULTIPLE = MULTIPLE_BOUNDARIES ///<  can result when an element is at the front and back at the same time because model is only a single element thick or similar
 };
 

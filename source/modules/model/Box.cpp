@@ -158,8 +158,8 @@ bool isBACK( BOX_BOUNDARY bd )
 
 BOX_BOUNDARY intToBOX_BOUNDARY( long64 i )
 {
-  if ( i == 0 )              return NOT;
-  if ( i == 1 )              return IRREGULAR;
+  if ( i == 0 )                 return NOT;
+  if ( i == IRREGULAR_OUTSIDE ) return IRREGULAR;
   if ( i == LEFT_OUTSIDE )    return LEFT;
   if ( i == RIGHT_OUTSIDE )   return RIGHT;
   if ( i == BOTTOM_OUTSIDE )  return BOTTOM;
@@ -187,6 +187,7 @@ BOX_BOUNDARY intToBOX_BOUNDARY( long64 i )
   if ( i == FRONT_TOP )       return EDGE11;
   if ( i == FRONT_LEFT )      return EDGE12;
   if ( i == REGION_BOUNDARY ) return INTERNAL;
+  if ( i == MULTIPLE_BOUNDARIES ) return MULTIPLE;
 
   //cout <<"\nintToSG_BOUNDARY(int): unable to parse integer: "<< i << endl;
   return NOT;
@@ -224,6 +225,7 @@ std::string  parseBoundary( BOX_BOUNDARY i )
   if ( i == EDGE11 )   return string( "EDGE11" );
   if ( i == EDGE12 )   return string( "EDGE12" );
   if ( i == INTERNAL ) return string( "INTERNAL" );
+  if ( i == MULTIPLE ) return string( "MULTIPLE" );
 
   cerr << "\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: " << i << endl;
   return string( "NOT" );
@@ -263,6 +265,8 @@ BOX_BOUNDARY  parseBoundary( const string& i )
   if ( i == "EDGE11" )   return EDGE11;
   if ( i == "EDGE12" )   return EDGE12;
   if ( i == "INTERNAL" ) return INTERNAL;
+  if ( i == "MULTIPLE" ) return MULTIPLE;
+  
   // if the name is not recognized it is not a BOX_BOUNDARY
   return NOT;
 }
@@ -306,6 +310,7 @@ bool belongsToSide( BOX_BOUNDARY side, BOX_BOUNDARY bd )
   else if ( side == BOTTOM ) return isBOTTOM( bd );
   else if ( side == FRONT )  return isFRONT( bd );
   else if ( side == BACK )   return isBACK( bd );
+  else if ( side == IRREGULAR && bd == IRREGULAR ) return true;
   return false;
 }
 
@@ -1583,17 +1588,30 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   assert( it != last_elmt );
+  
+  size_t nodes_at_boundary(0U);
+  
   while ( it != last_elmt ) 
     {
       assert( (*it) != nullptr );
       // the bflags of each element are stored in a set
-      SmallSet<BOX_BOUNDARY>  eflags;
+      SmallSet<BOX_BOUNDARY>  eflags; // this actually is a multiset!
       const size_t nodes( (*it)->Nodes() );
       for ( size_t i = 0U; i<nodes; ++i ) {
-          assert( (*it)->N(i) != nullptr );                
-           if ( (*it)->N(i)->AtBoundary() != NOT && (*it)->N(i)->AtBoundary() != INTERNAL )
-             eflags.insert( (*it)->N( i )->AtBoundary() );
+           assert( (*it)->N(i) != nullptr );                
+           if ( (*it)->N(i)->AtBoundary() != NOT && (*it)->N(i)->AtBoundary() != INTERNAL ) {
+                eflags.insert( (*it)->N( i )->AtBoundary() );
+                nodes_at_boundary++;
+             }
         }
+
+// testing
+//if ( !eflags.empty() ) {
+//     cerr <<"\n"<< (*it)->Idx() <<": ";
+//     for ( auto i=eflags.begin(); i!=eflags.end(); ++ i )
+//       cerr << parseBoundary( (*i) ) <<" ";
+//  }       
+        
       // if no identifier could be found the boundary flag is set to NOT
       if ( eflags.empty() )
         (*it)->AtBoundary( NOT );
@@ -1624,14 +1642,16 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
               else if ( flag1 == BACK and flag2 == TOP ) (*it)->AtBoundary( EDGE3 );
               // BACK_LEFT
               else if ( flag1 == BACK and flag2 == LEFT ) (*it)->AtBoundary( EDGE4 );
-              // BOTTOM_RIGHT
-              else if ( flag1 == BOTTOM and flag2 == RIGHT ) (*it)->AtBoundary( EDGE5 );
-              // TOP_RIGHT
-              else if ( flag1 == TOP and flag2 == RIGHT ) (*it)->AtBoundary( EDGE6 );
-              // TOP_LEFT
-              else if ( flag1 == TOP and flag2 == LEFT ) (*it)->AtBoundary( EDGE7 );
+  
               // BOTTOM_LEFT
-              else if ( flag1 == BOTTOM and flag2 == LEFT ) (*it)->AtBoundary( EDGE8 );
+              else if ( flag1 == BOTTOM and flag2 == LEFT ) (*it)->AtBoundary( EDGE5 );
+              // BOTTOM_RIGHT
+              else if ( flag1 == BOTTOM and flag2 == RIGHT ) (*it)->AtBoundary( EDGE6 );
+              // TOP_RIGHT
+              else if ( flag1 == TOP and flag2 == RIGHT ) (*it)->AtBoundary( EDGE7 );
+              // TOP_LEFT
+              else if ( flag1 == TOP and flag2 == LEFT ) (*it)->AtBoundary( EDGE8 );
+              
               // FRONT_BOTTOM
               else if ( flag1 == FRONT and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE9 );
               // FRONT_RIGHT
@@ -1640,6 +1660,7 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
               else if ( flag1 == FRONT and flag2 == TOP ) (*it)->AtBoundary( EDGE11 );
               // FRONT_LEFT
               else if ( flag1 == FRONT and flag2 == LEFT ) (*it)->AtBoundary( EDGE12 );
+              
               // if a corner is contained that corner flag is choosen
               else if ( flag1 <= CNR1 and flag1 >= CNR8 ) (*it)->AtBoundary( flag1 );
               else if ( flag2 <= CNR1 and flag2 >= CNR8 ) (*it)->AtBoundary( flag2 );
@@ -1653,9 +1674,9 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
         {
           if ( dim == 2 && isTriangular( (*it)->FE_Type() ) ) {
                (*it)->Out();
-               csmp_error.notice( ERROR, "flagElementUsingNodalAtBoundaryFlags", "all nodes of 2D triangular element appear to be located on boundary");
+               csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags", "all nodes of 2D triangular element appear to be located on boundary");
             }
-          // case when all boundary flags ware the same was already considered
+          // case when all boundary flags are the same was already considered
             
           // erase the basic boundary options
           eflags.erase( LEFT );
@@ -1684,7 +1705,7 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
                         (*eflags.begin()) <  INTERNAL ) (*it)->AtBoundary( (*eflags.begin()) );
               else if ( (*eflags.begin()) == IRREGULAR ) (*it)->AtBoundary( IRREGULAR );
               else {
-                  cerr << "\n\n\nflagElementUsingNodalAtBoundaryFlags: unable to determine box boundary flag for element:\n";
+                  cerr << "\n\n\nflagElementsUsingNodal_BOX_BOUNDARY_Flags: unable to determine box boundary flag for element:\n";
                   for ( auto boundary : eflags )
                     cout << parseBoundary( boundary ) << " ";
                   cout << endl;
@@ -1695,11 +1716,14 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
                 cerr << "\n\tmissed case: ";
                 (*it)->Out();
                 (*it)->AtBoundary( MULTIPLE );
-                csmp_error.notice( ERROR, "flagElementUsingNodalAtBoundaryFlags", "could not discern which boundary elemnt is located on");
+                csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags", "could not discern which boundary elemnt is located on");
              }
         }
       ++it;
     }
+    
+   if ( nodes_at_boundary == 0 ) 
+     csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags", "none of the nodes in the model had BOX_BOUNDARY flags");
 
 } // end flagElementUsingNodalAtBoundaryFlags
 

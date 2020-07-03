@@ -543,23 +543,27 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       root_interface_group_.push_back( (*group.begin()) );
   } // end interfaces
 
-    // ---------------------------------------------------------------------
-    // 3. Flagging nodes located at the model boundary
-    // ---------------------------------------------------------------------
+  // ---------------------------------------------------------------------
+  // 3. Flagging nodes at model boundary with BOX_BOUNDARY flags
+  // ---------------------------------------------------------------------
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: flagging boundary objects..." << endl;
-  if ( vset.BFlags() > 0 )
-  {
-    // nodes were initially constructed as not located at the model boundary
-    for ( auto bit = vset.BFlagsBegin(); bit != vset.BFlagsEnd(); bit++ )
-      node_connector[(*bit).first]->AtBoundary( intToBOX_BOUNDARY( (*bit).second ) );
-  }
+  if ( vset.BFlags() > 0 ) {
+       // nodes were initially constructed as not located at the model boundary
+       for ( auto bit = vset.BFlagsBegin(); bit != vset.BFlagsEnd(); bit++ )
+         node_connector[(*bit).first]->AtBoundary( intToBOX_BOUNDARY( (*bit).second ) );
 
-  // ---------------------------------------------------------------------
-  // 4. Flagging the elements using boundary flags from the nodes
-  // ---------------------------------------------------------------------
-  flagElementsUsingNodal_BOX_BOUNDARY_Flags<dim>( elmt_connector.begin(), elmt_connector.end() );
+// TESTING
+//for ( auto bit = vset.BFlagsBegin(); bit != vset.BFlagsEnd(); bit++ )
+// cerr <<" "<< parseBoundary( intToBOX_BOUNDARY( (*bit).second ) );
 
+       // ---------------------------------------------------------------------
+       // 4. Flagging the elements using the boundary flags from the nodes
+       // ---------------------------------------------------------------------
+       // (this can only be done where there are node flags, which is true only for box-shaped models)
+       flagElementsUsingNodal_BOX_BOUNDARY_Flags<dim>( elmt_connector.begin(), elmt_connector.end() );
+    }
+    
   // ------------------------------------------------------------------------------
   // 5. Assigning parent elements (these are the elements that share the node) and
   // their respective internal node-id numbers to the nodes

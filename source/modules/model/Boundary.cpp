@@ -754,14 +754,14 @@ bool Boundary<dim>::Divide( const typename std::vector<Face<dim>*>::const_iterat
 
 
 /**
-Dispatched initialize method to establish node vector, perimeter entities,
-bflags and entity sorting.
-
-@attention this method will not change the BOX boundary flags of the nodes.
+    Dispatched initialize method to establish node vector, perimeter entities,
+    bflags and entity sorting.
 */
 template<size_t dim>
 void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary, bool updateNeighborConnectivity, bool updateIndexes )
 {
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
   // establishing boundary node container
   this->CreateNodePointerVector();
 
@@ -775,8 +775,34 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary, bool updateNeighborCon
   // initialize indices
   if ( updateIndexes ) this->UpdateMemberIndexes();
 
-  // assigns boundary flags
+  // assigns BOX_BOUNDARY flags
   AtBoundary( boxBoundary );
+  
+  // assigning flags to nodes and higher-dimensional parent elements, performing check whether 'boxBoundary' is consistent with boundary location
+  // existing edge or corner flags are not changed because method has insufficient diagnostics
+  for ( typename vector<Node<dim>*>::iterator 
+        nit=this->node_vec_.begin(); nit!=this->node_vec_.end(); ++nit )
+    if ( !isEdge((*nit)->AtBoundary()) || !isCorner((*nit)->AtBoundary()) )
+      (*nit)->AtBoundary( boxBoundary );
+    
+  // faces and higher dimensional neighbor elements
+  for ( typename vector<Face<dim>*>::iterator 
+        fit=this->elmt_vec_.begin(); fit!=this->elmt_vec_.end(); ++fit ) {
+       // inner neighbor = always present
+       if ( !isEdge((*fit)->InnerParent()->AtBoundary()) || 
+            !isCorner((*fit)->InnerParent()->AtBoundary()) )
+         (*fit)->InnerParent()->AtBoundary( boxBoundary );
+       // outer neighbor = only at internal boundaries
+       if ( (*fit)->OuterParent() != nullptr ) {
+            if ( !isEdge((*fit)->OuterParent()->AtBoundary()) || 
+                 !isCorner((*fit)->OuterParent()->AtBoundary()) ) {
+                if ( boxBoundary != INTERNAL )
+                  csmp_error.notice( WARNING, "Boundary<dim>::Initialize: initialising higher-dimensional neighbors of Faces", parseBoundary(boxBoundary),
+                                    "flag indicates external model boundary, but Face has inner and outer neighbors. Assigning INTERNAL flag" );
+                (*fit)->OuterParent()->AtBoundary( INTERNAL );
+            }
+         }
+    }
 
 } // end Initialize
 
