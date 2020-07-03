@@ -1674,7 +1674,7 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
         {
           if ( dim == 2 && isTriangular( (*it)->FE_Type() ) ) {
                (*it)->Out();
-               csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags", "all nodes of 2D triangular element appear to be located on boundary");
+               csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags:", "all nodes of 2D triangular element appear to be located on boundary.");
             }
           // case when all boundary flags are the same was already considered
             
@@ -1707,8 +1707,8 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
               else {
                   cerr << "\n\n\nflagElementsUsingNodal_BOX_BOUNDARY_Flags: unable to determine box boundary flag for element:\n";
                   for ( auto boundary : eflags )
-                    cout << parseBoundary( boundary ) << " ";
-                  cout << endl;
+                    cerr << parseBoundary( boundary ) << " ";
+                  cerr << endl;
                   (*it)->Out();
                 }
              }
@@ -1716,14 +1716,14 @@ void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Elemen
                 cerr << "\n\tmissed case: ";
                 (*it)->Out();
                 (*it)->AtBoundary( MULTIPLE );
-                csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags", "could not discern which boundary elemnt is located on");
+                csmp_error.notice( WARNING, "flagElementsUsingNodal_BOX_BOUNDARY_Flags:", "could not discern which boundary elemnt is located on.");
              }
         }
       ++it;
     }
     
    if ( nodes_at_boundary == 0 ) 
-     csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags", "none of the nodes in the model had BOX_BOUNDARY flags");
+     csmp_error.notice( ERROR, "flagElementsUsingNodal_BOX_BOUNDARY_Flags:", "none of the nodes in the model had BOX_BOUNDARY flags.");
 
 } // end flagElementUsingNodalAtBoundaryFlags
 

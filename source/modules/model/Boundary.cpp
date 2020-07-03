@@ -1187,7 +1187,7 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize boundary essentials
-  Initialize( IRREGULAR, true, true );
+  Initialize( INTERNAL, true, true );
 
   //done
   return true;
