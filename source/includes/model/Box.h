@@ -140,6 +140,10 @@ bool isFRONT( BOX_BOUNDARY );
 /// returns whether boundary flag belongs to boundary BACK (3D only)
 bool isBACK( BOX_BOUNDARY );
 
+/// infers from the node flags which boundary the element lies on; returns MULTIPLE is ambiguous; throws exception if inconsistent
+template<size_t dim, template<size_t> class CELL>
+BOX_BOUNDARY atBoundary( const CELL<dim>* const );
+
 /// prints a summary of the current flags of the nodes and elements to screen.
 template<size_t dim> void printBoxBoundaryFlags( const Model<dim>& );
 
@@ -169,9 +173,9 @@ void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& );
 void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& );
 
 /// using the nodal BOX_BOUNDARY flag values, the elements are flagged accordingly
-template<size_t dim>
-void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator,
-                                                typename std::deque<csmp::Element<dim>* >::iterator );
+//template<size_t dim>
+//void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator,
+//                                                typename std::deque<csmp::Element<dim>* >::iterator );
 
 /// permits to create variables values from BOX_BOUNDARY flag enumeration values
 template<size_t dim>

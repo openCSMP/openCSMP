@@ -561,7 +561,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        // 4. Flagging the elements using the boundary flags from the nodes
        // ---------------------------------------------------------------------
        // (this can only be done where there are node flags, which is true only for box-shaped models)
-       flagElementsUsingNodal_BOX_BOUNDARY_Flags<dim>( elmt_connector.begin(), elmt_connector.end() );
+// no more BOX_BOUNDARY flags for elements!       flagElementsUsingNodal_BOX_BOUNDARY_Flags<dim>( elmt_connector.begin(), elmt_connector.end() );
     }
     
   // ------------------------------------------------------------------------------
@@ -2349,7 +2349,6 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
                             "inner dim+1 neighbor element of Face should be flagged as model boundary because Face has no outer element; flagging element as irregular" );
           cerr <<"\nDiagnostics:";
           f->InnerParent()->Out();
-          f->InnerParent()->AtBoundary( IRREGULAR );
         }
       vset.Pfvert( eidx, neighbors + 1U, f->InnerParent()->AtBoundary() );
     }

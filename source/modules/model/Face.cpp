@@ -135,29 +135,7 @@ Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
         this->ResizePropertyStorage( ep, ip );
     else
         this->ResizePropertyStorage( ep );
-   
-    // checking and adjusting the BOX_BOUNDARY element flagging of
-    // the higher-dimensional neighbor elements if these are not already
-    // flagged as boundary
-    if ( innerParent_->AtBoundary() == NOT )
-      for ( const auto nit : node_connector_ )
-        if ( isEdge( nit->AtBoundary() ) ) {
-             innerParent_->AtBoundary( nit->AtBoundary() );
-             break;
-          }
-    // if no suitable edge was determined the element is nevertheless marked as a boundary one
-    if ( innerParent_->AtBoundary() == NOT )
-      innerParent_->AtBoundary( IRREGULAR );
-    
-    if ( outerParent_->AtBoundary() == NOT )
-      for ( const auto nit : node_connector_ )
-        if ( isEdge( nit->AtBoundary() ) ) {
-             outerParent_->AtBoundary( nit->AtBoundary() );
-             break;
-          }
-    if ( outerParent_->AtBoundary() == NOT )
-      outerParent_->AtBoundary( IRREGULAR );
-   
+      
  } // end edge constructor
 
 

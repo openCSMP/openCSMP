@@ -32,7 +32,6 @@ pointer to zero.
 template<size_t dim>
 Element<dim>::Element( BOX_BOUNDARY bflag )
   : idx_( UINT_MAX ),
-    at_boundary_( bflag ),
     material_id_(UNSPECIFIED)
 {
 }
@@ -63,7 +62,6 @@ them properly.
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  at_boundary_( NOT ),
   idx_( UINT_MAX ),
   elmt_connector_( f->Neighbors(), nullptr ),
   node_connector_( f->Nodes(), nullptr ),
@@ -80,7 +78,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
                        csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
   FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-  at_boundary_( NOT ),
   idx_( UINT_MAX ),
   elmt_connector_( f->Neighbors(), nullptr ),
   node_connector_( f->Nodes(), nullptr ),
@@ -100,7 +97,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
   FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-  at_boundary_( NOT ),
   idx_( UINT_MAX ),
   elmt_connector_( f->Neighbors(), nullptr ),
   node_connector_( f->Nodes(), nullptr ),
@@ -133,7 +129,6 @@ Element<dim>::Element( size_t idx,
   idx_( idx ),
   elmt_connector_( f->Neighbors(), nullptr ),
   node_connector_( f->Nodes(), nullptr ),
-  at_boundary_( boundary_flag ),
   material_id_(UNSPECIFIED)
 {
   elmt_connector_.resize( f->Neighbors(), nullptr );
@@ -152,7 +147,6 @@ template<size_t dim>
 Element<dim>::Element( const Element<dim>& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-    at_boundary_( el.at_boundary_ ),
     idx_( el.idx_ ),
     elmt_connector_( el.elmt_connector_ ), // watch out where the pointers point to
     node_connector_( el.node_connector_ ),  // watch out where the pointers point to
@@ -171,7 +165,6 @@ template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
   : FiniteElementPolicy<dim, csmp::Element>( move( el.FE() ) ),
     FiniteVolumePolicy<dim, csmp::Element>( move( el.FV() ) ),
-    at_boundary_( move( el.at_boundary_ ) ),
     idx_( move( el.idx_ ) ),
     elmt_connector_( move( el.elmt_connector_ ) ),
     node_connector_( move( el.node_connector_ ) ),
@@ -200,7 +193,6 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
   if ( &el != this ) {
     if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
     if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
-    at_boundary_ = el.at_boundary_;
     idx_ = el.idx_;
     elmt_connector_ = el.elmt_connector_;
     node_connector_ = el.node_connector_;
@@ -224,7 +216,6 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( move( el.FE() ) );
   if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( move( el.FV() ) );
 
-  at_boundary_ = move( el.at_boundary_ );
   idx_ = move( el.idx_ );
   elmt_connector_ = move( el.elmt_connector_ );
   node_connector_ = move( el.node_connector_ );
@@ -466,12 +457,6 @@ void  Element<dim>::Idx( size_t idx_to_assign ) const
   idx_ = idx_to_assign;
 }
 
-template<size_t dim>
-void  Element<dim>::AtBoundary( BOX_BOUNDARY b )
-{
-  at_boundary_ = b;
-}
-
 
 /// unique material identifier that matches number of parent unique region
 template<size_t dim>
@@ -500,7 +485,7 @@ size_t   Element<dim>::Idx() const
 template<size_t dim>
 BOX_BOUNDARY  Element<dim>::AtBoundary() const
 {
-  return at_boundary_;
+  return atBoundary( this );
 }
 
 template<size_t dim>
@@ -757,7 +742,7 @@ template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<
 template<size_t dim>
 void Element<dim>::Out() const
 {
-  string str( parseBoundary( at_boundary_ ) );
+  string str( parseBoundary( atBoundary(this) ) );
   cout << "\n\nElement<" << dim << ">::Out: number: " << idx_;
   cout <<"\n\tMaterial ID: "<< material_id_;
   cout << " (" << parseFiniteElementType( this->FE_Type() ) << " = ";
