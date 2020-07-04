@@ -55,6 +55,7 @@ bool isSide( BOX_BOUNDARY bd )
   if ( bd == BOTTOM ) return true;
   if ( bd == FRONT )  return true;
   if ( bd == BACK )   return true;
+  if ( bd == IRREGULAR ) return true;
   return false;
 }
 
@@ -2073,5 +2074,9 @@ BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY 
 template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double64&, double64& );
 template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double64&, double64& );
 template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double64&, double64& );
+
+
+
+
 
 } // end namespace csmp

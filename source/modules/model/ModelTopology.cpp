@@ -1889,6 +1889,8 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
                                    bool correct_orientation_of_surface_elements,
                                    bool non_box_boundary )
 {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     // 1. merge region
     // -------------------------------------------------------
     if( require_unique_names_for_vol_surf_lines)
@@ -1906,8 +1908,9 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
 
     // 3. assign boundary flags for box-shaped model
     // -----------------------------------------------
-    if( !non_box_boundary )
-        AssignBoxShapedModelFlags( vset );
+      if ( !AssignBoxShapedModelFlags(vset) )
+        csmp_error.notice( WARNING, "ModelTopology::CheckTopology:",
+                          "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
 
     // 4. correct surface mesh orientation
     // ---------------------------------------
@@ -1976,7 +1979,9 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
  
     // 3. assign boundary flags for box-shaped model
     // -----------------------------------------------
-    if ( !non_box_boundary ) AssignBoxShapedModelFlags( vset );
+      if ( !AssignBoxShapedModelFlags(vset) )
+        csmp_error.notice( ERROR, "ModelTopology::CheckTopology:",
+                          "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
 
     // 4. correct surface mesh orientation
     // ---------------------------------------
@@ -2037,7 +2042,7 @@ bool  ModelTopology::BoxShapedModel() const
       if ( (bit=box_boundaries.find((*it).first)) != box_boundaries.end() )
         (*bit).second = true;
         
-    // checking whether all boundaries were found in the dataset
+    // checking whether all boundary regions were found in the dataset
     for (  bit=box_boundaries.begin(); bit!=box_boundaries.end(); bit++ )
       if ( (*bit).second == false ) return false;
       
@@ -2116,9 +2121,10 @@ bool  ModelTopology::BoxShapedModel() const
 
 
  template<size_t dim>
- void ModelTopology::AssignBoxShapedModelFlags( VSet<dim>& vset )
+ bool ModelTopology::AssignBoxShapedModelFlags( VSet<dim>& vset ) const
  {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+     bool flagging_was_done_successfully(false);
 
      // flag boundaries if the model is box-shaped ( 3D )
      // ------------------------------------------------------
@@ -2132,10 +2138,10 @@ bool  ModelTopology::BoxShapedModel() const
 
          // for all volume elements in the mesh which have surface element neighbors,
          // assign appropriate boundary flags
-         FlagNeighborFacesOfBoxShapedModel( vset );
+         flagging_was_done_successfully = FlagNeighborFacesOfBoxShapedModel( vset );
 
          // flagging the boundary nodes according to CSMP specs
-         FlagBoundaryNodesOfBoxShapedModel( vset );
+         flagging_was_done_successfully = Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( vset );
      }
 
      // flag boundaries if the model is rectangle-shaped ( 2D )
@@ -2149,20 +2155,22 @@ bool  ModelTopology::BoxShapedModel() const
          }
          // for all surface elements in the mesh which have bar element neighbors,
          // assign appropriate boundary flags
-         BuildNeighborConnectivityOfRectangleShapedModel( vset );
+         flagging_was_done_successfully = FlagNeighborFacesOfBoxShapedModel( vset );
      }
+     
+    return flagging_was_done_successfully;
  }
 
- template void ModelTopology::AssignBoxShapedModelFlags( VSet<1U>& );
- template void ModelTopology::AssignBoxShapedModelFlags( VSet<2U>& );
- template void ModelTopology::AssignBoxShapedModelFlags( VSet<3U>& );
+ template bool ModelTopology::AssignBoxShapedModelFlags( VSet<1U>& ) const;
+ template bool ModelTopology::AssignBoxShapedModelFlags( VSet<2U>& ) const;
+ template bool ModelTopology::AssignBoxShapedModelFlags( VSet<3U>& ) const;
 
 
 
 
  /**
 
- Assigns the characteristic neighbor flags to finite element pfverts
+ Assigns the correct neighbor flags to finite element pfverts
  array. This is done only for volume elements and for only those faces
  of these which are juxtaposed against surface elements that lie on
  the boundaries of the model, as is identified from their affiliation
@@ -2201,15 +2209,15 @@ bool  ModelTopology::BoxShapedModel() const
  The method is used inside the public methods that read in an ANSYS
  geometry.
   */
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<1U>& vset )
+ bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<1U>& vset ) const
  {
      return true;
  }
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<2U>& vset )
+ bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<2U>& vset ) const
  {
      return true;
  }
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<3U>& vset )
+ bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<3U>& vset ) const
   {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
@@ -2217,11 +2225,9 @@ bool  ModelTopology::BoxShapedModel() const
      // 0. Preliminary checks
          if ( !Contains("TOP")   || !Contains("BOTTOM") ||
               !Contains("FRONT") || !Contains("BACK")   ||
-              !Contains("LEFT")  || !Contains("RIGHT") ) {
-              throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
-       "not all boundaries of box-shaped model are not identified by appropriate std::strings; use methods for irregular model");
-              return false;
-           }
+              !Contains("LEFT")  || !Contains("RIGHT") )
+            throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
+                                  "not all boundaries of box-shaped model are not identified by appropriate std::strings; use methods for irregular model");
        }
      catch( csmp::Exception& ba )
        {
@@ -2297,7 +2303,11 @@ bool  ModelTopology::BoxShapedModel() const
 
  /**
 
- This method enables the more efficient handling of box shaped models, by
+ This method determines on which BOX_BOUNDARY the 'pfverts' 
+ entries in the VSet lie for which there is no neighbor element available.
+ The result is stored in VSet::Vdata.
+ 
+ This  enables the more efficient handling of box shaped models, by
  providing standard identifiers for the sides of these models such that
  boundary conditions can be assigned using the interfaces of the Model.
  For those volumetric elements which are located on the model boundary,
@@ -2329,19 +2339,19 @@ bool  ModelTopology::BoxShapedModel() const
  */
  bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype,
                                                         int32 ANSYS_bound_etype,
-                                                        VSet<1U>& vset )
+                                                        VSet<1U>& vset ) const
  {
      return true;
  }
  bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype,
                                                         int32 ANSYS_bound_etype,
-                                                        VSet<2U>& vset )
+                                                        VSet<2U>& vset ) const
  {
      return true;
  }
  bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype,
                                                         int32 ANSYS_bound_etype,
-                                                        VSet<3U>& vset )
+                                                        VSet<3U>& vset ) const
   {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
@@ -2431,7 +2441,8 @@ bool  ModelTopology::BoxShapedModel() const
 
  /**
 
- FlagBoundaryNodesOfBoxShapedModel() looks for families of surface
+ Infer_BOX_BOUNDARY_EdgesAndCornersFlagsFromSideFlags() 
+ looks for families of surface
  elements in the supplied model topology which are named FRONT, BACK,
  LEFT, RIGHT, TOP and BOTTOM. If these can be found the model is accepted
  as box shaped and the missing edge and corner point boundary flags
@@ -2454,22 +2465,45 @@ bool  ModelTopology::BoxShapedModel() const
  conventions which require that x increases from LEFT to RIGHT, y
  increases from BOTTOM to TOP, and z increases from BACK to FRONT.
  */
- bool ModelTopology::FlagBoundaryNodesOfBoxShapedModel( VSet<1U>& vset )
+bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<1U>& vset ) const
  {
      return true;
  }
- bool ModelTopology::FlagBoundaryNodesOfBoxShapedModel( VSet<2U>& vset )
+ /// method only checks whether the 4 corners are present and report missing ones, returning false.
+bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<2U>& vset ) const
  {
+     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+     csmp_error.notice( WARNING, "ModelTopology<2>::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags:",
+                       "Rectangular model has no edges.");
+     // checking for the presence of corners
+     std::set<BOX_BOUNDARY> corners;
+     for ( std::unordered_map<size_t,long64>::const_iterator 
+           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); ++bit ) 
+       if ( (*bit).second == CNR1 || (*bit).second == CNR2 || (*bit).second == CNR3 || (*bit).second == CNR4 )
+         corners.insert( intToBOX_BOUNDARY((*bit).second) );
+      
+     // reporting potential errors 
+     if ( corners.size() != 4U ) {
+          if ( !corners.empty() ) {
+               std::cerr <<"\n\tdetected corners: ";
+               for ( auto cit=corners.begin(); cit!=corners.end(); ++cit )
+                 std::cerr << parseBoundary( (*cit) ) <<" "; 
+               std::cerr << std::endl;
+            }
+          csmp_error.notice( ERROR, "ModelTopology<2>::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags:",
+                            "Some of the model corners are not flagged.");
+          return false;
+       }
      return true;
  }
- bool ModelTopology::FlagBoundaryNodesOfBoxShapedModel( VSet<3U>& vset )
+bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>& vset ) const
   {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
      // 0. Preliminary checks
      if ( !BoxShapedModel() ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
-                                         "Model is not box shaped");
+          throw csmp::Exception( ERROR, "ModelTopology<3>::Infer_BOX_BOUNDARY_EdgesAndCornersFlagsFromSideFlags:",
+                                         "Model is not box shaped.");
           return false;
        }
 
@@ -2605,7 +2639,7 @@ bool  ModelTopology::BoxShapedModel() const
                        back_bottom.begin(), back_bottom.end(), cit );
 
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR1 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN );
      corner.erase( corner.begin(), corner.end() );
@@ -2614,7 +2648,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( back_bottom.begin(), back_bottom.end(),
                        back_right.begin(), back_right.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR2 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXX );
      corner.erase( corner.begin(), corner.end() );
@@ -2623,7 +2657,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( back_right.begin(), back_right.end(),
                        back_top.begin(), back_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR3 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXX );
      corner.erase( corner.begin(), corner.end() );
@@ -2632,7 +2666,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( back_left.begin(), back_left.end(),
                        back_top.begin(), back_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR4 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MINXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2642,7 +2676,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( front_left.begin(), front_left.end(),
                        front_bottom.begin(), front_bottom.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR5 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2651,7 +2685,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( front_right.begin(), front_right.end(),
                        front_bottom.begin(), front_bottom.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR6 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2660,7 +2694,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( front_right.begin(), front_right.end(),
                        front_top.begin(), front_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR7 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX );
      corner.erase( corner.begin(), corner.end() );
@@ -2675,7 +2709,7 @@ bool  ModelTopology::BoxShapedModel() const
 
      if( csmp_error.Verbose() )
      {
-         std::cout <<"\nModelTopology::FlagBoundaryNodesOfBoxShapedModel: ";
+         std::cout <<"\nModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel: ";
          std::cout <<"Assigned CSMP associated boundary flags to the nodes."<< std::endl;
      }
 
@@ -2687,6 +2721,7 @@ bool  ModelTopology::BoxShapedModel() const
 
  /**
 
+RebuildLineElementNeighborConnectivity():
  ANSYS does not correctly flag the neighbors of surface and line elements
  in 2 and 3-dimensional models. This method recreates this information.
 
@@ -2701,13 +2736,13 @@ bool  ModelTopology::BoxShapedModel() const
  lines coming together at that node. This method only assigns one of
  these - which one is therefore arbitrary.
  */
- void ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel( VSet<1U>& vset )
+ void ModelTopology::RebuildLineElementNeighborConnectivity( VSet<1U>& vset )
  {
  }
- void ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel( VSet<3U>& vset )
+ void ModelTopology::RebuildLineElementNeighborConnectivity( VSet<3U>& vset )
  {
  }
- void ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel( VSet<2U>& vset )
+ void ModelTopology::RebuildLineElementNeighborConnectivity( VSet<2U>& vset )
   {
      // 0. erasing/deleting existing pfverts
      // vector gives number of neighbors per element
@@ -2870,22 +2905,22 @@ bool  ModelTopology::BoxShapedModel() const
 
      if ( ebottom.empty() ) {
            with_bottom=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                       "BOTTOM boundary: No line elements could be identified." );
        }
      if ( eright.empty() ) {
            with_right=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                       "RIGHT boundary: No line elements could be identified." );
        }
      if ( etop.empty() ) {
            with_top=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                       "TOP boundary: No line elements could be identified." );
        }
      if ( eleft.empty() ) {
            with_bottom=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                       "LEFT boundary: No line elements could be identified." );
        }
 
@@ -2903,7 +2938,7 @@ bool  ModelTopology::BoxShapedModel() const
             fit=surface_neighbor_keys.find( (*it).first );
             // if key cannot be found
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                          "BOTTOM boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2923,7 +2958,7 @@ bool  ModelTopology::BoxShapedModel() const
             std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
             fit=surface_neighbor_keys.find( (*it).first );
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                          "RIGHT boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2943,7 +2978,7 @@ bool  ModelTopology::BoxShapedModel() const
             std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
             fit=surface_neighbor_keys.find( (*it).first );
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                          "TOP boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2963,7 +2998,7 @@ bool  ModelTopology::BoxShapedModel() const
             std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
             fit=surface_neighbor_keys.find( (*it).first );
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                          "LEFT boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2990,7 +3025,7 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                   "CNR1 could not be identified" );
      // CNR2
      set_intersection( nbottom.begin(), nbottom.end(), nright.begin(), nright.end(), cit );
@@ -2999,7 +3034,7 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                   "CNR2 could not be identified" );
      // CNR3
      set_intersection( nright.begin(), nright.end(), ntop.begin(), ntop.end(), cit );
@@ -3008,7 +3043,7 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                   "CNR3 could not be identified" );
      // CNR4
      set_intersection( ntop.begin(), ntop.end(), nleft.begin(), nleft.end(), cit );
@@ -3017,10 +3052,13 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
                                   "CNR4 could not be identified" );
 
   } // end BuildNeighborConnectivityOfRectangleShapedModel
+
+
+
 
 
  /**
@@ -3105,6 +3143,9 @@ bool  ModelTopology::BoxShapedModel() const
        }
 
    } // end correctSurfaceElementOrientations
+
+
+ 
 
  } // end namespace csmp
 

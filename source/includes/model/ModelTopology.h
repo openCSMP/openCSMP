@@ -9,7 +9,23 @@ namespace csmp {
 
 template<size_t> class VSet;
 
-/// Stores model topology as defined in ANSYS model and conveyed to CSMP as '.asc' file
+/** 
+     Model topology  associates elements with regions and (future) boundaries,
+     recording the region and boundary names, element types, and their dimensionality.
+     This is important in model construction process.
+     The ModelTopology stores this "topologic" information, which
+     cannot be stored in the VSet.
+     
+     Model topology is used also to perform a consistency check on the VSet. It checks the neighbor connectivity and gets VSet to fix it if there is a problem.
+    
+     When the model is supposed box-shaped, this is tested and potentially missing information is restored in collaboration with the VSet / VDataand Box.
+     
+     When the model was created by ANSYS and output using its CSP interface,
+     the information needed to initialise the ModelToplogy class is contained in the '.asc' file.
+     
+     TODO: rather than doing this in ModelTopology create missing 'pfverts' (element neighbor info) in the VSet.
+     TODO: let VSet create correct line element orientations (where ends connect to beginnings)
+ */
 class ModelTopology {
   public:
     explicit ModelTopology( bool isoparametric_element_mesh=false );
@@ -95,8 +111,8 @@ class ModelTopology {
     template<size_t dim>
     void        RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset );
 
-	/// region names
-	void		RegionNames( std::vector<std::string>& ) const;
+	  /// region names
+	  void		RegionNames( std::vector<std::string>& ) const;
 
     /// properties of regions
     void        PropertiesOfRegions( const char* regions_file,
@@ -112,7 +128,12 @@ class ModelTopology {
     bool        CheckElementNumbering() const;
     void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
 
-    /// checks and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes etc
+
+    // ---------------------------------------------------------
+    // consistency checks and restoration of missing information
+    // ---------------------------------------------------------
+
+    /// checks and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes, neighbor connectivity etc.
     template<size_t dim>
     bool        CheckTopology( VSet<dim>& vset,
                                const std::multimap<std::string,std::string>& object_specs,
@@ -129,25 +150,40 @@ class ModelTopology {
                                bool correct_orientation_of_surface_elements = false,
                                bool non_box_boundary = true );
 
-
-    /// box shaped model related
-    bool        BoxShapedModel() const; // verifies that model has correctly named boundaries
+    /// In ANSYS 2D (surface only) models, line element neighbor connectivity is broken, this method fixes this
+    void        RebuildLineElementNeighborConnectivity( VSet<2U>& ); // not constant because topology gets changed as well
+    /// function stub does nothing
+    void        RebuildLineElementNeighborConnectivity( VSet<1U>& );
+    /// function stub does nothing because in 3D models connectivity is fine
+    void        RebuildLineElementNeighborConnectivity( VSet<3U>& );
+  
+    
+    // ------------------------------------------------------------------------------------------
+    // box shaped model related
+    // ------------------------------------------------------------------------------------------
+        
+    /// checks that 3D model contains the boundaries LEFT, RIGHT, BOTTOM, FRONT, BACK; TOP omitted because it may be IRREGULAR
+    bool        BoxShapedModel() const; 
+    
+    /// checks that 2D model contains the boundaries LEFT, RIGHT, BOTTOM, TOP
     bool        RectangleShapedModel() const;
-    template<size_t dim>
-    void        AssignBoxShapedModelFlags( VSet<dim>& );
-    void        BuildNeighborConnectivityOfRectangleShapedModel( VSet<3U>& );
-    void        BuildNeighborConnectivityOfRectangleShapedModel( VSet<2U>& );
-    void        BuildNeighborConnectivityOfRectangleShapedModel( VSet<1U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<3U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<2U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<1U>& );
-    // works only for specific elements
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<3U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<2U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<1U>& );
-    bool        FlagBoundaryNodesOfBoxShapedModel( VSet<3U>& );
-    bool        FlagBoundaryNodesOfBoxShapedModel( VSet<2U>& );
-    bool        FlagBoundaryNodesOfBoxShapedModel( VSet<1U>& );
+    
+    /// recreates the BOX_BOUNDARY node flags if a problem was detected 
+    template<size_t dim> 
+    bool        AssignBoxShapedModelFlags( VSet<dim>& ) const;
+    
+    /// determines  VSet 'pfverts'  BOX_BOUNDARY entries for the element faces that have no neighbor .
+    bool        FlagNeighborFacesOfBoxShapedModel( VSet<3U>& ) const;
+    bool        FlagNeighborFacesOfBoxShapedModel( VSet<2U>& ) const;
+    bool        FlagNeighborFacesOfBoxShapedModel( VSet<1U>& ) const;
+    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<3U>& ) const;
+    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<2U>& ) const;
+    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<1U>& ) const;
+    
+    /// attempts to reconstruct BOX_BOUNDARY node flags in VSet for edges and corners, assuming that flags LEFT,RIGHT,TOP... are there
+    bool        Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>& ) const;
+    bool        Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<2U>& ) const;
+    bool        Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<1U>& ) const;
 
   private:
 
