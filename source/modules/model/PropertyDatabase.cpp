@@ -645,6 +645,7 @@ void PropertyDatabase<dim>::AssignVariableIndices()
           
      for ( auto& prop : propList_ )
        prop.second.key.index = (variableCount_[prop.second.key.place][prop.second.key.type])++;
+       
  } // AssignVariableIndices
 
 
@@ -788,6 +789,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
      
      // initialize indices and create binary database
      UpdateParametersAndDatabase(); 
+     
   } // end TextToBinaryFile
 
 

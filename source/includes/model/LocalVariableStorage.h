@@ -9,6 +9,9 @@
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
 #include "enumTypeCompatibilityChecks.h"
+#include "compileTimeVariableDispatch.h"
+
+// #define VARIABLE_STORAGE_DEBUG
 
 namespace csmp {
 
@@ -364,7 +367,8 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
 #endif
     return data_.flags[idx.flagOffset];
  }
- 
+
+/// ArrayVariable 
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
 inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<ARRAY,place>& idx ) const 
@@ -390,12 +394,13 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifdef VARIABLE_STORAGE_DEBUG
+  assert( i < dim );
   assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
     return data_.flags[ idx.flagOffset + i ];
  }
 
-
+// tensor only has flags for its diagnao elements
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
 inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<TENSOR,place>& idx, size_t i ) const  
@@ -404,6 +409,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifdef VARIABLE_STORAGE_DEBUG
+  assert( i < dim );
   assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
     return data_.flags[ idx.flagOffset + i ];
@@ -418,12 +424,14 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifdef VARIABLE_STORAGE_DEBUG
+  const size_t array_length(idx.flagDepth);
+  assert( i < array_length );
   assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
     return data_.flags[ idx.flagOffset + i ];
  }
  
- 
+
  
  
 /// Scalar & Array variable flag
@@ -465,6 +473,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<VECTOR,p
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifdef VARIABLE_STORAGE_DEBUG
+ assert( i < dim );
  assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
     data_.flags[ idx.flagOffset + i ] = flag;
@@ -480,6 +489,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<TENSOR,p
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifdef VARIABLE_STORAGE_DEBUG
+ assert( i < dim );
  assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
     data_.flags[ idx.flagOffset + i ] = flag;
@@ -495,7 +505,9 @@ inline void LocalVariableStorage<dim,STOREE>::Status( const csmp::INDEX<FLAGGEDA
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifdef VARIABLE_STORAGE_DEBUG
- assert( (idx.flagOffset+i) < data_.flags.size() );
+  const size_t array_length(idx.flagDepth);
+  assert( i < array_length );
+  assert( (idx.flagOffset+i) < data_.flags.size() );
 #endif
     data_.flags[ idx.flagOffset + i ] = flag;
  }
@@ -641,8 +653,8 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<ARRAY,plac
     const size_t flags_offset( idx.flagOffset );
     const size_t arraySize( idx.dataDepth );
     for( size_t i(0); i < arraySize; ++i )
-      av(i)     = data_.data[ data_offset +  i ];
-    av.Flag()= data_.flags[ flags_offset];
+      av(i)   = data_.data[ data_offset +  i ];
+    av.Flag() = data_.flags[ flags_offset];
 }
 
 /// FlaggedArray variable
@@ -711,6 +723,7 @@ inline double64 LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::I
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( offset < data_.data.size() );
 #endif
     return data_.data[offset];
@@ -729,6 +742,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
 #endif
@@ -749,6 +763,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t ip, const csmp::INDE
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( offset < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
 #endif
@@ -768,6 +783,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t ip, const 
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( flagOffset < data_.flags.size() );
 #endif
     return data_.flags[flagOffset];
@@ -785,6 +801,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t ip, const 
     static_assert( TypeMatchesVariableType<ArrayVariable,ARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( flagOffset < data_.flags.size() );
 #endif
     return data_.flags[flagOffset];
@@ -803,6 +820,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t ip, const 
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+    assert( ip < IPS_SI );
     assert( i < dim );
     assert( flagOffset+i < data_.flags.size() );
 #endif
@@ -820,6 +838,7 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t ip, const 
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+    assert( ip < IPS_SI );
     assert( i < dim );
     assert( flagOffset+i < data_.flags.size() );
 #endif
@@ -837,7 +856,9 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t ip, const 
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
-    assert( i < idx.dataDepth );
+    assert( ip < IPS_SI );
+    const size_t array_length(idx.flagDepth);
+    assert( i < array_length );
     assert( flagOffset+i < data_.flags.size() );
 #endif
 
@@ -858,6 +879,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t ip, const csmp::IND
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( flagOffset < data_.flags.size() );
 #endif
 
@@ -873,6 +895,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t ip, const csmp::IND
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ArrayVariable,ARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( flagOffset < data_.flags.size() );
 #endif
 
@@ -890,6 +913,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t ip, const csmp::IND
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( i < dim );
   assert( flagOffset+i < data_.flags.size() );
 #endif
@@ -905,6 +929,7 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t ip, const csmp::IND
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( i < dim );
   assert( flagOffset+i < data_.flags.size() );
 #endif
@@ -920,7 +945,9 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t ip, const csmp::IND
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
-  assert( i < idx.dataDepth );
+  assert( ip < IPS_SI );
+  const size_t array_length(idx.flagDepth);
+  assert( i < array_length );
   assert( flagOffset+i < data_.flags.size() );
 #endif
     data_.flags[ flagOffset+i ] = flag;
@@ -939,6 +966,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t ip, const csmp::INDE
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
@@ -960,6 +988,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<VectorVariable,VECTOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( offset+dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
@@ -981,6 +1010,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t ip, const csmp::INDE
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
@@ -1004,6 +1034,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TemplateTypeMatchesVariableType<TensorVariable,TENSOR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( offset+dim*dim-1 < data_.data.size() );
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
@@ -1027,6 +1058,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t ip, const csmp::INDE
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ArrayVariable,ARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( av.Size() == idx.dataDepth );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset< data_.flags.size() );
@@ -1049,6 +1081,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<ArrayVariable,ARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( av.Size() == idx.dataDepth );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset < data_.flags.size() );
@@ -1072,6 +1105,7 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t ip, const csmp::INDE
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( av.Size() == idx.dataDepth );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset+arraySize-1 < data_.flags.size() );
@@ -1096,6 +1130,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX
     static_assert( place == ELEMENT_INTEGRATION_POINT || place == FACE_INTEGRATION_POINT || place == INTER_FACE_INTEGRATION_POINT, "LocalVariableStorage: STOREE type does not match IP PLACEMENT enumeration" );
     static_assert( TypeMatchesVariableType<FlaggedArrayVariable,FLAGGEDARRAY>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
 #ifndef NDEBUG
+  assert( ip < IPS_SI );
   assert( av.Size() == idx.dataDepth );
   assert( offset+arraySize-1 < data_.data.size() );
   assert( flagOffset+arraySize-1 < data_.flags.size() );
@@ -1127,17 +1162,23 @@ inline double64 LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, 
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
+    // offset to first instance of idx variable in the data vector
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.dataOffset < data_.data.size() );
+   assert( offsetData.first < data_.data.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth; // for facet integration points only
     ///                                                                                    ^^^^^^^^
-    return data_.data[idx.dataOffset + sector_ip_offset];
+    return data_.data[ offsetData.first + sector_ip_offset ];
   }
 
 
@@ -1152,12 +1193,19 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx);
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.dataOffset < data_.data.size() );
-    assert( idx.flagOffset < data_.flags.size() );
+    assert( offset < data_.data.size() );
+    assert( flagOffset < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1167,8 +1215,8 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    sc.Flag() = data_.flags[idx.flagOffset + sector_ip_flag_offset];
-    sc        = data_.data[idx.dataOffset + sector_ip_offset];
+    sc.Flag() = data_.flags[flagOffset + sector_ip_flag_offset];
+    sc        = data_.data[offset + sector_ip_offset];
   }
 
 
@@ -1184,12 +1232,19 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.dataOffset < data_.data.size() );
-    assert( idx.flagOffset < data_.flags.size() );
+    assert( offset < data_.data.size() );
+    assert( flagOffset < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1199,8 +1254,8 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    data_.flags[idx.flagOffset + sector_ip_flag_offset] = sc.Flag();
-    data_.data[idx.dataOffset + sector_ip_offset]       = sc();
+    data_.flags[flagOffset + sector_ip_flag_offset] = sc.Flag();
+    data_.data[offset + sector_ip_offset]           = sc();
   }
 
 
@@ -1217,17 +1272,21 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.flagOffset < data_.flags.size() );
+    assert( offsetData.second < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
     
-    return data_.flags[idx.flagOffset + sector_ip_offset];
+    return data_.flags[offsetData.second + sector_ip_offset];
   }
 
 template<size_t dim, template<size_t> class STOREE>
@@ -1239,17 +1298,22 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.flagOffset < data_.flags.size() );
+  assert( offsetData.second < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
     
-    return data_.flags[idx.flagOffset + sector_ip_offset];
+    return data_.flags[offsetData.second + sector_ip_offset];
   }
 
 
@@ -1264,19 +1328,25 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( i < dim );
-    assert( idx.flagOffset + i < data_.flags.size() );
+    assert( flagOffset+i < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
     
-    return data_.flags[ idx.flagOffset + sector_ip_offset + i ];
-  }
+    return data_.flags[ flagOffset + sector_ip_offset + i ];
+ }
 
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
@@ -1287,19 +1357,25 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( i < dim );
-    assert( idx.flagOffset + i < data_.flags.size() );
+    assert( flagOffset+i < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
     
-    return data_.flags[ idx.flagOffset + sector_ip_offset + i ];
-  }
+    return data_.flags[ flagOffset + sector_ip_offset + i ];
+ }
 
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
@@ -1310,19 +1386,25 @@ inline VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     const size_t arraySize( idx.dataDepth );
     assert( i < arraySize );
-    assert( idx.flagOffset + i < data_.flags.size() );
+    assert( flagOffset+i < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
     
-    return data_.flags[ idx.flagOffset + sector_ip_offset + i ];
+    return data_.flags[ flagOffset + sector_ip_offset + i ];
   }
 
 
@@ -1338,18 +1420,24 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_facet, si
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.flagOffset < data_.flags.size() );
+    assert( flagOffset < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    data_.flags[idx.flagOffset + sector_ip_offset] = flag;
-  }
+    data_.flags[flagOffset + sector_ip_offset] = flag;
+ }
 
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
@@ -1360,18 +1448,24 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_facet, si
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t flagOffset(offsetData.second);
+    
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.flagOffset < data_.flags.size() );
+  assert( flagOffset < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    data_.flags[idx.flagOffset + sector_ip_offset] = flag;
-  }
+    data_.flags[flagOffset + sector_ip_offset] = flag;
+ }
 
 
 
@@ -1385,18 +1479,24 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_facet, si
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( i < dim );
-    assert( idx.flagOffset + i < data_.flags.size() );
+    assert( flagOffset+i < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    data_.flags[ idx.flagOffset + sector_ip_offset + i ] = flag;
+    data_.flags[ flagOffset + sector_ip_offset + i ] = flag;
   }
 
 template<size_t dim, template<size_t> class STOREE>
@@ -1408,18 +1508,24 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_facet, si
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( i < dim );
-    assert( idx.flagOffset + i < data_.flags.size() );
+    assert( flagOffset+i < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    data_.flags[ idx.flagOffset + sector_ip_offset + i ] = flag;
+    data_.flags[ flagOffset + sector_ip_offset + i ] = flag;
   }
 
 template<size_t dim, template<size_t> class STOREE>
@@ -1431,19 +1537,25 @@ inline void LocalVariableStorage<dim,STOREE>::Status( size_t sector_or_facet, si
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     const size_t arraySize( idx.dataDepth );
     assert( i < arraySize );
-    assert( idx.flagOffset + i < data_.flags.size() );
+    assert( flagOffset+i < data_.flags.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    data_.flags[ idx.flagOffset + sector_ip_offset + i ] = flag;
+    data_.flags[ flagOffset + sector_ip_offset + i ] = flag;
   }
 
 
@@ -1458,12 +1570,19 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.dataOffset + dim - 1 < data_.data.size() );
-    assert( idx.flagOffset + dim - 1 < data_.flags.size() );
+    assert( offset+dim-1 < data_.data.size() );
+    assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1474,8 +1593,8 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i(0); i<dim; ++i ) {
-         data_.flags[ idx.flagOffset + sector_ip_flag_offset + i ] = vc.Flag(i);
-         data_.data[ idx.dataOffset + sector_ip_offset + i ]       = vc[i];
+         data_.flags[ flagOffset + sector_ip_flag_offset + i ] = vc.Flag(i);
+         data_.data[ offset + sector_ip_offset + i ]            = vc[i];
       }
   }
 
@@ -1492,12 +1611,19 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.dataOffset + dim - 1 < data_.data.size() );
-    assert( idx.flagOffset + dim - 1 < data_.flags.size() );
+    assert( offset+dim-1 < data_.data.size() );
+    assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1508,8 +1634,8 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i(0); i<dim; ++i ) {
-         vc.Flag(i) = data_.flags[ idx.flagOffset + sector_ip_flag_offset + i ];
-         vc(i)      = data_.data[ idx.dataOffset + sector_ip_offset + i ];
+         vc.Flag(i) = data_.flags[ flagOffset + sector_ip_flag_offset + i ];
+         vc(i)      = data_.data[ offset + sector_ip_offset + i ];
       }
   }
 
@@ -1526,12 +1652,19 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.dataOffset + dim - 1 < data_.data.size() );
-    assert( idx.flagOffset + dim - 1 < data_.flags.size() );
+    assert( offset+dim*dim-1 < data_.data.size() );
+    assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1542,9 +1675,9 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i=0U; i<dim; ++i ) {
-          data_.flags[ idx.flagOffset + sector_ip_flag_offset + i ] = ts.Flag(i);
+          data_.flags[ flagOffset + sector_ip_flag_offset + i ] = ts.Flag(i);
           for ( size_t j=0U; j<dim; ++j )
-            data_.data[ idx.dataOffset + sector_ip_offset + i*dim + j ] = ts(i,j);
+            data_.data[ offset + sector_ip_offset + i*dim + j ] = ts(i,j);
       }
  }
 
@@ -1559,12 +1692,19 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-    assert( idx.dataOffset + dim - 1 < data_.data.size() );
-    assert( idx.flagOffset + dim - 1 < data_.flags.size() );
+    assert( offset+dim*dim-1 < data_.data.size() );
+    assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1575,9 +1715,9 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i=0U; i<dim; ++i ) {
-          ts.Flag(i) = data_.flags[ idx.flagOffset + sector_ip_flag_offset + i ];
+          ts.Flag(i) = data_.flags[flagOffset + sector_ip_flag_offset + i];
           for ( size_t j=0U; j<dim; ++j )
-            ts(i,j) = data_.data[ idx.dataOffset + sector_ip_offset + i*dim + j ];
+            ts(i,j) = data_.data[ offset + sector_ip_offset + i*dim + j ];
       }
   }
 
@@ -1592,14 +1732,21 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-    const size_t arraySize( idx.dataDepth );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+    const size_t arraySize( idx.dataDepth );
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( av.Size() == idx.dataDepth );
-    assert( idx.dataOffset + arraySize - 1 < data_.data.size() );
-    assert( idx.flagOffset < data_.flags.size() );
+    assert( offset+arraySize-1 < data_.data.size() );
+    assert( flagOffset< data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1610,8 +1757,8 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i(0); i < arraySize; ++i )
-      data_.data[ idx.dataOffset + sector_ip_offset + i ]     = av[i];
-    data_.flags[ idx.flagOffset + sector_ip_flag_offset ] = av.Flag();
+      data_.data[ offset + sector_ip_offset + i ]     = av[i];
+    data_.flags[ flagOffset + sector_ip_flag_offset ] = av.Flag();
   }
 
 
@@ -1628,14 +1775,22 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-    const size_t arraySize( idx.dataDepth );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+    const size_t arraySize( idx.dataDepth );
+    av.Resize( idx.dataDepth );
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( av.Size() == idx.dataDepth );
-    assert( idx.dataOffset + arraySize - 1 < data_.data.size() );
-    assert( idx.flagOffset < data_.flags.size() );
+    assert( offset+arraySize-1 < data_.data.size() );
+    assert( flagOffset< data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1646,8 +1801,8 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i(0); i < arraySize; ++i )
-      av(i) = data_.data[ idx.dataOffset + sector_ip_offset + i ];
-    av.Flag( data_.flags[ idx.dataOffset + sector_ip_flag_offset ] );
+      av(i) = data_.data[ offset + sector_ip_offset + i ];
+    av.Flag( data_.flags[flagOffset + sector_ip_flag_offset] );
   }
 
 
@@ -1662,15 +1817,21 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
+
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
     const size_t arraySize( idx.dataDepth );
 
 #ifndef NDEBUG  
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( av.Size() == idx.dataDepth );
-    assert( idx.dataOffset + arraySize - 1 < data_.data.size() );
-    assert( idx.flagOffset + arraySize - 1 < data_.flags.size() );
+    assert( offset+arraySize-1 < data_.data.size() );
+    assert( flagOffset+arraySize-1 < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1681,8 +1842,8 @@ inline void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, siz
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i(0); i < arraySize; ++i ) {
-         data_.data[ idx.dataOffset  + sector_ip_offset + i ]      = av[i];
-         data_.flags[ idx.flagOffset + sector_ip_flag_offset + i ] = av.Flag(i);
+         data_.data[ offset     + sector_ip_offset + i ]      = av[i];
+         data_.flags[flagOffset + sector_ip_flag_offset + i ] = av.Flag(i);
       }
   }
 
@@ -1698,14 +1859,22 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                    place == FACE_SECTOR_INTEGRATION_POINT || place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
                    place == FACE_FACET_INTEGRATION_POINT || idx.place == INTER_FACE_FACET_INTEGRATION_POINT,
                   "LocalVariableStorage: STOREE type does not match VARIABLE placement" );
-    const size_t arraySize( idx.dataDepth );
-#ifndef NDEBUG
+
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const std::pair<size_t, size_t> offsetData = lvsCompileTimeDispatch::containerOffset( storeePtr, idx );
+    const size_t offset(offsetData.first);
+    const size_t flagOffset(offsetData.second);
+    const size_t arraySize( idx.dataDepth );
+    av.Resize( idx.dataDepth );
+
+#ifndef NDEBUG
+    if ( place == SECTOR_INTEGRATION_POINT ) assert( ip < IPS_SE );
+    if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
     assert( av.Size() == idx.dataDepth );
-    assert( idx.dataOffset + arraySize - 1 < data_.data.size() );
-    assert( idx.flagOffset + arraySize - 1 < data_.flags.size() );
+    assert( offset+arraySize-1 < data_.data.size() );
+    assert( flagOffset+arraySize-1 < data_.flags.size() );
 #endif
     const size_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                          (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
@@ -1716,8 +1885,8 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     for ( size_t i(0); i < arraySize; ++i ) {
-         av(i) = data_.data[ idx.dataOffset + sector_ip_offset + i ];
-         av.Flag( i, data_.flags[ idx.flagOffset + sector_ip_flag_offset + i ] );
+         av(i) = data_.data[ offset + sector_ip_offset + i ];
+         av.Flag( i, data_.flags[flagOffset + sector_ip_flag_offset + i] );
       }
   }
 

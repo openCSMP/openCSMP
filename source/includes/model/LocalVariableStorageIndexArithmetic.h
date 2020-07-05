@@ -28,13 +28,13 @@ LocalVariableStorageIndexArithmetic: macro FLAG_OFFSET_FVIP for local variable s
 #endif
 
 // CRT calls for elements/faces/interfaces
-#define FE_SES static_cast<const STOREE*>(this)->Sectors()                                  ///< sectors of element storee
-#define FE_FAS static_cast<const STOREE*>(this)->Facets()                                   ///< facets of element storee
-#define FE_FVIPS_PER_SECTOR static_cast<const STOREE*>(this)->IntegrationPointsPerSector()  ///< integration points per sector
-#define FE_FVIPS_PER_FACET static_cast<const STOREE*>(this)->IntegrationPointsPerFacet()    ///< integration points per facet
-#define IPS_SI static_cast<const STOREE*>(this)->IntegrationPoints()                        ///< simplex integration points
-#define IPS_SE FE_SES*FE_FVIPS_PER_SECTOR                                                   ///< sector integration points
-#define IPS_FA FE_FAS*FE_FVIPS_PER_FACET                                                    ///< facet integration points
+#define FE_SES static_cast<const STOREE<dim>*>(this)->Sectors()                                  ///< sectors of element storee
+#define FE_FAS static_cast<const STOREE<dim>*>(this)->Facets()                                   ///< facets of element storee
+#define FE_FVIPS_PER_SECTOR static_cast<const STOREE<dim>*>(this)->IntegrationPointsPerSector()  ///< integration points per sector
+#define FE_FVIPS_PER_FACET static_cast<const STOREE<dim>*>(this)->IntegrationPointsPerFacet()    ///< integration points per facet
+#define IPS_SI static_cast<const STOREE<dim>*>(this)->IntegrationPoints()                        ///< simplex integration points
+#define IPS_SE FE_SES * FE_FVIPS_PER_SECTOR                                                      ///< sector integration points
+#define IPS_FA FE_FAS * FE_FVIPS_PER_FACET                                                       ///< facet integration points
 
 // element/face/interface integration point offsets
 
