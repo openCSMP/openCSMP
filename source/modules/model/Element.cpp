@@ -83,8 +83,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
   node_connector_( f->Nodes(), nullptr ),
   material_id_(UNSPECIFIED)
 {
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
 }
 
 
@@ -102,11 +100,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
   node_connector_( f->Nodes(), nullptr ),
   material_id_(UNSPECIFIED)
 {
-  // variable storage is resized here because the
-  // finite element pointer must be initialised first
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
-
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );
   else
@@ -131,9 +124,6 @@ Element<dim>::Element( size_t idx,
   node_connector_( f->Nodes(), nullptr ),
   material_id_(UNSPECIFIED)
 {
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
-
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );
   else
@@ -416,9 +406,6 @@ void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor ele
 template<size_t dim>
 void Element<dim>::Unassign( const Element<dim>* e_ptr ) 
   {
-    if ( this == nullptr ) {
-         return;
-      }
     for ( size_t i = 0U; i < elmt_connector_.size(); ++i ) {
         if ( e_ptr == nullptr || elmt_connector_[i] == nullptr )
           continue;
@@ -430,24 +417,6 @@ void Element<dim>::Unassign( const Element<dim>* e_ptr )
   }
 
 
-/* OLD VERSION THAT WOULD DELETE ELEMENT FROM VECTOR
-
-    unassigns the neighbor element and deletes it from the 'elmt_connector' vector
-
-template<size_t dim>
-void Element<dim>::Unassign( Element<dim>* e_ptr ) 
-{
-  for ( size_t i = 0U; i < elmt_connector_.size(); i++ ) {
-    if ( e_ptr == nullptr || elmt_connector_[i] == nullptr )
-      continue;
-    if ( (*e_ptr) == (*elmt_connector_[i]) ) {
-      elmt_connector_.erase( elmt_connector_.begin() + i );
-      elmt_connector_.swap( elmt_connector_ );
-      break;
-    }
-  }
-}
-*/
 
 
 template<size_t dim>

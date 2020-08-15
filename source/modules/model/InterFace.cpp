@@ -391,9 +391,6 @@ void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE sid
 template<size_t dim>
 void InterFace<dim>::Unassign( const InterFace<dim>* e_ptr ) 
   {
-    if ( this == nullptr ) {
-         return;
-      }
     for ( size_t i = 0U; i < interface_connector_.size(); i++ ) {
         if ( e_ptr == nullptr || interface_connector_[i] == nullptr )
           continue;
@@ -405,33 +402,6 @@ void InterFace<dim>::Unassign( const InterFace<dim>* e_ptr )
   }
 
 
-
-/**
-  JCK - used in the deletion of InterFace objects
-  
-    SKM - comment: this costly operation deletes the pointer entry in the interface_connector_
-  
-  @todo check whether this works
-  @todo check whether this is compatible with the rest of the code
-*/
-/*
-template<size_t dim>
-bool InterFace<dim>::DisconnectNeighbor( InterFace<dim>* f_ptr )
-{
-  assert( f_ptr != nullptr );
-  assert( interface_connector_.size() == this->FE()->Neighbors() );
-  for ( size_t i( 0 ); i < interface_connector_.size(); ++i )
-    if ( f_ptr == interface_connector_[i] )
-      {
-        interface_connector_[i] = nullptr;
-        interface_connector_.erase( interface_connector_.begin() + i );
-        interface_connector_.swap( interface_connector_ );
-        return true;
-      }
-  return false;
-  
-} // end DisconnectNeighbor
-*/
 
 
 
