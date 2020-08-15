@@ -155,10 +155,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
       {
          // nothing will be done to the nodes because these are shared with the neighboring higher-dimensional regions
          for ( typename vector<InterFace<dim>*>::iterator it=splitboundary.ElementsBegin(); it!=splitboundary.ElementsEnd(); ++it ) {
-              // disconnecting the neighbors from the InterFace that is going to be deleted
-              for ( size_t j=0U; j<(*it)->Neighbors(); ++j ) 
-                (*it)->Neighbor(j)->Unassign( (*it) );
-              // getting MeshManager to delete the Faces
+              // getting MeshManager to delete the InterFace objects (IT MUST TAKE CARE OF ALL THE CONNECTING AND DISCONNECTING!!!)
               splitboundaryComplex->Mesh().Erase( (*it) ); 
            }
       } 

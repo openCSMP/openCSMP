@@ -391,6 +391,9 @@ void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE sid
 template<size_t dim>
 void InterFace<dim>::Unassign( const InterFace<dim>* e_ptr ) 
   {
+    if ( this == nullptr ) {
+         return;
+      }
     for ( size_t i = 0U; i < interface_connector_.size(); i++ ) {
         if ( e_ptr == nullptr || interface_connector_[i] == nullptr )
           continue;

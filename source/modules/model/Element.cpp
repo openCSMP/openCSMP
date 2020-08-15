@@ -416,6 +416,9 @@ void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor ele
 template<size_t dim>
 void Element<dim>::Unassign( const Element<dim>* e_ptr ) 
   {
+    if ( this == nullptr ) {
+         return;
+      }
     for ( size_t i = 0U; i < elmt_connector_.size(); ++i ) {
         if ( e_ptr == nullptr || elmt_connector_[i] == nullptr )
           continue;

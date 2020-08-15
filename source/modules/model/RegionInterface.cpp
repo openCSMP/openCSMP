@@ -342,9 +342,6 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
       for ( typename vector<Element<dim>*>::iterator 
             it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it ) 
         {
-           // disconnecting neighbor elements from the element that is just going to be deleted
-           for ( size_t j=0U; j<(*it)->Neighbors(); ++j ) 
-             (*it)->Neighbor(j)->Unassign( (*it) );
            // remove elements				
            meshMgr.Erase( (*it) );
         }

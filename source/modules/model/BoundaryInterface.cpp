@@ -1180,10 +1180,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<di
       {
          // nothing will be done to the nodes because these are shared with the neighboring higher-dimensional regions
          for ( typename vector<Face<dim>*>::iterator it=boundary.ElementsBegin(); it!=boundary.ElementsEnd(); ++it ) {
-              // disconnecting neighbor faces from the face that is going to be deleted
-              for ( size_t j=0U; j<(*it)->Neighbors(); ++j ) 
-                (*it)->Neighbor(j)->Unassign( (*it) );
-              // getting MeshManager to delete the Faces
+              // getting MeshManager to delete the Face objects (IT MUST TAKE CARE OF ALL THE CONNECTING AND DISCONNECTING!!!)
               boundaryComplex->Mesh().Erase( (*it) ); 
            }
       } 

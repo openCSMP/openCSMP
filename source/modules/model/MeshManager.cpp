@@ -1707,8 +1707,8 @@ void MeshManager<dim>::Erase( Node<dim>* node )
 {
   // if the found node is the root node
   // change the root into one of its neighbors and delete the found node,		
-  Node<dim>* new_root_node( NULL );
-  Node<dim>* root_node( NULL );
+  Node<dim>* new_root_node( nullptr );
+  Node<dim>* root_node( nullptr );
   if ( root_elmt_group_.size() > 0 ) {
     for ( auto root : root_node_group_ )
       if ( node == root ) {
@@ -1722,7 +1722,7 @@ void MeshManager<dim>::Erase( Node<dim>* node )
           new_root_node = n; break;
         }
       }
-      if ( new_root_node == NULL )
+      if ( new_root_node == nullptr )
         cerr << "MeshManager::Erase(Node): this is the root node which cannot be deleted. \n";
       else
         root_node = new_root_node;
@@ -1732,14 +1732,14 @@ void MeshManager<dim>::Erase( Node<dim>* node )
   // delete the node
   if ( node ) {
     delete node;
-    node = NULL;
+    node = nullptr;
     n_nodes_--;
   }
 }
 
 
 /**
-Deletes the corresponding element
+Deletes the corresponding element from the tree structure
 */
 template<size_t dim>
 void MeshManager<dim>::Erase( Element<dim>& elmt )
@@ -1747,7 +1747,7 @@ void MeshManager<dim>::Erase( Element<dim>& elmt )
   set<Node<dim>*>		discovered_nodes;
   deque<Node<dim>*>	current_nodes;
 
-  Element<dim>* found_elmt = NULL;
+  Element<dim>* found_elmt = nullptr;
   for ( auto root_node : root_node_group_ ) {
     discovered_nodes.insert( root_node );
     current_nodes.push_back( root_node );
@@ -1765,17 +1765,17 @@ void MeshManager<dim>::Erase( Element<dim>& elmt )
           found_elmt = n_ptr->Parent( i ); break;
         }
       }
-      if ( found_elmt != NULL ) break;
+      if ( found_elmt != nullptr ) break;
       current_nodes.pop_front();
     }
-    if ( found_elmt != NULL ) break;
+    if ( found_elmt != nullptr ) break;
   }
   discovered_nodes.clear();
   current_nodes.clear();
 
   // if the found element is the root element
   // change the root element into one of its neighbors and delete the found element,		
-  Element<dim>* new_root_elmt( NULL );
+  Element<dim>* new_root_elmt( nullptr );
   if ( root_elmt_group_.size() > 0 ) {
     size_t group_idx( 0U );
     for ( auto root : root_elmt_group_ ) {
@@ -1790,7 +1790,7 @@ void MeshManager<dim>::Erase( Element<dim>& elmt )
             }
           }
         }
-        if ( new_root_elmt == NULL )
+        if ( new_root_elmt == nullptr )
           cerr << "MeshManager::Erase(Element): this is the root element which cannot be deleted. \n";
         else
           root_elmt_group_[group_idx] = new_root_elmt;
@@ -1810,12 +1810,12 @@ void MeshManager<dim>::Erase( Element<dim>& elmt )
 
     // update node-to-element pointers in remaining node objects
     for ( auto n : neighbor_nodes )
-      if ( n != NULL )
+      if ( n != nullptr )
         n->Unassign( found_elmt );
     neighbor_nodes.clear();
 
     delete found_elmt;
-    found_elmt = NULL;
+    found_elmt = nullptr;
     n_elmts_--;
   }
 }
@@ -1829,7 +1829,7 @@ void MeshManager<dim>::Erase( Element<dim>* elmt )
 {
   // if the found element is the root element
   // change the root element into one of its neighbors and delete the found element,		
-  Element<dim>* new_root_elmt( NULL );
+  Element<dim>* new_root_elmt( nullptr );
   if ( root_elmt_group_.size() > 0 ) {
     size_t group_idx( 0U );
     for ( auto root : root_elmt_group_ ) {
@@ -1844,7 +1844,7 @@ void MeshManager<dim>::Erase( Element<dim>* elmt )
             }
           }
         }
-        if ( new_root_elmt == NULL )
+        if ( new_root_elmt == nullptr )
           cerr << "MeshManager::Erase(*Element): this is the root element which cannot be deleted. \n";
         else
           root_elmt_group_[group_idx] = new_root_elmt;
@@ -1864,12 +1864,12 @@ void MeshManager<dim>::Erase( Element<dim>* elmt )
 
     // update node-to-element pointers in remaining node objects
     for ( auto n : neighbor_nodes )
-      if ( n != NULL )
+      if ( n != nullptr )
         n->Unassign( elmt );
     neighbor_nodes.clear();
 
     delete elmt;
-    elmt = NULL;
+    elmt = nullptr;
     n_elmts_--;
   }
 }
@@ -1943,6 +1943,10 @@ void MeshManager<dim>::Erase( Face<dim>& face )
 } // end Erase( Face )
 
 
+
+
+
+
 /**
 Deletes the corresponding face
 */
@@ -1983,6 +1987,8 @@ void MeshManager<dim>::Erase( Face<dim>* face )
   }
   
 } // end Erase( Face pointer )
+
+
 
 
 /**
