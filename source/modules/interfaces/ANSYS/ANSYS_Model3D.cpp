@@ -399,9 +399,9 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
   const auto onodesEnd( original_node_numbers.end() );
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<Node<3U>*> nodes;
+  deque<Node<3U>*>    nodes;
   deque<Element<3U>*> elmts;
-  exploreNodesAndElementsFromMesh( &Mesh(), nodes, elmts );
+  exploreNodesAndElementsFromMesh( Mesh(), nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   for ( auto nit : nodes ) {

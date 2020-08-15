@@ -446,7 +446,8 @@ private:
   Model( const Model& );
   Model& operator=( const Model& );
 
-  void CheckElementsAfterBuilding();
+  /// checks wether elements have their correct neighbors and are in the expected model domains; @return number of major errors encoutered.
+  int32 CheckElementConnectivity();
 
   std::string                       model_name_;       ///< name of simulation model
   PropertyDatabase<dim>             database_;         ///< where variable specifications are stored

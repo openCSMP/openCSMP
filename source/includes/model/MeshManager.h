@@ -151,13 +151,19 @@ public:
   bool EraseInterFaces();
 
   /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
-  void AssignUniqueNumbers( bool in_a_single_sequence ) const;
+  void AssignUniqueNumbers( bool in_a_single_sequence );
 
-  /// outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
-  void OutputMeshTo( VSet<dim>& ) const;
+  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+  void OutputMeshTo( VSet<dim>&, 
+                     std::deque<const Node<dim>*>&, std::deque<const Element<dim>*>&, std::deque<const Face<dim>*>&, std::deque<const InterFace<dim>*>&  ) const;
 
-  /// storing distributed variables associated with the mesh in the VSet
-  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, VSet<dim>& ) const;
+  /// adds distributed variables to the VSet
+  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, 
+                                const std::deque<const Node<dim>*>&, 
+                                const std::deque<const Element<dim>*>&, const std::deque<const Face<dim>*>&, const std::deque<const InterFace<dim>*>&, 
+                                VSet<dim>& ) const;
+  
+  /// reads distributed variables from VSet
   void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
 
   /// Rebuild parent relationships, for example after a region was removed

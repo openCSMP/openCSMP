@@ -1165,8 +1165,49 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
 
 
 
+/**
+   Removes the boundary from the map, prompting the MeshManager to delete the corresponding Face objects if so required.
+   
+       @author SKM (refactored - since design was flawed)
+       @date 15/8/2020
+*/
+template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<dim>& boundary, bool deleteFaces )
+  {
+    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>* >(this) );
 
-// TODO: it is the task of the MeshManager to delete required range of Faces
+    if ( deleteFaces )
+      {
+         // nothing will be done to the nodes because these are shared with the neighboring higher-dimensional regions
+         for ( typename vector<Face<dim>*>::iterator it=boundary.ElementsBegin(); it!=boundary.ElementsEnd(); ++it ) {
+              // disconnecting neighbor faces from the face that is going to be deleted
+              for ( size_t j=0U; j<(*it)->Neighbors(); ++j ) 
+                (*it)->Neighbor(j)->Unassign( (*it) );
+              // getting MeshManager to delete the Faces
+              boundaryComplex->Mesh().Erase( (*it) ); 
+           }
+      } 
+
+    // locating the boundary in the boundary map
+    typename map<string,csmp::Boundary<dim> >::iterator iterBoundary( faceBoundaryMap_.end() );
+    for( boundaryIterator it = faceBoundaryMap_.begin(); it != faceBoundaryMap_.end(); ++it )
+      // if the addresses of the objects are the same
+      if( &it->second == &boundary )
+        iterBoundary = it;
+
+    if( iterBoundary == faceBoundaryMap_.end() )
+        throw csmp::Exception( WARNING, "BoundaryInterface<dim,Model>::RemoveBoundary", "boundary does not exist" );
+
+    // if the boundary was found in the list, it is erased
+    faceBoundaryMap_.erase( iterBoundary );
+    
+  } // end RemoveBoundary
+
+
+
+
+/* JUNCHULS VERSION THAT ACTUALLY DELETES THE FACES
+
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<dim>& boundary, bool deleteElements )
   {
@@ -1181,7 +1222,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<di
             {
                 // remove redundant Faces from existing Boundaries
                 for( boundaryIterator
-                     bit = faceBoundaryMap_.begin();  bit != faceBoundaryMap_.end(); /* see incrementation below */ ) {
+                     bit = faceBoundaryMap_.begin();  bit != faceBoundaryMap_.end(); ) { // see incrementation below
 
                     if( removeVectorElements( (*bit).second.CellVector(), elementsToDelete ) > 0 )
                     {
@@ -1225,6 +1266,9 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<di
     faceBoundaryMap_.erase( iterBoundary );
     
   } // end RemoveBoundary
+
+*/
+
 
 
 
@@ -1354,14 +1398,14 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
 
 	 // traversal of the existing mesh root faces to find all its faces	
 	 const size_t elements(mesh.Elements());
-	 deque<Face<dim>*> faces;
-	 exploreFacesFromMesh(&mesh, faces);
+	 deque<Face<dim>*>   faces;
+	 exploreFacesFromMesh( mesh, faces );
 	 sort(faces.begin(), faces.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
 
 	 // traversal of the existing mesh nodes to find all its elements	
-	 deque<Node<dim>*> nodes;
+	 deque<Node<dim>*>    nodes;
 	 deque<Element<dim>*> elmts;
-	 exploreNodesAndElementsFromMesh(&mesh, nodes, elmts);
+	 exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
 	 sort(nodes.begin(), nodes.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
 
 

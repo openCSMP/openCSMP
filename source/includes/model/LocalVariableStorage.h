@@ -11,7 +11,7 @@
 #include "enumTypeCompatibilityChecks.h"
 #include "compileTimeVariableDispatch.h"
 
-// #define VARIABLE_STORAGE_DEBUG
+//#define VARIABLE_STORAGE_DEBUG
 
 namespace csmp {
 

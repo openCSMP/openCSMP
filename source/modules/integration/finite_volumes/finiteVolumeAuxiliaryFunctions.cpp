@@ -567,18 +567,18 @@ template<size_t dim>
 void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, bool initialize_flux )
  {
     // input variables
-    const csmp::Index phi_key = model.Database().StorageKey("porosity");
-    const csmp::Index thi_key = model.Database().StorageKey("thickness");
-    const csmp::Index vt_key  = model.Database().StorageKey("total velocity");
+    const csmp::INDEX<SCALAR,ELEMENT> phi_key(model.Database().StorageKey("porosity"));
+    const csmp::INDEX<SCALAR,ELEMENT> thi_key(model.Database().StorageKey("thickness"));
+    const csmp::INDEX<VECTOR,ELEMENT> vt_key(model.Database().StorageKey("total velocity"));
     // output variables
-    const csmp::Index fv_key  = model.Database().StorageKey("finite volume");
-    const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
-    const csmp::Index sv_key  = model.Database().StorageKey("sector volume");
-    const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
-    const csmp::Index fa_key  = model.Database().StorageKey("facet area");
-    const csmp::Index ff_key  = model.Database().StorageKey("facet flux");
-    const csmp::Index fn_key  = model.Database().StorageKey("facet normal");
-    const csmp::Index fb_key  = model.Database().StorageKey("flux balance");
+    const csmp::INDEX<SCALAR,NODE> fv_key(model.Database().StorageKey("finite volume"));
+    const csmp::INDEX<SCALAR,NODE> pv_key(model.Database().StorageKey("FV pore volume"));
+    const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT> sv_key(model.Database().StorageKey("sector volume"));
+    const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT> spv_key(model.Database().StorageKey("sector pore volume"));
+    const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT> fa_key(model.Database().StorageKey("facet area"));
+    const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT> ff_key(model.Database().StorageKey("facet flux"));
+    const csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT> fn_key(model.Database().StorageKey("facet normal"));
+    const csmp::INDEX<SCALAR,NODE> fb_key(model.Database().StorageKey("flux balance"));
    
     Point<dim>           nrml;
     VectorVariable<dim>  fnrml, vt;

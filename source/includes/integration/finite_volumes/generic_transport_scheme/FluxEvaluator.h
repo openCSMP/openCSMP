@@ -8,6 +8,7 @@ namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
+template<size_t dim,template<size_t> class CELL> class ModelSubDomain;
 
 /**
 @class FluxEvaluator FluxEvaluator  "reservoir_simulator/FluxEvaluator.h"
@@ -44,6 +45,10 @@ class FluxEvaluator {
 
 // TODO: tensor permeability fluxes and higher-order in space approximations of fluxes
 
+    /// computes  volumetric flows and (chemical) fluxes across facets using FacetFlux (facet flux) and stores them in target region
+    template<template<size_t> class CELL>
+    void VolumetricFlowAndTransportVariableFluxBalances( ModelSubDomain<dim,CELL>&, 
+                                                         std::vector<CELL<dim>*>& halo_stencils );
 
     // COMPUTATIONS DEPENDENT ON PRECOMPUTED FACET FLUXES
 
@@ -67,6 +72,9 @@ class FluxEvaluator {
   
     /// computes the volumetric flow outside of the current cell; @return outflow which is always positive
     double64  OutFlow( const Node<dim>* const ) const;
+
+    /// computes the volumetric flow outside of the current cell; @return outflow which is always positive
+    double64  VolumetricFlowBalance( const Node<dim>* const ) const;
 
   private:
     /// shorthand for accessing the class that FluxEvaluator is a policy of

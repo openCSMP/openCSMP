@@ -6,8 +6,8 @@
 //  Copyright © 2017 Stephan Matthai. All rights reserved.
 //
 
-#ifndef PORE_VOLUME_RHS_H
-#define PORE_VOLUME_RHS_H
+#ifndef CSMP_PORE_VOLUME_RHS_H
+#define CSMP_PORE_VOLUME_RHS_H
 
 #include "VectorOperator.h"
 
@@ -25,16 +25,22 @@ namespace csmp {
 template<size_t dim>
 class PoreVolumeRHS : public VectorOperator<dim> {
   public:
-    PoreVolumeRHS( const Model<dim>& model,
-                   const char* pv_variable, const char* advected_variable, const char* porosity_variable );
+    PoreVolumeRHS( const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT>& spv_key,
+                   const csmp::INDEX<SCALAR,NODE>& fpv_key,
+                   const csmp::INDEX<SCALAR,NODE>& transported_variable_key );
+                   
+    virtual ~PoreVolumeRHS() {}
   
-    virtual void AccumulateStencil( Element<dim>&, std::vector<double64>& right_hand_vector ) const;
-    virtual void AccumulateFiniteVolume( Node<dim>&, std::vector<double64>& right_hand_vector ) const;
+    virtual void AccumulateFiniteVolume( const Node<dim>&, std::vector<double64>& right_hand_vector ) const;
+
+    virtual void AccumulateStencil( const Element<dim>&, std::vector<double64>& right_hand_vector ) const;
+    // virtual void AccumulateStencil( const Face<dim>&, std::vector<double64>& right_hand_vector ) const;
+    // virtual void AccumulateStencil( const InterFace<dim>&, std::vector<double64>& right_hand_vector ) const;
   
   private:
-    const csmp::Index  pv_key_;   ///< the pore volume of the FV as integrated over the sectors surrounding the node
-    const csmp::Index  adv_key_;  ///< the transported variable
-    const csmp::Index  phi_key_;  ///< porosity
+    const INDEX<SCALAR,NODE>&                      fpv_key_;  ///< the pore volume of the FV as integrated over the sectors surrounding the node
+    const INDEX<SCALAR,SECTOR_INTEGRATION_POINT>&  spv_key_;  ///< the pore volume of each finite volume sector
+    const INDEX<SCALAR,NODE>&                      adv_key_;  ///< the transported variable
 };
 
 

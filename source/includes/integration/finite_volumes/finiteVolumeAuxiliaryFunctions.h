@@ -11,12 +11,18 @@ namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
+template<size_t dim, template<size_t> class CELL> class ModelSubDomain;
 template<size_t> class Region;
 template<size_t> class Model;
+
 
 /**
 @addtogroup CSMPglobalFunctions
 */
+
+    /// identifies "halo" elements/faces/interfaces, i.e. which contribute to domain FVs, but are outside of domain, returns number
+template<size_t dim, template<size_t> class CELL>
+size_t collectHaloStencils( const ModelSubDomain<dim,CELL>&, std::vector<CELL<dim>*>& halo_stencils );
 
 /**
     taking into account element thickness and total velocity, initialises:

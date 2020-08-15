@@ -100,6 +100,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     /// connect InterFace to its equidimensional neighbors
     void Assign( size_t nbor, InterFace<dim>* const );
+    
+    /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
+    void Unassign( const InterFace<dim>* ); 
   
     /// connect interface to a lower dimensional element that shall act as intervening element in triple-layer boundary representations
     void Assign( Element<dim>* const intervening_elmt );
@@ -121,9 +124,6 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// assigns nodes as is; inner ones first, outer ones next
 //    void Assign( size_t node, Node<dim>* );
   
-	  /// unassigns interface neighbors TODO: test consequences 
-	  bool DisconnectNeighbor( InterFace<dim>* );
-
     InterFace& operator=( const InterFace& );
 
     /// hand-coded move assignment that deals with the pointers

@@ -123,7 +123,6 @@ void ExplicitTransport_Test::run()
     // computing divergence free 'total velocity' field and 'facet flux'
     DivergenceFreeTotalVelocityField();
     ExplicitTransport<3U>  transport( *model_ptr_, "Model" );
-    transport.UpdateFluxesAndFluxBalances();
 
     // 2.1 flux balance in the model interior for computed velocity
     // -------------------------------------------------------------------------
@@ -508,9 +507,9 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
          // left->right pressure gradient and flow (hydrostatic)
          const double64 delta_pf( 9.8 * 1000. * model_length_ );
          DivergenceFreeTotalVelocityField( delta_pf );
-         velo_magnitude = printRangeOfVariable( *model_ptr_, "velocity" );
       }
- 
+    velo_magnitude = printRangeOfVariable( *model_ptr_, "velocity" ); 
+    
     // initial and boundary conditions for tracer transport
     // - concentration
     // - constraints at boundary
@@ -521,6 +520,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 0, true );
 
+    // uses the current velocity field, to initialise facet fluxes in construction
     ExplicitTransport<3U>  transport( *model_ptr_, "Model" );
  
      if ( verbose_ ) {
@@ -529,7 +529,10 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
          printRangeOfVariable( *model_ptr_, "concentration" );
       }
  
-    const double64 model_length(40.), xsect_area(3. * 10.);
+    // assumes flow and model long axis are aligned with the X-axis
+    Point<3U> xyz_min, xyz_max;
+    model_ptr_->MinMaxCoordinates( xyz_min, xyz_max ); 
+    const double64 model_length(xyz_max[0]-xyz_min[0]), xsect_area((xyz_max[1]-xyz_min[1]) * (xyz_max[2]-xyz_min[2]));
     const double64 time_interval( (model_length/velo_magnitude) / 100. ); // ~10-m travel distance
     double64       duration(0.); // calculated from velocity and model length
 

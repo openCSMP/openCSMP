@@ -162,6 +162,12 @@ public:
   /// forms unique or non-unique regions. @todo SKM deprecate this method as it is equivalent to CopyRegion()
   bool FormRegionFrom( const char* regionname, const csmp::Region<dim>& region, bool unique = false );
 
+  /// forms unique or non-unique region from range of elements; returns reference to it
+  bool FormRegionFrom( const char* regionname, 
+                       typename std::vector<Element<dim>*>::iterator first, 
+                       typename std::vector<Element<dim>*>::iterator last, 
+                       bool unique = false );
+
 
   // -----------------------------------------------
   // Manipulations with already existed Regions
@@ -229,6 +235,9 @@ public:
   /// finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
   size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
                                 std::vector<std::tuple<Element<dim>*, Element<dim>*, size_t, size_t> >& shared ) const;
+
+  /// if the mesh changed this brute-force method rebuild the node and element vectors of all regions
+  void RebuildRegions();
 
 protected:
   std::map<std::string, csmp::Region<dim> >  uniqueGroupMap_; ///< map of regions that do not overlap

@@ -5,15 +5,153 @@
 #include "VSet.h"
 #include "Exception.h"
 #include "AP_BoolVector.h"
-#include "CSMP_highLevelUtilities.h"
 #include "ErrorHandler.h"
 #include "PropertyData.h"
 #include "Box.h"
 #include "ModelTopology.h"
+#include "MeshIterator.h"
+#include "CSMP_highLevelUtilities.h"
 
 using namespace std;
 
 namespace csmp {
+
+
+
+// ===================================================================================
+//
+//                 NON-MEMBER FUNCTIONS
+//
+// ===================================================================================
+
+
+template<size_t dim>
+void exploreNodesAndElementsFromMesh( const MeshManager<dim>& mesh, std::deque<const Node<dim>*>& nodes, std::deque<const Element<dim>*>& elmts )
+{
+	// traversal of the existing mesh nodes to find all nodes and elements
+	set<const Element<dim>*> explored_elements;
+	set<const Node<dim>*>	   discovered_nodes;
+	deque<const Node<dim>*>	 current_nodes;
+	for (size_t g = 0U; g < mesh.NodeGroups(); g++) {
+		auto root_node = mesh.RootNode(g);
+		// starting at the root node
+		discovered_nodes.insert(root_node);
+		current_nodes.push_back(root_node);
+		while (!current_nodes.empty()) {
+			auto n_ptr(*current_nodes.begin());
+			// for all parent elements of the current node
+			for (size_t i = 0U; i < n_ptr->Parents(); i++) {
+				// for all the nodes of each parent element
+				for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++)
+					// if this node is not the one from which we started
+					if (j != n_ptr->ParentNodeNumber(i)) {
+						auto new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
+						if (new_node.second) current_nodes.push_back(n_ptr->Parent(i)->N(j));
+					}
+				// storing the explored element
+				explored_elements.insert(n_ptr->Parent(i));
+			}
+			// removing the node from the discovered (but not yet explored) deque
+			current_nodes.pop_front();
+		}
+	}
+
+	// assigning the explored nodes and elements from the node and element pointer vectors	
+	nodes.assign(discovered_nodes.begin(), discovered_nodes.end());
+	elmts.assign(explored_elements.begin(), explored_elements.end());
+}
+
+template void exploreNodesAndElementsFromMesh( const MeshManager<1U>&, std::deque<const Node<1U>*>&, std::deque<const Element<1U>*>& );
+template void exploreNodesAndElementsFromMesh( const MeshManager<2U>&, std::deque<const Node<2U>*>&, std::deque<const Element<2U>*>& );
+template void exploreNodesAndElementsFromMesh( const MeshManager<3U>&, std::deque<const Node<3U>*>&, std::deque<const Element<3U>*>& );
+
+
+
+
+template<size_t dim>
+void exploreFacesFromMesh( const MeshManager<dim>& mesh, std::deque<const Face<dim>*>& faces)
+{
+	// traversal of the existing mesh root faces to find all faces	
+	set<const Face<dim>*>	discovered_faces;
+	deque<const Face<dim>*>	current_faces;
+
+	for (size_t g = 0U; g < mesh.FaceGroups(); g++) {
+		auto root_face = mesh.RootFace(g);
+		// starting at the first face
+		discovered_faces.insert(root_face);
+		current_faces.push_back(root_face);
+		while (!current_faces.empty()) {
+			auto n_ptr(*current_faces.begin());
+			// for all neighbor faces of the current face
+			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
+				if (n_ptr->Neighbor(i) == NULL) continue;
+
+				// if this neighbor is new one					
+				auto new_face = discovered_faces.insert(n_ptr->Neighbor(i));
+				if (new_face.second) current_faces.push_back(n_ptr->Neighbor(i));
+			}
+			// removing the face from the discovered (but not yet explored) deque
+			current_faces.pop_front();
+		}
+	}
+
+	// assigning the explored faces from the face pointer vectors	
+	faces.assign(discovered_faces.begin(), discovered_faces.end());
+}
+
+template void exploreFacesFromMesh(const MeshManager<1U>&, std::deque<const Face<1U>*>&);
+template void exploreFacesFromMesh(const MeshManager<2U>&, std::deque<const Face<2U>*>&);
+template void exploreFacesFromMesh(const MeshManager<3U>&, std::deque<const Face<3U>*>&);
+
+
+
+template<size_t dim>
+void exploreInterFacesFromMesh( const MeshManager<dim>& mesh, std::deque<const InterFace<dim>*>& interfaces)
+{
+	// traversal of the existing mesh root interfaces to find all interfaces	
+	set<const InterFace<dim>*>		discovered_interfaces;
+	deque<const InterFace<dim>*>	current_interfaces;
+
+	for (size_t g = 0U; g < mesh.InterFaceGroups(); g++) {
+		auto root_interface = mesh.RootInterFace(g);
+		// starting at the first interface
+		discovered_interfaces.insert(root_interface);
+		current_interfaces.push_back(root_interface);
+		while (!current_interfaces.empty()) {
+			auto n_ptr(*current_interfaces.begin());
+			// for all neighbor interfaces of the current interface
+			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
+				if (n_ptr->Neighbor(i) == NULL) continue;
+
+				// if this neighbor is new one					
+				auto new_interface = discovered_interfaces.insert(n_ptr->Neighbor(i));
+				if (new_interface.second) current_interfaces.push_back(n_ptr->Neighbor(i));
+			}
+			// removing the interface from the discovered (but not yet explored) deque
+			current_interfaces.pop_front();
+		}
+	}
+
+	// assigning the explored interfaces from the interface pointer vectors	
+	interfaces.assign(discovered_interfaces.begin(), discovered_interfaces.end());
+}
+
+template void exploreInterFacesFromMesh(const MeshManager<1U>&, std::deque<const InterFace<1U>*>&);
+template void exploreInterFacesFromMesh(const MeshManager<2U>&, std::deque<const InterFace<2U>*>&);
+template void exploreInterFacesFromMesh(const MeshManager<3U>&, std::deque<const InterFace<3U>*>&);
+
+
+
+
+// ===================================================================================
+//
+//                 MESH MANAGER METHODS 
+//
+// ===================================================================================
+
+
+
+
 
 // refactored
 template<size_t dim>
@@ -39,41 +177,41 @@ MeshManager<dim>::~MeshManager()
   // traversal of the existing mesh root nodes to find all nodes and elements	
   deque<Node<dim>*> nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
 
   // traversal of the existing mesh root faces to find all faces	
   deque<Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
+  exploreFacesFromMesh( *this, faces );
 
   // traversal of the existing mesh root interfaces to find all interfaces	
   deque<InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
+  exploreInterFacesFromMesh( *this, interfaces );
 
   // deallocate the memories and the root pointers
   for ( size_t i = 0U; i < nodes.size(); i++ ) {
     delete nodes[i];
-    nodes[i] = NULL;
+    nodes[i] = nullptr;
   }
 
   for ( size_t i = 0U; i < elmts.size(); i++ ) {
     delete elmts[i];
-    elmts[i] = NULL;
+    elmts[i] = nullptr;
   }
 
   for ( size_t i = 0U; i < faces.size(); i++ ) {
     delete faces[i];
-    faces[i] = NULL;
+    faces[i] = nullptr;
   }
 
   for ( size_t i = 0U; i < interfaces.size(); i++ ) {
     delete interfaces[i];
-    interfaces[i] = NULL;
+    interfaces[i] = nullptr;
   }
 
-  for ( auto f : root_node_group_ )		 f = NULL;
-  for ( auto f : root_elmt_group_ )		 f = NULL;
-  for ( auto f : root_face_group_ )		 f = NULL;
-  for ( auto f : root_interface_group_ ) f = NULL;
+  for ( auto f : root_node_group_ )		 f = nullptr;
+  for ( auto f : root_elmt_group_ )		 f = nullptr;
+  for ( auto f : root_face_group_ )		 f = nullptr;
+  for ( auto f : root_interface_group_ ) f = nullptr;
 
   root_node_group_.clear();
   root_elmt_group_.clear();
@@ -160,8 +298,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
 
   hybrid_element_mesh_ = vset.HybridElementTypeMesh();
 
-  // 1. checking the availability of the necessary finite element types, and the valid model topology
-  // ------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------
+  // 1. checking availability of necessary finite element types, and valid model topology
+  // ------------------------------------------------------------------------------------
   ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
   if ( csmp_error.Verbose() )
@@ -189,34 +328,31 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   }
   cout << endl;
 
-  // 2. constructing the nodes and the elements using the VSet element type information
-  // --------------------------------------------------------------------
+  // --------------------------------------------------------------------------
+  // 2. constructing nodes and elements using the VSet element type information
+  // --------------------------------------------------------------------------
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: building storage and assigning nodes to elements..." << endl;
 
-  size_t idx( 0U );
-
-  /// Variable storage for nodes
+  // Storage for nodes
    {
       vector<double64> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
-      for ( size_t i = 0U; i < vset.Vertices(); ++i )
+      for ( size_t idx = 0U; idx < vset.Vertices(); ++idx )
         {
           for ( size_t j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
-          Node<dim>* node = new Node<dim>( idx, Point<dim>( coord ), nvars, NOT );
-          node_connector.push_back( node );
-          idx++;
+          node_connector.emplace_back( new Node<dim>( idx, Point<dim>( coord ), nvars, NOT ) );
         }
       n_nodes_ = node_connector.size();
     }
      
-  /// Variable storage for elements and integration points
+  // storage for elements
    {
       const LocalVariables evars( phys_vars.LocalVariablesAt( ELEMENT ) );
       const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
       typename deque<vector<size_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
-      idx = 0U;
+      size_t idx(0U);
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
           const int32 csmpElementType = vset.ElementType( 0U );
@@ -227,10 +363,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
               Element<dim>* elmt = new Element<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars, NOT );
               const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; j++ )
-              {
                 elmt->Assign( j, node_connector[vset.Plist( elmt->Idx(), j )] );
-              }
-              elmt_connector.push_back( elmt );
+              elmt_connector.emplace_back( elmt );
               idx++;
               first++;
             }
@@ -243,308 +377,321 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
               Element<dim>* elmt = new Element<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars, NOT );
               const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; j++ )
-              {
                 elmt->Assign( j, node_connector[vset.Plist( elmt->Idx(), j )] );
-              }
-              elmt_connector.push_back( elmt );
+              elmt_connector.emplace_back( elmt );
               idx++;
               first++;
             }
         }
+      assert( elmt_connector.size() == vset.Elements() );
       n_elmts_ = elmt_connector.size();
    }
   
-  // ----------------------------------------------------------------
-  // 2. Assigning neighbor elements to elements, faces and interfaces
-  // ----------------------------------------------------------------
+  // 2.3 Assigning neighbor elements to elements
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
+
   size_t eidx( 0U );
   if ( vset.WithNeighbourConnectivity() ) {
-    if ( !vset.HybridElementTypeMesh() ) {
-      const int32 csmpElementType = vset.ElementType( 0U );
-      for ( auto& e : elmt_connector ) {
-        const size_t neighbors( fem_manager.E( csmpElementType )->Neighbors() );
-        for ( size_t j = 0U, nidx = 0U; j < neighbors; j++ ) {
-          // if there is a neighbor (as is the case if the stored index is greater than zero)			
-          if ( j < vset.PfvertsSize( e->Idx() ) ) {
-            const int32 index( static_cast<int32>(vset.Pfvert( e->Idx(), j )) );
-            if ( index >= 0 && index < n_elmts_ )
-              e->Assign( nidx++, elmt_connector[static_cast<size_t>(index)] );
-            else
-              e->Assign( nidx++, static_cast<Element<dim>*>(NULL) );
+      if ( !vset.HybridElementTypeMesh() ) {
+        const int32 csmpElementType = vset.ElementType( 0U );
+        for ( auto& e : elmt_connector ) {
+          const size_t neighbors( fem_manager.E( csmpElementType )->Neighbors() );
+          for ( size_t j = 0U, nidx = 0U; j < neighbors; j++ ) {
+            // if there is a neighbor (as is the case if the stored index is greater than zero)			
+            if ( j < vset.PfvertsSize( e->Idx() ) ) {
+              const int32 index( static_cast<int32>(vset.Pfvert( e->Idx(), j )) );
+              if ( index >= 0 && index < n_elmts_ )
+                e->Assign( nidx++, elmt_connector[static_cast<size_t>(index)] );
+              else
+                e->Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
+            }
+          }
+        }
+      }
+      else {
+        for ( auto& e : elmt_connector ) {
+          const int32 csmpElementType = vset.ElementType( eidx++ );
+          const size_t neighbors( fem_manager.E( csmpElementType )->Neighbors() );
+          for ( size_t j = 0U, nidx = 0U; j < neighbors; j++ ) {
+            // if there is a neighbor (as is the case if the stored index is greater than zero)			
+            if ( j < vset.PfvertsSize( e->Idx() ) ) {
+              const int32 index( static_cast<int32>(vset.Pfvert( e->Idx(), j )) );
+              if ( index >= 0 && index < n_elmts_ )
+                e->Assign( nidx++, elmt_connector[static_cast<size_t>(index)] );
+              else
+                e->Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
+            }
           }
         }
       }
     }
-    else {
-      for ( auto& e : elmt_connector ) {
-        const int32 csmpElementType = vset.ElementType( eidx++ );
-        const size_t neighbors( fem_manager.E( csmpElementType )->Neighbors() );
-        for ( size_t j = 0U, nidx = 0U; j < neighbors; j++ ) {
-          // if there is a neighbor (as is the case if the stored index is greater than zero)			
-          if ( j < vset.PfvertsSize( e->Idx() ) ) {
-            const int32 index( static_cast<int32>(vset.Pfvert( e->Idx(), j )) );
-            if ( index >= 0 && index < n_elmts_ )
-              e->Assign( nidx++, elmt_connector[static_cast<size_t>(index)] );
-            else
-              e->Assign( nidx++, static_cast<Element<dim>*>(NULL) );
-          }
-        }
-      }
-    }
-  }
   else
     csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity; nothing was done." );
 
-  // 3. constructing the faces using the VSet nodes information
+
+  // ----------------------------------------------------------
+  // 3. constructing the Faces using the VSet node information
   // ----------------------------------------------------------
   // (continuous running index 'idx' will be used so that face-IDs start with n-elements)
   // different face types are intrinsic to the VSet if so initialized
   if ( vset.Faces() > 0 )
-  {
-    if ( csmp_error.Verbose() )
-      cout << "\nMeshManager<" << dim << ">::Initialize: assigning nodes to faces..." << endl;
-    idx = n_elmts_;
-    // since faces are lower-dimensional, the mesh must contain different element types
-    assert( vset.HybridElementTypeMesh() );
-    const LocalVariables evars( phys_vars.LocalVariablesAt( FACE ) );
-    const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( FACE ) );
+    {
+      if ( csmp_error.Verbose() )
+        cout << "\nMeshManager<" << dim << ">::Initialize: assigning nodes to faces..." << endl;
+      size_t  idx(vset.Elements());
+      // since faces are lower-dimensional, the mesh must contain different element types
+      assert( vset.HybridElementTypeMesh() );
+      const LocalVariables evars( phys_vars.LocalVariablesAt( FACE ) );
+      const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( FACE ) );
 
-    typename deque<vector<size_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
-    while ( first != last ) {
-      const int32 csmpElementType = vset.ElementType( idx );
-      if ( csmpElementType == UNKNOWN ) { ++first; continue;}
+      typename deque<vector<size_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
+      while ( first != last ) {
+          const int32 csmpElementType = vset.ElementType( idx );
+          if ( csmpElementType == UNKNOWN ) { ++first; continue;}
 
-      Face<dim>* face = new Face<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars );
-      const size_t nodes( face->Nodes() );
-      for ( size_t j = 0U; j<nodes; ++j ) {
-        // assigning node indices
-        if( vset.Plist( face->Idx(), j ) < node_connector.size() )
-          face->Assign( j, node_connector[vset.Plist( face->Idx(), j )] );
+          Face<dim>* face = new Face<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars );
+          const size_t nodes( face->Nodes() );
+          for ( size_t j = 0U; j<nodes; ++j ) {
+            // assigning node indices
+            if( vset.Plist( face->Idx(), j ) < node_connector.size() )
+              face->Assign( j, node_connector[vset.Plist( face->Idx(), j )] );
+          }
+          face_connector.emplace_back( face );
+          ++first;
+          ++idx;
+        }
+      assert( face_connector.size() == vset.Faces() );
+      n_faces_ = face_connector.size();
+
+      // connecting the faces to their equi- and higher-dimensional neighbors
+      // --------------------------------------------------------------------
+      if ( csmp_error.Verbose() )
+        cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their higher-dimensional neighbors..." << endl;
+
+      const size_t elements( elmt_connector.size() );
+      const size_t faces( face_connector.size() );
+      for ( auto& e : face_connector ) {
+        // equidimensional neighbor Faces first
+        // ------------------------------------		
+        const size_t neighbors( e->Neighbors() );
+        for ( size_t j = 0U; j<neighbors; ++j ) {
+          // if there is a neighbor (as is the case if the stored index is greater than zero)
+          // (e->Idx() starts with elements=first face)
+          if ( j < vset.PfvertsSize( e->Idx() ) ) {
+            const long64 index( vset.Pfvert( e->Idx(), j ) );
+            if ( index >= 0 ) {
+              assert( index >= elements );
+              assert( index < elements + faces ); // (-) elements because face container is numbered from 0..n-1                   
+              if ( index >= elements && index < (elements + faces) )
+                e->Assign( j, face_connector[static_cast<size_t>(index) - elements] );
+              else
+                e->Assign( j, static_cast<Face<dim>*>(nullptr) );
+            }
+          }
+        }
+        // higher-dimensional Element neighbors
+        // ------------------------------------
+        // (are stored in VSet 'pfverts' record after the equidimensional neighbors)
+        // index of inner neighbor element i which is always there
+
+        const long64 index1( vset.Pfvert( e->Idx(), neighbors ) );
+        // index of outer neighbor element which may be there		
+        const long64 index2( vset.Pfvert( e->Idx(), neighbors + 1U ) );
+
+        Element<dim>* const innerElement = (index1 < 0) ? nullptr : elmt_connector[index1];
+        Element<dim>* const outerElement = (index2 < 0) ? nullptr : elmt_connector[index2];
+        // assigning inner and outer higher-dimensional neighbors
+        //              inner element             outer element
+        e->Assign( innerElement, outerElement );
       }
-      face_connector.push_back( face );
-      ++first;
-      ++idx;
-    }
-    n_faces_ = face_connector.size();
 
-    if ( csmp_error.Verbose() )
-      cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their higher-dimensional neighbors..." << endl;
-    const size_t elements( elmt_connector.size() );
-    const size_t faces( face_connector.size() );
-    for ( auto& e : face_connector ) {
-      // equidimensional neighbors first
-      // -------------------------------		
-      const size_t neighbors( e->Neighbors() );
-      for ( size_t j = 0U; j<neighbors; ++j ) {
-        // if there is a neighbor (as is the case if the stored index is greater than zero)
-        // (e->Idx() starts with elements=first face)
-        if ( j < vset.PfvertsSize( e->Idx() ) ) {
+      // traversal of existing mesh to find all its faces
+      deque<set<Face<dim>*>>	explored_face_groups;
+      set<Face<dim>*>			    discovered_faces;
+      deque<Face<dim>*>		    current_faces;
+      map<size_t, Face<dim>*> faces_map;
+      for ( auto f : face_connector )
+        faces_map[ f->Idx() ] = f;
+
+      // starting at the first face		
+      current_faces.push_back( faces_map.begin()->second );
+
+      size_t group_idx = 0U;
+      while ( !faces_map.empty() )
+      {
+        while ( !current_faces.empty() ) {
+          const Face<dim>*  f_ptr( *current_faces.begin() );
+          // for all neighbor faces of the current face
+          for ( size_t i = 0U; i < f_ptr->Neighbors(); i++ ) {
+              if ( f_ptr->Neighbor( i ) == nullptr ) continue;
+
+              // if this neighbor is new one					
+              auto new_face = discovered_faces.insert( f_ptr->Neighbor( i ) );
+              if ( new_face.second ) {
+                current_faces.push_back( f_ptr->Neighbor( i ) );
+                faces_map.erase( f_ptr->Neighbor( i )->Idx() );
+              }
+            }
+          // removing the face from the discovered (but not yet explored) deque
+          current_faces.pop_front();
+        }
+        if ( discovered_faces.empty() ) {
+            auto first_face = faces_map.begin()->second;
+            discovered_faces.insert( first_face );
+            explored_face_groups.push_back( discovered_faces );
+            faces_map.erase( first_face->Idx() );
+            discovered_faces.clear();
+            group_idx++;
+            continue;
+          }
+        explored_face_groups.push_back( discovered_faces );
+
+        // if there is only one single face left, it creates a new group of faces.
+        if ( faces_map.size() == 1 ) {
+            discovered_faces.clear();
+            auto first_face = faces_map.begin()->second;
+            discovered_faces.insert( first_face );
+            explored_face_groups.push_back( discovered_faces );
+            break;
+          }
+        if ( !faces_map.empty() ) {
+            auto first_face = faces_map.begin()->second;
+            current_faces.push_back( first_face );
+          }
+
+        discovered_faces.clear();
+        group_idx++;
+      }
+
+      for ( auto group : explored_face_groups )
+        root_face_group_.push_back( (*group.begin()) );
+        
+    } // end construction and initialisation of Face objects
+
+
+  // ------------------------------------------------------------------
+  // 4. constructing Interfaces objects using the VSet node information
+  // ------------------------------------------------------------------
+  // (continuous running index 'idx' will be used)
+  if ( vset.InterFaces() > 0 )
+    {
+      if ( csmp_error.Verbose() )
+        cout << "\nMeshManager<" << dim << ">::Initialize: assigning nodes to interfaces..." << endl;
+      assert( vset.HybridElementTypeMesh() );
+      const LocalVariables evars( phys_vars.LocalVariablesAt( INTER_FACE ) );
+      const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( INTER_FACE ) );
+
+      typename deque<vector<size_t> >::const_iterator  first( vset.PlistInterFacesBegin() ), last( vset.PlistInterFacesEnd() );
+      size_t idx(vset.Elements() + vset.Faces()); 
+      
+      while ( first != last ) {
+            const int32 csmpElementType = vset.ElementType( idx );
+            InterFace<dim>* inter_face = new InterFace<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars );
+            const size_t nodes( inter_face->Nodes() );
+            for ( size_t j = 0U; j<nodes; ++j ) {
+              // assigning node indices
+              inter_face->Assign( j, node_connector[ vset.Plist( inter_face->Idx(), j )], INSIDE );
+            }
+            interface_connector.emplace_back( inter_face );
+            ++idx;
+            ++first;
+          }
+        assert( interface_connector.size() == vset.InterFaces() ); 
+        n_interfaces_ = interface_connector.size();
+
+      if ( csmp_error.Verbose() )
+        cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
+      const size_t elements( elmt_connector.size() );
+      const size_t faces( face_connector.size() );
+      // connecting interfaces to their higher-dimensional neighbors
+      for ( auto& e : interface_connector ) {
+        // equidimensional neighbors first
+        const size_t neighbors( e->Neighbors() );
+        for ( size_t j = 0U; j<neighbors; ++j ) {
+          // if there is a neighbor (as is the case if the stored index is greater than zero)
           const long64 index( vset.Pfvert( e->Idx(), j ) );
           if ( index >= 0 ) {
-            assert( index >= elements );
-            assert( index < elements + faces ); // (-) elements because face container is numbered from 0..n-1                   
-            if ( index >= elements && index < (elements + faces) )
-              e->Assign( j, face_connector[static_cast<size_t>(index) - elements] );
-            else
-              e->Assign( j, static_cast<Face<dim>*>(NULL) );
+            assert( index >= elements + faces );
+            assert( index < elements + faces + n_interfaces_ ); // (-) because interface container is numbered from 0..n-1
+            e->Assign( j, interface_connector[static_cast<size_t>(index) - elements - faces] );
           }
         }
+        // higher-dimensional neighbors
+        // ----------------------------
+        // (the 2 sides will always be present because interfaces exist only on internal boundaries)
+        if ( vset.Pfvert( e->Idx(), neighbors ) < 0 || vset.Pfvert( e->Idx(), neighbors + 1U) < 0 || 
+             vset.Pfvert( e->Idx(), neighbors ) >= elmt_connector.size() || vset.Pfvert( e->Idx(), neighbors + 1U ) >= elmt_connector.size() )
+          continue;
+        e->Assign( elmt_connector[vset.Pfvert( e->Idx(), neighbors )], elmt_connector[vset.Pfvert( e->Idx(), neighbors + 1U )] );
       }
-      // higher-dimensional neighbors
-      // ----------------------------
-      // (are stored in VSet 'pfverts' record after the equidimensional neighbors)
-      // index of inner neighbor element i which is always there
 
-      const long64 index1( vset.Pfvert( e->Idx(), neighbors ) );
-      // index of outer neighbor element which may be there		
-      const long64 index2( vset.Pfvert( e->Idx(), neighbors + 1U ) );
+      // traversal of the existing mesh nodes to find all its interfaces
+      deque<set<InterFace<dim>*>>	 explored_interface_groups;
+      set<InterFace<dim>*>		     discovered_interfaces;
+      deque<InterFace<dim>*>		   current_interfaces;
+      map<size_t, InterFace<dim>*> interfaces_map;
+      for ( auto f : interface_connector )
+        interfaces_map[f->Idx()] = f;
 
-      Element<dim>* const innerElement = (index1 < 0) ? NULL : elmt_connector[index1];
-      Element<dim>* const outerElement = (index2 < 0) ? NULL : elmt_connector[index2];
-      // assigning inner and outer higher-dimensional neighbors
-      //              inner element             outer element
-      e->Assign( innerElement, outerElement );
-    }
+      // starting at the first interface		
+      current_interfaces.push_back( interfaces_map.begin()->second );
 
-    // traversal of the existing mesh to find all its faces
-    deque<set<Face<dim>*>>	explored_face_groups;
-    set<Face<dim>*>			discovered_faces;
-    deque<Face<dim>*>		current_faces;
-    map<size_t, Face<dim>*> faces_map;
-    for ( auto f : face_connector )
-      faces_map[f->Idx()] = f;
+      size_t group_idx = 0U;
+      while ( !interfaces_map.empty() )
+      {
+        while ( !current_interfaces.empty() ) {
+          const InterFace<dim>*  n_ptr( *current_interfaces.begin() );
+          // for all neighbor interfaces of the current interface
+          for ( size_t i = 0U; i < n_ptr->Neighbors(); i++ ) {
+            if ( n_ptr->Neighbor( i ) == nullptr ) continue;
 
-    // starting at the first face		
-    current_faces.push_back( faces_map.begin()->second );
-
-    size_t group_idx = 0U;
-    while ( !faces_map.empty() )
-    {
-      while ( !current_faces.empty() ) {
-        Face<dim>*  n_ptr( *current_faces.begin() );
-        // for all neighbor faces of the current face
-        for ( size_t i = 0U; i < n_ptr->Neighbors(); i++ ) {
-          if ( n_ptr->Neighbor( i ) == NULL ) continue;
-
-          // if this neighbor is new one					
-          auto new_face = discovered_faces.insert( n_ptr->Neighbor( i ) );
-          if ( new_face.second ) {
-            current_faces.push_back( n_ptr->Neighbor( i ) );
-            faces_map.erase( n_ptr->Neighbor( i )->Idx() );
+            // if this neighbor is a new one					
+            auto new_interface = discovered_interfaces.insert( n_ptr->Neighbor( i ) );
+            if ( new_interface.second ) {
+              current_interfaces.push_back( n_ptr->Neighbor( i ) );
+              interfaces_map.erase( n_ptr->Neighbor( i )->Idx() );
+            }
           }
+          // removing the interface from the discovered (but not yet explored) deque
+          current_interfaces.pop_front();
         }
-        // removing the face from the discovered (but not yet explored) deque
-        current_faces.pop_front();
-      }
-      if ( discovered_faces.size() == 0 ) {
-        auto first_face = faces_map.begin()->second;
-        discovered_faces.insert( first_face );
-        explored_face_groups.push_back( discovered_faces );
-        faces_map.erase( first_face->Idx() );
-        discovered_faces.clear();
-        group_idx++;
-        continue;
-      }
-      explored_face_groups.push_back( discovered_faces );
-
-      // if there is only one single face left, it creates a new group of faces.
-      if ( faces_map.size() == 1 ) {
-        discovered_faces.clear();
-        auto first_face = faces_map.begin()->second;
-        discovered_faces.insert( first_face );
-        explored_face_groups.push_back( discovered_faces );
-        break;
-      }
-      if ( faces_map.size() > 0 ) {
-        auto first_face = faces_map.begin()->second;
-        current_faces.push_back( first_face );
-      }
-
-      discovered_faces.clear();
-      group_idx++;
-    }
-
-    for ( auto group : explored_face_groups )
-      root_face_group_.push_back( (*group.begin()) );
-  } // end faces
-
-    // 4. constructing the interfaces using the VSet nodes information
-    // ---------------------------------------------------------------
-    // (continuous running index 'idx' will be used)
-  if ( vset.InterFaces() > 0 )
-  {
-    if ( csmp_error.Verbose() )
-      cout << "\nMeshManager<" << dim << ">::Initialize: assigning nodes to interfaces..." << endl;
-    assert( vset.HybridElementTypeMesh() );
-    const LocalVariables evars( phys_vars.LocalVariablesAt( INTER_FACE ) );
-    const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( INTER_FACE ) );
-
-    typename deque<vector<size_t> >::const_iterator  first( vset.PlistInterFacesBegin() ), last( vset.PlistInterFacesEnd() );
-    while ( first != last ) {
-      const int32 csmpElementType = vset.ElementType( idx );
-      InterFace<dim>* inter_face = new InterFace<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars );
-      const size_t nodes( inter_face->Nodes() );
-      for ( size_t j = 0U; j<nodes; ++j ) {
-        // assigning node indices
-        inter_face->Assign( j, node_connector[ vset.Plist( inter_face->Idx(), j )], INSIDE );
-      }
-      interface_connector.push_back( inter_face );
-      ++idx;
-      ++first;
-    }
-    n_interfaces_ = interface_connector.size();
-
-    if ( csmp_error.Verbose() )
-      cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
-    const size_t elements( elmt_connector.size() );
-    const size_t faces( face_connector.size() );
-    // connecting interfaces to their higher-dimensional neighbors
-    for ( auto& e : interface_connector ) {
-      // equidimensional neighbors first
-      const size_t neighbors( e->Neighbors() );
-      for ( size_t j = 0U; j<neighbors; ++j ) {
-        // if there is a neighbor (as is the case if the stored index is greater than zero)
-        const long64 index( vset.Pfvert( e->Idx(), j ) );
-        if ( index >= 0 ) {
-          assert( index >= elements + faces );
-          assert( index < elements + faces + n_interfaces_ ); // (-) because interface container is numbered from 0..n-1
-          e->Assign( j, interface_connector[static_cast<size_t>(index) - elements - faces] );
+        if ( discovered_interfaces.size() == 0 ) {
+          auto first_interface = interfaces_map.begin()->second;
+          discovered_interfaces.insert( first_interface );
+          explored_interface_groups.push_back( discovered_interfaces );
+          interfaces_map.erase( first_interface->Idx() );
+          discovered_interfaces.clear();
+          group_idx++;
+          continue;
         }
-      }
-      // higher-dimensional neighbors
-      // ----------------------------
-      // (the 2 sides will always be present because interfaces exist only on internal boundaries)
-      if ( vset.Pfvert( e->Idx(), neighbors ) < 0 || vset.Pfvert( e->Idx(), neighbors + 1U) < 0 || vset.Pfvert( e->Idx(), neighbors ) >= elmt_connector.size() || vset.Pfvert( e->Idx(), neighbors + 1U ) >= elmt_connector.size() )
-        continue;
-      e->Assign( elmt_connector[vset.Pfvert( e->Idx(), neighbors )], elmt_connector[vset.Pfvert( e->Idx(), neighbors + 1U )] );
-    }
-
-    // traversal of the existing mesh nodes to find all its interfaces
-    deque<set<InterFace<dim>*>>	explored_interface_groups;
-    set<InterFace<dim>*>		discovered_interfaces;
-    deque<InterFace<dim>*>		current_interfaces;
-    map<size_t, InterFace<dim>*> interfaces_map;
-    for ( auto f : interface_connector )
-      interfaces_map[f->Idx()] = f;
-
-    // starting at the first interface		
-    current_interfaces.push_back( interfaces_map.begin()->second );
-
-    size_t group_idx = 0U;
-    while ( !interfaces_map.empty() )
-    {
-      while ( !current_interfaces.empty() ) {
-        InterFace<dim>*  n_ptr( *current_interfaces.begin() );
-        // for all neighbor interfaces of the current interface
-        for ( size_t i = 0U; i < n_ptr->Neighbors(); i++ ) {
-          if ( n_ptr->Neighbor( i ) == nullptr ) continue;
-
-          // if this neighbor is a new one					
-          auto new_interface = discovered_interfaces.insert( n_ptr->Neighbor( i ) );
-          if ( new_interface.second ) {
-            current_interfaces.push_back( n_ptr->Neighbor( i ) );
-            interfaces_map.erase( n_ptr->Neighbor( i )->Idx() );
-          }
-        }
-        // removing the interface from the discovered (but not yet explored) deque
-        current_interfaces.pop_front();
-      }
-      if ( discovered_interfaces.size() == 0 ) {
-        auto first_interface = interfaces_map.begin()->second;
-        discovered_interfaces.insert( first_interface );
         explored_interface_groups.push_back( discovered_interfaces );
-        interfaces_map.erase( first_interface->Idx() );
+
+        // if there is only one single interface left, it creates a new group of interfaces.
+        if ( interfaces_map.size() == 1 ) {
+          discovered_interfaces.clear();
+          auto first_interface = interfaces_map.begin()->second;
+          discovered_interfaces.insert( first_interface );
+          explored_interface_groups.push_back( discovered_interfaces );
+          break;
+        }
+        if ( interfaces_map.size() > 0 ) {
+          auto first_interface = interfaces_map.begin()->second;
+          current_interfaces.push_back( first_interface );
+        }
+
         discovered_interfaces.clear();
         group_idx++;
-        continue;
-      }
-      explored_interface_groups.push_back( discovered_interfaces );
-
-      // if there is only one single interface left, it creates a new group of interfaces.
-      if ( interfaces_map.size() == 1 ) {
-        discovered_interfaces.clear();
-        auto first_interface = interfaces_map.begin()->second;
-        discovered_interfaces.insert( first_interface );
-        explored_interface_groups.push_back( discovered_interfaces );
-        break;
-      }
-      if ( interfaces_map.size() > 0 ) {
-        auto first_interface = interfaces_map.begin()->second;
-        current_interfaces.push_back( first_interface );
       }
 
-      discovered_interfaces.clear();
-      group_idx++;
-    }
+      for ( auto group : explored_interface_groups )
+        root_interface_group_.push_back( (*group.begin()) );
+        
+  } // end construction of Interface objects
 
-    for ( auto group : explored_interface_groups )
-      root_interface_group_.push_back( (*group.begin()) );
-  } // end interfaces
 
   // ---------------------------------------------------------------------
-  // 3. Flagging nodes at model boundary with BOX_BOUNDARY flags
+  // 5. Flagging nodes at model boundary with BOX_BOUNDARY flags
   // ---------------------------------------------------------------------
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: flagging boundary objects..." << endl;
@@ -552,30 +699,29 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        // nodes were initially constructed as not located at the model boundary
        for ( auto bit = vset.BFlagsBegin(); bit != vset.BFlagsEnd(); bit++ )
          node_connector[(*bit).first]->AtBoundary( intToBOX_BOUNDARY( (*bit).second ) );
-
-// TESTING
-//for ( auto bit = vset.BFlagsBegin(); bit != vset.BFlagsEnd(); bit++ )
-// cerr <<" "<< parseBoundary( intToBOX_BOUNDARY( (*bit).second ) );
-
-       // ---------------------------------------------------------------------
-       // 4. Flagging the elements using the boundary flags from the nodes
-       // ---------------------------------------------------------------------
-       // (this can only be done where there are node flags, which is true only for box-shaped models)
-// no more BOX_BOUNDARY flags for elements!       flagElementsUsingNodal_BOX_BOUNDARY_Flags<dim>( elmt_connector.begin(), elmt_connector.end() );
     }
     
+    
   // ------------------------------------------------------------------------------
-  // 5. Assigning parent elements (these are the elements that share the node) and
+  // 6. Assigning parent elements (these are the elements that share the node) and
   // their respective internal node-id numbers to the nodes
   // -------------------------------------------------------------------------------
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: assigning parent element information to nodes..." << endl;
-  vector<size_t>  parent_elmts_per_node( node_connector.size(), 0U );
+  vector<size_t>  parent_elmts_per_node( vset.Vertices(), 0U );
+
+//cerr <<"\nDEBUGGING: current nodes:";
+//for ( auto& n : node_connector )
+//  n->Out();
 
   // counting how many parent elements each node has
   for ( auto& e : elmt_connector ) {
-    for ( auto nit = e->NodesBegin(); nit != e->NodesEnd(); nit++ )
-      parent_elmts_per_node[(*nit)->Idx()]++;
+    assert( e != nullptr );
+    for ( auto nit = e->NodesBegin(); nit != e->NodesEnd(); nit++ ) {
+         assert( (*nit) != nullptr );
+         assert( (*nit)->Idx() < node_connector.size() ); 
+         parent_elmts_per_node[ (*nit)->Idx() ]++;
+      }
   }
 
   // reserving the memory for the parent storage and zeroing parent vector for next step
@@ -593,13 +739,16 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: forming regions for contiguous subdomains..." << endl;
 
-  // forming root pointers of the nodes for contiguous regions
-  if ( node_connector.size()>0 ) {
+
+  // ------------------------------------------------------------------------------
+  // 7. forming root pointers of the nodes for contiguous regions
+  // ------------------------------------------------------------------------------
+  if ( !node_connector.empty() ) {
     // assgining the root pointers
     // traversal of the existing mesh nodes to find all its nodes
     deque<set<Node<dim>*>>	explored_node_groups;
-    set<Node<dim>*>			discovered_nodes;
-    deque<Node<dim>*>		current_nodes;
+    set<Node<dim>*>			    discovered_nodes;
+    deque<Node<dim>*>		    current_nodes;
     map<size_t, Node<dim>*> nodes_map;
     for ( auto n : node_connector )
       nodes_map[n->Idx()] = n;
@@ -638,14 +787,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       // avoid the infinite iterative looping search
       bool infinite_looping( false );
       for ( size_t i = 0U; i < explored_node_groups.size(); i++)
-      {
-        if ( explored_node_groups[i] == discovered_nodes ) {
-          infinite_looping = true;
-          if ( csmp_error.Verbose() )
-            cout << "\nMeshManager<" << dim << ">::Initialize: node connections might be wrong..." << endl;
+        {
+          if ( explored_node_groups[i] == discovered_nodes ) {
+            infinite_looping = true;
+            if ( csmp_error.Verbose() )
+              cerr << "\nMeshManager<" << dim << ">::Initialize: node connections might be wrong..." << endl;
+          }
         }
-
-      }
 
       if ( infinite_looping ) {
         discovered_nodes.clear();
@@ -665,7 +813,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
         discovered_nodes.insert( first_node );
         explored_node_groups.push_back( discovered_nodes );
         if ( csmp_error.Verbose() )
-          cout << "\nMeshManager<" << dim << ">::Initialize: the node (" << first_node->Idx() << ") doesn't have any parents and neighbours..." << endl;
+          cerr << "\nMeshManager<" << dim << ">::Initialize: the node (" << first_node->Idx() << ") doesn't have any parents and neighbours..." << endl;
         break;
       }
       if ( nodes_map.size() > 0 ) {
@@ -706,12 +854,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       root_node_group_.push_back( root_elmt->N( 0 ) );
   }
 
-  // 5. verify the constructed elements according to the VSet and assgin the root node and element
+  // 5. verify the constructed elements according to the VSet and assign the root node and element
   if ( node_connector.size() != vset.Vertices() || elmt_connector.size() != vset.Elements() ) {
-    cout << "\nMeshManager<" << dim << ">::Initialize: ";
-    cout << " The constructed elements have a different number of nodes than are stored in the VSet" << vset.Elements() << endl;
-    return false;
-  }
+      cerr << "\nMeshManager<" << dim << ">::Initialize: ";
+      cerr << " The constructed elements have a different number of nodes than are stored in the VSet" << vset.Elements() << endl;
+      return false;
+    }
+
   return true;
   
 } // end Initialise
@@ -840,18 +989,18 @@ void MeshManager<dim>::Update()
   // traversal of the existing mesh nodes to find all its elements	
   deque<Node<dim>*> nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // traversal of the existing mesh root faces to find all its faces	
   deque<Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
+  exploreFacesFromMesh( *this, faces );
   sort( faces.begin(), faces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // traversal of the existing mesh root interfaces to find all its interfaces	
   deque<InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
+  exploreInterFacesFromMesh( *this, interfaces );
   sort( interfaces.begin(), interfaces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // forming root pointers of the nodes for contiguous subdomains
@@ -1110,7 +1259,7 @@ void MeshManager<dim>::Update()
 
 
 /**
-Rebuilds the storage of parents of each element from the model and assigns their relationships.
+   Rebuilds the node to element parent relationship. JCK 2018.
 */
 template<size_t dim>
 void MeshManager<dim>::RebuildParentRelationships( typename vector<Node<dim>*>::iterator begin, typename vector<Node<dim>*>::iterator end )
@@ -1153,25 +1302,24 @@ size_t MeshManager<dim>::DetectElementsWithAllNodesOnBoundary( set<size_t>& belm
   assert( Elements() > 0 );
   if ( Elements() == 0 ) return 0U;
 
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<const Node<dim>*> nodes;
-  deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
-
+  // traversal of the existing mesh nodes to find all its elements
   size_t boundary_only_elements( 0U );
-
-  // counting how many parent elements each node has
-  for ( auto& e : elmts ) {
-    size_t counter( 0U );
-    for ( auto nit = e->NodesBegin(); nit != e->NodesEnd(); nit++ )
-      if ( (*nit)->AtBoundary() != NOT )
-        counter++;
-    if ( counter == e->Nodes() ) {
-      belmts.insert( e->Idx() );
-      boundary_only_elements++;
-    }
-  }
-
+  for ( size_t g=0U; g<NodeGroups(); ++g ) 
+    {
+		   const MeshIterator<dim,Element>  mit( const_cast<Node<dim>*>(RootNode(g)) );
+       for ( typename set<Element<dim>*>::const_iterator 
+             it=mit.CellsBegin(); it!=mit.CellsEnd(); ++it ) {
+            const size_t nodes((*it)->Nodes());
+            size_t       counter(0U);
+            for ( size_t i=0U; i<nodes; ++i )
+              if ( (*it)->N(i)->AtBoundary() != NOT ) counter++;
+            if ( counter == nodes ) {
+                  belmts.insert( (*it)->Idx() );
+                  boundary_only_elements++;
+              } 
+         }
+     }
+  	
   return boundary_only_elements;
 }
 
@@ -1193,7 +1341,7 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
   // traversal of the existing mesh nodes to find all its elements	
   deque<Node<dim>*> nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
 
   if ( Elements() <= 1U )
     throw Exception( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
@@ -1737,8 +1885,8 @@ void MeshManager<dim>::Erase( Face<dim>& face )
   set<Face<dim>*>		discovered_faces;
   deque<Face<dim>*>	current_faces;
 
-  Face<dim>* found_face = NULL;
-  Face<dim>* found_root = NULL;
+  Face<dim>* found_face = nullptr;
+  Face<dim>* found_root = nullptr;
 
   for ( auto root_face : root_face_group_ ) {
     // starting at the first face
@@ -1749,23 +1897,23 @@ void MeshManager<dim>::Erase( Face<dim>& face )
       Face<dim>*  n_ptr( *current_faces.begin() );
       // for all neighbor faces of the current face
       for ( size_t i = 0U; i < n_ptr->Neighbors(); i++ ) {
-        if ( n_ptr->Neighbor( i ) == NULL ) continue;
+        if ( n_ptr->Neighbor( i ) == nullptr ) continue;
         if ( *n_ptr->Neighbor( i ) == face ) found_face = n_ptr->Neighbor( i );
 
         // if this neighbor is new one					
         auto new_face = discovered_faces.insert( n_ptr->Neighbor( i ) );
         if ( new_face.second ) current_faces.push_back( n_ptr->Neighbor( i ) );
       }
-      if ( found_face != NULL ) break;
+      if ( found_face != nullptr ) break;
       // removing the face from the discovered (but not yet explored) deque
       current_faces.pop_front();
     }
-    if ( found_face != NULL ) break;
+    if ( found_face != nullptr ) break;
   }
 
   // change the root face into one of its neighbors and delete the found face,
   // if the found face is the root face
-  Face<dim>* new_root_face( NULL );
+  Face<dim>* new_root_face( nullptr );
   if ( found_face == found_root ) {
     for ( auto f : discovered_faces ) {
       if ( found_root != f ) {
@@ -1773,7 +1921,7 @@ void MeshManager<dim>::Erase( Face<dim>& face )
         break;
       }
     }
-    if ( new_root_face == NULL )
+    if ( new_root_face == nullptr )
       cerr << "MeshManager::Erase(Face): this is the root face which cannot be deleted. \n";
     else
       found_root = new_root_face;
@@ -1782,16 +1930,17 @@ void MeshManager<dim>::Erase( Face<dim>& face )
   if ( found_face ) {
     // unassign the connections of its neighbors
     for ( auto n : found_face->NeighborElementVector() )
-      if ( n != NULL ) n->DisconnectNeighbor( found_face );
+      if ( n != nullptr ) n->Unassign( found_face );
 
     delete found_face;
-    found_face = NULL;
+    found_face = nullptr;
     n_faces_--;
   }
 
   discovered_faces.clear();
   current_faces.clear();
-}
+  
+} // end Erase( Face )
 
 
 /**
@@ -1802,8 +1951,8 @@ void MeshManager<dim>::Erase( Face<dim>* face )
 {
   // if the found face is the root face
   // change the root face into one of its neighbors and delete the found face.
-  Face<dim>* new_root_face( NULL );
-  Face<dim>* root_face( NULL );
+  Face<dim>* new_root_face( nullptr );
+  Face<dim>* root_face( nullptr );
   if ( root_face_group_.size() > 0 ) {
     for ( auto root : root_face_group_ )
       if ( face == root ) root_face = root;
@@ -1815,7 +1964,7 @@ void MeshManager<dim>::Erase( Face<dim>* face )
           break;
         }
       }
-      if ( new_root_face == NULL )
+      if ( new_root_face == nullptr )
         cerr << "MeshManager::Erase(Face): this is the root face which cannot be deleted. \n";
       else
         root_face = new_root_face;
@@ -1826,13 +1975,14 @@ void MeshManager<dim>::Erase( Face<dim>* face )
   if ( face ) {
     // unassign the connections of its neighbors
     for ( auto n : face->NeighborElementVector() )
-      if ( n != NULL ) n->DisconnectNeighbor( face );
+      if ( n != nullptr ) n->Unassign( face );
 
     delete face;
-    face = NULL;
+    face = nullptr;
     n_faces_--;
   }
-}
+  
+} // end Erase( Face pointer )
 
 
 /**
@@ -1845,8 +1995,8 @@ void MeshManager<dim>::Erase( InterFace<dim>& interface )
   set<InterFace<dim>*>	discovered_interfaces;
   deque<InterFace<dim>*>	current_interfaces;
 
-  InterFace<dim>* found_interface = NULL;
-  InterFace<dim>*	found_root = NULL;
+  InterFace<dim>* found_interface = nullptr;
+  InterFace<dim>*	found_root = nullptr;
 
   for ( auto root_interface : root_interface_group_ ) {
     // starting at the first interface
@@ -1856,23 +2006,23 @@ void MeshManager<dim>::Erase( InterFace<dim>& interface )
       InterFace<dim>*  n_ptr( *current_interfaces.begin() );
       // for all neighbor interfaces of the current interface
       for ( size_t i = 0U; i < n_ptr->Neighbors(); i++ ) {
-        if ( n_ptr->Neighbor( i ) == NULL ) continue;
+        if ( n_ptr->Neighbor( i ) == nullptr ) continue;
         if ( *n_ptr->Neighbor( i ) == interface ) found_interface = n_ptr->Neighbor( i );
 
         // if this neighbor is new one					
         auto new_interface = discovered_interfaces.insert( n_ptr->Neighbor( i ) );
         if ( new_interface.second ) current_interfaces.push_back( n_ptr->Neighbor( i ) );
       }
-      if ( found_interface != NULL ) break;
+      if ( found_interface != nullptr ) break;
       // removing the interface from the discovered (but not yet explored) deque			
       current_interfaces.pop_front();
     }
-    if ( found_interface != NULL ) break;
+    if ( found_interface != nullptr ) break;
   }
 
   // change the root face into one of its neighbors and delete the found face,
   // if the found face is the root face
-  InterFace<dim>* new_root_face( NULL );
+  InterFace<dim>* new_root_face( nullptr );
   if ( found_interface == found_root ) {
     for ( auto f : discovered_interfaces ) {
       if ( found_root != f ) {
@@ -1880,7 +2030,7 @@ void MeshManager<dim>::Erase( InterFace<dim>& interface )
         break;
       }
     }
-    if ( new_root_face == NULL )
+    if ( new_root_face == nullptr )
       cerr << "MeshManager::Erase(InterFace): this is the root interface which cannot be deleted. \n";
     else
       found_root = new_root_face;
@@ -1889,16 +2039,18 @@ void MeshManager<dim>::Erase( InterFace<dim>& interface )
   if ( found_interface ) {
     // unassign the connections of its neighbors
     for ( auto n : found_interface->NeighborElementVector() )
-      if ( n != NULL ) n->DisconnectNeighbor( found_interface );
+      if ( n != nullptr ) n->Unassign( found_interface );
 
     delete found_interface;
-    found_interface = NULL;
+    found_interface = nullptr;
     n_interfaces_--;
   }
 
   discovered_interfaces.clear();
   current_interfaces.clear();
-}
+  
+} // end Erase( InterFace )
+
 
 
 /**
@@ -1909,8 +2061,8 @@ void MeshManager<dim>::Erase( InterFace<dim>* interface )
 {
   // if the found interface is the root interface
   // change the root interface into one of its neighbors and delete the found interface.
-  InterFace<dim>* new_root_interface( NULL );
-  InterFace<dim>* root_interface( NULL );
+  InterFace<dim>* new_root_interface( nullptr );
+  InterFace<dim>* root_interface( nullptr );
   if ( root_interface_group_.size() > 0 ) {
     for ( auto root : root_interface_group_ )
       if ( interface == root ) root_interface = root;
@@ -1922,7 +2074,7 @@ void MeshManager<dim>::Erase( InterFace<dim>* interface )
           break;
         }
       }
-      if ( new_root_interface == NULL )
+      if ( new_root_interface == nullptr )
         cerr << "MeshManager::Erase(InterFace): this is the root interface which cannot be deleted. \n";
       else
         root_interface = new_root_interface;
@@ -1933,10 +2085,10 @@ void MeshManager<dim>::Erase( InterFace<dim>* interface )
   if ( interface ) {
     // unassign the connections of its neighbors
     for ( auto n : interface->NeighborElementVector() )
-      if ( n != NULL ) n->DisconnectNeighbor( interface );
+      if ( n != NULL ) n->Unassign( interface );
 
     delete interface;
-    interface = NULL;
+    interface = nullptr;
     n_interfaces_--;
   }
 }
@@ -1953,12 +2105,12 @@ bool MeshManager<dim>::EraseNodes()
   // traversal of the existing mesh nodes to find all its elements	
   deque<Node<dim>*> nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
 
   for ( auto n : nodes ) {
     if ( n ) {
       delete n;
-      n = NULL;
+      n = nullptr;
       n_nodes_--;
     }
   }
@@ -1983,12 +2135,12 @@ bool MeshManager<dim>::EraseElements()
   // traversal of the existing mesh nodes to find all its elements	
   deque<Node<dim>*> nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
 
   for ( auto e : elmts ) {
     if ( e ) {
       delete e;
-      e = NULL;
+      e = nullptr;
       n_elmts_--;
     }
   }
@@ -1996,7 +2148,7 @@ bool MeshManager<dim>::EraseElements()
   for ( auto n : nodes ) {
     if ( n ) {
       delete n;
-      n = NULL;
+      n = nullptr;
       n_nodes_--;
     }
   }
@@ -2021,13 +2173,13 @@ bool MeshManager<dim>::EraseFaces()
 
   // traversal of the existing mesh root faces to find all its faces	
   deque<Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
+  exploreFacesFromMesh( *this, faces );
 
   // 2. assigning and trimming excess storage from the face pointer vector
   for ( auto f : faces ) {
     if ( f ) {
       delete f;
-      f = NULL;
+      f = nullptr;
       n_faces_--;
     }
   }
@@ -2051,13 +2203,13 @@ bool MeshManager<dim>::EraseInterFaces()
 
   // traversal of the existing mesh root interfaces to find all its interfaces
   deque<InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
+  exploreInterFacesFromMesh( *this, interfaces );
 
   // 2. assigning and trimming excess storage from the interface pointer vector
   for ( auto f : interfaces ) {
     if ( f ) {
       delete f;
-      f = NULL;
+      f = nullptr;
       n_interfaces_--;
     }
   }
@@ -2076,23 +2228,23 @@ bool MeshManager<dim>::EraseInterFaces()
 @note this member function is constant because the idx_ is a mutable variable in the cell classes
 */
 template<size_t dim>
-void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence ) const
+void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence )
 {
   // traversal of the existing mesh nodes to find all its elements	
-  deque<const Node<dim>*> nodes;
+  deque<Node<dim>*> nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // traversal of the existing mesh root faces to find all its faces	
-  deque<const Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
+  deque<Face<dim>*> faces;
+  exploreFacesFromMesh( *this, faces );
   sort( faces.begin(), faces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // traversal of the existing mesh root interfaces to find all its interfaces	
-  deque<const InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
+  deque<InterFace<dim>*> interfaces;
+  exploreInterFacesFromMesh( *this, interfaces );
   sort( interfaces.begin(), interfaces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   size_t n( 0U );
@@ -2109,6 +2261,9 @@ void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence ) const
   for_each( interfaces.begin(), interfaces.end(), [&n]( const InterFace<dim>* o ) { o->Idx( n++ ); return o; } );
 
 } // end AssignUniqueNumbers
+
+
+
 
 
 /** Writes MeshManager to VSet
@@ -2180,7 +2335,9 @@ AssignUniqueNumbers( in_a_single_sequence );
 
 */
 template<size_t dim>
-void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
+void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset,
+                                     deque<const Node<dim>*>& nodes, deque<const Element<dim>*>& elmts, 
+                                     deque<const Face<dim>*>& faces, deque<const InterFace<dim>*>& interfaces ) const
 {
   ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
@@ -2190,20 +2347,16 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
   const size_t interfaceMultiplier( 2U );
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<const Node<dim>*> nodes;
-  deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
     
   // traversal of the existing mesh root faces to find all its faces	
-  deque<const Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
+  exploreFacesFromMesh( *this, faces );
   sort( faces.begin(), faces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // traversal of the existing mesh root interfaces to find all its interfaces	
-  deque<const InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
+  exploreInterFacesFromMesh( *this, interfaces );
   sort( interfaces.begin(), interfaces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   if ( HybridElementMesh() || faces.size() > 0 || interfaces.size() > 0 ) {
@@ -2442,7 +2595,7 @@ To store the properties in the VSet, they are first written to PropertyData obje
 These are then added to the VSet property storage.
 
 @attention  a continuous numbering of elements, faces, interfaces and nodes has to be
-created with AssignUniqueNumbers() before this method is called.
+established, for instance with AssignUniqueNumbers() before this method is called.
 
 @note region properties are stored together with the regions in respective binary files
 
@@ -2456,27 +2609,15 @@ database is therefore essential to retrieve all other variable related informati
 
 */
 template<size_t dim>
-void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& database, VSet<dim>& vset ) const
+void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& database, 
+                                                const deque<const Node<dim>*>& nodes, 
+                                                const deque<const Element<dim>*>& elmts, 
+                                                const deque<const Face<dim>*>& faces, 
+                                                const deque<const InterFace<dim>*>& interfaces, 
+                                                VSet<dim>& vset ) const
 {
   ErrorHandler&		csmp_error( ErrorHandler::Instance() );
   map<string, Index>  properties;
-
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<const Node<dim>*> nodes;
-  deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
-  sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-  sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  // traversal of the existing mesh root faces to find all its faces	
-  deque<const Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
-  sort( faces.begin(), faces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  // traversal of the existing mesh root interfaces to find all its interfaces	
-  deque<const InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
-  sort( interfaces.begin(), interfaces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   database.ListProperties( NODE, properties );
   const size_t n_nodes( nodes.size() );
@@ -3575,18 +3716,18 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
   // traversal of the existing mesh nodes to find all its elements	
   deque<Node<dim>*> nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // traversal of the existing mesh root faces to find all its faces	
   deque<Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
+  exploreFacesFromMesh( *this, faces );
   sort( faces.begin(), faces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // traversal of the existing mesh root interfaces to find all its interfaces	
   deque<InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
+  exploreInterFacesFromMesh( *this, interfaces );
   sort( interfaces.begin(), interfaces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // -------------------
@@ -4847,6 +4988,9 @@ void  MeshManager<dim>::SetRootInterFace( InterFace<dim>* root_interface )
   this->root_interface_group_.push_back( root_interface );
 }
 
+/**
+    Only use these const object methods when you DO NOT want to modify the state of the Node
+*/
 template<size_t dim>
 const Node<dim>*  MeshManager<dim>::RootNode( size_t group_idx ) const
 {
@@ -4889,17 +5033,17 @@ void MeshManager<dim>::Out() const
   cout << "\nMeshManager<" << dim << ">::Out: " << endl;
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<const Node<dim>*> nodes;
-  deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( this, nodes, elmts );
+  deque<const Node<dim>*>    nodes;
+  deque<const Element<dim>*> elmts;
+  exploreNodesAndElementsFromMesh( *this, nodes, elmts );
 
   // traversal of the existing mesh root faces to find all its faces	
   deque<const Face<dim>*> faces;
-  exploreFacesFromMesh( this, faces );
+  exploreFacesFromMesh( *this, faces );
 
   // traversal of the existing mesh root interfaces to find all its interfaces	
   deque<const InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( this, interfaces );
+  exploreInterFacesFromMesh( *this, interfaces );
 
   // nodes
   cout << "\nNODES: " << endl;

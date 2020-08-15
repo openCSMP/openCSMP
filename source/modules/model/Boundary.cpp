@@ -1,6 +1,5 @@
 #include "Boundary.h"
 #include "Box.h"
-#include "Region.h"
 
 #include "writeVariableIf.h"
 #include "Node.h"
@@ -88,7 +87,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
   // traversal of the existing mesh root faces to find all its faces	
   deque<Face<dim>*> faces;
-  exploreFacesFromMesh( &mesh, faces );
+  exploreFacesFromMesh( mesh, faces );
   sort( faces.begin(), faces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // assigning pointers to the interior faces
@@ -106,9 +105,9 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
   this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<Node<dim>*> nodes;
+  deque<Node<dim>*>    nodes;
   deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   // assigning pointers to the interior faces

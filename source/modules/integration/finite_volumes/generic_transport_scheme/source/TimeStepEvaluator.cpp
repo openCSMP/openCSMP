@@ -72,7 +72,7 @@ template<size_t dim, template<size_t> class USER>
 double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>* const nptr, double64 outflow ) const
  {
      // 1. (phi * V) / q_out = dt
-     double64 time_increment = nptr->Read( User()->key_FVPV ) / outflow;
+     double64 time_increment = nptr->Read( User()->Notation.key_FVPV ) / outflow;
      assert( time_increment > 0. );
 
      return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
@@ -99,15 +99,15 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
      assert( nptr != NULL );
  
      // 0. COMPUTING THE FLUX BALANCE
-     const double64 pore_volume  = nptr->Read( User()->key_FVPV );
-     double64       flux_balance = nptr->Read( User()->key_FB );
+     const double64 pore_volume  = nptr->Read( User()->Notation.key_FVPV );
+     double64       flux_balance = nptr->Read( User()->Notation.key_FB );
 
     // 1. FINITE VOLUMES TRUNCATED BY MODEL BOUNDARY
     //    if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance.
     //    however, if we are at a no-flow boundary of the model, there should be no inflow or outflow through the missing facets
     //    and any flux balance will therefore be correctly computed.
     if ( nptr->AtBoundary() != NOT ) {
-         if ( nptr->Status( User()->key_PF ) == DIRICH ) {
+         if ( nptr->Status( User()->Notation.key_PF ) == DIRICH ) {
                // if we are at an outflow boundary, no outflow was recorded as all FV facet normals point into the model domaim
                // in this the flux-balance is equivalent to the outflow
                if ( flux_balance < 0. ) outflow = fabs(flux_balance);
@@ -178,16 +178,16 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const 
     VectorVariable<dim>         vc;
     double64                    velocity, courant_increment(max_time_increment_);
     const double64              millisecond(1.0e-3);
-    const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
+    const bool                  multiply_with_cell_thickess = (User()->Notation.key_THI == csmp::Index()) ? false : true;
 
    // 1. limit imposed by advection
    // -----------------------------
-   eit->Read( User()->key_V, vc );
+   eit->Read( User()->Notation.key_V, vc );
    velocity = vc.Length();
 
 
-   double64 cell_diameter = eit->LengthInDirection(vc) * eit->Read( User()->key_PHI );
-   if ( multiply_with_cell_thickess ) cell_diameter *= eit->Read( User()->key_THI );
+   double64 cell_diameter = eit->LengthInDirection(vc) * eit->Read( User()->Notation.key_PHI );
+   if ( multiply_with_cell_thickess ) cell_diameter *= eit->Read( User()->Notation.key_THI );
 
 
    // 4. calculating the CFL criterion from the cell diameter

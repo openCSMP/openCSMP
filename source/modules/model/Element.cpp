@@ -410,11 +410,32 @@ void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor ele
 }
 
 
+/**
+    unassigns the neighbor element, setting the pointer in the 'elmt_connector' vector to null
+*/
 template<size_t dim>
-void Element<dim>::Unassign( Element<dim>* e_ptr ) // unassigns the neighbor element
+void Element<dim>::Unassign( const Element<dim>* e_ptr ) 
+  {
+    for ( size_t i = 0U; i < elmt_connector_.size(); ++i ) {
+        if ( e_ptr == nullptr || elmt_connector_[i] == nullptr )
+          continue;
+        if ( e_ptr == elmt_connector_[i] ) {
+            elmt_connector_[i] = nullptr;
+            break;
+          }
+      }
+  }
+
+
+/* OLD VERSION THAT WOULD DELETE ELEMENT FROM VECTOR
+
+    unassigns the neighbor element and deletes it from the 'elmt_connector' vector
+
+template<size_t dim>
+void Element<dim>::Unassign( Element<dim>* e_ptr ) 
 {
   for ( size_t i = 0U; i < elmt_connector_.size(); i++ ) {
-    if ( e_ptr == NULL || elmt_connector_[i] == NULL )
+    if ( e_ptr == nullptr || elmt_connector_[i] == nullptr )
       continue;
     if ( (*e_ptr) == (*elmt_connector_[i]) ) {
       elmt_connector_.erase( elmt_connector_.begin() + i );
@@ -423,6 +444,7 @@ void Element<dim>::Unassign( Element<dim>* e_ptr ) // unassigns the neighbor ele
     }
   }
 }
+*/
 
 
 template<size_t dim>
@@ -438,9 +460,24 @@ void Element<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 
 template<size_t dim>
 void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
+  {
+    for ( size_t i = 0U; i < node_connector_.size(); i++ ) {
+        if ( nd_ptr == nullptr || node_connector_[i] == nullptr )
+          continue;
+        if ( (*nd_ptr) == (*node_connector_[i]) ) {
+            node_connector_[i] = nullptr;
+            break;
+          }
+      }
+  }
+
+
+/* OLD VERSION WITH DELETION, changing size of vector
+template<size_t dim>
+void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
 {
   for ( size_t i = 0U; i < node_connector_.size(); i++ ) {
-    if ( nd_ptr == NULL || node_connector_[i] == NULL )
+    if ( nd_ptr == NULL || node_connector_[i] == nullptr )
       continue;
     if ( (*nd_ptr) == (*node_connector_[i]) ) {
       node_connector_.erase( node_connector_.begin() + i );
@@ -449,6 +486,7 @@ void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
     }
   }
 }
+*/
 
 
 template<size_t dim>

@@ -96,9 +96,9 @@ class Face : public FiniteElementPolicy<dim,Face>,
   
     /// tell face about its face neighbors
     void Assign( size_t nbor, Face<dim>* const );
-  
-    /// unassign its face neighbors
-	  bool DisconnectNeighbor( Face<dim>* );
+    
+    /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
+    void Unassign( const Face<dim>* ); 
 
     /// @attention because of the pointers, this assignment makes sense only in the rarest cases
     Face& operator=( const Face<dim>& );

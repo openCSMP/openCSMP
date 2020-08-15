@@ -55,10 +55,10 @@ class ExplicitTransport_Test : public Test {
     void  Test_initializeFiniteVolumeProperties( double64 tolerance_relaxation_factor = 1000. );
   
     /// is the flux balance equal to numeric zero in a divergence free velocity field ?
-    void  TestInteriorFluxBalance( double64 tolerance_relaxation_factor = 100. );
+    void  TestInteriorFluxBalance( double64 tolerance_relaxation_factor = 1000. );
   
     /// verifies that there is indeed no flux divergence in FVs that are located at a no-flow boundary
-    void  TestNoFlowBoundaryFluxBalance( double64 tolerance_relaxation_factor = 100. );
+    void  TestNoFlowBoundaryFluxBalance( double64 tolerance_relaxation_factor = 1000. );
   
     /// TVD? - first-order scheme during transport in a const velocity field and out of model
     void  TestFlowThroughModel( const char* model = "BOX40x3x10m", bool prescribed_velocity=false );

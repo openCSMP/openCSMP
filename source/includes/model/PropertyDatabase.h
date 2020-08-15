@@ -198,6 +198,8 @@ class PropertyDatabase  {
    bool           IsDefined( const csmp::Index& idx ) const;
    void           RangeOf( const char* property_name, double64& min, double64& max ) const;
    void           SetRangeOf( const char* property_name, double64 vmin, double64 vmax );
+   double64       LowerLimitOf( const char* property_name ) const;
+   double64       UpperLimitOf( const char* property_name ) const;
 
    // range checking
    /// prints details of the range check to screen and terminates program is value is out of range

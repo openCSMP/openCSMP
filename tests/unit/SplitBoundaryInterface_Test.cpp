@@ -10,360 +10,37 @@ using namespace std;
 
 // TODO: when the new nodes and elements are created, are the property values from the old nodes mapped to them? - would this help a user?
 
-namespace csmp
-{
+namespace csmp {
 
-template<size_t dim>
-void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double64 xShift, double64 yShift, double64 zShift )
+
+void SplitBoundaryInterface_Test::run()
 {
-  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
-  if ( dim == 2 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
-    {
-      const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
-      {
-        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
-        {
-          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
-          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
-        }
-      }
-    }
-  else if ( dim == 3 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
-    {
-      const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
-      {
-        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
-        {
-          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
-          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
-          (*it)->N( i, side )->z( (*it)->N( i, side )->z() + zShift );
-        }
-      }
-    }
+  // test splitboundary between 2D regions
+  Test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
+  Test_splitboundary_between_regions<2U>( "ThreeZones2D" );
+
+  // test splitboundary between 3D regions
+  Test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
+  Test_splitboundary_between_regions<3U>( "ThreeZones3D" );
+
+  // test splitboundary around interfaces
+  // JC: working on the QC process which is requried for the following models
+  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
+  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
+  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
+  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
+
+  // test splitboundary from constructor of ansys model
+  // JC: working on the QC process which is requried for the following models
+  //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
+  Detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
+
+  // test splitboundary for complex ansys models
+  Test_splitboundary_between_regions<3U>( "lamination" );
+  Test_splitboundary_between_regions<2U>( "kueper_one_interface" );
 }
 
 
-template<size_t dim>
-void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double64 shift )
-{
-  VectorVariable<dim> displacementPerpedicularToInterface( ANY, 0.0 );
-  Point<dim> displacementToBaryCenter;
-  Point<dim> baryCenter;
-  size_t null_neighbors( 0 );
-  Element<dim>* parentElement( NULL );
-
-  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
-  if ( dim == 2 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
-    {
-      if ( (*it)->InterveningElement() != NULL )
-        (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
-      else
-        (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
-      displacementPerpedicularToInterface *= shift;
-      const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
-      {
-        if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )
-        {
-          null_neighbors = 0;
-          for ( size_t k = 0; k<(*it)->N( i, OUTSIDE )->Parents(); k++ )
-          {
-            parentElement = (*it)->N( i, OUTSIDE )->Parent( k );
-            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
-            {
-              if ( parentElement->Neighbor( j ) == NULL )
-                null_neighbors++;
-            }
-          }
-          if ( null_neighbors > 1 )
-          {
-            baryCenter = (*it)->Parent( OUTSIDE )->BaryCenter();
-            displacementToBaryCenter = baryCenter - (*it)->N( i, OUTSIDE )->Coordinate();
-            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
-            displacementToBaryCenter *= shift;
-            (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementToBaryCenter[0] );
-            (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementToBaryCenter[1] );
-          }
-          (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementPerpedicularToInterface[0] );
-          (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementPerpedicularToInterface[1] );
-
-          null_neighbors = 0;
-          for ( size_t k = 0; k<(*it)->N( i, INSIDE )->Parents(); k++ )
-          {
-            parentElement = (*it)->N( i, INSIDE )->Parent( k );
-            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
-            {
-              if ( parentElement->Neighbor( j ) == nullptr )
-                null_neighbors++;
-            }
-          }
-          if ( null_neighbors > 1 )
-          {
-            baryCenter = (*it)->Parent( INSIDE )->BaryCenter();
-            displacementToBaryCenter = baryCenter - (*it)->N( i, INSIDE )->Coordinate();
-            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
-            displacementToBaryCenter *= shift;
-            (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() + displacementToBaryCenter[0] );
-            (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() + displacementToBaryCenter[1] );
-          }
-          (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() - displacementPerpedicularToInterface[0] );
-          (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() - displacementPerpedicularToInterface[1] );
-        }
-      }
-    }
-  else if ( dim == 3 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
-    {
-      const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
-      {
-        if ( (*it)->InterveningElement() != nullptr )
-          (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
-        else
-          (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
-        displacementPerpedicularToInterface *= shift;
-        if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )
-        {
-          null_neighbors = 0;
-          for ( size_t k = 0; k<(*it)->N( i, OUTSIDE )->Parents(); k++ )
-          {
-            parentElement = (*it)->N( i, OUTSIDE )->Parent( k );
-            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
-            {
-              if ( parentElement->Neighbor( j ) == nullptr )
-                null_neighbors++;
-            }
-          }
-          if ( null_neighbors > 1 )
-          {
-            baryCenter = (*it)->Parent( OUTSIDE )->BaryCenter();
-            displacementToBaryCenter = baryCenter - (*it)->N( i, OUTSIDE )->Coordinate();
-            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
-            displacementToBaryCenter *= shift;
-            (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementToBaryCenter[0] );
-            (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementToBaryCenter[1] );
-            (*it)->N( i, OUTSIDE )->z( (*it)->N( i, OUTSIDE )->z() + displacementToBaryCenter[2] );
-          }
-          (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementPerpedicularToInterface[0] );
-          (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementPerpedicularToInterface[1] );
-          (*it)->N( i, OUTSIDE )->z( (*it)->N( i, OUTSIDE )->z() + displacementPerpedicularToInterface[2] );
-
-          null_neighbors = 0;
-          for ( size_t k = 0; k<(*it)->N( i, INSIDE )->Parents(); k++ )
-          {
-            parentElement = (*it)->N( i, INSIDE )->Parent( k );
-            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
-            {
-              if ( parentElement->Neighbor( j ) == nullptr )
-                null_neighbors++;
-            }
-          }
-          if ( null_neighbors > 1 )
-          {
-            baryCenter = (*it)->Parent( INSIDE )->BaryCenter();
-            displacementToBaryCenter = baryCenter - (*it)->N( i, INSIDE )->Coordinate();
-            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
-            displacementToBaryCenter *= shift;
-            (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() + displacementToBaryCenter[0] );
-            (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() + displacementToBaryCenter[1] );
-            (*it)->N( i, INSIDE )->z( (*it)->N( i, INSIDE )->z() + displacementToBaryCenter[2] );
-          }
-          (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() - displacementPerpedicularToInterface[0] );
-          (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() - displacementPerpedicularToInterface[1] );
-          (*it)->N( i, INSIDE )->z( (*it)->N( i, INSIDE )->z() - displacementPerpedicularToInterface[2] );
-        }
-      }
-    }
-}
-
-
-template<size_t dim>
-void shiftInterfaceTips( Region<dim>& region, double64 shift )
-{
-  Point<dim> displacement;
-  Point<dim> baryCenter;
-
-  if ( dim == 2 )
-    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
-    {
-      baryCenter = (*it)->BaryCenter();
-      const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
-      {
-        displacement = baryCenter - (*it)->N( i )->Coordinate();
-        displacement.NormalizeLengthTo( 1.0 );
-        displacement *= shift;
-        (*it)->N( i )->x( (*it)->N( i )->x() + displacement[0] );
-        (*it)->N( i )->y( (*it)->N( i )->y() + displacement[1] );
-      }
-    }
-  else if ( dim == 3 )
-    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
-    {
-      baryCenter = (*it)->BaryCenter();
-      const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
-      {
-        displacement = baryCenter - (*it)->N( i )->Coordinate();
-        displacement.NormalizeLengthTo( 1.0 );
-        displacement *= shift;
-        (*it)->N( i )->x( (*it)->N( i )->x() + displacement[0] );
-        (*it)->N( i )->y( (*it)->N( i )->y() + displacement[1] );
-        (*it)->N( i )->z( (*it)->N( i )->z() + displacement[2] );
-      }
-    }
-}
-
-
-template<size_t dim>
-void shiftRegion( Region<dim>& region, double64 xShift, double64 yShift, double64 zShift )
-{
-  if ( dim == 2 )
-    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-    {
-      (*it)->x( (*it)->x() + xShift );
-      (*it)->y( (*it)->y() + yShift );
-    }
-  else if ( dim == 3 )
-    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-    {
-      (*it)->x( (*it)->x() + xShift );
-      (*it)->y( (*it)->y() + yShift );
-      (*it)->z( (*it)->z() + zShift );
-    }
-}
-
-
-template<size_t dim>
-void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
-{
-  if ( dim == 2 )
-  {
-    if ( x_or_y_or_z == 0 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->x() > (line_coordinate + eps) )
-          (*it)->x( (*it)->x() + shift );
-    }
-    else if ( x_or_y_or_z == 1 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->y() > (line_coordinate + eps) )
-          (*it)->y( (*it)->y() + shift );
-    }
-  }
-  else if ( dim == 3 )
-  {
-    if ( x_or_y_or_z == 0 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->x() > (line_coordinate + eps) )
-          (*it)->x( (*it)->x() + shift );
-    }
-    else if ( x_or_y_or_z == 1 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->y() > (line_coordinate + eps) )
-          (*it)->y( (*it)->y() + shift );
-    }
-    else {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->z() > (line_coordinate + eps) )
-          (*it)->z( (*it)->z() + shift );
-    }
-  }
-}
-
-
-template<size_t dim>
-void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
-{
-  if ( dim == 2 )
-  {
-    if ( x_or_y_or_z == 0 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->x() < (line_coordinate + eps) )
-          (*it)->x( (*it)->x() + shift );
-    }
-    else if ( x_or_y_or_z == 1 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->y() < (line_coordinate + eps) )
-          (*it)->y( (*it)->y() + shift );
-    }
-  }
-  else if ( dim == 3 )
-  {
-    if ( x_or_y_or_z == 0 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->x() < (line_coordinate + eps) )
-          (*it)->x( (*it)->x() + shift );
-    }
-    else if ( x_or_y_or_z == 1 )
-    {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->y() < (line_coordinate + eps) )
-          (*it)->y( (*it)->y() + shift );
-    }
-    else {
-      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-        if ( (*it)->z() < (line_coordinate + eps) )
-          (*it)->z( (*it)->z() + shift );
-    }
-  }
-}
-
-
-template<size_t dim>
-void scaleRegionSymmetricOverZero( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
-{
-  if ( dim == 2 )
-    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-    {
-      (*it)->x( (*it)->x()*xScale );
-      (*it)->y( (*it)->y()*yScale );
-    }
-  else if ( dim == 3 )
-    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-    {
-      (*it)->x( (*it)->x()*xScale );
-      (*it)->y( (*it)->y()*yScale );
-      (*it)->z( (*it)->z()*zScale );
-    }
-}
-
-
-template<size_t dim>
-void scaleRegion( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
-{
-  Point<dim> min_point;
-  Point<dim> max_point;
-  Point<dim> mid_point;
-
-  region.MinMaxCoordinates( min_point, max_point );
-  mid_point = (min_point + max_point) / 2.0;
-
-  if ( dim == 2 )
-    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-    {
-      (*it)->x( mid_point[0] + ((*it)->x() - mid_point[0])*xScale );
-      (*it)->y( mid_point[1] + ((*it)->y() - mid_point[1])*yScale );
-    }
-  else if ( dim == 3 )
-    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
-    {
-      (*it)->x( mid_point[0] + ((*it)->x() - mid_point[0])*xScale );
-      (*it)->y( mid_point[1] + ((*it)->y() - mid_point[1])*yScale );
-      (*it)->z( mid_point[2] + ((*it)->z() - mid_point[2])*zScale );
-    }
-}
 
 
 template<size_t dim>
@@ -768,11 +445,13 @@ void SplitBoundaryInterface_Test::LoadContiguousModel( const std::string& model_
 
   // 4. creating lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  set<string> new_regions = model->RegionsFromSplitBoundaries();
+  set<string> new_regions = model->InsertLowerDimensionalRegionsIntoSplitBoundaries();
 
   // 5. Writing it 
   model->OutputToBinaryFile( model_name.c_str() );
 }
+
+
 
 
 /// Input name of regions to split
@@ -941,6 +620,9 @@ void SplitBoundaryInterface_Test::OutputToFile( const char* file_name,
 } // end outputToFile
 
 
+
+
+
 /// TESTS
 /// SPLITBOUNDARY BETWEEN REGIONS
 template<size_t dim>
@@ -980,10 +662,10 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
     if ( verbose_ ) cout << "\n\tboundary: " << (*it).first;
   if ( verbose_ ) cout << endl;
 
-  // create SplitBoundaries
   std::vector<std::string> regions;
   regions.reserve( modelIN->UniqueRegions() );
 
+  // find lower dimensional regions
   const pair<int32, int32>  model_dim = modelIN->Region( "Model" ).SpatialDimensions();
   for ( typename std::map<std::string, csmp::Region<dim> >::iterator
         it = modelIN->UniqueRegionsBegin(); it != modelIN->UniqueRegionsEnd(); ++it ) {
@@ -1033,13 +715,42 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
   for ( auto it : region_final_pairs ) // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
     modelIN->InsertSplitBoundary( it.first.c_str(), it.second.c_str() );
   
-  // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
-  // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  set<string> new_regions = modelIN->RegionsFromSplitBoundaries();
+  
+  
+  // SKM extra tests
+  // ---------------
+  // are all the nodes functional
+  const Region<dim>&  model_domain( modelIN->Region("Model") );
+  _test( model_domain.Nodes() == modelIN->Mesh().Nodes() );
+  cerr <<"\nTest_splitboundary_between_regions: model domain nodes/elements: "<< model_domain.Nodes() <<"/"<< model_domain.Elements() <<"\n";
+//  cerr <<"\nTest_splitboundary_between_regions: node integrity test.";
+//  for ( auto nit=model_domain.NodesBegin(); nit != model_domain.NodesEnd(); ++nit )
+//    cerr << (*nit)->Idx() <<" ";
 
-  // read Model from Binary
+  
+  // LOWER DIMENSIONAL STAND ALONE MESH INSIDE OF SPLITBOUNDARY 
+  // ---------------------------------------------------------- 
+  // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
+  set<string> new_regions = modelIN->InsertLowerDimensionalRegionsIntoSplitBoundaries();
+  cerr <<"\nTest_splitboundary_between_regions: model domain nodes after creation of new region(s) inside of SplitBoundary: "<< model_domain.Nodes() <<"/"<< model_domain.Elements() <<"\n";
+//  model_domain.Out();
+
+  
+  // SKM extra tests
+  // ---------------
+  // are all the nodes functional
+  _test( model_domain.Nodes() == modelIN->Mesh().Nodes() );
+  cerr <<"\nTest_splitboundary_between_regions: node integrity test; current node number of Model: "<< modelIN->Mesh().Nodes() << endl;
+//  for ( auto nit=model_domain.NodesBegin(); nit != model_domain.NodesEnd(); ++nit )
+//    cerr << (*nit)->Idx() <<" ";
+
+
+
+
   modelIN->OutputToBinaryFile( model_name.c_str() );
   set<string> subset_variables;
+
+  // read Model from Binary
   Model<dim> model( model_name );
   cout << "\nNodes: " << model.Mesh().Nodes() << "\n";
   cout << "\nNode Groups: " << model.Mesh().NodeGroups() << "\n";
@@ -1061,9 +772,11 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
   modelIN->RegionsOut();
   modelIN->BoundariesOut();
   modelIN->SplitBoundariesOut();
+  
+} // end Test_splitboundary_between_regions
 
-  return;
-}
+
+
 
 
 /// SPLITBOUNDARY AROUND REGIONS
@@ -1158,7 +871,7 @@ void SplitBoundaryInterface_Test::Detect_and_create_splitboundaries_from_constru
   
   // 2. create lower - dimensional stand - alone meshes from SplitBoundary objects, and
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  set<string> new_regions = model->RegionsFromSplitBoundaries();
+  set<string> new_regions = model->InsertLowerDimensionalRegionsIntoSplitBoundaries();
 
   // 3. see whether the split boundary survives being writting to and recovered from file
   // ------------------------------------------------------------------------------------------
@@ -1173,39 +886,380 @@ void SplitBoundaryInterface_Test::Detect_and_create_splitboundaries_from_constru
   cout << "\nFace Groups: " << model_out.Mesh().FaceGroups() << "\n";
   cout << "\nInterfaces: " << model_out.Mesh().InterFaces() << "\n";
   cout << "\nInterface Groups: " << model_out.Mesh().InterFaceGroups() << "\n";
-
-  return;
-}
-
+  
+} // end test
 
 
 
 
-void SplitBoundaryInterface_Test::run()
+
+
+// ===================================================================================
+//
+// FUNCTIONS FOR THE MANIPULATION OF SPLIT BOUNDARIES FOR THE PURPOSE OF VISUALISATION
+// (currently these functions are not used inside of the test)
+//
+// by Roman Manasipov (2013)
+//
+// ===================================================================================
+
+
+template<size_t dim>
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double64 xShift, double64 yShift, double64 zShift )
 {
-  // test splitboundary between 2D regions
-  Test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
-  Test_splitboundary_between_regions<2U>( "ThreeZones2D" );
-
-  // test splitboundary between 3D regions
-  Test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
-  Test_splitboundary_between_regions<3U>( "ThreeZones3D" );
-
-  // test splitboundary around interfaces
-  // JC: working on the QC process which is requried for the following models
-  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
-  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
-  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
-  Test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
-
-  // test splitboundary from constructor of ansys model
-  // JC: working on the QC process which is requried for the following models
-  //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
-  Detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
-
-  // test splitboundary for complex ansys models
-  Test_splitboundary_between_regions<3U>( "lamination" );
-  Test_splitboundary_between_regions<2U>( "kueper_one_interface" );
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
+  if ( dim == 2 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( size_t i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
+        {
+          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
+          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
+        }
+      }
+    }
+  else if ( dim == 3 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( size_t i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
+        {
+          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
+          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
+          (*it)->N( i, side )->z( (*it)->N( i, side )->z() + zShift );
+        }
+      }
+    }
 }
+
+
+template<size_t dim>
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double64 shift )
+{
+  VectorVariable<dim> displacementPerpedicularToInterface( ANY, 0.0 );
+  Point<dim> displacementToBaryCenter;
+  Point<dim> baryCenter;
+  size_t null_neighbors( 0 );
+  Element<dim>* parentElement( NULL );
+
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
+  if ( dim == 2 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    {
+      if ( (*it)->InterveningElement() != NULL )
+        (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
+      else
+        (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
+      displacementPerpedicularToInterface *= shift;
+      const size_t nodes( (*it)->Nodes() );
+      for ( size_t i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )
+        {
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, OUTSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, OUTSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == NULL )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( OUTSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, OUTSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementToBaryCenter[1] );
+          }
+          (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementPerpedicularToInterface[0] );
+          (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementPerpedicularToInterface[1] );
+
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, INSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, INSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == nullptr )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( INSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, INSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() + displacementToBaryCenter[1] );
+          }
+          (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() - displacementPerpedicularToInterface[0] );
+          (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() - displacementPerpedicularToInterface[1] );
+        }
+      }
+    }
+  else if ( dim == 3 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( size_t i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->InterveningElement() != nullptr )
+          (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
+        else
+          (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
+        displacementPerpedicularToInterface *= shift;
+        if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )
+        {
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, OUTSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, OUTSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == nullptr )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( OUTSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, OUTSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementToBaryCenter[1] );
+            (*it)->N( i, OUTSIDE )->z( (*it)->N( i, OUTSIDE )->z() + displacementToBaryCenter[2] );
+          }
+          (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementPerpedicularToInterface[0] );
+          (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementPerpedicularToInterface[1] );
+          (*it)->N( i, OUTSIDE )->z( (*it)->N( i, OUTSIDE )->z() + displacementPerpedicularToInterface[2] );
+
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, INSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, INSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == nullptr )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( INSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, INSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() + displacementToBaryCenter[1] );
+            (*it)->N( i, INSIDE )->z( (*it)->N( i, INSIDE )->z() + displacementToBaryCenter[2] );
+          }
+          (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() - displacementPerpedicularToInterface[0] );
+          (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() - displacementPerpedicularToInterface[1] );
+          (*it)->N( i, INSIDE )->z( (*it)->N( i, INSIDE )->z() - displacementPerpedicularToInterface[2] );
+        }
+      }
+    }
+    
+} // end test
+
+
+
+
+template<size_t dim>
+void shiftInterfaceTips( Region<dim>& region, double64 shift )
+{
+  Point<dim> displacement;
+  Point<dim> baryCenter;
+
+  if ( dim == 2 )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
+    {
+      baryCenter = (*it)->BaryCenter();
+      const size_t nodes( (*it)->Nodes() );
+      for ( size_t i = 0; i < nodes; ++i )
+      {
+        displacement = baryCenter - (*it)->N( i )->Coordinate();
+        displacement.NormalizeLengthTo( 1.0 );
+        displacement *= shift;
+        (*it)->N( i )->x( (*it)->N( i )->x() + displacement[0] );
+        (*it)->N( i )->y( (*it)->N( i )->y() + displacement[1] );
+      }
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
+    {
+      baryCenter = (*it)->BaryCenter();
+      const size_t nodes( (*it)->Nodes() );
+      for ( size_t i = 0; i < nodes; ++i )
+      {
+        displacement = baryCenter - (*it)->N( i )->Coordinate();
+        displacement.NormalizeLengthTo( 1.0 );
+        displacement *= shift;
+        (*it)->N( i )->x( (*it)->N( i )->x() + displacement[0] );
+        (*it)->N( i )->y( (*it)->N( i )->y() + displacement[1] );
+        (*it)->N( i )->z( (*it)->N( i )->z() + displacement[2] );
+      }
+    }
+}
+
+
+template<size_t dim>
+void shiftRegion( Region<dim>& region, double64 xShift, double64 yShift, double64 zShift )
+{
+  if ( dim == 2 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x() + xShift );
+      (*it)->y( (*it)->y() + yShift );
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x() + xShift );
+      (*it)->y( (*it)->y() + yShift );
+      (*it)->z( (*it)->z() + zShift );
+    }
+}
+
+
+template<size_t dim>
+void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
+{
+  if ( dim == 2 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() > (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() > (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+  }
+  else if ( dim == 3 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() > (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() > (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+    else {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->z() > (line_coordinate + eps) )
+          (*it)->z( (*it)->z() + shift );
+    }
+  }
+}
+
+
+template<size_t dim>
+void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
+{
+  if ( dim == 2 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() < (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() < (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+  }
+  else if ( dim == 3 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() < (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() < (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+    else {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->z() < (line_coordinate + eps) )
+          (*it)->z( (*it)->z() + shift );
+    }
+  }
+}
+
+
+template<size_t dim>
+void scaleRegionSymmetricOverZero( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
+{
+  if ( dim == 2 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x()*xScale );
+      (*it)->y( (*it)->y()*yScale );
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x()*xScale );
+      (*it)->y( (*it)->y()*yScale );
+      (*it)->z( (*it)->z()*zScale );
+    }
+}
+
+
+template<size_t dim>
+void scaleRegion( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
+{
+  Point<dim> min_point;
+  Point<dim> max_point;
+  Point<dim> mid_point;
+
+  region.MinMaxCoordinates( min_point, max_point );
+  mid_point = (min_point + max_point) / 2.0;
+
+  if ( dim == 2 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( mid_point[0] + ((*it)->x() - mid_point[0])*xScale );
+      (*it)->y( mid_point[1] + ((*it)->y() - mid_point[1])*yScale );
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( mid_point[0] + ((*it)->x() - mid_point[0])*xScale );
+      (*it)->y( mid_point[1] + ((*it)->y() - mid_point[1])*yScale );
+      (*it)->z( mid_point[2] + ((*it)->z() - mid_point[2])*zScale );
+    }
+}
+
+
+
 
 } // csmp

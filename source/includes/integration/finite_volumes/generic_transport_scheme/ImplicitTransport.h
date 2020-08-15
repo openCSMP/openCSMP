@@ -1,108 +1,84 @@
 #ifndef CSMP_IMPLICIT_TRANSPORT_H
 #define CSMP_IMPLICIT_TRANSPORT_H
 
-#include "VariableSet_TracerTransfer.h"
+#include "IntegralEquation.h"
+#include "LinearAlgebraicSystem.h"
+#include "Accumulator.h"
+#include "Integrator.h"
+#include "PostProcessor.h"
 #include "FluxEvaluator.h"
-#include "Equation_TracerTransferImplicit.h"
 #include "TimeStepEvaluator.h"
-#include "DenseMatrix.h"
-#include "SparseMatrix.h"
-#include "LinearSolver.h"
+
+#include "VariableSet_TracerTransfer.h"
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
 template<size_t> class Region;
 template<size_t> class Model;
-template<size_t> class TwoPhaseModel;
-template<size_t> class LinearSystemAccumulator;
 
-template<size_t dim>
-class ImplicitTransport : public variables::VariableSet_TracerTransfer,
-                          public FluxEvaluator<dim,ImplicitTransport>,
-                          public Equation_TracerTransferImplicit<dim>,
-                          public TimeStepEvaluator<dim,ImplicitTransport> {
-  public:
-    // TODO: add choice of transport scheme: 1st versus 2nd order in space
-    /// constructor for target region; by default all driving forces are considered
-    ImplicitTransport( Solver&, Model<dim>&, const char* target_region, bool second_order );
-  
-    /// computes the time constraint
-    double64 TimeIncrement();
-    
-    /// executes incremental time-stepping (a suitable time increment is computed by scheme)
-    void AdvectVariable( double64 time_interval );
-
-    /// gets the model
-    const Model<dim>& GetModel() const;
- 
-    csmp::Index  key_acc_;     ///< accumulated interim result on the FV (scalar)
-    csmp::Index  key_out_;     ///< accumulated interim result on the FV (scalar)
-
-  private:
-    /// 2. calculates optimal time increment, flux balance, and in- and out flows for each FV
-    double64 TimeIncrementAndFluxBalance( double64 max_time_increment );
-
-    /// 3. Accumulate the linear system
-    void AccumulateSystem(double64 dt);
-                            
-    /// 4. Assign boundary conditions to the linear system
-     void AssignBoundaryConditions();
-
-    /// 5. Solve the linear system
-    void Solve();
-
-    /// 6. transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error
-    double64 VerifyAndAssignResults( bool show_range, bool do_range_check ) const;
-
-  private:
-    Solver& solver_;
-    Model<dim>& model_;
-    Region<dim>& gref_;
-    double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
-    bool second_order_;
-                            
-    SparseMatrix LHS_;
-    std::vector<double64> RHS_;
-    std::vector<double64> RESULT_;
-};
-
+// alias template (since C++11)
+template<size_t dim> 
+using GoverningEquation = IntegralEquation<dim,variables::VariableSet_TracerTransfer>;
 
 /**
-@class ImplicitTransport ImplicitTransport "integration/finite_volumes/generic_transport_scheme/ImplicitTransport.h"
-
-\brief     Implicit transport calculations
-\details   Part of the Colleoli transport scheme.
-\author    Andrew J. Bromage
-\version   0a
-\date      28/11/2017
-\pre       high-level class depending on CSMP++ API
-\bug
-\warning
-\copyright The University of Melbourne
-
-@section motivation Motivation
-
-
-@section design Design Intent
-
-
-@section applicability Applicability
-
-
-@section collaborations Collaborations
-
-
-@section implementation Implementation
-
-
-@section examples Application Examples
-
-@code
-
-@endcode
-
+TODO: include thickness attributes to support computations with lower-dimensional elements
+TODO: make this algorithm general so that it can also be applied to Boundary and SplitBoundary objects
+TODO: Implement bijective grid-to-grid mapping to loose grid orientation effects completely!
 */
+template<size_t dim>
+class ImplicitTransport : public GoverningEquation<dim>,
+                          public Accumulator<dim,ImplicitTransport>,        // needs base class to get to the INDEX keys
+                          public Integrator<dim,ImplicitTransport>,
+                          public PostProcessor<dim,ImplicitTransport>,      // anything we may need
+                          public FluxEvaluator<dim,ImplicitTransport>,
+                          public TimeStepEvaluator<dim,ImplicitTransport> {
+  public:
+    /// constructor for target region; by default all driving forces are considered; default equation is used; model non-const because FVs may have to be created
+    ImplicitTransport( Model<dim>&, const std::string& target_region, 
+                       const GoverningEquation<dim>&, 
+                       bool second_order_in_space );
+ 
+    // TODO: review whether this functio should be replaced by: VolumetricFlowAndTransportVariableFluxBalances()
+    double64 TimeIncrementAndFluxBalance( double64 max_time_increment ) const; 
+    
+    /// computes the time constraint
+    double64 TimeIncrement() const;
+    
+    /// initialises transport class for current pressure/velocity/transport variable field
+    void UpdateFluxesAndFluxBalances();
+
+    /// executes incremental time-stepping (a suitable time increment is computed by scheme) and writes the results back to model
+    void AdvectVariable( double64 time_interval );
+
+    double64 IncomingVolumetricFlow() const;
+    double64 OutgoingVolumetricFlow() const;
+
+
+    // MEMBER ACCESS
+    
+    Region<dim>&                  ComputationDomain()       { return subdomain_; }
+    const Region<dim>&            ComputationDomain() const { return subdomain_; }
+    LinearAlgebraicSystem&        LinearSystem()            { return linalg_sys_; }
+    const LinearAlgebraicSystem&  LinearSystem() const      { return linalg_sys_; }
+    
+    /// true if the computational domain has parts that are removed from the model boundary
+    bool HasHaloStencils() const { return !halo_cells_.empty(); }
+    
+    typename std::vector<Element<dim>*>::const_iterator HaloCellsBegin() const { return halo_cells_.begin(); }
+    typename std::vector<Element<dim>*>::const_iterator HaloCellsEnd() const { return halo_cells_.end(); }
+
+    void Verbose( bool value ) { verbose_ = value; }
+    bool Verbose() const { return verbose_; }
+    
+  private:
+    // note that the sequence of these classes is critical for correct construction of ImplicitTransport
+    Region<dim>&                subdomain_;   ///< computational region
+    LinearAlgebraicSystem       linalg_sys_;  ///<  A x = b
+    std::vector<Element<dim>*>  halo_cells_;  ///< elements outside of subdomain, contributing stencils to subdomain FVs
+    bool second_order_ = false, verbose_ = true;
+    
+    // Solver is in the Integrator base class
+};
 
 } // end csmp
 

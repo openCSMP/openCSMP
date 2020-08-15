@@ -108,7 +108,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
   // traversal of the existing mesh nodes to find all its elements
   deque<csmp::Node<dim>*>		  nodes;
   deque<csmp::Element<dim>*>	elmts;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
@@ -1206,9 +1206,9 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
   this->elmt_vec_.clear();
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<csmp::Node<dim>*>	nodes;
-  deque<csmp::Element<dim>*>	elmts;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  deque<csmp::Node<dim>*>	   nodes;
+  deque<csmp::Element<dim>*> elmts;
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
@@ -1307,7 +1307,7 @@ The Idx numbering of elements and nodes is not altered by this method.
 @author SKM 9/20/2008, CSMP Castasegna workshop, Switzerland.
 */
 template<size_t dim>
-size_t Region<dim>::AccumulateAll( const csmp::Node<dim>* root_node,
+size_t Region<dim>::AccumulateAll( csmp::Node<dim>* root_node,
                                    bool reestablishNeighborConnectivity )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1325,9 +1325,9 @@ size_t Region<dim>::AccumulateAll( const csmp::Node<dim>* root_node,
   this->elmt_vec_.clear();
 
   // 1. traversal of the existing mesh nodes to find all its elements
-  set<csmp::Element<dim>*>       explored_elements;
-  set<const csmp::Node<dim>*>    discovered_nodes;
-  deque<const csmp::Node<dim>*>  current_nodes;
+  set<csmp::Element<dim>*> explored_elements;
+  set<csmp::Node<dim>*>    discovered_nodes;
+  deque<csmp::Node<dim>*>  current_nodes;
   // starting at the root element
   discovered_nodes.insert( root_node );
   current_nodes.push_back( root_node );
@@ -1341,7 +1341,7 @@ size_t Region<dim>::AccumulateAll( const csmp::Node<dim>* root_node,
       for ( size_t j = 0U; j<n_ptr->Parent( i )->Nodes(); j++ )
         // if this node is not the one from which we started
         if ( j != n_ptr->ParentNodeNumber( i ) ) {
-          pair<typename set<const csmp::Node<dim>*>::iterator, bool>
+          pair<typename set<csmp::Node<dim>*>::iterator, bool>
             new_node = discovered_nodes.insert( n_ptr->Parent( i )->N( j ) );
           if ( new_node.second ) current_nodes.push_back( n_ptr->Parent( i )->N( j ) );
         }
@@ -1364,7 +1364,6 @@ size_t Region<dim>::AccumulateAll( const csmp::Node<dim>* root_node,
           nit = (*it)->NodesBegin(); nit != (*it)->NodesEnd(); nit++ )
       node_set.insert( (*nit) );
 
-  // TODO: use emplace here?
   this->node_vec_.assign( node_set.begin(), node_set.end() );
 
   // 4. (re)connecting elements up to their neighbors
@@ -1379,6 +1378,31 @@ size_t Region<dim>::AccumulateAll( const csmp::Node<dim>* root_node,
 
 } // end AccumulateAll
 
+
+
+/**
+     AcculumateAll - but for all potentially disconnected Element patches that make up the model domain.
+*/
+template<size_t dim>
+size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh, bool reestablishNeighborConnectivity )
+ {
+//   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   deque<Node<dim>*>           nodes;
+   deque<csmp::Element<dim>*>  elmts;
+   exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
+   
+   this->elmt_vec_.assign( elmts.begin(), elmts.end() );
+   this->node_vec_.assign( nodes.begin(), nodes.end() );
+
+   if ( reestablishNeighborConnectivity )
+    this->EstablishNeighborConnectivity();
+
+   this->IdentifyPerimeter();
+    
+   return this->elmt_vec_.size();
+
+ } // end AccumulateAll (disconnected domain version)
 
 
 
@@ -1626,8 +1650,11 @@ void Region<dim>::AccumulateWithinRange( typename vector<Element<dim>*>::const_i
 } // end AccumulateWithinRange
 
 
+
+
+
 template<size_t dim>
-void Region<dim>::AccumulateWithinRange( const MeshManager<dim>& mesh, const PropertyConstraints& constraints )
+void Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const PropertyConstraints& constraints )
 {
   if ( mesh.Elements() < 1U )
     throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
@@ -1648,9 +1675,9 @@ void Region<dim>::AccumulateWithinRange( const MeshManager<dim>& mesh, const Pro
   if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<const csmp::Node<dim>*>	nodes;
-  deque<csmp::Element<dim>*>		elmts;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  deque<csmp::Node<dim>*>	   nodes;
+  deque<csmp::Element<dim>*> elmts;
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   set<Element<dim>*>  element_set;
@@ -1726,7 +1753,7 @@ void Region<dim>::AccumulateRectangularRegion( typename vector<Element<dim>*>::c
 } // end AccumulateRectangularRegion
 
 template<size_t dim>
-void Region<dim>::AccumulateRectangularRegion( const MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max )
+void Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max )
 {
   if ( mesh.Elements() < 1U )
     throw Exception( ERROR, "Region<dim>::AccumulateRectangularRegion",
@@ -1746,9 +1773,9 @@ void Region<dim>::AccumulateRectangularRegion( const MeshManager<dim>& mesh, con
   }
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<const csmp::Node<dim>*>	nodes;
-  deque<csmp::Element<dim>*>		elmts;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  deque<csmp::Node<dim>*>	   nodes;
+  deque<csmp::Element<dim>*> elmts;
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   for ( auto e : elmts ) {
@@ -1777,16 +1804,16 @@ void Region<dim>::AccumulateRectangularRegion( const MeshManager<dim>& mesh, con
 } // end AccumulateRectangularRegion
 
 template<size_t dim>
-void Region<dim>::AccumulateWithinRange( const MeshManager<dim>& mesh, const char* feature, double64 min, double64 max )
+void Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* feature, double64 min, double64 max )
 {
   if ( mesh.Elements() < 1U )
     throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
                      "supplied element range is empty. Nothing is done." );
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<const csmp::Node<dim>*>	nodes;
-  deque<csmp::Element<dim>*>		elmts;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  deque<csmp::Node<dim>*>	   nodes;
+  deque<csmp::Element<dim>*> elmts;
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   set<Element<dim>*>  element_set;
@@ -1938,8 +1965,11 @@ void  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_ite
 
 } // end AccumulateByNumber
 
+
+
+
 template<size_t dim>
-void  Region<dim>::AccumulateByNumber( const MeshManager<dim>& mesh, std::vector<size_t>& element_ids )
+void  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh, std::vector<size_t>& element_ids )
 {
   if ( mesh.Elements() < 1U )
     throw Exception( ERROR, "Region<dim>::AccumulateByNumber",
@@ -1973,9 +2003,9 @@ void  Region<dim>::AccumulateByNumber( const MeshManager<dim>& mesh, std::vector
 
   // selecting elements and nodes from the selected ID range
   // traversal of the existing mesh nodes to find all its elements	
-  deque<const csmp::Node<dim>*>	nodes;
-  deque<csmp::Element<dim>*>		elmts;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  deque<csmp::Node<dim>*>	   nodes;
+  deque<csmp::Element<dim>*> elmts;
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
   for ( auto e : elmts ) {

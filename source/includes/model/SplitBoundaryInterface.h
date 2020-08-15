@@ -54,7 +54,7 @@ class SplitBoundaryInterface {
     std::pair<std::string,bool>  InsertRegionIntoSplitBoundary( const char* split_boundary );
 
     /// Creates isolated lower-dimensional mesh regions between split boundaries with unique names matching those of the SplitBoundary objects; set will be empty if none created
-    std::set<std::string>  RegionsFromSplitBoundaries();
+    std::set<std::string>  InsertLowerDimensionalRegionsIntoSplitBoundaries();
 
     /// Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful
     bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
@@ -76,6 +76,9 @@ class SplitBoundaryInterface {
   protected:
     /// JCK: multiplicates the nodes of the boundaryin order to create split boundary TODO: method does not seem to be used!
     void SplitNodes( const Boundary<dim>& boundary, csmp::SplitBoundary<dim>& splitboundary );
+    
+    /// Since the construction of a new SplitBoundary may have affected existing ones, this method updates the connectivity of all SplitBoundary objects;
+    void UpdateSplitBoundaryComplex();
  
   protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs

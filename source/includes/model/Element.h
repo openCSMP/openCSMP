@@ -195,7 +195,7 @@ public:
 
   /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
   void Assign( size_t nbor, Element<dim>* const );
-  void Unassign( Element<dim>* );
+  void Unassign( const Element<dim>* );
 
   /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
   void Assign( size_t node, Node<dim>* const );

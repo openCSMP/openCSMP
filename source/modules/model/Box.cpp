@@ -42,6 +42,8 @@ bool isCorner( BOX_BOUNDARY bd )
   if ( bd == CNR4 )  return true;
   if ( bd == CNR5 )  return true;
   if ( bd == CNR6 )  return true;
+  if ( bd == CNR7 )  return true;
+  if ( bd == CNR8 )  return true;
   return false;
 }
 
@@ -1399,12 +1401,13 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     // if only a single unique flag was contained the decision is easy
     if ( eflags.size() == 1U ) return (*eflags.begin());
     
-    // if this is a 2D model so that there are only CNR1 to CRN4 and BOTTOM, TOP, RIGHT, LEFT
+    // if this is a 2D model so that there are only CNR1 to CRN4 and BOTTOM, TOP, RIGHT, LEFT, INTERNAL
     if ( dim == 2U ) {
          if ( eflags.size() == 2U ) {
               // if there is a corner involved, note: corners will always have more negative values than sides
               const BOX_BOUNDARY flag1 = (*eflags.begin());
               if ( isCorner(flag1) ) return flag1;
+              if ( flag1 == INTERNAL ) return MULTIPLE;
               // there should be no other cases because the 2D model has no edges
               cerr <<"\n\tmissed case: ";
               for ( auto boundary : eflags )
@@ -1413,6 +1416,10 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               return flag1;
            }
          else {
+            // if there is a corner involved, note: corners will always have more negative values than sides
+            const BOX_BOUNDARY flag1 = (*eflags.begin());
+            if ( isCorner(flag1) ) return flag1;
+            if ( flag1 == INTERNAL ) return MULTIPLE;
             if ( isTriangular( eptr->FE_Type() ) ) {
                  cerr <<"\n\tmissed case: ";
                  for ( auto boundary : eflags )

@@ -441,6 +441,24 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  }
 
 
+/**
+    unassigns the neighbor face, setting the pointer in the 'face_connector' vector to null
+*/
+template<size_t dim>
+void Face<dim>::Unassign( const Face<dim>* e_ptr ) 
+  {
+    for ( size_t i = 0U; i < face_connector_.size(); i++ ) {
+        if ( e_ptr == nullptr || face_connector_[i] == nullptr )
+          continue;
+        if ( e_ptr == face_connector_[i] ) {
+            face_connector_[i] = nullptr;
+            break;
+          }
+      }
+  }
+
+
+/*
 template<size_t dim>
 bool Face<dim>::DisconnectNeighbor(Face<dim>* f_ptr)
 {
@@ -455,7 +473,7 @@ bool Face<dim>::DisconnectNeighbor(Face<dim>* f_ptr)
 		}
 	return false;
 } // end DisconnectNeighbor
-
+*/
 
 
 template<size_t dim>

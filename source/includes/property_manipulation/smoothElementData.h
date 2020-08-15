@@ -14,6 +14,7 @@
 namespace csmp {
 
 template<size_t> class Model;
+template<size_t> class Element;
 
 enum SMOOTHING_TYPE { MEAN, HARMONIC_MEAN, LOG10_MEAN, HORIZONTAL_MEAN };
 
@@ -39,6 +40,13 @@ void smoothElementData( Model<dim>&,
 /// smoothes porosity and permeability distributions in current model
 template<size_t dim>
 void smoothPorosityAndPermeabilityDistribution( Model<dim>& );
+
+
+/// Edoardo Pezulli's neighbor extrapolation based method, that avoids Element and Node objects located at BOX boundary
+template<size_t dim>
+void spreadPropertiesOfInitialisedCellsAcross( typename std::vector<csmp::Element<dim>*>::iterator first,
+                                               typename std::vector<csmp::Element<dim>*>::iterator last );
+
 
 } // end csmp
 

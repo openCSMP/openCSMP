@@ -8,6 +8,8 @@
 #include "smoothElementData.h"
 #include "Region.h"
 #include "Model.h"
+#include "Element.h"
+#include "Node.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
 #include "VTU_Interface.h"
@@ -294,6 +296,118 @@ void smoothPorosityAndPermeabilityDistribution( Model<dim>& model )
 template void smoothPorosityAndPermeabilityDistribution( Model<2U>& );
 template void smoothPorosityAndPermeabilityDistribution( Model<3U>& );
 
+
+
+
+
+/// Edoardo Pezulli's neighbor extrapolation based method, that avoids Element and Node objects located at the region boundary
+template<size_t dim>
+void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::iterator first,
+                                               typename vector<Element<dim>*>::iterator last )
+ {
+    assert( first != last );
+    sort( first, last );
+    
+    set<Node<dim>*>  new_nodes;
+     
+    const typename vector<csmp::Element<dim>*>::iterator elmts_end(last);
+    for ( typename vector<Element<dim>*>::iterator it=first; it!=elmts_end; ++it )
+      for ( size_t i=0U; i<(*it)->Nodes(); ++ i ) {
+           assert( (*it)->N(i) != nullptr );
+           new_nodes.insert( (*it)->N(i) );
+        }
+    
+    //for (size_t e = 0; e < new_elmts.size(); ++e )
+    typename vector<csmp::Element<dim>*>::iterator it(first);
+    while( it != elmts_end ) 
+      {
+         //Set elements to search for starting with original un-initialized element
+         // std::set<Element<dim>*> elmts_to_search{new_elmts[e]};
+         set<Element<dim>*> elmts_to_search;
+         elmts_to_search.insert( (*it) );
+         bool found_initialized_el = false;   //condition when closest neighour uninitialized is found
+         //Element traversal for uninitialized node
+         while (found_initialized_el == false){
+           //Set of neighbors to search next (if not found)
+           std::set<Element<dim>*> elmts_searching_next;
+           //Going over current element set
+           for (typename set<Element<dim>*>::iterator eit = elmts_to_search.begin();
+                eit != elmts_to_search.end(); ++eit){
+             //Searching all neighbors for unitialized element
+             for ( size_t nbor = 0; nbor < (*eit)->Neighbors(); ++nbor) {
+               if ( (*eit)->Neighbor(nbor) != nullptr){                 //Only consider existing neighbors
+                 //if neighbor element is not new it must be initilized
+                 // TODO: search elements in sorted vector using binary search (vector specific method rather than algorithm)
+                 if ( find( first, elmts_end, (*eit)->Neighbor(nbor) ) == elmts_end ){
+                   //Found an initialized neighbor
+                   Element<dim>* found_el = (*eit)->Neighbor(nbor);
+                   found_initialized_el = true;
+                   //Performing copy of data of found element to original element
+                   (*it)->LVS( found_el->LVS() );    //THIS WAS THE AIM: TODO: discuss intention here
+
+                   //getting nodes of closest uni-initialized element (assumed to be most relevant to original el)
+                   std::vector<Node<dim>*> closest_nodes = (*eit)->NodeVector();
+                   //Now initializing all new nodes in the new element
+                   for (size_t n_new = 0 ; n_new < (*it)->Nodes(); ++n_new){
+                     if ( find(new_nodes.begin(), new_nodes.end(), (*it)->N(n_new)) != new_nodes.end() ){
+                       //Looking for node with same boundary flag if possible
+                       BOX_BOUNDARY new_node_bound = (*it)->N(n_new)->AtBoundary();
+                       //Getting all potential nodes and their box boundaries
+                       std::multimap<BOX_BOUNDARY,Node<dim>*> potential_nodes;
+                       for (size_t n_found = 0; n_found < found_el->Nodes(); ++n_found){
+                           Node<dim>* potential_node = found_el->N(n_found);             //getting potential node from initialized element
+                           //if node is also within an unitialized elm (then its closest)
+                           if ( std::find(closest_nodes.begin(), closest_nodes.end(), potential_node) != closest_nodes.end() ){
+                             //then insert
+                             potential_nodes.insert( make_pair(potential_node->AtBoundary(), potential_node));
+                           }
+                         }
+                       //Now match node which matches boundary of new node
+                       if (potential_nodes.find(new_node_bound) != potential_nodes.end() ){
+                           assert( (*it)->N(n_new) != potential_nodes.find(new_node_bound)->second );         //check nodes arnt the same
+                           (*it)->N(n_new)->LVS( potential_nodes.find(new_node_bound)->second->LVS() );      //THIS WAS THE AIM (and/or similar copying below)
+                         }
+                       //If nodes dont match, non boundary nodes have priority
+                       else if ( potential_nodes.find( NOT ) != potential_nodes.end() ){
+                         //else if we have an interior node - that gets used instead
+                         (*it)->N(n_new)->LVS( potential_nodes.find(NOT)->second->LVS() );
+                       } else if ( potential_nodes.find( INTERNAL ) != potential_nodes.end() ){
+                         //Internal boundaries are also internal
+                         (*it)->N(n_new)->LVS( potential_nodes.find(INTERNAL)->second->LVS() );
+                       } else
+                         throw (csmp::Exception( ERROR, "spreadPropertiesOfInitialisedCellsAcross",
+                                                "Only Box Boundary nodes exist on element!"));
+                       } //end of if node is new
+                     } //end of node initialization
+
+                     break; //end of neighbor search
+                 } else {
+                   //then neighbor is also uninitialized, we add to neighbor search
+                   elmts_searching_next.insert((*eit)->Neighbor(nbor) );
+                 }
+               }//end of if nullptr
+             } // end of neigbor search
+             if (found_initialized_el == true )
+               break; //stop elm serach if we found initialized element
+           }//end of current element traversal
+
+           //set neighbors as next to search
+           elmts_to_search = elmts_searching_next;
+
+         }//end of while loop
+
+        it++;
+
+       }//end of new elm initialization
+       
+       
+//   }//end of if initialize
+
+ } // end spreadPropertiesOfInitialisedCellsAcross
+
+template void spreadPropertiesOfInitialisedCellsAcross<1U>( std::vector<Element<1U>*>::iterator, std::vector<Element<1U>*>::iterator );
+template void spreadPropertiesOfInitialisedCellsAcross<2U>( std::vector<Element<2U>*>::iterator, std::vector<Element<2U>*>::iterator );
+template void spreadPropertiesOfInitialisedCellsAcross<3U>( std::vector<Element<3U>*>::iterator, std::vector<Element<3U>*>::iterator );
 
 
 

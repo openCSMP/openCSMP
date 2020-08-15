@@ -45,6 +45,8 @@ struct Parameter {
   
     /// expected range of this parameter in the specific simulation
     void           Range( double64& vmin, double64& vmax ) const;
+    double64       MinValue() const { return min; }
+    double64       MaxValue() const { return max; }
   
     /// prints parameter record to screen
     void           Out() const;

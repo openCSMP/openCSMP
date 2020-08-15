@@ -153,9 +153,12 @@ public:
 
   // Accumulate based on the root node of the mesh and its indirect connections to all elements
 
-  /// breadth-first traversal of element tree in order to discover all elements in the model
-  size_t AccumulateAll( const csmp::Node<dim>* root_node,
+  /// breadth-first traversal of element tree in order to discover all elements in a particular model domain; returns number of elements discovered
+  size_t AccumulateAll( csmp::Node<dim>* root_node,
                         bool reestablishNeighborConnectivity = true );
+     
+  /// like AccumulateAll, but for all elements in the mesh ; returns number of elements of the new region                     
+  size_t AccumulateAll( MeshManager<dim>&, bool reestablishNeighborConnectivity ); 
 
   /// accumulate a range of elements into a region defined by iterators over an STL deque container
   void   Accumulate( typename std::deque<csmp::Element<dim> >::iterator start,
@@ -176,7 +179,7 @@ public:
                              typename std::vector<csmp::Element<dim>*>::const_iterator end,
                              std::vector<size_t>& element_ids );
 
-  void AccumulateByNumber( const csmp::MeshManager<dim>& mesh, std::vector<size_t>& element_ids );
+  void AccumulateByNumber( csmp::MeshManager<dim>& mesh, std::vector<size_t>& element_ids );
 
   // Accumulate based on property values
 
@@ -191,9 +194,9 @@ public:
                                 const char* property,
                                 double64 min, double64 max );
 
-  void AccumulateWithinRange( const csmp::MeshManager<dim>& mesh, const PropertyConstraints& );
+  void AccumulateWithinRange( csmp::MeshManager<dim>& mesh, const PropertyConstraints& );
 
-  void AccumulateWithinRange( const csmp::MeshManager<dim>& mesh, const char* property, double64 min, double64 max );
+  void AccumulateWithinRange( csmp::MeshManager<dim>& mesh, const char* property, double64 min, double64 max );
 
   // Accumulate based on the location
 
@@ -202,7 +205,7 @@ public:
                                     typename std::vector<csmp::Element<dim>*>::const_iterator end,
                                     const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
-  void AccumulateRectangularRegion( const csmp::MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max );
+  void AccumulateRectangularRegion( csmp::MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
   /// Accumulate from the largest component in a mesh
   size_t FromLargestComponent( MeshManager<dim>& mesh, bool reestablishNeighborConnectivity );

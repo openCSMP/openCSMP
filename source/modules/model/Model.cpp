@@ -365,7 +365,9 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
     // 10. final sanity check
-    CheckElementsAfterBuilding();
+#ifdef DEBUG
+  CheckElementConnectivity();
+#endif
 
     cout << "\n============================================================================";
     cout << "\nModel '"<< Name() <<"' has been established successfully!";
@@ -451,7 +453,9 @@ void Model<dim>::Initialize( bool isoparametric_elements,
   UpdateSubdomainPropertyStorage();
 
   // 8. final sanity check
-  CheckElementsAfterBuilding();
+#ifdef DEBUG
+  CheckElementConnectivity();
+#endif
 
   cout << "\n================================================";
   cout << "\nModel has been established successfully!";
@@ -578,7 +582,9 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
   UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
                                      // 10. final sanity check
-  CheckElementsAfterBuilding();
+#ifdef DEBUG
+  CheckElementConnectivity();
+#endif
 
   cout << "\n============================================================================";
   cout << "\nModel '" << Name() << "' has been established successfully!";
@@ -2927,13 +2933,17 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
   cout << "' at current time level, t = " << model_time << " secs." << endl;
 
   // 1. mesh output: creating a VSet including Face and InterFace objects
-  VSet<dim> vset;
-  const bool simplices_numbered_in_a_single_sequence( true );
-  mesh_manager_.AssignUniqueNumbers( simplices_numbered_in_a_single_sequence );
-  mesh_manager_.OutputMeshTo( vset );
+  VSet<dim>                    vset;
+// SUPERSEDED  const bool simplices_numbered_in_a_single_sequence( true );
+// SUPERSEDED  mesh_manager_.AssignUniqueNumbers( simplices_numbered_in_a_single_sequence );
+  deque<const Node<dim>*>      nodes;
+  deque<const Element<dim>*>   elmts;
+  deque<const Face<dim>*>      faces;
+  deque<const InterFace<dim>*> interfaces;
+  mesh_manager_.OutputMeshTo( vset, nodes, elmts, faces, interfaces );
 
   // 2. property output into VSet including Face and InterFace data
-  mesh_manager_.OutputStoredVariablesTo( Database(), vset );
+  mesh_manager_.OutputStoredVariablesTo( Database(), nodes, elmts, faces, interfaces, vset );
 
   // model properties
   map<string, Index>  properties;
@@ -3105,9 +3115,12 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
 
   // 9. do a final sanity check
-  CheckElementsAfterBuilding();
-
-  cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";
+#ifdef DEBUG
+  if ( CheckElementConnectivity() )
+    cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";
+#else
+    cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";
+#endif
 
 } // end InputFromBinaryFile
 
@@ -3118,19 +3131,20 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
 
 
 template<size_t dim>
-void  Model<dim>::CheckElementsAfterBuilding()
+int32  Model<dim>::CheckElementConnectivity()
 {
+  cout <<"\nModel<"<< dim <<">::CheckElementConnectivity: checking model read from binary file..."<< endl;
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   MeshManager<dim>& mesh = Mesh();
 
   if ( !mesh.Elements() )
-    throw csmp::Exception( ERROR, "Model<dim>::CheckElementsAfterBuilding", "the model contains no elements" );
+    throw csmp::Exception( ERROR, "Model<dim>::CheckElementConnectivity", "the model contains no elements." );
 
   // 1. traversal of the existing each region's nodes to find all its elements
-  deque<csmp::Element<dim>*>		elmts;
-  deque<csmp::Node<dim>*>	nodes;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  deque<csmp::Element<dim>*> elmts;
+  deque<csmp::Node<dim>*>	   nodes;
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
@@ -3139,13 +3153,14 @@ void  Model<dim>::CheckElementsAfterBuilding()
 
   if ( found_elements < expected_elements ) {
     std::cerr << "\n\n\tdiscovered only " << found_elements << " versus " << expected_elements << " elements.\n\n";
-    csmp_error.notice( ERROR, "Model<dim>::CheckElementsAfterBuilding:",
+    csmp_error.notice( ERROR, "Model<dim>::CheckElementConnectivity:",
                        "mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?" );
   }
 
   // --------------------------------------------------------------------
   // 3. detecting whether this region contains lower-dimensional elements
   // --------------------------------------------------------------------
+  int32 errors(0);
   int32 dimension_counter( 0 );
   int32 highest_spatial_dim( 1 );
 
@@ -3239,6 +3254,8 @@ void  Model<dim>::CheckElementsAfterBuilding()
       else lesser_dim_elmts.insert( eit );
     }
     assert( /* all elements are accounted for */ mesh.Elements() == interior_elmts + boundary_elmts + lesser_dim_elmts.size() );
+    if ( mesh.Elements() != interior_elmts + boundary_elmts + lesser_dim_elmts.size() )
+      errors++;
 
     set<Element<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
 
@@ -3259,7 +3276,7 @@ void  Model<dim>::CheckElementsAfterBuilding()
     }
 
     if ( !lesser_dim_elmts_detached.empty() ) {
-      csmp_error.notice( WARNING, "Model<dim>::CheckElementsAfterBuilding:",
+      csmp_error.notice( WARNING, "Model<dim>::CheckElementConnectivity:",
                          "model contains lower-dimensional elements detached from higher dimensional elements" );
       // do some additional diagnostics on these elements
       // ------------------------------------------------
@@ -3267,9 +3284,16 @@ void  Model<dim>::CheckElementsAfterBuilding()
       for ( auto e : lesser_dim_elmts_detached )
         cerr << " " << e->Idx();
       cerr << endl;
+      errors++;
     }
-  } // end multi-dim element region   
-} // end PartitionElementVector
+  } // end multi-dim element region 
+
+  cout <<"\nModel<"<< dim <<">::CheckElementConnectivity: completed model check."<< endl;
+  if ( errors > 0 ) cerr <<"\t"<< errors <<" major errors encountered."<< endl;
+  
+  return errors;
+    
+} // end CheckElementsAfterBuilding
 
 
 

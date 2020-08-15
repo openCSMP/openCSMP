@@ -1,6 +1,9 @@
 #include "RegionInterface.h"
 #include "Model.h"
 #include "UnionFind.h"
+#include "CSMP_highLevelUtilities.h"
+
+using namespace std;
 
 namespace csmp {
 
@@ -158,59 +161,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::ContainsRegion( const std::string& re
 
 
 
-/**
-Forms non-unique user-defined region by graph traversal, relying only on node-to-parent element connections.
 
-@return element and node numbers are compared with MeshManager entries to verify that
-all elements and nodes were discovered. If so method returns true, else false
-
-@param reestablishNeighborConnectivity will prompt CSMP to recreate element neighbor connectivity.
-
-@author SKM
-@date 5/4/2016
-*/
-/*
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode( bool reestablishNeighborConnectivity )
-{
-ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-// does this region already exist
-if ( ContainsRegion(masterRegion_) ) {
-csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
-masterRegion_.c_str(), " already exists; nothing was done." );
-return false;
-}
-
-std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-newRegion = groupMap_.insert( std::make_pair( masterRegion_, csmp::Region<dim>( masterRegion_,
-static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
-
-// if region could be inserted successfully
-if ( newRegion.second ) {
-const size_t elements = (*newRegion.first).second.AccumulateAll( &(static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().RootNode()),
-reestablishNeighborConnectivity );
-if ( elements < static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() ) {
-std::cerr <<"\n\n\tdiscovered only "<< elements <<" versus "<< static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() <<" elements.\n\n";
-csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
-"mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?");
-}
-}
-
-else {
-csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
-masterRegion_, "region could not be formed.");
-return false;
-}
-
-// checking that all elements and nodes were discovered
-if ( (*newRegion.first).second.Elements() != static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() or
-(*newRegion.first).second.Nodes() != static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Nodes() )
-return false;
-
-return true;
-}
-*/
 
 /**
 Forms contiguous multiple domains by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
@@ -255,6 +206,10 @@ bool RegionInterface<dim, REGION_COMPLEX>::CreateRegions( bool is_unique, bool r
 }
 
 
+
+/**
+       Method performs traversal of mesh tree, discovering all interconnected elements.
+*/
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::CreateRegionFromRootNode( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity )
 {
@@ -275,9 +230,13 @@ bool RegionInterface<dim, REGION_COMPLEX>::CreateRegionFromRootNode( const char*
                       static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
 
   // if region was inserted successfully	
-  if ( newRegion.second )
-    (*newRegion.first).second.AccumulateAll( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().RootNode( 0 ),
-                                             reestablishNeighborConnectivity );
+  if ( newRegion.second ) {
+       size_t elmts = (*newRegion.first).second.AccumulateAll( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh(),
+                                                               reestablishNeighborConnectivity );
+       if ( elmts == 0 )
+         csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
+                            regionname, "region could not be formed because the number of elements connected to root nodes is zero." );
+    }
 
   else {
     csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
@@ -338,9 +297,6 @@ bool RegionInterface<dim, REGION_COMPLEX>::CreateRegionFromLargestComponent( con
 
 
 
-
-
-
 /**
 Removes a named Region object from the map of regions which is stored
 inside of the Model object. If the region was unique and element
@@ -362,71 +318,54 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
   // check whether region exists (should be a notice only, nothrow)
   if ( !ContainsRegion( regionName ) )
     throw csmp::Exception( WARNING,
-                           "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
+                           "RegionsInterface<dim,Model>::RemoveRegion",
                            "region did not exist: ",
                            regionName );
 
   // finding the region in the corresponding map
-  typename std::map<std::string, csmp::Region<dim> >::iterator
-    iterRegion( groupMap_.find( std::string( regionName ) ) ),
-    iterUniqueRegion( uniqueGroupMap_.find( std::string( regionName ) ) );
+  typename map<string, csmp::Region<dim> >::iterator
+    iterRegion( groupMap_.find( string( regionName ) ) ),
+    iterUniqueRegion( uniqueGroupMap_.find( string( regionName ) ) );
 
   // alerting user that other regions may be accidentally damaged by deleting non-unique regions
   if ( delete_elements ) {
-    if ( iterRegion != groupMap_.end() ) {
-      ErrorHandler::Instance().notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion:",
+    if ( iterRegion != groupMap_.end() )
+       ErrorHandler::Instance().notice( WARNING, "RegionsInterface<dim,Model>::RemoveRegion:",
                                        "Deleting the elements of a non-unique region: ", regionName );
-    }
     else {
-      auto& subdomain = iterUniqueRegion->second;
-
       REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
-      auto& meshMgr = regionComplex->Mesh();
-      auto spatialDimensions = subdomain.ElementSpatialDimensions();
-      auto& elementVector = subdomain.ElementVector();
+      MeshManager<dim>&    meshMgr           = regionComplex->Mesh();
+      csmp::Region<dim>&   subdomain         = iterUniqueRegion->second;   
+      pair<int32, int32>   spatialDimensions = subdomain.ElementSpatialDimensions();
 
-      // 1. Delete elements              
-      for ( size_t i = 0U; i < elementVector.size(); i++ ) {
-        // 1.1 Remove this element from its neighbour's connections
-        Element<dim>* e = elementVector[i];
-        auto& neighbourVector = e->NeighborElementVector();
-        for ( size_t j = 0U; j < neighbourVector.size(); j++ ) {
-          if ( neighbourVector[j] == NULL ) continue;
-          auto& nnVector = neighbourVector[j]->NeighborElementVector();
-          for ( size_t k = 0U; k < nnVector.size(); k++ ) {
-            auto& nn = nnVector[k];
-            if ( nn == e )
-              nn = NULL;
-          }
+      // 1. disconnecting elements from their neighbors and deleting them              
+      for ( typename vector<Element<dim>*>::iterator 
+            it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it ) 
+        {
+           // disconnecting neighbor elements from the element that is just going to be deleted
+           for ( size_t j=0U; j<(*it)->Neighbors(); ++j ) 
+             (*it)->Neighbor(j)->Unassign( (*it) );
+           // remove elements				
+           meshMgr.Erase( (*it) );
         }
-
-        // 1.2. Remove it				
-        meshMgr.Erase( e );
-        elementVector.erase( elementVector.begin() + i );
-        elementVector.swap( elementVector );
-        i--;
-      }
 
       // 2. Rebuild node connections if necessary			  
       if ( spatialDimensions.second == dim ) {
-        // This is a region whose dimension is dim, so interior
-        // nodes must be removed.
-        for ( auto nit = subdomain.InteriorNodesBegin(); nit != subdomain.InteriorNodesEnd(); ++nit ) {
-          meshMgr.Erase( *nit );
+           // This is a region whose dimension is dim, so interior
+           // nodes must be removed.
+           for ( auto nit = subdomain.InteriorNodesBegin(); nit != subdomain.InteriorNodesEnd(); ++nit )
+             meshMgr.Erase( *nit );
+
+           // Update node connections on the region's perimeter nodes that were retained.
+           meshMgr.RebuildParentRelationships( subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd() );
         }
-
-        // Update node connections on the region's perimeter nodes that were retained.
-        meshMgr.RebuildParentRelationships( subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd() );
-      }
-      else {
-        // This is a region whose dimension is less than dim (i.e. a boundary or split boundary). Just update nodes.
-        meshMgr.RebuildParentRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
-      }
+      // This is a region whose dimension is less than dim (i.e. a boundary or split boundary). Just update nodes.
+      else meshMgr.RebuildParentRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
     }
-  }
+    
+  } // end delete elements
 
-
-  // if the region was found in the list, it is erased
+  // if the region was found in the respective map, it is erased
   if ( iterRegion != groupMap_.end() )
     groupMap_.erase( std::string( regionName ) );
   if ( iterUniqueRegion != uniqueGroupMap_.end() )
@@ -708,9 +647,9 @@ void RegionInterface<dim, REGION_COMPLEX>::InputAllRegionsFromBinary( const char
   // 2. unique regions
   // -----------------------------
 
-  std::deque<csmp::Node<dim>*>	 nodes;
+  std::deque<csmp::Node<dim>*>    nodes;
   std::deque<csmp::Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( &regionComplex.Mesh(), nodes, elmts );
+  exploreNodesAndElementsFromMesh( regionComplex.Mesh(), nodes, elmts );
   std::sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   std::sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
@@ -873,7 +812,7 @@ void RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( const 
   // traversal of the existing mesh nodes to find all its elements	
   std::deque<csmp::Element<dim>*>	elmts;
   std::deque<csmp::Node<dim>*>	nodes;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
+  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
 
@@ -949,6 +888,54 @@ bool RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionNam
     it = this->groupMap_.insert( std::make_pair( regionName, region ) );
   return it.second;
 }
+
+
+
+
+  /// forms unique or non-unique region from range of elements; returns reference to it
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+bool RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionname, 
+                                                           typename vector<Element<dim>*>::iterator first, 
+                                                           typename vector<Element<dim>*>::iterator last, 
+                                                           bool unique )
+ {
+    string output_region( regionname );
+    if ( ContainsRegion( regionname ) ) {
+      cerr << "\nModel<" << dim << ">::FormRegionFrom: WARNING: region '" << regionname;
+      cerr << "' already exists, adding an underscore at end of name: ";
+      output_region += "_";
+      cout << output_region << endl;
+    }
+
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    // the 'bool' member of pair indicates whether insertion into map worked or not
+    std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>  it;
+    if ( unique )
+      it = uniqueGroupMap_.insert( std::make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+    else
+      it = groupMap_.insert( std::make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+
+    if ( it.second ) {
+        (*it.first).second.Accumulate( first, last );
+
+        // removing the group if it contains no elements
+        if ( (*it.first).second.Elements() == 0U ) {
+          groupMap_.erase( it.first );
+          csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom",
+                             "Region could not be formed", output_region.c_str() );
+          return false;
+        }
+      }
+    else {
+        csmp_error.notice( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom",
+                           "Region could not be formed. ", output_region.c_str() );
+        return false;
+      }
+
+    return true;
+    
+ } // end FormRegionFrom (range of element pointers)
 
 
 
@@ -2651,6 +2638,41 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
   return shared.size();
 
 } // end SharedPerimeterFaces
+
+
+
+/**
+      if the mesh changed this brute-force method rebuild the node and element vectors of all regions
+      TODO: find way to do this more selectively
+      
+      @attention the assumption is made the inter-element connectivity has already been updated
+*/
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
+ {
+    // since this region may now contain a different number of elements
+    const bool delete_elements(false);
+    RemoveRegion("Model", delete_elements );
+ 
+     for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
+           rit->second.CreateNodePointerVector();
+           rit->second.EstablishNeighborConnectivity(false);
+           rit->second.IdentifyPerimeter(); // calls PartitionCellVector
+        }
+       
+     for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
+           rit->second.CreateNodePointerVector();
+           rit->second.EstablishNeighborConnectivity(false);
+           rit->second.IdentifyPerimeter();
+        }
+        
+     // rebuild Model
+     const bool is_unique(false), reestablishNeighborConnectivity(false);
+     CreateRegionFromRootNode( "Model", is_unique, reestablishNeighborConnectivity );
+       
+ } // end RebuildRegions
+
+
 
 
 

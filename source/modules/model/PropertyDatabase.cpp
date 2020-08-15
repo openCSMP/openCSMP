@@ -1275,11 +1275,34 @@ template<size_t dim>
 void PropertyDatabase<dim>::RangeOf( const char* s, double64& mn, double64& mx ) const
  {
      auto iter = propList_.find(string(s));
-     
      if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
      else cout <<"\nPropertyDatabase::RangeOf: Unable to identify range of: " << s << endl;
 
  } //  end RangeOf
+
+
+
+template<size_t dim>
+double64 PropertyDatabase<dim>::LowerLimitOf( const char* property ) const
+ {
+     auto iter = propList_.find(string(property));
+     if ( iter != propList_.end() ) return (*iter).second.MinValue();
+     else cout <<"\nPropertyDatabase::LowerLimitOf: Unable to identify minimum value of: " << property << endl;
+     return numeric_limits<double64>::quiet_NaN();
+
+ } //  end 
+
+
+template<size_t dim>
+double64 PropertyDatabase<dim>::UpperLimitOf( const char* property ) const
+ {
+     auto iter = propList_.find(string(property));
+     if ( iter != propList_.end() ) return (*iter).second.MaxValue();
+     else cout <<"\nPropertyDatabase::LowerLimitOf: Unable to identify maximum value of: " << property << endl;
+     return numeric_limits<double64>::quiet_NaN();
+
+ } //  end 
+
 
 
 /**

@@ -123,7 +123,7 @@ void InterFace_Test::Assign_tests(){
     //testing face before disconnected neighbors
     _test(if_obj0.Faces() == 2);
     //Unassagning neighbours
-    if_obj0.DisconnectNeighbor( &if_obj1 );
+    if_obj0.Unassign( &if_obj1 );
     _test( if_obj0.Neighbors() == 2);
     _test( if_obj0.ConnectedNeighbors() == 1);
     _test( if_obj0.Neighbor(1) == &if_obj2);
