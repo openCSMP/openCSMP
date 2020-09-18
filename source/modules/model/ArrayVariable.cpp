@@ -436,7 +436,7 @@ bool ArrayVariable::Out( std::fstream& fp ) const
   {
     if (!fp.is_open())
       {
-        std::cout <<"\nArrayVariable::Out(): invalid file pointer."<< std::endl;
+        std::cerr <<"\nArrayVariable::Out(): invalid file pointer."<< std::endl;
         return false;
       }    
 
@@ -458,6 +458,7 @@ bool ArrayVariable::Out( std::fstream& fp ) const
   }
 
 
+
 /**
  @fn  bool ArrayVariable::In( std::fstream& fp )
 
@@ -476,20 +477,20 @@ bool ArrayVariable::In( std::fstream& fp )
   {
     if (!fp.is_open())
       {
-        std::cout <<"\nArrayVariable::In(): invalid file pointer."<< std::endl;
+        std::cerr <<"\nArrayVariable::In(): invalid file pointer."<< std::endl;
         return false;
       }
 
     // flag
     if ( !fp.read( (char*) &flag_, sizeof(int32)) ) {  // VARIABLE_FLAG
-        std::cout <<"\nArrayVariable::In(): Not able to read binary record flag"<< std::endl;
+        std::cerr <<"\nArrayVariable::In(): Not able to read binary record flag"<< std::endl;
         return false;
     }
 
     // depth
     size_t depth(0);
     if ( !fp.read( (char*) &depth, sizeof(size_t)) ) {
-      std::cout <<"\nArrayVariable::In(): could not read bindary record depth"<< std::endl;
+      std::cerr <<"\nArrayVariable::In(): could not read bindary record depth"<< std::endl;
       return false;
       }
     Resize(depth);
@@ -500,7 +501,7 @@ bool ArrayVariable::In( std::fstream& fp )
       {
         if( !fp.read( (char*) &data_[i], bytes) )
           {
-          std::cout <<"\nArrayVariable::In(): could not read binary data record"<< std::endl;
+          std::cerr <<"\nArrayVariable::In(): could not read binary data record"<< std::endl;
           return false;
           }
       }
@@ -508,7 +509,8 @@ bool ArrayVariable::In( std::fstream& fp )
   }
 
 
-namespace{
+
+namespace {
   ArrayVariable::ArrayContainer sortedArray( ArrayVariable::ArrayContainer::const_iterator plainDataBegin,
                                              ArrayVariable::ArrayContainer::const_iterator plainDataEnd )
   {

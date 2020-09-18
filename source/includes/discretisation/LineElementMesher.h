@@ -2,6 +2,7 @@
 #define CSMP_LINE_ELEMENT_MESHER_H
 
 #include "VSet.h"
+#include "Point.h"
 
 namespace csmp {
 

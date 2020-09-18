@@ -400,6 +400,7 @@ void Index::Out() const
   cout << endl;
 }
 
+
 bool Index::Out( std::fstream& fp ) const
 {
   const size_t flag_size = sizeof( int32 );
@@ -523,7 +524,6 @@ bool Index::In( fstream& fp )
 
   return true; /// @todo (1-C) Meaningless return statement
 }
-
 
 
 /**

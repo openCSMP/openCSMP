@@ -470,7 +470,7 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
   {
     if (!fp)
       {
-        std::cout <<"\nFlaggedArrayVariable::Out(): invalid file pointer."<< std::endl;
+        std::cerr <<"\nFlaggedArrayVariable::Out(): invalid file pointer."<< std::endl;
         return false;
       }    
 
@@ -516,7 +516,7 @@ bool FlaggedArrayVariable::In( std::fstream& fp )
     // depth
     size_t depth(0);
     if ( !fp.read( (char*) &depth, sizeof(size_t)) ) {
-      std::cout <<"\nFlaggedArrayVariable::In(): could not read binary record depth"<< std::endl;
+      std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary record depth"<< std::endl;
       return false;
       }
     Resize(depth);
@@ -527,7 +527,7 @@ bool FlaggedArrayVariable::In( std::fstream& fp )
       {
         if( !fp.read( (char*) &flags_[i], flags_size) )
           {
-          std::cout <<"\nFlaggedArrayVariable::In(): could not read binary flags record"<< std::endl;
+          std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary flags record"<< std::endl;
           return false;
           }
       }
@@ -538,12 +538,15 @@ bool FlaggedArrayVariable::In( std::fstream& fp )
       {
         if( !fp.read( (char*) &data_[i], bytes) )
           {
-          std::cout <<"\nFlaggedArrayVariable::In(): could not read binary data record"<< std::endl;
+          std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary data record"<< std::endl;
           return false;
           }
       }
     return true;
   }
+
+
+
 
 namespace{
   FlaggedArrayVariable::FlaggedArrayContainer sortedArray( FlaggedArrayVariable::FlaggedArrayContainer::const_iterator plainDataBegin,

@@ -426,7 +426,7 @@ template<size_t dim>
 bool SplitBoundary<dim>::Out( std::fstream& fp ) const
 {
   // split-boundary variables
-  domainVariablesOut( fp, *this, this->pref_ ); /// @todo (3-D) Use FEM_Data instead?
+  domainVariablesOut( fp, *this, this->pref_ ); 
 
   // number of interfaces
   size_t bytes( sizeof( size_t ) );

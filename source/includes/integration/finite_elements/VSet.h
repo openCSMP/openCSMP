@@ -3,9 +3,6 @@
 
 #include "VData.h"
 #include "PropertyData.h"
-#include "TensorVariable.h"
-#include "ArrayVariable.h"
-#include "FlaggedArrayVariable.h"
 
 namespace csmp {
 

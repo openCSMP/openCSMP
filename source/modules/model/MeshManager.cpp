@@ -481,8 +481,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
           if ( j < vset.PfvertsSize( e->Idx() ) ) {
             const long64 index( vset.Pfvert( e->Idx(), j ) );
             if ( index >= 0 ) {
-              assert( index >= elements );
-              assert( index < elements + faces ); // (-) elements because face container is numbered from 0..n-1                   
+              assert( index >= vset.Elements() );
+              assert( index < vset.Elements() + vset.Faces() ); // (-) elements because face container is numbered from 0..n-1                   
               if ( index >= elements && index < (elements + faces) )
                 e->Assign( j, face_connector[static_cast<size_t>(index) - elements] );
               else

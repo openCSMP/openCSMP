@@ -153,7 +153,7 @@ class ScalarVariable;
       void           Out( long digits=3 ) const;
       bool           Out( const char* filename, size_t precision = 9 ) const;
       
-      /// printing values to filestream
+      /// filestream I/O used for domain variables (not recommended because padding creates large storage overhead; use PropertyData instead)
       bool           Out( std::fstream& ) const;
       bool           In( std::fstream& );
 
