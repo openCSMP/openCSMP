@@ -2681,17 +2681,23 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
           std::cout <<" "<< (*rit).second.Elements() <<" elements,";
-          std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           std::pair<int32, int32> rdim = (*rit).second.ElementSpatialDimensions();
-          std::cout <<", range of spatial dimensions: "<< rdim.first <<" to "<< rdim.second << std::endl;
+          if ( rdim.second == 3 )
+            std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
+          else if ( rdim.second == 2 )
+            std::cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
+          std::cout <<", range of spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << std::endl;
        }
      std::cout <<"\n\tNon-unique regions of model:\n";
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
           std::cout <<" "<< (*rit).second.Elements() <<" elements,"<< (*rit).second.Volume();
-          std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           std::pair<int32, int32> rdim = (*rit).second.ElementSpatialDimensions();
-          std::cout <<", range of spatial dimensions: "<< rdim.first <<" to "<< rdim.second << std::endl;
+          if ( rdim.second == 3 )
+            std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
+          else if ( rdim.second == 2 )
+            std::cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
+          std::cout <<", range of spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << std::endl;
        }
      std::cout << std::endl << std::endl;
  }

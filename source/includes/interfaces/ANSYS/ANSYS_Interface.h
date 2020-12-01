@@ -51,59 +51,39 @@ from file.
  
 @section implementation Implementation
 
-To keep things confidential, this is all in German ! 
- 
-2 Dateien, eine Text, die andere binaer (vorerst nur im Textformat zum Testen). 
-Beide mit dem gleichen Namen aber die erstere mit der Endung '*.asc' und die
-zweite mit der Endung '*.dat'. 
+Two files: one human readable text (.asc = ASCII) file and a binary (.dat) file
+that can be transferred across platforms (Windows OSX, linux etc/).
 
-Die Textdatei ('*.asc'):
+The regions and material file ('*.asc'):
 
-- der Modellname (eine Zeile)
+- model name (line break)
 
-- Kommentarzeile (ehemaliger header): 1. Name der Datei, 2. wann sie generiert
-  wurde (alles in einer Zeile)
+- Comment line (header): 1. filename, 2. date of generaton
 
-- die Anzahl der mit Namen bezeichneten Objekte
+- Number of labelled objects
 
-- eine Tabelle aller Objekte und ihre Charakteristika wie folgt:
+- Table with objects, element types, material ID values (rock types), number of elements (cells)
 
 @code
-  Objektname   Elementtyp   Materialkennzahl   Anzahl-Elemente
+  Object   element-type   material ID   number-of-elements
   LIV          TETRA_4      3                  760
   BOXS         TRI_3        0                  2030
   CURVES       BAR_2        0                  20
 @endcode
 
-Die Materialkennzahl wird benoetigt um Objekte mit verschiedenen Teilvolumina zu 
-ermoeglichen.
+The material ID facilitates the association of 'rock types' with model regions.
   
-- Listen der Elemente (numeriert 0...n-1), die die verschiedenen Objekte bilden,
-  angefuehrt vom Objektnamen und Elementzahl z.B.:
+- List of elements making up each region (numbered 0...n-1),  preceded by region name and 
+number of elements of region.
 
 @code
   LIV_SMALL 6
   12 13 14 15 16 17
 @endcode
 
-Diese Teilinformationen der Gesammtausgabe werden immer so wenig Platz einnehmen, 
-dass man sie bequem in einem Textfile abspeichern kann. 
-Ausserdem gewinne ich auf diese Weise schnell einen Ueberblick darueber
-was in dem output file noch fehlt, bzw. was ich vergessen habe in ANSYSTETRA zu benennen.
-Auch die Grenzflaechen quaderfoermiger Modelle koennen hier entsprechend der 
-CSP Boundary flags als TOP, BOTTOM, LEFT, RIGHT, FRONT, BACK benannt werden.
+The binary file ('*.dat') contains: 
 
-Alle anderen Informationen lassen sich dann ganz einfach
-als 'arrays' in die binaere Datei abspeichern. Diese arrays muessen aber mit der
-Angabe der Anzahl ihrer Elemente beginnen damit ich sie effizient lesen kann. Dies
-gillt auch fuer die vorlauefige Textversion dieses Files.
-
-
-Die binaere Datei ('*.dat') enthaelt: 
-
-
-1. Basic node coordinate data (double64) (wie bereits gemacht):
--------------------------------------------------------------
+1. NODE COORDINATE DATA (double64):
 
 PX, PY, PZ records: preceded by a single unsigned long indicating the size of
 these records which (individually) contain (with or without line breaks):
@@ -131,9 +111,7 @@ if ( (records=px.size()) > 0 && (ptr=const_cast<double64*>(px.Data())) != NULL )
 else fwrite( (void*) &n0, sizeof(unsigned long), 1, fp );
 @endcode
 
-2. Node flags (int) (wie bereits gemacht aber die Kanten muessen noch 
-   benannt werden)
-   ------------------------------------------------------------------
+2. NODE FLAGS (int)
 
 PBFLAGS: Same record length as the record set above but in int32 format.
 
@@ -149,8 +127,6 @@ PBFLAGS: Same record length as the record set above but in int32 format.
   the following values (adhering to a righthand-rule coordinate system
   where x points to the right, y points upward and z points to the front:
 
-hier die Kantenbezeichnungen:
-
 @code
 #define BACK_BOTTOM       -16 // BACK and BOTTOM
 #define BACK_RIGHT        -17 // BACK and RIGHT
@@ -165,9 +141,9 @@ hier die Kantenbezeichnungen:
 #define FRONT_TOP         -26 // FRONT and TOP
 #define FRONT_LEFT        -27 // FRONT and LEFT
 @endcode
+   
     
-3. Nodal boundary conditions (double64) (wie bereits gemacht)
------------------------------------------------------------
+3. BOUNDARY CONDITIONS APPLIED TO NODES (double64)
 
 PBVALS: Analogous to the record sets above but in double64 format:
 
@@ -177,8 +153,7 @@ PBVALS: Analogous to the record sets above but in double64 format:
   If no value was assigned, this record will just hold zeroes.
 
 
-4. Finite element types used for each element (unsigned int)
-------------------------------------------------------------
+4. TYPE OF FINITE ELEMENTS (enum -> unsigned int)
 
 PELMT (0...e-1): Record is preceded by an unsigned long indicating 
 record size (=number of finite elements in the mesh). 'pelmt'
@@ -193,9 +168,7 @@ consists of a single record of (all as unsigned longs):
   von Knotenpunkten gibt.   
 
 
-5. Mesh connectivity data (unsigned long) (wie bereits gemacht)
----------------------------------------------------------------
-(Hier muss aber jeder einzelne record mit seiner groesse beginnen)
+5. MESH CONNECTIVITY (unsigned long) 
 
 PLIST: Record preceded by an unsigned long indicating record size,
 a single record follows containing (all as unsigned longs):
@@ -220,14 +193,12 @@ single record (all long, where negative numbers denote model boundaries):
   boundary, a negative long is used to identify this boundary surface.  
     
     
-6. Materialzugehoerigkeiten fuer alle Elemente 
-----------------------------------------------
+6. MATERIAL IDENTIFIER FOR EACH ELEMENT = ROCK TYPE
     
 PMTRL: preceded by number of elements, associates each element with the 
 material flag from the '*.asc' file such that properties can be assigned.  
 
-Kommentare: Beginnen immer mit dem Gartenzaun (# sign) nachdem alles weitere
-ignoriert wird.
+Comments: leading hash key (# everything thereafter is ignored) 
  
 @section examples Application Examples
  
@@ -262,7 +233,7 @@ bottom_boundary 2
 16 17
 @endcode
 
-Mesh connectivity file (*.dat) in text format: 
+Mesh connectivity file (*.dat) in text ASCII version: 
 
 @code
 11 # px, py, pz
@@ -304,9 +275,6 @@ public:
                           ModelTopology&,
                           bool binary_input_file,
                           bool irregular_mesh );
-
-    /// turn this option on or off
-    void AssignMaterialPropertiesInteractively( bool ass=true ); 
 
   protected:
 
@@ -366,7 +334,6 @@ public:
 
     void Clear();
 
-    bool  interactive_property_assignment_;
     bool  isoparametric_;
 
     // storage for geometric objects and their element types
@@ -386,33 +353,30 @@ template<size_t dim>
 void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>&,bool);
 void Convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>&,bool,size_t);
 
-class ANSYS_ModelSettings
-{
-public:
+class ANSYS_ModelSettings {
+  public:
+      ANSYS_ModelSettings( const std::string& mesh_file_prefix );
+      ~ANSYS_ModelSettings();
 
-    ANSYS_ModelSettings( const std::string& mesh_file_prefix );
-    ~ANSYS_ModelSettings();
+      ANSYS_ModelSettings( const ANSYS_ModelSettings& );
+      ANSYS_ModelSettings& operator=( const ANSYS_ModelSettings& );
 
-    ANSYS_ModelSettings( const ANSYS_ModelSettings& );
-    ANSYS_ModelSettings& operator=( const ANSYS_ModelSettings& );
+      void MeshSetup( const std::string& regions_file_prefix,
+                      bool irregular_mesh    = true,    /* true = non-box shaped model, false = box shaped model */
+                      bool binary_file       = true,    /* true = binary, false = ascii */
+                      bool create_boundaries = true );  /* true = create boundaries around model, false = do not create boundaries */
 
-    void MeshSetup( const std::string& regions_file_prefix,
-                    bool irregular_mesh    = true,    /* true = non-box shaped model, false = box shaped model */
-                    bool binary_file       = true,    /* true = binary, false = ascii */
-                    bool create_boundaries = true );  /* true = create boundaries around model, false = do not create boundaries */
+      void MeshSetup( const std::set<std::string>& regions,
+                      bool irregular_mesh    = true,    /* true = non-box shaped model, false = box shaped model */
+                      bool binary_file       = true,    /* true = binary, false = ascii */
+                      bool create_boundaries = true );  /* true = create boundaries around model, false = do not create boundaries */
 
-    void MeshSetup( const std::set<std::string>& regions,
-                    bool irregular_mesh    = true,    /* true = non-box shaped model, false = box shaped model */
-                    bool binary_file       = true,    /* true = binary, false = ascii */
-                    bool create_boundaries = true );  /* true = create boundaries around model, false = do not create boundaries */
-
-public:
-
-    std::string mesh_file_prefix_;    // name of model or main mesh file
-    std::set<std::string> regions_;   // name of regions to be used
-    bool irregular_mesh_;     /* true = non-box shaped model, false = box shaped model */
-    bool binary_file_;        /* true = binary, false = ascii */
-    bool create_boundaries_;  /* true = create boundaries around model, false = do not create boundaries */
+  public:
+      std::string mesh_file_prefix_;    // name of model or main mesh file
+      std::set<std::string> regions_;   // name of regions to be used
+      bool irregular_mesh_;     /* true = non-box shaped model, false = box shaped model */
+      bool binary_file_;        /* true = binary, false = ascii */
+      bool create_boundaries_;  /* true = create boundaries around model, false = do not create boundaries */
 };
 
 } // end namespace csmp

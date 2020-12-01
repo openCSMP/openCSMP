@@ -26,27 +26,16 @@ poly-element type meshes.   */
 ANSYS_Interface::ANSYS_Interface( bool create_isoparametric_element_mesh )
    : file_header_("not initialized"),
      boundary_tag_( "BOUNDARY" ),
-     isoparametric_(create_isoparametric_element_mesh),
-     interactive_property_assignment_(false)
+     isoparametric_(create_isoparametric_element_mesh)
  {
  }
+
  
 ANSYS_Interface::~ANSYS_Interface()
  {
  }
 
-/** Sets a flag that allows that the user gets prompted to assign material
-properties to selected model regions.
 
-@section arguments Input Arguments
-
-The boolean flag=true will lead to a situation where the user gets
-prompted for boundary conditions.
-*/
-void ANSYS_Interface::AssignMaterialPropertiesInteractively( bool ass )
- {
-    interactive_property_assignment_ = ass;
- }
 
 void ANSYS_Interface::Clear()
 {
@@ -272,13 +261,14 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
     }
 
     // check topology (a long list of VSet manipulations that are not expected to be carried out by mesh_topology
-    bool require_unique_names_of_volumes_surfaces_and_lines = true;
-    bool correct_orientation_of_surface_elements = true;
+    const bool require_unique_names_of_volumes_surfaces_and_lines = true;
+    const bool correct_orientation_of_surface_elements = true;
+    const bool interactive_property_assignment = false;
     mesh_topology.ModelName( meshfile.c_str() );
     mesh_topology.CheckTopology( vset,
                                  object_specs_, object_elements_,
                                  require_unique_names_of_volumes_surfaces_and_lines,
-                                 interactive_property_assignment_,
+                                 interactive_property_assignment,
                                  correct_orientation_of_surface_elements,
                                  irregular_mesh );
     Clear();
@@ -423,13 +413,14 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
     }
 
     /// check topology
-    bool require_unique_names_of_volumes_surfaces_and_lines = true;
-    bool correct_orientation_of_surface_elements = true;
+    const bool require_unique_names_of_volumes_surfaces_and_lines = true;
+    const bool correct_orientation_of_surface_elements = true;
+    const bool interactive_property_assignment = false;
     mesh_topology.ModelName( meshfile.c_str() );
     mesh_topology.CheckTopology( vset,
                                  object_specs_, object_elements_,
                                  require_unique_names_of_volumes_surfaces_and_lines,
-                                 interactive_property_assignment_,
+                                 interactive_property_assignment,
                                  correct_orientation_of_surface_elements,
                                  irregular_mesh );
     Clear();
