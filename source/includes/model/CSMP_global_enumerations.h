@@ -143,6 +143,7 @@ void variableTypeSet( std::set<VARIABLE_TYPE>& );
 // conversion utilities
 
 /// variable type
+VARIABLE_TYPE  parseType( int type );
 std::string    parseType( VARIABLE_TYPE );
 VARIABLE_TYPE  parseType( const char* type );
 template<typename csmp_type>

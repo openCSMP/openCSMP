@@ -1908,6 +1908,8 @@ template void boxFlagsToVariable( Model<3>&, const char*, const char* );
 
 
 
+
+
 template<size_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
                                const char* node_property, double64& bmin, double64& bmax )
@@ -1947,6 +1949,8 @@ void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
   }
 
 } // end BoundaryPropertyRanges
+
+
 
 
 BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 )

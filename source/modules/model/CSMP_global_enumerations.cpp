@@ -58,6 +58,19 @@ namespace csmp {
 
 // VARIABLE TYPE
 
+VARIABLE_TYPE  parseType( int type )
+ {
+    if ( type == SCALAR )        return SCALAR;
+    if ( type == VECTOR )        return VECTOR;
+    if ( type == TENSOR )        return TENSOR;
+    if ( type == ARRAY )         return ARRAY;
+    if ( type == FLAGGEDARRAY )  return FLAGGEDARRAY;
+
+    cout <<"\nparseType(int): unable to parse: '";
+    cout << type <<"' returning -1"<< endl;
+    return static_cast<VARIABLE_TYPE>(-1);
+ }
+
 VARIABLE_TYPE  parseType( const char* type )
  {
     string  stype(type);
