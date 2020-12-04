@@ -272,7 +272,7 @@ Mesh connectivity file (*.dat) in text ASCII version:
 */
 class SKUA_FiniteElementMeshInterface {
   public:
-      explicit SKUA_FiniteElementMeshInterface( bool create_isoparametric_element_mesh=true);
+      explicit SKUA_FiniteElementMeshInterface( bool create_isoparametric_element_mesh=true );
       ~SKUA_FiniteElementMeshInterface();
       
       /// Reading SKUA mesh from .asc and .dat files; deduces irregular if more than the top surface is warped (IRREGULAR)
@@ -298,7 +298,7 @@ class SKUA_FiniteElementMeshInterface {
     bool IsCommentLine( char* str ) const;
     bool SkipPotentialComment( std::ifstream& ) const;
     void AdvancePastCommentLine( std::ifstream& ) const;
-
+    
     /// ASCII file ( regions and corresponding element id's )
     bool ReadTitleASCII( std::ifstream& ifs, std::string& title );
     bool ReadRegionsAndElementTypesASCII( std::ifstream& ifs );
@@ -350,6 +350,12 @@ class SKUA_FiniteElementMeshInterface {
     std::multimap<std::string,std::vector<size_t> >  object_elements_;
     bool  isoparametric_;
 };
+
+
+/// returns the corresponding CSMP element type, taking into account whether an isoparametric FEM formulation is used
+CSMP_FEM_TYPE convertSKUA_ElementType( int32 etype, bool isoparametric );
+
+
 
 } // end namespace csmp
 

@@ -79,8 +79,8 @@ class VSet : public VData {
     bool ContainsFiniteVolumeIntegrationPointData() const;
   
     /// const iterators for the propery collection
-    std::map<std::string,PropertyData>::const_iterator PropertyValuesBegin() const;;
-    std::map<std::string,PropertyData>::const_iterator PropertyValuesEnd() const;;
+    std::map<std::string,PropertyData>::const_iterator PropertyValuesBegin() const;
+    std::map<std::string,PropertyData>::const_iterator PropertyValuesEnd() const;
 
     void RemoveData( const char* s );
 

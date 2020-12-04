@@ -79,7 +79,7 @@ void TestSuite::run()
         else {
           #ifdef __GNUC__
             //This is a fix for gcc name demangling.
-            const std::type_info  &ti = typeid(*m_tests[i]);
+            const std::type_info  &ti = typeid( *m_tests[i] );
             realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
             cout<<"\n\n\nTestSuite: Running Test: "<<realname<<endl;
           #else

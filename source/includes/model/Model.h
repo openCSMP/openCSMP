@@ -331,6 +331,9 @@ public:
 
   /// returns the value range of the target property within the entire model
   void MinMaxOf( const char* prop, double64& min, double64& max ) const;
+  
+  /// checks the value range of a variable against the range specified in its Parameter record in the PropertyDatabse
+  bool IsWithinRange( const char* prop, const char* model_subdomain="Model" ) const;
 
   /// permits to transfer node coordinate components to the target scalar node variable; char options are 'x', 'y', 'z'
   void AssignNodeCoordinatesTo( const char* scalar_variable, char coord ); // x, y, z

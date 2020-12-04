@@ -80,6 +80,12 @@ VARIABLE_TYPE  parseType( const char* type )
     if ( stype == "ARRAY" )         return ARRAY;
     if ( stype == "FLAGGEDARRAY" )  return FLAGGEDARRAY;
 
+    if ( stype == "scalar" )        return SCALAR;
+    if ( stype == "vector" )        return VECTOR;
+    if ( stype == "tensor" )        return TENSOR;
+    if ( stype == "array" )         return ARRAY;
+    if ( stype == "flaggedarray" )  return FLAGGEDARRAY;
+
     cout <<"\nparseType(const char*): unable to parse: '";
     cout << type <<"' returning -1"<< endl;
     return static_cast<VARIABLE_TYPE>(-1);
@@ -387,17 +393,22 @@ bool isPlacedOnIntegrationPoint( PLACEMENT p )
 
 // VARIABLE FLAG
 
+/**
+    Options numbered in this sequence, starting with zero are:
+    PLAIN,   ANY, INIT_GUESS,  INIT_COND,  FIELD_DATA,  PERIODIC,   DIRICH,   NEUMANN,   ROBIN,  CONSTANT_FLUX
+*/
 VARIABLE_FLAG intToVARIABLE_FLAG( int i )
   {
     if      ( i == 0 ) return PLAIN;
-    else if ( i == 1 ) return INIT_GUESS;
-    else if ( i == 2 ) return INIT_COND;
-    else if ( i == 3 ) return DIRICH;
-    else if ( i == 4 ) return NEUMANN;
-    else if ( i == 5 ) return ROBIN;
-    else if ( i == 6 ) return PERIODIC;
-    else if ( i == 7 ) return FIELD_DATA;
-    else if ( i == 8 ) return ANY;
+    else if ( i == 1 ) return ANY;
+    else if ( i == 2 ) return INIT_GUESS;
+    else if ( i == 3 ) return INIT_COND;
+    else if ( i == 4 ) return FIELD_DATA;
+    else if ( i == 5 ) return PERIODIC;
+    else if ( i == 6 ) return DIRICH;
+    else if ( i == 7 ) return NEUMANN;
+    else if ( i == 8 ) return ROBIN;
+    else if ( i == 9 ) return CONSTANT_FLUX;
     else
     std::cerr <<"\nintToVARIABLE_FLAG(int): unable to parse integer: "<< i << std::endl;
     return ANY;

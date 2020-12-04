@@ -18,7 +18,7 @@ void SKUA_FiniteElementMeshInterface_Test::run()
  {
     // 0. creating box-shaped test model with nodes on the side surfaces
     SKUA_Model  model( "V6_SOLID2",
-                       "CSMP_variables.txt",
+                       "CSMP-variables.txt",
                        false,   ///< true = binary, false = ascii */
                        true,    ///< true = reduce regions according to regions file, false = does not redure regions
                        false,   ///< true = creates boundaries around model, false = does not create boundaries 
@@ -36,7 +36,7 @@ void SKUA_FiniteElementMeshInterface_Test::run()
     boxFlagsToVariable( model, "node variable", "element variable" );
     
     VTK_Interface<3U>  vtk_output;
-    vtk_output.OutputDataToVTK( model, "permeability", "permeability", 1 );
+    vtk_output.OutputDataToVTK( model, "porosity", "porosity", 1 );
     vtk_output.OutputDataToVTK( model, "node-flag", "node variable", 1 );
     vtk_output.OutputDataToVTK( model, "element-flag", "element variable", 1 );
     

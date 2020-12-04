@@ -806,26 +806,30 @@ void VData::ResizePlist( const deque<size_t>& mixed_ele_plist )
 
 
 /**
-    changes the length of the 'pfverts' record
+    increases the length of the 'pfverts' record
 */
 void VData::ResizePfverts( size_t elements )
 {
     vector<long64>  empty_vec;
     const size_t old_size( plist.size() );
-    assert( elements > old_size );
+    assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
     for ( size_t i=0; i<new_elmts; i++ )
         pfverts.push_back( empty_vec );
 }
 
 
-/// change the number of neighbor elements in a single element-type mesh
+/**
+    increases the number of neighbor elements in a single element-type mesh
+    
+        @attention this works only of the size of the pfverts record is increased
+ */
 void VData::ResizePfverts( size_t elements, size_t nperelmt )
 {
     assert( !hybrid_mesh_ );
     vector<long64>  empty_vec(nperelmt,0);
     const size_t old_size( plist.size() );
-    assert( elements > old_size );
+    assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
     for ( size_t i=0; i<new_elmts; i++ )
         pfverts.push_back( empty_vec );

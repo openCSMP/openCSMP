@@ -88,23 +88,23 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
     SKUA_FiniteElementMeshInterface  mesh_interface( isoparametric_elements );
 
     // 0. reading the mesh from SKUA-CSMP-input files
-    mesh_interface.Read_SKUA_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file);
+    mesh_interface.Read_SKUA_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file );
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
-      // element numbers
-      PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
-      elmt_nums.Reserve( vset.Elements() );
-      for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", elmt_nums );
-    }
+        // element numbers
+        PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
+        elmt_nums.Reserve( vset.Elements() );
+        for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+        vset.AddData( "element number", elmt_nums );
+      }
     if ( Database().IsDefined( "node number" ) ) {
-      // node numbers
-      PropertyData node_nums( NODE, SCALAR, 3U );
-      node_nums.Reserve( vset.Vertices() );
-      for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", node_nums );
-    }
+        // node numbers
+        PropertyData node_nums( NODE, SCALAR, 3U );
+        node_nums.Reserve( vset.Vertices() );
+        for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+        vset.AddData( "element number", node_nums );
+      }
 
     // 2. preserving numbered node coordinates in a vector
     const size_t vertices( vset.Vertices() );
@@ -126,7 +126,17 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
                              create_boundaries,
                              create_splitboundaries,
                             !mesh_topology.BoxShapedModel() );
-}
+                            
+    // 4. Performing range check on the inmported properties
+    ErrorHandler& csmp_error(ErrorHandler::Instance());
+    for ( map<string,PropertyData>::const_iterator pit=vset.PropertyValuesBegin();
+          pit!=vset.PropertyValuesEnd(); ++pit ) {
+         printRangeOfVariable( *this, (*pit).first.c_str(), true );
+         if ( !IsWithinRange( (*pit).first.c_str() ) )
+           csmp_error.notice( ERROR, "SKUA_Model::Initialize",
+                             (*pit).first.c_str(), "variable is outside of range specified in database");
+      }
+  }
 
   // -------------------------------------------------
   // catching all possible standard and csmp::Exceptions

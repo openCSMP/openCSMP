@@ -24,10 +24,10 @@ store the type of the single element of which the mesh consists.
 */
 template<size_t dim>
 VSet<dim>::VSet(size_t nodes_per_element,
-				size_t nbors_per_element,
-				int32 etype,
-				size_t nodes, size_t elmts)
-				: VData(nodes_per_element, nbors_per_element, nodes, elmts)
+                size_t nbors_per_element,
+                int32 etype,
+                size_t nodes, size_t elmts)
+: VData(nodes_per_element, nbors_per_element, nodes, elmts)
 {
 	SingleElementType(etype);
 }
@@ -36,9 +36,9 @@ VSet<dim>::VSet(size_t nodes_per_element,
 /// creates empty VSet of the desired dimensions
 template<size_t dim>
 VSet<dim>::VSet(const deque<size_t>& npes,
-				const deque<size_t>& epes,
-				size_t nodes)
-				: VData(npes, epes, nodes)
+                const deque<size_t>& epes,
+                size_t nodes)
+: VData(npes, epes, nodes)
 {
 	SingleElementType(0);
 }
@@ -47,8 +47,7 @@ VSet<dim>::VSet(const deque<size_t>& npes,
 /// copy constructor
 template<size_t dim>
 VSet<dim>::VSet(const VSet<dim>& a)
-				: VData(a),
-				property_map_(a.property_map_)
+ : VData(a), property_map_(a.property_map_)
 {
 }
 
@@ -59,8 +58,9 @@ template<size_t dim>
 VSet<dim>& VSet<dim>::operator=(const VSet<dim>& a)
 {
 	if (&a != this) {
-		property_map_ = a.property_map_;
-	}
+       VData::operator=( a ); 
+       property_map_ = a.property_map_;
+    }
 	return *this;
 }
 
@@ -72,10 +72,10 @@ of the specified size.
 */
 template<size_t dim>
 void VSet<dim>::Resize( size_t nodes_per_element,
-						size_t nbors_per_element,
-						int32  csmp_etype,
-						size_t nodes,
-						size_t elmts)
+                        size_t nbors_per_element,
+                        int32  csmp_etype,
+                        size_t nodes,
+                        size_t elmts)
 {
 	VData::Resize(nodes_per_element, nbors_per_element, csmp_etype, nodes, elmts);
 }
@@ -88,9 +88,9 @@ assigning any values to the subdeques.
 */
 template<size_t dim>
 void VSet<dim>::Resize( const deque<int32>& etypes,
-						const deque<size_t>& npes,
-						const deque<size_t>& epes,
-						size_t nodes, size_t faces, size_t interfaces)
+                        const deque<size_t>& npes,
+                        const deque<size_t>& epes,
+                        size_t nodes, size_t faces, size_t interfaces)
 {
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
 }
@@ -107,31 +107,31 @@ Adds node coordinates to VSet
 */
 template<size_t dim>
 void VSet<dim>::AddXYZ( const deque<double64>& x,
-						const deque<double64>& y,
-						const deque<double64>& z)
+                        const deque<double64>& y,
+                        const deque<double64>& z)
 {
 	if (x.size() != Vertices())
-	{
-		if (Vertices() > 0) {
-			cout << "\nVSet::AddXYZ: Warning: Changing node-coordinate " << endl;
-			cout << "array size from " << Vertices() << " to " << x.size() << endl;
-		}
-		VData::ResizeNodes(x.size());
-	}
+    {
+      if (Vertices() > 0) {
+          cout << "\nVSet::AddXYZ: Warning: Changing node-coordinate " << endl;
+          cout << "array size from " << Vertices() << " to " << x.size() << endl;
+        }
+      VData::ResizeNodes(x.size());
+    }
 
 	for (size_t i = 0; i<x.size(); i++) Px(i, x[i]);
 
-	if (dim > 1)
-	{
-		assert(x.size() == y.size());
-		for (size_t i = 0; i<y.size(); i++) Py(i, y[i]);
-	}
+	if ( dim > 1 )
+    {
+      assert(x.size() == y.size());
+      for (size_t i = 0; i<y.size(); i++) Py(i, y[i]);
+    }
 
-	if (dim > 2)
-	{
-		assert(y.size() == z.size());
-		for (size_t i = 0; i<x.size(); i++) Pz(i, z[i]);
-	}
+	if ( dim > 2 )
+    {
+      assert(y.size() == z.size());
+      for (size_t i = 0; i<x.size(); i++) Pz(i, z[i]);
+    }
 }
 
 
@@ -164,17 +164,18 @@ void VSet<dim>::AddPlist(typename map<size_t, vector<size_t> >::const_iterator f
 	reading the VSet.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPlist(typename deque<vector<size_t> >::const_iterator first,
-						 typename deque<vector<size_t> >::const_iterator last)
+void VSet<dim>::AddPlist( typename deque<vector<size_t> >::const_iterator first,
+                          typename deque<vector<size_t> >::const_iterator last )
 {
 	typename deque<vector<size_t> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
-	{
-		(*it) = (*first);
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first);
+      first++;
+      it++;
+    }
+    
 } // end
 
 
@@ -187,17 +188,18 @@ void VSet<dim>::AddPlist(typename deque<vector<size_t> >::const_iterator first,
 	These manifolds cannot be captured by this classical neighbor record.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPfverts(typename map<size_t, vector<long64> >::const_iterator first,
-						   typename map<size_t, vector<long64> >::const_iterator last)
+void VSet<dim>::AddPfverts( typename map<size_t, vector<long64> >::const_iterator first,
+						                typename map<size_t, vector<long64> >::const_iterator last )
 {
 	typename deque<vector<long64> >::iterator it = PfvertsBegin();
 
 	while (first != last && it != PfvertsEnd())
-	{
-		(*it) = (*first).second;
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first).second;
+      first++;
+      it++;
+    }
+    
 } // end
 
 
@@ -211,17 +213,18 @@ void VSet<dim>::AddPfverts(typename map<size_t, vector<long64> >::const_iterator
 	These manifolds cannot be captured by this classical neighbor record.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPfverts(typename deque<vector<long64> >::const_iterator first,
-						   typename deque<vector<long64> >::const_iterator last)
+void VSet<dim>::AddPfverts( typename deque<vector<long64> >::const_iterator first,
+						                typename deque<vector<long64> >::const_iterator last )
 {
 	typename deque<vector<long64> >::iterator it = PfvertsBegin();
 
 	while (first != last && it != PfvertsEnd())
-	{
-		(*it) = (*first);
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first);
+      first++;
+      it++;
+    }
+    
 } // end
 
 
@@ -230,14 +233,15 @@ void VSet<dim>::AddPfverts(typename deque<vector<long64> >::const_iterator first
 	BOX_BOUNDARY flags as values.
 	*/
 template<size_t dim>
-void VSet<dim>::AddBFlags(typename unordered_map<size_t, long64>::const_iterator first,
-                          typename unordered_map<size_t, long64>::const_iterator last)
+void VSet<dim>::AddBFlags( typename unordered_map<size_t, long64>::const_iterator first,
+                           typename unordered_map<size_t, long64>::const_iterator last )
 {
 	while (first != last)
-	{
-		AddBFlag((*first).first, (*first).second);
-		first++;
-	}
+    {
+      AddBFlag((*first).first, (*first).second);
+      first++;
+    }
+    
 } // end
 
 
@@ -265,7 +269,7 @@ New much more memory efficient variable storage framework.
 @note NEW!
 */
 template<size_t dim>
-bool VSet<dim>::AddData(const char* s, const PropertyData& data)
+bool VSet<dim>::AddData( const char* s, const PropertyData& data )
 {
 	auto result = property_map_.insert(make_pair(s, data));
 	return result.second;
@@ -663,40 +667,68 @@ Reduces the number of elements in the 'vset' to those identified by their
 ID number (1...n) in the supplied set. Then the correspond element
 material property data containers are also reduced.
 
+@parameter o_n_elmt_ids is a mapping that allows to retrieve the new element IDs by their old ones.
+
+@note revised by SKM 4/12/20 - to include properties placed on the node as well and warning user about errors for properties with any other placement.
+
 */
 template<size_t dim> //             old    new
-void VSet<dim>::ReduceTo(const map<size_t, size_t>& o_n_elmt_ids)
+void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
 {
 	if (o_n_elmt_ids.empty())
 		throw csmp::Exception(ERROR, "VSet<dim>::ReduceTo:", "new element ID set is empty.");
 
-	// 'plist' and 'pfverts' in base class
-	if (Elements() > 0) {
-		std::map<size_t, size_t> o_n_node_ids;
-		VData::ReduceTo(o_n_elmt_ids, o_n_node_ids);
-	}
+  std::map<size_t, size_t> o_n_node_ids;
+	if ( Elements() > 0 )
+	// adjusting 'plist' and 'pfverts' in base class, retrieving which nodes are kept
+   VData::ReduceTo( o_n_elmt_ids, o_n_node_ids );
+   
+  // if there are no properties, all is done already
+	if ( property_map_.empty() ) return;
 
-	if (property_map_.empty()) {
-		return;
-	}
+  // reorganising the property maps
+  // element properties
 	std::vector<size_t> n_o_elmt_ids;
 	n_o_elmt_ids.resize(o_n_elmt_ids.size());
-	for (auto& o_n : o_n_elmt_ids) {
-		n_o_elmt_ids[o_n.second] = o_n.first;
-	}
-	for (auto& property : property_map_) {
-		auto& oldprop = property.second;
-		PropertyData new_data(oldprop.Placement(), oldprop.Type(), dim);
-		new_data.Reserve(n_o_elmt_ids.size());
-		const size_t components = oldprop.Components();
-
-		for (auto id : n_o_elmt_ids) {
-			new_data.PushBackFrom(oldprop, id);
-		}
-
-		property.second = std::move(new_data);
-	}
+	for (auto& o_n : o_n_elmt_ids)
+    n_o_elmt_ids[o_n.second] = o_n.first;
+  // node properties
+	std::vector<size_t> n_o_node_ids;
+	n_o_node_ids.resize(o_n_node_ids.size());
+	for (auto& o_n : o_n_node_ids)
+    n_o_node_ids[o_n.second] = o_n.first;
+    
+	for ( auto& property : property_map_ ) 
+    {
+      auto& oldprop = property.second;
+      // handling properties with different placements
+      if ( oldprop.Placement() == ELEMENT ) {
+          PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
+          new_data.Reserve(n_o_elmt_ids.size());
+          for (auto id : n_o_elmt_ids)
+            new_data.PushBackFrom(oldprop, id);
+          // reassigning reduced set
+          property.second = std::move(new_data);
+       }
+      else if ( oldprop.Placement() == NODE ) {
+          PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
+          new_data.Reserve(n_o_node_ids.size());
+          for (auto id : n_o_node_ids)
+            new_data.PushBackFrom(oldprop, id);
+          // reassigning reduced set
+          property.second = std::move(new_data);
+       }
+      else {
+          cerr <<"\nERROR: VSet<dim>::ReduceTo: placement of property '"<< property.first <<"' not handled. yet.\n";
+          cerr <<"\n\tProperties with the placement "<< parsePlacement(oldprop.Placement()) <<" were not transferred correctly\n";
+          throw logic_error("VSet<dim>::ReduceTo");
+       }
+	  }
+    
 } // end ReduceTo
+
+
+
 
 
 /** Frees up all the storage in the VSet<dim>; all contained data are deleted.

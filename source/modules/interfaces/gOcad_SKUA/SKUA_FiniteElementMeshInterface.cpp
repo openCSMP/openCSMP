@@ -156,8 +156,6 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
  {
     ErrorHandler& csmp_error(ErrorHandler::Instance());
 
-    Clear();
-
     // 1. Reading the '*.asc' file with the mesh topology description
     // ---------------------------------------------------------------
     string   asc_name  = meshfile; asc_name += ".asc";
@@ -170,11 +168,11 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
       csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                     "File header not read correctly");
 
-    if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) // O.K. - produces object_specs_
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+    if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) { // O.K. - produces object_specs_
+         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                     "Region and element type information not read correctly");
+      }
    
-//    Convert_SKUA_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_, dim );
     ifs_asc.close(); // '*.asc' geometry file
 
     // 2.0 Reading the '*.dat' file with the mesh data
@@ -204,7 +202,11 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
          csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                        "Element types not read correctly");
       }
-//    Convert_SKUA_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
+    else { // if 'pelmt' was read correctly, CSMP element-type identifiers are created from SKUA integer identifiers
+         
+         for ( size_t i=0U; i<vset.ElementTypes(); ++ i )
+           vset.ElementType( i, convertSKUA_ElementType( vset.ElementType(i), isoparametric_ ) );
+      }
 
     if ( !ReadPlistBinary( ifs_dat, vset ) ) {
          csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
@@ -309,8 +311,6 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
  {
     ErrorHandler& csmp_error(ErrorHandler::Instance());
 
-    Clear();
-
     // 1. Reading the '*.asc' file with the mesh topology description
     // --------------------------------------------------------------
     string    asc_name = meshfile; asc_name += ".asc";
@@ -327,7 +327,6 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
          csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Region and element type information not read correctly");
       }
-//    Convert_SKUA_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_ , dim );
     ifs_asc.close(); // '*.asc' geometry file
 
 
@@ -358,8 +357,11 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
          csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Element types not read correctly");
       }
-//    Convert_SKUA_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
-
+    else { // if 'pelmt' was read correctly, CSMP element-type identifiers are created from SKUA integer identifiers
+         
+         for ( size_t i=0U; i<vset.ElementTypes(); ++ i )
+           vset.ElementType( i, convertSKUA_ElementType( vset.ElementType(i), isoparametric_ ) );
+      }
     if ( !ReadPlistASCII( ifs_dat, vset ) ) {
          csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Nodes per element information not read correctly");
@@ -371,25 +373,24 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
     if ( !ReadPmaterialASCII( ifs_dat, vset ) ) {
          csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Material property identifiers for elements not read correctly");
-      }
+      } // OK
     // reading potential property data (SKM 2/12/20)
     if ( !ReadPropertyRecordsASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordASCII",
+         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
                                     "Property data were not read correctly");
       }
-    
     ifs_dat.close(); // '*.data' pdata file
 
     if ( object_specs_.size() != object_elements_.size() )
-    {
-      csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII():",
-                                "Mismatch in object names and object specifiers");
-    }
+      {
+        csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII():",
+                                  "Mismatch in object names and object specifiers");
+      }
     else if( csmp_error.Verbose() )
-    {
-         cout <<"\n\nSKUA_FiniteElementMeshInterface::ReadMeshASCII(): Input (asc & dat) files '";
-         cout << meshfile <<"' read successfully."<< endl;
-    }
+      {
+           cout <<"\n\nSKUA_FiniteElementMeshInterface::ReadMeshASCII(): Input (asc & dat) files '";
+           cout << meshfile <<"' read successfully."<< endl;
+      }
 
     /// check topology
     const bool require_unique_names_of_volumes_surfaces_and_lines = true;
@@ -847,10 +848,12 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementASCII( ifstream& ifs, VSet<dim
       }
 
     vector<int32> elmt_types;
+    set<int32>    range_of_types;
     elmt_types.reserve(records);
     for ( size_t i=0U; i<records; i++ ) {
         ifs >> etype;
         elmt_types.push_back( etype );
+        range_of_types.insert( etype );
       }
 
     if ( elmt_types.size() < vset.Elements() ) {
@@ -859,7 +862,11 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementASCII( ifstream& ifs, VSet<dim
          return false;
       }
 
-    vset.ElementTypes( elmt_types );
+    // if there is only a single type there is just one entry needed
+    if ( range_of_types.size() == 1U ) {
+         vset.SingleElementType( elmt_types[0] );
+      }
+    else vset.ElementTypes( elmt_types );
 
     return true;
 
@@ -895,20 +902,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
                                  element(0), item(0), 
                                  id, nodes;
     const size_t                 n_nodes(vset.Vertices());
-    
-    pair<map<size_t,vector<size_t> >::iterator,bool>  it;
-    pair<size_t,vector<size_t> > data;
-    
-    // now the vset can be resized according to the new information
-    deque<size_t>  ndele(vset.ElementTypes());
-                       
-    for ( size_t i=0U; i<vset.ElementTypes(); i++ )
-      ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
-    vset.ResizePlist( ndele );
-
+        
     // reading number of data identifiers in the record
     ifs >> total_items;
-
     SkipPotentialComment( ifs );
 
     if ( total_items == 0 ) {
@@ -917,16 +913,27 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
          return false;
       }
     
+    // now the element types can be deduced and the 'plist' can be resized according to the new information
+    deque<size_t>  ndele;
+    if ( !vset.HybridElementTypeMesh() ) {
+         ndele.push_back( csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(0U) ) );
+         vset.ResizePlist( total_items / ndele[0] );
+      }
+    else {                   
+         for ( size_t i=0U; i<vset.ElementTypes(); i++ )
+           ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
+         vset.ResizePlist( ndele ); 
+      }
+      
     // reading plist
     while ( item < total_items )
       {
          // getting the number of nodes of the element to be read
-         nodes = ndele[element];
+         nodes = ( vset.HybridElementTypeMesh() ) ? ndele[element] : ndele[0U];
          assert( nodes >= 2 && nodes <= 32 );
          
-         data.first  = ++element;
-         data.second =   dummy;
-         it = plist.insert(data); // insertion of empty vector
+         pair<size_t,vector<size_t> > data( make_pair(++element,dummy) );
+         pair<map<size_t,vector<size_t> >::iterator,bool> it = plist.insert(data); // insertion of empty vector
          assert( it.second );
          (*it.first).second.reserve(nodes);
          
@@ -982,12 +989,6 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
-    // making an array of numbers of neighbors of each element
-    deque<size_t>  nbors( vset.ElementTypes() );
-    for ( size_t i=0U; i<vset.ElementTypes(); ++i )
-      nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
-    vset.ResizePfverts( nbors );
-
     // reading how many neighbor-element data identifiers are in the file record
     size_t total_items;
     ifs >> total_items;
@@ -1001,6 +1002,18 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
          return false;
       }
     
+    // making an array of numbers of neighbors of each element
+    deque<size_t>  nbors; 
+    if ( !vset.HybridElementTypeMesh() ) {
+         nbors.push_back( csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(0U) ) ); 
+         vset.ResizePfverts( total_items / nbors[0] );
+      }
+    else {
+         for ( size_t i=0U; i<vset.ElementTypes(); ++i )
+           nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
+         vset.ResizePfverts( nbors );
+      }
+      
     // reading the pfvert file record
     size_t                       element(0), item(0);
     map<size_t,vector<long64> >  pfverts;
@@ -1009,7 +1022,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
     while ( item < total_items )
       {
          // getting the number of neighbors of the element to be read
-         size_t neighbors = nbors[element];
+         size_t neighbors = ( vset.HybridElementTypeMesh() ) ? nbors[element] : nbors[0U];
          assert( neighbors >= 2  and  neighbors <= 32 );
          pair<size_t,vector<long64> >  data(element,dummy);
         
@@ -1134,6 +1147,10 @@ number of data entries (int32)
 flag values (int32)
 property values (double64)
 
+for variable placement and type, upper case or lower case spellings are accepted.
+
+@attention While space in variable names is expressed by an underscore which gets removed in CSMP.
+
 @attention At this point, no range check is performed on the values read, but parsing errors related to variable placement, type and flags are reported.
 
 @section arguments Input Arguments 
@@ -1147,29 +1164,38 @@ template<size_t dim>
 bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    string         property_name;
-    int32          integer, array_length(0);
-    
+    int32          integer;
+   
+    AdvancePastCommentLine( ifs );
+   
     // 0. checking how many properties are contained in file if any
+    if ( ifs.eof() ) 
+      csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
+                        "end of file reached; input fle does not contain any property data" );  
     ifs >> integer;
-    if ( ifs.eof() || integer <= 0 ) return false;
+    if ( integer <= 0 ) return false;
     const int32 number_of_properties(integer);
-    
+
     // 1. looping over the properties and storing them in the VSet
     for ( int32 n=0; n<number_of_properties; ++n )
       {
         // 1.1 reading variable name, placement and type
+        string property_name, str;
         ifs >> property_name;
-        ifs >> integer;
-        PLACEMENT place = intToPLACEMENT( integer );
-        ifs >> integer;
-        VARIABLE_TYPE type = parseType( integer );
+        // replacing underscores with ' '
+        for ( size_t i=0; i<property_name.size(); ++ i )
+          if ( property_name[i] == '_' ) property_name[i] = ' ';
+        ifs >> str;
+        PLACEMENT place = parsePlacement( str.c_str() );
+        ifs >> str;
+        VARIABLE_TYPE type = parseType( str.c_str() );
         // 1.2 reading array length, if variable is an array or flagged array
+        int32  array_length(0);
         if ( type == ARRAY || type == FLAGGEDARRAY ) {
              ifs >> integer;
              if ( integer <= 0 ) {
                   cerr <<"\n\tarray length = "<< integer;
-                  csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertysRecordASCII",
+                  csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
                                     "negative or zero array length read for variable", property_name.c_str() );
                   return false;
                }
@@ -1179,17 +1205,15 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
         // reading number of value entries, cross-checking them using the variable type 
         size_t records;
         ifs >> records;
-        assert( records < vset.Elements() );
 
         if ( records == 0 ) {
              csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII:",
                                       "Record of variable values appears to be empty." );
              return false;
           }
+        if   ( place == ELEMENT ) assert( records == vset.Elements() );
+        else if ( place == NODE ) assert( records == vset.Vertices() );
      
-     
-    //    SkipPotentialComment( ifs );
-       
         // property data are read from file, flags first, then values
         PropertyData pdata( place, type, dim, array_length );
         pdata.Reserve( records );
@@ -1241,6 +1265,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
                  pdata.PushBack( value );
                }
           }
+        // adding the property data to the VSet
+        vset.AddData( property_name.c_str(), pdata );   
+          
       } // end for n properties
       
     return true;
@@ -1251,6 +1278,17 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
 template bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream&,VSet<1U>& );
 template bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream&,VSet<2U>& );
 template bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream&,VSet<3U>& );
+
+/*
+cerr <<"\nremaining data in file:\n";    
+while ( !ifs.eof() ) {
+     char c;
+     ifs.get( c );
+     cout << c;
+  }    
+*/    
+    
+
 
 
 
@@ -1603,5 +1641,96 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialBinary( FILE* fp, VSet<dim>& 
 template bool SKUA_FiniteElementMeshInterface::ReadPmaterialBinary( FILE*, VSet<1U>& );
 template bool SKUA_FiniteElementMeshInterface::ReadPmaterialBinary( FILE*, VSet<2U>& );
 template bool SKUA_FiniteElementMeshInterface::ReadPmaterialBinary( FILE*, VSet<3U>& );
+
+
+
+
+// PLAIN FUNCTIONS
+
+
+/** returns the corresponding CSMP element type, taking into account whether an isoparametric FEM formulation is used
+*/
+CSMP_FEM_TYPE  convertSKUA_ElementType( int32 etype, bool isoparametric )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( isoparametric ) {
+         if ( etype == 4 ) return ISOPARAMETRIC_LINEAR_TETRAHEDRON; 					        // TETRA_4          = 4,
+         if ( etype == 8 ) return ISOPARAMETRIC_LINEAR_TRIANGLE;  					          // TRI_3            = 8,
+         if ( etype == 2 ) return ISOPARAMETRIC_LINEAR_BAR;    						            // BAR_2            = 2,
+/*
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_BAR, 						            // BAR_3            = 3,
+         if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_BAR, 
+         if ( etype == 2 ) return ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE, 		      // TRI_3_X          = 9,
+         if ( etype == 2 ) return SOPARAMETRIC_QUADRATIC_TRIANGLE, 					        // 2D & 3D TRI_6    = 10,
+         if ( etype == 2 ) return ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE, 		  // TRI_6_X          = 11,
+         if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_TRIANGLE,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_TETRAHEDRON, 			          // TETRA_10         = 5,
+         if ( etype == 2 ) return ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON,    // TETRA_11
+         if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_TETRAHEDRON,
+         if ( etype == 2 ) return ISOPARAMETRIC_LINEAR_PYRAMID,						            // PYRA_5           = 18,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_PYRAMID13, 					        // PYRA_13          = 24,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_PYRAMID14,     				      // PYRA_14          = 22,
+         if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_PYRAMID,
+         if ( etype == 2 ) return ISOPARAMETRIC_LINEAR_PRISM,  						            // PENTA_6          = 12,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_PRISM15,         			      // PENTA_15         = 13,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_PRISM18,           			    // PENTA_18         = 21,
+         if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_PRISM,
+         if ( etype == 2 ) return ISOPARAMETRIC_LINEAR_QUADRILATERAL,                 // QUAD_4           = 14,
+         if ( etype == 2 ) return ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL,     // QUAD_4_X         = 15,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL,              // QUAD_8           = 16,
+         if ( etype == 2 ) return ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL,  // QUAD_8_X         = 17,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9,  			      // QUAD_9           = 19,
+         if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_QUADRILATERAL,
+         if ( etype == 2 ) return ISOPARAMETRIC_LINEAR_HEXAHEDRON,              		  // HEXA_8           = 6,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20,       		    // HEXA_20          = 7,
+         if ( etype == 2 ) return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27, 				      // HEXA_27          = XX,
+         if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON,
+      */       
+         cerr <<"\n\telement type "<< etype << endl;
+         csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ConvertSKUA_ElementType",
+                           "isoparametric finite element type not recognised" );
+      }
+
+   if ( etype == 4 ) return LINEAR_TETRAHEDRON; 					        // TETRA_4          = 4,
+   if ( etype == 8 ) return LINEAR_TRIANGLE;  					          // TRI_3            = 8,
+   if ( etype == 2 ) return LINEAR_BAR;    						            // BAR_2            = 2,
+
+   cerr <<"\n\telement type "<< etype << endl;
+   csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ConvertSKUA_ElementType",
+                     "finite element type not recognised" );
+
+   // types not yet treated
+   /*
+      UNKNOWN,
+      LINEAR_BAR,    										                  // BAR_2            = 2,
+      QUADRATIC_BAR, 										                  // BAR_3            = 3,
+      CUBIC_BAR, 										                      // BAR_4  
+      LINEAR_TRIANGLE,   
+      LINEAR_TRIANGLE3D, 									                // TRI_3            = 8,
+      LINEAR_QUADRILATERAL,
+      LINEAR_CUBOID,
+      LINEAR_RECTANGLE,
+      BARYCENTRIC_LINEAR_TRIANGLE, 			    	           	// TRI_3_X          = 9,
+      QUADRATIC_TRIANGLE, 								                // 2D & 3D TRI_6    = 10,
+      BARYCENTRIC_QUADRATIC_TRIANGLE, 					          // TRI_6_X          = 11,
+      CUBIC_TRIANGLE,
+      LINEAR_TETRAHEDRON, 								                // TETRA_4          = 4,
+      QUADRATIC_TETRAHEDRON, 								              // TETRA_10         = 5,
+      BARYCENTRIC_QUADRATIC_TETRAHEDRON,                  // PYRA_5           = 18,
+      CUBIC_TETRAHEDRON,
+      ZERO_DIMENSIONAL_FACE,                              // the face of a line element 
+      POINT_ELEMENT,
+      POLYGONAL_ELEMENT,
+      POLYHEDRAL_ELEMENT,
+      EXPERIMENTAL_ELEMENT,
+   */
+   
+   return UNKNOWN;
+
+} // end 
+
+
+
 
 } // end namespace csmp

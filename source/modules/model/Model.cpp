@@ -2810,6 +2810,34 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
 
 
 
+/**
+      For vector and tensor variables, this method uses the length and the range of Eigenvalues as a measure.
+      For array variables, the min and max values (L1 norm) are used.
+*/
+template<size_t dim>
+bool Model<dim>::IsWithinRange( const char* var_name, const char* model_subdomain ) const
+ {
+    double64  omin(DBL_MAX), omax(DBL_MIN), pmin, pmax;
+    
+    // is the subdomain a region, boundary, or split boundary?
+    if ( this->ContainsRegion( string(model_subdomain) ) )
+      this->Region(model_subdomain).MinMaxOf( var_name, omin, omax );
+    else if ( this->ContainsBoundary( string(model_subdomain) ) )
+      this->Boundary(model_subdomain).MinMaxOf( var_name, omin, omax );
+    else if ( this->ContainsSplitBoundary( string(model_subdomain) ) )
+      this->SplitBoundary(model_subdomain).MinMaxOf( var_name, omin, omax );    
+    
+    Database().RangeOf(  var_name, pmin, pmax );
+    if ( omin >= pmin && omax <= pmax ) return true;
+
+    return false;
+    
+ } // end IsWithinRange
+
+
+
+
+
   /// Instantiates MODEL LocalVariables
 template<size_t dim>
 void Model<dim>::InitializeLocalVariableStorage()
