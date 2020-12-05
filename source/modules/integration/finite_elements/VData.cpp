@@ -810,8 +810,11 @@ void VData::ResizePlist( const deque<size_t>& mixed_ele_plist )
 */
 void VData::ResizePfverts( size_t elements )
 {
+    if ( first_face_  != plist.size() || first_interface_ != plist.size() )
+      throw logic_error( "VData::ResizePfverts(size_t): method does not handle VSets with Face and InterFace objects yet");
+
     vector<long64>  empty_vec;
-    const size_t old_size( plist.size() );
+    const size_t old_size( pfverts.size() );
     assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
     for ( size_t i=0; i<new_elmts; i++ )
@@ -826,9 +829,12 @@ void VData::ResizePfverts( size_t elements )
  */
 void VData::ResizePfverts( size_t elements, size_t nperelmt )
 {
+    if ( first_face_  != plist.size() || first_interface_ != plist.size() )
+      throw logic_error( "VData::ResizePfverts(size_t,size_t): method does not handle VSets with Face and InterFace objects yet");
+
     assert( !hybrid_mesh_ );
     vector<long64>  empty_vec(nperelmt,0);
-    const size_t old_size( plist.size() );
+    const size_t old_size( pfverts.size() );
     assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
     for ( size_t i=0; i<new_elmts; i++ )

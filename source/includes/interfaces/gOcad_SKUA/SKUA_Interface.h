@@ -15,6 +15,17 @@ namespace csmp {
 
 template<size_t> class Model;
 
+/**
+
+@section Some conventions regarding neighbor connectivity
+
+In CSMP, only the neighbors of equidimensional elements are recorded: 
+the volumetric neighbors of volumetric elements, the surface neighbors of surface elements and the line element neighbors of bar elements.
+Now, on the outer perimeter of the model, elements that make up the boundary surfaces would normally have the elements of adjacent 
+boundary surfaces as neighbors. This connectivity is ignored. Instead, missing neighbors are indicated in the VSet::VData by the BOX_BOUNDARY
+flags that correspond to the model edges.
+
+*/
 class SKUA_Interface {
   public:
   

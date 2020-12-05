@@ -23,7 +23,7 @@ class SKUA_FiniteElementMeshInterface_Test : public Test {
   /// mesh consistency (Jacobians, element volume range, non-manifold vertices, triangle boxes
   
   /// pfverts, disambiguated neighbors of lower-dimensional elements
-  bool TestNeighborConnectivity( Model<3U>& model );
+  bool TestNeighborConnectivity( Model<3U>& model, bool verbose=true );
   /// consistent facing directions of surface elements
   /// consecutive numbering of series of line elements
   /// material IDs

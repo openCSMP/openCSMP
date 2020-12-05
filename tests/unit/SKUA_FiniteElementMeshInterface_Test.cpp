@@ -65,7 +65,7 @@ void SKUA_FiniteElementMeshInterface_Test::run()
    
       TODO: also check neighbor connectivity of Face and InterFace objects
 */
-bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& model )
+bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& model, bool verbose )
  {
     const Region<3U>& domain(model.Region("Model"));
     // recording connectivity from SKUA in an element neighbor vector
@@ -83,16 +83,22 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     establishNeighborConnectivity( model.Region("Model").CellVector() );
     
     // comparing SKUA with CSMP connectivity
+    size_t failed_comparisons(0U);
     vector<vector<Element<3U>*> >::const_iterator pfit(pfverts.begin());
     for ( vector<Element<3U>*>::const_iterator
           it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it, ++pfit ) {
          for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != (*pfit)[i] ) {
-                cerr <<"\nelement neighbor "<< (*it)->Idx() <<":"<< i <<": ";
-                cerr << (*it)->Neighbor(i) <<" vs. "<< (*pfit)[i];
-                return false;
+                if ( verbose ) {
+                     cerr <<"\nelement neighbor "<< (*it)->Idx() <<":"<< i <<": ";
+                     cerr << (*it)->Neighbor(i)->Idx() <<" vs. "<< (*pfit)[i]->Idx() <<" ";
+                  }
+                failed_comparisons++;
              }
       }
+    if ( verbose && failed_comparisons > 0 ) cerr << endl;
+      
+    if ( failed_comparisons > 0U ) return false;  
     return true;
     
  } // end TestNeighborConnectivity

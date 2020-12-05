@@ -899,8 +899,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
     map<size_t,vector<size_t> >  plist;
     vector<size_t>               dummy;
     size_t                       total_items, 
-                                 element(0), item(0), 
-                                 id, nodes;
+                                 element(0), item(0), id;
     const size_t                 n_nodes(vset.Vertices());
         
     // reading number of data identifiers in the record
@@ -929,7 +928,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
     while ( item < total_items )
       {
          // getting the number of nodes of the element to be read
-         nodes = ( vset.HybridElementTypeMesh() ) ? ndele[element] : ndele[0U];
+         const size_t nodes = ( vset.HybridElementTypeMesh() ) ? ndele[element] : ndele[0U];
          assert( nodes >= 2 && nodes <= 32 );
          
          pair<size_t,vector<size_t> > data( make_pair(++element,dummy) );
@@ -1022,7 +1021,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
     while ( item < total_items )
       {
          // getting the number of neighbors of the element to be read
-         size_t neighbors = ( vset.HybridElementTypeMesh() ) ? nbors[element] : nbors[0U];
+         const size_t neighbors = ( vset.HybridElementTypeMesh() ) ? nbors[element] : nbors[0U];
          assert( neighbors >= 2  and  neighbors <= 32 );
          pair<size_t,vector<long64> >  data(element,dummy);
         
@@ -1061,11 +1060,11 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
     // element id's
     vset.AddPfverts( pfverts.begin(), pfverts.end() );
    
-    if( csmp_error.Verbose() )
-    {
-        cout <<"\nSKUA_FiniteElementMeshInterface::ReadPfvertsASCII: ";
-        cout <<"Neighbor IDs read for: "<< element <<" elements."<< endl;
-    }
+    if ( csmp_error.Verbose() )
+      {
+          cout <<"\nSKUA_FiniteElementMeshInterface::ReadPfvertsASCII: ";
+          cout <<"Neighbor IDs read for: "<< element <<" elements."<< endl;
+      }
 
     return true;
 

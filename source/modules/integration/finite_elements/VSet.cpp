@@ -154,11 +154,12 @@ void VSet<dim>::AddPlist( typename map<size_t, vector<size_t> >::const_iterator 
 	typename deque<vector<size_t> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
-	{
-		(*it) = (*first).second;
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first).second;
+      first++;
+      it++;
+    }
+    
 } // end
 
 
