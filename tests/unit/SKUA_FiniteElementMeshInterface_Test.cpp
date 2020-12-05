@@ -28,9 +28,9 @@ void SKUA_FiniteElementMeshInterface_Test::run()
     printModelDimensions( model, true );
     model.RegionsOut();
 
-  //  InputDataManager<3U>  model_configuration;
-  //  model_configuration.ConfigureFromFile( model, model_name.c_str(),
-  //                                         false, true, true, true, false );
+    // Testing
+    _test( TestNeighborConnectivity( model ) );
+
 
     // checking model boundary flagging
     boxFlagsToVariable( model, "node variable", "element variable" );
@@ -56,5 +56,46 @@ void SKUA_FiniteElementMeshInterface_Test::run()
 
  } // end run
 
+
+
+
+
+/**
+   Checks whethe the assignment of element neighbors from SKUA is identical with that done by CSMP; the side boundary flags are not considered.
+   
+      TODO: also check neighbor connectivity of Face and InterFace objects
+*/
+bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& model )
+ {
+    const Region<3U>& domain(model.Region("Model"));
+    // recording connectivity from SKUA in an element neighbor vector
+    vector<vector<Element<3U>*> > pfverts;
+    pfverts.reserve( domain.Elements() );
+    for ( vector<Element<3U>*>::const_iterator
+          it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
+         vector<Element<3U>*> nbors( (*it)->Neighbors(), nullptr );
+         for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+           if ( (*it)->Neighbor(i) != nullptr )
+             nbors[i] = (*it)->Neighbor(i);
+         pfverts.emplace_back( nbors );    
+      }
+    // recreating the connectivity in CSMP
+    establishNeighborConnectivity( model.Region("Model").CellVector() );
+    
+    // comparing SKUA with CSMP connectivity
+    vector<vector<Element<3U>*> >::const_iterator pfit(pfverts.begin());
+    for ( vector<Element<3U>*>::const_iterator
+          it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it, ++pfit ) {
+         for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+           if ( (*it)->Neighbor(i) != (*pfit)[i] ) {
+                cerr <<"\nelement neighbor "<< (*it)->Idx() <<":"<< i <<": ";
+                cerr << (*it)->Neighbor(i) <<" vs. "<< (*pfit)[i];
+                return false;
+             }
+      }
+    return true;
+    
+ } // end TestNeighborConnectivity
+ 
 
 } // end csmp

@@ -23,10 +23,10 @@ Element types gets a size of 1 in this case which is just enough to
 store the type of the single element of which the mesh consists.
 */
 template<size_t dim>
-VSet<dim>::VSet(size_t nodes_per_element,
-                size_t nbors_per_element,
-                int32 etype,
-                size_t nodes, size_t elmts)
+VSet<dim>::VSet( size_t nodes_per_element,
+                 size_t nbors_per_element,
+                 int32 etype,
+                 size_t nodes, size_t elmts )
 : VData(nodes_per_element, nbors_per_element, nodes, elmts)
 {
 	SingleElementType(etype);
@@ -46,23 +46,24 @@ VSet<dim>::VSet(const deque<size_t>& npes,
 
 /// copy constructor
 template<size_t dim>
-VSet<dim>::VSet(const VSet<dim>& a)
- : VData(a), property_map_(a.property_map_)
-{
-}
+VSet<dim>::VSet( const VSet<dim>& a )
+ : VData(a), pmtrl_(a.pmtrl_), property_map_(a.property_map_)
+ {
+ }
 
 
 /** Assignment operator
 */
 template<size_t dim>
-VSet<dim>& VSet<dim>::operator=(const VSet<dim>& a)
-{
-	if (&a != this) {
-       VData::operator=( a ); 
-       property_map_ = a.property_map_;
-    }
-	return *this;
-}
+VSet<dim>& VSet<dim>::operator=( const VSet<dim>& a )
+  {
+    if (&a != this) {
+         VData::operator=( a ); 
+         pmtrl_        = a.pmtrl_; 
+         property_map_ = a.property_map_;
+      }
+    return *this;
+  }
 
 
 /**
@@ -78,6 +79,8 @@ void VSet<dim>::Resize( size_t nodes_per_element,
                         size_t elmts)
 {
 	VData::Resize(nodes_per_element, nbors_per_element, csmp_etype, nodes, elmts);
+  if ( !pmtrl_.empty() || !property_map_.empty() ) 
+    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of 'pmtrl' and property map not handled yet.\n";
 }
 
 
@@ -93,6 +96,8 @@ void VSet<dim>::Resize( const deque<int32>& etypes,
                         size_t nodes, size_t faces, size_t interfaces)
 {
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
+  if ( !pmtrl_.empty() || !property_map_.empty() ) 
+    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of 'pmtrl' and property map not handled yet.\n";
 }
 
 
@@ -113,7 +118,7 @@ void VSet<dim>::AddXYZ( const deque<double64>& x,
 	if (x.size() != Vertices())
     {
       if (Vertices() > 0) {
-          cout << "\nVSet::AddXYZ: Warning: Changing node-coordinate " << endl;
+          cout << "\nVSet<"<< dim <<">::AddXYZ: Warning: Changing node-coordinate " << endl;
           cout << "array size from " << Vertices() << " to " << x.size() << endl;
         }
       VData::ResizeNodes(x.size());
@@ -143,8 +148,8 @@ to recuperate element types and the nodes per element information when
 reading the VSet.
 */
 template<size_t dim>
-void VSet<dim>::AddPlist(typename map<size_t, vector<size_t> >::const_iterator first,
-						 typename map<size_t, vector<size_t> >::const_iterator last)
+void VSet<dim>::AddPlist( typename map<size_t, vector<size_t> >::const_iterator first,
+						              typename map<size_t, vector<size_t> >::const_iterator last)
 {
 	typename deque<vector<size_t> >::iterator it = PlistBegin();
 
@@ -243,6 +248,32 @@ void VSet<dim>::AddBFlags( typename unordered_map<size_t, long64>::const_iterato
     }
     
 } // end
+
+
+
+
+/**
+       Material ID identifiers need to be provided for all elements, boundaries and split boundaries.
+*/
+template<size_t dim>
+void VSet<dim>::AddPmtrl( typename std::vector<int32>::const_iterator first,
+                          typename std::vector<int32>::const_iterator last )
+ {
+    pmtrl_.clear();
+    pmtrl_.assign( first, last );
+    if ( pmtrl_.size() != Elements() )
+      cerr <<"\nVSet<"<< dim <<">::AddPmtrl: mismatch between the number of elements and material IDs in vset.\n";
+ }
+
+
+template<size_t dim>
+std::vector<int32>::const_iterator VSet<dim>::PmtrlBegin() const
+ { return pmtrl_.begin(); }
+
+template<size_t dim>
+std::vector<int32>::const_iterator VSet<dim>::PmtrlEnd() const
+ { return pmtrl_.end(); }
+
 
 
 
@@ -647,16 +678,20 @@ void VSet<dim>::Out(bool data_as_well) const
 	VData::Out();
 
 	if (data_as_well)
-	{
-		// scalar type data
-		cout << "\nVSet<dim>::Out: property records stored in VSet:\n";
-		for (map<string, PropertyData>::const_iterator
-			it = property_map_.begin(); it != property_map_.end(); it++)
-		{
-			cout << "\n" << (*it).first << endl;
-			(*it).second.Out();
-		}
-	}
+    {
+      cout << "\nVSet<"<< dim <<">::Out: material identifiers (rocktypes) for each element stored in VSet:\n";
+      // material records
+      for ( auto& it : pmtrl_ ) 
+        cout << it <<" ";
+      // scalar type data
+      cout << "\nproperty records stored in VSet:\n";
+      for ( map<string, PropertyData>::const_iterator
+            it = property_map_.begin(); it != property_map_.end(); it++ )
+        {
+          cout << "\n" << (*it).first << endl;
+          (*it).second.Out();
+        }
+    }
 
 } // end Out
 
@@ -719,7 +754,7 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
           property.second = std::move(new_data);
        }
       else {
-          cerr <<"\nERROR: VSet<dim>::ReduceTo: placement of property '"<< property.first <<"' not handled. yet.\n";
+          cerr <<"\nERROR: VSet<"<< dim <<">::ReduceTo: placement of property '"<< property.first <<"' not handled. yet.\n";
           cerr <<"\n\tProperties with the placement "<< parsePlacement(oldprop.Placement()) <<" were not transferred correctly\n";
           throw logic_error("VSet<dim>::ReduceTo");
        }

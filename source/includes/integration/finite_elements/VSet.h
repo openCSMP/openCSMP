@@ -49,22 +49,28 @@ class VSet : public VData {
                  const std::deque<size_t>& epes,
                  size_t nodes, size_t faces, size_t interfaces );
 
+    /// node coordinates
     void AddXYZ( const std::deque<double64>& x,
                  const std::deque<double64>& y,
                  const std::deque<double64>& z );
       
+    /// the IDs of the nodes that make up each element 
     void AddPlist( typename std::map<size_t,std::vector<size_t> >::const_iterator first,
                    typename std::map<size_t,std::vector<size_t> >::const_iterator last );
 
     void AddPlist( typename std::deque<std::vector<size_t> >::const_iterator first,
                    typename std::deque<std::vector<size_t> >::const_iterator last );
 
+    /// the equi-dimensional neighbors adjacent to the numbered element faces plus boundary identifiers where there is no neighbor
     void AddPfverts( typename std::map<size_t,std::vector<long64> >::const_iterator first,
                      typename std::map<size_t,std::vector<long64> >::const_iterator last );
 
     void AddPfverts( typename std::deque<std::vector<long64> >::const_iterator first,
                      typename std::deque<std::vector<long64> >::const_iterator last );
   
+    /// rocktype identifiers for elements only
+    void AddPmtrl( typename std::vector<int32>::const_iterator first,
+                   typename std::vector<int32>::const_iterator last );
   
     /// checks whether the VSet contains any distributed variable values stored in PropertyData objects
     bool  DataEmpty() const;
@@ -78,6 +84,10 @@ class VSet : public VData {
     /// if the property records contain FV data
     bool ContainsFiniteVolumeIntegrationPointData() const;
   
+    /// const iterators for the material ID record (one for each element; none for face and interface objects)
+    std::vector<int32>::const_iterator PmtrlBegin() const;
+    std::vector<int32>::const_iterator PmtrlEnd() const;
+
     /// const iterators for the propery collection
     std::map<std::string,PropertyData>::const_iterator PropertyValuesBegin() const;
     std::map<std::string,PropertyData>::const_iterator PropertyValuesEnd() const;
@@ -115,6 +125,7 @@ class VSet : public VData {
   protected:
 
     std::map<std::string,PropertyData>  property_map_;  ///< container for variables distributed on the mesh
+    std::vector<int32>                  pmtrl_;         ///<  rocktype identifiers; one per element; for transfer to 'material_id_'
 
     friend class VSet_Test;
 };

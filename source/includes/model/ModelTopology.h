@@ -22,6 +22,48 @@ template<size_t> class VSet;
      
      When the model was created by ANSYS and output using its CSP interface,
      the information needed to initialise the ModelToplogy class is contained in the '.asc' file.
+
+    @author S.K. Matthaei
+    @date 2001
+     
+
+    @section motivation Motivation
+
+    ModelTopology was created to convey topological information from
+    an ANSYS model to CSMP so that corresponding named groups of elements 
+    can be created and assigned specific material properties.  
+
+    For this purpose, ModelTopology stores named maps of the element
+    IDs and types that make up specific model regions. By default, the 
+    element names are the ANSYS element names as captured inside
+    the class ANSYS_ElementSpecifications. Functionality is there
+    in the public interface to convert these into CSMP names.
+
+    Since one does not always want to use all topological information and
+    or finite elements in a simulation, ModelTopology allows the user
+    to reduce the initial topology as, for instance, obtained from ANSYS's
+    meshing tools, to a few target regions - or element types, such as
+    only the volume elements. Several interfaces are provided for this
+    purpose.  
+
+    @section structure Structure
+     
+    ModelTopology assumes a complementary role to the VSet which 
+    stores the connectivity between elements and their nodes. Thus, there
+    must always be a supporting VSet in order to build a Model.
+    When the ModelTopology is reduced to a subset of the original 
+    model, corresponding operations must be performed on the VSet.
+     
+     
+    @section participants Participants
+     
+    The current implementation depends on the ANSYS_ElementSpecifications 
+    object for the interpretation of finite element names.  
+     
+     
+    @section examples Application Examples
+     
+    The topology class is used inside of ANSYS_Model3D  and  2D.
      
      TODO: rather than doing this in ModelTopology create missing 'pfverts' (element neighbor info) in the VSet.
      TODO: let VSet create correct line element orientations (where ends connect to beginnings)
@@ -207,55 +249,6 @@ void BoundariesOfRectangleShapedModel( std::set<std::string>& );
 void CorrectSurfaceElementOrientations( VSet<3U>& vset );
 void CorrectSurfaceElementOrientations( VSet<2U>& vset );
 void CorrectSurfaceElementOrientations( VSet<1U>& vset );
-
-
-/**
- @class ModelTopology ModelTopology "main_library/ModelTopology.h"
-
-@author S.K. Matthaei
-@date 2001
- 
-
-@section motivation Motivation
-
-ModelTopology was created to convey topological information from
-an ANSYS model to CSMP so that corresponding named groups of elements 
-can be created and assigned specific material properties.  
-
-For this purpose, ModelTopology stores named maps of the element
-IDs and types that make up specific model regions. By default, the 
-element names are the ANSYS element names as captured inside
-the class ANSYS_ElementSpecifications. Functionality is there
-in the public interface to convert these into CSMP names.
-
-Since one does not always want to use all topological information and
-or finite elements in a simulation, ModelTopology allows the user
-to reduce the initial topology as, for instance, obtained from ANSYS's
-meshing tools, to a few target regions - or element types, such as
-only the volume elements. Several interfaces are provided for this
-purpose.  
-
-@section structure Structure
- 
-ModelTopology assumes a complementary role to the VSet which 
-stores the connectivity between elements and their nodes. Thus, there
-must always be a supporting VSet in order to build a Model.
-When the ModelTopology is reduced to a subset of the original 
-model, corresponding operations must be performed on the VSet.
- 
- 
-@section participants Participants
- 
-The current implementation depends on the ANSYS_ElementSpecifications 
-object for the interpretation of finite element names.  
- 
- 
-@section examples Application Examples
- 
-The topology class is used inside of ANSYS_Model3D  and  2D.
- 
- */
-
 
 } // csmp
 
