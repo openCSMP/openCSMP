@@ -40,6 +40,9 @@ void SKUA_FiniteElementMeshInterface_Test::run()
     _test( unit_B.Elements() == 1743 );
     const Region<3U>&  unit_C(model.Region("UNIT_C"));
     _test( unit_C.Elements() == 1761 );
+    
+    // are the property values assigned in the correct sequence?
+    _test( TestNodePropertyAssignment( model ) );
 
     // checking model boundary flagging
     boxFlagsToVariable( model, "node variable", "element variable" );
@@ -121,6 +124,41 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
  
  
  
+bool SKUA_FiniteElementMeshInterface_Test::TestNodePropertyAssignment( const Model<3>& model )
+ {
+    // if the element number is known so that the material IDs can be assigned correctly
+    if ( model.Database().IsDefined("node number") ) {
+         const csmp::Index nn_key = model.Database().StorageKey("node number");
+         const csmp::Index nu_key = model.Database().StorageKey("number");
+         // creating a mapping between current elements in region 'Model' and the VSet from the element number
+         const Region<3U>& domain = model.Region("Model");
+         vector<Node<3U>*> ordered_nodes(domain.Nodes());
+
+         for ( vector<Node<3U>*>::const_iterator nit=domain.NodesBegin(); nit!=domain.NodesEnd(); ++nit ) {
+              if ( fabs((*nit)->Read(nn_key) - (*nit)->Read(nu_key)) > numeric_limits<double64>::epsilon() ) { 
+                   cerr <<"\n\tnode number vs. number: "<< (*nit)->Read(nn_key) <<" vs. "<< (*nit)->Read(nu_key);
+                   _equal( (*nit)->Read(nn_key), (*nit)->Read(nu_key), numeric_limits<double64>::epsilon() );
+                }
+              ordered_nodes[ static_cast<size_t>((*nit)->Read(nn_key)) ] = (*nit);
+           }
+           
+         bool problem_found(false);  
+         for ( size_t i=0U; i<ordered_nodes.size(); ++i ) {
+              if ( ordered_nodes[i] == nullptr ) {
+                  cerr <<"\nordered nodes map contains nullptr for node "<< i; 
+                  problem_found = true;
+                }
+              else if ( i != static_cast<size_t>(ordered_nodes[i]->Read(nu_key)) ) {
+                  cerr <<"\nmismatch: node "<< i <<": vs 'number' "<< ordered_nodes[i]->Read(nu_key);
+                  problem_found = true;
+                }
+            }
+         if ( problem_found == true ) return false;  
+      }       
+    return true;
+
+ } // TestNodePropertyAssignment
+
 
 
 void SKUA_FiniteElementMeshInterface_Test::PrintOriginalNeighborIDs( const Model<3U>& model ) const

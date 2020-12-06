@@ -47,7 +47,7 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
       for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", node_nums );
+      vset.AddData( "node number", node_nums );
     }
 
     // 2. construct model based on obtained model topology and vset
@@ -156,7 +156,7 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
       for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", node_nums );
+      vset.AddData( "node number", node_nums );
     }
 
     // 2. construct model based on obtained model topology and vset

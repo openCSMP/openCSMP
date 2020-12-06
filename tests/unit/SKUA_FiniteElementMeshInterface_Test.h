@@ -34,6 +34,9 @@ class SKUA_FiniteElementMeshInterface_Test : public Test {
   /// generation of boundaries  
   /// generation of split boundaries
   
+  /// test that poperty values are assigned in the correct order using variables 'node number' and 'number'
+  bool TestNodePropertyAssignment( const Model<3>& );
+  
   /// for the elements in original order, prints original IDs of neighbor elements or boundary flag values where there is no neighbor
   void PrintOriginalNeighborIDs( const Model<3U>& ) const;
 };

@@ -311,7 +311,7 @@ class SKUA_FiniteElementMeshInterface {
     template<size_t dim>
     bool ReadPelementASCII( std::ifstream&, VSet<dim>& );
     template<size_t dim>
-    bool ReadPlistASCII( std::ifstream&, VSet<dim>& );
+    bool ReadPlistASCII( std::ifstream&, VSet<dim>&, bool test_for_consecutive_node_numbering=true );
     template<size_t dim>
     bool ReadPfvertsASCII( std::ifstream&, VSet<dim>& );
     template<size_t dim>

@@ -966,7 +966,7 @@ beginning of the plist data block.
 second method argument.  
 */
 template<size_t dim>
-bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
+bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset, bool test_for_consecutive_node_numbering )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -999,10 +999,28 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
     deque<vector<size_t> >  file_records; 
     readVectorOfVectors( ifs, ndele, total_items, file_records );   
 
+    // testing whether the nodes are numbered consecutively from 0..n-1
+    if ( test_for_consecutive_node_numbering ) {
+         set<size_t> node_ids;
+         for ( deque<vector<size_t> >::const_iterator it=file_records.begin(); it!=file_records.end(); ++it )
+           for ( vector<size_t>::const_iterator nit=(*it).begin(); nit!=(*it).end(); ++nit )
+             node_ids.insert( (*nit) );
+         // does the record start with 0 and ends with n-1?
+         if ( (*node_ids.begin()) != 0U ) {
+             cerr <<"\nID of first node: "<< (*node_ids.begin());
+             csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
+                                       "Node numbering does not start with zero" );
+           }
+         else if ( (*node_ids.rbegin()) != vset.Vertices()-1U ) {
+             cerr <<"\nID of last node vs. nodes in VSet: "<< (*node_ids.rbegin()) <<" vs. "<< vset.Vertices();
+             csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
+                                       "Node numbering does not end with number of nodes in VSet-1 (=non-consecutive)" );
+           }
+      }
+
     vset.AddPlist( file_records.begin(), file_records.end() );
    
-    if ( csmp_error.Verbose() )
-      {
+    if ( csmp_error.Verbose() ) {
           cout <<"\nSKUA_FiniteElementMeshInterface::ReadPlistASCII: ";
           cout <<"Member node IDs read for: "<< file_records.size() <<" elements."<< endl;
       }
@@ -1012,9 +1030,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
  } // ReadPlistASCII
 
 
-template bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream&,VSet<1U>& );
-template bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream&,VSet<2U>& );
-template bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream&,VSet<3U>& );
+template bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream&,VSet<1U>&, bool );
+template bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream&,VSet<2U>&, bool );
+template bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream&,VSet<3U>&, bool );
 
 
 /**
