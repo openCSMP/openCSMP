@@ -468,7 +468,7 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
   
 
 /**
-   tests method which recreates boundary flags using Adriana's vset_makers
+   tests method which recreates boundary flags
 */
 bool Box_Test::TestBoundaryFlagRecreation()
  {
