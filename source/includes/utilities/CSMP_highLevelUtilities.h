@@ -463,6 +463,9 @@ template<> struct hash<csmp::ijk> {
 };
 
 
+/// reads vector<vector> from filestream where the elements of the vector are sequential 
+template<typename T>   
+void readVectorOfVectors( ifstream& ifs, size_t total_items, size_t entries_per_vector, deque<vector<T> >& file_records );
 
 } // end csmp
 

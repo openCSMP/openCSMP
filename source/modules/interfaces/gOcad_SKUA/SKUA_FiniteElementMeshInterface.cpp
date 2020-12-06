@@ -877,6 +877,80 @@ template bool SKUA_FiniteElementMeshInterface::ReadPelementASCII( ifstream&,VSet
 template bool SKUA_FiniteElementMeshInterface::ReadPelementASCII( ifstream&,VSet<3U>& );
 
 
+
+
+
+
+/**
+      reads vector<vector> from filestream where the elements of the vector are sequential
+      the number of entries per vector is deduced from the element type stored in  'pelmt'
+*/   
+template<typename T>   
+void readVectorOfVectors( ifstream& ifs, const deque<size_t>& vector_sizes, size_t total_items, deque<vector<T> >& file_records )
+ {
+    assert( ifs.is_open() );
+    assert( !vector_sizes.empty() );
+    assert( total_items > vector_sizes.size() ); 
+    file_records.clear();
+    // not in deque: file_records.reserve( total_items / entries_per_vector );
+    size_t item=0U; 
+    
+    // case 1: all stored vectors have the same size
+    // ---------------------------------------------
+    // getting the number of nodes of the element to be read
+    // reading record when all entries have the same size
+    if ( vector_sizes.size() == 1 ) {
+        const size_t entries_per_vector( vector_sizes[0] );
+        while ( item < total_items )
+          {
+             // node ID's in file range 0...nodes-1
+             vector<T> data;
+             data.reserve( entries_per_vector );
+             T id;
+             for ( size_t i=0; i<entries_per_vector; ++i ) {
+                  ifs >> id;
+                  // assumption: there are not more nodes that elements * nodes_per_element
+                  assert( id < static_cast<long64>(total_items) ); 
+                  data.push_back( id );
+                  item++;
+               }
+             file_records.emplace_back( data );
+          }
+      }
+
+    // case 2: each stored vector has a different size
+    // -----------------------------------------------
+    // getting the number of nodes of the element to be read
+    // reading record when all entries have the same size
+    else {
+        while ( item < total_items )
+          {
+             const size_t entries_per_vector( vector_sizes[item] );
+             // node ID's in file range 0...nodes-1
+             vector<T> data;
+             data.reserve( entries_per_vector );
+             T id;
+             for ( size_t i=0; i<entries_per_vector; ++i ) {
+                  ifs >> id;
+                  assert( id < static_cast<long64>(total_items) );
+                  data.push_back( id );
+                  item++;
+               }
+             file_records.emplace_back( data );
+          }
+      }
+      
+    if ( item != total_items )
+         throw csmp::Exception( ERROR, "readVectorOfVectors", 
+                               "File record of vector<vector<typename>> was not correctly read" );
+
+ } // end read inlined vector
+
+template void readVectorOfVectors( ifstream&, const deque<size_t>& vector_sizes, size_t, deque<vector<size_t> >& );
+template void readVectorOfVectors( ifstream&, const deque<size_t>& vector_sizes, size_t, deque<vector<long64> >& );
+
+
+
 /**
  
 The method reads the 'plist' record from the supplied ASCII file. The
@@ -897,10 +971,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     map<size_t,vector<size_t> >  plist;
-    vector<size_t>               dummy;
-    size_t                       total_items, 
-                                 element(0), item(0), id;
-    const size_t                 n_nodes(vset.Vertices());
+    size_t                       total_items;
         
     // reading number of data identifiers in the record
     ifs >> total_items;
@@ -925,39 +996,16 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
       }
       
     // reading plist
-    while ( item < total_items )
-      {
-         // getting the number of nodes of the element to be read
-         const size_t nodes = ( vset.HybridElementTypeMesh() ) ? ndele[element] : ndele[0U];
-         assert( nodes >= 2 && nodes <= 32 );
-         
-         pair<size_t,vector<size_t> > data( make_pair(++element,dummy) );
-         pair<map<size_t,vector<size_t> >::iterator,bool> it = plist.insert(data); // insertion of empty vector
-         assert( it.second );
-         (*it.first).second.reserve(nodes);
-         
-         // node ID's in file range 0...nodes-1
-         for ( size_t i=0; i<nodes; i++ ) {
-              ifs >> id;
-              assert( id < n_nodes );
-              (*it.first).second.push_back( id );
-              item++;
-           }
-      }
+    deque<vector<size_t> >  file_records; 
+    readVectorOfVectors( ifs, ndele, total_items, file_records );   
 
-    if ( item != total_items ) {
-         throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
-                                        "File record of nodes per element (plist) was not correctly read" );
-         return false;
-      }
-
-    vset.AddPlist( plist.begin(), plist.end() );
+    vset.AddPlist( file_records.begin(), file_records.end() );
    
-    if( csmp_error.Verbose() )
-    {
-        cout <<"\nSKUA_FiniteElementMeshInterface::ReadPlistASCII: ";
-        cout <<"Member node IDs read for: "<< element <<" elements."<< endl;
-    }
+    if ( csmp_error.Verbose() )
+      {
+          cout <<"\nSKUA_FiniteElementMeshInterface::ReadPlistASCII: ";
+          cout <<"Member node IDs read for: "<< file_records.size() <<" elements."<< endl;
+      }
 
     return true;
     
@@ -1014,56 +1062,18 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
       }
       
     // reading the pfvert file record
-    size_t                       element(0), item(0);
-    map<size_t,vector<long64> >  pfverts;
-    vector<long64>               dummy;
-
-    while ( item < total_items )
-      {
-         // getting the number of neighbors of the element to be read
-         const size_t neighbors = ( vset.HybridElementTypeMesh() ) ? nbors[element] : nbors[0U];
-         assert( neighbors >= 2  and  neighbors <= 32 );
-         pair<size_t,vector<long64> >  data(element,dummy);
-        
-         // insertion of empty vector
-         pair<map<size_t,vector<long64> >::iterator,bool>  it(pfverts.insert(data));
-         assert( it.second );
-         (*it.first).second.reserve(neighbors);
-
-         // element ID's in file range 0...elements-1
-         for ( size_t i=0; i<neighbors; ++i ) {
-              int32  idx;
-              ifs >> idx;
-              if ( ifs.bad() ) {
-                   cerr <<"\nread 'pfvert' record for element: "<< element <<", neighbor: "<< i <<", value: "<< idx;
-                   throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadPfvertsASCII:",
-                                         "file stream went bad, when reading 'pfverts' record; may be not enough entries." );
-                }
-              // element number must not be larger than the number of elements in the mesh
-              assert( idx < static_cast<long>(vset.Elements()) );
-              // ascertaining that one of the possible options of boundary identifiers was used
-              if ( idx < 0 ) assert( idx >= REGION_BOUNDARY );
-              (*it.first).second.push_back( idx );
-              item++;
-           }
-         element++;
-      }
-
-    if ( item != total_items ) {
-         throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadPfvertsASCII:",
-                                    "File record of neighbors per element (pfverts) was not correctly read." );
-         return false;
-      }
+    deque<vector<long64> >  file_records; 
+    readVectorOfVectors( ifs, nbors, total_items, file_records );   
 
     // negative element numbers must now be identified as model boundaries
     // according to the families of the object neighbors which have these
     // element id's
-    vset.AddPfverts( pfverts.begin(), pfverts.end() );
+    vset.AddPfverts( file_records.begin(), file_records.end() );
    
     if ( csmp_error.Verbose() )
       {
           cout <<"\nSKUA_FiniteElementMeshInterface::ReadPfvertsASCII: ";
-          cout <<"Neighbor IDs read for: "<< element <<" elements."<< endl;
+          cout <<"Neighbor IDs read for: "<< file_records.size() <<" elements."<< endl;
       }
 
     return true;
@@ -1728,7 +1738,6 @@ CSMP_FEM_TYPE  convertSKUA_ElementType( int32 etype, bool isoparametric )
    return UNKNOWN;
 
 } // end 
-
 
 
 

@@ -3269,4 +3269,44 @@ std::vector<std::string> splitString( std::string str, char delimiter )
 }
 
 
+
+
+/**
+      reads vector<vector> from filestream where the elements of the vector are sequential 
+*/   
+template<typename T>   
+void readVectorOfVectors( ifstream& ifs, size_t total_items, size_t entries_per_vector, deque<vector<T> >& file_records )
+ {
+    file_records.clear();
+    // not in deque: file_records.reserve( total_items / entries_per_vector );
+    // reading plist
+    size_t item=0U; 
+    while ( item < total_items )
+      {
+         // node ID's in file range 0...nodes-1
+         vector<T> data;
+         data.reserve( entries_per_vector );
+         int32 id;
+         for ( size_t i=0; i<entries_per_vector; ++i ) {
+              ifs >> id;
+              assert( id >= 0 && id << total_items ); // assumption that there are not more nodes that elements*nodes_per_element
+              data.push_back( id );
+              item++;
+           }
+         file_records.emplace_back( data );
+      }
+
+    if ( item != total_items )
+         throw csmp::Exception( ERROR, "readVectorOfVectors", 
+                               "File record of vector<vector<typename>> was not correctly read" );
+
+ } // end read inlined vector
+
+template void readVectorOfVectors( ifstream&, size_t, size_t, deque<vector<size_t> >& );
+
+
+
+
+
+
 } // end namespace csmp

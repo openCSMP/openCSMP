@@ -17,7 +17,7 @@ namespace csmp {
 void SKUA_FiniteElementMeshInterface_Test::run()
  {
     // 0. creating box-shaped test model with nodes on the side surfaces
-    SKUA_Model  model( "V6_SOLID2",
+    SKUA_Model  model( "V6_SOLID2",   // "V6_SOLID2",
                        "CSMP-variables.txt",
                        false,   ///< true = binary, false = ascii */
                        true,    ///< true = reduce regions according to regions file, false = does not redure regions
@@ -90,6 +90,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
          for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != (*pfit)[i] ) {
                 if ( verbose ) {
+                     //(*it)->Out();
                      cerr <<"\nelement neighbor "<< (*it)->Idx() <<":"<< i <<": ";
                      cerr << (*it)->Neighbor(i)->Idx() <<" vs. "<< (*pfit)[i]->Idx() <<" ";
                   }
