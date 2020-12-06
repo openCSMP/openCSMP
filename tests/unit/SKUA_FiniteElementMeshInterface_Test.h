@@ -33,6 +33,9 @@ class SKUA_FiniteElementMeshInterface_Test : public Test {
   // ADVANCED
   /// generation of boundaries  
   /// generation of split boundaries
+  
+  /// for the elements in original order, prints original IDs of neighbor elements or boundary flag values where there is no neighbor
+  void PrintOriginalNeighborIDs( const Model<3U>& ) const;
 };
 
 } // end csmp

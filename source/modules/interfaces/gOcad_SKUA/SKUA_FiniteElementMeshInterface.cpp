@@ -1131,6 +1131,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialASCII( ifstream& ifs, VSet<di
                            "Element material information could not be obtained for all elements." );
          return false;
       }
+      
+    // Adding the material ID record to the VSet
+    vset.AddPmtrl( elmt_mtrls.begin(), elmt_mtrls.end() );  
 
     return true;
 

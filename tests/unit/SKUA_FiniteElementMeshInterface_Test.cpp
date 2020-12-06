@@ -8,6 +8,7 @@
 
 #include "SKUA_FiniteElementMeshInterface_Test.h"
 #include "SKUA_Model.h"
+#include "Element.h"
 #include "VTK_Interface.h"
 
 using namespace std;
@@ -29,8 +30,16 @@ void SKUA_FiniteElementMeshInterface_Test::run()
     model.RegionsOut();
 
     // Testing
-    _test( TestNeighborConnectivity( model ) );
-
+    _test( model.Mesh().Elements() == 21116/4 );
+    _test( model.Mesh().Nodes() == 1262 );
+    
+//    _test( TestNeighborConnectivity( model ) );
+    const Region<3U>&  unit_A(model.Region("UNIT_A"));
+    _test( unit_A.Elements() == 1775 );
+    const Region<3U>&  unit_B(model.Region("UNIT_B"));
+    _test( unit_B.Elements() == 1743 );
+    const Region<3U>&  unit_C(model.Region("UNIT_C"));
+    _test( unit_C.Elements() == 1761 );
 
     // checking model boundary flagging
     boxFlagsToVariable( model, "node variable", "element variable" );
@@ -67,6 +76,8 @@ void SKUA_FiniteElementMeshInterface_Test::run()
 */
 bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& model, bool verbose )
  {
+    const csmp::Index eidx = model.Database().StorageKey("element number");
+    const csmp::Index nidx = model.Database().StorageKey("node number");
     const Region<3U>& domain(model.Region("Model"));
     // recording connectivity from SKUA in an element neighbor vector
     vector<vector<Element<3U>*> > pfverts;
@@ -79,8 +90,12 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
              nbors[i] = (*it)->Neighbor(i);
          pfverts.emplace_back( nbors );    
       }
+      
+   if ( verbose ) PrintOriginalNeighborIDs( model );
+      
     // recreating the connectivity in CSMP
     establishNeighborConnectivity( model.Region("Model").CellVector() );
+    if ( verbose ) PrintOriginalNeighborIDs( model );
     
     // comparing SKUA with CSMP connectivity
     size_t failed_comparisons(0U);
@@ -91,8 +106,8 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
            if ( (*it)->Neighbor(i) != (*pfit)[i] ) {
                 if ( verbose ) {
                      //(*it)->Out();
-                     cerr <<"\nelement neighbor "<< (*it)->Idx() <<":"<< i <<": ";
-                     cerr << (*it)->Neighbor(i)->Idx() <<" vs. "<< (*pfit)[i]->Idx() <<" ";
+                     cerr <<"\nelement neighbor "<< (*it)->Read(eidx) <<":"<< i <<": ";
+                     cerr << (*it)->Neighbor(i)->Idx() <<" vs. "<< (*pfit)[i]->Read(eidx) <<" ";
                   }
                 failed_comparisons++;
              }
@@ -104,5 +119,35 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     
  } // end TestNeighborConnectivity
  
+ 
+ 
+
+
+void SKUA_FiniteElementMeshInterface_Test::PrintOriginalNeighborIDs( const Model<3U>& model ) const
+ {
+    // if the element number is known so that the material IDs can be assigned correctly
+    if ( model.Database().IsDefined("element number") ) {
+         const csmp::Index eid_key = model.Database().StorageKey("element number");
+         // creating a mapping between current elements in region 'Model' and the VSet from the element number
+         const Region<3U>& domain = model.Region("Model");
+         vector<Element<3U>*> ordered_elmts(domain.Elements());
+         for ( vector<Element<3U>*>::const_iterator it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
+           ordered_elmts[ static_cast<size_t>((*it)->Read(eid_key)) ] = (*it);
+           
+         // reading the VSet material record
+         for ( vector<Element<3U>*>::const_iterator it=ordered_elmts.begin(); it!=ordered_elmts.end(); ++it ) {
+              cerr <<"\nelmt "<< (*it)->Read( eid_key ) <<": ";
+              // printing the neighbors of this element
+              for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+                if ( (*it)->Neighbor(i) != nullptr )
+                  cerr << (*it)->Neighbor(i)->Read( eid_key ) <<" ";
+                else 
+                  cerr << parseBoundary( (*it)->AtBoundary() ) <<" ";
+           }
+         cerr << endl;
+      }
+    
+  } // end PrintOriginalNeighborIDs
+
 
 } // end csmp

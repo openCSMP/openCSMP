@@ -332,6 +332,9 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     // 6. associating supplied subregions with regions (model subdomains)
     this->FormRegionsFrom( mesh_topology );	
 	
+    // 6b (requires model region) assigning material IDs (if any) to the elements of the model (not Faces or Interfaces which have no such IDs)
+    InputMaterialIdentifiersFrom( vset );
+
     if ( mesh_topology.BoxShapedModel() ) {
 		if (fully_irregular_mesh)
 			ErrorHandler::Instance().notice(WARNING, "Model<dim>::Initialize:",
@@ -546,6 +549,9 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
   // 6. associating supplied subregions with regions (model subdomains)
   this->FormRegionsFrom( mesh_topology );
 
+  // 6b (requires model region) assigning material IDs (if any) to the elements of the model (not Faces or Interfaces which have no such IDs)
+  InputMaterialIdentifiersFrom( vset );
+
   if ( mesh_topology.BoxShapedModel() ) {
     if ( fully_irregular_mesh )
       ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
@@ -752,6 +758,49 @@ template void Model<3U>::OutputVariableTo( const char*, FEM_Data<VectorVariable<
 template void Model<3U>::OutputVariableTo( const char*, FEM_Data<TensorVariable<3U> >& ) const;
 template void Model<3U>::OutputVariableTo( const char*, FEM_Data<ArrayVariable>& ) const;
 template void Model<3U>::OutputVariableTo( const char*, FEM_Data<FlaggedArrayVariable>& ) const;
+
+
+
+
+/**
+  Rock type identifiers or material IDs are brought over from the VSet if it contains such information 
+  and they are used to initialise the element 'material_ID_variable values accordingly.
+  
+  @attention with this method this is only possible if 'element number' is defined and correctly initialised.
+  
+  @author SKM 5/12/20.
+*/
+template<size_t dim>
+void Model<dim>::InputMaterialIdentifiersFrom( const VSet<dim>& vset )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    // if there are material data in the VSet
+    vector<int32>::const_iterator mit = vset.PmtrlBegin();
+    const vector<int32>::const_iterator mtrls_end = vset.PmtrlEnd();
+    if ( mit == mtrls_end ) 
+      csmp_error.notice( INFO, "Model<dim>::InputMaterialIdentifiersFrom:", "the VSet does not contain any material identifiers." );
+
+    // if the element number is known so that the material IDs can be assigned correctly
+    if ( Database().IsDefined("element number") ) {
+         const csmp::Index eid_key = Database().StorageKey("element number");
+         // creating a mapping between current elements in region 'Model' and the VSet from the element number
+         Region<dim>& domain = this->Region("Model");
+         vector<Element<dim>*> ordered_elmts(domain.Elements());
+         for ( typename vector<Element<dim>*>::const_iterator it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
+           ordered_elmts[ static_cast<size_t>((*it)->Read(eid_key)) ] = (*it);
+           
+         // reading the VSet material record
+         size_t elmt_counter(0U);
+         while ( mit != mtrls_end ) {
+              ordered_elmts[ elmt_counter++ ]->Material_ID( (*mit) );
+              mit++;
+           }
+      }
+    else
+    csmp_error.notice( INFO, "Model<dim>::InputMaterialIdentifiersFrom:", "'element number' needs to be defined to assign material IDs correctly." );
+  
+ } // InputMaterialIdentifiersFrom
 
 
 

@@ -89,6 +89,7 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
 
     // 0. reading the mesh from SKUA-CSMP-input files
     mesh_interface.Read_SKUA_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file );
+    // tested: OK - vset.Out();
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
