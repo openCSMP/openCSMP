@@ -5,6 +5,7 @@
 #include "ModelTopology.h"
 #include "VSet.h"
 #include "Model.h"
+#include "TextFileIO.h"
 
 using namespace std;
 
@@ -454,7 +455,7 @@ bool SKUA_FiniteElementMeshInterface::SkipPotentialComment( ifstream& ifs ) cons
     ifs.unget();
 
     if ( is_comment && csmp_error.Verbose() )
-        cout <<"\n\tSkipped comment: "<< comment << endl;
+        cout <<"\n\tSkipPotentialComment: Skipped comment: "<< comment << endl;
 
     return is_comment;
 
@@ -469,16 +470,22 @@ void SKUA_FiniteElementMeshInterface::AdvancePastCommentLine( ifstream& ifs ) co
  {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
-    char  text_line[256];
+    char  text_line[1024];
     do {
-          ifs.getline( text_line, 256 );
+          ifs.getline( text_line, 1024 );
        }
-    while ( (!IsCommentLine(text_line) && !ifs.eof()) );
+//    while ( !IsCommentLine(text_line) && !(string(text_line).find('\n')==string::npos || string(text_line).find('\n')==string::npos) );
+//    while ( !IsCommentLine(text_line) && text_line[0] != '\0' );
+    while ( !IsCommentLine(text_line) and isBlankLine(text_line) );
 
-    if( csmp_error.Verbose() )
-        cout <<"\n\tSkipped comment line: "<< text_line << endl;
+    if ( csmp_error.Verbose() ) {
+        if ( text_line[0] == '\n' or text_line[0] == '\r' )
+          cout <<"\n\tAdvancePastCommentLine: advanced past line break.\n";
+        else
+          cout <<"\n\tAdvancePastCommentLine: Skipped comment line: "<< text_line << endl;
+      }
 
- } // end SkipPotentialCommentLines
+ } // end AdvancePastCommentLine
 
 
 
@@ -1189,6 +1196,8 @@ A reference to the initialized ASCII input file stream.
 
 @return true when the record was read correctly and completely. 
 
+TODO: potentially, we could test variable names with the PropertyDatabase already here, to rectify issues 
+
 */
 template<size_t dim>
 bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, VSet<dim>& vset )
@@ -1211,7 +1220,12 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
       {
         // 1.1 reading variable name, placement and type
         string property_name, str;
+        // swallowing potential comments
         ifs >> property_name;
+        if ( property_name[0] == '#' ) {
+              getline( ifs, property_name );
+              ifs >> property_name;
+           }
         // replacing underscores with ' '
         for ( size_t i=0; i<property_name.size(); ++ i )
           if ( property_name[i] == '_' ) property_name[i] = ' ';
@@ -1256,12 +1270,12 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
              else if ( type == FLAGGEDARRAY ) records *= array_length;
              // raw insertions 
              for ( size_t i=0U; i<records; ++i ) {
-                 ifs >> integer;
-                 pdata.PushBack( intToVARIABLE_FLAG(integer) );
+                  ifs >> integer;
+                  pdata.PushBack( intToVARIABLE_FLAG(integer) );
                }
              for ( size_t i=0U; i<records; ++i ) {
-                 ifs >> value;
-                 pdata.PushBack( value );
+                  ifs >> value;
+                  pdata.PushBack( value );
                }
           }
         // more complex variable types
@@ -1271,14 +1285,14 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
              records *= dim;
              // raw insertions 
              for ( size_t i=0U; i<records; ++i ) {
-                 ifs >> integer;
-                 pdata.PushBack( intToVARIABLE_FLAG(integer) );
+                  ifs >> integer;
+                  pdata.PushBack( intToVARIABLE_FLAG(integer) );
                }
              // dim * dim values per tensor  
              records *= dim;
              for ( size_t i=0U; i<records; ++i ) {
-                 ifs >> value;
-                 pdata.PushBack( value );
+                  ifs >> value;
+                  pdata.PushBack( value );
                }
           }
         else if ( type == ARRAY )
