@@ -164,7 +164,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS_AnalyticallyIntegrated
    mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
    mesh_container.ReduceTo( old_and_new_elmtids );
 
-   Model<DIM> model( mesh_topology, mesh_container, "DirichletPressureBoxModel_VVCase-variables.txt", false, true, true );
+   Model<DIM> model( mesh_topology, mesh_container, "DirichletPressureBoxModel_VVCase-variables.txt", true, true );
 
    model.InputPropertyValue( "conductivity", makeScalar(PLAIN,1.0e-12) );
    model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.) );

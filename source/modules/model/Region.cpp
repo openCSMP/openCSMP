@@ -19,6 +19,7 @@
 #include "CopyReplaceVisitor.h"
 
 #include "UnionFind.h"
+#include "IndexToPointerMapping.h"
 
 #include "ErrorHandler.h"
 #include "CSMP_highLevelUtilities.h"
@@ -101,28 +102,24 @@ faces or interfaces.
 */
 template<size_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
-                     MeshManager<dim>& mesh, ///< not constant because region shall later be able to modify elements and nodes
+                     const MeshManager<dim>& mesh, ///< not constant because region shall later be able to modify elements and nodes
                      const SubDomainInfo& info )   ///< information on how to connect pointers to mesh stored in MeshManager 
   : ModelSubDomain<dim, Element>( info.name, pref )
 {
-  // traversal of the existing mesh nodes to find all its elements
-  deque<csmp::Node<dim>*>		  nodes;
-  deque<csmp::Element<dim>*>	elmts;
-  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
-  sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-  sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
   // building the element vector
   // ---------------------------
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+  if ( this->elmt_vec_.capacity() > mesh.Elements() )
+    throw csmp::Exception( ERROR, "Region(custom constructor)",
+                          "attempt to contruct region with more elements than are contained in MeshManager");
 
   // pushing back the pointers to the interior elements
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( elmts[i] );
+    this->elmt_vec_.push_back( mesh.E(i) );
 
   // assigning pointers to the perimeter elements
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( elmts[i] );
+    this->elmt_vec_.push_back( mesh.E(i) );
 
   // building the node vector
   // ------------------------
@@ -131,11 +128,11 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior nodes
   for ( size_t i : info.interior_nodes )
-    this->node_vec_.push_back( nodes[i] );
+    this->node_vec_.push_back( mesh.N(i) );
 
   // assigning pointers to the perimeter nodes
   for ( size_t i : info.perimeter_nodes )
-    this->node_vec_.push_back( nodes[i] );
+    this->node_vec_.push_back( mesh.N(i) );
 
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
@@ -460,27 +457,24 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   }
 
   // 4. writing nodal boundary flags
-  unordered_map<size_t, long64>  bflags;
-
-  for ( size_t i = this->first_bd_node_; i<this->node_vec_.size(); i++ )
-    bflags.insert( make_pair( i, this->node_vec_[i]->AtBoundary() ) );
+  vector<std::int8_t>  bflags( this->PerimeterNodes(), IRREGULAR_OUTSIDE );
+  for ( size_t i=this->first_bd_node_; i<this->node_vec_.size(); i++ )
+    bflags[i] = this->node_vec_[i]->AtBoundary();
 
   vset.AddBFlags( bflags.begin(), bflags.end() );
   bflags.erase( bflags.begin(), bflags.end() );
 
-
   // 5. output of material properties
   if ( !with_properties ) {
-    cout << "\n\nRegion<" << dim << ">::OutputTo: ";
-    cout << "region successfully output to VSet." << endl;
-    return;
-  }
+      cout << "\n\nRegion<" << dim << ">::OutputTo: ";
+      cout << "region successfully output to VSet." << endl;
+      return;
+    }
   else
-  {
-    OutputDataTo( vset );
-    OutputFvDataTo( vset );
-  }
-
+    {
+      OutputDataTo( vset );
+      OutputFvDataTo( vset );
+    }
   cout << "\n\nRegion<" << dim << ">::OutputTo: ";
   cout << "region successfully output to VSet." << endl;
 
@@ -746,7 +740,7 @@ the outer template provides double64 = data type and dim = dimension,
 and Var the data type of the property
 (ScalarVariable, VectorVariable, or TensorVariable).
 
-@return The FEM_Data container with the data that corresponds to the given property.
+@note The result is returned into FEM_Data container with the data that corresponds to the given property.
 
 @section implementation Implementation
 
@@ -1009,26 +1003,6 @@ template void Region<3>::InputVariableFrom<TensorVariable<3U> >( const char*, co
 // -------------------------------------------------------------------
 
 
-template<size_t dim>
-void Region<dim>::CreateNodePointerVector()
-{
-  assert( !this->elmt_vec_.empty() );
-
-  if ( !this->node_vec_.empty() )
-    this->node_vec_.clear();
-
-  // creating the node index vector
-  set<csmp::Node<dim>*>  nodes_set;
-  for ( typename vector<Element<dim>*>::const_iterator it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-    for ( typename vector<Node<dim>*>::size_type i = 0U; i<(*it)->Nodes(); i++ )
-      nodes_set.insert( (*it)->N( i ) );
-
-  this->node_vec_.assign( nodes_set.begin(), nodes_set.end() );
-}
-
-
-
-
 
 /*
 In order to use the region node/element flags 'INTERIOR' or 'PERIMETER',
@@ -1191,9 +1165,14 @@ return ldim_bdry_elmts.size();
 
 
 /**
+
+ANDREW BROMAGE
+
 SKM trying to make sense of Andrew Bromage's undocumented code:
 12/08/18
+
 */
+/*
 template<size_t dim>
 size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
                                           bool reestablishNeighborConnectivity )
@@ -1272,7 +1251,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
   }
 
   // 5. (re)connecting elements up to their neighbors
-  //    TODO: this is a very time-consuming step; is there a speed-up?
+
   if ( reestablishNeighborConnectivity )
     this->EstablishNeighborConnectivity();
 
@@ -1281,119 +1260,39 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 
   return this->elmt_vec_.size();
 } // end FromLargestComponent
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
-Visit all elements without relying on their storage in a container.
-The Idx numbering of elements and nodes is not altered by this method.
-
-@return number of elements that were discovered.
-
-@attention, this method always gets called when a region is first formed.
-
-@attention nodes must have been assigned their parent elements for this method to work.
-
-@author SKM 9/20/2008, CSMP Castasegna workshop, Switzerland.
 */
-template<size_t dim>
-size_t Region<dim>::AccumulateAll( csmp::Node<dim>* root_node,
-                                   bool reestablishNeighborConnectivity )
-{
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( root_node == NULL )
-    csmp_error.notice( FATAL_ERROR, "Region<dim>::AccumulateAll:", "Root node pointer is dangling!" );
 
-  if ( root_node->Parent( 0 ) == NULL )
-    csmp_error.notice( FATAL_ERROR, "Region<dim>::AccumulateAll:",
-                       "Root node must have been assigned parent elements; else this method cannot operate." );
 
-  if ( !this->elmt_vec_.empty() )
-    csmp_error.notice( WARNING, "Region<dim>::AccumulateAll:",
-                       "Region is not empty; deleting all content." );
-  this->elmt_vec_.clear();
 
-  // 1. traversal of the existing mesh nodes to find all its elements
-  set<csmp::Element<dim>*> explored_elements;
-  set<csmp::Node<dim>*>    discovered_nodes;
-  deque<csmp::Node<dim>*>  current_nodes;
-  // starting at the root element
-  discovered_nodes.insert( root_node );
-  current_nodes.push_back( root_node );
 
-  // MESH TRAVERSAL
-  while ( !current_nodes.empty() ) {
-    const csmp::Node<dim>*  n_ptr( *current_nodes.begin() );
-    // for all parent elements of the current node
-    for ( size_t i = 0U; i<n_ptr->Parents(); i++ ) {
-      // for all the nodes of each parent element
-      for ( size_t j = 0U; j<n_ptr->Parent( i )->Nodes(); j++ )
-        // if this node is not the one from which we started
-        if ( j != n_ptr->ParentNodeNumber( i ) ) {
-          pair<typename set<csmp::Node<dim>*>::iterator, bool>
-            new_node = discovered_nodes.insert( n_ptr->Parent( i )->N( j ) );
-          if ( new_node.second ) current_nodes.push_back( n_ptr->Parent( i )->N( j ) );
-        }
-      // storing the explored element
-      explored_elements.insert( n_ptr->Parent( i ) );
-    }
-    // removing the node from the discovered (but not yet explored) deque
-    current_nodes.pop_front();
-  }
 
-  // 2. assigning and trimming excess storage from the element pointer vector
-  this->elmt_vec_.assign( explored_elements.begin(), explored_elements.end() );
-  vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
-  // 3. creating pointers to the nodes of the identified elements
-  set<csmp::Node<dim>*>  node_set;
-  for ( typename vector<csmp::Element<dim>*>::const_iterator
-        it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-    for ( typename vector<csmp::Node<dim>*>::const_iterator
-          nit = (*it)->NodesBegin(); nit != (*it)->NodesEnd(); nit++ )
-      node_set.insert( (*nit) );
 
-  this->node_vec_.assign( node_set.begin(), node_set.end() );
 
-  // 4. (re)connecting elements up to their neighbors
-  //    TODO: this is a very time-consuming step; is there a speed-up?
-  if ( reestablishNeighborConnectivity )
-    this->EstablishNeighborConnectivity();
 
-  // 5. identifying the boundaries
-  this->IdentifyPerimeter();
 
-  return this->elmt_vec_.size();
 
-} // end AccumulateAll
 
 
 
 /**
      AcculumateAll - but for all potentially disconnected Element patches that make up the model domain.
+     
+     @attention assumes that 'indexToPointerMapping' is unique and non empty.
 */
 template<size_t dim>
-size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh, bool reestablishNeighborConnectivity )
+size_t Region<dim>::AccumulateAll( const MeshManager<dim>& mapping, bool reestablishNeighborConnectivity )
  {
-//   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
-   deque<Node<dim>*>           nodes;
-   deque<csmp::Element<dim>*>  elmts;
-   exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
+   if ( mapping.Elements() == 0 ) {
+        csmp_error.notice( ERROR, "Region<dim>::AccumulateAll:", "supplied index-to-pointer mapping is empty.");
+        return 0U;
+     }
    
-   this->elmt_vec_.assign( elmts.begin(), elmts.end() );
-   this->node_vec_.assign( nodes.begin(), nodes.end() );
+   this->elmt_vec_.assign( mapping.ElementsBegin(), mapping.ElementsEnd() );
+   this->node_vec_.assign( mapping.NodesBegin(), mapping.NodesEnd() );
 
    if ( reestablishNeighborConnectivity )
     this->EstablishNeighborConnectivity();
@@ -1409,65 +1308,51 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh, bool reestablishNeigh
 
 
 /**
-Accumulates range of elements supplied.
+    Accumulates range of elements supplied as a deque.
 */
-
 template<size_t dim>
-void  Region<dim>::Accumulate( typename deque<csmp::Element<dim> >::iterator start,
-                               typename deque<csmp::Element<dim> >::iterator end )
+size_t  Region<dim>::Accumulate( typename deque<csmp::Element<dim>*>::iterator start,
+                                 typename deque<csmp::Element<dim>*>::iterator end )
 {
   if ( start == end )
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (deque)",
                            "supplied element range is empty. Nothing is done." );
 
-  this->elmt_vec_.clear();
-  this->elmt_vec_.reserve( static_cast<size_t>(distance( start, end )) );
+  this->elmt_vec_.assign( start, end );
 
-  set<csmp::Node<dim>*>  node_set;
-  for ( typename deque<csmp::Element<dim> >::iterator
-        it = start; it != end; it++ )
-  {
-    this->elmt_vec_.push_back( &(*it) );
-    for ( typename vector<csmp::Node<dim>*>::const_iterator
-          nit = (*it).NodesBegin(); nit != (*it).NodesEnd(); nit++ )
-      node_set.insert( (*nit) );
-  }
-
-  vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
-
-  this->node_vec_.assign( node_set.begin(), node_set.end() );
-
+  // uses vector in creation
+  this->CreateNodePointerVector2();
+  
   this->IdentifyPerimeter();
+  
+  return this->elmt_vec_.size();
 
 } // end Accumulate (deque)
 
 
+
+
+/**
+    Accumulates range of elements supplied as a vector. Assumes that there are no duplicate Element pointers in vector.
+    
+        @attention uses vector rather than set to create nodes vector.
+*/
 template<size_t dim>
-void  Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iterator start,
-                               typename vector<csmp::Element<dim>*>::const_iterator end )
+size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iterator start,
+                                typename vector<csmp::Element<dim>*>::const_iterator end )
 {
   if ( start == end )
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (vector)",
                            "supplied element range is empty. Nothing is done." );
 
-  this->elmt_vec_.clear();
-  this->elmt_vec_.reserve( static_cast<size_t>(distance( start, end )) );
-
-  // making sure that there a no duplicate element pointers
-  unique_copy( start, end, back_inserter( this->elmt_vec_ ) );
-
-  vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
-
-  set<csmp::Node<dim>*>  node_set;
-
-  for ( typename vector<csmp::Element<dim>*>::const_iterator
-        it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-    for ( typename vector<csmp::Node<dim>*>::const_iterator
-          nit = (*it)->NodesBegin(); nit != (*it)->NodesEnd(); nit++ )
-      node_set.insert( (*nit) );
-
-  this->node_vec_.assign( node_set.begin(), node_set.end() );
+  this->elmt_vec_.assign( start, end );
+  
+  // uses vector in creation
+  this->CreateNodePointerVector2();
+  
   this->IdentifyPerimeter();
+
+  return this->elmt_vec_.size();
 
 } // end Accumulate (vector)
 
@@ -1475,51 +1360,43 @@ void  Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_itera
 
 
 template<size_t dim>
-void  Region<dim>::Accumulate( typename set<csmp::Element<dim>*>::const_iterator start,
-                               typename set<csmp::Element<dim>*>::const_iterator end )
+size_t Region<dim>::Accumulate( typename set<csmp::Element<dim>*>::const_iterator start,
+                                typename set<csmp::Element<dim>*>::const_iterator end )
 {
   if ( start == end )
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (set)",
                            "supplied element range is empty. Nothing is done." );
-  this->elmt_vec_.clear();
-  this->elmt_vec_.reserve( static_cast<size_t>(distance( start, end )) );
 
-  while ( start != end ) {
-    this->elmt_vec_.push_back( *start );
-    start++;
-  }
-
-  vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+  this->elmt_vec_.assign( start, end );
 
   set<csmp::Node<dim>*>  node_set;
 
-  for ( typename vector<csmp::Element<dim>*>::const_iterator
-        it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-    for ( typename vector<csmp::Node<dim>*>::const_iterator
-          nit = (*it)->NodesBegin(); nit != (*it)->NodesEnd(); nit++ )
-      node_set.insert( (*nit) );
+    // uses vector in creation using set
+  this->CreateNodePointerVector1();
 
-  this->node_vec_.assign( node_set.begin(), node_set.end() );
   this->IdentifyPerimeter();
+
+  return this->elmt_vec_.size();
 
 } // end Accumulate (set)
 
 
 
+
+
+
+
 /**
 All those elements for which all property constraints are met are accumulated
-into this region.
+into this region. Returns the number of elements found.
 
-Use this also to modify an existing group.
+@attention assumes that the iterator range is unique.
 
-@code
-mesh<Element<dim>*>::iterator
-@endcode
 */
 template<size_t dim>
-void Region<dim>::AccumulateWithinRange( typename vector<csmp::Element<dim>*>::const_iterator start,
-                                         typename vector<csmp::Element<dim>*>::const_iterator end,
-                                         const PropertyConstraints& constraints )
+size_t Region<dim>::AccumulateWithinRange( typename vector<csmp::Element<dim>*>::const_iterator start,
+                                           typename vector<csmp::Element<dim>*>::const_iterator end,
+                                           const PropertyConstraints& constraints )
 {
   if ( start == end )
     throw csmp::Exception( ERROR, "Region<dim>::AccumulateWithinRange",
@@ -1535,31 +1412,36 @@ void Region<dim>::AccumulateWithinRange( typename vector<csmp::Element<dim>*>::c
     csmp_error.notice( WARNING, "Region<dim>::AccumulateWithinRange",
                        "Region<dim> already contains elements, they will be deleted" );
 
-  if ( !this->elmt_vec_.empty() ) this->elmt_vec_.clear();
-  if ( !this->node_vec_.empty() ) this->node_vec_.clear();
   if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
 
-  set<csmp::Element<dim>*>  element_set;
-  set<csmp::Node<dim>*>     node_set;
-
+  if ( !this->elmt_vec_.empty() ) this->elmt_vec_.clear();
+  this->elmt_vec_.reserve( distance(start,end) );
+  
+  set<Node<dim>*> node_set;
+  
   while ( start != end ) {
     if ( constraints.CheckConstraints( *(*start) ) )
-    {
-      element_set.insert( (*start) );
-      for ( size_t i = 0U; i<(*start)->Nodes(); i++ )
-        node_set.insert( (*start)->N( i ) );
-    }
+      {
+        this->elmt_vec_.push_back( (*start) );
+        for ( size_t i = 0U; i<(*start)->Nodes(); i++ )
+          node_set.insert( (*start)->N( i ) );
+      }
     start++;
   }
 
-  if ( !element_set.empty() )
-  {
-    this->node_vec_.assign( node_set.begin(), node_set.end() );
-    this->elmt_vec_.assign( element_set.begin(), element_set.end() );
-    this->IdentifyPerimeter();
-  }
+  if ( !this->elmt_vec_.empty() )
+    {
+       this->node_vec_.assign( node_set.begin(), node_set.end() );
+       this->IdentifyPerimeter();
+    }
+  else
+    csmp_error.notice( ERROR, "Region<dim>::AccumulateWithinRange", "no elements in the desired property range were found.");
+  
+  return this->elmt_vec_.size();
 
 } // end AccumulateWithinRange(PropertyConstraints)
+
+
 
 
 /**
@@ -1571,18 +1453,19 @@ upper bound of it.
 nodes must have a value inside of the target range.
 */
 template<size_t dim>
-void Region<dim>::AccumulateWithinRange( typename vector<Element<dim>*>::const_iterator start,
-                                         typename vector<Element<dim>*>::const_iterator end,
-                                         const char* feature, double64 min, double64 max )
+size_t Region<dim>::AccumulateWithinRange( typename vector<Element<dim>*>::const_iterator start,
+                                           typename vector<Element<dim>*>::const_iterator end,
+                                           const char* feature, double64 min, double64 max )
 {
   if ( start == end )
     throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
                      "supplied element range is empty. Nothing is done." );
 
+// TODO: no need to use set, use sort() then unique() on the result vector
   set<Element<dim>*>  element_set;
   set<Node<dim>*>     node_set;
-  Index                     prop_key = this->pref_.StorageKey( feature );
-  bool                      applies;
+  const Index         prop_key = this->pref_.StorageKey( feature );
+  bool                applies;
 
   switch ( prop_key.place )
   {
@@ -1647,84 +1530,38 @@ void Region<dim>::AccumulateWithinRange( typename vector<Element<dim>*>::const_i
     this->IdentifyPerimeter();
   }
 
+  return this->elmt_vec_.size();
+
 } // end AccumulateWithinRange
 
 
 
 
 
-template<size_t dim>
-void Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const PropertyConstraints& constraints )
-{
-  if ( mesh.Elements() < 1U )
-    throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
-                     "supplied element range is empty. Nothing is done." );
-
-  if ( constraints.Constraints() == 0U )
-    throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
-                     "No property constraints are supplied" );
-
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  if ( !this->elmt_vec_.empty() )
-    csmp_error.notice( WARNING, "Region<dim>::AccumulateWithinRange",
-                       "Region<dim> already contains elements, they will be deleted" );
-
-  if ( !this->elmt_vec_.empty() ) this->elmt_vec_.clear();
-  if ( !this->node_vec_.empty() ) this->node_vec_.clear();
-  if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
-
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<csmp::Node<dim>*>	   nodes;
-  deque<csmp::Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
-  sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  set<Element<dim>*>  element_set;
-  set<Node<dim>*>     node_set;
-
-  for ( auto start : elmts ) {
-    if ( constraints.CheckConstraints( *start ) )
-    {
-      element_set.insert( start );
-      for ( size_t i = 0U; i<start->Nodes(); i++ )
-        node_set.insert( start->N( i ) );
-    }
-  }
-
-  if ( !element_set.empty() )
-  {
-    this->node_vec_.assign( node_set.begin(), node_set.end() );
-    this->elmt_vec_.assign( element_set.begin(), element_set.end() );
-    this->IdentifyPerimeter();
-  }
-
-} // end AccumulateWithinRange(PropertyConstraints)
-
-
 
 template<size_t dim>
-void Region<dim>::AccumulateRectangularRegion( typename vector<Element<dim>*>::const_iterator start,
-                                               typename vector<Element<dim>*>::const_iterator end,
-                                               const Point<dim>& xyz_min,
-                                               const Point<dim>& xyz_max )
+size_t Region<dim>::AccumulateRectangularRegion( typename vector<Element<dim>*>::const_iterator start,
+                                                 typename vector<Element<dim>*>::const_iterator end,
+                                                 const Point<dim>& xyz_min,
+                                                 const Point<dim>& xyz_max )
 {
   if ( start == end )
     throw Exception( ERROR, "Region<dim>::AccumulateRectangularRegion",
                      "supplied element range is empty. Nothing is done." );
 
   size_t                    check;
+// TODO: no need to use set, use sort() then unique() on the result vector
   set<Element<dim>*>  element_set;
   set<Node<dim>*>     node_set;
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( !this->elmt_vec_.empty() ) {
-    csmp_error.notice( WARNING, "Region<dim>::AccumulateRectangularRegion",
-                       "Region already contains elements" );
-    this->elmt_vec_.clear();
-    this->node_vec_.clear();
-  }
+      csmp_error.notice( WARNING, "Region<dim>::AccumulateRectangularRegion",
+                         "Region already contains elements" );
+      this->elmt_vec_.clear();
+      this->node_vec_.clear();
+    }
 
   while ( start != end ) {
     check = 0U;
@@ -1749,139 +1586,12 @@ void Region<dim>::AccumulateRectangularRegion( typename vector<Element<dim>*>::c
     this->elmt_vec_.assign( element_set.begin(), element_set.end() );
     this->IdentifyPerimeter();
   }
+  
+  return this->elmt_vec_.size();
 
 } // end AccumulateRectangularRegion
 
-template<size_t dim>
-void Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max )
-{
-  if ( mesh.Elements() < 1U )
-    throw Exception( ERROR, "Region<dim>::AccumulateRectangularRegion",
-                     "supplied element range is empty. Nothing is done." );
 
-  size_t                    check;
-  set<Element<dim>*>  element_set;
-  set<Node<dim>*>     node_set;
-
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  if ( !this->elmt_vec_.empty() ) {
-    csmp_error.notice( WARNING, "Region<dim>::AccumulateRectangularRegion",
-                       "Region already contains elements" );
-    this->elmt_vec_.clear();
-    this->node_vec_.clear();
-  }
-
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<csmp::Node<dim>*>	   nodes;
-  deque<csmp::Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
-  sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  for ( auto e : elmts ) {
-    check = 0U;
-    // all nodes have to be inside for the element selection criterion to be fulfilled
-    for ( size_t j = 0U; j<e->Nodes(); j++ ) {
-      Point<dim>  p = e->N( j )->Coordinate();
-      if ( p.IsBetween( xyz_min, xyz_max ) ) check++;
-    }
-    // if all nodes are inside the rectangular region
-    // the element becomes part of the new group
-    if ( check == e->Nodes() ) {
-      element_set.insert( e );
-      for ( size_t i = 0U; i < e->Nodes(); i++ ) {
-        node_set.insert( e->N( i ) );
-      }
-    }
-  }
-
-  if ( !element_set.empty() ) {
-    this->node_vec_.assign( node_set.begin(), node_set.end() );
-    this->elmt_vec_.assign( element_set.begin(), element_set.end() );
-    this->IdentifyPerimeter();
-  }
-
-} // end AccumulateRectangularRegion
-
-template<size_t dim>
-void Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* feature, double64 min, double64 max )
-{
-  if ( mesh.Elements() < 1U )
-    throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
-                     "supplied element range is empty. Nothing is done." );
-
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<csmp::Node<dim>*>	   nodes;
-  deque<csmp::Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
-  sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  set<Element<dim>*>  element_set;
-  set<Node<dim>*>     node_set;
-  Index                     prop_key = this->pref_.StorageKey( feature );
-  bool                      applies;
-
-  switch ( prop_key.place )
-  {
-    case NODE:
-      for ( auto e : elmts ) {
-        applies = false;
-        for ( size_t j = 0U; j<e->Nodes(); j++ )
-          if ( e->N( j )->IsWithinRange( prop_key, min, max ) ) {
-            applies = true;
-            break;
-          }
-
-        if ( applies == true ) {
-          element_set.insert( e );
-          for ( size_t i = 0U; i<e->Nodes(); i++ ) {
-            assert( e->N( i ) != nullptr );
-            node_set.insert( e->N( i ) );
-          }
-        }
-      }
-      break;
-    case ELEMENT_INTEGRATION_POINT:
-      for ( auto e : elmts ) {
-        applies = false;
-        for ( size_t j = 0U; j<e->IntegrationPoints(); j++ )
-          if ( e->IsWithinRange( j, prop_key, min, max ) ) {
-            applies = true;
-            break;
-          }
-
-        if ( applies == true ) {
-          element_set.insert( e );
-          for ( size_t i = 0U; i<e->Nodes(); i++ ) {
-            assert( e->N( i ) != nullptr );
-            node_set.insert( e->N( i ) );
-          }
-        }
-      }
-      break;
-    case ELEMENT:
-      for ( auto e : elmts ) {
-        if ( e->IsWithinRange( prop_key, min, max ) ) {
-          element_set.insert( e );
-          for ( size_t i = 0U; i<e->Nodes(); i++ ) {
-            assert( e->N( i ) != nullptr );
-            node_set.insert( e->N( i ) );
-          }
-        }
-      }
-      break;
-    default:
-      throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
-                       feature, "placement could not be identified; REGION is not an option" );
-  } // end switch
-
-  if ( !element_set.empty() ) {
-    this->node_vec_.assign( node_set.begin(), node_set.end() );
-    this->elmt_vec_.assign( element_set.begin(), element_set.end() );
-    this->IdentifyPerimeter();
-  }
-
-} // end AccumulateWithinRange
 
 
 /**
@@ -1909,9 +1619,9 @@ Method will detect if the supplied vector<double64> is empty or if a group by
 that name already exists.
 */
 template<size_t dim>
-void  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_iterator start,
-                                       typename vector<Element<dim>*>::const_iterator end,
-                                       vector<size_t>& element_ids )
+size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_iterator start,
+                                         typename vector<Element<dim>*>::const_iterator end,
+                                         vector<size_t>& element_ids )
 {
   if ( start == end )
     throw Exception( ERROR, "Region<dim>::AccumulateByNumber",
@@ -1946,7 +1656,7 @@ void  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_ite
   // selecting elements and nodes from the selected ID range
   while ( start != end )
   {
-    assert( *start != NULL );
+    assert( *start != nullptr );
     if ( binary_search( element_ids.begin(), element_ids.end(), (*start)->Idx() ) ) {
       // add element with the correct id to the region
       this->elmt_vec_.push_back( (*start) );
@@ -1957,21 +1667,33 @@ void  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_ite
     start++;
   }
 
-  // TODO: use emplace here?
   this->node_vec_.assign( node_set.begin(), node_set.end() );
   assert( !this->node_vec_.empty() );
 
   this->IdentifyPerimeter();
+  
+  return this->elmt_vec_.size();
 
 } // end AccumulateByNumber
 
 
 
 
+
+
+
+
+
+/**
+       @author SKM revised 22/5/2021
+*/
 template<size_t dim>
-void  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh, std::vector<size_t>& element_ids )
+size_t  Region<dim>::AccumulateByNumber( const MeshManager<dim>& mesh,
+                                         vector<size_t>& element_ids )
 {
-  if ( mesh.Elements() < 1U )
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( mesh.Elements() == 0 )
     throw Exception( ERROR, "Region<dim>::AccumulateByNumber",
                      "user-supplied iterator range is empty. Nothing is done." );
 
@@ -1979,52 +1701,157 @@ void  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh, std::vector<size_
     throw Exception( ERROR, "Region<dim>::AccumulateByNumber",
                      "user-supplied element-number vector is empty. Nothing is done." );
 
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  if ( !this->elmt_vec_.empty() ) {
-    csmp_error.notice( WARNING, "Region<dim>::AccumulateByNumber",
-                       "Region is not empty", "erasing all members..." );
-    this->elmt_vec_.clear();
-  }
-
-  sort( element_ids.begin(), element_ids.end() );
-
-  // if in debug mode, tests whether there are consecutive duplicated elements
-  vector<size_t>::iterator  new_end( unique( element_ids.begin(), element_ids.end() ) );
-  if ( new_end != element_ids.end() )
-    element_ids.erase( new_end, element_ids.end() );
-
   if ( element_ids.size() > mesh.Elements() )
     csmp_error.notice( ERROR, "Region<dim>::AccumulateByNumber",
-                       "user-supplied element-number vector is larger than iterator range." );
+                       "user-supplied element-number vector is larger than range of index-to-element-pointer mapping." );
 
-  this->elmt_vec_.reserve( element_ids.size() );
-  set<Node<dim>*>  node_set;
-
-  // selecting elements and nodes from the selected ID range
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<csmp::Node<dim>*>	   nodes;
-  deque<csmp::Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
-  sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  for ( auto e : elmts ) {
-    assert( e != NULL );
-    if ( binary_search( element_ids.begin(), element_ids.end(), e->Idx() ) ) {
-      // add element with the correct id to the region
-      this->elmt_vec_.push_back( e );
-      // add its nodes as well
-      for ( size_t i = 0U; i<e->Nodes(); i++ )
-        node_set.insert( e->N( i ) );
+  if ( !this->elmt_vec_.empty() ) {
+      csmp_error.notice( WARNING, "Region<dim>::AccumulateByNumber",
+                         "Region is not empty", "erasing all members..." );
+      this->elmt_vec_.clear();
     }
-  }
 
-  this->node_vec_.assign( node_set.begin(), node_set.end() );
-  assert( !this->node_vec_.empty() );
+  // eliminating potential duplicates from element index vector
+  sort( element_ids.begin(), element_ids.end() );
+  element_ids.erase( unique( element_ids.begin(), element_ids.end() ), element_ids.begin() );
+
+  // creating the element vector for the region
+  this->elmt_vec_.reserve( element_ids.size() );
+  for ( vector<size_t>::const_iterator it=element_ids.begin(); it!=element_ids.end(); ++it )
+    this->elmt_vec_.push_back( mesh.E( (*it) ) );
+    
+  // creating node vector
+  if ( this->node_vec_.empty() ) this->node_vec_.clear();
+  this->node_vec_.reserve( element_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
+  // filling the vector
+  for ( typename vector<Element<dim>*>::const_iterator
+        it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); ++it ) {
+       assert( (*it) != nullptr );
+       for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
+            assert( (*it)->N(i) != nullptr );
+            this->node_vec_.push_back( (*it)->N(i) );
+         }
+     }
+
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
 
   this->IdentifyPerimeter();
+  
+  return this->elmt_vec_.size();
 
 } // end AccumulateByNumber
+
+
+
+
+/**
+    Removes target elements from Region, rebuilding it afterwards.
+    Reporting the number of removed elements.
+    
+    @attention the elements are not deleted, but pointers to them are returned into the second argument.
+*/
+template<size_t dim>
+size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<dim>*>& ptrs_to_removed_elements )
+  {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( !ptrs_to_removed_elements.empty() )
+      ptrs_to_removed_elements.clear();
+
+    if ( element_ids.empty() ) {
+         csmp_error.notice( WARNING, "Region<dim>::RemoveByNumber",  "user-supplied element-number vector is empty. Nothing was done." );
+         return 0U;
+      }
+
+    if ( this->elmt_vec_.empty() ) {
+         csmp_error.notice( WARNING, "Region<dim>::RemoveByNumber",  "Region is empty. Nothing was done." );
+         return 0U;
+      }
+
+    // making the element ID vector unique and searchable
+    sort( element_ids.begin(), element_ids.end() );
+    element_ids.erase( unique( element_ids.begin(), element_ids.end() ), element_ids.end() );
+    
+    // getting the elements for removal
+    for ( typename vector<Element<dim>*>::const_iterator it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )
+      if ( binary_search( element_ids.begin(), element_ids.end(), (*it)->Idx() ) )
+        ptrs_to_removed_elements.push_back( (*it) );
+     
+    // finding the difference between the removal and the current element vector
+    sort( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+    vector<Element<dim>*> elmts_to_retain;
+    set_difference( this->elmt_vec_.begin(), this->elmt_vec_.end(),
+                    ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end(),
+                    inserter(elmts_to_retain, elmts_to_retain.begin()));
+     
+    // rebuilding the region
+    this->elmt_vec_.assign( elmts_to_retain.begin(), elmts_to_retain.end() );
+    elmts_to_retain.clear();
+
+    this->CreateNodePointerVector2();
+
+    this->IdentifyPerimeter();
+    
+    return ptrs_to_removed_elements.size();
+
+ } // end RemoveByNumber
+
+
+
+
+
+
+  /// removes those elements in the region whose pointer matches the ones in the range supplied
+template<size_t dim>
+size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>*>::iterator begin,
+                                 typename vector<csmp::Element<dim>*>::iterator end )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( begin == end  ) {
+         csmp_error.notice( WARNING, "Region<dim>::RemoveRange",  "user-supplied element-pointer vector is empty. Nothing was done." );
+         return 0U;
+      }
+
+    if ( this->elmt_vec_.empty() ) {
+         csmp_error.notice( WARNING, "Region<dim>::RemoveRange",  "Region is empty. Nothing was done." );
+         return 0U;
+      }
+
+    // making the element pointer vector searchable
+    sort( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+    
+    // getting the elements for removal (they will already be in a sorted sequence)
+    const size_t elements = this->Elements();
+    vector<Element<dim>*>  ptrs_to_removed_elements;
+    ptrs_to_removed_elements.reserve( distance(begin,end) );
+    while ( begin != end ) {
+         if ( binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), (*begin) ) )
+           ptrs_to_removed_elements.push_back( (*begin) );
+         begin++;
+      }
+      
+    // finding the difference between the removal and the current element vector
+    vector<Element<dim>*> elmts_to_retain;
+    set_difference( this->elmt_vec_.begin(), this->elmt_vec_.end(),
+                    ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end(),
+                    inserter(elmts_to_retain, elmts_to_retain.begin()));
+     
+    // rebuilding the region
+    this->elmt_vec_.assign( elmts_to_retain.begin(), elmts_to_retain.end() );
+    elmts_to_retain.clear();
+
+    this->CreateNodePointerVector2();
+
+    this->IdentifyPerimeter();
+      
+    return elements - this->elmt_vec_.size();
+ 
+  } // end RemoveRange
+
+
 
 
 
@@ -2049,10 +1876,10 @@ void  Region<dim>::Add( const Region<dim>&  grp )
     elmt_set.insert( *it );
 
   this->elmt_vec_.assign( elmt_set.begin(), elmt_set.end() );
-
   vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
-  this->CreateNodePointerVector();
+  this->CreateNodePointerVector2();
+  
   this->IdentifyPerimeter();
 
 } // end Add
@@ -2113,8 +1940,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
           femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
 
           // getting the mesh manager to construct a new element
-          Element<dim> new_elmt( femPtr, NULL, lvsElements, lvsIntegrationPoints );
-          Element<dim>* elmtObj = meshManager.AddIfUnique( new_elmt );
+          Element<dim>* elmtObj = meshManager.AddElement( femPtr, nullptr, lvsElements, lvsIntegrationPoints );
 
           // the new face is connected to the elements it is sandwiched between
           // this assignment also includes connecting the element to its nodes
@@ -2127,7 +1953,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
             elmtObj->Assign( nid, ePtr->N( face_node_ids[nid] ) );
 
           // added to boundary
-          this->elmt_vec_.emplace_back( elmtObj );
+          this->elmt_vec_.push_back( elmtObj );
 
         } // neighboring elements
 
@@ -2138,7 +1964,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
     // free
   vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
-  this->CreateNodePointerVector();
+  this->CreateNodePointerVector2();
   establishNeighborConnectivity( this->elmt_vec_ );
   this->IdentifyPerimeter();
   this->UpdateMemberIndexes();
@@ -2176,15 +2002,13 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
 
   merge( a.ElementsBegin(), a.PerimeterElementsBegin(),
          b.ElementsBegin(), b.PerimeterElementsBegin(),
-         back_inserter( res.ElementVector() ) );
+         back_inserter( res.CellVector() ) );
 
   merge( a.PerimeterElementsBegin(), a.ElementsEnd(),
          b.PerimeterElementsBegin(), b.ElementsEnd(),
-         back_inserter( res.ElementVector() ) );
+         back_inserter( res.CellVector() ) );
 
-  vector<csmp::Element<dim>*>( res.ElementVector() ).swap( res.ElementVector() );
-
-  res.CreateNodePointerVector();
+  res.CreateNodePointerVector2();
   res.IdentifyPerimeter();
 
   return res.Elements();
@@ -2218,11 +2042,10 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
   // see chapter 16, Nelson STL Programmer's guide, p. 559
   set_intersection( tmp_elmt_vec1.begin(), tmp_elmt_vec1.end(),
                     tmp_elmt_vec2.begin(), tmp_elmt_vec2.end(),
-                    back_inserter( res.ElementVector() ) );
+                    back_inserter( res.CellVector() ) );
 
   if ( !res.Empty() ) {
-    vector<csmp::Element<dim>*>( res.ElementVector() ).swap( res.ElementVector() );
-    res.CreateNodePointerVector();
+    res.CreateNodePointerVector2();
     res.IdentifyPerimeter();
   }
 
@@ -2259,11 +2082,10 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   // see chapter 16, Nelson STL Programmer's guide, p. 559
   set_difference( tmp_elmt_vec1.begin(), tmp_elmt_vec1.end(),
                   tmp_elmt_vec2.begin(), tmp_elmt_vec2.end(),
-                  back_inserter( res.ElementVector() ) );
+                  back_inserter( res.CellVector() ) );
 
   if ( !res.Empty() ) {
-    vector<csmp::Element<dim>*>( res.ElementVector() ).swap( res.ElementVector() );
-    res.CreateNodePointerVector();
+    res.CreateNodePointerVector2();
     res.IdentifyPerimeter();
   }
 
@@ -2300,10 +2122,9 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
 
   set_symmetric_difference( tmp_elmt_vec1.begin(), tmp_elmt_vec1.end(),
                             tmp_elmt_vec2.begin(), tmp_elmt_vec2.end(),
-                            back_inserter( res.ElementVector() ) );
+                            back_inserter( res.CellVector() ) );
   if ( !res.Empty() ) {
-    vector<csmp::Element<dim>*>( res.ElementVector() ).swap( res.ElementVector() );
-    res.CreateNodePointerVector();
+    res.CreateNodePointerVector2();
     res.IdentifyPerimeter();
   }
   return res.Elements();

@@ -202,8 +202,8 @@ void VData::AddElementTypes( std::vector<int32>::const_iterator first,
                              std::vector<int32>::const_iterator last )
  { pelmt.assign( first, last ); }
 
-  void VData::AddElementTypes( std::vector<int32>::iterator first,
-                              std::vector<int32>::iterator last )
+  void VData::AddElementTypes( std::deque<int32>::const_iterator first,
+                               std::deque<int32>::const_iterator last )
   { pelmt.assign( first, last ); }
   
 
@@ -288,11 +288,12 @@ int32  VData::ElementType( size_t eidx ) const
  }
 
 // TODO: used to grow VSet cell-by-cell in EclipseInterface, refactor the latter and remove this method
+/*
 void VData::ResizeElementTypes( size_t new_size )
  {
     pelmt.resize( new_size, UNKNOWN );
  }
-
+*/
 
 
 // Map Accessors (iterators)
@@ -309,10 +310,10 @@ std::deque<std::vector<long64> >::iterator VData::PfvertsBegin()
 std::deque<std::vector<long64> >::iterator VData::PfvertsEnd()
  { return pfverts.end(); }
 
-std::unordered_map<size_t,long64>::iterator VData::BFlagsBegin()
+std::vector<std::int8_t>::iterator VData::BFlagsBegin()
  { return bflags.begin(); }
 
-std::unordered_map<size_t,long64>::iterator VData::BFlagsEnd()
+std::vector<std::int8_t>::iterator VData::BFlagsEnd()
  { return bflags.end(); }
 
 
@@ -343,14 +344,14 @@ std::deque<std::vector<long64> >::const_iterator VData::PfvertsBegin() const
 std::deque<std::vector<long64> >::const_iterator VData::PfvertsEnd() const
  { return pfverts.end(); }
 
-std::unordered_map<size_t,long64>::const_iterator VData::BFlagsBegin() const
+std::vector<std::int8_t>::const_iterator VData::BFlagsBegin() const
  { return bflags.begin(); }
 
-std::unordered_map<size_t,long64>::const_iterator VData::BFlagsEnd() const
+std::vector<std::int8_t>::const_iterator VData::BFlagsEnd() const
  { return bflags.end(); }
 
 
-void VData::AddBFlag( size_t node_id, long64 bflag )
+void VData::AddBFlag( size_t node_id, std::int8_t bflag )
  { 
     // if the boundary flag integer value is outside of the range of defined values
     if ( bflag < MULTIPLE ) {
@@ -361,24 +362,24 @@ void VData::AddBFlag( size_t node_id, long64 bflag )
          cerr <<"\nVData::AddBFlag: boundary flag "<< bflag <<" = NOT (at boundary); no assignment was made.\n";
          return;
       }
-    bflags.insert( make_pair( node_id, bflag ) ); 
+    bflags.at( node_id ) = bflag;
  }
  
  
 /**
       Finds boundary identifier if any.
 */
-long64 VData::BoundaryFlag( size_t vertex ) const
+std::int8_t VData::BoundaryFlag( size_t vertex ) const
  {
-    if (bflags.empty() ) {
+    if ( bflags.empty() ) {
          cerr <<"\nVData::ABoundaryFlag: cannot determine boundary flag because VData contains no boundary identifiers.\n";
          return NOT;
       }
-      
-    unordered_map<size_t,long64>::const_iterator bflag_it = bflags.find(vertex);
-    if ( bflag_it != bflags.end() ) return (*bflag_it).second;
-    
-    return NOT;
+    else if ( vertex >= bflags.size() ) {
+         cerr <<"\nVData::ABoundaryFlag: input 'vertex' is out of range.\n";
+         return NOT;
+      }
+    return bflags[vertex];
  }
 
  
@@ -505,7 +506,7 @@ void VData::ElementTypes( const vector<int32>& elmt_types )
     pelmt.clear();
     pelmt.reserve(elmt_types.size());
     pelmt.assign( elmt_types.begin(), elmt_types.end() );
-    hybrid_mesh_ = true;
+    if ( elmt_types.size() > 1 ) hybrid_mesh_ = true;
  }
 
 
@@ -537,6 +538,8 @@ void VData::Resize( size_t nodes_per_element,
     px.resize(nodes);  vector<double64>( px ).swap( px );
     py.resize(nodes);  vector<double64>( py ).swap( py );
     pz.resize(nodes);  vector<double64>( pz ).swap( pz );
+    ResizeBFlags();
+    
     pelmt.clear();
     plist.clear();
     pfverts.clear();
@@ -598,6 +601,7 @@ to be included into the supplied deques.
     px.resize(nodes);  vector<double64>( px ).swap( px );
     py.resize(nodes);  vector<double64>( py ).swap( py );
     pz.resize(nodes);  vector<double64>( pz ).swap( pz );
+    ResizeBFlags();
     
     plist.clear();
     pfverts.clear();
@@ -676,13 +680,16 @@ void VData::ResizeNodes( size_t nodes )
  } // end ResizeNodes
 
 
+
+
 /**
-   HOPE THIS IS NEVER USED!
+      Updates length of vector to that of the node vector, setting potential new flags to zero.
 */
-//void VData::ResizeElementTypes( size_t elements )
-//{
-//    pelmt.resize( elements );
-//}
+void VData::ResizeBFlags()
+ {
+    bflags.resize( px.size() );  vector<std::int8_t>( bflags ).swap( bflags );
+ }
+
 
 
 
@@ -968,8 +975,8 @@ bool VData::CheckFix()
    else {
 	    size_t  counter(0U);
 	    for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
-	      if ( (*bf).second < REGION_BOUNDARY ) {
-	            (*bf).second = REGION_BOUNDARY;
+	      if ( (*bf) < REGION_BOUNDARY ) {
+	            (*bf) = REGION_BOUNDARY;
 	            counter++;
 	         }
         if ( counter > 0 ) 
@@ -1017,14 +1024,7 @@ void VData::EstablishZeroBasedNumbering()
         // only the neighbor element ids, not the boundary flags must be decremented
         if ( *n > 0 ) *n -= 1;
 
-    // bconds
-    unordered_map<size_t,long64>  temp;
-    const auto bflagsEnd(bflags.end());
-    for ( auto it=bflags.begin(); it!=bflagsEnd; it++ )
-      // TODO: check whether the -1 is still correct
-      temp.insert( make_pair( (*it).first-1U, (*it).second ) );
-    
-   std::swap(bflags, temp);
+    // bflags & bconds - nothing needs to be done
     
  } // end EstablishZeroBasedNumbering
 
@@ -1054,24 +1054,24 @@ void VData::OutBinary( fstream& fp ) const
      // px
     if ( (records=px.size()) > 0 && (ptr=const_cast<double64*>( &(*px.begin()) )) != NULL ) 
       {
-         fp.write( (char*) &records, sizeof(size_t));
-         fp.write( (char*) ptr, sizeof(double64) * records );
+         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
+         fp.write( reinterpret_cast<const char*>(ptr), sizeof(double64) * records );
       }
-    else fp.write( (char*) &n0, sizeof(size_t));
+    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t));
     // py
     if ( (records=py.size()) > 0 && (ptr=const_cast<double64*>( &(*py.begin()) )) != NULL ) 
       {
-         fp.write( (char*) &records, sizeof(size_t));
-         fp.write( (char*) ptr, sizeof(double64) * records );
+         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
+         fp.write( reinterpret_cast<const char*>(ptr), sizeof(double64) * records );
       }
-    else fp.write( (char*) &n0, sizeof(size_t));
+    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t));
     // pz
     if ( (records=pz.size()) > 0 && (ptr=const_cast<double64*>( &(*pz.begin()) )) != NULL ) 
       {
-         fp.write( (char*) &records, sizeof(size_t));
-         fp.write( (char*) ptr, sizeof(double64) * records );
+         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
+         fp.write( reinterpret_cast<const char*>(ptr), sizeof(double64) * records );
       }
-    else fp.write( (char*) &n0, sizeof(size_t));
+    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t));
    }
 
     // 3. writing pelmt, plist, pfverts, bflags
@@ -1249,8 +1249,9 @@ void VData::OutASCII( const char* file ) const
      // bflags
      // ------
      if ( !bflags.empty() ) ofs <<"\nBoundary flags 'bflags':"<< endl;
+     size_t n_node(0U);
      for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
-       ofs << (*bf).first <<": \t"<< (*bf).second << endl;
+       ofs << n_node++ <<": \t"<< (*bf) << endl;
        
      cout <<"\nVData::OutASCII: ascii file '"<< file_name <<"' written successfully."<< endl;
 
@@ -1323,8 +1324,9 @@ void VData::Out() const
      // bflags
      // ------
      if ( !bflags.empty() ) cout <<"\nBoundary flags 'bflags':"<< endl;
+     size_t n_node(0U);
      for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
-       cout << (*bf).first <<": \t"<< (*bf).second << endl;
+       cout << n_node++ <<": \t"<< (*bf) << endl;
 
   } // end Out()
 
@@ -1348,12 +1350,11 @@ void VData::InText( std::ifstream& ifs )
      // ---------------------------------------------------------------------------------
      char text_line[256];
      const char* const delims =" ,\t,:,\n,\r";
-     int  nnodes, dim;
  
      do ifs.getline( text_line, 256 );
      while ( (isCommentLine(text_line) && !ifs.eof()) );
-     nnodes = atoi(strtok( text_line, delims ));
-     dim    = atoi(strtok(NULL,delims));
+     size_t nnodes = atoi(strtok( text_line, delims ));
+     size_t dim    = atoi(strtok(NULL,delims));
      assert( nnodes > 0 );
      assert( dim >= 1 && dim <=3 );
      px.resize( static_cast<uint32>(nnodes) );
@@ -1428,14 +1429,13 @@ void VData::InText( std::ifstream& ifs )
      while ( (isCommentLine(text_line) && !ifs.eof()) );
      size_t nbnodes = static_cast<uint32>(atoi(strtok( text_line, delims ))); // neigbor elements per element (=faces)
      assert( static_cast<int>(nbnodes) <= nnodes );
-     
+     bflags.resize(nnodes,0);
      for ( size_t i=0U; i<nbnodes; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
-          size_t nid   = static_cast<uint32>(atoi(strtok( text_line, delims ))); 
-          long64  bflag = atoi(strtok(NULL,delims));
- //         atof(strtok(NULL,delims)); // value is ignored
-          bflags.insert( make_pair( nid, bflag ) );
+          size_t      nid   = static_cast<uint32>(atoi(strtok( text_line, delims )));
+          std::int8_t bflag = atoi(strtok(NULL,delims));
+          bflags[nid] = bflag;
        }
    
     // 5. where the first face or interface - if any start in the records
@@ -1837,14 +1837,11 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
 
          // 5. updating boundary flags
          // --------------------------
-         unordered_map<size_t,long64>  new_bflags;
-         for ( auto bit=bflags.begin(); bit!=bflags.end(); bit++ ) {
-              auto nit=o_n_node_ids.find( (*bit).first );
-              if ( nit!=o_n_node_ids.end() )
-                //                             new node idx  old bflag
-                new_bflags.insert( make_pair( (*nit).second, (*bit).second ) );
-           }
-        std::swap(bflags, new_bflags);
+         vector<std::int8_t> new_bflags(px.size(),0);
+         //        old_ID    new_ID
+         for ( map<size_t,size_t>::const_iterator
+               nit=o_n_node_ids.begin(); nit!=o_n_node_ids.end(); nit++ )
+           new_bflags[ (*nit).second ] = bflags[ (*nit).first ];
       }
 
     // 6. updating the 'mixed_mesh' boolean variable
@@ -2241,12 +2238,12 @@ size_t VData::RenumberElementsCounterClockwise2D()
            // 3.1 If the chain is located on the model boundary, asserting that all of its nodes are too
            // ------------------------------------------------------------------------------------------
            assert( BFlags() > 0 );
-           if ( bflags.find( plist[(*it).first][0] ) != bflags.end() ) {
+           if ( bflags[ plist[(*it).first][0] ] != 0 ) {
                 bool all_nodes_on_boundary(true);
                 for ( vector<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit )
                   for ( vector<size_t>::const_iterator 
                         nit=plist[*bit].begin(); nit!=plist[*bit].end(); ++nit ) 
-                    if ( bflags.find( *nit ) == bflags.end() ) {    
+                    if ( bflags[ *nit ] == 0 ) {    
                          all_nodes_on_boundary = false;
                          break;
                       }

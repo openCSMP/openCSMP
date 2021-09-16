@@ -165,12 +165,12 @@ void VSet_Test::run()
   _test( vset4.Pfvert( 2, 3 ) == 99 );  _test( vset4.Pfvert( 2, 4 ) == 99 );
 
   // BOUNDARY FLAGS
-  std::unordered_map<size_t,long64> bfmap;
+  vector<std::int8_t> bfmap;
   for( size_t i = 0; i < 13; ++i )
-    bfmap.insert( std::make_pair( i, 99 ) );
+    bfmap.push_back( 99 );
   vset4.AddBFlags( bfmap.begin(), bfmap.end() );
   for( auto it = vset4.BFlagsBegin(); it != vset4.BFlagsEnd(); ++it )
-    _test( it->second == 99 );
+    _test( (*it) == 99 );
 
 
   // .)IO

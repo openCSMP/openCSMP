@@ -63,51 +63,33 @@ SplitBoundary<dim>& SplitBoundary<dim>::operator=( const SplitBoundary<dim>& ed 
 }
 
 
-/** "All InterFaces" re-constructor of boundary from all faces in the model
+/** "All InterFaces" re-constructor of split boundary from all faces in the model
 */
 template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
-                                   MeshManager<dim>& mesh,
+                                   const MeshManager<dim>& mesh,
                                    const SubDomainInfo& info )
   : ModelSubDomain<dim, InterFace>( info.name, pref )
 {
-  // building the interface vector
-  // -----------------------------
+  // building the interface vector (for this particular region)
+  // ----------------------------------------------------------
+  if ( info.interior_elmts[0] != mesh.Elements() + mesh.Faces() )
+    throw csmp::Exception( ERROR, "SplitBoundary(reconstructor)",
+                          "InterFace numbering is expected to start at the number of elements + faces");
+
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-
-  // traversal of the existing mesh root interfaces to find all its interfaces	
-  deque<InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( mesh, interfaces );
-  sort( interfaces.begin(), interfaces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  // assigning pointers to the interior interfaces
-  for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( interfaces[i] );
-
-  // assigning pointers to the perimeter interfaces
-  for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( interfaces[i] );
+  for ( auto i : info.interior_elmts ) this->elmt_vec_.push_back( mesh.I(i) );
+  for ( auto i : info.perimeter_elmts ) this->elmt_vec_.push_back( mesh.I(i) );
 
   // building the node vector
   // ------------------------
   // assigning pointers to the interior and perimeter nodes
   this->first_bd_node_ = info.interior_nodes.size();
   this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
+  for ( auto i : info.interior_nodes ) this->node_vec_.push_back( mesh.N(i) );
+  for ( auto i : info.perimeter_nodes ) this->node_vec_.push_back( mesh.N(i) );
 
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<Node<dim>*> nodes;
-  deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
-  sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  // assigning pointers to the interior faces
-  for ( size_t i : info.interior_nodes )
-    this->node_vec_.push_back( nodes[i] );
-
-  // assigning pointers to the perimeter faces
-  for ( size_t i : info.perimeter_nodes )
-    this->node_vec_.push_back( nodes[i] );
-
+  // sorting of the pointers is necessary because the memory addresses of the new pointers will be different than in the last model
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
   // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
@@ -117,7 +99,15 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
   // allocating the storage for subdomain properties
   // -----------------------------------------------
   this->ResizePropertyStorage( pref.LocalVariablesAt( SPLIT_BOUNDARY ) );
-}
+  
+} // end Constructor
+
+  // removing duplicates from a vector
+  //sort( this->node_vec_.begin(), this->node_vec_.end() );
+  //this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+
+
+
 
 
 
@@ -136,7 +126,7 @@ template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
                                    const FiniteElementManager& femgr,
-                                   MeshManager<dim>& mesh,
+                                   MeshManager<dim>& mesh, // not constant because InterFace creation will be prompted
                                    const InterFaceSet<dim>& ifset )
   : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
 {
@@ -158,7 +148,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
     FiniteElement* FE_ptr = femgr.E( if_elmt_type );
     // incomplete construction without connectivity
 //    InterFace<dim> new_interface( FE_ptr, nullptr, ifvars, if_ip_vars );
-    csmp::InterFace<dim>* interfaceObj = mesh.Add( InterFace<dim>( FE_ptr, nullptr, ifvars, if_ip_vars ) );
+    csmp::InterFace<dim>* const interfaceObj = mesh.AddInterFace( FE_ptr, nullptr, ifvars, if_ip_vars );
     interfaceObj->Idx( fidx++ );
 
     // assigning neighbor and node pointers to higher-dimensional elements sharing the interface
@@ -169,9 +159,6 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 
     // storing pointer to the interface in element collection
     this->elmt_vec_.push_back( interfaceObj );
-
-    // the interface is assigned into the root interface of this interface group in the mesh
-    mesh.SetRootInterFace( interfaceObj );
   }
 
   // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
@@ -394,186 +381,6 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 
 
 
-/**
-@fn  void Boundary<dim>::Out( std::fstream& fp ) const
-
-@brief Outs the boundary to binary fp.
-@attention Uses current index numbering.
-
-We use the following order her:
-0. boundary domain data
-1. interface count
-2. flag
-3. interface fem type
-4. inner, outer parent element id of interface
-(in the case of a null parent, i.e. at model perimeter, we also store the interface id of the inner element)
-5. fem interface data
--scalar data count, property name & scalar FEM_Data
--vector data count, property name & vector FEM_Data
--tensor data count, property name & tensor FEM_Data
--array data count, property name & array FEM_Data
--flagged array data count, property name & flagged array FEM_Data
-
-@author  JC 
-@date  1/7/2019
-
-@tparam  dim Dimension
-@param [in,out]  fp  If non-null, the file pointer to the binary output file
-
-@todo (2-C) Return values not used properly.
-*/
-template<size_t dim>
-bool SplitBoundary<dim>::Out( std::fstream& fp ) const
-{
-  // split-boundary variables
-  domainVariablesOut( fp, *this, this->pref_ ); 
-
-  // number of interfaces
-  size_t bytes( sizeof( size_t ) );
-  const size_t interfaceCount( this->Elements() );
-  fp.write( (char*)&interfaceCount, bytes );
-
-  // fem type of interfaces
-  CSMP_FEM_TYPE interfaceType;
-  bytes = sizeof( int32 ); //CSMP_FEM_TYPE
-  InterFace<dim>* interface(nullptr);
-  for ( size_t f( 0 ); f < interfaceCount; ++f )
-  {
-    interface = this->elmt_vec_[f];
-    if ( !interface ) // we check in this loop only for nullptrs
-      return false;
-    interfaceType = interface->FE()->ElementType();
-    fp.write( (char*)&interfaceType, bytes );
-  }
-
-  // interface parents
-  size_t idx( NULL_IDX );
-  bytes = sizeof( size_t );
-
-  // higher-dimensional elements will be present on the inside and the outside of the interface
-  // because interfaces can only be created at internal model boundaries
-  for ( size_t f( 0 ); f < interfaceCount; ++f )
-  {
-    interface = this->elmt_vec_[f];
-
-    assert( interface->Parent( INSIDE ) != nullptr );
-    assert( interface->Parent( OUTSIDE ) != nullptr );
-
-    idx = interface->Parent( INSIDE )->Idx();
-    fp.write( (char*)&idx, bytes );
-    const size_t innerParentFaceId( interface->ParentFaceID( INSIDE ) );
-    fp.write( (char*)&innerParentFaceId, bytes );
-
-    idx = interface->Parent( OUTSIDE )->Idx();
-    fp.write( (char*)&idx, bytes );
-    const size_t outerParentFaceId( interface->ParentFaceID( OUTSIDE ) );
-    fp.write( (char*)&outerParentFaceId, bytes );
-
-    // lower-dimensional element that only exists if an intervening Region was retained or generated
-    if ( interface->InterveningElement() )
-    {
-      idx = interface->InterveningElement()->Idx();
-      fp.write( (char*)&idx, bytes );
-    }
-    else
-    {
-      idx = NULL_IDX;
-      fp.write( (char*)&idx, bytes );
-    }
-    
-    // TODO: connectivity of nodes is currently not stored and therefore has to be recreated
-    //const size_t nodesCount( interface->Nodes() );
-    //fp.write( (char*)&nodesCount, bytes );
-    //for ( size_t fn( 0 ); fn < nodesCount; ++fn )
-    //{
-    //  const size_t localInnerNodeIdx( interface->ParentNodeNumber( fn, INSIDE ) );
-    //  fp.write( (char*)&localInnerNodeIdx, bytes );
-
-    //  const size_t localOuterNodeIdx( interface->ParentNodeNumber( fn, OUTSIDE ) );
-    //  fp.write( (char*)&localOuterNodeIdx, bytes );
-    //}
-  }
-
-  // interface variable count: scalar, vector, tensor, array, flagged array
-  // TODO: why is this necessary here at the end?
-  this->RenumberElements();
-
-  return true;
-}
-
-
-/**
-@fn  bool Boundary<dim>::In( const FiniteElementManager& femManager, fstream& fp ) const
-
-@brief INS Boundary from the given binary file pointer.
-
-see Out( fstream& fp )
-
-@author  JC
-@date  1/7/2019
-
-@param [in,out]  fp  If non-null, the fp.
-
-@return  true if it succeeds, false if it fails.
-
-@todo (2-C) Return values not used properly.
-
-TODO: neighbors of the interface elements are also not stored
-
-*/
-template<size_t dim>
-bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
-                             const FiniteElementManager& femManager,
-                             const Region<dim>& modelRegion,
-                             fstream& fp )
-{
-  // splitboundary variables
-  domainVariablesIn( fp, *this, this->pref_ );
-  // number of faces
-  size_t bytes( sizeof( size_t ) );
-  size_t interfaceCount( 0 );
-  fp.read( (char*)&interfaceCount, bytes );
-
-  // fem type of interfaces
-  bytes = sizeof( int32 ); //CSMP_FEM_TYPE
-  vector<CSMP_FEM_TYPE> interfaceTypes( interfaceCount );
-  for ( size_t f( 0 ); f < interfaceCount; ++f )
-    fp.read( (char*)&interfaceTypes[f], bytes );
-
-  // interface (higher-dimensional) parent elements
-  bytes = sizeof( size_t );
-  std::vector<std::vector<size_t> >                     interfaceParents( interfaceCount );
-  std::vector<std::vector<std::pair<size_t, size_t> > > interfaceParentNodes( interfaceCount );
-
-  for ( size_t f( 0 ); f < interfaceCount; ++f )
-  {
-    interfaceParents[f].resize( 5, NULL_IDX );
-
-    fp.read( (char*)&interfaceParents[f][0], bytes );
-    fp.read( (char*)&interfaceParents[f][1], bytes );
-
-    fp.read( (char*)&interfaceParents[f][2], bytes );
-    fp.read( (char*)&interfaceParents[f][3], bytes );
-
-    fp.read( (char*)&interfaceParents[f][4], bytes );
-  }
-
-  // TODO: OMG - this needs replacement with efficient code in MeshManager
-  deque<csmp::Node<dim>*>	   nodes;
-  deque<csmp::Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( meshManager, nodes, elmts );
-  sort(elmts.begin(), elmts.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-
-  std::map<size_t, Element<dim>*> elementIdPtr;
-  for ( auto e : elmts ) {
-    elementIdPtr.insert( make_pair( e->Idx(), e ) );
-  }
-
-  // creating splitboundary (code starting line 707)
-  CreateFrom( meshManager, femManager, elementIdPtr, interfaceTypes, interfaceParents, interfaceParentNodes );
-
-  return true;
-}
 
 
 // ------------------------------------------------------------------
@@ -646,38 +453,32 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   Element<dim>*   innerElement( nullptr );
   Element<dim>*   outerElement( nullptr );
 
-  deque<Face<dim>*> faces;
-  exploreFacesFromMesh( model.Mesh(), faces );
-
-  deque<InterFace<dim>*> interfaces;
-  exploreInterFacesFromMesh( model.Mesh(), interfaces );
-
   const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.ElementsEnd() );
   for ( typename vector<Face<dim>*>::const_iterator fit( boundary.ElementsBegin() ); fit != facesEnd; ++fit )
-  {
-    // getting parents
-    innerElement = (*fit)->Parent( INSIDE );
-    outerElement = (*fit)->Parent( OUTSIDE );
+    {
+      // getting parents
+      innerElement = (*fit)->Parent( INSIDE );
+      outerElement = (*fit)->Parent( OUTSIDE );
 
-    // the InterFace that is being build from the current interface
-    femPtr = model.FE_Manager().E( (*fit)->FE_Type() );
-    InterFace<dim>* interfaceObj = model.Mesh().Add( InterFace<dim>( femPtr, nullptr, lvsInterFace, lvsIntegrationPoint ) );
-   
-    interfaceObj->Assign( innerElement, outerElement );
-    interfaceObj->Idx( (*fit)->Idx() );
+      // the InterFace that is being build from the current interface
+      femPtr = model.FE_Manager().E( (*fit)->FE_Type() );
+      InterFace<dim>* const interfaceObj = model.Mesh().AddInterFace( femPtr, nullptr, lvsInterFace, lvsIntegrationPoint );
+     
+      interfaceObj->Assign( innerElement, outerElement );
+      interfaceObj->Idx( (*fit)->Idx() );
 
-    this->elmt_vec_.emplace_back( interfaceObj );
+      this->elmt_vec_.emplace_back( interfaceObj );
 
-    BoundaryConnector<dim>::RemoveElementNeighborConnectivity( *innerElement, *outerElement );
+      BoundaryConnector<dim>::RemoveElementNeighborConnectivity( *innerElement, *outerElement );
 
-    // resetting
-    innerElement = nullptr;
-    outerElement = nullptr;
+      // resetting
+      innerElement = nullptr;
+      outerElement = nullptr;
 
-    // each interface is assigned into its interface group in the mesh    
-    model.Mesh().SetRootInterFace( interfaceObj );
+      // each interface is assigned into its interface group in the mesh
+  //    model.Mesh().SetRootInterFace( interfaceObj );
 
-  } // interfaces from faces
+    } // interfaces from faces
 
     // free excessive allocated capacity
   vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
@@ -733,35 +534,35 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
   {
     femPtr = femManager.E( interfaceTypes[f] );
 
-    // which is used to create the new interface using the variables prepared above (nullptr is FV Stencil)            
-    InterFace<dim> new_interface( femPtr, nullptr, lvsInterFaces, lvsIntegrationPoints );
-    InterFace<dim>* interfaceObj = meshManager.AddIfUnique( new_interface );
+    // which is used to create the new interface using the variables prepared above (nullptr is FV Stencil)
+    // TODO: check for uniqueness?
+    InterFace<dim>* const interfaceObj = meshManager.AddInterFace( femPtr, nullptr, lvsInterFaces, lvsIntegrationPoints );
     interfaceObj->Idx( fidx++ );
 
     // inner parent element
     if ( interfaceParents[f][0] != NULL_IDX )
-    {
-      innerParentPtr = elementIdPtr.find( interfaceParents[f][0] )->second;
-      interfaceObj->Assign( innerParentPtr, interfaceParents[f][1], INSIDE );
-    }
+      {
+        innerParentPtr = elementIdPtr.find( interfaceParents[f][0] )->second;
+        interfaceObj->Assign( innerParentPtr, interfaceParents[f][1], INSIDE );
+      }
     else
       throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateFrom", "Inner interface parent cannot be nullptr" );
 
     // outer parent element
     if ( interfaceParents[f][2] != NULL_IDX )
-    {
-      outerParentPtr = elementIdPtr.find( interfaceParents[f][2] )->second;
-      interfaceObj->Assign( outerParentPtr, interfaceParents[f][3], OUTSIDE );      
-    }
+      {
+        outerParentPtr = elementIdPtr.find( interfaceParents[f][2] )->second;
+        interfaceObj->Assign( outerParentPtr, interfaceParents[f][3], OUTSIDE );
+      }
     else
       throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateFrom", "Outer interface parent cannot be nullptr" );
 
     // assign base element if it exists
     if ( interfaceParents[f][4] != NULL_IDX )
-    {
-      baseElementPtr = elementIdPtr.find( interfaceParents[f][4] )->second;
-      interfaceObj->Assign( baseElementPtr );
-    }
+      {
+        baseElementPtr = elementIdPtr.find( interfaceParents[f][4] )->second;
+        interfaceObj->Assign( baseElementPtr );
+      }
 
     // assign corresponding parent nodes
     interfaceObj->Assign( innerParentPtr, outerParentPtr, true );
@@ -780,7 +581,7 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
     this->elmt_vec_.emplace_back( interfaceObj );
 
     // the interface is assigned into the root interface of this interface group in the mesh
-    meshManager.SetRootInterFace( interfaceObj );    
+//    meshManager.SetRootInterFace( interfaceObj );
   } // region elements
 
   // free

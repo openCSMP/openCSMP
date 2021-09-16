@@ -1,7 +1,4 @@
-: pref(model.Database()), 
-  //    pmem(model.ReferencePropertyStorage()),
-    pmesh(model.Mesh()),
-    top_boundary(false),
+:   top_boundary(false),
     bogus_variables(false),
     first(false),
     pure_halite(false),
@@ -65,5 +62,4 @@
     expected_dp(0.0),
     hrock_prev(0.0),
     hrock_curr(0.0),
-    equilibrator(m_rock_,cp_rock_,rho_rock_,phi_,m_fluid_,wt_,tp_,p_current_,H_current_,H_previous_, fixed_temperature, t_fixed, t_diffusion_, verbose_eq ),
-    csmp_error( ErrorHandler::Instance() )
+    equilibrator(m_rock_,cp_rock_,rho_rock_,phi_,m_fluid_,wt_,tp_,p_current_,H_current_,H_previous_, fixed_temperature, t_fixed, t_diffusion_, verbose_eq )

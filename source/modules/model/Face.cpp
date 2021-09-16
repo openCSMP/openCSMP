@@ -352,6 +352,19 @@ Face<dim>::Face( Face<dim>&& fc )
 template<size_t dim>
 Face<dim>::~Face()
  {
+    // disconnecting the neighbor elements that are connected to this element
+    for ( auto it : face_connector_ )
+      if ( it != nullptr )
+        for ( auto nit : it->face_connector_ )
+          if ( nit == this ) {
+               nit = nullptr;
+               break;
+            }
+    // disconnecting the face from its nodes and neighbors
+    for ( auto& it : face_connector_ ) it = nullptr;
+    for ( auto& it : node_connector_ ) it = nullptr;
+    innerParent_ = nullptr;
+    outerParent_ = nullptr;
  }
 
 
@@ -441,21 +454,21 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  }
 
 
-/**
-    unassigns the neighbor face, setting the pointer in the 'face_connector' vector to null
-*/
 template<size_t dim>
-void Face<dim>::Unassign( const Face<dim>* e_ptr ) 
-  {
-    for ( size_t i = 0U; i < face_connector_.size(); i++ ) {
-        if ( e_ptr == nullptr || face_connector_[i] == nullptr )
-          continue;
-        if ( e_ptr == face_connector_[i] ) {
-            face_connector_[i] = nullptr;
-            break;
-          }
-      }
-  }
+bool Face<dim>::Unassign(Face<dim>* f_ptr)
+{
+	assert(f_ptr != nullptr);	
+	assert(face_connector_.size() == this->FE()->Neighbors());
+	for (size_t i(0); i < face_connector_.size(); ++i)
+		if (f_ptr == face_connector_[i])
+		{
+			face_connector_.erase(face_connector_.begin() + i);
+			face_connector_.swap(face_connector_);
+			return true;
+		}
+	return false;
+  
+} // end Unassign
 
 
 
@@ -587,6 +600,20 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
 
 
+template<size_t dim>
+void Face<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
+  {
+    for ( size_t i = 0U; i < node_connector_.size(); i++ ) {
+        if ( nd_ptr == nullptr || node_connector_[i] == nullptr )
+          continue;
+        if ( (*nd_ptr) == (*node_connector_[i]) ) {
+            node_connector_[i] = nullptr;
+            break;
+          }
+      }
+  }
+
+
 
 /// allows to assign a single parent, providing the node ids of face instead of face id. all assigns are dispatched to here.
 /*
@@ -708,7 +735,55 @@ size_t Face<dim>::InnerParentFaceNumber() const
  }
 
 
+//added
+/**
+     Reports the local number (0..faces-1) of the face of the inner higher-dimensional parent element that
+     matches the nodes of the Face object (also in terms of the sequence of these nodes).
+     
+     @return local face number of UINT_MAX if no index could be found.
 
+     @attention assumes that the Face has valid nodes and its inner parent element is connected
+*/
+template<size_t dim>
+size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
+ {
+
+    Element<dim>* parent;
+    switch (side){
+    case INSIDE: parent = innerParent_;
+      break;
+    case OUTSIDE: parent = outerParent_;
+      break;
+    case MIDDLE: throw csmp::Exception(ERROR, "Face::ParentFaceNumber" , "Face does not have a MIDDLE parent!");
+      break;
+    }
+
+    assert(parent != nullptr);
+    assert( !node_connector_.empty() );
+   
+     // 1. creating a unique key from the nodes of the Face
+    set<size_t>  face_key;
+    for ( auto nit=node_connector_.begin(); nit!=node_connector_.end(); ++nit ) {
+         assert( (*nit) != nullptr );
+         face_key.insert( (*nit)->Idx() );
+      }
+    
+    // 2. creating face keys for the inner parent element and trying to match them
+    //    with the one created for the current face
+    vector<size_t> fnids;
+    set<size_t>    face_key_n;
+    const size_t faces(parent->Faces());
+    for ( size_t i=0U; i<faces; ++i ) {
+         parent->FE()->NodesOfFace( i, fnids );
+         for ( size_t j=0U; j<fnids.size(); ++j )
+           face_key_n.insert( parent->N( fnids[j] )->Idx() );
+         // has a matching face been found?
+         if ( face_key == face_key_n ) return i;
+         else face_key_n.clear();
+      }
+
+    return UINT_MAX;
+ }
 
 
 /// returns the current index of this face assuming that a meaningful value was assigned earlier
@@ -832,7 +907,7 @@ also vary from element to element.
 resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
-@return The node coordinates are returned into the supplied matrix.
+@return void - The node coordinates are returned into the supplied matrix.
 
 @section application Application
 
@@ -1086,6 +1161,23 @@ bool  Face<dim>::operator==( const Face<dim>& fc ) const
      return true;
  }
 
+
+template<size_t dim>
+void* Face<dim>::operator new( size_t size )
+  {
+      std::cout<< "\nFace<"<< dim <<">: called overloaded new operator.\n";
+      //void * p = malloc(size); will also work fine
+      return ::operator new(size);
+  }
+ 
+
+template<size_t dim>
+void Face<dim>::operator delete( void* p )
+  {
+     std::cout<< "\nFace<"<< dim <<">: called overloaded delete operator.\n";
+     free(p);
+     p = nullptr;
+  }
 
 
 

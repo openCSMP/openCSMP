@@ -1,12 +1,13 @@
 #include "FiniteElement_TestData.h"
 #include "PL_Utilities.h"
 #include "GlobalVerbose.h"
+#include "Node.h"
 
 #include <iomanip>
 #include <sstream>
 #include <limits>
 
-namespace csmp{
+namespace csmp {
 
 /// PL 2010: overloaded istream operator for the FiniteElement_TestData class
 std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTestData )
@@ -163,13 +164,12 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   iStream.ignore( dS, dcT );
   //iStream >> cache >> cache;
   double x, y, z;
-  Node<3>* newNode;
   for( size_t i = 0; i < femTestData.NodeCount(); ++i )
   {
     iStream >> x; iStream >> y; iStream >> z;
-    newNode = new Node<3U>();
-    newNode->x( x ); newNode->y( y ); newNode->z( z );
-    femTestData.NodePtr( i, newNode );
+    Node<3U> newNode;
+    newNode.x( x ); newNode.y( y ); newNode.z( z );
+    femTestData.NodePtr( i, &newNode );
     if ( verbose ) {
         cout << "Node(" << i << ") read in with: " << femTestData.NodePtr( i )->x() << "(" << x << ")" << " / ";
         cout                                       << femTestData.NodePtr( i )->y() << "(" << y << ")" << " / ";

@@ -11,7 +11,7 @@
 
 namespace csmp {
 
-enum class FACE_TYPE {
+enum class FACE_TYPE : std::int8_t {
 
 	//       0_________1
 	//      /|        /|

@@ -1,8 +1,6 @@
 #include "HeterogeneityAndRateAwareModel.h"
 #include "PropertyDatabase.h"
 #include "ErrorHandler.h"
-//#include "OtwayCRC3_RockTypes.h" - March 2020 version of Maartje's curve fits for drainage relperms and pc(sw)
-#include "OtwayCRC3_RockTypes_Version_2.h" 
 
 //#define DEBUG_HETEROGENEITY_AWARE_MODEL
 //#define TURN_OFF_RATE_AWARE
@@ -928,15 +926,20 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "rocktype not recognized");
       }
    
-     // permeability initialisation
-     const double64 k_crossflow_ = PermeabilityPerpendicularToLaminations();
-     const double64 k_parallel_  = PermeabilityParallelToLaminations();
-     // assuming that layers are horizontal and that the stored K is the horizontal one
-     TwoPhaseModel<dim>::K_ = 0.;
-     TwoPhaseModel<dim>::K_(0,0)    = k_parallel_;
-     TwoPhaseModel<dim>::K_(1,1)    = k_crossflow_;
-     K_flow_direction_              = PermeabilityInFlowDirection( vt_normalised_ );
-     K_reduction_in_flow_direction_ = K_flow_direction_ / k_parallel_; 
+    // determine permeability anisotropy TODO: here we assume that laminations are horizontal
+    if ( is_composite_ ) {
+         // permeability
+         // TwoPhaseModel<dim>::tensor_permeability_ = true; // anisotropy is not communicated to base class
+         const double64 k_crossflow_ = PermeabilityPerpendicularToLaminations();
+         const double64 k_parallel_  = PermeabilityParallelToLaminations();
+         // assuming that layers are horizontal and that the stored K is the horizontal one
+         TwoPhaseModel<dim>::K_ = 0.;
+         TwoPhaseModel<dim>::K_(0,0)    = k_parallel_;
+         TwoPhaseModel<dim>::K_(1,1)    = k_crossflow_;
+         K_flow_direction_ = PermeabilityInFlowDirection( vt_normalised_ );
+         TwoPhaseModel<dim>::k_         = k_parallel_;
+         K_reduction_in_flow_direction_ = K_flow_direction_ / k_parallel_; 
+      }
 
 } // end Initialise (testing & plotting)
 
@@ -1039,6 +1042,8 @@ template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const VectorVariable<dim>& vt_normalised ) const
  {
     assert( is_composite_ );
+    assert( TwoPhaseModel<dim>::K_(0,0) > 0. );
+    assert( TwoPhaseModel<dim>::K_(1,1) > 0. );
     
     if ( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double64>::epsilon() )
       // horizontal permeability

@@ -18,9 +18,10 @@ namespace csmp {
 #define MEMBERS 10 // entries in one line of property description
 
 
-/// Goto ctor, initializing from text variables file
+/** initializes from text variables file
+ */
 template<size_t dim>
-PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isBinary, const set<string>* subset_variables )
+PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
     : vectorFlags(dim),
       tensorFlags(dim),
       physvarsFile((variablesFileName==NULL) ? "EmptyVariablesFile" : variablesFileName),
@@ -29,13 +30,24 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isB
       indexTracker_(),
       verbose_(true)
  {
- if(isBinary)
-   {
-     if( !BinaryIn(variablesFileName, subset_variables ) )
+    Initialize(variablesFileName);
+ }
+
+/**
+      Reader of binary variables file which also permits restriction to a subset of variables
+*/
+template<size_t dim>
+PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const set<string>& subset_variables )
+    : vectorFlags(dim),
+      tensorFlags(dim),
+      physvarsFile((variablesFileName==NULL) ? "EmptyVariablesFile" : variablesFileName),
+      variableCount_(),
+      propList_(),
+      indexTracker_(),
+      verbose_(true)
+ {
+    if ( !BinaryIn( variablesFileName, subset_variables ) )
       throw csmp::Exception( ERROR, "PropertyDatabase", "Not able to load from binary file" );
-   }
- else
-   Initialize(variablesFileName);    
  }
 
 
@@ -458,7 +470,7 @@ bool PropertyDatabase<dim>::BinaryOut( const char* fileName ) const
  @return  true if it succeeds, false if it fails.
  */
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_variables )
+bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>& subset_variables )
 {
   size_t parameterCount(0);
   fp.read( (char*) &parameterCount, sizeof(size_t) );
@@ -471,13 +483,11 @@ bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_var
     csmp::Parameter parameter;
     parameter.In( fp );
 
-    if ( subset_variables ){
-      if (subset_variables->find( parameterName ) != subset_variables->end() )
-      propList_[parameterName] = parameter;
-    }
-    else {
-      propList_[parameterName] = parameter;
-    }
+    if ( !subset_variables.empty() ) {
+        if ( subset_variables.find( parameterName ) != subset_variables.end() )
+          propList_[parameterName] = parameter;
+      }
+    else propList_[parameterName] = parameter;
   }
 
   return true; /// @todo (1-C) Meaningless return statement
@@ -486,23 +496,23 @@ bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_var
 
 /// Reads from binary file, appends '_variables.dat' if necessary, and can read only a subset of variables from the variables as an option
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryIn( const char* fileName, const set<string>* subset_variables )
+bool PropertyDatabase<dim>::BinaryIn( const char* fileName, const set<string>& subset_variables )
   {
-  InitializeCount();
+    InitializeCount();
 
-  string inputFileName(fileName);
+    string inputFileName(fileName);
 
-  fstream fp(inputFileName.c_str(), ios::in | ios::binary);
-  if (!fp.is_open())
-    return false;
+    fstream fp(inputFileName.c_str(), ios::in | ios::binary);
+    if (!fp.is_open())
+      return false;
 
-  if( !BinaryIn(fp, subset_variables ) )
-    return false;
+    if( !BinaryIn(fp, subset_variables ) )
+      return false;
 
-  fp.close();
-  UpdateParametersAndDatabase();
-  FlushToScreen();
-  return true;
+    fp.close();
+    UpdateParametersAndDatabase();
+    FlushToScreen();
+    return true;
   }
 
 

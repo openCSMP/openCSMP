@@ -71,8 +71,7 @@ void RhinoMesh_Example::Run()
       mesh_container.AddData( "permeability", permdata );
 
       const bool isoparametric(true);
-      const bool binaryVariablesFile(false);
-      Model<3U>  model3D( mesh_container, "example20.txt", isoparametric, binaryVariablesFile );
+      Model<3U>  model3D( mesh_container, "example20.txt", isoparametric );
       mesh_container.Erase();
 
       printModelDimensions( model3D, true );

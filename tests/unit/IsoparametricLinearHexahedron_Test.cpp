@@ -73,7 +73,9 @@ namespace csmp {
 		
 	}
 
-	double64 IsoparametricLinearHexahedron_Test::HexaVolUsingCSMP(double64 *Xcord, double64 *Ycord, double64 *Zcord, double64& HexaVolumeUsingFVSectors_, double64& HexaVolumeUsingFVSectorsIPWeight_)
+	double64 IsoparametricLinearHexahedron_Test::HexaVolUsingCSMP(double64 *Xcord, double64 *Ycord, double64 *Zcord,
+                                                                double64& HexaVolumeUsingFVSectors_,
+                                                                double64& HexaVolumeUsingFVSectorsIPWeight_)
 	{
 		//The following is the alternative for the dynamic allocation of memory, which is helpful when the required memory is only determined at the run time. 
 		//This method creates a Hexahedron element each time that the class is called and kills the element when returining to the run method. 
@@ -114,16 +116,16 @@ namespace csmp {
 		element.Assign(7, &n7);
 
 		// nodes
-		element.N(0)->x(Xcord[0]), element.N(0)->y(Ycord[0]), element.N(0)->z(Zcord[0]);
-		element.N(1)->x(Xcord[1]), element.N(1)->y(Ycord[1]), element.N(1)->z(Zcord[1]);
-		element.N(2)->x(Xcord[2]), element.N(2)->y(Ycord[2]), element.N(2)->z(Zcord[2]);
-		element.N(3)->x(Xcord[3]), element.N(3)->y(Ycord[3]), element.N(3)->z(Zcord[3]);
-		element.N(4)->x(Xcord[4]), element.N(4)->y(Ycord[4]), element.N(4)->z(Zcord[4]);
-		element.N(5)->x(Xcord[5]), element.N(5)->y(Ycord[5]), element.N(5)->z(Zcord[5]);
-		element.N(6)->x(Xcord[6]), element.N(6)->y(Ycord[6]), element.N(6)->z(Zcord[6]);
-		element.N(7)->x(Xcord[7]), element.N(7)->y(Ycord[7]), element.N(7)->z(Zcord[7]);
+		element.N(0)->x(Xcord[0]); element.N(0)->y(Ycord[0]); element.N(0)->z(Zcord[0]);
+		element.N(1)->x(Xcord[1]); element.N(1)->y(Ycord[1]); element.N(1)->z(Zcord[1]);
+		element.N(2)->x(Xcord[2]); element.N(2)->y(Ycord[2]); element.N(2)->z(Zcord[2]);
+		element.N(3)->x(Xcord[3]); element.N(3)->y(Ycord[3]); element.N(3)->z(Zcord[3]);
+		element.N(4)->x(Xcord[4]); element.N(4)->y(Ycord[4]); element.N(4)->z(Zcord[4]);
+		element.N(5)->x(Xcord[5]); element.N(5)->y(Ycord[5]); element.N(5)->z(Zcord[5]);
+		element.N(6)->x(Xcord[6]); element.N(6)->y(Ycord[6]); element.N(6)->z(Zcord[6]);
+		element.N(7)->x(Xcord[7]); element.N(7)->y(Ycord[7]); element.N(7)->z(Zcord[7]);
 
-		//cout << "\nVolume of One Hexahedron calculated by CSMP: " << element_->Volume() << endl;
+		//cout << "\nVolume of One Hexahedron calculated by CSMP: " << element.Volume() << endl;
 		double64 HexVol = element.Volume();
 
 		//The calcualtion of the Hexa Volume summing up the volumes of the sectors of the FV stencils over the finite element. 
@@ -170,10 +172,11 @@ namespace csmp {
 		return TetVolumes;
 	}
 
-	double64 IsoparametricLinearHexahedron_Test::TetVolFromCSMP(double64 *X, double64 *Y, double64 *Z, int p0, int p1, int p2, int p3)
+	double64 IsoparametricLinearHexahedron_Test::TetVolFromCSMP( double64 *X, double64 *Y, double64 *Z,
+                                                               int p0, int p1, int p2, int p3 )
 	{
-		IsoparametricLinearTetrahedron *lTet_ = new IsoparametricLinearTetrahedron();
-		Element<3U> *element_ = new Element < 3U >(lTet_);
+		IsoparametricLinearTetrahedron* lTet_ = new IsoparametricLinearTetrahedron();
+		Element<3U> element(lTet_);
 		Node<3U>  n0, n1, n2, n3;
 
 		n0.Idx(1);
@@ -181,20 +184,19 @@ namespace csmp {
 		n2.Idx(3);
 		n3.Idx(4);
 
-		element_->Idx(0);
-		element_->Assign(0, &n0);
-		element_->Assign(1, &n1);
-		element_->Assign(2, &n2);
-		element_->Assign(3, &n3);
+		element.Idx(0);
+		element.Assign(0, &n0);
+		element.Assign(1, &n1);
+		element.Assign(2, &n2);
+		element.Assign(3, &n3);
 		
-		element_->N(0)->x(X[p0]), element_->N(0)->y(Y[p0]), element_->N(0)->z(Z[p0]);
-		element_->N(1)->x(X[p1]), element_->N(1)->y(Y[p1]), element_->N(1)->z(Z[p1]);
-		element_->N(2)->x(X[p2]), element_->N(2)->y(Y[p2]), element_->N(2)->z(Z[p2]);
-		element_->N(3)->x(X[p3]), element_->N(3)->y(Y[p3]), element_->N(3)->z(Z[p3]);
+		element.N(0)->x(X[p0]); element.N(0)->y(Y[p0]); element.N(0)->z(Z[p0]);
+		element.N(1)->x(X[p1]); element.N(1)->y(Y[p1]); element.N(1)->z(Z[p1]);
+		element.N(2)->x(X[p2]); element.N(2)->y(Y[p2]); element.N(2)->z(Z[p2]);
+		element.N(3)->x(X[p3]); element.N(3)->y(Y[p3]); element.N(3)->z(Z[p3]);
 
-		double64 VolumeofTetra = element_->Volume();
+		double64 VolumeofTetra = element.Volume();
 		delete lTet_;
-    delete element_;
 		return VolumeofTetra;
 	}
   

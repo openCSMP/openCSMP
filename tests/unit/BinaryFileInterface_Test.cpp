@@ -33,7 +33,7 @@ void BinaryFileInterface_Test::run()
   // 3. Reading the mesh back from binary file and constructing a new model
   // ----------------------------------------------------------------------
   const bool isoparametric_elements(true);
-  Model<3> model3DvsetCopy( vSet, "CSMP-1phase-variables.txt", isoparametric_elements, false );
+  Model<3> model3DvsetCopy( vSet, "CSMP-1phase-variables.txt", isoparametric_elements );
   // assigning a permeability
   const ScalarVariable permValue(ANY,1.0e-12);
   model3DvsetCopy.InputPropertyValue( "permeability", permValue );

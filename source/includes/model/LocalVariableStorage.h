@@ -1172,7 +1172,7 @@ inline double64 LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, 
     if ( place == FACET_INTEGRATION_POINT ) assert( ip < IPS_FA );
     assert( sector_or_facet < storeePtr->Facets() || sector_or_facet < storeePtr->Sectors() );
     assert( ip < storeePtr->IntegrationPointsPerSector() || ip < storeePtr->IntegrationPointsPerFacet() );
-   assert( offsetData.first < data_.data.size() );
+    assert( offsetData.first < data_.data.size() );
 #endif
     const size_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :

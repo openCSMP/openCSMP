@@ -265,7 +265,7 @@ void CVFEM_PHX_Scheme<dim>::InitialFluidPropertiesFromPTX()
     {
 
        model.Accept( pore_visitor );
-       equilibrator_properties.InitialPropertiesFromPTX();
+       equilibrator_properties.InitialPropertiesFromPTX( model );
        model.CopyReplace(names.diff_mass_variables[2].c_str(),names.diff_mass_variables[1].c_str());
        model.CopyReplace(names.diff_enthalpy_variables[2].c_str(),names.diff_enthalpy_variables[1].c_str());
 

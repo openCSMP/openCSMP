@@ -1,6 +1,7 @@
 #include "Node.h"
 #include "Element.h"
 #include "Visitor.h"
+#include "NodeManifold.h"
 
 using namespace std;
 
@@ -70,6 +71,10 @@ Node<dim>::Node( Node<dim>&& nd )
 template<size_t dim>
 Node<dim>::~Node()
  {
+    for ( auto& it : parent_element_pointers_ ) it = nullptr;
+    if ( parent_manifold_ != nullptr )
+      parent_manifold_->Delete( this );
+    parent_manifold_ = nullptr;
  }
 
 
@@ -126,6 +131,8 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
 template<size_t dim>
 bool  Node<dim>::operator==( const Node<dim>& nd )
  {
+    // TODO: fix Node comparitor
+    cerr <<"Node<"<< dim <<">: called operato== Node comparitor, extremely costly and of questionable value\n";
     if ( &nd != this )
     {
         if( Coordinate() == nd.Coordinate() )
@@ -156,6 +163,27 @@ bool  Node<dim>::operator==( const Node<dim>& nd )
     }
     return true;
  }
+ 
+ 
+ // private operators
+
+template<size_t dim>
+void* Node<dim>::operator new( size_t size )
+  {
+      std::cout<< "\nNode<"<< dim <<">: called overloaded new operator.\n";
+      //void * p = malloc(size); will also work fine
+      return ::operator new(size);
+  }
+ 
+
+template<size_t dim>
+void Node<dim>::operator delete( void* p )
+  {
+     std::cout<< "\nNode<"<< dim <<">: called overloaded delete operator.\n";
+     free(p);
+     p = nullptr;
+  }
+
 
 /**
  
@@ -351,7 +379,9 @@ size_t   Node<dim>::Idx() const
 
 
 
-/// Set or return the global boundary flag of the Node. <p.
+/**
+   Set or return the global boundary flag of the Node.
+*/
 template<size_t dim>
 void Node<dim>::AtBoundary( BOX_BOUNDARY b ) { at_boundary_ = b; }
 

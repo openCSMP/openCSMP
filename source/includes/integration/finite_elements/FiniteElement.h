@@ -21,7 +21,7 @@ namespace csmp {
 //                  CSMP TYPE                                             ANSYS - ICEMTYPE
 //                  =========                                             ================
 
-enum CSMP_FEM_TYPE{ UNKNOWN,
+enum CSMP_FEM_TYPE : std::int8_t { UNKNOWN,
                     LINEAR_BAR,    										                  // BAR_2            = 2,
                     QUADRATIC_BAR, 										                  // BAR_3            = 3,
                     CUBIC_BAR, 										                      // BAR_4  
@@ -75,10 +75,10 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     EXPERIMENTAL_ELEMENT,
 };
 
-enum ELEMENT_DIMENSION { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
+enum ELEMENT_DIMENSION : std::int8_t { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
 
 
-enum FV_FACET_TYPE {
+enum FV_FACET_TYPE : std::int8_t {
         POINT_FACET,
         UNIT_LINEAR_FACET,
         TRIANGULAR_FACET,

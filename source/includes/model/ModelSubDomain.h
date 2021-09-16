@@ -89,6 +89,12 @@ class ModelSubDomain {
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
     
+    /// creates node vector from element vector, using a set to achieve uniqueness
+    void CreateNodePointerVector1();
+    
+    /// creates node vector from element vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
+    void CreateNodePointerVector2();
+
     /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
     void SortVectors( size_t interior_cells, size_t interior_nodes );
     
@@ -111,22 +117,19 @@ class ModelSubDomain {
     // access
     // ----------------------------------------
 
-    /// reference to container of finite element pointers to either Element, Face or InterFace objects
-    typename std::vector<CELL<dim>*>&  CellVector();
+    /// reference to container of finite element pointers to either Element, Face or InterFace objects; @note used for boolean operations
+    const typename std::vector<CELL<dim>*>&  CellVector() const;
+    /// do not remove!;  used for boolean operations
+    typename std::vector<CELL<dim>*>&        CellVector();
   
     /// reference to Node pointer vector
-    typename std::vector<Node<dim>*>&  NodeVector();
-  
-    // TODO: remove this proliferation of names! - if needed put into subclasses
-    typename std::vector<CELL<dim>*>&  ElementVector();
-    typename std::vector<CELL<dim>*>&  FaceVector();
-    typename std::vector<CELL<dim>*>&  InterFaceVector();
+    const typename std::vector<Node<dim>*>&  NodeVector() const;
 
     // iterators
-    typename std::vector<csmp::Node<dim>*>::iterator        NodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator        NodesEnd();
-    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesEnd();
+    typename std::vector<csmp::Node<dim>*>::iterator     NodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator     NodesEnd();
+    typename std::vector<csmp::Node<dim>*>::iterator     PerimeterNodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator     PerimeterNodesEnd();
     typename std::vector<CELL<dim>*>::iterator           ElementsBegin();
     typename std::vector<CELL<dim>*>::iterator           PerimeterElementsBegin();
     typename std::vector<CELL<dim>*>::iterator           ElementsEnd();
@@ -284,7 +287,7 @@ class ModelSubDomain {
 
     /// writes complete ModelSubDomain specifications in terms of unique indices as block to binary file
     void WriteDomainIndexesToBinaryFile( std::fstream& ) const;
-    // see non-member function readDomainIndexesFromBinaryFile() to read the indices back
+    // see non-member function readDomainIndexesFromBinaryFile() in this source file for reading the indices back
 
     void      OutputVariableToScreen( const char* prop ) const;
     void      Out() const;

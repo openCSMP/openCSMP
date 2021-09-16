@@ -1,8 +1,8 @@
-#include <cmath>
-#include <algorithm>
-
 #include "NaClH2OPropertiesVisitorPHX.h"
 #include "ConvertConcentrationUnitsNaCl.h"
+#include "Model.h"
+#include "Region.h"
+#include "Node.h"
 #include "compareFloats.h"
 
 
@@ -17,6 +17,7 @@ namespace csmp
 #include "NaClH2OPropertiesVisitorPHX_initializer_list.hpp"
   //
   {
+    const PropertyDatabase<dim>& pref = model.Database();
     // Initialise INDEX variables
     t_key = pref.StorageKey("temperature");
     p_key = pref.StorageKey("fluid pressure");
@@ -130,14 +131,16 @@ namespace csmp
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::Visit(Region<dim>* n)
   {
-
+     throw csmp::Exception( ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit(Region<dim>*):", "Method not implemented yet!");
   }
+
+
+
 
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::Visit( Node<dim>* n )
   {
-
-    double64 id(n->Idx());
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     // ****************************************
     // 1. Read all nodal varriables of interest
@@ -225,6 +228,8 @@ namespace csmp
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::Equilibrate( Node<dim>* n )
   {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     if (open_boundaries && t.Flag() == DIRICH && n->AtBoundary() != NOT && n->AtBoundary() != INTERNAL)
       {
         BoundaryIteration();
@@ -416,6 +421,8 @@ namespace csmp
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::UpdateSowatVariables()
   {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     t_          = t();
 //    p_bar_      = p()/1.e5;
 	p_bar_ = p();
@@ -445,6 +452,8 @@ namespace csmp
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::UpdateCSMPVariables( Node<dim>& n )
   {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     // Fluid properties
     t()   = t_ = Bulk.t;
     cpr() = cp_rock_ = rock.HeatCapacity(t_);
@@ -972,8 +981,9 @@ namespace csmp
   }
 
   template<size_t dim>
-  void NaClH2OPropertiesVisitorPHX<dim>::InitialPropertiesFromPTX()
+  void NaClH2OPropertiesVisitorPHX<dim>::InitialPropertiesFromPTX( Model<dim>& model )
   {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     // Only use for calculating properties when calculating static pressure
 
     H2ONaClFluidProperties   fluid( t_, p_bar_, x_, h_fluid_, cp_rock_, rho_rock_, phi_, false);
@@ -983,35 +993,13 @@ namespace csmp
 
     cout <<"\nNaClH2OPropertiesVisitorPHX<dim>::InitialPropertiesFromPTX(): Initialising fluid properties"<< endl;
 
-	set<csmp::Node<dim>*>    discovered_nodes;
-	deque<csmp::Node<dim>*>  current_nodes;
-	for (size_t n = 0U; n < pmesh.NodeGroups(); n++) {
-		// starting at the root node in each region
-		auto root_node = pmesh.RootNode(n);
-		discovered_nodes.insert(root_node);
-		current_nodes.push_back(root_node);
-		while (!current_nodes.empty()) {
-			const csmp::Node<dim>*  n_ptr(*current_nodes.begin());
-			for (size_t i = 0U; i < n_ptr->Parents(); i++) {
-				for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++) {
-					if (j != n_ptr->ParentNodeNumber(i)) {
-						pair<typename set<csmp::Node<dim>*>::iterator, bool>
-							new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
-						cout << n_ptr->Parent(i)->N(j)->Idx() << " ";
-						if (new_node.second) current_nodes.push_back(n_ptr->Parent(i)->N(j));
-					}
-				}
-			}
-			current_nodes.pop_front();
-		}
-	}
-
+    Region<dim>& subdomain(model.Region("Model"));
 	int count(0);
-	for ( auto it : discovered_nodes ) {
+	for ( auto it=subdomain.NodesBegin(); it!=subdomain.NodesEnd(); ++it ) {
 		//	cout << count << endl;
 		count++;
 		// 1. reading input variables (fluid)
-		ReadAllVariables(it);
+		ReadAllVariables(*it);
         tp() = t();
         mtp() = 0.01;
         ml() = mlp() = mv() = mvp() = src_rate() = 0.0;
@@ -1037,20 +1025,20 @@ namespace csmp
         // warning if variables below minimum of lookup table
         if ( p() < 101325.0 || t() < 5.0 )
           {
-            cerr << "\nNode: " << it->Idx() << ", Pressure: " << p() << " Pa, T: " << t() << " oC" << endl;
+            cerr << "\nNode: " << (*it)->Idx() << ", Pressure: " << p() << " Pa, T: " << t() << " oC" << endl;
             csmp_error.notice( ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
                             "\nPressure or temperature below minimum values of lookup table, erroneous results are possible...!");
           }
         // exit if negative values are encountered
         if ( p() < 0.0 || t() < 0.0 )
           {
-            cerr<<"\nNode: "<<it->Idx()<<", Pressure: "<< p() <<" Pa, T: "<< t() <<" oC"<<endl;
+            cerr<<"\nNode: "<< (*it)->Idx()<<", Pressure: "<< p() <<" Pa, T: "<< t() <<" oC"<<endl;
             csmp_error.notice( FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
                             "\nNegative input variable, terminating...!");
           }
         if ( p() > 5000.0e5 || t() > 1000.0 )
           {
-            cerr<<"\nNode: " << it->Idx() << ", Pressure: " << p() << " Pa, T: " << t() <<" oC" <<endl;
+            cerr<<"\nNode: " << (*it)->Idx() << ", Pressure: " << p() << " Pa, T: " << t() <<" oC" <<endl;
             csmp_error.notice( FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
                             "\nTooLarge input variable, terminating...!");
           }
@@ -1085,7 +1073,7 @@ namespace csmp
         // Vapor  = equilibrator.ReportVaporProperties(t_,p_bar_,x_,h_fluid_);
         // Salt   = equilibrator.ReportSaltProperties(t_,p_bar_,x_,h_fluid_);
         //	cout << "h\n";
-        UpdateCSMPVariables( *it );
+        UpdateCSMPVariables( *(*it) );
         beta_p() = beta();
         //*** new TD May 2011
         after_phasechange_counter() = 0.0;
@@ -1148,7 +1136,7 @@ namespace csmp
         state_p() = state();
         //*** end new
         //   cout << "k\n";
-        StoreInitialPropertiesAndFlags( *it );
+        StoreInitialPropertiesAndFlags( *(*it) );
         //   cout << "l\n";
       }
   }
@@ -1221,6 +1209,7 @@ namespace csmp
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::CheckForOutOfRange( Node<dim>* n )
   {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     // Out of range checks:
     if(hCl()<0.) 
       {
@@ -1890,6 +1879,8 @@ namespace csmp
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::VolumeFactorComputations( Node<dim>* n )
   {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     rl_transport() = rl();
     rv_transport() = rv();
 

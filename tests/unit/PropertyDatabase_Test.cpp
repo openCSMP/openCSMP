@@ -207,7 +207,7 @@ void PropertyDatabase_Test::SubsetVariablesTest()
     subset_size++;
   }
 
-  PropertyDatabase<3> pdb_subset( "CSMP-variables-vsTestLocked.dat", true, &subset_variables );  
+  PropertyDatabase<3> pdb_subset( "CSMP-variables-vsTestLocked.dat", subset_variables );  
   _test( pdb_subset.VariableCount() == subset_variables.size() );
 }
 

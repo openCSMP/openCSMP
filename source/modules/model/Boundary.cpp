@@ -35,7 +35,7 @@ Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& 
   : ModelSubDomain<dim, Face>( boundaryname, pref ),
     boundaryFlag_( flag )
 {
-  if ( dim == 1 )
+  if constexpr ( dim == 1 )
     ErrorHandler::Instance().notice( ERROR, "Boundary<dim>::(custom constructor):", "boundary objects are only supported in 2 & 3D models." );
   this->ResizePropertyStorage( this->pref_.LocalVariablesAt( Placement() ) );
 }
@@ -70,11 +70,13 @@ are numbered consecutivly.
 
 @author SKM 4/5/2016
 
+@attention assumes that the index for the first Face is equivalent to the number of elements in the model.
+
 @test nodes are assigned correctly, Face objects are not
 */
 template<size_t dim>
 Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
-                         MeshManager<dim>& mesh,
+                         const MeshManager<dim>& mesh,
                          const SubDomainInfo& info,
                          BOX_BOUNDARY bflag )
   : ModelSubDomain<dim, Face>( info.name, pref ),
@@ -82,21 +84,19 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 {
   // building the face vector
   // ------------------------
-  const size_t elements( mesh.Elements() );
-  this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+  if ( info.interior_elmts[0] != mesh.Elements() )
+    throw csmp::Exception( ERROR, "Boundary(reconstructor)",
+                          "error Face numbering is expected to start at the number of elements.");
 
-  // traversal of the existing mesh root faces to find all its faces	
-  deque<Face<dim>*> faces;
-  exploreFacesFromMesh( mesh, faces );
-  sort( faces.begin(), faces.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
+  this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
   // assigning pointers to the interior faces
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( faces[i - elements] );
+    this->elmt_vec_.push_back( mesh.F(i) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( faces[i - elements] );
+    this->elmt_vec_.push_back( mesh.F(i) );
 
   // building the node vector
   // ------------------------
@@ -104,19 +104,13 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
   this->first_bd_node_ = info.interior_nodes.size();
   this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
 
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<Node<dim>*>    nodes;
-  deque<Element<dim>*> elmts;
-  exploreNodesAndElementsFromMesh( mesh, nodes, elmts );
-  sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
   // assigning pointers to the interior faces
   for ( size_t i : info.interior_nodes )
-    this->node_vec_.push_back( nodes[i] );
+    this->node_vec_.push_back( mesh.N(i) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_nodes )
-    this->node_vec_.push_back( nodes[i] );
+    this->node_vec_.push_back( mesh.N(i) );
 
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
@@ -127,7 +121,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
   // ----------------------------------------------
   this->ResizePropertyStorage( pref.LocalVariablesAt( BOUNDARY ) );
 
-} // end re-constructor
+} // end re-constructor (MeshManager)
 
 
 
@@ -136,7 +130,9 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
 
 /**
-    new constructor: re-constructor of boundary from index data stored in SubDomainInfo and faces from the MeshManager
+    re-constructor of boundary from index data stored in SubDomainInfo and faces using an element and a face vector
+    
+        @attention assumes that the faces in SubDomainInfo are numbered from  elements..elements+faces-1
 */
 template<size_t dim>
 Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
@@ -149,7 +145,11 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
     boundaryFlag_( bflag )
 {
   // building the face vector
-  // ------------------------	 
+  // ------------------------
+  if ( info.interior_elmts[0] != elements )
+    throw csmp::Exception( ERROR, "Boundary(reconstructor)",
+                          "error Face numbering is expected to start at the number of elements.");
+  
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
   // assigning pointers to the interior faces
@@ -184,7 +184,10 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
   // allocating the storage for boundary properties
   // ----------------------------------------------
   this->ResizePropertyStorage( pref.LocalVariablesAt( BOUNDARY ) );
-}
+  
+} // end re-constructor (Nodes,Faces)
+
+
 
 template<size_t dim>
 IntegrationPointVariables Boundary<dim>::FaceIntegrationPointVariables() const
@@ -422,7 +425,7 @@ bool Boundary<dim>::Out( fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) con
 
   this->pref_.ListProperties( place, vtype, propList );
   vCount = propList.size();
-  fp.write( (char*)&vCount, bytes );
+  fp.write( reinterpret_cast<const char*>(&vCount), bytes );
   if ( vCount != 0 )
   {
     FEM_Data<Var> femData;
@@ -759,7 +762,7 @@ bool Boundary<dim>::Divide( const typename std::vector<Face<dim>*>::const_iterat
 template<size_t dim>
 void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary, bool updateNeighborConnectivity, bool updateIndexes )
 {
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  //ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   // establishing boundary node container
   this->CreateNodePointerVector();
@@ -930,41 +933,32 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
 
   // looping over regions elements, assuring that it's an eligible face type, creating new face with variable storage,
   // establishing connectivity and inserting into boundary element container
-  Face<dim>* root_face( NULL );
   const typename vector<Element<dim>*>::const_iterator regionElementsEnd( region.ElementsEnd() );
   for ( typename vector<Element<dim>*>::const_iterator it = region.ElementsBegin(); it != regionElementsEnd; ++it )
-  {
-    // in 3D, there still could be line elements in the region which are not eligible as face,
-    // unless the Region consist only of line elements
-    if ( dim == 3 && (*it)->IsLineElement() && regionContainsSurfaceElements )
-      continue;
+    {
+      // in 3D, there still could be line elements in the region which are not eligible as face,
+      // unless the Region consist only of line elements
+      if ( dim == 3 && (*it)->IsLineElement() && regionContainsSurfaceElements )
+        continue;
 
-    // finding the higher-dimensional element that sits adjacent to the lower-dimensional one
-    Face<dim>* faceObj( NULL );
-    std::string region_name = region.Name();
-    std::vector<csmp::Element<dim>*> inner_outter_elements;
+      // finding the higher-dimensional element that sits adjacent to the lower-dimensional one
+      std::string region_name = region.Name();
+      std::vector<csmp::Element<dim>*> inner_outter_elements;
 
-    if( !higherDimensionalNeighbors( *(*it), inner_outter_elements ) ) continue;
-    if( inner_outter_elements.size() == 2) {
-      // created a new face
-      faceObj = meshManager.Add( Face<dim>( *(*it), inner_outter_elements[0], inner_outter_elements[1], lvsFaces, lvsIntegrationPoints ) );
-      // push back into face container
-      this->elmt_vec_.emplace_back( faceObj );
-    }
-    else {
-      // created a new face
-      faceObj = meshManager.Add( Face<dim>( *(*it), const_cast<csmp::Element<dim>*>(inner_outter_elements[0]), nullptr, lvsFaces, lvsIntegrationPoints ) );
-      // push back into face container
-      this->elmt_vec_.emplace_back( faceObj );
-    }
+      if ( !higherDimensionalNeighbors( *(*it), inner_outter_elements ) ) continue;
+      if ( inner_outter_elements.size() == 2 ) {
+        // created a new face
+        this->elmt_vec_.push_back( meshManager.AddFace( (*it)->FE(), nullptr,
+                                                        inner_outter_elements[0], inner_outter_elements[1],
+                                                        lvsFaces, lvsIntegrationPoints ) );
+      }
+      else
+        // created a new face
+        this->elmt_vec_.push_back( meshManager.AddFace( (*it)->FE(), nullptr,
+                                                        inner_outter_elements[0], static_cast<Element<dim>*>(nullptr),
+                                                        lvsFaces, lvsIntegrationPoints ) );
 
-    // the first face is assigned into the root face of this face group in the mesh
-    if ( root_face == NULL ) {
-      root_face = faceObj;
-      meshManager.SetRootFace( faceObj );
-    }
-
-  } // region elements
+    } // region elements
 
     // free
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
@@ -1035,34 +1029,25 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
   vector<size_t> faceNodes;
 
   // for the faces of the perimeter elements of the region
-  Face<dim>* root_face( NULL );
-  for ( size_t i = region.InteriorElements(); i<region.Elements(); ++i ) {
-    // ignoring dim-2 elements
-    if ( (dim == 3 and !region.E( i )->IsVolumeElement()) or
-         (dim == 2 and !region.E( i )->IsSurfaceElement()) )
-      continue;
-
-    // for each perimter face
-    const size_t perimeter_faces( region.PerimeterFaces( i ) );
-    for ( size_t j = 0U; j<perimeter_faces; ++j )
+  for ( size_t i = region.InteriorElements(); i<region.Elements(); ++i )
     {
-      // create the new face using the variables prepared above ( FV Stencil = NULL)
-      Face<dim>* faceObj = meshManager.Add( Face<dim>( *region.E( i ),
-                                            finiteElementManager.E( region.E( i )->FE()->ElementTypeOfFace( region.PerimeterFace( i, j ) ) ),
-                                            region.PerimeterFace( i, j ),
-                                            lvsFaces, lvsIntegrationPoints )
-                                          );
-      // push back into face container
-      this->elmt_vec_.push_back( faceObj );
+      // ignoring dim-2 elements
+      if ( (dim == 3 and !region.E( i )->IsVolumeElement()) or
+           (dim == 2 and !region.E( i )->IsSurfaceElement()) )
+        continue;
 
-      // the first face is assigned into the root face of this face group in the mesh
-      if ( root_face == NULL ) {
-        root_face = faceObj;
-        meshManager.SetRootFace( faceObj );
-      }
+      // for each perimter face
+      const size_t perimeter_faces( region.PerimeterFaces( i ) );
+      for ( size_t j = 0U; j<perimeter_faces; ++j ) {
+            // create the new face using the variables prepared above ( FV Stencil = NULL)
+            FiniteElement* fem_ptr = finiteElementManager.E( region.E(i)->FE()->ElementTypeOfFace( region.PerimeterFace(i,j) ) );
+            // push back pointer to face into face container
+            this->elmt_vec_.push_back( meshManager.AddFace( fem_ptr, nullptr,
+                                                            region.E( i ),
+                                                            static_cast<Element<dim>*>(nullptr), // only the inner Face exists
+                                                            lvsFaces, lvsIntegrationPoints ) );
+        }
     }
-  }
-
   // free up excessive storage
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
@@ -1112,7 +1097,6 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
   const size_t   n_elements( region1.Elements() );
   vector<size_t> fnids;
 
-  Face<dim>* root_face( nullptr );
   // for the perimeter elements of the region
   for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
   {
@@ -1132,32 +1116,27 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
       // checking whether neighbor element is part of the boundary of region2
       if ( ePtrNeighbor != nullptr )
         if ( region2.IsPerimeterElement( ePtrNeighbor ) )
-        {
-          // if the neighbor is in the boundary, the new Face is build
-          FiniteElement* femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
-          Face<dim> new_face( femPtr, nullptr, lvsFaces, lvsIntegrationPoints );
-          Face<dim>* faceObj = meshManager.AddIfUnique( new_face );
+          {
+             // if the neighbor is in the boundary, the new Face is build
+             FiniteElement* femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
+             Face<dim>* const faceObj = meshManager.AddFace( femPtr, nullptr,
+                                                             ePtr, nullptr,
+                                                             lvsFaces, lvsIntegrationPoints );
+             // nodes are assigned to the new face
+             ePtr->FE()->NodesOfFace( face, fnids );
+            
+             for ( size_t node = 0U; node < fnids.size(); ++node )
+               faceObj->Assign( node, ePtr->N( fnids[node] ) );
 
-          // nodes are assigned to the new face
-          ePtr->FE()->NodesOfFace( face, fnids );
-          
-          for ( size_t node = 0U; node < fnids.size(); ++node )
-            faceObj->Assign( node, ePtr->N( fnids[node] ) );
+             // the new face is connected to the elements it is sandwiched between
+             // this assignment also includes connecting the face to its nodes
+             //               inner        outer  element w.r.t. to normal of face
+             faceObj->Assign( ePtr, ePtr->Neighbor( face ) );
 
-          // the new face is connected to the elements it is sandwiched between
-          // this assignment also includes connecting the face to its nodes
-          //               inner        outer  element w.r.t. to normal of face
-          faceObj->Assign( ePtr, ePtr->Neighbor( face ) );
+             // added to boundary
+             this->elmt_vec_.emplace_back( faceObj );
 
-          // added to boundary
-          this->elmt_vec_.emplace_back( faceObj );
-
-          // the first face is assigned into the root face of this face group in the mesh
-          if ( root_face == nullptr ) {
-            root_face = faceObj;
-            meshManager.SetRootFace( faceObj );
-          }
-        } // neighboring elements
+          } // neighboring elements
 
     } // perimeter faces
 
@@ -1349,12 +1328,13 @@ void Boundary<dim>::Out() const
   cout << "\n\tperimeter Faces and edge numbers (current local numbering):\n";
   vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
   for ( size_t i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
-    cout << i << ":";
-    for ( vector<ONE_BYTE_NUMBER>::const_iterator
-          ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
-  }
+      cout << i << ":";
+      for ( vector<ONE_BYTE_NUMBER>::const_iterator
+            ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
+    }
   cout << endl;
-}
+  
+} // end
 
 
 template class Boundary<1>;

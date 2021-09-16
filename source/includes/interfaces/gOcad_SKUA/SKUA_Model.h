@@ -7,7 +7,8 @@ namespace csmp {
 
 
 /**
-    SKUA ICEM 3D box-shaped and irregular meshes (including fracture-only DFN models).
+    Imports 3D SKUA  models meshed with SKUA's FiniteElement mesher plugin and using an output procedure
+    created by Thomas Jerome (GMDK Inc.).
  
     @attention if the variables "element number" and / or "node number" are in the variables file,
     they will be initialised with the data from the original VSet.
@@ -17,6 +18,9 @@ namespace csmp {
     @note if elements are elimitated from the model in the build process, corresponding ID values dissappear.
     However, the sequence of the element is not changed which means that "element number" can be collapsed
     to achieve a consecutive range again.
+    
+    @attention To rebuild model from CSMP native binary file do not use this SKUA model class, 
+    the standard CSMP model. All functionality should be there.
 */
 class SKUA_Model : public Model<3U> {
 public:
@@ -28,10 +32,9 @@ public:
               bool binary_file = true,             ///< true = binary, false = ascii */
               bool use_regions_file = true,        ///< true = reduce regions according to regions file, false = does not redure regions
               bool create_boundaries = true,       ///< true = creates boundaries around model, false = does not create boundaries 
-              bool create_splitboundaries = false, ///< true = creates splitboundaries around model, false = does not create splitboundaries 
+              bool create_splitboundaries = false, ///< TODO: true = creates splitboundaries around model, false = does not create splitboundaries 
               bool isoparametric = true );         ///< only option if model does not only consist of simplex elements
 
-  // To rebuild model from CSMP native binary file do not use an SKUA model
   virtual ~SKUA_Model();
 
   /// renumbers the nodes (0..n) as in the original SKUA model; returns true if changes were made

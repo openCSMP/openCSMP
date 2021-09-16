@@ -56,6 +56,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
      // regularising node positions
     cerr <<"\nrun: focusing on inner box region that has "<< model.Region("INNER_BOX_VOL").Nodes() <<" perimeter nodes.\n";
     // TESTING WHETHER PRECISION HAS AN IMPACT
+    /*
     if ( verbose ) {
         const double n_dec_places(1.0e-3);
         for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
@@ -64,7 +65,8 @@ void ANSYS_SplitBoundaryMatch_Test::run()
              (*nit)->z( quantiseToScale( (*nit)->z(), n_dec_places ) );
           }
       }
-  
+     */
+     
      // nodes at model perimeter
      const csmp::Index    nvar_key(model.Database().StorageKey("nodal variable"));
      multiset<Point<3U> > split_nodes;

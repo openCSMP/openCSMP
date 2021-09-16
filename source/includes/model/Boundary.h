@@ -7,16 +7,14 @@
 namespace csmp {
 
 class FiniteElementManager;
+class FaceConstructionData;
 template<size_t> class PropertyDatabase;
 template<size_t> class MeshManager;
 template<typename> class FEM_Data;
-class FaceConstructionData;
 template<size_t> class Point;
 template<size_t> class Node;
 template<size_t> class Element;
-template<size_t> class Face;
 template<size_t> class Region;
-
 
 /**
 
@@ -87,7 +85,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
 
     /// re-constructor of boundary from index data stored in SubDomainInfo
     Boundary( const PropertyDatabase<dim>&,
-              MeshManager<dim>&,       ///< not constant since write access is granted to boundary
+              const MeshManager<dim>&,       
               const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
               BOX_BOUNDARY = IRREGULAR );
 
@@ -181,7 +179,6 @@ class Boundary : public ModelSubDomain<dim, Face>,
     bool IsExternal() const;
 
     /// application of single-value Box boundary flagging
-    // TODO: should this also do the flagging of the edges etc.
     void AtBoundary( BOX_BOUNDARY boxBoundary );
 
     /// reports the flagging of the boundary with respect to csmp::Box boundary convention

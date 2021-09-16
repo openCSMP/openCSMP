@@ -135,19 +135,6 @@ size_t  findNode( const Model<3U>&,
 template<size_t dim, template<size_t> class CELL>
 void printNodes( const CELL<dim>& );
 
-/// retrieves and returns the nodes and the elements that are explored by mesh traversal from the starting root nodes
-template<size_t dim>
-void exploreNodesAndElementsFromMesh( csmp::MeshManager<dim>&, std::deque<Node<dim>*>& nodes, std::deque<Element<dim>*>& elmts );
-
-/// retrieves and returns the faces that are explored by mesh traversal from the starting root faces
-template<size_t dim>
-void exploreFacesFromMesh( csmp::MeshManager<dim>&, std::deque<Face<dim>*>& faces );
-
-/// retrieves and returns the interfaces that are explored by mesh traversal from the starting root interfaces
-template<size_t dim>
-void exploreInterFacesFromMesh( csmp::MeshManager<dim>&, std::deque<InterFace<dim>*>& interfaces );
-
-
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<size_t dim>
 void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );
@@ -305,11 +292,11 @@ template<class V, class D, size_t dim>
 bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
 {
   size_t vcount( -1 );
-  fp.read( (char*)&vcount, sizeof( size_t ) );
+  fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
   for ( size_t i( 0 ); i < vcount; ++i )
   {
     V var;
-    char propName[200];
+    char propName[NAME_STRING];
     binaryFileRead( fp, propName );
     if ( pref.IsDefined( propName ) ) {
       Index key( pref.StorageKey( propName ) );
@@ -324,6 +311,7 @@ bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref
   }
   return true;
 }
+
 
 template<class D, size_t dim>
 bool domainVariablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref )
@@ -341,6 +329,7 @@ bool domainVariablesOut( std::fstream& fp, const D& domain, const PropertyDataba
   return true;
 }
 
+
 template<class D, size_t dim>
 bool domainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref )
 {
@@ -356,6 +345,61 @@ bool domainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>
     return false;
   return true;
 }
+
+
+/**
+    selective variable reader, that extracts only those variables from file whose names are contained in the target set
+    @author SKM
+    @date 6/9/2021
+ */
+template<class V, class D, size_t dim>
+bool selectedVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref,
+                          VARIABLE_TYPE, const std::set<std::string>& selection )
+{
+  size_t vcount( -1 );
+  fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
+  for ( size_t i( 0 ); i < vcount; ++i )
+    {
+      V var;
+      char propName[NAME_STRING];
+      binaryFileRead( fp, propName );
+      if ( selection.find( propName ) != selection.end() && pref.IsDefined( propName ) ) {
+        Index key( pref.StorageKey( propName ) );
+        femDataOutputDispatch::initVariable( key, var );
+        if ( !var.In( fp ) )
+          return false;
+        domain.Store( key, var );
+      }else{
+        if ( !var.In( fp ) )
+          return false;
+      }
+    }
+  return true;
+}
+
+
+/**
+    selective variable reader, that extracts only those variables from file whose names are contained in the target set
+    @author SKM
+    @date 6/9/2021
+ */
+template<class D, size_t dim>
+bool selectedDomainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref,
+                                const std::set<std::string>& selection )
+{
+  if ( !selectedVariablesIn<ScalarVariable>( fp, domain, pref, SCALAR, selection ) )
+    return false;
+  if ( !selectedVariablesIn<VectorVariable<dim> >( fp, domain, pref, VECTOR, selection ) )
+    return false;
+  if ( !selectedVariablesIn<TensorVariable<dim> >( fp, domain, pref, TENSOR, selection ) )
+    return false;
+  if ( !selectedVariablesIn<ArrayVariable>( fp, domain, pref, ARRAY, selection ) )
+    return false;
+  if ( !selectedVariablesIn<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY, selection ) )
+    return false;
+  return true;
+}
+
 
 
 
@@ -411,10 +455,10 @@ may not work if any elements are concave (possible in the case of hexahedra).
 */
 Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& query );
 
+
 /**
 Utility class for storing (i,j,k) coordinates
 */
-
 struct ijk {
   size_t i, j, k;
 

@@ -56,7 +56,7 @@ enum {
 };
 
 /// @enum BOX_BOUNDARY uniquely identifies the placement of nodes and elements on the boundary of a box-shaped model
-enum BOX_BOUNDARY {
+enum BOX_BOUNDARY : std::int8_t {
   NOT       = 0,                  ///< not located on a model boundary
   IRREGULAR = IRREGULAR_OUTSIDE,  ///< located on a not-specified outside boundary of model (usually in the bounding box)
   TOP       = TOP_OUTSIDE,

@@ -90,15 +90,18 @@ class Face : public FiniteElementPolicy<dim,Face>,
 
     /// connects face to the supplied node
     void Assign( size_t node, Node<dim>* const );
-  
+    
+    /// disconnecting the Node without deleting it; its pointer is set to nullptr
+    void Unassign( csmp::Node<dim>* const );
+
     /// assign higher-dimensional neighbor elements to either side of face (outside is optional); needs nodes to be assigned first
     void Assign( Element<dim>* const innerElement, Element<dim>* const outerElement );
   
     /// tell face about its face neighbors
     void Assign( size_t nbor, Face<dim>* const );
-    
-    /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
-    void Unassign( const Face<dim>* ); 
+      
+    /// unassign its face neighbors
+	  bool Unassign( Face<dim>* );
 
     /// @attention because of the pointers, this assignment makes sense only in the rarest cases
     Face& operator=( const Face<dim>& );
@@ -151,6 +154,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
   
     /// returns which Face of the higher dimensional inner neighbor element this Face shares its nodes with
     size_t         InnerParentFaceNumber() const;
+
+    size_t         ParentFaceNumber(INTERFACE_SIDE side) const; //added
   
     /// returns the number of the desired node in the inner parent element of the Face
     size_t         ParentNodeNumber( size_t n_local ) const;
@@ -188,6 +193,11 @@ class Face : public FiniteElementPolicy<dim,Face>,
 
   private:
     Face();
+    
+    /// for exclusive use by MeshManager
+    template<size_t> friend class MeshManager;
+    void* operator new( size_t size );
+    void operator delete( void* p );
   
     // TODO: SKM: deprecate this inefficient method
     void AssignFaceID( const std::vector<Node<dim>*>& faceNodes );

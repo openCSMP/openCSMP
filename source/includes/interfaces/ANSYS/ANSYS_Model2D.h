@@ -58,8 +58,8 @@ public:
 private:
 
   void Initialize( bool isoparametric,
-                   const char * mesh_file_set,
-                   const char * regions_file_prefix,
+                   const char* mesh_file_set,
+                   const char* regions_file_prefix,
                    bool irregular_mesh, bool binary_input_file,
                    bool use_regions_file,
                    bool create_boundaries,

@@ -5,6 +5,50 @@ using namespace std;
 
 namespace csmp {
 
+// JCK 2018
+BinaryFileSectionRead::BinaryFileSectionRead( std::fstream& fp, const char* header )
+	: fp_(fp)
+{
+	char  readhdr[CSMP_BINARY_FILE_HDR_SIZE];
+	const size_t hdrlen = strlen(header);
+	assert(hdrlen <= CSMP_BINARY_FILE_HDR_SIZE);
+	memset(hdr_, 0, sizeof(hdr_));
+	memcpy(hdr_, header, std::min(hdrlen, (size_t)CSMP_BINARY_FILE_HDR_SIZE));
+	fp.read(readhdr, sizeof(char) * CSMP_BINARY_FILE_HDR_SIZE);
+	if ( memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE) ) {
+		throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file entry appears to be corrupt");
+	}
+}
+
+
+
+// JCK 2018
+BinaryFileSectionRead::~BinaryFileSectionRead()
+{
+}
+
+
+
+// JCK 2018
+BinaryFileSectionWrite::BinaryFileSectionWrite( std::fstream& fp, const char* header )
+	: fp_(fp)
+{
+	char hdr[CSMP_BINARY_FILE_HDR_SIZE];
+	size_t hdrlen = strlen(header);
+	assert(hdrlen <= sizeof(hdr));
+	memset(hdr, 0, sizeof(hdr));
+	memcpy(hdr, header, std::min(hdrlen, sizeof(hdr)));
+	fp.write(hdr, sizeof(hdr) / sizeof(char));
+}
+
+
+
+// JCK 2018
+BinaryFileSectionWrite::~BinaryFileSectionWrite()
+{
+}
+
+
 /**
      Reads the size record, returning how many elements the current record contains/
      
@@ -33,6 +77,9 @@ size_t checkContainerSize( std::fstream& fp )
 
 bool binaryFileWrite( fstream& fp, const char* str )
 {
+  if ( str == nullptr )
+    std::cerr <<"nbinaryFileWrite: WARNING: string is nullptr."<< std::endl;
+  
 	if (!fp.is_open()) {
 		cout << "\nbinaryFileWrite (const char*): ERROR: invalid file pointer." << endl;
 		return false;
@@ -66,7 +113,7 @@ bool binaryFileRead( fstream& fp, char str[] )
     }
 
 	if (characters > INFO_STRING)
-		throw csmp::Exception( ERROR, "binaryFileRead", "Binary file appears to be corrupt" );
+		throw csmp::Exception( ERROR, "binaryFileRead", "too many characters in input string" );
 
 	// reading the character string
 	fp.read( reinterpret_cast<char*>(buf), characters );	
@@ -85,38 +132,61 @@ bool binaryFileRead( fstream& fp, char str[] )
 
 
 
-BinaryFileSectionRead::BinaryFileSectionRead( std::fstream& fp, const char* header )
-	: fp_(fp)
+bool binaryFileWrite( fstream& fp, const std::string& str )
 {
-	char readhdr[CSMP_BINARY_FILE_HDR_SIZE];
-	size_t hdrlen = strlen(header);
-	assert(hdrlen <= CSMP_BINARY_FILE_HDR_SIZE);
-	memset(hdr_, 0, sizeof(hdr_));
-	memcpy(hdr_, header, std::min(hdrlen, (size_t)CSMP_BINARY_FILE_HDR_SIZE));
-	fp.read(readhdr, sizeof(char) * CSMP_BINARY_FILE_HDR_SIZE);
-	if (memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE)) {
-		throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file appears to be corrupt");
+  if ( str.empty() )
+    std::cerr <<"nbinaryFileWrite (string): WARNING: string is empty."<< std::endl;
+  
+	if (!fp.is_open()) {
+		cout << "\nbinaryFileWrite (const char*): ERROR: invalid file pointer." << endl;
+		return false;
 	}
+	// writing the size of the object
+	const size_t  characters = str.size();
+	fp.write( reinterpret_cast<const char*>(&characters), sizeof(size_t) );
+
+	// writing the character string (since C++1.7 string is guaranteed to be contiguous in memory)
+	fp.write( &str[0], characters );
+
+	return true;
 }
 
-BinaryFileSectionRead::~BinaryFileSectionRead()
+
+
+bool binaryFileRead( fstream& fp, string& str )
 {
+	if (!fp.is_open()) {
+		cerr << "\nbinaryFileRead(char[]): ERROR: invalid file pointer." << endl;
+		return false;
+	}
+	// read size of the record and assert this
+	size_t  characters(0);
+	char    buf[INFO_STRING];
+
+	if ( !fp.read( reinterpret_cast<char*>(&characters), sizeof(size_t) ) )
+    {
+      cerr << "\nbinaryFileRead(string): ERROR: could not read string length." << endl;
+      return false;
+    }
+
+	if (characters > INFO_STRING)
+		throw csmp::Exception( ERROR, "binaryFileRead(string)", "too many characters in input string" );
+
+	// reading the character string
+	fp.read( reinterpret_cast<char*>(buf), characters );
+	if (characters != fp.gcount())
+    {
+      cerr << "\nbinaryFileRead(string) ERROR: incorrect number of characters were read: ";
+      cerr << "\nIndicated number: " << characters << ", actual number read: " << strlen(buf) << endl;
+      return false;
+    }
+	// null terminate string and copy to 'str' argument
+	buf[characters] = '\0';
+	str = buf;
+
+	return true;
 }
 
-BinaryFileSectionWrite::BinaryFileSectionWrite(std::fstream& fp, const char* header)
-	: fp_(fp)
-{
-	char hdr[8];
-	size_t hdrlen = strlen(header);
-	assert(hdrlen <= sizeof(hdr));
-	memset(hdr, 0, sizeof(hdr));
-	memcpy(hdr, header, std::min(hdrlen, sizeof(hdr)));
-	fp.write(hdr, sizeof(hdr) / sizeof(char));
-}
-
-BinaryFileSectionWrite::~BinaryFileSectionWrite()
-{
-}
 
 
 } // end namespace csmp

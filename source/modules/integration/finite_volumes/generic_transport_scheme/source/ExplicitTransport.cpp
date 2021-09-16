@@ -645,7 +645,7 @@ double64 ExplicitTransport<dim>::OutgoingVolumetricFlow() const
 
 
 
-
+template class ExplicitTransport<2U>;
 template class ExplicitTransport<3U>;
 
 } // end csmp

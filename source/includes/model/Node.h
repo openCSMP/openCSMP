@@ -10,6 +10,7 @@ namespace csmp {
 
 template<size_t dim> class Visitor;
 template<size_t dim> class Element;
+template<size_t dim> class NodeManifold;
 
 /**
  
@@ -47,6 +48,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// custom constructor used when model is reconstructed from binary file
     Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
     ~Node();
+    /// constructs Node with same idx, position, property values, and pointer connections as the argument Node
     Node( const Node& );
     Node( Node&& );
     Node& operator=( const Node& );
@@ -76,34 +78,51 @@ class Node : public LocalVariableStorage<dim,Node> {
     size_t           Neighbors() const;
     /// access to any of these nodes
     Node<dim>*       Neighbor( size_t ) const;
+
+    /// access to manifold if any; returns nullptr if the node is not a manifold
+    NodeManifold<dim>* ParentManifold() { return parent_manifold_; }
+    void AssignParentManifold( NodeManifold<dim>* md ) { parent_manifold_ = md; }
+
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void             Idx( size_t id_0_to_n_minus_1 ) const; // since idx is mutable
     size_t           Idx() const;
     Point<dim>       Coordinate() const;
     void             Coordinate( const Point<dim>& );
+    /// flagging for box-shaped models: NOT, LEFT, BOTTOM, RIGHT, TOP, BACK, FRONT etc.
+    void             AtBoundary( BOX_BOUNDARY );
+    BOX_BOUNDARY     AtBoundary() const;
+
     /// accessors/mutators for specific node coordinates x=0, y=1, z=2 (z exists only in 3D)
     double64         operator[]( size_t i ) const;
     double64&        operator[]( size_t i );
     double64&        operator()( size_t i );
+    
     void             x( double64 );
     void             y( double64 );
     void             z( double64 );
+    
     double64         x() const;
     double64         y() const;
     double64         z() const;
 
+    /// output current state of class Node
     void             Out() const;
 
-    /// an flagging to be deprecated in the future
-    void             AtBoundary( BOX_BOUNDARY );
-    BOX_BOUNDARY     AtBoundary() const;
-
+  private:
+    /// private because these operators are owned by the MeshManager
+    template<size_t> friend class MeshManager;
+    void* operator new( size_t size );
+    void  operator delete( void* );
+  
   private:
     mutable size_t                 idx_;                      ///< 0..n-1
     BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     Point<dim>                     xyz_;                      ///< coordinate array
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     std::vector<Element<dim>*>     parent_element_pointers_;  ///< parent element pointers
+    NodeManifold<dim>*             parent_manifold_ = nullptr;///< parent manifold pointer
+    
+    friend class FiniteElement_TestData; // for testing 
 };
 
 } // csmp

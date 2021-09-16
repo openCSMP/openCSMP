@@ -2,17 +2,17 @@
 #define NACLH2OPROPERTIESVISITORPHX_H
 
 #include "CSMP_definitions.h"
-#include "Model.h"
 #include "Visitor.h"
-#include "ErrorHandler.h"
-
 #include "H2ONaClFluidProperties.h"
 #include "H2ONaClThermalEquilibrator.h"
 
 #include "Rock.h"
+#include "Index.h"
+#include "ScalarVariable.h"
 
 namespace csmp
 {
+  template<size_t> class Model;
 
   template<size_t dim> 
     class NaClH2OPropertiesVisitorPHX : public Visitor<dim> 
@@ -22,11 +22,11 @@ namespace csmp
       NaClH2OPropertiesVisitorPHX( Model<dim>& );
       ~NaClH2OPropertiesVisitorPHX();
       
-      virtual void Visit(Node<dim>* n);  
-	  virtual void Visit(Region<dim>* n);
+      virtual void Visit( Node<dim>* );
+	    virtual void Visit( Region<dim>* );
 
       void SetTimeIncrement( double64 time_increment );
-      void InitialPropertiesFromPTX();
+      void InitialPropertiesFromPTX( Model<dim>& );
       void TopBoundaryHandling( bool TB );
       
       void TemperatureDependentHeatCapacityRock( double64 cpr_min_ext, double64 t_min_ext,
@@ -39,10 +39,6 @@ namespace csmp
       // potentially problematic if yet another phase change within this number of timesteps!
 
     private:
-      // Accessing CSMP memory
-      PropertyDatabase<dim>&     pref;
-      /* csmp::MemoryManager<dim>&  pmem; */
-      csmp::MeshManager<dim>&    pmesh;
 
       bool                         top_boundary;
       bool                         bogus_variables;
@@ -382,7 +378,7 @@ namespace csmp
       void                         ScreenOutputSowatVariables();
       void                         UpdateCSMPVariables( Node<dim>& n );
 
-      double64                           TwoPhasePureWaterCompressibility(double64 cpl, double64 cpv);
+      double64                     TwoPhasePureWaterCompressibility(double64 cpl, double64 cpv);
 
       void                         Output_PTXState();
 
@@ -390,7 +386,7 @@ namespace csmp
       void                         StoreInitialPropertiesAndFlags( Node<dim>& n );  
 
       void                         BoundaryHandling( Node<dim>* n );
-      double64                           BoundaryFlow( );
+      double64                     BoundaryFlow( );
       void                         BoundaryIteration( );
 
       void                         CheckVolumeMismatchCompensation();
@@ -399,18 +395,12 @@ namespace csmp
       void                         TimeStepAdjustment();
       void                         VolumeFactorComputations( Node<dim>* n );
       void                         PrepareVariablesForStorage();
-
-      ErrorHandler&                csmp_error;
-      //      void BoundaryIteration( Node<dim>* n );
-      //      void BoundaryIteration( Node<dim>& n );
-      //	                         void UpdatePorosity();
-      //	double64  CalculateTimeMultiplicationFactor( Node<dim>* n );
     };
   
   
   /*!
     <!-- ================================================================== -->
-    <H1>NaClH2OPropertiesVisitorPHX</H1> <!-- ======================================= -->
+    <H1>NaClH2OPropertiesVisitorPHX</H1> <!-- ================================= -->
     <!-- ================================================================== -->
 
     <!-- ================================================================== -->

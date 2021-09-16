@@ -1,0 +1,433 @@
+//
+//  MeshManagementUtilities.cpp
+//  CSMP_GitHub_UnitTests
+//
+//  Created by Stephan Matthai on 3/7/21.
+//  Copyright © 2021 Stephan Matthai. All rights reserved.
+//
+
+#include "MeshManagementUtilities.h"
+#include "CSMP_highLevelUtilities.h"
+#include "MeshManager.h"
+#include "ErrorHandler.h"
+#include "Box.h"
+
+using namespace std;
+
+namespace csmp {
+
+/**
+Counts elements the nodes of which are all located on the model boundary.
+
+@attention such elements typically give rise to problems with the assignment of
+boundary conditions and should be eliminated.
+
+@attention method will work only if the elements are stored in elmt_connector deque.
+
+@author SKM
+*/
+template<size_t dim>
+size_t detectElementsWithAllNodesOnBoundary( MeshManager<dim>& mmgr, set<size_t>& belmts )
+{
+  belmts.clear();
+
+  assert( mmgr.Elements() > 0 );
+  if ( mmgr.Elements() == 0 ) return 0U;
+
+  // traversal of the existing mesh nodes to find all its elements
+  size_t boundary_only_elements( 0U );
+  for ( typename set<Element<dim>*>::const_iterator
+       it=mmgr.ElementsBegin(); it!=mmgr.ElementsEnd(); ++it ) {
+      const size_t nodes((*it)->Nodes());
+      size_t       counter(0U);
+      for ( size_t i=0U; i<nodes; ++i )
+        if ( (*it)->N(i)->AtBoundary() != NOT ) counter++;
+      if ( counter == nodes ) {
+            belmts.insert( (*it)->Idx() );
+            boundary_only_elements++;
+        }
+   }
+  	
+  return boundary_only_elements;
+}
+
+
+
+
+/**
+
+Breadth first traversal of mesh that can contain elements of any dimension.
+Visit all elements without relying on how they are stored. However, connectivity must be established.
+The Idx numbering of elements and nodes is not altered by this method.
+
+@return number of nodes that were discovered.
+
+@attention this method assumes that all the nodes are connected to elements.
+
+@attention nodes must have been assigned their parent elements for this method to work.
+
+@note method was formerly called AccumulateAll()
+
+@author SKM 9/20/2008, CSMP Castasegna workshop, Switzerland.
+*/
+template<size_t dim>
+size_t findContiguousMeshPatch( csmp::Node<dim>* const root_node, std::deque<Element<dim>*>& elements )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( root_node == nullptr )
+    csmp_error.notice( FATAL_ERROR, "findContiguousMeshPatch(node)", "Root node pointer is dangling!" );
+
+  if ( root_node->Parent( 0 ) == nullptr )
+    csmp_error.notice( FATAL_ERROR, "findContiguousMeshPatch(node)",
+                       "Root node must have been assigned parent elements; else this method cannot operate." );
+
+  if ( !elements.empty() )
+    csmp_error.notice( WARNING, "findContiguousMeshPatch(node)",
+                       "supplied element set not empty; deleting all its content." );
+  elements.clear();
+
+  // 1. traversal of the existing mesh nodes to find all its elements
+  set<csmp::Element<dim>*> explored_elements;
+  set<csmp::Node<dim>*>    discovered_nodes;
+  deque<csmp::Node<dim>*>  current_nodes;
+  // starting at the root element
+  discovered_nodes.insert( root_node );
+  current_nodes.push_back( root_node );
+
+  // MESH TRAVERSAL
+  while ( !current_nodes.empty() ) {
+    const csmp::Node<dim>*  n_ptr( *current_nodes.begin() );
+    // for all parent elements of the current node
+    for ( size_t i = 0U; i<n_ptr->Parents(); i++ ) {
+      // for all the nodes of each parent element
+      for ( size_t j = 0U; j<n_ptr->Parent( i )->Nodes(); j++ )
+        // if this node is not the one from which we started
+        if ( j != n_ptr->ParentNodeNumber( i ) ) {
+          pair<typename set<csmp::Node<dim>*>::iterator, bool>
+            new_node = discovered_nodes.insert( n_ptr->Parent( i )->N( j ) );
+          if ( new_node.second ) current_nodes.push_back( n_ptr->Parent( i )->N( j ) );
+        }
+      // storing the explored element
+      explored_elements.insert( n_ptr->Parent( i ) );
+    }
+    // removing the node from the discovered (but not yet explored) deque
+    current_nodes.pop_front();
+  }
+
+  // 2. assigning and trimming excess storage from the element pointer vector
+  elements.assign( explored_elements.begin(), explored_elements.end() );
+
+  return discovered_nodes.size();
+
+} // end findContiguousMeshPatch (node)
+
+template size_t findContiguousMeshPatch( csmp::Node<1U>* const, std::deque<Element<1U>*>& );
+template size_t findContiguousMeshPatch( csmp::Node<2U>* const, std::deque<Element<2U>*>& );
+template size_t findContiguousMeshPatch( csmp::Node<3U>* const, std::deque<Element<3U>*>& );
+
+
+
+
+
+
+
+/**  findContiguousMeshPatch
+
+Attempts a floodfill on the supplied set of elements, this so identified
+contiguous model region is returned.
+
+The method depends on correct neighbor information.
+
+@section arguments Input Arguments
+
+Input element range iterator: In this region it proceeds to identify
+a contiguous domain.
+
+@param cells_contiguous_subset the method returns a set of pointers to
+those elements forming the first contiguous domain that
+it was able to reach from the supplied iterator.
+
+@section application Application
+
+To break regions into contiguous subdomains.
+
+@author SKM
+@date 21/5/2021
+
+*/
+template<size_t dim,template<size_t> class CELL>
+void findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_contiguous_subset )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    if ( eptr == nullptr ) {
+         csmp_error.notice( ERROR, "findContiguousMeshPatch (set)",
+                           "supplied element pointer is a null pointer; nothing was done.");
+         return;
+      }
+    // identifying the neighbors of the first element to be looked at
+    deque<CELL<dim>*>  neighbor_cells;
+    const size_t  neighbors(eptr->Neighbors());
+    for ( size_t i=0U; i<neighbors; i++ )
+      if ( eptr->Neighbor(i) != nullptr )
+        neighbor_cells.push_back( eptr->Neighbor(i) );
+ 
+    // performing the floodfill, starting with an empty set
+    if ( !cells_contiguous_subset.empty() )
+      cells_contiguous_subset.clear();
+   
+    // insert the first element into the new subset
+    cells_contiguous_subset.insert( static_cast<CELL<dim>*>(eptr) );
+      
+    // element set for subsequent passes
+    deque<CELL<dim>*>  new_neighbor_cells;
+   
+     while( !neighbor_cells.empty() )
+       {
+          // 1. loop over those neighbors that are not already part of the deque
+          for ( typename deque<CELL<dim>*>::const_iterator
+                nit=neighbor_cells.begin(); nit!=neighbor_cells.end(); ++nit )
+            // if the element has not already been dealt with
+            if ( cells_contiguous_subset.find( (*nit) ) == cells_contiguous_subset.end() ) {
+                const size_t  neighbors((*nit)->Neighbors());
+                // adding its neighbor ids to the element list to be processed next, if they haven't been dealt with already
+                for ( size_t j=0U; j<neighbors; ++j )
+                  // if there is a neighbor whose neighbors have not been traversed, it is input in the list
+                  if ( (*nit)->Neighbor(j) != nullptr )
+                    new_neighbor_cells.push_back( (*nit)->Neighbor(j) );
+                cells_contiguous_subset.insert( (*nit) );
+             }
+ 
+          // 2. obtain a new set of neighbors that has to be visited in the next iteration
+          neighbor_cells = new_neighbor_cells;
+            
+          // 3. emptying neighbor set for the next loop
+          new_neighbor_cells.clear();
+      }
+     
+ } // end findContiguousMeshPatch
+
+
+template void findContiguousMeshPatch( Element<1U>* const, set<Element<1U>*>& );
+template void findContiguousMeshPatch( Element<2U>* const, set<Element<2U>*>& );
+template void findContiguousMeshPatch( Element<3U>* const, set<Element<3U>*>& );
+
+template void findContiguousMeshPatch( Face<1U>* const, set<Face<1U>*>& );
+template void findContiguousMeshPatch( Face<2U>* const, set<Face<2U>*>& );
+template void findContiguousMeshPatch( Face<3U>* const, set<Face<3U>*>& );
+
+template void findContiguousMeshPatch( InterFace<1U>* const, set<InterFace<1U>*>& );
+template void findContiguousMeshPatch( InterFace<2U>* const, set<InterFace<2U>*>& );
+template void findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>*>& );
+
+
+
+
+
+
+/**
+      Traversing mesh to find patches that cannot be reached by neighborhood traversal.
+      For each of these a pointer is inserted into the argument deque (root pointer container).
+       
+      returns number of stand-alone mesh patches found.
+      
+             @author SKM 14/8/21
+*/
+template<size_t dim, template<size_t> class CELL>
+size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator begin,
+                                   typename deque<CELL<dim>*>::const_iterator end,
+                                   map<string,deque<CELL<dim>*> >& mesh_patches )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     if ( begin == end ) {
+             csmp_error.notice( WARNING, "findStandAloneMeshPatches:",
+                                         "input CELL pointer range is empty." );
+            return 0U;
+        }
+     
+      // getting a copy of the element pointers of the mesh
+      deque<CELL<dim>*>  cells( begin, end );
+      sort( cells.begin(), cells.end() );
+
+      // detecting via a flood-fill whether the group can be partitioned, else nothing is done
+      set<CELL<dim>*>  cells_contiguous_subset;
+      findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+      
+      // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
+      if ( cells.size() <= cells_contiguous_subset.size() ) {
+           std::cout <<"\nModel<" << dim << ">::findStandAloneMeshPatches: ";
+           std::cout <<"mesh is already contiguous, nothing was done."<< std::endl;
+           return 0U;
+        }
+      // else, we already have found one patch
+      size_t  n_patches(1);
+    
+      // creating new contiguous group from the element subset
+      while ( !cells.empty() )
+        {
+           // creating name for contiguous patch from finite-element type
+           string patch_name( parseFiniteElementType( (*cells_contiguous_subset.begin())->FE_Type() ) );
+           // appending the patch number and the number of elements in patch
+           patch_name +="_patch";
+           patch_name += to_string( n_patches );
+           patch_name +="__";
+           patch_name += to_string( cells_contiguous_subset.size() );
+           patch_name +="cells";
+           if ( n_patches == 1U ) {
+                 std::cout <<"\nfindStandAloneMeshPatches: ";
+                 std::cout <<"mesh is divided into disconnected patch(es):\n";
+             }
+           std::cout <<"\t\t\t'"<< patch_name <<"'";
+           std::cout <<" ("<< cells_contiguous_subset.size() <<" elmts)"<< std::endl;
+
+           // storing away the current contiguous subset
+           if ( !cells_contiguous_subset.empty() )
+             {
+                pair<typename map<string,deque<CELL<dim>*> >::iterator,bool>
+                  insertion = mesh_patches.insert( make_pair( patch_name,
+                                                   move( deque<CELL<dim>*>( cells_contiguous_subset.begin(),
+                                                                            cells_contiguous_subset.end() ) ) ) );
+                if ( insertion.second == false ) {
+                     csmp_error.notice( ERROR, "findStandAloneMeshPatches:", patch_name,
+                                               "could not be inserted into patch map" );
+                  }
+                n_patches++;
+              }
+           else
+             csmp_error.notice( ERROR, "findStandAloneMeshPatches:", patch_name,
+                                       "patch contains no elements, nothing was done" );
+              
+           // deleting the cells that constitute the contiguous subset from the cell storage
+           cells.erase( remove_if( cells.begin(), cells.end(),
+                                   [&](auto x){ return binary_search( std::begin(cells_contiguous_subset),
+                                                                      std::end(cells_contiguous_subset), x ); } ),
+                                   cells.end() );
+
+           // if there are no more cells to process the job is done, else the next patch is searched
+           if ( !cells.empty() )
+             findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+         }
+
+      return n_patches;
+    
+   } // end findStandAloneMeshPatches
+
+// 3D version
+template size_t  findStandAloneMeshPatches( deque<Element<3U>*>::const_iterator,
+                                            deque<Element<3U>*>::const_iterator,
+                                            map<string,deque<Element<3U>*> >& );
+
+template size_t  findStandAloneMeshPatches( deque<Face<3U>*>::const_iterator,
+                                            deque<Face<3U>*>::const_iterator,
+                                            map<string,deque<Face<3U>*> >& );
+
+template size_t  findStandAloneMeshPatches( deque<InterFace<3U>*>::const_iterator,
+                                            deque<InterFace<3U>*>::const_iterator,
+                                            map<string,deque<InterFace<3U>*> >& );
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+      Traversing mesh to find patches that cannot be reached by neighborhood traversal.
+      For each of these a pointer is inserted into the argument deque (root pointer container).
+       
+      returns number of stand-alone mesh patches found.
+      
+*/
+template<size_t dim, template<size_t> class CELL>
+size_t  findPointersToStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator begin,
+                                             typename deque<CELL<dim>*>::const_iterator end,
+                                             map<CELL<dim>*,MeshPatchAttributes>& root_pointers )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     if ( begin == end ) {
+             csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
+                                         "input CELL pointer range is empty." );
+            return 0U;
+        }
+     
+      // getting a copy of the element pointers of the mesh
+      deque<CELL<dim>*>  cells( begin, end );
+      sort( cells.begin(), cells.end() );
+
+      // detecting via a flood-fill whether the group can be partitioned, else nothing is done
+      set<CELL<dim>*>  cells_contiguous_subset;
+      findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+      
+      // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
+      if ( cells.size() <= cells_contiguous_subset.size() ) {
+           std::cout <<"\nModel<" << dim << ">::findPointersToStandAloneMeshPatches: ";
+           std::cout <<"mesh is already contiguous, nothing was done."<< std::endl;
+           return 0U;
+        }
+
+      // else partitions can be created
+      std::string  group_name("meshPatch");
+      std::string  subgroup_name;
+      char         num[128];
+      size_t       n_subgroups(1);
+    
+      // creating new contiguous group from the element subset
+      while ( !cells.empty() )
+        {
+           // creating name of contiguous subgroup
+           sprintf( num, "%lu", n_subgroups );
+           subgroup_name = group_name + num;
+           if ( n_subgroups == 1U ) {
+                 std::cout <<"\findPointersToStandAloneMeshPatches: ";
+                 std::cout <<"mesh is divided into the subregion(s):\n";
+             }
+           std::cout <<"\t\t\t'"<< subgroup_name <<"'";
+           std::cout <<" ("<< cells_contiguous_subset.size() <<" elmts)"<< std::endl;
+         
+           // subtracting the elements that constitute the new group from the remaining element list
+           cells.erase( remove_if( cells.begin(), cells.end(),
+                                   [&](auto x){ return binary_search( std::begin(cells_contiguous_subset),
+                                                                      std::end(cells_contiguous_subset), x ); } ),
+                                   cells.end() );
+
+           // computing the next subset
+           if ( cells.empty() ) break;
+           else {
+                MeshPatchAttributes attributes( cells_contiguous_subset.size(),
+                                               parseFiniteElementDimension((*cells.begin())->FE_Type()) );
+                
+                pair<typename map<CELL<dim>*,MeshPatchAttributes>::iterator,bool>
+                  insertion = root_pointers.insert( make_pair( (*cells.begin()), attributes ) );
+                if ( insertion.second == false ) {
+                     csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
+                                                 "mesh patch could not be inserted into root cell map. Does it already exist?" );
+                  }
+                findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+             }
+           n_subgroups++;
+        }
+
+      return n_subgroups;
+    
+   } // end findPointersToStandAloneMeshPatches
+
+// 3D version
+template size_t  findPointersToStandAloneMeshPatches( deque<Element<3U>*>::const_iterator,
+                                                      deque<Element<3U>*>::const_iterator,
+                                                      map<Element<3U>*,MeshPatchAttributes>& );
+
+template size_t  findPointersToStandAloneMeshPatches( deque<Face<3U>*>::const_iterator,
+                                                      deque<Face<3U>*>::const_iterator,
+                                                      map<Face<3U>*,MeshPatchAttributes>& );
+
+template size_t  findPointersToStandAloneMeshPatches( deque<InterFace<3U>*>::const_iterator,
+                                                      deque<InterFace<3U>*>::const_iterator,
+                                                      map<InterFace<3U>*,MeshPatchAttributes>& );
+
+} // end csmp

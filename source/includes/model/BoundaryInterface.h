@@ -110,8 +110,8 @@ class BoundaryInterface {
     /// using the assigned box boundary flags, tries to create corresponding Boundary objects
     bool EstablishBoxBoundariesFromFlags();
     
-    /// Removes boundary with optional deletion of its faces by the MeshManager
-    void RemoveBoundary( csmp::Boundary<dim>& boundary, bool deleteElements = false );
+    /// Removes boundary with  deletion of its faces in the MeshManager
+    void RemoveBoundary( csmp::Boundary<dim>& boundary );
 
     // -----------------------------------------------
     //  input/output
@@ -121,10 +121,10 @@ class BoundaryInterface {
     void BoundariesOut() const;
 
     /// method used in the storage of a model to binary file
-    bool OutputAllBoundariesToBinary( const char* file_name ) const;
+    bool OutputBoundariesToBinary( const char* file_name ) const;
   
-    /// reads boundaries stored in CSMP native binary file written by OutputAllBoundariesToBinary; it can also read only a subset of variables
-    void InputAllBoundariesFromBinary( const char* file_name, const std::set<std::string>* subset_variables = nullptr );
+    /// reads boundaries stored in CSMP native binary file written by OutputBoundariesToBinary; if set non-empty will only read subset of variables
+    void InputBoundariesFromBinary( const char* file_name, const std::set<std::string>& subset_variables );
 
 
  protected:
@@ -143,17 +143,8 @@ class BoundaryInterface {
     /// inserts csmp::Boundary for box boundaries
     bool EstablishBoxBoundaries();
   
-    /// creates edge Boundary objects for box-shaped model from side boundaries
-    bool EstablishEdgeBoundariesOfBoxShapedModel();
-
-      /// @todo DEPRECATE use boundary information from VSet to create lower-dimensional regions of edge elements
-    bool EstablishEdgeRegionsOfBoxShapedModel( const VSet<dim>&  );
-
     /// inserts irregular csmp::Boundary for all eligible regions in the model
     bool EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
-
-    /// inserts irregular csmp::Boundary for all eligible regions in the discontiguous model
-    bool EstablishBoundariesFromDiscontiguousModel(bool remove_original_lower_dimensional_regions);
 
     /// construct Boundary<Face> objects around a region
     bool AddFaces(const char* region);
@@ -167,6 +158,14 @@ class BoundaryInterface {
                           const typename std::vector<Face<dim>*>::const_iterator facesBegin,
                           const typename std::vector<Face<dim>*>::const_iterator facesEnd,
                           const std::string& bName );
+    // EDGES
+    
+    /// creates edge Boundary objects for box-shaped model from side boundaries
+    bool EstablishEdgeBoundariesOfBoxShapedModel();
+
+      /// @todo DEPRECATE use boundary information from VSet to create lower-dimensional regions of edge elements
+    bool EstablishEdgeRegionsOfBoxShapedModel( const VSet<dim>&  );
+
  protected:
    std::map<std::string,csmp::Boundary<dim> >   faceBoundaryMap_; ///< storage of the boundaries
 };

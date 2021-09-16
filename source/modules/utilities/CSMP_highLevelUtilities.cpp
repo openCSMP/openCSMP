@@ -1575,162 +1575,6 @@ template double64 maximumResidual( const Model<2U>&, const char*, const char*, b
 template double64 maximumResidual( const Model<3U>&, const char*, const char*, bool );
 
 
-/**
-
-Explores all the nodes and the elements from the mesh by mesh traversal from the starting root nodes, 
-and returns the explored nodes and elements.
-
-The method depends on correct neighbor information.
-
-@param mesh  MeshMananger pointer
-@param nodes  elmts: the method returns deques of pointers to the nodes and the elements
-
-@section application Application
-
-*/
-template<size_t dim>
-void exploreNodesAndElementsFromMesh( MeshManager<dim>& mesh, std::deque<Node<dim>*>& nodes, std::deque<Element<dim>*>& elmts )
-{
-	// traversal of the existing mesh nodes to find all nodes and elements
-	set<Element<dim>*>		explored_elements;
-	set<Node<dim>*>	      discovered_nodes;
-	deque<Node<dim>*>	    current_nodes;
-	for (size_t g = 0U; g < mesh.NodeGroups(); g++) {
-		auto root_node = mesh.RootNode(g);
-		// starting at the root node
-		discovered_nodes.insert(root_node);
-		current_nodes.push_back(root_node);
-		while (!current_nodes.empty()) {
-			Node<dim>*  n_ptr(*current_nodes.begin());
-			// for all parent elements of the current node
-			for (size_t i = 0U; i < n_ptr->Parents(); i++) {
-				// for all the nodes of each parent element
-				for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++)
-					// if this node is not the one from which we started
-					if (j != n_ptr->ParentNodeNumber(i)) {
-						auto new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
-						if (new_node.second) current_nodes.push_back(n_ptr->Parent(i)->N(j));
-					}
-				// storing the explored element
-				explored_elements.insert(n_ptr->Parent(i));
-			}
-			// removing the node from the discovered (but not yet explored) deque
-			current_nodes.pop_front();
-		}
-	}
-
-	// assigning the explored nodes and elements from the node and element pointer vectors	
-	nodes.assign(discovered_nodes.begin(), discovered_nodes.end());
-	elmts.assign(explored_elements.begin(), explored_elements.end());
-}
-
-template void exploreNodesAndElementsFromMesh( MeshManager<1U>&, std::deque<Node<1U>*>&, std::deque<Element<1U>*>&);
-template void exploreNodesAndElementsFromMesh( MeshManager<2U>&, std::deque<Node<2U>*>&, std::deque<Element<2U>*>&);
-template void exploreNodesAndElementsFromMesh( MeshManager<3U>&, std::deque<Node<3U>*>&, std::deque<Element<3U>*>&);
-
-
-
-
-/**
-
-Explores all the faces from the mesh by mesh traversal from the starting root faces,
-and returns the explored faces.
-
-The method depends on correct neighbor information.
-
-@param mesh  MeshMananger pointer
-@param faces  the method returns deques of pointers to the faces
-
-@section application Application
-
-*/
-template<size_t dim>
-void exploreFacesFromMesh( MeshManager<dim>& mesh, std::deque<Face<dim>*>& faces )
-{
-	// traversal of the existing mesh root faces to find all faces	
-	set<Face<dim>*>	discovered_faces;
-	deque<Face<dim>*>	current_faces;
-
-	for (size_t g = 0U; g < mesh.FaceGroups(); g++) {
-		auto root_face = mesh.RootFace(g);
-		// starting at the first face
-		discovered_faces.insert(root_face);
-		current_faces.push_back(root_face);
-		while (!current_faces.empty()) {
-			Face<dim>*  n_ptr(*current_faces.begin());
-			// for all neighbor faces of the current face
-			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
-				if (n_ptr->Neighbor(i) == NULL) continue;
-
-				// if this neighbor is new one					
-				auto new_face = discovered_faces.insert(n_ptr->Neighbor(i));
-				if (new_face.second) current_faces.push_back(n_ptr->Neighbor(i));
-			}
-			// removing the face from the discovered (but not yet explored) deque
-			current_faces.pop_front();
-		}
-	}
-	
-	// assigning the explored faces from the face pointer vectors	
-	faces.assign(discovered_faces.begin(), discovered_faces.end());
-}
-
-template void exploreFacesFromMesh(MeshManager<1U>&, std::deque<Face<1U>*>&);
-template void exploreFacesFromMesh(MeshManager<2U>&, std::deque<Face<2U>*>&);
-template void exploreFacesFromMesh(MeshManager<3U>&, std::deque<Face<3U>*>&);
-
-
-
-
-/**
-
-Explores all the interfaces from the mesh by mesh traversal from the starting root interfaces,
-and returns the explored interfaces.
-
-The method depends on correct neighbor information.
-
-@param mesh MeshMananger pointer
-@param interfaces the method returns deques of pointers to the interfaces
-
-@section application Application
-
-*/
-template<size_t dim>
-void exploreInterFacesFromMesh( MeshManager<dim>& mesh, std::deque<InterFace<dim>*>& interfaces)
-{
-	// traversal of the existing mesh root interfaces to find all interfaces	
-	set<InterFace<dim>*>	discovered_interfaces;
-	deque<InterFace<dim>*>	current_interfaces;
-
-	for (size_t g = 0U; g < mesh.InterFaceGroups(); g++) {
-		auto root_interface = mesh.RootInterFace(g);
-		// starting at the first interface
-		discovered_interfaces.insert(root_interface);
-		current_interfaces.push_back(root_interface);
-		while (!current_interfaces.empty()) {
-			InterFace<dim>*  n_ptr(*current_interfaces.begin());
-			// for all neighbor interfaces of the current interface
-			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
-				if (n_ptr->Neighbor(i) == NULL) continue;
-
-				// if this neighbor is new one					
-				auto new_interface = discovered_interfaces.insert(n_ptr->Neighbor(i));
-				if (new_interface.second) current_interfaces.push_back(n_ptr->Neighbor(i));
-			}
-			// removing the interface from the discovered (but not yet explored) deque
-			current_interfaces.pop_front();
-		}
-	}
-
-	// assigning the explored interfaces from the interface pointer vectors	
-	interfaces.assign(discovered_interfaces.begin(), discovered_interfaces.end());
-}
-
-template void exploreInterFacesFromMesh(MeshManager<1U>&, std::deque<InterFace<1U>*>&);
-template void exploreInterFacesFromMesh(MeshManager<2U>&, std::deque<InterFace<2U>*>&);
-template void exploreInterFacesFromMesh(MeshManager<3U>&, std::deque<InterFace<3U>*>&);
-
-
 
 
 
@@ -1998,8 +1842,10 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
     @author SKM 2012
     
         @todo deal with manifolds, disambiguating them on the basis of element orientation (only elements int the same plane or aligned elements should be neighbors)
-*/
 
+        @TODO: no need to use set, use sort() then unique() on the result vector, searching will be much faster
+
+*/
 template<size_t dim>
 void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {

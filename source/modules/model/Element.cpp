@@ -110,13 +110,14 @@ Element<dim>::Element( csmp::FiniteElement* f,
 
 /**
 For model reconstruction from binary file
+
+TODO: add material ID here
 */
 template<size_t dim>
 Element<dim>::Element( size_t idx,
                        csmp::FiniteElement* f,
                        const LocalVariables& ep,
-                       const IntegrationPointVariables& cp,
-                       BOX_BOUNDARY boundary_flag )
+                       const IntegrationPointVariables& cp )
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
   idx_( idx ),
@@ -138,8 +139,8 @@ Element<dim>::Element( const Element<dim>& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
     idx_( el.idx_ ),
-    elmt_connector_( el.elmt_connector_ ), // watch out where the pointers point to
-    node_connector_( el.node_connector_ ),  // watch out where the pointers point to
+    elmt_connector_( el.elmt_connector_ ), // the pointers point to the same elements as for the original element
+    node_connector_( el.node_connector_ ),  
     material_id_(el.material_id_)
 {
   assert( !node_connector_.empty() /* detected unitialized element*/ );
@@ -170,10 +171,19 @@ Element<dim>::Element( Element<dim>&& el )
 
 template<size_t dim>
 Element<dim>::~Element()
-{
-  //    if ( idx_ == UINT_MAX ) cerr <<"x ";
-  //    else cerr << idx_ <<" ";
-}
+ {
+    // disconnecting the neighbor elements that are connected to this element
+    for ( auto it : elmt_connector_ )
+      if ( it != nullptr )
+        for ( auto nit : it->elmt_connector_ )
+          if ( nit == this ) {
+               nit = nullptr;
+               break;
+            }
+    // disconnecting the element from its nodes and neighbors
+    for ( auto& it : elmt_connector_ ) it = nullptr;
+    for ( auto& it : node_connector_ ) it = nullptr;
+ }
 
 
 
@@ -221,43 +231,67 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 
 
 /// Roman, 2014
-/// WARNING: this operator is used specifically in the process of creation of particular Region.
+/// WARNING: this operator is used specifically in the process of creation of particular ??? Region ???
 /// Therefore only important infromation for that process is taken into account in order to distinguish two Element's.
 /// That must be FE_Type and attached Nodes
-// TODO: check whether this is still needed after refactoring
+///   SKM revised 2021
 template<size_t dim>
 bool  Element<dim>::operator==( const Element<dim>& el )
 {
   if ( &el != this )
-  {
-    if ( this->FE_Type() == el.FE_Type() )
     {
-      if ( node_connector_.size() == el.node_connector_.size() )
-      {
-        if ( node_connector_.empty() )
-        {
-          if ( idx_ == el.idx_ )
-            return true;
-          return false;
-        }
-
-        std::set<Node<dim>*> nodes1( node_connector_.begin(), node_connector_.end() );
-        std::set<Node<dim>*> nodes2( el.node_connector_.begin(), el.node_connector_.end() );
-        std::vector<Node<dim>*> nodes_intersect;
-        std::set_intersection( nodes1.begin(), nodes1.end(),
-                               nodes2.begin(), nodes2.end(),
-                               std::back_inserter( nodes_intersect ) );
+       if ( this->FE_Type() != el.FE_Type() ) return false;
+       if ( node_connector_.size() != el.node_connector_.size() ) return false;
+       // ignored: if ( idx_ == el.idx_ ) return true;
+       set<Node<dim>*> nodes1( node_connector_.begin(), node_connector_.end() );
+       set<Node<dim>*> nodes2( el.node_connector_.begin(), el.node_connector_.end() );
+       vector<Node<dim>*> nodes_intersect;
+       set_intersection( nodes1.begin(), nodes1.end(),
+                         nodes2.begin(), nodes2.end(),
+                         back_inserter( nodes_intersect ) );
         if ( nodes_intersect.size() == node_connector_.size() )
           return true;
-
-        return false;
-      }
-      return false;
     }
-    return false;
-  }
   return true;
 }
+
+
+/**
+  less_than<> predicate for storage of Elements in STL container objects, including equal comparisons.
+    @author SKM
+    @date 6/9/2021
+*/
+template<size_t dim>
+bool  Element<dim>::operator<( const Element<dim>& el )
+{
+  if ( &el != this )
+    {
+       Point<dim> barycentre(BaryCenter());
+       Point<dim> barycentre_el(el.BaryCenter());
+       return barycentre < barycentre_el;
+    }
+  return false;
+}
+
+
+// privatized to avoid use outside of MeshManager
+template<size_t dim>
+void* Element<dim>::operator new( size_t size )
+  {
+      std::cout<< "\nElement<"<< dim <<">: called overloaded new operator.\n";
+      //void * p = malloc(size); will also work fine
+      return ::operator new(size);
+  }
+ 
+
+// privatized to avoid use outside of MeshManager
+template<size_t dim>
+void Element<dim>::operator delete( void* p )
+  {
+     std::cout<< "\nElement<"<< dim <<">: called overloaded delete operator.\n";
+     free(p);
+     p = nullptr;
+  }
 
 
 
@@ -443,22 +477,6 @@ void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
       }
   }
 
-
-/* OLD VERSION WITH DELETION, changing size of vector
-template<size_t dim>
-void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
-{
-  for ( size_t i = 0U; i < node_connector_.size(); i++ ) {
-    if ( nd_ptr == NULL || node_connector_[i] == nullptr )
-      continue;
-    if ( (*nd_ptr) == (*node_connector_[i]) ) {
-      node_connector_.erase( node_connector_.begin() + i );
-      node_connector_.swap( node_connector_ );
-      break;
-    }
-  }
-}
-*/
 
 
 template<size_t dim>

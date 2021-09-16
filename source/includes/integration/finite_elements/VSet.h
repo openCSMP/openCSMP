@@ -68,9 +68,13 @@ class VSet : public VData {
     void AddPfverts( typename std::deque<std::vector<long64> >::const_iterator first,
                      typename std::deque<std::vector<long64> >::const_iterator last );
   
+    /// adds BOX_BOUNDARY flag values to VData
+    void AddBFlags( typename std::vector<std::int8_t>::const_iterator first,
+                    typename std::vector<std::int8_t>::const_iterator last );
+
     /// rocktype identifiers for elements only
-    void AddPmtrl( typename std::vector<int32>::const_iterator first,
-                   typename std::vector<int32>::const_iterator last );
+    void AddPmtrl( typename std::deque<int32>::const_iterator first,
+                   typename std::deque<int32>::const_iterator last );
   
     /// checks whether the VSet contains any distributed variable values stored in PropertyData objects
     bool  DataEmpty() const;
@@ -94,14 +98,14 @@ class VSet : public VData {
 
     void RemoveData( const char* s );
 
-    void AddBFlags( typename std::unordered_map<size_t,long64>::const_iterator first,
-                    typename std::unordered_map<size_t,long64>::const_iterator last );
-
     /// writes complete VSet to binary file with the given time stamp
     bool  OutputTo( const char* bin_file, double64 time ) const;
   
+    /// reads binary files written with OutputTo() and initialises the VSet with it; the time stamp is returned in second argument
+    bool  InputFrom( const char* bin_file, double64& time );
+
     /// reads binary files written with OutputTo() and initialises the VSet with it; the time stamp is returned in second argument; it can read only a subset of variables by using third argument
-    bool  InputFrom( const char* bin_file, double64& time, const std::set<std::string>* subset_variables = nullptr );
+    bool  InputFrom( const char* bin_file, double64& time, const std::set<std::string>& subset_variables );
   
     /// permits to initialise a VSet from a text file (see detailed DOxygen documentation for format)
     bool  InputFromTextFile( const char* file_dot_txt );

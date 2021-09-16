@@ -564,7 +564,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
    // --------------------------------------------------------------------------------------
    deque<vector<long64> > pfverts( triangles.size() );
    vector<long64>         pfvert(  triangle.Neighbors() );
-   unordered_map<size_t,long64> pbflags;
+   vector<int8_t>         pbflags( vset.Vertices(), 0 );
    vector<double64>       nd1(3), nd2(3), nd3(3);
    char                   face_key[30];
 
@@ -636,8 +636,9 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
                   
                 // flagging the boudary nodes as such
                 // ----------------------------------
-                pbflags[ (*plit).second[1] ] = pfvert[0];
-                pbflags[ (*plit).second[2] ] = pfvert[0];
+                assert( pfvert[0] < 0 );
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[0]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[0]);
              }
          }
        // ------
@@ -660,8 +661,8 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[1] = IRREGULAR;
-                pbflags[ (*plit).second[0] ] = pfvert[1];
-                pbflags[ (*plit).second[2] ] = pfvert[1];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[1]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[1]);
              }
          }
        // ------
@@ -684,19 +685,21 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[2] = IRREGULAR;
-                pbflags[ (*plit).second[0] ] = pfvert[2];
-                pbflags[ (*plit).second[1] ] = pfvert[2];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[2]);
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[2]);
              }
          }
        pfverts[ (*plit).first ] = pfvert;
     }
 
-  typename unordered_map<size_t,long64>::const_iterator  bflit;
-  if ( debug ) 
+  if ( debug )
     {
-       cout <<"\nDetermined boundary flags:"<< endl; 
-       for ( bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++ )
-         cout <<"\nNode: "<< (*bflit).first <<" flagged: "<< (*bflit).second;
+       cout <<"\nDetermined boundary flags:"<< endl;
+       size_t counter(0U);
+       for ( auto bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++, counter++ )
+         if ( (*bflit) < 0 )
+           cout <<"\nNode: "<< counter <<" flagged: "<< (*bflit);
+           
        cout << endl; 
     }
     
@@ -1510,7 +1513,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
    // --------------------------------------------------------------------------------------
    deque<vector<long64> > pfverts( tetrahedra.size() );
    vector<long64>         pfvert(  tetrahedron.Neighbors() );
-   unordered_map<size_t,long64> pbflags;
+   vector<int8_t>         pbflags( vset.Vertices() );
    vector<double64>       nd1(3), nd2(3), nd3(3), nd4(3);
    char                   face_key[30];
 
@@ -1589,9 +1592,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                   
                 // flagging the boudary nodes as such
                 // ----------------------------------
-                pbflags[ (*plit).second[1] ] = pfvert[0];
-                pbflags[ (*plit).second[2] ] = pfvert[0];
-                pbflags[ (*plit).second[3] ] = pfvert[0];
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[0]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[0]);
+                pbflags[ (*plit).second[3] ] = static_cast<int8_t>(pfvert[0]);
              }
          }
        // ------
@@ -1616,9 +1619,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[1] = IdentifyTetrahedronBoundary( nd1, nd4, nd3 );
-                pbflags[ (*plit).second[0] ] = pfvert[1];
-                pbflags[ (*plit).second[3] ] = pfvert[1];
-                pbflags[ (*plit).second[2] ] = pfvert[1];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[1]);
+                pbflags[ (*plit).second[3] ] = static_cast<int8_t>(pfvert[1]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[1]);
              }
          }
        // ------
@@ -1643,9 +1646,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[2] = IdentifyTetrahedronBoundary( nd1, nd2, nd4 );
-                pbflags[ (*plit).second[0] ] = pfvert[2];
-                pbflags[ (*plit).second[1] ] = pfvert[2];
-                pbflags[ (*plit).second[3] ] = pfvert[2];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[2]);
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[2]);
+                pbflags[ (*plit).second[3] ] = static_cast<int8_t>(pfvert[2]);
              }
          }
        // ------
@@ -1670,9 +1673,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 4: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[3] = IdentifyTetrahedronBoundary( nd1, nd3, nd2 );
-                pbflags[ (*plit).second[0] ] = pfvert[3];
-                pbflags[ (*plit).second[2] ] = pfvert[3];
-                pbflags[ (*plit).second[1] ] = pfvert[3];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[3]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[3]);
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[3]);
              }
          }
        pfverts[ (*plit).first ] = pfvert;
@@ -1680,9 +1683,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 
   if ( verbose )
     {
-       cout <<"\nDetermined boundary flags:"<< endl; 
-       for ( auto bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++ )
-         cout <<"\nNode: "<< (*bflit).first <<" flagged: "<< (*bflit).second;
+       cout <<"\nDetermined boundary flags:"<< endl;
+       size_t counter(0U);
+       for ( auto bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++, counter++ )
+         if ( (*bflit) < 0 )
+           cout <<"\nNode: "<< counter <<" flagged: "<< (*bflit);
        cout << endl; 
     }
     
@@ -1736,22 +1741,9 @@ void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
  {
     // 1. finding coordinate extrema for the boundary nodes
     double64 xmin, xmax, ymin, ymax, zmin, zmax, xco, yco, zco;
-    
-    xmin = xmax = vset.Px( (*vset.BFlagsBegin()).first );
-    ymin = ymax = vset.Py( (*vset.BFlagsBegin()).first );
-    zmin = zmax = vset.Pz( (*vset.BFlagsBegin()).first );
-    
-    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
-      { 
-         if ( xmin > vset.Px( (*bit).first ) ) xmin = vset.Px( (*bit).first );
-         if ( xmax < vset.Px( (*bit).first ) ) xmax = vset.Px( (*bit).first );
-
-         if ( ymin > vset.Py( (*bit).first ) ) ymin = vset.Py( (*bit).first );
-         if ( ymax < vset.Py( (*bit).first ) ) ymax = vset.Py( (*bit).first );
-
-         if ( zmin > vset.Pz( (*bit).first ) ) zmin = vset.Pz( (*bit).first );
-         if ( zmax < vset.Pz( (*bit).first ) ) zmax = vset.Pz( (*bit).first );
-      }
+    vset.CoordinateRange( 0, xmin, xmax );
+    vset.CoordinateRange( 1, ymin, ymax );
+    vset.CoordinateRange( 2, zmin, zmax );
     
     // 2. checking whether the model is actually 3-dimensional
     if ( xmin == xmax || ymin == ymax || zmin == zmax ) {
@@ -1760,41 +1752,42 @@ void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
          return;
       }
       
-    // 3. Flagging the edge nodes according to their coordinates 
-    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+    // 3. Flagging the edge nodes according to their coordinates
+    size_t counter(0U);
+    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, counter++ )
       // ignoring nodes which were already identified as model corners 
-      if ( (*bit).second != CNR_MIN      && (*bit).second != CNR_MAX &&
-           (*bit).second != CNR_MIN_MAXX && (*bit).second != CNR_MIN_MAXXZ &&
-           (*bit).second != CNR_MIN_MAXZ && (*bit).second != CNR_MAX_MINXZ &&
-           (*bit).second != CNR_MAX_MAXX && (*bit).second != CNR_MAX_MAXZ ) 
+      if ( (*bit) != CNR_MIN      && (*bit) != CNR_MAX &&
+           (*bit) != CNR_MIN_MAXX && (*bit) != CNR_MIN_MAXXZ &&
+           (*bit) != CNR_MIN_MAXZ && (*bit) != CNR_MAX_MINXZ &&
+           (*bit) != CNR_MAX_MAXX && (*bit) != CNR_MAX_MAXZ )
         {
-           xco = vset.Px( (*bit).first );
-           yco = vset.Py( (*bit).first );
-           zco = vset.Pz( (*bit).first );
+           xco = vset.Px( counter );
+           yco = vset.Py( counter );
+           zco = vset.Pz( counter );
         
            // 3.1 back wall (z=zmin)
            if ( zco == zmin )
              {
-                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit).second = BACK_BOTTOM; 
-                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit).second = BACK_TOP; 
-                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit).second = BACK_LEFT; 
-                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit).second = BACK_RIGHT; 
+                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit) = BACK_BOTTOM;
+                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit) = BACK_TOP;
+                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit) = BACK_LEFT;
+                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit) = BACK_RIGHT;
              }
            // 3.2 front wall (z=zmax)
            else if ( zco == zmax )
              {
-                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit).second = FRONT_BOTTOM; 
-                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit).second = FRONT_TOP; 
-                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit).second = FRONT_LEFT; 
-                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit).second = FRONT_RIGHT; 
+                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit) = FRONT_BOTTOM;
+                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit) = FRONT_TOP;
+                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit) = FRONT_LEFT;
+                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit) = FRONT_RIGHT;
              }
            // 3.3 side edges ( zmin < z < zmax )
            else if ( zco > zmin && zco < zmax )
              {
-                if ( xco == xmin && yco == ymin ) (*bit).second = BOTTOM_LEFT; 
-                if ( xco == xmax && yco == ymin ) (*bit).second = BOTTOM_RIGHT; 
-                if ( xco == xmax && yco == ymax ) (*bit).second = TOP_RIGHT; 
-                if ( xco == xmin && yco == ymax ) (*bit).second = TOP_LEFT; 
+                if ( xco == xmin && yco == ymin ) (*bit) = BOTTOM_LEFT;
+                if ( xco == xmax && yco == ymin ) (*bit) = BOTTOM_RIGHT;
+                if ( xco == xmax && yco == ymax ) (*bit) = TOP_RIGHT;
+                if ( xco == xmin && yco == ymax ) (*bit) = TOP_LEFT;
              }
       }
  

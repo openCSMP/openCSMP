@@ -90,7 +90,7 @@ void Experimental_Example::Run()
   
       // Model configuration:
       ANSYS_Model2D  model( "SneddonCrack_10cm", false, true, false, true, false);    // Constractor for empty variables
-      for ( auto E : model.Region("FRACTURE").ElementVector()){
+      for ( auto E : model.Region("FRACTURE").CellVector() ) {
           std::cout << "Nbrs -> " << E->ConnectedNeighbors() << std::endl;
           if (E->ConnectedNeighbors() == 1){
               E->Out();

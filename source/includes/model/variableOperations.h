@@ -52,6 +52,12 @@ template<size_t dim>
 TensorVariable<dim> multiplyTensorByTensor( const TensorVariable<dim>&, const TensorVariable<dim>& );
 
 template<size_t dim>
+bool isDiagonalTensor( const TensorVariable<dim>& ts );
+
+template<size_t dim>
+void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64& tmax );
+
+template<size_t dim>
 double64  angleBetween( const VectorVariable<dim>&, const VectorVariable<dim>& );
 
 /// applies any of the standard math library functions to each element of the variable

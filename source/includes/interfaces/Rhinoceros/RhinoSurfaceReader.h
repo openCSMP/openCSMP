@@ -64,7 +64,7 @@ class SKM_RhinoSurfaceReader {
                          
      void CreateNeighborPData( const std::map<size_t,std::vector<size_t> >& plist,
                                std::map<size_t,std::vector<long64> >& pfverts,
-                               std::unordered_map<size_t,long64>& pbflags ) const;
+                               std::vector<std::int8_t>& pbflags ) const;
                          
      void WriteGocadHeader( const char* surf_name, const char* GEOLOGICAL_TYPE, std::ofstream& ofs ) const;
      

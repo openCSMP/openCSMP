@@ -45,7 +45,7 @@ class IsoparametricQuadraticTetrahedron_Test : public Test {
   
   private:
     FiniteElement*  ltetra_, *qtetra_;
-    Element<3U>*    element_, *element2_;
+    Element<3U>     element_, element2_;
     Node<3U>        n0, n1, n2, n3, n4, n5, n6, n7, n8, n9;
     const double64  tolerance_factor_;
     bool            verbose_;

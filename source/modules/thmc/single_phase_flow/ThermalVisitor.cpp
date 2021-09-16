@@ -302,11 +302,11 @@ void ThermalVisitor<dim>::SetInitialProperties(Model<dim>* model)
   }
   this->ApplyTemperatureBoundaryConditionsToTransportedVariables();
 
-}
+} // end SetInitialProperties
 
 template class ThermalVisitor<1>;
 template class ThermalVisitor<2>;
 template class ThermalVisitor<3>;
 
-}// end csmp
+} // end csmp
 

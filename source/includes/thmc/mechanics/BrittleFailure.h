@@ -14,7 +14,7 @@
 
 namespace csmp {
 
-enum FAILURE { COMPRESSIVE=-1,
+enum FAILURE : std::int8_t { COMPRESSIVE=-1,
                NONE=0,
                FRICTIONAL_SLIDING=1,
                SHEAR_FRACTURE=2,

@@ -178,8 +178,10 @@ template<size_t dim>
 class PropertyDatabase  {
  public:
    PropertyDatabase();
-   /// it reads a full of variables in the variables text file; it can also read only a subset of variables from the binary file
-   PropertyDatabase( const char* variablesFileName, bool isBinary = false, const std::set<std::string>* subset_variables = nullptr );
+   /// reads all variables from variables text file
+   explicit PropertyDatabase( const char* variablesFileName );
+   /// reads all variables from binary variables file unless a subset of variables is supplied for the reading
+   PropertyDatabase( const char* variablesBinaryFileName, const std::set<std::string>& subset_variables );
    PropertyDatabase( const PropertyDatabase<dim>& );
    ~PropertyDatabase();
    PropertyDatabase<dim>& operator=( const PropertyDatabase<dim>& p );
@@ -276,8 +278,8 @@ class PropertyDatabase  {
 
    bool   BinaryOut( const char* fileName ) const;
    bool   BinaryOut( std::fstream& fp ) const;
-   bool   BinaryIn( const char* fileName, const std::set<std::string>* subset_variables = nullptr );
-   bool   BinaryIn( std::fstream& fp, const std::set<std::string>* subset_variables = nullptr );
+   bool   BinaryIn( const char* fileName, const std::set<std::string>& subset_variables );
+   bool   BinaryIn( std::fstream& fp, const std::set<std::string>& subset_variables );
 
    void   Verbose(bool verbose) { this->verbose_=verbose; }
    bool   Verbose() { return this->verbose_; }

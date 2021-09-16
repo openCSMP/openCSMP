@@ -53,8 +53,6 @@ encountered during a visitation.
 Have a look at the AlterationVisitor of the equation of state visitors
 in order to understand this design pattern.
 
-@todo (1) Write Concatenate and ConstantFactor  visitors (A)
-
 */
 template<size_t dim>
 class Visitor {
@@ -74,7 +72,6 @@ class Visitor {
     virtual void SetInitialProperties(Model<dim>* model); //Added to allow flexibility in the creation and usage of a visitors that need specific properties
                                                           //to exist/be-calculated before they can be properly initialized.  Model is added as a parameter
                                                           //to aid the extraction of needed parameters. (J.E.M. 07.01.2016)
-
     virtual void Visit( Model<dim>* );   
     virtual void Visit( Region<dim>* );   
     virtual void Visit( Boundary<dim>* );   

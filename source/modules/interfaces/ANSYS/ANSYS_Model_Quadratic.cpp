@@ -472,7 +472,7 @@ and the regions file prefix is used to read the regions file.
       if ( it.second )
         {
           (*it.first).second.CellVector().assign( elementsBegin, elementsEnd );
-          (*it.first).second.CreateNodePointerVector();
+          (*it.first).second.CreateNodePointerVector2();
           (*it.first).second.IdentifyPerimeter( );
         }
       cout << endl << "  csmp::Region " << regionName << " created." << endl;

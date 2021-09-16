@@ -27,7 +27,8 @@ VSet<dim>::VSet( size_t nodes_per_element,
                  size_t nbors_per_element,
                  int32 etype,
                  size_t nodes, size_t elmts )
-: VData(nodes_per_element, nbors_per_element, nodes, elmts)
+: VData(nodes_per_element, nbors_per_element, nodes, elmts),
+  pmtrl_( elmts, UNSPECIFIED )
 {
 	SingleElementType(etype);
 }
@@ -38,7 +39,8 @@ template<size_t dim>
 VSet<dim>::VSet(const deque<size_t>& npes,
                 const deque<size_t>& epes,
                 size_t nodes)
-: VData(npes, epes, nodes)
+: VData(npes, epes, nodes),
+  pmtrl_( epes.size(), UNSPECIFIED )
 {
 	SingleElementType(0);
 }
@@ -76,11 +78,13 @@ void VSet<dim>::Resize( size_t nodes_per_element,
                         size_t nbors_per_element,
                         int32  csmp_etype,
                         size_t nodes,
-                        size_t elmts)
+                        size_t elmts )
 {
 	VData::Resize(nodes_per_element, nbors_per_element, csmp_etype, nodes, elmts);
-  if ( !pmtrl_.empty() || !property_map_.empty() ) 
-    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of 'pmtrl' and property map not handled yet.\n";
+  if ( !pmtrl_.empty() || !property_map_.empty() ) {
+       cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
+       pmtrl_.resize( elmts );
+    }
 }
 
 
@@ -96,8 +100,10 @@ void VSet<dim>::Resize( const deque<int32>& etypes,
                         size_t nodes, size_t faces, size_t interfaces)
 {
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
-  if ( !pmtrl_.empty() || !property_map_.empty() ) 
-    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of 'pmtrl' and property map not handled yet.\n";
+  if ( !pmtrl_.empty() || !property_map_.empty() ) {
+       pmtrl_.resize( epes.size() - faces - interfaces );
+       cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
+    }
 }
 
 
@@ -113,7 +119,7 @@ Adds node coordinates to VSet
 template<size_t dim>
 void VSet<dim>::AddXYZ( const deque<double64>& x,
                         const deque<double64>& y,
-                        const deque<double64>& z)
+                        const deque<double64>& z )
 {
 	if (x.size() != Vertices())
     {
@@ -239,14 +245,23 @@ void VSet<dim>::AddPfverts( typename deque<vector<long64> >::const_iterator firs
 	BOX_BOUNDARY flags as values.
 	*/
 template<size_t dim>
-void VSet<dim>::AddBFlags( typename unordered_map<size_t, long64>::const_iterator first,
-                           typename unordered_map<size_t, long64>::const_iterator last )
+void VSet<dim>::AddBFlags( typename vector<std::int8_t>::const_iterator first,
+                           typename vector<std::int8_t>::const_iterator last )
 {
-	while (first != last)
-    {
-      AddBFlag((*first).first, (*first).second);
-      first++;
-    }
+   const size_t bflags_size(distance(first,last));
+   if ( bflags_size != Vertices() ) {
+        cerr <<"\nVSet<dim>::AddBFlags: supplied BOX_BOUNDARY flag range does not match the number of nodes: ";
+        cerr << bflags_size <<" vs. "<< Vertices() << endl;
+        cerr <<"No assignments were made.\n";
+        return;
+     }
+   ResizeBFlags();
+   auto bit=BFlagsBegin();
+   
+	 while ( first != last ) {
+       (*bit) = (*first);
+       first++;
+     }
     
 } // end
 
@@ -257,8 +272,8 @@ void VSet<dim>::AddBFlags( typename unordered_map<size_t, long64>::const_iterato
        Material ID identifiers need to be provided for all elements, boundaries and split boundaries.
 */
 template<size_t dim>
-void VSet<dim>::AddPmtrl( typename std::vector<int32>::const_iterator first,
-                          typename std::vector<int32>::const_iterator last )
+void VSet<dim>::AddPmtrl( typename std::deque<int32>::const_iterator first,
+                          typename std::deque<int32>::const_iterator last )
  {
     pmtrl_.clear();
     pmtrl_.assign( first, last );
@@ -427,21 +442,31 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 		OutBinary(fp);
 	}
 
-	// NEW: Writing the property data records to file
+	// 4. Writing material / rocktype identifiers ('pmtrl' keys from the elements)
+	{
+		BinaryFileSectionWrite sect(fp, "VSETMTRL");
+    // number of property records
+    records = pmtrl_.size();
+    fp.write((char*)&records, sizeof(size_t));
+    // individual records (all together)
+    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), sizeof(size_t) * records );
+	}
+
+	// 5. Writing the property data records to file
 	{
 		BinaryFileSectionWrite sect(fp, "VSETPROP");
 		if (!property_map_.empty()) {
-			// number of property records
-			records = property_map_.size();
-			fp.write((char*)&records, sizeof(size_t));
-			// individual records
-			for (auto it = property_map_.begin(); it != property_map_.end(); ++it) {
-				// writing the property name
-				binaryFileWrite(fp, (*it).first.c_str());
-				// writing the dataset
-				(*it).second.OutBinary(fp);
-			}
-		}
+        // number of property records
+        records = property_map_.size();
+        fp.write((char*)&records, sizeof(size_t));
+        // individual records
+        for (auto it = property_map_.begin(); it != property_map_.end(); ++it) {
+          // writing the property name
+          binaryFileWrite(fp, (*it).first.c_str());
+          // writing the dataset
+          (*it).second.OutBinary(fp);
+        }
+     }
 		else { // no data record is registered for later reading
 			records = 0U;
 			fp.write((char*)&records, sizeof(size_t));
@@ -449,10 +474,8 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 	}
 
 
-	// 5. cleaning up
-	{
-		BinaryFileSectionWrite sect(fp, "VSETFOTR");
-	}
+	// 6. cleaning up
+  BinaryFileSectionWrite sect(fp, "VSETFOTR");
 
 	fp.close();
 	cout << "\nVSet<" << dim << ">::OutputTo: VSet has been successfully written to: ";
@@ -463,11 +486,23 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 } // end OutputTo
 
 
+
+/**
+Key method for recovery of a model from binary file. 
+*/
+template<size_t dim>
+bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
+{
+   const set<string> empty_subset;
+   return InputFrom( bin_file, time, empty_subset );
+}
+
+
 /**
 Key method for recovery of a model from binary file. It can load only a subset of variables if neccesary.
 */
 template<size_t dim>
-bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<string>* subset_variables )
+bool  VSet<dim>::InputFrom( const char* bin_file, double64& time, const set<string>& subset_variables )
 {
 	char file_name[NAME_STRING];
 	strcpy(file_name, bin_file);
@@ -495,15 +530,24 @@ bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<strin
 		time = atof(strtok(NULL, ":"));
 	}
 
-	// 3. reading the mesh connectivity to file
+	// 3. reading the mesh connectivity to file (VData)
 	{
 		BinaryFileSectionRead sect(fp, "VSETCONN");
-
 		cout << "\nVSet<dim>::InputFrom: reading finite element mesh..." << endl;
 		InBinary(fp);
 	}
 
-	// NEW: Reading the property data records from file
+	// 4. reading material / rocktype identifiers ('pmtrl' keys from the elements)
+	{
+		BinaryFileSectionRead sect(fp, "VSETMTRL");
+    // number of property records
+    fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
+    pmtrl_.resize( records );
+    // individual records (all together)
+    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), records * sizeof(size_t) );
+	}
+
+	// Reading the property data records from file (PropertyData)
 	{
 		BinaryFileSectionRead sect(fp, "VSETPROP");
 
@@ -518,21 +562,17 @@ bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<strin
 				dname = heading;
 
         auto prop = make_pair( dname, inBinaryPropertyData( fp ) );
-        if ( subset_variables ) {
-          if ( subset_variables->find( dname ) != subset_variables->end() )
-            property_map_.insert( prop );
-        }
-        else {
-          property_map_.insert( prop );
-        }
+        if ( !subset_variables.empty() ) {
+            if ( subset_variables.find( dname ) != subset_variables.end() )
+              property_map_.insert( prop );
+          }
+        else  property_map_.insert( prop );
 			}
 		else cout << "\nVSet<dim>::InputFrom: no PropertyData objects detected." << endl;
 	}
 
 	// 5. cleaning up
-	{
-		BinaryFileSectionRead sect(fp, "VSETFOTR");
-	}
+  BinaryFileSectionRead sect(fp, "VSETFOTR");
 
 	fp.close();
 
@@ -644,7 +684,13 @@ bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t&
 } // end ParallelInputFrom
 
 
-/// reads -in polygonal dataset to internal VData container
+
+
+/** reads -in polygonal dataset to internal VData container
+ 
+ @todo read 'pmtrl' and property data as well
+ 
+ */
 template<size_t dim>
 bool  VSet<dim>::InputFromTextFile(const char* text_file)
 {
@@ -673,8 +719,16 @@ bool  VSet<dim>::InputFromTextFile(const char* text_file)
 } // end InputFrom(textfile)
 
 
+
+
+/**
+       Writes VSet to text file.
+       
+        @todo write non-scalar property data as well
+
+*/
 template<size_t dim>
-void VSet<dim>::Out(bool data_as_well) const
+void VSet<dim>::Out( bool data_as_well ) const
 {
 	VData::Out();
 

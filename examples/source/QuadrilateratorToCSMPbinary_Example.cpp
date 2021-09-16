@@ -72,8 +72,8 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     // creating a region of all elements 'sediments'
     topology.AddRegion( "sediments",fem_types, elements );
     // constructing the rectangular model              
-    const bool binaryVariablesFile(false), create_boundary_objects(false /* since there are no line elements */), box_shaped(true);
-    Model<2U>  model( topology, mesh_container, "IMPES-variables.txt", binaryVariablesFile, create_boundary_objects, box_shaped );
+    const bool create_boundary_objects(false /* since there are no line elements */), box_shaped(true);
+    Model<2U>  model( topology, mesh_container, "IMPES-variables.txt", create_boundary_objects, box_shaped );
     recreateBoxBoundaryFlags( model );
     model.Name( "permMatrix50x25" ); 
     // give the model dimensions

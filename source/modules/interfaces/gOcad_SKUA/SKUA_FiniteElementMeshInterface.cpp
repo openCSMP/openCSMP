@@ -176,51 +176,47 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
    
     ifs_asc.close(); // '*.asc' geometry file
 
-    // 2.0 Reading the '*.dat' file with the mesh data
-    // -----------------------------------------------
+    // 2.0 Reading the binary '*.dat' file with the mesh data
+    // -------------------------------------------------------
     FILE*  ifs_dat(0);
     string dat_name = meshfile; dat_name += ".dat";
 
-    if ( (ifs_dat=fopen( dat_name.c_str(), "rb" )) == NULL )
+    if ( (ifs_dat=fopen( dat_name.c_str(), "rb" )) == nullptr )
       csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
-                                     "DAT input file with extension '.dat' could not be opened");
+                         "DAT input file with extension '.dat' could not be opened");
 
-    if( csmp_error.Verbose() )
-    {
-        cout <<"\n\nSKUA_FiniteElementMeshInterface::ReadMeshBinary: Reading connectivity file: '"<< dat_name;
-        cout <<"'"<< endl << endl;
-    }
+    if ( csmp_error.Verbose() ) {
+         cout <<"\n\nSKUA_FiniteElementMeshInterface::ReadMeshBinary: Reading connectivity file: '"<< dat_name;
+         cout <<"'"<< endl << endl;
+      }
 
-    if ( !ReadNodeCoordinatesBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
-                                       "Node coordinates not read correctly");
-      }
-    if ( !ReadBoundaryFlagsAndConditionsBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
-                                       "Boundary flags and conditions not read correctly");
-      }
-    if ( !ReadPelementBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
-                                       "Element types not read correctly");
-      }
+    if ( !ReadNodeCoordinatesBinary( ifs_dat, vset ) )
+      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+                                 "Node coordinates not read correctly");
+
+    if ( !ReadBoundaryFlagsAndConditionsBinary( ifs_dat, vset ) )
+      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+                                     "Boundary flags and conditions not read correctly");
+
+    if ( !ReadPelementBinary( ifs_dat, vset ) )
+      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+                                     "Element types not read correctly");
+                                       
     else { // if 'pelmt' was read correctly, CSMP element-type identifiers are created from SKUA integer identifiers
-         
          for ( size_t i=0U; i<vset.ElementTypes(); ++ i )
            vset.ElementType( i, convertSKUA_ElementType( vset.ElementType(i), isoparametric_ ) );
-      }
-
-    if ( !ReadPlistBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
-                                       "Nodes per element information not read correctly");
-      }
-    if ( !ReadPfvertsBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
-                                       "Element neighbor information not read correctly");
-      }
-    if ( !ReadPmaterialBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
-                                       "Material property identifiers for elements not read correctly");
-      }
+       }
+    if ( !ReadPlistBinary( ifs_dat, vset ) )
+      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+                                   "Nodes per element information not read correctly");
+                                       
+    if ( !ReadPfvertsBinary( ifs_dat, vset ) )
+      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+                                   "Element neighbor information not read correctly");
+                                       
+    if ( !ReadPmaterialBinary( ifs_dat, vset ) )
+       csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+                                   "Material property identifiers for elements not read correctly");
       
     // TODO: read property data  
       
@@ -469,6 +465,11 @@ bool SKUA_FiniteElementMeshInterface::SkipPotentialComment( ifstream& ifs ) cons
 void SKUA_FiniteElementMeshInterface::AdvancePastCommentLine( ifstream& ifs ) const
  {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+    if ( !ifs.is_open() or ifs.eof() ) {
+         csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::AdvancePastCommentLine",
+                            "end of file or file that is not open supplied as an argument." );
+         return;
+      }
 
     char  text_line[1024];
     do {
@@ -479,7 +480,8 @@ void SKUA_FiniteElementMeshInterface::AdvancePastCommentLine( ifstream& ifs ) co
     while ( !IsCommentLine(text_line) and isBlankLine(text_line) );
 
     if ( csmp_error.Verbose() ) {
-        if ( text_line[0] == '\n' or text_line[0] == '\r' )
+        //   linux                   osx                      windows
+        if ( text_line[0] == '\n' or text_line[0] == '\r' or (text_line[0] == '\r' and text_line[1] == '\n') )
           cout <<"\n\tAdvancePastCommentLine: advanced past line break.\n";
         else
           cout <<"\n\tAdvancePastCommentLine: Skipped comment line: "<< text_line << endl;
@@ -899,7 +901,6 @@ void readVectorOfVectors( ifstream& ifs, const deque<size_t>& vector_sizes, size
     assert( !vector_sizes.empty() );
     assert( total_items > vector_sizes.size() ); 
     file_records.clear();
-    // not in deque: file_records.reserve( total_items / entries_per_vector );
     size_t item=0U; 
     
     // case 1: all stored vectors have the same size
@@ -928,11 +929,12 @@ void readVectorOfVectors( ifstream& ifs, const deque<size_t>& vector_sizes, size
     // case 2: each stored vector has a different size
     // -----------------------------------------------
     // getting the number of nodes of the element to be read
-    // reading record when all entries have the same size
+    // reading record 
     else {
+        size_t element_data_read(0U);
         while ( item < total_items )
           {
-             const size_t entries_per_vector( vector_sizes[item] );
+             const size_t entries_per_vector( vector_sizes[element_data_read] );
              // node ID's in file range 0...nodes-1
              vector<T> data;
              data.reserve( entries_per_vector );
@@ -944,6 +946,7 @@ void readVectorOfVectors( ifstream& ifs, const deque<size_t>& vector_sizes, size
                   item++;
                }
              file_records.emplace_back( data );
+             element_data_read++;
           }
       }
       
@@ -994,11 +997,11 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
     deque<size_t>  ndele;
     if ( !vset.HybridElementTypeMesh() ) {
          ndele.push_back( csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(0U) ) );
-         vset.ResizePlist( total_items / ndele[0] );
+         vset.ResizePlist( total_items / ndele[0] ); // number of elements
       }
     else {                   
          for ( size_t i=0U; i<vset.ElementTypes(); i++ )
-           ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
+           ndele.push_back( csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) ) );
          vset.ResizePlist( ndele ); 
       }
       
@@ -1082,7 +1085,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
       }
     else {
          for ( size_t i=0U; i<vset.ElementTypes(); ++i )
-           nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
+           nbors.push_back( csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) ) );
          vset.ResizePfverts( nbors );
       }
       
@@ -1108,6 +1111,19 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
 template bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream&,VSet<1U>& );
 template bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream&,VSet<2U>& );
 template bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream&,VSet<3U>& );
+
+
+// DEBUGGING
+/*
+cerr <<"\n'pfverts'"<< endl;
+for ( size_t i=0U; i<file_records.size(); ++i ) {
+     cerr <<"\n"<< i <<": ";
+     for ( size_t j=0U; j<file_records[i].size(); j++ )
+     cerr << file_records[i][j] <<" ";
+  }
+*/
+
+
 
 
 
@@ -1141,10 +1157,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialASCII( ifstream& ifs, VSet<di
       }
     
     // only for the volumetric elements material data are read from file
-    vector<int32> elmt_mtrls;
-    elmt_mtrls.reserve(records);
-    int32   emtrl;
-    size_t  i(0);
+    deque<int32> elmt_mtrls;
+    int32        emtrl;
+    size_t       i(0);
     for ( i=0; i<records; ++i ) {
          ifs >> emtrl;
          elmt_mtrls.push_back(emtrl);
@@ -1212,7 +1227,11 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
       csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
                         "end of file reached; input fle does not contain any property data" );  
     ifs >> integer;
-    if ( integer <= 0 ) return false;
+    if ( integer <= 0 ) {
+         csmp_error.notice( INFO, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
+                            "text file does not contain any property data"); 
+         return true;
+      }
     const int32 number_of_properties(integer);
 
     // 1. looping over the properties and storing them in the VSet
@@ -1247,6 +1266,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
           }
         
         // reading number of value entries, cross-checking them using the variable type 
+        AdvancePastCommentLine( ifs );
         size_t records;
         ifs >> records;
 
@@ -1337,20 +1357,32 @@ while ( !ifs.eof() ) {
 
 
 
-
+// ----------------------------------------------------------------------------------------------
 
 // BINARY FILE READING
 
+// ----------------------------------------------------------------------------------------------
 
 
-// BINARY data file
 
+/**
+      Node coordinates
+      
+      written in Tcl using the formating (sizes in int32)
+             
+      puts -nonewline $TCLID [binary format d $TCLLine] ; x
+      puts -nonewline $TCLID [binary format d $TCLLine] ; y
+      puts -nonewline $TCLID [binary format d $TCLLine] ; z
+
+*/
 template<size_t dim>
 bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    if ( fp == nullptr )
+      csmp_error.notice( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary", "file pointer is zero.");
 
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  uibytes = sizeof(int32);
     const size_t  dbytes  = sizeof(double64);
     size_t        entries(0);
 
@@ -1362,11 +1394,11 @@ bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE* fp, VSet<
     fread( (void*) &entries, uibytes, 1U, fp );
     assert( entries > 0 );
     assert( entries < ULONG_MAX ); // max size of unsigned 32 bit integer
-    if( csmp_error.Verbose() )
-    {
-        cout <<"\n\treading "<< entries <<" node coordinates 'px,py,pz'..."<< endl;
-        cout.flush();
-    }
+    if ( csmp_error.Verbose() )
+      {
+          cout <<"\n\treading "<< entries <<" node coordinates 'px,py,pz'..."<< endl;
+          cout.flush();
+      }
     // reading node coordinates 'px', 'py', 'pz' (double)
     double64* px = new double64[ entries ];
     double64* py = new double64[ entries ];
@@ -1385,43 +1417,48 @@ bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE* fp, VSet<
     vset.ResizeNodes( entries );
 
     // assign node coordinates
+cerr <<"\nSKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary: node coordinates:\n";
     for ( size_t i=0U; i<entries; i++ ) {
+cerr <<"\n"<< i<<": "<< px[i] <<","<< py[i] <<","<< pz[i];
          vset.Px( i, px[i] );
-         vset.Py( i, py[i] ); // SKUA models will always have a three coordinate's
+         vset.Py( i, py[i] ); 
          vset.Pz( i, pz[i] ); // SKUA models will always have a three coordinate's
       }
     delete[] px;
     delete[] py;
     delete[] pz;
 
+    if ( extra_checks_on_binary_file_ ) {
+        // coordinate range checking
+        double64* xmin=min_element( px, px + entries );
+        double64* xmax=max_element( px, px + entries );
+        double64* ymin=min_element( py, py + entries );
+        double64* ymax=max_element( py, py + entries );
+        double64* zmin=min_element( pz, pz + entries );
+        double64* zmax=max_element( pz, pz + entries );
+
+        if ( (*xmax) - (*xmin) < numeric_limits<double64>::epsilon() )
+          throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
+                                              "all nodes have same X-coordinate, but this is a 3D SKUA model.");
+
+        if ( (*ymax) - (*ymin) < numeric_limits<double64>::epsilon() )
+          throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
+                                              "all nodes have same Y-coordinate, but this is a 3D SKUA model.");
+
+        if ( (*zmax) - (*zmin) < numeric_limits<double64>::epsilon() )
+          throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
+                                              "all nodes have same Z-coordinate, but this is a 3D SKUA model.");
+      }
+
     return true;
-
-    /*
-    // coordinate range checking
-    double64* xmin=min_element( px, px + entries );
-    double64* xmax=max_element( px, px + entries );
-    double64* ymin=min_element( py, py + entries );
-    double64* ymax=max_element( py, py + entries );
-    double64* zmin=min_element( pz, pz + entries );
-    double64* zmax=max_element( pz, pz + entries );
-
-    if ( (*xmax) - (*xmin) < numeric_limits<double64>::epsilon() )
-      throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
-                                          "all nodes have same X-coordinate. 2D model must lie in YZ plane.");
-
-    if ( (*ymax) - (*ymin) < numeric_limits<double64>::epsilon() )
-      throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
-                                          "all nodes have same Y-coordinate. 2D model must lie in XZ plane.");
-
-    if ( (*zmax) - (*zmin) < numeric_limits<double64>::epsilon() )
-      throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
-                                          "all nodes have same Z-coordinate. 2D model must lie in XY plane.");
-    */
-}
+    
+} // end 
 
 template bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE*,VSet<1U>&);
 template bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE*,VSet<2U>&);
 template bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE*,VSet<3U>&);
+
+
 
 
 template<size_t dim>
@@ -1435,11 +1472,11 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE
     // 1. reading boundary flags 'pbflags' (int)
     // ------------------------------------------
 
-    if( csmp_error.Verbose() )
-    {
-        cout <<"\n\treading boundary flags 'pbflags'..."<< endl;
-        cout.flush();
-    }
+    if ( csmp_error.Verbose() )
+      {
+          cout <<"\n\treading boundary flags 'pbflags'..."<< endl;
+          cout.flush();
+      }
     set<size_t>  bnodes;
     int32        ival;
     const int32  min28(-30), zero(0);
@@ -1478,6 +1515,12 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE
 template bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<1U>&);
 template bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<2U>&);
 template bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<3U>&);
+
+
+
+
+
+
 
 template<size_t dim>
 bool SKUA_FiniteElementMeshInterface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )

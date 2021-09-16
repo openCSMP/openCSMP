@@ -1365,6 +1365,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
                 for ( int32 e = 0 ; e < gref.Elements(); e++ )
                 {
 //                    cout<<"element: "<<e<<endl;
+// TODO: check what is going on here with the parallel accumulation
                     typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
                     fe_tmp=eit->FE(); //save old pointer.
                     // change pointer here

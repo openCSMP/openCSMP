@@ -6,16 +6,16 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
 class PropertyData;
 class PropertyConstraints;
 struct LocalVariables;
+template<size_t>   class PropertyDatabase;
+template<size_t>   class Node;
+template<size_t>   class VSet;
+template<size_t>   class Region;
+template<size_t>   class Boundary;
+template<size_t>   class MeshManager;
 template<typename> class FEM_Data;
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class VSet;
-template<size_t> class Region;
-template<size_t> class Boundary;
 
 /// returns number of nodes that are shared by the two subdomains
 template<size_t dim, template<size_t> class SIMPLEX>
@@ -79,210 +79,189 @@ their faces coincides with the region boundary.
 template<size_t dim>
 class Region : public ModelSubDomain<dim, Element>,
                public LocalVariableStorage<dim, Region> {
+  public:
 
-public:
+    // ---------------------------------------------
+    // construction of regions in a new model
+    // ---------------------------------------------
 
-  // ---------------------------------------------
-  // construction of regions in a new model
-  // ---------------------------------------------
+    /// construction of named empty region with appropriately sized property storage
+    Region( std::string regionname, const PropertyDatabase<dim>& );
 
-  /// construction of named empty region with appropriately sized property storage
-  Region( std::string regionname, const PropertyDatabase<dim>& );
+    Region( const Region& );
+    Region( Region&& );
+    Region& operator=( const Region& );
 
-  Region( const Region& );
-  Region( Region&& );
-  Region& operator=( const Region& );
+    virtual ~Region();
 
-  virtual ~Region();
+    // ---------------------------------------------
+    // reconstruction of regions that existed before
+    // ---------------------------------------------
 
-  // ---------------------------------------------
-  // reconstruction of regions that existed before
-  // ---------------------------------------------
+    /// re-constructor for regions via the MeshManager
+    Region( const PropertyDatabase<dim>&,
+            const MeshManager<dim>&,
+            const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
 
-  /// re-constructor for regions via the MeshManager
-  Region( const PropertyDatabase<dim>&,
-          MeshManager<dim>&,
-          const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
-
-                                   /// re-constructor for regions via the nodes and elements which are explored by the MeshManager
-  Region( const PropertyDatabase<dim>&,
-          const std::deque<Node<dim>*>&,
-          const std::deque<Element<dim>*>&,
-          const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
-
-
- // --------------------------------------------
- // Property input/output
- // --------------------------------------------
-
-  /// for the assignment of properties that are unique to the instance of this subclass
-  template<typename Var>
-  void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
-    
-  /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
-  template<typename Var>
-  void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
-
-  /// outputs region into VSet polygonal data container; all properties may be output as well
-  void OutputTo( VSet<dim>& vset, bool with_properties = true ) const;
-
-  /// outputs region into VSet polygonal data container, including a selected list of properties
-  void OutputTo( VSet<dim>& vset, const std::map<std::string, Index>& properties ) const;
-
-  /// output all distributed properties into the supplied VSet
-  void OutputDataTo( VSet<dim>& vset ) const;
-
-  /// outputs finite-volume sector and facet variables to VSet
-  void OutputFvDataTo( VSet<dim>& vset ) const;
-
-  /// outputs distributed variable to variable storage container of type PropertyData
-  PropertyData  OutputVariableTo( const char* region_property ) const;
-
-  /// outputs distributed variable to FEM_Data container
-  template<class Var>
-  void OutputVariableTo( const char* property, FEM_Data<Var>& data_local ) const;
-
-  /// inputs distributed variable from file into region; @note indices must match
-  template<class Var>
-  void InputVariableFrom( const char* property, const FEM_Data<Var>& vdata );
+                                     /// re-constructor for regions via the nodes and elements which are explored by the MeshManager
+    Region( const PropertyDatabase<dim>&,
+            const std::deque<Node<dim>*>&,
+            const std::deque<Element<dim>*>&,
+            const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
 
 
-  // --------------------------------------------
-  // region building & modification
-  // --------------------------------------------
+   // --------------------------------------------
+   // Property input/output
+   // --------------------------------------------
 
-  // Accumulate based on the root node of the mesh and its indirect connections to all elements
+    /// for the assignment of properties that are unique to the instance of this subclass
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+      
+    /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
-  /// breadth-first traversal of element tree in order to discover all elements in a particular model domain; returns number of elements discovered
-  size_t AccumulateAll( csmp::Node<dim>* root_node,
-                        bool reestablishNeighborConnectivity = true );
-     
-  /// like AccumulateAll, but for all elements in the mesh ; returns number of elements of the new region                     
-  size_t AccumulateAll( MeshManager<dim>&, bool reestablishNeighborConnectivity ); 
+    /// Local variable storage interface
+    virtual PLACEMENT Placement() const { return REGION; }
 
-  /// accumulate a range of elements into a region defined by iterators over an STL deque container
-  void   Accumulate( typename std::deque<csmp::Element<dim> >::iterator start,
-                     typename std::deque<csmp::Element<dim> >::iterator end );
+    /// checks whether variable placement is compatible with placement on a region
+    virtual bool  ValidVariable( const char* variableName ) const;
 
-  /// accumulate a range of elements into a region defined by constant iterators (accessors only) over an STL vector container
-  void   Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                     typename std::vector<csmp::Element<dim>*>::const_iterator end );
+    /// outputs region into VSet polygonal data container; all properties may be output as well
+    void OutputTo( VSet<dim>& vset, bool with_properties = true ) const;
 
-  /// accumulate a range of elements into a region defined by iterators over the STL set (associative) container
-  void   Accumulate( typename std::set<csmp::Element<dim>*>::const_iterator start,
-                     typename std::set<csmp::Element<dim>*>::const_iterator end );
+    /// outputs region into VSet polygonal data container, including a selected list of properties
+    void OutputTo( VSet<dim>& vset, const std::map<std::string, Index>& properties ) const;
 
-  // Accumulate based on pointers to elements
+    /// output all distributed properties into the supplied VSet
+    void OutputDataTo( VSet<dim>& vset ) const;
 
-  /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids'
-  void   AccumulateByNumber( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                             typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                             std::vector<size_t>& element_ids );
+    /// outputs finite-volume sector and facet variables to VSet
+    void OutputFvDataTo( VSet<dim>& vset ) const;
 
-  void AccumulateByNumber( csmp::MeshManager<dim>& mesh, std::vector<size_t>& element_ids );
+    /// outputs distributed variable to variable storage container of type PropertyData
+    PropertyData  OutputVariableTo( const char* region_property ) const;
 
-  // Accumulate based on property values
+    /// outputs distributed variable to FEM_Data container
+    template<class Var>
+    void OutputVariableTo( const char* property, FEM_Data<Var>& data_local ) const;
 
-  /// accumulates region whose elements have properties in the ranges defined inside of the PropertyConstraints object
-  void   AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                                typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                                const PropertyConstraints& );
+    /// inputs distributed variable from file into region; @note indices must match
+    template<class Var>
+    void InputVariableFrom( const char* property, const FEM_Data<Var>& vdata );
 
-  /// accumulates elements where (at least one node) has 'property' values in the range defined by 'min/max'
-  void   AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                                typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                                const char* property,
-                                double64 min, double64 max );
 
-  void AccumulateWithinRange( csmp::MeshManager<dim>& mesh, const PropertyConstraints& );
+    // --------------------------------------------
+    // region building & modification
+    // --------------------------------------------
 
-  void AccumulateWithinRange( csmp::MeshManager<dim>& mesh, const char* property, double64 min, double64 max );
+    /// accumulates all elements in the mesh directly from MeshManager; returns the number of elements of the new region
+    size_t AccumulateAll( const MeshManager<dim>&, bool reestablishNeighborConnectivity );
 
-  // Accumulate based on the location
+    /// accumulates assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
+    size_t AccumulateByNumber( const MeshManager<dim>&, std::vector<size_t>& element_ids );
 
-  /// accumulates region of elements whose barycenter lies within the defined bounding box
-  void AccumulateRectangularRegion( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                                    typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                                    const Point<dim>& xyz_min, const Point<dim>& xyz_max );
+    /// accumulate a range of elements into a region defined by iterators over an STL deque container
+    size_t Accumulate( typename std::deque<csmp::Element<dim>*>::iterator start,
+                       typename std::deque<csmp::Element<dim>*>::iterator end );
 
-  void AccumulateRectangularRegion( csmp::MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max );
+    /// accumulate a range of elements into a region defined by constant iterators (accessors only) over an STL vector container; returns # of accumulated elements
+    size_t Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                       typename std::vector<csmp::Element<dim>*>::const_iterator end );
 
-  /// Accumulate from the largest component in a mesh
-  size_t FromLargestComponent( MeshManager<dim>& mesh, bool reestablishNeighborConnectivity );
+    /// accumulate a range of elements into a region defined by iterators over the STL set (associative) container
+    size_t Accumulate( typename std::set<csmp::Element<dim>*>::const_iterator start,
+                       typename std::set<csmp::Element<dim>*>::const_iterator end );
 
-  /// merges supplied region with the current one
-  void  Add( const Region& );
+    // Accumulate based on pointers to elements
 
-  /// reestablish nodes based on element container
-  void CreateNodePointerVector();
+    /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids'; uses binary_search
+    size_t AccumulateByNumber( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                               typename std::vector<csmp::Element<dim>*>::const_iterator end,
+                               std::vector<size_t>& element_ids );
 
-  /// excludes the intersection of elements of the 2 regions from the non-unique region
-  bool RemoveRegionFromNonUniqueRegion( const char* non_unique_region, const char* region_to_substract );
+    // Accumulate based on property values
 
-  /// moves region to from the unique- to the non-unique regions map
-  bool MoveRegionRegionToUniqueRegions( const char* unique_region );
+    /// accumulates region whose elements have properties in the ranges defined inside of the PropertyConstraints object; returns number of elements found
+    size_t AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                                  typename std::vector<csmp::Element<dim>*>::const_iterator end,
+                                  const PropertyConstraints& );
 
-  // TODO: deprecate since purpose duplicates that of boundaries
-  /// creates surface / perimeter line of Elements between regions (the first is on the inside); TODO: @todo check whether this works
-  bool CreateBetween( MeshManager<dim>&,
-                      const FiniteElementManager&,
-                      const Region<dim>&,
-                      const Region<dim>& );
+    /// accumulates elements where (at least one node) has 'property' values in the range defined by 'min/max', returns number of elements found
+    size_t AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                                  typename std::vector<csmp::Element<dim>*>::const_iterator end,
+                                  const char* property,
+                                  double64 min, double64 max );
 
-  // ----------------------------------------
-  // geometry manipulations
-  // ----------------------------------------
+    /// accumulates region of elements whose barycenter lies within the defined bounding box
+    size_t AccumulateRectangularRegion( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                                        typename std::vector<csmp::Element<dim>*>::const_iterator end,
+                                        const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
-  /// movement of the nodes in the region
-  void MoveNodeCoordinatesBy( const char* vector_variable );
+    /// merges supplied region with the current one
+    void  Add( const Region& );
 
-  // ----------------------------------------
-  // diagnostics and property calculations
-  // ----------------------------------------
+    /// removes those elements in the region whose id matches one of the numbers contained in vector 'element_ids'
+    size_t RemoveByNumber( std::vector<size_t>& element_ids, std::vector<csmp::Element<dim>*>& ptrs_to_removed_elements );
 
-  /// Visitors
-  virtual void Accept( Visitor<dim>& );
+    /// removes those elements in the region whose pointer matches the ones in the range supplied
+    size_t RemoveRange( typename std::vector<csmp::Element<dim>*>::iterator begin,
+                        typename std::vector<csmp::Element<dim>*>::iterator end );
 
-  /// tests whether the current region includes the specified one
-  bool   Includes( const Region& ) const;
+    // TODO: deprecate since purpose duplicates that of boundaries
+    /// creates surface / perimeter line of Elements between regions (the first is on the inside); TODO: @todo check whether this works
+    bool CreateBetween( MeshManager<dim>&,
+                        const FiniteElementManager&,
+                        const Region<dim>&,
+                        const Region<dim>& );
 
-  /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in subdomain
-  std::pair<int32, int32>  ElementSpatialDimensions() const;
+    // ----------------------------------------
+    // geometry manipulations
+    // ----------------------------------------
 
-  /// returns either the lenght of the perimeter (2D) or the surface area of the region (3D)
-  double64  SurfaceArea() const;
+    /// movement of the nodes in the region
+    void MoveNodeCoordinatesBy( const char* vector_variable );
 
-  /// returns either the area of a surface region, the length of a line region or the region's volume
-  double64  Volume( bool multiply_with_porosity = false ) const;
+    // ----------------------------------------
+    // diagnostics and property calculations
+    // ----------------------------------------
 
-  /// integration over volume elements
-  double64  VolumeIntegral( const char* property, bool multiply_with_porosity, bool verbose = true ) const;
+    /// Visitors
+    virtual void Accept( Visitor<dim>& );
 
-  /// integration over volume and surface elements using thickness attribute (=1 for volume elements)
-  double64  VolumeIntegral_x_Thickness( const char* property, bool multiply_with_porosity = false ) const;
+    /// tests whether the current region includes the specified one
+    bool   Includes( const Region& ) const;
 
-  // ----------------------------------------
-  // screen output
-  // ----------------------------------------
+    /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in subdomain
+    std::pair<int32, int32>  ElementSpatialDimensions() const;
 
-  /// no variables in addition to ModelSubDomain
-  void Out() const { std::cout << "\nRegion:Out:\n"; ModelSubDomain<dim, Element>::Out(); }
+    /// returns either the lenght of the perimeter (2D) or the surface area of the region (3D)
+    double64  SurfaceArea() const;
 
-public:
+    /// returns either the area of a surface region, the length of a line region or the region's volume
+    double64  Volume( bool multiply_with_porosity = false ) const;
 
-  /// Local variable storage interface
-  virtual PLACEMENT Placement() const { return REGION; }
+    /// integration over volume elements
+    double64  VolumeIntegral( const char* property, bool multiply_with_porosity, bool verbose = true ) const;
 
-  /// checks whether variable placement is compatible with placement on a region
-  virtual bool  ValidVariable( const char* variableName ) const;
+    /// integration over volume and surface elements using thickness attribute (=1 for volume elements)
+    double64  VolumeIntegral_x_Thickness( const char* property, bool multiply_with_porosity = false ) const;
 
-protected:
+    // ----------------------------------------
+    // screen output
+    // ----------------------------------------
 
-  /// returns local variables for integration points
-  IntegrationPointVariables ElementIntegrationPointVariables() const;
+    /// no variables in addition to ModelSubDomain
+    void Out() const { std::cout << "\nRegion:Out:\n"; ModelSubDomain<dim, Element>::Out(); }
 
-  /// returns local variables for elements
-  LocalVariables ElementVariables() const;
+  protected:
+
+    /// returns local variables for integration points
+    IntegrationPointVariables ElementIntegrationPointVariables() const;
+
+    /// returns local variables for elements
+    LocalVariables ElementVariables() const;
 };
 
 } // csmp   

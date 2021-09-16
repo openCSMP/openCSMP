@@ -22,12 +22,12 @@ template<size_t> class Element;
 template<size_t> class Region;
 template<size_t> class Model;
 
-enum AQUEOUS_PHASE { XH2O=0, XCO2=1, XNACl_aq=2 }; ///< mass fractions stored
-enum CARBONIC_PHASE { YCO2=0, YH2O=1 };
+enum AQUEOUS_PHASE : std::int8_t { XH2O=0, XCO2=1, XNACl_aq=2 }; ///< mass fractions stored
+enum CARBONIC_PHASE : std::int8_t { YCO2=0, YH2O=1 };
 
 /// phases that are continuous across element, note extra NEITHER state required by contrast to SYSTEM_STATE; neither corresponds to full & undefined
-enum PHASES_CONTINUOUS_ACROSS_ELEMENT { AQUEOUS, CARBONIC, HALITE, AQUEOUS_HALITE, AQUEOUS_CARBONIC,
-                                        CARBONIC_HALITE, AQUEOUS_CARBONIC_HALITE, NEITHER };
+enum PHASES_CONTINUOUS_ACROSS_ELEMENT : std::int8_t { AQUEOUS, CARBONIC, HALITE, AQUEOUS_HALITE, AQUEOUS_CARBONIC,
+                                                      CARBONIC_HALITE, AQUEOUS_CARBONIC_HALITE, NEITHER };
 
 /// returns phases which are present on all nodes of the element so that their physical properties can be interpolated
 template<size_t dim>

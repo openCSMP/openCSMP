@@ -254,7 +254,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
 
 void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t> >& plist,
                                                   map<size_t,vector<long64> >& pfverts,
-                                                  unordered_map<size_t,long64>& pbflags ) const
+                                                  vector<std::int8_t>& pbflags ) const
  {
      //  parent element id,  edge of p1 < p2
      map<pair<size_t,size_t>,long64>              edge_map;
@@ -278,29 +278,29 @@ void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t
      // finding the neighbor id's by using the opposite edge definition now to retrieve the neighbor edges
      // if there is no such neighbor, the edge is located on the model boundary and is flagged as IRREGULAR_OUTSIDE
      map<pair<size_t,size_t>,long64>::const_iterator  eit;
-     vector<long64>                                   nbors(3);
+     vector<long64> nbors(3);
 
-     for ( pit=plist.begin(); pit!=plist.end(); pit++ ) {
+     for ( auto pit=plist.begin(); pit!=plist.end(); pit++ ) {
           // initializing neighbor ids
           // neighbor 1 (12)                              clockwise nodes 
           if ( (eit=edge_map.find( make_pair((*pit).second[2],(*pit).second[1]))) == edge_map.end() ) {
                nbors[0] = IRREGULAR_OUTSIDE;
-               pbflags.insert( make_pair( (*pit).second[2],nbors[0] ) );
-               pbflags.insert( make_pair( (*pit).second[1],nbors[0] ) );
+               pbflags[ (*pit).second[2] ] = nbors[0];
+               pbflags[ (*pit).second[1] ] = nbors[0];
             }
           else nbors[0] = (*eit).second;
           // neighbor 2 (20)
           if ( (eit=edge_map.find( make_pair((*pit).second[0],(*pit).second[2]))) == edge_map.end() ) {
                nbors[1] = IRREGULAR_OUTSIDE;
-               pbflags.insert( make_pair( (*pit).second[0],nbors[1] ) );
-               pbflags.insert( make_pair( (*pit).second[2],nbors[1] ) );
+               pbflags[ (*pit).second[0] ] = nbors[1];
+               pbflags[ (*pit).second[2] ] = nbors[1];
             }
           else nbors[1] = (*eit).second;
           // neighbor 3 (01)
           if ( (eit=edge_map.find( make_pair((*pit).second[1],(*pit).second[0]))) == edge_map.end() ) {
                nbors[2] = IRREGULAR_OUTSIDE;
-               pbflags.insert( make_pair( (*pit).second[1],nbors[2] ) );
-               pbflags.insert( make_pair( (*pit).second[0],nbors[2] ) );
+               pbflags[ (*pit).second[1] ] = nbors[2];
+               pbflags[ (*pit).second[0] ] = nbors[2];
             }
           else nbors[2] = (*eit).second;
           // adding new neighbor vector to map
@@ -495,8 +495,8 @@ void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) c
     PopObject( object.c_str(), points, plist );
     
     // create 'pfverts' data
-    unordered_map<size_t,long64>  pbflags;
-    map<size_t,vector<long64> >  pfverts;
+    vector<std::int8_t>         pbflags;
+    map<size_t,vector<long64> > pfverts;
 
     CreateNeighborPData( plist, pfverts, pbflags );
 

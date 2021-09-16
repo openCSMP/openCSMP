@@ -270,6 +270,7 @@ Mesh connectivity file (*.dat) in text ASCII version:
 @endcode
 
 */
+// TODO: get this to work in a way where it does not matter whether the ASCII files are MSDOS or UNIX
 class SKUA_FiniteElementMeshInterface {
   public:
       explicit SKUA_FiniteElementMeshInterface( bool create_isoparametric_element_mesh=true );
@@ -349,6 +350,7 @@ class SKUA_FiniteElementMeshInterface {
     //          region name   element ids
     std::multimap<std::string,std::vector<size_t> >  object_elements_;
     bool  isoparametric_;
+    bool  extra_checks_on_binary_file_ = true;
 };
 
 

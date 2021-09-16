@@ -1,5 +1,6 @@
 #include "SKUA_Model.h"
 #include "SKUA_FiniteElementMeshInterface.h"
+#include "Node.h"
 #include "Element.h"
 #include "Region.h"
 #include "Box.h"
@@ -14,8 +15,9 @@ namespace csmp {
 /**
 Choose isoparametric or non-isoparametric!
 Default constructor of Model is called. Then the model is build
-from the 'icem_file_set' '*.asc' and '*.dat' files using the method
-Initialize.
+from the file set of '*.asc' and '*.dat' files using the method
+Initialize. Notice that - while similar - the internal structure of these files is not the same as in ANSYS.
+
 */
 
 SKUA_Model::SKUA_Model( const char* icem_file_set,
@@ -193,7 +195,7 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
 
 
 /**
-Renumbers the nodes (0..n) as in the original SKUA model.
+Renumbers the nodes (0..n) as in the original SKUA model, using the node location to identify their original number.
 
 @return returns whether any changes in the numbering were made.
 
@@ -211,24 +213,19 @@ bool SKUA_Model::RestoreOriginalNodeNumbering( bool verbose )
   bool first_call( true ), made_changes( false );
   const auto onodesEnd( original_node_numbers.end() );
 
-  // traversal of the existing mesh nodes to find all its elements	
-  deque<Node<3U>*>    nodes;
-  deque<Element<3U>*> elmts;
-  exploreNodesAndElementsFromMesh( Mesh(), nodes, elmts );
-  sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  for ( auto nit : nodes ) {
-    auto onit( original_node_numbers.find( nit->Coordinate() ) );
+  // traversal of the existing mesh nodes to find all its elements
+  for ( auto nit=Mesh().NodesBegin();  nit!=Mesh().NodesEnd(); ++nit ) {
+    auto onit( original_node_numbers.find( (*nit)->Coordinate() ) );
     if ( onit != onodesEnd ) {
-      if ( nit->Idx() != (*onit).second ) {
+      if ( (*nit)->Idx() != (*onit).second ) {
         if ( first_call ) {
           if ( verbose ) cout << "\nSKUA_Model::RestoreOriginalNodeNumbering: changed indices of following nodes:";
           first_call = false;
           made_changes = true;
         }
-        if ( verbose ) cout << "\n\t" << nit->Idx() << " -> " << (*onit).second;
+        if ( verbose ) cout << "\n\t" << (*nit)->Idx() << " -> " << (*onit).second;
       }
-      nit->Idx( (*onit).second );
+      (*nit)->Idx( (*onit).second );
     }
     else
       throw csmp::Exception( ERROR, "SKUA_Model::RestoreOriginalNodeNumbering:",

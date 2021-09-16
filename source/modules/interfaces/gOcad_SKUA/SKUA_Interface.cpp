@@ -553,7 +553,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
 */
 bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& input_txt_file,
                                                                const string& target_region,
-                                                               std::set<long>& no_data_elmt_numbers )
+                                                               std::set<size_t>& no_data_elmt_numbers )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     string datafile = input_txt_file + "-element_barycentres_properties.txt";
@@ -615,7 +615,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
           }
         if ( no_data_count == (items_per_line - first_prop) )
           // for any NO_DATA element record insert element number into the element number set
-          no_data_elmt_numbers.insert( elmt_num );
+          no_data_elmt_numbers.insert( static_cast<size_t>(elmt_num) );
 
         // reading next line
         bc_ifs.getline( text_line, LMAX );
@@ -645,42 +645,56 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
 removes the elements for which NO_DATA values (-9999, -99999) in the target region of the model.
 After removing the elements, the unique regions, boundaries, and split boundaries are updated accordingly.
 
-@author JC
+@author JC revised by SKM
 @date 26/2/2019
+@date 22/5/2021
+
 */
-void SKUA_Interface::Remove_NO_DATA_ElementsInModel( Model<3U>& model, const string& target_region, std::set<long>& no_data_elmt_numbers )
+void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const string& target_region, std::set<size_t>& no_data_elmt_numbers )
 {
   csmp::Region<3U>& region = model.Region( target_region );
   
-  size_t n_removed_elmts = model.RemoveElements( target_region.c_str(), no_data_elmt_numbers );
-
+  vector<size_t>              element_ids( no_data_elmt_numbers.begin(), no_data_elmt_numbers.end() );
+  vector<csmp::Element<3U>*>  ptrs_to_removed_elements;
+  size_t n_removed_elmts    = region.RemoveByNumber( element_ids, ptrs_to_removed_elements );
+  
   // reporting
   std::cout << "\nremove_NO_DATA_ElementsInModel: " << region.Name() << " (removed elements: " << n_removed_elmts << ")";
   std::cout << "\t" << region.Elements() << " elements remaining in '" << region.Name() << "'.\n";
 
+  // updating the model, dependent on wether the removed elements were located only in a single unique region or across regions
+  // if the region is unique ony that region needs to be modified
+  if ( model.IsUnique(target_region) ) {
+       // finding the target elements
+       vector<Element<3U>*> elmt_ptrs;
+       model.Mesh().Erase( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       return;
+    }
+
+  // if the region was non-unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
   // updating regions
   for ( auto rit = model.RegionsBegin(); rit != model.RegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector();
+    rit->second.CreateNodePointerVector2();
     rit->second.EstablishNeighborConnectivity();
     rit->second.IdentifyPerimeter();
   }
 
   // updating unique regions
   for ( auto rit = model.UniqueRegionsBegin(); rit != model.UniqueRegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector();
+    rit->second.CreateNodePointerVector2();
     rit->second.EstablishNeighborConnectivity();
     rit->second.IdentifyPerimeter();
   }
   // updating boundaries
   for ( auto bit = model.BoundariesBegin(); bit != model.BoundariesEnd(); ++bit ) {
     //bit->second.UpdateElementPointerVector( model.Mesh() );
-    bit->second.CreateNodePointerVector();
+    bit->second.CreateNodePointerVector2();
     bit->second.EstablishNeighborConnectivity();
     bit->second.IdentifyPerimeter();
   }
   // updating split boundaries
   for ( auto sbit = model.SplitBoundariesBegin(); sbit != model.SplitBoundariesEnd(); ++sbit ) {
-    sbit->second.CreateNodePointerVector();
+    sbit->second.CreateNodePointerVector2();
     sbit->second.EstablishNeighborConnectivity();
     sbit->second.IdentifyPerimeter();
   }

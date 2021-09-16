@@ -66,7 +66,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     vector<double64>             evalues;
     map<size_t,vector<size_t> >  plist;
     map<size_t,vector<long64> >  pfverts;
-    unordered_map<size_t,long64>           bflags;
+    vector<std::int8_t>          bflags;
     map<size_t,double64>         bvalues;
 
     // 1. Read input files 
@@ -173,7 +173,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     map<size_t,vector<size_t> >  plist_bar;
     map<size_t,vector<long64> >  pfverts_tria;
     map<size_t,vector<long64> >  pfverts_bar;
-    unordered_map<size_t,long64> bflags;
+    std::vector<std::int8_t>     bflags;
     map<size_t,double64>         bvalues;
 
     // 1. Read input files 
@@ -337,7 +337,7 @@ void TRIANGLE_Interface::CheckTriangleOutput( const char*  file,
 void TRIANGLE_Interface::ReadNodeDataFile( const char* file, 
                                            deque<double64>& x, deque<double64>& y, 
                                            deque<double64>& z,
-                                           unordered_map<size_t,long64>&  bflags,
+                                           vector<std::int8_t>&  bflags,
                                            map<size_t,double64>& bvalues )
  {
     char    fname[200];
@@ -674,7 +674,7 @@ corner points of the model. This task is left to CSMP.
 */
 void TRIANGLE_Interface::FlagBoundaryNodes( map<size_t,vector<long64> >& pfverts,
                                             map<size_t,vector<size_t> >& plist, 
-                                            unordered_map<size_t,long64>& bflags )
+                                            std::vector<std::int8_t>& bflags )
  {
     // flag of program 'triangle' for boundary node
     map<size_t,vector<size_t> >::iterator  pit;
@@ -719,7 +719,7 @@ numbers.
 */
 void TRIANGLE_Interface::FlagBoundaryNodesAccordingTo( size_t fvert, long64 bflag_int,
                                                        const vector<size_t>& nds,
-                                                       unordered_map<size_t,long64>&  bflags )
+                                                       std::vector<std::int8_t>&  bflags )
  {
     assert( fvert < 3 );
     // 1. parsing the boundary identifying integer to BOX_BOUNDARY enum
@@ -733,28 +733,16 @@ void TRIANGLE_Interface::FlagBoundaryNodesAccordingTo( size_t fvert, long64 bfla
  
     // 2. Flagging the nodes
     if ( fvert == 0U ) {
-         auto bit=bflags.find(nds[1]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
-         bit=bflags.find(nds[2]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         bflags[nds[1]] = bflag;
+         bflags[nds[2]] = bflag;
       }
     else if ( fvert == 1U ) {
-         auto bit=bflags.find(nds[2]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
-         bit=bflags.find(nds[0]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         bflags[nds[2]] = bflag;
+         bflags[nds[0]] = bflag;
       }
     else if ( fvert == 2U ) {
-         auto bit=bflags.find(nds[0]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
-         bit=bflags.find(nds[1]);
-         assert ( bit != bflags.end() );
-         (*bit).second = bflag;
+         bflags[nds[0]] = bflag;
+         bflags[nds[1]] = bflag;
       }
     
  } // end FlagBoundaryNodesAccordingTo                                       
@@ -1161,36 +1149,37 @@ such that the 2D model has, counting from the bottom up in counter-
 clockwise fashion, the corners 1, 2, 3, 4. In a 3D model another rectangle
 further front (z-direction) has the corresponding corners 4, 5, 6, 7, 8.  
  */
-void TRIANGLE_Interface::FlagCornerNodes( unordered_map<size_t,long64>& bflags,
+void TRIANGLE_Interface::FlagCornerNodes( vector<std::int8_t>& bflags,
                                           deque<double64>& x,
                                           deque<double64>& y,
                                           deque<double64>& z )
  {
      deque<double64>::const_iterator xmin = min_element( x.begin(), x.end() ), 
-                                   xmax = max_element( x.begin(), x.end() ), 
-                                   ymin = min_element( y.begin(), y.end() ), 
-                                   ymax = max_element( y.begin(), y.end() ), 
-                                   zmin = min_element( z.begin(), z.end() ), 
-                                   zmax = max_element( z.begin(), z.end() );
-    
-     for ( auto it=bflags.begin(); it!=bflags.end(); it++ )
+                                     xmax = max_element( x.begin(), x.end() ),
+                                     ymin = min_element( y.begin(), y.end() ),
+                                     ymax = max_element( y.begin(), y.end() ),
+                                     zmin = min_element( z.begin(), z.end() ),
+                                     zmax = max_element( z.begin(), z.end() );
+      
+     size_t n_node(0U);
+     for ( auto it=bflags.begin(); it!=bflags.end(); it++, n_node++ )
        {
-          if ( x[ (*it).first-1 ] == *xmin && y[ (*it).first-1 ] == *ymin && z[ (*it).first-1 ] == *zmin )
-            (*it).second = CNR_MIN;
-          if ( x[ (*it).first-1 ] == *xmax && y[ (*it).first-1 ] == *ymax && z[ (*it).first-1 ] == *zmax )
-            (*it).second = CNR_MAX;
-          if ( x[ (*it).first-1 ] == *xmax && y[ (*it).first-1 ] == *ymin && z[ (*it).first-1 ] == *zmin )
-            (*it).second = CNR_MIN_MAXX;
-          if ( x[ (*it).first-1 ] == *xmax && y[ (*it).first-1 ] == *ymin && z[ (*it).first-1 ] == *zmax )
-            (*it).second = CNR_MIN_MAXXZ;
-          if ( x[ (*it).first-1 ] == *xmin && y[ (*it).first-1 ] == *ymin && z[ (*it).first-1 ] == *zmax )
-            (*it).second = CNR_MIN_MAXZ;
-          if ( x[ (*it).first-1 ] == *xmin && y[ (*it).first-1 ] == *ymax && z[ (*it).first-1 ] == *zmin )
-            (*it).second = CNR_MAX_MINXZ;
-          if ( x[ (*it).first-1 ] == *xmax && y[ (*it).first-1 ] == *ymax && z[ (*it).first-1 ] == *zmin )
-            (*it).second = CNR_MAX_MAXX;
-          if ( x[ (*it).first-1 ] == *xmin && y[ (*it).first-1 ] == *ymax && z[ (*it).first-1 ] == *zmax )
-            (*it).second = CNR_MAX_MAXZ;
+          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymin && z[ n_node ] == *zmin )
+            (*it) = CNR_MIN;
+          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymax && z[ n_node ] == *zmax )
+            (*it) = CNR_MAX;
+          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymin && z[ n_node ] == *zmin )
+            (*it) = CNR_MIN_MAXX;
+          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymin && z[ n_node ] == *zmax )
+            (*it) = CNR_MIN_MAXXZ;
+          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymin && z[ n_node ] == *zmax )
+            (*it) = CNR_MIN_MAXZ;
+          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymax && z[ n_node ] == *zmin )
+            (*it) = CNR_MAX_MINXZ;
+          if ( x[ n_node ] == *xmax && y[ n_node ] == *ymax && z[ n_node ] == *zmin )
+            (*it) = CNR_MAX_MAXX;
+          if ( x[ n_node ] == *xmin && y[ n_node ] == *ymax && z[ n_node ] == *zmax )
+            (*it) = CNR_MAX_MAXZ;
        }    
  
  } // end FlagCornerNodes  

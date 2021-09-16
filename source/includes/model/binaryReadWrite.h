@@ -11,18 +11,54 @@ namespace csmp {
 @file binaryReadWrite.h
 */
 
-#define CSMP_BINARY_FILE_HDR_SIZE  8
+constexpr int CSMP_BINARY_FILE_HDR_SIZE(8); // JCK header for data record in file
 
-/// Helper class to read sections from a binary file
+/**
+   Helper class for reading fixed-size strings from binary files
+   
+      defines strings that are used to read the possible datablocks that are abbreviated as
+      VSETCORD
+        VSETPELT
+        VSETPLST
+        VSETPFVT
+        VSETBFLG
+        VSETHEDR
+        VSETCONN
+        VSETFOTR
+        VSETMTRL - new for pmtrl record
+        
+     BoundaryInterface
+        BNDFHEDR - file header
+        BOUNDARY - object description
+        ONE_BDRY
+        BOUNDVAR - variable datablock
+        BNDFFOTR - file footer
+ 
+      SplitBoundaryInterface
+        SBDFHEDR
+        SPLITBDRY
+        ONE_BDRY
+        SBDRYVAR
+        SBDFFOTR
+
+    IRegionInterface
+        REGGHEDR
+        UNIQREGN
+        ONE_REGN
+        NONUREGN
+        MODELVARS
+        REGFFOTR
+        
+    SplitBoundaryInterface - @todo MISSING
+*/
 class BinaryFileSectionRead
 {
 public:
-	BinaryFileSectionRead(std::fstream& fp, const char* header);
-
+	BinaryFileSectionRead( std::fstream& fp, const char* header );
 	~BinaryFileSectionRead();
 
 private:
-	char hdr_[CSMP_BINARY_FILE_HDR_SIZE + 1];
+	char hdr_[CSMP_BINARY_FILE_HDR_SIZE + 1]; // header JCK - string + null terminator
 	std::fstream& fp_;  
 };
 
@@ -30,8 +66,7 @@ private:
 /// Helper class to write sections to a binary file
 class BinaryFileSectionWrite {
 public:
-	BinaryFileSectionWrite(std::fstream& fp, const char* header);
-
+	BinaryFileSectionWrite( std::fstream& fp, const char* header );
 	~BinaryFileSectionWrite();
 
 private:
@@ -86,6 +121,10 @@ bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner);
 
 // character strings
 
+bool binaryFileWrite( std::fstream& fp, const std::string& );
+
+bool binaryFileRead( std::fstream& fp, std::string& );
+
 bool binaryFileWrite( std::fstream& fp, const char* str);
 
 bool binaryFileRead( std::fstream& fp, char str[]);
@@ -123,6 +162,9 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class T>
 bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 {
+  if ( stl_ctner.empty() )
+    std::cerr <<"nbinaryFileWrite(vector): WARNING: container is empty."<< std::endl;
+  
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileWrite: ERROR: invalid file pointer." << std::endl;
       return false;
@@ -135,9 +177,7 @@ bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-	for ( typename std::vector<T>::const_iterator 
-        it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-		fp.write( reinterpret_cast<const char*>(&(*it)), bytes );
+  fp.write( reinterpret_cast<const char*>(&stl_ctner[0]), bytes * elements );
 
 	return true;
 }
@@ -147,6 +187,9 @@ bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 template<typename T>
 bool binaryFileWrite( std::fstream& fp, const std::deque<T>& stl_ctner )
 {
+  if ( stl_ctner.empty() )
+    std::cerr <<"nbinaryFileWrite(deque): WARNING: container is empty."<< std::endl;
+  
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileWrite( deque<T>& ): ERROR: invalid file pointer." << std::endl;
       return false;
@@ -238,7 +281,7 @@ bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
 
 /// deque version
 template<typename T>
-bool binaryFileRead(std::fstream& fp, std::deque<T>& stl_ctner)
+bool binaryFileRead( std::fstream& fp, std::deque<T>& stl_ctner )
 {
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileRead: ERROR: invalid file pointer." << std::endl;
@@ -305,8 +348,11 @@ To efficiently write vector data to a binary file.
 If the file pointer is invalid, method will quit, reporting an error.
 */
 template<class T>
-bool binaryFileWrite(std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner)
+bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner )
 {
+  if ( stl_ctner.empty() )
+    std::cerr <<"nbinaryFileWrite(deque<vector>): WARNING: container is empty."<< std::endl;
+  
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileWrite(const deque<vector<T> >&): ";
       std::cerr << "ERROR: invalid file pointer." << std::endl;
@@ -433,6 +479,9 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class M, class T>
 bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
 {
+  if ( stl_ctner.empty() )
+    std::cerr <<"nbinaryFileWrite(map): WARNING: container is empty."<< std::endl;
+  
 	if (!fp.is_open())
     {
       std::cerr << "\nbool binaryFileWrite(const map<M,T,less<M> >&): ";
@@ -570,8 +619,11 @@ To efficiently write map data to a binary file.
 If the file pointer is invalid, method will quit, reporting an error.
 */
 template<class M, class T>
-bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner)
+bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner )
 {
+  if ( stl_ctner.empty() )
+    std::cerr <<"nbinaryFileWrite(unordered map): WARNING: container is empty."<< std::endl;
+  
 	if (!fp.is_open())
 	{
 		std::cerr << "\nbool binaryFileWrite(const unordered_map<M,T,less<M> >&): ";
@@ -711,6 +763,9 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class M, class T>
 bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner)
 {
+  if ( stl_ctner.empty() )
+    std::cerr <<"nbinaryFileWrite(map<vector>>): WARNING: container is empty."<< std::endl;
+  
 	if (!fp.is_open()) {
 		std::cerr << "\nbool binaryFileWrite(const map<M,vector<T>,less<M> >&): ";
 		std::cerr << "ERROR: invalid file pointer." << std::endl;

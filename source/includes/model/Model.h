@@ -190,19 +190,20 @@ class Model : public RegionInterface<dim, Model>,
 {
 
 public:
+  // class Model is not copy constructable
 
   /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
-  Model( VSet<dim>&, const char* var_file, bool isoparametric = false, bool binaryVariablesFile = false );
+  Model( VSet<dim>&, const char* var_file, bool isoparametric = false );
 
   /// using the supplied polygonal data constructs unnamed single-domain model without regions, boundaries nor variable storage
   Model( VSet<dim>&, bool isoparametric = false );
 
-  /// constructs model with regions supplied as labeled element lists
-  Model( ModelTopology&, VSet<dim>&, const char* var_file,
-         bool binaryVariablesFile = false, bool create_boundary_objects = false, bool box_shaped = true );
-
-  /// constructs model with regions supplied as labeled element lists
+  /// constructs model with regions supplied as labeled element lists, variables file name is "*-variables.txt" where * is the name of the model
   Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects = false, bool box_shaped = true );
+
+  /// constructs model with regions supplied as labeled element lists and with the possibility to specific a variables file with unique name
+  Model( ModelTopology&, VSet<dim>&, const char* var_file,
+         bool create_boundary_objects = false, bool box_shaped = true );
 
   /// to read model from set of CSMP native binary files
   explicit Model( const std::string& binaryFiles );
@@ -249,8 +250,8 @@ public:
   /// writes entire model with associated properties to disk; non-constant because this involves region creation
   void OutputToBinaryFile( const char* ) const;
 
-  /// reads model written by OutputToDisk() including all associated properties; it can also read only a subset of variables
-  void InputFromBinaryFile( const char* model_name, const std::set<std::string>* subset_variables = nullptr );
+  /// reads model written by OutputToBinaryFile() including all associated properties; if subset of variables is not empty only these will be read
+  void InputFromBinaryFile( const char* model_name, const std::set<std::string>& subset_variables );
 
   /// writes discretised variable to generic variable container
   template<class Var>
@@ -448,9 +449,9 @@ protected:
 
 private:
 
-  /// prevent accidential copy construction of large object
-  Model( const Model& );
-  Model& operator=( const Model& );
+  /// prevent accidential copy construction of large Model object
+  Model( const Model& ) = delete;
+  Model& operator=( const Model& ) = delete;
 
   /// checks wether elements have their correct neighbors and are in the expected model domains; @return number of major errors encoutered.
   int32 CheckElementConnectivity();

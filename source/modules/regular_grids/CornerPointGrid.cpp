@@ -427,19 +427,20 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
 
     Point<3U> m_pt;
   };
-  unordered_map< size_t, long64> pbflags; // boundary type      
+  
+  vector<std::int8_t> pbflags( vset.Vertices(), 0 ); // boundary flags
   for ( size_t i = 0U; i < vset.Vertices(); ++i )
-  {
-    vector<double64> coord( 3U );
-    for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
-    Point<3U> pt( coord );
-    if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
-      pbflags.insert( make_pair( i, BOX_BOUNDARY::TOP ) );
-    else if ( std::find_if( bt_pts.begin(), bt_pts.end(), isEqual( pt ) ) != bt_pts.end() )
-      pbflags.insert( make_pair( i, BOX_BOUNDARY::BOTTOM ) );
-    else
-      pbflags.insert( make_pair( i, BOX_BOUNDARY::IRREGULAR ) );
-  }
+    {
+      vector<double64> coord( 3U );
+      for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
+      Point<3U> pt( coord );
+      if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
+        pbflags[i] = BOX_BOUNDARY::TOP;
+      else if ( std::find_if( bt_pts.begin(), bt_pts.end(), isEqual( pt ) ) != bt_pts.end() )
+        pbflags[i] = BOX_BOUNDARY::BOTTOM;
+      else
+        pbflags[i] = BOX_BOUNDARY::IRREGULAR;
+    }
 
   // 5. Set up the rest of the vset
   // There is no neighbor information in the Eclipse data(*.grdecl). The information will be created later.

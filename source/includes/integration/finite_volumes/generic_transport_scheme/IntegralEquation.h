@@ -15,7 +15,7 @@
 
 namespace csmp {
 
-enum ADE_TERM { ADVECTION,
+enum ADE_TERM : std::int8_t { ADVECTION,
                 FE_DIFFUSION,
                 DISPERSION,
                 SOURCE_SINK,

@@ -213,23 +213,15 @@ CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const
 
 
 template<size_t dim, template<size_t> class CELL>
+const typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() const
+ { return elmt_vec_; }
+
+template<size_t dim, template<size_t> class CELL>
 typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector()
  { return elmt_vec_; }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::ElementVector()
- { return elmt_vec_; }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::FaceVector()
- { return elmt_vec_; }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::InterFaceVector()
- { return elmt_vec_; }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector()
+const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() const
   { return node_vec_; }
 
 
@@ -429,7 +421,7 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity( bool verbose )
           cout << "\n\t\tline elements...";
         //                key                  n-face, neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                                 it2(line_neighbor_keys.begin());
+                                                                              it2(line_neighbor_keys.begin());
         it2++;
 
         while ( it2 != line_neighbor_keys.end() )
@@ -702,6 +694,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
 
 
 /**
+       Distinguishes 'interior' from 'perimeter' elements of the model subdomain by checking for each element face whether
+       this face is located at a model boundary or has a neighbor that does not belong to the current region (=element range of ModelSubdomain).
 
   Remarks on binary search:
 
@@ -1030,6 +1024,60 @@ cout.flush();
  } // end PartitionElementVector
 
 
+
+/**
+    Uses set to create unique node vector.
+*/
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector1()
+{
+  assert( !this->elmt_vec_.empty() );
+
+  if ( !this->node_vec_.empty() )
+    this->node_vec_.clear();
+
+  // creating the node index vector
+  set<csmp::Node<dim>*>  nodes_set;
+  const typename vector<CELL<dim>*>::const_iterator end(this->elmt_vec_.end());
+  for ( typename vector<CELL<dim>*>::const_iterator it = this->elmt_vec_.begin(); it != end; ++it ) {
+       const size_t nodes((*it)->Nodes());
+       for ( typename vector<Node<dim>*>::size_type i = 0U; i<nodes; i++ ) {
+            assert( (*it)->N( i ) != nullptr );
+            nodes_set.insert( (*it)->N( i ) );
+         }
+    }
+
+  this->node_vec_.assign( nodes_set.begin(), nodes_set.end() );
+}
+
+
+
+/**
+    Uses vector to create unique node vector.
+*/
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
+{
+  assert( !this->elmt_vec_.empty() );
+
+  if ( !this->node_vec_.empty() )
+    this->node_vec_.clear();
+
+  // creating the node index vector
+  this->node_vec_.reserve( elmt_vec_.size() );
+  const typename vector<CELL<dim>*>::const_iterator end(this->elmt_vec_.end());
+  for ( typename vector<CELL<dim>*>::const_iterator it = this->elmt_vec_.begin(); it != end; ++it ) {
+       const size_t nodes((*it)->Nodes());
+       for ( typename vector<Node<dim>*>::size_type i = 0U; i<nodes; i++ ) {
+            assert( (*it)->N( i ) != nullptr );
+            this->node_vec_.push_back( (*it)->N( i ) );
+         }
+    }
+
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+}
 
 
 
@@ -5151,7 +5199,7 @@ void ModelSubDomain<dim,CELL>::Out() const
 /**
     Writes data block containing all information that is needed to reconstruct a ModelSubDomain
     
-    @note template template parameters for functions are not allowed
+    @note this is not a function because template template parameters are not allowed for for functions.
 */
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
@@ -5171,8 +5219,9 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
    
-    // 4. writing the boundary faces (not done because pointer locations will change in reconstruction)
-    // -----------------------------
+    // 4. writing the boundary faces
+    // (this not stored because pointer locations will change in reconstruction eliminating storage benefit)
+    // -----------------------------------------------------------------------------------------------------
     /* 
         since this is vector of vectors predominated by single value entries,
         it is collapsed into a flat vector in which all entries that refer to 
@@ -5194,6 +5243,8 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
     transform( PerimeterNodesBegin(), NodesEnd(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
+    
+    // NB: the connectivity between the elements is not stored because it is handled by MeshManager
    
  } // end WriteDomainIndexesToBinaryFile
 
@@ -5221,7 +5272,7 @@ void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& in
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
-    // 1. reading name of the region
+    // 1. reading name of the subdomain
     char name[INFO_STRING];
     binaryFileRead( fp, name );
     info.name = name;
@@ -5236,7 +5287,7 @@ void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& in
 
     // 3. reading the perimeter element records of the region
     binaryFileRead( fp, info.perimeter_elmts );
-//    assert( !info.perimeter_elmts.empty() );
+    assert( !info.perimeter_elmts.empty() );
    
     // 4. reading the interior nodes
     binaryFileRead( fp, info.interior_nodes );

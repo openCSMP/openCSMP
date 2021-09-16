@@ -8,11 +8,9 @@ namespace csmp {
 
 class FiniteElementManager;
 template<size_t> class PropertyDatabase;
-template<size_t> class InterFace;
 template<size_t> class MeshManager;
 template<size_t> class Boundary;
 template<size_t> class Element;
-template<size_t> class InterFace;
 template<size_t> class Region;
 template<typename> class FEM_Data;
 
@@ -44,13 +42,12 @@ boundaries interfaces and use InterFace::N(i,j).
 
 @section implementation Implementation
 
-Split boundaries will split the interior nodes of the provided Boundary plus those that belong to
+Split boundaries  split the nodes of the provided Boundary plus those that belong to
 another Boundary as well. Hence, use of Boundaries is required where all external
 and internal boundaries of the domain are represented as such (exist as a csmp::Boundary).
 
 Opposing parent elements on either side of the csmp::Boundary are removed from each others neighbor list, so they are
 from the now duplicated nodes parent list on the opposing side.
-
 
 @attention Before andy SplitBoundaries may be built all Boundaries have to be set up.
 @attention 2D models in 3D space will not allow for proper split boundary creation (unit normal of line element issue)
@@ -60,14 +57,14 @@ from the now duplicated nodes parent list on the opposing side.
 To address and carry out computations at material interfaces or model
 boundaries.
 
-To avoid conditional processing of all elements of a model, by treating
+To avoid conditional processing (if at boundary statements etc.) for all elements of a model, by treating
 boundary specific calculations separately.
 
 @section consequences Consequences
 
-Through the use of boundaries essential conditions and coupling terms
-arising at material interfaces can be computed with greater ease and
-efficiency.
+SplitBoundary objects permit the implementation of jump discontinuities in continuum models, see Tran et al. (2020, AWR)
+
+@note SplitBoundary has no BOX_BOUNDARY flag because it can only have the value INTERNAL anyway.
 
 */
 template<size_t dim>
@@ -87,7 +84,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     
     /// re-constructor of split boundaries from csmp native file format
     SplitBoundary( const PropertyDatabase<dim>&,
-                   MeshManager<dim>&,       ///< not constant since write access is granted to boundary
+                   const MeshManager<dim>&, // TODO: check whether this is still needed  ///< not constant since write access is granted to boundary
                    const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
     
     virtual ~SplitBoundary();
@@ -141,23 +138,13 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
     /// returns 1) interfaces of how many different spatial dimensions are contained, and 2) the highest interface spatial dimension in subdomain
     std::pair<int32,int32>  InterFaceSpatialDimensions() const;
+    
+    /// reports box-boundary flag equivalent which is always INTERNAL because SplitBoundary objects can only exist on the interior of a model
+    BOX_BOUNDARY AtBoundary() const { return INTERNAL; }
 
     /// writes all contained data on the screen
     void Out() const;
 
-    // -----------------------------------------------
-    // Binary input/output
-    // -----------------------------------------------
-
-    /// output to binary file
-    bool Out( std::fstream& ) const;
-  
-    /// initializes split boundary from binary file
-    bool In( MeshManager<dim>& ,
-             const FiniteElementManager& ,
-             const Region<dim>&, std::fstream& );
-             
-             
   protected:
       /// creates split boundary from supplied vectors (used in binary IO - supplied ids used from Model region)
       bool CreateFrom( MeshManager<dim>& ,

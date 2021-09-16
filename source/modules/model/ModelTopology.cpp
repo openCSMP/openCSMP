@@ -2477,10 +2477,9 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<2U>
                        "Rectangular model has no edges.");
      // checking for the presence of corners
      std::set<BOX_BOUNDARY> corners;
-     for ( std::unordered_map<size_t,long64>::const_iterator 
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); ++bit ) 
-       if ( (*bit).second == CNR1 || (*bit).second == CNR2 || (*bit).second == CNR3 || (*bit).second == CNR4 )
-         corners.insert( intToBOX_BOUNDARY((*bit).second) );
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); ++bit )
+       if ( (*bit) == CNR1 || (*bit) == CNR2 || (*bit) == CNR3 || (*bit) == CNR4 )
+         corners.insert( intToBOX_BOUNDARY((*bit)) );
       
      // reporting potential errors 
      if ( corners.size() != 4U ) {

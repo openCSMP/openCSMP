@@ -167,9 +167,10 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	// for each element contains for each face the neighbour element
 	vset.AddPfverts(pfverts.begin(), pfverts.end());
 
-	unordered_map< size_t, long64> pbflags; // boundary type
+	vector<std::int8_t> pbflags; // boundary type
+  pbflags.reserve(n_vertices);
 	for (int i = 0; i<n_vertices; i++)
-		pbflags.insert(make_pair(i, IRREGULAR_OUTSIDE));
+		pbflags.push_back(IRREGULAR_OUTSIDE);
 	vset.AddBFlags(pbflags.begin(), pbflags.end());
 	
 	// vset.OutASCII("c:\\test\\test");
@@ -311,9 +312,8 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 	// for each element contains for each face the neighbour element
 	vset.AddPfverts(pfverts.begin(), pfverts.end());
 
-	map< size_t, long64> pbflags; // boundary type
-	for (int i = 0; i<n_vertices; i++)
-		pbflags.insert(make_pair(i, IRREGULAR_OUTSIDE));
+	vector<std::int8_t> pbflags; // boundary type
+  pbflags.reserve(n_vertices);
 	vset.AddBFlags(pbflags.begin(), pbflags.end());
 	
 	// vset.OutASCII("c:\\test\\test");

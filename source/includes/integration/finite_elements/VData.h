@@ -61,8 +61,8 @@ class VData {
     void AddElementTypes( std::vector<int32>::const_iterator first,
                           std::vector<int32>::const_iterator last );
 
-    void AddElementTypes( std::vector<int32>::iterator first,
-                          std::vector<int32>::iterator last );
+    void AddElementTypes( std::deque<int32>::const_iterator first,
+                          std::deque<int32>::const_iterator last );
 
     void Resize( size_t nodes_per_element, size_t nbors_per_element, int32 etype, size_t nodes, size_t elmts );
    
@@ -72,8 +72,6 @@ class VData {
                  size_t nodes, size_t faces, size_t interfaces );
   
     void ResizeNodes( size_t nodes );
-    // TODO: refactor this dangerous method as it may corrupt vdata if not used wisely
-    void ResizeElementTypes( size_t elements );
     void ResizePlist( size_t elements );
     void ResizePlist( size_t elements, size_t nperelmt );
     void ResizeElementNodes( size_t eid, size_t nperelmt );
@@ -82,6 +80,7 @@ class VData {
     void ResizePfverts( size_t elements, size_t nperelmt );
     void ResizeElementNeighbors( size_t eid, size_t nperelmt );
     void ResizePfverts( const std::deque<size_t>& mixed_ele_pfverts );
+    void ResizeBFlags( /* nodes */ );
 
     virtual ~VData();
     VData( const VData& );
@@ -180,7 +179,10 @@ class VData {
     long64 Pfvert( size_t eidx, size_t i ) const;
 
     /// adds id (0..n-1) of boundary node and its BOX_BOUNDARY flag (negative integer)
-    void AddBFlag( size_t node_id, long64 bflag );
+    void AddBFlag( size_t node_id, std::int8_t bflag );
+  
+    /// returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT
+    std::int8_t BoundaryFlag( size_t vertex ) const;
   
     /// empties 'pfverts' container if the contained info is flaky so that later code is prompted to recreate it
     void RemovePfverts() { pfverts.clear(); }
@@ -199,10 +201,10 @@ class VData {
     std::vector<long64>::iterator                 PfvertsBegin( size_t eidx );
     std::vector<long64>::iterator                 PfvertsEnd( size_t eidx );
 
-    std::unordered_map<size_t,long64>::iterator       BFlagsBegin();
-    std::unordered_map<size_t,long64>::iterator       BFlagsEnd();
-    std::unordered_map<size_t,long64>::const_iterator BFlagsBegin() const;
-    std::unordered_map<size_t,long64>::const_iterator BFlagsEnd() const;
+    std::vector<std::int8_t>::iterator            BFlagsBegin();
+    std::vector<std::int8_t>::iterator            BFlagsEnd();
+    std::vector<std::int8_t>::const_iterator      BFlagsBegin() const;
+    std::vector<std::int8_t>::const_iterator      BFlagsEnd() const;
 
     // const iterators
     std::vector<int32>::const_iterator                 PelmtBegin() const;
@@ -220,9 +222,6 @@ class VData {
     std::vector<long64>::const_iterator                PfvertsBegin( size_t eidx ) const;
     std::vector<long64>::const_iterator                PfvertsEnd( size_t eidx ) const;
     
-    /// returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT
-    long64 BoundaryFlag( size_t vertex ) const;
-  
     // specific element, face and interface iterators
     /// iterator to CSMP finite element type of first face stored in mesh
     std::vector<int32>::const_iterator                 PelmtFacesBegin() const;
@@ -270,13 +269,13 @@ class VData {
     // PERSISTANCE (storing mesh in binary file)
   
     /// write mesh to supplied binary file
-    void OutBinary( std::fstream& fp ) const;
+    void OutBinary( std::fstream& ) const;
   
     /// read mesh from supplied binary file
-    void InBinary( std::fstream& fp );
+    void InBinary( std::fstream& );
   
     /// initialise VData=mesh connectivity structures from binary file
-    void InText( std::ifstream& ifs );
+    void InText( std::ifstream& );
   
     /// wrtie connectivity structure to ASCII text file
     void OutASCII( const char* file ) const;
@@ -302,9 +301,11 @@ class VData {
     bool                              hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double64>             px, py, pz;        ///< node coordinates
     std::vector<int32>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
+    // although there's little point to having 64-bit pointers but not 64-bit sizes, after all.
     std::deque<std::vector<size_t> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
-    std::unordered_map<size_t,long64> bflags;            ///< flags for those nodes that lie on model boundary
+    // all enums / flags must fit into 8-bit integers
+    std::vector<std::int8_t>          bflags;            ///< flags for those nodes that lie on model boundary
     size_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
     size_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements 
 

@@ -3,7 +3,8 @@
 
 #include "TwoPhaseModel.h"
 //#include "OtwayCRC3_RockTypes.h"
-#include "OtwayCRC3_RockTypes_Version_2.h" 
+//#include "OtwayCRC3_RockTypes_Version_2.h" 
+#include "OtwayCRC3_RockTypes_Version_3.h" 
 
 namespace csmp {
 

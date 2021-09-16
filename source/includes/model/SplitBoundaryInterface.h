@@ -38,7 +38,7 @@ class SplitBoundaryInterface {
     // -----------------------------------------------
     // SplitBoundary creation and deletion
     // -----------------------------------------------
-    /// Creates SplitBoundaries detecting and connecting node-matched disconnected perimeter element faces in mesh; these are grouped and named for regions
+    /// Creates SplitBoundaries detecting and connecting node-matched disconnected perimeter element faces in mesh (already created in ANSYS or other); these are grouped and named for regions
     std::pair<std::set<std::string>,bool>  DetectAndCreateSplitBoundaries();
     
     /// creation of one or multiple SplitBoundaries from a lower dimensional region 
@@ -59,8 +59,8 @@ class SplitBoundaryInterface {
     /// Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful
     bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
 
-    /// Removes splitboundary
-    void RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary, bool deleteElements = false );
+    /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
+    void RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary );
 
     // -----------------------------------------------------------
     // Input/output
@@ -71,9 +71,12 @@ class SplitBoundaryInterface {
     void SplitBoundariesOut() const;
     
     bool OutputSplitBoundariesToBinary( const char* fileName ) const;
-    bool InputSplitBoundariesFromBinary( const char* fileName, const std::set<std::string>* subset_variables = nullptr );
+    bool InputSplitBoundariesFromBinary( const char* fileName, const std::set<std::string>& subset_variables );
 
   protected:
+    /// creating name for the case when the SplitBoundary was already present in the input mesh
+    std::string CreateSplitBoundaryName( const std::pair<std::string, std::string>& juxtaposed_regions ) const;
+  
     /// JCK: multiplicates the nodes of the boundaryin order to create split boundary TODO: method does not seem to be used!
     void SplitNodes( const Boundary<dim>& boundary, csmp::SplitBoundary<dim>& splitboundary );
     

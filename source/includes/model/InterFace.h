@@ -120,9 +120,6 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     /// assign node of the higher-dimensional neigbor element (order as on corresponding InterFace sides)
     void Assign( size_t n_local, Node<dim>*, INTERFACE_SIDE side );
-
-    /// assigns nodes as is; inner ones first, outer ones next
-//    void Assign( size_t node, Node<dim>* );
   
     InterFace& operator=( const InterFace& );
 
@@ -238,6 +235,11 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void Out() const;
 
   private:
+    /// for exclusive use by MeshManager
+    template<size_t> friend class MeshManager;
+    void* operator new( size_t size );
+    void operator delete( void* p );
+
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
     std::pair<size_t,size_t>  SharedElementFaces();
   

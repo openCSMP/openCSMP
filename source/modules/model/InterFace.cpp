@@ -144,8 +144,22 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
 
 template<size_t dim>
 InterFace<dim>::~InterFace()
-{
-}
+ {
+    // disconnecting the neighbor interfaces that are connected to this interface
+    for ( auto it : interface_connector_ )
+      if ( it != nullptr )
+        for ( auto nit : it->interface_connector_ )
+          if ( nit == this ) {
+               nit = nullptr;
+               break;
+            }
+    // disconnecting the interface from its nodes and neighbors
+    for ( auto& it : interface_connector_ ) it = nullptr;
+    for ( auto& it : node_connector_ ) it = nullptr;
+    innerParent_   = nullptr;
+    outerParent_   = nullptr;
+    middleElement_ = nullptr;
+ }
 
 
 
@@ -155,23 +169,24 @@ template<size_t dim>
 InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
 {
   if ( &ifc != this )
-  {
-    if ( ifc.FE() ) FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
-    if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
+    {
+      // TODO: these assignments may be redundant
+      if ( ifc.FE() ) FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
+      if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
 
-    idx_ = ifc.idx_;
-    node_connector_ = ifc.node_connector_;
-    interface_connector_ = ifc.interface_connector_;
-    collocated_nodes_    = ifc.collocated_nodes_;
-    middleElement_ = ifc.middleElement_;
-    current_side_ = ifc.current_side_;
-    innerParent_ = ifc.innerParent_;
-    outerParent_ = ifc.outerParent_;
-    inner_parent_face_id_ = ifc.inner_parent_face_id_;
-    outer_parent_face_id_ = ifc.outer_parent_face_id_;
+      idx_ = ifc.idx_;
+      node_connector_ = ifc.node_connector_;
+      interface_connector_ = ifc.interface_connector_;
+      collocated_nodes_    = ifc.collocated_nodes_;
+      middleElement_ = ifc.middleElement_;
+      current_side_ = ifc.current_side_;
+      innerParent_ = ifc.innerParent_;
+      outerParent_ = ifc.outerParent_;
+      inner_parent_face_id_ = ifc.inner_parent_face_id_;
+      outer_parent_face_id_ = ifc.outer_parent_face_id_;
 
-    this->LVS( ifc.LVS() );
-  }
+      this->LVS( ifc.LVS() );
+    }
   return *this;
 }
 
@@ -224,6 +239,26 @@ bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
 
   return true;
 }
+
+
+
+template<size_t dim>
+void* InterFace<dim>::operator new( size_t size )
+  {
+      std::cout<< "\nInterFace<"<< dim <<">: called overloaded new operator.\n";
+      //void * p = malloc(size); will also work fine
+      return ::operator new(size);
+  }
+ 
+
+template<size_t dim>
+void InterFace<dim>::operator delete( void* p )
+  {
+     std::cout<< "\nInterFace<"<< dim <<">: called overloaded delete operator.\n";
+     free(p);
+     p = nullptr;
+  }
+
 
 
 
