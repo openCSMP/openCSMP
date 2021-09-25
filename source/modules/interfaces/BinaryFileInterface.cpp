@@ -31,13 +31,7 @@ bool BinaryFileInterface<dim>::WriteConnectivityFile( const Model<dim>& sg,
     double64& model_time( ModelTime::Instance().modelTime );
     VSet<dim>  vset;
     
-// SUPERSEDED    const bool in_a_single_sequence(true);
-// SUPERSEDED    sg.Mesh().AssignUniqueNumbers( in_a_single_sequence );
-    deque<const Node<dim>*>      nodes;
-    deque<const Element<dim>*>   elmts;
-    deque<const Face<dim>*>      faces;    
-    deque<const InterFace<dim>*> interfaces;
-    sg.Mesh().OutputMeshTo( vset, nodes, elmts, faces, interfaces );
+    sg.Mesh().OutputMeshTo( vset );
     vset.OutputTo( file_name, model_time );
     
     cout <<"\nBinaryFileInterface<"<< dim <<">::WriteConnectivityFile: '";

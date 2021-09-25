@@ -718,6 +718,57 @@ template void eraseElementPointerFromVector( vector<csmp::Element<2U>*>&, const 
 template void eraseElementPointerFromVector( vector<csmp::Element<3U>*>&, const Element<3U>* );
 
 
+/* CLIPPING OF FACE NUMBERING FUNCTION FOR INTERFACE
+
+    const size_t neighbors2x( f->Neighbors() * 2 );
+    for ( size_t j = 0U; j<neighbors2x; ++j ) {
+      InterFace<dim>* const ptr( f->Neighbor( j ) );
+      if ( ptr != nullptr ) {
+        // building search maps that we will use to find the shared interfaces
+        // key=pointset   face iD
+        map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
+        vector<size_t>  nids;
+        // first element
+        Element<dim>* e1 = f->InnerParent();
+        for ( size_t face = 0U; face<e1->Faces(); ++face ) {
+          e1->FE()->NodesOfFace( face, nids );
+          set<Point<dim> >  face_key;
+          for ( size_t j = 0U; j<nids.size(); ++j )
+            face_key.insert( e1->N( nids[j] )->Coordinate() );
+          outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
+        }
+        // second element
+        Element<dim>* e2 = f->OuterParent();
+        for ( size_t face = 0U; face<e2->Faces(); ++face ) {
+          e2->FE()->NodesOfFace( face, nids );
+          set<Point<dim> >  face_key;
+          for ( size_t j = 0U; j<nids.size(); ++j )
+            face_key.insert( e2->N( nids[j] )->Coordinate() );
+          inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
+        }
+
+        // 2. finding the shared faces
+        bool found( false );
+        long64 inner_face_id( -1 ), outer_face_id( -1 );
+        for ( auto inner_face : inner_elmt_faces ) {
+          for ( auto outer_face : outer_elmt_faces ) {
+            if ( inner_face.first == outer_face.first ) {
+              inner_face_id = inner_face.second.second;
+              outer_face_id = outer_face.second.second;
+              found = true;
+              break;
+            }
+          }
+          if ( found ) break;
+        }
+
+        vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
+      }
+      else
+        vset.Pfvert( eidx, j, REGION_BOUNDARY );
+    }
+
+*/ // FACE NUMBERING
 
 
 

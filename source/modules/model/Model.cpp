@@ -20,7 +20,6 @@
 #include "ModelTime.h"
 #include "FiniteVolumeStencilManager.h"
 #include "UnionFind.h"
-#include "IndexToPointerMapping.h"
 
 using namespace std;
 
@@ -531,7 +530,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                                    mesh_topology.IsoparametricElements() );
 
   // 3. building the finite element mesh (finite volume mesh) and property storage
-  IndexToPointerMapping<dim>  idx_ptr_mapping;
   mesh_manager_.Initialize( Database(), FE_Manager(), vset );
 
   if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
@@ -2956,17 +2954,12 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
   cout << "' at current time level, t = " << model_time << " secs." << endl;
 
   // 1. mesh output: creating a VSet including Face and InterFace objects
-  VSet<dim>                    vset;
-// SUPERSEDED  const bool simplices_numbered_in_a_single_sequence( true );
-// SUPERSEDED  mesh_manager_.AssignUniqueNumbers( simplices_numbered_in_a_single_sequence );
-  deque<const Node<dim>*>      nodes;
-  deque<const Element<dim>*>   elmts;
-  deque<const Face<dim>*>      faces;
-  deque<const InterFace<dim>*> interfaces;
-  mesh_manager_.OutputMeshTo( vset, nodes, elmts, faces, interfaces );
+  //   (elements, faces, and interfaces are numbered in a single continous sequence)
+  VSet<dim>  vset;
+  mesh_manager_.OutputMeshTo( vset );
 
   // 2. property output into VSet including Face and InterFace data
-  mesh_manager_.OutputStoredVariablesTo( Database(), nodes, elmts, faces, interfaces, vset );
+  mesh_manager_.OutputStoredVariablesTo( Database(), vset );
 
   // model properties
   map<string, Index>  properties;
@@ -2984,41 +2977,41 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
     data.Reserve( flag_capacity, data_capacity );
 
     switch ( (*pit).second.type )
-    {
-      case SCALAR: {
-        ScalarVariable value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
+      {
+        case SCALAR: {
+              ScalarVariable value;
+              this->Read( (*pit).second, value );
+              pushBack( data, value );
+            }
+              break;
+        case VECTOR: {
+              VectorVariable<dim> value;
+              this->Read( (*pit).second, value );
+              pushBack( data, value );
+            }
+          break;
+        case TENSOR: {
+              TensorVariable<dim> value;
+              this->Read( (*pit).second, value );
+              pushBack( data, value );
+            }
+          break;
+        case ARRAY: {
+              ArrayVariable value;
+              this->Read( (*pit).second, value );
+              pushBack( data, value );
+            }
+          break;
+        case FLAGGEDARRAY: {
+              FlaggedArrayVariable value;
+              this->Read( (*pit).second, value );
+              pushBack( data, value );
+            }
+          break;
+        default:
+          csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
+                             (*pit).first, "type of Model variable not recognized." );
       }
-                   break;
-      case VECTOR: {
-        VectorVariable<dim> value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                   break;
-      case TENSOR: {
-        TensorVariable<dim> value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                   break;
-      case ARRAY: {
-        ArrayVariable value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                  break;
-      case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                         break;
-      default:
-        csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
-                           (*pit).first, "type of Model variable not recognized." );
-    }
     // storing the data in the VSet
     vset.AddData( (*pit).first.c_str(), data );
   }
@@ -3028,11 +3021,13 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
   // 3. regions: unique and then the non-unique regions
   this->OutputRegionsToBinary( BinaryRegionsFileName( file_string ).c_str() );
 
-  // 4. boundaries "All Faces"
+  // 4. boundaries
   this->OutputBoundariesToBinary( BinaryBoundariesFileName( file_string ).c_str() );
 
-  // 5. splitboundaries "AllInterFaces"
+  // 5. splitboundaries
   this->OutputSplitBoundariesToBinary( BinarySplitBoundariesFileName(file_string).c_str() );
+  
+  // node manifolds are deduced from the connectivty stored in the VSet and handled inside the MeshManager
 
   // 6. variable specifications through the database
   Database().BinaryOut( BinaryVariablesFileName( file_string ).c_str() );
@@ -3040,6 +3035,8 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
   cout << "' to CSMP binaries completed successfully.\n\n";
 
 } // end OutputToBinaryFile
+
+
 
 
 /**
@@ -3063,7 +3060,6 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   cout << "\nModel<" << dim << ">::InputFromBinaryFile: it is assumed that the model is based on 'isoparametric' finite elements.\n\n";
 
   // 3. rebuilds finite element mesh and associated property storage
-  IndexToPointerMapping<dim>  idx_ptr_mapping;
   mesh_manager_.Initialize( database_, fem_manager_, vset );
 
   // 4. checking whether the FV stencils need to be initialised

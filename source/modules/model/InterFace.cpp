@@ -279,22 +279,13 @@ void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
     Assigning neighbor InterFace objects on either side of the InterFace.
 */
 template<size_t dim>
-void InterFace<dim>::Assign( size_t i, InterFace<dim>* const ifc_ptr, INTERFACE_SIDE side ) // neighbor interface
+void InterFace<dim>::Assign( size_t i, InterFace<dim>* const ifc_ptr ) // neighbor interface
 {
   assert( this->FE() != nullptr );
-  assert( interface_connector_.size() == this->FE()->Neighbors()*2 );
+  assert( interface_connector_.size() == this->FE()->Neighbors() );
   assert( i < this->Neighbors() );
   
-  // the inner neighbors are enlisted first
-  if ( side == INSIDE ) {
-       interface_connector_[i] = ifc_ptr;
-    }
-  else if ( side == OUTSIDE ) {
-       interface_connector_[i+this->FE()->Faces()] = ifc_ptr;
-    }
-  else cerr <<"\nInterFace<dim>::Assign(neighbor): attempt to assign InterFace to MIDDLE Element.\n";
-
-  // the outer neighers follow
+  interface_connector_[i] = ifc_ptr;
   
 } // end InterFace<dim>::Assign(neighbor)
 
@@ -392,28 +383,35 @@ void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, I
 /**
     Assigns nodes to node_connector_ vector of the InterFace
 
-    @note the nodes on the inner side of the interface are the first in the node connector
-    vector, the outer ones follow
+    @note the nodes on the inner side of the interface are the first stored in the node connector
+    vector, the outer ones follow in this single node vector.
 
     @author SKM 16/6/2016
 */
 template<size_t dim>
 void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE side )
 {
-  assert( !node_connector_.empty() );
-  assert( n_local < node_connector_.size() );
-  assert( nptr != nullptr );
+   assert( nptr != nullptr );
+   
+   const size_t finite_element_nodes( this->FE()->Nodes() );
+   assert( n_local < finite_element_nodes );
+   assert( !node_connector_.empty() );
+   assert( finite_element_nodes * 2 == node_connector_.size() );
+
+   if ( side == INSIDE ) {
+        node_connector_[n_local] = nptr;
+        return;
+     }
+
+   if ( side == OUTSIDE ) {
+        assert( n_local + finite_element_nodes < node_connector_.size() );
+        node_connector_[ n_local + finite_element_nodes ] = nptr;
+        return;
+     }
+
   if ( side == MIDDLE )
-    throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( size_t, Node, INTERFACE_SIDE )", 
+    throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( size_t, Node, INTERFACE_SIDE )",
                           "Called wrong method to assign intervening element!" );
-
-  if ( side == INSIDE ) {
-      node_connector_[n_local] = nptr;
-      return;
-    }
-
-  assert( this->FE()->Nodes() + n_local < node_connector_.size() ); 
-  node_connector_[ this->FE()->Nodes() + n_local ] = nptr;
 
 } // end Assign node pointers
 
@@ -464,21 +462,30 @@ size_t  InterFace<dim>::Nodes() const
  }
 
   
-/// the InterFace object neighbors of the InterFace (one per face of interface)
+/**
+   Returns the total number of neighbors of the InterFace , which is equivalent
+   to the number of interface finite element faces although either side of the Interface
+   has different nodes.
+*/
 template<size_t dim>
 size_t  InterFace<dim>::Neighbors() const 
   {
      assert( this->FE()!=nullptr ); 
-     assert( this->FE()->Neighbors() == interface_connector_.size() );   
+     assert( this->FE()->Neighbors() == interface_connector_.size() );
      return interface_connector_.size(); 
   }
 
 
+
+/**
+    Again this number is the same as that of the number of faces of the underlying finite element
+    inspite of the fact that the InterFace has two sides.
+*/
 template<size_t dim>
 size_t  InterFace<dim>::Faces() const 
  { 
     assert( this->FE()!=nullptr ); 
-    assert( this->FE()->Faces() == interface_connector_.size() ); 
+    assert( this->FE()->Faces() == interface_connector_.size() );
     return interface_connector_.size(); 
  }
 

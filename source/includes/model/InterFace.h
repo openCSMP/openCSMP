@@ -98,8 +98,8 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// reference to provide efficiency hack in MeshManager
     typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
 
-    /// connect InterFace to its equidimensional neighbors
-    void Assign( size_t nbor, InterFace<dim>* const, INTERFACE_SIDE side );
+    /// connect InterFace to its equidimensional neighbors (=number of finite-element faces)
+    void Assign( size_t nbor, InterFace<dim>* const );
     
     /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
     void Unassign( const InterFace<dim>* ); 

@@ -19,7 +19,6 @@
 #include "CopyReplaceVisitor.h"
 
 #include "UnionFind.h"
-#include "IndexToPointerMapping.h"
 
 #include "ErrorHandler.h"
 #include "CSMP_highLevelUtilities.h"

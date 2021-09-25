@@ -513,8 +513,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
     const string output_model("box_test_temporary");
     model.OutputToBinaryFile( output_model.c_str() );
    
-    // Recovering the model from file
-    Model<3U>* mptr = new Model<3>( output_model.c_str() );
+    // Recovering the model from file (all variables are read as subset is empty)
+    Model<3U>* mptr = new Model<3>( output_model, set<string>({}) );
 
     // recovering the flags again for comparison
     list<BOX_BOUNDARY>  node_flags_after;
@@ -559,8 +559,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
     // NEW model.OutputToDisk( output_model.c_str() );
     model.OutputToBinaryFile("box_test_temporary");
    
-    // Recovering the model from file
-    Model<3U>* mptr = new Model<3>( output_model.c_str() );
+    // Recovering the model from file (read all variables)
+    Model<3U>* mptr = new Model<3>( output_model, set<string>({}) );
 
     // recovering the flags again for comparison
     list<BOX_BOUNDARY>  node_flags_after;

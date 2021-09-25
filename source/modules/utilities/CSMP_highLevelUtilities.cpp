@@ -663,7 +663,7 @@ double64  printRangeOfVariable( const Model<3U>& sg,
     Checks whether region of interest contains elements of the type of interest.
 */
 template<size_t dim>  
-bool containsElementsOfTtype( const Region<dim>& gref, ELEMENT_DIMENSION dimension )
+bool containsElementsOfType( const Region<dim>& gref, ELEMENT_DIMENSION dimension )
  {
     for ( typename vector<Element<dim>*>::const_iterator
           it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
@@ -674,9 +674,9 @@ bool containsElementsOfTtype( const Region<dim>& gref, ELEMENT_DIMENSION dimensi
       
  } // end containsElementsOfTtype
 
-template bool containsElementsOfTtype<1U>( const Region<1>&, ELEMENT_DIMENSION );
-template bool containsElementsOfTtype<2U>( const Region<2>&, ELEMENT_DIMENSION );
-template bool containsElementsOfTtype<3U>( const Region<3>&, ELEMENT_DIMENSION );
+template bool containsElementsOfType<1U>( const Region<1>&, ELEMENT_DIMENSION );
+template bool containsElementsOfType<2U>( const Region<2>&, ELEMENT_DIMENSION );
+template bool containsElementsOfType<3U>( const Region<3>&, ELEMENT_DIMENSION );
 
 
 
@@ -2055,7 +2055,7 @@ template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>
          Inside and outside must be considered.
 */
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, INTERFACE_SIDE side, bool unassign_neighbors_outside, bool verbose )
+void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
@@ -2088,7 +2088,7 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
            (*it)->CurrentSide( INSIDE ); // just for node-vector
            (*it)->FE()->NodesOfFace( face, fnids );
            for ( size_t j=0U; j<fnids.size(); j++ )
-             key.insert( (*it)->N( fnids[j], side ) );
+             key.insert( (*it)->N( fnids[j] ) );
 
            // inserting newly generated key into multimap
            if ( (*it)->FE()->IsSurfaceElement() )
@@ -2153,8 +2153,8 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
                    // assigning eachothers faces
                     //                        face pointer, neighbor pointer, side-of interface
-                   (*it1).second.second->Assign( (*it1).second.first, e2Ptr, side );
-                   (*it2).second.second->Assign( (*it2).second.first, e1Ptr, side );
+                   (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
+                   (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
 
                    // both iterators are advanced (so that with the second increment a new pair of faces is reached)
                    ++it1;
@@ -2194,8 +2194,8 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
                     // assigning eachothers faces
                     //                        face pointer, neighbor pointer, side-of interface
-                    (*it1).second.second->Assign( (*it1).second.first, e2Ptr, side );
-                    (*it2).second.second->Assign( (*it2).second.first, e1Ptr, side );
+                    (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
+                    (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
 
 
                    // both iterators are advanced (so that with the second increment a new pair of faces is reached)
@@ -2213,9 +2213,9 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
  } // end establishNeighborConnectivity
 
-template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, INTERFACE_SIDE, bool, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, INTERFACE_SIDE, bool, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, INTERFACE_SIDE, bool, bool );
+template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, bool, bool );
+template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, bool, bool );
+template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, bool, bool );
 
 
 

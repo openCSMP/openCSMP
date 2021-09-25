@@ -151,7 +151,7 @@ bool isoparametricElementMesh( const Model<dim>& );
 
 /// checks region for whether it contains elements of the same dimensionality
 template<size_t dim>
-bool containsElementsOfTtype( const Region<dim>&, ELEMENT_DIMENSION );
+bool containsElementsOfType( const Region<dim>&, ELEMENT_DIMENSION );
 
 /// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
 template<size_t dim>
@@ -159,7 +159,7 @@ void  establishNeighborConnectivity( std::vector<Element<dim>*>&,
                                      bool unassign_neighbors_outside = false, bool verbose = true );
 
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&, INTERFACE_SIDE,
+void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&,
                                      bool unassign_neighbors_outside = false, bool verbose = true );
 
 /// checks all elements of the surface region for whether their neighbor elements have normals that deviate less than 90o from their normals

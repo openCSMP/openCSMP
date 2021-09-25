@@ -77,7 +77,8 @@ namespace csmp
       // Verification Binary
       //------------------------------------
       timer.Start();
-      Model<3> modelInput1("ANSYS_Model3D_Test_modelOutput1");
+      const string file_name("ANSYS_Model3D_Test_modelOutput1");
+      Model<3> modelInput1( file_name, set<string>({}) );
       const Region<3U> model_domain2(modelInput1.Region("Model"));
       const double binaryModelTime( timer.Stop() );
       _test( elementCount == modelInput1.Region("Model").Elements() );
@@ -166,7 +167,8 @@ namespace csmp
       if ( verbose ) cout<<"The Output of Model with boundaries done..."<<endl;
 
       cout <<"Re-building ModelInput with boundaries..."<<endl;
-      Model<3U> modelInput2("ANSYS_Model3D_Test_modelOutput2");
+      const string file_name2("ANSYS_Model3D_Test_modelOutput2");
+      Model<3U> modelInput2( file_name2, set<string>({}) );
       _test( modelInput2.Boundary("BOUNDARY1").Read(boundaryScalarKey) == 1. );
       modelInput2.Region("Model").Read( regionVectorKey, vvPlain );
       _test( vvPlain == vv );
@@ -266,7 +268,8 @@ namespace csmp
         }
         modelOutput3.OutputToBinaryFile("ANSYS_Model3D_Test_modelOutput3");
 
-        Model<3> modelInput3("ANSYS_Model3D_Test_modelOutput3");
+        const string file_name3("ANSYS_Model3D_Test_modelOutput3");
+        Model<3> modelInput3( file_name, set<string>({}) );
         _test( modelInput3.Boundary("BOUNDARY1").Nodes() == modelOutput3_boundar1NodesOut );
         _test( modelInput3.Boundary("BOUNDARY2").Nodes() == modelOutput3_boundar2NodesOut );
         _test( modelInput3.Boundary("BOUNDARY3").Nodes() == modelOutput3_boundar3NodesOut );

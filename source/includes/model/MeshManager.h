@@ -201,16 +201,10 @@ public:
   void AssignUniqueNumbers( bool in_a_single_sequence=false ) const;
 
   /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
-  void OutputMeshTo( VSet<dim>&, std::deque<const Node<dim>*>&, std::deque<const Element<dim>*>&,
-                     std::deque<const Face<dim>*>&, std::deque<const InterFace<dim>*>&  ) const;
+  void OutputMeshTo( VSet<dim>& ) const;
 
   /// adds distributed variables to the VSet
-  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, 
-                                const std::deque<const Node<dim>*>&, 
-                                const std::deque<const Element<dim>*>&,
-                                const std::deque<const Face<dim>*>&,
-                                const std::deque<const InterFace<dim>*>&,
-                                VSet<dim>& ) const;
+  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, VSet<dim>& ) const;
   
   /// reads distributed variables from VSet
   void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
@@ -220,10 +214,6 @@ public:
   template<template<size_t> class CELL>
   void RebuildConnectivity(  typename std::deque<CELL<dim>*>::iterator first,
                              typename std::deque<CELL<dim>*>::iterator last );
-                             
-  /// for InterFaces - with neighbors on either side
-  void RebuildConnectivity( typename std::deque<InterFace<dim>*>::iterator first,
-                            typename std::deque<InterFace<dim>*>::iterator last, INTERFACE_SIDE );
 
   /// Rebuild node-to-element parent relationships, for example after a region was removed
   void RebuildParentRelationships( typename std::vector<Node<dim>*>::iterator begin, typename std::vector<Node<dim>*>::iterator end );

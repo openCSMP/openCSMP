@@ -588,11 +588,11 @@ to be included into the supplied deques.
  
 */
   void VData::Resize( const deque<int32>& etypes,
-                     const deque<size_t>& npes,
-                     const deque<size_t>& epes,
-                     size_t nodes,
-                     size_t faces,
-                     size_t interfaces )
+                      const deque<size_t>& npes,
+                      const deque<size_t>& epes,
+                      size_t nodes,
+                      size_t faces,
+                      size_t interfaces )
   {
     assert(npes.size() == epes.size());
     const size_t nrCells = npes.size();

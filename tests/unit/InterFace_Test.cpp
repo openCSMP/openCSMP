@@ -114,9 +114,8 @@ void InterFace_Test::Assign_tests(){
 
     ///Neighbour Testing
     //Neighbour assign functionality
-    // TODO: extend test to check inside AND outside neighbor assignments
-    if_obj0.Assign(0, &if_obj1,INSIDE);
-    if_obj0.Assign(1, &if_obj2,INSIDE);
+    if_obj0.Assign(0, &if_obj1);
+    if_obj0.Assign(1, &if_obj2);
     _test( if_obj0.Neighbors() == 2 );
     _test( if_obj0.ConnectedNeighbors() == 2);
     _test( if_obj1 == *if_obj0.Neighbor(0) );
