@@ -63,7 +63,14 @@ SplitBoundary<dim>& SplitBoundary<dim>::operator=( const SplitBoundary<dim>& ed 
 }
 
 
-/** "All InterFaces" re-constructor of split boundary from all faces in the model
+
+/** RECONSTRUCTOR of split boundary
+ 
+    @attention the InterFace objects referred to by SubDomainInfo are expected to be allready part of the model
+    @attention this also means, that these were already interconnected with one-another when the mesh was build from VSet
+    
+        @author SKM
+        @date 21/9/21
 */
 template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
@@ -126,7 +133,7 @@ template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
                                    const FiniteElementManager& femgr,
-                                   MeshManager<dim>& mesh, // not constant because InterFace creation will be prompted
+                                   MeshManager<dim>& mesh,
                                    const InterFaceSet<dim>& ifset )
   : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
 {
@@ -136,43 +143,41 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // 1. getting mesh manager to build interfaces according to specifications
   // -----------------------------------------------------------------------
   this->elmt_vec_.reserve( ifset.size() );
-  // appending the new interfaces at the end of the existing deque
-  size_t fidx = mesh.InterFaces();
+  vector<InterFace<dim>*>  empty_nbor_connectivity;
   // for all the interfaces of the new split boundary
-  for ( auto it = ifset.begin(); it != ifset.end(); ++it ) {
-    // getting the element type that the interface shall represent
-    // from the first higher dimensional neighbor element
-    // InterFaceSet member:   pair<pair<Element<dim>*,size_t>, pair<Element<dim>*,size_t> >
-    //                        first high-dim. nbor interface at interface
-    const CSMP_FEM_TYPE if_elmt_type = (*it).second.first->FE()->ElementTypeOfFace( (*it).second.second );
-    FiniteElement* FE_ptr = femgr.E( if_elmt_type );
-    // incomplete construction without connectivity
-//    InterFace<dim> new_interface( FE_ptr, nullptr, ifvars, if_ip_vars );
-    csmp::InterFace<dim>* const interfaceObj = mesh.AddInterFace( FE_ptr, nullptr, ifvars, if_ip_vars );
-    interfaceObj->Idx( fidx++ );
+  for ( auto it = ifset.begin(); it != ifset.end(); ++it )
+    {
+      // getting the element type that the interface shall represent
+      // from the first higher dimensional neighbor element
+      // InterFaceSet member:   pair<pair<Element<dim>*,size_t>, pair<Element<dim>*,size_t> >
+      //                        first high-dim. nbor interface at interface
+      const CSMP_FEM_TYPE if_elmt_type = (*it).second.first->FE()->ElementTypeOfFace( (*it).second.second );
+      FiniteElement*      FE_ptr = femgr.E( if_elmt_type );
 
-    // assigning neighbor and node pointers to higher-dimensional elements sharing the interface
-    const bool connect_nodes( true );
-    interfaceObj->Assign( (*it).first.first, (*it).first.second,
-                          (*it).second.first, (*it).second.second,
-                          connect_nodes );
+      // construction with connectivity and number continueing from already existing interfaces
+      csmp::InterFace<dim>* const interfaceObj = mesh.AddInterFace( FE_ptr, nullptr,
+                                                                    // inner neighbor  outer neighbor, intervening element
+                                                                    (*it).first.first, (*it).second.first, nullptr,
+                                                                    ifvars, if_ip_vars,
+                                                                    empty_nbor_connectivity );
 
-    // storing pointer to the interface in element collection
-    this->elmt_vec_.push_back( interfaceObj );
-  }
+      // storing pointer to the interface in element collection
+      this->elmt_vec_.push_back( interfaceObj );
+    }
 
   // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
   // ---------------------------------------------------------------------------------------------------
-  this->EstablishNeighborConnectivity( false );
+  establishNeighborConnectivity( this->elmt_vec_, INSIDE );
+  establishNeighborConnectivity( this->elmt_vec_, OUTSIDE );
 
   // 3. building the interface node vector
   // ---------------------------------------------------------------------------------------------------
-  set<Node<dim>*>  unique_nodes;
+  this->node_vec_.reserve( this->elmt_vec_.size() );
   for ( auto it : this->elmt_vec_ )
-    for ( size_t i = 0U; i<it->Nodes(); ++i )
-      unique_nodes.insert( it->N( i ) );
-
-  this->node_vec_.assign( unique_nodes.begin(), unique_nodes.end() );
+    for ( size_t i = 0U; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
+  // sorting node vector and making it unique
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
 
   // 4. sorting interfaces and nodes and building the boundary interface vector
   // ---------------------------------------------------------------------------------------------------
@@ -434,7 +439,7 @@ pair<int32, int32>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
 /**
     Creates a split boundary from a boundary. Requires unique indices.
     @author SKM 1/11/2013
-    @author modified by JC 1/7/2019
+    @author SKM 21/9/2021
 */
 template<size_t dim>
 bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
@@ -448,35 +453,19 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   this->elmt_vec_.clear();
   this->elmt_vec_.reserve( boundary.Elements() );
 
-  // check whether all faces have inner AND outer parents.
-  FiniteElement*  femPtr( nullptr );
-  Element<dim>*   innerElement( nullptr );
-  Element<dim>*   outerElement( nullptr );
+  // neighbor connectivity will be established later
+  vector<InterFace<dim>*> empty_iface_neighbors;
 
   const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.ElementsEnd() );
   for ( typename vector<Face<dim>*>::const_iterator fit( boundary.ElementsBegin() ); fit != facesEnd; ++fit )
     {
-      // getting parents
-      innerElement = (*fit)->Parent( INSIDE );
-      outerElement = (*fit)->Parent( OUTSIDE );
-
       // the InterFace that is being build from the current interface
-      femPtr = model.FE_Manager().E( (*fit)->FE_Type() );
-      InterFace<dim>* const interfaceObj = model.Mesh().AddInterFace( femPtr, nullptr, lvsInterFace, lvsIntegrationPoint );
-     
-      interfaceObj->Assign( innerElement, outerElement );
-      interfaceObj->Idx( (*fit)->Idx() );
+      InterFace<dim>* const interfaceObj = model.Mesh().ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint, empty_iface_neighbors );
 
-      this->elmt_vec_.emplace_back( interfaceObj );
+      this->elmt_vec_.push_back( interfaceObj );
 
-      BoundaryConnector<dim>::RemoveElementNeighborConnectivity( *innerElement, *outerElement );
-
-      // resetting
-      innerElement = nullptr;
-      outerElement = nullptr;
-
-      // each interface is assigned into its interface group in the mesh
-  //    model.Mesh().SetRootInterFace( interfaceObj );
+      // TODO: is this still needed?
+      //BoundaryConnector<dim>::RemoveElementNeighborConnectivity( *innerElement, *outerElement );
 
     } // interfaces from faces
 
@@ -484,117 +473,12 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize splitboundary essentials 
-  this->EstablishNeighborConnectivity( false ); 
+  establishNeighborConnectivity( this->elmt_vec_, INSIDE );
+  establishNeighborConnectivity( this->elmt_vec_, OUTSIDE );
 
   return true;
   
 } // CreateFrom
-
-
-/**
-@brief Creates splitboundary from input vectors (used in binary IO)
-
-@author  JC
-@date  1/7/2019
-
-@param meshManager which will take care of the creation of the new elements
-@param femManager  Manager for finite elements.
-@param interfaceTypes   List of types of the interfaces.
-@param interfaceParents The interface parents.
-@param interfaceParentNodes Local indexes of interface nodes in parent elements
-
-@return  Failed/Succeeded.
-*/
-template<size_t dim>
-bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                                  meshManager,
-                                     const FiniteElementManager&                        femManager,
-                                     const std::map<size_t, csmp::Element<dim>*>&       elementIdPtr,
-                                     const std::vector<CSMP_FEM_TYPE>&                  interfaceTypes,
-                                     const std::vector<std::vector<size_t> >&           interfaceParents,
-                                     const std::vector<std::vector<std::pair<size_t, size_t> > >&  interfaceParentNodes )
-{
-
-  // LVS
-  const LocalVariables lvsInterFaces( InterFaceVariables() );
-  const IntegrationPointVariables lvsIntegrationPoints( InterFaceIntegrationPointVariables() );
-
-  // running pointer to fem type of new interfaces as acquired from region element
-  FiniteElement* femPtr( nullptr );
-  Element<dim>* innerParentPtr( nullptr );
-  Element<dim>* outerParentPtr( nullptr );
-  Element<dim>* baseElementPtr( nullptr );
-
-  // preparing container for a max of total region element count
-  this->elmt_vec_.reserve( interfaceTypes.size() );
-
-  // looping over regions elements, assuring that it's an eligible interface type, creating new interface with variable storage,
-  // establishing connectivity and inserting into boundary element container
-  size_t fidx = meshManager.Elements() + meshManager.Faces() + meshManager.InterFaces();
-  for ( size_t f( 0 ); f < interfaceTypes.size(); ++f )
-  {
-    femPtr = femManager.E( interfaceTypes[f] );
-
-    // which is used to create the new interface using the variables prepared above (nullptr is FV Stencil)
-    // TODO: check for uniqueness?
-    InterFace<dim>* const interfaceObj = meshManager.AddInterFace( femPtr, nullptr, lvsInterFaces, lvsIntegrationPoints );
-    interfaceObj->Idx( fidx++ );
-
-    // inner parent element
-    if ( interfaceParents[f][0] != NULL_IDX )
-      {
-        innerParentPtr = elementIdPtr.find( interfaceParents[f][0] )->second;
-        interfaceObj->Assign( innerParentPtr, interfaceParents[f][1], INSIDE );
-      }
-    else
-      throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateFrom", "Inner interface parent cannot be nullptr" );
-
-    // outer parent element
-    if ( interfaceParents[f][2] != NULL_IDX )
-      {
-        outerParentPtr = elementIdPtr.find( interfaceParents[f][2] )->second;
-        interfaceObj->Assign( outerParentPtr, interfaceParents[f][3], OUTSIDE );
-      }
-    else
-      throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateFrom", "Outer interface parent cannot be nullptr" );
-
-    // assign base element if it exists
-    if ( interfaceParents[f][4] != NULL_IDX )
-      {
-        baseElementPtr = elementIdPtr.find( interfaceParents[f][4] )->second;
-        interfaceObj->Assign( baseElementPtr );
-      }
-
-    // assign corresponding parent nodes
-    interfaceObj->Assign( innerParentPtr, outerParentPtr, true );
-    
-    std::vector<std::size_t> split_node_ids;
-    for ( size_t i = 0; i < interfaceObj->Nodes(); i++ )
-      split_node_ids.push_back( interfaceObj->N( i )->Idx() );
-
-    sort( split_node_ids.begin(), split_node_ids.end() );
-    bool found_duplicate = (unique( split_node_ids.begin(), split_node_ids.end() ) != split_node_ids.end());
-    if ( found_duplicate ) {
-      continue;
-    }
-
-    // push back into interface container
-    this->elmt_vec_.emplace_back( interfaceObj );
-
-    // the interface is assigned into the root interface of this interface group in the mesh
-//    meshManager.SetRootInterFace( interfaceObj );
-  } // region elements
-
-  // free
-  vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
-
-  // establishing splitboundary essentials
-  this->CreateNodePointerVector();
-  this->EstablishNeighborConnectivity( false /* non verbose */ );
-  this->IdentifyPerimeter();
-
-  return true;
-
-} // end CreateFrom
 
 
 

@@ -15,10 +15,6 @@ public:
     /// input from csmp native fileset
     Model1D( const std::string& input_file);
 
-    /// input from csmp native file set
-    Model1D( const std::string& input_file,
-             const std::string& variable_file );
-
     /// creates an uniform mesh
     Model1D( const std::string& model_name,
              double64 length,

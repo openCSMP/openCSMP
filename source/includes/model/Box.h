@@ -23,6 +23,8 @@ template<size_t> class Model;
 @addtogroup CSMPglobalEnums
 @{
 */
+
+/// fixed boundary identifiers; @attention do not alter numbering or sequence because it is used in iterations
 enum {
   IRREGULAR_OUTSIDE = -1,
   LEFT_OUTSIDE = -2,  ///< model boundary flags
@@ -55,7 +57,7 @@ enum {
   MULTIPLE_BOUNDARIES = -29
 };
 
-/// @enum BOX_BOUNDARY uniquely identifies the placement of nodes and elements on the boundary of a box-shaped model
+/// @enum BOX_BOUNDARY uniquely identifies placement of nodes on the boundary of a box-shaped model
 enum BOX_BOUNDARY : std::int8_t {
   NOT       = 0,                  ///< not located on a model boundary
   IRREGULAR = IRREGULAR_OUTSIDE,  ///< located on a not-specified outside boundary of model (usually in the bounding box)

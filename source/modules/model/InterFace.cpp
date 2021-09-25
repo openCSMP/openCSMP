@@ -29,7 +29,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f )
 
 template<size_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f,
-                           csmp::FiniteVolumeStencil<dim>* fvs )
+                           const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
     FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
     idx_( UINT_MAX ),
@@ -47,7 +47,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
 /// custom constructor which also builds variable storage; used in most cases
 template<size_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f,
-                           csmp::FiniteVolumeStencil<dim>* fvs,
+                           const csmp::FiniteVolumeStencil<dim>* fvs,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
@@ -275,15 +275,29 @@ void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
 } // end Accept
 
 
-// CONSTRUCTION
+/**
+    Assigning neighbor InterFace objects on either side of the InterFace.
+*/
 template<size_t dim>
-void InterFace<dim>::Assign( size_t i, InterFace<dim>* const ifc_ptr ) // neighbor interface
+void InterFace<dim>::Assign( size_t i, InterFace<dim>* const ifc_ptr, INTERFACE_SIDE side ) // neighbor interface
 {
   assert( this->FE() != nullptr );
-  assert( interface_connector_.size() == this->FE()->Neighbors() );
+  assert( interface_connector_.size() == this->FE()->Neighbors()*2 );
   assert( i < this->Neighbors() );
-  interface_connector_[i] = ifc_ptr;
-}
+  
+  // the inner neighbors are enlisted first
+  if ( side == INSIDE ) {
+       interface_connector_[i] = ifc_ptr;
+    }
+  else if ( side == OUTSIDE ) {
+       interface_connector_[i+this->FE()->Faces()] = ifc_ptr;
+    }
+  else cerr <<"\nInterFace<dim>::Assign(neighbor): attempt to assign InterFace to MIDDLE Element.\n";
+
+  // the outer neighers follow
+  
+} // end InterFace<dim>::Assign(neighbor)
+
 
 
 template<size_t dim>
@@ -373,20 +387,6 @@ void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, I
 
 } // end Assign
 
-
-
-/**
-       Nodes in the sequence that they are contained in the VSet
-*/
-/*
-template<size_t dim>
-void InterFace<dim>::Assign( size_t node, Node<dim>* nptr )
-  { 
-     assert( nptr != nullptr );
-     assert( node < node_connector_.size() ); 
-     node_connector_[node] = nptr; 
-  }
-*/
 
 
 /**
@@ -485,8 +485,9 @@ size_t  InterFace<dim>::Faces() const
 
 
 /**
-    finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface;
-    uses point coordinates that must be matched
+    Finds the local numbers of the faces of the higher-dimensional element that will be connected by this interface;
+    
+    uses point coordinates that must be matched across the interface to find the nodes.
 */
 template<size_t dim>
 std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
@@ -499,18 +500,22 @@ std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
   map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
   vector<size_t>  nids;
   // inner parent element
-  for ( size_t face = 0U; face<innerParent_->Faces(); ++face ) {
+  const size_t ifaces(innerParent_->Faces());
+  for ( size_t face = 0U; face < ifaces; ++face ) {
     innerParent_->FE()->NodesOfFace( face, nids );
     set<Point<dim> >  face_key;
-    for ( size_t j = 0U; j<nids.size(); ++j )
+    const size_t nodes(nids.size());
+    for ( size_t j = 0U; j<nodes; ++j )
       face_key.insert( innerParent_->N( nids[j] )->Coordinate() );
     inner_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
   }
   // outer parent element
-  for ( size_t face = 0U; face<outerParent_->Faces(); ++face ) {
+  const size_t ofaces(outerParent_->Faces());
+  for ( size_t face = 0U; face < ofaces; ++face ) {
     outerParent_->FE()->NodesOfFace( face, nids );
     set<Point<dim> >  face_key;
-    for ( size_t j = 0U; j<nids.size(); ++j )
+    const size_t nodes(nids.size());
+    for ( size_t j = 0U; j<nodes; ++j )
       face_key.insert( outerParent_->N( nids[j] )->Coordinate() );
     outer_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
   }
@@ -853,13 +858,39 @@ size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
     return outer_parent_face_id_;
   }
 
-
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::InterFace<dim>::AssignFaceID:", "ID of outer face could not be determined." );
+  csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
   return inner_parent_face_id_;
-
 }
+
+
+
+
+/// assign face ID of inner or outer parent element depending on their local face numbering 
+template<size_t dim>
+void  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side, size_t idx )
+{
+  if ( side == INSIDE )
+  {
+    assert( innerParent_ != nullptr );
+    inner_parent_face_id_ = idx;
+  }
+  else if ( side == OUTSIDE )
+  {
+    assert( outerParent_ != nullptr );
+    outer_parent_face_id_ = idx;
+  }
+
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+
+} // end ParentFaceID(assignment)
+
+
+
+
+
 
 // GEOMETRY
 

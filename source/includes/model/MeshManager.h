@@ -37,7 +37,7 @@ public:
   MeshManager();
   MeshManager( const PropertyDatabase<dim>&, const FiniteElementManager&, const VSet<dim>& );
   
-  // not copy constructible
+  /// MeshManager is not copy constructible
   MeshManager( const MeshManager& ) = delete;
   MeshManager&  operator=( const MeshManager& ) = delete;
 
@@ -114,61 +114,88 @@ public:
   //
   // ==============================================================
 
-  /// MeshManager swallows the mesh objects created by a user; const pointer cannot be modified
-  Node<dim>*	    const	AddNode( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
-  
-  Element<dim>*	  const	AddElement( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
-                                    const LocalVariables&, const IntegrationPointVariables& );
-  Element<dim>*	  const	AddElement( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
-                                    const LocalVariables&, const IntegrationPointVariables&, size_t material_id );
-                                    
-  Face<dim>*	    const	AddFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
-                                 const LocalVariables&, const IntegrationPointVariables& );
-  Face<dim>*	    const	AddFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
-                                 Element<dim>* const inner_parent, Element<dim>* const outer_parent,
-                                 const LocalVariables&,
-                                 const IntegrationPointVariables& );
-                                 
-  // TODO: do we need to also supply the nodes?
-  Face<dim>*	    const	AddFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
-                                 Element<dim>* const inner_parent, Element<dim>* const outer_parent,
-                                 const std::vector<Node<dim>*>&  edge_nodes,
-                                 const LocalVariables&,
-                                 const IntegrationPointVariables& );
+  /// by location only, the parent element storage is not initialised; TODO: is this method needed
+  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&,
+                                  bool only_add_if_not_collocated, BOX_BOUNDARY = NOT );
 
-  InterFace<dim>*	const	AddInterFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
-                                      const LocalVariables&, const IntegrationPointVariables& );
+  /// if neighbors are not supplied, method tries to find neighbors through the parent connectivity of the nodes
+  Element<dim>*	const AddElement( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
+                                  const LocalVariables&, const IntegrationPointVariables&,
+                                  const std::vector<Node<dim>*>& nodes,
+                                  const std::vector<Element<dim>*>& nbors, int32 material_id );
+
+  /// puts lower-dimensional element inside of an InterFace, connecting it to its base pointer; the neighbors are not connected yet
+  Element<dim>*	const AddInterveningElement( csmp::InterFace<dim>* const,
+                                             const LocalVariables&, const IntegrationPointVariables&,
+                                             const std::vector<Node<dim>*>& nodes,
+                                             int32 material_id );
+
+  /// compatibility checks are performed
+  Face<dim>* const ReplaceElementByFace( csmp::Element<dim>* eptr,
+                                         csmp::Element<dim>* inner_eptr,
+                                         csmp::Element<dim>* outer_eptr,
+                                         const LocalVariables&,
+                                         const IntegrationPointVariables&,
+                                         const std::vector<Face<dim>*>& face_neighbors );
+     
+  /// optionally, the neighbor element pointers might not be assigned; @note node pointers must be supplied in CCW order from outside looking in
+  Face<dim>* const AddFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
+                            Element<dim>* const inner_parent, Element<dim>* const outer_parent,
+                            const LocalVariables&,
+                            const IntegrationPointVariables&,
+                            const std::vector<Node<dim>*>& nodes,
+                            const std::vector<Face<dim>*>& face_neighbors );
+
+  /// adds Face that caps a higher-dimensional Element at the model boundary
+  Face<dim>* const AddBoundaryFace( csmp::Element<dim>* const innerParent,
+                                    size_t local_face_id,
+                                    const LocalVariables&,
+                                    const IntegrationPointVariables&,
+                                    const std::vector<Face<dim>*>& face_neighbors ); ///< optional
+
+  /// like AddFace, but with double the nodes (inside & outside) and neighbors; extra option to assign a precreated intervening element
   InterFace<dim>*	const	AddInterFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
                                       Element<dim>* const inner_parent, Element<dim>* const outer_parent,
                                       Element<dim>* const intervening_elmt,
-                                      const std::vector<Node<dim>*>&  edge_nodes, // do these need to be supplied?
                                       const LocalVariables&,
-                                      const IntegrationPointVariables& );
-  
-   /// inserts new  object if it does not already exist in the tree, otherwise returns pointer to existing one.
-  Node<dim>* const      Duplicate( const Node<dim>* const );
-  Element<dim>* const   Duplicate( const Element<dim>* const );
+                                      const IntegrationPointVariables&,
+                                      const std::vector<InterFace<dim>*>& iface_neighbors );
+   /// compatibility checks are performed
+  InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
+                                                const LocalVariables&,
+                                                const IntegrationPointVariables&,
+                                                const std::vector<InterFace<dim>*>& iface_neighbors );
+ 
+   /// duplicates Node, automatically creating a node manifold or adding it to an existing one.
+  Node<dim>* const      Duplicate( Node<dim>* const nptr_inside,
+                                   INTERFACE_SIDE new_node_side,
+                                   ManifoldType geometry );
 
-  /// by location only, the parent element storage is not initialised; TODO: is this method needed
-  Node<dim>* const			AddNodeAt( const Point<dim>&, const LocalVariables&,
-                                   bool only_add_if_not_collocated, BOX_BOUNDARY = NOT );
  
   /// updates the connectivity of the mesh after its modification mesh
-  void Update();
+  void UpdateConnectivity();
 
   /// after disconnecting the nodes from potential manifolds, and parent elements, these are deleted
-  size_t Erase( typename std::vector<Node<dim>*>::iterator first,
-                typename std::vector<Node<dim>*>::iterator last );
+  size_t Erase( typename std::deque<Node<dim>*>::iterator first,
+                typename std::deque<Node<dim>*>::iterator last );
 
-  /// erases the supplied sequence of elements returning the number of erasures, the pointers to the erased elements are nulled. The connectivity of the affected mesh neighborhood will get fixed.
-  size_t Erase( typename std::vector<Element<dim>*>::iterator first,
-                typename std::vector<Element<dim>*>::iterator last );
+  /// erases the supplied sequence of elements returning the number of erasures, the pointers to the erased elements are nulled. @todo update connectivity of affected mesh
+  size_t Erase( typename std::deque<Element<dim>*>::iterator first,
+                typename std::deque<Element<dim>*>::iterator last );
 
-  size_t Erase( typename std::vector<InterFace<dim>*>::iterator first,
-                typename std::vector<InterFace<dim>*>::iterator last );
+  size_t Erase( typename std::deque<InterFace<dim>*>::iterator first,
+                typename std::deque<InterFace<dim>*>::iterator last );
 
-  size_t Erase( typename std::vector<Face<dim>*>::iterator first,
-                typename std::vector<Face<dim>*>::iterator last );
+  size_t Erase( typename std::deque<Face<dim>*>::iterator first,
+                typename std::deque<Face<dim>*>::iterator last );
+                
+  /// for any type of cells using a vector iterator
+  template<template<size_t> class CELL>
+  size_t Erase( typename std::vector<CELL<dim>*>::iterator first,
+                typename std::vector<CELL<dim>*>::iterator last );
+
+  /// compacts deques, first filling in deleted cells with cells from the back; then erasing cells at the back
+  size_t RemoveNullPointerCells();
 
   /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
   void AssignUniqueNumbers( bool in_a_single_sequence=false ) const;
@@ -188,7 +215,17 @@ public:
   /// reads distributed variables from VSet
   void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
 
-  /// Rebuild parent relationships, for example after a region was removed
+  /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
+  /// @todo disambiguate connectivity between Face and InterFace object at manifolds
+  template<template<size_t> class CELL>
+  void RebuildConnectivity(  typename std::deque<CELL<dim>*>::iterator first,
+                             typename std::deque<CELL<dim>*>::iterator last );
+                             
+  /// for InterFaces - with neighbors on either side
+  void RebuildConnectivity( typename std::deque<InterFace<dim>*>::iterator first,
+                            typename std::deque<InterFace<dim>*>::iterator last, INTERFACE_SIDE );
+
+  /// Rebuild node-to-element parent relationships, for example after a region was removed
   void RebuildParentRelationships( typename std::vector<Node<dim>*>::iterator begin, typename std::vector<Node<dim>*>::iterator end );
   
   /// JCK's method to test the connectivity of a mesh after it had been read from binary file
@@ -199,11 +236,6 @@ public:
   
   
 private:
-
-  /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements, Faces, InterFaces)
-  template<template<size_t> class CELL>
-  void RebuildConnectivity(  typename std::deque<CELL<dim>*>::iterator first,
-                             typename std::deque<CELL<dim>*>::iterator last );
 
   /// detecting and counting potentially empty cells or nodes in storage for prompting an update
   std::pair<std::array<size_t,4>,bool>  NullPointersInStorage() const;
@@ -220,26 +252,6 @@ private:
   
   NodeManifoldManager<dim>    node_manifold_manager_; ///<  node manifolds of SplitBoundaries
 };
-
-// POTENTIALLY NEEDED METHODS
-/*
-  /// uses same nodes and data all existing connections and data; argument vector is only used if non-empty
-  Face<dim>* const      FaceFromElement( const Element<dim>* const,
-                                         const LocalVariables&, const IntegrationPointVariables&,
-                                         Element<dim>* const inner_parent, Element<dim>* const outer_parent,
-                                         const std::vector<Face<dim>*>& nbor_faces );
-               
-  /// generates  extra nodes, if these are not already present as indicated by NodeManifolds
-  InterFace<dim>* const InterFaceFromFace( const Face<dim>* const,
-                                           const LocalVariables&, const IntegrationPointVariables&,
-                                           Element<dim>* const inner_parent, Element<dim>* const outer_parent,
-                                           const std::vector<InterFace<dim>*>& nbor_faces );
-
-  /// replace lower-dimensional element with Face object, deleting the Elements and establishing the neighbor connectivity of the new Faces
-  size_t          ReplaceElementsByFaces( const PropertyDatabase<dim>&,
-                                          typename std::vector<Element<dim>*>::iterator first,
-                                          typename std::vector<Element<dim>*>::iterator last );
-*/
 
 } // end namespace csmp
 

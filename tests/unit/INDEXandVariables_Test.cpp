@@ -37,7 +37,7 @@ void INDEXandVariables_Test::run()
     runModel(m0);
 
     // Run Test for 3D Model loaded from CSMP++ binary format
-    Model<3> m1("INDEXandVariables_Test_BinaryModel");
+    Model<3> m1( string("INDEXandVariables_Test_BinaryModel") );
     runModel(m1);
   }
   

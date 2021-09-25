@@ -16,6 +16,8 @@ namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
+template<size_t> class Face;
+template<size_t> class InterFace;
 template<size_t> class MeshManager;
 
 /// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
@@ -46,6 +48,36 @@ void findContiguousMeshPatch( CELL<dim>* const cell_pointer, std::set<CELL<dim>*
 /// breadth-first mesh traversal starting at a Node; returns number of discovered nodes
 template<size_t dim>
 size_t findContiguousMeshPatch( csmp::Node<dim>* const node_pointer, std::deque<Element<dim>*>& elements );
+
+/// relying on the parent element information from its nodes, method finds higher-dim neighbors of each element face and connects itself with them and vice versa; returns # found
+template<size_t dim>
+size_t connectNeighborsUsingNodeParents( Element<dim>* const );
+
+// TODO: not sure how to do this in a generic way
+template<size_t dim>
+void updateParentElementConnectivity( Node<dim>* const );
+
+
+/// TODO: Using the parent elements of its nodes, finds its higher-dimensional neighbor on inside or outside
+template<size_t dim>
+Element<dim>* const findInnerHigherDimensionalNeighborFromNodes( Element<dim>* const, INTERFACE_SIDE );
+
+/// Connects nodes to Face, finding them by matching the faces of the supplied higher dimensional elements
+template<size_t dim>
+void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
+                                             const Element<dim>* const outer_neighbor,
+                                             Face<dim>* const );
+
+/// Connects nodes to InterFace, finding them by matching the faces of the supplied higher dimensional elements; face IDs are set as well
+template<size_t dim>
+void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
+                                             const Element<dim>* const outer_neighbor,
+                                             InterFace<dim>* const );
+
+
+/// Surt's method to efficiently erase vector Element from a pointer vector.
+template<size_t dim>
+void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Element<dim>* );
 
 } // end csmp
 

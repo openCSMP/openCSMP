@@ -376,7 +376,7 @@ void FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const nptr
  
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-           const Element<3U>* const eptr = nptr->Parent(i);
+           const Element<dim>* const eptr = nptr->Parent(i);
            const size_t sector_node      = nptr->ParentNodeNumber(i);
            const size_t sector_facets(eptr->FV()->FacetsPerSector(sector_node));
            for ( size_t j=0U; j<sector_facets; ++j ) {
@@ -451,7 +451,7 @@ double64 FluxEvaluator<dim,USER>::FluxBalanceAndOutFlow( Node<dim>* const nptr )
  
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
            for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
@@ -492,7 +492,7 @@ double64 FluxEvaluator<dim,USER>::InFlow( const Node<dim>* const nptr ) const
  
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
            for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
@@ -524,7 +524,7 @@ double64 FluxEvaluator<dim,USER>::OutFlow( const Node<dim>* const nptr ) const
  
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
            for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
@@ -552,7 +552,7 @@ double64 FluxEvaluator<dim,USER>::VolumetricFlowBalance( const Node<dim>* const 
  
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-           const Element<3U>* const eptr = nptr->Parent(i);
+           const Element<dim>* const eptr = nptr->Parent(i);
            const size_t sector_node      = nptr->ParentNodeNumber(i);
            const size_t sector_facets(eptr->FV()->FacetsPerSector(sector_node));
            for ( size_t j=0U; j<sector_facets; ++j ) {
@@ -648,6 +648,9 @@ template void FluxEvaluator<3U,ImplicitTransport>::VolumetricFlowAndTransportVar
                                                                                                    vector<Element<3U>*>& );
  
   
+template class FluxEvaluator<2U,ExplicitTransport>;
+template class FluxEvaluator<2U,ImplicitTransport>;
+
 template class FluxEvaluator<3U,ExplicitTransport>;
 template class FluxEvaluator<3U,ImplicitTransport>;
 

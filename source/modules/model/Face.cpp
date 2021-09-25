@@ -259,7 +259,7 @@ Face<dim>::Face( const FiniteElementManager& finiteElementManager,
 */
 template<size_t dim>
 Face<dim>::Face( csmp::FiniteElement* f,
-                 csmp::FiniteVolumeStencil<dim>* fvs,
+                 const csmp::FiniteVolumeStencil<dim>* fvs,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
 
@@ -490,7 +490,7 @@ size_t  Face<dim>::ConnectedNeighbors() const
 {
 	size_t nulls(0);
 	for (auto f : face_connector_)
-		if (!f) nulls++;
+		if ( f == nullptr ) nulls++;
 	return (face_connector_.size() - nulls);
 }
 

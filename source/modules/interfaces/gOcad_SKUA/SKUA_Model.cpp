@@ -27,7 +27,7 @@ SKUA_Model::SKUA_Model( const char* icem_file_set,
                         bool create_boundaries,
                         bool create_splitboundaries,
                         bool isoparametric )
-  : Model<3U>( variable_file, false )
+  : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,

@@ -208,7 +208,7 @@ public:
   /// to read model from set of CSMP native binary files
   explicit Model( const std::string& binaryFiles );
 
-  /// to read model from set of CSMP native binary files; but only with a subset of variables
+  /// to read model from set of CSMP native binary files; but only with the specified subset of variables from the binary variables file
   Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
   /// destructor that needs to be overloaded when a subclass is derived from model
@@ -400,6 +400,9 @@ public:
 protected:
 
   Model();
+  
+  /// to construct model  as a base class to a derived model built from an external dataset using a variable file in ASCII format
+  explicit Model( const char* complete_variables_file_name );
 
   /// to read model from set of CSMP native binary files; boolean whether a binary variable file with same name as model is available or not
   Model( const std::string& modelName, bool with_binary_variables_file );

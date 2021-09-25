@@ -16,8 +16,14 @@ namespace csmp {
 template<size_t> class Node;
 
 /**
-    Class performs breadth-first traversal of mesh patch during construction 
-    and then contains cell and node sets that can be used to iterate over the mesh tree.
+    Interator to perform a breadth-first traversal of contiguous mesh patch during its construction
+    and then contain cell and node sets that can be used to iterate over the mesh tree.
+    
+    @author SKM
+    @date 15/3/2017
+    
+    @todo needs to be completed to become useful
+    @todo use this breadth-first graph traversal rather than any other method to discover patch of CELLs.
 */
 template<size_t dim, template<size_t> class CELL> 
 class MeshIterator {
@@ -38,6 +44,7 @@ class MeshIterator {
     typename std::set<csmp::Node<dim>*>::iterator NodesEnd() { return discovered_nodes_.end(); }   
 
   private:
+    // use deque contain made unique to store the cell references
     std::set<CELL<dim>*>          discovered_cells_;
     std::set<csmp::Node<dim>*>    discovered_nodes_;
     std::deque<csmp::Node<dim>*>  current_nodes_;

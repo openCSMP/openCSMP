@@ -3297,7 +3297,8 @@ void csmpBinaryToVTK( const char* modelBinFIleName )
   cout << "\n\ncsmpBinaryToVTK: Enter name of region for which to output '" << propertyName << "': " << flush;
   getline( cin, regionName );
 
-  Model<3> model( modelBinFIleName );
+  const std::string bin_file_set(modelBinFIleName);
+  Model<3> model( bin_file_set );
 
   if ( !model.Database().IsDefined( propertyName.c_str() ) ) {
     cerr << "\csmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";

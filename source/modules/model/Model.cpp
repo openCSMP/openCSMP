@@ -45,25 +45,25 @@ Model<dim>::Model()
   {
   }
 
+
 /**
 Constructor used for base class construction in subclasses of the model.
 Example: ANSYS_Model3D where model construction input data are read from
-file, initializing VSet and ModelTopology classes that serve as an input
+text file, initializing VSet and ModelTopology classes that serve as an input
 for model construction.
 
 @note this is not a stand-alone constructor and leaves the model in an incomplete state.
 */
-/*
 template<size_t dim>
-Model<dim>::Model( const std::string& varFile, bool binary )
+Model<dim>::Model( const char* varTextFile )
   : model_name_( "undefined" ),
-  database_( varFile.c_str(), binary ),
-  fvStencilManager_( nullptr ),
-  verbose_( true )
+    database_( varTextFile ),
+    fvStencilManager_( nullptr ),
+    verbose_( true )
 {
   InitializeLocalVariableStorage();
 }
-*/
+
 
 // PUBLIC CONSTRUCTORS
 

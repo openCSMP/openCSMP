@@ -52,9 +52,9 @@ and to give access to them.
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 class BoundaryInterface {
   public:
-    BoundaryInterface();
+    BoundaryInterface() {}   
     BoundaryInterface( const BoundaryInterface& ) = delete;
-    virtual ~BoundaryInterface();
+    ~BoundaryInterface() {}
     
     friend class Boundary_Test;
     friend class BoundaryInterface_Test; ///< to gain access to protected member functions for testing
@@ -98,7 +98,7 @@ class BoundaryInterface {
     std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region, 
                                                                        bool remove_dim_minus1_region=true );
 
-    /// insert Boundary<Face> between two equidimensional unique regions, first on inside by convention returns name
+    /// insert lower-dimensional Region between two equidimensional unique regions, and then converts it into Boundary; returns boundary name
     std::pair<std::string,bool>  InsertBoundary( const char* region1, const char* region2, bool createRegionBetween = false );
 
     /// converts lower dimensional element regions surrounding the target region and containing strings like BOUNDARY in their name into a Boundary<Face> object
@@ -111,7 +111,11 @@ class BoundaryInterface {
     bool EstablishBoxBoundariesFromFlags();
     
     /// Removes boundary with  deletion of its faces in the MeshManager
-    void RemoveBoundary( csmp::Boundary<dim>& boundary );
+    void RemoveBoundary( const char* boundary );
+    
+    /// Rembove boundary by direct reference to it as is needed by SplitBoundaryInterFace
+    void RemoveBoundary( csmp::Boundary<dim>& );
+
 
     // -----------------------------------------------
     //  input/output
@@ -154,10 +158,10 @@ class BoundaryInterface {
                          const typename std::map<std::string, Region<dim> >::const_iterator subRegion );
 
     /// Splits boundary into remainder and new name with parameter name
-    bool DivideBoundary(  typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
-                          const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                          const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                          const std::string& bName );
+    bool DivideBoundary( typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
+                         const typename std::vector<Face<dim>*>::const_iterator facesBegin,
+                         const typename std::vector<Face<dim>*>::const_iterator facesEnd,
+                         const std::string& bName );
     // EDGES
     
     /// creates edge Boundary objects for box-shaped model from side boundaries

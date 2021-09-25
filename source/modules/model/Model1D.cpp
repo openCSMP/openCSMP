@@ -23,13 +23,6 @@ Model1D<dim>::Model1D( const std::string& input_file)
    this->Name( input_file.c_str() );
  }
 
-template<size_t dim>
-Model1D<dim>::Model1D( const std::string& input_file,
-                       const std::string& variable_file )
- : Model<dim>( input_file.c_str(), variable_file.c_str() )
- {
-   this->Name( input_file.c_str() );
- }
 
 
 /**
@@ -45,13 +38,15 @@ Model1D<dim>::Model1D( const std::string& name,
                        const std::vector<double64>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
  {
     this->Name(name.c_str());
     Initialize( length, elements,
                 splitnode_coordinates,
                 origin, destination );
  }
+
+
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
@@ -68,6 +63,7 @@ Model1D<dim>::Model1D( const std::string& name,
  }
 
 
+
 template<size_t dim>
 Model1D<dim>::Model1D(const std::string& name,
                        const std::string& variable_file,
@@ -78,7 +74,7 @@ Model1D<dim>::Model1D(const std::string& name,
                        const std::vector<double64>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
  {
     this->Name(name.c_str());
     Initialize( length, min_size, max_size, width_of_transition_zone, density,
@@ -101,6 +97,8 @@ Model1D<dim>::Model1D(const std::string& name,
                 splitnode_coordinates,
                 origin, destination );
  }
+ 
+ 
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
@@ -109,13 +107,15 @@ Model1D<dim>::Model1D( const std::string& name,
                        const std::vector<double64>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
 {
    this->Name(name.c_str());
    Initialize( node_coordinates,
                splitnode_coordinates,
                origin, destination );
 }
+
+
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
@@ -129,6 +129,8 @@ Model1D<dim>::Model1D( const std::string& name,
                splitnode_coordinates,
                origin, destination );
 }
+
+
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
@@ -137,13 +139,15 @@ Model1D<dim>::Model1D( const std::string& name,
                        const std::vector<Point<dim> >& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
 {
    this->Name(name.c_str());
    Initialize( node_coordinates,
                splitnode_coordinates,
                origin, destination );
 }
+
+
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,

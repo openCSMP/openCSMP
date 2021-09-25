@@ -71,10 +71,8 @@ Node<dim>::Node( Node<dim>&& nd )
 template<size_t dim>
 Node<dim>::~Node()
  {
-    for ( auto& it : parent_element_pointers_ ) it = nullptr;
-    if ( parent_manifold_ != nullptr )
-      parent_manifold_->Delete( this );
-    parent_manifold_ = nullptr;
+    if ( manifold_ != nullptr )
+      manifold_->Remove( this );
  }
 
 
@@ -410,6 +408,24 @@ template<size_t dim>
 double64          Node<dim>::z() const { return xyz_[2u]; }
 
 
+// MANIFOLDS
+
+/// access to manifold if any; returns nullptr if the node is not a manifold
+template<size_t dim>
+bool Node<dim>::IsManifold() const { return (manifold_ == nullptr); }
+
+
+template<size_t dim>
+NodeManifold<dim>* const Node<dim>::Manifold() const { return manifold_; }
+
+
+template<size_t dim>
+void Node<dim>::Assign( NodeManifold<dim>* const md )
+ {
+    assert( md != nullptr );
+    manifold_ = md;
+ }
+
 
 
 // OUTPUT
@@ -439,7 +455,13 @@ void Node<dim>::Out() const
          cout << endl;
       } 
 #endif
- } // end out 
+    if ( manifold_ != nullptr ) {
+         cout <<"\nconnected nodes: ";
+         manifold_->Out();
+      }
+    
+ } // end out
+ 
 
 template class Node<1U>;
 template class Node<2U>;

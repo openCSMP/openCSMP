@@ -667,12 +667,16 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   if ( model.IsUnique(target_region) ) {
        // finding the target elements
        vector<Element<3U>*> elmt_ptrs;
-       model.Mesh().Erase( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       model.Mesh().template Erase<Element>( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
        return;
     }
 
   // if the region was non-unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
   // updating regions
+  model.Mesh().UpdateConnectivity();
+  model.UpdateIndices();
+  
+  /*
   for ( auto rit = model.RegionsBegin(); rit != model.RegionsEnd(); ++rit ) {
     rit->second.CreateNodePointerVector2();
     rit->second.EstablishNeighborConnectivity();
@@ -698,8 +702,7 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
     sbit->second.EstablishNeighborConnectivity();
     sbit->second.IdentifyPerimeter();
   }
-  // updating indexes
-  model.UpdateIndices();
+  */
   
 } // end Remove_NO_DATA_ElementsInModel
 

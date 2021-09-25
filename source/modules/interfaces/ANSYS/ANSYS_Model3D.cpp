@@ -28,7 +28,7 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<3U>( variable_file, false )
+  : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,
@@ -55,7 +55,7 @@ ANSYS_Model3D::ANSYS_Model3D( bool isoparametric,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<3U>( variable_file, false )
+  : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( isoparametric,
@@ -80,7 +80,7 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<3U>( variable_file, false )
+  : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,

@@ -83,9 +83,6 @@ class ModelSubDomain {
     virtual void Accept( Visitor<dim>& );
     void Apply( Interrelation<dim>& );
 
-    /// connects simplices (=cells) with their equidimensional neighbors
-    void EstablishNeighborConnectivity( bool verbose = true );
-
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
     
@@ -166,10 +163,10 @@ class ModelSubDomain {
     size_t            PerimeterElements() const;
 
     // access via objects and local order in containers
-    bool              Contains( const CELL<dim>* ) const;
-    bool              Contains( const Node<dim>* ) const;
-    bool              IsPerimeterNode( const csmp::Node<dim>* ) const;
-    bool              IsPerimeterElement( const CELL<dim>* ) const;
+    bool              Contains( const CELL<dim>* const ) const;
+    bool              Contains( const Node<dim>* const ) const;
+    bool              IsPerimeterNode( const csmp::Node<dim>* const ) const;
+    bool              IsPerimeterElement( const CELL<dim>* const ) const;
     /// number of faces of perimeter element #eid, that lie on subdomain surface; @attention member indexes must be are uptodate
     size_t            PerimeterFaces( size_t eid ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain

@@ -58,8 +58,8 @@ void InterFace_Test::Assign_tests(){
 
     //Interface Construction
     IsoparametricLinearLineElement face_FE;
-    InterFace<2> if_obj0( &face_FE, nullptr), if_obj1( &face_FE, nullptr),
-                 if_obj2( &face_FE, nullptr), if_obj3( &face_FE, nullptr);
+    InterFace<2> if_obj0( &face_FE, nullptr ), if_obj1( &face_FE, nullptr ),
+                 if_obj2( &face_FE, nullptr ), if_obj3( &face_FE, nullptr );
 
 
     ///Beginning Use and Tests
@@ -92,8 +92,8 @@ void InterFace_Test::Assign_tests(){
     //Assigns Element and nodes
     if_obj2.Assign(&e1, &e2, true) ;
     //Test Element sides
-    _test(e1 == *(if_obj2.InnerParent()) );
-    _test(e2 == *(if_obj2.OuterParent()) );
+    _test( e1 == *(if_obj2.InnerParent()) );
+    _test( e2 == *(if_obj2.OuterParent()) );
     //test node assigned
     _test( n2 ==  *(if_obj2.InnerParent()->N( if_obj2.ParentNodeNumber(size_t(0), INSIDE) ) ) );
     _test( n3 ==  *(if_obj2.InnerParent()->N( if_obj2.ParentNodeNumber(size_t(1), INSIDE) ) ) );
@@ -114,8 +114,9 @@ void InterFace_Test::Assign_tests(){
 
     ///Neighbour Testing
     //Neighbour assign functionality
-    if_obj0.Assign(0, &if_obj1);
-    if_obj0.Assign(1, &if_obj2);
+    // TODO: extend test to check inside AND outside neighbor assignments
+    if_obj0.Assign(0, &if_obj1,INSIDE);
+    if_obj0.Assign(1, &if_obj2,INSIDE);
     _test( if_obj0.Neighbors() == 2 );
     _test( if_obj0.ConnectedNeighbors() == 2);
     _test( if_obj1 == *if_obj0.Neighbor(0) );

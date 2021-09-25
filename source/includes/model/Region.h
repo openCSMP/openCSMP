@@ -43,7 +43,7 @@ template<size_t dim>
 size_t  sharedElements( const Region<dim>&, const Region<dim>& );
 
 template<size_t dim>
-bool  isOfLowerDimensionalRepresentation( const Region<dim>& );
+bool  hasLowerDimensionalRepresentation( const Region<dim>& );
 
 template<size_t dim>
 bool  containsVolumeElements( const Region<dim>& );
@@ -98,12 +98,12 @@ class Region : public ModelSubDomain<dim, Element>,
     // reconstruction of regions that existed before
     // ---------------------------------------------
 
-    /// re-constructor for regions via the MeshManager
+    /// RECONSTRUCTOR for regions via the MeshManager
     Region( const PropertyDatabase<dim>&,
             const MeshManager<dim>&,
             const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
 
-                                     /// re-constructor for regions via the nodes and elements which are explored by the MeshManager
+    /// RECONSTRUCTOR for regions via the nodes and elements which are explored by the MeshManager
     Region( const PropertyDatabase<dim>&,
             const std::deque<Node<dim>*>&,
             const std::deque<Element<dim>*>&,
@@ -209,12 +209,12 @@ class Region : public ModelSubDomain<dim, Element>,
     size_t RemoveRange( typename std::vector<csmp::Element<dim>*>::iterator begin,
                         typename std::vector<csmp::Element<dim>*>::iterator end );
 
-    // TODO: deprecate since purpose duplicates that of boundaries
     /// creates surface / perimeter line of Elements between regions (the first is on the inside); TODO: @todo check whether this works
     bool CreateBetween( MeshManager<dim>&,
                         const FiniteElementManager&,
                         const Region<dim>&,
-                        const Region<dim>& );
+                        const Region<dim>&,
+                        int32 material_id_for_new_region );
 
     // ----------------------------------------
     // geometry manipulations

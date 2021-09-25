@@ -3989,7 +3989,8 @@ double yCoordinate( Point<1> const& )
 */
 void outputBoundariesToVTU( const char* modelBinFIleName )
 {
-  Model<3> model( modelBinFIleName );
+  const string bin_file_set(modelBinFIleName);
+  Model<3> model( bin_file_set );
   VTU_Interface<3> vtu( model );
 
   cin.ignore( numeric_limits<streamsize>::max(), '\n' );
@@ -4024,8 +4025,9 @@ void csmpBinaryToVTU( const char* modelBinFIleName )
   cout << "\n\ncsmpBinaryToVTU::Enter name of property to output: " << flush;
   string propertyName( "" );
   getline( cin, propertyName );
-
-  Model<3> model( modelBinFIleName );
+  
+  const string bin_file_set(modelBinFIleName);
+  Model<3> model( bin_file_set );
   VTU_Interface<3> vtu( model );
 
   vtu.OutputDataToVTU( propertyName, propertyName, string( "Model" ), 0 );

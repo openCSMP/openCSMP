@@ -2050,10 +2050,12 @@ template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>
 
 
 
-// CONNECTIVITY BETWEEN INTERFACES
-
+/** CONNECTIVITY BETWEEN INTERFACES
+       
+         Inside and outside must be considered.
+*/
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
+void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, INTERFACE_SIDE side, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
@@ -2082,14 +2084,11 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
                 return;
              }
 
-           // creating face key from idx's of face
-           (*it)->CurrentSide( INSIDE );
+           // creating face keys from idx's of interface for INSIDE & OUTSIDE
+           (*it)->CurrentSide( INSIDE ); // just for node-vector
            (*it)->FE()->NodesOfFace( face, fnids );
            for ( size_t j=0U; j<fnids.size(); j++ )
-           {
-               key.insert( (*it)->N( fnids[j], INSIDE ) );
-               key.insert( (*it)->N( fnids[j], OUTSIDE ) );
-           }
+             key.insert( (*it)->N( fnids[j], side ) );
 
            // inserting newly generated key into multimap
            if ( (*it)->FE()->IsSurfaceElement() )
@@ -2153,9 +2152,9 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
                    assert( e1Ptr != e2Ptr ); // avoid self-assignment
 
                    // assigning eachothers faces
-                   //                          face pointer                   nbor face idx        neighbor pointer
-                   (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                   (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
+                    //                        face pointer, neighbor pointer, side-of interface
+                   (*it1).second.second->Assign( (*it1).second.first, e2Ptr, side );
+                   (*it2).second.second->Assign( (*it2).second.first, e1Ptr, side );
 
                    // both iterators are advanced (so that with the second increment a new pair of faces is reached)
                    ++it1;
@@ -2194,9 +2193,9 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
                    assert( e1Ptr != e2Ptr ); // avoid self-assignment
 
                     // assigning eachothers faces
-                    //                          face pointer                   nbor face idx        neighbor pointer
-                    (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                    (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
+                    //                        face pointer, neighbor pointer, side-of interface
+                    (*it1).second.second->Assign( (*it1).second.first, e2Ptr, side );
+                    (*it2).second.second->Assign( (*it2).second.first, e1Ptr, side );
 
 
                    // both iterators are advanced (so that with the second increment a new pair of faces is reached)
@@ -2214,9 +2213,9 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
  } // end establishNeighborConnectivity
 
-template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, bool, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, bool, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, bool, bool );
+template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, INTERFACE_SIDE, bool, bool );
+template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, INTERFACE_SIDE, bool, bool );
+template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, INTERFACE_SIDE, bool, bool );
 
 
 

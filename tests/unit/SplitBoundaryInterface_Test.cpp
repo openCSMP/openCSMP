@@ -1035,7 +1035,9 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
   
   // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  set<string> new_regions = modelIN->InsertLowerDimensionalRegionsIntoSplitBoundaries();
+  const int32 rocktype(8);
+  const int32 material_id_for_new_elements(rocktype);
+  set<string> new_regions = modelIN->InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id_for_new_elements );
 
   // read Model from Binary
   modelIN->OutputToBinaryFile( model_name.c_str() );

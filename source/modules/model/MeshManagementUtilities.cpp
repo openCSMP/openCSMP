@@ -7,8 +7,10 @@
 //
 
 #include "MeshManagementUtilities.h"
-#include "CSMP_highLevelUtilities.h"
+#include "CSMP_highLevelUtilities.h" // perhaps the mesh related stuff should be moved here
 #include "MeshManager.h"
+#include "Element.h"
+#include "Node.h"
 #include "ErrorHandler.h"
 #include "Box.h"
 
@@ -429,5 +431,295 @@ template size_t  findPointersToStandAloneMeshPatches( deque<Face<3U>*>::const_it
 template size_t  findPointersToStandAloneMeshPatches( deque<InterFace<3U>*>::const_iterator,
                                                       deque<InterFace<3U>*>::const_iterator,
                                                       map<InterFace<3U>*,MeshPatchAttributes>& );
+
+
+
+
+
+/** relying on the parent element information from its nodes, method finds the neighbor elements for each Face (or boundary) and connects itself them
+ 
+        @return the number of neighbors that were identified
+ */
+template<size_t dim>
+size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+     if ( eptr == nullptr ) {
+             csmp_error.notice( ERROR, "connectNeighborsUsingNodeParents:",
+                               "invalid element pointer" );
+            return 0U;
+        }
+        
+     // making search keys from the nodes
+     // TODO: the number of nodes might be reduced by ignoring boundary nodes ?!
+     set<Node<dim>*>               node_keys( eptr->NodesBegin(), eptr->NodesEnd() );
+     //  key             face
+     map<set<Node<dim>*>,size_t>  face_keys;
+     const size_t                 n_nbors(face_keys.size());
+     vector<size_t>               fnids;
+     for ( size_t i=0U; i<n_nbors; ++i ) {
+          eptr->FE()->NodesOfFace( i, fnids );
+          set<Node<dim>*> face_key;
+          for ( auto j : fnids ) face_key.insert( eptr->N(j) );
+          face_keys.insert( make_pair( face_key, i ) );
+          // setting nbor pointers to null
+          eptr->Assign( i, static_cast<Element<dim>*>(nullptr) );
+       }
+       
+     // finding the neighbor elements opposite to the element's faces
+     // -------------------------------------------------------------
+     size_t nbors_found(0U);
+     // making a subset of the parent elements that share a sufficient number of nodes to qualify
+     set<Element<dim>*> potential_nbors;
+     size_t min_face_nodes = (dim != 3) ? 2 : 3;
+     if ( dim == 1 ) min_face_nodes = 1;
+     // using the element's nodes to find the neighbors
+     for ( auto nit=eptr->NodesBegin(); nit!=eptr->NodesEnd(); ++nit )
+       for (size_t i=0U; i<(*nit)->Parents(); ++i )
+         {
+            size_t counter(0U);
+            for ( auto it=(*nit)->Parent(i)->NodesBegin(); it!=(*nit)->Parent(i)->NodesEnd(); ++it )
+              if ( node_keys.find(*it) != node_keys.end() ) counter++;
+            // if the element shares an equal or greater number of nodes than face nodes it is a potential neighbor
+            if ( counter >= min_face_nodes ) potential_nbors.insert( (*nit)->Parent(i) );
+         }
+     
+     // searching the subset of elements
+     set<Node<dim>*> nbor_face_key;
+     for ( auto it : potential_nbors )
+       {
+          // loop over faces until matching face is found; else report
+          const size_t n_faces(it->Neighbors());
+          for ( size_t i=0U; i<n_faces; ++i ) {
+              it->FE()->NodesOfFace( i, fnids );
+              for ( auto j : fnids ) nbor_face_key.insert( it->N(j) );
+              // searching & assigning neighbors found
+              auto nbor_it(face_keys.find(nbor_face_key));
+              if ( nbor_it != face_keys.end() ) {
+                   // assigning the neighbor
+                   eptr->Assign( (*nbor_it).second, it );
+                   // assigning the neighbor's neighbor-element pointer to this new element
+                   it->Assign( i, eptr );
+                   nbors_found++;
+                   // only of face of the neighbor may be connected
+                   break;
+                }
+              nbor_face_key.clear();
+           }
+       }
+       
+    return nbors_found;
+        
+ } // end connectNeighborsUsingNodeParents
+ 
+template size_t connectNeighborsUsingNodeParents( Element<1U>* );
+template size_t connectNeighborsUsingNodeParents( Element<2U>* );
+template size_t connectNeighborsUsingNodeParents( Element<3U>* );
+
+
+
+
+/**
+    Assigns nodes to the Face finding them from the nodes of the higher dimensional neighbors that share the Face.
+       
+    Uses unordered set of sets to find the interface between the higher dimensional elements.
+    
+    The nodes of the face are assigned directly
+ */
+template<size_t dim>
+void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
+                                             const Element<dim>* const outer_nbor,
+                                             Face<dim>* const face )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( face == nullptr )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to target Face is not initialised");
+   if ( inner_nbor == nullptr )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to inner higher-dim Element not initialised");
+   if ( outer_nbor == nullptr )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
+    
+   // 1. Creating a map of the faces of the outer element
+   vector<size_t> fnids;
+   //      face key
+   set<set<Node<dim>*> > outer_elmt_faces;
+
+   const size_t n_outer_elmt_faces(outer_nbor->Faces());
+   for ( size_t i=0U; i<n_outer_elmt_faces; ++i ) {
+        outer_nbor->FE()->NodesOfFace( i, fnids );
+        // creating and recording the search key and face number
+        set<Node<dim>*> face_nodes;
+        const size_t n_face_nodes(fnids.size());
+        for ( size_t j=0U; j<n_face_nodes; j++ ) face_nodes.insert( inner_nbor->N( fnids[j] ) );
+        outer_elmt_faces.insert( face_nodes );
+     }
+     
+   // 2. Searching the faces of the inner element that matches this face
+   const size_t n_inner_elmt_faces(inner_nbor->Faces());
+   for ( size_t i=0U; i<n_inner_elmt_faces; ++i ) {
+        inner_nbor->FE()->NodesOfFace( i, fnids );
+        // creating and recording the search key
+        set<Node<dim>*> face_nodes;
+        const size_t n_face_nodes(fnids.size());
+        for ( size_t j=0U; j<n_face_nodes; j++ ) face_nodes.insert( inner_nbor->N( fnids[j] ) );
+        // performing the search
+        auto search_it = outer_elmt_faces.find( face_nodes );
+        // if a matching face is found
+        if ( search_it != outer_elmt_faces.end() ) {
+             // assigning the nodes which are in the right order in fnids
+             // (remember that the nodes of the Face should match the order at the inner face)
+             size_t k(0U);
+             for ( size_t j=0U; j<n_face_nodes; j++ )
+               face->Assign( k++, inner_nbor->N( fnids[j] ) );
+             // ending the search because only one matching neighbor is expected
+             break;
+          }
+     }
+
+ } // end findNodesViaHigherDimensionalNeighbors
+
+template void findNodesViaHigherDimensionalNeighbors( const Element<1>* const, const Element<1>* const, Face<1>* const );
+template void findNodesViaHigherDimensionalNeighbors( const Element<2>* const, const Element<2>* const, Face<2>* const );
+template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, const Element<3>* const, Face<3>* const );
+
+
+
+/**
+    Assigns nodes to the InterFace finding them by searching for collocated nodes in the higher dimensional neiighbor elements that share the Face.
+    For each of the nodes their local integer code in in the inner and outer element are stored. With these a search key is created to find the corresponding
+    element faces that are needed to recreate the node order.
+       
+    Uses unordered set of sets to find the interface between the higher dimensional elements.
+    
+    The nodes of the face are assigned directly
+ */
+template<size_t dim>
+void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
+                                             const Element<dim>* const outer_nbor,
+                                             InterFace<dim>* const interface )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( interface == nullptr )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to target InterFace is not initialised");
+   if ( inner_nbor == nullptr )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to inner higher-dim Element not initialised");
+   if ( outer_nbor == nullptr )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
+    
+   // 1. creating a search map from the nodes of the outer element
+   //  key    inner local id, outer local node id
+   map<Point<dim>,pair<size_t,size_t> > outer_elmt_nodes;
+   // OUTER ELEMENT
+   const size_t n_nodes_outer_elmt(outer_nbor->Nodes());
+   for ( size_t i=0U; i<n_nodes_outer_elmt; ++i )
+     outer_elmt_nodes.insert( make_pair( outer_nbor->N(i)->Coordinate(), make_pair(UINT_MAX,i) ) );
+   
+   // 2. searching for the shared nodes
+   const size_t n_nodes_inner_elmt(inner_nbor->Nodes());
+   for ( size_t i=0U; i<n_nodes_inner_elmt; ++i ) {
+        auto search_it=outer_elmt_nodes.find( inner_nbor->N(i)->Coordinate() );
+        // if the node is shared between the elements its local id is stored
+        if ( search_it != outer_elmt_nodes.end() )
+          (*search_it).second.first = i;
+     }
+   
+   // 3. creating face_node ID search keys for the inner and outer elements
+   set<size_t> inner_nodes, outer_nodes;
+   for ( auto it : outer_elmt_nodes )
+     if ( it.second.first != UINT_MAX ) {
+          inner_nodes.insert( it.second.first );
+          outer_nodes.insert( it.second.second );
+       }
+   
+   // 4. searching the faces of the higher-dimensional for the node keys
+   vector<size_t> fnids;
+   // INNER ELEMENT
+   const size_t n_inner_elmt_faces(inner_nbor->Faces());
+   bool  inner_face_found(false);
+   for ( size_t i=0U; i<n_inner_elmt_faces; ++i ) {
+        inner_nbor->FE()->NodesOfFace( i, fnids );
+        // creating and recording the search key
+        set<size_t> face_nodes( fnids.begin(), fnids.end() );
+        // if it matches the interface, the nodes are assigned and the loop is stopped
+        if ( face_nodes == inner_nodes ) {
+             inner_face_found = true;
+             const size_t n_fnids(fnids.size());
+             size_t k(0U);
+             for ( size_t j=0U; j<n_fnids; ++j )
+               interface->Assign( k++, inner_nbor->N( fnids[j] ), INSIDE );
+             interface->ParentFaceID( INSIDE, i );
+             break;
+          }
+     }
+   if ( !inner_face_found )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of inner higher-dim neighbor element");
+    
+   // OUTER ELEMENT
+   const size_t n_outer_elmt_faces(outer_nbor->Faces());
+   bool  outer_face_found(false);
+   for ( size_t i=0U; i<n_outer_elmt_faces; ++i ) {
+        outer_nbor->FE()->NodesOfFace( i, fnids );
+        // creating and recording the search key
+        set<size_t> face_nodes( fnids.begin(), fnids.end() );
+        // if it matches the interface, the nodes are assigned and the loop is stopped
+        if ( face_nodes == outer_nodes ) {
+             outer_face_found = true;
+             const size_t n_fnids(fnids.size());
+             size_t k(0U);
+             for ( size_t j=0U; j<n_fnids; ++j )
+               interface->Assign( k++, outer_nbor->N( fnids[j] ), OUTSIDE );
+             interface->ParentFaceID( OUTSIDE, i );
+             break;
+          }
+     }
+   if ( !outer_face_found )
+     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of outer higher-dim neighbor element");
+
+ } // end findNodesViaHigherDimensionalNeighbors
+
+template void findNodesViaHigherDimensionalNeighbors( const Element<1>* const, const Element<1>* const, InterFace<1>* const );
+template void findNodesViaHigherDimensionalNeighbors( const Element<2>* const, const Element<2>* const, InterFace<2>* const );
+template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, const Element<3>* const, InterFace<3>* const );
+
+
+
+
+
+/**
+     Surt's code to efficiently remove a single element from a sorted vector, without preserving sorted order
+     (//inline void erase_v4(std::vector<int> &vec, int value)
+     
+     https://stackoverflow.com/questions/26719144/how-to-erase-a-value-efficiently-from-a-sorted-vector/26720032
+ */
+template<size_t dim>
+void eraseElementPointerFromVector( vector<csmp::Element<dim>*>& vec, const Element<dim>* eptr )
+ {
+    // get the range in 2*log2(N), N=vec.size()
+    auto bounds = std::equal_range(vec.begin(), vec.end(), eptr );
+
+    // calculate the index of the first to be deleted O(1)
+    auto last = vec.end() - std::distance(bounds.first, bounds.second);
+
+    // swap the 2 ranges O(equals) , equal = std::distance(bounds.first, bounds.last)
+    std::swap_ranges(bounds.first, bounds.second, last);
+
+    // erase the victims O(equals)
+    vec.erase(last, vec.end());
+}
+
+template void eraseElementPointerFromVector( vector<csmp::Element<1U>*>&, const Element<1U>* );
+template void eraseElementPointerFromVector( vector<csmp::Element<2U>*>&, const Element<2U>* );
+template void eraseElementPointerFromVector( vector<csmp::Element<3U>*>&, const Element<3U>* );
+
+
+
+
+
 
 } // end csmp

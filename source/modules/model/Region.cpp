@@ -81,10 +81,11 @@ Region<dim>::~Region()
 
 
 /**
-Re-constructor for regions that were stored in the CSMP native
-file format.
+    RECONSTRUCTOR
+    
+for regions that were stored in the CSMP nativefile  format.
 
-Using the indices retrieved from binary file and stored in SubDomainInfo,
+Using the connectivity indices for the Region as retrieved from the CSMP++ native binary file and stored in SubDomainInfo,
 the regions are recreated.
 
 @attention the numbering that is provided through the domain info
@@ -1295,7 +1296,7 @@ size_t Region<dim>::AccumulateAll( const MeshManager<dim>& mapping, bool reestab
    this->node_vec_.assign( mapping.NodesBegin(), mapping.NodesEnd() );
 
    if ( reestablishNeighborConnectivity )
-    this->EstablishNeighborConnectivity();
+     establishNeighborConnectivity( this->elmt_vec_ );
 
    this->IdentifyPerimeter();
     
@@ -1902,7 +1903,8 @@ template<size_t dim>
 bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
                                  const FiniteElementManager& finiteElementManager,
                                  const Region<dim>& region1,
-                                 const Region<dim>& region2 )
+                                 const Region<dim>& region2,
+                                 int32 material_id )
 {
 
   // LVS
@@ -1923,43 +1925,48 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
   // searching for elements of region1 that are neighbors of ones in group1.
   // If so, there is a shared boundary and faces or interfaces are constructed.
   const size_t n_elements( region1.Elements() );
+  vector<Element<dim>*> empty_nbor_elmts;
   for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
-  {
-    ePtr = region1.E( i );
-    const size_t perimeter_faces( region1.PerimeterFaces( i ) );
-    for ( size_t j = 0U; j < perimeter_faces; ++j )
     {
-      const size_t face = region1.PerimeterFace( i, j );
-      ePtrNeighbor = ePtr->Neighbor( face );
-
-      // checking whether neighbor element forms part of the boundary of group2
-      if ( ePtrNeighbor != NULL )
-        if ( region2.IsPerimeterElement( ePtrNeighbor ) )
+      ePtr = region1.E( i );
+      const size_t perimeter_faces( region1.PerimeterFaces( i ) );
+      for ( size_t j = 0U; j < perimeter_faces; ++j )
         {
-          // if the neighbor is in the boundary, the new Face is build
-          femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
+          const size_t face = region1.PerimeterFace( i, j );
+          ePtrNeighbor = ePtr->Neighbor( face );
 
-          // getting the mesh manager to construct a new element
-          Element<dim>* elmtObj = meshManager.AddElement( femPtr, nullptr, lvsElements, lvsIntegrationPoints );
+          // checking whether neighbor element forms part of the boundary of group2
+          if ( ePtrNeighbor != nullptr )
+            if ( region2.IsPerimeterElement( ePtrNeighbor ) )
+              {
+                // if the neighbor is in the boundary, the new Face is build
+                femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
 
-          // the new face is connected to the elements it is sandwiched between
-          // this assignment also includes connecting the element to its nodes
-          // inner/outer  element w.r.t. to normal of face
-          face_node_ids.clear();
-          face_node_ids.resize( ePtr->FE()->NodesPerFace( face ) );
-          ePtr->FE()->NodesOfFace( face, face_node_ids );
-          size_t face_size = face_node_ids.size();
-          for ( size_t nid = 0U; nid < face_size; ++nid )
-            elmtObj->Assign( nid, ePtr->N( face_node_ids[nid] ) );
+                // the new face is connected to the elements it is sandwiched between
+                // this assignment also includes connecting the element to its nodes
+                // inner/outer  element w.r.t. to normal of face
+                face_node_ids.clear();
+                face_node_ids.resize( ePtr->FE()->NodesPerFace( face ) );
+                ePtr->FE()->NodesOfFace( face, face_node_ids );
+                const size_t face_size = face_node_ids.size();
+                vector<Node<dim>*>  nodes;
+                nodes.reserve( face_size );
+                for ( size_t nid = 0U; nid < face_size; ++nid )
+                  nodes.push_back( ePtr->N( face_node_ids[nid] ) );
 
-          // added to boundary
-          this->elmt_vec_.push_back( elmtObj );
+                // getting the mesh manager to construct a new element
+                Element<dim>* elmtObj = meshManager.AddElement( femPtr, nullptr,
+                                                                lvsElements, lvsIntegrationPoints,
+                                                                nodes, empty_nbor_elmts,
+                                                                material_id );
+                // added to boundary
+                this->elmt_vec_.push_back( elmtObj );
 
-        } // neighboring elements
+              } // neighboring elements
 
-    } // perimeter faces
+        } // perimeter faces
 
-  } // perimeter elements
+    } // perimeter elements
 
     // free
   vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
@@ -2212,31 +2219,31 @@ bool Region<dim>::Includes( const Region<dim>& g ) const
 
 } // end Includes
 
-bool  isOfLowerDimensionalRepresentation( const Element<3U>& element )
+bool  hasLowerDimensionalRepresentation( const Element<3U>& element )
 {
   return !element.FE()->IsVolumeElement();
 }
 
-bool  isOfLowerDimensionalRepresentation( const Element<2U>& element )
+bool  hasLowerDimensionalRepresentation( const Element<2U>& element )
 {
   return !element.FE()->IsSurfaceElement();
 }
 
 template<>
-bool  isOfLowerDimensionalRepresentation<1>( const Region<1>& )
+bool  hasLowerDimensionalRepresentation<1>( const Region<1>& )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( csmp::ERROR, "isOfLowerDimensionalRepresentation", "na for 1D" );
+  csmp_error.notice( csmp::ERROR, "hasLowerDimensionalRepresentation", "na for 1D" );
   return false;
 }
 
 template<size_t dim>
-bool  isOfLowerDimensionalRepresentation( const Region<dim>& region )
+bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
 {
   const typename vector<Element<dim>*>::const_iterator elementsEnd( region.ElementsEnd() );
   for ( typename vector<Element<dim>*>::const_iterator it = region.ElementsBegin(); it != elementsEnd; ++it )
   {
-    if ( !isOfLowerDimensionalRepresentation( *(*it) ) )
+    if ( !hasLowerDimensionalRepresentation( *(*it) ) )
       return false;
   }
   return true;
@@ -2296,8 +2303,8 @@ template size_t  symmetricDifference<1U>( const Region<1>&, const Region<1>&, Re
 template size_t  symmetricDifference<2U>( const Region<2>&, const Region<2>&, Region<2>& );
 template size_t  symmetricDifference<3U>( const Region<3>&, const Region<3>&, Region<3>& );
 
-template bool isOfLowerDimensionalRepresentation( const Region<3>& );
-template bool isOfLowerDimensionalRepresentation( const Region<2>& );
+template bool hasLowerDimensionalRepresentation( const Region<3>& );
+template bool hasLowerDimensionalRepresentation( const Region<2>& );
 
 template bool containsVolumeElements( const Region<3>& );
 template bool containsVolumeElements( const Region<2>& );

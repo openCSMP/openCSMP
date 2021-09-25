@@ -1,15 +1,15 @@
 #include "MeshManager.h"
+#include "MeshManagementUtilities.h"
 #include "PropertyDatabase.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
 #include "VSet.h"
-#include "AP_BoolVector.h"
+//#include "AP_BoolVector.h"
 #include "ErrorHandler.h"
 #include "PropertyData.h"
 #include "Box.h"
 #include "ModelTopology.h"
-#include "MeshIterator.h"
-#include "IndexToPointerMapping.h"
+// #include "MeshIterator.h"
 #include "CSMP_highLevelUtilities.h"
 
 using namespace std;
@@ -159,6 +159,74 @@ size_t MeshManager<dim>::InterFaces() const
 
 
 
+template<size_t dim>
+  typename std::deque<Node<dim>*>::iterator      MeshManager<dim>::NodesBegin()
+  { return nodes_.begin(); }
+  
+template<size_t dim>
+  typename std::deque<Node<dim>*>::iterator      MeshManager<dim>::NodesEnd()
+  { return nodes_.end(); }
+
+template<size_t dim>
+  typename std::deque<Element<dim>*>::iterator   MeshManager<dim>::ElementsBegin()
+  { return elements_.begin(); }
+  
+template<size_t dim>
+  typename std::deque<Element<dim>*>::iterator   MeshManager<dim>::ElementsEnd()
+  { return elements_.end(); }
+
+template<size_t dim>
+  typename std::deque<Face<dim>*>::iterator      MeshManager<dim>::FacesBegin()
+  { return faces_.begin(); }
+
+template<size_t dim>
+  typename std::deque<Face<dim>*>::iterator      MeshManager<dim>::FacesEnd()
+  { return faces_.end(); }
+
+template<size_t dim>
+  typename std::deque<InterFace<dim>*>::iterator MeshManager<dim>::InterFacesBegin()
+  { return interfaces_.begin(); }
+  
+template<size_t dim>
+  typename std::deque<InterFace<dim>*>::iterator MeshManager<dim>::InterFacesEnd()
+  { return interfaces_.end(); }
+
+  // const versions
+template<size_t dim>
+  typename std::deque<Node<dim>*>::const_iterator      MeshManager<dim>::NodesBegin() const
+  { return nodes_.begin(); }
+
+template<size_t dim>
+  typename std::deque<Node<dim>*>::const_iterator      MeshManager<dim>::NodesEnd() const
+  { return nodes_.end(); }
+
+template<size_t dim>
+  typename std::deque<Element<dim>*>::const_iterator   MeshManager<dim>::ElementsBegin() const
+  { return elements_.begin(); }
+
+template<size_t dim>
+  typename std::deque<Element<dim>*>::const_iterator   MeshManager<dim>::ElementsEnd() const
+  { return elements_.end(); }
+
+template<size_t dim>
+  typename std::deque<Face<dim>*>::const_iterator      MeshManager<dim>::FacesBegin() const
+  { return faces_.begin(); }
+
+template<size_t dim>
+  typename std::deque<Face<dim>*>::const_iterator      MeshManager<dim>::FacesEnd() const
+  { return faces_.end(); }
+
+template<size_t dim>
+  typename std::deque<InterFace<dim>*>::const_iterator MeshManager<dim>::InterFacesBegin() const
+  { return interfaces_.begin(); }
+
+template<size_t dim>
+  typename std::deque<InterFace<dim>*>::const_iterator MeshManager<dim>::InterFacesEnd() const
+  { return interfaces_.end(); }
+
+
+
+
 /**
        Range checked access of entities by their place in the storage.
        throws out_of_range if abused.
@@ -281,7 +349,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
           const int32 csmpElementType = vset.ElementType( 0U );
           while ( first != last )
             {
-              elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), evars, cvars ) );
+              elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), nullptr, evars, cvars, vset.Pmtrl(elmt_idx) ) );
               const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; ++j )
                 elements_[elmt_idx]->Assign( j, nodes_[ vset.Plist( elmt_idx, j )] );
@@ -294,7 +362,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
           while ( first != last )
             {
               const int32 csmpElementType = vset.ElementType( elmt_idx );
-              elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), evars, cvars ) );
+              elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), nullptr, evars, cvars, vset.Pmtrl(elmt_idx) ) );
               const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; j++ )
                 elements_[elmt_idx]->Assign( j, nodes_[vset.Plist( elmt_idx, j )] );
@@ -476,9 +544,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
           }
        assert( interfaces_.size() == vset.InterFaces() );
 
-       // connecting the faces to their equi- and higher-dimensional neighbors
-       // --------------------------------------------------------------------
-       // necessary info is stored in 'pfverts' record for Face
+       // connecting the interfaces to their equi- and higher-dimensional neighbors
+       // -------------------------------------------------------------------------
+       // necessary info is stored in 'pfverts' record for InterFace: inner nbors first, then outer, then higher-dimensional ones
        if ( csmp_error.Verbose() )
          cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
        const size_t n_faces(faces_.size()), n_interfaces(interfaces_.size());
@@ -501,7 +569,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
                 
                  // the number of the interface in the container is the number from the VSet - elements and faces
                  // because the interface container is counts from 0..n-1
-                 e->Assign( j, interfaces_[ static_cast<size_t>(index) - n_elmts - n_faces ] );
+                 e->Assign( j, interfaces_[ static_cast<size_t>(index) - n_elmts - n_faces ], INSIDE );
+                 e->Assign( j, interfaces_[ static_cast<size_t>(index) - n_elmts - n_faces + neighbors ], OUTSIDE );
               }
 
            // higher-dimensional neighbors
@@ -696,18 +765,490 @@ Node<dim>* const MeshManager<dim>::AddNodeAt( const Point<dim>& location, const 
 
 
 /**
-   Duplicates existing node inside of the MeshManager
-   TODO: register with NodeManifoldManager
+      Constructs element and connects it up with the supplied nodes and neighbor elements if any.
+      
+   if neighbors are not supplied, method tries to find neighbors through the parent connectivity of the nodes.
+   Warning messages are issued if there are issues with the input data.
+   
+   @author SKM
+   @date 17/9/21
 */
 template<size_t dim>
-Node<dim>* const MeshManager<dim>::Duplicate( const Node<dim>* const node )
+Element<dim>*	const MeshManager<dim>::AddElement( csmp::FiniteElement* const fe_ptr,
+                                                  const csmp::FiniteVolumeStencil<dim>* const fv_ptr,
+                                                  const LocalVariables& lvars, const IntegrationPointVariables& ivars,
+                                                  const std::vector<Node<dim>*>& nodes,
+                                                  const std::vector<Element<dim>*>& nbors, int32 material_id )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( fe_ptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "finite element pointer not initialised");
+   if ( fv_ptr == nullptr )
+     csmp_error.notice( INFO, "MeshManager<dim>::AddElement", "finite volume stencil pointer not initialised");
+   // node vector
+   if ( nodes.empty() )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
+   if ( nodes.size() != fe_ptr->Nodes() )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "node vector has the wrong size");
+   for ( size_t i=0U; i<fe_ptr->Nodes(); ++i )
+     if ( nodes[i] == nullptr ) {
+          cerr <<"\n\tnode "<< i;
+          csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "node vector contains a nullptr ");
+          break;
+       }
+
+   // 1. constructing new element
+   elements_.push_back( new Element<dim>( elements_.size(), fe_ptr, fv_ptr, lvars, ivars, material_id ) );
+   Element<dim>* const eptr = elements_.back();
+
+
+   // 2. assigning nodes
+   const size_t n_nodes(nodes.size());
+   for ( size_t i=0U; i<n_nodes; ++i )
+     eptr->Assign( i, nodes[i] );
+
+
+   // 3. assigning neighbors elements
+   // -------------------------------
+   //    checking if there is any valid neighbor information provided
+   const bool valid_nbor_vec = ( nbors.empty() || nbors.size() != fe_ptr->Neighbors() ) ? false : true;
+#ifdef DEBUG
+   if ( !valid_nbor_vec )
+     csmp_error.notice( WARNING, "MeshManager<dim>::AddElement", "neighbor vector cannot be used; trying to identify neighbors from node connectivity");
+#endif
+   if ( valid_nbor_vec ) {
+        const size_t n_nbors(nbors.size());
+        for ( size_t i=0U; i<n_nbors; ++i )
+          eptr->Assign( i, nbors[i] );
+        return eptr;
+     }
+
+  // 4. trying to establish neighbor information from the nodes assuming that they have parent connectivity
+  // ------------------------------------------------------------------------------------------------------ 
+  //    checking whether the nodes have the necessary parent element information
+  bool valid_parent_info(true);
+  for ( size_t i=0U; i<n_nodes; ++i )
+    if ( eptr->N(i)->Parents() == 0U ) {
+         cerr <<"\n\tnode "<< i;
+         valid_parent_info = false;
+         csmp_error.notice( ERROR, "MeshManager<dim>::AddElement",
+                          "neighbor information could not be created because node has no parent element info");
+         return eptr;
+      }
+      
+   // if the nodes have parents, this method tries to find and connect the neighbors
+   if ( connectNeighborsUsingNodeParents( eptr ) < eptr->FE()->Faces()-1 )
+     csmp_error.notice( WARNING, "MeshManager<dim>::AddElement", "neighbor vector could not be used; found less neighbors than expected");
+   
+   return eptr;
+  
+} // AddElement
+
+
+
+
+
+
+
+/**
+     puts a lower-dimensional element inside of an InterFace, connecting it to its base pointer
+     
+     @attention the nodes need to be provided because they are shared among the lower-dimensional elements and collocated
+          so that they cannot be told apart.
+          
+          @attention no neighbor connectivity is provided here because it is not known yet
+*/
+template<size_t dim>
+Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim>* const ifptr,
+                                                             const LocalVariables& lvars,
+                                                             const IntegrationPointVariables& ivars,
+                                                             const vector<Node<dim>*>& nodes,
+                                                             int32 material_id )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the InterFace
+   if ( ifptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "finite element pointer not initialised");
+   if ( ifptr->HasInterveningElement() ) {
+        ifptr->InterveningElement()->Out();
+        csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "InterFace already has intervening element");
+     }
+     
+   // 1. checking the node vector
+   if ( nodes.empty() )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector is empty");
+   if ( nodes.size() != ifptr->Nodes() )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector has the wrong size");
+     
+   // 2. checking the validity of the node vector in debug mode
+#ifdef DEBUG
+   // node vector
+   for ( size_t i=0U; i<ifptr->FE()->Nodes(); ++i ) {
+         if ( nodes[i] == nullptr ) {
+              cerr <<"\n\tnode "<< i;
+              csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
+              break;
+           }
+         else if ( nodes[i]->Coordinate() != ifptr->N(i)->Coordinate() ) {
+              cerr <<"\n\tnode "<< i;
+              csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node locations do not match");
+              break;
+           }
+       }
+#endif
+
+   // 3. creating the new Element
+   elements_.push_back( new Element<dim>( elements_.size(), ifptr->FE(), ifptr->FV(), lvars, ivars, material_id ) );
+   Element<dim>* const eptr = elements_.back();
+   
+   // 4. connecting the nodes to the element
+   const size_t n_nodes( ifptr->FE()->Nodes() );
+   for ( size_t i=0U; i<n_nodes; ++i )
+     eptr->Assign( i, nodes[i] );
+     
+   // 5. Connecting the intervening element to interface
+   ifptr->Assign( eptr );
+   
+   return eptr;
+
+} // end AddInterveningElement
+
+
+
+
+
+/**
+    Creates Face from lower-dimensional Element and assigns the higher dimensional neighbors on inside and outside.
+    
+    @attention the neighbor information is taken from supplied vector; nullptr entries are accepted so that the method may be used in an advancing front algorithm.
+    
+    @attention the original element is deleted and set to null. Later on, the MeshManager needs to be updated.
+*/
+template<size_t dim>
+Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* eptr,
+                                                         csmp::Element<dim>* inner_eptr,
+                                                         csmp::Element<dim>* outer_eptr,
+                                                         const LocalVariables& lvars,
+                                                         const IntegrationPointVariables& ivars,
+                                                         const vector<Face<dim>*>& face_nbors )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( eptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "element pointer not initialised");
+   // the element indeed lower dimensional?
+   if ( (dim == 3 && !eptr->IsSurfaceElement()) || (dim == 2 && !eptr->IsLineElement()) )
+     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "element to be replaced is not lower-dimensional");
+   if ( eptr->FV() == nullptr )
+     csmp_error.notice( INFO, "MeshManager<dim>::ReplaceElementByFace", "finite volume stencil pointer not initialised");
+   if ( inner_eptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "pointer to higher dimensional element on inside not initialised");
+#ifdef DEBUG
+   // node vector
+   for ( size_t i=0U; i<eptr->Nodes(); ++i )
+     if ( eptr->N(i) == nullptr ) {
+          cerr <<"\n\tnode "<< i;
+          csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "node vector contains a nullptr ");
+          break;
+       }
+#endif
+   if ( face_nbors.empty() || face_nbors.size() != eptr->Faces() )
+     csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceElementByFace", "pointer vector for neighbor faces not initialised");
+
+   // 1. constructing new face
+   const size_t face_id = faces_.size();
+   faces_.push_back( new Face<dim>( const_cast<Element<dim>&>(*eptr), inner_eptr, outer_eptr, lvars, ivars ) );
+   Face<dim>* const fptr = faces_.back();
+   if ( eptr->FV() != nullptr ) fptr->AssignFiniteVolume( eptr->FV() );
+   fptr->Idx( face_id );
+
+   // 2. assigning nodes
+   const size_t n_nodes(eptr->Nodes());
+   for ( size_t i=0U; i<n_nodes; ++i )
+     fptr->Assign( i, eptr->N(i) );
+
+   // 3. assigning neighbors elements (searching the existing faces) - but nodes do not connect to parent faces
+   const size_t n_nbors(eptr->Neighbors());
+   for (  size_t i=0U; i<n_nbors; ++i )
+     fptr->Assign( i, face_nbors[i] );
+     
+   // 4. deleting original Element
+   delete eptr;
+   eptr = nullptr;
+   
+   return fptr;
+   
+ } // end ReplaceElementByFace
+       
+       
+       
+       
+       
+       
+       
+  /// optionally, the neighbor element pointers might not be assigned; @note node pointers must be supplied in CCW order from outside looking in
+template<size_t dim>
+Face<dim>* const MeshManager<dim>::AddFace( csmp::FiniteElement* const feptr, const csmp::FiniteVolumeStencil<dim>* const fvptr,
+                                            Element<dim>* const inner_parent, Element<dim>* const outer_parent,
+                                            const LocalVariables& lvars,
+                                            const IntegrationPointVariables& ivars,
+                                            const std::vector<Node<dim>*>& nodes,
+                                            const vector<Face<dim>*>& face_nbors )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( feptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "element pointer not initialised");
+   if ( fvptr == nullptr )
+     csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "finite volume stencil pointer not initialised");
+   if ( inner_parent == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on inside not initialised");
+//   if ( outer_parent == nullptr )
+//     csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on ouside not initialised");
+   bool with_valid_node_vector = ( nodes.empty() || nodes.size() != feptr->Faces() ) ? false : true;
+
+#ifdef DEBUG
+   // node vector
+   if ( with_valid_node_vector )
+     for ( size_t i=0U; i<nodes.size(); ++i )
+       if ( nodes[i] == nullptr ) {
+            cerr <<"\n\tnode "<< i;
+            csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "node vector contains a nullptr ");
+            with_valid_node_vector = false;
+            break;
+         }
+#endif
+   if ( face_nbors.empty() || face_nbors.size() != feptr->Faces() )
+     csmp_error.notice( WARNING, "MeshManager<dim>::AddFace", "pointer vector for neighbor faces not initialised");
+
+   // 1. constructing new face
+   const size_t face_id = faces_.size();
+   faces_.push_back( new Face<dim>( feptr, fvptr, lvars, ivars ) );
+   Face<dim>* const fptr = faces_.back();
+   fptr->Assign( inner_parent, outer_parent );
+   fptr->Idx( face_id );
+
+   // 2. assigning nodes
+   if ( with_valid_node_vector ) {
+       const size_t n_nodes(fptr->Nodes());
+       for ( size_t i=0U; i<n_nodes; ++i )
+         fptr->Assign( i, fptr->N(i) );
+     }
+   else // more costly but possible
+     findNodesViaHigherDimensionalNeighbors( inner_parent, outer_parent, fptr );
+
+   // 3. assigning neighbors elements (searching the existing faces) - but nodes do not connect to parent faces
+   const size_t n_nbors(fptr->Neighbors());
+   for (  size_t i=0U; i<n_nbors; ++i )
+     fptr->Assign( i, face_nbors[i] );
+   
+   return fptr;
+
+} // end AddFace
+
+
+
+
+
+
+template<size_t dim>
+Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const eptr,
+                                                    size_t local_face_id,
+                                                    const LocalVariables& lvars,
+                                                    const IntegrationPointVariables& ivars,
+                                                    const std::vector<Face<dim>*>& face_nbors )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( eptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddBoundaryFace", "element pointer not initialised");
+   if ( local_face_id >= eptr->Faces() )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddBoundaryFace", "face ID does not exist in element");
+   if ( eptr->Neighbor(local_face_id) != nullptr )
+     csmp_error.notice( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it located at model boundary");
+
+#ifdef DEBUG
+   if ( face_nbors.empty() || face_nbors.size() != eptr->Faces() )
+     csmp_error.notice( INFO, "MeshManager<dim>::AddBoundaryFace", "pointer vector for neighbor faces not initialised");
+#endif
+
+   // 1. constructing new face
+   const size_t face_id = faces_.size();
+   faces_.push_back( new Face<dim>( eptr->FE(), eptr->FV(), lvars, ivars ) );
+   Face<dim>* const fptr = faces_.back();
+   // higher-dimensional neighbors
+   fptr->Assign( eptr, static_cast<Element<dim>*>(nullptr) );
+   fptr->Idx( face_id );
+
+   // 2. assigning nodes
+   vector<size_t> fnids;
+   eptr->FE()->NodesOfFace( local_face_id, fnids );
+   const size_t n_nodes(fnids.size());
+   for ( size_t i=0U; i<n_nodes; ++i )
+     fptr->Assign( i, eptr->N( fnids[i] ) );
+
+   // 3. assigning neighbors elements (searching the existing faces) - but nodes do not connect to parent faces
+   if ( !face_nbors.empty() && face_nbors.size() == eptr->Faces() ) {
+       const size_t n_nbors(fptr->Neighbors());
+       for (  size_t i=0U; i<n_nbors; ++i )
+         fptr->Assign( i, face_nbors[i] );
+     }
+     
+   return fptr;
+
+} // end AddBoundaryFace
+
+
+
+
+
+
+                                 
+template<size_t dim>
+InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const feptr, const csmp::FiniteVolumeStencil<dim>* const fvptr,
+                                                      Element<dim>* const inner_parent, Element<dim>* const outer_parent,
+                                                      Element<dim>* const intervening_elmt,
+                                                      const LocalVariables& lvars,
+                                                      const IntegrationPointVariables& ivars,
+                                                      const vector<InterFace<dim>*>& iface_nbors )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( feptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "element pointer not initialised");
+   if ( fvptr == nullptr )
+     csmp_error.notice( INFO, "MeshManager<dim>::AddInterFace", "finite volume stencil pointer not initialised");
+   if ( inner_parent == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
+   if ( outer_parent == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+   bool unsuitable_nbor_vector(false);
+   if ( iface_nbors.empty() || iface_nbors.size() != feptr->Faces()*2 ) {
+        unsuitable_nbor_vector = true;
+        csmp_error.notice( WARNING, "MeshManager<dim>::AddInterFace", "pointer vector for neighbor faces not initialised");
+     }
+
+   // 1. constructing new face
+   const size_t iface_id = interfaces_.size();
+   interfaces_.push_back( new InterFace<dim>( feptr, fvptr, lvars, ivars ) );
+   InterFace<dim>* const ifptr = interfaces_.back();
+   ifptr->Assign( inner_parent, outer_parent );
+   ifptr->Idx( iface_id );
+
+   // 2. assigning nodes and face ids w.r.t. higher-dimensional element neighbors
+   findNodesViaHigherDimensionalNeighbors( inner_parent, outer_parent, ifptr );
+   
+   // 3. Assign neighbor interfaces to interface
+   if ( !unsuitable_nbor_vector ) {
+       const size_t n_nbors(ifptr->Neighbors());
+       for (  size_t i=0U; i<n_nbors; ++i ) {
+            // inside
+            ifptr->Assign( i, iface_nbors[i], INSIDE );
+            // outside
+            ifptr->Assign( i, iface_nbors[i], OUTSIDE );
+         }
+     }
+   
+   return ifptr;
+
+} // end AddInterFace
+
+
+
+
+
+   /// compatibility checks are performed
+template<size_t dim>
+InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>* fptr,
+                                                                const LocalVariables& lvars,
+                                                                const IntegrationPointVariables& ivars,
+                                                                const vector<InterFace<dim>*>& iface_nbors )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+   // 0. verifying the input
+   // pointers
+   if ( fptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceFaceByInterFace", "Face pointer not initialised");
+
+   bool unsuitable_nbor_vector(false);
+   if ( iface_nbors.empty() || iface_nbors.size() != fptr->Faces()*2 ) {
+        unsuitable_nbor_vector = true;
+        csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceFaceByInterFace", "pointer vector for neighbor interfaces not initialised");
+     }
+
+   // 1. constructing new interface
+   const size_t iface_id = interfaces_.size();
+   interfaces_.push_back( new InterFace<dim>( fptr->FE(), fptr->FV(), lvars, ivars ) );
+   InterFace<dim>* const ifptr = interfaces_.back();
+   ifptr->Assign( fptr->InnerParent(), fptr->OuterParent() );
+   ifptr->Idx( iface_id );
+
+   // 2. assigning nodes and face ids w.r.t. higher-dimensional neighbors
+   findNodesViaHigherDimensionalNeighbors( fptr->InnerParent(), fptr->OuterParent(), ifptr );
+   
+   // 3. assigning neighbor InterFace objects
+   if ( !unsuitable_nbor_vector ) {
+       const size_t n_nbors(fptr->Neighbors());
+       for (  size_t i=0U; i<n_nbors; ++i ) {
+            // inside
+            ifptr->Assign( i, iface_nbors[i], INSIDE );
+            // outside
+            ifptr->Assign( i, iface_nbors[i], OUTSIDE );
+         }
+     }
+     
+   // TODO: does connectivity of higher-dimensional neighbor elements need to be updated?
+     
+   // 4. removing original face
+   delete fptr;
+   fptr = nullptr;
+
+   return ifptr;
+
+} // end ReplaceFaceByInterFace
+
+
+
+
+/**
+    Duplicates existing node inside of the MeshManager and connects it to corresponding manifold.
+         @attention the current node is assumed to be on the INSIDE of the Interface; when there is none yet, this distinction will be made automatically
+*/
+template<size_t dim>
+Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
+                                              INTERFACE_SIDE new_node_side,
+                                              ManifoldType geometry )
   {
-    if ( node == nullptr )
+    if ( nptr_inside == nullptr )
       throw csmp::Exception( ERROR, "MeshManager<dim>::Duplicate", "Node does not exist.");
 
-    nodes_.push_back( new Node<dim>( *node ) );
+    // copying the inside node
+    nodes_.push_back( new Node<dim>( *nptr_inside ) );
+    Node<dim>* const new_nptr = nodes_.back();
+    
+    // creating or updating the NodeManifold
+    if ( nptr_inside->IsManifold() ) {
+         // if we are already dealing with a manifold, the geomtric classifier is retained
+         nptr_inside->Manifold()->Add( new_nptr, new_node_side, nptr_inside->Manifold()->GeometricClassifier() );
+         new_nptr->Assign( nptr_inside->Manifold() );
+      }
+    else // a new manifold is created with the provided geometric classifier
+      node_manifold_manager_.NewManifold( nptr_inside, new_nptr, geometry );
 
-    return (nodes_.back());
+    return new_nptr;
   }
 
 
@@ -715,6 +1256,7 @@ Node<dim>* const MeshManager<dim>::Duplicate( const Node<dim>* const node )
 /**
    Duplicates the corresponding element
 */
+/* TODO: bring back if there is a reason for it
 template<size_t dim>
 Element<dim>* const MeshManager<dim>::Duplicate( const Element<dim>* const elmt )
 {
@@ -725,70 +1267,9 @@ Element<dim>* const MeshManager<dim>::Duplicate( const Element<dim>* const elmt 
     elements_.push_back( new Element<dim>( *elmt ) );
 
     return (elements_.back());
-}
+}*/
 
 
-/*
-template<size_t dim>
-Face<dim>* const MeshManager<dim>::FaceFromElement( const Element<dim>* const dim_minus1_element,
-                                                    const LocalVariables& lvars, const IntegrationPointVariables& ivars,
-                                                    Element<dim>* const inner_parent, Element<dim>* const outer_parent,
-                                                    const std::vector<Face<dim>*>& nbor_faces )
- {
-    if ( dim_minus1_element == nullptr )
-      throw csmp::Exception( ERROR, "MeshManager<dim>::FaceFromElement", "Element does not exist.");
-
-    if ( dim == 3 and !dim_minus1_element->IsSurfaceElement() )
-      throw csmp::Exception( ERROR, "MeshManager<3>::FaceFromElement", "Face can only be constructed from surface element.");
-
-    if ( dim == 2 and !dim_minus1_element->IsLineElement() )
-      throw csmp::Exception( ERROR, "MeshManager<2>::FaceFromElement", "Face can only be constructed from line element.");
-
-    faces_.push_back( new Face<dim>( dim_minus1_element, lvars, ivars, inner_parent, outer_parent ) );
-    
-    if ( !nbor_faces.empty() ) {
-         const typename deque<Face<dim>*>::iterator fit(*faces_.back());
-         const size_t nbors_of_face = (*fit)->Faces();
-         assert( nbor_faces.size() == nbors_of_face );
-         for ( size_t i=0U; i<nbors_of_face; ++i )
-           (*fit)->Assign( i, nbor_faces[i] );
-      }
-
-    return (*faces_.back());
-
- } // end
-*/
-
-
-/*
-template<size_t dim>
-InterFace<dim>* const MeshManager<dim>::InterFaceFromFace( const Face<dim>* const face,
-                                                           const LocalVariables& lvars, const IntegrationPointVariables& ivars,
-                                                           Element<dim>* const inner_parent, Element<dim>* const outer_parent,
-                                                           const std::vector<InterFace<dim>*>& nbor_faces )
- {
-    if ( face == nullptr )
-      throw csmp::Exception( ERROR, "MeshManager<dim>::InterFaceFromElement", "Element does not exist.");
-
-    if ( inner_parent == nullptr )
-      throw csmp::Exception( ERROR, "MeshManager<3>::InterFaceFromElement", "InterFace must have inner higher dimensional neighbor.");
-
-    if ( outer_parent == nullptr )
-      throw csmp::Exception( ERROR, "MeshManager<3>::InterFaceFromElement", "InterFace must have inouterner higher dimensional neighbor.");
-
-    interfaces_.push_back( new InterFace<dim>( face, lvars, ivars, inner_parent, outer_parent ) );
-    
-    if ( !nbor_faces.empty() ) {
-         const typename deque<InterFace<dim>*>::iterator fit(*interfaces_.back());
-         const size_t nbors_of_iface = (*fit)->Faces();
-         assert( nbor_faces.size() == nbors_of_iface );
-         for ( size_t i=0U; i<nbors_of_iface; ++i )
-           (*fit)->Assign( i, nbor_faces[i] );
-      }
-
-    return (*interfaces_.back());
- }
-*/
 
 
 
@@ -849,15 +1330,66 @@ size_t MeshManager<dim>::ReplaceElementsByFaces( const PropertyDatabase<dim>& pr
 // ========================================================================================================================
 
 
+template<size_t dim, template<size_t> class CELL>
+void sortUniqueErase( deque<CELL<dim>*>& container )
+ {
+     sort( container.begin(), container.end() );
+     container.erase( unique(container.begin(), container.end()), container.end() );
+ }
 
+
+template<size_t dim>
+template<template<size_t> class CELL>
+size_t MeshManager<dim>::Erase( typename vector<CELL<dim>*>::iterator first,
+                                typename vector<CELL<dim>*>::iterator last )
+ {
+    size_t deleted_cells( distance(first,last) );
+ 
+     if ( deleted_cells == 0U ) return 0U;
+     
+     // deleting the objects that are stored in the MeshManager's 'elements' container
+     while( first != last ) {
+          if ( (*first) == nullptr ) deleted_cells--;
+          delete (*first);
+          (*first) = nullptr;
+          first++;
+       }
+
+     // sorting and reducing the size of the deque
+     if constexpr ( is_same<CELL<dim>,Node<dim> >::value )      sortUniqueErase( nodes_ );
+     if constexpr ( is_same<CELL<dim>,Element<dim> >::value )   sortUniqueErase( elements_ );
+     if constexpr ( is_same<CELL<dim>,Face<dim> >::value )      sortUniqueErase( faces_ );
+     if constexpr ( is_same<CELL<dim>,InterFace<dim> >::value ) sortUniqueErase( interfaces_ );
+     
+     return deleted_cells;
+    
+ } // end Erase (any type)
+
+// 3D
+template size_t MeshManager<3>::Erase<Node>( vector<Node<3>*>::iterator, vector<Node<3>*>::iterator );
+template size_t MeshManager<3>::Erase<Element>( vector<Element<3>*>::iterator, vector<Element<3>*>::iterator );
+template size_t MeshManager<3>::Erase<Face>( vector<Face<3>*>::iterator, vector<Face<3>*>::iterator );
+template size_t MeshManager<3>::Erase<InterFace>( vector<InterFace<3>*>::iterator, vector<InterFace<3>*>::iterator );
+
+// 2D
+template size_t MeshManager<2>::Erase<Node>( vector<Node<2>*>::iterator, vector<Node<2>*>::iterator );
+template size_t MeshManager<2>::Erase<Element>( vector<Element<2>*>::iterator, vector<Element<2>*>::iterator );
+template size_t MeshManager<2>::Erase<Face>( vector<Face<2>*>::iterator, vector<Face<2>*>::iterator );
+template size_t MeshManager<2>::Erase<InterFace>( vector<InterFace<2>*>::iterator, vector<InterFace<2>*>::iterator );
+
+// 1D
+template size_t MeshManager<1>::Erase<Node>( vector<Node<1>*>::iterator, vector<Node<1>*>::iterator );
+template size_t MeshManager<1>::Erase<Element>( vector<Element<1>*>::iterator, vector<Element<1>*>::iterator );
+template size_t MeshManager<1>::Erase<Face>( vector<Face<1>*>::iterator, vector<Face<1>*>::iterator );
+template size_t MeshManager<1>::Erase<InterFace>( vector<InterFace<1>*>::iterator, vector<InterFace<1>*>::iterator );
 
 
 /**
     erases the supplied sequence of elements returning the number of erasures, the pointers to the erased elements are nulled. The connectivity of the affected mesh neighborhood will get fixed.
 */
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename vector<Node<dim>*>::iterator first,
-                                typename vector<Node<dim>*>::iterator last )
+size_t MeshManager<dim>::Erase( typename deque<Node<dim>*>::iterator first,
+                                typename deque<Node<dim>*>::iterator last )
  {
     size_t deleted_nodes( distance(first,last) );
  
@@ -897,8 +1429,8 @@ size_t MeshManager<dim>::Erase( typename vector<Node<dim>*>::iterator first,
     
 */
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename vector<Element<dim>*>::iterator first,
-                                typename vector<Element<dim>*>::iterator last )
+size_t MeshManager<dim>::Erase( typename deque<Element<dim>*>::iterator first,
+                                typename deque<Element<dim>*>::iterator last )
  {
     size_t deleted_elements( distance(first,last) );
  
@@ -924,8 +1456,8 @@ size_t MeshManager<dim>::Erase( typename vector<Element<dim>*>::iterator first,
 
 
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename vector<Face<dim>*>::iterator first,
-                                typename vector<Face<dim>*>::iterator last )
+size_t MeshManager<dim>::Erase( typename deque<Face<dim>*>::iterator first,
+                                typename deque<Face<dim>*>::iterator last )
  {
     size_t deleted_faces( distance(first,last) );
  
@@ -951,8 +1483,8 @@ size_t MeshManager<dim>::Erase( typename vector<Face<dim>*>::iterator first,
 
 
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename vector<InterFace<dim>*>::iterator first,
-                                typename vector<InterFace<dim>*>::iterator last )
+size_t MeshManager<dim>::Erase( typename deque<InterFace<dim>*>::iterator first,
+                                typename deque<InterFace<dim>*>::iterator last )
  {
     size_t deleted_ifaces( distance(first,last) );
  
@@ -979,14 +1511,35 @@ size_t MeshManager<dim>::Erase( typename vector<InterFace<dim>*>::iterator first
 
 
 
+/** Compacts deques for Node, Element, Face and Interface objects
+    @todo (could be modified to first filling in deleted cells with cells from the back; then erasing cells at the back)
+ */
+template<size_t dim>
+size_t MeshManager<dim>::RemoveNullPointerCells()
+ {
+    size_t null_ptr_entities_removed = Erase( nodes_.begin(), nodes_.end() );
+    null_ptr_entities_removed += Erase( elements_.begin(), elements_.end() );
+    null_ptr_entities_removed += Erase( faces_.begin(), faces_.end() );
+    null_ptr_entities_removed += Erase( interfaces_.begin(), interfaces_.end() );
+    
+    return null_ptr_entities_removed;
+    
+ } // end RemoveNullPointerCells
+
+
+
 
 
 /**
     Connects elements, faces or interfaces with their equidimensional neighbors
+    
+    @todo deal with potential manifolds relating to lower-dimensional cells
+    
 */
 template<size_t dim>
 template<template<size_t> class CELL>
-void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterator first, typename deque<CELL<dim>*>::iterator last )
+void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterator first,
+                                             typename deque<CELL<dim>*>::iterator last )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( distance(first,last) == 0U ) {
@@ -1122,7 +1675,7 @@ void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterato
         cout << "\n\t\tvolume elements...\n";
         //                key             n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
-                                                                                 it2(volume_neighbor_keys.begin());
+                                                                              it2(volume_neighbor_keys.begin());
         it2++;
 
         while ( it2 != volume_neighbor_keys.end() )
@@ -1150,12 +1703,212 @@ void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterato
     
  } // end RebuildConnectivity
 
-
-
 template void MeshManager<3>::RebuildConnectivity<Element>( typename deque<Element<3>*>::iterator, typename deque<Element<3>*>::iterator );
 template void MeshManager<3>::RebuildConnectivity<Face>( typename deque<Face<3>*>::iterator, typename deque<Face<3>*>::iterator );
-template void MeshManager<3>::RebuildConnectivity<InterFace>( typename deque<InterFace<3>*>::iterator, typename deque<InterFace<3>*>::iterator );
 
+template void MeshManager<2>::RebuildConnectivity<Element>( typename deque<Element<2>*>::iterator, typename deque<Element<2>*>::iterator );
+template void MeshManager<2>::RebuildConnectivity<Face>( typename deque<Face<2>*>::iterator, typename deque<Face<2>*>::iterator );
+
+template void MeshManager<1>::RebuildConnectivity<Element>( typename deque<Element<1>*>::iterator, typename deque<Element<1>*>::iterator );
+template void MeshManager<1>::RebuildConnectivity<Face>( typename deque<Face<1>*>::iterator, typename deque<Face<1>*>::iterator );
+
+
+/* TESTING - formerly EstablishNeighborConnectivity
+
+/ printing the multimap
+RenumberElements();
+cerr <<"\nline element face key map:\n";
+cerr <<"\n\tnode-id, face-id, nbor elmt id, neighbor 1 and 2";
+for ( auto it=line_neighbor_keys.begin(); it!=line_neighbor_keys.end(); ++it ) {
+      cerr <<"\n\t"<< (*(*it).first.begin())->Idx() <<", "<< (*it).second.first <<", ";
+      if ( (*it).second.second != nullptr ) {
+           cerr << (*it).second.second->Idx() <<", ";
+           if ( (*it).second.second->Neighbor(0) != nullptr )
+             cerr << (*it).second.second->Neighbor(0)->Idx() <<", ";
+           else cerr <<"nullptr" <<", ";
+           if ( (*it).second.second->Neighbor(1) != nullptr )
+             cerr << (*it).second.second->Neighbor(1)->Idx() <<", ";
+           else cerr <<"nullptr" <<", ";
+        }
+      else cerr <<"nullptr.";
+   }
+cerr << endl;
+cerr <<"\nprinting the elements:";
+for ( auto it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it )
+  (*it)->Out();
+cerr << endl;
+      
+*/
+
+
+
+
+// InterFace specialisation of above method
+template<size_t dim>
+void  MeshManager<dim>::RebuildConnectivity( typename deque<InterFace<dim>*>::iterator first,
+                                             typename deque<InterFace<dim>*>::iterator last, INTERFACE_SIDE side )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    if ( distance(first,last) == 0U ) {
+         csmp_error.notice( WARNING, "MeshManager<dim>::RebuildConnectivity:", "supplied cell vector is empty; nothing was done." );
+         return;
+      }
+    cout << "\nMeshManager<"<< dim <<">::RebuildConnectivity: Establishing CSMP FE neighbor connectivity...\n";
+ 
+    // 1. making separate search vectors of face keys for surface and line elements
+    // ----------------------------------------------------------------------------
+    cout << "  Building a multimap of the faces of the cells...\n";
+    //       key             face number,neighbor
+    multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >  volume_neighbor_keys,
+                                                             surface_neighbor_keys,
+                                                             line_neighbor_keys;
+    vector<size_t>                 fnids;
+    typename std::set<Node<dim>*>  key; // region, boundary and split boundary all use nodes
+
+    while ( first != last ) {
+          const size_t faces((*first)->Faces());
+          for ( size_t face=0U; face<faces; ++face )
+            {
+               if ( (*first) == nullptr ) {
+                    csmp_error.notice( ERROR, "MeshManager<dim>::RebuildConnectivity:",
+                                      "supplied input range contains NULL pointers; nothing was done." );
+                    return;
+                 }
+               // creating face key of node pointers from indices of face nodes
+               (*first)->FE()->NodesOfFace( face, fnids );
+               const size_t nodes(fnids.size());
+               for ( size_t j=0U; j<nodes; ++j )
+                 key.insert( (*first)->N( fnids[j] ) );
+                 
+               // inserting newly generated keys into multimap
+               if ( (*first)->IsVolumeElement() )
+                 volume_neighbor_keys.insert( make_pair( key, make_pair( face, (*first) ) ) );
+               else if ( (*first)->IsSurfaceElement() )
+                 surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*first) ) ) );
+               else // for all line elements
+                 line_neighbor_keys.insert( make_pair( key, make_pair( face, (*first) ) ) );
+               key.clear();
+            }
+          first++;
+        }
+
+    // 2. (re)building element neigborhoods
+    // ------------------------------------
+    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
+    cout << "  (Re)building neighbor connectivity...";
+
+    // 2.1 line elements
+    // -----------------
+    if ( !line_neighbor_keys.empty() )
+      {
+        InterFace<dim>* e1Ptr(nullptr);
+        InterFace<dim>* e2Ptr(nullptr);
+
+        cout << "\n\t\tline elements...";
+        //                key                  n-face, neighbor
+        typename multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >::iterator it1(line_neighbor_keys.begin()),
+                                                                                   it2(line_neighbor_keys.begin());
+        it2++;
+
+        while ( it2 != line_neighbor_keys.end() )
+          {
+              // if there is a pair of valid neighbor elements, neighbor assignments are made
+              if ( (*it1).first == (*it2).first )
+                {
+                   assert( (*it1).second.second != nullptr );
+                   assert( (*it2).second.second != nullptr );
+                   e1Ptr = (*it1).second.second;
+                   e2Ptr = (*it2).second.second;
+                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
+
+                   // assigning the two cells face neighbors to one another
+                   //                        face pointer  nbor face idx   neighbor pointer
+                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr, side );
+                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr, side );
+                   
+                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
+                   ++it1;
+                   ++it2;
+                }
+
+              // both iterators are advanced
+              if ( it2 == line_neighbor_keys.end() ) break;
+              ++it1;
+              ++it2;
+          }
+      } // line elements
+    
+    // 2.2 surface elements
+    // --------------------
+    if ( dim >= 2U and !surface_neighbor_keys.empty() )
+      {
+        cout << "\n\t\tsurface elements...";
+        //                key              n-face neighbor
+        typename multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
+                                                                                  it2(surface_neighbor_keys.begin());
+        it2++;
+
+        while ( it2 != surface_neighbor_keys.end() )
+          {
+              // if there is a pair of valid neighbor elements, neighbor assignments are made
+              if ( (*it1).first == (*it2).first )
+                {
+                    assert( (*it1).second.second != nullptr );
+                    assert( (*it2).second.second != nullptr );
+                    InterFace<dim>* e1Ptr((*it1).second.second);
+                    InterFace<dim>* e2Ptr((*it2).second.second);
+                    if ( e1Ptr != e2Ptr ) {
+                         ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr, side );
+                         ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr, side );
+                      }
+                    else csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::RebuildConnectivity:",
+                                            "discovered potentially duplicate surface simplex.");
+                    ++it1;
+                    ++it2;
+                }
+              if ( it2 == surface_neighbor_keys.end() ) break;
+              ++it1;
+              ++it2;
+          }
+      } // surface elements
+      
+    // 2.3 volume elements
+    // -------------------
+    if ( dim == 3U and !volume_neighbor_keys.empty() ) {
+
+        InterFace<dim>* e1Ptr(nullptr);
+        InterFace<dim>* e2Ptr(nullptr);
+
+        cout << "\n\t\tvolume elements...\n";
+        //                key             n-face neighbor
+        typename multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
+                                                                                   it2(volume_neighbor_keys.begin());
+        it2++;
+
+        while ( it2 != volume_neighbor_keys.end() )
+          {
+              // if there is a pair of valid neighbor elements, neighbor assignments are made
+              if ( (*it1).first == (*it2).first )
+                {
+                   assert( (*it1).second.second != nullptr );
+                   assert( (*it2).second.second != nullptr );
+                   e1Ptr = (*it1).second.second;
+                   e2Ptr = (*it2).second.second;
+                   assert( e1Ptr != e2Ptr );
+                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr, side );
+                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr, side );
+                   ++it1;
+                   ++it2;
+                }
+
+              // both iterators are advanced
+              if ( it2 == volume_neighbor_keys.end() ) break;
+              ++it1;
+              ++it2;
+          }
+      } // dim=3
+    
+ } // end RebuildConnectivity (InterFace)
 
 
 
@@ -1167,13 +1920,12 @@ template void MeshManager<3>::RebuildConnectivity<InterFace>( typename deque<Int
     After some diagnostics that establish the extent of mesh modification, the connectivity is rebuilt.
 */
 template<size_t dim>
-void MeshManager<dim>::Update()
+void MeshManager<dim>::UpdateConnectivity()
  {
     RebuildConnectivity<csmp::Element>( elements_.begin(), elements_.end() );
     RebuildConnectivity<csmp::Face>( faces_.begin(), faces_.end() );
-    RebuildConnectivity<csmp::InterFace>( interfaces_.begin(), interfaces_.end() );
- 
-    throw csmp::Exception( WARNING, "MeshManager<dim>::Update", "Method not implemented yet. Some connectivity might be broken");
+    RebuildConnectivity( interfaces_.begin(), interfaces_.end(), INSIDE );
+    RebuildConnectivity( interfaces_.begin(), interfaces_.end(), OUTSIDE );
     
  } // end Update
 
@@ -1463,13 +2215,13 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset,
   // 2. adding node coordinates and boundary flags (BOX_BOUNDARY)
   // ------------------------------------------------------------
   size_t i( 0U );
-  if ( dim == 1U ) {
+  if constexpr ( dim == 1U ) {
     for ( auto n : nodes ) {
       vset.Px( i, n->x() );
       ++i;
     }
   }
-  else if ( dim == 2U ) {
+  else if constexpr ( dim == 2U ) {
     for ( auto n : nodes ) {
       vset.Px( i, n->x() );
       vset.Py( i, n->y() );
@@ -1545,14 +2297,14 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset,
     }
     // higher-dimensional neighbors second
     // inner neighbor
-    if ( dim == 3U ) assert( f->InnerParent()->IsVolumeElement() );
-    else if ( dim == 2U ) assert( f->InnerParent()->IsSurfaceElement() );
+    if constexpr ( dim == 3U ) assert( f->InnerParent()->IsVolumeElement() );
+    else if constexpr ( dim == 2U ) assert( f->InnerParent()->IsSurfaceElement() );
     assert( f->InnerParent()->Idx() < Elements() );
     vset.Pfvert( eidx, neighbors, static_cast<int32>(f->InnerParent()->Idx()) );
     // outer neighbor
-    if ( f->OuterParent() != NULL && dim == 3U ) assert( f->OuterParent()->IsVolumeElement() );
-    else if ( f->OuterParent() != NULL && dim == 2U ) assert( f->OuterParent()->IsSurfaceElement() );
-    if ( f->OuterParent() != NULL ) {
+    if ( f->OuterParent() != nullptr && dim == 3U ) assert( f->OuterParent()->IsVolumeElement() );
+    else if ( f->OuterParent() != nullptr && dim == 2U ) assert( f->OuterParent()->IsSurfaceElement() );
+    if ( f->OuterParent() != nullptr ) {
       assert( f->OuterParent()->Idx() < Elements() );
       vset.Pfvert( eidx, neighbors + 1U, static_cast<int32>(f->OuterParent()->Idx()) );
     }
@@ -4249,6 +5001,18 @@ void MeshManager<dim>::Out() const
     cout << endl;
   }
 } // end Out
+
+
+// POTENTIALLY NEEDED METHODS
+/*
+  /// replace lower-dimensional element with Face object, deleting the Elements and establishing the neighbor connectivity of the new Faces
+  size_t          ReplaceElementsByFaces( const PropertyDatabase<dim>&,
+                                          typename std::vector<Element<dim>*>::iterator first,
+                                          typename std::vector<Element<dim>*>::iterator last );
+*/
+
+
+
 
 template class MeshManager<1U>;
 template class MeshManager<2U>;

@@ -74,11 +74,11 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     explicit InterFace( FiniteElement* );
 
     InterFace( FiniteElement*,
-               FiniteVolumeStencil<dim>* );
+               const FiniteVolumeStencil<dim>* );
     
     /// default: incomplete construction without connection to nodes
     InterFace( csmp::FiniteElement*, 
-               csmp::FiniteVolumeStencil<dim>*, 
+               const csmp::FiniteVolumeStencil<dim>*,
                const LocalVariables& interface_props, 
                const IntegrationPointVariables& integration_point_props );
 
@@ -99,7 +99,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
 
     /// connect InterFace to its equidimensional neighbors
-    void Assign( size_t nbor, InterFace<dim>* const );
+    void Assign( size_t nbor, InterFace<dim>* const, INTERFACE_SIDE side );
     
     /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
     void Unassign( const InterFace<dim>* ); 
@@ -107,8 +107,10 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// connect interface to a lower dimensional element that shall act as intervening element in triple-layer boundary representations
     void Assign( Element<dim>* const intervening_elmt );
 
-    /// connect interface to its higher-dimensional neighbors
-    void Assign( Element<dim>* const inner_elmt, Element<dim>* const outer_elmt, bool assign_nodes = true );
+    /// connect interface to its higher-dimensional neighbors; choice to assign nodes automatically
+    void Assign( Element<dim>* const inner_elmt,
+                 Element<dim>* const outer_elmt,
+                 bool assign_nodes = true );
   
     /// as Assign, for the case that the shared faces are already known
     void Assign( Element<dim>* const inner_elmt, size_t inner_local_face_id,
@@ -186,8 +188,8 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// is an equi-dimensional element connected to the MIDDLE element pointer of this InterFace
     bool           HasInterveningElement() const { return middleElement_!=nullptr; }
   
-    // TODO: review this functionality, included SharedElementFaces()
     /// local number of the face in the inner parent element, which borders against the interface
+    void           ParentFaceID( INTERFACE_SIDE, size_t idx );
     size_t         InnerParentFaceID() const;
     size_t         OuterParentFaceID() const;
     size_t         ParentFaceID( INTERFACE_SIDE side ) const;
@@ -255,7 +257,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     mutable size_t                idx_;                 ///< unique identifier for indexing operations
     std::vector<Node<dim>*>       node_connector_;      ///< pointers to the nodes on inside followed by those on the outside
-    std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces 
+    std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces; inside ones first, outside ones next, order determined by interface normal
     bool                          collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
   
     // used for compatibility with Element and Face methods (Neighbor etc.)

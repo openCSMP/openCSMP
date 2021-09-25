@@ -320,6 +320,8 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
  } // end StreamlineCFL (multiphase case)
 */
 
+template class TimeStepEvaluator<2U,ExplicitTransport>;
+template class TimeStepEvaluator<2U,ImplicitTransport>;
 
 template class TimeStepEvaluator<3U,ExplicitTransport>;
 template class TimeStepEvaluator<3U,ImplicitTransport>;

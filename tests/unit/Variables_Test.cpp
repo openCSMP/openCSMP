@@ -35,7 +35,7 @@ void Variables_Test::run()
     runModel(m0);
 
     // Run Test for 3D Model loaded from CSMP++ binary format
-    Model<3> m1("Variables_Test_BinaryModel");
+    Model<3> m1( string("Variables_Test_BinaryModel") );
     runModel(m1);
   }
   

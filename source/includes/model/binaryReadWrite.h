@@ -34,14 +34,14 @@ constexpr int CSMP_BINARY_FILE_HDR_SIZE(8); // JCK header for data record in fil
         BOUNDVAR - variable datablock
         BNDFFOTR - file footer
  
-      SplitBoundaryInterface
+    SplitBoundaryInterface
         SBDFHEDR
         SPLITBDRY
         ONE_BDRY
         SBDRYVAR
         SBDFFOTR
 
-    IRegionInterface
+    RegionInterface
         REGGHEDR
         UNIQREGN
         ONE_REGN
@@ -49,7 +49,9 @@ constexpr int CSMP_BINARY_FILE_HDR_SIZE(8); // JCK header for data record in fil
         MODELVARS
         REGFFOTR
         
-    SplitBoundaryInterface - @todo MISSING
+    NodeManifolds
+        NDMFHEDR
+        MANIFLDS
 */
 class BinaryFileSectionRead
 {

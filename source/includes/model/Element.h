@@ -154,18 +154,20 @@ class Element : public FiniteElementPolicy<dim, Element>,
 
     /// constructor for testing element in isolation
     Element( FiniteElement*,
-             FiniteVolumeStencil<dim>* );
+             const FiniteVolumeStencil<dim>* );
 
     Element( FiniteElement*,
-             FiniteVolumeStencil<dim>*,
+             const FiniteVolumeStencil<dim>*,
              const LocalVariables& element_props,
              const IntegrationPointVariables& integration_point_props );
 
     /// for model reconstruction from CSMP native binary file
     Element( size_t index,
              FiniteElement*,
+             const FiniteVolumeStencil<dim>*,
              const LocalVariables& element_props,
-             const IntegrationPointVariables& integration_point_props );
+             const IntegrationPointVariables& integration_point_props,
+             int32 material );
 
     /// exact copy: same idx, properties, nodes and neighbor elements
     Element( const Element& );

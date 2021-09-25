@@ -115,7 +115,8 @@ typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_
 /// find all elements in a model that contact eachother across split interfaces and are node-matched
 template<size_t dim>
 bool findSplitInterfaceElements( const Region<dim>&,
-                                 std::set<std::pair<std::pair<Element<dim>*, size_t>, std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
+                                 std::set<std::pair<std::pair<Element<dim>*, size_t>,
+                                 std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
 
 /// finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
 template<size_t dim>
@@ -154,10 +155,12 @@ bool containsElementsOfTtype( const Region<dim>&, ELEMENT_DIMENSION );
 
 /// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside = false, bool verbose = true );
+void  establishNeighborConnectivity( std::vector<Element<dim>*>&,
+                                     bool unassign_neighbors_outside = false, bool verbose = true );
 
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside = false, bool verbose = true );
+void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&, INTERFACE_SIDE,
+                                     bool unassign_neighbors_outside = false, bool verbose = true );
 
 /// checks all elements of the surface region for whether their neighbor elements have normals that deviate less than 90o from their normals
 template<size_t dim>

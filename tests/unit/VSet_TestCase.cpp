@@ -127,7 +127,7 @@ void VSet_TestCase::TestModelConstructionAndSaving3D()
         cout<<"The Output of Model without boundaries done..."<<endl;
         cout <<"Building ModelInput..."<<endl;
       }
-    Model<3U> modelInput1("model1");
+    Model<3U> modelInput1( string("model1") );
     Index dKey1( modelOutput1.Database().StorageKey("diffusivity") );
     Index naKey1( modelOutput1.Database().StorageKey("nodal array") );
     _test( elementCount1 == modelInput1.Region("Model").Elements() );
@@ -170,7 +170,7 @@ void VSet_TestCase::TestModelConstructionAndSaving3D()
         cout<<"The Output of Model with boundaries done..."<<endl;
         cout <<"Building ModelInput with boundaries..."<<endl;
       }
-    Model<3U> modelInput2("model2");
+    Model<3U> modelInput2( string("model2") );
     _test( modelInput2.Boundary("BOUNDARY1").Read(boundaryScalarKey) == 1. );
     modelInput2.Region("Model").Read( regionVectorKey, vvPlain );
     _test( vvPlain == vv );
@@ -200,7 +200,7 @@ void VSet_TestCase::TestModelConstructionAndSaving3D()
         }
     modelOutput3.OutputToBinaryFile("VSet_TestCase_modelOutput3");
     
-    Model<3> modelInput3("VSet_TestCase_modelOutput3");
+    Model<3> modelInput3( string("VSet_TestCase_modelOutput3") );
     
     ePtr = *modelInput3.Region("Model").ElementsBegin();
     size_t ctr(0);

@@ -70,8 +70,9 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 class RegionInterface
 {
 public:
-  RegionInterface();
-  virtual ~RegionInterface();
+  RegionInterface() {}
+  RegionInterface( const RegionInterface& ) = delete;
+  ~RegionInterface() {}
 
   /// checks whether region exists considering both unique and non-unique regions
   bool ContainsRegion( const std::string& regionname ) const;
@@ -201,8 +202,8 @@ public:
   void    MergeRegions( const std::set<std::string>& input_regions, const char* ensemble_region );
   size_t  MergeRegions( const char* region_name_tag, const char* ensemble_region );
 
-  /// removes region and associated variable storage, and optionally the underlying elements, nodes etc.
-  void    RemoveRegion( const char* regionname, bool delete_elements );
+  /// removes region and associated variable storage; erases  the underlying elements and nodes, if they are not shared  etc.
+  void    RemoveRegion( const char* regionname );
 
   /// excludes the intersection of elements of the 2 regions from the non-unique region
   bool    RemoveFromRegion( const char* region, const char* region_to_subtract );
@@ -229,8 +230,8 @@ public:
   bool    RegionSymmetricDifference( const char* region_a, const char* region_b, const char* region_symdiff );
 
   // TODO: test
-  /// creates a lower-dimensiona region along the contact area of 2 higher dimensional ones
-  size_t  RegionBetween( const char* region_a, const char* region_b, const char* region_between );
+  /// creates a lower-dimensional region along the contact area of 2 higher dimensional ones
+  size_t  RegionBetween( const char* region_a, const char* region_b, const char* region_between, int32 material_id );
 
   /// finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
   size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
@@ -242,9 +243,6 @@ public:
 protected:
   std::map<std::string, csmp::Region<dim> >  uniqueGroupMap_; ///< map of regions that do not overlap
   std::map<std::string, csmp::Region<dim> >  groupMap_;       ///< map of potentially overlapping regions
-
-private:
-  RegionInterface( const RegionInterface& );
 };
 
 } // csmp

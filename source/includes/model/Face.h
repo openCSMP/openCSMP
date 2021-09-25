@@ -71,7 +71,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
 
     /// prefered custom constructor creates face with together with variable storage
     Face( csmp::FiniteElement*,
-          csmp::FiniteVolumeStencil<dim>*,
+          const csmp::FiniteVolumeStencil<dim>*,
           const LocalVariables&,
           const IntegrationPointVariables& );
 

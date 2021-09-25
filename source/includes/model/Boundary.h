@@ -70,6 +70,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
     Boundary( const Boundary& );
     Boundary( Boundary&& );
 
+    /// gets MeshManager to delete the boundary including Faces
     virtual ~Boundary();
 
     Boundary<dim>&  operator=( const Boundary& );
@@ -83,19 +84,21 @@ class Boundary : public ModelSubDomain<dim, Face>,
     // reconstruction of boundaries that existed before
     // ------------------------------------------------
 
-    /// re-constructor of boundary from index data stored in SubDomainInfo
+    /// RECONSTRUCTOR of boundary from index data stored in SubDomainInfo
     Boundary( const PropertyDatabase<dim>&,
               const MeshManager<dim>&,       
               const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
               BOX_BOUNDARY = IRREGULAR );
 
-    /// re-constructor of boundary from index data stored in SubDomainInfo and faces from the MeshManager
+    /// TODO: still needed? - re-constructor of boundary from index data stored in SubDomainInfo and faces from the MeshManager
+    /*
     Boundary( const PropertyDatabase<dim>&,
               const size_t&,
               const std::deque<Node<dim>*>&,
               const std::deque<Face<dim>*>&,
-              const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
+              const SubDomainInfo&,
               BOX_BOUNDARY = IRREGULAR );
+    */
 
     /// Visitors
     virtual void Accept( Visitor<dim>& );
@@ -139,9 +142,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
 
     /// creating from supplied vector of faces
     bool CreateFrom( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                     const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                     bool updateFaceConnectivity = true,
-                     bool updateIndexes = true );
+                     const typename std::vector<Face<dim>*>::const_iterator facesEnd );
 
     /// create faces from lower dimensional region
     bool CreateFrom( MeshManager<dim>& meshManager,
@@ -191,8 +192,8 @@ class Boundary : public ModelSubDomain<dim, Face>,
 
   protected:
 
-    /// establishes connectivity, assigns boundary flags and initializes LVS
-    void Initialize( BOX_BOUNDARY boxBoundary = IRREGULAR, bool updateNeighborConnectivity = true, bool updateIndexes = true );
+    /// establishes connectivity between Faces if not already there, assigns boundary flag and finds perimeter
+    void Initialize( BOX_BOUNDARY boxBoundary );
 
     /// returns local variables stored at face integration points
     IntegrationPointVariables FaceIntegrationPointVariables() const;

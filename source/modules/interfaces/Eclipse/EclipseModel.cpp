@@ -10,7 +10,7 @@ namespace csmp {
 EclipseModel::EclipseModel(EclipseModelSettings& settings,
 	const std::string& model_name,
 	const std::string& variables_file)
-	: csmp::Model<3U>(variables_file.c_str(), false),
+	: csmp::Model<3U>(variables_file.c_str()),
 	eclipse_model_settings_(settings)
 {
 	this->Name(model_name.c_str());
@@ -113,7 +113,6 @@ void EclipseModel::Initialize()
 		const bool non_box_shaped_model(!mesh_topology.BoxShapedModel());
 
 		// all cells are lumped into the region "Eclipse Model" that is stored in the model topology
-		const bool isoparametric(true);
 		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false here.    
     EstablishBoxBoundariesFromFlags();
 		UpdateIndices();    

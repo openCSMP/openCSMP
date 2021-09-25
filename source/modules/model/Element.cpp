@@ -75,7 +75,7 @@ Element<dim>::Element( csmp::FiniteElement* f )
 
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f,
-                       csmp::FiniteVolumeStencil<dim>* fvs )
+                       const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
   FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
   idx_( UINT_MAX ),
@@ -89,16 +89,16 @@ Element<dim>::Element( csmp::FiniteElement* f,
 
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f,
-                       csmp::FiniteVolumeStencil<dim>* fvs,
+                       const csmp::FiniteVolumeStencil<dim>* fvs,
                        const LocalVariables& ep,
                        const IntegrationPointVariables& cp )
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-  idx_( UINT_MAX ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
+    idx_( UINT_MAX ),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr ),
+    material_id_(UNSPECIFIED)
 {
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );
@@ -111,19 +111,21 @@ Element<dim>::Element( csmp::FiniteElement* f,
 /**
 For model reconstruction from binary file
 
-TODO: add material ID here
 */
 template<size_t dim>
 Element<dim>::Element( size_t idx,
                        csmp::FiniteElement* f,
+                       const FiniteVolumeStencil<dim>* s,
                        const LocalVariables& ep,
-                       const IntegrationPointVariables& cp )
+                       const IntegrationPointVariables& cp,
+                       int32 material )
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  idx_( idx ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, ::csmp::Element>( s ),
+    idx_( idx ),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr ),
+    material_id_(material)
 {
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );

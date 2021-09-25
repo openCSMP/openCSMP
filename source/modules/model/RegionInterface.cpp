@@ -9,51 +9,36 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-RegionInterface<dim, REGION_COMPLEX>::RegionInterface()
-{}
-
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-RegionInterface<dim, REGION_COMPLEX>::RegionInterface( const RegionInterface& re )
-  : uniqueGroupMap_( re.uniqueGroupMap_ ),
-  groupMap_( re.groupMap_ )
-{}
-
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-RegionInterface<dim, REGION_COMPLEX>::~RegionInterface()
-{}
-
-
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::iterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsBegin()
+typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsBegin()
 { return uniqueGroupMap_.begin(); }
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::iterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsEnd()
+typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsEnd()
 { return uniqueGroupMap_.end(); }
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::iterator  RegionInterface<dim, REGION_COMPLEX>::RegionsBegin()
+typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::RegionsBegin()
 { return groupMap_.begin(); }
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::iterator  RegionInterface<dim, REGION_COMPLEX>::RegionsEnd()
+typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::RegionsEnd()
 { return groupMap_.end(); }
 
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::const_iterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsBegin() const
+typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsBegin() const
 { return uniqueGroupMap_.begin(); }
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::const_iterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsEnd() const
+typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsEnd() const
 { return uniqueGroupMap_.end(); }
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::const_iterator  RegionInterface<dim, REGION_COMPLEX>::RegionsBegin() const
+typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator RegionInterface<dim, REGION_COMPLEX>::RegionsBegin() const
 { return groupMap_.begin(); }
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-typename std::map<std::string, csmp::Region<dim> >::const_iterator  RegionInterface<dim, REGION_COMPLEX>::RegionsEnd() const
+typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator RegionInterface<dim, REGION_COMPLEX>::RegionsEnd() const
 { return groupMap_.end(); }
 
 
@@ -162,6 +147,19 @@ bool RegionInterface<dim, REGION_COMPLEX>::ContainsRegion( const std::string& re
 
 
 
+// TODO: remove contiguity requirement in the presence of SplitBoundaries
+  /// checks that there is a model region and that it contains elements
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+bool RegionInterface<dim, REGION_COMPLEX>::HasValidModelRegion() const
+ {
+    // does the region model exist?
+    if ( !this->ContainsRegion("Model") ) return false;
+    
+    // is it contiguous?
+    if ( !this->IsContiguous("Model") ) return false;
+    
+    return true;
+ }
 
 
 
@@ -298,12 +296,9 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs( bool re
 
 
 /**
-Removes a named Region object and its elements from the map of regions stored
-inside of the Model object. If the region was unique and element
-region IDs were set to it, these are reset to ULONG_MAX.
+Removes named Region object and its elements and nodes.
 
 @param  regionName The name of the group object which shall be removed.
-
 
 @section messages Messages
 
@@ -313,7 +308,7 @@ region IDs were set to it, these are reset to ULONG_MAX.
 
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName, bool delete_elements )
+void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName )
 {
   // check whether region exists (should be a notice only, nothrow)
   if ( !ContainsRegion( regionName ) )
@@ -328,32 +323,29 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
     iterUniqueRegion( uniqueGroupMap_.find( string( regionName ) ) );
 
   // alerting user that other regions may be accidentally damaged by deleting non-unique regions
-  if ( delete_elements ) {
-    if ( iterRegion != groupMap_.end() )
-       ErrorHandler::Instance().notice( WARNING, "RegionsInterface<dim,Model>::RemoveRegion:",
-                                       "Do not try to delete the elements of a non-unique region: ", regionName );
-    else {
-      REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
-      MeshManager<dim>&    meshMgr           = regionComplex->Mesh();
-      csmp::Region<dim>&   subdomain         = iterUniqueRegion->second;   
-      pair<int32, int32>   spatialDimensions = subdomain.ElementSpatialDimensions();
+  if ( iterRegion != groupMap_.end() )
+     ErrorHandler::Instance().notice( INFO, "RegionsInterface<dim,Model>::RemoveRegion:", regionName,
+                                     "is a non-unique region. Since its elements are shared with a unique region they will not be deleted" );
+  else {
+    REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
+    MeshManager<dim>&    meshMgr           = regionComplex->Mesh();
+    csmp::Region<dim>&   subdomain         = iterUniqueRegion->second;
+    pair<int32, int32>   spatialDimensions = subdomain.ElementSpatialDimensions();
 
-      // 1. disconnecting elements from their neighbors and deleting them
-      meshMgr.Erase( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+    // 1. disconnecting elements from their neighbors and deleting them
+    meshMgr.template Erase<Element>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
 
-      // 2. Rebuild node connections if necessary			  
-      if ( spatialDimensions.second == dim ) {
-           // This is a region whose dimension is dim, so interior
-           // nodes must be removed.
-           meshMgr.Erase( subdomain.NodesBegin(), subdomain.PerimeterNodesBegin() );
-           // Update node connections on the region's perimeter nodes that were retained.
-           meshMgr.RebuildParentRelationships( subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd() );
-        }
-      // This is a region whose dimension is less than dim (i.e. a boundary or split boundary). Just update nodes.
-      else meshMgr.RebuildParentRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
-    }
-    
-  } // end delete elements
+    // 2. Rebuild node connections if necessary
+    if ( spatialDimensions.second == dim ) {
+         // This is a region whose dimension is dim, so interior
+         // nodes must be removed.
+         meshMgr.template Erase<Node>( subdomain.NodesBegin(), subdomain.PerimeterNodesBegin() );
+         // Update node connections on the region's perimeter nodes that were retained.
+         meshMgr.RebuildParentRelationships( subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd() );
+      }
+    // This is a region whose dimension is less than dim (i.e. a boundary or split boundary). Just update nodes.
+    else meshMgr.RebuildParentRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
+  }
 
   // if the region was found in the respective map, it is erased
   if ( iterRegion != groupMap_.end() )
@@ -1332,7 +1324,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
 
       // if the region has been partitioned succesfully and its name is not model, it will be removed
       if ( IsUnique(group) )
-        RemoveRegion( group, false );
+        RemoveRegion( group );
 
       return n_subgroups;
     
@@ -1670,7 +1662,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
   if ( !groups_to_remove.empty() ) std::cout << "\nRegionsInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor: removing region(s): ";
   for ( std::set<std::string>::const_iterator it = groups_to_remove.begin(); it != groups_to_remove.end(); it++ ) {
     std::cout << "'" << (*it) << "' ";
-    RemoveRegion( (*it).c_str(), false );
+    RemoveRegion( (*it).c_str() );
     groups_removed++;
   }
   if ( !groups_to_remove.empty() ) std::cout << std::endl << std::endl;
@@ -2332,7 +2324,8 @@ faces only.
 @author R. Manasipov (2014)
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::RegionBetween( const char* group1, const char* group2, const char* region_between )
+size_t RegionInterface<dim, REGION_COMPLEX>::RegionBetween( const char* group1, const char* group2,
+                                                            const char* region_between, int32 material_id )
 {
   REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2361,7 +2354,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RegionBetween( const char* group1, 
       csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
                          "one of the supplied regions is not unique and they overlap",
                          "It was therefore impossible to insert a boundary" );
-      regionComplex->RemoveRegion( "groupintersection", false );
+      // regionComplex->RemoveRegion( "groupintersection", false );
       return 0U;
     }
   }
@@ -2387,7 +2380,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RegionBetween( const char* group1, 
         std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::RegionBetween creating Region between " << group1;
         std::cout << " and " << group2 << std::endl;
         regionComplex->UpdateIndices();
-        succeeded = (*it.first).second.CreateBetween( regionComplex->Mesh(), regionComplex->FE_Manager(), gref1, gref2 );
+        succeeded = (*it.first).second.CreateBetween( regionComplex->Mesh(), regionComplex->FE_Manager(), gref1, gref2, material_id );
         regionComplex->UpdateIndices();
         // assigning new region name
         (*it.first).second.Name( region_between );
@@ -2458,7 +2451,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
 
   // rebuilding the decimated region
   r1_ref.CellVector() = std::move( new_region1 );
-  r1_ref.EstablishNeighborConnectivity( false ); // TODO: needed, but this connectivity should have been established long ago !
+// NOT AFFECTED  r1_ref.EstablishNeighborConnectivity( false ); // TODO: needed, but this connectivity should have been established long ago !
   r1_ref.CreateNodePointerVector2();
   r1_ref.IdentifyPerimeter();
 
@@ -2661,18 +2654,15 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
  {
     // since this region may now contain a different number of elements
-    const bool delete_elements(false);
-    RemoveRegion("Model", delete_elements );
+    RemoveRegion("Model" );
  
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
            rit->second.CreateNodePointerVector2();
-           rit->second.EstablishNeighborConnectivity(false);
            rit->second.IdentifyPerimeter(); // calls PartitionCellVector
         }
        
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
            rit->second.CreateNodePointerVector2();
-           rit->second.EstablishNeighborConnectivity(false);
            rit->second.IdentifyPerimeter();
         }
         

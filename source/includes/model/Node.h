@@ -64,7 +64,17 @@ class Node : public LocalVariableStorage<dim,Node> {
     bool             Unassign( Element<dim>* parent_elmt );
     void             ResizeParentStorage( size_t parent_elements );
     void             EraseParents();
+
+
+    /// connects the node to other topologically collocated nodes if any
+    void             Assign( NodeManifold<dim>* const );
     
+    /// access to manifold if any; returns nullptr if the node is not a manifold
+    bool             IsManifold() const;
+
+    /// access to other topologically collocarted Node objects through manifold if any; returns nullptr if the node is not a manifold
+    NodeManifold<dim>* const Manifold() const;
+
     /// support of the vistor design pattern
     void             Accept( csmp::Visitor<dim>& );
 
@@ -78,10 +88,6 @@ class Node : public LocalVariableStorage<dim,Node> {
     size_t           Neighbors() const;
     /// access to any of these nodes
     Node<dim>*       Neighbor( size_t ) const;
-
-    /// access to manifold if any; returns nullptr if the node is not a manifold
-    NodeManifold<dim>* ParentManifold() { return parent_manifold_; }
-    void AssignParentManifold( NodeManifold<dim>* md ) { parent_manifold_ = md; }
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void             Idx( size_t id_0_to_n_minus_1 ) const; // since idx is mutable
@@ -120,7 +126,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     Point<dim>                     xyz_;                      ///< coordinate array
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     std::vector<Element<dim>*>     parent_element_pointers_;  ///< parent element pointers
-    NodeManifold<dim>*             parent_manifold_ = nullptr;///< parent manifold pointer
+    NodeManifold<dim>*             manifold_ = nullptr;       ///< node manifold pointer
     
     friend class FiniteElement_TestData; // for testing 
 };

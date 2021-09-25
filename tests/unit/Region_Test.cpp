@@ -158,7 +158,7 @@ void Region_Test::run()
     _test( model.Region("permeability_regions").Elements() == model.Region("Model").Elements() );
     if ( verbose_ ) cout <<"\n\n\nRegion_Test::run: RemoveRegion()  removing region 'permeability_regions' and other new regions."<< endl;
 
-    model.RemoveRegion( "permeability_regions", false );
+    model.RemoveRegion( "permeability_regions" );
 
     //test of remove
     // removal of the new permeability-based unique regions:
@@ -166,7 +166,7 @@ void Region_Test::run()
 
     for ( set<string>::const_iterator it=group_names.begin(); it!=group_names.end(); it++ )
     {
-        model.RemoveRegion( (*it).c_str(), false );
+        model.RemoveRegion( (*it).c_str() );
        _test( model.ContainsRegion((*it).c_str()) == false );
     }
 
@@ -225,8 +225,8 @@ void Region_Test::run()
     _test( model.ContainsRegion("pressure_permeability_overlap2") == true );
 
     // removal
-    model.RemoveRegion( "pressure_permeability_overlap1", false );
-    model.RemoveRegion( "pressure_permeability_overlap2", false );
+    model.RemoveRegion( "pressure_permeability_overlap1" );
+    model.RemoveRegion( "pressure_permeability_overlap2" );
     // regions should no longer be there
     _test( model.ContainsRegion("pressure_permeability_overlap1") == false );
     _test( model.ContainsRegion("pressure_permeability_overlap2") == false );
@@ -238,7 +238,7 @@ void Region_Test::run()
     model.FormRegionFrom( "pf_window", "fluid pressure", 1.5e6, 1.7e6 );
     _test( model.ContainsRegion("pf_window") == true );
     if ( verbose_ ) vtk_output.OutputDataToVTK( model, "pf_window", "pf_window", "fluid pressure", 1, true );
-    model.RemoveRegion( "pf_window", false );
+    model.RemoveRegion( "pf_window" );
 
 
     // creating and testing rectangular regions
@@ -271,7 +271,7 @@ void Region_Test::run()
     _test( p1 == p1_newRegion or p1 < p1_newRegion );
     _test( p2 == p2_newRegion or p2 > p2_newRegion );
 
-    model.RemoveRegion( "rectangular region", false );
+    model.RemoveRegion( "rectangular region" );
 
 
     // Region Union Test
@@ -289,7 +289,7 @@ void Region_Test::run()
     if ( verbose_ ) cout <<"\nRegion_Test::run: Is Model a part of FRAC_VOLUMES(no):  "<< endl;
     _test( model.RegionIncludes( "FRAC_VOLUMES","MODEL" ) == false );
 
-    model.RemoveRegion( "MODEL", false );
+    model.RemoveRegion( "MODEL" );
 
     // Region Intersection Test
     if ( verbose_ ) {
@@ -318,7 +318,7 @@ void Region_Test::run()
     _test( model.RegionSymmetricDifference( "MATRIX", "Model", "diff" ) == true );
     // should contain all volumetric elements from FRAC_VOLUMES
     _test( model.Region("diff").Elements() == model.Region("FRAC_VOLUMES").Elements() );
-    model.RemoveRegion( "diff", false );
+    model.RemoveRegion( "diff" );
 
     // breaking a region into contiguous sub-regions
     // ---------------------------------------------

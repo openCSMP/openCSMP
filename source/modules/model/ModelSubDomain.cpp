@@ -352,209 +352,8 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
 
 
 
-/**
-    Connects the simplices with their equidimensional neighbors
-*/
-template<size_t dim, template<size_t> class CELL>
-void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity( bool verbose )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( elmt_vec_.empty() ) {
-         csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
-         return;
-      }
-    if (verbose)
-      cout << "\nModelSubDomain<"<< dim <<",CELL>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
- 
-    // 1. making separate search vectors of face keys for surface and line elements
-    // ----------------------------------------------------------------------------
-    if (verbose)
-      cout << "  Building a list of the faces of the cells...\n";
-    //       key             face number,neighbor
-    multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
-                                                           surface_neighbor_keys, 
-                                                           line_neighbor_keys;
-    vector<size_t>                 fnids;
-    typename std::set<Node<dim>*>  key; // region, boundary and split boundary all use nodes
-
-    for ( typename vector<CELL<dim>*>::const_iterator it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it ) {
-          const size_t faces((*it)->Faces());
-          for ( size_t face=0U; face<faces; ++face )
-            {
-               if ( (*it) == nullptr ) {
-                    csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:",
-                                      "supplied element contains NULL pointer to elements; nothing was done." );
-                    return;
-                 }
-               // creating face key of node pointers from indices of face nodes
-               (*it)->FE()->NodesOfFace( face, fnids );
-               const size_t nodes(fnids.size());
-               for ( size_t j=0U; j<nodes; ++j )
-                 key.insert( (*it)->N( fnids[j] ) );
-                 
-               // inserting newly generated keys into multimap
-               // TODO: use move constructor here
-               if ( (*it)->IsVolumeElement() )
-                 volume_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-               else if ( (*it)->IsSurfaceElement() )
-                 surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-               else // for all line elements
-                 line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-               key.clear();
-            }
-        }
-
-    // 2. (re)building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    if (verbose)
-      cout << "  (Re)building neighbor connectivity...";
-
-    // 2.1 line elements
-    // -----------------
-    if ( !line_neighbor_keys.empty() )
-      {
-        CELL<dim>* e1Ptr(nullptr);
-        CELL<dim>* e2Ptr(nullptr);
-
-        if (verbose)
-          cout << "\n\t\tline elements...";
-        //                key                  n-face, neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                              it2(line_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != line_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning the two cells face neighbors to one another
-                   //                        face pointer  nbor face idx   neighbor pointer
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // line elements
-    
-    // 2.2 surface elements
-    // --------------------
-    if ( dim >= 2U and !surface_neighbor_keys.empty() )
-      {
-        if (verbose)
-          cout << "\n\t\tsurface elements...";
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
-                                                                                 it2(surface_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != surface_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                    assert( (*it1).second.second != nullptr );
-                    assert( (*it2).second.second != nullptr );
-                    CELL<dim>* e1Ptr((*it1).second.second);
-                    CELL<dim>* e2Ptr((*it2).second.second);
-                    if ( e1Ptr != e2Ptr ) {
-                         ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                         ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                      }
-                    else csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:",
-                                            "discovered potentially duplicate surface simplex.");
-                    ++it1;
-                    ++it2;
-                }
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // surface elements
-      
-    // 2.3 volume elements
-    // -------------------
-    if ( dim == 3U and !volume_neighbor_keys.empty() ) {
-
-        CELL<dim>* e1Ptr(nullptr);
-        CELL<dim>* e2Ptr(nullptr);
-
-        if (verbose)
-          cout << "\n\t\tvolume elements...\n";
-        //                key             n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
-                                                                                 it2(volume_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != volume_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-//              if ( (*it1).first == (*it2).first and ( (*it1).second.second != nullptr and (*it2).second.second != nullptr ) )
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr );
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == volume_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // dim=3
-    
- } // end EstablishNeighborConnectivity
 
 
-
-/* TESTING - EstablishNeighborConnectivity
-
-/ printing the multimap
-RenumberElements();
-cerr <<"\nline element face key map:\n";
-cerr <<"\n\tnode-id, face-id, nbor elmt id, neighbor 1 and 2";
-for ( auto it=line_neighbor_keys.begin(); it!=line_neighbor_keys.end(); ++it ) {
-      cerr <<"\n\t"<< (*(*it).first.begin())->Idx() <<", "<< (*it).second.first <<", ";
-      if ( (*it).second.second != nullptr ) {
-           cerr << (*it).second.second->Idx() <<", ";
-           if ( (*it).second.second->Neighbor(0) != nullptr )
-             cerr << (*it).second.second->Neighbor(0)->Idx() <<", ";
-           else cerr <<"nullptr" <<", ";
-           if ( (*it).second.second->Neighbor(1) != nullptr )
-             cerr << (*it).second.second->Neighbor(1)->Idx() <<", ";
-           else cerr <<"nullptr" <<", ";
-        }
-      else cerr <<"nullptr.";
-   }
-cerr << endl;
-cerr <<"\nprinting the elements:";
-for ( auto it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it )
-  (*it)->Out();
-cerr << endl;
-      
-*/
 
 
 
@@ -666,24 +465,26 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
      vector<ONE_BYTE_NUMBER>  boundary_faces;
      size_t                   counter(0U);
 
-     for ( typename vector<CELL<dim>*>::const_iterator it = perimeterElementsBegin; it != elementsEnd; ++it ) {
-         assert( (*it)->Faces() == (*it)->Neighbors() );
-         // for all faces of the CELLs that are located on the domain boundary
-         const size_t faces( (*it)->Faces() );
-         boundary_faces.reserve( faces );
-         for ( size_t face(0U); face<faces; ++face )
-           // TODO: see whether this costly search (=Contains()) can be avoided
-           if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
-             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
-         // storing the boundary face vector for the current element
-         if ( boundary_faces.size() == faces ) {
-              cerr <<"\n\tModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
-              (*it)->Out();
-           }
-         this->bd_face_vec_[counter] = boundary_faces;
-         boundary_faces.clear();
-         counter++;
-      }
+     // for all faces of CELLs that are located on the subdomain boundary
+     for ( typename vector<CELL<dim>*>::const_iterator
+           it = perimeterElementsBegin; it != elementsEnd; ++it )
+       {
+          assert( (*it)->Faces() == (*it)->Neighbors() );
+          const size_t faces( (*it)->Faces() );
+          boundary_faces.reserve( faces );
+          for ( size_t face(0U); face<faces; ++face )
+            //   located on model boundary          or  neighbor is not contained in this subdomain
+            if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
+              boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+          // storing the boundary face vector for the current element
+          if ( boundary_faces.size() == faces ) {
+               cerr <<"\n\tModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
+               (*it)->Out();
+            }
+          this->bd_face_vec_[counter] = boundary_faces;
+          boundary_faces.clear();
+          counter++;
+       }
       
   } // end BuildPerimeterFaceVector
 
@@ -1318,12 +1119,15 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
     returns true or false.
 */
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* eptr ) const
+bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* const eptr ) const
  {
-    if ( binary_search( elmt_vec_.begin(), next(elmt_vec_.begin(),InteriorElements()), eptr ) )
+    assert( eptr != nullptr );
+
+    // search perimeter first
+    if ( binary_search( next(elmt_vec_.begin(),InteriorElements()), elmt_vec_.end(), eptr ) )
        return true;
 
-    if ( binary_search( next(elmt_vec_.begin(),InteriorElements()), elmt_vec_.end(), eptr ) )
+    if ( binary_search( elmt_vec_.begin(), next(elmt_vec_.begin(),InteriorElements()), eptr ) )
        return true;
 
     return false;
@@ -1336,14 +1140,14 @@ bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* eptr ) const
     returns true or false.
 */
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
+bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) const
  {
-    assert( nptr != NULL );
-
-    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), InteriorNodes()), nptr ) )
-       return true;
+    assert( nptr != nullptr );
 
     if ( binary_search( next(node_vec_.begin(), InteriorNodes()), node_vec_.end(), nptr ) )
+       return true;
+
+    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), InteriorNodes()), nptr ) )
        return true;
 
     return false;
@@ -1351,17 +1155,17 @@ bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
  } // end
 
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* nd_ptr ) const
+bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* const nd_ptr ) const
  {
-    assert( nd_ptr != NULL );
+    assert( nd_ptr != nullptr );
     return std::binary_search( PerimeterNodesBegin(), NodesEnd(), nd_ptr );
  }
 
 
 template<size_t dim, template<size_t> class CELL>
-bool  ModelSubDomain<dim,CELL>::IsPerimeterElement( const CELL<dim>* e_ptr ) const
+bool  ModelSubDomain<dim,CELL>::IsPerimeterElement( const CELL<dim>* const e_ptr ) const
  {
-    assert( e_ptr != NULL );
+    assert( e_ptr != nullptr );
     return std::binary_search( PerimeterElementsBegin(), ElementsEnd(), e_ptr );
  }
 
@@ -1699,9 +1503,9 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64&
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& vmin, double64& vmax ) const
  {
-     if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
+     if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf",
-                             "Region/SplitBoundary/Boundary property placements imply single-values within model subdomains.");
+                             "Model/Region/SplitBoundary/Boundary properties have constant values within individual model subdomains; read directly!");
 
     // properties / variables placed on the model
     /*

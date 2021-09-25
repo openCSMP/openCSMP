@@ -91,6 +91,8 @@ class VSet : public VData {
     /// const iterators for the material ID record (one for each element; none for face and interface objects)
     std::vector<int32>::const_iterator PmtrlBegin() const;
     std::vector<int32>::const_iterator PmtrlEnd() const;
+    
+    int32 Pmtrl( size_t elmt ) const { return pmtrl_.at(elmt); }
 
     /// const iterators for the propery collection
     std::map<std::string,PropertyData>::const_iterator PropertyValuesBegin() const;
