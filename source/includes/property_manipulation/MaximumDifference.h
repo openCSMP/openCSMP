@@ -21,20 +21,11 @@ class MaximumDifference : public Interrelation<dim> {
     double64   Value() const; /// < outputs the computed value
 };
 
-
-
-
+/// compare distributed variable values: calculates maximum difference between distributed variable values of the same type and placement; difference can be normalised
 template<size_t dim>
-inline void MaximumDifference<dim>::Calculate()
- {
-    Var1.AssignTo( var1 );
-    Var2.AssignTo( var2 );
-    
-    if ( std::fabs(var1() - var2()) > max_difference )
-      max_difference = std::fabs(var1() - var2());
-     
- } // end
-
+double64 maximumDifference( const Model<dim>&,
+                            const char* new_property, const char* old_property,
+                            bool normalise );
 
 
 

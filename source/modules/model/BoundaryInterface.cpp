@@ -1,6 +1,7 @@
 #include "BoundaryInterface.h"
 #include "Model.h"
 #include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "FaceConstructionData.h"
 #include "Face.h"
 #include "Boundary.h"
@@ -11,6 +12,7 @@
 #include "SmallSet.h"
 #include "ErrorHandler.h"
 #include "variableOperations.h"
+#include "binaryReadWrite.h"
 
 using namespace std;
 
@@ -1928,6 +1930,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
        @attention model corners are not considered.
 
   */
+  /*
   template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
   bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeRegionsOfBoxShapedModel( const VSet<dim>& vset )
     {
@@ -2049,7 +2052,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
    return true;
       
  } // end EstablishEdgeRegionsOfBoxShapedModel
- 
+*/
  
 
 

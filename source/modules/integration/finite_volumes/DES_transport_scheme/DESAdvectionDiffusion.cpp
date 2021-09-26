@@ -5,6 +5,9 @@
 #if defined(_OPENMP )
 #include "omp.h"
 #endif
+#include "Exception.h"
+#include "ErrorHandler.h"
+
 
 using namespace std;
 

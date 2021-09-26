@@ -2,10 +2,12 @@
 #include "VTK_Interface.h"
 
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "Region.h"
 #include "Model.h"
 #include "OS_Utilities.h"
 
+#include "ErrorHandler.h"
 
 using namespace std;
 

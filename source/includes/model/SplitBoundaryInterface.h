@@ -1,9 +1,12 @@
 #ifndef SPLIT_BOUNDARY_INTERFACE_H
 #define SPLIT_BOUNDARY_INTERFACE_H
 
-#include "SplitBoundary.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
+
+template<size_t> class Boundary;
+template<size_t> class SplitBoundary;
 
 /**
     Creation, management and deletion of SplitBoundary objects.

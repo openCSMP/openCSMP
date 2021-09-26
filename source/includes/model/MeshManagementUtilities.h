@@ -18,15 +18,39 @@ template<size_t> class Node;
 template<size_t> class Element;
 template<size_t> class Face;
 template<size_t> class InterFace;
+
+template<size_t> class Model;
 template<size_t> class MeshManager;
+template<size_t> class Region;
+template<size_t> class Boundary;
+template<size_t> class SplitBoundary;
 
-/// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
+
+// MESH CONNECTIVITY
+
+/// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<size_t dim>
-size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
+void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );
 
-// TODO: implement
-template<size_t dim,template<size_t> class CELL>
-size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<size_t>& );
+/// retrieves and returns the element ids of the first contiguous element patch that can be reached by mesh traversal from the starting element
+template<size_t dim>
+void floodFillViaIndexes( const Region<dim>&, size_t starting_idx,
+                          std::set<size_t>& output_contiguous_subset );
+
+/// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
+template<size_t dim>
+void  establishNeighborConnectivity( std::vector<Element<dim>*>&,
+                                     bool unassign_neighbors_outside = false, bool verbose = true );
+
+template<size_t dim>
+void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&,
+                                     bool unassign_neighbors_outside = false, bool verbose = true );
+
+/// checks all elements of the surface region for whether their neighbor elements have normals that deviate less than 90o from their normals
+template<size_t dim>
+bool checkNeighborNormalsForConsistentOrientation( const Region<dim>& );
+
+
 
 /// finds the connected (contiguous) mesh patches in the supplied range of cells storing them in map with names that reflect their dimensionality and cell numbers
 template<size_t dim, template<size_t> class CELL>
@@ -78,6 +102,43 @@ void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbo
 /// Surt's method to efficiently erase vector Element from a pointer vector.
 template<size_t dim>
 void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Element<dim>* );
+
+// ELEMENT DIAGNOSTICS
+
+/// determines whether mesh in model is built from finite elements with a local coordinate system
+template<size_t dim>
+bool isoparametricElementMesh( const Model<dim>& );
+
+/// checks region for whether it contains elements of the same dimensionality
+template<size_t dim>
+bool containsElementsOfType( const Region<dim>&, ELEMENT_DIMENSION );
+
+/// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
+template<size_t dim>
+size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
+
+// TODO: implement
+template<size_t dim,template<size_t> class CELL>
+size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<size_t>& );
+
+/// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
+bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double64 tolerance=1.0e-5 );
+
+/// barycentre-to-node distances for parent elements returned into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
+template<size_t dim>
+void distanceWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
+                      typename std::vector<Node<dim>*>::const_iterator nodes_end,
+                      std::vector<std::vector<double64> >& distances_and_weight );
+
+/// container of element pointers and local face ids of elements contacting each other across a split boundary
+typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_t> > OppositeElements;
+
+/// find all elements in a model that contact eachother across split interfaces and are node-matched
+template<size_t dim>
+bool findSplitInterfaceElements( const Region<dim>&,
+                                 std::set<std::pair<std::pair<Element<dim>*, size_t>,
+                                 std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
+
 
 } // end csmp
 

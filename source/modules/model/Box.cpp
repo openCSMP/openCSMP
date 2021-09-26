@@ -2,6 +2,7 @@
 #include "Boundary.h"
 #include "Element.h"
 #include "Model.h"
+#include "ErrorHandler.h"
 #include "Exception.h"
 
 #include "SmallSet.h"

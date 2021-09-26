@@ -4,6 +4,7 @@
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "VTU_Interface.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 
 using namespace std;
 

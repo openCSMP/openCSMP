@@ -2,7 +2,6 @@
 #define CSMP_MATH_UTILITIES_H
 
 #include "CSMP_definitions.h"
-#include "CSMP_random.h"
 #include "DenseMatrix.h"
 
 // minor convienient additions to standard C++ functionality
@@ -79,7 +78,7 @@ double64 vector_norm2( std::vector<double64>& x, std::vector<double64>& scale );
 double64 vector_norm_inf( std::vector<double64>& x, std::vector<double64>& scale );
 
 /// randomly perturbs the values stored in the supplied floating-point vector
-void     vector_randomize( random_generator& rng, std::vector<double64>& x, double64 scale_fac=1. );
+void     vector_randomize( std::vector<double64>& x, double64 scale_fac=1. );
 
 /// averaging the floating-point values of scalar, vector and tensor variables in CSMP
 template<typename Var> void average( const std::vector<Var>&, Var& );

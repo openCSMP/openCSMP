@@ -1,6 +1,7 @@
 #include "EclipseModel.h"
 #include "ModelTime.h"
 #include "variableOperations.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 

@@ -5,8 +5,10 @@
 #include "Region.h"
 #include "Box.h"
 #include "Exception.h"
+#include "ErrorHandler.h"
 #include "ModelTopology.h"
 #include "ModelTime.h"
+#include "CSMP_highLevelUtilities.h"
 
 using namespace std;
 

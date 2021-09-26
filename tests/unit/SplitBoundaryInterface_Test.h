@@ -6,6 +6,12 @@
 
 namespace csmp {
 
+template<size_t> class Region;
+template<size_t> class Face;
+template<size_t> class InterFace;
+template<size_t> class Model;
+
+
 /**
     SplitBoundaryInterface_Test unit test tests all functionality related to the creation and destruction of SplitBoundary objects.
     Refer to SplitBoundaryInterface_Test for tests of the functionality of the SplitBoundary itself.

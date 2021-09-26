@@ -1,24 +1,40 @@
 #include "RandomFieldGenerator.h"
+#include "Exception.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
 namespace csmp {
 
 template<size_t dim>
-RandomFieldGenerator<dim>::RandomFieldGenerator(random_generator rng)
- : rng_(std::move(rng)), m1_(0,0), m2_(0,0), m3_(0,0), pi_(csmp::PI), k_(0), fname("random_permeability_field.txt")
+RandomFieldGenerator<dim>::RandomFieldGenerator()
+ : m1_(0,0), m2_(0,0), m3_(0,0), pi_(csmp::PI), k_(0), fname("random_permeability_field.txt")
 {
 
 } 
 
 template<size_t dim>
 Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
-{    
+{
+   // ascertain that we get a different distribution everytime we call this
+    std::random_device rd;
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+  std::mt19937 gen(seed);
   std::uniform_real_distribution<> rndist(0,1);
+  
   m1_.Resize(m,n);
   for(size_t i=0; i<m; i++) {
       for(size_t j=0; j<n; j++)
-          m1_(i,j) = rndist(rng_);
+          m1_(i,j) = rndist(gen);
     } 
   return m1_;
 }
@@ -27,11 +43,24 @@ Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
 template<size_t dim>
 Matrix& RandomFieldGenerator<dim>::NormalRandomMatrix(size_t m, size_t n)
 {    
+    std::random_device rd;
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+  std::mt19937 gen(seed);
   std::normal_distribution<> rndist(0,1);
+  
   m3_.Resize(m,n);
   for (size_t i=0; i<m; i++) {
       for (size_t j=0; j<n; j++) {
-          m3_(i,j) = rndist(rng_);
+          m3_(i,j) = rndist(gen);
       }
   }
   return m3_;

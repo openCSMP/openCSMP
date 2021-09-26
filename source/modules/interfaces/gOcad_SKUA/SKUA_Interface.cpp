@@ -11,6 +11,8 @@
 #include "Region.h"
 #include "Boundary.h"
 #include "Point.h"
+#include "CSMP_highLevelUtilities.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 

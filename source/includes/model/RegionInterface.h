@@ -1,18 +1,15 @@
 #ifndef REGIONS_INTERFACE_H
 #define REGIONS_INTERFACE_H
 
-#include "Region.h"
-#include "ErrorHandler.h"
-#include "ModelTopology.h"
-#include "PropertyConstraints.h"
-#include "CSMP_highLevelUtilities.h"
-
-#include <map>
-#include <set>
-#include <utility>
-#include <tuple>
+#include "CSMP_definitions.h"
 
 namespace csmp {
+
+class PropertyConstraints;
+class ModelTopology;
+template<size_t> class Region;
+template<size_t> class Element;
+template<size_t> class Point;
 
 /**
 @brief Policy of the class model for the management of its labeled subdomains that

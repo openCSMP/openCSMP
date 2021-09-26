@@ -7,6 +7,9 @@
 #include "CSMP_mathUtilities.h"
 #include "Element.h"
 
+#include "Exception.h"
+#include "ErrorHandler.h"
+
 using namespace std;
 
 namespace csmp {

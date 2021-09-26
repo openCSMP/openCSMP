@@ -14,6 +14,7 @@
 #include "InputDataManager.h"
 #include "VSet.h"
 #include "VTU_Interface.h"
+#include "ModelTopology.h"
 
 using namespace std;
 

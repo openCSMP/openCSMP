@@ -2,8 +2,9 @@
 #define CSMP_READ_WRITE_H
 
 #include "CSMP_definitions.h"
-
-// STL vectors & deques
+#include "PropertyDatabase.h"
+#include "ArrayVariable.h"
+#include "FlaggedArrayVariable.h"
 
 namespace csmp {
 
@@ -130,6 +131,165 @@ bool binaryFileRead( std::fstream& fp, std::string& );
 bool binaryFileWrite( std::fstream& fp, const char* str);
 
 bool binaryFileRead( std::fstream& fp, char str[]);
+
+
+// OUTPUT OF DISCRETISED CSMP VARIABLES TO FILE
+
+/// additions by P. Lang (2012); SKM @todo explain what this is good for
+namespace femDataOutputDispatch {
+
+template<class Var>
+inline void initVariable( csmp::Index, Var& ) {}
+
+template<>
+inline void initVariable( csmp::Index key, ArrayVariable& var )
+{ var.Resize( key.dataDepth ); }
+
+template<>
+inline void initVariable( csmp::Index key, FlaggedArrayVariable& var )
+{ var.Resize( key.dataDepth ); }
+
+} // femDataOutputDispatch
+
+
+
+  /// domain (Model, Region...) variables binary IO
+template<class V, class D, size_t dim>
+bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE vtype )
+{
+  size_t vcount( pref.VariableCount( domain.Placement(), vtype ) );
+  fp.write( (char*)&vcount, sizeof( size_t ) );
+  std::set<std::string> propList;
+  pref.ListProperties( domain.Placement(), vtype, propList );
+  for ( std::set<std::string>::const_iterator it( propList.begin() ); it != propList.end(); ++it )
+  {
+    V var;
+    Index key( pref.StorageKey( it->c_str() ) );
+    femDataOutputDispatch::initVariable( key, var );
+    domain.Read( key, var );
+    binaryFileWrite( fp, it->c_str() );
+    if ( !var.Out( fp ) )
+      return false;
+  }
+  return true;
+}
+
+
+template<class V, class D, size_t dim>
+bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
+{
+  size_t vcount( -1 );
+  fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
+  for ( size_t i( 0 ); i < vcount; ++i )
+  {
+    V var;
+    char propName[NAME_STRING];
+    binaryFileRead( fp, propName );
+    if ( pref.IsDefined( propName ) ) {
+      Index key( pref.StorageKey( propName ) );
+      femDataOutputDispatch::initVariable( key, var );
+      if ( !var.In( fp ) )
+        return false;
+      domain.Store( key, var );
+    }else{
+      if ( !var.In( fp ) )
+        return false;
+    }
+  }
+  return true;
+}
+
+
+template<class D, size_t dim>
+bool domainVariablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref )
+{
+  if ( !variablesOut<ScalarVariable>( fp, domain, pref, SCALAR ) )
+    return false;
+  if ( !variablesOut<VectorVariable<dim> >( fp, domain, pref, VECTOR ) )
+    return false;
+  if ( !variablesOut<TensorVariable<dim> >( fp, domain, pref, TENSOR ) )
+    return false;
+  if ( !variablesOut<ArrayVariable>( fp, domain, pref, ARRAY ) )
+    return false;
+  if ( !variablesOut<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY ) )
+    return false;
+  return true;
+}
+
+
+template<class D, size_t dim>
+bool domainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref )
+{
+  if ( !variablesIn<ScalarVariable>( fp, domain, pref, SCALAR ) )
+    return false;
+  if ( !variablesIn<VectorVariable<dim> >( fp, domain, pref, VECTOR ) )
+    return false;
+  if ( !variablesIn<TensorVariable<dim> >( fp, domain, pref, TENSOR ) )
+    return false;
+  if ( !variablesIn<ArrayVariable>( fp, domain, pref, ARRAY ) )
+    return false;
+  if ( !variablesIn<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY ) )
+    return false;
+  return true;
+}
+
+
+/**
+    selective variable reader, that extracts only those variables from file whose names are contained in the target set
+    @author SKM
+    @date 6/9/2021
+ */
+template<class V, class D, size_t dim>
+bool selectedVariablesIn( std::fstream& fp, D& domain,
+                          const PropertyDatabase<dim>& pref,
+                          VARIABLE_TYPE, const std::set<std::string>& selection )
+{
+  size_t vcount( -1 );
+  fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
+  for ( size_t i( 0 ); i < vcount; ++i )
+    {
+      V var;
+      char propName[NAME_STRING];
+      binaryFileRead( fp, propName );
+      if ( selection.find( propName ) != selection.end() && pref.IsDefined( propName ) ) {
+        Index key( pref.StorageKey( propName ) );
+        femDataOutputDispatch::initVariable( key, var );
+        if ( !var.In( fp ) )
+          return false;
+        domain.Store( key, var );
+      }else{
+        if ( !var.In( fp ) )
+          return false;
+      }
+    }
+  return true;
+}
+
+
+/**
+    selective variable reader, that extracts only those variables from file whose names are contained in the target set
+    @author SKM
+    @date 6/9/2021
+ */
+template<class D, size_t dim>
+bool selectedDomainVariablesIn( std::fstream& fp, D& domain,
+                                const PropertyDatabase<dim>& pref,
+                                const std::set<std::string>& selection )
+{
+  if ( !selectedVariablesIn<ScalarVariable>( fp, domain, pref, SCALAR, selection ) )
+    return false;
+  if ( !selectedVariablesIn<VectorVariable<dim> >( fp, domain, pref, VECTOR, selection ) )
+    return false;
+  if ( !selectedVariablesIn<TensorVariable<dim> >( fp, domain, pref, TENSOR, selection ) )
+    return false;
+  if ( !selectedVariablesIn<ArrayVariable>( fp, domain, pref, ARRAY, selection ) )
+    return false;
+  if ( !selectedVariablesIn<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY, selection ) )
+    return false;
+  return true;
+}
+
+
 
 
 

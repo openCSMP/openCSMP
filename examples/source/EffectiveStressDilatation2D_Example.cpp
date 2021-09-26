@@ -9,6 +9,7 @@
 #include "EffectiveStressDilatation2D_Example.h"
 
 #include "Model.h"
+#include "ModelTopology.h"
 #include "SplitBoundary.h"
 #include "Region.h"
 #include "ModelTime.h"

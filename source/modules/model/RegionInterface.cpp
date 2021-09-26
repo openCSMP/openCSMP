@@ -1,8 +1,14 @@
 #include "RegionInterface.h"
+#include "Region.h"
 #include "Model.h"
+#include "PropertyConstraints.h"
+#include "ModelTopology.h"
 #include "MeshManagementUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "UnionFind.h"
+#include "binaryReadWrite.h"
+#include "ErrorHandler.h"
+
 
 using namespace std;
 

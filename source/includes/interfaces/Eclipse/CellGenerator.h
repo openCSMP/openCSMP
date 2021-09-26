@@ -9,6 +9,9 @@
 #include "IsoparametricLinearPrism.h"
 #include "IsoparametricLinearLineElement.h"
 
+#include "ErrorHandler.h"
+
+
 namespace csmp {
 
 enum class FACE_TYPE : std::int8_t {

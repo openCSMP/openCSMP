@@ -3,13 +3,18 @@
 #include "SplitBoundary.h"
 #include "Model.h"
 #include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "smoothElementData.h"
 #include "MeshManager.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
 #include "IsoparametricLinearLineElement.h" 
 #include "IsoparametricLinearTriangle.h" 
-#include "IsoparametricLinearQuadrilateral.h" 
+#include "IsoparametricLinearQuadrilateral.h"
+#include "binaryReadWrite.h"
+
+#include "Exception.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 

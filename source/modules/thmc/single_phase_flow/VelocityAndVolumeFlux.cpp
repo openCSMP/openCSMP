@@ -4,6 +4,7 @@
 #include "STL_utilities.h"
 #include "Element.h"
 #include "Face.h"
+#include "ErrorHandler.h"
 #include "CSMP_physical_constants.h"
 
 using namespace std;

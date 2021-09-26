@@ -8,6 +8,7 @@
 #include "CSMP_mathUtilities.h"
 #include "vectorOperations.h"
 #include "Element.h"
+#include "Exception.h"
 
 using namespace std;
 

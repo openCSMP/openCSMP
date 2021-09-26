@@ -1,5 +1,6 @@
 #include "TextInterface.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "Matrix.h"
 #include "ArrayVariable.h"
 #include "Region.h"

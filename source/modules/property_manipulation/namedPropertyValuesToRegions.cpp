@@ -7,6 +7,7 @@
 //
 
 #include "namedPropertyValuesToRegions.h"
+#include "ErrorHandler.h"
 #include "Model.h"
 #include "Region.h"
 

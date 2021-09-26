@@ -7,6 +7,8 @@
 //
 
 #include "SKUA_FiniteElementMeshInterface_Test.h"
+#include "MeshManagementUtilities.h"
+#include "CSMP_highLevelUtilities.h"
 #include "SKUA_Model.h"
 #include "Element.h"
 #include "VTK_Interface.h"

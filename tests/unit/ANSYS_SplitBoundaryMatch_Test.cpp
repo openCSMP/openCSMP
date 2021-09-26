@@ -2,10 +2,12 @@
 
 #include "ANSYS_Model3D.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "PL_Utilities.h"
 #include "VTK_Interface.h"
 #include "variableOperations.h"
 #include "CSMP_mathUtilities.h"
+#include "MeshManagementUtilities.h"
 
 #include "Model.h"
 #include "VTU_Interface.h"

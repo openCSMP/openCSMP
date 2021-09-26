@@ -208,8 +208,7 @@ void RelativePermeabilityModel_Test::run()
    try {
         PropertyHandle<1U>  a( *model_ptr_, "fracture aperture", SCALAR, ELEMENT );
         model_ptr_->InputPropertyValue( "fracture aperture",  makeScalar(PLAIN,1.0e-3) );
-        random_generator rng;
-        randomPerturb( rng, *model_ptr_, "fracture aperture", 20. ); // by 20 percent
+        randomPerturb( *model_ptr_, "fracture aperture", 20. ); // by 20 percent
         relperm_model = new FourarLenormand<DIM>( model_ptr_->Database(), "fracture aperture" );
         Test( *relperm_model, true );
         delete relperm_model;

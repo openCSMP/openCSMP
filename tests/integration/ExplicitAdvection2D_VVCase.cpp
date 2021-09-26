@@ -1,4 +1,5 @@
 #include "ExplicitAdvection2D_VVCase.h"
+#include "ModelTopology.h"
 
 // CSMP Files
 #include "Model.h"

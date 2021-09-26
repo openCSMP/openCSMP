@@ -3185,6 +3185,959 @@ std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y,
 
 
 
+/**
+
+Method obtains the range of values for the physical variable that it
+is prompted for by the user. For vector and tensor variables, the
+length and the minimum/maximum eigenvalues are returned (check whether
+the latter actually happens).
+
+With the optional boolean argument (default=true), the user can determin
+the return value. As the default, the maximum obtained value is returned;
+else the minimum.
+
+@section arguments Input Arguments
+
+The model to be examined, the name of the target physical variable, and
+targeted return value (true->maximum, false->minimum of target variable).
+
+The second version of this method also takes an I/O handler as argument
+in order to log the calculated values to file etc.
+
+@return Either the maximum (default) or the minimum value of the target variable.
+The result is printed to the screen.
+
+*/
+template<size_t  dim>
+double64 printRangeOfVariable( const Model<dim>& sg,
+                               const char* var, bool max_or_min )
+ {
+     double64 pmin, pmax;
+     sg.MinMaxOf( var, pmin, pmax );
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
+     cout << var <<"': "<< pmin <<" to "<< pmax << endl;
+          
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+template<size_t  dim>
+double64 printRangeOfVariable( const Model<dim>& sg,
+                               Standard_IO_Handler& io,
+                               const char* var, bool max_or_min )
+ {
+     double64  pmin, pmax;
+     sg.MinMaxOf( var, pmin, pmax );
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
+     cout << var <<"': "<< pmin <<" to "<< pmax << endl;
+     
+     // recording the measured variable value range at given timestep
+     double64& model_time( ModelTime::Instance().modelTime );
+     char   info[100];
+     sprintf( info, "%lf", model_time );
+     string var_info(info);
+     var_info += " secs, range of'";
+     var_info += var;
+     var_info += "' [";
+     var_info += sg.Database().Unit(var);
+     var_info += "]: ";
+     sprintf( info, "%lf", pmin );
+     var_info += info;
+     var_info += " to ";
+     sprintf( info, "%lf", pmax );
+     var_info += info;
+     
+     io.RecordInformation( var_info );
+     
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+
+/// as above, but for individual model regions
+template<size_t  dim>
+double64 printRangeOfVariable( const Model<dim>& sg,
+                               const char* group, const char* var, bool max_or_min )
+ {
+     double64  pmin, pmax;
+     const PropertyDatabase<dim>& p_ref = sg.Database();
+     const PLACEMENT place = sg.Database().Placement(var);
+     
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
+       sg.Region( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
+     else {
+          cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
+          return std::numeric_limits<double64>::signaling_NaN();
+       }
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << var <<"' in subdomain of model '"<< group <<"': "<< pmin <<" to "<< pmax << endl;
+          
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+
+template<size_t  dim>
+double64 printRangeOfVariable( const Model<dim>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group,
+                                const char* var, bool max_or_min )
+ {
+     double64& model_time( ModelTime::Instance().modelTime );
+     double64         pmin, pmax;
+     const PropertyDatabase<dim>& p_ref = sg.Database();
+     const PLACEMENT place = sg.Database().Placement(var);
+
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
+       sg.Region( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
+     else {
+          cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
+          return std::numeric_limits<double64>::signaling_NaN();
+       }
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << var <<"': "<< pmin <<" to "<< pmax <<" in subdomain of model '"<< group <<"'"<< endl;
+     
+     // recording the measured variable value range at given timestep
+     char info[100];
+     sprintf( info, "%lf", model_time );
+     string var_info(info);
+     var_info += info;
+     var_info += ", region: ";
+     var_info += group;
+     var_info += ", secs, range of '";
+     var_info += var;
+     var_info += "' [";
+     var_info += p_ref.Unit(var);
+     var_info += "]: ";
+     sprintf( info, "%lf", pmin );
+     var_info += info;
+     var_info += " to ";
+     sprintf( info, "%lf", pmax );
+     var_info += info;
+     
+     io.RecordInformation( var_info );
+     
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+
+
+
+/**
+
+Method prints the physical dimensions of the model and returns either
+the maximum or the intermediate axis, depending on the value of its
+second argument.
+
+returns intermediate (true) or maximum (false) model dimensions.
+
+@section arguments Input Arguments
+
+The current model and a boolean flag. For 'true' the intermediate axis
+is returned, if 'false' the long axis is returned.
+
+@return The intermediate or long axis of the current model.
+*/
+template<size_t  dim>
+double64  printModelDimensions( const Model<dim>& sg, bool intermed_or_max )
+ {
+    Point<dim> xyz_min, xyz_max;
+    sg.MinMaxCoordinates( xyz_min, xyz_max );
+    cout <<"\nprintModelDimensions: Dimensions of model (meters): "<< endl;
+    cout <<"xmin, xmax (horizontal right):    "<< xyz_min[0] <<" "<< xyz_max[0] << endl;
+    if ( dim != 1U ) cout <<"ymin, ymax (vertical upward):     "<< xyz_min[1] <<" "<< xyz_max[1] << endl;
+    if ( dim == 3U ) cout <<"zmin, zmax (horizontal to front): "<< xyz_min[2] <<" "<< xyz_max[2] << endl << endl;
+
+    set<double64,greater<double64> >  axis;
+    axis.insert( xyz_max[0] - xyz_min[0] );
+    if ( dim != 1U ) axis.insert( xyz_max[1] - xyz_min[1] );
+    if ( dim == 3U ) axis.insert( xyz_max[2] - xyz_min[2] );
+    
+    set<double64,greater<double64> >::const_iterator  it = axis.begin();
+    
+    if ( !intermed_or_max ) return *it;
+    
+    if ( axis.size() >= 2U ) it++;
+    
+    return *it;
+
+ } // end printModelDimensions
+
+
+
+
+/**
+    calculates the center of gravity of the model by averaging
+    the barycenter locations of all highest-dimensional elements.
+*/
+template<size_t  dim>
+Point<dim>  centerOfGravity( const Model<dim>& model )
+ {
+    const Region<dim>& mref(model.Region("Model"));
+    typename vector<Element<dim>*>::const_iterator it(mref.ElementsBegin());
+    Point<dim>  center((*it)->BaryCenter());
+    double64    counter(0.);
+    it++;
+   
+    while( it != mref.ElementsEnd() ) {
+         if ( dim == 3U ) {
+               if ( (*it)->FE()->IsVolumeElement() ) {
+                    center += (*it)->BaryCenter();
+                    counter += 1.;
+                 }
+            }
+         else if ( dim == 2U ) {
+               if ( (*it)->FE()->IsSurfaceElement() ) {
+                    center += (*it)->BaryCenter();
+                    counter += 1.;
+                 }
+            }
+         else /* 1D */ {
+                    center += (*it)->BaryCenter();
+                    counter += 1.;
+            }
+         it++;
+      }
+    center /= counter;
+    return center;
+
+ } // end CenterOfGravity
+
+template Point<1U>  centerOfGravity( const Model<1U>& );
+template Point<2U>  centerOfGravity( const Model<2U>& );
+template Point<3U>  centerOfGravity( const Model<3U>& );
+
+
+
+// template instantiations
+template
+double64  printModelDimensions( const Model<1U>& sg, bool intermed_or_max );
+
+template
+double64  printRangeOfVariable( const Model<1U>& sg,
+                                const char* var, bool max_or_min );
+template
+double64  printRangeOfVariable( const Model<1U>& sg,
+	                              Standard_IO_Handler& io, const char* var,
+	                              bool max_instead_of_min );
+template
+double64  printRangeOfVariable( const Model<1U>& sg,
+                                const char* group, const char* var, bool max_or_min );
+template
+double64  printRangeOfVariable( const Model<1U>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group, const char* var,
+                                bool max_instead_of_min );
+
+template
+double64  printModelDimensions( const Model<2U>& sg, bool intermed_or_max );
+
+template
+double64  printRangeOfVariable( const Model<2U>& sg,
+                                const char* var, bool max_or_min );
+template
+double64  printRangeOfVariable( const Model<2U>& sg,
+                                Standard_IO_Handler& io, const char* var,
+                                bool max_instead_of_min );
+template
+double64  printRangeOfVariable( const Model<2U>& sg,
+                                const char* group, const char* var, bool max_or_min );
+template
+double64  printRangeOfVariable( const Model<2U>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group, const char* var,
+                                bool max_instead_of_min );
+
+template
+double64  printModelDimensions( const Model<3U>& sg, bool intermed_or_max );
+
+template
+double64  printRangeOfVariable( const Model<3U>& sg,
+                                const char* var, bool max_or_min );
+template
+double64  printRangeOfVariable( const Model<3U>& sg,
+                                Standard_IO_Handler& io, const char* var,
+                                bool max_instead_of_min );
+template
+double64  printRangeOfVariable( const Model<3U>& sg,
+                                const char* group, const char* var, bool max_or_min );
+template
+double64  printRangeOfVariable( const Model<3U>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group, const char* var,
+                                bool max_instead_of_min );
+
+
+
+
+
+
+
+/**
+     Smoothes scalar element variable by extrapolating it to the nodes and back-interpolating it to barycenters
+     Apart from the mname of element variable to be smoothed, the name of the temporary node variable needs to be specified.
+     Uses the dummy variable 'dummy node' to store the interim result
+*/
+template<size_t dim>
+void smoothElementVariable( Model<dim>& model, const char* region, const char* element_var, const char* temp_node_var, size_t n_smoothing_cycles )
+ {
+    csmp::Index eprop_key = model.Database().StorageKey(element_var);
+    csmp::Index nprop_key = model.Database().StorageKey(temp_node_var);
+    assert( nprop_key.place == NODE );
+
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+    if ( eprop_key.place != ELEMENT ) {
+         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed variable must be placed on the element" );
+         return;
+      }
+    if ( nprop_key.place != NODE ) {
+         csmp_error.notice( ERROR, "smoothElementVariable", "Temporary variable must be placed on the node" );
+         return;
+      }
+    if ( nprop_key.type != eprop_key.type ) {
+         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed and temporary variable must have the same type" );
+         return;
+      }
+    if ( n_smoothing_cycles == 0 ) {
+         csmp_error.notice( WARNING, "smoothElementVariable", "smoothing cycles=0; nothing was done" );
+         return;
+      }
+   
+    // smoothing
+    Region<dim> ref = model.Region(region);
+   
+    for ( size_t i=0U; i<n_smoothing_cycles; i++ ) {
+         ref.ExtrapolateElementToNodeProperty( element_var, temp_node_var );
+         ref.InterpolateNodeToElementProperty( temp_node_var, element_var );
+      }
+
+ } // end smoothElementVariable
+
+template void smoothElementVariable( Model<1U>&, const char*, const char*, const char*, size_t );
+template void smoothElementVariable( Model<2U>&, const char*, const char*, const char*, size_t );
+template void smoothElementVariable( Model<3U>&, const char*, const char*, const char*, size_t );
+
+
+
+
+/**
+
+Randomly perturbs the values of a scalar target property by subtracting an
+amount which varies between minus zero and the specified percentage of the
+original maximum value of the target property.
+
+@section arguments Input Arguments
+
+RandomPerturb() requires the name of the property which shall be perturbed
+and the percentage of the original maximum value of the property by which
+the property shall be perturbed, in order to operate.
+
+@section application Application
+
+Processes which are critically dependent on initial conditions can profit
+from a 'noisy' input signal when one tries to simulate natural behaviour.
+
+@section messages Messages
+
+RandomPerturb() only handles scalar variables and it will therefore report
+an error and return without executing when one tries to perturb a vector or
+tensor variable.
+
+*/
+template<size_t dim>
+void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max_value )
+ {
+    csmp::Index prop_key = sg.Database().StorageKey(prop);
+    Region<dim>&  sgroup(sg.Region("Model"));
+    
+    if ( prop_key.type != SCALAR )
+      throw csmp::Exception( ERROR, "Model::RandomPerturb",
+                                     "Can only perturb scalar values so far" );
+
+    double64 dmin, dmax;
+    ScalarVariable  sc;
+    sgroup.MinMaxOf( prop, dmin, dmax );
+    
+    std::random_device rd;
+    // seed value is designed specifically to make initialization
+    // parameters of std::mt19937 (instance of std::mersenne_twister_engine<>)
+    // different across executions of application
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+    std::mt19937 gen(seed);
+
+    // generating floating point values
+    std::uniform_real_distribution<double> rngen(0, by_percent_of_max_value * dmax * 0.01);
+
+    switch( prop_key.place )
+      {
+         case NODE:
+              for ( typename vector<Node<dim>*>::iterator
+                    nit=sgroup.NodesBegin(); nit!=sgroup.NodesEnd(); nit++ )
+                {
+                   (*nit)->Read( prop_key, sc );
+                   sc -= rngen(gen);
+                   (*nit)->Store( prop_key, sc );
+                }
+           break;
+         case ELEMENT_INTEGRATION_POINT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+                for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+                {
+                   (*eit)->Read( i, prop_key, sc );
+                   sc -= rngen(gen);
+                   (*eit)->Store( i, prop_key, sc );
+                }
+           break;
+         case ELEMENT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+                {
+                   (*eit)->Read( prop_key, sc );
+                   sc -= rngen(gen);
+                   (*eit)->Store( prop_key, sc );
+                }
+           break;
+         default:
+           cout <<"\nrandomPerturb: property placement not handled."<< endl;
+      }
+      
+ } // end RandomPerturb
+
+template void randomPerturb( Model<1U>&, const char*, double64 );
+template void randomPerturb( Model<2U>&, const char*, double64 );
+template void randomPerturb( Model<3U>&, const char*, double64 );
+
+
+
+
+
+
+/**
+    convert the flag(s) of a variable into integer values stored in its number part
+    
+    @attention works only for scalars and basic property placements.
+    
+    @author SKM 21/5/2014
+*/
+template<size_t dim>
+void flagToNumber( Model<dim>& model, const char* variable )
+ {
+    csmp::Region<dim>&  mref(model.Region("Model"));
+    csmp::Index  prop_key = model.Database().StorageKey(variable);
+   
+    if ( prop_key.type != SCALAR )
+      throw csmp::Exception( ERROR, "flagToNumber:", "method has not been implemented yet" );
+
+    switch( prop_key.place )
+      {
+         case NODE:
+              for ( typename vector<Node<dim>*>::iterator
+                    nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                {
+                   // overwrites variable value with integer value of its flag enum
+                   double64 value = static_cast<double64>( (*nit)->Status(prop_key) );
+                   (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
+                }
+           break;
+         case ELEMENT_INTEGRATION_POINT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
+                for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+                {
+                   double64 value = static_cast<double64>( (*eit)->Status(prop_key) );
+                   (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
+                }
+           break;
+         case ELEMENT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
+                {
+                   double64 value = static_cast<double64>( (*eit)->Status(prop_key) );
+                   (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
+                }
+           break;
+         default:
+           cout <<"\nflagToNumber: property placement not handled."<< endl;
+      }
+   
+ } // end flagToNumber
+
+template void flagToNumber( Model<1U>&, const char* );
+template void flagToNumber( Model<2U>&, const char* );
+template void flagToNumber( Model<3U>&, const char* );
+
+
+
+
+/**
+    convert the flag(s) of first variable into double values stored in the second variable
+    
+    @attention works only for node-property placement.
+    
+    @author SKM 8/12/2016
+*/
+template<size_t dim>
+void flagToNumber( Model<dim>& model, const char* flag_variable, const char* value_variable )
+ {
+    csmp::Region<dim>&  mref(model.Region("Model"));
+    csmp::Index  flag_key = model.Database().StorageKey(flag_variable);  // input
+    csmp::Index  prop_key = model.Database().StorageKey(value_variable); // output
+ 
+    if ( flag_key.type != prop_key.type )
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must be of the same type." );
+
+    if ( flag_key.place != prop_key.place )
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must have the same placement." );
+
+    if ( flag_key.type != SCALAR and flag_key.type != VECTOR )
+      throw csmp::Exception( ERROR, "flagToNumber:", "method handles only scalar and vector variables." );
+  
+    switch( prop_key.place )
+      {
+         case NODE:
+              if ( flag_key.type == SCALAR ) {
+                  for ( typename vector<Node<dim>*>::iterator
+                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                    {
+                       // retrieves status of the flag variable
+                       double64 value = static_cast<double64>( (*nit)->Status(flag_key) );
+                       // overwrites value of value variable with integer value of its flag enum
+                       (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
+                    }
+                }
+              else if ( flag_key.type == VECTOR ) {
+                  VectorVariable<dim> vc;
+                  for ( typename vector<Node<dim>*>::iterator
+                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                    {
+                       (*nit)->Read( flag_key, vc );
+                       for ( size_t i=0U; i<dim; ++ i )
+                         vc(i) = static_cast<double64>( vc.Flag(i) );
+                       (*nit)->Store( prop_key, vc );
+                    }
+                }
+           break;
+         default:
+           throw csmp::Exception( ERROR, "flagToNumber:", "property placement not handled." );
+      }
+   
+ } // end flagToNumber
+
+template void flagToNumber( Model<1U>&, const char*, const char* );
+template void flagToNumber( Model<2U>&, const char*, const char* );
+template void flagToNumber( Model<3U>&, const char*, const char* );
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+
+StripDomainEdgesFor() tests the spatial distribution of a scalar input element
+property for outliers and removes these. Property outliers are elements
+that constitute a property value boundary with >=two of their faces.
+When such elements are detected, their property value is set to the
+average of the surrounding elements. The property is changed only if
+the outside property is either smaller or greater than the element
+property.
+
+@section arguments Input Arguments
+
+The name of the property whose variations over the mesh shall be defined
+by relatively smooth boundaries.
+
+@section implementation Implementation
+
+The method using the connections among elements to test whether the
+element represents a property outlier.
+
+@section application Application
+
+The method is used for regular meshes which were created from pixel-type
+input data. In this case the method allows to capitalize on the element
+splits which were created by the Triangulator meshing tool along
+property boundaries. The result are boundaries with 45o segments that
+superseed the stepwise property boundaries of the original mesh.
+
+Numerous calls to StripDomainEdgesFor() also allow to erode regions
+defined by stepwise property variations.
+
+@section messages Messages
+
+The method will always warn the user that the model properties are
+modified. If the target property is not an element property, the
+simulation will be halted by a fatal error.
+
+If the target property is not a scalar variable the method will return
+without modifying the target property and it will report a warning.
+
+ */
+void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
+ {
+     const csmp::Index  prop_key = sg.Database().StorageKey(el_prop);
+
+     if ( prop_key.place != ELEMENT )
+       throw csmp::Exception( FATAL_ERROR, "stripDomainEdgesFor<2U>::StripDomainEdgesFor",
+                                    "The requested property is not an element variable");
+
+     if ( prop_key.type != SCALAR ) {
+          throw csmp::Exception( WARNING, "stripDomainEdgesFor<double64oat,2U>::StripDomainEdgesFor",
+                                   "only SCALAR variables are handled so far");
+          return;
+       }
+     
+    map<size_t,ScalarVariable > new_sc_data;
+    ScalarVariable              sc;
+
+    csmp::Region<2>&  super_group(sg.Region("Model"));
+
+    for ( size_t n=0U; n<super_group.Elements(); n++ )
+       {
+          //  for elements that are not located at model boundary
+          if ( super_group.E(n)->AtBoundary() == NOT )
+            {
+               // getting the scalar variable data
+               super_group.E(n)->Read( prop_key, sc );
+              
+               // checking whether element-property should be changed
+               // because the element is located at a region boundary
+               // ---------------------------------------------------
+               // 1. counting the surrounding values that are different from el-value
+               double64     sc_sum(0U);
+               unsigned int counter(0U);
+               for ( size_t i=0U; i<super_group.E(n)->Neighbors(); i++ ) {
+                   assert( super_group.E(n)->Neighbor(i) != nullptr );
+                   if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) {
+                        sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
+                        counter++;
+                     }
+                 }
+               // if more than 2 neighbors have a different property value, this value
+               // is assigned to the element
+               // TODO: if were are not dealing with triangular elements, this number (2U) is not correct
+               if ( counter >= 2U ) sc = sc_sum / static_cast<double64>(counter);
+          
+               // storing the new values of only those elements that must be changed
+               new_sc_data[ n ] = sc;
+            }
+       }
+    
+     // modyfying those elements that were found to be isolated
+     // this implies that isolated squares are removed
+     for ( map<size_t,ScalarVariable >::iterator
+           sc_it=new_sc_data.begin(); sc_it!=new_sc_data.end(); sc_it++ )
+       super_group.E( (*sc_it).first )->Store( prop_key, (*sc_it).second );
+       
+     cout <<"\n\nstripDomainEdgesFor<2U>::StripDomainEdgesFor: "<< new_sc_data.size() <<" '"<< el_prop;
+     cout <<"' domain-edge elements have been modified to create a smoother boundary."<< endl;
+            
+   } // end StripRoughDomainEdgesFor
+
+
+
+
+
+
+
+
+
+
+
+/**
+     Assigns chosen node coordinate (x or y or z) to the target node variable.
+*/
+template<size_t dim>
+void assignNodeCoordinatesTo( Model<dim>& sg, const char coordinate, const char* node_var )
+ {
+      csmp::Index nvar_key = sg. Database().StorageKey(node_var);
+      assert( nvar_key.place == NODE );
+      
+      Region<dim>&  sgref(sg.Region("Model"));
+
+      const typename vector<Node<dim>* >::iterator  nodesEnd(sgref.NodesEnd());
+      
+      if ( coordinate == 'x' or coordinate == 'X' )
+        for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->x() ) );
+        
+      if ( dim > 1 and (coordinate == 'y' or coordinate == 'Y') )
+        for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->y() ) );
+
+      if ( dim > 2 and (coordinate == 'z' or coordinate == 'Z') )
+        for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key ), (*nit)->z() ) );
+ 
+ }  // end
+
+template void assignNodeCoordinatesTo( Model<1U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<2U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<3U>&, const char, const char* );
+
+
+
+
+/**
+
+Function evaluates that the VSet connectivity is exactly the same
+as the data in the current Model!
+
+The Model is used as the reference case.
+
+*/
+template<size_t dim>
+bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
+ {
+    bool correct(true);
+   
+    const Region<dim>&  gref(sg.Region("Model"));
+    if ( gref.Elements() != vset.Elements() ) cout <<"\ncompareConnectivity: element number mismatch."<< endl;
+    if ( gref.Nodes() != vset.Vertices() ) cout <<"\ncompareConnectivity: node number mismatch."<< endl;
+  
+    // 1. plist
+    for ( uint32 i=0U; i<gref.Elements(); i++ )
+      {
+         for ( uint32 j=0U; j<gref.E(i)->Nodes(); j++ )
+           if ( gref.E(i)->N(j)->Idx() != vset.Plist( gref.E(i)->Idx(), j ) ) {
+                 cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->N(j)->Idx();
+                 cerr <<" vs. vset nid: "<< vset.Plist( gref.E(i)->Idx(), j );
+                 correct = false;
+             }
+      }
+    
+    // 2. pfverts
+    for ( uint32 i=0U; i<gref.Elements(); i++ )
+      {
+         for ( uint32 j=0U; j<gref.E(i)->Neighbors(); j++ )
+           if ( gref.E(i)->Neighbor(j) and
+                static_cast<int32>(gref.E(i)->Neighbor(j)->Idx()) != vset.Pfvert( gref.E(i)->Idx(), j ) ) {
+                 cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->Neighbor(j)->Idx();
+                 cerr <<" vs. vset nid: "<< vset.Pfvert( gref.E(i)->Idx(), j );
+                 correct = false;
+             }
+      }
+   
+   return correct;
+    
+ } // end compare
+
+template bool compareConnectivity<2U>( const Model<2U>&, const VSet<2U>& );
+template bool compareConnectivity<3U>( const Model<3U>&, const VSet<3U>& );
+
+
+
+
+
+
+
+
+/**
+    Imposes a user-defined upper or lower limit on the value of the variable of interest.
+    
+    For a vector variable, its length gets scaled to the limit value.
+    For a tensor variable nothing can be done yet, so an exception is thrown.
+    
+    @author SKM 7/9/2014
+*/
+template<size_t dim>
+void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double64 limit_value )
+ {
+    Region<dim>&  rref(model.Region(region));
+    csmp::Index   prop_key(model.Database().StorageKey(variable));
+    double64      min, max;
+    model.Database().RangeOf( variable, min, max );
+   
+    if ( upper_limit && limit_value > max ) {
+         cerr <<"\nIntended upper limit on variable '"<< variable <<"' exceeds that defined in database: ";
+         cerr << limit_value <<" vs. "<< max << endl;
+         throw csmp::Exception( ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
+      }
+    if ( !upper_limit && limit_value < min ) {
+         cerr <<"\nIntended lower limit on variable '"<< variable <<"' is lower than that defined in database: ";
+         cerr << limit_value <<" vs. "<< min << endl;
+         throw csmp::Exception( ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
+      }
+   
+    if ( prop_key.type == SCALAR ) {
+        ScalarVariable  sc;
+        if ( upper_limit )
+          switch( prop_key.place )
+            {
+               case MODEL:
+                  model.Store( prop_key, makeScalar( model.Status(prop_key), std::min(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case REGION:
+                  rref.Store( prop_key, makeScalar( rref.Status(prop_key), std::min(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case ELEMENT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                      double64 val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::min(limit_value,val) ) );
+                   }
+                 break;
+               case ELEMENT_INTEGRATION_POINT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                    for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
+                         double64 val = (*it)->Read( i, prop_key );
+                         (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::min(limit_value,val) ) );
+                      }
+                 break;
+               case NODE:
+                  for ( typename vector<Node<dim>*>::iterator
+                        it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
+                      double64 val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::min(limit_value,val) ) );
+                   }
+                 break;
+               default:
+                 throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
+            }
+          else // if a lower limit shall be imposed
+          switch( prop_key.place )
+            {
+               case MODEL:
+                  model.Store( prop_key, makeScalar( model.Status(prop_key), std::max(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case REGION:
+                  rref.Store( prop_key, makeScalar( rref.Status(prop_key), std::max(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case ELEMENT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                      double64 val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::max(limit_value,val) ) );
+                   }
+                 break;
+               case ELEMENT_INTEGRATION_POINT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                    for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
+                         double64 val = (*it)->Read( i, prop_key );
+                         (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::max(limit_value,val) ) );
+                      }
+                 break;
+               case NODE:
+                  for ( typename vector<Node<dim>*>::iterator
+                        it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
+                      double64 val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::max(limit_value,val) ) );
+                   }
+                 break;
+               default:
+                 throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
+            }
+      }
+   
+    // for a vector variable, its length gets scaled to the limit value
+    else if ( prop_key.type == VECTOR ) {
+        VectorVariable<dim>  vc;
+        switch( prop_key.place )
+          {
+             case MODEL: {
+                    model.Read( prop_key, vc );
+                    const double64 vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    // if the vector is too long it gets scaled back
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    model.Store( prop_key, vc );
+                 }
+               break;
+             case REGION: {
+                    rref.Read( prop_key, vc );
+                    const double64 vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    rref.Store( prop_key, vc );
+                 }
+               break;
+             case ELEMENT:
+                for ( typename vector<Element<dim>*>::iterator
+                      it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                    (*it)->Read( prop_key, vc );
+                    const double64 vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    (*it)->Store( prop_key, vc );
+                 }
+               break;
+             case ELEMENT_INTEGRATION_POINT:
+                for ( typename vector<Element<dim>*>::iterator
+                      it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                  for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
+                       (*it)->Read( i, prop_key, vc );
+                        const double64 vmagnitude = vc.Length();
+                        assert( vmagnitude > 0. );
+                        if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                        else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                       (*it)->Store( i, prop_key, vc );
+                    }
+               break;
+             case NODE:
+                for ( typename vector<Node<dim>*>::iterator
+                      it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
+                    (*it)->Read( prop_key, vc );
+                    const double64 vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    (*it)->Store( prop_key, vc );
+                 }
+               break;
+             default:
+               throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
+          }
+      }
+    else throw csmp::Exception( ERROR, "imposeLimitOn:", "variable type not recognized." );
+
+ } // end imposeLimitOn
+
+template void imposeLimitOn( Model<1U>&, const char*, const char*, bool, double64 );
+template void imposeLimitOn( Model<2U>&, const char*, const char*, bool, double64 );
+template void imposeLimitOn( Model<3U>&, const char*, const char*, bool, double64 );
+
+
+
+
+
+
+
+
 
   // explicit instantiations
 template class RegionInterface<1U, Model>;

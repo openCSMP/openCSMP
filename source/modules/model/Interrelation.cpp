@@ -5,6 +5,7 @@
 #include "InterFace.h"
 #include "Element.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "Region.h"
 #include "Model.h"
 #include "Exception.h"

@@ -1,6 +1,8 @@
 #include "PressureSaturationInitializer.h"
 #include "Model.h"
 #include "PropertyDatabase.h"
+#include "Exception.h"
+#include "ErrorHandler.h"
 
 namespace csmp {
 

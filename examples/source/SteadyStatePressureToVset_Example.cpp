@@ -1,6 +1,7 @@
 #include "SteadyStatePressureToVset_Example.h"
 
 #include "Model.h"
+#include "ModelTopology.h"
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "ConstantFactor.h"

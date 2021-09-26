@@ -9,6 +9,7 @@
 #include "Model.h"
 #include "Exception.h"
 #include "CSMP_highLevelUtilities.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 

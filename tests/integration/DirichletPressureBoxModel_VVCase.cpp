@@ -10,6 +10,8 @@
 #include "ANSYS_Interface.h"
 #include "ANSYS_Model3D.h"
 #include "MeshDiagnostics.h"
+#include "ModelTopology.h"
+#include "CSMP_highLevelUtilities.h"
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
 #include "Region.h"

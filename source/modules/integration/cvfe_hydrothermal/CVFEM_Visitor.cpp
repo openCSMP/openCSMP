@@ -1,4 +1,7 @@
 #include "CVFEM_Visitor.h"
+#include "ErrorHandler.h"
+#include "Exception.h"
+
 
 using namespace std;
 

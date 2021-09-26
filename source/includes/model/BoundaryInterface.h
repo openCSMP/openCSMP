@@ -167,9 +167,6 @@ class BoundaryInterface {
     /// creates edge Boundary objects for box-shaped model from side boundaries
     bool EstablishEdgeBoundariesOfBoxShapedModel();
 
-      /// @todo DEPRECATE use boundary information from VSet to create lower-dimensional regions of edge elements
-    bool EstablishEdgeRegionsOfBoxShapedModel( const VSet<dim>&  );
-
  protected:
    std::map<std::string,csmp::Boundary<dim> >   faceBoundaryMap_; ///< storage of the boundaries
 };

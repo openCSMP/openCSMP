@@ -22,6 +22,7 @@
 
 #include "ErrorHandler.h"
 #include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 
 // #define REGION_DEBUG
 

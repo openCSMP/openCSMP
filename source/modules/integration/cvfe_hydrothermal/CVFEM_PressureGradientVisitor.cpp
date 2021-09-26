@@ -1,4 +1,5 @@
 #include "CVFEM_PressureGradientVisitor.h"
+#include "Exception.h"
 
 using namespace std;
 

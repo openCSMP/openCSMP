@@ -1,5 +1,6 @@
 #include "SplitBoundaryInterface_Test.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "VTU_Interface.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"

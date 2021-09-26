@@ -57,8 +57,7 @@ void Averaging_Example::Run()
   vtu.OutputDataToVTU( "ExtrapolationByCount", "nodal fluid volume source count", "Model", static_cast<int>(0) );
 
   // creating a perturbed field and extrapolating this
-  random_generator float_generator;
-  randomPerturb( float_generator, model, "fluid volume source", 20. );
+  randomPerturb( model, "fluid volume source", 20. );
 
   region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
   region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );

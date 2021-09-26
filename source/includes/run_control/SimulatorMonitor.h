@@ -67,7 +67,6 @@ private:
     SimulatorMonitor();
 
     Model<dim>& mref_;
-    ErrorHandler& error_handler_;
     std::string file_prefix_;
 
     std::list<std::string>  integrated_property_names_;

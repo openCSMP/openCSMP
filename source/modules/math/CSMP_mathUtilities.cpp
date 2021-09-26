@@ -211,12 +211,26 @@ return 0.;
 }
 
 
-void  vector_randomize( random_generator& rng, vector<double64>& x, double64 scale_fac )
+void  vector_randomize( vector<double64>& x, double64 scale_fac )
  {
-     std::uniform_real_distribution<> rndist(0,scale_fac);
+   // get a different seed every time 
+    std::random_device rd;
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+    std::mt19937 gen(seed);
+    std::uniform_real_distribution<> rndist(0,scale_fac);
+ 
     for ( vector<double64>::iterator it=x.begin();
           it!=x.end(); it++ )
-      *it = rndist(rng);
+      *it = rndist(gen);
 
  } // end vector_randomize
 

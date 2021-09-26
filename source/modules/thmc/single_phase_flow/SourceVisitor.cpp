@@ -1,5 +1,7 @@
 #include "SourceVisitor.h"
 #include "Model.h"
+#include "Exception.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
