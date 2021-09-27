@@ -115,9 +115,13 @@ public:
   //
   // ==============================================================
 
-  /// by location only, the parent element storage is not initialised; TODO: is this method needed
-  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&,
-                                  bool only_add_if_not_collocated, BOX_BOUNDARY = NOT );
+  /// by location only, no parent element  gets connected
+  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
+
+  /// only if there is not already a node at this location, else a pointer to that node is returned, no parent element  gets connected
+  Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
+                                                const LocalVariables&,
+                                                BOX_BOUNDARY = NOT );
 
   /// if neighbors are not supplied, method tries to find neighbors through the parent connectivity of the nodes
   Element<dim>*	const AddElement( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,

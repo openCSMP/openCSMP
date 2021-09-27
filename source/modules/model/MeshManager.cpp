@@ -789,21 +789,80 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
 
 
 /**
-Inserts the corresponding node, nulling all the connection pointers.
-   TODO: register with NodeManifoldManager
+    Inserts a new Node at the desired location.  No connection are made.
 */
 template<size_t dim>
-Node<dim>* const MeshManager<dim>::AddNodeAt( const Point<dim>& location, const LocalVariables& lvars,
-                                              bool only_add_if_not_collocated, BOX_BOUNDARY bdry )
+Node<dim>* const MeshManager<dim>::AddNodeAt( const Point<dim>& location,
+                                              const LocalVariables& lvars,
+                                              BOX_BOUNDARY bdry )
 {
-  if ( !only_add_if_not_collocated ) {
-       nodes_.push_back( new Node<dim>( nodes_.size(), location, lvars, bdry ) );
-       return (nodes_.back());
-    }
-    
-  throw csmp::Exception( ERROR, "MeshManager<dim>::AddNodeAt", "Test for collocation not implemented yet.");
+   nodes_.push_back( new Node<dim>( nodes_.size(), location, lvars, bdry ) );
+   return (nodes_.back());
 }
 
+
+/**
+    Inserts  a new Node at the desired point, but only if there is not already a node there.
+    
+    @return if there is already a node at the point location, a pointer to that node is returned
+    
+        Search algorithm for the collocated node uses  "nearby" node as a starting point.
+        
+        Idea: start from nearby Node
+        - loop over the neighbor nodes of the node ranking them in terms of their proximity from the target point
+        - move to closest node and then repeat (remembering the shortest distance)
+        - repeat until node is found while the distance decreases
+        - if distance increases, the node does not exist and will be created
+        - allow  to move across manifold member nodes in order to cross split boundaries
+        
+            /// the number of nodes that this Node is connected with
+    size_t           Neighbors() const;
+    /// access to any of these nodes
+    Node<dim>*       Neighbor( size_t ) const;
+
+*/
+template<size_t dim>
+Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt,
+                                                            size_t nearby_node,
+                                                            const LocalVariables& nvars,
+                                                            BOX_BOUNDARY bflag )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+ 
+   // if the node location needs to be compared with existing ndes
+   if ( nearby_node >=nodes_.size() ) {
+        csmp_error.notice( WARNING, "MeshManager<dim>::AddNodeAt",
+                          "nearby Node not contained in Mesh:", to_string(nearby_node) );
+        // using the last node
+        nearby_node = nodes_.size() - 1U;
+     }
+
+   // searching the mesh tree for a node with the same location (using the provided point as a start location)
+   Node<dim>*            nptr( nodes_[nearby_node] );
+   double64              new_distance(pt.DistanceTo(nptr->Coordinate())), old_distance(1e30);
+   map<double64,size_t>  distances;
+   // estimating a tolerance on the basis of the distance of the point to the node and the first node
+   const double64 tolerance = 1.0e-7 * (new_distance + pt.DistanceTo(nodes_[0]->Coordinate())) / 2.;
+   while ( old_distance > new_distance )
+     {
+        // tree travel: looping the neighbor nodes of the current node, finding the one that is the closest to the point
+        const size_t n_nbors( nptr->Neighbors() );
+        for ( size_t i=0U; i<n_nbors; ++i )
+          distances.insert( make_pair( pt.DistanceTo( nptr->Neighbor(i)->Coordinate() ), i ) );
+        // since map defaults to less, its first entry is the node we want
+        nptr = nptr->Neighbor( (*distances.begin()).second );
+        old_distance = new_distance;
+        new_distance = (*distances.begin()).first;
+        assert( nptr != nullptr );
+     }
+   // TODO: deal with NodeManifolds - if IsManifold()...
+   // if a node matching the point location was found, a pointer to it is returned
+   if ( fabs(new_distance) < tolerance ) return nptr;
+  
+   // else a new node is created
+   nodes_.push_back( new Node<dim>( nodes_.size(), pt, nvars, bflag ) );
+   return (nodes_.back());
+}
 
 
 /**

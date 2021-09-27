@@ -271,54 +271,36 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 
 bool MeshManager_Test::TestElementDeletionAndInsertion()
 {
-	// check the numbering of the nodes and elements from the mesh
-	set<csmp::Element<3U>*> discovered_elmts;
-	set<csmp::Node<3U>*>    discovered_nodes;
-	deque<csmp::Node<3U>*>  current_nodes;
+  MeshManager<3U>& mesh(model3d_->Mesh());
+  const size_t     orig_n_elmts(mesh.Elements());
+	// 0. the first element is copy constructed and stored, and then deleted
 
-	discovered_nodes.insert(model3d_->Mesh().N(0));
-	current_nodes.push_back(model3d_->Mesh().N(0));
-
-	while (!current_nodes.empty()) {
-		const csmp::Node<3U>*  n_ptr(*current_nodes.begin());
-		for (size_t i = 0U; i < n_ptr->Parents(); i++) {
-			for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++) {
-				if (j != n_ptr->ParentNodeNumber(i)) {
-					pair<typename set<csmp::Node<3U>*>::iterator, bool>
-						new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
-					if (new_node.second) current_nodes.push_back(n_ptr->Parent(i)->N(j));
-				}
-			}
-			discovered_elmts.insert(n_ptr->Parent(i));
-		}
-		current_nodes.pop_front();
-	}
-	// 1. delete an element from the model
-	// the first element from the model is stored into a new object, and then delete it
-	auto it = discovered_elmts.begin();
-	csmp::Element<3U> first_element(*(*it));
-
-	model3d_->Mesh().Erase(*it);
-	_test(model3d_->Mesh().Elements() == discovered_elmts.size() - 1);
-
-	model3d_->Mesh().Add( csmp::Element<3U>(first_element) );
-	_test(model3d_->Mesh().Elements() == discovered_elmts.size());
+	csmp::Element<3U> first_element( (*mesh.E(0)) );
+	// 1. delete elements 1 from the model
+	mesh.Erase( mesh.ElementsBegin(), next(mesh.ElementsBegin(),1) );
+  
+	_test(mesh.Elements() == orig_n_elmts - 1);
 
 	// 2. create a new element with its nodes
 	IsoparametricLinearPyramid fe;
 	LocalVariables				     node_vars = model3d_->Database().LocalVariablesAt(NODE);
 	LocalVariables				     elmt_vars = model3d_->Database().LocalVariablesAt(ELEMENT);
 	IntegrationPointVariables	 intp_vars = model3d_->Database().IntegrationPointVariablesAt(ELEMENT);
+  // copy the first node
+  Node<3U>    n1( *mesh.N(0) );
+  const size_t nearby_node(4);
+	Node<3U>*		ptr_n1 = mesh.AddNodeAtUniqueLocation( n1.Coordinate(), nearby_node, node_vars );
+  // method must return pointer to node 1 pointer
+  _test( ptr_n1 == mesh.N(0) );
 
-	Node<3U>&	n1 = *(model3d_->Mesh().RootNode(0));
-	Node<3U>*		ptr_n1 = model3d_->Mesh().AddIfUnique(n1); // if it is already in the mesh, returns the existing node's pointer
-	Node<3U>*		ptr_n2 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(26., 27., 0.0), node_vars, NOT) ); // otherwise, create new node and return its pointer
-	Node<3U>*		ptr_n3 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(29., 30., 0.0), node_vars, NOT) );
-	Node<3U>*		ptr_n4 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(31., 32., 0.0), node_vars, NOT) );
-	Node<3U>*		ptr_n5 = model3d_->Mesh().Add( Node<3U>(model3d_->Mesh().Nodes() + 1, Point<3U>(34., 35., 0.0), node_vars, NOT) );
+  // create new nodes and return pointers to them
+	Node<3U>*		ptr_n2 = mesh.AddNodeAt( Point<3U>(26., 27., 0.0), node_vars, NOT );
+	Node<3U>*		ptr_n3 = mesh.AddNodeAt( Point<3U>(29., 30., 0.0), node_vars, NOT );
+	Node<3U>*		ptr_n4 = mesh.AddNodeAt( Point<3U>(31., 32., 0.0), node_vars, NOT );
+	Node<3U>*		ptr_n5 = mesh.AddNodeAt( Point<3U>(34., 35., 0.0), node_vars, NOT );
 
-  size_t elmt_id = model3d_->Mesh().Elements(); // new element's id is equal to the number of the existing elements in the model
-	Element<3U>*	ptr_e1 = model3d_->Mesh().Add( csmp::Element<3U>(elmt_id, &fe, elmt_vars, intp_vars, NOT) );
+  size_t elmt_id = mesh.Elements(); // new element's id is equal to the number of the existing elements in the model
+	Element<3U>*	ptr_e1 = mesh.Add( csmp::Element<3U>(elmt_id, &fe, elmt_vars, intp_vars, NOT) );
 
 	// assign node connectivity where it is connected one of the last element's nodes
 	ptr_n1->ResizeParentStorage(ptr_n1->Parents() + 1);
@@ -340,27 +322,27 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	ptr_e1->Assign(2, ptr_n3);
 	ptr_e1->Assign(3, ptr_n4);
 	ptr_e1->Assign(4, ptr_n5);
-	ptr_e1->Assign(0, model3d_->Mesh().RootNode(0)->Parent(0));
+	ptr_e1->Assign(0, mesh.RootNode(0)->Parent(0));
 
 	// checking the total number of nodes and elements (after insertion)
 	std::cout << "\nNodes    discovered   after insertion: " << discovered_nodes.size();
 	std::cout << "\nElements discovered   after insertion: " << discovered_elmts.size();
-	std::cout << "\nNodes    of the model after insertion: " << model3d_->Mesh().Nodes();
-	std::cout << "\nElements of the model after insertion: " << model3d_->Mesh().Elements();
+	std::cout << "\nNodes    of the model after insertion: " << mesh.Nodes();
+	std::cout << "\nElements of the model after insertion: " << mesh.Elements();
 
-	_test(model3d_->Mesh().Nodes() == (discovered_nodes.size() + 4));
-	_test(model3d_->Mesh().Elements() == (discovered_elmts.size() + 1));
+	_test(mesh.Nodes() == (discovered_nodes.size() + 4));
+	_test(mesh.Elements() == (discovered_elmts.size() + 1));
 
 	// 2. deleting these nodes again
-	model3d_->Mesh().Erase(ptr_e1);
+	mesh.Erase(ptr_e1);
 
 	// checking the total number of nodes and elements (after deletion)
 	std::cout << "\nNodes    discovered   after deletion: " << discovered_nodes.size();
 	std::cout << "\nElements discovered   after deletion: " << discovered_elmts.size();
-	std::cout << "\nNodes    of the model after deletion: " << model3d_->Mesh().Nodes();
-	std::cout << "\nElements of the model after deletion: " << model3d_->Mesh().Elements();
+	std::cout << "\nNodes    of the model after deletion: " << mesh.Nodes();
+	std::cout << "\nElements of the model after deletion: " << mesh.Elements();
 
-	_test(model3d_->Mesh().Elements() == discovered_elmts.size());
+	_test(mesh.Elements() == discovered_elmts.size());
 
 	discovered_elmts.clear();
 	discovered_nodes.clear();
