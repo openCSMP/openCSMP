@@ -6,7 +6,6 @@
 #include "Face.h"
 #include "InterFace.h"
 #include "Region.h"
-#include "NodeManifoldManager.h"
 
 namespace csmp {
 
@@ -16,6 +15,8 @@ template<size_t> struct IndexToPointerMapping;
 template<size_t> class PropertyDatabase;
 template<size_t> class VSet;
 template<size_t> class FiniteVolumeStencilManager;
+template<size_t> class NodeManifoldManager;
+enum class ManifoldType : int8_t;
 
 /**
 @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
@@ -239,8 +240,8 @@ private:
   std::deque<Element<dim>*>   elements_;       ///<  pointers elements
   std::deque<Face<dim>*>      faces_;          ///<  pointers faces making up the boundaries
   std::deque<InterFace<dim>*> interfaces_;     ///<  pointers to interfaces making up the split boundaries
-  
-  NodeManifoldManager<dim>    node_manifold_manager_; ///<  node manifolds of SplitBoundaries
+  // only used in models that contain node SplitBoundaries / IterFace objects
+  NodeManifoldManager<dim>*   node_manifold_manager_ = nullptr; ///<  node manifolds of SplitBoundaries
 };
 
 } // end namespace csmp

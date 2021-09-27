@@ -226,7 +226,7 @@ class VData {
     /// iterator to CSMP finite element type of first face stored in mesh
     std::vector<int32>::const_iterator                 PelmtFacesBegin() const;
     /// iterator to CSMP finite element type of first interface stored in mesh
-    std::vector<int32>::const_iterator                 PelmtInterfacesEnd() const;
+    std::vector<int32>::const_iterator                 PelmtInterfacesBegin() const;
   
     // node iterators for subsets of the Plist
     /// Iterator to beginning of elements in the Plist
@@ -267,6 +267,12 @@ class VData {
 
     
     // PERSISTANCE (storing mesh in binary file)
+    
+    /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
+    typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
+    
+    /// checks for collocated vertices into transfer data structure
+    bool ExtractNodeManifolds( vertexManifoldIndices& ) const;
   
     /// write mesh to supplied binary file
     void OutBinary( std::fstream& ) const;
@@ -274,11 +280,11 @@ class VData {
     /// read mesh from supplied binary file
     void InBinary( std::fstream& );
   
-    /// initialise VData=mesh connectivity structures from binary file
-    void InText( std::ifstream& );
-  
     /// wrtie connectivity structure to ASCII text file
     void OutASCII( const char* file ) const;
+  
+    /// initialise VData=mesh connectivity structures from binary file
+    void InText( std::ifstream& );
   
     /// print connectivity information to screen
     void Out() const;

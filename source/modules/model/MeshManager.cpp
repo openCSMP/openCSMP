@@ -1,10 +1,10 @@
 #include "MeshManager.h"
 #include "MeshManagementUtilities.h"
+#include "NodeManifoldManager.h"
 #include "PropertyDatabase.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
 #include "VSet.h"
-//#include "AP_BoolVector.h"
 #include "ErrorHandler.h"
 #include "PropertyData.h"
 #include "Box.h"
@@ -60,6 +60,8 @@ MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref,
 template<size_t dim>
 MeshManager<dim>::~MeshManager()
   {
+     delete node_manifold_manager_;
+     
      // erasing nodes, elements, faces, and interfaces
      for ( auto& nit : nodes_ ) {
           delete nit;
@@ -644,7 +646,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
     
   // ------------------------------------------------------------------------------
   // 6. Assigning parent elements (these are the elements that share the node) and
-  // their respective internal node-id numbers to the nodes
+  //    their respective internal node-id numbers to the nodes
   // -------------------------------------------------------------------------------
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: assigning parent element information to nodes..." << endl;
@@ -672,6 +674,16 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
 
    if ( csmp_error.Verbose() )
      cout << "\nMeshManager<" << dim << ">::Initialize: forming regions for contiguous subdomains..." << endl;
+     
+     
+  // ------------------------------------------------------------------------------
+  // 7. reconstructing the NodeManifolds if any
+  // -------------------------------------------------------------------------------
+  if ( !interfaces_.empty() ) {
+       VData::vertexManifoldIndices  indexes;
+       vset.ExtractNodeManifolds( indexes );
+       node_manifold_manager_ = new NodeManifoldManager( indexes, nodes_ );
+    }
 
    return true;
   
@@ -1268,7 +1280,7 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
          new_nptr->Assign( nptr_inside->Manifold() );
       }
     else // a new manifold is created with the provided geometric classifier
-      node_manifold_manager_.NewManifold( nptr_inside, new_nptr, geometry );
+      node_manifold_manager_->NewManifold( nptr_inside, new_nptr, geometry );
 
     return new_nptr;
   }

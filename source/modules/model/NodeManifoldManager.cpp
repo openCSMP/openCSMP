@@ -8,6 +8,75 @@ using namespace std;
 
 namespace csmp {
 
+/**
+    Preferred constructor of  node manifolds, including the case where these are read back from a CSMP native binary fileset
+    
+    @todo make sure that the map:key nodes are ideed contained in the manifolds.
+*/
+template<size_t dim>
+NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indices,
+                                               deque<Node<dim>*>& nptrs )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( indices.empty() ) {
+        csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
+                          "no manifold information contained in vertexManifoldIndicxes map; no manifolds were constructed" );
+        return;
+      }
+    if ( nptrs.empty() ) {
+        csmp_error.notice( ERROR, "NodeManifoldManager::constructor:",
+                          "no nodes available to create manifolds from" );
+        return;
+      }
+    // checking that the deque does indeed have ther required node entries
+    if ( indices.size() > nptrs.size() )
+      csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
+                        "it appears that more manifold indices are supplied than nodes" );
+
+#ifdef DEBUG
+// checking that the key nodes in vertexManifoldIndices map are also contained in the corresponding sets
+for ( auto nit : indices ) {
+    set<size_t> mnodes;
+    for ( auto mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
+    // if the key node is not contained this is reported
+    if ( mnodes.find(nit.first) == mnodes.end() )
+        csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
+                          "manifold does not contain key node: ", to_string(nit.first) );
+  }
+#endif
+
+    // creating the node manifolds
+    // NB:    node_id, connected nodes and their INTERFACE_SIDE identifiers
+    //     map<size_t,set<pair<size_t,int8_t> > >
+    vector<Node<dim>*>      nodes;
+    vector<INTERFACE_SIDE>  iface_sides;
+    for ( auto nit : indices ) {
+        const size_t n_nodes(nit.second.size());
+        nodes.reserve( n_nodes );
+        iface_sides.reserve( n_nodes );
+        for ( auto mf_nodes : nit.second ) {
+             nodes.push_back( nptrs[mf_nodes.first] );
+             iface_sides.push_back( static_cast<INTERFACE_SIDE>(mf_nodes.second) );
+          }
+        // geometric qualifier is determined through a consistency check once the manifold is in place
+        node_manifolds_.push_back( new NodeManifold<dim>( nodes, iface_sides, ManifoldType::INTERFACE ) );
+        node_manifolds_.back()->GeometricClassifier( consistencyCheck( node_manifolds_.back() ) );
+        // cleaning up (note that clear keeps the allocated memory!)
+        nodes.clear();
+        iface_sides.clear();
+      }
+      
+    cout <<"\nNodeManifoldManager(custom ctor): constructed "<< node_manifolds_.size();
+    cout <<" node manifolds from the input data.\n";
+    
+ } // end custom constructor
+
+
+
+
+
+
 // disconnecting and deleting the node manifolds
 template<size_t dim>
 NodeManifoldManager<dim>::~NodeManifoldManager<dim>()

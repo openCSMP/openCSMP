@@ -5,7 +5,6 @@
 
 namespace csmp {
 
-template<size_t> class NodeManifold;
 template<size_t> class Node;
 
 /**
@@ -18,6 +17,13 @@ template<size_t> class Node;
 template<size_t dim>
 class NodeManifoldManager {
   public:
+       /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
+    typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
+    
+    /// Re-constructor when node manifolds are read back from a CSMP native binary fileset
+    NodeManifoldManager( const vertexManifoldIndices&,
+                         std::deque<Node<dim>*>& node_pointer_storage );
+
     NodeManifoldManager()                                        = default;
     NodeManifoldManager( const NodeManifoldManager& )            = delete;
     NodeManifoldManager& operator=( const NodeManifoldManager& ) = delete;

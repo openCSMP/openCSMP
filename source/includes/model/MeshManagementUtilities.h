@@ -77,12 +77,11 @@ size_t findContiguousMeshPatch( csmp::Node<dim>* const node_pointer, std::deque<
 template<size_t dim>
 size_t connectNeighborsUsingNodeParents( Element<dim>* const );
 
-// TODO: not sure how to do this in a generic way
+// TODO: implement: not sure how to do this in a generic way
 template<size_t dim>
 void updateParentElementConnectivity( Node<dim>* const );
 
-
-/// TODO: Using the parent elements of its nodes, finds its higher-dimensional neighbor on inside or outside
+/// Using the parent elements of its nodes, finds its higher-dimensional neighbor on inside or outside
 template<size_t dim>
 Element<dim>* const findInnerHigherDimensionalNeighborFromNodes( Element<dim>* const, INTERFACE_SIDE );
 

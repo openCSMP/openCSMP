@@ -394,7 +394,7 @@ std::vector<int32>::const_iterator  VData::PelmtFacesBegin() const {
     return std::next( pelmt.begin(), first_face_ );
  }
 /// iterator to CSMP finite element type of first interface stored in mesh
-std::vector<int32>::const_iterator  VData::PelmtInterfacesEnd() const {
+std::vector<int32>::const_iterator  VData::PelmtInterfacesBegin() const {
     return std::next( pelmt.begin(), first_interface_ );
  }
 
@@ -2761,6 +2761,84 @@ void VData::EstablishNeighborConnectivity2D()
     pfverts = nbors;
        
  } // end EstablishNeighborConnectivity2D
+
+
+
+
+/**
+    vertex manifolds: pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
+    typedef std::deque<std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
+    
+    Checks for collocated vertices into transfer data structure.
+*/
+bool VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
+ {
+    indexes.clear();
+    
+    // if there are no interfaces, method returns false
+    if (  first_interface_ == first_face_ ) {
+         cerr <<"\nVData::ExtractNodeManifolds: does not contain any manifolds.\n";
+         return false;
+      }
+      
+   // creating manifold data from the interface node indices stored in plist
+   //for ( auto it=PelmtInterfacesBegin(); it!=PelmtEnd(); ++it ) - element type info
+   for ( auto it=PlistInterFacesBegin(); it!=PlistInterFacesEnd(); ++it )
+     {
+        // the first half of the interface vertices represents inside nodes
+        assert( !(*it).empty() );
+        const size_t plist_entries((*it).size());
+        assert( (plist_entries & 1) == 0 /* even number */ );
+        const size_t iface_nodes(plist_entries/2);
+        
+        // creating a new entry in the manifold map or getting an iterator to an existing one
+        // map<size_t,set<pair<size_t,int8_t> > > vertexManifoldIndices
+        for ( size_t i=1U; i<iface_nodes; ++i ) {
+              const pair<size_t,int8_t> vertex( make_pair( (*it)[i], INSIDE ) );
+              // trying the insertion
+              auto manif_it = indexes.insert( make_pair( (*it)[i], set<pair<size_t,int8_t> >({vertex}) ) );
+              // if this is an existing record the vertex is added to that one
+              if ( manif_it.second == false )
+                (*manif_it.first).second.insert( vertex );
+          }
+        for ( size_t i=iface_nodes; i<plist_entries; ++i ) {
+               const pair<size_t,int8_t> vertex( make_pair( (*it)[i], OUTSIDE ) );
+              // trying the insertion
+              auto manif_it = indexes.insert( make_pair( (*it)[i], set<pair<size_t,int8_t> >({vertex}) ) );
+              // if this is an existing record the vertex is added to that one
+              if ( manif_it.second == false )
+                (*manif_it.first).second.insert( vertex );
+          }
+     }
+     
+   // now trying to match the vertices of intervening elements, if any
+   deque<long64> intervening_elmts;
+   for ( auto it=next(PfvertsBegin(),first_interface_); it!=PfvertsEnd(); ++it ) {
+         assert( (*it).size() > 2U );
+         // the last entry in each pfvert record is the index of the intervening element or bflag
+         const auto idx = (*it).back();
+         if ( idx >= 0 ) // if there is an intervening element
+           intervening_elmts.push_back( idx );
+     }
+     
+   // if there are intervening elements, they are added to the manifolds
+   if ( !intervening_elmts.empty() ) {
+        for ( auto elmt : intervening_elmts )
+          for ( auto it=PlistBegin(elmt); it!=PlistEnd(elmt); ++it ) {
+              const pair<size_t,int8_t> vertex( make_pair( (*it), MIDDLE ) );
+              // trying the insertion
+              auto manif_it = indexes.insert( make_pair( (*it), set<pair<size_t,int8_t> >({vertex}) ) );
+              // if this is an existing record the vertex is added to that one
+              if ( manif_it.second == false )
+                (*manif_it.first).second.insert( vertex );
+          }
+     }
+      
+   return true;
+   
+ } // end ExtractNodeManifolds
+
+
 
  
 } // end namespace csmp

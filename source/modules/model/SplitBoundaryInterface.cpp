@@ -6,6 +6,7 @@
 #include "MeshManagementUtilities.h"
 #include "smoothElementData.h"
 #include "MeshManager.h"
+#include "NodeManifold.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
 #include "IsoparametricLinearLineElement.h" 

@@ -105,6 +105,9 @@ class NodeManifold {
 template<size_t dim>
 ManifoldType consistencyCheck( const NodeManifold<dim>* const );
   
+/// determines the type of manifold on the basis of its node members and their BOX_BOUNDARY flags
+//template<size_t dim>
+//ManifoldType manifoldType( const NodeManifold<dim>* const );
 
 
 } // end csmp

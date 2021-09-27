@@ -870,7 +870,6 @@ template void floodFillViaIndexes( const Region<3U>&, size_t, set<size_t>&  );
         @todo deal with manifolds, disambiguating them on the basis of element orientation (only elements int the same plane or aligned elements should be neighbors)
 
         @TODO: no need to use set, use sort() then unique() on the result vector, searching will be much faster
-
 */
 template<size_t dim>
 void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
