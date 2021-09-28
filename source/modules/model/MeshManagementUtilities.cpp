@@ -28,7 +28,7 @@ boundary conditions and should be eliminated.
 @author SKM
 */
 template<size_t dim>
-size_t detectElementsWithAllNodesOnBoundary( MeshManager<dim>& mmgr, set<size_t>& belmts )
+size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>& mmgr, set<size_t>& belmts )
 {
   belmts.clear();
 
@@ -37,8 +37,8 @@ size_t detectElementsWithAllNodesOnBoundary( MeshManager<dim>& mmgr, set<size_t>
 
   // traversal of the existing mesh nodes to find all its elements
   size_t boundary_only_elements( 0U );
-  for ( typename set<Element<dim>*>::const_iterator
-       it=mmgr.ElementsBegin(); it!=mmgr.ElementsEnd(); ++it ) {
+  for ( typename deque<Element<dim>*>::const_iterator
+        it=mmgr.ElementsBegin(); it!=mmgr.ElementsEnd(); ++it ) {
       const size_t nodes((*it)->Nodes());
       size_t       counter(0U);
       for ( size_t i=0U; i<nodes; ++i )
@@ -47,11 +47,12 @@ size_t detectElementsWithAllNodesOnBoundary( MeshManager<dim>& mmgr, set<size_t>
             belmts.insert( (*it)->Idx() );
             boundary_only_elements++;
         }
-   }
-  	
+    }
   return boundary_only_elements;
 }
 
+template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<2U>&, set<size_t>& );
+template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<3U>&, set<size_t>& );
 
 
 
@@ -326,6 +327,18 @@ template size_t  findStandAloneMeshPatches( deque<InterFace<3U>*>::const_iterato
                                             deque<InterFace<3U>*>::const_iterator,
                                             map<string,deque<InterFace<3U>*> >& );
 
+// 2D version
+template size_t  findStandAloneMeshPatches( deque<Element<2U>*>::const_iterator,
+                                            deque<Element<2U>*>::const_iterator,
+                                            map<string,deque<Element<2U>*> >& );
+
+template size_t  findStandAloneMeshPatches( deque<Face<2U>*>::const_iterator,
+                                            deque<Face<2U>*>::const_iterator,
+                                            map<string,deque<Face<2U>*> >& );
+
+template size_t  findStandAloneMeshPatches( deque<InterFace<2U>*>::const_iterator,
+                                            deque<InterFace<2U>*>::const_iterator,
+                                            map<string,deque<InterFace<2U>*> >& );
 
 
 

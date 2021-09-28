@@ -339,13 +339,13 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName 
     pair<int32, int32>   spatialDimensions = subdomain.ElementSpatialDimensions();
 
     // 1. disconnecting elements from their neighbors and deleting them
-    meshMgr.template Erase<Element>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+    meshMgr.template Delete<Element>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
 
     // 2. Rebuild node connections if necessary
     if ( spatialDimensions.second == dim ) {
          // This is a region whose dimension is dim, so interior
          // nodes must be removed.
-         meshMgr.template Erase<Node>( subdomain.NodesBegin(), subdomain.PerimeterNodesBegin() );
+         meshMgr.template Delete<Node>( subdomain.NodesBegin(), subdomain.PerimeterNodesBegin() );
          // Update node connections on the region's perimeter nodes that were retained.
          meshMgr.RebuildParentRelationships( subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd() );
       }

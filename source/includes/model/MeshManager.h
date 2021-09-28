@@ -115,6 +115,8 @@ public:
   //
   // ==============================================================
 
+// TODO: check whether there are any use cases where the neighbor information can be applied during construction; else remove this optional argument
+
   /// by location only, no parent element  gets connected
   Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
 
@@ -154,6 +156,7 @@ public:
   /// adds Face that caps a higher-dimensional Element at the model boundary
   Face<dim>* const AddBoundaryFace( csmp::Element<dim>* const innerParent,
                                     size_t local_face_id,
+ //                                   const FiniteElementManager& fe_manager, // put into MeshManager
                                     const LocalVariables&,
                                     const IntegrationPointVariables&,
                                     const std::vector<Face<dim>*>& face_neighbors ); ///< optional
@@ -177,30 +180,32 @@ public:
                                    ManifoldType geometry );
 
  
-  /// updates the connectivity of the mesh after its modification mesh
+  /// updates all connectivity (elements, faces, interfaces, nodes to parents); call after  mesh modification
   void UpdateConnectivity();
+  // TODO: create version of method that permits selective update of cells
 
   /// after disconnecting the nodes from potential manifolds, and parent elements, these are deleted
-  size_t Erase( typename std::deque<Node<dim>*>::iterator first,
-                typename std::deque<Node<dim>*>::iterator last );
+  size_t Delete( typename std::deque<Node<dim>*>::iterator first,
+                 typename std::deque<Node<dim>*>::iterator last );
 
-  /// erases the supplied sequence of elements returning the number of erasures, the pointers to the erased elements are nulled. @todo update connectivity of affected mesh
-  size_t Erase( typename std::deque<Element<dim>*>::iterator first,
-                typename std::deque<Element<dim>*>::iterator last );
+  /// deletes supplied sequence of elements returning their number; pointers are nulled for erase via  EraseNullPointerCells()
+  // TODO: update connectivity of remaining mesh, in the meantime, call UpdateConnectivity()
+  size_t Delete( typename std::deque<Element<dim>*>::iterator first,
+                 typename std::deque<Element<dim>*>::iterator last );
 
-  size_t Erase( typename std::deque<InterFace<dim>*>::iterator first,
-                typename std::deque<InterFace<dim>*>::iterator last );
+  size_t Delete( typename std::deque<InterFace<dim>*>::iterator first,
+                 typename std::deque<InterFace<dim>*>::iterator last );
 
-  size_t Erase( typename std::deque<Face<dim>*>::iterator first,
-                typename std::deque<Face<dim>*>::iterator last );
+  size_t Delete( typename std::deque<Face<dim>*>::iterator first,
+                 typename std::deque<Face<dim>*>::iterator last );
                 
   /// for any type of cells using a vector iterator
   template<template<size_t> class CELL>
-  size_t Erase( typename std::vector<CELL<dim>*>::iterator first,
-                typename std::vector<CELL<dim>*>::iterator last );
+  size_t Delete( typename std::vector<CELL<dim>*>::iterator first,
+                 typename std::vector<CELL<dim>*>::iterator last );
 
   /// compacts deques, first filling in deleted cells with cells from the back; then erasing cells at the back
-  size_t RemoveNullPointerCells();
+  size_t EraseNullPointerCells();
 
   /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
   void AssignUniqueNumbers( bool in_a_single_sequence=false ) const;
@@ -219,6 +224,10 @@ public:
   template<template<size_t> class CELL>
   void RebuildConnectivity(  typename std::deque<CELL<dim>*>::iterator first,
                              typename std::deque<CELL<dim>*>::iterator last );
+
+  /// same for node-to-node connectivity
+  void RebuildConnectivity(  typename std::deque<Node<dim>*>::iterator first,
+                             typename std::deque<Node<dim>*>::iterator last );
 
   /// Rebuild node-to-element parent relationships, for example after a region was removed
   void RebuildParentRelationships( typename std::vector<Node<dim>*>::iterator begin, typename std::vector<Node<dim>*>::iterator end );

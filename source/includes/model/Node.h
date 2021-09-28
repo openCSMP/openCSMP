@@ -65,7 +65,6 @@ class Node : public LocalVariableStorage<dim,Node> {
     void             ResizeParentStorage( size_t parent_elements );
     void             EraseParents();
 
-
     /// connects the node to other topologically collocated nodes if any
     void             Assign( NodeManifold<dim>* const );
     

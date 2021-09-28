@@ -669,7 +669,7 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   if ( model.IsUnique(target_region) ) {
        // finding the target elements
        vector<Element<3U>*> elmt_ptrs;
-       model.Mesh().template Erase<Element>( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       model.Mesh().template Delete<Element>( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
        return;
     }
 

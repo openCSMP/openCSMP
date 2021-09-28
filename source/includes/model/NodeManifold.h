@@ -8,6 +8,7 @@ namespace csmp {
 template<size_t dim> class Node;
 class Index;
 
+// TODO: include parent InterFace connectivity to the NodeManifolds because this is missing for InterFace nodes
 // TODO: distinguish perimeter nodes in SplitBoundaries from interior nodes, using criteria below
 // TODO: do we need to track intersections between SB and Boundaries or lower-dim Regions?
 /**

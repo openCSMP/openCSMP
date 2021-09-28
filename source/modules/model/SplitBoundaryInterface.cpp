@@ -160,7 +160,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
     splitBoundaryIterator  spit = splitBoundaryMap_.find( splitboundary );
     if ( spit != splitBoundaryMap_.end() ) {
          // getting the MeshManager to delete the interfaces
-         splitboundaryComplex->Mesh().template Erase<InterFace>( (*spit).second.ElementsBegin(), (*spit).second.ElementsEnd() );
+         splitboundaryComplex->Mesh().template Delete<InterFace>( (*spit).second.ElementsBegin(), (*spit).second.ElementsEnd() );
          // deleting the split boundary
          splitBoundaryMap_.erase( (*spit).first );
          return;
@@ -197,7 +197,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
     // if the addresses are the same
     if ( spit !=  splitBoundaryMap_.end() ) {
          // getting the MeshManager to delete the interfaces
-         splitboundaryComplex->Mesh().template Erase<InterFace>( splitboundary.ElementsBegin(), splitboundary.ElementsEnd() );
+         splitboundaryComplex->Mesh().template Delete<InterFace>( splitboundary.ElementsBegin(), splitboundary.ElementsEnd() );
          // if the split boundary is contained in the map, it is erased
          splitBoundaryMap_.erase( (*spit).first );
          return;

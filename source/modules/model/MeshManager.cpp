@@ -1185,6 +1185,7 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
 
    // 1. constructing new face
    const size_t face_id = faces_.size();
+//   FiniteElement* fetype = fe_manager.E( eptr->FE()->ElementTypeOfFace(local_face_id) );
    faces_.push_back( new Face<dim>( eptr->FE(), eptr->FV(), lvars, ivars ) );
    Face<dim>* const fptr = faces_.back();
    // higher-dimensional neighbors
@@ -1433,7 +1434,7 @@ void sortUniqueErase( deque<CELL<dim>*>& container )
 
 template<size_t dim>
 template<template<size_t> class CELL>
-size_t MeshManager<dim>::Erase( typename vector<CELL<dim>*>::iterator first,
+size_t MeshManager<dim>::Delete( typename vector<CELL<dim>*>::iterator first,
                                 typename vector<CELL<dim>*>::iterator last )
  {
     size_t deleted_cells( distance(first,last) );
@@ -1456,32 +1457,32 @@ size_t MeshManager<dim>::Erase( typename vector<CELL<dim>*>::iterator first,
      
      return deleted_cells;
     
- } // end Erase (any type)
+ } // end Delete (any type)
 
 // 3D
-template size_t MeshManager<3>::Erase<Node>( vector<Node<3>*>::iterator, vector<Node<3>*>::iterator );
-template size_t MeshManager<3>::Erase<Element>( vector<Element<3>*>::iterator, vector<Element<3>*>::iterator );
-template size_t MeshManager<3>::Erase<Face>( vector<Face<3>*>::iterator, vector<Face<3>*>::iterator );
-template size_t MeshManager<3>::Erase<InterFace>( vector<InterFace<3>*>::iterator, vector<InterFace<3>*>::iterator );
+template size_t MeshManager<3>::Delete<Node>( vector<Node<3>*>::iterator, vector<Node<3>*>::iterator );
+template size_t MeshManager<3>::Delete<Element>( vector<Element<3>*>::iterator, vector<Element<3>*>::iterator );
+template size_t MeshManager<3>::Delete<Face>( vector<Face<3>*>::iterator, vector<Face<3>*>::iterator );
+template size_t MeshManager<3>::Delete<InterFace>( vector<InterFace<3>*>::iterator, vector<InterFace<3>*>::iterator );
 
 // 2D
-template size_t MeshManager<2>::Erase<Node>( vector<Node<2>*>::iterator, vector<Node<2>*>::iterator );
-template size_t MeshManager<2>::Erase<Element>( vector<Element<2>*>::iterator, vector<Element<2>*>::iterator );
-template size_t MeshManager<2>::Erase<Face>( vector<Face<2>*>::iterator, vector<Face<2>*>::iterator );
-template size_t MeshManager<2>::Erase<InterFace>( vector<InterFace<2>*>::iterator, vector<InterFace<2>*>::iterator );
+template size_t MeshManager<2>::Delete<Node>( vector<Node<2>*>::iterator, vector<Node<2>*>::iterator );
+template size_t MeshManager<2>::Delete<Element>( vector<Element<2>*>::iterator, vector<Element<2>*>::iterator );
+template size_t MeshManager<2>::Delete<Face>( vector<Face<2>*>::iterator, vector<Face<2>*>::iterator );
+template size_t MeshManager<2>::Delete<InterFace>( vector<InterFace<2>*>::iterator, vector<InterFace<2>*>::iterator );
 
 // 1D
-template size_t MeshManager<1>::Erase<Node>( vector<Node<1>*>::iterator, vector<Node<1>*>::iterator );
-template size_t MeshManager<1>::Erase<Element>( vector<Element<1>*>::iterator, vector<Element<1>*>::iterator );
-template size_t MeshManager<1>::Erase<Face>( vector<Face<1>*>::iterator, vector<Face<1>*>::iterator );
-template size_t MeshManager<1>::Erase<InterFace>( vector<InterFace<1>*>::iterator, vector<InterFace<1>*>::iterator );
+template size_t MeshManager<1>::Delete<Node>( vector<Node<1>*>::iterator, vector<Node<1>*>::iterator );
+template size_t MeshManager<1>::Delete<Element>( vector<Element<1>*>::iterator, vector<Element<1>*>::iterator );
+template size_t MeshManager<1>::Delete<Face>( vector<Face<1>*>::iterator, vector<Face<1>*>::iterator );
+template size_t MeshManager<1>::Delete<InterFace>( vector<InterFace<1>*>::iterator, vector<InterFace<1>*>::iterator );
 
 
 /**
     erases the supplied sequence of elements returning the number of erasures, the pointers to the erased elements are nulled. The connectivity of the affected mesh neighborhood will get fixed.
 */
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename deque<Node<dim>*>::iterator first,
+size_t MeshManager<dim>::Delete( typename deque<Node<dim>*>::iterator first,
                                 typename deque<Node<dim>*>::iterator last )
  {
     size_t deleted_nodes( distance(first,last) );
@@ -1502,7 +1503,7 @@ size_t MeshManager<dim>::Erase( typename deque<Node<dim>*>::iterator first,
      
      return deleted_nodes;
     
- } // end Erase
+ } // end Delete
 
 
 
@@ -1522,7 +1523,7 @@ size_t MeshManager<dim>::Erase( typename deque<Node<dim>*>::iterator first,
     
 */
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename deque<Element<dim>*>::iterator first,
+size_t MeshManager<dim>::Delete( typename deque<Element<dim>*>::iterator first,
                                 typename deque<Element<dim>*>::iterator last )
  {
     size_t deleted_elements( distance(first,last) );
@@ -1543,13 +1544,13 @@ size_t MeshManager<dim>::Erase( typename deque<Element<dim>*>::iterator first,
      
      return deleted_elements;
     
- } // end Erase
+ } // end Delete
 
 
 
 
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename deque<Face<dim>*>::iterator first,
+size_t MeshManager<dim>::Delete( typename deque<Face<dim>*>::iterator first,
                                 typename deque<Face<dim>*>::iterator last )
  {
     size_t deleted_faces( distance(first,last) );
@@ -1570,13 +1571,13 @@ size_t MeshManager<dim>::Erase( typename deque<Face<dim>*>::iterator first,
      
      return deleted_faces;
     
- } // end Erase
+ } // end Delete
 
 
 
 
 template<size_t dim>
-size_t MeshManager<dim>::Erase( typename deque<InterFace<dim>*>::iterator first,
+size_t MeshManager<dim>::Delete( typename deque<InterFace<dim>*>::iterator first,
                                 typename deque<InterFace<dim>*>::iterator last )
  {
     size_t deleted_ifaces( distance(first,last) );
@@ -1597,7 +1598,7 @@ size_t MeshManager<dim>::Erase( typename deque<InterFace<dim>*>::iterator first,
      
      return deleted_ifaces;
     
- } // end Erase
+ } // end Delete
 
 
 
@@ -1608,16 +1609,16 @@ size_t MeshManager<dim>::Erase( typename deque<InterFace<dim>*>::iterator first,
     @todo (could be modified to first filling in deleted cells with cells from the back; then erasing cells at the back)
  */
 template<size_t dim>
-size_t MeshManager<dim>::RemoveNullPointerCells()
+size_t MeshManager<dim>::EraseNullPointerCells()
  {
-    size_t null_ptr_entities_removed = Erase( nodes_.begin(), nodes_.end() );
-    null_ptr_entities_removed += Erase( elements_.begin(), elements_.end() );
-    null_ptr_entities_removed += Erase( faces_.begin(), faces_.end() );
-    null_ptr_entities_removed += Erase( interfaces_.begin(), interfaces_.end() );
+    size_t null_ptr_entities_removed = Delete( nodes_.begin(), nodes_.end() );
+    null_ptr_entities_removed += Delete( elements_.begin(), elements_.end() );
+    null_ptr_entities_removed += Delete( faces_.begin(), faces_.end() );
+    null_ptr_entities_removed += Delete( interfaces_.begin(), interfaces_.end() );
     
     return null_ptr_entities_removed;
     
- } // end RemoveNullPointerCells
+ } // end EraseNullPointerCells
 
 
 
@@ -1809,6 +1810,39 @@ template void MeshManager<1>::RebuildConnectivity<Face>( typename deque<Face<1>*
 template void MeshManager<1>::RebuildConnectivity<InterFace>( typename deque<InterFace<1>*>::iterator, typename deque<InterFace<1>*>::iterator );
 
 
+
+/**
+    Same goal as previous methods but for node-to-node connectivity, which is established as soon as the nodes know their parent elements.
+    
+    @attention this does not include faces and interfaces since these are not included among ParentElements; use the manifolds to gain access to them.
+*/
+template<size_t dim>
+void MeshManager<dim>::RebuildConnectivity( typename std::deque<Node<dim>*>::iterator first,
+                                            typename std::deque<Node<dim>*>::iterator last )
+ {
+   cout << "\nMeshManager<" << dim << ">::RebuildConnectivity: assigning parent element information to nodes..." << endl;
+   const size_t    n_nodes(nodes_.size());
+   vector<size_t>  parent_elmts_per_node( n_nodes, 0U );
+
+   // counting how many parent elements each node has
+   for ( auto& e : elements_ ) {
+        assert( e != nullptr );
+        for ( auto nit = e->NodesBegin(); nit != e->NodesEnd(); nit++ ) {
+             assert( (*nit) != nullptr );
+             assert( (*nit)->Idx() < n_nodes );
+             parent_elmts_per_node[ (*nit)->Idx() ]++;
+          }
+     }
+     
+   // connecting the nodes to their neighbors
+     
+ } // RebuildConnectivity(Nodes)
+
+
+
+
+
+
 /* TESTING - formerly EstablishNeighborConnectivity
 
 / printing the multimap
@@ -1850,6 +1884,7 @@ cerr << endl;
 template<size_t dim>
 void MeshManager<dim>::UpdateConnectivity()
  {
+    RebuildConnectivity( nodes_.begin(), nodes_.end() );
     RebuildConnectivity<csmp::Element>( elements_.begin(), elements_.end() );
     RebuildConnectivity<csmp::Face>( faces_.begin(), faces_.end() );
     RebuildConnectivity<csmp::InterFace>( interfaces_.begin(), interfaces_.end() );

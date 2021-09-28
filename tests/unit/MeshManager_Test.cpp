@@ -16,11 +16,12 @@
 #include "IsoparametricLinearPyramid.h"
 #include "VTK_Interface.h"
 #include "ModelTopology.h"
+#include "NodeManifold.h"
+
+
 using namespace std;
 
 namespace csmp {
-
-
 
 /**
 custom models
@@ -272,15 +273,16 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 bool MeshManager_Test::TestElementDeletionAndInsertion()
 {
   MeshManager<3U>& mesh(model3d_->Mesh());
-  const size_t     orig_n_elmts(mesh.Elements());
+  const size_t     n_original_elmts(mesh.Elements());
 	// 0. the first element is copy constructed and stored, and then deleted
 
 	csmp::Element<3U> first_element( (*mesh.E(0)) );
 	// 1. delete elements 1 from the model
-	mesh.Erase( mesh.ElementsBegin(), next(mesh.ElementsBegin(),1) );
+	mesh.Delete( mesh.ElementsBegin(), next(mesh.ElementsBegin(),1) );
   
-	_test(mesh.Elements() == orig_n_elmts - 1);
+	_test(mesh.Elements() == n_original_elmts - 1);
 
+  const size_t n_original_nodes(mesh.Nodes());
 	// 2. create a new element with its nodes
 	IsoparametricLinearPyramid fe;
 	LocalVariables				     node_vars = model3d_->Database().LocalVariablesAt(NODE);
@@ -299,142 +301,194 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	Node<3U>*		ptr_n4 = mesh.AddNodeAt( Point<3U>(31., 32., 0.0), node_vars, NOT );
 	Node<3U>*		ptr_n5 = mesh.AddNodeAt( Point<3U>(34., 35., 0.0), node_vars, NOT );
 
-  size_t elmt_id = mesh.Elements(); // new element's id is equal to the number of the existing elements in the model
-	Element<3U>*	ptr_e1 = mesh.Add( csmp::Element<3U>(elmt_id, &fe, elmt_vars, intp_vars, NOT) );
+	_test( mesh.Nodes() == n_original_nodes + 5 );
 
-	// assign node connectivity where it is connected one of the last element's nodes
-	ptr_n1->ResizeParentStorage(ptr_n1->Parents() + 1);
-	ptr_n2->ResizeParentStorage(1);
-	ptr_n3->ResizeParentStorage(1);
-	ptr_n4->ResizeParentStorage(1);
-	ptr_n5->ResizeParentStorage(1);
+  // create new PYRAMID element
+  int32 material_id(1); // new element's rock_tye
+  vector<Node<3U>*>    nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
+  Element<3U>*         neptr( mesh.E(4) ); // just a neighbor to try
+  vector<Element<3U>*> nbors = {neptr,neptr,neptr,neptr,neptr};
+	Element<3U>*	ptr_e1 = mesh.AddElement( &fe, nullptr, elmt_vars, intp_vars, nodes, nbors, material_id );
 
-	// assign node's parent element
-	ptr_n1->Assign(n1.Parents() - 1, ptr_e1);
-	ptr_n2->Assign(0, ptr_e1);
-	ptr_n3->Assign(0, ptr_e1);
-	ptr_n4->Assign(0, ptr_e1);
-	ptr_n5->Assign(0, ptr_e1);
-
-	// assign new element's neighbors
-	ptr_e1->Assign(0, ptr_n1);
-	ptr_e1->Assign(1, ptr_n2);
-	ptr_e1->Assign(2, ptr_n3);
-	ptr_e1->Assign(3, ptr_n4);
-	ptr_e1->Assign(4, ptr_n5);
-	ptr_e1->Assign(0, mesh.RootNode(0)->Parent(0));
+	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
+  ptr_n1->ResizeParentStorage( n1.Parents()+1 );
+	ptr_n1->Assign( n1.Parents() - 1, ptr_e1);
+  
+  ptr_n2->ResizeParentStorage( n1.Parents()+1 );
+	ptr_n2->Assign( n1.Parents() - 1, ptr_e1);
+  
+  ptr_n3->ResizeParentStorage( n1.Parents()+1 );
+	ptr_n3->Assign( n1.Parents() - 1, ptr_e1);
+  
+  ptr_n4->ResizeParentStorage( n1.Parents()+1 );
+	ptr_n4->Assign( n1.Parents() - 1, ptr_e1);
+  
+  ptr_n4->ResizeParentStorage( n1.Parents()+1 );
+	ptr_n5->Assign( n1.Parents() - 1, ptr_e1);
 
 	// checking the total number of nodes and elements (after insertion)
-	std::cout << "\nNodes    discovered   after insertion: " << discovered_nodes.size();
-	std::cout << "\nElements discovered   after insertion: " << discovered_elmts.size();
 	std::cout << "\nNodes    of the model after insertion: " << mesh.Nodes();
 	std::cout << "\nElements of the model after insertion: " << mesh.Elements();
-
-	_test(mesh.Nodes() == (discovered_nodes.size() + 4));
-	_test(mesh.Elements() == (discovered_elmts.size() + 1));
+  // one lost one gained
+	_test( mesh.Elements() == n_original_elmts );
 
 	// 2. deleting these nodes again
-	mesh.Erase(ptr_e1);
+	mesh.Delete<Node>( nodes.begin(), nodes.end() );
+	_test( mesh.Nodes() == n_original_nodes );
 
-	// checking the total number of nodes and elements (after deletion)
-	std::cout << "\nNodes    discovered   after deletion: " << discovered_nodes.size();
-	std::cout << "\nElements discovered   after deletion: " << discovered_elmts.size();
-	std::cout << "\nNodes    of the model after deletion: " << mesh.Nodes();
-	std::cout << "\nElements of the model after deletion: " << mesh.Elements();
-
-	_test(mesh.Elements() == discovered_elmts.size());
-
-	discovered_elmts.clear();
-	discovered_nodes.clear();
-	current_nodes.clear();
-
+// TODO: test insertion / deletion / connection of Face and InterFace objects
 	return true;
 }
 
 
 
+
+// create Faces at boundary and between elements, converted to InterFace objects and then delete them.
 bool MeshManager_Test::TestFaceDeletionAndInsertion()
 {
-	// delete a face 
-	csmp::Face<3U>*			target_face(NULL); // face to be deleted
-	set<csmp::Face<3U>*>	discovered_faces;
-	deque<csmp::Face<3U>*>	current_faces;
-	for (size_t i = 0U; i < model3d_->Mesh().FaceGroups(); i++) {
-		auto root_face = model3d_->Mesh().RootFace(i);
-		discovered_faces.insert(root_face);
-		current_faces.push_back(root_face);
-		while (!current_faces.empty()) {
-			csmp::Face<3U>*  n_ptr(*current_faces.begin());
-			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
-				if (n_ptr->Neighbor(i) == NULL) continue;
-				if (target_face == NULL) target_face = n_ptr->Neighbor(i);
-				auto new_face = discovered_faces.insert(n_ptr->Neighbor(i));
-				if (new_face.second) current_faces.push_back(n_ptr->Neighbor(i));
-			}
-			current_faces.pop_front();
-		}
-	}
+  MeshManager<3U>& mesh(model3d_->Mesh());
+  bool             boundary_face_constructed(false);
+  bool             interior_face_constructed(false);
+  LocalVariables				     fvars = model3d_->Database().LocalVariablesAt(FACE);
+	IntegrationPointVariables	 ivars = model3d_->Database().IntegrationPointVariablesAt(FACE);
+  const size_t n_original_faces = mesh.Faces();
+
+  // element 4
+  Element<3U>* const eptr( mesh.E(4) );
+  Face<3U>*    fptr1(nullptr), *fptr2(nullptr);
+  for ( size_t i=0U; i<eptr->Faces(); i++ )
+    {
+       // if the face is at the boundary, we construct a boundary face
+       if ( eptr->Neighbor(i) == nullptr && !boundary_face_constructed ) {
+            // dummy neighbors
+            vector<Face<3U>*> empty_face_neighbors;
+            FiniteElement* fetype = model3d_->FE_Manager().E( eptr->FE()->ElementTypeOfFace(i) );
+            fptr1 = mesh.AddBoundaryFace( eptr, i, fvars, ivars, empty_face_neighbors );
+            boundary_face_constructed = true;
+         }
+       // if the face is within model, we construct a normal face
+       if ( eptr->Neighbor(i) != nullptr && !interior_face_constructed ) {
+            // dummy neighbors
+            vector<Node<3U>*> empty_nodes; // to test that this method can correctly identify them
+            vector<Face<3U>*> empty_face_neighbors;
+            //                                   inner  outer highher-dim nbor
+            fptr2 = mesh.AddFace( eptr->FE(), eptr->FV(), eptr, eptr->Neighbor(i),
+                                  fvars, ivars, empty_nodes, empty_face_neighbors );
+            interior_face_constructed = true;
+         }
+    }
+  cout<<"\n\tcreated faces: ";
+  if ( boundary_face_constructed ) fptr1->Out();
+  if ( interior_face_constructed ) fptr2->Out();
+    
+	_test( mesh.Faces() == n_original_faces + boundary_face_constructed + interior_face_constructed );
+ 
+ // conversion of interior face to interfaces
+  LocalVariables				     ifvars = model3d_->Database().LocalVariablesAt(INTER_FACE);
+	IntegrationPointVariables	 iivars = model3d_->Database().IntegrationPointVariablesAt(INTER_FACE);
+  if ( interior_face_constructed ) {
+       vector<InterFace<3U>*> empty_iface_neighbors;
+       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( fptr2, ifvars, iivars, empty_iface_neighbors );
+       ifptr->Out();
+    }
 	
-	_test(discovered_faces.size() == model3d_->Mesh().Faces());
-	
-	// delete the target face
-	model3d_->Mesh().Erase(target_face);
+	// delete the new face(s) again
+	mesh.Delete( next(mesh.FacesBegin(),n_original_faces), mesh.FacesEnd() );
+  mesh.EraseNullPointerCells();
 	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model3d_name_ << "' (after deletion of faces):\n";
 	cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
-	cout << "\nFace Groups: " << model3d_->Mesh().FaceGroups() << "\n";
 
-	_test(discovered_faces.size() - 1 == model3d_->Mesh().Faces());
+	_test( mesh.Faces() == n_original_faces );
 
 	return true;
 }
+
+
+
+
+
 
 
 bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
 {
-	if (model3d_->Mesh().InterFaces() == 0) return true;
+  MeshManager<3U>& mesh(model3d_->Mesh());
+  bool                       interface_constructed(false);
+  LocalVariables				     ifvars = model3d_->Database().LocalVariablesAt(INTER_FACE);
+	IntegrationPointVariables	 iivars = model3d_->Database().IntegrationPointVariablesAt(INTER_FACE);
+  const size_t n_original_ifaces = mesh.InterFaces();
 
-	// delete a interface 
-	csmp::InterFace<3U>*		target_interface(NULL); // interface to be deleted
-	set<csmp::InterFace<3U>*>	discovered_interfaces;
-	deque<csmp::InterFace<3U>*>	current_interfaces;
-	for (size_t i = 0U; i < model3d_->Mesh().InterFaceGroups(); i++) {
-		auto root_interface = model3d_->Mesh().RootInterFace(i);
-		discovered_interfaces.insert(root_interface);
-		current_interfaces.push_back(root_interface);
-		while (!current_interfaces.empty()) {
-			csmp::InterFace<3U>*  n_ptr(*current_interfaces.begin());
-			for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
-				if (n_ptr->Neighbor(i) == NULL) continue;
-				if (target_interface == NULL) target_interface = n_ptr->Neighbor(i);
-				auto new_interface = discovered_interfaces.insert(n_ptr->Neighbor(i));
-				if (new_interface.second) current_interfaces.push_back(n_ptr->Neighbor(i));
-			}
-			current_interfaces.pop_front();
-		}
-	}
-	csmp::InterFace<3U> new_interface(*target_interface);
-
-	_test(discovered_interfaces.size() == model3d_->Mesh().InterFaces());
-
-	model3d_->Mesh().Erase(target_interface);
+  // puts interfaces between the interior faces of Element # and Element #
+  Element<3U>* const eptr( mesh.E(4) );
+  InterFace<3U>*     ifptr(nullptr);
+  for ( size_t i=0U; i<eptr->Faces(); i++ )
+    {
+       if ( eptr->Neighbor(i) != nullptr && !interface_constructed ) {
+            vector<size_t> fnids;
+            // getting the nodes for the inside of the future interface
+            eptr->FE()->NodesOfFace( i, fnids );
+            vector<Node<3U>*> inside_nodes;
+            inside_nodes.reserve( fnids.size() );
+            for ( size_t j=0U; j<fnids.size(); ++j )
+              inside_nodes.push_back( eptr->N( fnids[j] ) );
+            // duplicating these nodes to get nodes for the inside element and the other side
+            vector<Node<3U>*> middle_nodes, outside_nodes;
+            middle_nodes.reserve( fnids.size() );
+            outside_nodes.reserve( fnids.size() );
+            for ( size_t j=0U; j<fnids.size(); ++j ) {
+                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE, ManifoldType::INTERFACE );
+                 middle_nodes.push_back( mnptr );
+                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, ManifoldType::INTERFACE );
+                 outside_nodes.push_back( onptr );
+              }
+            // create an intervening element
+            const int32 material_id(5);
+            FiniteElement* fetype = model3d_->FE_Manager().E( eptr->FE()->ElementTypeOfFace(i) );
+            vector<Element<3U>*> empty_elmt_neighbors;
+            Element<3U>*	ieptr = mesh.AddElement( fetype, nullptr, ifvars, iivars,
+                                                   middle_nodes, empty_elmt_neighbors, material_id );
+            // dummy neighbors
+            vector<InterFace<3U>*> empty_iface_neighbors;
+            //                                         inner  outer              middle nbor
+            ifptr = mesh.AddInterFace( fetype, nullptr, eptr, eptr->Neighbor(i), ieptr,
+                                       ifvars, iivars, empty_iface_neighbors );
+            interface_constructed = true;
+         }
+    }
+  cout<<"\n\tcreated faces: ";
+  if ( interface_constructed ) ifptr->Out();
+    
+	_test( mesh.Faces() == n_original_ifaces + interface_constructed );
+ 
+	// delete the new interface(s) again
+	mesh.Delete( next(mesh.InterFacesBegin(),n_original_ifaces), mesh.InterFacesEnd() );
+  mesh.EraseNullPointerCells();
 	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model3d_name_ << "' (after deletion of interfaces):\n";
-	cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
-	cout << "\nInterface Groups: " << model3d_->Mesh().InterFaceGroups() << "\n";
+	cout << "\nFaces: " << model3d_->Mesh().InterFaces() << "\n";
 
-	_test(discovered_interfaces.size() - 1 == model3d_->Mesh().InterFaces());
+	_test( mesh.InterFaces() == n_original_ifaces );
 
 	return true;
 }
 
 
 
-
+  
+/*
+    Erasure of all elements, faces and interfaces from 2d model.
+*/
 bool MeshManager_Test::TestEraseAllPrimitives()
 {
-	bool ret = false;
-	ret = model3d_->Mesh().EraseElements();
-	cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-	_test(model3d_->Mesh().Elements() == 0);
+   MeshManager<2U>& mesh(model2d_->Mesh());
+   const size_t     n_original_elmts(mesh.Elements());
+   const size_t     n_original_faces(mesh.Faces());
+   const size_t     n_orig_interfaces(mesh.InterFaces());
+	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+   _test( mesh.Delete( mesh.ElementsBegin(),   mesh.ElementsEnd() )   == n_original_elmts );
+   _test( mesh.Delete( mesh.FacesBegin(),      mesh.FacesEnd() )      == n_original_faces );
+   _test( mesh.Delete( mesh.InterFacesBegin(), mesh.InterFacesEnd() ) == n_orig_interfaces );
+   _test( mesh.EraseNullPointerCells() == n_original_elmts );
+	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+	 _test( mesh.Elements() + mesh.Faces() + mesh.InterFaces() + mesh.Nodes() == 0);
 
 	return true;
 }

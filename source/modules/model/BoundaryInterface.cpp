@@ -1108,7 +1108,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* bound
     
     // getting MeshManager to remove the boudary faces
     csmp::Boundary<dim>&  subdomain( this->Boundary(boundary) );
-    boundaryComplex->Mesh().template Erase<Face>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+    boundaryComplex->Mesh().template Delete<Face>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
 
     // erasing the boundary
     faceBoundaryMap_.erase( boundary );
@@ -1132,7 +1132,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<di
     boundaryIterator it = faceBoundaryMap_.find( boundary.Name() );
     // if the addresses of the objects are the same
     if ( it != faceBoundaryMap_.end() ) {
-         boundaryComplex->Mesh().template Erase<Face>( boundary.ElementsBegin(), boundary.ElementsEnd() );
+         boundaryComplex->Mesh().template Delete<Face>( boundary.ElementsBegin(), boundary.ElementsEnd() );
          faceBoundaryMap_.erase( (*it).first );
          return;
       }
