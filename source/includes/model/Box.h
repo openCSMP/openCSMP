@@ -174,11 +174,6 @@ void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& );
 /// boundary flags for 3D models consisting of hexahedra only; since these models are regular method is rather fast
 void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& );
 
-/// using the nodal BOX_BOUNDARY flag values, the elements are flagged accordingly
-//template<size_t dim>
-//void flagElementsUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator,
-//                                                typename std::deque<csmp::Element<dim>* >::iterator );
-
 /// permits to create variables values from BOX_BOUNDARY flag enumeration values
 template<size_t dim>
 void boxFlagsToVariable( Model<dim>&, const char* node_variable, const char* elmt_variable );

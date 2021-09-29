@@ -194,7 +194,7 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
  
 
 /**
-    Computes FV balances of products of the transported variable with the facet fluxes.
+    Computes the distributed FV balances of products of the transported variable with the facet fluxes.
     The volumetric flux balance is not updated, aussuming that the volumetric facet flows
     did not change.
 */
@@ -580,7 +580,9 @@ cout << scientific << setprecision(5) << gmin <<" to "<< gmax;
 template<size_t dim>
 double64 ExplicitTransport<dim>::IncomingVolumetricFlow() const
  {
-     double64 inflow(0.);
+     // accumulating into a vector that will be sorted to avoid round-off
+     vector<double64>  inflows;
+     inflows.reserve( subdomain_.Nodes() );
  
      const typename vector<Node<dim>*>::const_iterator nodes_end(subdomain_.NodesEnd());
      for ( typename vector<Node<dim>*>::const_iterator
@@ -588,7 +590,7 @@ double64 ExplicitTransport<dim>::IncomingVolumetricFlow() const
        {
            if ( HasHaloStencils() ) {
                 // away from model boundaries, the inflow is computed correctly and can be used
-                if ( (*nit)->AtBoundary() == NOT ) inflow += this->InFlow( (*nit) );           
+                if ( (*nit)->AtBoundary() == NOT ) inflows.push_back( this->InFlow( (*nit) ) );
              }
            // at model boundaries, FV's are truncated and only the their inside part exist; inflows are outflows (+) for these
            if ( (*nit)->AtBoundary() != NOT ) {
@@ -597,15 +599,19 @@ double64 ExplicitTransport<dim>::IncomingVolumetricFlow() const
                if ( pf_flag == DIRICH || pf_flag == NEUMANN ) {
                     const double64 flow = this->VolumetricFlowBalance( (*nit) );
                     if ( flow > 0. )
-                      inflow += flow;
+                      inflows.push_back( flow );
                  }
              }
        }
  
+    // sorting values in ascending order
+    sort( inflows.begin(), inflows.end() );
+    
     // incoming flux should be positive
-    return inflow;
+    return accumulate( inflows.begin(), inflows.end(), decltype(inflows)::value_type(0.) );
 
  } // end IncomingVolumetricFlow
+  
   
   
 /**
@@ -616,7 +622,8 @@ double64 ExplicitTransport<dim>::IncomingVolumetricFlow() const
 template<size_t dim>
 double64 ExplicitTransport<dim>::OutgoingVolumetricFlow() const
  {
-     double64 outflow(0.);
+     vector<double64>  outflows;
+     outflows.reserve( subdomain_.Nodes() );
  
      const typename vector<Node<dim>*>::const_iterator nodes_end(subdomain_.NodesEnd());
      for ( typename vector<Node<dim>*>::const_iterator
@@ -624,7 +631,7 @@ double64 ExplicitTransport<dim>::OutgoingVolumetricFlow() const
        {
            if ( HasHaloStencils() ) {
                 // away from model boundaries, the inflow is computed correctly and can be used
-                if ( (*nit)->AtBoundary() == NOT ) outflow += this->OutFlow( (*nit) );           
+                if ( (*nit)->AtBoundary() == NOT ) outflows.push_back( this->OutFlow( (*nit) ) );
              }
            // at model boundaries, FV's are truncated and only the their inside part exist; inflows are outflows (+) for these
            if ( (*nit)->AtBoundary() != NOT ) {
@@ -633,13 +640,16 @@ double64 ExplicitTransport<dim>::OutgoingVolumetricFlow() const
                if ( pf_flag == DIRICH || pf_flag == NEUMANN ) {
                     const double64 flow = this->VolumetricFlowBalance( (*nit) );
                     if ( flow < 0. )
-                      outflow += flow;
+                      outflows.push_back( flow );
                  }
              }
        }
  
-    // since the accumulated outflow is negative, it needs to be inverted 
-    return -outflow;
+    // sorting values in ascending order
+    sort( outflows.begin(), outflows.end() );
+
+    // since the accumulated outflow is negative, it needs to be inverted
+    return -accumulate( outflows.begin(), outflows.end(), decltype(outflows)::value_type(0.) );
  
  } // end OutgoingVolumetricFlow
 

@@ -2196,7 +2196,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
            // starting line-element chain traversal
            elmt_idx           = (*it);
            bool   flip        = ( pfverts[elmt_idx][0] < 0 ) ? false : true;
-           BOX_BOUNDARY bflag = (flip == false) ? intToBOX_BOUNDARY( pfverts[*it][0] ) : intToBOX_BOUNDARY( pfverts[*it][1] );
+           BOX_BOUNDARY bflag = (flip == false) ? intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][0] ) ) :
+                                                  intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][1] ) );
+           assert( bflag <= 0 );
+           assert( bflag >= MULTIPLE );
            if ( flip == true ) {
                 const size_t node0 = plist[elmt_idx][0];
                 const size_t node1 = plist[elmt_idx][1];
