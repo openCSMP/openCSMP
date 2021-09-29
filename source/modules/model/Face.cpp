@@ -1165,7 +1165,7 @@ bool  Face<dim>::operator==( const Face<dim>& fc ) const
 template<size_t dim>
 void* Face<dim>::operator new( size_t size )
   {
-      std::cout<< "\nFace<"<< dim <<">: called overloaded new operator.\n";
+//      std::cout<< "\nFace<"<< dim <<">: called overloaded new operator.\n";
       //void * p = malloc(size); will also work fine
       return ::operator new(size);
   }
@@ -1174,7 +1174,7 @@ void* Face<dim>::operator new( size_t size )
 template<size_t dim>
 void Face<dim>::operator delete( void* p )
   {
-     std::cout<< "\nFace<"<< dim <<">: called overloaded delete operator.\n";
+//     std::cout<< "\nFace<"<< dim <<">: called overloaded delete operator.\n";
      free(p);
      p = nullptr;
   }

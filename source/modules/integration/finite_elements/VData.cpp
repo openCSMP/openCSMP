@@ -40,6 +40,7 @@ VData::VData( const deque<size_t>& npes,
   : px(nodes),
     py(nodes),
     pz(nodes),
+    bflags(nodes),
     pelmt(epes.size()),
     plist(epes.size()),
     pfverts(epes.size()),
@@ -62,7 +63,7 @@ VData::VData( const deque<size_t>& npes,
    @note it is assumed that there are no faces nor interfaces
 */
 VData::VData( size_t nodes_per_element, size_t nbors_per_element, size_t nodes, size_t elmts )
-  : px(nodes), py(nodes), pz(nodes), pelmt(elmts),
+  : px(nodes), py(nodes), pz(nodes), bflags(nodes), pelmt(elmts),
     hybrid_mesh_(false),
     first_face_(elmts),
     first_interface_(elmts)
@@ -352,14 +353,13 @@ std::vector<std::int8_t>::const_iterator VData::BFlagsEnd() const
 
 
 void VData::AddBFlag( size_t node_id, std::int8_t bflag )
- { 
+ {
+    assert( node_id < bflags.size() );
+    BOX_BOUNDARY flag = static_cast<BOX_BOUNDARY>(bflag);
     // if the boundary flag integer value is outside of the range of defined values
-    if ( bflag < MULTIPLE ) {
-         cerr <<"\nVData::AddBFlag: boundary flag "<< bflag <<" is uninterpretable; no assignment was made.\n";
-         return;
-      }
-    if ( intToBOX_BOUNDARY(bflag) == NOT ) {
-         cerr <<"\nVData::AddBFlag: boundary flag "<< bflag <<" = NOT (at boundary); no assignment was made.\n";
+    if ( flag < MULTIPLE_BOUNDARIES - 1 ) {
+         cerr <<"\nVData::AddBFlag: boundary flag "<< parseBoundary( flag );
+         cerr <<" is uninterpretable; no assignment was made.\n";
          return;
       }
     bflags.at( node_id ) = bflag;
@@ -393,6 +393,7 @@ std::int8_t VData::BoundaryFlag( size_t vertex ) const
 std::vector<int32>::const_iterator  VData::PelmtFacesBegin() const {
     return std::next( pelmt.begin(), first_face_ );
  }
+ 
 /// iterator to CSMP finite element type of first interface stored in mesh
 std::vector<int32>::const_iterator  VData::PelmtInterfacesBegin() const {
     return std::next( pelmt.begin(), first_interface_ );
@@ -543,7 +544,7 @@ void VData::Resize( size_t nodes_per_element,
     pelmt.clear();
     plist.clear();
     pfverts.clear();
-    bflags.clear();
+
     for ( size_t i=0U; i<elmts; ++i ) {
          plist.push_back( vector<size_t>(nodes_per_element) );
       }
@@ -605,7 +606,6 @@ to be included into the supplied deques.
     
     plist.clear();
     pfverts.clear();
-    bflags.clear();
     pelmt.clear();
     
     pelmt.assign( etypes.begin(), etypes.end() );
@@ -676,6 +676,7 @@ void VData::ResizeNodes( size_t nodes )
     px.resize( nodes );  vector<double64>( px ).swap( px );
     py.resize( nodes );  vector<double64>( py ).swap( py );
     pz.resize( nodes );  vector<double64>( pz ).swap( pz );
+    ResizeBFlags();
         
  } // end ResizeNodes
 
@@ -687,7 +688,9 @@ void VData::ResizeNodes( size_t nodes )
 */
 void VData::ResizeBFlags()
  {
-    bflags.resize( px.size() );  vector<std::int8_t>( bflags ).swap( bflags );
+    bflags.resize( px.size() );
+    vector<std::int8_t>( bflags ).swap( bflags );
+    fill( bflags.begin(), bflags.end(), NOT );
  }
 
 

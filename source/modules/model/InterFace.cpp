@@ -245,7 +245,7 @@ bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
 template<size_t dim>
 void* InterFace<dim>::operator new( size_t size )
   {
-      std::cout<< "\nInterFace<"<< dim <<">: called overloaded new operator.\n";
+//      std::cout<< "\nInterFace<"<< dim <<">: called overloaded new operator.\n";
       //void * p = malloc(size); will also work fine
       return ::operator new(size);
   }
@@ -254,7 +254,7 @@ void* InterFace<dim>::operator new( size_t size )
 template<size_t dim>
 void InterFace<dim>::operator delete( void* p )
   {
-     std::cout<< "\nInterFace<"<< dim <<">: called overloaded delete operator.\n";
+//     std::cout<< "\nInterFace<"<< dim <<">: called overloaded delete operator.\n";
      free(p);
      p = nullptr;
   }

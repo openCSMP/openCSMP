@@ -277,8 +277,7 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type,
         cout.flush();
 #ifndef NDEBUG 
         if ( err_type < WARNING ) {
-             cout <<"\nErrorHandler: Hit return to continue."<< endl;
-             getchar();
+             cerr <<"\nErrorHandler: Hit return to continue."<< endl;
              getchar();
           }
 #endif

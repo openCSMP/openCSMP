@@ -272,8 +272,8 @@ void VSet<dim>::AddBFlags( typename vector<std::int8_t>::const_iterator first,
        Material ID identifiers need to be provided for all elements, boundaries and split boundaries.
 */
 template<size_t dim>
-void VSet<dim>::AddPmtrl( typename std::deque<int32>::const_iterator first,
-                          typename std::deque<int32>::const_iterator last )
+void VSet<dim>::AddPmtrl( typename std::vector<int32>::const_iterator first,
+                          typename std::vector<int32>::const_iterator last )
  {
     pmtrl_.clear();
     pmtrl_.assign( first, last );

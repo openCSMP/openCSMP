@@ -168,7 +168,7 @@ bool  Node<dim>::operator==( const Node<dim>& nd )
 template<size_t dim>
 void* Node<dim>::operator new( size_t size )
   {
-      std::cout<< "\nNode<"<< dim <<">: called overloaded new operator.\n";
+//      std::cout<< "\nNode<"<< dim <<">: called overloaded new operator.\n";
       //void * p = malloc(size); will also work fine
       return ::operator new(size);
   }
@@ -177,7 +177,7 @@ void* Node<dim>::operator new( size_t size )
 template<size_t dim>
 void Node<dim>::operator delete( void* p )
   {
-     std::cout<< "\nNode<"<< dim <<">: called overloaded delete operator.\n";
+//     std::cout<< "\nNode<"<< dim <<">: called overloaded delete operator.\n";
      free(p);
      p = nullptr;
   }

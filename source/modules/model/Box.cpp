@@ -160,7 +160,7 @@ bool isBACK( BOX_BOUNDARY bd )
 
 
 
-BOX_BOUNDARY intToBOX_BOUNDARY( long64 i )
+BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
 {
   if ( i == 0 )                 return NOT;
   if ( i == IRREGULAR_OUTSIDE ) return IRREGULAR;
@@ -231,7 +231,7 @@ std::string  parseBoundary( BOX_BOUNDARY i )
   if ( i == INTERNAL ) return string( "INTERNAL" );
   if ( i == MULTIPLE ) return string( "MULTIPLE" );
 
-  cerr << "\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: " << i << endl;
+//  cerr << "\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: " << i << endl;
   return string( "NOT" );
 }
 

@@ -106,7 +106,7 @@ public:
 
 };
 
-BOX_BOUNDARY  intToBOX_BOUNDARY( long64 i );
+BOX_BOUNDARY  intToBOX_BOUNDARY( int8_t i );
 
 /// turn enumeration into string
 std::string  parseBoundary( BOX_BOUNDARY );

@@ -945,6 +945,11 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 
     vset.Resize( etypes, npes, epes, nodes, 0, 0 );
     vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+    
+    //---------------------------MATERIALS
+    const int32 material_id(5); // some plausible integer identifier
+    vector<int32> materials( iNrOfElements, material_id );
+    vset.AddPmtrl( materials.begin(), materials.end() );
 
     
   	//-----------------------NODES

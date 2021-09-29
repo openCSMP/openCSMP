@@ -1157,10 +1157,10 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialASCII( ifstream& ifs, VSet<di
       }
     
     // only for the volumetric elements material data are read from file
-    deque<int32> elmt_mtrls;
-    int32        emtrl;
-    size_t       i(0);
-    for ( i=0; i<records; ++i ) {
+    vector<int32> elmt_mtrls;
+    elmt_mtrls.reserve( records );
+    int32         emtrl;
+    for ( size_t i=0; i<records; ++i ) {
          ifs >> emtrl;
          elmt_mtrls.push_back(emtrl);
       }

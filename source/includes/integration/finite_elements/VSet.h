@@ -73,8 +73,8 @@ class VSet : public VData {
                     typename std::vector<std::int8_t>::const_iterator last );
 
     /// rocktype identifiers for elements only
-    void AddPmtrl( typename std::deque<int32>::const_iterator first,
-                   typename std::deque<int32>::const_iterator last );
+    void AddPmtrl( typename std::vector<int32>::const_iterator first,
+                   typename std::vector<int32>::const_iterator last );
   
     /// checks whether the VSet contains any distributed variable values stored in PropertyData objects
     bool  DataEmpty() const;

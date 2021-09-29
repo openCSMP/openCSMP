@@ -260,9 +260,7 @@ Mesh connectivity file (*.dat) in text ASCII version:
 
 */
 class ANSYS_Interface {
-
-public:
-
+  public:
     explicit ANSYS_Interface( bool create_isoparametric_element_mesh=true);
 
     ~ANSYS_Interface();
@@ -277,7 +275,6 @@ public:
                           bool irregular_mesh );
 
   protected:
-
     /// ascii format
     template<size_t dim>
     void ReadMeshASCII( const std::string& meshfile,
@@ -294,7 +291,6 @@ public:
                          bool irregular_mesh );
 
   private:
-
     /// reading comments
     bool IsCommentLine( char* str ) const;
     bool SkipPotentialComment( std::ifstream& ) const;
@@ -337,7 +333,7 @@ public:
     bool  isoparametric_;
 
     // storage for geometric objects and their element types
-    //  objectname  elmttype  identifier (volumes, surfaces, curves in file) 
+    //  objectname  elmttype  identifier (volumes, surfaces, curves in file)
     std::string                                       file_header_;
     std::string                                       boundary_tag_;
     typedef ANSYS_ElementSpecifications               elmt_specs;       ///< not local variable but shorthand
@@ -348,10 +344,16 @@ public:
     std::multimap<std::string,std::vector<size_t> >   object_elements_;
 };
 
+
+
+
 /// ANSYS - to - CSMP FE's
 template<size_t dim>
-void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>&,bool);
-void Convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>&,bool,size_t);
+void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>&,bool);
+void convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>&,bool,size_t);
+
+
+
 
 class ANSYS_ModelSettings {
   public:

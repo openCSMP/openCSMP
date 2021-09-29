@@ -203,7 +203,7 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
       csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                     "Region and element type information not read correctly");
    
-    Convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_, dim );
+    convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_, dim );
     ifs_asc.close(); // '*.asc' geometry file
 
     // 2.0 Reading the '*.dat' file with the mesh data
@@ -233,7 +233,7 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                        "Element types not read correctly");
       }
-    Convert_ANSYS_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
+    convert_ANSYS_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
 
     if ( !ReadPlistBinary( ifs_dat, vset ) ) {
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
@@ -354,7 +354,7 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Region and element type information not read correctly");
       }
-    Convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_ , dim );
+    convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_ , dim );
     ifs_asc.close(); // '*.asc' geometry file
 
 
@@ -385,7 +385,7 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Element types not read correctly");
       }
-    Convert_ANSYS_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
+    convert_ANSYS_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
 
     if ( !ReadPlistASCII( ifs_dat, vset ) ) {
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
@@ -450,7 +450,7 @@ an isoparametric model shall be created or not.
 The method converts the argument VSet.
 */
 template<size_t dim>
-void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>& vset, bool isoparametric )
+void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>& vset, bool isoparametric )
  {
     if ( !vset.HybridElementTypeMesh() )
       vset.ElementType( 0U, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(0U), isoparametric, dim ) );
@@ -460,11 +460,11 @@ void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>& vset, bool isoparametr
 
  } // end
 
-template void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<1U>&,bool );
-template void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<2U>&,bool );
-template void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<3U>&,bool );
+template void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<1U>&,bool );
+template void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<2U>&,bool );
+template void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<3U>&,bool );
 
-void Convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>& object_specs,
+void convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>& object_specs,
                                                bool isoparametric, size_t dim )
 {
     std::string elmt_type;
@@ -476,18 +476,6 @@ void Convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::st
         (*it).second = ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_TypeName( elmt_type, isoparametric, dim );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -853,7 +841,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, V
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    int32         flag;
+    int8_t        flag;
     double64      bvalue;
     std::vector<bool>  bconds(vset.Vertices(),false);
     
@@ -873,6 +861,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, V
               // '0...n-1' since nodes are numbered this way
               vset.AddBFlag( i, flag );
            }
+         else vset.AddBFlag( i, NOT );
       }
       
     AdvancePastCommentLine( ifs );
@@ -1189,6 +1178,8 @@ bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream& ifs, VSet<dim>& vset )
                            "Element material information could not be obtained for all elements." );
          return false;
       }
+    
+    vset.AddPmtrl( elmt_mtrls.begin(), elmt_mtrls.end() );
 
     return true;
 
@@ -1304,7 +1295,6 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
         std::cout <<"\n\treading boundary flags 'pbflags'..."<< std::endl;
         std::cout.flush();
     }
-    std::set<size_t>  bnodes;
     int32        ival;
     const int32  min28(-30), zero(0);
     uint32       counter(0);
@@ -1316,10 +1306,10 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
            throw csmp::Exception( ERROR, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
          // if this is a boundary node
          if ( ival < zero ) {
-              vset.AddBFlag( i, ival );
-              bnodes.insert(i);
+              vset.AddBFlag( i, static_cast<int8_t>(ival) );
               counter++;
            }
+         else vset.AddBFlag( i, NOT );
       }
 
     // 2. reading boundary condition values 'pbounds' (double) and ignoring them
@@ -1335,7 +1325,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
          fread( (void*) &dval, dbytes, 1U, fp );
          // only if a boundary flag was stored, a boundary value is stored as well
       }
-    bnodes.erase( bnodes.begin(), bnodes.end() );
+
     return true;
 }
 
@@ -1526,9 +1516,8 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
     const size_t  uibytes = sizeof(uint32);
     size_t        entries(0);
 
-    // reading material information 'pmtrl' (unsigned int)
-    // -------------------------------------------------------
-
+    // reading material information 'pmtrl'
+    // ------------------------------------
     fread( (void*) &entries, uibytes, 1U, fp );
     assert( entries > 0 );
     assert( entries < ULONG_MAX );
@@ -1541,6 +1530,9 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
     fread( (void*) mtrls, ibytes, entries, fp );
     std::vector<int32> elmt_mtrls;
     elmt_mtrls.assign( mtrls, mtrls + entries );
+    
+    vset.AddPmtrl( elmt_mtrls.begin(), elmt_mtrls.end() );
+    
     delete[] mtrls;
 
     return true;

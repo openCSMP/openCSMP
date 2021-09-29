@@ -347,7 +347,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
       typename deque<vector<size_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
-      size_t elmt_idx(0U);
+      size_t elmt_idx(0);
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
           const int32 csmpElementType = vset.ElementType( 0U );
@@ -381,7 +381,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
 
-  const size_t n_elmts(elements_.size());
+  const long64 n_elmts(elements_.size());
   if ( vset.WithNeighbourConnectivity() ) {
        for ( auto& e : elements_ ) {
             const int32 csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e->Idx() );
@@ -397,7 +397,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
                         }
                       else if ( index >= 0 )
                         e->Assign( nidx++, elements_[static_cast<size_t>(index)] );
-                      else
+                      else // negative numbers indicate boundaries
                         e->Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
                    }
               }
@@ -426,7 +426,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( FACE ) );
 
        // the faces are numbered  elements to (elements + faces - 1), but they are stored in connector at Face 0..n-1
-       size_t  face_idx(vset.Elements());
+       long64  face_idx(vset.Elements());
        typename deque<vector<size_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
             const int32 csmpElementType = vset.ElementType( face_idx );
@@ -456,7 +456,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
          csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for Face objects; nothing was done." );
        else
          {
-            const size_t n_faces(faces_.size());
+            const long64 n_faces(faces_.size());
             for ( auto& e : faces_ )
               {
                  // Equidimensional Face neighbors first
@@ -566,8 +566,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        // necessary info is stored in 'pfverts' record for InterFace: inner nbors first, then outer, then higher-dimensional ones
        if ( csmp_error.Verbose() )
          cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
-       const size_t n_faces(faces_.size()), n_interfaces(interfaces_.size());
-       const size_t cells(n_elmts+n_faces+n_interfaces);
+       const long64 n_faces(faces_.size()), n_interfaces(interfaces_.size());
+       const long64 cells(n_elmts+n_faces+n_interfaces);
        // connecting interfaces to their higher-dimensional neighbors
        for ( auto& e : interfaces_ )
          {
@@ -2375,7 +2375,8 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   
   // 'pmtrl' stored exclusively on elements
   // =========================================
-  deque<int32> pmtrl;
+  vector<int32> pmtrl;
+  pmtrl.reserve( elements_.size() );
   for ( auto e : elements_ )
     pmtrl.push_back( e->Material_ID() );
   vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );

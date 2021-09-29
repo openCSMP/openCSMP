@@ -280,7 +280,7 @@ bool  Element<dim>::operator<( const Element<dim>& el )
 template<size_t dim>
 void* Element<dim>::operator new( size_t size )
   {
-      std::cout<< "\nElement<"<< dim <<">: called overloaded new operator.\n";
+//      std::cout<< "\nElement<"<< dim <<">: called overloaded new operator.\n";
       //void * p = malloc(size); will also work fine
       return ::operator new(size);
   }
@@ -290,7 +290,7 @@ void* Element<dim>::operator new( size_t size )
 template<size_t dim>
 void Element<dim>::operator delete( void* p )
   {
-     std::cout<< "\nElement<"<< dim <<">: called overloaded delete operator.\n";
+//     std::cout<< "\nElement<"<< dim <<">: called overloaded delete operator.\n";
      free(p);
      p = nullptr;
   }
