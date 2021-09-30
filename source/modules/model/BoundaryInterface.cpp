@@ -885,7 +885,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     vector<Face<dim>*> face_vector;
     face_vector.reserve(new_faces_required);
     const size_t original_faces(model.Mesh().Faces());
-    vector<Face<dim>*> empty_face_nbor_vec;
 
     // establish the storage requirements for face variables
     const LocalVariables             lvsFaces( model.Database().LocalVariablesAt(FACE) );
@@ -905,8 +904,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
              Face<dim>* const faceObj = model.Mesh().ReplaceElementByFace( model_domain.E((*pit).Element()),
                                                                            model_domain.E((*pit).InnerElement()),
                                                                            model_domain.E((*pit).OuterElement()),
-                                                                           lvsFaces, lvsIntegrationPoints,
-                                                                           empty_face_nbor_vec );
+                                                                           lvsFaces, lvsIntegrationPoints );
 			       face_vector.push_back(faceObj);
 			    }
 
@@ -1702,10 +1700,7 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& 
     const LocalVariables lvsFaces( model.Database().LocalVariablesAt(FACE) );
     const IntegrationPointVariables lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
     
-    // Face neighbors (will be created later)
-    std::vector<Face<3U>*>  segment_nbors;
-
-    shared_faces.reserve( perimeter_keys1.size() );	
+    shared_faces.reserve( perimeter_keys1.size() );
     for ( typename map<set<csmp::Node<3U>*>,Face<3U>*>::const_iterator
           it1=perimeter_keys1.begin(); it1!=perimeter_keys1.end(); ++it1 )
       {
@@ -1747,7 +1742,7 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& 
 			         Face<3U>* const faceObj = model.Mesh().AddFace( fem_ptr, nullptr,
                                                                 inner, outer,
                                                                 lvsFaces, lvsIntegrationPoints,
-                                                                segment_nodes, segment_nbors );
+                                                                segment_nodes );
 			        shared_faces.push_back(faceObj);
            }
       }
@@ -1762,7 +1757,9 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& 
 
 
 
-  /// High Level Functions to create Boundaries from provided Region names
+
+
+  // High Level Functions to create Boundaries from provided Region names
 
 
 /** creates edge Boundary objects (of dim-2 Face objects) for box-shaped model from side boundaries

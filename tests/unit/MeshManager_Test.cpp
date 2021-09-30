@@ -307,8 +307,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   int32 material_id(1); // new element's rock_tye
   vector<Node<3U>*>    nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
   Element<3U>*         neptr( mesh.E(4) ); // just a neighbor to try
-  vector<Element<3U>*> nbors = {neptr,neptr,neptr,neptr,neptr};
-	Element<3U>*	ptr_e1 = mesh.AddElement( &fe, nullptr, elmt_vars, intp_vars, nodes, nbors, material_id );
+	Element<3U>*	ptr_e1 = mesh.AddElement( &fe, nullptr, elmt_vars, intp_vars, nodes, material_id );
 
 	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
   ptr_n1->ResizeParentStorage( n1.Parents()+1 );
@@ -360,20 +359,16 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
     {
        // if the face is at the boundary, we construct a boundary face
        if ( eptr->Neighbor(i) == nullptr && !boundary_face_constructed ) {
-            // dummy neighbors
-            vector<Face<3U>*> empty_face_neighbors;
             FiniteElement* fetype = model3d_->FE_Manager().E( eptr->FE()->ElementTypeOfFace(i) );
-            fptr1 = mesh.AddBoundaryFace( eptr, i, fvars, ivars, empty_face_neighbors );
+            fptr1 = mesh.AddBoundaryFace( eptr, i, fvars, ivars );
             boundary_face_constructed = true;
          }
        // if the face is within model, we construct a normal face
        if ( eptr->Neighbor(i) != nullptr && !interior_face_constructed ) {
-            // dummy neighbors
             vector<Node<3U>*> empty_nodes; // to test that this method can correctly identify them
-            vector<Face<3U>*> empty_face_neighbors;
             //                                   inner  outer highher-dim nbor
             fptr2 = mesh.AddFace( eptr->FE(), eptr->FV(), eptr, eptr->Neighbor(i),
-                                  fvars, ivars, empty_nodes, empty_face_neighbors );
+                                  fvars, ivars, empty_nodes );
             interior_face_constructed = true;
          }
     }
@@ -387,8 +382,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
   LocalVariables				     ifvars = model3d_->Database().LocalVariablesAt(INTER_FACE);
 	IntegrationPointVariables	 iivars = model3d_->Database().IntegrationPointVariablesAt(INTER_FACE);
   if ( interior_face_constructed ) {
-       vector<InterFace<3U>*> empty_iface_neighbors;
-       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( fptr2, ifvars, iivars, empty_iface_neighbors );
+       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( fptr2, ifvars, iivars );
        ifptr->Out();
     }
 	
@@ -443,14 +437,11 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
             // create an intervening element
             const int32 material_id(5);
             FiniteElement* fetype = model3d_->FE_Manager().E( eptr->FE()->ElementTypeOfFace(i) );
-            vector<Element<3U>*> empty_elmt_neighbors;
             Element<3U>*	ieptr = mesh.AddElement( fetype, nullptr, ifvars, iivars,
-                                                   middle_nodes, empty_elmt_neighbors, material_id );
-            // dummy neighbors
-            vector<InterFace<3U>*> empty_iface_neighbors;
+                                                   middle_nodes, material_id );
             //                                         inner  outer              middle nbor
             ifptr = mesh.AddInterFace( fetype, nullptr, eptr, eptr->Neighbor(i), ieptr,
-                                       ifvars, iivars, empty_iface_neighbors );
+                                       ifvars, iivars );
             interface_constructed = true;
          }
     }

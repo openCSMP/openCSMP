@@ -936,7 +936,6 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
   // looping over regions elements, assuring that it's an eligible face type, creating new face with variable storage,
   // establishing connectivity and inserting into boundary element container
   const typename vector<Element<dim>*>::const_iterator regionElementsEnd( region.ElementsEnd() );
-  vector<Face<dim>*> empty_nbor_vec;
   for ( typename vector<Element<dim>*>::const_iterator it = region.ElementsBegin(); it != regionElementsEnd; ++it )
     {
       // in 3D, there still could be line elements in the region which are not eligible as face,
@@ -953,15 +952,13 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
         // created a new face
         this->elmt_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
                                                         inner_outter_elements[0], inner_outter_elements[1],
-                                                        lvsFaces, lvsIntegrationPoints,
-                                                        empty_nbor_vec ) );
+                                                        lvsFaces, lvsIntegrationPoints ) );
       }
       else
         // created a new face
         this->elmt_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
                                                         inner_outter_elements[0], static_cast<Element<dim>*>(nullptr),
-                                                        lvsFaces, lvsIntegrationPoints,
-                                                        empty_nbor_vec ) );
+                                                        lvsFaces, lvsIntegrationPoints ) );
 
     } // region elements
 
@@ -1041,9 +1038,6 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
 
   const size_t n_faces_before = meshManager.Faces();
 
-  // for the faces of the perimeter elements of the region
-  vector<Face<dim>*> empty_face_nbor_vec; // neighbors are established further below
-  
   for ( size_t i = region.InteriorElements(); i<region.Elements(); ++i )
     {
       // ignoring dim-2 elements because they share the nodes with the higher-dim ones
@@ -1056,8 +1050,7 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
       for ( size_t j = 0U; j<perimeter_faces; ++j )
         // push back pointer to face into face container
         this->elmt_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
-                                                                lvsFaces, lvsIntegrationPoints,
-                                                                empty_face_nbor_vec ) );
+                                                                lvsFaces, lvsIntegrationPoints ) );
     }
   // free up excessive storage
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
@@ -1110,7 +1103,6 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
   const size_t n_faces_before = meshManager.Faces();
 
   // for the perimeter elements of the region
-  vector<Face<dim>*> empty_face_nbor_vec; // is initialised later
   for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
     {
       Element<dim>* const ePtr = region1.E( i );
@@ -1136,8 +1128,7 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
                  FiniteElement* femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
                  Face<dim>* const faceObj = meshManager.AddFace( femPtr, nullptr,
                                                                  ePtr, ePtrNeighbor,
-                                                                 lvsFaces, lvsIntegrationPoints,
-                                                                 nodes, empty_face_nbor_vec );
+                                                                 lvsFaces, lvsIntegrationPoints, nodes );
                  // added to boundary
                  this->elmt_vec_.push_back( faceObj );
 

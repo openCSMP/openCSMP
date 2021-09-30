@@ -878,8 +878,7 @@ template<size_t dim>
 Element<dim>*	const MeshManager<dim>::AddElement( csmp::FiniteElement* const fe_ptr,
                                                   const csmp::FiniteVolumeStencil<dim>* const fv_ptr,
                                                   const LocalVariables& lvars, const IntegrationPointVariables& ivars,
-                                                  const std::vector<Node<dim>*>& nodes,
-                                                  const std::vector<Element<dim>*>& nbors, int32 material_id )
+                                                  const std::vector<Node<dim>*>& nodes, int32 material_id )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -912,22 +911,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( csmp::FiniteElement* const fe_
      eptr->Assign( i, nodes[i] );
 
 
-   // 3. assigning neighbors elements
-   // -------------------------------
-   //    checking if there is any valid neighbor information provided
-   const bool valid_nbor_vec = ( nbors.empty() || nbors.size() != fe_ptr->Neighbors() ) ? false : true;
-#ifdef DEBUG
-   if ( !valid_nbor_vec )
-     csmp_error.notice( WARNING, "MeshManager<dim>::AddElement", "neighbor vector cannot be used; trying to identify neighbors from node connectivity");
-#endif
-   if ( valid_nbor_vec ) {
-        const size_t n_nbors(nbors.size());
-        for ( size_t i=0U; i<n_nbors; ++i )
-          eptr->Assign( i, nbors[i] );
-        return eptr;
-     }
-
-  // 4. trying to establish neighbor information from the nodes assuming that they have parent connectivity
+  // 3. trying to establish neighbor information from the nodes assuming that they have parent connectivity
   // ------------------------------------------------------------------------------------------------------ 
   //    checking whether the nodes have the necessary parent element information
   bool valid_parent_info(true);
@@ -940,7 +924,8 @@ Element<dim>*	const MeshManager<dim>::AddElement( csmp::FiniteElement* const fe_
          return eptr;
       }
       
-   // if the nodes have parents, this method tries to find and connect the neighbors
+   // 4. if the nodes have parents, this method tries to find and connect the neighbors
+   // ---------------------------------------------------------------------------------
    if ( connectNeighborsUsingNodeParents( eptr ) < eptr->FE()->Faces()-1 )
      csmp_error.notice( WARNING, "MeshManager<dim>::AddElement", "neighbor vector could not be used; found less neighbors than expected");
    
@@ -1034,8 +1019,7 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
                                                          csmp::Element<dim>* inner_eptr,
                                                          csmp::Element<dim>* outer_eptr,
                                                          const LocalVariables& lvars,
-                                                         const IntegrationPointVariables& ivars,
-                                                         const vector<Face<dim>*>& face_nbors )
+                                                         const IntegrationPointVariables& ivars )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1059,8 +1043,6 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
           break;
        }
 #endif
-   if ( face_nbors.empty() || face_nbors.size() != eptr->Faces() )
-     csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceElementByFace", "pointer vector for neighbor faces not initialised");
 
    // 1. constructing new face
    const size_t face_id = faces_.size();
@@ -1074,12 +1056,7 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    for ( size_t i=0U; i<n_nodes; ++i )
      fptr->Assign( i, eptr->N(i) );
 
-   // 3. assigning neighbors elements (searching the existing faces) - but nodes do not connect to parent faces
-   const size_t n_nbors(eptr->Neighbors());
-   for (  size_t i=0U; i<n_nbors; ++i )
-     fptr->Assign( i, face_nbors[i] );
-     
-   // 4. deleting original Element
+   // 3. deleting original Element
    delete eptr;
    eptr = nullptr;
    
@@ -1099,8 +1076,7 @@ Face<dim>* const MeshManager<dim>::AddFace( csmp::FiniteElement* const feptr, co
                                             Element<dim>* const inner_parent, Element<dim>* const outer_parent,
                                             const LocalVariables& lvars,
                                             const IntegrationPointVariables& ivars,
-                                            const std::vector<Node<dim>*>& nodes,
-                                            const vector<Face<dim>*>& face_nbors )
+                                            const std::vector<Node<dim>*>& nodes )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1127,8 +1103,6 @@ Face<dim>* const MeshManager<dim>::AddFace( csmp::FiniteElement* const feptr, co
             break;
          }
 #endif
-   if ( face_nbors.empty() || face_nbors.size() != feptr->Faces() )
-     csmp_error.notice( WARNING, "MeshManager<dim>::AddFace", "pointer vector for neighbor faces not initialised");
 
    // 1. constructing new face
    const size_t face_id = faces_.size();
@@ -1145,11 +1119,6 @@ Face<dim>* const MeshManager<dim>::AddFace( csmp::FiniteElement* const feptr, co
      }
    else // more costly but possible
      findNodesViaHigherDimensionalNeighbors( inner_parent, outer_parent, fptr );
-
-   // 3. assigning neighbors elements (searching the existing faces) - but nodes do not connect to parent faces
-   const size_t n_nbors(fptr->Neighbors());
-   for (  size_t i=0U; i<n_nbors; ++i )
-     fptr->Assign( i, face_nbors[i] );
    
    return fptr;
 
@@ -1164,8 +1133,7 @@ template<size_t dim>
 Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const eptr,
                                                     size_t local_face_id,
                                                     const LocalVariables& lvars,
-                                                    const IntegrationPointVariables& ivars,
-                                                    const std::vector<Face<dim>*>& face_nbors )
+                                                    const IntegrationPointVariables& ivars )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1177,11 +1145,6 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
      csmp_error.notice( ERROR, "MeshManager<dim>::AddBoundaryFace", "face ID does not exist in element");
    if ( eptr->Neighbor(local_face_id) != nullptr )
      csmp_error.notice( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it located at model boundary");
-
-#ifdef DEBUG
-   if ( face_nbors.empty() || face_nbors.size() != eptr->Faces() )
-     csmp_error.notice( INFO, "MeshManager<dim>::AddBoundaryFace", "pointer vector for neighbor faces not initialised");
-#endif
 
    // 1. constructing new face
    const size_t face_id = faces_.size();
@@ -1199,13 +1162,6 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    for ( size_t i=0U; i<n_nodes; ++i )
      fptr->Assign( i, eptr->N( fnids[i] ) );
 
-   // 3. assigning neighbors elements (searching the existing faces) - but nodes do not connect to parent faces
-   if ( !face_nbors.empty() && face_nbors.size() == eptr->Faces() ) {
-       const size_t n_nbors(fptr->Neighbors());
-       for (  size_t i=0U; i<n_nbors; ++i )
-         fptr->Assign( i, face_nbors[i] );
-     }
-     
    return fptr;
 
 } // end AddBoundaryFace
@@ -1221,8 +1177,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const
                                                       Element<dim>* const inner_parent, Element<dim>* const outer_parent,
                                                       Element<dim>* const intervening_elmt,
                                                       const LocalVariables& lvars,
-                                                      const IntegrationPointVariables& ivars,
-                                                      const vector<InterFace<dim>*>& iface_nbors )
+                                                      const IntegrationPointVariables& ivars )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1236,11 +1191,6 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const
      csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
    if ( outer_parent == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
-   bool unsuitable_nbor_vector(false);
-   if ( iface_nbors.empty() || iface_nbors.size() != feptr->Faces()*2 ) {
-        unsuitable_nbor_vector = true;
-        csmp_error.notice( WARNING, "MeshManager<dim>::AddInterFace", "pointer vector for neighbor faces not initialised");
-     }
 
    // 1. constructing new face
    const size_t iface_id = interfaces_.size();
@@ -1251,13 +1201,6 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const
 
    // 2. assigning nodes and face ids w.r.t. higher-dimensional element neighbors
    findNodesViaHigherDimensionalNeighbors( inner_parent, outer_parent, ifptr );
-   
-   // 3. Assign neighbor interfaces to interface
-   if ( !unsuitable_nbor_vector ) {
-       const size_t n_nbors(ifptr->Neighbors());
-       for (  size_t i=0U; i<n_nbors; ++i )
-         ifptr->Assign( i, iface_nbors[i] );
-     }
    
    return ifptr;
 
@@ -1271,8 +1214,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const
 template<size_t dim>
 InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>* fptr,
                                                                 const LocalVariables& lvars,
-                                                                const IntegrationPointVariables& ivars,
-                                                                const vector<InterFace<dim>*>& iface_nbors )
+                                                                const IntegrationPointVariables& ivars )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1280,12 +1222,6 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
    // pointers
    if ( fptr == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceFaceByInterFace", "Face pointer not initialised");
-
-   bool unsuitable_nbor_vector(false);
-   if ( iface_nbors.empty() || iface_nbors.size() != fptr->Faces()*2 ) {
-        unsuitable_nbor_vector = true;
-        csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceFaceByInterFace", "pointer vector for neighbor interfaces not initialised");
-     }
 
    // 1. constructing new interface
    const size_t iface_id = interfaces_.size();
@@ -1296,17 +1232,10 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 
    // 2. assigning nodes and face ids w.r.t. higher-dimensional neighbors
    findNodesViaHigherDimensionalNeighbors( fptr->InnerParent(), fptr->OuterParent(), ifptr );
-   
-   // 3. assigning neighbor InterFace objects
-   if ( !unsuitable_nbor_vector ) {
-       const size_t n_nbors(fptr->Neighbors());
-       for (  size_t i=0U; i<n_nbors; ++i )
-         ifptr->Assign( i, iface_nbors[i] );
-     }
-     
+        
    // TODO: does connectivity of higher-dimensional neighbor elements need to be updated?
      
-   // 4. removing original face
+   // 3. removing original face
    delete fptr;
    fptr = nullptr;
 

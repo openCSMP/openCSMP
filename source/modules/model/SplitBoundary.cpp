@@ -144,7 +144,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // 1. getting mesh manager to build interfaces according to specifications
   // -----------------------------------------------------------------------
   this->elmt_vec_.reserve( ifset.size() );
-  vector<InterFace<dim>*>  empty_nbor_connectivity;
+
   // for all the interfaces of the new split boundary
   for ( auto it = ifset.begin(); it != ifset.end(); ++it )
     {
@@ -159,8 +159,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
       csmp::InterFace<dim>* const interfaceObj = mesh.AddInterFace( FE_ptr, nullptr,
                                                                     // inner neighbor  outer neighbor, intervening element
                                                                     (*it).first.first, (*it).second.first, nullptr,
-                                                                    ifvars, if_ip_vars,
-                                                                    empty_nbor_connectivity );
+                                                                    ifvars, if_ip_vars );
 
       // storing pointer to the interface in element collection
       this->elmt_vec_.push_back( interfaceObj );
@@ -454,28 +453,16 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   this->elmt_vec_.clear();
   this->elmt_vec_.reserve( boundary.Elements() );
 
-  // neighbor connectivity will be established later
-  vector<InterFace<dim>*> empty_iface_neighbors;
-
   const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.ElementsEnd() );
   for ( typename vector<Face<dim>*>::const_iterator fit( boundary.ElementsBegin() ); fit != facesEnd; ++fit )
-    {
-      // the InterFace that is being build from the current interface
-      InterFace<dim>* const interfaceObj = model.Mesh().ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint, empty_iface_neighbors );
-
-      this->elmt_vec_.push_back( interfaceObj );
-
-      // TODO: is this still needed?
-      //BoundaryConnector<dim>::RemoveElementNeighborConnectivity( *innerElement, *outerElement );
-
-    } // interfaces from faces
+    // the InterFace that is being build from the current interface
+    this->elmt_vec_.push_back( model.Mesh().ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
 
     // free excessive allocated capacity
   vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize splitboundary essentials 
-  establishNeighborConnectivity( this->elmt_vec_, INSIDE );
-  establishNeighborConnectivity( this->elmt_vec_, OUTSIDE );
+  establishNeighborConnectivity( this->elmt_vec_ );
 
   return true;
   

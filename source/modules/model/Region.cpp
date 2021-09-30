@@ -1925,7 +1925,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
   // searching for elements of region1 that are neighbors of ones in group1.
   // If so, there is a shared boundary and faces or interfaces are constructed.
   const size_t n_elements( region1.Elements() );
-  vector<Element<dim>*> empty_nbor_elmts;
+
   for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
     {
       ePtr = region1.E( i );
@@ -1957,8 +1957,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
                 // getting the mesh manager to construct a new element
                 Element<dim>* elmtObj = meshManager.AddElement( femPtr, nullptr,
                                                                 lvsElements, lvsIntegrationPoints,
-                                                                nodes, empty_nbor_elmts,
-                                                                material_id );
+                                                                nodes, material_id );
                 // added to boundary
                 this->elmt_vec_.push_back( elmtObj );
 

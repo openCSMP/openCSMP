@@ -125,11 +125,10 @@ public:
                                                 const LocalVariables&,
                                                 BOX_BOUNDARY = NOT );
 
-  /// if neighbors are not supplied, method tries to find neighbors through the parent connectivity of the nodes
+  /// method tries to find neighbors through the parent connectivity of the nodes
   Element<dim>*	const AddElement( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
                                   const LocalVariables&, const IntegrationPointVariables&,
-                                  const std::vector<Node<dim>*>& nodes,
-                                  const std::vector<Element<dim>*>& nbors, int32 material_id );
+                                  const std::vector<Node<dim>*>& nodes, int32 material_id );
 
   /// puts lower-dimensional element inside of an InterFace, connecting it to its base pointer; the neighbors are not connected yet
   Element<dim>*	const AddInterveningElement( csmp::InterFace<dim>* const,
@@ -142,37 +141,32 @@ public:
                                          csmp::Element<dim>* inner_eptr,
                                          csmp::Element<dim>* outer_eptr,
                                          const LocalVariables&,
-                                         const IntegrationPointVariables&,
-                                         const std::vector<Face<dim>*>& face_neighbors );
+                                         const IntegrationPointVariables& );
      
-  /// optionally, the neighbor element pointers might not be assigned; @note node pointers must be supplied in CCW order from outside looking in
+  /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in
   Face<dim>* const AddFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
                             Element<dim>* const inner_parent, Element<dim>* const outer_parent,
                             const LocalVariables&,
                             const IntegrationPointVariables&,
-                            const std::vector<Node<dim>*>& nodes,
-                            const std::vector<Face<dim>*>& face_neighbors );
+                            const std::vector<Node<dim>*>& nodes );
 
   /// adds Face that caps a higher-dimensional Element at the model boundary
   Face<dim>* const AddBoundaryFace( csmp::Element<dim>* const innerParent,
                                     size_t local_face_id,
  //                                   const FiniteElementManager& fe_manager, // put into MeshManager
                                     const LocalVariables&,
-                                    const IntegrationPointVariables&,
-                                    const std::vector<Face<dim>*>& face_neighbors ); ///< optional
+                                    const IntegrationPointVariables& ); ///< optional
 
   /// like AddFace, but with double the nodes (inside & outside) and neighbors; extra option to assign a precreated intervening element
   InterFace<dim>*	const	AddInterFace( csmp::FiniteElement* const, const csmp::FiniteVolumeStencil<dim>* const,
                                       Element<dim>* const inner_parent, Element<dim>* const outer_parent,
                                       Element<dim>* const intervening_elmt,
                                       const LocalVariables&,
-                                      const IntegrationPointVariables&,
-                                      const std::vector<InterFace<dim>*>& iface_neighbors );
+                                      const IntegrationPointVariables& );
    /// compatibility checks are performed
   InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
                                                 const LocalVariables&,
-                                                const IntegrationPointVariables&,
-                                                const std::vector<InterFace<dim>*>& iface_neighbors );
+                                                const IntegrationPointVariables& );
  
    /// duplicates Node, automatically creating a node manifold or adding it to an existing one.
   Node<dim>* const      Duplicate( Node<dim>* const nptr_inside,
