@@ -97,11 +97,11 @@ bool isQuadrilateral( CSMP_FEM_TYPE );
 bool isHexahedral( CSMP_FEM_TYPE );
 
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE );
-CSMP_FEM_TYPE      parseFiniteElementTypeEnum( int32 csp_etype );
+CSMP_FEM_TYPE      parseFiniteElementTypeEnum( int8_t csp_etype );
 CSMP_FEM_TYPE      parseFiniteElementType( const std::string& etype );
-const char*        parseFiniteElementType( int32 etype );
+const char*        parseFiniteElementType( int8_t etype );
 FV_FACET_TYPE      parseFacetType( const std::string& ftype );
-const char*        parseFacetType( int32 ftype );
+const char*        parseFacetType( int8_t ftype );
 
 
 /**

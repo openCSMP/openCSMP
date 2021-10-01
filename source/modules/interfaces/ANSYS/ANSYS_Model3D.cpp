@@ -290,6 +290,7 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
     vset.RemovePfverts();
+    vset.EstablishElementConnectivity3D();
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {

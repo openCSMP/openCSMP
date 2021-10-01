@@ -77,7 +77,7 @@ void VData_Test::run()
   _test( !( copyCountVData == dequeVData ) );
 
   // .)ELEMENT TYPE OPS
-  std::vector<int32> elmtType;
+  std::vector<int8_t> elmtType;
   elmtType.push_back( 8 );
   elmtType.push_back( 8 );
   elmtType.push_back( 8 );
@@ -88,8 +88,8 @@ void VData_Test::run()
   _test( dummyVData.ElementType( 0 ) == 8 );
   _test( dummyVData.ElementType( 2 ) == 8 );
   _test( dummyVData.ElementType( 4 ) == 6 );
-  std::vector<int32>::const_iterator elmtStart = elmtType.begin();
-  std::vector<int32>::const_iterator elmtEnd = elmtType.end();
+  auto elmtStart = elmtType.begin();
+  auto elmtEnd = elmtType.end();
   dummyVData.AddElementTypes( elmtStart, elmtEnd );
   _test( dummyVData.ElementType( 0 ) == 8 );
   _test( dummyVData.ElementType( 2 ) == 8 );
@@ -107,7 +107,7 @@ void VData_Test::run()
   countVData.Resize( 4, 4, 8, 6, 3 );
   _test( countVData.Elements() == 3 );
   _test( countVData.Vertices() == 6 );
-  std::deque<int32> etypes;
+  std::deque<int8_t> etypes;
   etypes.push_back( 3 );
   etypes.push_back( 3 );
   etypes.push_back( 3 );

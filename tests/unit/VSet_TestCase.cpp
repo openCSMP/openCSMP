@@ -7,6 +7,7 @@
 #include "ScalarVariable.h"
 #include "ArrayVariable.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
+#include "vsetMakers.h"
 
 // File I/O and Initialization
 #include "ANSYS_Model3D.h"
@@ -34,7 +35,8 @@ VSet_TestCase::~VSet_TestCase()
 */
 void VSet_TestCase::run()
 {
-   TestModelConstructionAndSaving2D();
+   Test_CreateConsistentLineElementOrientations2D();
+   //TestModelConstructionAndSaving2D();
     
 } // end VSet_TestCase
 
@@ -68,11 +70,12 @@ void VSet_TestCase::TestModelConstructionAndSaving2D()
     // processing the (deliberately) inconsistent VSet 
     const size_t rotated_elements = vset.RenumberElementsCounterClockwise2D();
     if ( rotated_elements == 0U )
-      throw csmp::Exception( ERROR, "VSet_TestCase::TestModelConstructionAndSaving2D",
-                             "element orientations were already correct.");
+      ErrorHandler::Instance().notice( WARNING, "VSet_TestCase::TestModelConstructionAndSaving2D",
+                                                "non-diagnostic test: element orientations are already correct.");
+      
   
     // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
-    vset.EstablishConnectivityOfEquidimensionalElements2D();
+    vset.EstablishElementConnectivity2D();
 
     // aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
     vset.CreateConsistentLineElementOrientations2D();
@@ -241,6 +244,40 @@ void VSet_TestCase::TestModelConstructionAndSaving3D()
 
   } // end 
 
+
+
+
+/**
+     uses specific line element model from vset_makers
+     SKM 1/10/2022
+*/
+bool VSet_TestCase::Test_CreateConsistentLineElementOrientations2D()
+ {
+    VSet<2U> vset;
+    test_Create_MeshPatchWithLineElements_VSet( vset );
+    // making a backup copy
+    VSet<2U> backup_vset( vset );
+    
+    vset.CreateConsistentLineElementOrientations2D();
+    
+    // removing the neighbor information and recreating it
+    vset.RemovePfverts();
+    vset.EstablishElementConnectivity2D();
+    
+    // comparison
+    auto itb=backup_vset.PfvertsBegin();
+    size_t vec_mismatches(0U);
+    for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
+        for ( size_t i=0U; i<(*it).size(); ++i )
+          _test( (*it)[i] == (*itb)[i] );
+        if ( (*it) != (*itb) )
+          vec_mismatches++;
+      }
+    
+    if ( vec_mismatches > 0 ) return false;
+    return true;
+    
+ } // end Test_CreateConsistentLineElementOrientations2D
 
 
 

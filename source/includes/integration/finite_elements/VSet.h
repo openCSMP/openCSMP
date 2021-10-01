@@ -41,10 +41,10 @@ class VSet : public VData {
 
     void Resize( size_t nodes_per_element, 
                  size_t nbors_per_element,
-                 int32  csmp_etype, 
+                 int8_t csmp_etype, 
                  size_t nodes, size_t elmts );
 
-    void Resize( const std::deque<int32>& etypes,
+    void Resize( const std::deque<int8_t>& etypes,
                  const std::deque<size_t>& npes, 
                  const std::deque<size_t>& epes,
                  size_t nodes, size_t faces, size_t interfaces );

@@ -73,7 +73,7 @@ void VSet_Test::run()
   _test( vset4.PlistSize( 0 ) == 8 );
   _test( vset4.PlistSize( 1 ) == 8 );
   _test( vset4.ElementType( 0 ) == LINEAR_TETRAHEDRON );
-  std::deque<int32> etypes;
+  std::deque<int8_t> etypes;
   etypes.push_back( ISOPARAMETRIC_LINEAR_HEXAHEDRON );
   etypes.push_back( ISOPARAMETRIC_LINEAR_HEXAHEDRON );
   etypes.push_back( ISOPARAMETRIC_LINEAR_PYRAMID );

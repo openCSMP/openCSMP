@@ -410,8 +410,8 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   size_t         counter( 0U );
   deque<size_t>  nodes_per_element( this->elmt_vec_.size() );
   deque<size_t>  elements_per_element( this->elmt_vec_.size() );
-  deque<int32>   etypes( this->elmt_vec_.size() );
-  set<int32>     n_etypes;
+  deque<int8_t>  etypes( this->elmt_vec_.size() );
+  set<int8_t>    n_etypes;
 
   for ( typename vector<csmp::Element<dim>*>::const_iterator
         eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )

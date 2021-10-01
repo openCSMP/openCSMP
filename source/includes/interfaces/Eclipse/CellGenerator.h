@@ -39,7 +39,7 @@ public:
 	std::deque<Point<3u>> extraNodes;
 
 	std::map<size_t, std::vector<size_t>>  plist;
-	std::vector<int32> fem_types;
+	std::vector<int8_t> fem_types;
 
 	Pillar* p0;
 	Pillar* p1;

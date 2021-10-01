@@ -2508,6 +2508,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
 
      // getting rid of previous bflags
      vset.RemoveBflags();
+     vset.ResizeBFlags();
 
      // 1. Making node ID sets for each of the standard boundaries
      // box boundaries

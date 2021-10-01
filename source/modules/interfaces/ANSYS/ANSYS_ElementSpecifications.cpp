@@ -7,7 +7,7 @@ namespace csmp {
 /** Returns the ANSYS integer flag corresponding to the ANSYS element name
 string.  
 */
-int32  ANSYS_ElementSpecifications::ANSYS_Type( const string& icem_FEtype )
+int8_t  ANSYS_ElementSpecifications::ANSYS_Type( const string& icem_FEtype )
  {
     // bar elements
     if ( icem_FEtype == "BAR_2" )    return 2;
@@ -82,7 +82,7 @@ element type     identifier
 #define POLYGON		23
 @endcode
 */
-size_t ANSYS_ElementSpecifications::NodesPerElementOfType( int32 etype )
+size_t ANSYS_ElementSpecifications::NodesPerElementOfType( int8_t etype )
  {
     if ( etype ==  2 ) return  2U; // bar element
     if ( etype ==  3 ) return  3U; // 
@@ -117,7 +117,7 @@ size_t ANSYS_ElementSpecifications::NodesPerElementOfType( int32 etype )
 
 /** Returns the number of neighbors of the input ANSYS finite element type.
 */
-size_t ANSYS_ElementSpecifications::NeighborsPerElementOfType( int32 etype )
+size_t ANSYS_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
  {
     if ( etype ==  2 ) return  2U; // bar element
     if ( etype ==  3 ) return  2U; // 
@@ -152,7 +152,7 @@ size_t ANSYS_ElementSpecifications::NeighborsPerElementOfType( int32 etype )
 
 
 
-size_t ANSYS_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype, 
+size_t ANSYS_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
                                                                     size_t face )
  {
     // bar element
@@ -201,7 +201,7 @@ size_t ANSYS_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
  
 
   
-size_t ANSYS_ElementSpecifications::FaceNodeForElementOfType( int32 etype, 
+size_t ANSYS_ElementSpecifications::FaceNodeForElementOfType( int8_t etype,
                                                               size_t face, 
                                                               size_t face_node )
  {
@@ -400,7 +400,7 @@ size_t ANSYS_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
  
 
 
-size_t ANSYS_ElementSpecifications::FacesPerElementOfType( int32 ANSYS_finite_element_type )
+size_t ANSYS_ElementSpecifications::FacesPerElementOfType( int8_t ANSYS_finite_element_type )
  {
     // since these are equivalent numbers
     return NeighborsPerElementOfType( ANSYS_finite_element_type );
@@ -418,7 +418,7 @@ element type     identifier
 #define BAR_2		2
 #define BAR_3		3
 @endcode*/
-bool  ANSYS_ElementSpecifications::LineElement( int32 etype )
+bool  ANSYS_ElementSpecifications::LineElement( int8_t etype )
  {
     if ( etype == 2 || etype == 3 ) return true;
     
@@ -442,7 +442,7 @@ element type     identifier
 #define TRI_6_X	 11
 @endcode
 */
-bool  ANSYS_ElementSpecifications::SurfaceElement( int32 etype )
+bool  ANSYS_ElementSpecifications::SurfaceElement( int8_t etype )
  {
     if ( etype ==  8 || etype ==  9 || etype == 10 || 
          etype == 11 || etype == 14 || etype == 15 || 
@@ -468,7 +468,7 @@ element type     identifier
 #define PENTA_15	13	#define PYRA_14		22
 #define PENTA_18	21	#define PYRA_13		24
 @endcode */
-bool  ANSYS_ElementSpecifications::VolumeElement( int32 etype )
+bool  ANSYS_ElementSpecifications::VolumeElement( int8_t etype )
  {
     if ( etype ==  4 || etype ==  5 || etype ==  6 || 
          etype ==  7 || etype == 12 || etype == 13 || 
@@ -614,7 +614,7 @@ size_t  ANSYS_ElementSpecifications::InterpolationOrder( const std::string& etyp
  }
 
 
-size_t  ANSYS_ElementSpecifications::InterpolationOrder( int32 etype )
+size_t  ANSYS_ElementSpecifications::InterpolationOrder( int8_t etype )
   {
     if ( LinearElement( etype ) )    return 1U;
     if ( QuadraticElement( etype ) ) return 2U;
@@ -643,7 +643,7 @@ QUAD_4		14
 QUAD_4_X	15
 PYRA_5		18
 @endcode */
-bool  ANSYS_ElementSpecifications::LinearElement( int32 etype )
+bool  ANSYS_ElementSpecifications::LinearElement( int8_t etype )
  {
     if ( etype ==  2 || etype ==  4 || 
          etype ==  6 || etype ==  8 || etype ==  9 || 
@@ -678,7 +678,7 @@ PENTA_18	21
 PYRA_14		22
 PYRA_13		24
 @endcode*/
-bool  ANSYS_ElementSpecifications::QuadraticElement( int32 etype )
+bool  ANSYS_ElementSpecifications::QuadraticElement( int8_t etype )
  {
     if ( etype ==  5 || etype ==  7 || etype == 10 || 
          etype == 11 || etype == 13 || etype == 16 || 
@@ -701,7 +701,7 @@ cubic
 ==============
 HEXA_32		32
 @endcode*/
-bool  ANSYS_ElementSpecifications::CubicElement( int32 etype )
+bool  ANSYS_ElementSpecifications::CubicElement( int8_t etype )
  {
     if ( etype == 32 ) return true;
     return false;
@@ -880,7 +880,7 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
 */
-std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_Type( int32 etype, bool isoparametric, uint32 dim )
+std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_Type( int8_t etype, bool isoparametric, uint32 dim )
 {
     return parseFiniteElementType( CSMP_TypeFrom_ANSYS_Type( etype, isoparametric, dim ) );
 }
@@ -890,7 +890,7 @@ std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_TypeName( cons
     return parseFiniteElementType( CSMP_TypeFrom_ANSYS_TypeName( etype, isoparametric, dim ) );
 }
 
-std::string  parse_ANSYS_BoundaryFlag( int i )
+std::string  parse_ANSYS_BoundaryFlag( int8_t i )
  {
     if ( i == IRREGULAR_OUTSIDE ) return string("IRREGULAR");
     if ( i == LEFT_OUTSIDE )    return string("LEFT");
@@ -938,7 +938,7 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
  */
-CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int32 etype, bool isoparametric, uint32 dim )
+CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int8_t etype, bool isoparametric, uint32 dim )
  {
     if ( isoparametric ) {
 	    // bar elements
@@ -1101,9 +1101,6 @@ CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const 
     return UNKNOWN;
     
  } // end CSMP_TypeFromANSYSType (char* s, bool)
-
-    
-
 
 
 } // end namespace csmp

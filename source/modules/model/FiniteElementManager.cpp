@@ -126,7 +126,7 @@ FiniteElement*  FiniteElementManager::LinearTetrahedronElement() const
  }
 
 
-FiniteElement*  FiniteElementManager::E( int32 e_type ) const
+FiniteElement*  FiniteElementManager::E( int8_t e_type ) const
  {
     if ( dimensions == 3 ) {
 	     if ( hexa_ptr != NULL && e_type == hexa_ptr->ElementType() ) return hexa_ptr;

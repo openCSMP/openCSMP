@@ -19,6 +19,11 @@ namespace csmp {
     void test_Create_SlitRectangle_VSet(VSet<2U>&, size_t x_dimension, size_t y_dimension, double64 x_length, 
                                         double64 y_length, size_t depth_of_slit, bool bSkewed=false );
                                         
+    // 2D poly-element sets
+    // ----------------------
+    void test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& );
+
+
     // 3D single element sets
     // ----------------------
     void test_Create_Pyramid_VSet( VSet<3U>&, bool bSkewed=false );

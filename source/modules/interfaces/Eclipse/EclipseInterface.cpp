@@ -121,7 +121,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
   std::set<std::string> fem_types;
   for ( size_t i = 0U; i < vset_->Elements(); i++ ) {
     elmts.push_back( i );
-    fem_types.insert( csmp::parseFiniteElementType( (vset_->ElementType( i )) ) );
+    fem_types.insert( csmp::parseFiniteElementType( vset_->ElementType(i) ) );
   }
   model_topology_->AddRegion( "ALL_CELLS", fem_types, elmts );
 

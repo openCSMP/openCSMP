@@ -25,6 +25,9 @@ class VSet_TestCase : public Test
       void TestModelConstructionAndSaving2D();
       void TestModelConstructionAndSaving3D();
       
+      // uses specific line element model from vset_makers
+      bool Test_CreateConsistentLineElementOrientations2D();
+      
     private:
       const std::string model_file_;
       const bool verbose_;

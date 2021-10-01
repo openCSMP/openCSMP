@@ -47,12 +47,12 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	int dimension;
 
 	map< string, std::set<std::string> > fem_types;
-	map< string, vector<size_t> > regions; // key: name of the region, value: list of vertices
-	vector<int> element_types;
-	deque< vector< size_t > > elements;
-	vector<int32> element_type;
-	deque<size_t> mixed_ele_plist;      // number of nodes per element
-	deque<size_t> mixed_ele_pfverts;    // number of neighbours per element
+	map< string, vector<size_t> >    regions; // key: name of the region, value: list of vertices
+	vector<int8_t>                   element_types;
+	deque< vector< size_t > >        elements;
+	vector<int8_t>                   element_type;
+	deque<size_t>                    mixed_ele_plist;      // number of nodes per element
+	deque<size_t>                    mixed_ele_pfverts;    // number of neighbours per element
 	std::deque<std::vector<long64> > pfverts; // neighbour elements
 
 	size_t n_vertices = 0;

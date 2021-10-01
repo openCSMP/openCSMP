@@ -2065,7 +2065,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
   if ( HybridElementMesh() || faces_.size() > 0 || interfaces_.size() > 0 ) {
       deque<size_t>  nodes_per_element;
       deque<size_t>  neighbors_per_element;
-      deque<int32>   csmp_fem_types;
+      deque<int8_t>  csmp_fem_types;
 
       // 1.1 identifying how many nodes and neighbors there are per element
       for ( auto e : elements_ ) {

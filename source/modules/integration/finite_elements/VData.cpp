@@ -199,12 +199,12 @@ bool VData::HybridElementTypeMesh() const { return hybrid_mesh_; }
 
 void VData::HybridElementTypeMesh( bool hybrid_mesh ) { hybrid_mesh_ = hybrid_mesh; }
 
-void VData::AddElementTypes( std::vector<int32>::const_iterator first,
-                             std::vector<int32>::const_iterator last )
+void VData::AddElementTypes( std::vector<int8_t>::const_iterator first,
+                             std::vector<int8_t>::const_iterator last )
  { pelmt.assign( first, last ); }
 
-  void VData::AddElementTypes( std::deque<int32>::const_iterator first,
-                               std::deque<int32>::const_iterator last )
+  void VData::AddElementTypes( std::deque<int8_t>::const_iterator first,
+                               std::deque<int8_t>::const_iterator last )
   { pelmt.assign( first, last ); }
   
 
@@ -276,13 +276,13 @@ std::vector<long64>::const_iterator  VData::PfvertsEnd( size_t eidx ) const {
   }
 
 
-void   VData::ElementType( size_t eidx, int32 etype )
+void   VData::ElementType( size_t eidx, int8_t etype )
  {
     assert( eidx < pelmt.size() );
     pelmt[ eidx ] = etype;
  }
 
-int32  VData::ElementType( size_t eidx ) const
+int8_t  VData::ElementType( size_t eidx ) const
  {
     assert( eidx < pelmt.size() );
     return pelmt[ eidx ];
@@ -297,7 +297,7 @@ void VData::ResizeElementTypes( size_t new_size )
 */
 
 
-// Map Accessors (iterators)
+// Accessors (iterators)
 
 std::deque<std::vector<size_t> >::iterator VData::PlistBegin()
  { return plist.begin(); }
@@ -324,10 +324,10 @@ size_t  VData::PlistSize( size_t eidx ) const
 
 
 // const iterators
-std::vector<int32>::const_iterator  VData::PelmtBegin() const
+std::vector<int8_t>::const_iterator  VData::PelmtBegin() const
  { return pelmt.begin(); }
     
-std::vector<int32>::const_iterator  VData::PelmtEnd() const
+std::vector<int8_t>::const_iterator  VData::PelmtEnd() const
  { return pelmt.end(); }
 
 std::deque<std::vector<size_t> >::const_iterator VData::PlistBegin() const
@@ -362,7 +362,7 @@ void VData::AddBFlag( size_t node_id, std::int8_t bflag )
          cerr <<" is uninterpretable; no assignment was made.\n";
          return;
       }
-    bflags.at( node_id ) = bflag;
+    bflags[ node_id ] = bflag;
  }
  
  
@@ -390,12 +390,12 @@ std::int8_t VData::BoundaryFlag( size_t vertex ) const
 
 // specific element, face and interface iterators
 /// iterator to CSMP finite element type of first face stored in mesh
-std::vector<int32>::const_iterator  VData::PelmtFacesBegin() const {
+std::vector<int8_t>::const_iterator  VData::PelmtFacesBegin() const {
     return std::next( pelmt.begin(), first_face_ );
  }
  
 /// iterator to CSMP finite element type of first interface stored in mesh
-std::vector<int32>::const_iterator  VData::PelmtInterfacesBegin() const {
+std::vector<int8_t>::const_iterator  VData::PelmtInterfacesBegin() const {
     return std::next( pelmt.begin(), first_interface_ );
  }
 
@@ -474,7 +474,7 @@ long64 VData::Pfvert( size_t eidx, size_t nidx ) const
 /**
     Sets the element type of a mono-type element mesh
 */
-void VData::SingleElementType( int32 etype )
+void VData::SingleElementType( int8_t etype )
  {
     if ( pelmt.size() > 1U )
       cout <<"\nVData::SingleElementType: changing VSet from hybrid element to single-element container."<< endl;
@@ -501,7 +501,7 @@ void VData::SingleElementType( int32 etype )
     2. element type entries for each element of the mesh
        including potential faces and interfaces
 */
-void VData::ElementTypes( const vector<int32>& elmt_types )
+void VData::ElementTypes( const vector<int8_t>& elmt_types )
  {
     assert( !elmt_types.empty() );
     pelmt.clear();
@@ -533,7 +533,7 @@ Resize() allows a VSet to be re-used in a computation.
  */
 void VData::Resize( size_t nodes_per_element, 
                     size_t nbors_per_element, 
-                    int32 etype,
+                    int8_t etype,
                     size_t nodes, size_t elmts )
  {
     px.resize(nodes);  vector<double64>( px ).swap( px );
@@ -588,7 +588,7 @@ Resize() allows a VSet to be re-used in a computation.
 to be included into the supplied deques.
  
 */
-  void VData::Resize( const deque<int32>& etypes,
+  void VData::Resize( const deque<int8_t>& etypes,
                       const deque<size_t>& npes,
                       const deque<size_t>& epes,
                       size_t nodes,
@@ -1220,7 +1220,7 @@ void VData::OutASCII( const char* file ) const
      // -----
      ofs <<"\n'pelmt' finite element types:";
      size_t i(0U);
-     for ( vector<int32>::const_iterator
+     for ( vector<int8_t>::const_iterator
            eit=pelmt.begin(); eit!=pelmt.end(); eit++, i++ )
        ofs <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
      ofs << endl;
@@ -1295,7 +1295,7 @@ void VData::Out() const
      // -----
      cout <<"\n'pelmt' finite element types:";
      size_t i(0U);
-     for ( vector<int32>::const_iterator
+     for ( vector<int8_t>::const_iterator
            eit=pelmt.begin(); eit!=pelmt.end(); eit++, i++ )
        cout <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
      cout << endl;
@@ -1320,7 +1320,14 @@ void VData::Out() const
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
           cout << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t ";
+          for ( size_t j=0U; j<(*ft).size(); j++ ) {
+               if ( (*ft)[j] >= 0 )
+                 cout << (*ft)[j] <<"\t ";
+               else {
+                    BOX_BOUNDARY bflag = intToBOX_BOUNDARY( static_cast<int8_t>((*ft)[j]) );
+                    cout << parseBoundary( bflag ) <<"\t ";
+                 }
+            }
           cout << endl;
        }
 
@@ -1329,7 +1336,7 @@ void VData::Out() const
      if ( !bflags.empty() ) cout <<"\nBoundary flags 'bflags':"<< endl;
      size_t n_node(0U);
      for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
-       cout << n_node++ <<": \t"<< (*bf) << endl;
+       cout << n_node++ <<": \t"<< parseBoundary( intToBOX_BOUNDARY(*bf) ) << endl;
 
   } // end Out()
 
@@ -1397,8 +1404,8 @@ void VData::InText( std::ifstream& ifs )
      for ( size_t i=0U; i<static_cast<size_t>(nelements); i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
-          int etype = atoi(strtok( text_line, delims ));
-          int npe   = atoi(strtok(NULL,delims));
+          int8_t etype = atoi(strtok( text_line, delims ));
+          int npe      = atoi(strtok(NULL,delims));
           pelmt.push_back( etype );
           plist[i].resize( static_cast<uint32>(npe) );
           vector<size_t>( plist[i] ).swap( plist[i] );
@@ -1700,10 +1707,10 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
    
     // checking wether the mesh is still mixed element type and resizing 
     // the element type deque if not
-    set<int32>  n_etypes( pelmt.begin(), pelmt.end() );
+    set<int8_t>  n_etypes( pelmt.begin(), pelmt.end() );
     if ( n_etypes.size() == 1U ) {
          pelmt.resize(1U);
-         vector<int32>( pelmt ).swap( pelmt );
+         vector<int8_t>( pelmt ).swap( pelmt );
       }
 
 
@@ -1889,7 +1896,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
 */
 size_t  VData::OrderOfFiniteElementInterpolationFunctions() const
  {
-     for ( vector<int32>::const_iterator 
+     for ( vector<int8_t>::const_iterator
            it=PelmtBegin(); it!=PelmtEnd(); it++ ) {
 		  if ( (*it) == LINEAR_CUBOID ) return 1;
 		  if ( (*it) == LINEAR_RECTANGLE ) return 1;
@@ -2024,10 +2031,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
     
     // 1. processing the elements that have the same dimension as the 2D mesh (with at least 3 nodes)
     // ----------------------------------------------------------------------------------------------
-    const vector<int32>::const_iterator end = PelmtEnd();
-    vector<int32>::const_iterator       eit = PelmtBegin();
-    deque<vector<size_t> >::iterator    pls = PlistBegin();
-    deque<vector<long64> >::iterator    pfv = PfvertsBegin();
+    const vector<int8_t>::const_iterator end = PelmtEnd();
+    vector<int8_t>::const_iterator       eit = PelmtBegin();
+    deque<vector<size_t> >::iterator     pls = PlistBegin();
+    deque<vector<long64> >::iterator     pfv = PfvertsBegin();
     
     while( eit != end ) {
          // if this is a triangle or quadrilateral
@@ -2098,20 +2105,21 @@ size_t VData::RenumberElementsCounterClockwise2D()
  /**
    Line elements are oriented in a consistent way for internal 1D regions within a 2D domain.
    
-   @brief To ensure that the normals pointing out of a lower (1D) dimensional regions located at the model boundary,
-   and that they all point in the same direction for internal boundaries, their nodes must be locally ordered consistently;
-   meaning these line elements are aligned with the node-numbering of the faces of the surface elements located at the 
+   @brief To ensure that the normals pointing out of a lower (1D) dimensional elements located at the model boundary,
+   and that they all point in the same direction for internal boundaries, the nodes of such elements must be locally ordered consistently;
+   meaning these line elements are aligned with the node-numbering of the faces of 2D surface elements located at the
    model boundary whose nodes are numbered counter clockwise.
-      The normals of the line elements are found by 90degrees clockwise rotation of the tangent vector of the line elements,
+   
+   The normals of the line elements are found by 90degrees clockwise rotation of the tangent vector of the line elements,
    which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
    
-   @attention assumes node numbering in Plist follows the convention Exterior nodes first, then Interior nodes.
+   @attention assumes node numbering in 'plist' follows the convention corner nodes first, then Interior nodes.
    
    @attention method assumes that all manifolds (connections of more than 2 line elements at a node have been removed
-   =disambiguated before. Thus it relies on a valid neighbor connectivity of the line elements, which should be stored in pfverts.
+   =disambiguated before. Thus it relies on a valid neighbor connectivity of the line elements, which must stored in pfverts.
    
-   @note algorithmic procedure: 1) all chains of connected line elements are found and stored in a map, using their "root" nodes as keys.
-   2) these are traversed, flipping nodes whenever successive elements are not aligned. 3) at the model boundaries,  the fixed chains of 
+   @note algorithmic procedure: 1) chains of connected line elements are found and stored in a map, using their "root" nodes as keys.
+   2) these are then traversed, flipping nodes whenever successive elements are not aligned. 3) at the model boundaries,  the chains of
    line elements are flipped if their direction is not matched with that of the faces of the surface elements at the model boundary.
    4) line element chains inside of the model are kept in whichever, yet consistent orientation.
    
@@ -2138,13 +2146,13 @@ size_t VData::RenumberElementsCounterClockwise2D()
       // ------------------------------------------------------------
       // (if a root node already exists in the map, the other end of the chain is used as root node)
       // elmt-idx - of line elements where at least one neighbor is missing 
-      set<size_t>  polyline_ends;
+      set<size_t>  line_elmts;
       // recording the corner-node ids of the surface elements for later searching
       //  face-nd-ids,       elmt, face
       map<set<size_t>,pair<size_t,size_t> > surf_elmt_face_nd_ids;
 
-      const vector<int32>::const_iterator  end = PelmtEnd();
-      vector<int32>::const_iterator        eit = PelmtBegin();
+      const vector<int8_t>::const_iterator  end = PelmtEnd();
+      vector<int8_t>::const_iterator        eit = PelmtBegin();
       size_t elmt_idx(0U);
 
        while( eit != end ) {
@@ -2152,7 +2160,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
             CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
             if ( isLineElement( etype ) ) {
                   if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 ) 
-                    polyline_ends.insert( elmt_idx ); 
+                    line_elmts.insert( elmt_idx );
               }
             // if this is a surface element  
             else {
@@ -2187,14 +2195,15 @@ size_t VData::RenumberElementsCounterClockwise2D()
             eit++;
          }
          
-      // 2. following chains until the end, re-orientating the line element orientations if necessary
-      // --------------------------------------------------------------------------------------------
+      // 2. following chains until the end, re-orientating line-elements if necessary
+      // ----------------------------------------------------------------------------
       // root-elmt, numbers of interconnected line elements in chain
       map<size_t,vector<size_t> > polylines;
       
-      for ( set<size_t>::const_iterator it=polyline_ends.begin(); it!= polyline_ends.end(); ++it ) {
+      for ( set<size_t>::const_iterator it=line_elmts.begin(); it!= line_elmts.end(); ++it ) {
            // starting line-element chain traversal
            elmt_idx           = (*it);
+           // if the line element has no first neighbor it must be at the beginning of a chain and correctly oriented
            bool   flip        = ( pfverts[elmt_idx][0] < 0 ) ? false : true;
            BOX_BOUNDARY bflag = (flip == false) ? intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][0] ) ) :
                                                   intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][1] ) );
@@ -2212,10 +2221,12 @@ size_t VData::RenumberElementsCounterClockwise2D()
           pair<map<size_t,vector<size_t> >::iterator,bool> chain_it=polylines.insert( make_pair( elmt_idx, vector<size_t>(1,elmt_idx) ) );
           // making sure that the element was inserted (else it is a duplicate)
           assert( chain_it.second == true );
+          
           // traversing the chains in the direction of the available neighbor, node0 is the one with no neighbor
           bool end_of_polyline(false);
           while ( end_of_polyline == false ) {
                // is the neighbor element is correctly oriented (forming a chain with its first node against the second node of the previous one)
+               assert( pfverts[elmt_idx][1] >= 0 );
                flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true; 
                elmt_idx = pfverts[elmt_idx][1];
                // flipping the elements nodes and neighbors if necessary
@@ -2230,7 +2241,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                  }
                // storing the element in the chain (polyline)
                (*chain_it.first).second.push_back( elmt_idx );
-               // exit condition
+               // exit condition (if both nodes od line element are o the BOX_BOUNDARY)
                if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 ) {
                     // TODO: does box boundary have to be treated?
                     end_of_polyline = true;
@@ -2356,7 +2367,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
  
 
 /**
-   (Re)bBuild 'pfverts' container in the case it is empty or may contain unreliable information.
+   (Re)bBuild 'pfverts' container for the case it is empty or may contain unreliable information.
    computes 'pfverts' connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
    
    @attention this method assumes that all elements are numbered in counter-clockwise direction
@@ -2365,10 +2376,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
   @date 2/2/2020
   
 */
-void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbor line elements too */ )
+void  VData::EstablishElementConnectivity2D()
  {
    if ( !pfverts.empty() ) {
-         cout <<"\nVData::EstablishConnectivityOfEquidimensionalElements2D: 'pfverts' not empty; deleting original content before reconstruction.\n";
+         cout <<"\nVData::EstablishElementConnectivity2D: 'pfverts' not empty; deleting original content before reconstruction.\n";
          pfverts.clear();
          assert( !plist.empty() );
          pfverts.resize( plist.size() );
@@ -2378,9 +2389,7 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
    bool      is_triangle = (etype != UNKNOWN) ? isTriangularElement( etype ) : false;
    bool is_quadrilateral = (etype != UNKNOWN) ? isQuadrilateralElement( etype ) : false;
    
-   // 1. Processing single (surface) element-type mesh
-   // ------------------------------------------------
-   // building face keys for surface and line element types and collecting them into maps including the elements that they belong to with corresponding face ID
+   // building face keys for surface and line elements types, collecting them into maps including the elements that they belong to with corresponding face ID
    //  face-nd-ids    elmt-id, face-of-element  
    map<set<size_t>,map<size_t,size_t> >  surf_elmt_nbors;
    map<size_t,map<size_t,size_t> >       line_elmt_nbors;
@@ -2454,6 +2463,7 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
                }
              // any line elements only have a single node at their end-points, so they go into separate map  
              else {
+                  assert( isLineElement( etype ) );
                   pfverts[elmt_idx].resize(2U,IRREGULAR);
                   pair<map<size_t,map<size_t,size_t> >::iterator,bool> face1_it = 
                     line_elmt_nbors.insert( make_pair( (*eit)[0], map<size_t,size_t>({{elmt_idx,{0}}}) ) );
@@ -2541,23 +2551,27 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
         
         // detecting elements with more than one face on boundary (these need to be fixed)
         elmt_idx = 0U;
-        for ( deque<vector<long64> >::const_iterator pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx ) {
-             size_t boundaries_per_element(0U);
-             for ( vector<long64>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
-               // the face is on the boundary
-               if ( (*pt) < 0 ) boundaries_per_element++;
-             if ( boundaries_per_element > 1U ) {
-                  cerr <<"\nVData::EstablishConnectivityOfEquidimensionalElements2D: WARNING: element "<< elmt_idx;
-                  cerr <<" has "<< boundaries_per_element <<" faces on the model boundary.\n";
-               } 
-          }
+        for ( deque<vector<long64> >::const_iterator pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx )
+          if ( !isLineElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) )
+            {
+               size_t boundaries_per_element(0U);
+               for ( vector<long64>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
+                 // the face is on the boundary
+                 if ( (*pt) < 0 ) boundaries_per_element++;
+               if ( boundaries_per_element > 1U ) {
+                    cerr <<"\nVData::EstablishElementConnectivity2D: WARNING: element "<< elmt_idx;
+                    cerr <<" ("<< parseFiniteElementType( pelmt[elmt_idx] ) <<") ";
+                    cerr <<" has "<< boundaries_per_element <<" faces on the model boundary.\n";
+                 }
+            }
         
         // 3. reconnecting line elements
         // -----------------------------
-        map<size_t,map<size_t,size_t> >  line_elmt_nbors;
+        //    face-nd-id   elmt-id, face-of-element
         for ( map<size_t,map<size_t,size_t> >::iterator
               it=line_elmt_nbors.begin(); it!=line_elmt_nbors.end(); ++it ) {
              // dealing with line elements where these end in the interior or the perimeter of the model
+             //   only one neighbor
              if ( (*it).second.size() == 1U ) {
                   elmt_idx          = (*(*it).second.begin()).first;
                   const size_t face = (*(*it).second.begin()).second;
@@ -2566,7 +2580,7 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
                   BOX_BOUNDARY boundary = ( bit != bflags_revised.end() ) ? (*bit).second : INTERNAL;
                   pfverts[elmt_idx][face] = boundary;
                }
-             // case where each line element has just one neighbor
+             // line element has two neighbors
              else if ( (*it).second.size() == 2U ) {
                   const size_t elmt1      = (*(*it).second.begin()).first;
                   const size_t face_elmt1 = (*(*it).second.begin()).second;
@@ -2575,9 +2589,9 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
                   pfverts[elmt1][face_elmt1] = elmt2;
                   pfverts[elmt2][face_elmt2] = elmt1;
                }
-             // disambiguating manifolds
+             // line element has more than 2 neighbors (disambiguating manifolds)
              else {
-                  cout <<"\nVData::EstablishConnectivityOfEquidimensionalElements2D:";
+                  cout <<"\nVData::EstablishElementConnectivity2D:";
                   cout <<"\n found line-element manifold at node "<< (*it).first;
                   cout <<". Disambiguating it by using most closely aligned neighbor.\n";
                   while( (*it).second.size() >= 2U ) {
@@ -2612,7 +2626,7 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
         return;
      } // single-element type meshes
         
- } // end EstablishConnectivityOfEquidimensionalElements2D
+ } // end EstablishElementConnectivity2D
 
 
 
@@ -2625,28 +2639,28 @@ void  VData::EstablishConnectivityOfEquidimensionalElements2D( /* bool reneighbo
        @author SKM
        @date 25/4/2020
 */
-void VData::EstablishNeighborConnectivity2D()
+void VData::EstablishSurfaceElementConnectivity2D()
  {
     if ( plist.empty() )
-     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method requires a valid 'plist' in the input VSet.");
+     throw csmp::Exception( ERROR, "VData::EstablishSurfaceElementConnectivity2D", "method requires a valid 'plist' in the input VSet.");
     
     if ( bflags.empty() )
-     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method requires a valid 'bflags' map in the input VSet.");
+     throw csmp::Exception( ERROR, "VData::EstablishSurfaceElementConnectivity2D", "method requires a valid 'bflags' map in the input VSet.");
     
     if ( !pfverts.empty() )
-     cout <<"\nVData::EstablishNeighborConnectivity2D: WARNING, existing 'pfverts' record in Vdata is being deleted.\n";
+     cout <<"\nVData::EstablishSurfaceElementConnectivity2D: WARNING, existing 'pfverts' record in Vdata is being deleted.\n";
     
     if ( HybridElementTypeMesh() )
-     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method only works for single-element-type 2D meshes.");
+     throw csmp::Exception( ERROR, "VData::EstablishSurfaceElementConnectivity2D", "method only works for single-element-type 2D meshes.");
     
     if ( OrderOfFiniteElementInterpolationFunctions() != 1U )
-     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method only works for linear finite elements.");
+     throw csmp::Exception( ERROR, "VData::EstablishSurfaceElementConnectivity2D", "method only works for linear finite elements.");
     
     if ( ElementType(0U) != LINEAR_TRIANGLE and 
          ElementType(0U) != ISOPARAMETRIC_LINEAR_TRIANGLE and 
          ElementType(0U) != LINEAR_QUADRILATERAL and 
          ElementType(0U) != ISOPARAMETRIC_LINEAR_QUADRILATERAL )
-     throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", "method only works for 2D surface elements.");
+     throw csmp::Exception( ERROR, "VData::EstablishSurfaceElementConnectivity2D", "method only works for 2D surface elements.");
 
     
     // 1. generating map of faces from plist
@@ -2697,7 +2711,7 @@ void VData::EstablishNeighborConnectivity2D()
                        key.insert( plist[elmt_count][0] );
                     }    
                 }   
-              else throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", 
+              else throw csmp::Exception( ERROR, "VData::EstablishSurfaceElementConnectivity2D",
                                           "number of faces is incompatible with triangle or quadrilateral." );
               
               // inserting newly generated surface element keys into multimap          
@@ -2750,7 +2764,7 @@ void VData::EstablishNeighborConnectivity2D()
               else {
                    cerr <<"\n\telement "<< (*it1).second.second <<": face "<< (*it1).second.first <<": ";
                    cerr <<"bflags of face nodes: "<< parseBoundary(bflag1) <<" "<< parseBoundary(bflag2) <<"\n";
-                   throw csmp::Exception( ERROR, "VData::EstablishNeighborConnectivity2D", 
+                   throw csmp::Exception( ERROR, "VData::EstablishSurfaceElementConnectivity2D",
                                          "boundary that face is located on could not be identified.");
                 }
               // assigning the boundary identifier to neighbor of face 'pfverts'
@@ -2766,7 +2780,22 @@ void VData::EstablishNeighborConnectivity2D()
     // overwriting existing neighbor connectivity info with new one   
     pfverts = nbors;
        
- } // end EstablishNeighborConnectivity2D
+ } // end EstablishSurfaceElementConnectivity2D
+
+
+
+
+
+
+/**
+   rebuilds 'pfverts' from scratch
+*/
+void VData::EstablishElementConnectivity3D()
+ {
+     throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity3D", "not implemented yet");
+ 
+ } // end EstablishElementConnectivity3D
+
 
 
 

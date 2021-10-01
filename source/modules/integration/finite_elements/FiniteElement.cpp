@@ -1081,7 +1081,7 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
  
  
 /// converts enum names
-CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int32 etype )
+CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
   {
      if ( etype == UNKNOWN ) return UNKNOWN;
 	 if (etype == LINEAR_RECTANGLE) return LINEAR_RECTANGLE;
@@ -1199,7 +1199,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  
  
  /// converts enum names into text
- const char* parseFiniteElementType( int32 etype )
+ const char* parseFiniteElementType( int8_t etype )
   {
      if ( etype == UNKNOWN ) return "UNKNOWN";
 	   if ( etype == LINEAR_RECTANGLE) return "LINEAR_RECTANGLE";
@@ -1265,7 +1265,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      return static_cast<FV_FACET_TYPE>(0);
  }
 
- const char* parseFacetType( int32 ftype )
+ const char* parseFacetType( int8_t ftype )
  {
      switch (ftype)
      {

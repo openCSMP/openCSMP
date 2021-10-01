@@ -250,7 +250,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     vset.AddBFlags( bflags.begin(), bflags.end() );
     vset.AddData( "permeability", mesh_regions );
     
-    vector<int32> elmt_types(total_elements);
+    vector<int8_t> elmt_types(total_elements);
     for ( size_t i=0U; i<tria_elements; i++ )
       //vset.ElementType( i, ISOPARAMETRIC_LINEAR_TRIANGLE );
       elmt_types[i] = ISOPARAMETRIC_LINEAR_TRIANGLE;

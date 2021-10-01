@@ -54,19 +54,19 @@ class VData {
                         
     VData( size_t nodes_per_element, size_t nbors_per_element, size_t nodes, size_t elmts );
     
-    void SingleElementType( int32 etype );
+    void SingleElementType( int8_t etype );
     
-    void ElementTypes( const std::vector<int32>& elmt_types );
+    void ElementTypes( const std::vector<int8_t>& elmt_types );
     
-    void AddElementTypes( std::vector<int32>::const_iterator first,
-                          std::vector<int32>::const_iterator last );
+    void AddElementTypes( std::vector<int8_t>::const_iterator first,
+                          std::vector<int8_t>::const_iterator last );
 
-    void AddElementTypes( std::deque<int32>::const_iterator first,
-                          std::deque<int32>::const_iterator last );
+    void AddElementTypes( std::deque<int8_t>::const_iterator first,
+                          std::deque<int8_t>::const_iterator last );
 
-    void Resize( size_t nodes_per_element, size_t nbors_per_element, int32 etype, size_t nodes, size_t elmts );
+    void Resize( size_t nodes_per_element, size_t nbors_per_element, int8_t etype, size_t nodes, size_t elmts );
    
-    void Resize( const std::deque<int32>& etypes,
+    void Resize( const std::deque<int8_t>& etypes,
                  const std::deque<size_t>& npes, 
                  const std::deque<size_t>& epes, 
                  size_t nodes, size_t faces, size_t interfaces );
@@ -158,10 +158,10 @@ class VData {
     double64  P( size_t coordinate_axis, size_t i ) const;
 
     /// set CSMP finite element type of element in 'pelmt' container
-    void   ElementType( size_t eidx, int32 type );
+    void   ElementType( size_t eidx, int8_t type );
   
     /// get CSMP finite element type from 'pelmt' container; stores only 1 elmt in single element-type mesh
-    int32  ElementType( size_t eidx ) const;
+    int8_t ElementType( size_t eidx ) const;
 
     /// assuming that all interpolation functions have same order, returns that order
     size_t OrderOfFiniteElementInterpolationFunctions() const;
@@ -207,8 +207,8 @@ class VData {
     std::vector<std::int8_t>::const_iterator      BFlagsEnd() const;
 
     // const iterators
-    std::vector<int32>::const_iterator                 PelmtBegin() const;
-    std::vector<int32>::const_iterator                 PelmtEnd() const;
+    std::vector<int8_t>::const_iterator                PelmtBegin() const;
+    std::vector<int8_t>::const_iterator                PelmtEnd() const;
     std::deque<std::vector<size_t> >::const_iterator   PlistBegin() const;
     std::deque<std::vector<size_t> >::const_iterator   PlistEnd() const;
     std::deque<std::vector<long64> >::const_iterator   PfvertsBegin() const;
@@ -224,9 +224,9 @@ class VData {
     
     // specific element, face and interface iterators
     /// iterator to CSMP finite element type of first face stored in mesh
-    std::vector<int32>::const_iterator                 PelmtFacesBegin() const;
+    std::vector<int8_t>::const_iterator                 PelmtFacesBegin() const;
     /// iterator to CSMP finite element type of first interface stored in mesh
-    std::vector<int32>::const_iterator                 PelmtInterfacesBegin() const;
+    std::vector<int8_t>::const_iterator                 PelmtInterfacesBegin() const;
   
     // node iterators for subsets of the Plist
     /// Iterator to beginning of elements in the Plist
@@ -256,14 +256,17 @@ class VData {
     /// flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
     size_t RenumberElementsCounterClockwise2D();
     
-    /// computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
-    void   EstablishConnectivityOfEquidimensionalElements2D();
+    /// computes connectivity between line and surface elements, faces and interfaces and replaces existing connectivity with it
+    void   EstablishElementConnectivity2D();
     
-    /// (re)creates 'pfverts' = neighbor connectivity for a mesh that only consists of a single type of surface elements
-    void   EstablishNeighborConnectivity2D();
+    /// (re)creates 'pfverts' = neighbor connectivity for a mesh that only consists of surface elements
+    void   EstablishSurfaceElementConnectivity2D();
 
     /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
     void   CreateConsistentLineElementOrientations2D();
+    
+    /// rebuilds 'pfverts' from scratch
+    void   EstablishElementConnectivity3D();
 
     
     // PERSISTANCE (storing mesh in binary file)
@@ -306,7 +309,7 @@ class VData {
 
     bool                              hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double64>             px, py, pz;        ///< node coordinates
-    std::vector<int32>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
+    std::vector<int8_t>               pelmt;             ///< CSMP element type info, needed to read plist & pfverts
     // although there's little point to having 64-bit pointers but not 64-bit sizes, after all.
     std::deque<std::vector<size_t> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible

@@ -31,7 +31,7 @@ struct Expiration {
 // ----------------------------------------------------
 // here the license details need to be specified
 // ----------------------------------------------------
-Expiration  aus(YEAR,2020,9,1);
+Expiration  aus(YEAR,2023,10,1);
 
 
 
@@ -65,7 +65,7 @@ inline Expiration::Expiration( LICENSE_PERIOD p, int startYear, int startMonth, 
 
 	  #ifdef _MSC_VER
 		#if _MSC_VER < 1800   // detecting versions older than 2013
-			secs_remaining = static_cast<long>(duration) * 86400L - static_cast<long>(ceil(std::difftime( now, std::mktime(&start_time))) );
+			    secs_remaining = static_cast<long>(duration) * 86400L - static_cast<long>(ceil(std::difftime( now, std::mktime(&start_time))) );
         #else
 	        secs_remaining = static_cast<long>(duration) * 86400L - lrint(std::difftime( now, std::mktime(&start_time)) );
         #endif

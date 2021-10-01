@@ -39,7 +39,7 @@ class FiniteElementManager {
     size_t            Dimensions() const;
     bool              ContainsElementType( CSMP_FEM_TYPE etype ) const;
     void              CurrentElementTypes( std::list<CSMP_FEM_TYPE>& etypes ) const;
-    FiniteElement*    E( int32 csmp_etype ) const;
+    FiniteElement*    E( int8_t csmp_etype ) const;
     FiniteElement*    E( CSMP_FEM_TYPE csmp_etype ) const;
     size_t            NodesOfElementType( CSMP_FEM_TYPE etype ) const;
     // standard types

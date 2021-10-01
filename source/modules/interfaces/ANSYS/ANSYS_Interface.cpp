@@ -904,7 +904,7 @@ bool ANSYS_Interface::ReadPelementASCII( std::ifstream& ifs, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     unsigned long  records(0U);
-    int32          etype;
+    int8_t         etype;
 
     // Getting record size
     ifs >> records;
@@ -917,7 +917,7 @@ bool ANSYS_Interface::ReadPelementASCII( std::ifstream& ifs, VSet<dim>& vset )
          return false;
       }
 
-    std::vector<int32> elmt_types;
+    std::vector<int8_t> elmt_types;
     elmt_types.reserve(records);
     for ( size_t i=0U; i<records; i++ ) {
         ifs >> etype;
@@ -1362,7 +1362,7 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
                              "'pelement' value out of range ANSYS-TYPE range (2-23).");
 
     // adding element types to vset
-    std::vector<int32> elmt_types;
+    std::vector<int8_t> elmt_types;
     elmt_types.assign( pelmt, pelmt + entries );
     vset.ElementTypes( elmt_types );
 

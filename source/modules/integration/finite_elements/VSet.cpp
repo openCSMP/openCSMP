@@ -76,7 +76,7 @@ of the specified size.
 template<size_t dim>
 void VSet<dim>::Resize( size_t nodes_per_element,
                         size_t nbors_per_element,
-                        int32  csmp_etype,
+                        int8_t csmp_etype,
                         size_t nodes,
                         size_t elmts )
 {
@@ -94,7 +94,7 @@ Just resizes all storage according to specifications without actually
 assigning any values to the subdeques.
 */
 template<size_t dim>
-void VSet<dim>::Resize( const deque<int32>& etypes,
+void VSet<dim>::Resize( const deque<int8_t>& etypes,
                         const deque<size_t>& npes,
                         const deque<size_t>& epes,
                         size_t nodes, size_t faces, size_t interfaces)

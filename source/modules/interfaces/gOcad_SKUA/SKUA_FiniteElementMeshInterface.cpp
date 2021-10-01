@@ -843,7 +843,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementASCII( ifstream& ifs, VSet<dim
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     unsigned long  records(0U);
-    int32          etype;
+    int8_t         etype;
 
     // Getting record size
     ifs >> records;
@@ -856,8 +856,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementASCII( ifstream& ifs, VSet<dim
          return false;
       }
 
-    vector<int32> elmt_types;
-    set<int32>    range_of_types;
+    vector<int8_t> elmt_types;
+    set<int8_t>    range_of_types;
     elmt_types.reserve(records);
     for ( size_t i=0U; i<records; i++ ) {
         ifs >> etype;
@@ -1551,7 +1551,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementBinary( FILE* fp, VSet<dim>& v
                              "'pelement' value out of range SKUA-TYPE range (2-23).");
 
     // adding element types to vset
-    vector<int32> elmt_types;
+    vector<int8_t> elmt_types;
     elmt_types.assign( pelmt, pelmt + entries );
     vset.ElementTypes( elmt_types );
 
