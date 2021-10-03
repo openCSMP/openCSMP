@@ -6,6 +6,7 @@
 #include "ErrorHandler.h"
 #include "TextFileIO.h"
 #include "CSMP_mathUtilities.h"
+#include "CSMP_highLevelUtilities.h"
 
 using namespace std;
 
@@ -2113,6 +2114,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
    The normals of the line elements are found by 90degrees clockwise rotation of the tangent vector of the line elements,
    which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
    
+   @attention if the line elements do not know their neighbors already, this method will not work!
+   
    @attention assumes node numbering in 'plist' follows the convention corner nodes first, then Interior nodes.
    
    @attention method assumes that all manifolds (connections of more than 2 line elements at a node have been removed
@@ -2125,6 +2128,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
    
   @author SKM
   @date 3/22020
+  @test 2/10/21
   
   */
  void VData::CreateConsistentLineElementOrientations2D()
@@ -2142,8 +2146,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
       // assuming that the mesh consists of surface and line elements
       assert( HybridElementTypeMesh()==true ); 
        
-      // 1. Finding chains of line elements and storing them in a map
-      // ------------------------------------------------------------
+      // 1. Finding line elements and edges of surface elements located at the model boundary
+      // ------------------------------------------------------------------------------------
       // (if a root node already exists in the map, the other end of the chain is used as root node)
       // elmt-idx - of line elements where at least one neighbor is missing 
       set<size_t>  line_elmts;
@@ -2165,9 +2169,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
             // if this is a surface element  
             else {
                  if ( isTriangularElement( etype ) ) {
-                      const set<size_t> face1({ plist[elmt_idx][1], plist[elmt_idx][2] });
-                      const set<size_t> face2({ plist[elmt_idx][2], plist[elmt_idx][0] });
-                      const set<size_t> face3({ plist[elmt_idx][0], plist[elmt_idx][1] });
+                      // nodes of faces
+                      const set<size_t> face1{ plist[elmt_idx][1], plist[elmt_idx][2] };
+                      const set<size_t> face2{ plist[elmt_idx][2], plist[elmt_idx][0] };
+                      const set<size_t> face3{ plist[elmt_idx][0], plist[elmt_idx][1] };
                       // inserting the faces
                       surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair(elmt_idx,0U) ) );
                       surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair(elmt_idx,1U) ) );
@@ -2176,10 +2181,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
                  else if ( isQuadrilateralElement( etype ) ) {
                       pfverts[elmt_idx].resize(4U,IRREGULAR);
                       // see CSMP fem specifications for these conventions 
-                      const set<size_t> face1({ plist[elmt_idx][0], plist[elmt_idx][1] });
-                      const set<size_t> face2({ plist[elmt_idx][1], plist[elmt_idx][2] });
-                      const set<size_t> face3({ plist[elmt_idx][2], plist[elmt_idx][3] });
-                      const set<size_t> face4({ plist[elmt_idx][3], plist[elmt_idx][0] });
+                      const set<size_t> face1{ plist[elmt_idx][0], plist[elmt_idx][1] };
+                      const set<size_t> face2{ plist[elmt_idx][1], plist[elmt_idx][2] };
+                      const set<size_t> face3{ plist[elmt_idx][2], plist[elmt_idx][3] };
+                      const set<size_t> face4{ plist[elmt_idx][3], plist[elmt_idx][0] };
                       // inserting the faces
                       surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair(elmt_idx,0U) ) );
                       surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair(elmt_idx,1U) ) );
@@ -2222,30 +2227,32 @@ size_t VData::RenumberElementsCounterClockwise2D()
           // making sure that the element was inserted (else it is a duplicate)
           assert( chain_it.second == true );
           
-          // traversing the chains in the direction of the available neighbor, node0 is the one with no neighbor
+          // traversing polylines in the direction of available neighbors, node0 is the one with no neighbor
+          // NB: in line elements the element neighbor also is opposite to the node, e.g.,
+          //     [nd0]-line element0-[nd1]-line element1-[nd2] -> elm1 1 is opposite to nd0
           bool end_of_polyline(false);
           while ( end_of_polyline == false ) {
-               // is the neighbor element is correctly oriented (forming a chain with its first node against the second node of the previous one)
-               assert( pfverts[elmt_idx][1] >= 0 );
-               flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true; 
+               // if this is an isolated line segment with no neighbors it is left as is
+               if ( pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0 ) break;
+               // is the neighbor element is correctly oriented its first node will be shared with the second node of the previous line element
+               flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true;
+               // moving to the next element
                elmt_idx = pfverts[elmt_idx][1];
-               // flipping the elements nodes and neighbors if necessary
+               // flipping the next element nodes and neighbors if necessary
                if ( flip == true ) {
                     const size_t node0 = plist[elmt_idx][0];
                     const size_t node1 = plist[elmt_idx][1];
                     plist[elmt_idx][0] = node1;
                     plist[elmt_idx][1] = node0;
-                    long swap            = pfverts[elmt_idx][1];
+                    long64 swap          = pfverts[elmt_idx][1];
                     pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
                     pfverts[elmt_idx][0] = swap;
                  }
                // storing the element in the chain (polyline)
                (*chain_it.first).second.push_back( elmt_idx );
                // exit condition (if both nodes od line element are o the BOX_BOUNDARY)
-               if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 ) {
-                    // TODO: does box boundary have to be treated?
-                    end_of_polyline = true;
-                 }
+               if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 )
+                 end_of_polyline = true;
             }
         }
         
@@ -2272,10 +2279,11 @@ size_t VData::RenumberElementsCounterClockwise2D()
                                             "found chain of line elements with some nodes on boundary and some not." );
                   }
 
-                // 3.2 Reorienting all elements in the boundary polyline if the first is not aligned with nodes of surface element face that it matches
+                // 3.2 Reorienting all elements of boundary polylines if their first element is not aligned with the nodes of adjacent surface element face that it matches
                 // ------------------------------------------------------------------------------------------------------------------------------------
                 // (reason: else their unit normals do not point to the outside of the model)
-                map<set<size_t>,pair<size_t,size_t> >::const_iterator fit = surf_elmt_face_nd_ids.find( set<size_t>({ plist[(*it).first][0], plist[(*it).first][1] }) );
+                map<set<size_t>,pair<size_t,size_t> >::const_iterator
+                  fit = surf_elmt_face_nd_ids.find( set<size_t>{ plist[(*it).first][0], plist[(*it).first][1] } );
                 assert( fit != surf_elmt_face_nd_ids.end() );
                 // checking the line element orientation
                 elmt_idx = (*fit).second.first;
@@ -2372,12 +2380,16 @@ size_t VData::RenumberElementsCounterClockwise2D()
    
    @attention this method assumes that all elements are numbered in counter-clockwise direction
    
+   @attention this method does not change the BOX_BOUNDARY flags of the model
+   
   @author SKM
   @date 2/2/2020
   
 */
 void  VData::EstablishElementConnectivity2D()
  {
+   ErrorHandler& csmp_error( ErrorHandler::Instance() );
+   
    if ( !pfverts.empty() ) {
          cout <<"\nVData::EstablishElementConnectivity2D: 'pfverts' not empty; deleting original content before reconstruction.\n";
          pfverts.clear();
@@ -2392,7 +2404,7 @@ void  VData::EstablishElementConnectivity2D()
    // building face keys for surface and line elements types, collecting them into maps including the elements that they belong to with corresponding face ID
    //  face-nd-ids    elmt-id, face-of-element  
    map<set<size_t>,map<size_t,size_t> >  surf_elmt_nbors;
-   map<size_t,map<size_t,size_t> >       line_elmt_nbors;
+   map<size_t,set<size_t> >              line_elmt_that_share_node;
 
    const deque<vector<size_t> >::iterator end = PlistEnd();
    deque<vector<size_t> >::iterator       eit = PlistBegin();
@@ -2401,6 +2413,7 @@ void  VData::EstablishElementConnectivity2D()
    if ( !plist.empty() ) {
         // 1. establishing connectivity
         // ----------------------------
+        pfverts.resize( plist.size() );
         while( eit != end ) {
              // if this is a triangle or quadrilateral
               if ( HybridElementTypeMesh() ) {
@@ -2438,10 +2451,10 @@ void  VData::EstablishElementConnectivity2D()
              else if ( is_quadrilateral ) {
                   pfverts[elmt_idx].resize(4U,IRREGULAR);
                   // see CSMP fem specifications for these conventions 
-                  const set<size_t> face1({ (*eit)[0], (*eit)[1] });
-                  const set<size_t> face2({ (*eit)[1], (*eit)[2] });
-                  const set<size_t> face3({ (*eit)[2], (*eit)[3] });
-                  const set<size_t> face4({ (*eit)[3], (*eit)[0] });
+                  const set<size_t> face1{ (*eit)[0], (*eit)[1] };
+                  const set<size_t> face2{ (*eit)[1], (*eit)[2] };
+                  const set<size_t> face3{ (*eit)[2], (*eit)[3] };
+                  const set<size_t> face4{ (*eit)[3], (*eit)[0] };
                   // inserting the faces
                   // face 1
                   pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face1_it =
@@ -2461,16 +2474,21 @@ void  VData::EstablishElementConnectivity2D()
                     surf_elmt_nbors.insert( make_pair( face4, map<size_t,size_t>({{elmt_idx,{3}}}) ) );
                   if ( face4_it.second == false ) (*face4_it.first).second.insert( make_pair( elmt_idx, 3 ) );               
                }
-             // any line elements only have a single node at their end-points, so they go into separate map  
+             // any line elements (making a map of which ones share a node, which also identifies manifolds)
              else {
                   assert( isLineElement( etype ) );
                   pfverts[elmt_idx].resize(2U,IRREGULAR);
-                  pair<map<size_t,map<size_t,size_t> >::iterator,bool> face1_it = 
-                    line_elmt_nbors.insert( make_pair( (*eit)[0], map<size_t,size_t>({{elmt_idx,{0}}}) ) );
-                  if ( face1_it.second == false ) (*face1_it.first).second.insert( make_pair( elmt_idx, 0 ) );
-                  pair<map<size_t,map<size_t,size_t> >::iterator,bool> face2_it = 
-                    line_elmt_nbors.insert( make_pair( (*eit)[0], map<size_t,size_t>({{elmt_idx,{1}}}) ) );
-                  if ( face2_it.second == false ) (*face2_it.first).second.insert( make_pair( elmt_idx, 1 ) );                  
+                  pair<map<size_t,set<size_t> >::iterator,bool> // node 0
+                    it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set{elmt_idx} ) );
+                  // if there is already an entry for the node, the elmt id is added to the set
+                  if ( !it0.second )
+                    (*it0.first).second.insert( elmt_idx );
+                  
+                  pair<map<size_t,set<size_t> >::iterator,bool> // node 1
+                    it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set{elmt_idx} ) );
+                  // if there is already an entry for the node, the elmt id is added to the set
+                  if ( !it1.second )
+                    (*it1.first).second.insert( elmt_idx );
                }
              elmt_idx++;
              eit++;
@@ -2481,8 +2499,7 @@ void  VData::EstablishElementConnectivity2D()
         // where there is no neighbor an attempt is made to assign a face to a particular boundary,
         // based on its alignment with boundary normal
         size_t node0(NULL_IDX),   node1(NULL_IDX);
-        map<size_t,BOX_BOUNDARY>  bflags_revised; // node number 0..n-1 and boundary flag
-        for ( map<set<size_t>,map<size_t,size_t> >::const_iterator 
+        for ( map<set<size_t>,map<size_t,size_t> >::const_iterator
               it=surf_elmt_nbors.begin(); it!=surf_elmt_nbors.end(); ++it ) {
              // there should be no more than 2 entries per face
              assert( (*it).second.size() <= 2U );
@@ -2512,29 +2529,38 @@ void  VData::EstablishElementConnectivity2D()
                   const double64 dx = px[ plist[elmt_idx][node1] ] - px[ plist[elmt_idx][node0] ]; // dx=x2-x1 
                   const double64 dy = py[ plist[elmt_idx][node1] ] - py[ plist[elmt_idx][node0] ]; // dy=y2-y1, 
                   const double64 length = sqrt( dx*dx + dy*dy );
-                  // normals are (-dy, dx)=clockwise(USED HERE) and (dy, -dx)=counter-clockwise
-                  const double64 unrml[2U] = { -dy/length, dx/length };
+                  // normals are (-dy, dx)=clockwise and (dy, -dx)=counter-clockwise (USED HERE)
+                  const double64 unrml[2U] = { dy/length, -dx/length };
                   // determining BOX_BOUNDARY
+                  // TODO: does not work yet
                   BOX_BOUNDARY boundary(IRREGULAR);
+                  bool boundary_found{false};
                   // bottom (within +/-20o of side-boundary normal (dot-product >=0.94)
                   double64 dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * -1.;
-                  if ( dotproduct >= 0.94 ) boundary = BOTTOM;
+                  if ( dotproduct >= 0.94 ) {
+                       boundary       = BOTTOM;
+                       boundary_found = true;
+                    }
                   // right
                   else dotproduct = unrml[0U] * 1. /* + unrml[1U] * 0. */;
-                  if ( dotproduct >= 0.94 ) boundary = RIGHT;
+                  if ( dotproduct >= 0.94 && !boundary_found ) {
+                       boundary       = RIGHT;
+                       boundary_found = true;
+                    }
                   // top
                   else dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * 1.;
-                  if ( dotproduct >= 0.94 ) boundary = TOP;
+                  if ( dotproduct >= 0.94 && !boundary_found ) {
+                       boundary       = TOP;
+                       boundary_found = true;
+                    }
                   // left
                   else dotproduct = unrml[0U] * -1. /* + unrml[1U] * 0. */;
-                  if ( dotproduct >= 0.94 ) boundary = LEFT;
+                  if ( dotproduct >= 0.94 && !boundary_found )
+                    boundary = LEFT;
                   // all other cases remain IRREGULAR
                   
                   // assigning boundary to the face without neighbor
                   pfverts[elmt_idx][face] = boundary;
-                  // recording the boundary nodes (TODO: this does not deal with corners yet)
-                  bflags_revised.insert( make_pair( plist[elmt_idx][node0], boundary ) );
-                  bflags_revised.insert( make_pair( plist[elmt_idx][node1], boundary ) );
                }
              // if there are 2 elements that share the face
              // -------------------------------------------
@@ -2567,61 +2593,85 @@ void  VData::EstablishElementConnectivity2D()
         
         // 3. reconnecting line elements
         // -----------------------------
-        //    face-nd-id   elmt-id, face-of-element
-        for ( map<size_t,map<size_t,size_t> >::iterator
-              it=line_elmt_nbors.begin(); it!=line_elmt_nbors.end(); ++it ) {
-             // dealing with line elements where these end in the interior or the perimeter of the model
-             //   only one neighbor
-             if ( (*it).second.size() == 1U ) {
-                  elmt_idx          = (*(*it).second.begin()).first;
-                  const size_t face = (*(*it).second.begin()).second;
-                  // the boundary flags are found in 
-                  map<size_t,BOX_BOUNDARY>::iterator bit = bflags_revised.find( (*it).first );
-                  BOX_BOUNDARY boundary = ( bit != bflags_revised.end() ) ? (*bit).second : INTERNAL;
-                  pfverts[elmt_idx][face] = boundary;
-               }
-             // line element has two neighbors
-             else if ( (*it).second.size() == 2U ) {
-                  const size_t elmt1      = (*(*it).second.begin()).first;
-                  const size_t face_elmt1 = (*(*it).second.begin()).second;
-                  const size_t elmt2      = (*next((*it).second.begin(),1)).first;
-                  const size_t face_elmt2 = (*next((*it).second.begin(),1)).second;
-                  pfverts[elmt1][face_elmt1] = elmt2;
-                  pfverts[elmt2][face_elmt2] = elmt1;
-               }
-             // line element has more than 2 neighbors (disambiguating manifolds)
-             else {
-                  cout <<"\nVData::EstablishElementConnectivity2D:";
-                  cout <<"\n found line-element manifold at node "<< (*it).first;
-                  cout <<". Disambiguating it by using most closely aligned neighbor.\n";
-                  while( (*it).second.size() >= 2U ) {
-                      //  angle,      element, face
-                      map<double64,pair<size_t,size_t> > angles;
-                      map<size_t,size_t>::const_iterator lt=(*it).second.begin();
-                      size_t elmt1 = (*lt).first, // first=element number
-                             face1 = (*lt).second;
-                      lt++;
-                      // finding the angle between the first and all the other elemts
-                      while( lt != (*it).second.end() ) {
-                           const size_t elmt = (*lt).first,
-                                        face = (*lt).second;
-                           angles.insert( make_pair( AngleBetweenLineElements2D( elmt1, elmt ), make_pair(elmt,face ) ) );
-                        }
-                      // assigning the neighbor
-                      // (smallest angle element is at the beginning of map)
-                      size_t elmt2 = (*angles.begin()).second.first,
-                             face2 = (*angles.begin()).second.second;
-                      pfverts[elmt1][face1] = elmt2;
-                      pfverts[elmt2][face2] = elmt1;
-                      // removing the element pair, which was already processed
-                      (*it).second.erase( elmt1 );
-                      (*it).second.erase( elmt2 );
-                   }
-               }
+        // map<size_t,set<size_t> >  line_elmt_that_contain_node;
+        for ( auto it : line_elmt_that_share_node )
+          {
+              const size_t n_connections(it.second.size()-1);
+              
+              // isolated line elements terminating either inside the node (INTERNAL) or at another BOX_BOUNDARY
+              if ( n_connections == 0U ) {
+                   const size_t elmt = (*it.second.begin());
+                   // if there is no neighbor element opposite the first node
+                   if ( it.first == plist[elmt][0] ) {
+                        // the missing neighbor is located at a boundary
+                        pfverts[elmt][1] = (bflags[ plist[elmt][0] ]==NOT) ? INTERNAL : bflags[ plist[elmt][0] ];
+                     }
+                   else if ( it.first == plist[elmt][1] ) {
+                        // the missing neighbor is located at a boundary
+                        pfverts[elmt][0] = (bflags[ plist[elmt][0] ]==NOT) ? INTERNAL : bflags[ plist[elmt][1] ];
+                     }
+                   else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity2D", "orphan line element node");
+                }
+              // 2 line elements sharing one node
+              else if ( n_connections == 1U ) {
+                   const size_t elmt1 = (*it.second.begin());
+                   const size_t elmt2 = (*it.second.rbegin());
+                   // processing the neighbors
+                   // line element 1
+                   if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
+                   else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                   // line element 2
+                   if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
+                   else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                  
+                }
+              // off the possible neighbors, the aligned elements are picked
+              else { // n_connections > 1 )
+                   vector<pair<Point<2U>,Point<2U> > > edges;
+                   edges.reserve( n_connections );
+                   Point<2U> org( px[it.first], py[it.first] );
+                   // recovering the line elements
+                   for ( auto eit=it.second.begin(); eit!=it.second.end(); ++eit )
+                     {
+                        // finding the second node
+                        Point<2U> dest = (it.first == plist[*eit][0]) ?
+                                         Point<2U>{ px[plist[*eit][1]], py[plist[*eit][1]] } :
+                                         Point<2U>{ px[plist[*eit][0]], py[plist[*eit][0]] };
+                        // creating the edge
+                        edges.push_back( make_pair( org, dest ) );
+                     }
+                   // finding the pair of most closely aligned line elements starting at node
+                   // establish element combinations
+                   std::vector<long64>    joint_line_elmts( it.second.begin(), it.second.end() );
+                   const size_t           n_elmts_to_combine(2U);
+                   deque<vector<long64> > combinations;
+                   if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
+                     csmp_error.notice( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
+                   // finding inter-element angle for all combinations
+                   //             angle, combination number
+                   vector<pair<double64,size_t> > inter_element_angles;
+                   inter_element_angles.reserve( combinations.size() );
+                   size_t n_combi{0};
+                   for ( auto cit : combinations )
+                     inter_element_angles.push_back( make_pair( acuteAngleBetweenEdges( edges[cit[0]], edges[cit[1]] ), n_combi++ ) );
+                   // sorting the angles to find the edges that are closest to a straight continuation
+                   // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
+                   sort( inter_element_angles.begin(), inter_element_angles.end(),
+                         [](auto& a, auto& b) -> bool
+                       {
+                          a.first = (a.first > 90.) ? 90. - a.first : a.first;
+                          b.first = (b.first > 90.) ? 90. - b.first : b.first;
+                          return a.first > b.first;
+                       } );
+                    // for any 2 edges connections are made
+                    for 
+                }
+              
+              
           } // processing the line element neighbors
           
         // 4. reorienting line-element chains (done in other method)
-        // CreateConsistentLineElementOrientations2D()
+        CreateConsistentLineElementOrientations2D();
 
         return;
      } // single-element type meshes

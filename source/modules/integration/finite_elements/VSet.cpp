@@ -255,12 +255,13 @@ void VSet<dim>::AddBFlags( typename vector<std::int8_t>::const_iterator first,
         cerr <<"No assignments were made.\n";
         return;
      }
+     
    ResizeBFlags();
    auto bit=BFlagsBegin();
-   
 	 while ( first != last ) {
        (*bit) = (*first);
        first++;
+       bit++;
      }
     
 } // end

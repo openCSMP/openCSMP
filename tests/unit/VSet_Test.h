@@ -165,12 +165,10 @@ void VSet_Test::run()
   _test( vset4.Pfvert( 2, 3 ) == 99 );  _test( vset4.Pfvert( 2, 4 ) == 99 );
 
   // BOUNDARY FLAGS
-  vector<std::int8_t> bfmap;
-  for( size_t i = 0; i < 13; ++i )
-    bfmap.push_back( 99 );
+  vector<std::int8_t> bfmap( 13, INTERNAL );
   vset4.AddBFlags( bfmap.begin(), bfmap.end() );
   for( auto it = vset4.BFlagsBegin(); it != vset4.BFlagsEnd(); ++it )
-    _test( (*it) == 99 );
+    _test( (*it) == INTERNAL );
 
 
   // .)IO

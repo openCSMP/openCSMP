@@ -258,12 +258,17 @@ bool VSet_TestCase::Test_CreateConsistentLineElementOrientations2D()
     // making a backup copy
     VSet<2U> backup_vset( vset );
     
-    vset.CreateConsistentLineElementOrientations2D();
-    
+    // should not do anything because everything is already correct
+    vset.CreateConsistentLineElementOrientations2D(); // OK - does not change anything
+
+vset.Out();
     // removing the neighbor information and recreating it
     vset.RemovePfverts();
+vset.Out();
     vset.EstablishElementConnectivity2D();
-    
+    vset.CreateConsistentLineElementOrientations2D(); 
+vset.Out();
+
     // comparison
     auto itb=backup_vset.PfvertsBegin();
     size_t vec_mismatches(0U);

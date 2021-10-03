@@ -81,6 +81,39 @@ bool areFartherApartThan( const double64* pn, const double64* pw, double64 dista
     
  } // end
 
+
+
+
+
+/// returns smallest angle in degrees between the line segments that start with the first point and terminate at the last point of thedge
+double64 acuteAngleBetweenEdges( const std::pair<Point<2U>,Point<2U> >& edge1, const pair<Point<2>,Point<2> >& edge2 )
+ {
+    const Point<2U> a(edge1.second - edge1.first), b(edge2.second - edge2.first);
+    
+    // a b
+    // ---
+    double ab = a[0]*b[0] + a[1]*b[1];
+    
+    // |a| . |b|
+    // ---------
+    double a_dot_b   = std::sqrt( (a[0]*a[0]+a[1]*a[1])*(b[0]*b[0]+b[1]*b[1]) );
+    double cos_angle = ab/a_dot_b;
+
+    // if zero intercept
+    if ( cos_angle == 0. ) return 90.;
+    // if outside of range of 'acos' function
+    if ( cos_angle >  1. ) return   0.;
+    if ( cos_angle < -1. ) return 180.;
+        
+    return (180./3.14159265358979323) * std::acos(cos_angle);
+
+ } // end acuteAngleBetweenEdges
+
+
+
+
+
+
 /**
  * Returns true if file on ifstream is empty.(Aug 2014)
  * @author Julian E. Mindel
@@ -1339,6 +1372,71 @@ void readVectorOfVectors( ifstream& ifs, size_t total_items, size_t entries_per_
 template void readVectorOfVectors( ifstream&, size_t, size_t, deque<vector<size_t> >& );
 
 
+
+
+ /**
+     Finds all possible combinations of single or multiple values in the input vector,
+     after sorting it and making it unique.
+     
+      @param samples refers to the subset of values for which unique combinations shall be found.
+      @param combinations will store the uniqe combinations that were found
+      
+      @attention combinations is not equal to permutations.
+      
+      @author SKM (modified from example on stackoverflow)
+      @date 4/10/2021
+      
+ */
+size_t createUniqueCombinations( std::vector<long64>& sequence, long64 samples,
+                                 std::deque<std::vector<long64> >& combinations )
+ {
+    // checking the input
+    if ( sequence.empty() ) return 0U;
+    if ( samples > sequence.size() ) {
+        cerr <<"\ncreateUniqueCombinations: can't combine more numbers than are in the input vector.\n";
+        return 0U;
+      }
+    sort( sequence.begin(), sequence.end() );
+    sequence.erase( unique( sequence.begin(), sequence.end() ), sequence.end() );
+    const size_t N{sequence.size()};
+    
+    // generating combinations by selectively sampling sequence using 011.. pattern in bitmap
+    std::string bitmask(samples, 1); // generating leading 1's
+    bitmask.resize(N, 0);            // adding (N - samples) trailing 0's
+ 
+    do {
+        combinations.push_back( std::vector<long64>{} );
+        combinations.back().reserve( samples );
+        for ( size_t i=0; i < N; ++i ) { // [0..N-1] integers
+             if ( bitmask[i] == 1 )
+               combinations.back().push_back( sequence[i] );
+          }
+      }
+    while ( std::prev_permutation( bitmask.begin(), bitmask.end() ) );
+    
+    return combinations.size();
+    
+} // end createUniqueCombinations
+ 
+
+// usage example for createUniqueCombinations()
+static void test_createUniqueCombinations()
+ {
+   vector<long>          sequence{0,123,20,43,17,5,8};
+   const long            samples{2};
+   deque<vector<long> >  combinations;
+   
+   size_t n_combinations = createUniqueCombinations( sequence, samples, combinations );
+   
+   // printing the results
+   cout <<"\nmain: combinations: "<< n_combinations <<"\n";
+   for ( auto i : combinations ) {
+        cout <<"\n\t";
+        for ( auto j : i )
+          cout <<" "<< j;
+     }
+   cout << endl << endl;
+ }
 
 
 
