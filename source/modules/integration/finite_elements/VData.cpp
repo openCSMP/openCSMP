@@ -2111,7 +2111,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
    meaning these line elements are aligned with the node-numbering of the faces of 2D surface elements located at the
    model boundary whose nodes are numbered counter clockwise.
    
-   The normals of the line elements are found by 90degrees clockwise rotation of the tangent vector of the line elements,
+   The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the line elements,
    which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
    
    @attention if the line elements do not know their neighbors already, this method will not work!
@@ -2160,7 +2160,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
       size_t elmt_idx(0U);
 
        while( eit != end ) {
-            // if this is a line element
+            // if this is a line element at the end of a line element chain
             CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
             if ( isLineElement( etype ) ) {
                   if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 ) 
@@ -2200,20 +2200,29 @@ size_t VData::RenumberElementsCounterClockwise2D()
             eit++;
          }
          
-      // 2. following chains until the end, re-orientating line-elements if necessary
-      // ----------------------------------------------------------------------------
-      // root-elmt, numbers of interconnected line elements in chain
-      map<size_t,vector<size_t> > polylines;
+      // 2. following potential line element chains from beginning to end, re-orientating elements as necessary
+      // ------------------------------------------------------------------------------------------------------
+      // root-elmt & numbers of interconnected line elements in discovered chain
+      map<size_t,deque<size_t> > polylines;
+      set<size_t>                processed_elmts;
       
-      for ( set<size_t>::const_iterator it=line_elmts.begin(); it!= line_elmts.end(); ++it ) {
-           // starting line-element chain traversal
-           elmt_idx           = (*it);
+      // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
+      for ( set<size_t>::const_iterator it=line_elmts.begin(); it!= line_elmts.end(); ++it )
+        {
+           // if this is an isolated line segment with no neighbors it is skipped
+           elmt_idx = (*it);
+           if ( (pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0) ||
+                 processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
+
            // if the line element has no first neighbor it must be at the beginning of a chain and correctly oriented
            bool   flip        = ( pfverts[elmt_idx][0] < 0 ) ? false : true;
            BOX_BOUNDARY bflag = (flip == false) ? intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][0] ) ) :
                                                   intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][1] ) );
-           assert( bflag <= 0 );
+           // its neighbor-free side must also be at an internal or external boundary
+           if ( bflag >= 0 ) cerr <<"\npfvert "<< elmt_idx <<" boudary flag not correct.";
            assert( bflag >= MULTIPLE );
+           
+           // flipping the element if necessary
            if ( flip == true ) {
                 const size_t node0 = plist[elmt_idx][0];
                 const size_t node1 = plist[elmt_idx][1];
@@ -2222,23 +2231,26 @@ size_t VData::RenumberElementsCounterClockwise2D()
                 pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
                 pfverts[elmt_idx][0] = bflag;
              }
-          // storing the element in the chain
-          pair<map<size_t,vector<size_t> >::iterator,bool> chain_it=polylines.insert( make_pair( elmt_idx, vector<size_t>(1,elmt_idx) ) );
-          // making sure that the element was inserted (else it is a duplicate)
+          // storing the element as the first in the line element sequence
+          pair<map<size_t,deque<size_t> >::iterator,bool>
+            chain_it=polylines.insert( make_pair( elmt_idx, deque<size_t>{elmt_idx} ) );
+            
+          // making sure that the element was indeed inserted (else it is a duplicate)
           assert( chain_it.second == true );
+          processed_elmts.insert( elmt_idx );
           
-          // traversing polylines in the direction of available neighbors, node0 is the one with no neighbor
-          // NB: in line elements the element neighbor also is opposite to the node, e.g.,
+          // traversing the line element chain in the direction of available neighbors, node0 is the one with no neighbor
+          // NB: in line elements the element neighbor also is opposite to the node with the same number, e.g.,
           //     [nd0]-line element0-[nd1]-line element1-[nd2] -> elm1 1 is opposite to nd0
           bool end_of_polyline(false);
           while ( end_of_polyline == false ) {
-               // if this is an isolated line segment with no neighbors it is left as is
-               if ( pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0 ) break;
                // is the neighbor element is correctly oriented its first node will be shared with the second node of the previous line element
+               assert( pfverts[elmt_idx][1] >= 0 );
+               // if the next neighbor's first neighbor element is element 'elmt_idx', everything is fine and no flip is required,
                flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true;
-               // moving to the next element
+               // else, we move to this next element,
                elmt_idx = pfverts[elmt_idx][1];
-               // flipping the next element nodes and neighbors if necessary
+               // and flip its nodes and neighbors.
                if ( flip == true ) {
                     const size_t node0 = plist[elmt_idx][0];
                     const size_t node1 = plist[elmt_idx][1];
@@ -2248,23 +2260,33 @@ size_t VData::RenumberElementsCounterClockwise2D()
                     pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
                     pfverts[elmt_idx][0] = swap;
                  }
-               // storing the element in the chain (polyline)
+               // Then we store this element in the polyline.
                (*chain_it.first).second.push_back( elmt_idx );
+               processed_elmts.insert( elmt_idx );
                // exit condition (if both nodes od line element are o the BOX_BOUNDARY)
                if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 )
                  end_of_polyline = true;
             }
         }
+      // NOTE: since every chain has a beginning and an end, it is stored twice
+      //       - of the interior chains, only the ones starting with the lower element number are kept
+      //       - for the ones surrounding the model the one consistent with the counter-clockwise numbering of the higher-dim. ele is stored
+      //       - the only line elements left now, are those forming part of loops, these must be consistent in their orientation with
+      //         the faces of the elements that they surround.
+      
+      
+      
+      
         
       // 3. Reordering chains that are located on the model boundary to make them consistent with the counter-clockwise element numbering
       // --------------------------------------------------------------------------------------------------------------------------------
-      for ( map<size_t,vector<size_t> >::const_iterator it=polylines.begin(); it!=polylines.end(); ++it ) {
+      for ( map<size_t,deque<size_t> >::const_iterator it=polylines.begin(); it!=polylines.end(); ++it ) {
            // 3.1 If the chain is located on the model boundary, asserting that all of its nodes are too
            // ------------------------------------------------------------------------------------------
            assert( BFlags() > 0 );
            if ( bflags[ plist[(*it).first][0] ] != 0 ) {
                 bool all_nodes_on_boundary(true);
-                for ( vector<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit )
+                for ( deque<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit )
                   for ( vector<size_t>::const_iterator 
                         nit=plist[*bit].begin(); nit!=plist[*bit].end(); ++nit ) 
                     if ( bflags[ *nit ] == 0 ) {    
@@ -2273,7 +2295,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                       }
                 if ( all_nodes_on_boundary == false ) {
                       cerr <<"\n\tproblematic chain of line elements with ids: ";
-                      for ( vector<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit )
+                      for ( deque<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit )
                         cerr << (*bit) <<" ";
                       throw csmp::Exception( WARNING, "VData::CreateConsistentLineElementOrientations2D:",
                                             "found chain of line elements with some nodes on boundary and some not." );
@@ -2326,7 +2348,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                 // if the numbering does not match, node-numbers and neighbors must be flipped for the entire polyline
                 if ( match == false ) {
                      // for all line elements in the patch
-                     for ( vector<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit ) {
+                     for ( deque<size_t>::const_iterator bit=(*it).second.begin(); bit!=(*it).second.end(); ++bit ) {
                           elmt_idx = (*bit);
                           // swapping nodes
                           const size_t node_swap = plist[elmt_idx][0];
@@ -2404,23 +2426,24 @@ void  VData::EstablishElementConnectivity2D()
          cout <<"\nVData::EstablishElementConnectivity2D: 'pfverts' not empty; deleting original content before reconstruction.\n";
          pfverts.clear();
          assert( !plist.empty() );
-         pfverts.resize( plist.size() );
       }
     
    CSMP_FEM_TYPE   etype = (HybridElementTypeMesh()==false) ? parseFiniteElementTypeEnum( ElementType(0) ) : UNKNOWN;
    bool      is_triangle = (etype != UNKNOWN) ? isTriangularElement( etype ) : false;
    bool is_quadrilateral = (etype != UNKNOWN) ? isQuadrilateralElement( etype ) : false;
    
-   // building face keys for surface and line elements types, collecting them into maps including the elements that they belong to with corresponding face ID
-   //  face-nd-ids    elmt-id, face-of-element  
-   map<set<size_t>,map<size_t,size_t> >  surf_elmt_nbors;
-   map<size_t,set<size_t> >              line_elmt_that_share_node;
+   if ( !plist.empty() )
+     {
+        // building face keys for surface and line elements types, collecting them into maps,
+        // including the elements that they belong to with corresponding face IDs.
+        //  face-nd-ids    elmt-id, face-of-element
+        map<set<size_t>,map<size_t,size_t> >  surf_elmt_nbors;
+        map<size_t,set<size_t> >              line_elmt_that_share_node;
 
-   const deque<vector<size_t> >::iterator end = PlistEnd();
-   deque<vector<size_t> >::iterator       eit = PlistBegin();
-   size_t elmt_idx(0U);
+        const deque<vector<size_t> >::iterator end = PlistEnd();
+        deque<vector<size_t> >::iterator       eit = PlistBegin();
+        size_t elmt_idx(0U);
 
-   if ( !plist.empty() ) {
         // 1. establishing connectivity
         // ----------------------------
         pfverts.resize( plist.size() );
@@ -2587,7 +2610,8 @@ void  VData::EstablishElementConnectivity2D()
         
         // detecting elements with more than one face on boundary (these need to be fixed)
         elmt_idx = 0U;
-        for ( deque<vector<long64> >::const_iterator pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx )
+        for ( deque<vector<long64> >::const_iterator
+              pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx )
           if ( !isLineElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) )
             {
                size_t boundaries_per_element(0U);
@@ -2703,11 +2727,12 @@ void  VData::EstablishElementConnectivity2D()
                             
           } // processing the line element neighbors
 
-        // 4. reorienting line-element chains (done in other method)
-        CreateConsistentLineElementOrientations2D();
-
      } // if plist empty
-        
+
+   // 4. reorienting line-element chains (done in other method)
+   assert( !pfverts.empty() );
+   CreateConsistentLineElementOrientations2D();
+
  } // end EstablishElementConnectivity2D
 
 
