@@ -16,8 +16,7 @@ template<size_t> class Model;
 class VSet_TestCase : public Test
   {
     public:
-      explicit VSet_TestCase( const char* prefix,
-                              bool verbose );
+      VSet_TestCase( const char* prefix, bool verbose );
       ~VSet_TestCase();
       virtual void run();
     

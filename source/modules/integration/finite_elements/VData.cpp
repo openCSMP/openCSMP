@@ -2160,10 +2160,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
       size_t elmt_idx(0U);
 
        while( eit != end ) {
-            // if this is a line element at the end of a line element chain
+            // if this is a line element at the beginning of a line element chain
             CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
             if ( isLineElement( etype ) ) {
-                  if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 ) 
+                  if ( pfverts[elmt_idx][0] < 0 )
                     line_elmts.insert( elmt_idx );
               }
             // if this is a surface element  
@@ -2215,22 +2215,12 @@ size_t VData::RenumberElementsCounterClockwise2D()
                  processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
 
            // if the line element has no first neighbor it must be at the beginning of a chain and correctly oriented
-           bool   flip        = ( pfverts[elmt_idx][0] < 0 ) ? false : true;
-           BOX_BOUNDARY bflag = (flip == false) ? intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][0] ) ) :
-                                                  intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[*it][1] ) );
-           // its neighbor-free side must also be at an internal or external boundary
-           if ( bflag >= 0 ) cerr <<"\npfvert "<< elmt_idx <<" boudary flag not correct.";
+           BOX_BOUNDARY bflag = intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[elmt_idx][0] ) );
+           // its neighbor-free side must be at an internal or external boundary
+           if ( bflag >= 0 )
+             cerr <<"\n\t'pfvert' entry for line element "<< elmt_idx <<" not correct: ["<< pfverts[elmt_idx][0]<<","<< pfverts[elmt_idx][1] <<"].";
            assert( bflag >= MULTIPLE );
-           
-           // flipping the element if necessary
-           if ( flip == true ) {
-                const size_t node0 = plist[elmt_idx][0];
-                const size_t node1 = plist[elmt_idx][1];
-                plist[elmt_idx][0] = node1;
-                plist[elmt_idx][1] = node0;
-                pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
-                pfverts[elmt_idx][0] = bflag;
-             }
+
           // storing the element as the first in the line element sequence
           pair<map<size_t,deque<size_t> >::iterator,bool>
             chain_it=polylines.insert( make_pair( elmt_idx, deque<size_t>{elmt_idx} ) );
@@ -2247,7 +2237,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                // is the neighbor element is correctly oriented its first node will be shared with the second node of the previous line element
                assert( pfverts[elmt_idx][1] >= 0 );
                // if the next neighbor's first neighbor element is element 'elmt_idx', everything is fine and no flip is required,
-               flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true;
+               bool flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true;
                // else, we move to this next element,
                elmt_idx = pfverts[elmt_idx][1];
                // and flip its nodes and neighbors.
