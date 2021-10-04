@@ -1008,4 +1008,46 @@ Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
      return std::numeric_limits<double64>::signaling_NaN();
   }
 
+
+/**
+    returns smallest angle in degrees between the line segments that start with the first point and terminate at the last point of thedge
+    
+    @note, to get the acute (smallest angle) between the edges ignoring their orientation, adjust the angle as follows:
+       
+          acute_angle = (angle > 90.) ? 180. -angle : angle;
+*/
+template<size_t dim>
+double64 angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const pair<Point<dim>,Point<dim> >& edge2 )
+ {
+    const Point<dim> a(edge1.second - edge1.first), b(edge2.second - edge2.first);
+    
+    // a . b
+    // -----
+    double64 ab{0.};
+    for ( size_t i{0}; i<dim; ++i ) ab += a[i] * b[i];
+    
+    // ||a||  ||b||
+    // ------------
+    double64 a_b{std::numeric_limits<double64>::quiet_NaN()};
+    if constexpr (dim == 2) a_b = std::sqrt( (a[0]*a[0]+a[1]*a[1]) * (b[0]*b[0]+b[1]*b[1]) );
+    else if constexpr (dim == 3 )
+      a_b = std::sqrt( (a[0]*a[0]+a[1]*a[1]+a[2]*a[2]) * (b[0]*b[0]+b[1]*b[1]+b[2]*b[2]) );
+      
+    double64 cos_angle = ab / a_b;
+
+    // if zero intercept
+    if ( cos_angle == 0. ) return 90.;
+    // if outside of range of 'acos' function
+    if ( cos_angle >  1. ) return   0.;
+    if ( cos_angle < -1. ) return 180.;
+        
+    return (180./3.14159265358979323) * std::acos(cos_angle);
+
+ } // end angleBetweenEdges
+
+template double64 angleBetweenEdges( const std::pair<Point<2>,Point<2> >&, const pair<Point<2>,Point<2> >& );
+template double64 angleBetweenEdges( const std::pair<Point<3>,Point<3> >&, const pair<Point<3>,Point<3> >& );
+
+
+
 } // end namespace csmp

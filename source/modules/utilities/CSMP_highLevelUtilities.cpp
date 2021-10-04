@@ -85,35 +85,6 @@ bool areFartherApartThan( const double64* pn, const double64* pw, double64 dista
 
 
 
-/// returns smallest angle in degrees between the line segments that start with the first point and terminate at the last point of thedge
-double64 acuteAngleBetweenEdges( const std::pair<Point<2U>,Point<2U> >& edge1, const pair<Point<2>,Point<2> >& edge2 )
- {
-    const Point<2U> a(edge1.second - edge1.first), b(edge2.second - edge2.first);
-    
-    // a b
-    // ---
-    const double64 ab = a[0] * b[0] + a[1] * b[1];
-    
-    // |a| . |b|
-    // ---------
-    double64 a_dot_b   = std::sqrt( (a[0]*a[0]+a[1]*a[1])*(b[0]*b[0]+b[1]*b[1]) );
-    double64 cos_angle = ab/a_dot_b;
-
-    // if zero intercept
-    if ( cos_angle == 0. ) return 90.;
-    // if outside of range of 'acos' function
-    if ( cos_angle >  1. ) return   0.;
-    if ( cos_angle < -1. ) return 180.;
-        
-    return (180./3.14159265358979323) * std::acos(cos_angle);
-
- } // end acuteAngleBetweenEdges
-
-
-
-
-
-
 /**
  * Returns true if file on ifstream is empty.(Aug 2014)
  * @author Julian E. Mindel

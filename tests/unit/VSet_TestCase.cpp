@@ -77,9 +77,6 @@ void VSet_TestCase::TestModelConstructionAndSaving2D()
     // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
     vset.EstablishElementConnectivity2D();
 
-    // aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
-    vset.CreateConsistentLineElementOrientations2D();
-
     // build model from mesh
     Model<DIM>  model( mesh_topology, vset, "pore_flow_quadratic-variables" );
     
@@ -258,16 +255,9 @@ bool VSet_TestCase::Test_CreateConsistentLineElementOrientations2D()
     // making a backup copy
     VSet<2U> backup_vset( vset );
     
-    // should not do anything because everything is already correct
-    vset.CreateConsistentLineElementOrientations2D(); // OK - does not change anything
-
-vset.Out();
     // removing the neighbor information and recreating it
     vset.RemovePfverts();
-vset.Out();
     vset.EstablishElementConnectivity2D();
-    vset.CreateConsistentLineElementOrientations2D(); 
-vset.Out();
 
     // comparison
     auto itb=backup_vset.PfvertsBegin();

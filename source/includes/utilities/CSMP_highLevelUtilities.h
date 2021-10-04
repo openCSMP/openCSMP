@@ -145,9 +145,6 @@ size_t removeVectorElements( std::vector<T>& toRemoveFrom, std::vector<T>& toRem
   return deleted;
 }
 
-/// returns smallest angle in degrees between the line segments that start with the first point and terminate at the last point of thedge, ignoring edge direction
-double64 acuteAngleBetweenEdges( const std::pair<Point<2>,Point<2> >& edge1, const std::pair<Point<2>,Point<2> >& edge2 );
-
 /// find all possible combinations of the numbers provided in 'sequence', where 'samples' specified how many numbers shall be combined; combinations are returned into deque.
 size_t createUniqueCombinations( std::vector<long64>& sequence, long samples,
                                  std::deque<std::vector<long64> >& combinations );

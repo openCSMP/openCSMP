@@ -498,7 +498,7 @@ void test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     deqElementNeighbors[30] = { INTERNAL, INTERNAL };
     deqElementNeighbors[31] = { INTERNAL, 29 };
     deqElementNeighbors[32] = { BOTTOM, INTERNAL };
-    deqElementNeighbors[33] = { 34, 41 }; // boundary edges
+    deqElementNeighbors[33] = { 34, 44 }; // boundary edges
     deqElementNeighbors[34] = { 35, 33 };
     deqElementNeighbors[35] = { 36, 34 };
     deqElementNeighbors[36] = { 37, 35 };
@@ -509,7 +509,7 @@ void test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     deqElementNeighbors[41] = { 42, 40 };
     deqElementNeighbors[42] = { 43, 41 };
     deqElementNeighbors[43] = { 44, 42 };
-    deqElementNeighbors[44] = { 39, 43 };
+    deqElementNeighbors[44] = { 33, 43 };
   	
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
     

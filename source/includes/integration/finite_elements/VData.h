@@ -256,14 +256,8 @@ class VData {
     /// flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
     size_t RenumberElementsCounterClockwise2D();
     
-    /// computes connectivity between line and surface elements, faces and interfaces and replaces existing connectivity with it
+    /// computes neighbor element connectivity between line and surface elements, faces and interfaces and replaces existing connectivity with it
     void   EstablishElementConnectivity2D();
-    
-    /// (re)creates 'pfverts' = neighbor connectivity for a mesh that only consists of surface elements
-    void   EstablishSurfaceElementConnectivity2D();
-
-    /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
-    void   CreateConsistentLineElementOrientations2D();
     
     /// rebuilds 'pfverts' from scratch
     void   EstablishElementConnectivity3D();
@@ -299,7 +293,10 @@ class VData {
     void Erase();
 
   protected:
-
+  
+    /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
+    void   CreateConsistentLineElementOrientations2D();
+    
     /// angle between line elements in degrees
     double64 AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );
     

@@ -124,6 +124,10 @@ double64  dotProduct( const Point<dim>&, const Point<dim>& );
 template<size_t dim>
 Point<dim>  crossProduct( const Point<dim>&, const Point<dim>& );
 
+/// returns the angle in degrees between the line segments that start with the first point and terminate at the last point of thedge, ignoring edge direction
+template<size_t dim>
+double64 angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const std::pair<Point<dim>,Point<dim> >& edge2 );
+
 
 // specialisations
 
