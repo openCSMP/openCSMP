@@ -92,12 +92,12 @@ double64 acuteAngleBetweenEdges( const std::pair<Point<2U>,Point<2U> >& edge1, c
     
     // a b
     // ---
-    double ab = a[0]*b[0] + a[1]*b[1];
+    const double64 ab = a[0] * b[0] + a[1] * b[1];
     
     // |a| . |b|
     // ---------
-    double a_dot_b   = std::sqrt( (a[0]*a[0]+a[1]*a[1])*(b[0]*b[0]+b[1]*b[1]) );
-    double cos_angle = ab/a_dot_b;
+    double64 a_dot_b   = std::sqrt( (a[0]*a[0]+a[1]*a[1])*(b[0]*b[0]+b[1]*b[1]) );
+    double64 cos_angle = ab/a_dot_b;
 
     // if zero intercept
     if ( cos_angle == 0. ) return 90.;
