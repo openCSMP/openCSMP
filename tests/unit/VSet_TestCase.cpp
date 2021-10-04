@@ -35,8 +35,8 @@ VSet_TestCase::~VSet_TestCase()
 */
 void VSet_TestCase::run()
 {
-   Test_CreateConsistentLineElementOrientations2D();
-   //TestModelConstructionAndSaving2D();
+   _test( Test_EstablishElementConnectivity2D() );
+   TestModelConstructionAndSaving2D();
     
 } // end VSet_TestCase
 
@@ -248,7 +248,7 @@ void VSet_TestCase::TestModelConstructionAndSaving3D()
      uses specific line element model from vset_makers
      SKM 1/10/2022
 */
-bool VSet_TestCase::Test_CreateConsistentLineElementOrientations2D()
+bool VSet_TestCase::Test_EstablishElementConnectivity2D()
  {
     VSet<2U> vset;
     test_Create_MeshPatchWithLineElements_VSet( vset );
@@ -260,14 +260,21 @@ bool VSet_TestCase::Test_CreateConsistentLineElementOrientations2D()
     vset.EstablishElementConnectivity2D();
 
     // comparison
+    cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity2D: errors if any:\n";
     auto itb=backup_vset.PfvertsBegin();
-    size_t vec_mismatches(0U);
+    size_t elmt{0U}, vec_mismatches{0U};
     for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
         for ( size_t i=0U; i<(*it).size(); ++i )
-          _test( (*it)[i] == (*itb)[i] );
-        if ( (*it) != (*itb) )
-          vec_mismatches++;
+          if ( (*it) != (*itb) ) {
+               cerr <<"\n\t"<< elmt <<":";
+               for ( auto i : (*itb) ) cerr <<" "<< i;
+               cerr <<" vs. ";
+               for ( auto i : (*it) ) cerr <<" "<< i;
+               vec_mismatches++;
+            }
+        elmt++;
       }
+    cout << endl;
     
     if ( vec_mismatches > 0 ) return false;
     return true;
