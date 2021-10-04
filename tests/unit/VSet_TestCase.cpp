@@ -78,7 +78,7 @@ void VSet_TestCase::TestModelConstructionAndSaving2D()
     vset.EstablishElementConnectivity2D();
 
     // build model from mesh
-    Model<DIM>  model( mesh_topology, vset, "pore_flow_quadratic-variables" );
+    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
     
     // turn line-element region into SplitBoundary
 

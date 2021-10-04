@@ -110,22 +110,22 @@ pair<array<size_t,4>,bool>  MeshManager<dim>::NullPointersInStorage() const
  {
      pair<array<size_t,4>,bool>  nullptrs = { {0,0,0,0},false };
      
-     for ( auto nit : nodes_ )
+     for ( auto& nit : nodes_ )
        if ( nit == nullptr ) {
             nullptrs.first[0]++;
             nullptrs.second = true;
          }
-     for ( auto eit : elements_ )
+     for ( auto& eit : elements_ )
        if ( eit == nullptr ) {
             nullptrs.first[1]++;
             nullptrs.second = true;
          }
-     for ( auto fit : faces_ )
+     for ( auto& fit : faces_ )
        if ( fit == nullptr ) {
             nullptrs.first[2]++;
             nullptrs.second = true;
          }
-     for ( auto it : interfaces_ )
+     for ( auto& it : interfaces_ )
        if ( it == nullptr ) {
             nullptrs.first[3]++;
             nullptrs.second = true;
@@ -350,7 +350,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       size_t elmt_idx(0);
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
-          const int32 csmpElementType = vset.ElementType( 0U );
+          const int8_t csmpElementType = vset.ElementType( 0U );
           while ( first != last )
             {
               elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), nullptr, evars, cvars, vset.Pmtrl(elmt_idx) ) );
@@ -365,7 +365,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       else {
           while ( first != last )
             {
-              const int32 csmpElementType = vset.ElementType( elmt_idx );
+              const int8_t csmpElementType = vset.ElementType( elmt_idx );
               elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), nullptr, evars, cvars, vset.Pmtrl(elmt_idx) ) );
               const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; j++ )
@@ -384,7 +384,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   const long64 n_elmts(elements_.size());
   if ( vset.WithNeighbourConnectivity() ) {
        for ( auto& e : elements_ ) {
-            const int32 csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e->Idx() );
+            const int8_t csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e->Idx() );
             const size_t neighbors( fem_manager.E( csmpElementType )->Neighbors() );
 
             for ( size_t j = 0U, nidx = 0U; j < neighbors; ++j ) {
@@ -429,7 +429,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        long64  face_idx(vset.Elements());
        typename deque<vector<size_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
-            const int32 csmpElementType = vset.ElementType( face_idx );
+            const int8_t csmpElementType = vset.ElementType( face_idx );
             if ( csmpElementType == UNKNOWN ) {
                  cerr <<"\n\t"<< parseFiniteElementType(csmpElementType) <<" encountered for Face "<< face_idx <<"\n";
                  csmp_error.notice( FATAL_ERROR, "MeshManager::Initialise:", "encountered UNKNOWN Face element type." );
@@ -532,7 +532,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        size_t interface_idx(vset.Elements() + vset.Faces());
        while ( first != last )
          {
-            const int32 csmpElementType = vset.ElementType( interface_idx );
+            const int8_t csmpElementType = vset.ElementType( interface_idx );
             interfaces_.push_back( new InterFace<dim>( interface_idx, fem_manager.E( csmpElementType ), evars, cvars ) );
             // number of nodes of the finite-element corresponding to the interface
             const size_t nodes( interfaces_[interface_idx]->FE()->Nodes() );
@@ -728,7 +728,7 @@ void MeshManager<dim>::RebuildParentRelationships( typename vector<Node<dim>*>::
                                                    typename vector<Node<dim>*>::iterator end )
 {
   deque< pair<size_t, Element<dim>*>> parents;
-  for ( auto it = begin; it != end; ++it ) {
+  for ( auto& it = begin; it != end; ++it ) {
     auto n = *it;
     for ( size_t i = 0; i < n->Parents(); ++i ) {
       auto e = n->Parent( i );
@@ -775,13 +775,13 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
   const LocalVariables lvs( pref.LocalVariablesAt( ELEMENT ) );
   const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt( ELEMENT ) );
 
-  for ( auto e : elements_ ) {
+  for ( auto& e : elements_ ) {
     if ( e->FV() == nullptr )
-    {
-      e->AssignFiniteVolume( fvs_manager.Stencil( e->FE_Type() ) );
-      e->ResizePropertyStorage( lvs, ipvs );
+      {
+        e->AssignFiniteVolume( fvs_manager.Stencil( e->FE_Type() ) );
+        e->ResizePropertyStorage( lvs, ipvs );
+      }
     }
-  }
 
 } // end InitializeFiniteVolumeStencils
 
@@ -977,12 +977,12 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
          if ( nodes[i] == nullptr ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
-              break;
+   break;
            }
          else if ( nodes[i]->Coordinate() != ifptr->N(i)->Coordinate() ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node locations do not match");
-              break;
+   break;
            }
        }
 #endif
@@ -1100,7 +1100,7 @@ Face<dim>* const MeshManager<dim>::AddFace( csmp::FiniteElement* const feptr, co
             cerr <<"\n\tnode "<< i;
             csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "node vector contains a nullptr ");
             with_valid_node_vector = false;
-            break;
+ break;
          }
 #endif
 
@@ -2068,21 +2068,21 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
       deque<int8_t>  csmp_fem_types;
 
       // 1.1 identifying how many nodes and neighbors there are per element
-      for ( auto e : elements_ ) {
+      for ( auto& e : elements_ ) {
           nodes_per_element.push_back( e->Nodes() );
           neighbors_per_element.push_back( e->Neighbors() );
           csmp_fem_types.push_back( e->FE_Type() );
         }
 
       // 1.2 adding Face information after the elements
-      for ( auto f : faces_ ) {
+      for ( auto& f : faces_ ) {
           nodes_per_element.push_back( f->Nodes() );
           neighbors_per_element.push_back( f->Neighbors() + higherDimParents );
           csmp_fem_types.push_back( f->FE_Type() );
         }
 
       // 1.3 adding InterFace information after the faces
-      for ( auto f : interfaces_ ) {
+      for ( auto& f : interfaces_ ) {
           // multiplier takes care of the multiplicated interface nodes that the InterFace will be connected to
           nodes_per_element.push_back( f->Nodes() * interfaceMultiplier );
           neighbors_per_element.push_back( f->Neighbors() + higherDimParents + interfaceExtras );
@@ -2139,21 +2139,21 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
   // -----------------------------------
   size_t eidx = 0;
   // elements
-  for ( auto e : elements_ ) {
+  for ( auto& e : elements_ ) {
     for ( size_t j = 0U; j<e->Nodes(); ++j )
       vset.Plist( eidx, j, (e->N( j )->Idx()) );
     ++eidx;
   }
 
   // faces
-  for ( auto f : faces_ ) {
+  for ( auto& f : faces_ ) {
     for ( size_t j = 0U; j<f->Nodes(); ++j )
       vset.Plist( eidx, j, (f->N( j )->Idx()) );
     ++eidx;
   }
 
   // interfaces
-  for ( auto f : interfaces_ ) {
+  for ( auto& f : interfaces_ ) {
     // nodes = femptr->Nodes * 2 (all nodes of the interface)
     for ( size_t j = 0U; j<f->Nodes(); ++j )
       vset.Plist( eidx, j, (f->N( j )->Idx()) );
@@ -2346,7 +2346,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                 pushBack( data, value );
               }
             }
-           break;
+break;
         case TENSOR: {
           TensorVariable<dim> value;
           for ( auto it : nodes_ ) {
@@ -2399,44 +2399,44 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     {
       case SCALAR: {
         ScalarVariable value;
-        for ( auto it : elements_ ) {
-          (*it).Read( (*pit).second, value );
-          pushBack( data, value );
-        }
-      }
-                   break;
+        for ( auto& it : elements_ ) {
+              it->Read( (*pit).second, value );
+              pushBack( data, value );
+            }
+          }
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
-        for ( auto it : elements_ ) {
+        for ( auto& it : elements_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
-        for ( auto it : elements_ ) {
+        for ( auto& it : elements_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( (*pit).second.dataDepth );
-        for ( auto it : elements_ ) {
+        for ( auto& it : elements_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( (*pit).second.dataDepth );
-        for ( auto it : elements_ ) {
-          (*it).Read( (*pit).second, value );
-          pushBack( data, value );
-        }
-      }
-                         break;
+        for ( auto& it : elements_ ) {
+              (*it).Read( (*pit).second, value );
+              pushBack( data, value );
+            }
+          }
+       break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of element variable not recognized." );
@@ -2464,7 +2464,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2472,10 +2472,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2483,10 +2483,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2494,10 +2494,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2505,10 +2505,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2516,7 +2516,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                           break;
+     break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of element integration point variable not recognized." );
@@ -2545,7 +2545,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2556,10 +2556,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2570,10 +2570,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2584,10 +2584,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2598,21 +2598,21 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : elements_ ) {
-            const size_t sectors( (*it).Sectors() );
-            for ( size_t i = 0U; i<sectors; ++i ) {
-              const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
-              for ( size_t j = 0U; j<ips_per_sector; ++j ) {
-                (*it).Read( i, j, (*pit).second, value );
-                pushBack( data, value );
+          for ( auto& it : elements_ ) {
+                const size_t sectors( (*it).Sectors() );
+                for ( size_t i = 0U; i<sectors; ++i ) {
+                  const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
+                  for ( size_t j = 0U; j<ips_per_sector; ++j ) {
+                    (*it).Read( i, j, (*pit).second, value );
+                    pushBack( data, value );
+                  }
+                }
               }
             }
-          }
-        }
-                           break;
+         break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of element sector integraton point variable not recognized." );
@@ -2641,7 +2641,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -2652,10 +2652,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -2666,10 +2666,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -2680,10 +2680,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -2694,10 +2694,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : elements_ ) {
+          for ( auto& it : elements_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -2708,7 +2708,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                           break;
+     break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of facet integration point variable not recognized." );
@@ -2738,39 +2738,39 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     {
       case SCALAR: {
         ScalarVariable value;
-        for ( auto it : faces_ ) {
+        for ( auto& it : faces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
-        for ( auto it : faces_ ) {
+        for ( auto& it : faces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
-        for ( auto it : faces_ ) {
+        for ( auto& it : faces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( (*pit).second.dataDepth );
-        for ( auto it : faces_ ) {
+        for ( auto& it : faces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( (*pit).second.dataDepth );
-        for ( auto it : faces_ ) {
+        for ( auto& it : faces_ ) {
               (*it).Read( (*pit).second, value );
               pushBack( data, value );
             }
@@ -2803,7 +2803,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2811,10 +2811,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2822,10 +2822,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2833,10 +2833,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2844,10 +2844,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -2855,7 +2855,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                           break;
+     break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of face integration point variable not recognized." );
@@ -2885,7 +2885,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2896,10 +2896,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2910,10 +2910,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2924,10 +2924,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2938,10 +2938,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -2952,7 +2952,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                           break;
+     break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of face-sector integration point variable not recognized." );
@@ -2982,7 +2982,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -2993,10 +2993,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3007,10 +3007,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3021,10 +3021,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3035,10 +3035,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : faces_ ) {
+          for ( auto& it : faces_ ) {
             const size_t facets( (*it).Facets() );
             for ( size_t i = 0U; i<facets; ++i ) {
               const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3049,7 +3049,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                           break;
+     break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of face facet integration point variable not recognized." );
@@ -3079,44 +3079,44 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     {
       case SCALAR: {
         ScalarVariable value;
-        for ( auto it : interfaces_ ) {
+        for ( auto& it : interfaces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
-        for ( auto it : interfaces_ ) {
+        for ( auto& it : interfaces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
-        for ( auto it : interfaces_ ) {
+        for ( auto& it : interfaces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( (*pit).second.dataDepth );
-        for ( auto it : interfaces_ ) {
+        for ( auto& it : interfaces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( (*pit).second.dataDepth );
-        for ( auto it : interfaces_ ) {
+        for ( auto& it : interfaces_ ) {
           (*it).Read( (*pit).second, value );
           pushBack( data, value );
         }
       }
-                         break;
+   break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface variable not recognized." );
@@ -3141,7 +3141,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -3149,10 +3149,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -3160,10 +3160,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -3171,10 +3171,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -3182,10 +3182,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t integration_points( (*it).IntegrationPoints() );
             for ( size_t i = 0U; i<integration_points; ++i ) {
               (*it).Read( i, (*pit).second, value );
@@ -3193,7 +3193,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                           break;
+     break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of interface integration point variable not recognized." );
@@ -3221,7 +3221,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       {
         case SCALAR: {
           ScalarVariable value;
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -3232,10 +3232,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case VECTOR: {
           VectorVariable<dim> value;
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -3246,10 +3246,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -3260,10 +3260,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                     break;
+          break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -3274,10 +3274,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                    break;
+         break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
-          for ( auto it : interfaces_ ) {
+          for ( auto& it : interfaces_ ) {
             const size_t sectors( (*it).Sectors() );
             for ( size_t i = 0U; i<sectors; ++i ) {
               const size_t ips_per_sector( (*it).IntegrationPointsPerSector() );
@@ -3288,7 +3288,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             }
           }
         }
-                           break;
+     break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of interface sector integration point variable not recognized." );
@@ -3316,7 +3316,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         {
           case SCALAR: {
                 ScalarVariable value;
-                for ( auto it : interfaces_ ) {
+                for ( auto& it : interfaces_ ) {
                   const size_t facets( (*it).Facets() );
                   for ( size_t i = 0U; i<facets; ++i ) {
                     const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3330,7 +3330,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           break;
         case VECTOR: {
               VectorVariable<dim> value;
-              for ( auto it : interfaces_ ) {
+              for ( auto& it : interfaces_ ) {
                 const size_t facets( (*it).Facets() );
                 for ( size_t i = 0U; i<facets; ++i ) {
                   const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3344,7 +3344,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           break;
         case TENSOR: {
               TensorVariable<dim> value;
-              for ( auto it : interfaces_ ) {
+              for ( auto& it : interfaces_ ) {
                 const size_t facets( (*it).Facets() );
                 for ( size_t i = 0U; i<facets; ++i ) {
                   const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3358,7 +3358,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           break;
         case ARRAY: {
               ArrayVariable value( (*pit).second.dataDepth );
-              for ( auto it : interfaces_ ) {
+              for ( auto& it : interfaces_ ) {
                 const size_t facets( (*it).Facets() );
                 for ( size_t i = 0U; i<facets; ++i ) {
                   const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3369,10 +3369,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                 }
               }
             }
-           break;
+break;
         case FLAGGEDARRAY: {
               FlaggedArrayVariable value( (*pit).second.dataDepth );
-              for ( auto it : interfaces_ ) {
+              for ( auto& it : interfaces_ ) {
                 const size_t facets( (*it).Facets() );
                 for ( size_t i = 0U; i<facets; ++i ) {
                   const size_t ips_per_facet( (*it).IntegrationPointsPerFacet() );
@@ -3383,7 +3383,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                 }
               }
             }
-           break;
+break;
         default:
           csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of interface facet integration point variable not recognized." );
@@ -3516,7 +3516,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e->Store( key, value );
                 }
               }
-            break;
+ break;
           case VECTOR: {
             VectorVariable<dim> value;
             size_t i( 0U );
@@ -3525,7 +3525,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e->Store( key, value );
                 }
               }
-            break;
+ break;
           case TENSOR: {
             TensorVariable<dim> value;
             size_t i( 0U );
@@ -3534,7 +3534,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e->Store( key, value );
                 }
               }
-            break;
+ break;
           case ARRAY: {
             ArrayVariable value( key.dataDepth );
             size_t i( 0U );
@@ -3543,7 +3543,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e->Store( key, value );
                 }
               }
-            break;
+ break;
           case FLAGGEDARRAY: {
             FlaggedArrayVariable value( key.dataDepth );
             size_t i( 0U );
@@ -3552,7 +3552,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e->Store( key, value );
                 }
               }
-            break;
+ break;
           default:
             csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element variable not recognized." );
@@ -3584,7 +3584,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case VECTOR: {
             VectorVariable<dim> value;
             size_t entry( 0U );
@@ -3597,7 +3597,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case TENSOR: {
             TensorVariable<dim> value;
             size_t entry( 0U );
@@ -3610,7 +3610,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case ARRAY: {
             ArrayVariable value( key.dataDepth );
             size_t entry( 0U );
@@ -3623,7 +3623,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case FLAGGEDARRAY: {
             FlaggedArrayVariable value( key.dataDepth );
             size_t entry( 0U );
@@ -3636,7 +3636,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           default:
             csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element integration point variable not recognized." );
@@ -3672,7 +3672,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case VECTOR: {
             VectorVariable<dim> value;
             size_t entry( 0U );
@@ -3689,7 +3689,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case TENSOR: {
             TensorVariable<dim> value;
             size_t entry( 0U );
@@ -3706,7 +3706,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case ARRAY: {
             ArrayVariable value( key.dataDepth );
             size_t entry( 0U );
@@ -3723,7 +3723,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           case FLAGGEDARRAY: {
             FlaggedArrayVariable value( key.dataDepth );
             size_t entry( 0U );
@@ -3740,7 +3740,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
-            break;
+ break;
           default:
             csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element sector integraton point variable not recognized." );
@@ -3776,7 +3776,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t entry( 0U );
@@ -3793,7 +3793,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
@@ -3810,7 +3810,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -3827,7 +3827,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -3844,7 +3844,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                         break;
+   break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of facet integration point variable not recognized." );
@@ -3879,7 +3879,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           f->Store( key, value );
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t i( 0U );
@@ -3888,7 +3888,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           f->Store( key, value );
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t i( 0U );
@@ -3897,7 +3897,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           f->Store( key, value );
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t i( 0U );
@@ -3906,7 +3906,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           f->Store( key, value );
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t i( 0U );
@@ -3915,7 +3915,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           f->Store( key, value );
         }
       }
-                         break;
+   break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of face variable not recognized." );
@@ -3947,7 +3947,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t entry( 0U );
@@ -3960,7 +3960,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
@@ -3973,7 +3973,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -3986,7 +3986,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4034,7 +4034,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t entry( 0U );
@@ -4050,7 +4050,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
@@ -4066,7 +4066,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4082,7 +4082,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4133,7 +4133,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t entry( 0U );
@@ -4149,7 +4149,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
@@ -4165,7 +4165,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4181,7 +4181,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4232,7 +4232,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           i++;
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t i( 0U );
@@ -4242,7 +4242,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           i++;
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t i( 0U );
@@ -4252,7 +4252,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           i++;
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t i( 0U );
@@ -4262,7 +4262,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           i++;
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t i( 0U );
@@ -4272,7 +4272,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           i++;
         }
       }
-                         break;
+   break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface variable not recognized." );
@@ -4304,7 +4304,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t entry( 0U );
@@ -4317,7 +4317,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
@@ -4330,7 +4330,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4343,7 +4343,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4356,7 +4356,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                         break;
+   break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface integration point variable not recognized." );
@@ -4391,7 +4391,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t entry( 0U );
@@ -4407,7 +4407,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
@@ -4423,7 +4423,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4439,7 +4439,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4455,7 +4455,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                         break;
+   break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface sector integration point variable not recognized." );
@@ -4490,7 +4490,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case VECTOR: {
         VectorVariable<dim> value;
         size_t entry( 0U );
@@ -4506,7 +4506,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
@@ -4522,7 +4522,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4538,7 +4538,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                  break;
+       break;
       case FLAGGEDARRAY: {
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
@@ -4554,7 +4554,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         }
       }
-                         break;
+   break;
       default:
         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface facet integration point variable not recognized." );
@@ -4586,18 +4586,19 @@ bool  MeshManager<dim>::IsContiguous() const
     Element<dim>* eptr(nullptr);
     
     // looking for volume elements
+    size_t elmt_count{0};
     if constexpr ( dim == 3 ) {
-         for ( auto it : elements_ )
+         for ( auto& it : elements_ )
            if ( it->IsVolumeElement() ) {
                 eptr = it;
-                break;
+                elmt_count++;
              }
       }
     else if constexpr ( dim == 2 ) {
-         for ( auto it : elements_ ) {
-           if ( it->IsSurfaceElement() )
+         for ( auto& it : elements_ )
+           if ( it->IsSurfaceElement() ) {
                 eptr = it;
-                break;
+                elmt_count++;
              }
       }
     else eptr = (*elements_.begin());
@@ -4606,7 +4607,7 @@ bool  MeshManager<dim>::IsContiguous() const
     floodFill( eptr, contiguous_subset );
 
     // performing a floodfill on them
-    if ( contiguous_subset.size() < elements_.size() ) return false;
+    if ( contiguous_subset.size() < elmt_count ) return false;
     return true;
 
  } // end IsContiguous
@@ -4647,7 +4648,7 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
   bool with_surface_elements( false );
   bool with_line_elements( false );
 
-  for ( auto it : elements_ ) {
+  for ( auto& it : elements_ ) {
       if      ( !with_line_elements && it->IsLineElement() )			  with_line_elements = true;
       else if ( !with_surface_elements && it->IsSurfaceElement() )	with_surface_elements = true;
       else if ( !with_volume_elements && it->IsVolumeElement() )		with_volume_elements = true;
@@ -4673,7 +4674,7 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
   // 4.1 If all elements have the same spatial dimension
   // ---------------------------------------------------
   if ( dimension_counter == 1 ) {
-    for ( auto eit : elements_ ) {
+    for ( auto& eit : elements_ ) {
       // identifying the boundary faces and their nodes
       // (each face potentially has a neighbor element)
       long  nbors_that_belong_to_group( eit->Neighbors() );
@@ -4740,21 +4741,21 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
 
     set<Element<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
 
-    for ( auto e : lesser_dim_elmts )
-    {
-      // a) lower-dim elements that may be sticking out
-      // ----------------------------------------------
-      // lower-dimensional elements with nodes that do not belong to the node set of the
-      // higher dimensional elements must be boundary elements
-      size_t  exterior_nodes( 0U );
-      for ( size_t i = 0U; i<e->Nodes(); ++i )
-        if ( !highest_dim_elmt_nodes.count( e->N( i ) ) )
-          exterior_nodes++;
+    for ( auto& e : lesser_dim_elmts )
+      {
+        // a) lower-dim elements that may be sticking out
+        // ----------------------------------------------
+        // lower-dimensional elements with nodes that do not belong to the node set of the
+        // higher dimensional elements must be boundary elements
+        size_t  exterior_nodes( 0U );
+        for ( size_t i = 0U; i<e->Nodes(); ++i )
+          if ( !highest_dim_elmt_nodes.count( e->N( i ) ) )
+            exterior_nodes++;
 
-      // if individual nodes stick out the parent element sticks out as well.
-      if ( exterior_nodes == e->Nodes() )
-        lesser_dim_elmts_detached.insert( e );
-    }
+        // if individual nodes stick out the parent element sticks out as well.
+        if ( exterior_nodes == e->Nodes() )
+          lesser_dim_elmts_detached.insert( e );
+      }
 
     if ( !lesser_dim_elmts_detached.empty() ) {
       csmp_error.notice( WARNING, "MeshManager::CheckElementConnectivity:",
@@ -4763,7 +4764,7 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
       // do some additional diagnostics on these elements
       // ------------------------------------------------
       cerr << "\n\tdetached elements: " << lesser_dim_elmts_detached.size() << ":";
-      for ( auto e : lesser_dim_elmts_detached )
+      for ( auto& e : lesser_dim_elmts_detached )
         cerr << " " << e->Idx();
       cerr << endl;
       errors++;
@@ -4798,7 +4799,7 @@ void MeshManager<dim>::Out() const
 
   // nodes
   cout << "\nNODES: " << endl;
-  for ( auto n : nodes_ ) {
+  for ( auto& n : nodes_ ) {
     string bound = parseBoundary( n->AtBoundary() );
     cout << "\nNode ID: " << n->Idx() << " ";
     cout << n->Coordinate();
@@ -4807,7 +4808,7 @@ void MeshManager<dim>::Out() const
 
   // elements
   cout << "\nELEMENTS: " << endl;
-  for ( auto e : elements_ ) {
+  for ( auto& e : elements_ ) {
     string bound = parseBoundary( e->AtBoundary() );
     cout << "\nElement ID: " << e->Idx() << " Boundary flag: " << bound << endl;
     cout << "Member Nodes: " << endl;
@@ -4825,7 +4826,7 @@ void MeshManager<dim>::Out() const
 
   // faces
   cout << "\nFACES: " << endl;
-  for ( auto f : faces_ ) {
+  for ( auto& f : faces_ ) {
     cout << "\nFace ID: " << f->Idx() << endl;
     cout << "Member Nodes: " << endl;
     for ( size_t i = 0U; i < f->Nodes(); i++ )
@@ -4842,7 +4843,7 @@ void MeshManager<dim>::Out() const
 
   // inter faces
   cout << "\nINTERFACES: " << endl;
-  for ( auto f : interfaces_ ) {
+  for ( auto& f : interfaces_ ) {
     cout << "\nInterFace ID: " << f->Idx() << endl;
     cout << "Member Nodes: " << endl;
     for ( size_t i = 0U; i < f->Nodes(); i++ )
@@ -4860,7 +4861,7 @@ void MeshManager<dim>::Out() const
   // parent elements ID's for each node
   cout << endl << endl;
   cout << "PARENT ELEMENT INFORMATION FOR ALL NODES: " << endl;
-  for ( auto n : nodes_ ) {
+  for ( auto& n : nodes_ ) {
     cout << "\nNode: " << n->Idx() << ", parent elements: " << endl;
     for ( size_t i = 0u; i < n->Parents(); i++ )
       cout << n->Parent( i )->Idx() << " ";

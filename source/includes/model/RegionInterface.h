@@ -131,7 +131,7 @@ public:
   // -----------------------------------------------
 
   /// builds master region 'Model' (discontigous or not) including all elements (line, surface, or volume if any); this regions is then used to build others
-  size_t FormModelRegion( bool is_unique, bool reestablishNeighborConnectivity = false );
+  size_t FormModelRegion( bool is_unique );
   
   /// forms unique or non-unique region including entire range of elements; returns number of elements created (USED TO CREATE MODEL REGION 22/5/21)
   size_t FormRegionFrom( const char* regionname,

@@ -262,9 +262,6 @@ public:
   template<class T>
   void InputVariableFrom( const char* input_prop, const FEM_Data<T>& );
   
-  /// rock-type identifiers or material IDs if these are present in the VSet
-  void InputMaterialIdentifiersFrom( const VSet<dim>& );
-
   /// inputs all discretised variables stored in the supplied VSet into the model
   void InputVariablesFrom( const VSet<dim>& );
 

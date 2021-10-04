@@ -1283,7 +1283,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
      @attention assumes that 'indexToPointerMapping' is unique and non empty.
 */
 template<size_t dim>
-size_t Region<dim>::AccumulateAll( const MeshManager<dim>& mapping, bool reestablishNeighborConnectivity )
+size_t Region<dim>::AccumulateAll( const MeshManager<dim>& mapping )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1294,9 +1294,6 @@ size_t Region<dim>::AccumulateAll( const MeshManager<dim>& mapping, bool reestab
    
    this->elmt_vec_.assign( mapping.ElementsBegin(), mapping.ElementsEnd() );
    this->node_vec_.assign( mapping.NodesBegin(), mapping.NodesEnd() );
-
-   if ( reestablishNeighborConnectivity )
-     establishNeighborConnectivity( this->elmt_vec_ );
 
    this->IdentifyPerimeter();
     
@@ -1714,7 +1711,7 @@ size_t  Region<dim>::AccumulateByNumber( const MeshManager<dim>& mesh,
 
   // eliminating potential duplicates from element index vector
   sort( element_ids.begin(), element_ids.end() );
-  element_ids.erase( unique( element_ids.begin(), element_ids.end() ), element_ids.begin() );
+  element_ids.erase( unique( element_ids.begin(), element_ids.end() ), element_ids.end() );
 
   // creating the element vector for the region
   this->elmt_vec_.reserve( element_ids.size() );

@@ -157,7 +157,7 @@ class Region : public ModelSubDomain<dim, Element>,
     // --------------------------------------------
 
     /// accumulates all elements in the mesh directly from MeshManager; returns the number of elements of the new region
-    size_t AccumulateAll( const MeshManager<dim>&, bool reestablishNeighborConnectivity );
+    size_t AccumulateAll( const MeshManager<dim>& );
 
     /// accumulates assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
     size_t AccumulateByNumber( const MeshManager<dim>&, std::vector<size_t>& element_ids );

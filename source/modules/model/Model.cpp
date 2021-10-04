@@ -319,15 +319,15 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
 
     // if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-    const bool place_in_unique_regions( (mesh_topology.ModelRegions() == 0) );
-    const bool contiguous_model( mesh_manager_.IsContiguous() );
-    const size_t elmts = this->FormModelRegion( place_in_unique_regions );
+    const bool place_into_unique_regions( (mesh_topology.ModelRegions() == 0) );
+    const size_t elmts = this->FormModelRegion( place_into_unique_regions );
     if ( elmts == 0U )
       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
 
+    const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
-      csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                         "model contains disconnected mesh patches! - they will be connected with SplitBoundary objects" );
+      csmp_error.notice( INFO, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                         "model contains disconnected mesh patches - they will be connected with SplitBoundary objects" );
 
     cout <<"\nModel<dim>::Initialize: ";
     if ( contiguous_model ) cout << "Contiguous model has been built successfully..." << endl;
@@ -336,9 +336,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     // 6. associating supplied subregions with regions (model subdomains)
     this->FormRegionsFrom( mesh_topology );
 	
-    // 6b (requires model region) assigning material IDs (if any) to the elements of the model (not Faces or Interfaces which have no such IDs)
-    InputMaterialIdentifiersFrom( vset );
-
     if ( mesh_topology.BoxShapedModel() )
       if ( fully_irregular_mesh )
         csmp_error.notice( WARNING, "Model<dim>::Initialize:",
@@ -392,10 +389,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
 
 /**
-Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
-the creation of regions other than 'Model'.
-
-@note this version of Initialise() is called when the model is build from ANSYS input data
+    Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
+    the creation of regions other than 'Model'.
 */
 template<size_t dim>
 void Model<dim>::Initialize( bool isoparametric_elements,
@@ -417,21 +412,12 @@ void Model<dim>::Initialize( bool isoparametric_elements,
   if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
     csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
                                               
-  const bool contiguous_model( mesh_manager_.IsContiguous() );
   const bool unique(true);
   const size_t elmts = this->FormModelRegion( unique );
   if ( elmts == 0U )
     csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
   
-  if ( !contiguous_model  )
-    csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                       "model appears to contain domains that are not connected to one another and there are no SplitBoundaries!" );
-
-  cout << "\nModel<dim>::Initialize: ";
-  if ( contiguous_model )
-    cout << "Contiguous mesh has been built successfully..." << endl;
-  else
-    cout << "Discontiguous mesh has been built successfully..." << endl;
+  cout << "\nModel<dim>::Initialize: modek mesh has been built successfully..." << endl;
 
   // 4. creating the finite volume mesh if necessary
   if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
@@ -453,6 +439,11 @@ void Model<dim>::Initialize( bool isoparametric_elements,
           if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
         }
       else {
+          const bool contiguous_model( mesh_manager_.IsContiguous() );
+          if ( !contiguous_model  )
+            csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                               "model appears to contain domains that are not connected to one another and there are no SplitBoundaries!" );
+
           if ( contiguous_model )
             this->EstablishBoundariesFromRegions( true );
           else
@@ -517,6 +508,10 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+  // 0. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
+  if ( !vset.WithNeighbourConnectivity() )
+    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
+
   // 1. reducing the mesh data to the desired element types as specified
   //    by the topology object
   map<size_t, size_t>  old_and_new_elmtids;
@@ -531,6 +526,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
   // 3. building the finite element mesh (finite volume mesh) and property storage
   mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+  cout << "\nModel<dim>::Initialize: model has been built successfully..." << endl;
 
   if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
        Database().VariableCount( FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACE_FACET_INTEGRATION_POINT ) or
@@ -538,41 +534,21 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
        vset.ContainsFiniteVolumeIntegrationPointData() )
     InstantiateFiniteVolumes();
 
-  // assigning properties to mesh; this does not depend on regions,
-  // so this is safe to do before we have established them.
+  // 4. assigning properties to mesh; this does not depend on regions,
+  //    so this is safe to do before we have established them.
   InputVariablesFrom( vset );
 
-  // 4. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
-  if ( !vset.WithNeighbourConnectivity() )
-    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
-
-  // if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-  const bool place_in_unique_regions( (mesh_topology.ModelRegions() == 0) );
-  const bool contiguous_model( mesh_manager_.IsContiguous() );
-  const size_t elmts = this->FormModelRegion( place_in_unique_regions );
-  if ( elmts == 0U )
-    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
-
-  if ( !contiguous_model )
-    csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                       "model appears to contain domains that are not connected to one another!" );
-
-  cout << "\nModel<dim>::Initialize: ";
-  if ( contiguous_model ) cout << "Contiguous model has been built successfully..." << endl;
-  else cout << "Discontiguous model has been built successfully..." << endl;
-
-  // 6. associating supplied subregions with regions (model subdomains)
+  // 5. Model and subregions (model subdomains)
+  const bool place_into_unique_regions( (mesh_topology.ModelRegions() == 0) );
+  const size_t elmts = this->FormModelRegion( place_into_unique_regions );
+  if ( elmts == 0U ) csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
   this->FormRegionsFrom( mesh_topology );
-
-  // 6b (requires model region) assigning material IDs (if any) to the elements of the model (not Faces or Interfaces which have no such IDs)
-  InputMaterialIdentifiersFrom( vset );
 
   if ( mesh_topology.BoxShapedModel() )
     if ( fully_irregular_mesh )
       ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
                                        "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
-
-  // 7. forming Boundaries
+  // 6. forming Boundaries
   if ( create_boundaries ) {
     const bool remove_original_lower_dimensional_regions( true );
     // if the model is box-shaped (albeit perhaps with irregular top surface)
@@ -584,6 +560,11 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       }
     // irregularly shaped models
     else {
+        const bool contiguous_model( mesh_manager_.IsContiguous() );
+        if ( !contiguous_model )
+          csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                             "model appears to contain domains that are not connected to one another!" );
+
         if ( contiguous_model )
           this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
         else
@@ -595,7 +576,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       }
 
     // split boundaries
-    if ( contiguous_model && create_splitboundaries ) {
+    if ( create_splitboundaries ) {
         this->DetectAndCreateSplitBoundaries();
         this->SplitBoundariesOut();
       }
@@ -779,45 +760,6 @@ template void Model<3U>::OutputVariableTo( const char*, FEM_Data<FlaggedArrayVar
 
 
 
-/**
-  Rock type identifiers or material IDs are brought over from the VSet if it contains such information 
-  and they are used to initialise the element 'material_ID_variable values accordingly.
-  
-  @attention with this method this is only possible if 'element number' is defined and correctly initialised.
-  
-  @author SKM 5/12/20.
-*/
-template<size_t dim>
-void Model<dim>::InputMaterialIdentifiersFrom( const VSet<dim>& vset )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    
-    // if there are material data in the VSet
-    vector<int32>::const_iterator mit = vset.PmtrlBegin();
-    const vector<int32>::const_iterator mtrls_end = vset.PmtrlEnd();
-    if ( mit == mtrls_end ) 
-      csmp_error.notice( INFO, "Model<dim>::InputMaterialIdentifiersFrom:", "the VSet does not contain any material identifiers." );
-
-    // if the element number is known so that the material IDs can be assigned correctly
-    if ( Database().IsDefined("element number") ) {
-         const csmp::Index eid_key = Database().StorageKey("element number");
-         // creating a mapping between current elements in region 'Model' and the VSet from the element number
-         Region<dim>& domain = this->Region("Model");
-         vector<Element<dim>*> ordered_elmts(domain.Elements());
-         for ( typename vector<Element<dim>*>::const_iterator it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
-           ordered_elmts[ static_cast<size_t>((*it)->Read(eid_key)) ] = (*it);
-           
-         // reading the VSet material record
-         size_t elmt_counter(0U);
-         while ( mit != mtrls_end ) {
-              ordered_elmts[ elmt_counter++ ]->Material_ID( (*mit) );
-              mit++;
-           }
-      }
-    else
-    csmp_error.notice( INFO, "Model<dim>::InputMaterialIdentifiersFrom:", "'element number' needs to be defined to assign material IDs correctly." );
-  
- } // InputMaterialIdentifiersFrom
 
 
 
@@ -3059,7 +3001,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   fem_manager_.InitializeElements( dim, vset.OrderOfFiniteElementInterpolationFunctions(), true );
   cout << "\nModel<" << dim << ">::InputFromBinaryFile: it is assumed that the model is based on 'isoparametric' finite elements.\n\n";
 
-  // 3. rebuilds finite element mesh and associated property storage
+  // 3. rebuilds finite element mesh and associated property storage, initialising 'mtrl' identifiers and boundary flags
   mesh_manager_.Initialize( database_, fem_manager_, vset );
 
   // 4. checking whether the FV stencils need to be initialised

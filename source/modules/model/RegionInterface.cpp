@@ -180,11 +180,12 @@ Uses the highest order of elements (dim == model dimension) to perform a flood f
 
 @author SKM
 @date 4/9/21
+
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique, bool reestablishNeighborConnectivity )
+size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
 {
-  ErrorHandler&        csmp_error( ErrorHandler::Instance() );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
  
   // 0. initial checks
   // -----------------
@@ -207,14 +208,11 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique, bo
 
   // if region was inserted successfully
   if ( newRegion.second ) {
-       size_t elmts(0U);
-       if ( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().IsContiguous() )
-         elmts = (*newRegion.first).second.AccumulateAll( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh(), reestablishNeighborConnectivity );
+       size_t elmts = (*newRegion.first).second.AccumulateAll( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh() );
        if ( elmts == 0 )
          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
-                            regionname, "region could not be formed because the number of elements connected to root nodes is zero." );
+                            regionname, "region could not be formed." );
     }
-
   else {
       csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
                          regionname, "region could not be formed." );
@@ -2673,8 +2671,8 @@ void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
         }
         
      // rebuild Model
-     const bool is_unique(false), reestablishNeighborConnectivity(false);
-     FormModelRegion( is_unique, reestablishNeighborConnectivity );
+     const bool is_unique(false);
+     FormModelRegion( is_unique );
        
  } // end RebuildRegions
 
