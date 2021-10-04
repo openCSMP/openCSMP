@@ -1298,7 +1298,7 @@ void VData::Out() const
      size_t i(0U);
      for ( vector<int8_t>::const_iterator
            eit=pelmt.begin(); eit!=pelmt.end(); eit++, i++ )
-       cout <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
+       cout <<"\n"<< i <<": "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
      cout << endl;
 
      // plist
