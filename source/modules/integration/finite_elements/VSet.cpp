@@ -729,18 +729,20 @@ bool  VSet<dim>::InputFromTextFile(const char* text_file)
 
 */
 template<size_t dim>
-void VSet<dim>::Out( bool data_as_well ) const
+void VSet<dim>::Out( bool print_data_as_well ) const
 {
 	VData::Out();
 
-	if (data_as_well)
+	if ( print_data_as_well )
     {
-      cout << "\nVSet<"<< dim <<">::Out: material identifiers (rocktypes) for each element stored in VSet:\n";
+      if ( distance(PmtrlBegin(),PmtrlEnd()) > 0 )
+        cout << "\nVSet<"<< dim <<">::Out: material identifiers (rocktypes) for each element stored in VSet:\n";
       // material records
       for ( auto& it : pmtrl_ ) 
         cout << it <<" ";
       // scalar type data
-      cout << "\nproperty records stored in VSet:\n";
+      if ( distance(PropertyValuesBegin(),PropertyValuesEnd()) > 0 )
+        cout << "\nproperty records stored in VSet:\n";
       for ( map<string, PropertyData>::const_iterator
             it = property_map_.begin(); it != property_map_.end(); it++ )
         {

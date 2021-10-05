@@ -271,6 +271,13 @@ class VData {
     /// checks for collocated vertices into transfer data structure
     bool ExtractNodeManifolds( vertexManifoldIndices& ) const;
   
+  
+    /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
+    bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );
+  
+    /// clear the container
+    void Erase();
+
     /// write mesh to supplied binary file
     void OutBinary( std::fstream& ) const;
   
@@ -285,12 +292,6 @@ class VData {
   
     /// print connectivity information to screen
     void Out() const;
-  
-    /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
-    bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );
-  
-    /// clear the container
-    void Erase();
 
   protected:
   
