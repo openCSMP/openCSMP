@@ -194,7 +194,7 @@ BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
   if ( i == MULTIPLE_BOUNDARIES ) return MULTIPLE;
 
   //cout <<"\nintToSG_BOUNDARY(int): unable to parse integer: "<< i << endl;
-  return NOT;
+  return MULTIPLE;
 }
 
 
@@ -232,7 +232,7 @@ std::string  parseBoundary( BOX_BOUNDARY i )
   if ( i == MULTIPLE ) return string( "MULTIPLE" );
 
 //  cerr << "\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: " << i << endl;
-  return string( "NOT" );
+  return string( "UNDEFINED" );
 }
 
 
@@ -272,7 +272,7 @@ BOX_BOUNDARY  parseBoundary( const string& i )
   if ( i == "MULTIPLE" ) return MULTIPLE;
   
   // if the name is not recognized it is not a BOX_BOUNDARY
-  return NOT;
+  return MULTIPLE;
 }
 
 

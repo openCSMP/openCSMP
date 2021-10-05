@@ -302,7 +302,7 @@ class VData {
     double64 AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );
     
     /// reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts'
-    size_t switchCornerTriangles2D();
+    size_t SwitchCornerTriangles2D();
     
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );
 

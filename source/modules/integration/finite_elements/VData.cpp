@@ -2241,8 +2241,11 @@ size_t VData::RenumberElementsCounterClockwise2D()
            // if the line element has no first neighbor it must be at the beginning of a chain and correctly oriented
            BOX_BOUNDARY bflag = intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[elmt_idx][0] ) );
            // its neighbor-free side must be at an internal or external boundary
-           if ( bflag >= 0 )
-             cerr <<"\n\t'pfvert' entry for line element "<< elmt_idx <<" not correct: ["<< pfverts[elmt_idx][0]<<","<< pfverts[elmt_idx][1] <<"].";
+           if ( bflag >= 0 ) {
+                cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
+                cerr <<"'pfvert["<< elmt_idx <<"][0]' entry for neighbour element 1: "<< pfverts[elmt_idx][0];
+                cerr <<" not correct: ["<< pfverts[elmt_idx][0] <<","<< pfverts[elmt_idx][1] <<"].";
+             }
            assert( bflag >= MULTIPLE );
 
           // storing the element as the first in the line element sequence
@@ -2301,7 +2304,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
       for ( set<size_t>::const_iterator it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
         {
            // searching for the corresponding face of a higher dimensional element
-           auto face_it = surf_elmt_face_nd_ids.find( set<size_t>{ plist[*it][0], plist[*it][1] } );
+           auto face_it = surf_elmt_face_nd_ids.find( set{ plist[*it][0], plist[*it][1] } );
            
            // is there a line element with no surface element next to it?
            if ( face_it == surf_elmt_face_nd_ids.end() ) {
@@ -2396,6 +2399,7 @@ void  VData::EstablishElementConnectivity2D()
    CSMP_FEM_TYPE   etype = (HybridElementTypeMesh()==false) ? parseFiniteElementTypeEnum( ElementType(0) ) : UNKNOWN;
    bool      is_triangle = (etype != UNKNOWN) ? isTriangularElement( etype ) : false;
    bool is_quadrilateral = (etype != UNKNOWN) ? isQuadrilateralElement( etype ) : false;
+   bool triangle_with_all_nodes_on_boundary(false);
    
    if ( !plist.empty() )
      {
@@ -2583,10 +2587,14 @@ void  VData::EstablishElementConnectivity2D()
                for ( vector<long64>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
                  // the face is on the boundary
                  if ( (*pt) < 0 ) boundaries_per_element++;
-               if ( boundaries_per_element > 1U ) {
-                    cerr <<"\nVData::EstablishElementConnectivity2D: WARNING: element "<< elmt_idx;
-                    cerr <<" ("<< parseFiniteElementType( pelmt[elmt_idx] ) <<") ";
-                    cerr <<" has "<< boundaries_per_element <<" faces on the model boundary.\n";
+               if ( boundaries_per_element > 1U &&
+                   isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) )
+                 {
+                   cerr <<"\n\n\telement "<< elmt_idx <<" ("<< parseFiniteElementType( pelmt[elmt_idx] ) <<") ";
+                   cerr <<" has "<< boundaries_per_element <<" faces on model boundary.\n";
+                   csmp_error.notice( WARNING, "VData::EstablishElementConnectivity2D:",
+                                     "triangular element with  2 faces on boundary ");
+                   triangle_with_all_nodes_on_boundary = true;
                  }
             }
         
@@ -2694,8 +2702,13 @@ void  VData::EstablishElementConnectivity2D()
 
      } // if plist empty
 
-   // 4. reorienting line-element chains (done in other method)
    assert( !pfverts.empty() );
+
+   // 4. Elements with all nodes on the boundary can degrade solver convergence for certain boundary conditions
+   //    This method eliminates such elements by node swapping
+   if ( triangle_with_all_nodes_on_boundary ) SwitchCornerTriangles2D();
+
+   // 5. reorienting line-element chains (done in other method)
    CreateConsistentLineElementOrientations2D();
 
  } // end EstablishElementConnectivity2D
@@ -2713,7 +2726,7 @@ void  VData::EstablishElementConnectivity2D()
     
     @return the number of replaced triangles;
 */
-size_t VData::switchCornerTriangles2D()
+size_t VData::SwitchCornerTriangles2D()
  {
     size_t switched_triangles{0};
     
@@ -2723,8 +2736,8 @@ size_t VData::switchCornerTriangles2D()
          return 0U;
       }
       
-    size_t elmt_idx{0};
-    for ( auto& it : pfverts )
+    const size_t n_elements{pfverts.size()};
+    for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
       {
          if ( isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) ) {
               // count valid neighbors
@@ -2748,10 +2761,10 @@ size_t VData::switchCornerTriangles2D()
                           }
                      }
                    assert( isTriangularElement( parseFiniteElementTypeEnum( pelmt[nb_idx] ) ) );
-                   //           face nodes, other node
-                   map<pair<size_t,size_t>,size_t> fnids{ {{plist[nb_idx][1],plist[nb_idx][2]},0},
-                                                          {{plist[nb_idx][2],plist[nb_idx][0]},1},
-                                                          {{plist[nb_idx][0],plist[nb_idx][1]},2} };
+                   //           face nodes, other node, but order in pair flipped so that opposite face can be matched
+                   map<pair<size_t,size_t>,size_t> fnids{ {{plist[nb_idx][2],plist[nb_idx][1]},0},
+                                                          {{plist[nb_idx][0],plist[nb_idx][2]},1},
+                                                          {{plist[nb_idx][1],plist[nb_idx][0]},2} };
                    // searching reversed nodes in map
                    auto face_it = fnids.find( face_nds );
                    if ( face_it != fnids.end() ) {
@@ -2759,8 +2772,8 @@ size_t VData::switchCornerTriangles2D()
                         array elmt1_nds{ plist[elmt_idx][0], plist[elmt_idx][1], plist[elmt_idx][2] };
                         array elmt2_nds{ plist[nb_idx][0],   plist[nb_idx][1],   plist[nb_idx][2] };
                         // rotating these vectors such that the unshared nodes become the corner nodes
-                        rotate( elmt1_nds.begin(), elmt1_nds.begin() - cnr_nd, elmt1_nds.end() );
-                        rotate( elmt2_nds.begin(), elmt2_nds.begin() - (*face_it).second, elmt2_nds.end() );
+                        rotate( begin(elmt1_nds), begin(elmt1_nds) + cnr_nd, end(elmt1_nds) );
+                        rotate( begin(elmt2_nds), begin(elmt2_nds) + (*face_it).second, end(elmt2_nds) );
                         // new element 1
                         plist[elmt_idx][0] = elmt1_nds[0];
                         plist[elmt_idx][1] = elmt1_nds[1];
@@ -2774,8 +2787,8 @@ size_t VData::switchCornerTriangles2D()
                         array elmt1_nbors{ pfverts[elmt_idx][0], pfverts[elmt_idx][1], pfverts[elmt_idx][2] };
                         array elmt2_nbors{ pfverts[nb_idx][0],   pfverts[nb_idx][1],   pfverts[nb_idx][2] };
                         // rotating these vectors such that the unshared nodes become the corner nodes
-                        rotate( elmt1_nbors.begin(), elmt1_nbors.begin() - cnr_nd, elmt1_nbors.end() );
-                        rotate( elmt2_nbors.begin(), elmt2_nbors.begin() - (*face_it).second, elmt2_nbors.end() );
+                        rotate( elmt1_nbors.begin(), elmt1_nbors.begin() + cnr_nd, elmt1_nbors.end() );
+                        rotate( elmt2_nbors.begin(), elmt2_nbors.begin() + (*face_it).second, elmt2_nbors.end() );
                         // neighbors of new element 1
                         pfverts[elmt_idx][0] = elmt2_nbors[1];
                         pfverts[elmt_idx][1] = nb_idx;
@@ -2789,12 +2802,13 @@ size_t VData::switchCornerTriangles2D()
                      }
                 }
            }
-         elmt_idx++;
       }
       
+    if ( switched_triangles > 0 )
+      cout <<"\n\nSwitchCornerTriangles2D: reconnected: "<< switched_triangles <<" triangular elements."<< endl;
     return switched_triangles;
  
- } // end switchCornerTriangles2D
+ } // end SwitchCornerTriangles2D
 
 
 
