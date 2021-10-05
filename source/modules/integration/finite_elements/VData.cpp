@@ -2165,7 +2165,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                   if ( pfverts[elmt_idx][0] < 0 )
                     line_elmts.insert( elmt_idx );
                   // boundary line elements or loop on the boundary
-                  if ( bflags[ plist[elmt_idx][0] ] != 0 && bflags[ plist[elmt_idx][1] ] != 0 )
+                  if ( bflags[ plist[elmt_idx][0] ] < 0 && bflags[ plist[elmt_idx][1] ] < 0 )
                     boundary_line_elmts.insert( elmt_idx );
               }
             // if this is a surface element  
@@ -2356,6 +2356,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
  
  
  
+ 
+
  
  
 
@@ -2700,6 +2702,99 @@ void  VData::EstablishElementConnectivity2D()
 
 
 
+
+
+
+
+
+
+/**
+    Reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts.'
+    
+    @return the number of replaced triangles;
+*/
+size_t VData::switchCornerTriangles2D()
+ {
+    size_t switched_triangles{0};
+    
+    if ( pfverts.empty() || pfverts.size() != plist.size() ) {
+         cerr <<"\nVData::switchCornerTriangles2D: method needs valid 'pfverts' (neighbor connectivity) for its operation. ";
+         cerr <<" no modifications made.\n";
+         return 0U;
+      }
+      
+    size_t elmt_idx{0};
+    for ( auto& it : pfverts )
+      {
+         if ( isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) ) {
+              // count valid neighbors
+              size_t nbors = count_if( pfverts[elmt_idx].begin(), pfverts[elmt_idx].end(),
+                                       []( long64 nbor )->bool { return (nbor >= 0) ? true : false; } );
+              assert( nbors != 0 );
+              if ( nbors == 1 ) {
+                   // finding the only valid neigbor and its shared face
+                   pair<size_t,size_t> face_nds;
+                   size_t              cnr_nd(UINT_MAX);
+                   long64              nb_idx(UINT_MAX);
+                   for ( size_t i{0}; i<3; ++i ) {
+                        if ( pfverts[elmt_idx][i] >= 0 ) {
+                             nb_idx = pfverts[elmt_idx][i];
+                             switch ( i ) {
+                                 case 0: face_nds = make_pair( plist[elmt_idx][1],plist[elmt_idx][2] ); cnr_nd=0; break;
+                                 case 1: face_nds = make_pair( plist[elmt_idx][2],plist[elmt_idx][0] ); cnr_nd=1; break;
+                                 case 2: face_nds = make_pair( plist[elmt_idx][0],plist[elmt_idx][1] ); cnr_nd=2;
+                               }
+                             break;
+                          }
+                     }
+                   assert( isTriangularElement( parseFiniteElementTypeEnum( pelmt[nb_idx] ) ) );
+                   //           face nodes, other node
+                   map<pair<size_t,size_t>,size_t> fnids{ {{plist[nb_idx][1],plist[nb_idx][2]},0},
+                                                          {{plist[nb_idx][2],plist[nb_idx][0]},1},
+                                                          {{plist[nb_idx][0],plist[nb_idx][1]},2} };
+                   // searching reversed nodes in map
+                   auto face_it = fnids.find( face_nds );
+                   if ( face_it != fnids.end() ) {
+                        // reassigning nodes to new elements (first nodes are taken as those on the far sides (not shared ones))
+                        array elmt1_nds{ plist[elmt_idx][0], plist[elmt_idx][1], plist[elmt_idx][2] };
+                        array elmt2_nds{ plist[nb_idx][0],   plist[nb_idx][1],   plist[nb_idx][2] };
+                        // rotating these vectors such that the unshared nodes become the corner nodes
+                        rotate( elmt1_nds.begin(), elmt1_nds.begin() - cnr_nd, elmt1_nds.end() );
+                        rotate( elmt2_nds.begin(), elmt2_nds.begin() - (*face_it).second, elmt2_nds.end() );
+                        // new element 1
+                        plist[elmt_idx][0] = elmt1_nds[0];
+                        plist[elmt_idx][1] = elmt1_nds[1];
+                        plist[elmt_idx][2] = elmt2_nds[0];
+                        // new element 2 (nb_idx)
+                        plist[nb_idx][0]   = elmt2_nds[0];
+                        plist[nb_idx][1]   = elmt2_nds[1];
+                        plist[nb_idx][2]   = elmt1_nds[0];
+                        // reassigning neighbors
+                        // old neighbors
+                        array elmt1_nbors{ pfverts[elmt_idx][0], pfverts[elmt_idx][1], pfverts[elmt_idx][2] };
+                        array elmt2_nbors{ pfverts[nb_idx][0],   pfverts[nb_idx][1],   pfverts[nb_idx][2] };
+                        // rotating these vectors such that the unshared nodes become the corner nodes
+                        rotate( elmt1_nbors.begin(), elmt1_nbors.begin() - cnr_nd, elmt1_nbors.end() );
+                        rotate( elmt2_nbors.begin(), elmt2_nbors.begin() - (*face_it).second, elmt2_nbors.end() );
+                        // neighbors of new element 1
+                        pfverts[elmt_idx][0] = elmt2_nbors[1];
+                        pfverts[elmt_idx][1] = nb_idx;
+                        pfverts[elmt_idx][2] = elmt1_nbors[2];
+                        // new element 2
+                        pfverts[nb_idx][0]   = elmt1_nbors[1];
+                        pfverts[nb_idx][1]   = elmt_idx;
+                        pfverts[nb_idx][2]   = elmt2_nbors[2];
+                        // TODO: check: these new elements should only have a single boundary face left
+                        switched_triangles += 2U;
+                     }
+                }
+           }
+         elmt_idx++;
+      }
+      
+    return switched_triangles;
+ 
+ } // end switchCornerTriangles2D
 
 
 

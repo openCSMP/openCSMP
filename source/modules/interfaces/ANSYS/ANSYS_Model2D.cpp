@@ -34,8 +34,8 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
     //    and eliminating the unwanted line/surface element regions
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
+    vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
-    vset.CreateConsistentLineElementOrientations2D();
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
@@ -146,9 +146,8 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
     //    and eliminating the unwanted line/surface element regions
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
+    vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
-    vset.VData::Out();
-    vset.CreateConsistentLineElementOrientations2D();
     
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {

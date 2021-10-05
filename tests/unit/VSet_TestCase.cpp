@@ -66,6 +66,9 @@ void VSet_TestCase::TestModelConstructionAndSaving2D()
     mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
     vset.ReduceTo( old_and_new_elmtids );
     old_and_new_elmtids.clear();
+    
+    vset.RemovePfverts();
+    vset.EstablishElementConnectivity2D();
 
     // processing the (deliberately) inconsistent VSet 
     const size_t rotated_elements = vset.RenumberElementsCounterClockwise2D();
