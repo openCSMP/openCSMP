@@ -301,6 +301,9 @@ class VData {
     /// angle between line elements in degrees
     double64 AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );
     
+    /// computes the unit normals to the surfaces and then returns the angle between them
+    double64 AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 );
+    
     /// reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts'
     size_t SwitchCornerTriangles2D();
     

@@ -2064,6 +2064,42 @@ BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY 
 }
 
 
+
+/// return which boundary the edge or lower-dim face with the two end-node flags is on
+BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 )
+ {
+    if ( node_flag1 == node_flag2 ) return node_flag1;
+    // sides
+    if ( isLEFT(node_flag1)   && isLEFT(node_flag2) )   return LEFT;
+    if ( isRIGHT(node_flag1)  && isRIGHT(node_flag2) )  return RIGHT;
+    if ( isBOTTOM(node_flag1) && isBOTTOM(node_flag2) ) return BOTTOM;
+    if ( isTOP(node_flag1)    && isTOP(node_flag2) )    return TOP;
+    if ( isFRONT(node_flag1)  && isFRONT(node_flag2) )  return FRONT;
+    if ( isBACK(node_flag1)   && isBACK(node_flag2) )   return BACK;
+    // edges
+    if ( node_flag1 == EDGE1 || node_flag2 == EDGE1 ) return EDGE1;
+    if ( node_flag1 == EDGE2 || node_flag2 == EDGE2 ) return EDGE2;
+    if ( node_flag1 == EDGE3 || node_flag2 == EDGE3 ) return EDGE3;
+    if ( node_flag1 == EDGE4 || node_flag2 == EDGE4 ) return EDGE4;
+    if ( node_flag1 == EDGE5 || node_flag2 == EDGE5 ) return EDGE5;
+    if ( node_flag1 == EDGE6 || node_flag2 == EDGE6 ) return EDGE6;
+    if ( node_flag1 == EDGE7 || node_flag2 == EDGE7 ) return EDGE7;
+    if ( node_flag1 == EDGE8 || node_flag2 == EDGE8 ) return EDGE8;
+    if ( node_flag1 == EDGE9 || node_flag2 == EDGE9 ) return EDGE9;
+    if ( node_flag1 == EDGE10 || node_flag2 == EDGE10 ) return EDGE10;
+    if ( node_flag1 == EDGE11 || node_flag2 == EDGE11 ) return EDGE11;
+    if ( node_flag1 == EDGE12 || node_flag2 == EDGE12 ) return EDGE12;
+    
+    return MULTIPLE;
+ 
+ } // end whichBoundary
+
+
+
+
+
+
+
 template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double64&, double64& );
 template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double64&, double64& );
 template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double64&, double64& );

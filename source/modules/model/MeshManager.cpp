@@ -1617,6 +1617,9 @@ void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterato
     // -----------------
     if ( !line_neighbor_keys.empty() )
       {
+
+csmp_error.notice( ERROR, "MeshManager::RebuidConnectivity:", "line element neighbor connectivity calculation most likely faulty.");
+
         CELL<dim>* e1Ptr(nullptr);
         CELL<dim>* e2Ptr(nullptr);
 

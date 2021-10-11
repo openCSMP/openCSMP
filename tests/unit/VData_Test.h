@@ -6,7 +6,11 @@
 #include "Test.h"
 #include "VData.h"
 
-namespace csmp{
+namespace csmp {
+
+// MISSING
+// TODO: test read / write of VSet/VData with faces and interfaces
+// TODO: test extraction of manifolds
 
 /// PL Nov 2010
 class VData_Test : public Test

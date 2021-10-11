@@ -192,6 +192,9 @@ BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 );
 /// returns the corner of the BOX (1-6) that is shared by the side boundaries
 BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY side3 );
 
+/// return which boundary the edge or lower-dim face with the two end-node flags is on
+BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 );
+
 
 /// reports the range of property values on the nodes flagged with the BOX_BOUNDARY identifier
 template<size_t dim>

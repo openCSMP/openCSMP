@@ -7,6 +7,7 @@
 #include "TextFileIO.h"
 #include "CSMP_mathUtilities.h"
 #include "CSMP_highLevelUtilities.h"
+#include "CSMP_ElementSpecifications.h"
 
 using namespace std;
 
@@ -2359,6 +2360,39 @@ size_t VData::RenumberElementsCounterClockwise2D()
  
  
  
+ /**
+      Computes the unit normals to the supplied surface elements and then returns the angle between them in degrees.
+      
+      @attention the surface elements are assumed to be planar; only the first 3 nodes are considered.
+ */
+double64 VData::AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 )
+  {
+     assert( elmt1 < pelmt.size() );
+     assert( elmt2 < pelmt.size() );
+     assert( CSMP_ElementSpecifications::SurfaceElement( parseFiniteElementTypeEnum( pelmt[elmt1] ) ) );
+     assert( CSMP_ElementSpecifications::SurfaceElement( parseFiniteElementTypeEnum( pelmt[elmt2] ) ) );
+     // are there at least 3 nodes
+     assert( plist[elmt1].size() >= 3 );
+     assert( plist[elmt2].size() >= 3 );
+
+     // getting the node points of the triangle to construct the normal for
+     const Point<3U> p1_0( px[plist[elmt1][0]], py[plist[elmt1][0]], pz[plist[elmt1][0]] );
+     const Point<3U> p1_1( px[plist[elmt1][1]], py[plist[elmt1][1]], pz[plist[elmt1][1]] );
+     const Point<3U> p1_2( px[plist[elmt1][2]], py[plist[elmt1][2]], pz[plist[elmt1][2]] );
+     const Point<3U> normal_e1 = normalOfTriangle( p1_0, p1_1, p1_2 );
+
+     const Point<3U> p2_0( px[plist[elmt2][0]], py[plist[elmt2][0]], pz[plist[elmt2][0]] );
+     const Point<3U> p2_1( px[plist[elmt2][1]], py[plist[elmt2][1]], pz[plist[elmt2][1]] );
+     const Point<3U> p2_2( px[plist[elmt2][2]], py[plist[elmt2][2]], pz[plist[elmt2][2]] );
+     const Point<3U> normal_e2 = normalOfTriangle( p2_0, p2_1, p2_2 );
+
+     // cos theta = dot-product over cross-product (length1 * length2)
+     // already in degrees
+     return angleBetweenEdges( make_pair( Point<3U>{0.,0.,0.}, normal_e1 ),
+                               make_pair( Point<3U>{0.,0.,0.}, normal_e2 ) );
+
+  } // end angleBetweenLineSegments
+
  
 
  
@@ -2500,7 +2534,7 @@ void  VData::EstablishElementConnectivity2D()
         // -------------------------------------
         // where there is no neighbor an attempt is made to assign a face to a particular boundary,
         // based on its alignment with boundary normal
-        size_t node0(NULL_IDX),   node1(NULL_IDX);
+        size_t node0(NULL_IDX), node1(NULL_IDX);
         for ( map<set<size_t>,map<size_t,size_t> >::const_iterator
               it=surf_elmt_nbors.begin(); it!=surf_elmt_nbors.end(); ++it ) {
              // there should be no more than 2 entries per face
@@ -2601,7 +2635,7 @@ void  VData::EstablishElementConnectivity2D()
         // 3. reconnecting line elements
         // -----------------------------
         // map<size_t,set<size_t> >  line_elmt_that_contain_node;
-        for ( auto it : line_elmt_that_share_node )
+        for ( const auto& it : line_elmt_that_share_node )
           {
               const size_t n_connections(it.second.size()-1);
               
@@ -2815,14 +2849,338 @@ size_t VData::SwitchCornerTriangles2D()
 
 
 
+
+
+
 /**
-   rebuilds 'pfverts' from scratch
+    Rebuilds 3D  'pfverts' from scratch
+    
+    @attention method relies on correct boundary flags
+    
+    @todo needs to take into account potentials Faces and Interfaces.
 */
 void VData::EstablishElementConnectivity3D()
  {
-     throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity3D", "not implemented yet");
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( plist.empty() ) {
+         csmp_error.notice( WARNING, "VData::EstablishElementConnectivity3D:", "supplied cell vector is empty; nothing was done." );
+         return;
+      }
+    if ( Faces() > 0 ) {
+         csmp_error.notice( WARNING, "VData::EstablishElementConnectivity3D:", "Face objects not handled yet" );
+         return;
+      }
+    if ( InterFaces() > 0 ) {
+         csmp_error.notice( WARNING, "VData::EstablishElementConnectivity3D:", "InterFace objects not handled yet" );
+         return;
+      }
+ 
+    // 1. making separate search vectors of face keys for volume, surface and line elements
+    // ------------------------------------------------------------------------------------
+    cout << "\nEstablishElementConnectivity3D: Establishing CSMP FE neighbor connectivity...\n";
+    cout << "  Building a multimap of the faces of the cells...\n";
+    // face-node key  element idx, face number
+    map<set<size_t>,map<size_t,size_t> >  volume_neighbor_keys, surface_neighbor_keys;
+    //  node key, elements connected at that node
+    map<size_t,set<size_t> >  line_elmt_that_share_node;
+
+    const size_t n_elements(plist.size());
+    for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
+      {
+         // getting the element type (unfortunately this is known only at runtime)
+         const CSMP_FEM_TYPE etype{ pelmt[elmt_idx] };
+         assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
+         
+          const size_t faces(CSMP_ElementSpecifications::FacesPerElementOfType(etype));
+          pfverts[elmt_idx].resize(faces,IRREGULAR);
+          for ( size_t face=0U; face<faces; ++face )
+            {
+               // creating face key of node pointers from indices of face nodes
+               set<size_t> key;
+               const size_t nodes(CSMP_ElementSpecifications::NodesPerFaceForElementOfType( etype, face ) );
+               for ( size_t j=0U; j<nodes; ++j ) {
+                    // inserting the global  node numbers into the key
+                    const size_t face_node = plist[elmt_idx][ CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, j ) ];
+                    key.insert( face_node );
+                 }
+               // inserting newly generated keys into multimap
+               if ( CSMP_ElementSpecifications::VolumeElement( etype ) ) {
+                    pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool>
+                      vit = volume_neighbor_keys.insert( make_pair( key, map<size_t,size_t>{{elmt_idx,face}} ) );
+                    if ( !vit.second ) (*vit.first).second.insert( make_pair(elmt_idx,face) );
+                 }
+               else if ( CSMP_ElementSpecifications::SurfaceElement( etype ) ) {
+                    pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool>
+                      vit = surface_neighbor_keys.insert( make_pair( key, map<size_t,size_t>{{elmt_idx,face}} ) );
+                    if ( !vit.second ) (*vit.first).second.insert( make_pair(elmt_idx,face) );
+                 }
+               else {
+                    // for all line elements
+                    // node 0
+                    pair<map<size_t,set<size_t> >::iterator,bool>
+                      it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set{elmt_idx} ) );
+                    // if there is already an entry for the node, the elmt id is added to the set
+                    if ( !it0.second ) (*it0.first).second.insert( elmt_idx );
+                    // node 1
+                    pair<map<size_t,set<size_t> >::iterator,bool>
+                      it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set{elmt_idx} ) );
+                    // if there is already an entry for the node, the elmt id is added to the set
+                    if ( !it1.second ) (*it1.first).second.insert( elmt_idx );
+                 }
+            }
+        }
+
+
+    // 2. (re)building element neigborhoods
+    // ------------------------------------
+    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
+    cout << "  (Re)building neighbor connectivity...";
+
+    // 2.1 line elements
+    // -----------------
+    if ( !line_elmt_that_share_node.empty() )
+      {
+        // map<size_t,set<size_t> >  line_elmt_that_contain_node;
+        for ( const auto& it : line_elmt_that_share_node )
+          {
+              const size_t n_connections(it.second.size()-1);
+              
+              // 1. isolated line elements terminating either at an inside node (INTERNAL) or at the BOX_BOUNDARY
+              // --------------------------------------------------------------------------------------------------
+              if ( n_connections == 0U ) {
+                   const size_t elmt = (*it.second.begin());
+                   // if there is no neighbor element opposite the first node
+                   if ( it.first == plist[elmt][0] ) {
+                        // identifying the boundary that the missing neighbor is located at
+                        pfverts[elmt][1] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
+                     }
+                   else if ( it.first == plist[elmt][1] ) {
+                        // the missing neighbor is located at a boundary
+                        pfverts[elmt][0] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
+                     }
+                   else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity3D", "orphan line element node");
+                }
+              // 2. two line elements sharing one node
+              // --------------------------------------------------------------------------------------------------
+              else if ( n_connections == 1U ) {
+                   const size_t elmt1 = (*it.second.begin());
+                   const size_t elmt2 = (*it.second.rbegin());
+                   // processing the neighbors
+                   // line element 1
+                   if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
+                   else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                   // line element 2
+                   if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
+                   else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                }
+              // 3. line element manifolds (multiple line elements)
+              // --------------------------------------------------------------------------------------------------
+              // off the possible neighbors, the aligned elements are picked
+              else { // n_connections > 1 )
+                   // finding the pair of most closely aligned line elements starting at node
+                   // establish element combinations
+                   std::vector<long64>    joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
+                   const size_t           n_elmts_to_combine(2U);
+                   deque<vector<long64> > combinations;
+                   if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
+                     csmp_error.notice( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
+                   // finding inter-element angle for all combinations
+                   //             angle, combination number
+                   vector<pair<double64,size_t> > inter_element_angles;
+                   inter_element_angles.reserve( combinations.size() );
+                   size_t n_combi{0};
+                   for ( auto cit : combinations ) {
+                        const double64 angle = AngleBetweenLineElements2D( cit[0], cit[1] );
+                        // ignoring edge direction
+                        const double64 acute_angle = ( angle > 90. ) ? 180. - angle : angle;
+                        inter_element_angles.push_back( make_pair( acute_angle, n_combi++ ) );
+                     }
+                   // sorting the angles to find the edges that are closest to a straight continuation
+                   // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
+                   sort( inter_element_angles.begin(), inter_element_angles.end(),
+                         [](auto& a, auto& b) -> bool { return a.first < b.first; } );
+                    // for any 2 edges unique connections are made until there are no more elements to connect
+                    set<size_t> assigned_elements;
+                    for ( auto aet : inter_element_angles ) {
+                         // connecting the pair of line elements
+                         // ------------------------------------
+                         const size_t elmt1 = combinations[aet.second][0];
+                         const size_t elmt2 = combinations[aet.second][1];
+                         // only if both elements in the combination have not been assigned already
+                         if ( assigned_elements.find(elmt1) == assigned_elements.end() &&
+                              assigned_elements.find(elmt2) == assigned_elements.end() )
+                           {
+                              // finding the correct side of edge1
+                              if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
+                              else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                              assigned_elements.insert( elmt1 );
+                              // and edge2
+                              if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
+                              else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                              assigned_elements.insert( elmt2 );
+                           }
+                      }
+                    // assigning boundary flag to left-over neighbor elements at manifolds
+                    if ( assigned_elements.size() < joint_line_elmts.size() ) {
+                         // making sure that there only is a single unassigned element
+                         assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
+                         // finding the yet-to-be-assigned element
+                         size_t unassigned_elmt{UINT_MAX};
+                         for ( auto eit : joint_line_elmts )
+                           if ( assigned_elements.find(eit) == assigned_elements.end() ) {
+                                unassigned_elmt = eit;
+                                break;
+                             }
+                         assert ( unassigned_elmt != UINT_MAX );
+                         // finding the correct side of the line element and assigning the vertex bflag to irt
+                         if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][1] = bflags[it.first];
+                         else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][0] = bflags[it.first];
+                      }
+                }
+                            
+          } // processed the neighbors of the line elements that share a node
+    
+       }
+       
+    // 2.2 surface elements
+    // --------------------
+    if ( !surface_neighbor_keys.empty() )
+      {
+        for ( map<set<size_t>,map<size_t,size_t> >::const_iterator
+              it=surface_neighbor_keys.begin(); it!=surface_neighbor_keys.end(); ++it )
+          {
+             assert( !(*it).second.empty() );
+             // 2.2.1 if there is only a single entry, the face is at the model boundary
+             // ------------------------------------------------------------------------
+             if ( (*it).second.size() == 1U ) {
+                  const size_t elmt_idx = (*(*it).second.begin()).first;
+                  const size_t face     = (*(*it).second.begin()).second;
+                  // finding out on which boundary the edge of the face is
+                  // relying on appropriate box-boundary flagging
+                  // (using only the two first nodes of the face)
+                  const CSMP_FEM_TYPE etype{ pelmt[elmt_idx] };
+                  assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
+                  const size_t n0 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 0 ) ];
+                  const size_t n1 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 1 ) ];
+                  pfverts[elmt_idx][face] = whichBoundary( intToBOX_BOUNDARY( bflags[n0] ), intToBOX_BOUNDARY( bflags[n1] ) );
+                }
+             // 2.2.2 if there is only one matching neighbor it gets recorded
+             // ------------------------------------------------------------------------
+             else if ( (*it).second.size() == 2U ) {
+                  // the neighbors are recorded in the 'pfverts' map
+                  const size_t elmt1      = (*(*it).second.begin()).first;
+                  const size_t face_elmt1 = (*(*it).second.begin()).second;
+                  const size_t elmt2      = (*next((*it).second.begin(),1)).first;
+                  const size_t face_elmt2 = (*next((*it).second.begin(),1)).second;
+                  pfverts[elmt1][face_elmt1] = elmt2;
+                  pfverts[elmt2][face_elmt2] = elmt1;
+                }
+
+             // 2.2.3 if there is a surface element manifold that needs to be disambiguated
+             // ----------------------------------------------------------------------------
+             else {
+                   // finding the pair of most elements with the most closely aligned normals
+                   // establish element combinations
+                   std::vector<long64>  joint_surf_elmts;
+                   joint_surf_elmts.reserve( (*it).second.size() );
+                   for ( const auto& i : (*it).second ) joint_surf_elmts.push_back( i.first ); // actual element ids
+                   const size_t           n_elmts_to_combine(2U);
+                   deque<vector<long64> > combinations;
+                   if ( createUniqueCombinations( joint_surf_elmts, n_elmts_to_combine, combinations ) == 0 )
+                     csmp_error.notice( ERROR, "EstablishElementConnectivity3D", "no combinations between elements available");
+                   // finding inter-element angle for all combinations
+                   //             angle, combination number
+                   vector<pair<double64,size_t> > inter_element_normal_angles;
+                   inter_element_normal_angles.reserve( combinations.size() );
+                   size_t n_combi{0};
+                   for ( auto cit : combinations ) {
+                        const double64 angle = AngleBetweenSurfaceElements3D( cit[0], cit[1] );
+                        // ignoring edge direction
+                        const double64 acute_angle = ( angle > 90. ) ? 180. - angle : angle;
+                        inter_element_normal_angles.push_back( make_pair( acute_angle, n_combi++ ) );
+                     }
+                   // sorting the angles to find the edges that are closest to a straight continuation
+                   // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
+                   sort( inter_element_normal_angles.begin(), inter_element_normal_angles.end(),
+                         [](auto& a, auto& b) -> bool { return a.first < b.first; } );
+                    // for any 2 edges unique connections are made until there are no more elements to connect
+                    set<size_t> assigned_elements;
+                    for ( auto aet : inter_element_normal_angles )
+                      {
+                         // connecting the pair of surface elements
+                         // ---------------------------------------
+                         const size_t elmt1 = combinations[aet.second][0];
+                         const size_t elmt2 = combinations[aet.second][1];
+                         // only if both elements in the combination have not been assigned already
+                         if ( assigned_elements.find(elmt1) == assigned_elements.end() &&
+                              assigned_elements.find(elmt2) == assigned_elements.end() )
+                           {
+                              // retrieve the faces of the elements that will be interconnected
+                              const size_t nbor_face_e1 = (*(*it).second.find(elmt1)).second;
+                              const size_t nbor_face_e2 = (*(*it).second.find(elmt2)).second;
+                              pfverts[elmt1][nbor_face_e1] = elmt2;
+                              pfverts[elmt2][nbor_face_e2] = elmt1;
+                              assigned_elements.insert( elmt1 );
+                              assigned_elements.insert( elmt2 );
+                           }
+                      }
+                    // assigning boundary flag to left-over neighbor elements at manifolds
+                    if ( assigned_elements.size() < joint_surf_elmts.size() ) {
+                         // making sure that there only is a single unassigned element
+                         assert( joint_surf_elmts.size() - 1 == assigned_elements.size() );
+                         // finding the yet-to-be-assigned element
+                         long64 unassigned_elmt{-1};
+                         for ( auto i : joint_surf_elmts )
+                           if ( assigned_elements.find(i) == assigned_elements.end() ) {
+                                unassigned_elmt = i;
+                                break;
+                             }
+                         assert ( unassigned_elmt >= 0 );
+                         // finding the correct side of the surface element and assigning a bflag to it
+                         const size_t boundary_face = (*(*it).second.find(unassigned_elmt)).second;
+                         // TODO: one could narrow down which boundary this is, but it will not be used later
+                         pfverts[unassigned_elmt][boundary_face] = IRREGULAR;
+                      }
+               }
+          }
+      } // surface elements
+      
+    // 2.3 volume elements
+    // -------------------
+    if ( !volume_neighbor_keys.empty() )
+      {
+        cout << "\n\t\tvolume elements...\n";
+        for ( map<set<size_t>,map<size_t,size_t> >::const_iterator
+              it=volume_neighbor_keys.begin(); it!=volume_neighbor_keys.end(); ++it )
+          {
+              // 2.3.0 - there must be at least 1 face entry
+              assert( (*it).second.size() >= 0 );
+              
+              // 2.3.1 interior faces (there is a pair of valid adjacent element faces so that neighbor assignments can be made)
+              if ( (*it).second.size() == 2 )
+                {
+                  // the neighbors are recorded in the 'pfverts' map
+                  const size_t elmt1      = (*(*it).second.begin()).first;
+                  const size_t face_elmt1 = (*(*it).second.begin()).second;
+                  const size_t elmt2      = (*next((*it).second.begin(),1)).first;
+                  const size_t face_elmt2 = (*next((*it).second.begin(),1)).second;
+                  pfverts[elmt1][face_elmt1] = elmt2;
+                  pfverts[elmt2][face_elmt2] = elmt1;
+                }
+              // 2.3.2 boundary faces
+              else if ( (*it).second.size() == 1 ) {
+                  const size_t elmt          = (*(*it).second.begin()).first;
+                  const size_t boundary_face = (*(*it).second.begin()).second;
+                  pfverts[elmt][boundary_face] = IRREGULAR;
+                }
+          }
+          
+      } // volume elements
  
  } // end EstablishElementConnectivity3D
+
+
 
 
 
