@@ -154,7 +154,7 @@ class ModelTopology {
     void        RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset );
 
 	  /// region names
-	  void		RegionNames( std::vector<std::string>& ) const;
+	  void		    RegionNames( std::vector<std::string>& ) const;
 
     /// properties of regions
     void        PropertiesOfRegions( const char* regions_file,

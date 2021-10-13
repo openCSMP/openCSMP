@@ -79,19 +79,6 @@ MeshManager<dim>::~MeshManager()
           delete it;
           it = nullptr;
        }
-
-     // sorting and reducing the size of the deques; TODO: is this really necessary for deletion?
-     sort( nodes_.begin(), nodes_.end() );
-     nodes_.erase( unique(nodes_.begin(), nodes_.end()), nodes_.end() );
-
-     sort( elements_.begin(), elements_.end() );
-     elements_.erase( unique(elements_.begin(), elements_.end()), elements_.end() );
-
-     sort( faces_.begin(), faces_.end() );
-     faces_.erase( unique(faces_.begin(), faces_.end()), faces_.end() );
-
-     sort( interfaces_.begin(), interfaces_.end() );
-     interfaces_.erase( unique(interfaces_.begin(), interfaces_.end()), interfaces_.end() );
     
  } // end destructor
 
@@ -108,7 +95,7 @@ MeshManager<dim>::~MeshManager()
 template<size_t dim>
 pair<array<size_t,4>,bool>  MeshManager<dim>::NullPointersInStorage() const
  {
-     pair<array<size_t,4>,bool>  nullptrs = { {0,0,0,0},false };
+     pair<array<size_t,4>,bool>  nullptrs{ {0,0,0,0},false };
      
      for ( auto& nit : nodes_ )
        if ( nit == nullptr ) {
@@ -405,8 +392,6 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
     }
   else
   csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity; nothing was done." );
-
-// TODO: find root Elements and insert them into deque/set or whatever mesh patch container
 
 
   // ----------------------------------------------------------
@@ -721,27 +706,59 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
 
 
 /**
-   Rebuilds the node to element parent relationship. JCK 2018.
+   Rebuilds  node to element parent relationships for the given range of elements.
+   
+   @todo using a map here might be memory intensive, alternative containers?
+   
+   @author SKM
+   @date 13/10/21
 */
 template<size_t dim>
-void MeshManager<dim>::RebuildParentRelationships( typename vector<Node<dim>*>::iterator begin,
-                                                   typename vector<Node<dim>*>::iterator end )
+void MeshManager<dim>::RebuildNodeParentElementRelationships( typename vector<Element<dim>*>::iterator begin,
+                                                              typename vector<Element<dim>*>::iterator end )
 {
-  deque< pair<size_t, Element<dim>*>> parents;
-  for ( auto& it = begin; it != end; ++it ) {
-    auto n = *it;
-    for ( size_t i = 0; i < n->Parents(); ++i ) {
-      auto e = n->Parent( i );
-      parents.push_back( make_pair( n->ParentNodeNumber( i ), e ) );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  if ( begin == end ) {
+      csmp_error.notice( WARNING, "MeshManager::RebuildNodeParentElementRelationships",
+                        "supplied range of element iterators is empty; nothing was done.");
+       return;
     }
-    n->EraseParents();
-    n->ResizeParentStorage( parents.size() );
-    for ( auto& p : parents ) {
-      n->Assign( p.first, p.second );
+  
+  // counting the parent elements of each node
+  map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
+
+  while ( begin != end ) {
+      if ( (*begin) != nullptr ) {
+          const auto nodes_end{(*begin)->NodesEnd()};
+          for ( auto nit = (*begin)->NodesBegin(); nit != nodes_end; ++nit ) {
+               assert( (*nit) != nullptr );
+               pair<typename map<Node<dim>*,set<Element<dim>*> >::iterator,bool>
+                 mit = parent_elmts_per_node.insert( make_pair( (*nit), set{ (*begin) } ) );
+               if ( mit.second == false )
+                 (*mit.first).second.insert( (*begin) );
+            }
+        }
+       begin++;
     }
-    parents.clear();
-  }
-}
+
+  // reserving the memory for the parent storage and assigning the parent elements
+  for ( auto& n : parent_elmts_per_node ) {
+       const size_t n_parents{n.second.size()};
+       n.first->ResizeParentStorage( n_parents );
+       // loopin over the future parents
+       for ( const auto& it : n.second ) {
+         size_t n_nodes{it->Nodes()};
+         // assigning them to the node
+         for ( size_t j=0U; j<n_nodes; ++j )
+           if ( n.first == it->N(j) ) {
+               it->N(j)->Assign( j, it );
+               break;
+            }
+         }
+       assert( n.first->Parents() >= 1 );
+    }
+
+} // end RebuildNodeParentElementRelationships
 
 
 
@@ -1353,18 +1370,10 @@ size_t MeshManager<dim>::ReplaceElementsByFaces( const PropertyDatabase<dim>& pr
 // ========================================================================================================================
 
 
-template<size_t dim, template<size_t> class CELL>
-void sortUniqueErase( deque<CELL<dim>*>& container )
- {
-     sort( container.begin(), container.end() );
-     container.erase( unique(container.begin(), container.end()), container.end() );
- }
-
-
 template<size_t dim>
 template<template<size_t> class CELL>
 size_t MeshManager<dim>::Delete( typename vector<CELL<dim>*>::iterator first,
-                                typename vector<CELL<dim>*>::iterator last )
+                                 typename vector<CELL<dim>*>::iterator last )
  {
     size_t deleted_cells( distance(first,last) );
  
@@ -1379,10 +1388,14 @@ size_t MeshManager<dim>::Delete( typename vector<CELL<dim>*>::iterator first,
        }
 
      // sorting and reducing the size of the deque
-     if constexpr ( is_same<CELL<dim>,Node<dim> >::value )      sortUniqueErase( nodes_ );
-     if constexpr ( is_same<CELL<dim>,Element<dim> >::value )   sortUniqueErase( elements_ );
-     if constexpr ( is_same<CELL<dim>,Face<dim> >::value )      sortUniqueErase( faces_ );
-     if constexpr ( is_same<CELL<dim>,InterFace<dim> >::value ) sortUniqueErase( interfaces_ );
+     if constexpr ( is_same<CELL<dim>,Node<dim> >::value )
+       nodes_.erase( remove( nodes_.begin(), nodes_.end(), nullptr ), nodes_.end() );
+     if constexpr ( is_same<CELL<dim>,Element<dim> >::value )
+       elements_.erase( remove( elements_.begin(), elements_.end(), nullptr ), elements_.end() );
+     if constexpr ( is_same<CELL<dim>,Face<dim> >::value )
+       faces_.erase( remove( faces_.begin(), faces_.end(), nullptr ), faces_.end() );
+     if constexpr ( is_same<CELL<dim>,InterFace<dim> >::value )
+       interfaces_.erase( remove( interfaces_.begin(), interfaces_.end(), nullptr ), interfaces_.end() );
      
      return deleted_cells;
     
@@ -1408,11 +1421,12 @@ template size_t MeshManager<1>::Delete<InterFace>( vector<InterFace<1>*>::iterat
 
 
 /**
-    erases the supplied sequence of elements returning the number of erasures, the pointers to the erased elements are nulled. The connectivity of the affected mesh neighborhood will get fixed.
+    Erases the supplied sequence of nodes returning the number of erasures.
+    Any potential node manifolds are updated.
 */
 template<size_t dim>
 size_t MeshManager<dim>::Delete( typename deque<Node<dim>*>::iterator first,
-                                typename deque<Node<dim>*>::iterator last )
+                                 typename deque<Node<dim>*>::iterator last )
  {
     size_t deleted_nodes( distance(first,last) );
  
@@ -1420,7 +1434,15 @@ size_t MeshManager<dim>::Delete( typename deque<Node<dim>*>::iterator first,
      
      // deleting the objects that are stored in the MeshManager's 'elements' container
      while( first != last ) {
+          // only couting active nodes
           if ( (*first) == nullptr ) deleted_nodes--;
+          // disconnecting the node from its manifold
+          else if ( (*first)->IsManifold() ){
+               (*first)->Manifold()->Remove( (*first) );
+               // if no manifold remains it is removed from the manager
+               if ( (*first)->Manifold()->Branches() == 0U )
+               node_manifold_manager_->Delete( (*first)->Manifold() );
+            }
           delete (*first);
           (*first) = nullptr;
           first++;
@@ -1440,9 +1462,15 @@ size_t MeshManager<dim>::Delete( typename deque<Node<dim>*>::iterator first,
 
 
 /**
-    erases the supplied sequence of elements returning the number of erasures, the pointers to the erased elements are nulled. The connectivity of the affected mesh neighborhood will get fixed.
-
-    Inside the destructor of the Element the following steps are performed
+    Erases range of elements not counting  null-pointer cells in the supplied sequence,
+    returning the number of genuine erasures.
+    
+    Also checks whether element deletion causes orphan nodes. If so, these are deleted as well.
+    This check involves counting the nodes parent elements that are not null pointers to make
+    sure that the true state of the node is captured.
+    
+    @attention The connectivity of the affected mesh neighborhood needs to get fixed separately.
+    Inside all cell destructors the following steps are performed:
 
     1. set the neighbor pointers to the element to zero
     2. remove the pointers from the connected nodes to this parent-element
@@ -1453,23 +1481,47 @@ size_t MeshManager<dim>::Delete( typename deque<Node<dim>*>::iterator first,
 */
 template<size_t dim>
 size_t MeshManager<dim>::Delete( typename deque<Element<dim>*>::iterator first,
-                                typename deque<Element<dim>*>::iterator last )
+                                 typename deque<Element<dim>*>::iterator last )
  {
     size_t deleted_elements( distance(first,last) );
  
      if ( deleted_elements == 0U ) return 0U;
      
      // deleting the objects that are stored in the MeshManager's 'elements' container
+     size_t n_deleted_nodes{0};
      while( first != last ) {
-          if ( (*first) == nullptr ) deleted_elements--;
+          if ( (*first) == nullptr )  deleted_elements--;
+          else {
+             // deleting potential dangling nodes before the element
+             const size_t n_nodes{(*first)->Nodes()};
+             for ( size_t i{0}; i<n_nodes; ++i ) {
+                 const size_t n_parents{(*first)->N(i)->Parents()};
+                 size_t n_active_parents{0};
+                 for ( size_t j{0}; j<n_parents; ++j )
+                   if ( (*first)->N(i)->Parent(j) != nullptr &&
+                        (*first) != (*first)->N(i)->Parent(j) )
+                     n_active_parents++;
+                 // if this is indeed a node that will not have a parent element
+                 // anymore once the current one has been deleted, it is removed
+                 if ( n_active_parents <= 1 ) {
+                      assert( (*first)->N(i)->IsManifold() == false );
+                      delete (*first)->N(i);
+                      (*first)->Assign( i, static_cast<Node<dim>*>(nullptr) );
+                      n_deleted_nodes++;
+                   }
+               }
+            }
           delete (*first);
           (*first) = nullptr;
           first++;
        }
 
      // sorting and reducing the size of the deque
-     sort( elements_.begin(), elements_.end() );
-     elements_.erase( unique(elements_.begin(), elements_.end()), elements_.end() );
+     elements_.erase( remove( elements_.begin(), elements_.end(), nullptr ), elements_.end() );
+     
+     if ( n_deleted_nodes > 0 )
+       nodes_.erase( remove( nodes_.begin(), nodes_.end(), nullptr ), nodes_.end() );
+       
      
      return deleted_elements;
     
@@ -1480,7 +1532,7 @@ size_t MeshManager<dim>::Delete( typename deque<Element<dim>*>::iterator first,
 
 template<size_t dim>
 size_t MeshManager<dim>::Delete( typename deque<Face<dim>*>::iterator first,
-                                typename deque<Face<dim>*>::iterator last )
+                                 typename deque<Face<dim>*>::iterator last )
  {
     size_t deleted_faces( distance(first,last) );
  
@@ -1488,9 +1540,11 @@ size_t MeshManager<dim>::Delete( typename deque<Face<dim>*>::iterator first,
      
      // deleting the objects that are stored in the MeshManager's 'elements' container
      while( first != last ) {
-          if ( (*first) == nullptr ) deleted_faces--;
-          delete (*first);
-          (*first) = nullptr;
+          if ( (*first) == nullptr ) {
+                deleted_faces--;
+               delete (*first);
+               (*first) = nullptr;
+            }
           first++;
        }
 
@@ -1507,7 +1561,7 @@ size_t MeshManager<dim>::Delete( typename deque<Face<dim>*>::iterator first,
 
 template<size_t dim>
 size_t MeshManager<dim>::Delete( typename deque<InterFace<dim>*>::iterator first,
-                                typename deque<InterFace<dim>*>::iterator last )
+                                 typename deque<InterFace<dim>*>::iterator last )
  {
     size_t deleted_ifaces( distance(first,last) );
  
@@ -1515,9 +1569,11 @@ size_t MeshManager<dim>::Delete( typename deque<InterFace<dim>*>::iterator first
      
      // deleting the objects that are stored in the MeshManager's 'elements' container
      while( first != last ) {
-          if ( (*first) == nullptr ) deleted_ifaces--;
-          delete (*first);
-          (*first) = nullptr;
+          if ( (*first) == nullptr ) {
+              deleted_ifaces--;
+              delete (*first);
+              (*first) = nullptr;
+            }
           first++;
        }
 
@@ -1540,10 +1596,23 @@ size_t MeshManager<dim>::Delete( typename deque<InterFace<dim>*>::iterator first
 template<size_t dim>
 size_t MeshManager<dim>::EraseNullPointerCells()
  {
-    size_t null_ptr_entities_removed = Delete( nodes_.begin(), nodes_.end() );
-    null_ptr_entities_removed += Delete( elements_.begin(), elements_.end() );
-    null_ptr_entities_removed += Delete( faces_.begin(), faces_.end() );
-    null_ptr_entities_removed += Delete( interfaces_.begin(), interfaces_.end() );
+    size_t null_ptr_entities_removed{0};
+    
+    size_t n_nodes{nodes_.size()};
+    nodes_.erase( remove( nodes_.begin(), nodes_.end(), nullptr ), nodes_.end() );
+    null_ptr_entities_removed += n_nodes - nodes_.size();
+     
+    size_t n_elements{elements_.size()};
+    elements_.erase( remove( elements_.begin(), elements_.end(), nullptr ), elements_.end() );
+    null_ptr_entities_removed += n_elements - elements_.size();
+     
+    size_t n_faces{faces_.size()};
+    faces_.erase( remove( faces_.begin(), faces_.end(), nullptr ), faces_.end() );
+    null_ptr_entities_removed += n_faces - faces_.size();
+
+    size_t n_ifaces{interfaces_.size()};
+    interfaces_.erase( remove( interfaces_.begin(), interfaces_.end(), nullptr ), interfaces_.end() );
+    null_ptr_entities_removed += n_ifaces - interfaces_.size();
     
     return null_ptr_entities_removed;
     
@@ -1561,19 +1630,19 @@ size_t MeshManager<dim>::EraseNullPointerCells()
 */
 template<size_t dim>
 template<template<size_t> class CELL>
-void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterator first,
-                                             typename deque<CELL<dim>*>::iterator last )
+void  MeshManager<dim>::BuildConnectivity( typename deque<CELL<dim>*>::iterator first,
+                                          typename deque<CELL<dim>*>::iterator last )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( distance(first,last) == 0U ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::RebuildConnectivity:", "supplied cell vector is empty; nothing was done." );
+         csmp_error.notice( WARNING, "MeshManager<dim>::BuildConnectivity:", "supplied cell vector is empty; nothing was done." );
          return;
       }
-    cout << "\nMeshManager<"<< dim <<">::RebuildConnectivity: Establishing CSMP FE neighbor connectivity...\n";
+    cout << "\nMeshManager<"<< dim <<">::BuildConnectivity: Establishing CSMP FE neighbor connectivity...\n";
  
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "  Building a multimap of the faces of the cells...\n";
+    cout << "\n\tBuilding a multimap of the faces of the cells...\n";
     //       key             face number,neighbor
     multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
                                                         surface_neighbor_keys,
@@ -1586,8 +1655,8 @@ void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterato
           for ( size_t face=0U; face<faces; ++face )
             {
                if ( (*first) == nullptr ) {
-                    csmp_error.notice( ERROR, "MeshManager<dim>::RebuildConnectivity:",
-                                      "supplied input range contains NULL pointers; nothing was done." );
+                    csmp_error.notice( ERROR, "MeshManager<dim>::BuildConnectivity:",
+                                      "supplied input range contains null pointers; nothing was done." );
                     return;
                  }
                // creating face key of node pointers from indices of face nodes
@@ -1618,7 +1687,7 @@ void  MeshManager<dim>::RebuildConnectivity( typename deque<CELL<dim>*>::iterato
     if ( !line_neighbor_keys.empty() )
       {
 
-csmp_error.notice( ERROR, "MeshManager::RebuidConnectivity:", "line element neighbor connectivity calculation most likely faulty.");
+csmp_error.notice( ERROR, "MeshManager::BuildConnectivity:", "line element neighbor connectivity calculation most likely faulty.");
 
         CELL<dim>* e1Ptr(nullptr);
         CELL<dim>* e2Ptr(nullptr);
@@ -1680,7 +1749,7 @@ csmp_error.notice( ERROR, "MeshManager::RebuidConnectivity:", "line element neig
                          ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
                          ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
                       }
-                    else csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::RebuildConnectivity:",
+                    else csmp_error.notice( WARNING, "MeshManager::BuildConnectivity:",
                                             "discovered potentially duplicate surface simplex.");
                     ++it1;
                     ++it2;
@@ -1729,81 +1798,17 @@ csmp_error.notice( ERROR, "MeshManager::RebuidConnectivity:", "line element neig
     
  } // end RebuildConnectivity
 
-template void MeshManager<3>::RebuildConnectivity<Element>( typename deque<Element<3>*>::iterator, typename deque<Element<3>*>::iterator );
-template void MeshManager<3>::RebuildConnectivity<Face>( typename deque<Face<3>*>::iterator, typename deque<Face<3>*>::iterator );
-template void MeshManager<3>::RebuildConnectivity<InterFace>( typename deque<InterFace<3>*>::iterator, typename deque<InterFace<3>*>::iterator );
+template void MeshManager<3>::BuildConnectivity<Element>( typename deque<Element<3>*>::iterator, typename deque<Element<3>*>::iterator );
+template void MeshManager<3>::BuildConnectivity<Face>( typename deque<Face<3>*>::iterator, typename deque<Face<3>*>::iterator );
+template void MeshManager<3>::BuildConnectivity<InterFace>( typename deque<InterFace<3>*>::iterator, typename deque<InterFace<3>*>::iterator );
 
-template void MeshManager<2>::RebuildConnectivity<Element>( typename deque<Element<2>*>::iterator, typename deque<Element<2>*>::iterator );
-template void MeshManager<2>::RebuildConnectivity<Face>( typename deque<Face<2>*>::iterator, typename deque<Face<2>*>::iterator );
-template void MeshManager<2>::RebuildConnectivity<InterFace>( typename deque<InterFace<2>*>::iterator, typename deque<InterFace<2>*>::iterator );
+template void MeshManager<2>::BuildConnectivity<Element>( typename deque<Element<2>*>::iterator, typename deque<Element<2>*>::iterator );
+template void MeshManager<2>::BuildConnectivity<Face>( typename deque<Face<2>*>::iterator, typename deque<Face<2>*>::iterator );
+template void MeshManager<2>::BuildConnectivity<InterFace>( typename deque<InterFace<2>*>::iterator, typename deque<InterFace<2>*>::iterator );
 
-template void MeshManager<1>::RebuildConnectivity<Element>( typename deque<Element<1>*>::iterator, typename deque<Element<1>*>::iterator );
-template void MeshManager<1>::RebuildConnectivity<Face>( typename deque<Face<1>*>::iterator, typename deque<Face<1>*>::iterator );
-template void MeshManager<1>::RebuildConnectivity<InterFace>( typename deque<InterFace<1>*>::iterator, typename deque<InterFace<1>*>::iterator );
-
-
-
-/**
-    Same goal as previous methods but for node-to-node connectivity, which is established as soon as the nodes know their parent elements.
-    
-    @attention this does not include faces and interfaces since these are not included among ParentElements; use the manifolds to gain access to them.
-*/
-template<size_t dim>
-void MeshManager<dim>::RebuildConnectivity( typename std::deque<Node<dim>*>::iterator first,
-                                            typename std::deque<Node<dim>*>::iterator last )
- {
-   cout << "\nMeshManager<" << dim << ">::RebuildConnectivity: assigning parent element information to nodes..." << endl;
-   const size_t    n_nodes(nodes_.size());
-   vector<size_t>  parent_elmts_per_node( n_nodes, 0U );
-
-   // counting how many parent elements each node has
-   for ( auto& e : elements_ ) {
-        assert( e != nullptr );
-        for ( auto nit = e->NodesBegin(); nit != e->NodesEnd(); nit++ ) {
-             assert( (*nit) != nullptr );
-             assert( (*nit)->Idx() < n_nodes );
-             parent_elmts_per_node[ (*nit)->Idx() ]++;
-          }
-     }
-     
-   // connecting the nodes to their neighbors
-     
- } // RebuildConnectivity(Nodes)
-
-
-
-
-
-
-/* TESTING - formerly EstablishNeighborConnectivity
-
-/ printing the multimap
-RenumberElements();
-cerr <<"\nline element face key map:\n";
-cerr <<"\n\tnode-id, face-id, nbor elmt id, neighbor 1 and 2";
-for ( auto it=line_neighbor_keys.begin(); it!=line_neighbor_keys.end(); ++it ) {
-      cerr <<"\n\t"<< (*(*it).first.begin())->Idx() <<", "<< (*it).second.first <<", ";
-      if ( (*it).second.second != nullptr ) {
-           cerr << (*it).second.second->Idx() <<", ";
-           if ( (*it).second.second->Neighbor(0) != nullptr )
-             cerr << (*it).second.second->Neighbor(0)->Idx() <<", ";
-           else cerr <<"nullptr" <<", ";
-           if ( (*it).second.second->Neighbor(1) != nullptr )
-             cerr << (*it).second.second->Neighbor(1)->Idx() <<", ";
-           else cerr <<"nullptr" <<", ";
-        }
-      else cerr <<"nullptr.";
-   }
-cerr << endl;
-cerr <<"\nprinting the elements:";
-for ( auto it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it )
-  (*it)->Out();
-cerr << endl;
-      
-*/
-
-
-
+template void MeshManager<1>::BuildConnectivity<Element>( typename deque<Element<1>*>::iterator, typename deque<Element<1>*>::iterator );
+template void MeshManager<1>::BuildConnectivity<Face>( typename deque<Face<1>*>::iterator, typename deque<Face<1>*>::iterator );
+template void MeshManager<1>::BuildConnectivity<InterFace>( typename deque<InterFace<1>*>::iterator, typename deque<InterFace<1>*>::iterator );
 
 
 
@@ -1812,16 +1817,56 @@ cerr << endl;
 
 /**
     After some diagnostics that establish the extent of mesh modification, the connectivity is rebuilt.
+    
+    @attention calls EraseNullPointerCells()
 */
 template<size_t dim>
 void MeshManager<dim>::UpdateConnectivity()
  {
-    RebuildConnectivity( nodes_.begin(), nodes_.end() );
-    RebuildConnectivity<csmp::Element>( elements_.begin(), elements_.end() );
-    RebuildConnectivity<csmp::Face>( faces_.begin(), faces_.end() );
-    RebuildConnectivity<csmp::InterFace>( interfaces_.begin(), interfaces_.end() );
+    EraseNullPointerCells();
+
+    // neighbor connectivity
+    BuildConnectivity<csmp::Element>( elements_.begin(), elements_.end() );
+    BuildConnectivity<csmp::Face>( faces_.begin(), faces_.end() );
+    BuildConnectivity<csmp::InterFace>( interfaces_.begin(), interfaces_.end() );
     
- } // end Update
+    // node connectivity to parent elements
+    // RebuildNodeParentElementRelationships( elements_.begin(), elements_.end() );
+    // ----------------------------------------------------------------------------
+    // counting the parent elements of each node
+    map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
+
+    for ( auto& it : elements_ ) {
+        const auto nodes_end{it->NodesEnd()};
+        for ( auto nit = it->NodesBegin(); nit != nodes_end; ++nit ) {
+             assert( (*nit) != nullptr );
+             pair<typename map<Node<dim>*,set<Element<dim>*> >::iterator,bool>
+               mit = parent_elmts_per_node.insert( make_pair( (*nit), set{ it } ) );
+             if ( mit.second == false )
+               (*mit.first).second.insert( it );
+          }
+      }
+
+    // reserving the memory for the parent storage and assigning the parent elements
+    for ( auto& n : parent_elmts_per_node ) {
+         const size_t n_parents{n.second.size()};
+         n.first->ResizeParentStorage( n_parents );
+         // loopin over the future parents
+         for ( const auto& it : n.second ) {
+           size_t n_nodes{it->Nodes()};
+           // assigning them to the node
+           for ( size_t j=0U; j<n_nodes; ++j )
+             if ( n.first == it->N(j) ) {
+                 it->N(j)->Assign( j, it );
+                 break;
+              }
+           }
+         assert( n.first->Parents() >= 1 );
+      }
+    
+    cerr <<"\nMeshManager::UpdateConnectivity: WARNING: node manifolds are not reestablished here yet.\n";
+    
+ } // end UpdateConnectivity
 
 
 
@@ -1846,100 +1891,6 @@ Duplicates nodes as necessary.
 TODO: needs complete rewrite
 
 */
-/*
-template<size_t dim>
-typename vector<InterFace<dim>*>::iterator  MeshManager<dim>::ConvertFacesToInterFaces( typename vector<Face<dim>*>::iterator faces_begin,
-                                                                                        typename vector<Face<dim>*>::iterator faces_end,
-                                                                                        typename vector<Node<dim>*>::iterator interior_nodes_begin,
-                                                                                        typename vector<Node<dim>*>::iterator interior_nodes_end,
-                                                                                        typename vector<InterFace<dim>*>::iterator interfaces_begin,
-                                                                                        typename vector<InterFace<dim>*>::iterator interfaces_end )
-{
-  // generating InterFace objects
-  
-  std::set<Node<dim>*> outsideElementNodes, insideElementNodes;
-  std::map<Node<dim>*, Node<dim>*> manyfoldNodes;
-  
-  // finding higher-dimensional neighbors on inside
-  for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
-    {
-        Element<dim>* eit = (*ifit)->OuterParent();
-        for ( size_t en( 0 ); en < eit->Nodes(); ++en )
-        {
-          bool found( false );
-          for ( size_t ifn( 0 ); ifn < (*ifit)->Nodes(); ++ifn )
-          {
-            if ( (*ifit)->N( ifn )->Idx() == eit->N( en )->Idx() )
-              found = true;
-          }
-          if( found )
-            outsideElementNodes.insert( eit->N( en ) );
-        }
-    }
-
-  // finding higher-dimensional neighbors on outside
-  for ( typename std::vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
-    {
-        Element<dim>* eit = (*ifit)->InnerParent();
-        for ( size_t en( 0 ); en < eit->Nodes(); ++en )
-        {
-          bool found( false );
-          for ( size_t ifn( 0 ); ifn < (*ifit)->Nodes(); ++ifn )
-          {
-            if ( (*ifit)->N( ifn )->Idx() == eit->N( en )->Idx() )
-              found = true;
-          }
-          if ( found )
-          insideElementNodes.insert( eit->N( en ) );
-        }
-    }
-  // TODO: here the new nodes should be added to the mesh tree
-  /*
-  for ( auto oen : outsideElementNodes ) {
-    Node<dim> new_node( *oen );
-    Node<dim>* duplicatedNode = model.Mesh().Add( new_node );
-    duplicatedNode->Idx( model.Mesh().Nodes() );
-    manyfoldNodes.insert( make_pair( oen, duplicatedNode ) );
-  }
-  */
-  
-/* dealing with the Node manifolds
-
-  Region<dim>* outer_region = nullptr;
-  for ( typename std::vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
-  {
-    Element<dim>* oeit = (*ifit)->OuterParent();
-    for ( typename std::map<std::string, csmp::Region<dim> >::iterator
-          it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it ) {
-      if ( (*it).second.Contains( oeit ) ) {
-        outer_region = &(*it).second;
-        break;
-      }
-    }
-  }
-  for ( typename std::vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
-  {
-    Element<dim>* oeit = (*ifit)->OuterParent();
-    for ( size_t en( 0 ); en < oeit->Nodes(); ++en ) {
-      if ( manyfoldNodes.find( oeit->N( en ) ) != manyfoldNodes.end() ) {
-        oeit->Assign( en, manyfoldNodes[oeit->N( en )] );
-      }
-    }
-
-    if ( model.UniqueRegions() > 1 ) {
-      Region<dim>&  mref( model.Region( "Model" ) );
-      for ( typename vector<Element<dim>*>::iterator eit( mref.ElementsBegin() ); eit != mref.ElementsEnd(); ++eit )
-        for ( size_t en( 0 ); en < (*eit)->Nodes(); ++en )
-          if ( outer_region->Contains( (*eit) ) )
-            if ( manyfoldNodes.find( (*eit)->N( en ) ) != manyfoldNodes.end() )
-              (*eit)->Assign( en, manyfoldNodes[(*eit)->N( en )] );
-    }
-  }
-
-} // end ConvertFacesToInterFaces
-
-*/
-
 
 
 
@@ -1953,11 +1904,9 @@ typename vector<InterFace<dim>*>::iterator  MeshManager<dim>::ConvertFacesToInte
 
 */
 template<size_t dim>
-void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence ) const
+void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence )
 {
-
   size_t n( 0U );
-
   for_each( nodes_.begin(), nodes_.end(), [&n]( const Node<dim>* o ) { o->Idx( n++ ); return o; } );
 
   n = 0U; // resetting the counter
@@ -1974,6 +1923,50 @@ void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence ) const
 
 
 
+/**
+    Puts nodes, elements, faces, and interfaces into an ascending order given by Idx() variables
+    
+    @attention const because it just changes the order but not the content of the container.
+*/
+template<size_t dim>
+void MeshManager<dim>::ReorderObjectsByIndexes()
+ {
+     sort( nodes_.begin(), nodes_.end(),
+           []( const auto& a, const auto& b ) -> bool
+            {
+                assert( a != nullptr && b != nullptr );
+                // (<) implies in ascending order
+                return a->Idx() < b->Idx();
+            } );
+
+     sort( elements_.begin(), elements_.end(),
+           []( const auto& a, const auto& b ) -> bool
+            {
+                assert( a != nullptr && b != nullptr );
+                return a->Idx() < b->Idx();
+            } );
+    
+     if ( !faces_.empty() )
+       sort( faces_.begin(), faces_.end(),
+             []( const auto& a, const auto& b ) -> bool
+              {
+                 assert( a != nullptr && b != nullptr );
+                 return a->Idx() < b->Idx();
+              } );
+
+     if ( !interfaces_.empty() )
+       sort( interfaces_.begin(), interfaces_.end(),
+             []( const auto& a, const auto& b ) -> bool
+              {
+                assert( a != nullptr && b != nullptr );
+                return a->Idx() < b->Idx();
+              } );
+
+ } // end ReorderObjectsByIndexes
+
+
+
+
 
 /** Writes VData information from MeshManager to VSet
 
@@ -1986,6 +1979,9 @@ i.e. the connections between these entities.
 @param vset A VSet preferably empty, which is
 resized first, if necessary and into which the
 MeshManager connectivity information is input.
+
+@param bool renumber_uniquely = true is default,
+else the current indexing of nodes, elements etc. is used.
 
 @section conventions Conventions
 
@@ -2044,7 +2040,7 @@ AssignUniqueNumbers( in_a_single_sequence );
 
 */
 template<size_t dim>
-void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
+void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stored_variables )
 {
   ErrorHandler& csmp_error( ErrorHandler::Instance() );
   
@@ -2052,45 +2048,54 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
        csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo", "Mesh Manager does not currently store a mesh; no output");
        return;
     }
-    
-  // 0. creating a unique numbering for pointer integer conversions
-  // --------------------------------------------------------------
-  const bool in_a_single_sequence(true);
-  AssignUniqueNumbers( in_a_single_sequence );
 
+  // 0. creating a mapping from pointers to integer values
+  // -----------------------------------------------------
+  if ( !get_indices_from_stored_variables ) {
+      const bool in_a_single_sequence(true);
+      AssignUniqueNumbers( in_a_single_sequence );
+    }
+  // else, MeshManager relies on current indexing of nodes, elements etc.
+  // if this is non-unique or non-contiguous, this method call will fail.
+  else ReorderObjectsByIndexes();
 
   // 1. resizing the VSet
   // --------------------
-  const size_t higherDimParents( 2U );
-  const size_t interfaceMultiplier( 2U );
-  const size_t interfaceExtras( 3U ); // 2 face IDs and 1 entry for potential high dim element
 
-  if ( HybridElementMesh() || faces_.size() > 0 || interfaces_.size() > 0 ) {
+  if ( HybridElementMesh() || faces_.size() > 0 || interfaces_.size() > 0 )
+    {
+      const size_t higherDimParents( 2U );
+      const size_t interfaceMultiplier( 2U );
+      const size_t interfaceExtras( 3U ); // 2 face IDs and 1 entry for potential high dim element
+
       deque<size_t>  nodes_per_element;
       deque<size_t>  neighbors_per_element;
       deque<int8_t>  csmp_fem_types;
 
       // 1.1 identifying how many nodes and neighbors there are per element
-      for ( auto& e : elements_ ) {
+      for ( const auto& e : elements_ ) {
           nodes_per_element.push_back( e->Nodes() );
           neighbors_per_element.push_back( e->Neighbors() );
           csmp_fem_types.push_back( e->FE_Type() );
         }
 
       // 1.2 adding Face information after the elements
-      for ( auto& f : faces_ ) {
-          nodes_per_element.push_back( f->Nodes() );
-          neighbors_per_element.push_back( f->Neighbors() + higherDimParents );
-          csmp_fem_types.push_back( f->FE_Type() );
-        }
+      if ( !faces_.empty() )
+        for ( const auto& f : faces_ ) {
+            nodes_per_element.push_back( f->Nodes() );
+            neighbors_per_element.push_back( f->Neighbors() + higherDimParents );
+            csmp_fem_types.push_back( f->FE_Type() );
+          }
 
       // 1.3 adding InterFace information after the faces
-      for ( auto& f : interfaces_ ) {
-          // multiplier takes care of the multiplicated interface nodes that the InterFace will be connected to
-          nodes_per_element.push_back( f->Nodes() * interfaceMultiplier );
-          neighbors_per_element.push_back( f->Neighbors() + higherDimParents + interfaceExtras );
-          csmp_fem_types.push_back( f->FE_Type() );
-        }
+      if ( !interfaces_.empty() )
+        for ( const auto& f : interfaces_ ) {
+            // multiplier takes care of the multiplicated interface nodes that the InterFace will be connected to
+            nodes_per_element.push_back( f->Nodes() * interfaceMultiplier );
+            neighbors_per_element.push_back( f->Neighbors() + higherDimParents + interfaceExtras );
+            csmp_fem_types.push_back( f->FE_Type() );
+          }
+
       // 1.4 resizing the VSet
       vset.Resize( csmp_fem_types, nodes_per_element, neighbors_per_element,
                    nodes_.size(), faces_.size(), interfaces_.size() );
@@ -2143,22 +2148,24 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
   size_t eidx = 0;
   // elements
   for ( auto& e : elements_ ) {
-    for ( size_t j = 0U; j<e->Nodes(); ++j )
+    const size_t n_nodes{e->Nodes()};
+    for ( size_t j = 0U; j<n_nodes; ++j )
       vset.Plist( eidx, j, (e->N( j )->Idx()) );
     ++eidx;
   }
 
   // faces
   for ( auto& f : faces_ ) {
-    for ( size_t j = 0U; j<f->Nodes(); ++j )
+    const size_t n_nodes{f->Nodes()};
+    for ( size_t j = 0U; j<n_nodes; ++j )
       vset.Plist( eidx, j, (f->N( j )->Idx()) );
     ++eidx;
   }
 
   // interfaces
   for ( auto& f : interfaces_ ) {
-    // nodes = femptr->Nodes * 2 (all nodes of the interface)
-    for ( size_t j = 0U; j<f->Nodes(); ++j )
+    const size_t n_nodes{f->Nodes()};
+    for ( size_t j = 0U; j<n_nodes; ++j )
       vset.Plist( eidx, j, (f->N( j )->Idx()) );
     ++eidx;
   }
@@ -2170,9 +2177,10 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
 
   // 'pfverts' elements
   for ( auto e : elements_ ) {
-    for ( size_t j = 0U; j<e->Neighbors(); ++j ) {
+    const size_t n_nbors{e->Neighbors()};
+    for ( size_t j = 0U; j<n_nbors; ++j ) {
       Element<dim>* const ptr( e->Neighbor( j ) );
-      if ( ptr != NULL )
+      if ( ptr != nullptr )
         vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
       else
         vset.Pfvert( eidx, j, e->AtBoundary() );
@@ -4634,12 +4642,12 @@ bool  MeshManager<dim>::HybridElementMesh() const
        @date 2018
 */
 template<size_t dim>
-int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh )
+int32  MeshManager<dim>::CheckElementConnectivity() const
 {
   cout <<"\nMeshManager::CheckElementConnectivity: checking mesh..."<< endl;
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !mesh.Elements() )
+  if ( !Elements() )
     throw csmp::Exception( ERROR, "MeshManager::CheckElementConnectivity", "the mesh contains no elements." );
 
   // --------------------------------------------------------------------
@@ -4651,7 +4659,7 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
   bool with_surface_elements( false );
   bool with_line_elements( false );
 
-  for ( auto& it : elements_ ) {
+  for ( const auto& it : elements_ ) {
       if      ( !with_line_elements && it->IsLineElement() )			  with_line_elements = true;
       else if ( !with_surface_elements && it->IsSurfaceElement() )	with_surface_elements = true;
       else if ( !with_volume_elements && it->IsVolumeElement() )		with_volume_elements = true;
@@ -4677,7 +4685,7 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
   // 4.1 If all elements have the same spatial dimension
   // ---------------------------------------------------
   if ( dimension_counter == 1 ) {
-    for ( auto& eit : elements_ ) {
+    for ( const auto& eit : elements_ ) {
       // identifying the boundary faces and their nodes
       // (each face potentially has a neighbor element)
       long  nbors_that_belong_to_group( eit->Neighbors() );
@@ -4714,7 +4722,7 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
     set<Element<dim>*> lesser_dim_elmts;
     set<Node<dim>*>    highest_dim_elmt_nodes;
 
-    for ( auto eit : elements_ ) {
+    for ( const auto& eit : elements_ ) {
       // elements of the highest spatial dimension are used to define the boundary
       assert( parseFiniteElementDimension( eit->FE_Type() ) != 0 );
       if ( parseFiniteElementDimension( eit->FE_Type() ) == highest_spatial_dim )
@@ -4738,13 +4746,13 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
       }
       else lesser_dim_elmts.insert( eit );
     }
-    assert( /* all elements are accounted for */ mesh.Elements() == interior_elmts + boundary_elmts + lesser_dim_elmts.size() );
-    if ( mesh.Elements() != interior_elmts + boundary_elmts + lesser_dim_elmts.size() )
+    assert( /* all elements are accounted for */ Elements() == interior_elmts + boundary_elmts + lesser_dim_elmts.size() );
+    if ( Elements() != interior_elmts + boundary_elmts + lesser_dim_elmts.size() )
       errors++;
 
     set<Element<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
 
-    for ( auto& e : lesser_dim_elmts )
+    for ( const auto& e : lesser_dim_elmts )
       {
         // a) lower-dim elements that may be sticking out
         // ----------------------------------------------
@@ -4767,7 +4775,7 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
       // do some additional diagnostics on these elements
       // ------------------------------------------------
       cerr << "\n\tdetached elements: " << lesser_dim_elmts_detached.size() << ":";
-      for ( auto& e : lesser_dim_elmts_detached )
+      for ( const auto& e : lesser_dim_elmts_detached )
         cerr << " " << e->Idx();
       cerr << endl;
       errors++;
@@ -4786,94 +4794,119 @@ int32  MeshManager<dim>::CheckElementConnectivity( const MeshManager<dim>& mesh 
 
 
 
-//Qi added
-/*
-template<size_t dim>
-NodeManifoldManager<dim>&  MeshManager<dim>::Manifold() { return node_manifold_manager_; }
-
-template<size_t dim>
-const NodeManifoldManager<dim>&  MeshManager<dim>::Manifold() const { return node_manifold_manager_; }
-*/
-
 template<size_t dim>
 void MeshManager<dim>::Out() const
 {
   cout << "\nMeshManager<" << dim << ">::Out: " << endl;
-
+  
   // nodes
   cout << "\nNODES: " << endl;
-  for ( auto& n : nodes_ ) {
-    string bound = parseBoundary( n->AtBoundary() );
-    cout << "\nNode ID: " << n->Idx() << " ";
-    cout << n->Coordinate();
-    cout << " Boundary flag: " << bound << endl;
-  }
+  size_t n_node{0};
+  for ( const auto& n : nodes_ ) {
+      if ( n == nullptr ) cout << "\nNode entry: "<< n_node <<" is a nullpointer.";
+      else {
+           string bound = parseBoundary( n->AtBoundary() );
+           cout << "\nNode ID: " << n->Idx() << " ";
+           cout << n->Coordinate();
+           cout << " Boundary flag: " << bound << endl;
+        }
+      n_node++;
+    }
 
   // elements
+  size_t n_elmt{0};
   cout << "\nELEMENTS: " << endl;
-  for ( auto& e : elements_ ) {
-    string bound = parseBoundary( e->AtBoundary() );
-    cout << "\nElement ID: " << e->Idx() << " Boundary flag: " << bound << endl;
-    cout << "Member Nodes: " << endl;
-    for ( size_t i = 0U; i < e->Nodes(); i++ )
-      cout << e->N( i )->Idx() << "\t";
-    cout << "\nNeighbor elements: " << endl;
-    for ( size_t i = 0U; i < e->Neighbors(); i++ )
-      if ( e->Neighbor( i ) != NULL )
-        cout << e->Neighbor( i )->Idx() << "\t";
-      else
-        cout << "NO NEIGHBOR\t";
-
-    cout << endl;
-  }
+  for ( const auto& e : elements_ ) {
+       if ( e == nullptr ) cout <<"\nElement entry "<< n_elmt <<" is a nullpointer";
+       else {
+           string bound = parseBoundary( e->AtBoundary() );
+           cout << "\nElement ID: " << e->Idx() <<" ("<< parseFiniteElementType(e->FE_Type());
+           cout <<"), Boundary flag: " << bound << endl;
+           cout << "Member Nodes: " << endl;
+           for ( size_t i = 0U; i < e->Nodes(); i++ )
+             cout << e->N( i )->Idx() << "\t";
+           cout << "\nNeighbor elements: " << endl;
+           for ( size_t i = 0U; i < e->Neighbors(); i++ )
+             if ( e->Neighbor( i ) != NULL )
+               cout << e->Neighbor( i )->Idx() << "\t";
+             else
+               cout << "NO NEIGHBOR\t";
+           cout << endl;
+         }
+       n_elmt++;
+    }
 
   // faces
+  size_t n_face{0};
   cout << "\nFACES: " << endl;
-  for ( auto& f : faces_ ) {
-    cout << "\nFace ID: " << f->Idx() << endl;
-    cout << "Member Nodes: " << endl;
-    for ( size_t i = 0U; i < f->Nodes(); i++ )
-      cout << f->N( i )->Idx() << "\t";
-    cout << "\nNeighbor faces: " << endl;
-    for ( size_t i = 0U; i < f->Neighbors(); i++ )
-      if ( f->Neighbor( i ) != NULL )
-        cout << f->Neighbor( i )->Idx() << "\t";
-      else
-        cout << "NO NEIGHBOR\t";
+  for ( const auto& f : faces_ ) {
+      if ( f == nullptr ) cout <<"\nFace entry "<< n_face <<" is a nullpointer.";
+      else {
+          cout << "\nFace ID: " << f->Idx() <<" ("<< parseFiniteElementType(f->FE_Type()) <<")."<< endl;
+          cout << "Member Nodes: " << endl;
+          for ( size_t i = 0U; i < f->Nodes(); i++ )
+            cout << f->N( i )->Idx() << "\t";
+          cout << "\nNeighbor faces: " << endl;
+          for ( size_t i = 0U; i < f->Neighbors(); i++ )
+            if ( f->Neighbor( i ) != NULL )
+              cout << f->Neighbor( i )->Idx() << "\t";
+            else
+              cout << "NO NEIGHBOR\t";
 
-    cout << endl;
-  }
+          cout << endl;
+        }
+      n_face++;
+    }
 
   // inter faces
+  size_t n_iface{0};
   cout << "\nINTERFACES: " << endl;
-  for ( auto& f : interfaces_ ) {
-    cout << "\nInterFace ID: " << f->Idx() << endl;
-    cout << "Member Nodes: " << endl;
-    for ( size_t i = 0U; i < f->Nodes(); i++ )
-      cout << f->N( i )->Idx() << "\t";
-    cout << "\nNeighbor faces: " << endl;
-    for ( size_t i = 0U; i < f->Neighbors(); i++ )
-      if ( f->Neighbor( i ) != NULL )
-        cout << f->Neighbor( i )->Idx() << "\t";
-      else
-        cout << "NO NEIGHBOR\t";
-
-    cout << endl;
-  }
+  for ( const auto& f : interfaces_ ) {
+        if ( f == nullptr ) cout <<"\nInterFace entry "<< n_iface <<" is a nullpointer.";
+        else {
+            cout << "\nInterFace ID: " << f->Idx() <<" ("<< parseFiniteElementType(f->FE_Type()) <<")."<< endl;
+            cout << "Member Nodes: " << endl;
+            for ( size_t i = 0U; i < f->Nodes(); i++ )
+              cout << f->N( i )->Idx() << "\t";
+            cout << "\nNeighbor faces: " << endl;
+            for ( size_t i = 0U; i < f->Neighbors(); i++ )
+              if ( f->Neighbor( i ) != NULL )
+                cout << f->Neighbor( i )->Idx() << "\t";
+              else
+                cout << "NO NEIGHBOR\t";
+            cout << endl;
+        }
+      n_iface++;
+    }
 
   // parent elements ID's for each node
+  n_node = 0;
   cout << endl << endl;
   cout << "PARENT ELEMENT INFORMATION FOR ALL NODES: " << endl;
-  for ( auto& n : nodes_ ) {
-    cout << "\nNode: " << n->Idx() << ", parent elements: " << endl;
-    for ( size_t i = 0u; i < n->Parents(); i++ )
-      cout << n->Parent( i )->Idx() << " ";
-    cout << endl;
-  }
+  for ( const auto& n : nodes_ ) {
+      if ( n == nullptr ) cout <<"\nNode entry "<< n_node <<" is a nullpointer.";
+      else {
+          cout << "\nNode: " << n->Idx() << ", parent elements: " << endl;
+          for ( size_t i = 0u; i < n->Parents(); i++ )
+            cout << n->Parent( i )->Idx() << " ";
+          cout << endl;
+        }
+      n_node++;
+    }
+  
+  // node manifolds
+  if ( node_manifold_manager_ != nullptr ) {
+      cout << endl << endl;
+      cout << "NODE MANIFOLDS: " << endl;
+      node_manifold_manager_->Out();
+    }
+    
 } // end Out
 
 
 // POTENTIALLY NEEDED METHODS
+
+
 /*
   /// replace lower-dimensional element with Face object, deleting the Elements and establishing the neighbor connectivity of the new Faces
   size_t          ReplaceElementsByFaces( const PropertyDatabase<dim>&,

@@ -431,6 +431,7 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   elements_per_element.clear();
 
   cout << "\nOutput of Geometry...";
+  this->UpdateMemberIndexes();
 
   // 1. assigning coordinate values
   for ( size_t i = 0U; i<this->node_vec_.size(); i++ ) {
@@ -762,6 +763,8 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
   csmp::Index  idx = this->pref_.StorageKey( property );
   Var          var;
   femDataOutputDispatch::initVariable( idx, var );
+
+  this->UpdateMemberIndexes();
 
   switch ( idx.place ) {
     case ELEMENT: {

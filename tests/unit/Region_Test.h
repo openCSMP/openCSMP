@@ -19,7 +19,7 @@ namespace csmp
      bool TestBoundaryFaceFunctionality( const std::string& );
     
      /// test covers functionality of the base class ModelSubDomain
-     bool TestRegionFileInputOutput(  const Model<3U>& model, const char* region );
+     bool TestRegionFileInputOutput( Model<3U>& model, const char* region );
 
     const bool verbose_;
 };

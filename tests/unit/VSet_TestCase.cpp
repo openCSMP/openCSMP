@@ -15,10 +15,8 @@
 using namespace std;
 
 namespace csmp {
-VSet_TestCase::VSet_TestCase( const char* prefix,
-                              bool verbose )
- : model_file_(prefix),
-   verbose_(verbose)
+VSet_TestCase::VSet_TestCase( bool verbose )
+ : verbose_(verbose)
 {
     this->setName("VSet_TestCase");
 }
@@ -36,18 +34,94 @@ VSet_TestCase::~VSet_TestCase()
 void VSet_TestCase::run()
 {
    _test( Test_EstablishElementConnectivity2D() );
-   TestModelConstructionAndSaving2D();
+   _test( Test_ModelConstructionAndSaving2D() );
+   Test_ANSYS_ModelConstructionAndSaving2D( "HorFracs2D" );
     
 } // end VSet_TestCase
 
 
 
-
-
-
-void VSet_TestCase::TestModelConstructionAndSaving2D()
+bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
   {
-    string input_file_name(model_file_);
+    enum{DIM=2U};
+    if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
+    
+    VSet<DIM> vset, vset2;
+    test_Create_MeshPatchWithLineElements_VSet( vset );
+    
+    // creating a matching model topology
+    ModelTopology mesh_topology( "VSet_TestCase", true );
+    // all surface elements are "MATRIX"
+    mesh_topology.AddRegion( "MATRIX", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
+                              vector<size_t>{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24} );
+
+    // fracture line-element regions
+    mesh_topology.AddRegion( "FRAC1", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{25,29,31} );
+    mesh_topology.AddRegion( "FRAC2", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{26,27,28} );
+    mesh_topology.AddRegion( "FRAC3", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{30} );
+    mesh_topology.AddRegion( "FRAC4", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{32} );
+    // boundaries
+    mesh_topology.AddRegion( "BOTTOM", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{33,34,35} );
+    mesh_topology.AddRegion( "RIGHT",  set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{36,37,38} );
+    mesh_topology.AddRegion( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{39,40,41} );
+    mesh_topology.AddRegion( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{42,43,44} );
+
+    _test( mesh_topology.Elements() == vset.Elements() );
+
+    // adding corresponding materials to VSet
+    vector<int32> pmtrl(45,1); // matrix
+    fill( next(pmtrl.begin(),25), next(pmtrl.begin(),31), 2 ); // fine because wrong values will be overwritten next
+    fill( next(pmtrl.begin(),26), next(pmtrl.begin(),28), 3 );
+    fill( next(pmtrl.begin(),33), next(pmtrl.begin(),35), 4 );
+    fill( next(pmtrl.begin(),36), next(pmtrl.begin(),38), 5 );
+    fill( next(pmtrl.begin(),39), next(pmtrl.begin(),41), 6 );
+    fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    
+    // adding node and element numbers for comparisons
+    PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+    elmt_nums.Reserve( vset.Elements() );
+    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    vset.AddData( "element number", elmt_nums );
+    // node numbers
+    PropertyData node_nums( NODE, SCALAR, 2U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+
+
+    // build model from mesh
+    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
+    printModelDimensions( model, true );
+    _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
+    _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
+    const bool   get_indices_from_stored_variables{true};
+    const size_t zero_errors{0};
+    _test( model.Mesh().CheckElementConnectivity() == zero_errors );
+    model.OutputMeshTo( vset2, get_indices_from_stored_variables );
+    _test( vset2 == vset );
+    vset2.Out();
+    
+    // saving model to binary
+    const string test_model_name( string(model.Name()) + "Vset_TestCase" );
+    model.OutputToBinaryFile( test_model_name.c_str() );
+    
+    // bringing the model back (calling reconstructor)
+    Model<DIM>  model2( test_model_name );
+    printModelDimensions( model, true );
+    model2.OutputMeshTo( vset2 );
+    
+    // comparing it to original VSet
+    if ( vset2 == vset ) return true;
+    return false;
+    
+  } // end Test_ANSYS_ModelConstructionAndSaving2D
+ 
+
+
+
+void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_name )
+  {
     enum{DIM=2U};
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
     
@@ -67,39 +141,32 @@ void VSet_TestCase::TestModelConstructionAndSaving2D()
     vset.ReduceTo( old_and_new_elmtids );
     old_and_new_elmtids.clear();
     
-    vset.RemovePfverts();
-    vset.EstablishElementConnectivity2D();
-
-    // processing the (deliberately) inconsistent VSet 
+    // processing the (deliberately) inconsistent VSet
     const size_t rotated_elements = vset.RenumberElementsCounterClockwise2D();
     if ( rotated_elements == 0U )
       ErrorHandler::Instance().notice( WARNING, "VSet_TestCase::TestModelConstructionAndSaving2D",
                                                 "non-diagnostic test: element orientations are already correct.");
       
-  
     // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
+    vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
 
     // build model from mesh
     Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
-    
-    // turn line-element region into SplitBoundary
-
     printModelDimensions( model, true );
     
-
-  } // end
+    // saving model to binary
+    model.OutputToBinaryFile( string( string(model.Name()) + "Vset_TestCase" ).c_str() );
+    
+  } // end Test_ANSYS_ModelConstructionAndSaving2D
  
  
  
  
   
   
-void VSet_TestCase::TestModelConstructionAndSaving3D()
+void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& input_file_name )
   {
-    //------------------------------------
-    // Parameters section
-    string input_file_name(model_file_);
     enum{DIM=3U};
   
     //end Parameters section
@@ -263,7 +330,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
     vset.EstablishElementConnectivity2D();
 
     // comparison
-    cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity2D: errors if any:\n";
+    cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity2D: errors if any: ";
     auto itb=backup_vset.PfvertsBegin();
     size_t elmt{0U}, vec_mismatches{0U};
     for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
@@ -277,6 +344,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
             }
         elmt++;
       }
+    if ( vec_mismatches == 0 ) cout <<"NONE\n";
     cout << endl;
     
     if ( vec_mismatches > 0 ) return false;

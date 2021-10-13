@@ -500,7 +500,7 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
 /**
     Compares whether the data of the region class are correctly recovered from binary file.
 */
-bool Region_Test::TestRegionFileInputOutput( const Model<3U>& model, const char* region )
+bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* region )
  {
      // 1. creating sets for interior and perimeter nodes, elements, boundary faces etc.
      // --------------------------------------------------------------------------------

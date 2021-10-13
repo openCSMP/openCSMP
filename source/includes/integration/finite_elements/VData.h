@@ -250,9 +250,6 @@ class VData {
  
     // EXTRA DATA, MESH MODIFICATION AND REPAIR 
 
-    /// remove any gaps in the numbering of nodes and elements
-    bool   CheckFix();
-
     /// flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
     size_t RenumberElementsCounterClockwise2D();
     
@@ -270,7 +267,6 @@ class VData {
     
     /// checks for collocated vertices into transfer data structure
     bool ExtractNodeManifolds( vertexManifoldIndices& ) const;
-  
   
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );
@@ -295,6 +291,9 @@ class VData {
 
   protected:
   
+    /// remove any gaps in the numbering of nodes and elements
+    bool   CheckFix();
+
     /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
     void   CreateConsistentLineElementOrientations2D();
     

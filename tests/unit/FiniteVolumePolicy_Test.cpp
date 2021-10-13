@@ -181,7 +181,6 @@ void FiniteVolumePolicy_Test::Test_CreateVSet()
 	  vset.AddBFlag( 7, TOP_OUTSIDE );
     vset.AddBFlag( 8, CNR3 );
 
-    vset.CheckFix();
     vset.Out();
 
     //create the super group

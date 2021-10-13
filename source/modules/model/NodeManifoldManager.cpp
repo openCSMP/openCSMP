@@ -387,6 +387,19 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( std::deque<Node<d
  }
     
 
+template<size_t dim>
+void NodeManifoldManager<dim>::Out() const
+ {
+    if ( node_manifolds_.empty() )
+      cout <<"\n\nNodeManifoldManager<"<< dim <<">::Out: no manifolds in store.\n";
+    else {
+         cout <<"\n\nNodeManifoldManager<"<< dim <<">::Out: "<< node_manifolds_.size() <<" manifolds in store.\n";
+         for ( const auto& nit : node_manifolds_ ) {
+              nit->Out();
+           }
+      }
+ } // end Out
+
 
 
 template class NodeManifoldManager<1U>;

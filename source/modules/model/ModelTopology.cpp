@@ -1633,6 +1633,7 @@ suitable for reorganising the VSet. The following tests are made:
 - does the element numbering start with zero?
 - is the largest element number equivalent to the number of elements-1?
 - are the elements numbered consecutively?
+- are the elemnt ids' within each Region consecutive.
 - are there any duplicate elements?
  
 The method assumes that that each element can only belong to a single

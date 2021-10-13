@@ -513,7 +513,7 @@ void test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
   	
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
     
-    vset.Out();
+    //vset.Out();
     
 } // end test_Create_MeshPatchWithLineElements_VSet
 

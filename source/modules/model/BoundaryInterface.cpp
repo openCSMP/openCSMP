@@ -1420,7 +1420,6 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( cons
          if ( it.second ) 
            {
              //std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(between): creating boundary between " << group1 << " and " << group2 << std::endl;
-             boundaryComplex->UpdateIndices();
              if ( createBetween ) {
                    const string temp_region_name( std::string( std::string(group1) + std::string("_") + std::string(group2) ).c_str() );
                    const int32 material_id(999);
@@ -1436,7 +1435,6 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( cons
                }
              else succeeded = (*it.first).second.CreateBetween( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), gref1, gref2 );
 
-             boundaryComplex->UpdateIndices();
              std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(between): created boundary between " << group1 << " and " << group2 << std::endl;
              return make_pair(boundary_name,true);
            }

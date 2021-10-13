@@ -119,6 +119,10 @@ VData& VData::operator=( const VData& a )
 
 
 
+
+
+
+
 void  VData::Px( size_t i, double64 val ) 
 { assert( i<px.size() ); px[i] = val; }
 
@@ -1558,6 +1562,8 @@ void VData::ScaleCoordinateToRange( char coordinate_axis, double64 cmin, double6
 
 /**
     comparitor for VSets.
+    
+    @attention node coordinates are ignored because such a comparison would depend on precision.
 */
 bool  VData::operator==( const VData& vd ) const
  {
@@ -1565,9 +1571,9 @@ bool  VData::operator==( const VData& vd ) const
     if ( !(hybrid_mesh_ == vd.hybrid_mesh_) ) return false;
     if ( first_face_      != vd.first_face_ ) return false;
     if ( first_interface_ != vd.first_interface_ ) return false;
-    if ( !(px == vd.px) ) { cerr<<"\nVData::operator== failed 'px' comparison."; return_value = false; }
-    if ( !(py == vd.py) ) { cerr<<"\nVData::operator== failed 'py' comparison."; return_value = false; }
-    if ( !(pz == vd.pz) ) { cerr<<"\nVData::operator== failed 'pz' comparison."; return_value = false; }
+//    if ( !(px == vd.px) ) { cerr<<"\nVData::operator== failed 'px' comparison."; return_value = false; }
+//    if ( !(py == vd.py) ) { cerr<<"\nVData::operator== failed 'py' comparison."; return_value = false; }
+//    if ( !(pz == vd.pz) ) { cerr<<"\nVData::operator== failed 'pz' comparison."; return_value = false; }
     if ( !(pelmt == vd.pelmt) ) { cerr<<"\nVData::operator== failed 'pelmt' comparison."; return_value = false; }
     if ( !(plist == vd.plist) ) { cerr<<"\nVData::operator== failed 'plist' comparison."; return_value = false; }
     if ( !(pfverts == vd.pfverts) ) { cerr<<"\nVData::operator== failed 'pfverts' comparison."; return_value = false; }
@@ -1668,7 +1674,8 @@ is output from the ModelTopology class.
 
 Used to make region selections from the supplied input meshes.  
 */
-void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>& o_n_node_ids )
+void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  idx mapping from old to new
+                      map<size_t,size_t>& o_n_node_ids )      ///< the old->new node idx mapping but only for the nodes that are kept
  {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 

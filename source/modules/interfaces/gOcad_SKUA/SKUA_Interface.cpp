@@ -676,7 +676,6 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   // if the region was non-unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
   // updating regions
   model.Mesh().UpdateConnectivity();
-  model.UpdateIndices();
   
   /*
   for ( auto rit = model.RegionsBegin(); rit != model.RegionsEnd(); ++rit ) {

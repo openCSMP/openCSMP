@@ -16,19 +16,22 @@ template<size_t> class Model;
 class VSet_TestCase : public Test
   {
     public:
-      VSet_TestCase( const char* prefix, bool verbose );
+      explicit VSet_TestCase( bool verbose=false );
       ~VSet_TestCase();
+      
       virtual void run();
     
     private:
-      void TestModelConstructionAndSaving2D();
-      void TestModelConstructionAndSaving3D();
+    
+      /// using VSet from VSet makers
+      bool Test_ModelConstructionAndSaving2D();
+      void Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_set="HorFracs2D" );
+      void Test_ANSYS_ModelConstructionAndSaving3D( const std::string& input_file_set );
       
-      // uses specific model with line elements from vset_makers
+      /// uses  VSet maker-made model with line elements from vset_makers
       bool Test_EstablishElementConnectivity2D();
       
     private:
-      const std::string model_file_;
       const bool verbose_;
   };
 

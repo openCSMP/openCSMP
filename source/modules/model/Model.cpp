@@ -292,12 +292,14 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     if ( !vset.WithNeighbourConnectivity() )
       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
 
-    // 1. reducing the mesh data to the desired element types as specified
-    //    by the topology object
-    map<size_t,size_t>  old_and_new_elmtids;
-    mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
-    vset.ReduceTo( old_and_new_elmtids );
-    old_and_new_elmtids.clear();
+    // 1. reducing the element data to the desired elements specified in the topology object
+    //    if the element numbers in the two are different.
+    if ( mesh_topology.Elements() != vset.Elements() ) {
+        map<size_t,size_t>  old_and_new_elmtids;
+        mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+        vset.ReduceTo( old_and_new_elmtids );
+        old_and_new_elmtids.clear();
+      }
 
     // 2. initializing the finite-element manager true=isoparametric
     fem_manager_.InitializeElements( dim,
@@ -702,6 +704,17 @@ size_t spatialDimensionOfModel( const char* csmp_binary )
 
 
 
+  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+template<size_t dim>
+void  Model<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stored_variables )
+ {
+    this->IndexByPropertyValues();
+    mesh_manager_.OutputMeshTo( vset,  get_indices_from_stored_variables );
+ }
+
+
+
+
 /**
 OutputVariableTo() is an overloaded method which will output any kind
 of property to the supplied FEM_Data object.
@@ -750,7 +763,6 @@ template void Model<3U>::OutputVariableTo( const char*, FEM_Data<VectorVariable<
 template void Model<3U>::OutputVariableTo( const char*, FEM_Data<TensorVariable<3U> >& ) const;
 template void Model<3U>::OutputVariableTo( const char*, FEM_Data<ArrayVariable>& ) const;
 template void Model<3U>::OutputVariableTo( const char*, FEM_Data<FlaggedArrayVariable>& ) const;
-
 
 
 
@@ -894,41 +906,104 @@ template void Model<3U>::InputVariableFrom( const char*, const FEM_Data<FlaggedA
 
 
 
-// Renumbers nodes, elements, faces & interfaces. Nodes and Element/Face/Interface may have same values, but the latter may not.
+
+/**
+     Sets the Idx values of the nodes, elements, faces, and interfaces of the model according to the stored values, if any.
+     @code
+     "node number", "element number", "face number", "interface number"
+     @endcode
+     
+     @attention if elements were created or deleted, then there may now be gaps in the numbering.
+*/
 template<size_t dim>
-size_t Model<dim>::UpdateIndices() const
-{
-   const bool in_a_single_sequence(true);
-   this->Mesh().AssignUniqueNumbers( in_a_single_sequence );
-   return this->Mesh().Elements() + this->Mesh().Faces() + this->Mesh().InterFaces();
-}
+void Model<dim>::IndexByPropertyValues()
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+    MeshManager<dim>& mesh(this->Mesh());
+    const bool in_a_single_sequence{true};
+    
+    if ( Database().IsDefined( "node number" ) ) {
+         const csmp::Index key = this->Database().StorageKey("node number");
+         const size_t n_nodes{mesh.Nodes()};
+         for ( size_t i{0}; i<n_nodes; ++i ) {
+              const size_t node_number = static_cast<size_t>(mesh.N(i)->Read(key));
+              if ( node_number >= n_nodes )
+                csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                  "'node number' exceeds range of available nodes:", to_string(node_number) );
+              mesh.N(i)->Idx( node_number );
+           }
+      }
+    else {
+         csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                  "'node number' is not defined; default unique contiguous numbering will be used" );
+         mesh.AssignUniqueNumbers( in_a_single_sequence );
+         return;
+      }
+    
+    if ( Database().IsDefined( "element number" ) ) {
+         const csmp::Index key = this->Database().StorageKey("element number");
+         const size_t n_elmts{mesh.Elements()};
+         for ( size_t i{0}; i<n_elmts; ++i ) {
+              const size_t elmt_number = static_cast<size_t>(mesh.E(i)->Read(key));
+              if ( elmt_number >= n_elmts )
+                csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                  "'element number' exceeds range of available elements:", to_string(elmt_number) );
+              mesh.E(i)->Idx( elmt_number );
+           }
+      }
+    else {
+         csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                  "'element number' is not defined; default unique contiguous numbering will be used" );
+         mesh.AssignUniqueNumbers( in_a_single_sequence );
+         return;
+      }
+    
+    // faces
+    if ( Mesh().Faces() > 0 ) {
+        if ( Database().IsDefined( "face number" ) ) {
+             const csmp::Index key = this->Database().StorageKey("face number");
+             const size_t n_faces{mesh.Faces()};
+             for ( size_t i{0}; i<n_faces; ++i ) {
+                  const size_t face_number = static_cast<size_t>(mesh.F(i)->Read(key));
+                  if ( face_number >= n_faces + mesh.Elements() )
+                    csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                      "'face number' exceeds range of available faces:",
+                                       to_string(face_number) );
+                  mesh.F(i)->Idx( face_number );
+               }
+          }
+        else {
+             csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                      "'face number' is not defined; default unique contiguous numbering will be used" );
+             mesh.AssignUniqueNumbers( in_a_single_sequence );
+             return;
+          }
+      }
 
+    // interfaces
+    if ( Mesh().InterFaces() > 0 ) {
+        if ( Database().IsDefined( "interface number" ) ) {
+             const csmp::Index key = this->Database().StorageKey("interface number");
+             const size_t n_ifaces{mesh.InterFaces()};
+             const size_t n_all_cells{ n_ifaces + mesh.Faces() + mesh.Elements() };
+             for ( size_t i{0}; i<n_ifaces; ++i ) {
+                  const size_t iface_number = static_cast<size_t>(mesh.I(i)->Read(key));
+                  if ( iface_number >= n_all_cells )
+                    csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                      "'interface number' exceeds range of available faces:",
+                                       to_string(iface_number) );
+                  mesh.I(i)->Idx( iface_number );
+               }
+          }
+        else {
+             csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                      "'interface number' is not defined; default unique contiguous numbering will be used" );
+             mesh.AssignUniqueNumbers( in_a_single_sequence );
+          }
+      }
 
-
-// Renumbers nodes, elements, faces & interfaces. Nodes and Element/Face/Interface may have same values, but the latter may not.
-template<size_t dim>
-size_t Model<dim>::UpdateIndices( const char* region_name ) const
-{
-  // elements and nodes
-  this->Region( region_name ).UpdateMemberIndexes();
-  size_t runningIndex( this->Region( region_name ).Elements() );
-
-  // boundaries  
-  for ( typename Model<dim>::boundaryConstIterator bit( this->BoundariesBegin() ); bit != this->BoundariesEnd(); ++bit )
-  {
-    for ( typename vector<Face<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
-  // split boundaries
-  for ( typename Model<dim>::splitBoundaryConstIterator bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
-  {
-    for ( typename vector<InterFace<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
-  return runningIndex;
-}
-
+ } // end IndexByPropertyValues
 
 
 
@@ -1091,6 +1166,9 @@ void  Model<dim>::DeleteProperty( const char* property )
 
 } // end DeleteProperty
 
+
+
+
 /**
 In a finite-element mesh, each node is shared by a variable number of
 elements which also may differ in their area. This method extrapolates
@@ -1138,6 +1216,9 @@ void  Model<dim>::ExtrapolateElementToNodeProperty( const char* eprop, const cha
   this->Region( "Model" ).ExtrapolateElementToNodeProperty( eprop, nprop, by_distance );
 
 } // end ExtrapolateElementToNodeProperty
+
+
+
 
 
 /**
@@ -2880,7 +2961,7 @@ const MeshManager<dim>&  Model<dim>::Mesh() const { return mesh_manager_; }
 writes entire model with associated properties / variables to CSMP native set of binary files.
 */
 template<size_t dim>
-void Model<dim>::OutputToBinaryFile( const char* file_string ) const
+void Model<dim>::OutputToBinaryFile( const char* file_string )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

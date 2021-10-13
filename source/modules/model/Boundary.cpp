@@ -818,10 +818,9 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
 template<size_t dim>
 bool csmp::Boundary<dim>::IsExternal() const
 {
-    for ( typename vector<Face<dim>*>::const_iterator
-          it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )
+    for ( const auto& it : this->elmt_vec_ )
       // perhaps create method inside of Face to check whether it lies on the outside of the model
-      if ( (*it)->OuterParent() == nullptr ) return true;
+      if ( it->OuterParent() == nullptr ) return true;
     return false;
 }
 
@@ -853,10 +852,10 @@ void Boundary<dim>::CreateNodePointerVector()
 
   // creating the node index vector
   set<csmp::Node<dim>*>  nodes_set;
-  for ( typename vector<Face<dim>*>::const_iterator it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); ++it )
-    for ( size_t i = 0U; i<(*it)->Nodes(); ++i ) {
-      assert( (*it)->N( i ) != nullptr );
-      nodes_set.insert( (*it)->N( i ) );
+  for ( const auto& it : this->elmt_vec_ )
+    for ( size_t i = 0U; i<it->Nodes(); ++i ) {
+      assert( it->N( i ) != nullptr );
+      nodes_set.insert( it->N( i ) );
     }
 
   this->node_vec_.assign( nodes_set.begin(), nodes_set.end() );
@@ -966,7 +965,8 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // creating the connectivity among the new faces
-  meshManager.template RebuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+  meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+
   // initialize boundary essentials
   Initialize( boxBoundary );
 
@@ -1056,7 +1056,8 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
   
   // initialize boundary essentials
-  meshManager.template RebuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+  meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+
   Initialize( boxBoundary );
 
   //done
@@ -1142,7 +1143,8 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize boundary essentials
-  meshManager.template RebuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+  meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+
   Initialize( INTERNAL );
 
   //done
@@ -1202,9 +1204,8 @@ double64  Boundary<dim>::Area() const
 {
   double64  integrated_area( 0. );
 
-  for ( typename vector<Face<dim>*>::const_iterator
-        it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-    integrated_area += (*it)->Area();
+  for ( const auto& it  : this->elmt_vec_ )
+    integrated_area += it->Area();
 
   return integrated_area;
 }

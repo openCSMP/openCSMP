@@ -248,11 +248,14 @@ public:
   // Binary input/output
   // -----------------------------------------------
 
-  /// writes entire model with associated properties to disk; non-constant because this involves region creation
-  void OutputToBinaryFile( const char* ) const;
+  /// writes entire model with associated properties to disk; non-constant because this involves region creation; not const because mesh is updated
+  void OutputToBinaryFile( const char* );
 
   /// reads model written by OutputToBinaryFile() including all associated properties; if subset of variables is not empty only these will be read
   void InputFromBinaryFile( const char* model_name, const std::set<std::string>& subset_variables );
+  
+  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+  void OutputMeshTo( VSet<dim>&, bool get_indices_from_stored_variables=false );
 
   /// writes discretised variable to generic variable container
   template<class Var>
@@ -278,11 +281,8 @@ public:
   /// deletes property from the database and the distributed containers all across the model
   void DeleteProperty( const char* property );
 
-  /// renumbers everything, starting face and interface numbers after element index max; TODO: deprecate
-  size_t UpdateIndices() const;
-
-  /// renumbers everything, starting face and interface numbers after element index max in the subdomain; TODO: deprecate
-  size_t UpdateIndices( const char* region_name ) const;
+  /// renumbers everything, using stored  "node number" etc. if available, else MeshManager is prompted to created unique numbering
+  void IndexByPropertyValues();
 
   /// sets the values of the distributed variable all across the model; to enter scalar value use makeScalar(flag,value) helper function
   template<class T>

@@ -9,6 +9,7 @@
 
 namespace csmp {
 
+class MeshManager_Test;
 class ModelTopology;
 class FiniteElementManager;
 template<size_t> struct IndexToPointerMapping;
@@ -115,8 +116,6 @@ public:
   //
   // ==============================================================
 
-// TODO: check whether there are any use cases where the neighbor information can be applied during construction; else remove this optional argument
-
   /// by location only, no parent element  gets connected
   Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
 
@@ -173,17 +172,30 @@ public:
                                    INTERFACE_SIDE new_node_side,
                                    ManifoldType geometry );
 
- 
-  /// updates all connectivity (elements, faces, interfaces, nodes to parents); call after  mesh modification
+  /// Rebuild node-to-element parent relationships, for example after a region was removed
+  void RebuildNodeParentElementRelationships( typename std::vector<Element<dim>*>::iterator begin,
+                                              typename std::vector<Element<dim>*>::iterator end );
+
+  /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
   void UpdateConnectivity();
   // TODO: create version of method that permits selective update of cells
 
-  /// after disconnecting the nodes from potential manifolds, and parent elements, these are deleted
+  /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
+  /// @todo disambiguate connectivity between Face and InterFace object at manifolds
+  template<template<size_t> class CELL>
+  void BuildConnectivity( typename std::deque<CELL<dim>*>::iterator first,
+                          typename std::deque<CELL<dim>*>::iterator last );
+
+
+  // DELETIONS & MAINTANANCE OF MESH CONNECTIVITY
+  // --------------------------------------------
+  // NB: elements are responsible for the nodes, nodes for their manifolds
+
+  /// after disconnecting the nodes from potential manifolds, the supplied range of nodes is deleted
   size_t Delete( typename std::deque<Node<dim>*>::iterator first,
                  typename std::deque<Node<dim>*>::iterator last );
 
-  /// deletes supplied sequence of elements returning their number; pointers are nulled for erase via  EraseNullPointerCells()
-  // TODO: update connectivity of remaining mesh, in the meantime, call UpdateConnectivity()
+  /// deletes the supplied range of elements, and singly owned nodes if any; pointers are nulled 
   size_t Delete( typename std::deque<Element<dim>*>::iterator first,
                  typename std::deque<Element<dim>*>::iterator last );
 
@@ -198,43 +210,36 @@ public:
   size_t Delete( typename std::vector<CELL<dim>*>::iterator first,
                  typename std::vector<CELL<dim>*>::iterator last );
 
-  /// compacts deques, first filling in deleted cells with cells from the back; then erasing cells at the back
-  size_t EraseNullPointerCells();
+                                              
+// JCK method still needed? - void RebuildParentRelationships( typename std::vector<Node<dim>*>::iterator begin,
+//                                                              typename std::vector<Node<dim>*>::iterator end );
 
-  /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
-  void AssignUniqueNumbers( bool in_a_single_sequence=false ) const;
-
-  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
-  void OutputMeshTo( VSet<dim>& ) const;
-
-  /// adds distributed variables to the VSet
-  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, VSet<dim>& ) const;
-  
-  /// reads distributed variables from VSet
-  void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
-
-  /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
-  /// @todo disambiguate connectivity between Face and InterFace object at manifolds
-  template<template<size_t> class CELL>
-  void RebuildConnectivity(  typename std::deque<CELL<dim>*>::iterator first,
-                             typename std::deque<CELL<dim>*>::iterator last );
-
-  /// same for node-to-node connectivity
-  void RebuildConnectivity(  typename std::deque<Node<dim>*>::iterator first,
-                             typename std::deque<Node<dim>*>::iterator last );
-
-  /// Rebuild node-to-element parent relationships, for example after a region was removed
-  void RebuildParentRelationships( typename std::vector<Node<dim>*>::iterator begin, typename std::vector<Node<dim>*>::iterator end );
-  
   /// JCK's method to test the connectivity of a mesh after it had been read from binary file
-  int32 CheckElementConnectivity( const MeshManager<dim>& );
+  int32 CheckElementConnectivity() const;
 
   /// prints stored objects and their connectivity to screen
   void Out() const;
   
   
 private:
+  /// compacts deques, first filling in deleted cells with cells from the back; then erasing cells at the back
+  size_t EraseNullPointerCells();
 
+  /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
+  void AssignUniqueNumbers( bool in_a_single_sequence=false );
+  
+  /// puts nodes, elements, faces, and interfaces into the order given by Idx() variables; removes nullptr cells first
+  void ReorderObjectsByIndexes();
+
+  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+  void OutputMeshTo( VSet<dim>&, bool get_indices_from_stored_variables=false );
+
+  /// adds distributed variables to the VSet
+  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, VSet<dim>& ) const;
+  
+  /// reads distributed variables from VSet
+  void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
+  
   /// detecting and counting potentially empty cells or nodes in storage for prompting an update
   std::pair<std::array<size_t,4>,bool>  NullPointersInStorage() const;
 
@@ -242,13 +247,16 @@ private:
   /// access is via root node or element only    
   bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types
 
-  // root pointers to contiguous mesh patches
+  // root pointers to contiguous mesh patches; mutable to allow for behind scene updates
   std::deque<Node<dim>*>      nodes_;          ///<  nodes
   std::deque<Element<dim>*>   elements_;       ///<  pointers elements
   std::deque<Face<dim>*>      faces_;          ///<  pointers faces making up the boundaries
   std::deque<InterFace<dim>*> interfaces_;     ///<  pointers to interfaces making up the split boundaries
   // only used in models that contain node SplitBoundaries / IterFace objects
   NodeManifoldManager<dim>*   node_manifold_manager_ = nullptr; ///<  node manifolds of SplitBoundaries
+  ///
+  friend class MeshManager_Test; ///< so that private methods can be tested
+  friend class Model<dim>;       ///<  exclusive access to private member functions
 };
 
 } // end namespace csmp

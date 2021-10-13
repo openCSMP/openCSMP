@@ -456,9 +456,9 @@ std::string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBound
     in mesh; these are detected and grouped by bordering regions and turned into SplitBoundary objects
     with names following the same conventions as for Boundary objects.
     
-    @attention this method does not prompt the generation of any nodes because they are already there in ANSYS.
+    @attention this method does not prompt the generation of any nodes because they are expected to be already there in ANSYS.
     
-    @attention this method may change the existing numbering of nodes, elements, faces and interfaces.
+    @attention this method relies on the existing numbering of nodes, elements, faces and interfaces.
 
     @author SKM
     @date 20/03/2018 updated 5/9/2021
@@ -472,7 +472,6 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
 
   // 1. detecting potential SplitBoundaries
   // --------------------------------------
-  splitboundaryComplex->Mesh().AssignUniqueNumbers();
   // finding the (local) ids of the element faces on either side of the split boundary
   set<pair<pair<Element<dim>*, size_t>, pair<Element<dim>*, size_t> > >  interface_elmt_pairs;
   if ( !findSplitInterfaceElements( splitboundaryComplex->Region( "Model" ), interface_elmt_pairs ) ) {
@@ -536,7 +535,6 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
       if ( bit.second ) {
           std::cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries: '"<< bname;
           std::cout << "' created successfully.\n";
-          splitboundaryComplex->UpdateIndices();
         }
       else
         throw csmp::Exception( INFO,
@@ -618,7 +616,6 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
   if ( it.second ) {
       cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom:";
       cout <<" creating SplitBoundary from 'Boundary' "<< boundary.Name() << endl;
-      splitboundaryComplex->UpdateIndices();
       succeeded = (*it.first).second.CreateFrom( *splitboundaryComplex, boundary );
       // SKM FIX - 
       if ( succeeded ) {
@@ -633,13 +630,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
                            splitboundaryName.c_str(),
                            "boundary already exists. Nothing was done." );
 
-  splitboundaryComplex->UpdateIndices();
-
   // removes boundary also deleting its interface objects
   splitboundaryComplex->RemoveBoundary( boundary );
-
-  // update indexes
-  splitboundaryComplex->UpdateIndices();
   
   UpdateSplitBoundaryComplex();
 
@@ -807,7 +799,6 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      model->FormRegionFrom( region_name.c_str(), new_elmts.begin(), new_elmts.end(), unique_map );
      // add new unique region to model region
      model->Region("Model").Add( model->Region(region_name) );
-     model->UpdateIndices();
      
      return make_pair( region_name, true ); 
      

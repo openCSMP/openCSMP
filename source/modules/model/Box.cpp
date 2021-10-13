@@ -1403,12 +1403,23 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if ( eflags.size() == 1U ) return (*eflags.begin());
     
     // if this is a 2D model so that there are only CNR1 to CRN4 and BOTTOM, TOP, RIGHT, LEFT, INTERNAL
-    if ( dim == 2U ) {
+    if constexpr ( dim == 2U ) {
+         // if there are two different flags
          if ( eflags.size() == 2U ) {
-              // if there is a corner involved, note: corners will always have more negative values than sides
-              const BOX_BOUNDARY flag1 = (*eflags.begin());
+              // if there is a corner involved
+              auto flag_it = eflags.begin();
+              const BOX_BOUNDARY flag1 = (*flag_it);
               if ( isCorner(flag1) ) return flag1;
-              if ( flag1 == INTERNAL ) return MULTIPLE;
+              flag_it++;
+              const BOX_BOUNDARY flag2 = (*flag_it);
+              if ( isCorner(flag2) ) return flag2;
+              // internal boundaries
+              if ( flag1 == INTERNAL || flag2 == INTERNAL ) return MULTIPLE;
+              // corner quadrilaterals that may be on two sides
+              if ( flag1 == BOTTOM || flag2 == LEFT ) return CNR1;
+              if ( flag1 == BOTTOM || flag2 == RIGHT ) return CNR2;
+              if ( flag1 == TOP    || flag2 == RIGHT ) return CNR3;
+              if ( flag1 == LEFT   || flag2 == TOP ) return CNR4;
               // there should be no other cases because the 2D model has no edges
               cerr <<"\n\tmissed case: ";
               for ( auto boundary : eflags )

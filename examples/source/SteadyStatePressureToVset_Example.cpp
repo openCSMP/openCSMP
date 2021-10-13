@@ -11,7 +11,6 @@
 #include "TRIANGLE_Interface.h"
 #include "VSetConverter.h"
 #include "VTK_Interface.h"
-#include "BinaryFileInterface.h"
 
 // fluid pressure algorithm and velocity computation
 #include "NumIntegral_NT_op_N_dV.h"
@@ -275,16 +274,6 @@ void SteadyStatePressureToVset_Example::Run()
     vtk_output.OutputDataToVTK( model_from_vset, "velocity",       "velocity",       2 );
     vtk_output.OutputDataToVTK( model_from_vset, "nvelocity",      "nodal velocity", 2 );
     vtk_output.OutputDataToVTK( model_from_vset, "volume-flux",    "volume flux",    2 );
-
-    // Binary file output
-    BinaryFileInterface<2U>  binary_interface;
-    model_time = 86400.; // a day is done
-
-    binary_interface.WriteConnectivityFile( model_from_vset, "model_example2" );
-
-    binary_interface.WriteDataTo( model_from_vset, "fluid-pressure", "fluid pressure", 2 );
-    binary_interface.WriteDataTo( model_from_vset, "velocity",       "velocity",       2 );
-    binary_interface.WriteDataTo( model_from_vset, "volume-flux",    "volume flux",    2 );
 
 
     // 17. Analysis of results using StatisticalAnalyzer

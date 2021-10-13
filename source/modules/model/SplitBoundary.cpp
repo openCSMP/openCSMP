@@ -265,17 +265,15 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
   const typename vector<Element<dim>*>::const_iterator regionElementsEnd( region.ElementsEnd() );
   const typename vector<InterFace<dim>*>::const_iterator sbElementsEnd( this->ElementsEnd() );
   for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != sbElementsEnd; ++ifit )
-  {
-    const size_t innerParentIdx( (*ifit)->Parent( INSIDE )->Idx() ),
-      outerParentIdx( (*ifit)->Parent( OUTSIDE )->Idx() );
-    for ( typename vector<Element<dim>*>::const_iterator eit( region.ElementsBegin() ); eit != regionElementsEnd; ++eit )
     {
-      if ( (*eit)->Idx() == innerParentIdx )
-        return INSIDE;
-      if ( (*eit)->Idx() == outerParentIdx )
-        return OUTSIDE;
-    } // region elements
-  } // split boundary interfaces
+      const Element<dim>* const innerParent( (*ifit)->Parent( INSIDE ) );
+      const Element<dim>* const outerParent( (*ifit)->Parent( OUTSIDE ) );
+      for ( typename vector<Element<dim>*>::const_iterator eit( region.ElementsBegin() ); eit != regionElementsEnd; ++eit )
+        {
+          if ( (*eit) == innerParent ) return INSIDE;
+          if ( (*eit) == outerParent ) return OUTSIDE;
+        } // region elements
+    } // split boundary interfaces
   throw csmp::Exception( ERROR, "SplitBoundary<dim>::RegionLocation", "Region seems not to be adjacent to split boundary!" );
   // shouldn't get here
   return OUTSIDE;
