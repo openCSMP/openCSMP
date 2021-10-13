@@ -3144,11 +3144,13 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
     if ( !this->ContainsRegion( "Model" ) )
       throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
 
-  // 7. reconstructing the boundaries (TODO: what if there are no boundaries?)
-  this->InputBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
+  // 7. reconstructing the boundaries, if any
+  if ( vset.Faces() > 0 )
+    this->InputBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
   
-  // 8. reconstructing the splitboundaries
-  this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
+  // 8. reconstructing the splitboundaries, if any
+  if ( vset.InterFaces() > 0 )
+    this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
 
   cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";
 

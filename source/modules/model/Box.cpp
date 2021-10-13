@@ -1397,6 +1397,13 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     // diagnosis
     if ( eflags.empty() ) return NOT;
 
+if ( isLineElement( eptr->FE_Type() ) ) {
+     cerr <<"\nelement "<< eptr->Idx() <<": "<< parseFiniteElementType(eptr->FE_Type()) <<", nodes:\n";
+     for ( size_t i{0}; i<eptr->Nodes(); ++i )
+       cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+     cerr << endl;
+  }
+  
     // if there were boundary flags
     // ----------------------------
     // if only a single unique flag was contained the decision is easy
@@ -1406,16 +1413,24 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if constexpr ( dim == 2U ) {
          // if there are two different flags
          if ( eflags.size() == 2U ) {
-              // if there is a corner involved
+              // if there is a corner involved, the other flag is chosen because an element must not span a corner
+              // and its boundary face will lie on one of the sides of the model
               auto flag_it = eflags.begin();
               const BOX_BOUNDARY flag1 = (*flag_it);
-              if ( isCorner(flag1) ) return flag1;
               flag_it++;
               const BOX_BOUNDARY flag2 = (*flag_it);
-              if ( isCorner(flag2) ) return flag2;
+              if ( isCorner(flag1) ) return flag2;
+              if ( isCorner(flag2) ) return flag1;
               // internal boundaries
               if ( flag1 == INTERNAL || flag2 == INTERNAL ) return MULTIPLE;
-              // corner quadrilaterals that may be on two sides
+              // corner quadrilaterals that should not exist unless the element is a non simplex element
+              if ( !isQuadrilateral( eptr->FE_Type() ) ) {
+                   cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
+                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                     cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+                   cerr << endl;
+                   csmp_error.notice( ERROR, "atBoundary(2D):", "simplex element with two faces at boundary.");
+                }
               if ( flag1 == BOTTOM || flag2 == LEFT ) return CNR1;
               if ( flag1 == BOTTOM || flag2 == RIGHT ) return CNR2;
               if ( flag1 == TOP    || flag2 == RIGHT ) return CNR3;

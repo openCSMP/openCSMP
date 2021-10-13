@@ -1,7 +1,5 @@
 #include "vsetMakers.h"
 #include "CSMP_definitions.h"
-#include "VSet.h"
-#include "Model.h"
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPyramid.h"
@@ -344,11 +342,13 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
 /**
         Test mixed element (triangle, quadrilateral and line elements) dataset for testing
         VData etc. functionality for the clean-up of 'pfverts', line-element connectivity etc.
+                
+        Also returns corresponding model topology and property data in the form of "element number" and "node number" for testing.
         
         @author SKM
         @date 1/10/2021
 */
-void test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
+ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 {
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -382,8 +382,8 @@ void test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
   	
   	px[0]=0.;    py[0]=5.;    bflags[0] = CNR4;
   	px[1]=2.;    py[1]=5.;    bflags[1] = TOP;
-  	px[2]=5.;    py[2]=5.;    bflags[2] = CNR3;
-  	px[3]=6;     py[3]=5.;    bflags[3] = TOP;
+  	px[2]=5.;    py[2]=5.;    bflags[2] = TOP;
+  	px[3]=6;     py[3]=5.;    bflags[3] = CNR3;
   	px[4]=0.;    py[4]=4.;    bflags[4] = LEFT;
   	px[5]=2.;    py[5]=4.;
   	px[6]=4.;    py[6]=3.5;
@@ -512,8 +512,50 @@ void test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     deqElementNeighbors[44] = { 33, 43 };
   	
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+
+    // creating a matching model topology
+    ModelTopology mesh_topology( "test_Create_MeshPatchWithLineElements_VSet", true );
+    // all surface elements are "MATRIX"
+    mesh_topology.AddRegion( "MATRIX", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
+                              vector<size_t>{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24} );
+
+    // fracture line-element regions
+    mesh_topology.AddRegion( "FRAC1", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{25,29,31} );
+    mesh_topology.AddRegion( "FRAC2", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{26,27,28} );
+    mesh_topology.AddRegion( "FRAC3", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{30} );
+    mesh_topology.AddRegion( "FRAC4", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{32} );
+    // boundaries
+    mesh_topology.AddRegion( "BOTTOM", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{33,34,35} );
+    mesh_topology.AddRegion( "RIGHT",  set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{36,37,38} );
+    mesh_topology.AddRegion( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{39,40,41} );
+    mesh_topology.AddRegion( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{42,43,44} );
+
+    assert( mesh_topology.Elements() == vset.Elements() );
+
+    // adding corresponding materials to VSet
+    vector<int32> pmtrl(45,1); // matrix
+    fill( next(pmtrl.begin(),25), next(pmtrl.begin(),31), 2 ); // fine because wrong values will be overwritten next
+    fill( next(pmtrl.begin(),26), next(pmtrl.begin(),28), 3 );
+    fill( next(pmtrl.begin(),33), next(pmtrl.begin(),35), 4 );
+    fill( next(pmtrl.begin(),36), next(pmtrl.begin(),38), 5 );
+    fill( next(pmtrl.begin(),39), next(pmtrl.begin(),41), 6 );
+    fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
+    // adding node and element numbers for comparisons
+    PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+    elmt_nums.Reserve( vset.Elements() );
+    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    vset.AddData( "element number", elmt_nums );
+    // node numbers
+    PropertyData node_nums( NODE, SCALAR, 2U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+
     //vset.Out();
+    
+    return mesh_topology;
     
 } // end test_Create_MeshPatchWithLineElements_VSet
 

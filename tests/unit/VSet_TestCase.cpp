@@ -47,48 +47,9 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
     
     VSet<DIM> vset, vset2;
-    test_Create_MeshPatchWithLineElements_VSet( vset );
+    ModelTopology mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
     
-    // creating a matching model topology
-    ModelTopology mesh_topology( "VSet_TestCase", true );
-    // all surface elements are "MATRIX"
-    mesh_topology.AddRegion( "MATRIX", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
-                              vector<size_t>{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24} );
-
-    // fracture line-element regions
-    mesh_topology.AddRegion( "FRAC1", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{25,29,31} );
-    mesh_topology.AddRegion( "FRAC2", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{26,27,28} );
-    mesh_topology.AddRegion( "FRAC3", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{30} );
-    mesh_topology.AddRegion( "FRAC4", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{32} );
-    // boundaries
-    mesh_topology.AddRegion( "BOTTOM", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{33,34,35} );
-    mesh_topology.AddRegion( "RIGHT",  set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{36,37,38} );
-    mesh_topology.AddRegion( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{39,40,41} );
-    mesh_topology.AddRegion( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{42,43,44} );
-
     _test( mesh_topology.Elements() == vset.Elements() );
-
-    // adding corresponding materials to VSet
-    vector<int32> pmtrl(45,1); // matrix
-    fill( next(pmtrl.begin(),25), next(pmtrl.begin(),31), 2 ); // fine because wrong values will be overwritten next
-    fill( next(pmtrl.begin(),26), next(pmtrl.begin(),28), 3 );
-    fill( next(pmtrl.begin(),33), next(pmtrl.begin(),35), 4 );
-    fill( next(pmtrl.begin(),36), next(pmtrl.begin(),38), 5 );
-    fill( next(pmtrl.begin(),39), next(pmtrl.begin(),41), 6 );
-    fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
-    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
-    
-    // adding node and element numbers for comparisons
-    PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
-    elmt_nums.Reserve( vset.Elements() );
-    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
-    vset.AddData( "element number", elmt_nums );
-    // node numbers
-    PropertyData node_nums( NODE, SCALAR, 2U );
-    node_nums.Reserve( vset.Vertices() );
-    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-    vset.AddData( "node number", node_nums );
-
 
     // build model from mesh
     Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
