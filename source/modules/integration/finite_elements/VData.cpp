@@ -1571,16 +1571,64 @@ bool  VData::operator==( const VData& vd ) const
     if ( !(hybrid_mesh_ == vd.hybrid_mesh_) ) return false;
     if ( first_face_      != vd.first_face_ ) return false;
     if ( first_interface_ != vd.first_interface_ ) return false;
+    
 //    if ( !(px == vd.px) ) { cerr<<"\nVData::operator== failed 'px' comparison."; return_value = false; }
 //    if ( !(py == vd.py) ) { cerr<<"\nVData::operator== failed 'py' comparison."; return_value = false; }
 //    if ( !(pz == vd.pz) ) { cerr<<"\nVData::operator== failed 'pz' comparison."; return_value = false; }
-    if ( !(pelmt == vd.pelmt) ) { cerr<<"\nVData::operator== failed 'pelmt' comparison."; return_value = false; }
-    if ( !(plist == vd.plist) ) { cerr<<"\nVData::operator== failed 'plist' comparison."; return_value = false; }
-    if ( !(pfverts == vd.pfverts) ) { cerr<<"\nVData::operator== failed 'pfverts' comparison."; return_value = false; }
-    if ( !(bflags == vd.bflags) ) { cerr<<"\nVData::operator== failed 'bflags' comparison."; return_value = false; }
+
+    if ( !(pelmt == vd.pelmt) ) {
+         cerr<<"\nVData::operator== failed 'pelmt' comparison.";
+         if ( pelmt.size() != vd.pelmt.size() ) cerr <<"\nelement type records have different sizes.\n";
+         for ( size_t i{0}; i<pelmt.size(); ++i )
+           if ( pelmt[i] != vd.pelmt[i] )
+             cerr <<"\n\t\t"<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": "<< static_cast<int>(pelmt[i]) <<" vs "<< static_cast<int>(vd.pelmt[i]);
+         cerr << endl << endl;
+         return_value = false;
+      }
+    
+    if ( !(plist == vd.plist) ) {
+         cerr<<"\nVData::operator== failed 'plist' comparison.";
+         for ( size_t i{0}; i<plist.size(); ++i )
+           if ( plist[i] != vd.plist[i] ) {
+                if ( plist[i].size() != vd.plist[i].size() ) cerr <<"\ncell "<< i <<" nodes-per-element records have different sizes.\n";
+                else {
+                     cerr <<"\n"<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'plist' member comparison: ";
+                     for ( size_t j{0}; j<plist[i].size(); ++j )
+                       cerr <<"\n\t\t"<< j <<": "<< plist[i][j] <<" vs "<< vd.plist[i][j];
+                  }
+                cerr << endl << endl;
+             }
+         return_value = false;
+      }
+    
+    if ( !(pfverts == vd.pfverts) ) {
+         cerr<<"\nVData::operator== failed 'pfverts' comparison.\n";
+         for ( size_t i{0}; i<pfverts.size(); ++i )
+           if ( pfverts[i] != vd.pfverts[i] ) {
+                if ( pfverts[i].size() != vd.pfverts[i].size() ) cerr <<"\n\tcell "<< i <<" element-neighbor records have different sizes.\n";
+                else {
+                     cerr <<"\n"<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'pfvert' member comparison: ";
+                     for ( size_t j{0}; j<pfverts[i].size(); ++j )
+                       cerr <<"\n\t\t"<< j <<": "<< pfverts[i][j] <<" vs "<< vd.pfverts[i][j];
+                  }
+                cerr << endl << endl;
+             }
+         return_value = false;
+      }
+      
+    if ( !(bflags == vd.bflags) ) {
+         cerr<<"\nVData::operator== failed 'bflags' comparison.";
+         if ( bflags.size() != vd.bflags.size() ) cerr <<"\n\tboundary flag records have different sizes.\n";
+         for ( size_t i{0}; i<bflags.size(); ++i )
+           if ( bflags[i] != vd.bflags[i] )
+             cerr <<"\n\t\tnode flag "<< i <<": "<< static_cast<int>(bflags[i]) <<" vs "<< static_cast<int>(vd.bflags[i]);
+         cerr << endl << endl;
+         return_value = false;
+      }
     
     return return_value;
- }
+    
+ } // end operator==
 
 
 

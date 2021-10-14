@@ -87,6 +87,8 @@ class VData {
     VData( VData&& ) = default;
     VData& operator=( const VData& );
     VData& operator=( VData&& ) = default;
+    
+    /// compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the VData; specific mismatches are reported to std::cerr
     bool   operator==( const VData& ) const;
 
     /// returns number of nodes in the mesh
