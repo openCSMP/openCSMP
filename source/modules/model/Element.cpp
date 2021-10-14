@@ -603,7 +603,7 @@ also vary from element to element.
 resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
-@return The node coordinates are returned into the supplied matrix.
+@return Element The node coordinates are returned into the supplied matrix.
 
 @section application Application
 

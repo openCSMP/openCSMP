@@ -2565,7 +2565,7 @@ void  VData::EstablishElementConnectivity2D()
                     surf_elmt_nbors.insert( make_pair( face4, map<size_t,size_t>({{elmt_idx,{3}}}) ) );
                   if ( face4_it.second == false ) (*face4_it.first).second.insert( make_pair( elmt_idx, 3 ) );               
                }
-             // any line elements (making a map of which ones share a node, which also identifies manifolds)
+             // any line elements (making a map of which ones share a node; this map also identifies manifolds)
              else {
                   assert( isLineElement( etype ) );
                   pfverts[elmt_idx].resize(2U,IRREGULAR);
@@ -2698,14 +2698,14 @@ void  VData::EstablishElementConnectivity2D()
               // --------------------------------------------------------------------------------------------------
               if ( n_connections == 0U ) {
                    const size_t elmt = (*it.second.begin());
-                   // if there is no neighbor element opposite the first node
+                   // if there is no neighbor element corresponding to the first node
                    if ( it.first == plist[elmt][0] ) {
                         // identifying the boundary that the missing neighbor is located at
-                        pfverts[elmt][1] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
+                        pfverts[elmt][0] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
                      }
                    else if ( it.first == plist[elmt][1] ) {
                         // the missing neighbor is located at a boundary
-                        pfverts[elmt][0] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
+                        pfverts[elmt][1] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
                      }
                    else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity2D", "orphan line element node");
                 }
@@ -2716,11 +2716,11 @@ void  VData::EstablishElementConnectivity2D()
                    const size_t elmt2 = (*it.second.rbegin());
                    // processing the neighbors
                    // line element 1
-                   if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
-                   else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                   if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
+                   else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
                    // line element 2
-                   if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
-                   else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                   if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
+                   else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
                 }
               // 3. line element manifolds (multiple line elements)
               // --------------------------------------------------------------------------------------------------
@@ -2760,12 +2760,12 @@ void  VData::EstablishElementConnectivity2D()
                               assigned_elements.find(elmt2) == assigned_elements.end() )
                            {
                               // finding the correct side of edge1
-                              if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
-                              else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                              if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
+                              else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
                               assigned_elements.insert( elmt1 );
                               // and edge2
-                              if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
-                              else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                              if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
+                              else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
                               assigned_elements.insert( elmt2 );
                            }
                       }
@@ -2782,8 +2782,8 @@ void  VData::EstablishElementConnectivity2D()
                              }
                          assert ( unassigned_elmt != UINT_MAX );
                          // finding the correct side of the line element and assigning the vertex bflag to irt
-                         if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][1] = bflags[it.first];
-                         else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][0] = bflags[it.first];
+                         if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][0] = bflags[it.first];
+                         else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][1] = bflags[it.first];
                       }
                 }
                             
@@ -3008,11 +3008,11 @@ void VData::EstablishElementConnectivity3D()
                    // if there is no neighbor element opposite the first node
                    if ( it.first == plist[elmt][0] ) {
                         // identifying the boundary that the missing neighbor is located at
-                        pfverts[elmt][1] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
+                        pfverts[elmt][0] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
                      }
                    else if ( it.first == plist[elmt][1] ) {
                         // the missing neighbor is located at a boundary
-                        pfverts[elmt][0] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
+                        pfverts[elmt][1] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
                      }
                    else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity3D", "orphan line element node");
                 }
@@ -3023,11 +3023,11 @@ void VData::EstablishElementConnectivity3D()
                    const size_t elmt2 = (*it.second.rbegin());
                    // processing the neighbors
                    // line element 1
-                   if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
-                   else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                   if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
+                   else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
                    // line element 2
-                   if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
-                   else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                   if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
+                   else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
                 }
               // 3. line element manifolds (multiple line elements)
               // --------------------------------------------------------------------------------------------------
@@ -3067,12 +3067,12 @@ void VData::EstablishElementConnectivity3D()
                               assigned_elements.find(elmt2) == assigned_elements.end() )
                            {
                               // finding the correct side of edge1
-                              if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
-                              else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                              if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
+                              else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
                               assigned_elements.insert( elmt1 );
                               // and edge2
-                              if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
-                              else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                              if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
+                              else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
                               assigned_elements.insert( elmt2 );
                            }
                       }
@@ -3089,8 +3089,8 @@ void VData::EstablishElementConnectivity3D()
                              }
                          assert ( unassigned_elmt != UINT_MAX );
                          // finding the correct side of the line element and assigning the vertex bflag to irt
-                         if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][1] = bflags[it.first];
-                         else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][0] = bflags[it.first];
+                         if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][0] = bflags[it.first];
+                         else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][1] = bflags[it.first];
                       }
                 }
                             

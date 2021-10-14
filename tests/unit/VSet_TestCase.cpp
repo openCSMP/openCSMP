@@ -61,7 +61,6 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     _test( model.Mesh().CheckElementConnectivity() == zero_errors );
     model.OutputMeshTo( vset2, get_indices_from_stored_variables );
     _test( vset2 == vset );
-    vset2.Out();
     
     // saving model to binary
     const string test_model_name( string(model.Name()) + "Vset_TestCase" );

@@ -14,7 +14,7 @@ IsoparametricLinearLineElement::IsoparametricLinearLineElement( size_t dimension
     itp = 1;
     npf = 2;
     npe = 2;
-    fpe = 2; // 2-faces located at the two nodes
+    fpe = 2; // 2-faces located at the two nodes matching the location of the neighbors
     spe = 1;
     epe = 2;
     nne = 2;
