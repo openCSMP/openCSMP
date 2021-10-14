@@ -245,7 +245,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     size_t       Idx() const;
 
     /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
-    BOX_BOUNDARY AtBoundary() const;
+    BOX_BOUNDARY AtBoundary( size_t boundary_face ) const;
     
     /// unique material identifier that matches number of parent unique region
     int32 Material_ID() const;

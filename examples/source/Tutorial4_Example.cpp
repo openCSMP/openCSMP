@@ -266,15 +266,11 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   const Region<2U>&   mref = mdl.Region("Model");
   vector<Element<2U>* >::const_iterator eit;
   for ( eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
-      if ( (*eit)->AtBoundary() == LEFT or
-           (*eit)->AtBoundary() == CNR1 or
-           (*eit)->AtBoundary() == CNR4 ) {
+      if ( isLEFT( atBoundary(*eit) ) ) {
           j = 0;
           // first loop to calculate length of the FE edge that lies at the boundary
           for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
-              if ( (*eit)->N(i)->AtBoundary() == LEFT or
-                   (*eit)->N(i)->AtBoundary() == CNR1   or
-                   (*eit)->N(i)->AtBoundary() == CNR4 ) {
+              if ( isLEFT( (*eit)->N(i)->AtBoundary() ) ) {
                   y[j]  = (*eit)->N(i)->y();
                   j++;
                 }

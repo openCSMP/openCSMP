@@ -262,19 +262,14 @@ void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const
   // final flux is zero initionally
   mdl.InputPropertyValue( flux, makeScalar( PLAIN, 0.0 ) ); // set to zero initially
 
-                                                            // loop over all finite elements and identify elements that lie at the same model boundary of interest (here LEFT)
+  // loop over all finite elements and identify elements that lie at the model boundary of interest (here LEFT)
   const Region<2U>&   mref = mdl.Region( "Model" );
-  vector<Element<2U>* >::const_iterator eit;
-  for ( eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
-    if ( (*eit)->AtBoundary() == LEFT or
-         (*eit)->AtBoundary() == CNR1 or
-         (*eit)->AtBoundary() == CNR4 ) {
+  for ( auto eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
+    if ( isLEFT( atBoundary(*eit) ) ) {
       j = 0;
       // first loop to calculate length of the FE edge that lies at the boundary
       for ( size_t i = 0; i<(*eit)->Nodes(); i++ ) {
-        if ( (*eit)->N( i )->AtBoundary() == LEFT or
-             (*eit)->N( i )->AtBoundary() == CNR1 or
-             (*eit)->N( i )->AtBoundary() == CNR4 ) {
+        if ( isLEFT( atBoundary(*eit) ) ) {
           y[j] = (*eit)->N( i )->y();
           j++;
         }
@@ -295,9 +290,7 @@ void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const
       }
       // second loop to calculate and scale nodal flux
       for ( size_t i = 0; i<(*eit)->Nodes(); i++ ) {
-        if ( (*eit)->N( i )->AtBoundary() == LEFT or
-             (*eit)->N( i )->AtBoundary() == CNR1 or
-             (*eit)->N( i )->AtBoundary() == CNR4 ) {
+        if ( isLEFT( (*eit)->N( i )->AtBoundary() ) ) {
           // read existing flux at node i
           tf = (*eit)->N( i )->Read( tf_key );
           // read existing source at node i

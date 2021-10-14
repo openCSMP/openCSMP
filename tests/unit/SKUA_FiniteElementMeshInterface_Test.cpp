@@ -212,7 +212,7 @@ void SKUA_FiniteElementMeshInterface_Test::PrintOriginalNeighborIDs( const Model
                 if ( (*it)->Neighbor(i) != nullptr )
                   cerr << (*it)->Neighbor(i)->Read( eid_key ) <<" ";
                 else 
-                  cerr << parseBoundary( (*it)->AtBoundary() ) <<" ";
+                  cerr << parseBoundary( (*it)->AtBoundary(i) ) <<" ";
            }
          cerr << endl;
       }

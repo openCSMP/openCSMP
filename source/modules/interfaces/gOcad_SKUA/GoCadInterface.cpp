@@ -2226,7 +2226,7 @@ const
                   if ( dim == 3U ) ofs << xyz[0] <<" "<< xyz[1] <<" "<< xyz[2] <<" ";
                   else ofs << xyz[0] <<" "<< xyz[1] <<" "<< 0. <<" ";
                   ofs << val();
-                  if ( (*it)->AtBoundary() != NOT ) ofs <<" CNXYZ";
+                  if ( atBoundary(*it) != NOT ) ofs <<" CNXYZ";
                   ofs << endl;
                } 
            break;
@@ -2639,7 +2639,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                         ofs <<"PVRTX "<< counter++ <<" ";
                         ofs << xyz[0] <<" "<< xyz[1] <<" "<< xyz[2] <<" ";
                         ofs << sc();
-                        if ( (*eit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
+                        if ( atBoundary(*eit) != NOT ) ofs <<" CNXYZ";
                         ofs << endl;
                       }
                     eit++;
@@ -2930,7 +2930,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                         ofs <<"PVRTX "<< i+1 <<" ";
                         ofs << xyz[0] <<" "<< xyz[1] <<" "<< xyz[2] <<" ";
                         ofs << sc();
-                        if ( (*it)->AtBoundary() != NOT ) ofs <<" CNXYZ";
+                        if ( atBoundary(*it) != NOT ) ofs <<" CNXYZ";
                         ofs << endl;
                     }
                } 

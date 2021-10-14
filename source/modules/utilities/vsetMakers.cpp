@@ -553,7 +553,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
     vset.AddData( "node number", node_nums );
 
-    //vset.Out();
+    // vset.Out();
     
     return mesh_topology;
     

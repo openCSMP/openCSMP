@@ -142,7 +142,11 @@ bool isFRONT( BOX_BOUNDARY );
 /// returns whether boundary flag belongs to boundary BACK (3D only)
 bool isBACK( BOX_BOUNDARY );
 
-/// infers from the node flags which boundary the element lies on; returns MULTIPLE is ambiguous; throws exception if inconsistent
+/// infers from node flags, and cell types, which boundary the element face lies on including INTERNAL ones
+template<size_t dim, template<size_t> class CELL>
+BOX_BOUNDARY atBoundary( const CELL<dim>* const, size_t boundary_face );
+
+/// infers from node flags, missing neighbors, and cell types, which boundary the element lies on including INTERNAL ones; returns MULTIPLE if ambiguous; throws if inconsistent
 template<size_t dim, template<size_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const );
 

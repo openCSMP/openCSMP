@@ -119,7 +119,7 @@ void smoothMaterialInterfaces( Model<dim>& model )
            cerr <<"\nsmoothMaterialInterfaces: element "<< (*it)->Idx() <<" has spatially isolated material ID. What shall be done?\n";
            
          // application to elements inside of Model domain
-         if ( (*it)->AtBoundary() == NOT ) {
+         if ( atBoundary(*it) == NOT ) {
               // checking neighbors of adjacent pair of element faces: if 2 are the same their material key is assigned to current element
               if ( (*it)->Neighbor(0)->Material_ID() == (*it)->Neighbor(1)->Material_ID() &&
                    (*it)->Neighbor(0)->Material_ID() != (*it)->Material_ID() ) {

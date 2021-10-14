@@ -513,9 +513,9 @@ size_t   Element<dim>::Idx() const
 }
 
 template<size_t dim>
-BOX_BOUNDARY  Element<dim>::AtBoundary() const
+BOX_BOUNDARY  Element<dim>::AtBoundary( size_t boundary_face ) const
 {
-  return atBoundary( this );
+  return atBoundary( this, boundary_face );
 }
 
 template<size_t dim>
@@ -790,10 +790,10 @@ void Element<dim>::Out() const
 
   cout << "\n\tconnected neighbors (finite element types : boundary flags):\n";
   for ( size_t i = 0U; i<this->Neighbors(); i++ )
-    if ( Neighbor( i ) != NULL ) {
+    if ( Neighbor( i ) != nullptr ) {
       cout << "\t\t" << Neighbor( i )->Idx() << ": ";
       cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
-      str = parseBoundary( Neighbor( i )->AtBoundary() );
+      str = parseBoundary( Neighbor( i )->AtBoundary(i) );
       cout << str << endl;
     }
     else cout << "\t\tnone.\n";

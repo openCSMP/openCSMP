@@ -319,9 +319,9 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     Box().UnitNormalTo( BACK,   3, backNormal );
 
     for ( size_t i=model_domain.InteriorElements(); i<model_domain.Elements(); ++i ) {
-         const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary();
-         assert( flag != NOT );
          for ( size_t j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
+                const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary(j);
+                assert( flag != NOT );
                 // verifying alignment of the element's unit normal with that of the model boundary
                 model_domain.E(i)->UnitNormalToFace( model_domain.PerimeterFace(i,j), eUnitNormal );
                 // checking whether the normals are aligned and of of same unit magnitude
@@ -507,7 +507,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_before.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
     const string output_model("box_test_temporary");
@@ -522,7 +523,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_after.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;
    
@@ -552,7 +554,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_before.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
     const string output_model("box_test_temporary");
@@ -568,7 +571,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_after.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;
    

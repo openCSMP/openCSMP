@@ -786,7 +786,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // checking that the region is not located at the model boundary
     size_t boundary_elements(0);
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
-      if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL and (*eit)->AtBoundary() != IRREGULAR ) boundary_elements++;
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i ) {
+           const BOX_BOUNDARY bflag = (*eit)->AtBoundary(i);
+           if ( bflag != NOT and bflag != INTERNAL and bflag != IRREGULAR ) boundary_elements++;
+        }
       
     if ( boundary_elements == subdomain.Elements() ) {
          ErrorHandler::Instance().notice( WARNING, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region,

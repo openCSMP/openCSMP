@@ -2179,11 +2179,12 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   for ( auto e : elements_ ) {
     const size_t n_nbors{e->Neighbors()};
     for ( size_t j = 0U; j<n_nbors; ++j ) {
-      Element<dim>* const ptr( e->Neighbor( j ) );
+      Element<dim>* const ptr( e->Neighbor(j) );
       if ( ptr != nullptr )
         vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
       else
-        vset.Pfvert( eidx, j, e->AtBoundary() );
+        vset.Pfvert( eidx, j, e->AtBoundary(j) );
+        
     }
     ++eidx;
   }
@@ -2198,10 +2199,10 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     for ( size_t j = 0U; j<neighbors; ++j ) {
       Face<dim>* const ptr( f->Neighbor( j ) );
       // if the neighbor exists (which it must on the inside of the Face)
-      if ( ptr != NULL )
+      if ( ptr != nullptr )
         vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
       else
-        vset.Pfvert( eidx, j, f->InnerParent()->AtBoundary() );
+        vset.Pfvert( eidx, j, f->InnerParent()->AtBoundary(j) );
     }
     // higher-dimensional neighbors second
     // inner neighbor
@@ -2213,18 +2214,18 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     if ( f->OuterParent() != nullptr && dim == 3U ) assert( f->OuterParent()->IsVolumeElement() );
     else if ( f->OuterParent() != nullptr && dim == 2U ) assert( f->OuterParent()->IsSurfaceElement() );
     if ( f->OuterParent() != nullptr ) {
-      assert( f->OuterParent()->Idx() < Elements() );
-      vset.Pfvert( eidx, neighbors + 1U, static_cast<int32>(f->OuterParent()->Idx()) );
-    }
+        assert( f->OuterParent()->Idx() < Elements() );
+        vset.Pfvert( eidx, neighbors + 1U, static_cast<int32>(f->OuterParent()->Idx()) );
+      }
     else {
       // if there is no neighbor, the inner element parent should be at the model boundary
-      if ( f->InnerParent()->AtBoundary() == NOT ) {
+      if ( f->InnerParent()->AtBoundary(neighbors + 1U) == NOT ) {
           csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
                             "inner dim+1 neighbor element of Face should be flagged as model boundary because Face has no outer element; flagging element as irregular" );
           cerr <<"\nDiagnostics:";
           f->InnerParent()->Out();
         }
-      vset.Pfvert( eidx, neighbors + 1U, f->InnerParent()->AtBoundary() );
+      vset.Pfvert( eidx, neighbors + 1U, f->InnerParent()->AtBoundary(neighbors + 1U) );
     }
     ++eidx;
   }
@@ -4819,7 +4820,7 @@ void MeshManager<dim>::Out() const
   for ( const auto& e : elements_ ) {
        if ( e == nullptr ) cout <<"\nElement entry "<< n_elmt <<" is a nullpointer";
        else {
-           string bound = parseBoundary( e->AtBoundary() );
+           string bound = parseBoundary( atBoundary(e) );
            cout << "\nElement ID: " << e->Idx() <<" ("<< parseFiniteElementType(e->FE_Type());
            cout <<"), Boundary flag: " << bound << endl;
            cout << "Member Nodes: " << endl;

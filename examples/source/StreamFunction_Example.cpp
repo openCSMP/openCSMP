@@ -365,7 +365,7 @@ double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
 
   for ( typename vector<Element<dim>*>::const_iterator
         eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
-    if ( (*eit)->AtBoundary() != NOT )
+    if ( atBoundary(*eit) != NOT )
       {
          // collecting nodal fluid pressures and elemental hydraulic conductivities from
          // each element

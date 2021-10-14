@@ -3844,7 +3844,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
     for ( size_t n=0U; n<super_group.Elements(); n++ )
        {
           //  for elements that are not located at model boundary
-          if ( super_group.E(n)->AtBoundary() == NOT )
+          if ( atBoundary( super_group.E(n) ) == NOT )
             {
                // getting the scalar variable data
                super_group.E(n)->Read( prop_key, sc );

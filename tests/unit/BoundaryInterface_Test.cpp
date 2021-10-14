@@ -669,10 +669,8 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
       {
          // TODO: improve these diagnostics
-         if ( (*eit)->AtBoundary() != NOT and
-              (*eit)->AtBoundary() != INTERNAL and
-              (*eit)->AtBoundary() != IRREGULAR ) {
-              cerr << parseBoundary( (*eit)->AtBoundary() ) <<" ";
+         if ( atBoundary(*eit) != NOT ) {
+              cerr << parseBoundary( atBoundary(*eit) ) <<" ";
               boundary_elements++;
            }
       }
