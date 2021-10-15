@@ -62,12 +62,21 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     model.OutputMeshTo( vset2, get_indices_from_stored_variables );
     _test( vset2 == vset );
     
+    // checking the single element regions
+    //model.RegionsOut();
+    const Region<2U>& fracs(model.Region("FRAC3"));
+    //cerr <<"\ninterior vs perimeter: "<< fracs.InteriorElements() <<" "<< fracs.PerimeterElements();
+    _test( fracs.InteriorElements()  == 0 );
+    _test( fracs.PerimeterElements() == 1 );
+    
     // saving model to binary
     const string test_model_name( string(model.Name()) + "Vset_TestCase" );
     model.OutputToBinaryFile( test_model_name.c_str() );
     
     // bringing the model back (calling reconstructor)
     Model<DIM>  model2( test_model_name );
+    // getting this a distinct name for the destruction process
+    model2.Name( (string(model2.Name()) + "_reconstructed").c_str() );
     printModelDimensions( model, true );
     model2.OutputMeshTo( vset2 );
     

@@ -464,12 +464,12 @@ void PropertyData::TransformValues( double64 (*f)(double64) )
 bool PropertyData::OutBinary( fstream& fp ) const
  {
      // writing the variable placement
-     int32  var_placement = static_cast<int32>(place_);
-     fp.write( (char*) &var_placement, sizeof(int32));
+     int8_t  var_placement = static_cast<int8_t>(place_);
+     fp.write( (char*) &var_placement, sizeof(int8_t));
 
      // writing the variable type
-     int32  var_type = static_cast<int32>(type_);
-     fp.write( (char*) &var_type, sizeof(int32));
+     int8_t  var_type = static_cast<int8_t>(type_);
+     fp.write( (char*) &var_type, sizeof(int8_t));
 
      // writing the spatial dimension
      int32  var_dim = static_cast<int32>(dim_);
@@ -484,8 +484,8 @@ bool PropertyData::OutBinary( fstream& fp ) const
      fp.write( (char*) &var_data_stride, sizeof(int32));
    
      // writing the number of records followed by flag values
-     std::vector<int32>  flags; //VARIABLE_FLAG
-     std::transform( flags_.begin(), flags_.end(), std::back_inserter( flags ), []( VARIABLE_FLAG flag ) -> int32 { return flag; } );
+     std::vector<int8_t>  flags; //VARIABLE_FLAG
+     std::transform( flags_.begin(), flags_.end(), std::back_inserter( flags ), []( VARIABLE_FLAG flag ) -> int8_t { return flag; } );
      bool return_value = binaryFileWrite( fp, flags );
    
      // writing the data values
@@ -504,13 +504,13 @@ bool PropertyData::OutBinary( fstream& fp ) const
 PropertyData inBinaryPropertyData( fstream& fp )
  {
      // reading the variable placement
-     int32  var_placement(UNSPECIFIED);
-     fp.read( (char*) &var_placement, sizeof(int32));
+     int8_t  var_placement(UNSPECIFIED);
+     fp.read( (char*) &var_placement, sizeof(int8_t));
      //assert( place_ == static_cast<PLACEMENT>(var_placement) );
 
      // reading the variable type
-     int32  var_type(UNSPECIFIED);
-     fp.read( (char*) &var_type, sizeof(int32));
+     int8_t  var_type(UNSPECIFIED);
+     fp.read( (char*) &var_type, sizeof(int8_t));
      //assert( type_ == static_cast<VARIABLE_TYPE>(var_type) );
 
      // reading the spatial dimension
@@ -534,7 +534,7 @@ PropertyData inBinaryPropertyData( fstream& fp )
      PropertyData data( static_cast<PLACEMENT>(var_placement), static_cast<VARIABLE_TYPE>(var_type), var_dim, array_length );
 
      // reading the number of records followed by flag values
-     std::vector<int32>  flags; //VARIABLE_FLAG
+     std::vector<int8_t> flags; //VARIABLE_FLAG
      binaryFileRead( fp, flags );
    
      // reading the data values
@@ -543,7 +543,7 @@ PropertyData inBinaryPropertyData( fstream& fp )
    
      // pushing the data into Property record
      std::vector<VARIABLE_FLAG>  flags_tr;
-     std::transform( flags.begin(), flags.end(), std::back_inserter( flags_tr ), []( int32 flag ) -> VARIABLE_FLAG { return static_cast<VARIABLE_FLAG>(flag); } );
+     std::transform( flags.begin(), flags.end(), std::back_inserter( flags_tr ), []( int8_t flag ) -> VARIABLE_FLAG { return static_cast<VARIABLE_FLAG>(flag); } );
      data.Reserve( flags_tr.size(), values.size() );
      for ( auto it= flags_tr.begin(); it!= flags_tr.end(); ++it ) data.PushBack( (*it) );
      for ( auto it=values.begin(); it!=values.end(); ++it ) data.PushBack( (*it) );

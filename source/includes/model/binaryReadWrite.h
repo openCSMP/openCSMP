@@ -324,9 +324,10 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class T>
 bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 {
+#ifdef DEBUG
   if ( stl_ctner.empty() )
-    std::cerr <<"nbinaryFileWrite(vector): WARNING: container is empty."<< std::endl;
-  
+    std::cerr <<"\nbinaryFileWrite(vector): WARNING: container is empty."<< std::endl;
+#endif
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileWrite: ERROR: invalid file pointer." << std::endl;
       return false;
@@ -349,9 +350,10 @@ bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 template<typename T>
 bool binaryFileWrite( std::fstream& fp, const std::deque<T>& stl_ctner )
 {
+#ifdef DEBUG
   if ( stl_ctner.empty() )
-    std::cerr <<"nbinaryFileWrite(deque): WARNING: container is empty."<< std::endl;
-  
+    std::cerr <<"\nbinaryFileWrite(deque): WARNING: container is empty."<< std::endl;
+#endif
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileWrite( deque<T>& ): ERROR: invalid file pointer." << std::endl;
       return false;
@@ -512,9 +514,10 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class T>
 bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner )
 {
+#ifdef DEBUG
   if ( stl_ctner.empty() )
-    std::cerr <<"nbinaryFileWrite(deque<vector>): WARNING: container is empty."<< std::endl;
-  
+    std::cerr <<"\nbinaryFileWrite(deque<vector>): WARNING: container is empty."<< std::endl;
+#endif
 	if (!fp.is_open()) {
       std::cerr << "\nbool binaryFileWrite(const deque<vector<T> >&): ";
       std::cerr << "ERROR: invalid file pointer." << std::endl;
@@ -641,9 +644,10 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class M, class T>
 bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
 {
+#ifdef DEBUG
   if ( stl_ctner.empty() )
-    std::cerr <<"nbinaryFileWrite(map): WARNING: container is empty."<< std::endl;
-  
+    std::cerr <<"\nbinaryFileWrite(map): WARNING: container is empty."<< std::endl;
+#endif
 	if (!fp.is_open())
     {
       std::cerr << "\nbool binaryFileWrite(const map<M,T,less<M> >&): ";
@@ -783,9 +787,10 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class M, class T>
 bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner )
 {
+#ifdef DEBUG
   if ( stl_ctner.empty() )
-    std::cerr <<"nbinaryFileWrite(unordered map): WARNING: container is empty."<< std::endl;
-  
+    std::cerr <<"\nbinaryFileWrite(unordered map): WARNING: container is empty."<< std::endl;
+#endif
 	if (!fp.is_open())
 	{
 		std::cerr << "\nbool binaryFileWrite(const unordered_map<M,T,less<M> >&): ";
@@ -925,9 +930,10 @@ If the file pointer is invalid, method will quit, reporting an error.
 template<class M, class T>
 bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner)
 {
+#ifdef DEBUG
   if ( stl_ctner.empty() )
-    std::cerr <<"nbinaryFileWrite(map<vector>>): WARNING: container is empty."<< std::endl;
-  
+    std::cerr <<"\nbinaryFileWrite(map<vector>>): WARNING: container is empty."<< std::endl;
+#endif
 	if (!fp.is_open()) {
 		std::cerr << "\nbool binaryFileWrite(const map<M,vector<T>,less<M> >&): ";
 		std::cerr << "ERROR: invalid file pointer." << std::endl;

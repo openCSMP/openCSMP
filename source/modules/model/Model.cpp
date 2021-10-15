@@ -144,9 +144,9 @@ Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_ele
 template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
   : model_name_( "undefined" ),
-  database_(),
-  fvStencilManager_( nullptr ),
-  verbose_(true)
+    database_(),
+    fvStencilManager_( nullptr ),
+    verbose_(true)
 {
   Initialize( isoparametric_elements, vset,
               false /* do not create boundaries */,
@@ -197,10 +197,10 @@ by default.
 template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* var_file,
                    bool create_boundary_objects, bool box_shaped )
-  : model_name_( "undefined" ),
-  database_( var_file ),
-  fvStencilManager_( nullptr ),
-  verbose_( true )
+  : model_name_( mesh_topology.ModelName() ),
+    database_( var_file ),
+    fvStencilManager_( nullptr ),
+    verbose_( true )
 {
   Initialize( mesh_topology, vset,
               create_boundary_objects,
@@ -212,8 +212,8 @@ Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* va
 
 template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, bool create_boundary_objects, bool box_shaped )
-  : model_name_( "undefined" ),
-  fvStencilManager_( nullptr )
+  : model_name_( mesh_topology.ModelName() ),
+    fvStencilManager_( nullptr )
 {
   Initialize( mesh_topology, vset,
               create_boundary_objects,
@@ -620,10 +620,10 @@ template<size_t dim>
 void Model<dim>::InstantiateFiniteVolumes()
 {
   if ( !fvStencilManager_ )
-  {
-    fvStencilManager_ = new FiniteVolumeStencilManager<dim>();
-    cout << "\nModel<dim>::InstantiateFiniteVolumeStencilManager: Created local FiniteVolumeStencilManager\n";
-  }
+    {
+      fvStencilManager_ = new FiniteVolumeStencilManager<dim>();
+      cout << "\nModel<dim>::InstantiateFiniteVolumeStencilManager: Created local FiniteVolumeStencilManager\n";
+    }
   Mesh().InitializeFiniteVolumeStencils( Database(), fem_manager_, *fvStencilManager_ );
 }
 
@@ -2978,61 +2978,62 @@ void Model<dim>::OutputToBinaryFile( const char* file_string )
   // 2. property output into VSet including Face and InterFace data
   mesh_manager_.OutputStoredVariablesTo( Database(), vset );
 
-  // model properties
+  // adding properties stored on "Model"
   map<string, Index>  properties;
   Database().ListProperties( MODEL, properties );
 
   // for all model properties
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
-  {
-    // setting the specifications for the property storage (no memory allocation yet)
-    PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-    // for the given property type
-    const size_t flag_capacity( (*pit).second.flagDepth );
-    const size_t data_capacity( (*pit).second.dataDepth );
-    // allocating memory to store the property flags and values
-    data.Reserve( flag_capacity, data_capacity );
+    {
+      // setting the specifications for the property storage (no memory allocation yet)
+      PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+      // for the given property type
+      const size_t flag_capacity( (*pit).second.flagDepth );
+      const size_t data_capacity( (*pit).second.dataDepth );
+      // allocating memory to store the property flags and values
+      data.Reserve( flag_capacity, data_capacity );
 
-    switch ( (*pit).second.type )
-      {
-        case SCALAR: {
-              ScalarVariable value;
-              this->Read( (*pit).second, value );
-              pushBack( data, value );
-            }
-              break;
-        case VECTOR: {
-              VectorVariable<dim> value;
-              this->Read( (*pit).second, value );
-              pushBack( data, value );
-            }
-          break;
-        case TENSOR: {
-              TensorVariable<dim> value;
-              this->Read( (*pit).second, value );
-              pushBack( data, value );
-            }
-          break;
-        case ARRAY: {
-              ArrayVariable value;
-              this->Read( (*pit).second, value );
-              pushBack( data, value );
-            }
-          break;
-        case FLAGGEDARRAY: {
-              FlaggedArrayVariable value;
-              this->Read( (*pit).second, value );
-              pushBack( data, value );
-            }
-          break;
-        default:
-          csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
-                             (*pit).first, "type of Model variable not recognized." );
-      }
-    // storing the data in the VSet
-    vset.AddData( (*pit).first.c_str(), data );
-  }
+      switch ( (*pit).second.type )
+        {
+          case SCALAR: {
+                ScalarVariable value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+                break;
+          case VECTOR: {
+                VectorVariable<dim> value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          case TENSOR: {
+                TensorVariable<dim> value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          case ARRAY: {
+                ArrayVariable value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          case FLAGGEDARRAY: {
+                FlaggedArrayVariable value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          default:
+            csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
+                               (*pit).first, "type of Model variable not recognized." );
+        }
+      // storing the data in the VSet
+      vset.AddData( (*pit).first.c_str(), data );
+    }
 
+  // writing the VSet to binary file
   vset.OutputTo( BinaryVsetFileName( file_string ).c_str(), model_time );
 
   // 3. regions: unique and then the non-unique regions

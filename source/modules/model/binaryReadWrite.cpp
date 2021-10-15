@@ -78,7 +78,7 @@ size_t checkContainerSize( std::fstream& fp )
 bool binaryFileWrite( fstream& fp, const char* str )
 {
   if ( str == nullptr )
-    std::cerr <<"nbinaryFileWrite: WARNING: string is nullptr."<< std::endl;
+    std::cerr <<"\nbinaryFileWrite: WARNING: string is nullptr."<< std::endl;
   
 	if (!fp.is_open()) {
 		cout << "\nbinaryFileWrite (const char*): ERROR: invalid file pointer." << endl;
@@ -135,7 +135,7 @@ bool binaryFileRead( fstream& fp, char str[] )
 bool binaryFileWrite( fstream& fp, const std::string& str )
 {
   if ( str.empty() )
-    std::cerr <<"nbinaryFileWrite (string): WARNING: string is empty."<< std::endl;
+    std::cerr <<"\nbinaryFileWrite (string): WARNING: string is empty."<< std::endl;
   
 	if (!fp.is_open()) {
 		cout << "\nbinaryFileWrite (const char*): ERROR: invalid file pointer." << endl;

@@ -411,7 +411,7 @@ The binary writing is done with the templatized set of functions declared
 in 'binaryReadWrite.h'. These can read and write all CSMP type of datasets.
 */
 template<size_t dim>
-bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
+bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
 {
 	char file_name[200], num[20];
 	sprintf(num, "%lf", time);
@@ -448,9 +448,9 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 		BinaryFileSectionWrite sect(fp, "VSETMTRL");
     // number of property records
     records = pmtrl_.size();
-    fp.write((char*)&records, sizeof(size_t));
+    fp.write((char*)&records, sizeof(int32));
     // individual records (all together)
-    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), sizeof(size_t) * records );
+    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), sizeof(int32) * records );
 	}
 
 	// 5. Writing the property data records to file
@@ -542,10 +542,10 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double64& time, const set<stri
 	{
 		BinaryFileSectionRead sect(fp, "VSETMTRL");
     // number of property records
-    fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
+    fp.read( reinterpret_cast<char*>(&records), sizeof(int32));
     pmtrl_.resize( records );
     // individual records (all together)
-    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), records * sizeof(size_t) );
+    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), records * sizeof(int32) );
 	}
 
 	// Reading the property data records from file (PropertyData)
