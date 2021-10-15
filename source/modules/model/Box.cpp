@@ -1440,8 +1440,8 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
               const BOX_BOUNDARY flag1 = (*flag_it);
               flag_it++;
               const BOX_BOUNDARY flag2 = (*flag_it);
-              if ( isCorner(flag1) ) return flag2;
-              if ( isCorner(flag2) ) return flag1;
+              if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
+              if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
               // there should be no other cases because the 2D model has no edges
               cerr <<"\n\tmissed case: ";
               for ( auto boundary : eflags )
@@ -1463,8 +1463,8 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
                    // only the corner nodes are considered
                    BOX_BOUNDARY flag1 = eptr->N( fnids[0] )->AtBoundary();
                    BOX_BOUNDARY flag2 = eptr->N( fnids[1] )->AtBoundary();
-                   if ( isCorner(flag1) ) return flag2;
-                   if ( isCorner(flag2) ) return flag1;
+                   if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
+                   if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
                 }
            }
           return MULTIPLE;
@@ -1488,8 +1488,8 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
                    flag_it++;
                    const BOX_BOUNDARY flag2 = (*flag_it);
                    // if there is a corner involved, the other flag is chosen because an element face cannot span a corner
-                   if ( isCorner(flag1) ) return flag2;
-                   if ( isCorner(flag2) ) return flag1;
+                   if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
+                   if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
                    return whichBoundary( flag1, flag2 );
                 }
               // only the sides of the model are an option
