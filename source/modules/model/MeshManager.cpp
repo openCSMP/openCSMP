@@ -377,13 +377,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
             for ( size_t j = 0U, nidx = 0U; j < neighbors; ++j ) {
                   // if there is a neighbor (as is the case if the stored index is greater than zero)
                   if ( j < vset.PfvertsSize( e->Idx() ) ) {
-                      const int32 index( static_cast<int32>(vset.Pfvert( e->Idx(), j )) );
+                      const long64 index(vset.Pfvert( e->Idx(), j ));
                       if ( index >= n_elmts ) {
                            cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
                            csmp_error.notice( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
                         }
                       else if ( index >= 0 )
-                        e->Assign( nidx++, elements_[static_cast<size_t>(index)] );
+                        e->Assign( nidx++, elements_[index] );
                       else // negative numbers indicate boundaries
                         e->Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
                    }
@@ -459,7 +459,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
                       assert( index >= vset.Elements() );
                       assert( index < vset.Elements() + vset.Faces() ); // (-) elements because face container is numbered from 0..n-1
                       if ( index >= n_elmts )
-                        e->Assign( j, faces_[ static_cast<size_t>(index) - n_elmts] );
+                        e->Assign( j, faces_[ index - n_elmts] );
                       else
                         e->Assign( j, static_cast<Face<dim>*>(nullptr) );
                    }
@@ -572,7 +572,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
                 
                  // the number of the interface in the container is the number from the VSet - elements and faces
                  // because the interface container is counts from 0..n-1
-                 e->Assign( j, interfaces_[ static_cast<size_t>(index) - n_elmts - n_faces ] );
+                 e->Assign( j, interfaces_[ index - n_elmts - n_faces ] );
               }
 
            // higher-dimensional Element-type neighbors
@@ -2181,7 +2181,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     for ( size_t j = 0U; j<n_nbors; ++j ) {
       Element<dim>* const ptr( e->Neighbor(j) );
       if ( ptr != nullptr )
-        vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
+        vset.Pfvert( eidx, j, ptr->Idx() );
       else
         vset.Pfvert( eidx, j, e->AtBoundary(j) );
         
@@ -2200,7 +2200,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       Face<dim>* const ptr( f->Neighbor( j ) );
       // if the neighbor exists (which it must on the inside of the Face)
       if ( ptr != nullptr )
-        vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
+        vset.Pfvert( eidx, j, ptr->Idx() );
       else
         vset.Pfvert( eidx, j, f->InnerParent()->AtBoundary(j) );
     }
@@ -2209,13 +2209,13 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     if constexpr ( dim == 3U ) assert( f->InnerParent()->IsVolumeElement() );
     else if constexpr ( dim == 2U ) assert( f->InnerParent()->IsSurfaceElement() );
     assert( f->InnerParent()->Idx() < Elements() );
-    vset.Pfvert( eidx, neighbors, static_cast<int32>(f->InnerParent()->Idx()) );
+    vset.Pfvert( eidx, neighbors, f->InnerParent()->Idx() );
     // outer neighbor
     if ( f->OuterParent() != nullptr && dim == 3U ) assert( f->OuterParent()->IsVolumeElement() );
     else if ( f->OuterParent() != nullptr && dim == 2U ) assert( f->OuterParent()->IsSurfaceElement() );
     if ( f->OuterParent() != nullptr ) {
         assert( f->OuterParent()->Idx() < Elements() );
-        vset.Pfvert( eidx, neighbors + 1U, static_cast<int32>(f->OuterParent()->Idx()) );
+        vset.Pfvert( eidx, neighbors + 1U, f->OuterParent()->Idx() );
       }
     else {
       // if there is no neighbor, the inner element parent should be at the model boundary
@@ -2239,9 +2239,9 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     const size_t neighbors( f->Neighbors() );
     for ( size_t j = 0U; j<neighbors; ++j ) {
          if ( f->Neighbor(i) != nullptr )
-           vset.Pfvert( eidx, j, static_cast<int32>(f->Idx()) );
+           vset.Pfvert( eidx, j, f->Idx() );
          else
-           vset.Pfvert( eidx, j, static_cast<int32>(INTERNAL) );
+           vset.Pfvert( eidx, j, INTERNAL );
       }
     // 2. inner and outer higher-dimensional neighbors (2 entries)
     //   (they must always exist because SplitBoundaries are internal model boundaries)
@@ -2249,22 +2249,22 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     assert( f->OuterParent() != nullptr );
     assert( f->InnerParent()->Idx() < elements_.size() );
     assert( f->OuterParent()->Idx() < elements_.size() );
-    vset.Pfvert( eidx, neighbors,      static_cast<int32>(f->InnerParent()->Idx()) );
-    vset.Pfvert( eidx, neighbors + 1U, static_cast<int32>(f->OuterParent()->Idx()) );
+    vset.Pfvert( eidx, neighbors,      f->InnerParent()->Idx() );
+    vset.Pfvert( eidx, neighbors + 1U, f->OuterParent()->Idx() );
       
     // 3. local number of face of the inner element that the InterFace is connected to (2 entries)
     assert( f->InnerParentFaceID() < f->InnerParent()->Faces() );
     assert( f->OuterParentFaceID() < f->OuterParent()->Faces() );
-    vset.Pfvert( eidx, neighbors + 2U, static_cast<int32>(f->InnerParentFaceID()) );
-    vset.Pfvert( eidx, neighbors + 3U, static_cast<int32>(f->OuterParentFaceID()) );
+    vset.Pfvert( eidx, neighbors + 2U, f->InnerParentFaceID() );
+    vset.Pfvert( eidx, neighbors + 3U, f->OuterParentFaceID() );
     
     // 4. number of intervening element or nullptr identifier (one entry)
     if ( f->HasInterveningElement() ) {
          assert( f->InterveningElement()->Idx() < elements_.size() );
-         vset.Pfvert( eidx, neighbors + 4U, static_cast<int32>(f->InterveningElement()->Idx()) );
+         vset.Pfvert( eidx, neighbors + 4U, f->InterveningElement()->Idx() );
       }
     else
-      vset.Pfvert( eidx, neighbors + 4U, static_cast<int32>(INTERNAL) );
+      vset.Pfvert( eidx, neighbors + 4U, INTERNAL );
       
     ++eidx;
   }

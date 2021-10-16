@@ -2381,17 +2381,17 @@ bool  ModelTopology::BoxShapedModel() const
      std::vector<size_t>::const_iterator  bit;
 
      for ( bit=ElementsOfRegionBegin("TOP");
-           bit!=ElementsOfRegionEnd("TOP"); bit++ )    boundary_elements[ static_cast<int32>(*bit) ] = "TOP";
+           bit!=ElementsOfRegionEnd("TOP"); bit++ )    boundary_elements[ (*bit) ] = "TOP";
      for ( bit=ElementsOfRegionBegin("BOTTOM");
-           bit!=ElementsOfRegionEnd("BOTTOM"); bit++ ) boundary_elements[ static_cast<int32>(*bit) ] = "BOTTOM";
+           bit!=ElementsOfRegionEnd("BOTTOM"); bit++ ) boundary_elements[ (*bit) ] = "BOTTOM";
      for ( bit=ElementsOfRegionBegin("FRONT");
-           bit!=ElementsOfRegionEnd("FRONT"); bit++ )  boundary_elements[ static_cast<int32>(*bit) ] = "FRONT";
+           bit!=ElementsOfRegionEnd("FRONT"); bit++ )  boundary_elements[ (*bit) ] = "FRONT";
      for ( bit=ElementsOfRegionBegin("BACK");
-           bit!=ElementsOfRegionEnd("BACK"); bit++ )   boundary_elements[ static_cast<int32>(*bit) ] = "BACK";
+           bit!=ElementsOfRegionEnd("BACK"); bit++ )   boundary_elements[ (*bit) ] = "BACK";
      for ( bit=ElementsOfRegionBegin("LEFT");
-           bit!=ElementsOfRegionEnd("LEFT"); bit++ )   boundary_elements[ static_cast<int32>(*bit) ] = "LEFT";
+           bit!=ElementsOfRegionEnd("LEFT"); bit++ )   boundary_elements[ (*bit) ] = "LEFT";
      for ( bit=ElementsOfRegionBegin("RIGHT");
-           bit!=ElementsOfRegionEnd("RIGHT"); bit++ )  boundary_elements[ static_cast<int32>(*bit) ] = "RIGHT";
+           bit!=ElementsOfRegionEnd("RIGHT"); bit++ )  boundary_elements[ (*bit) ] = "RIGHT";
 
 
      // 2. Going through 'pfverts' record making new assignments
@@ -2823,8 +2823,8 @@ RebuildLineElementNeighborConnectivity():
                assert( (*it2).second.first < 2U );
                assert( (*it1).second.second != (*it2).second.second ); // avoid self-assignment
                //           element eid           nbor face idx                           neighbor eid
-               vset.Pfvert( (*it1).second.second, (*it1).second.first, static_cast<int32>((*it2).second.second) );
-               vset.Pfvert( (*it2).second.second, (*it2).second.first, static_cast<int32>((*it1).second.second) );
+               vset.Pfvert( (*it1).second.second, (*it1).second.first, ((*it2).second.second) );
+               vset.Pfvert( (*it2).second.second, (*it2).second.first, ((*it1).second.second) );
                // both iterators are advanced (so that with the second increment a new pair of faces is reached)
                it1++;
                it2++;

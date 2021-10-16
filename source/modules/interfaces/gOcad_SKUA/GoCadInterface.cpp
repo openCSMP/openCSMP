@@ -615,7 +615,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // ----------------------------------------------------
        if ( debug ) cout <<"\nTest1 face1: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[0] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[0] = ((*face_it).second);
        // if the face belongs to the same element one searches for
        // the next occurrence of the key in the multimap
        // ----------------------------------------------
@@ -624,7 +624,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // -----------------------
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[0] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[0] = ((*face_it).second);
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 1: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -652,11 +652,11 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( debug ) cout <<"\nTest1 face2: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[1] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[1] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[1] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[1] = (*face_it).second;
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -676,11 +676,11 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( debug ) cout <<"\nTest1 face3: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[2] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[2] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[2] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[2] = ((*face_it).second);
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1571,7 +1571,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        // ----------------------------------------------------
        if ( verbose ) cout <<"\nTest1 face1: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[0] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[0] = ((*face_it).second);
        // if the face belongs to the same element one searches for
        // the next occurrence of the key in the multimap
        // ----------------------------------------------
@@ -1580,7 +1580,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        // -----------------------
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[0] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[0] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 1: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1610,11 +1610,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face2: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[1] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[1] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[1] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[1] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1637,11 +1637,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face3: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[2] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[2] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[2] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[2] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1664,11 +1664,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face4: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[3] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[3] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[3] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[3] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 4: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;

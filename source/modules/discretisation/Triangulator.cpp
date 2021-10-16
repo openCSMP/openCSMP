@@ -197,13 +197,13 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              // 2.1.6 getting face-edge values, setting 
              // face edges are the elements that sit on the opposite site of a certain
              // node of the triangle 
-             fed1 = static_cast<int32>((n+1) + 2 * n_mtrx + 1); 
+             fed1 = ((n+1) + 2 * n_mtrx + 1);
              if ( i<m_mtrx and (t=TestOutline( (i+1), j, grid, elperm2 )) != DOWN_DIAG )
-               fed1 = static_cast<int32>((n+1) + 2 * n_mtrx);     
-             fed2 = static_cast<int32>((n+1) + 1);                  
+               fed1 = ((n+1) + 2 * n_mtrx);
+             fed2 = ((n+1) + 1);
              if( j == 1 ) fed3 = LEFT_OUTSIDE;                      
-             else fed3 = static_cast<int32>(n);                    
-             if( static_cast<uint32>(fed1)>n_elements ) fed1 = BOTTOM_OUTSIDE;
+             else fed3 = (n);
+             if( fed1 > n_elements ) fed1 = BOTTOM_OUTSIDE;
              if ( fed1 > 0 ) fed1--;
              if ( fed2 > 0 ) fed2--;
              if ( fed3 > 0 ) fed3--;
@@ -243,9 +243,9 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
                     fed1 = static_cast<int32>((n+1) - 2 * n_mtrx);       
                   else fed1 = static_cast<int32>((n+1) - 2 * n_mtrx - 1); 
                } 
-             fed2 = static_cast<int32>(n); // O.K.     
+             fed2 = n; // O.K.
              if( j >= n_mtrx ) fed3 = RIGHT_OUTSIDE; // O.K.
-             else fed3 = static_cast<int32>((n+1) + 1);  // O.K.
+             else fed3 = ((n+1) + 1);  // O.K.
              if ( fed1 > 0 ) fed1--;
              if ( fed2 > 0 ) fed2--;
              if ( fed3 > 0 ) fed3--;
@@ -333,13 +333,13 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
 
              // 3.2.6 getting face-edge values, setting 
              if ( j >= n_mtrx ) fed1 = RIGHT_OUTSIDE;  
-             else fed1 = static_cast<int32>((n+1) + 1); 
-             fed2 = static_cast<int32>(n);               	      
+             else fed1 = ((n+1) + 1);
+             fed2 = n;
              if ( i >= m_mtrx ) fed3 = BOTTOM_OUTSIDE; 
              else  {
                   if ( i<m_mtrx and (t=TestOutline( (i+1), j, grid, elperm2 )) != DOWN_DIAG )
-                    fed3 = static_cast<int32>((n+1) + 2 * n_mtrx - 1);      
-		              else fed3 = static_cast<int32>((n+1) + 2 * n_mtrx);     
+                    fed3 = ((n+1) + 2 * n_mtrx - 1);
+		              else fed3 = ((n+1) + 2 * n_mtrx);     
     		       }
              if ( fed1 > 0 ) fed1--;
              if ( fed2 > 0 ) fed2--;

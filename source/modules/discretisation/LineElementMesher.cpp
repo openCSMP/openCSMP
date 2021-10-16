@@ -549,8 +549,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
 
             //2.1 PFVerts - assigning content
             for ( size_t i=0U; i<n_elements; i++ ) {
-                 pfvert[i][0] = static_cast<int32>(i) - 1U;
-                 pfvert[i][1] = static_cast<int32>(i) + 1U;
+                 pfvert[i][0] = i - 1U;
+                 pfvert[i][1] = i + 1U;
               }
 
             //2.3 PFVerts - assigning boundary flags

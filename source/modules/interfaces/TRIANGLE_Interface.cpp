@@ -528,9 +528,9 @@ void TRIANGLE_Interface::FindNeighborsForFractureElements( map<size_t,vector<lon
       nbors[0] = nbors[1] = -1; // flag as -1 in case BAR element has no neighbor
       for ( map<size_t,vector<long64> >::iterator plit2 = plist.begin(); plit2 != plist.end(); plit2++) {
           if ( ( plit1->second[0] == plit2->second[0] || plit1->second[0] == plit2->second[1] ) && plit1 != plit2 )  
-              nbors[0] = static_cast<int32>(plit2->first);
+              nbors[0] = (plit2->first);
           if ( ( plit1->second[1] == plit2->second[0] || plit1->second[1] == plit2->second[1] ) && plit1 != plit2 )  
-              nbors[1] = static_cast<int32>(plit2->first);
+              nbors[1] = (plit2->first);
         }
       pfverts[i] = nbors;
       i++;
@@ -890,7 +890,7 @@ void  TRIANGLE_Interface::SplitSingleCornerElements( map<size_t,vector<long64> >
            {  
               for ( cnr_node=0; cnr_node<(*pfit).second.size(); cnr_node++ ) 
                 if ( (*pfit).second[cnr_node] > 0 ) break;
-              cnr_id      = static_cast<int32>((*pfit).first);
+              cnr_id      = ((*pfit).first);
               neighbor_id = (*pfit).second[cnr_node];
 
               cout <<"\nTRIANGLE_Interface::SplitSingleCornerElements: "<< endl;
