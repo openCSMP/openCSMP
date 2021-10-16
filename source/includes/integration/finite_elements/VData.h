@@ -48,14 +48,17 @@ class VData {
 
     VData();
 
-    VData( const std::deque<size_t>& npes, 
+    /// constructor for hybrid element meshes 
+    VData( const std::deque<size_t>& npes, ///< just the sizes of the different vectors
            const std::deque<size_t>& epes,
            size_t nodes );
-                        
+
+    /// constructor for meshes that only hold a single element type
     VData( size_t nodes_per_element, size_t nbors_per_element, size_t nodes, size_t elmts );
     
     void SingleElementType( int8_t etype );
     
+    /// maps to CSMP_FEM_TYPE
     void ElementTypes( const std::vector<int8_t>& elmt_types );
     
     void AddElementTypes( std::vector<int8_t>::const_iterator first,
@@ -64,11 +67,12 @@ class VData {
     void AddElementTypes( std::deque<int8_t>::const_iterator first,
                           std::deque<int8_t>::const_iterator last );
 
+    /// resizes for a single-element type mesh
     void Resize( size_t nodes_per_element, size_t nbors_per_element, int8_t etype, size_t nodes, size_t elmts );
    
     void Resize( const std::deque<int8_t>& etypes,
-                 const std::deque<size_t>& npes, 
-                 const std::deque<size_t>& epes, 
+                 const std::deque<size_t>& npes,  ///< sizes for resizing the member vectors
+                 const std::deque<size_t>& epes,
                  size_t nodes, size_t faces, size_t interfaces );
   
     void ResizeNodes( size_t nodes );
@@ -154,7 +158,7 @@ class VData {
     void ScaleCoordinateToRange( char coordinate_axis, double64 cmin, double64 cmax ); 
     
     /// to set vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
-    void      P( size_t coordinate_axis, size_t i, double64 );
+    void  P( size_t coordinate_axis, size_t i, double64 );
 
     /// to get vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
     double64  P( size_t coordinate_axis, size_t i ) const;
@@ -172,10 +176,10 @@ class VData {
     void   Plist( size_t eidx, size_t node, size_t val );
 
     /// get node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
-    size_t Plist( size_t eidx, size_t node ) const;
+    long64 Plist( size_t eidx, size_t node ) const;
   
     /// set neighbor element index (or boundary identifier) for neighbor i of element eidx
-    void   Pfvert( size_t eidx, size_t i, int32 val );
+    void   Pfvert( size_t eidx, size_t i, long64 val );
 
     /// get neighbor element index (or boundary identifier) for neighbor i of element eidx
     long64 Pfvert( size_t eidx, size_t i ) const;
@@ -193,13 +197,13 @@ class VData {
     void RemoveBflags();
 
     // iterators (for any element, face or interface)
-    std::deque<std::vector<size_t> >::iterator    PlistBegin();
-    std::deque<std::vector<size_t> >::iterator    PlistEnd();
+    std::deque<std::vector<long64> >::iterator    PlistBegin();
+    std::deque<std::vector<long64> >::iterator    PlistEnd();
     std::deque<std::vector<long64> >::iterator    PfvertsBegin();
     std::deque<std::vector<long64> >::iterator    PfvertsEnd();
 
-    std::vector<size_t>::iterator                 PlistBegin( size_t eidx );
-    std::vector<size_t>::iterator                 PlistEnd( size_t eidx );
+    std::vector<long64>::iterator                 PlistBegin( size_t eidx );
+    std::vector<long64>::iterator                 PlistEnd( size_t eidx );
     std::vector<long64>::iterator                 PfvertsBegin( size_t eidx );
     std::vector<long64>::iterator                 PfvertsEnd( size_t eidx );
 
@@ -211,16 +215,16 @@ class VData {
     // const iterators
     std::vector<int8_t>::const_iterator                PelmtBegin() const;
     std::vector<int8_t>::const_iterator                PelmtEnd() const;
-    std::deque<std::vector<size_t> >::const_iterator   PlistBegin() const;
-    std::deque<std::vector<size_t> >::const_iterator   PlistEnd() const;
+    std::deque<std::vector<long64> >::const_iterator   PlistBegin() const;
+    std::deque<std::vector<long64> >::const_iterator   PlistEnd() const;
     std::deque<std::vector<long64> >::const_iterator   PfvertsBegin() const;
     std::deque<std::vector<long64> >::const_iterator   PfvertsEnd() const;
   
     /// checks whether pfverts, has right size and contains plausible information (no guarantees!)
     bool WithNeighbourConnectivity() const;
 
-    std::vector<size_t>::const_iterator                PlistBegin( size_t eidx ) const;
-    std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
+    std::vector<long64>::const_iterator                PlistBegin( size_t eidx ) const;
+    std::vector<long64>::const_iterator                PlistEnd( size_t eidx ) const;
     std::vector<long64>::const_iterator                PfvertsBegin( size_t eidx ) const;
     std::vector<long64>::const_iterator                PfvertsEnd( size_t eidx ) const;
     
@@ -232,17 +236,17 @@ class VData {
   
     // node iterators for subsets of the Plist
     /// Iterator to beginning of elements in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsBegin() const;
+    std::deque<std::vector<long64> >::const_iterator    PlistElmtsBegin() const;
     /// Iterator to end of elements in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsEnd() const;
+    std::deque<std::vector<long64> >::const_iterator    PlistElmtsEnd() const;
     /// Iterator to beginning of faces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistFacesBegin() const;
+    std::deque<std::vector<long64> >::const_iterator    PlistFacesBegin() const;
     /// Iterator to end of faces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistFacesEnd() const;
+    std::deque<std::vector<long64> >::const_iterator    PlistFacesEnd() const;
     /// Iterator to beginning of interfaces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesBegin() const;
+    std::deque<std::vector<long64> >::const_iterator    PlistInterFacesBegin() const;
     /// Iterator to end of interfaces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesEnd() const;
+    std::deque<std::vector<long64> >::const_iterator    PlistInterFacesEnd() const;
 
     /// neighbor iterator for first face in plist (use PlistInterFacesBegin() to find last one)
     std::deque<std::vector<long64> >::const_iterator    PfvertsFacesBegin() const;
@@ -316,12 +320,12 @@ class VData {
     std::vector<double64>             px, py, pz;        ///< node coordinates
     std::vector<int8_t>               pelmt;             ///< CSMP element type info, needed to read plist & pfverts
     // although there's little point to having 64-bit pointers but not 64-bit sizes, after all.
-    std::deque<std::vector<size_t> >  plist;             ///< nodes of each element, face and interface in that order
+    std::deque<std::vector<long64> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
     // all enums / flags must fit into 8-bit integers
     std::vector<std::int8_t>          bflags;            ///< flags for those nodes that lie on model boundary
-    size_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
-    size_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements 
+    long64                            first_face_;       ///< faces come after elements; if none this is equal to elements
+    long64                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements
 
     friend class VData_Test;
 };

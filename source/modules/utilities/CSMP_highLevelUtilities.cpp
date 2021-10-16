@@ -788,7 +788,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearHexahedron     fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<size_t>::iterator
+                    for ( std::vector<long64>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -805,7 +805,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearPyramid        fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<size_t>::iterator
+                    for ( std::vector<long64>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -822,7 +822,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearPrism fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<size_t>::iterator
+                    for ( std::vector<long64>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -839,7 +839,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearTetrahedron fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<size_t>::iterator
+                    for ( std::vector<long64>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -856,7 +856,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearQuadrilateral  fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<size_t>::iterator
+                    for ( std::vector<long64>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -873,7 +873,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearTriangle fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<size_t>::iterator
+                    for ( std::vector<long64>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -890,7 +890,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearLineElement    fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<size_t>::iterator
+                    for ( std::vector<long64>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -908,7 +908,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
             }
             var *= volume;
             /// summ up data
-            for ( std::vector<size_t>::iterator
+            for ( std::vector<long64>::iterator
                   nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit )
             {
                 nid = (*nit);

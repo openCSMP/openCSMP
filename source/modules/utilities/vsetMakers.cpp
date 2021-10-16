@@ -49,8 +49,8 @@ VSet<2U> test_CreateVSet()
   	vset.AddXYZ( px, py, pz );
     
     //define elements
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
-    std::vector<size_t> vecNodes(4);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
+    std::vector<long64> vecNodes(4);
     //element 0
     vecNodes[0]=0;
     vecNodes[1]=1;
@@ -175,7 +175,7 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double64 length_of_sides, bool 
   	
   	//--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque< std::vector<size_t> > deqElements(1);
+    std::deque< std::vector<long64> > deqElements(1);
     deqElements[0].resize(nodes);
   	 
     deqElements[0][0]= 1;
@@ -250,8 +250,8 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
   	
   	//--------------------------ELEMENTS
   	// define nodes per element
-  	vector<size_t> node_dummy(3);
-    std::deque< std::vector<size_t> > deqElements(10,node_dummy);
+  	vector<long64> node_dummy(3);
+    std::deque< std::vector<long64> > deqElements(10,node_dummy);
     deqElements[0][0]= 0;
     deqElements[0][1]= 3;
     deqElements[0][2]= 1;
@@ -413,7 +413,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
   	//--------------------------ELEMENTS
   	// define nodes per element
-    std::deque< std::vector<size_t> > deqElements(45);
+    std::deque< std::vector<long64> > deqElements(45);
     deqElements[0]  = { 1, 5, 6 };
     deqElements[1]  = { 0, 4, 5 };
     deqElements[2]  = { 0, 5, 1 };
@@ -561,28 +561,6 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 } // end test_Create_MeshPatchWithLineElements_VSet
 
 
-/* neighbors opposite to nodes
-    deqElementNeighbors[25] = { 29, INTERNAL };
-    deqElementNeighbors[26] = { 27, INTERNAL };
-    deqElementNeighbors[27] = { 28, 26 };
-    deqElementNeighbors[28] = { INTERNAL, 27 };
-    deqElementNeighbors[29] = { 31, 25 };
-    deqElementNeighbors[30] = { INTERNAL, INTERNAL };
-    deqElementNeighbors[31] = { INTERNAL, 29 };
-    deqElementNeighbors[32] = { BOTTOM, INTERNAL };
-    deqElementNeighbors[33] = { 34, 44 }; // boundary edges
-    deqElementNeighbors[34] = { 35, 33 };
-    deqElementNeighbors[35] = { 36, 34 };
-    deqElementNeighbors[36] = { 37, 35 };
-    deqElementNeighbors[37] = { 38, 36 };
-    deqElementNeighbors[38] = { 39, 37 };
-    deqElementNeighbors[39] = { 40, 38 };
-    deqElementNeighbors[40] = { 41, 39 };
-    deqElementNeighbors[41] = { 42, 40 };
-    deqElementNeighbors[42] = { 43, 41 };
-    deqElementNeighbors[43] = { 44, 42 };
-    deqElementNeighbors[44] = { 33, 43 };
-*/
 
 
 
@@ -639,7 +617,7 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	
   	//--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(1);
+    std::deque<std::vector<long64> > deqElements(1);
     deqElements[0].resize(8);
   	 
     deqElements[0][0]= 1;
@@ -741,7 +719,7 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     
     //--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
   	for(size_t i = 0U; i < iDim_i-1; i++) //x
@@ -760,7 +738,7 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	 deqElements[iElement][7]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
     }
   	
-  	vset.AddPlist( deqElements.begin(),deqElements.end());
+  	vset.AddPlist( deqElements.begin(),deqElements.end() );
 
     //---------------------------------NEIGHBORS
     //define neighbors
@@ -959,7 +937,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
   	
     //--------------------------ELEMENTS
     //define quad elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
     for(size_t j = 0U; j < iDim_j-1; j++) //y
   	for(size_t i = 0U; i < iDim_i-1; i++) //x
   	{
@@ -1239,7 +1217,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     
     //--------------------------ELEMENTS
     //define hexahedron elements (elements 0->31), assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
   	for(size_t i = 0U; i < iDim_i-1; i++) //x
@@ -1265,7 +1243,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	
   	size_t node_center(64);
     //element 26, assign nodes per element
-    std::vector<size_t> vecNodes(5);
+    std::vector<long64> vecNodes(5);
     vecNodes[0]= 1+ 21;
     vecNodes[1]= 1+ 22;
     vecNodes[2]= 1+ 26;
@@ -1650,7 +1628,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     
     //--------------------------ELEMENTS
     //define hexahedron elements (elements 0->26), assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
     
     iElement = 0;
     for(size_t k = 0U; k < iDim_k-1; k++) //z
@@ -2104,7 +2082,7 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	
   	//--------------------------ELEMENTS
     //define prism element, assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(1);
+    std::deque<std::vector<long64> > deqElements(1);
     deqElements[0].resize(6);
   	 
     deqElements[0][0]= 1;
@@ -2201,7 +2179,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     
     //--------------------------ELEMENTS
     //define prism elements (elements 0->54), assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
   	for(size_t i = 0U; i < iDim_i-1; i++) //x
@@ -2461,7 +2439,7 @@ void test_Create_Pyramid_VSet(VSet<3U> & vset, bool bSkewed )
   	
     //--------------------------ELEMENTS
     //define pyramid elements (elements 0->54), assign nodes per element
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
   	for(size_t i = 0U; i < iDim_i-1; i++) //x

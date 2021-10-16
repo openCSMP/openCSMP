@@ -23,7 +23,6 @@ enum class FACE_TYPE : std::int8_t {
 	//     |/        |/
 	//     7_________6
 
-
 	FULL_QUAD,
 	SPLIT_02_OR_46,
 	SPLIT_13_OR_57,
@@ -34,11 +33,11 @@ class CellGenerator {
 public:
 	CornerPointGrid& grid;
 
-	size_t elementID = 0;
+	size_t elementID = UINT_MAX;
 	std::vector<Point<3u>> ordinaryNodes;
 	std::deque<Point<3u>> extraNodes;
 
-	std::map<size_t, std::vector<size_t>>  plist;
+	std::map<size_t, std::vector<long64>>  plist;
 	std::vector<int8_t> fem_types;
 
 	Pillar* p0;
@@ -46,40 +45,37 @@ public:
 	Pillar* p2;
 	Pillar* p3;
 
-	CellGenerator(CornerPointGrid& grid)
-		: grid(grid)
-	{
-	}
+	CellGenerator(CornerPointGrid& grid) : grid(grid) {}
 
 	Point<3u> getGlobalNodeCoord(size_t node) const {
 		if (node < ordinaryNodes.size()) {
-			return ordinaryNodes[node];
-		}
+        return ordinaryNodes[node];
+      }
 		else {
-			return extraNodes[node - ordinaryNodes.size()];
-		}
+        return extraNodes[node - ordinaryNodes.size()];
+      }
 	}
 
 	Point<3u> getNodeCoord(ColumnCell& cell, size_t vertex) const {
 		switch (vertex)
-		{
-		case 0:
-			return p0->GetPoint(cell.z[0][0]);
-		case 1:
-			return p1->GetPoint(cell.z[1][0]);
-		case 2:
-			return p2->GetPoint(cell.z[2][0]);
-		case 3:
-			return p3->GetPoint(cell.z[3][0]);
-		case 4:
-			return p0->GetPoint(cell.z[0][1]);
-		case 5:
-			return p1->GetPoint(cell.z[1][1]);
-		case 6:
-			return p2->GetPoint(cell.z[2][1]);
-		case 7:
-			return p3->GetPoint(cell.z[3][1]);
-		}
+      {
+      case 0:
+        return p0->GetPoint(cell.z[0][0]);
+      case 1:
+        return p1->GetPoint(cell.z[1][0]);
+      case 2:
+        return p2->GetPoint(cell.z[2][0]);
+      case 3:
+        return p3->GetPoint(cell.z[3][0]);
+      case 4:
+        return p0->GetPoint(cell.z[0][1]);
+      case 5:
+        return p1->GetPoint(cell.z[1][1]);
+      case 6:
+        return p2->GetPoint(cell.z[2][1]);
+      case 7:
+        return p3->GetPoint(cell.z[3][1]);
+      }
 		throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeCoord",
 			"Node id out of range");
 	}
@@ -241,7 +237,7 @@ public:
       return found;
 	}
 
-	size_t vertexIDs[8];
+	long64 vertexIDs[8];
 	IsoparametricLinearHexahedron hexa;
 	IsoparametricLinearPyramid pyra;
 	IsoparametricLinearTetrahedron tetra;
@@ -249,7 +245,6 @@ public:
 	IsoparametricLinearLineElement line;
 
 	bool ConstructLine(ColumnCell& cell) {
-
 		vertexIDs[0] = 0;
 		auto p1 = getNodeCoord(cell, vertexIDs[0]);
 		grid.ConvertFromReservoirToCSMPcoordinateSystem(p1);
@@ -274,7 +269,6 @@ public:
 	}
 
 	bool ConstructHexahedron(ColumnCell& cell) {
-
 		//std::cerr << "hexa: \n";				
 		for (size_t i = 0; i < 8; ++i) {
 			vertexIDs[i] = i;
@@ -337,7 +331,7 @@ public:
 	}
 
 	size_t EmitPyramid(ColumnCell& cell) {
-		std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[5]);
+		std::vector<long64> ids(&vertexIDs[0], &vertexIDs[5]);
 		size_t elid = elementID++;
 		plist.emplace(elid, ids);
 		fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
@@ -375,7 +369,7 @@ public:
 	}
 
 	size_t EmitTetrahedron(ColumnCell& cell) {
-		std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[4]);
+		std::vector<long64> ids(&vertexIDs[0], &vertexIDs[4]);
 		size_t elid = elementID++;
 		plist.emplace(elid, ids);
 		fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
@@ -414,7 +408,7 @@ public:
 	}
 
 	size_t EmitPrism(ColumnCell& cell) {
-		std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[6]);
+		std::vector<long64> ids(&vertexIDs[0], &vertexIDs[6]);
 		size_t elid = elementID++;
 		plist.emplace(elid, ids);
 		fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
@@ -423,8 +417,8 @@ public:
 
 
 	// return a list of globalNodeID from local vertex index
-	std::vector<size_t> getGlobalIDList(ColumnCell& cell, size_t size, const size_t* vertexIDs) {
-		std::vector<size_t> nodeIDs;
+	std::vector<long64> getGlobalIDList(ColumnCell& cell, size_t size, const long64* vertexIDs) {
+		std::vector<long64> nodeIDs;
 		nodeIDs.reserve(size);
 		for (int i = 0; i < size; ++i) {
 			nodeIDs.push_back(getNodeID(cell, vertexIDs[i]));
@@ -434,81 +428,81 @@ public:
 
 	/// degenerates to one prism
 
-	std::vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
-		static const size_t vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
+	std::vector<long64> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
+		static const long64 vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
 		return getGlobalIDList(cell, 6, vertexIDs);
 	}
 
-	std::vector<size_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
-		static const size_t vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
+	std::vector<long64> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
+		static const long64 vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
 		return getGlobalIDList(cell, 6, vertexIDs);
 	}
 
-	std::vector<std::vector<size_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
-		std::vector<std::vector<size_t>> nodeLists;          // tetra 0125 0237
+	std::vector<std::vector<long64>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
+		std::vector<std::vector<long64>> nodeLists;          // tetra 0125 0237
 		nodeLists.reserve(2);
 
-		static const size_t vertexIDs1[4] = { 0, 1, 2, 5 };
+		static const long64 vertexIDs1[4] = { 0, 1, 2, 5 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const size_t vertexIDs2[4] = { 0, 2, 3, 7 };
+		static const long64 vertexIDs2[4] = { 0, 2, 3, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
 		return nodeLists;
 	}
 
-	std::vector<std::vector<size_t>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
-		std::vector<std::vector<size_t>> nodeLists;          // tetra 1304 1326
+	std::vector<std::vector<long64>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
+		std::vector<std::vector<long64>> nodeLists;          // tetra 1304 1326
 		nodeLists.reserve(2);
 
-		static const size_t vertexIDs1[4] = { 1, 3, 0, 4 };
+		static const long64 vertexIDs1[4] = { 1, 3, 0, 4 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const size_t vertexIDs2[4] = { 1, 3, 2, 6 };
+		static const long64 vertexIDs2[4] = { 1, 3, 2, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
 		return nodeLists;
 	}
 
-	std::vector<std::vector<size_t>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
-		std::vector<std::vector<size_t>> nodeLists;                // 0457 0125 0237 0257 2756
+	std::vector<std::vector<long64>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
+		std::vector<std::vector<long64>> nodeLists;                // 0457 0125 0237 0257 2756
 		nodeLists.reserve(5);
 
-		static const size_t vertexIDs1[4] = { 0, 4, 5, 7 };
+		static const long64 vertexIDs1[4] = { 0, 4, 5, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const size_t vertexIDs2[4] = { 0, 1, 2, 5 };
+		static const long64 vertexIDs2[4] = { 0, 1, 2, 5 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
-		static const size_t vertexIDs3[4] = { 0, 2, 3, 7 };
+		static const long64 vertexIDs3[4] = { 0, 2, 3, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
 
-		static const size_t vertexIDs4[4] = { 0, 2, 5, 7 };
+		static const long64 vertexIDs4[4] = { 0, 2, 5, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
 
-		static const size_t vertexIDs5[4] = { 2, 7, 5, 6 };
+		static const long64 vertexIDs5[4] = { 2, 7, 5, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
 
 		return nodeLists;
 	}
 
-	std::vector<std::vector<size_t>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
-		std::vector<std::vector<size_t>> nodeLists;                // 0134 1456 1236 1346 3467
+	std::vector<std::vector<long64>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
+		std::vector<std::vector<long64>> nodeLists;                // 0134 1456 1236 1346 3467
 		nodeLists.reserve(5);
 
-		static const size_t vertexIDs1[4] = { 0, 1, 3, 4 };
+		static const long64 vertexIDs1[4] = { 0, 1, 3, 4 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-		static const size_t vertexIDs2[4] = { 1, 4, 5, 6 };
+		static const long64 vertexIDs2[4] = { 1, 4, 5, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
-		static const size_t vertexIDs3[4] = { 1, 2, 3, 6 };
+		static const long64 vertexIDs3[4] = { 1, 2, 3, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
 
-		static const size_t vertexIDs4[4] = { 1, 3, 4, 6 };
+		static const long64 vertexIDs4[4] = { 1, 3, 4, 6 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
 
-		static const size_t vertexIDs5[4] = { 3, 4, 6, 7 };
+		static const long64 vertexIDs5[4] = { 3, 4, 6, 7 };
 		nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
 
 		return nodeLists;

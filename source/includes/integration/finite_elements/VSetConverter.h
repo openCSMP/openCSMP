@@ -53,8 +53,8 @@ class VSetConverter {
     void FlagCornerNodes( VSet<dim>&, bool three_dimensional=false ) const;
     
     /// returns 0 if face is not at the model boundary
-    int32  TestForBoundaryFlags( const std::vector<std::int8_t>& bflags,
-                                 size_t nID1, size_t nID2 ) const;
+    int8_t  TestForBoundaryFlags( const std::vector<std::int8_t>& bflags,
+                                  size_t nID1, size_t nID2 ) const;
   
     /// interpolation between value pairs
     double64 BoundaryValue( const std::map<size_t,double64>& bvals, 
@@ -72,11 +72,11 @@ class VSetConverter {
     void   FlagEdges( VSet<dim>& vset, double64 tolerance=1.0e-4 ) const;
 
     /// flag-based check
-    long64  BoundaryFlags3D( const std::vector<std::int8_t>& bflags,
+    int8_t  BoundaryFlags3D( const std::vector<std::int8_t>& bflags,
                              size_t nID1, size_t nID2 ) const;
   
     /// coordinate-based check of whether a node is in on the boundary of a box shaped model
-    long64  TestForBoundaryFlags3D( double64 x, double64 y, double64 z ) const;
+    int8_t  TestForBoundaryFlags3D( double64 x, double64 y, double64 z ) const;
  };
 
 

@@ -1195,8 +1195,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
      {
        BinaryFileSectionWrite sect(fp, "BOUNDARY");
 
-       const size_t records(this->Boundaries());
-       fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
+       const long64 records(this->Boundaries());
+       fp.write( reinterpret_cast<const char*>(&records), sizeof(long64) );
 
        for ( typename std::map<std::string,csmp::Boundary<dim> >::const_iterator
              git=BoundariesBegin(); git!=BoundariesEnd(); ++git )
@@ -1207,8 +1207,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
             (*git).second.WriteDomainIndexesToBinaryFile( fp );
             // 1.2 writing the boundary flags
             auto bflag = (*git).second.AtBoundary();
-            const size_t record(1U);
-            fp.write( reinterpret_cast<const char*>(&record), sizeof( size_t ) );
+            const long64 record(1U);
+            fp.write( reinterpret_cast<const char*>(&record), sizeof( long64 ) );
             fp.write( reinterpret_cast<const char*>(&bflag), sizeof( int8_t ) );
             // 1.3 writing the stored variables
             domainVariablesOut( fp, (*git).second, boundaryComplex.Database() );
@@ -1265,9 +1265,9 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
        BinaryFileSectionRead sect(fp, "BOUNDARY");
        
        SubDomainInfo  info;
-       size_t  records(0);  // region records
+       long64  records(0);  // region records
        // getting number of unique region records from file
-       fp.read( reinterpret_cast<char*>(&records), sizeof(size_t) );
+       fp.read( reinterpret_cast<char*>(&records), sizeof(long64) );
        if ( records > 0 )
           // reading the regions sequentially
           for ( size_t i=0U; i<records; ++i )
@@ -1278,8 +1278,8 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
                readDomainIndexesFromBinaryFile( dim, fp, info );
               
                // 1.2 reading BOX boundary flag of the boundary
-               size_t record;
-               fp.read( reinterpret_cast<char*>(&record), sizeof(size_t) );
+               long64 record;
+               fp.read( reinterpret_cast<char*>(&record), sizeof(long64) );
                assert( record == 1 );
                std::int8_t box_boundary_index(IRREGULAR_OUTSIDE);
                fp.read( reinterpret_cast<char*>(&box_boundary_index), sizeof(int8_t) );

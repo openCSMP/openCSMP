@@ -68,6 +68,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <array>

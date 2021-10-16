@@ -49,7 +49,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	map< string, std::set<std::string> > fem_types;
 	map< string, vector<size_t> >    regions; // key: name of the region, value: list of vertices
 	vector<int8_t>                   element_types;
-	deque< vector< size_t > >        elements;
+	deque< vector< long64 > >        elements;
 	vector<int8_t>                   element_type;
 	deque<size_t>                    mixed_ele_plist;      // number of nodes per element
 	deque<size_t>                    mixed_ele_pfverts;    // number of neighbours per element
@@ -86,8 +86,9 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 
 	size_t region, npe, fpe, n_elem, inode;
 	string stype;
-	int etype;
-	int elem_idx = 0;
+	int8_t etype;
+	long64 elem_idx = 0;
+  
 	while (true)
 	{
 		string fem_string, csmp_fem;
@@ -116,7 +117,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 		if (n_elem <= 0) throw out_of_range(str+"value not expected");
 		n_elements += n_elem;
 
-		vector<size_t> elem(npe);
+		vector<long64> elem(npe);
 
 		for (int i = 0; i<n_elem; i++)
       {
@@ -369,7 +370,7 @@ void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
                 // reassigning the nodes to the plist in opposite order (first getting the global node numbers
                 for ( vector<size_t>::iterator it=ids.begin(); it!=ids.end(); ++it ) (*it) = vset.Plist( elmt, (*it) );
                 size_t counter(0U);
-                for ( vector<size_t>::iterator nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
+                for ( vector<long64>::iterator nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
                   (*nit) = ids[counter++];
                 repaired_elmts++;
               }

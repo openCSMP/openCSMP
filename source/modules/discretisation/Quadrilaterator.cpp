@@ -280,7 +280,7 @@ void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_
 
 void Quadrilaterator::GenerateVSet( VSet<2U>& vset ) const
  {
-   deque<vector<size_t> >     plist( n_elements, vector<size_t>(4) ); 
+   deque<vector<long64> >     plist( n_elements, vector<long64>(4) ); 
    deque<vector<long64> >     pfvert( n_elements, vector<long64>(4) );
    //FEM_Data<ScalarVariable >  edata( ELEMENT, n_elements );
    PropertyData               edata( ELEMENT, SCALAR, 2U );

@@ -25,7 +25,7 @@ store the type of the single element of which the mesh consists.
 template<size_t dim>
 VSet<dim>::VSet( size_t nodes_per_element,
                  size_t nbors_per_element,
-                 int32 etype,
+                 int8_t etype,
                  size_t nodes, size_t elmts )
 : VData(nodes_per_element, nbors_per_element, nodes, elmts),
   pmtrl_( elmts, UNSPECIFIED )
@@ -44,6 +44,7 @@ VSet<dim>::VSet(const deque<size_t>& npes,
 {
 	SingleElementType(0);
 }
+
 
 
 /// copy constructor
@@ -154,10 +155,10 @@ to recuperate element types and the nodes per element information when
 reading the VSet.
 */
 template<size_t dim>
-void VSet<dim>::AddPlist( typename map<size_t, vector<size_t> >::const_iterator first,
-						              typename map<size_t, vector<size_t> >::const_iterator last)
+void VSet<dim>::AddPlist( typename map<size_t, vector<long64> >::const_iterator first,
+						              typename map<size_t, vector<long64> >::const_iterator last)
 {
-	typename deque<vector<size_t> >::iterator it = PlistBegin();
+	typename deque<vector<long64> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
     {
@@ -176,10 +177,10 @@ void VSet<dim>::AddPlist( typename map<size_t, vector<size_t> >::const_iterator 
 	reading the VSet.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPlist( typename deque<vector<size_t> >::const_iterator first,
-                          typename deque<vector<size_t> >::const_iterator last )
+void VSet<dim>::AddPlist( typename deque<vector<long64> >::const_iterator first,
+                          typename deque<vector<long64> >::const_iterator last )
 {
-	typename deque<vector<size_t> >::iterator it = PlistBegin();
+	typename deque<vector<long64> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
     {
@@ -613,7 +614,7 @@ bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t fi
 	strcat(heading, bin_file);
 	strcat(heading, " saved at time: ");
 	strcat(heading, num);
-	sprintf(num, "%lu", static_cast<long>(first_outerhalo));
+	sprintf(num, "%lu", first_outerhalo );
 	strcat(heading, ", first outerhalo: ");
 	strcat(heading, num);
 
@@ -668,7 +669,7 @@ bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t&
 	strtok(NULL, ":");
 	strtok(NULL, ":");
 	time = atof(strtok(NULL, ":"));
-	first_outerhalo = static_cast<size_t> (atoi(strtok(NULL, ":")));
+	first_outerhalo = atoi(strtok(NULL, ":"));
 
 	// 3. reading the mesh connectivity to file
 	cout << "\nVSet<dim>::ParallelInputFrom: reading finite element mesh..." << endl;

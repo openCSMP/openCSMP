@@ -359,8 +359,8 @@ bool binaryFileWrite( std::fstream& fp, const std::deque<T>& stl_ctner )
       return false;
     }
 
-	const size_t  bytes = sizeof(T);
-	const size_t  elements = stl_ctner.size();
+	const size_t bytes = sizeof(T);
+	size_t       elements = stl_ctner.size();
 
 	// writing the size of the object
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
@@ -525,7 +525,7 @@ bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T> >& stl_c
     }
 
 	// writing the number of vector objects
-	const size_t  elements(stl_ctner.size());
+	const long64  elements(stl_ctner.size());
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
@@ -581,7 +581,7 @@ bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
     }
 
 	// 1. reading number of vector records and assert this reading
-  const size_t elements = checkContainerSize( fp );
+  const long64 elements = checkContainerSize( fp );
 
 	size_t counter(0);
 	if ( elements > 0U ) {
@@ -655,11 +655,11 @@ bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
       return false;
     }
 
-	const size_t elements = stl_ctner.size();
 	const size_t bytesM = sizeof(M);
 	const size_t bytesT = sizeof(T);
-	M      key;
-	T      val;
+	size_t       elements = stl_ctner.size();
+	M            key;
+	T            val;
 
 	// writing the number of vector objects
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
@@ -723,13 +723,14 @@ bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner)
 		std::cerr << "ERROR: invalid file pointer." << std::endl;
 		return false;
 	}
+
 	const size_t bytesM = sizeof(M), bytesT = sizeof(T);
   size_t  counterM(0), counterT(0);
 	M       key;
 	T       val;
 
 	// 1. read number of record in the map and assert reading
-  const size_t elements = checkContainerSize( fp );
+  const long64 elements = checkContainerSize( fp );
 
 	if (elements > 0) {
 		// 2. reading all map records

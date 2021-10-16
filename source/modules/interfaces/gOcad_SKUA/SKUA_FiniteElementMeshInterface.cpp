@@ -1006,14 +1006,14 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
       }
       
     // reading plist
-    deque<vector<size_t> >  file_records; 
+    deque<vector<long64> >  file_records;
     readVectorOfVectors( ifs, ndele, total_items, file_records );   
 
     // testing whether the nodes are numbered consecutively from 0..n-1
     if ( test_for_consecutive_node_numbering ) {
          set<size_t> node_ids;
-         for ( deque<vector<size_t> >::const_iterator it=file_records.begin(); it!=file_records.end(); ++it )
-           for ( vector<size_t>::const_iterator nit=(*it).begin(); nit!=(*it).end(); ++nit )
+         for ( deque<vector<long64> >::const_iterator it=file_records.begin(); it!=file_records.end(); ++it )
+           for ( vector<long64>::const_iterator nit=(*it).begin(); nit!=(*it).end(); ++nit )
              node_ids.insert( (*nit) );
          // does the record start with 0 and ends with n-1?
          if ( (*node_ids.begin()) != 0U ) {
@@ -1601,7 +1601,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistBinary( FILE* fp, VSet<dim>& vset
     uint32* plist = new uint32[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
-    deque<vector<size_t> >::iterator  it(vset.PlistBegin());
+    deque<vector<long64> >::iterator  it(vset.PlistBegin());
     size_t                            nentry(0U);
 
     // the elements of the plist (node ids) are assigned

@@ -451,6 +451,9 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   vset.AddBFlags( pbflags.begin(), pbflags.end() );
 }
 
+
+
+
 bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   bool faceAboveIsQuad = !cellAbove || generator_->getShapeOfBottomFace( *cellAbove ) == FACE_TYPE::FULL_QUAD;
   bool faceBeneathIsQuad = !cellBeneath || generator_->getShapeOfTopFace( *cellBeneath ) == FACE_TYPE::FULL_QUAD;

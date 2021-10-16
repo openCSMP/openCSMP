@@ -2520,38 +2520,35 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
                   back_bottom, back_left, back_top, back_right,
                   top_left, top_right;
 
-     std::vector<size_t>::const_iterator  it;
-     std::vector<size_t>::iterator        vit;
-
-     for ( it=ElementsOfRegionBegin("BOTTOM");
+     for ( auto it=ElementsOfRegionBegin("BOTTOM");
            it!=ElementsOfRegionEnd("BOTTOM"); it++ ) {
            // accessing contiguous ranges of element ID's with it->size_t
-           for ( vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
+           for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              bottom.insert( (*vit) );
        }
-     for ( it=ElementsOfRegionBegin("LEFT");
+     for ( auto it=ElementsOfRegionBegin("LEFT");
            it!=ElementsOfRegionEnd("LEFT"); it++ ) {
-           for ( vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
+           for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              left.insert( (*vit) );
        }
-     for ( it=ElementsOfRegionBegin("RIGHT");
+     for ( auto it=ElementsOfRegionBegin("RIGHT");
            it!=ElementsOfRegionEnd("RIGHT"); it++ ) {
-           for ( vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
+           for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              right.insert( (*vit) );
        }
-     for ( it=ElementsOfRegionBegin("TOP");
+     for ( auto it=ElementsOfRegionBegin("TOP");
            it!=ElementsOfRegionEnd("TOP"); it++ ) {
-           for ( vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
+           for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              top.insert( (*vit) );
        }
-     for ( it=ElementsOfRegionBegin("FRONT");
+     for ( auto it=ElementsOfRegionBegin("FRONT");
            it!=ElementsOfRegionEnd("FRONT"); it++ ) {
-           for ( vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
+           for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              front.insert( (*vit) );
        }
-     for ( it=ElementsOfRegionBegin("BACK");
+     for ( auto it=ElementsOfRegionBegin("BACK");
            it!=ElementsOfRegionEnd("BACK"); it++ ) {
-           for ( vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
+           for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              back.insert( (*vit) );
        }
 
@@ -3077,9 +3074,9 @@ RebuildLineElementNeighborConnectivity():
  }
  void CorrectSurfaceElementOrientations( VSet<2U>& vset )
  {
-     std::deque<std::vector<size_t> >::iterator it(vset.PlistBegin());
+     std::deque<std::vector<long64> >::iterator it(vset.PlistBegin());
      std::deque<std::vector<long64> >::iterator itpf(vset.PfvertsBegin());
-     std::vector<size_t> temp_vector;
+     std::vector<long64> temp_vector;
      std::vector<long64> temp_pfverts;
      size_t  n_orientations_corrected(0U);
 

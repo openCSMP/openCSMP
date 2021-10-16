@@ -154,7 +154,7 @@ bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_ol
 
 void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                                             map<size_t,mjl::Point3D>&  points,
-                                            map<size_t,vector<size_t> >& plist,
+                                            map<size_t,vector<long64> >& plist,
                                             size_t poffset ) const
   {
      // finding the desired object in the map 
@@ -202,7 +202,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
     // and assigning the vertex points to the output map
     map<string,size_t>                              pxyz_ids;
     size_t                                          n;
-    vector<size_t>                                  ids(3);
+    vector<long64>                                  ids(3);
     map<string,vector<double64> >::const_iterator  pit;
     
     for ( n=poffset, pit=pxyz.begin(); pit!=pxyz.end(); pit++ )
@@ -252,13 +252,13 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
 
 
 
-void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t> >& plist,
+void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<long64> >& plist,
                                                   map<size_t,vector<long64> >& pfverts,
                                                   vector<std::int8_t>& pbflags ) const
  {
      //  parent element id,  edge of p1 < p2
      map<pair<size_t,size_t>,long64>              edge_map;
-     map<size_t,vector<size_t> >::const_iterator  pit;
+     map<size_t,vector<long64> >::const_iterator  pit;
      
      // just in case
      if ( !pfverts.empty() ) pfverts.erase( pfverts.begin(), pfverts.end() );
@@ -395,7 +395,7 @@ which make up each triangle.
 */
 bool SKM_RhinoSurfaceReader::PopObject( const char *obj_name,
                                         map<size_t,mjl::Point3D >&  points,
-                                        map<size_t,vector<size_t> >& plist,
+                                        map<size_t,vector<long64> >& plist,
                                         size_t poffset ) const
  {
      ObjectToPData( string(obj_name), points, plist, poffset );
@@ -490,7 +490,7 @@ void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) c
 
     // find object and create pxyz and plist arrays for the desired object
     map<size_t,mjl::Point3D>     points;
-    map<size_t,vector<size_t> >  plist;
+    map<size_t,vector<long64> >  plist;
 
     PopObject( object.c_str(), points, plist );
     
@@ -664,9 +664,9 @@ void SKM_RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs 
     assert( ofs.is_open() );
  
     map<size_t,mjl::Point3D>                     points;
-    map<size_t,vector<size_t> >                  plist;
+    map<size_t,vector<long64> >                  plist;
     map<size_t,mjl::Point3D>::const_iterator     it;
-    map<size_t,vector<size_t> >::const_iterator  pit;
+    map<size_t,vector<long64> >::const_iterator  pit;
 
     // find object and create pxyz and plist arrays for the desired object
     PopObject( obj, points, plist, 0 );

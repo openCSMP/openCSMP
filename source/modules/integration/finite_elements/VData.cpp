@@ -36,7 +36,7 @@ VData::VData()
    @note it is assumed that there are no faces nor interfaces
 
 */
-VData::VData( const deque<size_t>& npes, 
+VData::VData( const deque<size_t>& npes,
               const deque<size_t>& epes,
               size_t nodes )
   : px(nodes),
@@ -51,11 +51,12 @@ VData::VData( const deque<size_t>& npes,
     first_interface_(npes.size())
  {
     for ( size_t i=0U; i<epes.size(); i++ )
-      plist[i]   = vector<size_t>(npes[i]);
+      plist[i]   = vector<long64>(npes[i]);
          
     for ( size_t i=0U; i<epes.size(); i++ )
       pfverts[i] = vector<long64>(epes[i]);
  }
+
 
 
 
@@ -71,7 +72,7 @@ VData::VData( size_t nodes_per_element, size_t nbors_per_element, size_t nodes, 
     first_interface_(elmts)
 {
     for ( size_t i=0U; i<elmts; i++ )
-      plist.push_back( vector<size_t>(nodes_per_element) );
+      plist.push_back( vector<long64>(nodes_per_element) );
     for ( size_t k=0U; k<elmts; k++ )
       pfverts.push_back( vector<long64>(nbors_per_element) );
 }
@@ -216,7 +217,7 @@ void VData::AddElementTypes( std::vector<int8_t>::const_iterator first,
 
 
 //  aelement ID's 0...n-1              
-std::vector<size_t>::iterator  VData::PlistBegin( size_t eidx ) {
+std::vector<long64>::iterator  VData::PlistBegin( size_t eidx ) {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
        throw std::overflow_error( "VData::PlistBegin: input Element ID out of range");
@@ -224,7 +225,7 @@ std::vector<size_t>::iterator  VData::PlistBegin( size_t eidx ) {
      return plist[eidx].begin();
   } 
   
-std::vector<size_t>::iterator  VData::PlistEnd( size_t eidx ) {
+std::vector<long64>::iterator  VData::PlistEnd( size_t eidx ) {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
        throw std::overflow_error( "VData::PlistEnd: input Element ID out of range");
@@ -249,7 +250,7 @@ std::vector<long64>::iterator  VData::PfvertsEnd( size_t eidx ) {
   }
 
 // constant versions
-std::vector<size_t>::const_iterator  VData::PlistBegin( size_t eidx ) const {
+std::vector<long64>::const_iterator  VData::PlistBegin( size_t eidx ) const {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
        throw std::overflow_error( "VData::PlistBegin: input Element ID out of range");
@@ -257,7 +258,7 @@ std::vector<size_t>::const_iterator  VData::PlistBegin( size_t eidx ) const {
      return plist[eidx].begin();
   } 
   
-std::vector<size_t>::const_iterator  VData::PlistEnd( size_t eidx ) const {
+std::vector<long64>::const_iterator  VData::PlistEnd( size_t eidx ) const {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
        throw std::overflow_error( "VData::PlistEnd: input Element ID out of range");
@@ -305,10 +306,10 @@ void VData::ResizeElementTypes( size_t new_size )
 
 // Accessors (iterators)
 
-std::deque<std::vector<size_t> >::iterator VData::PlistBegin()
+std::deque<std::vector<long64> >::iterator VData::PlistBegin()
  { return plist.begin(); }
 
-std::deque<std::vector<size_t> >::iterator VData::PlistEnd()
+std::deque<std::vector<long64> >::iterator VData::PlistEnd()
  { return plist.end(); }
 
 std::deque<std::vector<long64> >::iterator VData::PfvertsBegin()
@@ -336,10 +337,10 @@ std::vector<int8_t>::const_iterator  VData::PelmtBegin() const
 std::vector<int8_t>::const_iterator  VData::PelmtEnd() const
  { return pelmt.end(); }
 
-std::deque<std::vector<size_t> >::const_iterator VData::PlistBegin() const
+std::deque<std::vector<long64> >::const_iterator VData::PlistBegin() const
  { return plist.begin(); }
 
-std::deque<std::vector<size_t> >::const_iterator VData::PlistEnd() const
+std::deque<std::vector<long64> >::const_iterator VData::PlistEnd() const
  { return plist.end(); }
 
 size_t  VData::PfvertsSize( size_t eidx ) const
@@ -405,27 +406,27 @@ std::vector<int8_t>::const_iterator  VData::PelmtInterfacesBegin() const {
     return std::next( pelmt.begin(), first_interface_ );
  }
 
-std::deque<std::vector<size_t> >::const_iterator  VData::PlistElmtsBegin() const {
+std::deque<std::vector<long64> >::const_iterator  VData::PlistElmtsBegin() const {
     return plist.begin();
  }
 
-std::deque<std::vector<size_t> >::const_iterator  VData::PlistElmtsEnd() const {
+std::deque<std::vector<long64> >::const_iterator  VData::PlistElmtsEnd() const {
     return std::next( plist.begin(), first_face_ );
  }
 
-std::deque<std::vector<size_t> >::const_iterator  VData::PlistFacesBegin() const {
+std::deque<std::vector<long64> >::const_iterator  VData::PlistFacesBegin() const {
     return std::next( plist.begin(), first_face_ );
  }
 
-std::deque<std::vector<size_t> >::const_iterator  VData::PlistFacesEnd() const {
+std::deque<std::vector<long64> >::const_iterator  VData::PlistFacesEnd() const {
     return std::next( plist.begin(), first_interface_ );
  }
 
-std::deque<std::vector<size_t> >::const_iterator  VData::PlistInterFacesBegin() const {
+std::deque<std::vector<long64> >::const_iterator  VData::PlistInterFacesBegin() const {
     return std::next( plist.begin(), first_interface_ );
  }
 
-std::deque<std::vector<size_t> >::const_iterator  VData::PlistInterFacesEnd() const {
+std::deque<std::vector<long64> >::const_iterator  VData::PlistInterFacesEnd() const {
     return plist.end();
  }
 
@@ -448,7 +449,7 @@ void VData::Plist( size_t eidx, size_t nidx, size_t val )
      plist[eidx][nidx] = val; 
   }
 
-size_t VData::Plist( size_t eidx, size_t nidx ) const 
+long64 VData::Plist( size_t eidx, size_t nidx ) const
   { 
      assert( eidx < plist.size() );
     if (nidx >= plist[eidx].size()) {
@@ -459,7 +460,7 @@ size_t VData::Plist( size_t eidx, size_t nidx ) const
   }
 
 /// nidx is neighbour index
-void VData::Pfvert( size_t eidx, size_t nidx, int val ) 
+void VData::Pfvert( size_t eidx, size_t nidx, long64 val )
   { 
      assert( eidx < pfverts.size() ); 
      assert( nidx < pfverts[eidx].size() ); 
@@ -489,8 +490,8 @@ void VData::SingleElementType( int8_t etype )
     pelmt.push_back( etype );
     hybrid_mesh_ = false;
     // since faces are lower dimensional, at least 2 etypes would be required
-    first_face_  = plist.size();
-    first_interface_ = plist.size();
+    first_face_      = static_cast<long64>(plist.size());
+    first_interface_ = static_cast<long64>(plist.size());
  }
     
     
@@ -552,7 +553,7 @@ void VData::Resize( size_t nodes_per_element,
     pfverts.clear();
 
     for ( size_t i=0U; i<elmts; ++i ) {
-         plist.push_back( vector<size_t>(nodes_per_element) );
+         plist.push_back( vector<long64>(nodes_per_element) );
       }
     for ( size_t k=0U; k<elmts; ++k )
       pfverts.push_back( vector<long64>(nbors_per_element) );
@@ -562,8 +563,8 @@ void VData::Resize( size_t nodes_per_element,
     SingleElementType( etype );
 
     // single element meshes have no faces nor interfaces
-    first_face_      = plist.size();
-    first_interface_ = plist.size();
+    first_face_      = static_cast<long64>(plist.size());
+    first_interface_ = static_cast<long64>(plist.size());
  }
 
 
@@ -617,7 +618,7 @@ to be included into the supplied deques.
     pelmt.assign( etypes.begin(), etypes.end() );
     
     for ( size_t i=0U; i<nrCells; i++ )
-      plist.push_back( vector<size_t>(npes[i]) );
+      plist.push_back( vector<long64>(npes[i]) );
     
     for ( size_t i=0U; i<nrCells; i++ )
       pfverts.push_back( vector<long64>(epes[i]) );
@@ -626,10 +627,10 @@ to be included into the supplied deques.
     else hybrid_mesh_ = false;
     
     // faces
-    first_face_ = nrCells - faces - interfaces;
+    first_face_ = static_cast<long64>(nrCells - faces - interfaces);
     
     // interfaces
-    first_interface_ = nrCells - interfaces;
+    first_interface_ = static_cast<long64>(nrCells - interfaces);
   }
 
 
@@ -667,9 +668,9 @@ void VData::ResizeNodes( size_t nodes )
     
     // getting highest node ID in the plist array
     if ( !plist.empty() ) {
-       for (  deque<vector<size_t> >::const_iterator
+       for (  deque<vector<long64> >::const_iterator
               it=plist.begin(); it!=plist.end(); it++ )
-         for ( vector<size_t>::const_iterator
+         for ( vector<long64>::const_iterator
                i=(*it).begin(); i!=(*it).end(); i++ )
            if ( (*i) > node_max ) node_max = (*i);
         
@@ -713,7 +714,7 @@ void VData::ResizePlist( size_t elements )
  {
     const size_t old_n_elements(plist.size());
   
-    vector<size_t>  empty_vec;
+    vector<long64>  empty_vec;
     const size_t old_size( plist.size() );
     assert( elements > old_size );
     const size_t new_elmts( elements - old_size );
@@ -750,7 +751,7 @@ void VData::ResizePlist( size_t elements )
 void VData::ResizePlist( size_t elements, size_t nperelmt )
 {
     assert( !hybrid_mesh_ );
-    vector<size_t>  empty_vec(nperelmt,0);
+    vector<long64>  empty_vec(nperelmt,0);
     const size_t old_size( plist.size() );
     assert( elements > old_size );
     const size_t new_elmts( elements - old_size );
@@ -790,7 +791,7 @@ void VData::ResizePlist( const deque<size_t>& mixed_ele_plist )
 
     hybrid_mesh_ = false;
 
-    vector<size_t>  empty_vec;
+    vector<long64>  empty_vec;
     size_t          n_last(mixed_ele_plist[0]);
 
     for ( size_t i=0U; i<mixed_ele_plist.size(); ++i )
@@ -805,9 +806,9 @@ void VData::ResizePlist( const deque<size_t>& mixed_ele_plist )
     // if there were no faces or interfaces initially
     if ( first_face_ == old_n_elements or first_interface_ == old_n_elements ) {
          if ( first_face_ == old_n_elements )
-           first_face_  = plist.size();
+           first_face_      = static_cast<long64>(plist.size());
          if ( first_interface_ == old_n_elements )
-           first_interface_ = plist.size();
+           first_interface_ = static_cast<long64>(plist.size());
          return;
       }
 
@@ -943,9 +944,9 @@ bool VData::CheckFix()
 
    // plist
    // -----
-   for ( deque<vector<size_t> >::const_iterator
+   for ( deque<vector<long64> >::const_iterator
          pit=plist.begin(); pit!=plist.end(); pit++ )
-     for ( vector<size_t>::const_iterator
+     for ( vector<long64>::const_iterator
            it=(*pit).begin(); it!=(*pit).end(); it++ )
        if ( *it > Vertices() )
          {
@@ -1009,20 +1010,20 @@ void VData::EstablishZeroBasedNumbering()
 //    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     // test whether nodes are not already numbered 0..1
-    const deque<vector<size_t> >::const_iterator constElementsEnd(plist.end());
-    for ( deque<vector<size_t> >::const_iterator
+    const deque<vector<long64> >::const_iterator constElementsEnd(plist.end());
+    for ( deque<vector<long64> >::const_iterator
           it=plist.begin(); it!=constElementsEnd; it++ )
-      for ( vector<size_t>::const_iterator n=(*it).begin(); n!=(*it).end(); n++ )
+      for ( vector<long64>::const_iterator n=(*it).begin(); n!=(*it).end(); n++ )
         if ( *n == 0U ) {
              cerr << "\nVData::EstablishZeroBasedNumbering: Numbering already is 0..n-1 based.\n";
              return;
           }
     // to convert: 
     // plist
-    const deque<vector<size_t> >::iterator elementsEnd(plist.end());
-    for ( deque<vector<size_t> >::iterator
+    const deque<vector<long64> >::iterator elementsEnd(plist.end());
+    for ( deque<vector<long64> >::iterator
           it=plist.begin(); it!=elementsEnd; it++ )
-      for ( vector<size_t>::iterator n=(*it).begin(); n!=(*it).end(); n++ )
+      for ( vector<long64>::iterator n=(*it).begin(); n!=(*it).end(); n++ )
         *n -= 1U;
 
     // pfverts
@@ -1048,13 +1049,14 @@ void VData::EstablishZeroBasedNumbering()
 */ 
 void VData::OutBinary( fstream& fp ) const
  {
+    static_assert( sizeof(size_t) == sizeof(streamsize), "VData::OutBinary: on this system 'std::streamsize' is not equal to size_t" );
     size_t n0(0), n1(1), records;
     double64*  ptr(0);
     
     // 1. writing whether we are dealing with a mixed mesh
     // ---------------------------------------------------
-    if ( hybrid_mesh_ ) fp.write( (char*) &n1, sizeof(size_t));
-    else                fp.write( (char*) &n0, sizeof(size_t));
+    if ( hybrid_mesh_ ) fp.write( reinterpret_cast<const char*>(&n1), sizeof(size_t) );
+    else                fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
     
     // 2. writing all the p,c arrays or length identifiers = 0
     // -------------------------------------------------------
@@ -1063,24 +1065,24 @@ void VData::OutBinary( fstream& fp ) const
      // px
     if ( (records=px.size()) > 0 && (ptr=const_cast<double64*>( &(*px.begin()) )) != NULL ) 
       {
-         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
+         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
          fp.write( reinterpret_cast<const char*>(ptr), sizeof(double64) * records );
       }
-    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t));
+    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
     // py
     if ( (records=py.size()) > 0 && (ptr=const_cast<double64*>( &(*py.begin()) )) != NULL ) 
       {
-         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
+         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
          fp.write( reinterpret_cast<const char*>(ptr), sizeof(double64) * records );
       }
-    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t));
+    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
     // pz
     if ( (records=pz.size()) > 0 && (ptr=const_cast<double64*>( &(*pz.begin()) )) != NULL ) 
       {
-         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
+         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
          fp.write( reinterpret_cast<const char*>(ptr), sizeof(double64) * records );
       }
-    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t));
+    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
    }
 
     // 3. writing pelmt, plist, pfverts, bflags
@@ -1104,8 +1106,8 @@ void VData::OutBinary( fstream& fp ) const
    
     // 4. offsets for faces and interfaces
     // -----------------------------------
-    fp.write( (char*) &first_face_, sizeof(size_t));
-    fp.write( (char*) &first_interface_, sizeof(size_t));
+    fp.write( reinterpret_cast<const char*>(&first_face_), sizeof(long64) );
+    fp.write( reinterpret_cast<const char*>(&first_interface_), sizeof(long64) );
    
     cout <<"\nVData::OutBinary: Mesh has been successfully written to file."<< endl;
 
@@ -1120,11 +1122,12 @@ void VData::OutBinary( fstream& fp ) const
 */
 void VData::InBinary( fstream& fp )
  {
+    static_assert( sizeof(size_t) == sizeof(streamsize), "VData::InBinary: on this system 'std::streamsize' is not equal to size_t" );
     size_t mixed(0U), records(0U);
     
     // 1. reading whether we are dealing with a mixed mesh
     // ---------------------------------------------------
-    fp.read( (char*) &mixed, sizeof(size_t));
+    fp.read( reinterpret_cast<char*>(&mixed), sizeof(size_t) );
     if ( mixed ) hybrid_mesh_ = true;
     else         hybrid_mesh_ = false;
     
@@ -1134,11 +1137,11 @@ void VData::InBinary( fstream& fp )
      BinaryFileSectionRead sect(fp, "VSETCORD");
 
     // px
-    fp.read( (char*) &records, sizeof(size_t));
+    fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
     if ( records > 0U ) {
          px.resize( records );
          vector<double64>( px ).swap( px );
-         fp.read( (char*) &(*px.begin()), sizeof(double64) * records );
+         fp.read( reinterpret_cast<char*>(&(*px.begin())), sizeof(double64) * records );
       }
 
     // py
@@ -1146,7 +1149,7 @@ void VData::InBinary( fstream& fp )
     if ( records > 0U ) {
          py.resize( records );
          vector<double64>( py ).swap( py );
-         fp.read( (char*) &(*py.begin()), sizeof(double64) * records );
+         fp.read( reinterpret_cast<char*>(&(*py.begin())), sizeof(double64) * records );
       }
 
     // pz
@@ -1154,7 +1157,7 @@ void VData::InBinary( fstream& fp )
     if ( records > 0U ) {
          pz.resize( records );
          vector<double64>( pz ).swap( pz );
-         fp.read( (char*) &(*pz.begin()), sizeof(double64) * records );
+         fp.read( reinterpret_cast<char*>(&(*pz.begin())), sizeof(double64) * records );
       }
    }
 
@@ -1179,8 +1182,8 @@ void VData::InBinary( fstream& fp )
     
     // 4. offsets for faces and interfaces
     // -----------------------------------
-    fp.read( (char*) &first_face_, sizeof(size_t));
-    fp.read( (char*) &first_interface_, sizeof(size_t));
+    fp.read( reinterpret_cast<char*>(&first_face_), sizeof(long64) );
+    fp.read( reinterpret_cast<char*>(&first_interface_), sizeof(long64) );
     cout <<"\nVData::InBinary: Mesh has been successfully read from file."<< endl;
         
  } // end InBinary
@@ -1235,7 +1238,7 @@ void VData::OutASCII( const char* file ) const
      // -----
      ofs <<"\n'plist' entries of "<< plist.size() <<" elements:"<< endl;
      i = 0U;
-     for ( deque<vector<size_t> >::const_iterator
+     for ( deque<vector<long64> >::const_iterator
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
           ofs << i <<": \t";
@@ -1310,7 +1313,7 @@ void VData::Out() const
      // -----
      cout <<"\n'plist' entries of "<< plist.size() <<" elements:"<< endl;
      i = 0U;
-     for ( deque<vector<size_t> >::const_iterator
+     for ( deque<vector<long64> >::const_iterator
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
           cout << i <<": \t";
@@ -1364,7 +1367,7 @@ void VData::InText( std::ifstream& ifs )
      
      // 1. read node locations: 1 headlines gives number of nodes and dimensions of model
      // ---------------------------------------------------------------------------------
-     char text_line[256];
+     char text_line[NAME_STRING];
      const char* const delims =" ,\t,:,\n,\r";
  
      do ifs.getline( text_line, 256 );
@@ -1373,23 +1376,23 @@ void VData::InText( std::ifstream& ifs )
      size_t dim    = atoi(strtok(NULL,delims));
      assert( nnodes > 0 );
      assert( dim >= 1 && dim <=3 );
-     px.resize( static_cast<uint32>(nnodes) );
+     px.resize( nnodes );
      vector<double64>( px ).swap( px );
      if ( dim  > 1 ) {
-          py.resize( static_cast<uint32>(nnodes) );
+          py.resize( nnodes );
           vector<double64>( py ).swap( py );
        }
      if ( dim == 3 ) {
-          pz.resize( static_cast<uint32>(nnodes) );
+          pz.resize( nnodes );
           vector<double64>( pz ).swap( pz );
        }
 
-     for ( size_t i=0U; i<static_cast<size_t>(nnodes); i++ ) {
+     for ( size_t i=0U; i<nnodes; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           px[i] = atof(strtok( text_line, delims ));
-          if ( static_cast<size_t>(dim)  > 1U ) py[i] = atof(strtok(NULL,delims));
-          if ( static_cast<size_t>(dim) == 3U ) pz[i] = atof(strtok(NULL,delims));
+          if ( dim  > 1U ) py[i] = atof(strtok(NULL,delims));
+          if ( dim == 3U ) pz[i] = atof(strtok(NULL,delims));
        }
        
      // 2. pelmt and plist, mixed mesh indicated by third number  
@@ -1397,26 +1400,28 @@ void VData::InText( std::ifstream& ifs )
      // -----------------------------------------------------------------
      do ifs.getline( text_line, 256 );
      while ( (isCommentLine(text_line) && !ifs.eof()) );
-     int nelements = atoi(strtok( text_line, delims ));
-     int netypes   = atoi(strtok(NULL,delims));
+     size_t nelements = atoi(strtok( text_line, delims ));
+     size_t netypes   = atoi(strtok(NULL,delims));
      assert( nelements > 0 );
      assert( netypes < 20 );
      plist.resize(nelements);
-     deque<vector<size_t> >( plist ).swap( plist ); 
+     deque<vector<long64> >( plist ).swap( plist );
      if ( netypes == 1 ) hybrid_mesh_ = false;
      else                hybrid_mesh_ = true;
      if ( hybrid_mesh_ ) pelmt.reserve(nelements);
      
-     for ( size_t i=0U; i<static_cast<size_t>(nelements); i++ ) {
+     for ( size_t i=0U; i<nelements; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
-          int8_t etype = atoi(strtok( text_line, delims ));
-          int npe      = atoi(strtok(NULL,delims));
-          pelmt.push_back( etype );
-          plist[i].resize( static_cast<uint32>(npe) );
-          vector<size_t>( plist[i] ).swap( plist[i] );
+          long64 etype = atoi(strtok( text_line, delims ));
+          assert( etype >= 0 && etype < 50 );
+          pelmt.push_back( static_cast<int8_t>(etype) );
+          long64 npe  = atoi(strtok(NULL,delims));
+          assert( npe > 2 );
+          plist[i].resize( static_cast<size_t>(npe) );
+          vector<long64>( plist[i] ).swap( plist[i] );
           for ( size_t j=0U; j<static_cast<size_t>(npe); j++ )
-            plist[i][j] = static_cast<uint32>(atoi(strtok(NULL,delims)));
+            plist[i][j] = atoi(strtok(NULL,delims));
        }
      
      
@@ -1424,15 +1429,15 @@ void VData::InText( std::ifstream& ifs )
      // ----------
      do ifs.getline( text_line, 256 );
      while ( (isCommentLine(text_line) && !ifs.eof()) );
-     int npe = atoi(strtok( text_line, delims ));
+     long64 npe = atoi(strtok( text_line, delims ));
      assert( nelements == npe );
-     pfverts.resize( static_cast<uint32>(nelements) );
+     pfverts.resize( static_cast<long64>(nelements) );
      deque<vector<long64> >( pfverts ).swap( pfverts );
      for ( size_t i=0U; i<static_cast<size_t>(nelements); i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           npe = atoi(strtok( text_line, delims )); // neigbor elements per element (=faces)
-          pfverts[i].resize( static_cast<uint32>(npe) );
+          pfverts[i].resize( static_cast<size_t>(npe) );
           vector<long64>( pfverts[i] ).swap( pfverts[i] );
           for ( size_t j=0; j<static_cast<size_t>(npe); j++ )
             pfverts[i][j] = atoi(strtok(NULL,delims));
@@ -1443,25 +1448,26 @@ void VData::InText( std::ifstream& ifs )
      // -----------------
      do ifs.getline( text_line, 256 );
      while ( (isCommentLine(text_line) && !ifs.eof()) );
-     size_t nbnodes = static_cast<uint32>(atoi(strtok( text_line, delims ))); // neigbor elements per element (=faces)
+     size_t nbnodes = atoi(strtok( text_line, delims )); // neigbor elements per element (=faces)
      assert( static_cast<int>(nbnodes) <= nnodes );
      bflags.resize(nnodes,0);
      for ( size_t i=0U; i<nbnodes; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
-          size_t      nid   = static_cast<uint32>(atoi(strtok( text_line, delims )));
-          std::int8_t bflag = atoi(strtok(NULL,delims));
-          bflags[nid] = bflag;
+          size_t nid   = atoi(strtok( text_line, delims ));
+          long64 bflag = atoi(strtok(NULL,delims));
+          assert( bflag <= 0 );
+          bflags[nid] = static_cast<int8_t>(bflag);
        }
    
     // 5. where the first face or interface - if any start in the records
     // ------------------------------------------------------------------
     do ifs.getline( text_line, 256 );
     while ( (isCommentLine(text_line) && !ifs.eof()) );
-    size_t face  = static_cast<uint32>(atoi(strtok( text_line, delims )));
+    long64 face = atoi(strtok( text_line, delims ));
     assert( face <= nelements );
     first_face_ = face;
-    face  = static_cast<uint32>(atoi(strtok( text_line, delims )));
+    face  = atoi(strtok( text_line, delims ));
     assert( face <= nelements );
     first_interface_ = face;
    
@@ -1656,9 +1662,9 @@ bool VData::DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes )
     set<size_t>  node_set;
  
     // creating the unique nodeset
-    for ( deque<vector<size_t> >::const_iterator
+    for ( deque<vector<long64> >::const_iterator
           it=plist.begin(); it!=plist.end(); it++ )
-      for ( vector<size_t>::const_iterator 
+      for ( vector<long64>::const_iterator
             vt=(*it).begin(); vt!=(*it).end(); vt++ )
         node_set.insert( *vt );
         
@@ -1775,7 +1781,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
     // ---------------------------------------------
     // copying those entries which are to be retained
     // and creating a node correspondance map with the new node IDs
-    vector<vector<size_t> >  new_plist( o_n_elmt_ids.size() );
+    vector<vector<long64> >  new_plist( o_n_elmt_ids.size() );
     vector<vector<long64> >  new_pfverts( with_connectivity ? o_n_elmt_ids.size() : 0 );
     size_t                   n_node(0U);
     //  old   & new node numbers
@@ -1798,7 +1804,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
          if( with_connectivity ) new_pfverts[neidx] = pfverts[eidx];
          // recording which nodes are retained and creating an access map for them
          // in which the old node IDs are used as keys for the new ones
-         for ( vector<size_t>::const_iterator
+         for ( vector<long64>::const_iterator
                nit=plist[eidx].begin(); nit!=plist[eidx].end(); nit++ ) {
               pair<map<size_t,size_t>::iterator,bool>
               iit = o_n_node_ids.insert( make_pair( *nit, n_node ) );
@@ -1807,7 +1813,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
            }
       }
     // verifying that plist and pfverts do not contain empty elements
-    for ( vector<vector<size_t> >::const_iterator
+    for ( vector<vector<long64> >::const_iterator
           it=new_plist.begin(); it!=new_plist.end(); it++ )
       if ( (*it).empty() )
         throw csmp::Exception( FATAL_ERROR, "VData::ReduceTo",
@@ -1835,7 +1841,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
             // only if there was a neighboring element before its ID is updated
             if ( (*pit) > 0 ) {
                  map<size_t,size_t>::const_iterator
-                   eit=o_n_elmt_ids.find( static_cast<size_t>(*pit) );
+                   eit=o_n_elmt_ids.find( *pit );
                  if ( eit == o_n_elmt_ids.end() ) {
                        if ( first_incidence ) {
                              if ( csmp_error.Verbose() ) {
@@ -1854,8 +1860,8 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
     // 3. 'plist': updating node IDs if necessary
     // ------------------------------------------
     if ( px.size() != o_n_node_ids.size() ) {
-         for ( deque<vector<size_t> >::iterator it=plist.begin(); it!=plist.end(); it++ )
-           for ( vector<size_t>::iterator pit=(*it).begin(); pit!=(*it).end(); pit++ )
+         for ( deque<vector<long64> >::iterator it=plist.begin(); it!=plist.end(); it++ )
+           for ( vector<long64>::iterator pit=(*it).begin(); pit!=(*it).end(); pit++ )
              // only if there was a neighboring element before its ID is updated
               {
                   map<size_t,size_t>::const_iterator nit=o_n_node_ids.find( *pit );
@@ -1918,7 +1924,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
     size_t  nodes_per_element = plist[0].size();
 
     hybrid_mesh_=false;
-    for ( deque<vector<size_t> >::iterator it=plist.begin(); it!=plist.end(); it++ )
+    for ( deque<vector<long64> >::iterator it=plist.begin(); it!=plist.end(); it++ )
       if ( (*it).size() != nodes_per_element ) {
            hybrid_mesh_ = true;
            break;
@@ -2090,7 +2096,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
     // ----------------------------------------------------------------------------------------------
     const vector<int8_t>::const_iterator end = PelmtEnd();
     vector<int8_t>::const_iterator       eit = PelmtBegin();
-    deque<vector<size_t> >::iterator     pls = PlistBegin();
+    deque<vector<long64> >::iterator     pls = PlistBegin();
     deque<vector<long64> >::iterator     pfv = PfvertsBegin();
     
     while( eit != end ) {
@@ -2204,14 +2210,14 @@ size_t VData::RenumberElementsCounterClockwise2D()
        
       // 1. Finding line elements and edges of surface elements located at the model boundary
       // ------------------------------------------------------------------------------------
-      set<size_t>  line_elmts, boundary_line_elmts;
+      set<long64>  line_elmts, boundary_line_elmts;
       // recording the corner-node ids of the surface elements for later searching
       // face-nd-id key, boundary face node ids in correct sequence
-      map<  set<size_t>, pair<size_t,size_t> > surf_elmt_face_nd_ids;
+      map<  set<long64>, pair<long64,long64> > surf_elmt_face_nd_ids;
 
       const vector<int8_t>::const_iterator  end = PelmtEnd();
       vector<int8_t>::const_iterator        eit = PelmtBegin();
-      size_t elmt_idx(0U);
+      long64 elmt_idx(0U);
 
        while( eit != end ) {
             // if this is a line element at the beginning of a line element chain
@@ -2234,15 +2240,15 @@ size_t VData::RenumberElementsCounterClockwise2D()
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
                              if ( i == 0 ) {
-                                  const set<size_t> face1{ plist[elmt_idx][1], plist[elmt_idx][2] };
+                                  const set<long64> face1{ plist[elmt_idx][1], plist[elmt_idx][2] };
                                   surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) ) );
                                }
                              else if ( i == 1 ) {
-                                  const set<size_t> face2{ plist[elmt_idx][2], plist[elmt_idx][0] };
+                                  const set<long64> face2{ plist[elmt_idx][2], plist[elmt_idx][0] };
                                   surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair( plist[elmt_idx][2], plist[elmt_idx][0] ) ) );
                                }
                              else {
-                                  const set<size_t> face3{ plist[elmt_idx][0], plist[elmt_idx][1] };
+                                  const set<long64> face3{ plist[elmt_idx][0], plist[elmt_idx][1] };
                                   surf_elmt_face_nd_ids.insert( make_pair( face3, make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) ) );
                                }
                           }
@@ -2253,19 +2259,19 @@ size_t VData::RenumberElementsCounterClockwise2D()
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
                              if ( i == 0 ) {
-                                  const set<size_t> face1{ plist[elmt_idx][0], plist[elmt_idx][1] };
+                                  const set<long64> face1{ plist[elmt_idx][0], plist[elmt_idx][1] };
                                   surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) ) );
                                }
                              else if ( i == 1 ) {
-                                  const set<size_t> face2{ plist[elmt_idx][1], plist[elmt_idx][2] };
+                                  const set<long64> face2{ plist[elmt_idx][1], plist[elmt_idx][2] };
                                   surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) ) );
                                }
                              else if ( i == 2 ) {
-                                  const set<size_t> face3{ plist[elmt_idx][2], plist[elmt_idx][3] };
+                                  const set<long64> face3{ plist[elmt_idx][2], plist[elmt_idx][3] };
                                   surf_elmt_face_nd_ids.insert( make_pair( face3, make_pair( plist[elmt_idx][2], plist[elmt_idx][3] ) ) );
                                }
                              else {
-                                  const set<size_t> face4{ plist[elmt_idx][3], plist[elmt_idx][0] };
+                                  const set<long64> face4{ plist[elmt_idx][3], plist[elmt_idx][0] };
                                   surf_elmt_face_nd_ids.insert( make_pair( face4, make_pair( plist[elmt_idx][3], plist[elmt_idx][0] ) ) );
                                }
                          }
@@ -2283,11 +2289,11 @@ size_t VData::RenumberElementsCounterClockwise2D()
       // 2. following potential line element chains from beginning to end, re-orientating elements as necessary
       // ------------------------------------------------------------------------------------------------------
       // root-elmt & numbers of interconnected line elements in discovered chain
-      map<size_t,deque<size_t> > polylines;
-      set<size_t>                processed_elmts;
+      map<long64,deque<long64> > polylines;
+      set<long64>                processed_elmts;
       
       // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
-      for ( set<size_t>::const_iterator it=line_elmts.begin(); it!= line_elmts.end(); ++it )
+      for ( set<long64>::const_iterator it=line_elmts.begin(); it!= line_elmts.end(); ++it )
         {
            // if this is an isolated line segment with no neighbors it is skipped
            elmt_idx = (*it);
@@ -2305,8 +2311,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
            assert( bflag >= MULTIPLE );
 
           // storing the element as the first in the line element sequence
-          pair<map<size_t,deque<size_t> >::iterator,bool>
-            chain_it=polylines.insert( make_pair( elmt_idx, deque<size_t>{elmt_idx} ) );
+          pair<map<long64,deque<long64> >::iterator,bool>
+            chain_it=polylines.insert( make_pair( elmt_idx, deque<long64>{elmt_idx} ) );
             
           // making sure that the element was indeed inserted (else it is a duplicate)
           assert( chain_it.second == true );
@@ -2357,7 +2363,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
       //        map<set<size_t>,pair<size_t,size_t> > surf_elmt_face_nd_ids;
       //
       // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
-      for ( set<size_t>::const_iterator it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
+      for ( set<long64>::const_iterator it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
         {
            // searching for the corresponding face of a higher dimensional element
            auto face_it = surf_elmt_face_nd_ids.find( set{ plist[*it][0], plist[*it][1] } );
@@ -2495,12 +2501,12 @@ void  VData::EstablishElementConnectivity2D()
         // building face keys for surface and line elements types, collecting them into maps,
         // including the elements that they belong to with corresponding face IDs.
         //  face-nd-ids    elmt-id, face-of-element
-        map<set<size_t>,map<size_t,size_t> >  surf_elmt_nbors;
-        map<size_t,set<size_t> >              line_elmt_that_share_node;
+        map<set<long64>,map<long64,size_t> >  surf_elmt_nbors;
+        map<long64,set<long64> >              line_elmt_that_share_node;
 
-        const deque<vector<size_t> >::iterator end = PlistEnd();
-        deque<vector<size_t> >::iterator       eit = PlistBegin();
-        size_t elmt_idx(0U);
+        const deque<vector<long64> >::iterator end = PlistEnd();
+        deque<vector<long64> >::iterator       eit = PlistBegin();
+        long64 elmt_idx(0U);
 
         // 1. establishing connectivity
         // ----------------------------
@@ -2521,61 +2527,61 @@ void  VData::EstablishElementConnectivity2D()
              // and the corner nodes are sufficient to identify them
              if ( is_triangle ) {
                   pfverts[elmt_idx].resize(3U,IRREGULAR);
-                  const set<size_t> face1({ (*eit)[1], (*eit)[2] });
-                  const set<size_t> face2({ (*eit)[2], (*eit)[0] });
-                  const set<size_t> face3({ (*eit)[0], (*eit)[1] });
+                  const set<long64> face1({ (*eit)[1], (*eit)[2] });
+                  const set<long64> face2({ (*eit)[2], (*eit)[0] });
+                  const set<long64> face3({ (*eit)[0], (*eit)[1] });
                   // inserting the faces
                   // face 1
-                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face1_it =
-                    surf_elmt_nbors.insert( make_pair( face1, map<size_t,size_t>({{elmt_idx,{0}}}) ) );
+                  pair<map<set<long64>,map<long64,size_t> >::iterator,bool> face1_it =
+                    surf_elmt_nbors.insert( make_pair( face1, map<long64,size_t>({{elmt_idx,{0}}}) ) );
                   // if the face already is in the map, the element ID is added
                   if ( face1_it.second == false ) (*face1_it.first).second.insert( make_pair( elmt_idx, 0 ) );
                   // face 2
-                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face2_it =
-                    surf_elmt_nbors.insert( make_pair( face2, map<size_t,size_t>({{elmt_idx,{1}}}) ) );
+                  pair<map<set<long64>,map<long64,size_t> >::iterator,bool> face2_it =
+                    surf_elmt_nbors.insert( make_pair( face2, map<long64,size_t>({{elmt_idx,{1}}}) ) );
                   if ( face2_it.second == false ) (*face2_it.first).second.insert( make_pair( elmt_idx, 1 ) );
                   // face 3
-                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face3_it =
-                    surf_elmt_nbors.insert( make_pair( face3, map<size_t,size_t>({{elmt_idx,{2}}}) ) );
+                  pair<map<set<long64>,map<long64,size_t> >::iterator,bool> face3_it =
+                    surf_elmt_nbors.insert( make_pair( face3, map<long64,size_t>({{elmt_idx,{2}}}) ) );
                   if ( face3_it.second == false ) (*face3_it.first).second.insert( make_pair( elmt_idx, 2 ) );
                }
              else if ( is_quadrilateral ) {
                   pfverts[elmt_idx].resize(4U,IRREGULAR);
                   // see CSMP fem specifications for these conventions 
-                  const set<size_t> face1{ (*eit)[0], (*eit)[1] };
-                  const set<size_t> face2{ (*eit)[1], (*eit)[2] };
-                  const set<size_t> face3{ (*eit)[2], (*eit)[3] };
-                  const set<size_t> face4{ (*eit)[3], (*eit)[0] };
+                  const set<long64> face1{ (*eit)[0], (*eit)[1] };
+                  const set<long64> face2{ (*eit)[1], (*eit)[2] };
+                  const set<long64> face3{ (*eit)[2], (*eit)[3] };
+                  const set<long64> face4{ (*eit)[3], (*eit)[0] };
                   // inserting the faces
                   // face 1
-                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face1_it =
-                    surf_elmt_nbors.insert( make_pair( face1, map<size_t,size_t>({{elmt_idx,{0}}}) ) );
+                  pair<map<set<long64>,map<long64,size_t> >::iterator,bool> face1_it =
+                    surf_elmt_nbors.insert( make_pair( face1, map<long64,size_t>({{elmt_idx,{0}}}) ) );
                   // if the face already is in the map, the element ID is added
                   if ( face1_it.second == false ) (*face1_it.first).second.insert( make_pair( elmt_idx, 0 ) );
                   // face 2
-                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face2_it =
-                    surf_elmt_nbors.insert( make_pair( face2, map<size_t,size_t>({{elmt_idx,{1}}}) ) );
+                  pair<map<set<long64>,map<long64,size_t> >::iterator,bool> face2_it =
+                    surf_elmt_nbors.insert( make_pair( face2, map<long64,size_t>({{elmt_idx,{1}}}) ) );
                   if ( face2_it.second == false ) (*face2_it.first).second.insert( make_pair( elmt_idx, 1 ) );
                   // face 3
-                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face3_it =
-                    surf_elmt_nbors.insert( make_pair( face3, map<size_t,size_t>({{elmt_idx,{2}}}) ) );
+                  pair<map<set<long64>,map<long64,size_t> >::iterator,bool> face3_it =
+                    surf_elmt_nbors.insert( make_pair( face3, map<long64,size_t>({{elmt_idx,{2}}}) ) );
                   if ( face3_it.second == false ) (*face3_it.first).second.insert( make_pair( elmt_idx, 2 ) );               
                   // face 4
-                  pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool> face4_it =
-                    surf_elmt_nbors.insert( make_pair( face4, map<size_t,size_t>({{elmt_idx,{3}}}) ) );
+                  pair<map<set<long64>,map<long64,size_t> >::iterator,bool> face4_it =
+                    surf_elmt_nbors.insert( make_pair( face4, map<long64,size_t>({{elmt_idx,{3}}}) ) );
                   if ( face4_it.second == false ) (*face4_it.first).second.insert( make_pair( elmt_idx, 3 ) );               
                }
              // any line elements (making a map of which ones share a node; this map also identifies manifolds)
              else {
                   assert( isLineElement( etype ) );
                   pfverts[elmt_idx].resize(2U,IRREGULAR);
-                  pair<map<size_t,set<size_t> >::iterator,bool> // node 0
+                  pair<map<long64,set<long64> >::iterator,bool> // node 0
                     it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it0.second )
                     (*it0.first).second.insert( elmt_idx );
                   
-                  pair<map<size_t,set<size_t> >::iterator,bool> // node 1
+                  pair<map<long64,set<long64> >::iterator,bool> // node 1
                     it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it1.second )
@@ -2590,7 +2596,7 @@ void  VData::EstablishElementConnectivity2D()
         // where there is no neighbor an attempt is made to assign a face to a particular boundary,
         // based on its alignment with boundary normal
         size_t node0(NULL_IDX), node1(NULL_IDX);
-        for ( map<set<size_t>,map<size_t,size_t> >::const_iterator
+        for ( map<set<long64>,map<long64,size_t> >::const_iterator
               it=surf_elmt_nbors.begin(); it!=surf_elmt_nbors.end(); ++it ) {
              // there should be no more than 2 entries per face
              assert( (*it).second.size() <= 2U );

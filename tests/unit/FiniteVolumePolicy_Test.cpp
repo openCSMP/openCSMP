@@ -122,8 +122,8 @@ void FiniteVolumePolicy_Test::Test_CreateVSet()
   	vset.AddXYZ( px, py, pz );
 
     //define elements
-    std::deque<std::vector<size_t> > deqElements(iNrOfElements);
-    std::vector<size_t> vecNodes(4);
+    std::deque<std::vector<long64> > deqElements(iNrOfElements);
+    std::vector<long64> vecNodes(4);
     vecNodes[0]=0;
     vecNodes[1]=1;
     vecNodes[2]=4;

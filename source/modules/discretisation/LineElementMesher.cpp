@@ -460,7 +460,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
         const size_t n_elements( vset.Vertices() - 1U );
 
         //1.0 PList - establish
-        deque<vector<size_t> >  plist( n_elements, vector<size_t>(2) );
+        deque<vector<long64> >  plist( n_elements, vector<long64>(2) );
 
         //1.1 PList - assigning content
         for ( size_t i=0; i<n_elements; ++i )
@@ -560,7 +560,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             //3.1 VSet  - assigning point x-coordinates
             //    PList - establish
             //    VSet  - adding boundary flags
-            deque<vector<size_t> >  plist( n_elements, vector<size_t>(2) );
+            deque<vector<long64> >  plist( n_elements, vector<long64>(2) );
 
             size_t node_counter( 0U );
             size_t element_counter( 0U );

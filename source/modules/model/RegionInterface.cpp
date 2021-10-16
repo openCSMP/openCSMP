@@ -421,10 +421,10 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
   {
     BinaryFileSectionWrite hdr( fp, "UNIQREGN" );
 
-    size_t records = this->UniqueRegions();
-
+    long64 records = this->UniqueRegions();
+    
     // writing number of unique regions
-    fp.write( reinterpret_cast<const char*>(&records), sizeof( size_t ) );
+    fp.write( reinterpret_cast<const char*>(&records), sizeof( long64 ) );
 
     for ( typename std::map<std::string, csmp::Region<dim> >::const_iterator
           git = UniqueRegionsBegin(); git != UniqueRegionsEnd(); ++git )
@@ -444,9 +444,9 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
     cout << "\n\n\tNon-unique regions overlapping unique ones and potentially each other: ";
     BinaryFileSectionWrite hdr( fp, "NONUREGN" );
 
-    size_t records = this->Regions() - this->UniqueRegions();
+    long64 records = this->Regions() - this->UniqueRegions();
 
-    fp.write( (char*)&records, sizeof( size_t ) );
+    fp.write( reinterpret_cast<const char*>(&records), sizeof( long64 ) );
 
     for ( auto git = RegionsBegin(); git != RegionsEnd(); git++ )
       {
@@ -528,8 +528,8 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
     {
       BinaryFileSectionRead hdr( fp, "UNIQREGN" );
       // getting number of unique region records from file
-      size_t  records( 0 );  // region records
-      fp.read( (char*)&records, sizeof( size_t ) );
+      long64  records( 0 );  // region records
+      fp.read( reinterpret_cast<char*>(&records), sizeof( long64 ) );
       if ( records > 0 )
           // reading the regions sequentially
           for ( size_t i = 0U; i<records; i++ )
@@ -563,8 +563,8 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
   {
     BinaryFileSectionRead hdr( fp, "NONUREGN" );
     // getting number of non-unique region records from file
-    size_t  records( 0 );
-    fp.read( (char*)&records, sizeof( size_t ) );
+    long64  records( 0 );
+    fp.read( reinterpret_cast<char*>(&records), sizeof( long64 ) );
     if ( records > 0 )
       // reading the regions sequentially
       for ( size_t i = 0U; i<records; i++ )

@@ -27,15 +27,16 @@ class VSet : public VData {
     VSet( VSet&& ) = default;
     VSet( size_t nodes_per_element, 
           size_t nbors_per_element,
-          int32  csmp_etype, 
+          int8_t  csmp_etype, 
           size_t nodes, size_t elmts );
 
     // setting sizes without transfer of data
-    VSet( const std::deque<size_t>& npes, 
+    VSet( const std::deque<size_t>& npes,
           const std::deque<size_t>& epes,
           size_t nodes );
 
-    ~VSet();
+    virtual ~VSet();
+    
     VSet& operator=( const VSet& );
     VSet& operator=( VSet&& ) = default;
 
@@ -55,11 +56,11 @@ class VSet : public VData {
                  const std::deque<double64>& z );
       
     /// the IDs of the nodes that make up each element 
-    void AddPlist( typename std::map<size_t,std::vector<size_t> >::const_iterator first,
-                   typename std::map<size_t,std::vector<size_t> >::const_iterator last );
+    void AddPlist( typename std::map<size_t,std::vector<long64> >::const_iterator first,
+                   typename std::map<size_t,std::vector<long64> >::const_iterator last );
 
-    void AddPlist( typename std::deque<std::vector<size_t> >::const_iterator first,
-                   typename std::deque<std::vector<size_t> >::const_iterator last );
+    void AddPlist( typename std::deque<std::vector<long64> >::const_iterator first,
+                   typename std::deque<std::vector<long64> >::const_iterator last );
 
     /// the equi-dimensional neighbors adjacent to the numbered element faces plus boundary identifiers where there is no neighbor
     void AddPfverts( typename std::map<size_t,std::vector<long64> >::const_iterator first,

@@ -332,7 +332,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
    {
       const LocalVariables evars( phys_vars.LocalVariablesAt( ELEMENT ) );
       const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
-      typename deque<vector<size_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
+      typename deque<vector<long64>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
       size_t elmt_idx(0);
       // 2.1 If the MeshManager contains only one element type
@@ -412,7 +412,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
 
        // the faces are numbered  elements to (elements + faces - 1), but they are stored in connector at Face 0..n-1
        long64  face_idx(vset.Elements());
-       typename deque<vector<size_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
+       typename deque<vector<long64> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
             const int8_t csmpElementType = vset.ElementType( face_idx );
             if ( csmpElementType == UNKNOWN ) {
@@ -511,7 +511,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        const LocalVariables evars( phys_vars.LocalVariablesAt( INTER_FACE ) );
        const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( INTER_FACE ) );
 
-       typename deque<vector<size_t> >::const_iterator  first( vset.PlistInterFacesBegin() ),
+       typename deque<vector<long64> >::const_iterator  first( vset.PlistInterFacesBegin() ),
                                                         last( vset.PlistInterFacesEnd() );
 
        size_t interface_idx(vset.Elements() + vset.Faces());

@@ -53,7 +53,7 @@ class GoCadInterface {
     
     void FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset );
  
-    bool VerifyConsecutiveNodeNumbering( std::map<size_t,std::vector<size_t> >& plist ) const; 
+    bool VerifyConsecutiveNodeNumbering( std::map<size_t,std::vector<long64> >& plist ) const; 
 };
 
 } // csmp

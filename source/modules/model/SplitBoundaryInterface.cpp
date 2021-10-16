@@ -255,8 +255,8 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
   {
      BinaryFileSectionWrite sect(fp, "SPLITBDRY");
   
-     const size_t records( this->SplitBoundaries() );
-     fp.write( reinterpret_cast<const char*>(&records), sizeof( size_t ) );
+     const long64 records( this->SplitBoundaries() );
+     fp.write( reinterpret_cast<const char*>(&records), sizeof( long64 ) );
 
      for ( auto bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
        {
@@ -321,9 +321,9 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
     BinaryFileSectionRead sect(fp, "SPLITBDRY");
    
     SubDomainInfo  info;
-    size_t  records(0);  // region records
+    long64         records(0);  // region records
     // getting number of unique region records from file
-    fp.read( reinterpret_cast<char*>(&records), sizeof(size_t) );
+    fp.read( reinterpret_cast<char*>(&records), sizeof(long64) );
     if ( records > 0 )
       // reading the regions sequentially
       for ( size_t i=0U; i<records; ++i )

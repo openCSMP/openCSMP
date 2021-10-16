@@ -418,9 +418,9 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Reading triangle elements TRGL
     // ---------------------------------
-    map<size_t,vector<size_t> >  triangles;
-    vector<size_t>                        node_ids(3);
-    size_t                                triangleID(1);
+    map<size_t,vector<long64> >  triangles;
+    vector<long64>               node_ids(3);
+    size_t                       triangleID(1);
 
     do
       {
@@ -457,7 +457,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<size_t> >::iterator  plit;
+    typename map<size_t,vector<long64> >::iterator  plit;
     size_t n;
     
     if ( !properties.empty() ) assert( node_properties.size() == nodes.size() );
@@ -1182,8 +1182,8 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
     // 3. Reading tetrahedral elements TETRA
     // -------------------------------------
     //   id      attr   node xyz
-    map<size_t,vector<size_t> >  tetrahedra;
-    vector<size_t>  node_ids(4);
+    map<size_t,vector<long64> >  tetrahedra;
+    vector<long64>  node_ids(4);
     size_t          tetraID = 1;
 
     // reading line by line 
@@ -1235,9 +1235,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 //
 // ------------------------------------------------------------------------- 
    // newid oldid
-   map<size_t,size_t>                  shared_vtrx;
-   typename map<size_t,size_t>::const_iterator  shit;
-   size_t                                 newID;
+   map<long64,long64>                  shared_vtrx;
+   typename map<long64,long64>::const_iterator  shit;
+   long64                                 newID;
    bool                                      cnp_data_read;
 
    // filling node ID's from first TVOLUME into 'shared_vtrx' map
@@ -1263,10 +1263,10 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                {
                   // new vertex id
                   token  = strtok( NULL, delims );
-                  newID  = static_cast<size_t>(atol( token )); 
+                  newID  = static_cast<long64>(atol( token ));
                   // collocated old vertex id
                   token  = strtok( NULL, delims );
-                  nodeID = static_cast<size_t>(atol( token )); 
+                  nodeID = static_cast<long64>(atol( token ));
                   // if there is property information, it is ignored since it
                   // duplicates already existing node data.
                   
@@ -1392,7 +1392,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<size_t> >::iterator  plit;
+    typename map<size_t,vector<long64> >::iterator  plit;
     size_t n;
     
     if ( verbose )
@@ -3065,13 +3065,13 @@ Loops through plist making a map of node numbers. If this map has jumps
 in the numbering, these are detected when looping through it again. 
  */
 template<size_t dim>
-bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<size_t> >& plist ) 
+bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<long64> >& plist )
  const 
  {
-    map<size_t,vector<size_t> >::const_iterator  it;
-    vector<size_t>::const_iterator                  nit;
-    set<size_t>                                     node_numbers;
-    set<size_t>::const_iterator                     sit;
+    map<size_t,vector<long64> >::const_iterator  it;
+    vector<long64>::const_iterator                  nit;
+    set<long64>                                     node_numbers;
+    set<long64>::const_iterator                     sit;
     size_t                                          counter(1);
     
     for ( it=plist.begin(); it!=plist.end(); it++ )

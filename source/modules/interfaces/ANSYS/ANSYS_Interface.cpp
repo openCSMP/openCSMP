@@ -960,15 +960,15 @@ bool ANSYS_Interface::ReadPlistASCII( std::ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    std::map<size_t,std::vector<size_t> >  plist;
-    std::vector<size_t>               dummy;
+    std::map<size_t,std::vector<long64> >  plist;
+    std::vector<long64>          dummy;
     size_t                       total_items, 
                                  element(0), item(0), 
                                  id, nodes;
     const size_t                 n_nodes(vset.Vertices());
     
-    std::pair<std::map<size_t,std::vector<size_t> >::iterator,bool>  it;
-    std::pair<size_t,std::vector<size_t> > data;
+    std::pair<std::map<size_t,std::vector<long64> >::iterator,bool>  it;
+    std::pair<size_t,std::vector<long64> > data;
     
     // now the vset can be resized according to the new information
     std::deque<size_t>  ndele(vset.ElementTypes());
@@ -1099,7 +1099,7 @@ bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream& ifs, VSet<dim>& vset )
                                          "file stream went bad, when reading 'pfverts' record; may be not enough entries." );
                 }
               // element number must not be larger than the number of elements in the mesh
-              assert( idx < static_cast<long>(vset.Elements()) );
+              assert( idx < vset.Elements() );
               // ascertaining that one of the possible options of boundary identifiers was used
               if ( idx < 0 ) assert( idx >= REGION_BOUNDARY );
               (*it.first).second.push_back( idx );
@@ -1300,7 +1300,6 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
     uint32       counter(0);
     size_t nodes(vset.Vertices());
     for ( size_t i=0; i<nodes; i++ ){
-         // TODO: to read models with 10s of billions of cells, ibytes must be long64
          fread( (void*) &ival, ibytes, 1U, fp );
          if ( ival < min28 || ival > zero )
            throw csmp::Exception( ERROR, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
@@ -1332,6 +1331,8 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
 template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<1U>&);
 template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<2U>&);
 template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<3U>&);
+
+
 
 template<size_t dim>
 bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
@@ -1412,8 +1413,8 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     uint32* plist = new uint32[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
-    std::deque<std::vector<size_t> >::iterator  it(vset.PlistBegin());
-    size_t                            nentry(0U);
+    std::deque<std::vector<long64> >::iterator  it(vset.PlistBegin());
+    size_t                                      nentry(0U);
 
     // the elements of the plist (node ids) are assigned
     for ( size_t i=0U; i<nelements; i++, it++ )
@@ -1440,7 +1441,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 
     const size_t  ibytes  = sizeof(int32);
     const size_t  uibytes = sizeof(uint32);
-    size_t        entries(0);
+    long64        entries(0);
 
     // setting up the storage for 'pfverts' in VSet
     const size_t   nelements(vset.ElementTypes());
@@ -1461,7 +1462,8 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
          std::cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< std::endl;
          std::cout.flush();
       }
-    // TODO: eventually this must be an array of 'long64' records
+    if ( entries >= 2147483647 )
+      csmp_error.notice( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "too many elements in file to be read by this reader");
     int32* pfverts = new int32[ entries ];
     fread( (void*) pfverts, ibytes, entries, fp );
 
@@ -1469,10 +1471,12 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     // ---------------------------------------------------------------
     std::deque<std::vector<long64> >::iterator it(vset.PfvertsBegin());
     size_t  nentry(0U);
-    for ( size_t i=0; i<nelements; i++, it++ )
-      if (nbors[i] > 2) // SKM: not sure anymore why the restriction was imposed => JC: check it later due to some errors without this restriction especially for fault_boundary_test in BoundaryInterface_Test.
+    for ( size_t i=0; i<nelements; i++, ++it ) {
+        // minimum number of neighbors per element
+        assert( nbors[i] >= 2 );
         for ( size_t j=0U; j<nbors[i]; j++ )
           (*it)[j] = pfverts[nentry++];
+      }
 
     delete[] pfverts;
 
