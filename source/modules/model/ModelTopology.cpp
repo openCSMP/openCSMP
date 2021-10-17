@@ -7,6 +7,8 @@
 #include "Box.h"
 #include "ConsecutiveSequenceChecker.h"
 
+using namespace std;
+
 namespace csmp {
 
 ModelTopology::ModelTopology( bool isoparametric_element_mesh )
@@ -698,7 +700,8 @@ element list stored by the topology class is returned.
 
 @section messages Messages
 
-A ERROR is raised if the target region cannot be found.
+An ERROR is raised if the target region cannot be found.
+
 */
 std::vector<size_t>::const_iterator  ModelTopology::ElementsOfRegionBegin( const char* region ) const
  {
@@ -846,7 +849,7 @@ target regions is not contained in the model topology. In the latter case
 a ERROR is raised. 
  
 */
-bool  isRegionsFileExist( const char* regions_file )
+bool  doesRegionsFileExist( const char* regions_file )
 {
     std::string  file_name(regions_file);
     file_name += "-regions.txt";
@@ -1398,7 +1401,7 @@ void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset )
             elmtid   = (*rit).second.second[ i ];
             elmttype = vset.ElementType( elmtid );
             // if element has a different spatial dimension it will be removed
-            if ( fem_specs::MinimumSpatialDimension( elmttype ) != elmtdim )
+            if ( fem_specs::MinimumSpatialDimension( static_cast<int8_t>(elmttype) ) != elmtdim )
                 remove_eids.push_back( i );
         }
         if( !remove_eids.empty() || !remove_types.empty() )
@@ -1429,14 +1432,11 @@ template void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<3U>& );
 /**
 	return names of regions in the model
 */
-void ModelTopology::RegionNames(std::vector<std::string>& region_names) const
+void ModelTopology::RegionNames( std::vector<std::string>& region_names ) const
 {
-	std::string region_name;
-	size_t idx(0U);
-	for (std::map<std::string, std::pair<std::set<std::string>, std::vector<size_t> > >::const_iterator
-		it = model_regions.begin(); it != model_regions.end(); it++) {
+	for ( map<std::string, std::pair<std::set<std::string>, std::vector<size_t> > >::const_iterator
+		    it = model_regions.begin(); it != model_regions.end(); ++ it )
 		region_names.push_back( (*it).first );
-	}
 }
 
 /*
@@ -1874,13 +1874,15 @@ template void ModelTopology::RenumberElements( csmp::VSet<2U>&,bool );
 template void ModelTopology::RenumberElements( csmp::VSet<3U>&,bool );
 
 
-    // checking that the new numbers form a consecutive range
-    // test: assert( ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker() );
-//    const bool check_whether_max_value_is_size_minus1(true);
-//    if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( eid_mapping, check_whether_max_value_is_size_minus1 ) )
-//      throw csmp::Exception( ERROR, "ModelTopology::CreateNewElementNumbers:", "failed to calculate consecutive new element idx range.");
 
 
+
+/**
+    Checks that the new numbers in the VSet form a consecutive range.
+    
+    test: assert( ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker() );
+
+*/
 template<size_t dim>
 bool ModelTopology::CheckTopology( VSet<dim>& vset,
                                    const std::multimap<std::string,std::string>& object_specs,
@@ -1892,8 +1894,8 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    // 1. merge region
-    // -------------------------------------------------------
+    // 1. eliminating lower-dimensional regions that have the same name as higher-dimensional ones
+    // -------------------------------------------------------------------------------------------
     if( require_unique_names_for_vol_surf_lines)
         AddRegionsWithEquidimensionalCheck( object_specs, object_elements );
     else
@@ -1908,7 +1910,8 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
       RenumberElements( vset, false );
 
     // 3. assign boundary flags for box-shaped model
-    // -----------------------------------------------
+    // ---------------------------------------------
+    // TODO: (thus far, method only assigns neighbor flags for 3D model)
       if ( !AssignBoxShapedModelFlags(vset) )
         csmp_error.notice( WARNING, "ModelTopology::CheckTopology:",
                           "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
@@ -1916,9 +1919,11 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     // 4. correct surface mesh orientation
     // ---------------------------------------
     // SKM note: this functionality also deals with surface mesh in 3D meshes 
-    if( dim == 2U && correct_orientation_of_surface_elements )
-      if( InterpolationOrder() == 1 )
-        CorrectSurfaceElementOrientations( vset );
+    if constexpr ( dim == 2U ) {
+        if ( correct_orientation_of_surface_elements )
+          if ( InterpolationOrder() == 1 )
+            CorrectSurfaceElementOrientations( vset );
+      }
 
     // 5. assigning properties to regions
     // ----------------------------------
@@ -2129,314 +2134,222 @@ bool  ModelTopology::BoxShapedModel() const
 
      // flag boundaries if the model is box-shaped ( 3D )
      // ------------------------------------------------------
-     if ( dim == 3U && BoxShapedModel() )
-     {
-         if( csmp_error.Verbose() )
-         {
-             std::cout <<"\n\nModelTopology::VSetToModelTopology: The model is 'box shaped'. ";
-             std::cout <<"Assigning boundary flags to box-shaped model..."<< std::endl;
-         }
-
-         // for all volume elements in the mesh which have surface element neighbors,
-         // assign appropriate boundary flags
-         flagging_was_done_successfully = FlagNeighborFacesOfBoxShapedModel( vset );
-
-         // flagging the boundary nodes according to CSMP specs
-         flagging_was_done_successfully = Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( vset );
-     }
-
+     if constexpr ( dim == 3U ) {
+         if ( BoxShapedModel() )
+           {
+              if ( csmp_error.Verbose() )
+                {
+                   std::cout <<"\n\nModelTopology::AssignBoxShapedModelFlags: The model is 'box shaped'. ";
+                   std::cout <<"Re-assigning boundary flags to box-shaped model..."<< std::endl;
+                }
+               // flagging the boundary nodes according to CSMP specs
+               flagging_was_done_successfully = FlagNodesUsingBoundaryRegions( vset );
+           }
+       }
      // flag boundaries if the model is rectangle-shaped ( 2D )
-     // ------------------------------------------------------------
-     else if ( dim == 2U && RectangleShapedModel() )
-     {
-         if( csmp_error.Verbose() )
-         {
-             std::cout <<"\n\nModelTopology::VSetToModelTopology: The model is 'rectangle shaped'. ";
-             std::cout <<"Building neighbor connectivity and assigning boundary flags in rectangle-shaped model..."<< std::endl;
+     // -------------------------------------------------------
+     else if constexpr ( dim == 2U ) {
+           if ( RectangleShapedModel() )
+             {
+                 if ( csmp_error.Verbose() ) {
+                      std::cout <<"\n\nModelTopology::AssignBoxShapedModelFlags: The model is 'rectangle shaped'. ";
+                      std::cout <<"Building neighbor connectivity and assigning boundary flags in rectangle-shaped model..."<< std::endl;
+                   }
+                 // for all surface elements in the mesh which have bar element neighbors,
+                 // assign appropriate boundary flags
+                 flagging_was_done_successfully = FlagNodesUsingBoundaryRegions( vset );
+             }
+            return flagging_was_done_successfully;
          }
-         // for all surface elements in the mesh which have bar element neighbors,
-         // assign appropriate boundary flags
-         flagging_was_done_successfully = FlagNeighborFacesOfBoxShapedModel( vset );
-     }
-     
+         
     return flagging_was_done_successfully;
- }
+    
+ } // end AssignBoxShapedModelFlags
 
- template bool ModelTopology::AssignBoxShapedModelFlags( VSet<1U>& ) const;
  template bool ModelTopology::AssignBoxShapedModelFlags( VSet<2U>& ) const;
  template bool ModelTopology::AssignBoxShapedModelFlags( VSet<3U>& ) const;
 
 
 
 
- /**
 
- Assigns the correct neighbor flags to finite element pfverts
- array. This is done only for volume elements and for only those faces
- of these which are juxtaposed against surface elements that lie on
- the boundaries of the model, as is identified from their affiliation
- with groups with corresponding boundary names.
-
- For those volumetric elements which are located on the model boundary,
- the boundary faces where there would normally be a neighbor element are
- flagged according to the definitions in 'CSMP_definitions.h', i.e. LEFT,
- RIGHT, TOP, BOTTOM, FRONT and BACK.
-
- If all boundary types are present, but the surface element cannot be
- matched to any of them, then the element face is assigned to an
- IRREGULAR model boundary.
-
- @section arguments Input Arguments
-
- The model topology needs to be supplied because it specifies
- which model regions specific elements belong to.
-
- @return When no neighbor faces could be assigned the method will return false.
-
- @section implementation Implementation
-
- The method goes through the 'pfvert' record in the Vset.
- When it finds an element that has only got a surface element as neighbor
- and the latter belongs to a group that has a boundary name, then it
- assigns a corresponding boundary flag to the face against which this
- element is juxtaposed.
-
- The assumptions made are the following: If the neighbor of a volume
- element is a surface element, then the volume element lies at a model
- boundary (this is an ANSYS convention).
-
- @section application Application
-
- The method is used inside the public methods that read in an ANSYS
- geometry.
-  */
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<1U>& vset ) const
- {
-     return true;
- }
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<2U>& vset ) const
- {
-     return true;
- }
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( VSet<3U>& vset ) const
+/**
+       Deduces boundary flags from region names, including the basic BOX_BOUNDARY flags,
+       All other boundary regions (regionts that contain the string "BOUNDARY" are flagged IRREGULAR.
+       
+       @author SKM
+       @date 17/10/2021
+*/
+bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
   {
-     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+     set<string> boundary_regions;
 
-     try {
-     // 0. Preliminary checks
-         if ( !Contains("TOP")   || !Contains("BOTTOM") ||
-              !Contains("FRONT") || !Contains("BACK")   ||
-              !Contains("LEFT")  || !Contains("RIGHT") )
-            throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
-                                  "not all boundaries of box-shaped model are not identified by appropriate std::strings; use methods for irregular model");
+     // 0. Extracting the names of valid BOUNDARY regions from file
+     // -----------------------------------------------------------
+     //  region name  etypes-of-region  elmt-ids for region
+     //   map<string, pair<set<string>,vector<size_t> > >  model_regions;
+     for ( auto it : model_regions ) {
+          const string region_name{ it.first };
+          if ( region_name.find("BOUNDARY") != std::string::npos ||
+               region_name.find("IRREGULAR") != std::string::npos ) {
+               // if it is a lower dimensional region
+               const auto etype = it.second.first.begin(); // .first.begin());
+               if ( isLineElement( parseFiniteElementType(*etype) ) == true )
+                 boundary_regions.insert( region_name );
+            }
        }
-     catch( csmp::Exception& ba )
-       {
-          std::cerr <<"\nException: Exception raised: "<< ba.What() << std::endl;
-          std::cerr <<"\nDiagnostics:"<< std::endl;
-          ba.Out();
-          if ( !Standard_IO_Handler().YesNo("\nDo you want to carry on?") ) throw ba;
-       }
-
+     
      // 1. Making map of the target regions in which to search for the boundary elements
-     std::set<size_t>  sfront, sback, sleft, sright, sbottom, stop;
+     deque<size_t>  nodes_left, nodes_right, nodes_bottom, nodes_top, nodes_irregular;
      std::vector<size_t>::const_iterator  bit;
 
-     for ( bit=ElementsOfRegionBegin("TOP");
-           bit!=ElementsOfRegionEnd("TOP"); bit++ )    stop.insert( (*bit) );
      for ( bit=ElementsOfRegionBegin("BOTTOM");
-           bit!=ElementsOfRegionEnd("BOTTOM"); bit++ ) sbottom.insert( (*bit) );
-     for ( bit=ElementsOfRegionBegin("FRONT");
-           bit!=ElementsOfRegionEnd("FRONT"); bit++ )  sfront.insert( (*bit) );
-     for ( bit=ElementsOfRegionBegin("BACK");
-           bit!=ElementsOfRegionEnd("BACK"); bit++ )   sback.insert( (*bit) );
-     for ( bit=ElementsOfRegionBegin("LEFT");
-           bit!=ElementsOfRegionEnd("LEFT"); bit++ )   sleft.insert( (*bit) );
+           bit!=ElementsOfRegionEnd("BOTTOM"); bit++ )
+       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         nodes_bottom.push_back( (*nit) );
+       
      for ( bit=ElementsOfRegionBegin("RIGHT");
-           bit!=ElementsOfRegionEnd("RIGHT"); bit++ )  sright.insert( (*bit) );
-
-
-     // 2. Going through 'pfverts' record making new assignments
-     size_t  counter(0), eid(0);
-     const size_t  element_types(vset.ElementTypes());
-
-     for ( std::deque<std::vector<long64> >::iterator it1=vset.PfvertsBegin(); it1!=vset.PfvertsEnd(); it1++, eid++ )
-       // only for the volume elements in the mesh
-       if ( fem_specs::VolumeElement( vset.ElementType(eid) ) )
-         // for each neighbor of this volume element
-         for ( std::vector<long64>::iterator it2=(*it1).begin(); it2!=(*it1).end(); it2++ ) {
-               // only if there is not already a neighbor definition and
-               // only if the neighbor element is a surface element
-               if ( element_types > 1U and
-                   (*it2) >= 0 and fem_specs::SurfaceElement( vset.ElementType( static_cast<size_t>(*it2) ) ) )
-                 {
-                    // checking whether the surface element is a member of any boundary group
-                    if      ( stop.find(static_cast<size_t>(*it2))    != stop.end() )    (*it2) = TOP_OUTSIDE;
-                    else if ( sbottom.find(static_cast<size_t>(*it2)) != sbottom.end() ) (*it2) = BOTTOM_OUTSIDE;
-                    else if ( sfront.find(static_cast<size_t>(*it2))  != sfront.end() )  (*it2) = FRONT_OUTSIDE;
-                    else if ( sback.find(static_cast<size_t>(*it2))   != sback.end() )   (*it2) = BACK_OUTSIDE;
-                    else if ( sleft.find(static_cast<size_t>(*it2))   != sleft.end() )   (*it2) = LEFT_OUTSIDE;
-                    else if ( sright.find(static_cast<size_t>(*it2))  != sright.end() )  (*it2) = RIGHT_OUTSIDE;
-                    // else the element face is flagged as irregular
-                    else (*it2) = IRREGULAR;
-                    counter++;
-                 }
-             }
-
-     if( csmp_error.Verbose() )
-     {
-         std::cout <<"\nModelTopology::FlagNeighborFacesOfBoxShapedModel: Assigned "<< counter;
-         std::cout <<" boundary flags."<< std::endl;
-     }
-     if ( counter == 0 ) return false;
-
-     return true;
-
-  } // end FlagNeighborFacesOfBoxShapedModel (general method)
-
-
-
-
-
-
-
-
-
- /**
-
- This method determines on which BOX_BOUNDARY the 'pfverts' 
- entries in the VSet lie for which there is no neighbor element available.
- The result is stored in VSet::Vdata.
+           bit!=ElementsOfRegionEnd("RIGHT"); bit++ )
+       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         nodes_right.push_back( (*nit) );
+       
+     for ( bit=ElementsOfRegionBegin("TOP");
+           bit!=ElementsOfRegionEnd("TOP"); bit++ )
+       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         nodes_top.push_back( (*nit) );
+       
+     for ( bit=ElementsOfRegionBegin("LEFT");
+           bit!=ElementsOfRegionEnd("LEFT"); bit++ )
+       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         nodes_left.push_back( (*nit) );
  
- This  enables the more efficient handling of box shaped models, by
- providing standard identifiers for the sides of these models such that
- boundary conditions can be assigned using the interfaces of the Model.
- For those volumetric elements which are located on the model boundary,
- the boundary faces where there would normally be a neighbor element are
- flagged according to the definitions in 'CSMP_definitions.h', i.e. LEFT,
- RIGHT, TOP, BOTTOM, FRONT and BACK.
+      for ( auto it : boundary_regions )
+       for ( bit=ElementsOfRegionBegin(it.c_str());
+             bit!=ElementsOfRegionEnd(it.c_str()); bit++ )
+         for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+           nodes_irregular.push_back( (*bit) );
 
- @section arguments Input Arguments
+     // making these containers unique
+     sort( nodes_bottom.begin(), nodes_bottom.end() );
+     nodes_bottom.erase( unique( nodes_bottom.begin(), nodes_bottom.end() ), nodes_bottom.end() );
 
- The method only works for mono-boundary surface element type meshes, the
- element type of which is identified by the first argument. The method
- also needs a reference to the current model topology.
+     sort( nodes_right.begin(), nodes_right.end() );
+     nodes_right.erase( unique( nodes_right.begin(), nodes_right.end() ), nodes_right.end() );
 
- @return The argument VSet will be assigned the correct boundary face information.
- When no neighbor faces could be assigned the method will return false.
+     sort( nodes_top.begin(), nodes_top.end() );
+     nodes_top.erase( unique( nodes_top.begin(), nodes_top.end() ), nodes_top.end() );
 
- @section implementation Implementation
+     sort( nodes_left.begin(), nodes_left.end() );
+     nodes_left.erase( unique( nodes_left.begin(), nodes_left.end() ), nodes_left.end() );
 
- The method goes through the 'pfvert' record in the Vset and - only for
- the specified volume elements inside of this record - replaces
- any neighbor element references which refer to surface elements with the
- integer boundary identifiers which match the ANSYS family name to which the
- respective element belongs.
+     sort( nodes_irregular.begin(), nodes_irregular.end() );
+     nodes_irregular.erase( unique( nodes_irregular.begin(), nodes_irregular.end() ), nodes_irregular.end() );
 
- @section application Application
 
- Do not use unless you have to. The method is likely to be deprecated
- in the near future.
- */
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype,
-                                                        int32 ANSYS_bound_etype,
-                                                        VSet<1U>& vset ) const
- {
-     return true;
- }
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype,
-                                                        int32 ANSYS_bound_etype,
-                                                        VSet<2U>& vset ) const
- {
-     return true;
- }
- bool ModelTopology::FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype,
-                                                        int32 ANSYS_bound_etype,
-                                                        VSet<3U>& vset ) const
-  {
-     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+     // 2. Going over the nodes, making BOX_BOUNDARY flag assignments
+     // -------------------------------------------------------------
+     // (starting with the least specific regions so that their corners are overwritten by box boundary flags)
+     for ( auto nit : nodes_irregular ) vset.AddBFlag( nit, IRREGULAR );
+     for ( auto nit : nodes_bottom ) vset.AddBFlag( nit, BOTTOM );
+     for ( auto nit : nodes_right ) vset.AddBFlag( nit, RIGHT );
+     for ( auto nit : nodes_top ) vset.AddBFlag( nit, TOP );
+     for ( auto nit : nodes_left ) vset.AddBFlag( nit, LEFT );
 
-     // 0. Preliminary checks
-     if ( !fem_specs::VolumeElement(ANSYS_etype) ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
-                         "Element the faces of which shall be flagged must be a volume element");
-          return false;
-       }
-     if ( !fem_specs::SurfaceElement(ANSYS_bound_etype) ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
-                         "Element used to assign model boundary must be a volume element");
-          return false;
-       }
-     if ( !Contains("TOP")   || !Contains("BOTTOM") ||
-          !Contains("FRONT") || !Contains("BACK")   ||
-          !Contains("LEFT")  || !Contains("RIGHT") ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
-                         "Boundaries of box-shaped model must be identified by appropriate std::strings");
-          return false;
+
+     // 3. finding the corners of a box-shaped model, if any
+     // ----------------------------------------------------
+     if ( !nodes_left.empty() && !nodes_bottom.empty() ) {
+          vector<long64> cnr;
+          set_intersection( nodes_left.begin(), nodes_left.end(),
+                            nodes_bottom.begin(), nodes_bottom.end(),
+                            back_inserter( cnr ) );
+         
+          assert( !cnr.empty() );
+          vset.AddBFlag( cnr[0], CNR1 );
        }
 
+     if ( !nodes_right.empty() && !nodes_bottom.empty() ) {
+          vector<long64> cnr;
+          set_intersection( nodes_right.begin(), nodes_right.end(),
+                            nodes_bottom.begin(), nodes_bottom.end(),
+                            back_inserter( cnr ) );
+         
+          assert( !cnr.empty() );
+          vset.AddBFlag( cnr[0], CNR2 );
+       }
 
-     // 1. Making map of the target regions in which to search for the boundary elements
-     std::map<long64,std::string>         boundary_elements;
-     std::vector<size_t>::const_iterator  bit;
+     if ( !nodes_right.empty() && !nodes_top.empty() ) {
+          vector<long64> cnr;
+          set_intersection( nodes_right.begin(), nodes_right.end(),
+                            nodes_top.begin(), nodes_top.end(),
+                            back_inserter( cnr ) );
+         
+          assert( !cnr.empty() );
+          vset.AddBFlag( cnr[0], CNR3 );
+       }
 
-     for ( bit=ElementsOfRegionBegin("TOP");
-           bit!=ElementsOfRegionEnd("TOP"); bit++ )    boundary_elements[ (*bit) ] = "TOP";
-     for ( bit=ElementsOfRegionBegin("BOTTOM");
-           bit!=ElementsOfRegionEnd("BOTTOM"); bit++ ) boundary_elements[ (*bit) ] = "BOTTOM";
-     for ( bit=ElementsOfRegionBegin("FRONT");
-           bit!=ElementsOfRegionEnd("FRONT"); bit++ )  boundary_elements[ (*bit) ] = "FRONT";
-     for ( bit=ElementsOfRegionBegin("BACK");
-           bit!=ElementsOfRegionEnd("BACK"); bit++ )   boundary_elements[ (*bit) ] = "BACK";
-     for ( bit=ElementsOfRegionBegin("LEFT");
-           bit!=ElementsOfRegionEnd("LEFT"); bit++ )   boundary_elements[ (*bit) ] = "LEFT";
-     for ( bit=ElementsOfRegionBegin("RIGHT");
-           bit!=ElementsOfRegionEnd("RIGHT"); bit++ )  boundary_elements[ (*bit) ] = "RIGHT";
+     if ( !nodes_left.empty() && !nodes_top.empty() ) {
+          vector<long64> cnr;
+          set_intersection( nodes_left.begin(), nodes_left.end(),
+                            nodes_top.begin(), nodes_top.end(),
+                            back_inserter( cnr ) );
+         
+          assert( !cnr.empty() );
+          vset.AddBFlag( cnr[0], CNR4 );
+       }
 
+     // 4. potential corners with an irregular boundary
+     // -----------------------------------------------
 
-     // 2. Going through 'pfverts' record making new assignments
-     std::deque<std::vector<long64> >::iterator   it1;
-     std::vector<long64>::iterator           it2;
-     size_t                             nelmt;
-     size_t                             counter;
-     std::map<long64,std::string>::const_iterator fit;
+     // if there is an irregular boundary on the model top instead of TOP
+     if ( !nodes_irregular.empty() && nodes_top.empty() ) {
+         if ( !nodes_left.empty() ) {
+              vector<long64> cnr;
+              set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
+                                nodes_left.begin(), nodes_left.end(),
+                                back_inserter( cnr ) );
+             
+              vset.AddBFlag( cnr[0], CNR4 );
+           }
+         if ( !nodes_right.empty() ) {
+              vector<long64> cnr;
+              set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
+                                nodes_right.begin(), nodes_right.end(),
+                                back_inserter( cnr ) );
+             
+              vset.AddBFlag( cnr[0], CNR3 );
+           }
+       }
 
-     for ( nelmt=0, counter=0, it1=vset.PfvertsBegin(); it1!=vset.PfvertsEnd(); it1++, nelmt++ )
-       if ( vset.ElementType( nelmt ) == ANSYS_etype )
-         for ( it2=(*it1).begin(); it2!=(*it1).end(); it2++ )
-           if ( (*it2) > 0 && vset.ElementType( static_cast<size_t>((*it2)-1) ) == ANSYS_bound_etype )
-             {
-                // search for which family this surface element belongs to
-                if ( (fit=boundary_elements.find( *it2 )) == boundary_elements.end() ) {
-                     std::cerr <<"\n\tElement ID: "<< (*it2) << std::endl;
-                     throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
-                                           "Surface element at side of volume element is not part of any boundary family");
-                   }
-                else {
-                     if      ( (*fit).second == "TOP" )    (*it2) = TOP_OUTSIDE;
-                     else if ( (*fit).second == "BOTTOM" ) (*it2) = BOTTOM_OUTSIDE;
-                     else if ( (*fit).second == "LEFT" )   (*it2) = LEFT_OUTSIDE;
-                     else if ( (*fit).second == "RIGHT" )  (*it2) = RIGHT_OUTSIDE;
-                     else if ( (*fit).second == "FRONT" )  (*it2) = FRONT_OUTSIDE;
-                     else if ( (*fit).second == "BACK" )   (*it2) = BACK_OUTSIDE;
-                     counter++;
-                  }
-             }
-
-     if( csmp_error.Verbose() )
-     {
-         std::cout <<"\nModelTopology::FlagNeighborFacesOfBoxShapedModel: Assigned "<< counter;
-         std::cout <<" boundary flags."<< std::endl;
-     }
-     if ( counter == 0 ) return false;
+     // if there is an irregular boundary on the model bottom instead of BOTTOM
+     if ( !nodes_irregular.empty() && nodes_bottom.empty() ) {
+         if ( !nodes_left.empty() ) {
+              vector<long64> cnr;
+              set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
+                                nodes_left.begin(), nodes_left.end(),
+                                back_inserter( cnr ) );
+             
+              vset.AddBFlag( cnr[0], CNR1 );
+           }
+         if ( !nodes_right.empty() ) {
+              vector<long64> cnr;
+              set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
+                                nodes_right.begin(), nodes_right.end(),
+                                back_inserter( cnr ) );
+             
+              vset.AddBFlag( cnr[0], CNR2 );
+           }
+       }
 
      return true;
 
-  } // end FlagNeighborFacesOfBoxShapedModel
+  } // end FlagNodesUsingBoundaryRegions(2D)
 
 
 
 
+
+ 
 
 
 
@@ -2466,12 +2379,8 @@ bool  ModelTopology::BoxShapedModel() const
  conventions which require that x increases from LEFT to RIGHT, y
  increases from BOTTOM to TOP, and z increases from BACK to FRONT.
  */
-bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<1U>& vset ) const
- {
-     return true;
- }
  /// method only checks whether the 4 corners are present and report missing ones, returning false.
-bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<2U>& vset ) const
+bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VSet<2U>& vset ) const
  {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
      csmp_error.notice( WARNING, "ModelTopology<2>::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags:",
@@ -2496,13 +2405,16 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<2U>
        }
      return true;
  }
-bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>& vset ) const
+ 
+ 
+ 
+bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const
   {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
      // 0. Preliminary checks
      if ( !BoxShapedModel() ) {
-          throw csmp::Exception( ERROR, "ModelTopology<3>::Infer_BOX_BOUNDARY_EdgesAndCornersFlagsFromSideFlags:",
+          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions:",
                                          "Model is not box shaped.");
           return false;
        }
@@ -2515,10 +2427,10 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      // box boundaries
      // expects "BOTTOM","LEFT","RIGHT","TOP","FRONT","BACK"
      std::set<size_t>  bottom, right, left, top, front, back,
-                  front_left, front_right, front_bottom, front_top,
-                  bottom_left, bottom_right,
-                  back_bottom, back_left, back_top, back_right,
-                  top_left, top_right;
+                       front_left, front_right, front_bottom, front_top,
+                       bottom_left, bottom_right,
+                       back_bottom, back_left, back_top, back_right,
+                       top_left, top_right;
 
      for ( auto it=ElementsOfRegionBegin("BOTTOM");
            it!=ElementsOfRegionEnd("BOTTOM"); it++ ) {
@@ -2637,7 +2549,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
                        back_bottom.begin(), back_bottom.end(), cit );
 
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
                                                            "CNR1 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN );
      corner.erase( corner.begin(), corner.end() );
@@ -2646,7 +2558,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      set_intersection( back_bottom.begin(), back_bottom.end(),
                        back_right.begin(), back_right.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
                                                            "CNR2 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXX );
      corner.erase( corner.begin(), corner.end() );
@@ -2655,7 +2567,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      set_intersection( back_right.begin(), back_right.end(),
                        back_top.begin(), back_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
                                                            "CNR3 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXX );
      corner.erase( corner.begin(), corner.end() );
@@ -2664,7 +2576,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      set_intersection( back_left.begin(), back_left.end(),
                        back_top.begin(), back_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
                                                            "CNR4 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MINXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2674,7 +2586,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      set_intersection( front_left.begin(), front_left.end(),
                        front_bottom.begin(), front_bottom.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
                                                            "CNR5 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2683,7 +2595,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      set_intersection( front_right.begin(), front_right.end(),
                        front_bottom.begin(), front_bottom.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
                                                            "CNR6 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2692,7 +2604,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      set_intersection( front_right.begin(), front_right.end(),
                        front_top.begin(), front_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
                                                            "CNR7 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX );
      corner.erase( corner.begin(), corner.end() );
@@ -2701,360 +2613,23 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>
      set_intersection( front_left.begin(), front_left.end(),
                        front_top.begin(), front_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( ERROR, "ModelTopology::FlagNodesUsingBoundaryRegions",
                                                            "CNR8 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXZ );
 
      if( csmp_error.Verbose() )
      {
-         std::cout <<"\nModelTopology<3>::FlagBoundaryNodesOfBoxShapedModel: ";
+         std::cout <<"\nModelTopology<3>::FlagNodesUsingBoundaryRegions: ";
          std::cout <<"Assigned CSMP associated boundary flags to the nodes."<< std::endl;
      }
 
      return true;
 
-  } // end FlagBoundaryNodesOfBoxShapedModel
+  } // end FlagNodesUsingBoundaryRegions
 
 
 
- /**
-
-RebuildLineElementNeighborConnectivity():
- ANSYS does not correctly flag the neighbors of surface and line elements
- in 2 and 3-dimensional models. This method recreates this information.
-
- For the line elements their logical neighbors are the adjacent line
- elements and if there are no such elements the neighbor flag is
- either INTERNAL_BOUNDARY or the corresponding model boundary.
-
- @section implementation  Implementation
-
- The assignment of neighbors to line elements is ambiguous because
- each face (located at the corresponding node) may connect up to multiple
- lines coming together at that node. This method only assigns one of
- these - which one is therefore arbitrary.
- */
- void ModelTopology::RebuildLineElementNeighborConnectivity( VSet<1U>& vset )
- {
- }
- void ModelTopology::RebuildLineElementNeighborConnectivity( VSet<3U>& vset )
- {
- }
- void ModelTopology::RebuildLineElementNeighborConnectivity( VSet<2U>& vset )
-  {
-     // 0. erasing/deleting existing pfverts
-     // vector gives number of neighbors per element
-     // -------------------------------------------- O.K.
-     std::deque<size_t>  mixed_ele_pfverts;
-     for ( size_t eid=0U; eid<vset.Elements(); eid++ )
-       mixed_ele_pfverts.push_back( fem_specs::NeighborsPerElementOfType( vset.ElementType(eid) ) );
-     vset.ResizePfverts( mixed_ele_pfverts );
-     // giving the new 'pfverts' a default value
-     for ( size_t i=0U; i<vset.Elements(); i++ )
-       for ( std::vector<long64>::iterator
-             it=vset.PfvertsBegin(i); it!=vset.PfvertsEnd(i); it++ ) *it = IRREGULAR_OUTSIDE;
-
-     // 1. making separate search vectors of face keys for surface and line elements
-     // ----------------------------------------------------------------------------
-     //       key                 face      neighbor
-     std::multimap<std::set<size_t>,std::pair<size_t,size_t> >  surface_neighbor_keys, line_neighbor_keys;
-     std::set<size_t>  key;
-     for ( size_t eid=0U; eid<vset.Elements(); eid++ )
-       for ( size_t i=0U; i<fem_specs::FacesPerElementOfType( vset.ElementType(eid) ); i++ )
-         {
-            for ( size_t j=0U; j<fem_specs::NodesPerFaceForElementOfType( vset.ElementType(eid), i ); j++ )
-              key.insert( vset.Plist( eid, fem_specs::FaceNodeForElementOfType( vset.ElementType(eid), i, j ) ) );
-            // insert newly generated key into multimap
-            if ( fem_specs::SurfaceElement( vset.ElementType(eid) ) )
-              surface_neighbor_keys.insert( make_pair( key, std::make_pair( i, eid ) ) );
-            else // for all line elements
-              line_neighbor_keys.insert( make_pair( key, std::make_pair( i, eid ) ) );
-            key.clear();
-         }
-
-     // 2. rebuilding element neigborhoods laying bare those elements which have no neighbor
-     // ------------------------------------------------------------------------------------
-     assert( !surface_neighbor_keys.empty() );
-     //       key                 face      neighbor
-     std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator it1(surface_neighbor_keys.begin()),
-                                                          it2(surface_neighbor_keys.begin()); it2++;
-
-     // assigning boundary flags to surface elements on the basis of pairs of nodes shared with line elements
-     // situated on the model boundaries
-     while ( it2 != surface_neighbor_keys.end() )
-       {
-           assert( (*it1).second.second < vset.Elements() );
-           assert( (*it2).second.second < vset.Elements() );
-
-           // if there is a neighbor element assignments are made
-           if ( (*it1).first == (*it2).first ) {
-                size_t faces_per_element(mixed_ele_pfverts[(*it1).second.second]);
-                assert( (*it1).second.first < faces_per_element );
-                faces_per_element = mixed_ele_pfverts[(*it2).second.second];
-                assert( (*it2).second.first < faces_per_element );
-                assert( (*it1).second.second != (*it2).second.second ); // avoid self-assignment
-                //           element eid           nbor face idx                           neighbor eid
-                vset.Pfvert( (*it1).second.second, (*it1).second.first, static_cast<int32>((*it2).second.second) );
-                vset.Pfvert( (*it2).second.second, (*it2).second.first, static_cast<int32>((*it1).second.second) );
-                // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                it1++;
-                it2++;
-             }
-
-           // both iterators are advanced
-           if ( it2 == surface_neighbor_keys.end() ) break;
-           it1++;
-           it2++;
-       }
-
-     // 3. creating neighbor flags for the line elements
-     // ------------------------------------------------
-     assert( !line_neighbor_keys.empty() );
-     it1=line_neighbor_keys.begin();
-     it2=line_neighbor_keys.begin();
-     it2++;
-     while ( it2 != line_neighbor_keys.end() )
-       {
-           assert( (*it1).second.second < vset.Elements() );
-           assert( (*it2).second.second < vset.Elements() );
-           // if there is a neighboring line element cross assignments are made
-           if ( (*it1).first == (*it2).first ) {
-               assert( (*it1).second.first < 2U );
-               assert( (*it2).second.first < 2U );
-               assert( (*it1).second.second != (*it2).second.second ); // avoid self-assignment
-               //           element eid           nbor face idx                           neighbor eid
-               vset.Pfvert( (*it1).second.second, (*it1).second.first, ((*it2).second.second) );
-               vset.Pfvert( (*it2).second.second, (*it2).second.first, ((*it1).second.second) );
-               // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-               it1++;
-               it2++;
-             }
-
-           // both iterators are advanced
-           if ( it2 == line_neighbor_keys.end() ) break;
-           it1++;
-           it2++;
-       }
-
-
-     // 4. setting the boundary flags for the element faces which lie on a model boundary
-     // ---------------------------------------------------------------------------------
-     // boundary (line) element map
-     std::map<std::set<size_t>,size_t>  ebottom, eright, etop, eleft;
-     // boundary node sets
-     std::set<size_t>  nbottom, nright, ntop, nleft;
-     bool with_bottom(true), with_right(true), with_top(true), with_left(true);
-
-     // creating surface element face keys from the boundary element sets
-     key.clear();
-     // bottom
-     assert( ElementsOfRegion("BOTTOM") > 0U );
-     for ( std::vector<size_t>::const_iterator
-           eit=ElementsOfRegionBegin("BOTTOM"); eit!=ElementsOfRegionEnd("BOTTOM"); eit++ ) {
-           assert( *eit < vset.Elements() );
-           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
-           for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
-           ebottom.insert( std::make_pair( key, *eit ) );
-           for ( std::set<size_t>::const_iterator
-                 sit=key.begin(); sit!=key.end(); sit++ ) nbottom.insert( (*sit) );
-           key.clear();
-        }
-
-     // right
-     assert( ElementsOfRegion("RIGHT") > 0U );
-     for ( std::vector<size_t>::const_iterator
-           eit=ElementsOfRegionBegin("RIGHT"); eit!=ElementsOfRegionEnd("RIGHT"); eit++ ) {
-           assert( *eit < vset.Elements() );
-           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
-           for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
-           eright.insert( std::make_pair( key, *eit ) );
-           for ( std::set<size_t>::const_iterator
-                 sit=key.begin(); sit!=key.end(); sit++ ) nright.insert( (*sit) );
-           key.clear();
-        }
-
-     // top
-     assert( ElementsOfRegion("TOP") > 0U );
-     for ( std::vector<size_t>::const_iterator
-           eit=ElementsOfRegionBegin("TOP"); eit!=ElementsOfRegionEnd("TOP"); eit++ ) {
-           assert( *eit < vset.Elements() );
-           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
-           for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
-           etop.insert( std::make_pair( key, *eit ) );
-           for ( std::set<size_t>::const_iterator
-                 sit=key.begin(); sit!=key.end(); sit++ ) ntop.insert( (*sit) );
-           key.clear();
-        }
-
-     // left
-     assert( ElementsOfRegion("LEFT") > 0U );
-     for ( std::vector<size_t>::const_iterator
-           eit=ElementsOfRegionBegin("LEFT"); eit!=ElementsOfRegionEnd("LEFT"); eit++ ) {
-           assert( *eit < vset.Elements() );
-           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
-           for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
-           eleft.insert( std::make_pair( key, *eit ) );
-           for ( std::set<size_t>::const_iterator
-                 sit=key.begin(); sit!=key.end(); sit++ ) nleft.insert( (*sit) );
-           key.clear();
-        }
-
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
-     if ( ebottom.empty() ) {
-           with_bottom=false;
-           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                      "BOTTOM boundary: No line elements could be identified." );
-       }
-     if ( eright.empty() ) {
-           with_right=false;
-           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                      "RIGHT boundary: No line elements could be identified." );
-       }
-     if ( etop.empty() ) {
-           with_top=false;
-           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                      "TOP boundary: No line elements could be identified." );
-       }
-     if ( eleft.empty() ) {
-           with_bottom=false;
-           csmp_error.notice( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                      "LEFT boundary: No line elements could be identified." );
-       }
-
-     vset.RemoveBflags();
-
-     // 5. assigning the correct boundary flags to the Pfverts, thus far flagged as irregular
-     //    the nodes are also flagged as such
-     // -------------------------------------
-     // NB: in the case of elements at the model boundary, the multimap should just contain a single entry
-     // bottom
-     if ( with_bottom )
-       for ( std::map<std::set<size_t>,size_t>::const_iterator it=ebottom.begin(); it!=ebottom.end(); it++ ) {
-            //       key                 face      neighbor
-            std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
-            fit=surface_neighbor_keys.find( (*it).first );
-            // if key cannot be found
-            if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                         "BOTTOM boundary pfvert not identified." );
-            else {
-                assert( (*fit).second.second < vset.Elements() );
-                assert( (*fit).second.first < 4U );
-                //           eid                   face                 flag
-                vset.Pfvert( (*fit).second.second, (*fit).second.first, BOTTOM_OUTSIDE );
-                // flagging the nodes as well
-                for ( std::set<size_t>::const_iterator sit=(*fit).first.begin(); sit!=(*fit).first.end(); sit++ ) {
-                     vset.AddBFlag( (*sit), BOTTOM_OUTSIDE );
-                  }
-              }
-         }
-
-     // right
-     if ( with_right )
-       for ( std::map<std::set<size_t>,size_t>::const_iterator it=eright.begin(); it!=eright.end(); it++ ) {
-            std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
-            fit=surface_neighbor_keys.find( (*it).first );
-            if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                         "RIGHT boundary pfvert not identified." );
-            else {
-                assert( (*fit).second.second < vset.Elements() );
-                assert( (*fit).second.first < 4U );
-                //           eid                   face                 flag
-                vset.Pfvert( (*fit).second.second, (*fit).second.first, RIGHT_OUTSIDE );
-                // flagging the nodes as well
-                for ( std::set<size_t>::const_iterator sit=(*fit).first.begin(); sit!=(*fit).first.end(); sit++ ) {
-                     vset.AddBFlag( (*sit), RIGHT_OUTSIDE );
-                  }
-              }
-         }
-
-     // top
-     if ( with_top )
-       for ( std::map<std::set<size_t>,size_t>::const_iterator it=etop.begin(); it!=etop.end(); it++ ) {
-            std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
-            fit=surface_neighbor_keys.find( (*it).first );
-            if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                         "TOP boundary pfvert not identified." );
-            else {
-                assert( (*fit).second.second < vset.Elements() );
-                assert( (*fit).second.first < 4U );
-                //           eid                   face                 flag
-                vset.Pfvert( (*fit).second.second, (*fit).second.first, TOP_OUTSIDE );
-                // flagging the nodes as well
-                for ( std::set<size_t>::const_iterator sit=(*fit).first.begin(); sit!=(*fit).first.end(); sit++ ) {
-                     vset.AddBFlag( (*sit), TOP_OUTSIDE );
-                  }
-              }
-         }
-
-     // left
-     if ( with_left )
-       for ( std::map<std::set<size_t>,size_t>::const_iterator it=eleft.begin(); it!=eleft.end(); it++ ) {
-            std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
-            fit=surface_neighbor_keys.find( (*it).first );
-            if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                         "LEFT boundary pfvert not identified." );
-            else {
-                assert( (*fit).second.second < vset.Elements() );
-                assert( (*fit).second.first < 4U );
-                //           eid                   face                 flag
-                vset.Pfvert( (*fit).second.second, (*fit).second.first, LEFT_OUTSIDE );
-                // flagging the nodes as well
-                for ( std::set<size_t>::const_iterator sit=(*fit).first.begin(); sit!=(*fit).first.end(); sit++ ) {
-                     vset.AddBFlag( (*sit), LEFT_OUTSIDE );
-                  }
-              }
-         }
-
-
-     // 6. flagging the corner nodes
-     // ----------------------------
-     std::set<size_t>                    corner;
-     std::insert_iterator<std::set<size_t> >  cit(corner,corner.begin());
-
-     // CNR1
-     set_intersection( nleft.begin(), nleft.end(), nbottom.begin(), nbottom.end(), cit );
-     if ( !corner.empty() ) {
-          vset.AddBFlag( (*corner.begin()), CNR_MIN );
-          corner.clear();
-       }
-     else
-       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                  "CNR1 could not be identified" );
-     // CNR2
-     set_intersection( nbottom.begin(), nbottom.end(), nright.begin(), nright.end(), cit );
-     if( !corner.empty() ) {
-          vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXX );
-          corner.clear();
-       }
-     else
-       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                  "CNR2 could not be identified" );
-     // CNR3
-     set_intersection( nright.begin(), nright.end(), ntop.begin(), ntop.end(), cit );
-     if ( !corner.empty() ) {
-          vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXX );
-          corner.clear();
-       }
-     else
-       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                  "CNR3 could not be identified" );
-     // CNR4
-     set_intersection( ntop.begin(), ntop.end(), nleft.begin(), nleft.end(), cit );
-     if ( !corner.empty() ) {
-          vset.AddBFlag( (*corner.begin()), CNR_MAX_MINXZ );
-          corner.clear();
-       }
-     else
-       throw csmp::Exception( ERROR, "ModelTopology<2>::RebuildLineElementNeighborConnectivity",
-                                  "CNR4 could not be identified" );
-
-  } // end BuildNeighborConnectivityOfRectangleShapedModel
-
+ 
 
 
 
@@ -3066,14 +2641,8 @@ RebuildLineElementNeighborConnectivity():
 
      @attention correction is carried out correctly only when method is applied to linear elements.
  */
- void CorrectSurfaceElementOrientations( VSet<1U>& vset )
- {
- }
- void CorrectSurfaceElementOrientations( VSet<3U>& vset )
- {
- }
  void CorrectSurfaceElementOrientations( VSet<2U>& vset )
- {
+  {
      std::deque<std::vector<long64> >::iterator it(vset.PlistBegin());
      std::deque<std::vector<long64> >::iterator itpf(vset.PfvertsBegin());
      std::vector<long64> temp_vector;
@@ -3085,9 +2654,9 @@ RebuildLineElementNeighborConnectivity():
          if( (*it).size() < 3U ) continue;
 
          // getting node ids
-         const size_t p1( (*it)[0] );
-         const size_t p2( (*it)[1] );
-         const size_t p3( (*it)[2] );
+         const long64 p1( (*it)[0] );
+         const long64 p2( (*it)[1] );
+         const long64 p3( (*it)[2] );
 
          const double64 vector1x ( vset.Px(p2) - vset.Px(p1) );
          const double64 vector1y ( vset.Py(p2) - vset.Py(p1) );
@@ -3115,9 +2684,9 @@ RebuildLineElementNeighborConnectivity():
          //const double64 cross_product_z ( vector1x*vector2y-vector1y*vector2x );
 
          //std::cout << "\nCorrect element:" << i << " xpdct:" << cross_product_z;
-         const size_t p11( (*it)[0] );
-         const size_t p21( (*it)[1] );
-         const size_t p31( (*it)[2] );
+         const long64 p11( (*it)[0] );
+         const long64 p21( (*it)[1] );
+         const long64 p31( (*it)[2] );
 
          const double64 vector1x1 ( vset.Px(p21) - vset.Px(p11) );
          const double64 vector1y1 ( vset.Py(p21) - vset.Py(p11) );

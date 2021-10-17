@@ -1560,7 +1560,7 @@ ANSYS_ModelSettings::ANSYS_ModelSettings( const std::string& mesh_file_prefix )
       binary_file_          ( true ),
       create_boundaries_    ( true )
 {
-    if( isRegionsFileExist( mesh_file_prefix.c_str() ) ){
+    if( doesRegionsFileExist( mesh_file_prefix.c_str() ) ){
         regions_.clear();
         readDesiredRegions( mesh_file_prefix.c_str(), regions_ );
     }
@@ -1598,7 +1598,7 @@ void ANSYS_ModelSettings
              bool binary_file,           /* true = binary, false = ascii */
              bool create_boundaries )    /* true = creates boundaries around model, false = does not create boundaries */
 {
-    if( isRegionsFileExist( regions_file_prefix.c_str() ) )
+    if( doesRegionsFileExist( regions_file_prefix.c_str() ) )
     {
         regions_.clear();
         readDesiredRegions( regions_file_prefix.c_str(), regions_ );

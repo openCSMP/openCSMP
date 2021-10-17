@@ -64,9 +64,6 @@ template<size_t> class VSet;
     @section examples Application Examples
      
     The topology class is used inside of ANSYS_Model3D  and  2D.
-     
-     TODO: rather than doing this in ModelTopology create missing 'pfverts' (element neighbor info) in the VSet.
-     TODO: let VSet create correct line element orientations (where ends connect to beginnings)
  */
 class ModelTopology {
   public:
@@ -75,10 +72,6 @@ class ModelTopology {
     ModelTopology( const ModelTopology& mt );
     ModelTopology& operator=( const ModelTopology& mt );
     ~ModelTopology();
-
-    /// output info
-    void        Out() const;
-    void        Out( const char* output_file ) const;
 
     /// general model info
     void        ModelName( const char* name );
@@ -127,7 +120,7 @@ class ModelTopology {
     /// check whether region is alreday included
     bool        Contains( const char* region ) const;
     /// remove certain regions
-    void        Erase();
+    void        Erase(); ///< all regions
     void        RemoveRegions( const std::set<std::string>& regions );
     void        RemoveRegion( const char* name );
     /// eliminate all model regions other than the ones specified in '*-regions.txt' file
@@ -146,8 +139,10 @@ class ModelTopology {
     void        AddRegionElementIds( const char* rname,
                                      const std::vector<size_t>& elms );
     bool        AddRegions( const std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >& unique_regions );
+    
     bool        AddRegionsWithoutEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
                                                        const std::multimap<std::string,std::vector<size_t> >& object_elements );
+                                                       
     bool        AddRegionsWithEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
                                                     const std::multimap<std::string,std::vector<size_t> >& object_elements );
     template<size_t dim>
@@ -160,15 +155,6 @@ class ModelTopology {
     void        PropertiesOfRegions( const char* regions_file,
                                      std::list<std::string>& properties,
                                      std::map<std::string,std::list<double64> >& props ) const;
-    template<size_t dim>
-    void        AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements);
-
-    /// numbering
-    template<size_t dim>
-    void        RenumberElements( VSet<dim>& vset, bool check_whether_already_correct );
-    void        RenumberElements( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
-    bool        CheckElementNumbering() const;
-    void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
 
 
     // ---------------------------------------------------------
@@ -191,44 +177,45 @@ class ModelTopology {
                                bool require_unique_names_for_vol_surf_lines = true,
                                bool correct_orientation_of_surface_elements = false,
                                bool non_box_boundary = true );
-
-    /// In ANSYS 2D (surface only) models, line element neighbor connectivity is broken, this method fixes this
-    void        RebuildLineElementNeighborConnectivity( VSet<2U>& ); // not constant because topology gets changed as well
-    /// function stub does nothing
-    void        RebuildLineElementNeighborConnectivity( VSet<1U>& );
-    /// function stub does nothing because in 3D models connectivity is fine
-    void        RebuildLineElementNeighborConnectivity( VSet<3U>& );
   
-    
-    // ------------------------------------------------------------------------------------------
-    // box shaped model related
-    // ------------------------------------------------------------------------------------------
-        
-    /// checks that 3D model contains the boundaries LEFT, RIGHT, BOTTOM, FRONT, BACK; TOP omitted because it may be IRREGULAR
-    bool        BoxShapedModel() const; 
-    
     /// checks that 2D model contains the boundaries LEFT, RIGHT, BOTTOM, TOP
-    bool        RectangleShapedModel() const;
+    bool RectangleShapedModel() const;
     
-    /// recreates the BOX_BOUNDARY node flags if a problem was detected 
+    /// checks that 3D model contains the boundaries LEFT, RIGHT, BOTTOM, FRONT, BACK; TOP omitted because it may be IRREGULAR
+    bool BoxShapedModel() const;
+    
+    /// recreates the BOX_BOUNDARY node flags if a problem was detected
     template<size_t dim> 
-    bool        AssignBoxShapedModelFlags( VSet<dim>& ) const;
-    
-    /// determines  VSet 'pfverts'  BOX_BOUNDARY entries for the element faces that have no neighbor .
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<3U>& ) const;
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<2U>& ) const;
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<1U>& ) const;
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<3U>& ) const;
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<2U>& ) const;
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<1U>& ) const;
-    
-    /// attempts to reconstruct BOX_BOUNDARY node flags in VSet for edges and corners, assuming that flags LEFT,RIGHT,TOP... are there
-    bool        Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<3U>& ) const;
-    bool        Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<2U>& ) const;
-    bool        Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( VSet<1U>& ) const;
+    bool  AssignBoxShapedModelFlags( VSet<dim>& ) const;
+
+    template<size_t dim>
+    void  AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements);
+
+    bool  CheckElementNumbering() const;
+
+    /// numbering / repair
+    void  CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
+
+    /// output info
+    void  Out() const;
+    void  Out( const char* output_file ) const;
+
 
   private:
+  
+    template<size_t dim>
+    void  RenumberElements( VSet<dim>& vset, bool check_whether_already_correct );
+    void  RenumberElements( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
 
+    /// tests that the corner elements are indeed present
+    bool Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VSet<2U>& ) const;
+    
+    /// deduces node boundary flags from BOX_BOUNDARY and other regions the name of which contains 'BOUNDARY'
+    bool  FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const;
+    bool  FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const;
+
+
+  private:
     //       region name          etypes-of-region       ids of elements in region
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >  model_regions;
     // public information on csmp element types
@@ -237,8 +224,9 @@ class ModelTopology {
     bool  isoparametric_mesh; // default is false
 };
 
+
 /// read regions from file
-bool isRegionsFileExist( const char* regions_file );
+bool doesRegionsFileExist( const char* regions_file );
 void readDesiredRegions( const char* regions_file, std::set<std::string>& desired_regions );
 
 /// box-shaped models

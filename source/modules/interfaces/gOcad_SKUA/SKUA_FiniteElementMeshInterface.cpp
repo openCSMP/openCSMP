@@ -233,18 +233,7 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
          cout << meshfile <<"' read successfully."<< endl;
     }
 
-    // check topology (a long list of VSet manipulations that are not expected to be carried out by mesh_topology
-    const bool require_unique_names_of_volumes_surfaces_and_lines = true;
-    const bool correct_orientation_of_surface_elements = true;
-    const bool interactive_property_assignment = false;
     mesh_topology.ModelName( meshfile.c_str() );
-    mesh_topology.CheckTopology( vset,
-                                 object_specs_, object_elements_,
-                                 require_unique_names_of_volumes_surfaces_and_lines,
-                                 interactive_property_assignment,
-                                 correct_orientation_of_surface_elements,
-                                !mesh_topology.BoxShapedModel() );
-    Clear();
 
  } // ReadMeshBinary
 
@@ -389,18 +378,8 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
            cout << meshfile <<"' read successfully."<< endl;
       }
 
-    /// check topology
-    const bool require_unique_names_of_volumes_surfaces_and_lines = true;
-    const bool correct_orientation_of_surface_elements = true;
-    const bool interactive_property_assignment = false;
+    /// name topology
     mesh_topology.ModelName( meshfile.c_str() );
-    mesh_topology.CheckTopology( vset,
-                                 object_specs_, object_elements_,
-                                 require_unique_names_of_volumes_surfaces_and_lines,
-                                 interactive_property_assignment,
-                                 correct_orientation_of_surface_elements,
-                                !mesh_topology.BoxShapedModel() );
-    Clear();
 
  } // ReadMeshASCII
 

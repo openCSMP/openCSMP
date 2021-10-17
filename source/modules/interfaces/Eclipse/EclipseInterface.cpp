@@ -2462,7 +2462,7 @@ EclipseModelSettings::EclipseModelSettings( const std::string& mesh_file_prefix 
   create_boundaries_( false ),
   tetra_mesh_( false )
 {
-  if ( csmp::isRegionsFileExist( mesh_file_prefix.c_str() ) ) {
+  if ( csmp::doesRegionsFileExist( mesh_file_prefix.c_str() ) ) {
     regions_.clear();
     csmp::readDesiredRegions( mesh_file_prefix.c_str(), regions_ );
   }
@@ -2492,7 +2492,7 @@ void EclipseModelSettings
   exclude_inactive_cells_ = exclude_inactive_cells;
   tetra_mesh_ = tetra_mesh;
   create_boundaries_ = create_boundaries;
-  if ( csmp::isRegionsFileExist( regions_file_prefix.c_str() ) )
+  if ( csmp::doesRegionsFileExist( regions_file_prefix.c_str() ) )
   {
     regions_.clear();
     csmp::readDesiredRegions( regions_file_prefix.c_str(), regions_ );
