@@ -104,18 +104,14 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& 
     mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, irregular_mesh );
 
     // keep all mesh regions from topology and vset
+    // calls CheckTopology and re-numbers nodes counter-clockwise if necessary
     mesh_topology.ReduceToRegions( input_file_name.c_str() );
     map<size_t,size_t>  old_and_new_elmtids;
     mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
     vset.ReduceTo( old_and_new_elmtids );
     old_and_new_elmtids.clear();
+    _test( mesh_topology.Elements() == vset.Elements() );
     
-    // processing the (deliberately) inconsistent VSet
-    const size_t rotated_elements = vset.RenumberElementsCounterClockwise2D();
-    if ( rotated_elements == 0U )
-      ErrorHandler::Instance().notice( WARNING, "VSet_TestCase::TestModelConstructionAndSaving2D",
-                                                "non-diagnostic test: element orientations are already correct.");
-      
     // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();

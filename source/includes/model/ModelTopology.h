@@ -235,8 +235,6 @@ void BoundariesOfRectangleShapedModel( std::set<std::string>& );
 
 /// surface elements orientation ( works soo far only for linear elements )
 void CorrectSurfaceElementOrientations( VSet<3U>& vset );
-void CorrectSurfaceElementOrientations( VSet<2U>& vset );
-void CorrectSurfaceElementOrientations( VSet<1U>& vset );
 
 } // csmp
 

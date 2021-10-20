@@ -1896,7 +1896,7 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
 
     // 1. eliminating lower-dimensional regions that have the same name as higher-dimensional ones
     // -------------------------------------------------------------------------------------------
-    if( require_unique_names_for_vol_surf_lines)
+    if ( require_unique_names_for_vol_surf_lines )
         AddRegionsWithEquidimensionalCheck( object_specs, object_elements );
     else
         AddRegionsWithoutEquidimensionalCheck( object_specs, object_elements );
@@ -1908,10 +1908,12 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     const bool check_whether_max_value_is_size_minus1(true);
     if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( object_elements, check_whether_max_value_is_size_minus1 ) )
       RenumberElements( vset, false );
+    if ( vset.Elements() != Elements() )
+        csmp_error.notice( ERROR, "ModelTopology::CheckTopology:",
+                          "the number of elements in the VSet is inconsistent with the ones stored in ModelTopology." );
 
-    // 3. assign boundary flags for box-shaped model
-    // ---------------------------------------------
-    // TODO: (thus far, method only assigns neighbor flags for 3D model)
+    // 3. assign boundary flags to box-shaped model
+    // --------------------------------------------
       if ( !AssignBoxShapedModelFlags(vset) )
         csmp_error.notice( WARNING, "ModelTopology::CheckTopology:",
                           "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
@@ -1921,8 +1923,9 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     // SKM note: this functionality also deals with surface mesh in 3D meshes 
     if constexpr ( dim == 2U ) {
         if ( correct_orientation_of_surface_elements )
-          if ( InterpolationOrder() == 1 )
-            CorrectSurfaceElementOrientations( vset );
+          if ( InterpolationOrder() <= 2 )
+            // NB! - actually makes changes for most 2D ANSYS models
+            vset.RenumberElementsCounterClockwise2D();
       }
 
     // 5. assigning properties to regions
@@ -1991,10 +1994,10 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
 
     // 4. correct surface mesh orientation
     // ---------------------------------------
-    if ( dim == 2U && correct_orientation_of_surface_elements )
-     if ( InterpolationOrder() == 1 )
-       CorrectSurfaceElementOrientations( vset );
-
+    if constexpr ( dim == 2U )
+      if ( correct_orientation_of_surface_elements )
+        vset.RenumberElementsCounterClockwise2D();
+      
     return checks_passed;
 }
 
@@ -2626,91 +2629,6 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const
      return true;
 
   } // end FlagNodesUsingBoundaryRegions
-
-
-
- 
-
-
-
-
- /**
-     checking and correcting the orientation of misoriented surface elements
-
-     @attention method assumes that the first 3 nodes in each plist record are corner nodes.
-
-     @attention correction is carried out correctly only when method is applied to linear elements.
- */
- void CorrectSurfaceElementOrientations( VSet<2U>& vset )
-  {
-     std::deque<std::vector<long64> >::iterator it(vset.PlistBegin());
-     std::deque<std::vector<long64> >::iterator itpf(vset.PfvertsBegin());
-     std::vector<long64> temp_vector;
-     std::vector<long64> temp_pfverts;
-     size_t  n_orientations_corrected(0U);
-
-     for ( size_t i=0U; i<vset.Elements(); i++, it++, itpf++ ) {
-         // if its not a triangle nor quad, do not check orientation
-         if( (*it).size() < 3U ) continue;
-
-         // getting node ids
-         const long64 p1( (*it)[0] );
-         const long64 p2( (*it)[1] );
-         const long64 p3( (*it)[2] );
-
-         const double64 vector1x ( vset.Px(p2) - vset.Px(p1) );
-         const double64 vector1y ( vset.Py(p2) - vset.Py(p1) );
-
-         const double64 vector2x ( vset.Px(p3) - vset.Px(p1) );
-         const double64 vector2y ( vset.Py(p3) - vset.Py(p1) );
-
-         const double64 cross_product_z ( vector1x*vector2y-vector1y*vector2x );
-
-         //std::cout << "\nCorrect element:" << i << " xpdct:" << cross_product_z;
-         //if the z component of the return vector is negative, the orientation is wrong
-         if ( cross_product_z < 0. ) {
-            temp_vector = (*it);
-            temp_pfverts = (*itpf);
-
-            const size_t vsize( vset.PlistSize(i) );
-            //std::cout <<"vsize: "<< vsize<<std::endl;
-            for ( size_t j=0U; j<vsize; j++ ) (*it)[j] = temp_vector[vsize-j-1U];
-
-            const size_t vfsize( vset.PfvertsSize(i) );
-            for ( size_t j=0U; j<vfsize; j++ ) (*itpf)[j] = temp_pfverts[vsize-j-1U];
-            n_orientations_corrected++;
-         }
-         // getting node ids
-         //const double64 cross_product_z ( vector1x*vector2y-vector1y*vector2x );
-
-         //std::cout << "\nCorrect element:" << i << " xpdct:" << cross_product_z;
-         const long64 p11( (*it)[0] );
-         const long64 p21( (*it)[1] );
-         const long64 p31( (*it)[2] );
-
-         const double64 vector1x1 ( vset.Px(p21) - vset.Px(p11) );
-         const double64 vector1y1 ( vset.Py(p21) - vset.Py(p11) );
-
-         const double64 vector2x1 ( vset.Px(p31) - vset.Px(p11) );
-         const double64 vector2y1 ( vset.Py(p31) - vset.Py(p11) );
-
-         const double64 cross_product_z1 ( vector1x1*vector2y1-vector1y1*vector2x1 );
-
-         //if the z component of the return vector is negative, the orientation is wrong
-         if ( cross_product_z1 < 0. ) {
-              //std::cout << "\nElement Still Wrong:" << i << " xpdct:" << cross_product_z;
-           }
-       }
-
-     ErrorHandler& csmp_error( ErrorHandler::Instance() );
-     if ( n_orientations_corrected > 0U ) {
-          csmp_error.notice( WARNING, "ModelTopology::correctSurfaceElementOrientations(2D)",
-                                      "node-numbering in 'plist' was not counter-clockwise.");
-          std::cerr <<"\t\tcorrections made: "<< n_orientations_corrected << std::endl << std::endl;
-       }
-
-   } // end correctSurfaceElementOrientations
-
 
  
 

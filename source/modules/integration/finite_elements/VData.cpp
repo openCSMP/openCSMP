@@ -2103,11 +2103,6 @@ size_t VData::RenumberElementsCounterClockwise2D()
          // if this is a triangle or quadrilateral
          if ( HybridElementTypeMesh() ) {
               etype = parseFiniteElementTypeEnum(*eit);
-              assert ( etype != CUBIC_TRIANGLE );
-              assert ( etype != ISOPARAMETRIC_CUBIC_TRIANGLE );
-              assert ( etype != CUBIC_BAR );
-              assert ( etype != ISOPARAMETRIC_CUBIC_BAR );
-              assert ( etype != ISOPARAMETRIC_CUBIC_QUADRILATERAL );
               is_triangle      = isTriangularElement( etype );
               is_quadrilateral = isQuadrilateralElement( etype ); 
            }
@@ -2122,7 +2117,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
               if ( crossProduct < 0. ) {
                    // linear elements (less than or equal to 4 nodes)
                    const size_t nodes = (*pls).size();
-                   // reverse plist and pfverts
+                   // reverse plist and pfverts of linear elements
                    if ( nodes <= 4 ) {
                         reverse( (*pls).begin(), (*pls).end() );  
                      }
@@ -2131,30 +2126,28 @@ size_t VData::RenumberElementsCounterClockwise2D()
                         if ( is_triangle ) {
                              // reverse corner nodes, then midside nodes, bubble node stays in barycentric element 
                              assert( nodes <= 7 );
-                             reverse( (*pls).begin(), next((*pls).begin(),3) ); 
-                             reverse( next((*pls).begin(),4), next((*pls).begin(),6) ); // TODO: check offsets
+                             reverse( (*pls).begin(), next((*pls).begin(),3) );
+                             reverse( next((*pls).begin(),4), next((*pls).begin(),6) );
                           }
                         else { // quadratic quadrilateral with and without bubble node
                              assert( nodes <= 9 );
                              reverse( (*pls).begin(), next((*pls).begin(),8) );  
                           }
                      }
-                   // in all cases, the neighbor numbering has to be reversed   
+                   // in all cases, the neighbor numbering has to be reversed as well
                    if ( !(*pfv).empty() ) reverse( (*pfv).begin(), (*pfv).end() );
                    orientation_changes++;  
-                }         
+                }
            }
          eit++;
          pls++;
          pfv++;
-      } 
-
-
-    // 2. making the line elements at model boundary comply with the numbering of the boundary faces
-    // ---------------------------------------------------------------------------------------------    
-    // 3. aligning the elements of internal line element regions if any
-    // ----------------------------------------------------------------
-    if ( HybridElementTypeMesh() ) CreateConsistentLineElementOrientations2D();
+      }
+      
+    if ( orientation_changes > 0 ) {
+         cerr <<"\nVData::RenumberElementsCounterClockwise2D: flipped node numbering of "<< orientation_changes;
+         cerr <<" surface elements from clockwise to counter-clockwise.\n";
+      }
     
     return orientation_changes;
  
@@ -2826,7 +2819,7 @@ size_t VData::SwitchCornerTriangles2D()
     size_t switched_triangles{0};
     
     if ( pfverts.empty() || pfverts.size() != plist.size() ) {
-         cerr <<"\nVData::switchCornerTriangles2D: method needs valid 'pfverts' (neighbor connectivity) for its operation. ";
+         cerr <<"\nVData::SwitchCornerTriangles2D: method needs valid 'pfverts' (neighbor connectivity) for its operation. ";
          cerr <<" no modifications made.\n";
          return 0U;
       }
@@ -2900,7 +2893,7 @@ size_t VData::SwitchCornerTriangles2D()
       }
       
     if ( switched_triangles > 0 )
-      cout <<"\n\nSwitchCornerTriangles2D: reconnected: "<< switched_triangles <<" triangular elements."<< endl;
+      cout <<"\n\nVData::SwitchCornerTriangles2D: reconnected: "<< switched_triangles <<" triangular elements."<< endl;
     return switched_triangles;
  
  } // end SwitchCornerTriangles2D
@@ -3298,7 +3291,7 @@ bool VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
    for ( auto it=next(PfvertsBegin(),first_interface_); it!=PfvertsEnd(); ++it ) {
          assert( (*it).size() > 2U );
          // the last entry in each pfvert record is the index of the intervening element or bflag
-         const auto idx = (*it).back();
+         const ssize_t idx = (*it).back();
          if ( idx >= 0 ) // if there is an intervening element
            intervening_elmts.push_back( idx );
      }

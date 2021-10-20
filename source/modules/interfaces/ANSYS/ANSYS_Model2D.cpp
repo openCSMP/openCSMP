@@ -30,14 +30,15 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
     ModelTopology    mesh_topology( isoparametric_elements );
     ANSYS_Interface  mesh_interface( isoparametric_elements );
 
-    // 0. reading the mesh from ANSYS CSMP-input files
-    //    and eliminating the unwanted line/surface element regions
+    // 0. reading mesh from ANSYS CSMP-input .asc and .dat files,
+    //    eliminating unwanted line/surface element regions
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
-    // create 'pfverts' information because the one ANSYS does not get the line element orientations right
+ 
+    // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the line element orientations right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
 
-    // 1. writing element and node numbers to property data and storing them in the VSet
+    // 2. writing original element and node numbers to property data and storing them in VSet
     if ( Database().IsDefined( "element number" ) ) {
       // element numbers
       PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
@@ -53,9 +54,8 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
       vset.AddData( "node number", node_nums );
     }
 
-    // 2. construct model based on obtained model topology and vset
-    //    ansys neighbor info will be overwritten later since it includes neighbor information
-    //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbor)
+    // 3. constructing model from the polygonal data in the VSet and the region information in model topology
+    // 3.1 using only the selected regions from the -regions.txt file
     if ( use_regions_file )
       Model<2U>::Initialize( regions_file_prefix,
                              mesh_topology,
@@ -64,6 +64,7 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
                              create_splitboundaries,
                              irregular_mesh );
     else
+      // 3.2 using all regions from the ANSYS model
       Model<2U>::Initialize( mesh_topology,
                              vset,
                              create_boundaries,
