@@ -59,8 +59,7 @@ namespace csmp {
     // Building Region object from ANSYS data files
     cout <<"Reading mesh..."<<endl;
     const bool binary_file( true );
-    const bool irregular_mesh( false );
-    mesh_interface.Read_ANSYS_Mesh( prefix_, mesh_container, mesh_topology, binary_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( prefix_, mesh_container, mesh_topology, binary_file, true );
     cout <<"Finished reading mesh..."<<endl;
     cout <<"Building Model..."<<endl;
 

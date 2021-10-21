@@ -1890,7 +1890,7 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
                                    bool require_unique_names_for_vol_surf_lines,
                                    bool interactive_property_assignment,
                                    bool correct_orientation_of_surface_elements,
-                                   bool non_box_boundary )
+                                   bool reassign_boundary_flags )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1914,10 +1914,12 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
 
     // 3. assign boundary flags to box-shaped model
     // --------------------------------------------
-      if ( !AssignBoxShapedModelFlags(vset) )
-        csmp_error.notice( WARNING, "ModelTopology::CheckTopology:",
-                          "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
-
+    if ( reassign_boundary_flags ) {
+        if ( !AssignBoxShapedModelFlags(vset) )
+          csmp_error.notice( WARNING, "ModelTopology::CheckTopology:",
+                            "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
+     }
+     
     // 4. correct surface mesh orientation
     // ---------------------------------------
     // SKM note: this functionality also deals with surface mesh in 3D meshes 
@@ -1941,11 +1943,14 @@ template bool ModelTopology::CheckTopology( VSet<2U>&,const std::multimap<std::s
 template bool ModelTopology::CheckTopology( VSet<3U>&,const std::multimap<std::string,std::string>&,const std::multimap<std::string,std::vector<size_t> >&,bool,bool,bool,bool);
 
 
+
+
+
 template<size_t dim>
 bool ModelTopology::CheckTopology( VSet<dim>& vset,
                                    bool require_unique_names_for_vol_surf_lines,
                                    bool correct_orientation_of_surface_elements,
-                                   bool non_box_boundary )
+                                   bool reassign_boundary_flags )
 {
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     bool checks_passed(true);
@@ -1988,10 +1993,12 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
  
     // 3. assign boundary flags for box-shaped model
     // -----------------------------------------------
-      if ( !AssignBoxShapedModelFlags(vset) )
-        csmp_error.notice( ERROR, "ModelTopology::CheckTopology:",
-                          "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
-
+    if ( reassign_boundary_flags ) {
+         if ( !AssignBoxShapedModelFlags(vset) )
+           csmp_error.notice( ERROR, "ModelTopology::CheckTopology:",
+                             "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
+      }
+      
     // 4. correct surface mesh orientation
     // ---------------------------------------
     if constexpr ( dim == 2U )
@@ -2129,6 +2136,10 @@ bool  ModelTopology::BoxShapedModel() const
   }
 
 
+
+/**
+    Overwrites all pre-existing boundary flags.
+*/
  template<size_t dim>
  bool ModelTopology::AssignBoxShapedModelFlags( VSet<dim>& vset ) const
  {
@@ -2251,6 +2262,8 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
 
      // 2. Going over the nodes, making BOX_BOUNDARY flag assignments
      // -------------------------------------------------------------
+     // zapping all previous box boundary flags
+     for ( auto bit=vset.BFlagsBegin(); bit!= vset.BFlagsEnd(); ++bit ) (*bit) = NOT;
      // (starting with the least specific regions so that their corners are overwritten by box boundary flags)
      for ( auto nit : nodes_irregular ) vset.AddBFlag( nit, IRREGULAR );
      for ( auto nit : nodes_bottom ) vset.AddBFlag( nit, BOTTOM );

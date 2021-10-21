@@ -272,7 +272,7 @@ class ANSYS_Interface {
                           VSet<dim>&,
                           ModelTopology&,
                           bool binary_input_file,
-                          bool irregular_mesh );
+                          bool reassign_boundary_flags=true ); ///< needed when users do not properly assign them in ANSYS
 
   protected:
     /// ascii format
@@ -280,7 +280,7 @@ class ANSYS_Interface {
     void ReadMeshASCII( const std::string& meshfile,
                         VSet<dim>&,
                         ModelTopology&,
-                        bool irregular_mesh );
+                        bool reassign_boundary_flags=true );
 
     /// binary format
     /// use the binary interfaces for efficient reading of large files
@@ -288,7 +288,7 @@ class ANSYS_Interface {
     void ReadMeshBinary( const std::string& meshfile,
                          VSet<dim>&,
                          ModelTopology&,
-                         bool irregular_mesh );
+                         bool reassign_boundary_flags );
 
   private:
     /// reading comments

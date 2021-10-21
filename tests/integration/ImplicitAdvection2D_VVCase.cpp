@@ -46,8 +46,7 @@ int test_implicit_advection_2D()
     // Building Region object from ANSYS data files
     cerr <<"Reading mesh..."<<endl;
     const bool binary_file( true );
-    const bool irregular_mesh( false );
-    mesh_interface.Read_ANSYS_Mesh( "square", mesh_container, mesh_topology, binary_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( "square", mesh_container, mesh_topology, binary_file, true );
     cerr <<"Finished reading mesh..."<<endl;
     cerr <<"Building Model..."<<endl;
     Model<2U>  model2D( mesh_topology, mesh_container, "square.txt" );

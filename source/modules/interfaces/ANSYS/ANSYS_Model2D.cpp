@@ -32,7 +32,7 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
 
     // 0. reading mesh from ANSYS CSMP-input .asc and .dat files,
     //    eliminating unwanted line/surface element regions
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
  
     // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the line element orientations right
     vset.RemovePfverts();
@@ -145,7 +145,7 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
 
     // 0. reading the mesh from ANSYS CSMP-input files
     //    and eliminating the unwanted line/surface element regions
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();

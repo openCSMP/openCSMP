@@ -53,13 +53,13 @@ void ANSYS_Interface::Read_ANSYS_Mesh( const std::string& filename,
                                        VSet<dim>&         vset,
                                        ModelTopology&     mesh_topology,
                                        bool               binary_input_file,
-                                       bool               irregular_mesh )
+                                       bool               reassign_boundary_flags )
 {
    /// read ansys mesh
    if ( binary_input_file )
-       ReadMeshBinary( filename, vset, mesh_topology, irregular_mesh );
+       ReadMeshBinary( filename, vset, mesh_topology, reassign_boundary_flags );
    else
-       ReadMeshASCII( filename, vset, mesh_topology, irregular_mesh );
+       ReadMeshASCII( filename, vset, mesh_topology, reassign_boundary_flags );
 }
 
 
@@ -181,7 +181,7 @@ template<size_t dim>
 void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
                                       VSet<dim>&  vset,
                                       ModelTopology&  mesh_topology,
-                                      bool irregular_mesh )
+                                      bool reassign_boundary_flags )
  {
     ErrorHandler& csmp_error(ErrorHandler::Instance());
 
@@ -270,7 +270,7 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
                                  require_unique_names_of_volumes_surfaces_and_lines,
                                  interactive_property_assignment,
                                  correct_orientation_of_surface_elements,
-                                 irregular_mesh );
+                                 reassign_boundary_flags );
     Clear();
 
  } // ReadMeshBinary
@@ -332,7 +332,7 @@ template<size_t dim>
 void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
                                      VSet<dim>&  vset,
                                      ModelTopology&  mesh_topology,
-                                     bool irregular_mesh )
+                                     bool reassign_boundary_flags )
  {
     ErrorHandler& csmp_error(ErrorHandler::Instance());
 
@@ -422,7 +422,7 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
                                  require_unique_names_of_volumes_surfaces_and_lines,
                                  interactive_property_assignment,
                                  correct_orientation_of_surface_elements,
-                                 irregular_mesh );
+                                 reassign_boundary_flags );
     Clear();
 
  } // ReadMeshASCII
@@ -1302,7 +1302,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
     for ( size_t i=0; i<nodes; i++ ){
          fread( (void*) &ival, ibytes, 1U, fp );
          if ( ival < min28 || ival > zero )
-           throw csmp::Exception( ERROR, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
+           csmp_error.notice( ERROR, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
          // if this is a boundary node
          if ( ival < zero ) {
               vset.AddBFlag( i, static_cast<int8_t>(ival) );
@@ -1310,15 +1310,17 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
            }
          else vset.AddBFlag( i, NOT );
       }
+    if ( counter == nodes )
+      csmp_error.notice( WARNING, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","all entries in 'bflag' array are negative. Data have to be recreated!");
+
 
     // 2. reading boundary condition values 'pbounds' (double) and ignoring them
     // --------------------------------------------------------------------------
 
-    if( csmp_error.Verbose() )
-    {
+    if ( csmp_error.Verbose() ) {
         std::cout <<"\n\treading "<< counter <<" boundary values 'pbounds'..."<< std::endl;
         std::cout.flush();
-    }
+      }
     double64 dval;
     for ( size_t i=1; i<=nodes; i++ ) {
          fread( (void*) &dval, dbytes, 1U, fp );

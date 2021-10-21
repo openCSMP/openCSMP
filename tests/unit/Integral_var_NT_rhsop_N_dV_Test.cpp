@@ -16,8 +16,7 @@ Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test( bool verbose )
   if ( verbose_ ) cout <<"Reading mesh..."<<endl;
   string mesh_name("pde_integrator_test");
   const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+  mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
   if ( verbose_ ) {
       cout <<"Finished reading mesh..."<<endl;
       cout <<"Building Model..."<<endl;

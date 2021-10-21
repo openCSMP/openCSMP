@@ -43,8 +43,7 @@ void StatisticalAnalyzer_Example::Run()
   cin >> model_name;
 
   const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+  mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, true );
 
   Model<2U> reservoir_model( mesh_topology, mesh_container, "StatisticalAnalyzer_Example_var.txt" );
 

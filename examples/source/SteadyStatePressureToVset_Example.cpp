@@ -96,8 +96,7 @@ void SteadyStatePressureToVset_Example::Run()
     else {
          ANSYS_Interface  mesh_interface(isoparametric);
          const bool binary_file( true );
-         const bool irregular_mesh( false );
-         mesh_interface.Read_ANSYS_Mesh( file_name, mesh_container, mesh_topology, binary_file, irregular_mesh );
+         mesh_interface.Read_ANSYS_Mesh( file_name, mesh_container, mesh_topology, binary_file, true );
          mesh_topology.ReduceToRegions( file_name );
          map<size_t,size_t>  old_and_new_elmtids;
          mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );

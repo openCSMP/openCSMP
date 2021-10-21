@@ -15,8 +15,7 @@ namespace csmp {
 
     string mesh_name(modelName);
     const bool binary_file(true);
-    const bool irregular_mesh(false); // irregular_boundary! BOX SHAPE or IRREGULAR SHAPE
-    mesh_interface.Read_ANSYS_Mesh(mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh);
+    mesh_interface.Read_ANSYS_Mesh(mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
     cout << "Finished reading mesh..." << endl;
     cout << "Building Model..." << endl;
     model = new Model<2U>(mesh_topology, mesh_container, "PDE_Integrate_UoM_2phase-variables.txt");

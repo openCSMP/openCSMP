@@ -2206,7 +2206,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
       set<long64>  line_elmts, boundary_line_elmts;
       // recording the corner-node ids of the surface elements for later searching
       // face-nd-id key, boundary face node ids in correct sequence
-      map<  set<long64>, pair<long64,long64> > surf_elmt_face_nd_ids;
+      deque<pair<long64,long64> > surf_elmt_face_nd_ids;
 
       const vector<int8_t>::const_iterator  end = PelmtEnd();
       vector<int8_t>::const_iterator        eit = PelmtBegin();
@@ -2232,17 +2232,14 @@ size_t VData::RenumberElementsCounterClockwise2D()
                       for ( size_t i{0}; i < faces; ++i )
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
-                             if ( i == 0 ) {
-                                  const set<long64> face1{ plist[elmt_idx][1], plist[elmt_idx][2] };
-                                  surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) ) );
+                             if ( i == 0 ) { // face 0
+                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) );
                                }
-                             else if ( i == 1 ) {
-                                  const set<long64> face2{ plist[elmt_idx][2], plist[elmt_idx][0] };
-                                  surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair( plist[elmt_idx][2], plist[elmt_idx][0] ) ) );
+                             else if ( i == 1 ) { // face 1
+                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][2], plist[elmt_idx][0] ) );
                                }
-                             else {
-                                  const set<long64> face3{ plist[elmt_idx][0], plist[elmt_idx][1] };
-                                  surf_elmt_face_nd_ids.insert( make_pair( face3, make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) ) );
+                             else { // face 2
+                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) );
                                }
                           }
                    }
@@ -2251,21 +2248,17 @@ size_t VData::RenumberElementsCounterClockwise2D()
                       for ( size_t i{0}; i < faces; ++i )
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
-                             if ( i == 0 ) {
-                                  const set<long64> face1{ plist[elmt_idx][0], plist[elmt_idx][1] };
-                                  surf_elmt_face_nd_ids.insert( make_pair( face1, make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) ) );
+                             if ( i == 0 ) { // face 0
+                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) );
                                }
-                             else if ( i == 1 ) {
-                                  const set<long64> face2{ plist[elmt_idx][1], plist[elmt_idx][2] };
-                                  surf_elmt_face_nd_ids.insert( make_pair( face2, make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) ) );
+                             else if ( i == 1 ) { // face 1
+                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) );
                                }
-                             else if ( i == 2 ) {
-                                  const set<long64> face3{ plist[elmt_idx][2], plist[elmt_idx][3] };
-                                  surf_elmt_face_nd_ids.insert( make_pair( face3, make_pair( plist[elmt_idx][2], plist[elmt_idx][3] ) ) );
+                             else if ( i == 2 ) { // face 2
+                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][2], plist[elmt_idx][3] ) );
                                }
-                             else {
-                                  const set<long64> face4{ plist[elmt_idx][3], plist[elmt_idx][0] };
-                                  surf_elmt_face_nd_ids.insert( make_pair( face4, make_pair( plist[elmt_idx][3], plist[elmt_idx][0] ) ) );
+                             else { // face 3
+                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][3], plist[elmt_idx][0] ) );
                                }
                          }
                       // inserting the faces
@@ -2355,31 +2348,33 @@ size_t VData::RenumberElementsCounterClockwise2D()
       // using: //  face-nd-ids,      elmt, face   to verify that elements are indeed oriented correctly
       //        map<set<size_t>,pair<size_t,size_t> > surf_elmt_face_nd_ids;
       //
+      // getting the surface element deque ready for binary_search
+      sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
       // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
       for ( set<long64>::const_iterator it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
         {
            // searching for the corresponding face of a higher dimensional element
-           auto face_it = surf_elmt_face_nd_ids.find( set{ plist[*it][0], plist[*it][1] } );
-           
-           // is there a line element with no surface element next to it?
-           if ( face_it == surf_elmt_face_nd_ids.end() ) {
+           // --------------------------------------------------------------------
+           // if a surface element face with same node numbering is found the line element is already correctly oriented
+           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][0], plist[*it][1]) ) )
+             continue;
+           // if the face has the opposite orientation, the line element is flipped
+           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][1], plist[*it][0]) ) ) {
+                // swapping nodes
+                long64 swap     = plist[*it][1];
+                plist[*it][1]   = plist[*it][0];
+                plist[*it][0]   = swap;
+                // swapping neighbors
+                swap            = pfverts[*it][1];
+                pfverts[*it][1] = pfverts[*it][0];
+                pfverts[*it][0] = swap;
+             }
+           // this is a line element with no surface element next to it?
+           else {
                 cerr <<"\nCreateConsistentLineElementOrientations: line element "<< *it <<" at border with the nodes:\n\t\t";
                 cerr << plist[*it][0] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][0]])) <<"), ";
                 cerr << plist[*it][1] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][1]])) <<"), ";
                 cerr <<" has no higher-dimensional neighbor; its orientation is left untouched.\n";
-             }
-           else {
-               // verifying that the orientation is correct, else flipping the element
-               if ( make_pair( plist[*it][0], plist[*it][1] ) != (*face_it).second ) {
-                    // swapping nodes
-                    long64 swap     = plist[*it][1];
-                    plist[*it][1]   = plist[*it][0];
-                    plist[*it][0]   = swap;
-                    // swapping neighbors
-                    swap            = pfverts[*it][1];
-                    pfverts[*it][1] = pfverts[*it][0];
-                    pfverts[*it][0] = swap;
-                 }
              }
            
         } // end boundary_line_elmts

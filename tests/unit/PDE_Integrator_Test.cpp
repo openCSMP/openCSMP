@@ -15,8 +15,7 @@ PDE_Integrator_Test::PDE_Integrator_Test() {
     cout <<"Reading mesh..."<<endl;
     string mesh_name("pde_integrator_test");
     const bool binary_file( true );
-    const bool irregular_mesh( false );
-    mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
     cout <<"Finished reading mesh..."<<endl;
     cout <<"Building Model..."<<endl;
     sg_= new Model<2U> ( mesh_topology, mesh_container, "CSMP-2phase-variables.txt");

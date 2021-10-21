@@ -169,14 +169,14 @@ class ModelTopology {
                                bool require_unique_names_for_vol_surf_lines  = true,
                                bool interactive_property_assignment = false,
                                bool correct_orientation_of_surface_elements = false,
-                               bool non_box_boundary = true );
+                               bool reassign_boundary_flags = true );
   
     /// calls CheckTopology with a reduced set of options
     template<size_t dim>
     bool        CheckTopology( VSet<dim>& vset,
                                bool require_unique_names_for_vol_surf_lines = true,
                                bool correct_orientation_of_surface_elements = false,
-                               bool non_box_boundary = true );
+                               bool reassign_boundary_flags = true );
   
     /// checks that 2D model contains the boundaries LEFT, RIGHT, BOTTOM, TOP
     bool RectangleShapedModel() const;
@@ -232,9 +232,6 @@ void readDesiredRegions( const char* regions_file, std::set<std::string>& desire
 /// box-shaped models
 void BoundariesOfBoxShapedModel( std::set<std::string>& bs );
 void BoundariesOfRectangleShapedModel( std::set<std::string>& );
-
-/// surface elements orientation ( works soo far only for linear elements )
-void CorrectSurfaceElementOrientations( VSet<3U>& vset );
 
 } // csmp
 

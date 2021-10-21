@@ -99,9 +99,11 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& 
     ModelTopology   mesh_topology(true);
     VSet<DIM>       vset;
 
-    const bool binary_file( true );
-    const bool irregular_mesh( false );
-    mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, irregular_mesh );
+    const bool binary_file( true ), recreate_bflags(true);
+    mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, recreate_bflags );
+    // for ( size_t i{0}; i<vset.BFlags(); ++i )
+    //  cout <<" "<< static_cast<int>(vset.BoundaryFlag(i) );
+    //cout << endl;
 
     // keep all mesh regions from topology and vset
     // calls CheckTopology and re-numbers nodes counter-clockwise if necessary
@@ -115,6 +117,38 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& 
     // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
+    
+    // testing whether connectivity of the boundary faces has been achieved
+    // looping over element faces that have a neighbor, reporting those where both nodes are at the boundary
+    size_t dodgy_neighbors{0};
+    for ( size_t eidx{0}; eidx < vset.Elements(); ++eidx ) {
+        CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( vset.ElementType(eidx) );
+        // faces=neighbors
+        size_t face{0};
+        for ( auto j=vset.PfvertsBegin(eidx); j!=vset.PfvertsEnd(eidx); ++j, ++face )
+          if ( isTriangularElement(etype) && (*j) >= 0 ) {
+             // face 0
+             if ( face == 0 && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT ) {
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
+                  dodgy_neighbors++;
+               }
+             if ( face == 1 && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT ) {
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
+                  dodgy_neighbors++;
+               }
+             if ( face == 2 && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT ) {
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
+                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
+                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
+                  dodgy_neighbors++;
+               }
+          }
+      }
+    _test( dodgy_neighbors == 0 );
 
     // build model from mesh
     Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );

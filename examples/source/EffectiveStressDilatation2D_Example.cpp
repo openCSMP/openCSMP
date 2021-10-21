@@ -113,8 +113,7 @@ void EffectiveStressDilatation2D_Example::Run()
 
   // reading mesh
   const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( bin_file, mesh_container, mesh_topology, binary_file, irregular_mesh );
+  mesh_interface.Read_ANSYS_Mesh( bin_file, mesh_container, mesh_topology, binary_file, true );
   // mesh_topology.Out();
   // eliminating potentially unwanted regions
   mesh_topology.ReduceToRegions( bin_file );
