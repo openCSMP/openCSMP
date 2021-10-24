@@ -8,6 +8,7 @@
 
 #include "TwoPhaseModel_TestSuite.h"
 
+#include "Region.h"
 #include "TwoPhaseModel_Test.h"
 #include "PropertyHandle.h"
 #include "VectorVariable.h"

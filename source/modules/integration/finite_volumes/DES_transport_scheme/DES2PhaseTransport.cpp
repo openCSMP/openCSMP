@@ -35,7 +35,6 @@ DES2PhaseTransport<dim,FLOW_FUNCTIONS>::DES2PhaseTransport(  Model<dim>& m,
     T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.)
 {
     InitializeBasicVariablsAndKeys();
-    m.InstantiateFiniteVolumes();
     InitializeFiniteVolumeProperties();
     cout<<"DES2PhaseTransport constructed"<<endl;
 } // end constructor 
@@ -153,12 +152,13 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
         "The 'permeability' variable must be SCALAR and placed on ELEMENT"  );
 
     // model-wide initialisation
-    sg_.Region("Model").InputPropertyValue( "update count", makeScalar(PLAIN,0.), COMPLETE );
-    sg_.Region("Model").InputPropertyValue( "rate count", makeScalar(PLAIN,0.), COMPLETE );   
-    sg_.Region("Model").InputPropertyValue( "schedule count", makeScalar(PLAIN,0.), COMPLETE ); 
-    sg_.Region("Model").InputPropertyValue( "synchronize count", makeScalar(PLAIN,0.), COMPLETE ); 
-    sg_.Region("Model").InputPropertyValue( "DES array", ArrayVariable(7,0.,PLAIN), COMPLETE); 
-    sg_.Region("Model").InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE);
+    Region<dim> region(sg_.Region("Model"));
+    region.InputPropertyValue( "update count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "rate count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "schedule count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "synchronize count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "DES array", ArrayVariable(7,0.,PLAIN), COMPLETE);
+    region.InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE);
     db_.RangeOf( db_.Name(key_sCO2), lower_limit_, upper_limit_ );    
 }
 

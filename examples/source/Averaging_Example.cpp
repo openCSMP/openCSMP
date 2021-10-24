@@ -1,6 +1,7 @@
 #include "Averaging_Example.h"
 
 #include "ANSYS_Model2D.h"
+#include "Region.h"
 #include "VTU_Interface.h"
 #include "PL_Utilities.h"
 

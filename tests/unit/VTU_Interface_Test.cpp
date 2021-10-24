@@ -4,6 +4,7 @@
 #include "CSMP_number_types.h"
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
+#include "Region.h"
 #include "Boundary.h"
 
 using namespace std;

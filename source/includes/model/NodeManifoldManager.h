@@ -49,6 +49,9 @@ class NodeManifoldManager {
     
     /// puts the nodes inside of the manifolds into the ascending order of values of the user specified  variable
     void SortManifoldsByVariableValue( std::string var_name, const csmp::Index& var_index );
+    
+    /// replace two separate node manifolds by a single one that contains the union of their nodes, but only if there is at least one shared node
+    bool MergeManifolds( NodeManifold<dim>*, NodeManifold<dim>* );
 
     /// deletes = erases manifold from storage container, reordering / compacting as necessary
     bool   Delete( NodeManifold<dim>* );

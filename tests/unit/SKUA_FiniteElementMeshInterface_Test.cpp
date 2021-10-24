@@ -10,6 +10,7 @@
 #include "MeshManagementUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "SKUA_Model.h"
+#include "Region.h"
 #include "Element.h"
 #include "VTK_Interface.h"
 

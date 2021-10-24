@@ -1280,8 +1280,59 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  } // end parseFacetType
 
 
+/*
+bool isTriangularElement( CSMP_FEM_TYPE );
+bool isQuadrilateralElement( CSMP_FEM_TYPE );
+bool isLineElement( CSMP_FEM_TYPE );
+bool isTriangular( CSMP_FEM_TYPE );
+bool isQuadrilateral( CSMP_FEM_TYPE );
+bool isHexahedral( CSMP_FEM_TYPE );
+*/
+
+CSMP_FEM_TYPE  finiteElementTypeOfSharedFace( CSMP_FEM_TYPE etype1, CSMP_FEM_TYPE etype2, bool isoparametric )
+  {
+     // in the order of likelihood
+     if ( isoparametric ) {
+          // since this is used mainly to create Face or InterFace objects
+          if ( etype1 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_TETRAHEDRON )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          if ( etype1 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          if ( isTriangular(etype1) ||  isTriangular(etype2) || isQuadrilateral(etype1) || isQuadrilateral(etype2) )
+            return ISOPARAMETRIC_LINEAR_BAR;
+          // mixed element type cases
+          if ( etype1 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          //
+          if ( etype1 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          //
+          if ( etype1 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          //
+          if ( etype1 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          // cases involving pyramid or prism elements can not be resolved
+       }
+     else cerr <<"\nfiniteElementTypeOfSharedFace: only isoparametric elements are handled so far.";
+  
+     if ( isLineElement(etype1) || isLineElement(etype2) ) return ZERO_DIMENSIONAL_FACE;
+     
+     return UNKNOWN;
+  }
+
+
+
  
- } // end namespace csp
+ } // end namespace csmp
  
  
  

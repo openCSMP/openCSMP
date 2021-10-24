@@ -8,6 +8,7 @@
 
 #include "CSMP_definitions.h"
 #include "QuadraturePointOutputToVTK.h"
+#include "Region.h"
 
 using namespace std;
 

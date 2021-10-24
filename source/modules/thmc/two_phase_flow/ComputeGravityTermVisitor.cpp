@@ -1,5 +1,6 @@
 #include "ComputeGravityTermVisitor.h"
 #include "Model.h"
+#include "Region.h"
 #include "TwoPhaseModel.h"
 #include "ScalarVariable.h"
 #if defined(_OPENMP )

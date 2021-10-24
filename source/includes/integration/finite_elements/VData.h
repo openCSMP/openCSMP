@@ -130,6 +130,9 @@ class VData {
   
     /// set whether mesh contains multiple element types
     void   HybridElementTypeMesh( bool hybrid_mesh );
+    
+    /// reports whether the model contains only isoparametric element types
+    bool   IsoparametricElementMesh() const;
   
     /// if numbering is not 0..n-1, this method establishes thos
     void   EstablishZeroBasedNumbering();

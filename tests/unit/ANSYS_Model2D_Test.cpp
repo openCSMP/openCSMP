@@ -1,4 +1,5 @@
 #include "ANSYS_Model2D_Test.h"
+#include "Region.h"
 #include "Boundary.h"
 
 #include "ANSYS_Model2D.h"

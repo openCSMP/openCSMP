@@ -60,7 +60,7 @@ to an intervening lower-dimensional element mesh once the InterFace has been cre
 */
 template<size_t dim>
 class InterFace : public FiniteElementPolicy<dim,InterFace>,
-                  public FiniteVolumePolicy<dim,InterFace>,
+                  public FiniteVolumePolicy<dim,InterFace>, // TODO: what for? - flow parallel to interface on either side?
                   public LocalVariableStorage<dim,InterFace>
 {
   public:
@@ -79,14 +79,15 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// default: incomplete construction without connection to nodes
     InterFace( csmp::FiniteElement*, 
                const csmp::FiniteVolumeStencil<dim>*,
-               const LocalVariables& interface_props, 
-               const IntegrationPointVariables& integration_point_props );
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props );
 
     /// incomplete reconstruction of model from native binary file
     InterFace( size_t index,
                csmp::FiniteElement*,
-               const LocalVariables& interface_props,
-               const IntegrationPointVariables& integration_point_props );
+               const csmp::FiniteVolumeStencil<dim>*,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props );
 
     InterFace( const InterFace& );
   
@@ -107,7 +108,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// connect interface to a lower dimensional element that shall act as intervening element in triple-layer boundary representations
     void Assign( Element<dim>* const intervening_elmt );
 
-    /// connect interface to its higher-dimensional neighbors; choice to assign nodes automatically
+    /// connect interface to its higher-dimensional neighbors, finding the matching nodes automatically
     void Assign( Element<dim>* const inner_elmt,
                  Element<dim>* const outer_elmt,
                  bool assign_nodes = true );
@@ -263,15 +264,11 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // used for compatibility with Element and Face methods (Neighbor etc.)
     INTERFACE_SIDE  current_side_;  ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
 
-    // pointers to the higher-dimensional elements this face sits in between
-    // the (same dimensional) neighbors are stored by the base class
-    Element<dim>* innerParent_;            ///< higher-dimensional parent element on side opposite to normal direction
-    size_t        inner_parent_face_id_;   ///< face number of inside higher-dimensional parent element
-
-    Element<dim>* outerParent_;            ///< higher-dimensional neighbor element in direction of interface normal
-    size_t        outer_parent_face_id_;   ///< face number of outside higher-dimensional parent element
-
-    Element<dim>* middleElement_ = nullptr;  ///< pointer to lower-dimensional element that may have been inserted between the sides of InterFace.
+    Element<dim>* innerParent_;                 ///< higher-dimensional parent element on side opposite to normal direction
+    Element<dim>* outerParent_;                 ///< higher-dimensional neighbor element in direction of interface normal
+    Element<dim>* middleElement_ = nullptr;     ///< pointer to lower-dimensional element that may have been inserted between the sides of InterFace.
+    size_t inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
+    size_t outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
 };
 
 

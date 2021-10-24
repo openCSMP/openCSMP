@@ -1,4 +1,5 @@
 #include "SplitBoundary.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "BoundaryConnector.h"
 
@@ -127,7 +128,6 @@ Can be used to create Splitboundaries from node-matched interface meshes
 which already contain multiplicated yet collocated nodes (can be done in ANSYS).
 
 @author SKM 15/08/2018
-@author modified by JC 1/7/2019
 
 */
 template<size_t dim>
@@ -147,23 +147,14 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 
   // for all the interfaces of the new split boundary
   for ( auto it = ifset.begin(); it != ifset.end(); ++it )
-    {
-      // getting the element type that the interface shall represent
-      // from the first higher dimensional neighbor element
-      // InterFaceSet member:   pair<pair<Element<dim>*,size_t>, pair<Element<dim>*,size_t> >
-      //                        first high-dim. nbor interface at interface
-      const CSMP_FEM_TYPE if_elmt_type = (*it).second.first->FE()->ElementTypeOfFace( (*it).second.second );
-      FiniteElement*      FE_ptr = femgr.E( if_elmt_type );
-
-      // construction with connectivity and number continueing from already existing interfaces
-      csmp::InterFace<dim>* const interfaceObj = mesh.AddInterFace( FE_ptr, nullptr,
-                                                                    // inner neighbor  outer neighbor, intervening element
-                                                                    (*it).first.first, (*it).second.first, nullptr,
-                                                                    ifvars, if_ip_vars );
-
-      // storing pointer to the interface in element collection
-      this->elmt_vec_.push_back( interfaceObj );
-    }
+    // getting the element type that the interface shall represent
+    // from the first higher dimensional neighbor element
+    // InterFaceSet member:   pair<pair<Element<dim>*,size_t>, pair<Element<dim>*,size_t> >
+    //                        first high-dim. nbor interface at interface
+    // construction with connectivity and number continueing from already existing interfaces
+    this->elmt_vec_.push_back( mesh.AddInterFace( ifset.InnerElement(it), ifset.InnerFaceID(it),
+                                                  ifset.OuterElement(it), ifset.OuterFaceID(it),
+                                                  ifvars, if_ip_vars ) );
 
   // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
   // ---------------------------------------------------------------------------------------------------
@@ -440,7 +431,7 @@ pair<int32, int32>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
     @author SKM 21/9/2021
 */
 template<size_t dim>
-bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
+bool  SplitBoundary<dim>::CreateFrom( MeshManager<dim>& mesh,
                                       Boundary<dim>& boundary )
 {
   //LVS
@@ -454,13 +445,15 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.ElementsEnd() );
   for ( typename vector<Face<dim>*>::const_iterator fit( boundary.ElementsBegin() ); fit != facesEnd; ++fit )
     // the InterFace that is being build from the current interface
-    this->elmt_vec_.push_back( model.Mesh().ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
+    this->elmt_vec_.push_back( mesh.ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
 
     // free excessive allocated capacity
   vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize splitboundary essentials 
   establishNeighborConnectivity( this->elmt_vec_ );
+  
+  this->IdentifyPerimeter();
 
   return true;
   

@@ -152,13 +152,14 @@ class TwoPhaseImplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeT
 
     /// advects non-wetting phase in 2-phase flow without gravity (1st-order accurate)
     void SolveTransportEquation1stOrder_NonlinearNewtonRaphson( TwoPhaseModel<dim>& relperm,
-                                                       double64 time_increment);
+                                                                double64 time_increment);
 
     /// advects non-wetting phase in 2-phase flow without gravity (2nd-order accurate)
-    void SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( TwoPhaseModel<dim>& relperm,
-                                                       double64 time_increment);
-
+    void SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( Model<dim>&, TwoPhaseModel<dim>& relperm,
+                                                                       double64 time_increment);
+ 
   private:
+  
     mutable std::vector<double64>  LHSSRC, RHSSRC, /// < source terms for limiting
                                    OMEGA;          /// < balancing parameter for LHS and RHS
 

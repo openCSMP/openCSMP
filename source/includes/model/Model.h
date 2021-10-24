@@ -24,6 +24,7 @@ template<size_t> class VSet;
 template<size_t> class Interrelation;
 template<size_t> class Visitor;
 template<size_t> class FiniteVolumeStencilManager;
+template<typename> class FEM_Data;
 
 template<size_t, template<size_t> class> class PDE_Integrator;
 template<size_t, template<size_t> class> class PDE_Integrator_UoM;
@@ -230,19 +231,8 @@ public:
   /// read-only access to the finite element types that are needed to support the current mesh
   const  FiniteElementManager&  FE_Manager() const;
 
-  /// access to the finite element types that are needed to support the current mesh
-  FiniteElementManager&  FE_Manager();
-
-  /// read only access to low-level finite volume functionality
-  const  FiniteVolumeStencilManager<dim>*  FV_Manager() const;
-
-  /// access to low-level finite volume functionality
-  FiniteVolumeStencilManager<dim>*  FV_Manager();
-
   PLACEMENT Placement() const { return MODEL; }
 
-  /// connects the finite-volume stencil pointers of the elements to the stencils after initialising them
-  void InstantiateFiniteVolumes();
 
   // -----------------------------------------------
   // Binary input/output
@@ -457,12 +447,10 @@ private:
   /// checks wether elements have their correct neighbors and are in the expected model domains; @return number of major errors encoutered.
   int32 CheckElementConnectivity();
 
-  std::string                       model_name_;       ///< name of simulation model
-  PropertyDatabase<dim>             database_;         ///< where variable specifications are stored
-  FiniteElementManager              fem_manager_;      ///< current FiniteElement objects in model
-  MeshManager<dim>                  mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
-  FiniteVolumeStencilManager<dim>*  fvStencilManager_; ///< current finite volume specifications
-  bool                              verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
+  std::string            model_name_;       ///< name of simulation model
+  PropertyDatabase<dim>  database_;         ///< where variable specifications are stored
+  MeshManager<dim>       mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
+  bool                   verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
 };
 
 // SUPPORTING FUNCTIONS

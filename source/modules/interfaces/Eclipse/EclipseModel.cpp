@@ -1,4 +1,5 @@
 #include "EclipseModel.h"
+#include "Region.h"
 #include "ModelTime.h"
 #include "variableOperations.h"
 #include "ErrorHandler.h"

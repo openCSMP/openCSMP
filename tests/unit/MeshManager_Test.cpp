@@ -11,6 +11,7 @@
 #include "vsetMakers.h"
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
+#include "Region.h"
 #include "Element.h"
 
 #include "IsoparametricLinearPyramid.h"
@@ -307,7 +308,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   int32 material_id(1); // new element's rock_tye
   vector<Node<3U>*>    nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
   Element<3U>*         neptr( mesh.E(4) ); // just a neighbor to try
-	Element<3U>*	ptr_e1 = mesh.AddElement( &fe, nullptr, elmt_vars, intp_vars, nodes, material_id );
+	Element<3U>*	ptr_e1 = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes, material_id );
 
 	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
   ptr_n1->ResizeParentStorage( n1.Parents()+1 );
@@ -359,7 +360,6 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
     {
        // if the face is at the boundary, we construct a boundary face
        if ( eptr->Neighbor(i) == nullptr && !boundary_face_constructed ) {
-            FiniteElement* fetype = model3d_->FE_Manager().E( eptr->FE()->ElementTypeOfFace(i) );
             fptr1 = mesh.AddBoundaryFace( eptr, i, fvars, ivars );
             boundary_face_constructed = true;
          }
@@ -367,8 +367,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
        if ( eptr->Neighbor(i) != nullptr && !interior_face_constructed ) {
             vector<Node<3U>*> empty_nodes; // to test that this method can correctly identify them
             //                                   inner  outer highher-dim nbor
-            fptr2 = mesh.AddFace( eptr->FE(), eptr->FV(), eptr, eptr->Neighbor(i),
-                                  fvars, ivars, empty_nodes );
+            fptr2 = mesh.AddFace( eptr, eptr->Neighbor(i), fvars, ivars, empty_nodes );
             interior_face_constructed = true;
          }
     }
@@ -436,12 +435,9 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
               }
             // create an intervening element
             const int32 material_id(5);
-            FiniteElement* fetype = model3d_->FE_Manager().E( eptr->FE()->ElementTypeOfFace(i) );
-            Element<3U>*	ieptr = mesh.AddElement( fetype, nullptr, ifvars, iivars,
-                                                   middle_nodes, material_id );
-            //                                         inner  outer              middle nbor
-            ifptr = mesh.AddInterFace( fetype, nullptr, eptr, eptr->Neighbor(i), ieptr,
-                                       ifvars, iivars );
+            Element<3U>*	ieptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_TRIANGLE, ifvars, iivars, middle_nodes, material_id );
+            //                        inner  outer
+            ifptr = mesh.AddInterFace( eptr, eptr->Neighbor(i), ifvars, iivars );
             interface_constructed = true;
          }
     }

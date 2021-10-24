@@ -52,6 +52,77 @@ size_t  CSMP_ElementSpecifications::InterpolationOrder( int8_t etype )
   }
 
 
+/** Considers the element types.
+ 
+    ISOPARAMETRIC_LINEAR_BAR,    						            // BAR_2            = 2,
+    ISOPARAMETRIC_QUADRATIC_BAR, 						            // BAR_3            = 3,
+    ISOPARAMETRIC_CUBIC_BAR,
+    ISOPARAMETRIC_LINEAR_TRIANGLE,  					          // TRI_3            = 8,
+    ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE, 		      // TRI_3_X          = 9,
+    ISOPARAMETRIC_QUADRATIC_TRIANGLE, 					        // 2D & 3D TRI_6    = 10,
+    ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE, 		  // TRI_6_X          = 11,
+    ISOPARAMETRIC_CUBIC_TRIANGLE,
+    ISOPARAMETRIC_LINEAR_TETRAHEDRON, 					        // TETRA_4          = 4,
+    ISOPARAMETRIC_QUADRATIC_TETRAHEDRON, 			          // TETRA_10         = 5,
+    ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON,    // TETRA_11
+    ISOPARAMETRIC_CUBIC_TETRAHEDRON,
+    ISOPARAMETRIC_LINEAR_PYRAMID,						            // PYRA_5           = 18,
+    ISOPARAMETRIC_QUADRATIC_PYRAMID13, 					        // PYRA_13          = 24,
+    ISOPARAMETRIC_QUADRATIC_PYRAMID14,     				      // PYRA_14          = 22,
+    ISOPARAMETRIC_CUBIC_PYRAMID,
+    ISOPARAMETRIC_LINEAR_PRISM,  						            // PENTA_6          = 12,
+    ISOPARAMETRIC_QUADRATIC_PRISM15,         			      // PENTA_15         = 13,
+    ISOPARAMETRIC_QUADRATIC_PRISM18,           			    // PENTA_18         = 21,
+    ISOPARAMETRIC_CUBIC_PRISM,
+    ISOPARAMETRIC_LINEAR_QUADRILATERAL,                 // QUAD_4           = 14,
+    ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL,     // QUAD_4_X         = 15,
+    ISOPARAMETRIC_QUADRATIC_QUADRILATERAL,              // QUAD_8           = 16,
+    ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL,  // QUAD_8_X         = 17,
+    ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9,  			      // QUAD_9           = 19,
+    ISOPARAMETRIC_CUBIC_QUADRILATERAL,
+    ISOPARAMETRIC_LINEAR_HEXAHEDRON,              		  // HEXA_8           = 6,
+    ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20,       		    // HEXA_20          = 7,
+    ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27, 				      // HEXA_27          = XX,
+    ISOPARAMETRIC_CUBIC_HEXAHEDRON,
+*/
+bool CSMP_ElementSpecifications::UsesLocalCoordinates( int8_t etype )
+ {
+    // linear elements
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return true;
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return true;
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return true;
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) return true;
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) return true;
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return true;
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return true;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return true;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return true;
+    // quadratic elements
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ) return true;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return true;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ) return true;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ) return true;
+    // cubic elements
+    if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON ) return true;
+    if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return true;
+    if ( etype == ISOPARAMETRIC_CUBIC_PRISM ) return true;
+    if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID ) return true;
+    if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE ) return true;
+    if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ) return true;
+    return false;
+ }
+
+
+
 /**
 
 Returns whether the CSMP element type specifier denotes a finite

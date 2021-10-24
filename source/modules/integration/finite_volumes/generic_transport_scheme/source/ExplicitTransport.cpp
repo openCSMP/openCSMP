@@ -29,8 +29,6 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const std::string& tar
     Notation(*this),
     subdomain_(m.Region(target_region))
   {
-    m.InstantiateFiniteVolumes();
-  
     // 0. diagnostics: has velocity been initialised, if so, it is used in initialisation.
     double64 vmin, vmax;
     subdomain_.MinMaxOf( "velocity", vmin, vmax );

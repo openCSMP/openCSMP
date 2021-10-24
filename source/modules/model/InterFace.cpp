@@ -71,9 +71,11 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
 template<size_t dim>
 InterFace<dim>::InterFace( size_t index,
                            csmp::FiniteElement* f,
+                           const csmp::FiniteVolumeStencil<dim>* fvs,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
+    FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
     idx_( index ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
@@ -531,7 +533,8 @@ std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
   bool found( false );
   size_t inner_face_id, outer_face_id;
   for ( auto inner_face : inner_elmt_faces ) {
-    for ( auto outer_face : outer_elmt_faces ) {      
+    for ( auto outer_face : outer_elmt_faces ) {
+      // compares the sets of the point coordinates of potentially opposing faces
       if ( inner_face.first == outer_face.first ) {
         inner_face_id = inner_face.second.second;
         outer_face_id = outer_face.second.second;
@@ -630,34 +633,35 @@ void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
 
   // resizing the nodevector (x2 because there are 2 sides of the interface
   if ( node_connector_.empty() ) {
-    if ( dim == 1U ) node_connector_.resize( 2U );
-    else node_connector_.resize( this->FE()->Nodes() * 2U );
+      if constexpr ( dim == 1U ) {
+           node_connector_.resize( 2U );
+           // in 1D there is only one node per Face and we are done
+           Assign( 0U, innerParent_->N(1), INSIDE );
+           Assign( 0U, outerParent_->N(0), OUTSIDE );
+           return;
+        }
+      if constexpr ( dim  > 1U ) node_connector_.resize( this->FE()->Nodes() * 2U );
+      node_connector_.shrink_to_fit();
   }
-  node_connector_.shrink_to_fit();
 
-  // 2,3. starting with the inside
+  // 2. 2 and 3D cases starting with the inside
+  const size_t n_nodes_per_face{this->FE()->Nodes()};
   vector<size_t>  nids;
 
   // inside
   innerParent_->FE()->NodesOfFace( inner_parent_face_id_, nids );
-  // we retain the order in which the nodes are given to
-  if ( dim != 1U ) {
-    assert( nids.size() == this->FE()->Nodes() );
-    for ( size_t n = 0U; n<this->FE()->Nodes(); ++n )
-      Assign( n, innerParent_->N( nids[n] ), INSIDE );
-  }
+  assert( nids.size() == n_nodes_per_face );
   // assuming that the unit normal points from the inside to the outside
-  else Assign( 0U, innerParent_->N( 1 ), INSIDE );
+  // we retain the order in which the nodes are given to
+  for ( size_t n = 0U; n<n_nodes_per_face; ++n )
+    Assign( n, innerParent_->N( nids[n] ), INSIDE );
 
   // outside
   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
+  assert( nids.size() == n_nodes_per_face );
   // we retain the order in which the nodes are given to
-  if ( dim != 1U ) {
-    assert( nids.size() == this->FE()->Nodes() );
-    for ( size_t n = 0U; n<this->FE()->Nodes(); ++n )
-      Assign( n, outerParent_->N( nids[n] ), OUTSIDE );
-  }
-  else Assign( 0U, outerParent_->N( 0 ), OUTSIDE );
+  for ( size_t n = 0U; n<n_nodes_per_face; ++n )
+    Assign( n, outerParent_->N( nids[n] ), OUTSIDE );
 
 } // end InitializeNodeVector (version 2)
 

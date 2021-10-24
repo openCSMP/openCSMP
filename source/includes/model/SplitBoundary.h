@@ -16,7 +16,7 @@ template<typename> class FEM_Data;
 
 /**
     Set of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
-    For each InterFace we have.
+    For each InterFace we have a pair or Element pointer - face ID pairs
         1) inner higher-dim element pointer
         2) local face number of element face that is located at interface to outer element
         3) outer higher-dim element pointer
@@ -25,10 +25,17 @@ template<typename> class FEM_Data;
 */
 template<size_t dim> ///
 struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > > {
-  // constructor
-  InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>,
-                std::pair<Element<dim>*,size_t> > >& set )
-    : std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >(set) {}
+    // constructor
+    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>,
+                  std::pair<Element<dim>*,size_t> > >& set )
+      : std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >(set) {}
+      
+    typedef typename InterFaceSet<dim>::const_iterator ifaceIterator;
+    // data members
+    Element<dim>* InnerElement( ifaceIterator it ) const { return (*it).first.first; }
+    Element<dim>* OuterElement( ifaceIterator it ) const { return (*it).second.first; }
+    size_t InnerFaceID( ifaceIterator it ) const { return (*it).first.second; }
+    size_t OuterFaceID( ifaceIterator it ) const { return (*it).second.second; }
 };
 
 
@@ -113,8 +120,8 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     // building of SplitBoundaries and their modification
     // --------------------------------------------------
 
-    /// creates split boundary from boundary
-    bool CreateFrom( Model<dim>&, Boundary<dim>& );
+    /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
+    bool CreateFrom( MeshManager<dim>&, Boundary<dim>& );
   
     // ----------------------------------------
     // user interface
@@ -154,6 +161,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     void Out() const;
 
   protected:
+
     /// reestablishes the pointers to the nodes associated with the stored elements
     void CreateNodePointerVector();
 

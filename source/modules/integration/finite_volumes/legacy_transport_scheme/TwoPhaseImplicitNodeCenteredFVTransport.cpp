@@ -703,9 +703,9 @@ double64  TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoP
          if ( nonlinear_scheme_ )
            {
               if ( this->SecondOrderInSpace() )
-                  SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson(relperm, time_increment );
+                  SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( this->mref_, relperm, time_increment );
               else
-                  SolveTransportEquation1stOrder_NonlinearNewtonRaphson(relperm, time_increment );
+                  SolveTransportEquation1stOrder_NonlinearNewtonRaphson( relperm, time_increment );
 
            } else SolveTransportEquation1stOrder( relperm, time_increment );
 
@@ -999,7 +999,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1stOrder_NonlinearNewtonRaphson( TwoPhaseModel<dim>& relperm,
-                                                                                               double64 time_increment)
+                                                                                                              double64 time_increment )
  {
     const size_t  n_result_phase(2U); // always phase is the one that gets advected
 
@@ -1246,8 +1246,9 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
 
 template<size_t dim, template<size_t> class STP>
-void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( TwoPhaseModel<dim>& relperm,
-                                                                                               double64 time_increment)
+void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( Model<dim>& sg,
+                                                                                                                     TwoPhaseModel<dim>& relperm,
+                                                                                                                     double64 time_increment )
  {
     const size_t  n_result_phase(2U); // always phase is the one that gets advected
     size_t iter(1U);

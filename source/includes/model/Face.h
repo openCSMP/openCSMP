@@ -11,6 +11,8 @@ namespace csmp {
 template<size_t> class Node;
 template<size_t> class Element;
 template<size_t> class Visitor;
+class FiniteElementManager;
+template<size_t> class FiniteVolumeStencilManager;
 
 /**
     Lower dimensional surface (3D) or line (2D) element that serves as interface (Face) or connector (InterFace)
@@ -48,36 +50,49 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     /// constructs model-interior face as an exact copy of the supplied lower-dimensional element; no neighbor faces yet
-    Face( const Element<dim>& dim_minus1_element,
+    Face( const Element<dim>& dim_minus1_element, ///< supplies finite element policy & finite volume stencil information
+          Element<dim>* const inner_parent,
+          Element<dim>* const outer_parent,
+          size_t inner_parent_face_id,
+          size_t outer_parent_face_id,
+          const LocalVariables&,
+          const IntegrationPointVariables& );
+
+    /// constructs model-boundary face as n-th (external) boundary face of the supplied higher dimensional parent element; no neighbor faces yet
+    Face( Element<dim>& inner_parent,
+          csmp::FiniteElement* FE_type_of_boundary_face,
+          const FiniteVolumeStencilManager<dim>&,
+          size_t n_boundary_face,
+          const LocalVariables&,
+          const IntegrationPointVariables& );
+
+     /// constructs face shared by the two volumetric elements inside of the model auto-detecting the nodes
+    Face( const FiniteElementManager&,
+          const FiniteVolumeStencilManager<dim>&,
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-    /// constructs model-boundary face as n-th (external) boundary face of the supplied higher dimensional parent element; no neighbor faces yet
-    Face( Element<dim>& dim_dimensional_inner_parent_element,
-          csmp::FiniteElement* FE_type_of_boundary_face,
-          size_t n_boundary_face,
-          const LocalVariables&,
-          const IntegrationPointVariables& );
-
-    /// constructs model-edge line-element face connected with two volumetric elements at model boundary sharing its nodes
+   /// constructs model-edge line-element face connected with two volumetric elements at model boundary sharing its nodes
     Face( csmp::FiniteElement* FE_type_of_boundary_face,
+          const FiniteVolumeStencilManager<dim>&,
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
           const std::vector<Node<dim>*>&  edge_nodes,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-    /// prefered custom constructor creates face with together with variable storage
+    /// PREFERED  constructor for MeshManager - initailse process creates face with together with variable storage
     Face( csmp::FiniteElement*,
           const csmp::FiniteVolumeStencil<dim>*,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-    /// for reconstruction of model from binary file; with storage but without connectivity
+    /// for RECONSTRUCTION of model from binary file; with storage but without connectivity
     Face( size_t index,
           csmp::FiniteElement*,
+          const csmp::FiniteVolumeStencil<dim>*,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
@@ -153,9 +168,11 @@ class Face : public FiniteElementPolicy<dim,Face>,
     Element<dim>*  OuterParent() const;
   
     /// returns which Face of the higher dimensional inner neighbor element this Face shares its nodes with
-    size_t         InnerParentFaceNumber() const;
-
-    size_t         ParentFaceNumber(INTERFACE_SIDE side) const; //added
+    /// local number of the face in the inner parent element, which borders against the interface
+    void           ParentFaceID( INTERFACE_SIDE, size_t idx );
+    size_t         InnerParentFaceID() const;
+    size_t         OuterParentFaceID() const;
+    size_t         ParentFaceID( INTERFACE_SIDE side ) const;
   
     /// returns the number of the desired node in the inner parent element of the Face
     size_t         ParentNodeNumber( size_t n_local ) const;
@@ -209,11 +226,13 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     mutable size_t           idx_;
-    std::vector<Node<dim>*>  node_connector_;  ///< pointers to the nodes of the face
-    std::vector<Face<dim>*>  face_connector_;  ///< the (equidimensional) neighbors of the face
+    std::vector<Node<dim>*>  node_connector_;     ///< pointers to the nodes of the face
+    std::vector<Face<dim>*>  face_connector_;     ///< the (equidimensional) neighbors of the face
     // not references or constant pointers because these may need to change during remeshing
-    Element<dim>*            innerParent_;     ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
-    Element<dim>*            outerParent_;     ///< (optional) higher-dimensional neighbor in direction of unit normal
+    Element<dim>*            innerParent_;        ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
+    Element<dim>*            outerParent_;        ///< higher-dimensional neighbor element in direction of interface normal
+    size_t inner_parent_face_id_ = UNSPECIFIED;   ///< face number of inside higher-dimensional parent element
+    size_t outer_parent_face_id_ = UNSPECIFIED;   ///< face number of outside higher-dimensional parent element
 };
 
 } // csmp

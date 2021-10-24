@@ -484,9 +484,9 @@ screen as a progress monitor.
 */
 template<size_t dim,template<size_t> class STP>
 double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable( double64 time_interval,
-                                                                              double64 cfl_multiplication_factor,
-                                                                              bool apply_flux_balance_correction,
-                                                                              bool update_pore_volumes )
+                                                                             double64 cfl_multiplication_factor,
+                                                                             bool apply_flux_balance_correction,
+                                                                             bool update_pore_volumes )
  {
     this->gref_.RenumberNodes();
 
@@ -737,7 +737,7 @@ one should use the implicit approach rather than this method, when the
 velocity field is not rapidly changing.  
  */
 template<size_t dim,template<size_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder( double64 time_increment, 
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder( double64 time_increment,
                                                                                  bool output_result_range )
  {
     std::fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
@@ -822,8 +822,8 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariabl
 
 
 template<size_t dim,template<size_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable2ndOrder( double64 time_increment, 
-	                                                                                        bool output_result_range )
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable2ndOrder( double64 time_increment,
+	                                                                                         bool output_result_range )
  {
     std::fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
     

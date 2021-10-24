@@ -1,4 +1,5 @@
 #include "SplitBoundaryInterface.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
 #include "Model.h"
@@ -6,6 +7,7 @@
 #include "MeshManagementUtilities.h"
 #include "smoothElementData.h"
 #include "MeshManager.h"
+#include "Node.h"
 #include "NodeManifold.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
@@ -609,36 +611,33 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
   splitboundaryName.replace( splitboundaryName.find("BOUNDARY"), str_length, "SPLIT_BOUNDARY" );
 
   // attempt to create a splitboundary
-  bool succeeded(false);
+  if ( ContainsSplitBoundary(splitboundaryName) ) {
+       csmp_error.notice( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom", splitboundaryName,
+                        "a SplitBoundary with this name already exists; nothing was done." );
+       return make_pair( "no SplitBoundary was created", false );
+    }
+  
+  // get some diagnostics here whether the boundary terminates into a volume or not
+  const bool include_perimeter_nodes{true};
+  
+  // create new outside nodes for access via manifolds, connecting them to outside parent elements on the boundary
+  // remove neighbor element connections across the future split boundary
+  DuplicateNodesAndDisconnectParents( boundary, include_perimeter_nodes );
+  
   pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
     it = splitBoundaryMap_.insert( std::make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName,
                                                                                                 splitboundaryComplex->Database() ) ) );
   if ( it.second ) {
       cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom:";
       cout <<" creating SplitBoundary from 'Boundary' "<< boundary.Name() << endl;
-      succeeded = (*it.first).second.CreateFrom( *splitboundaryComplex, boundary );
-      // SKM FIX - 
-      if ( succeeded ) {
-           SplitNodes( boundary, (*it.first).second ); 
-           // TODO: no need to identify perimeter again because it exists already in Boundary
-           (*it.first).second.IdentifyPerimeter();
-        }
+      (*it.first).second.CreateFrom( splitboundaryComplex->Mesh(), boundary );
     }
-  else
-    throw csmp::Exception( WARNING,
-                           "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom",
-                           splitboundaryName.c_str(),
-                           "boundary already exists. Nothing was done." );
 
   // removes boundary also deleting its interface objects
   splitboundaryComplex->RemoveBoundary( boundary );
-  
-  UpdateSplitBoundaryComplex();
 
-  if ( succeeded ) {
-        cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom: created splitboundary: '";
-        cout << splitboundaryName <<"' successfully.\n\n";
-    }
+  cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom: created splitboundary: '";
+  cout << splitboundaryName <<"' successfully.\n\n";
 
   return make_pair( splitboundaryName, false );
 
@@ -1010,105 +1009,54 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
 
 
 
-/**
-    Duplicate Node objects and update related connectivity (node to Element, Interface)
-    @author JC 1/7/2019
+/** Gets  MeshManager to multiplicate the nodes of the future split boundary using the supplied node-pointer vector.
+    The elements on the outside are then assigned to the new nodes and both inner and outer higher-dimensional neighbors
+        are disconnected from one another.
+ 
+    @attention in the construction of the Splitboundary, the manifold flagging will allow to retrieve the correct side of the interface.
 */
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitNodes(  const Boundary<dim>& boundary, 
-                                                                      csmp::SplitBoundary<dim>& splitboundary  )
-{
-  SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
-
-  // Backup pointers to the nodes of the boundary that will be duplicated into a new set
-  std::set<Node<dim>*> nodesToDuplicate;
-  for ( typename vector<Node<dim>*>::const_iterator 
-        nit( boundary.NodesBegin() ); nit != boundary.NodesEnd(); ++nit )
-    nodesToDuplicate.insert( (*nit) );
-  
-  std::set<Node<dim>*>             outsideElementNodes, insideElementNodes;
-  std::map<Node<dim>*,Node<dim>*>  manyfoldNodes;
-  
-  for ( typename std::vector<InterFace<dim>*>::const_iterator 
-        ifit( splitboundary.ElementsBegin() ); ifit != splitboundary.ElementsEnd(); ++ifit )
-  {
-    Element<dim>* eit = (*ifit)->OuterParent();    
-    for ( size_t en( 0 ); en < eit->Nodes(); ++en )
-    {
-      bool found( false );
-      for ( size_t ifn( 0 ); ifn < (*ifit)->Nodes(); ++ifn )
+void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DuplicateNodesAndDisconnectParents( Boundary<dim>& inputBoundary,
+                                                                                             bool include_perimeter_nodes )
+ {
+    SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+    MeshManager<dim>& mesh_manager(model->Mesh());
+    
+    const typename vector<csmp::Node<dim>*>::iterator nodesEnd = (include_perimeter_nodes==true) ?
+                                                                  inputBoundary.NodesEnd() : inputBoundary.PerimeterNodesBegin();
+    // TODO: track already existing manifolds here
+    for ( typename vector<csmp::Node<dim>*>::iterator
+          nit=inputBoundary.NodesBegin(); nit!=nodesEnd; ++nit )
+      mesh_manager.Duplicate( *nit, OUTSIDE, ManifoldType::INTERFACE );
+    
+    // assigning the new nodes to the higher dimensional parent elements on the outside
+    vector<size_t>  fnids;
+    const typename vector<csmp::Face<dim>*>::iterator facesEnd{inputBoundary.ElementsEnd()};
+    for ( typename vector<csmp::Face<dim>*>::iterator
+          it=inputBoundary.ElementsBegin(); it!=facesEnd; ++it )
       {
-        if ( (*ifit)->N( ifn )->Idx() == eit->N( en )->Idx() )
-          found = true;
+         // the nodes on the outside need to be updated
+         assert( (*it)->OuterParent() );
+         const size_t outer_parent_face_id = (*it)->OuterParentFaceID();
+         (*it)->FE()->NodesOfFace( outer_parent_face_id, fnids );
+         size_t n_nodes{fnids.size()};
+         for ( size_t i{0}; i<n_nodes; ++i ) {
+              assert( (*it)->OuterParent()->N( fnids[i] )->IsManifold() );
+              NodeManifold<dim>* nmanifold = (*it)->OuterParent()->N( fnids[i] )->Manifold();
+              vector<Node<dim>*> node_vec = nmanifold->NodesLocatedAt( OUTSIDE );
+              // TODO: deal with the case where manifold has many entries and has to be disambiguated
+              assert( node_vec.size() == 1 );
+              // assigning the outer node of the manifold to the outer element parent
+              (*it)->OuterParent()->Assign( fnids[i], node_vec[0] );
+           }
+         // disconnect higher-dimensional parent elements from one-another
+         (*it)->InnerParent()->Assign( (*it)->InnerParentFaceID(), static_cast<Element<dim>*>(nullptr) );
+         (*it)->OuterParent()->Assign( outer_parent_face_id, static_cast<Element<dim>*>(nullptr) );
       }
-      if( found )
-        outsideElementNodes.insert( eit->N( en ) );
-    }
-  }
+    
+ } // end DuplicateNodesAndDisconnectParents
 
-  for ( typename std::vector<InterFace<dim>*>::const_iterator 
-        ifit( splitboundary.ElementsBegin() ); ifit != splitboundary.ElementsEnd(); ++ifit )
-  {
-    Element<dim>* eit = (*ifit)->InnerParent();    
-    for ( size_t en( 0 ); en < eit->Nodes(); ++en )
-    {
-      bool found( false );
-      for ( size_t ifn( 0 ); ifn < (*ifit)->Nodes(); ++ifn )
-      {
-        if ( (*ifit)->N( ifn )->Idx() == eit->N( en )->Idx() )
-          found = true;
-      }
-      if ( found )
-      insideElementNodes.insert( eit->N( en ) );
-    }
-  }
 
-  // prompting mesh manager to create new nodes
-// SKM fix - this is all done by the MeshManager and the NodeManifoldManager within
-    for ( auto& ien : insideElementNodes )
-      model->Mesh().Duplicate( ien, OUTSIDE, ManifoldType::INTERFACE );
-
-//  for ( auto& oen : outsideElementNodes ) {
-//      Node<dim>* duplicatedNode = model->Mesh().Duplicate( oen );
-      //                          ===========================================
-//      duplicatedNode->Idx( model->Mesh().Nodes() );
-//      manyfoldNodes.insert( make_pair( oen, duplicatedNode ) );
-//    }
-
-  Region<dim>* outer_region = nullptr;
-  for ( typename std::vector<InterFace<dim>*>::const_iterator 
-        ifit( splitboundary.ElementsBegin() ); ifit != splitboundary.ElementsEnd(); ++ifit )
-  {
-    Element<dim>* oeit = (*ifit)->OuterParent();
-    for ( typename std::map<std::string, csmp::Region<dim> >::iterator
-          it = model->UniqueRegionsBegin(); it != model->UniqueRegionsEnd(); ++it ) {
-      if ( (*it).second.Contains( oeit ) ) {
-        outer_region = &(*it).second;
-        break;
-      }
-    }
-  }
-  
-  for ( typename std::vector<InterFace<dim>*>::const_iterator 
-        ifit( splitboundary.ElementsBegin() ); ifit != splitboundary.ElementsEnd(); ++ifit )
-  {
-    Element<dim>* oeit = (*ifit)->OuterParent();
-    for ( size_t en( 0 ); en < oeit->Nodes(); ++en ) {
-      if ( manyfoldNodes.find( oeit->N( en ) ) != manyfoldNodes.end() ) {
-        oeit->Assign( en, manyfoldNodes[oeit->N( en )] );
-      }
-    }
-
-  // assigning manifold nodes to elements of the model 
-  Region<dim>&  mref( model->Region( "Model" ) );
-  for ( typename vector<Element<dim>*>::iterator eit( mref.ElementsBegin() ); eit != mref.ElementsEnd(); ++eit )
-    for ( size_t en( 0 ); en < (*eit)->Nodes(); ++en )
-      if ( outer_region->Contains( (*eit) ) )
-        if ( manyfoldNodes.find( (*eit)->N( en ) ) != manyfoldNodes.end() )
-          (*eit)->Assign( en, manyfoldNodes[(*eit)->N( en )] );
-    }
-  
-} // end SplitNodes
 
 
 

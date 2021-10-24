@@ -3,6 +3,7 @@
 #include "ANSYS_Model3D.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "VTU_Interface.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
 

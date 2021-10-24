@@ -8,6 +8,7 @@
 
 #include "MaximumDifference.h"
 #include "Model.h"
+#include "Region.h"
 
 namespace csmp {
 

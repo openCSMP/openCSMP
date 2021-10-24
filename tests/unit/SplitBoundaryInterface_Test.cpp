@@ -1,4 +1,5 @@
 #include "SplitBoundaryInterface_Test.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
 #include "VTU_Interface.h"

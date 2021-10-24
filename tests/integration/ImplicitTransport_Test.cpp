@@ -111,7 +111,6 @@ Model<3U>*  ImplicitTransport_Test::CreateHexahedralModel()
 void ImplicitTransport_Test::run()
  {
     model_ptr_ = CreateTetrahedralModel();
-    model_ptr_->InstantiateFiniteVolumes();
     Region<3U>  model_domain = model_ptr_->Region("Model");
     AssignFlowProperties();
     const bool initialize_flux( true ); // prescibed 'total velocity'
@@ -499,9 +498,6 @@ void ImplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double64 tolerance_r
 */
 void  ImplicitTransport_Test::TestFlowThroughModel( const char* model, bool prescribed_velocity )
  {
-    // model_ptr_ = CreateModel( model );
-    //model_ptr_ = CreateModel( "BOX40x3x10m" );
-    model_ptr_->InstantiateFiniteVolumes();
     AssignFlowProperties();
  
     // constant velocity field, left-to-right, velocity = 1m/s

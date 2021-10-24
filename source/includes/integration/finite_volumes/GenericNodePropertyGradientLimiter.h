@@ -39,13 +39,8 @@ template<size_t dim>
 class GenericNodePropertyGradientLimiter {
        
   public:
-    GenericNodePropertyGradientLimiter( Model<dim>&, const FiniteVolumeStencilManager<dim>&,
-                                        const char* prop ="node property gradient"  );
-                                        
-  
-    GenericNodePropertyGradientLimiter( Model<dim>&,
-                                        const FiniteVolumeStencilManager<dim>&,
-                                        std::vector<char* > prop_names   );
+    GenericNodePropertyGradientLimiter( Model<dim>&, const char* region, const char* prop ="node property gradient" );
+    GenericNodePropertyGradientLimiter( Model<dim>&, const char* region, std::vector<char*> prop_names );
   
     ~GenericNodePropertyGradientLimiter(); 
     
@@ -63,13 +58,12 @@ class GenericNodePropertyGradientLimiter {
 
     
   private:
-    Model<dim>&            sg_;
-    const FiniteVolumeStencilManager<dim>&      fcv_;
-    std::vector<PropertyHandle<dim>* >   limiter;
-    GenericNodePropertyGradient<dim>     node_prop_grad;
-    double64                             tolerance;
-    csmp::Index                          u_key;
-
+    Region<dim>                        gref_; ///< handle to the application domain of the limiter
+    std::vector<PropertyHandle<dim>*>  limiter;
+    GenericNodePropertyGradient<dim>   node_prop_grad;
+    double64                           tolerance;
+    csmp::Index                        u_key;
+    const csmp::Index                  grad_key, lim_key, mctr_key;
  };
 
 }

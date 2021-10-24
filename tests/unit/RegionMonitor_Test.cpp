@@ -1,4 +1,5 @@
 #include "RegionMonitor_Test.h"
+#include "Region.h"
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
 

@@ -1,5 +1,6 @@
 #include "PropertyStorageSpeed_Test.h"
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "BE_Time.h"
 
 using namespace std;

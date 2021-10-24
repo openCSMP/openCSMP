@@ -1,6 +1,7 @@
 #include "VariablePlacement_Example.h"
 
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "InputDataManager.h"
 #include "PropertyHandle.h"
 

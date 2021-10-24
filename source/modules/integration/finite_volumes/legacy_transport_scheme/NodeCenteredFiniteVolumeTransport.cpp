@@ -29,8 +29,7 @@ namespace csmp {
 The model and basic transport-related variables.
 */
 template<size_t dim>
-NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // for entire model
-                                                                           const char* group_name,
+NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( const char* group_name,
                                                                            Model<dim>& sg,
                                                                            const char* porosity,
                                                                            const char* advected_prop,
@@ -51,7 +50,6 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // fo
       src_key_(sg.Database().StorageKey(nodal_source)),
       thi_key_( ((elmt_thickness_attribute==NULL) ? csmp::Index() : sg.Database().StorageKey(elmt_thickness_attribute)) ),
       velo_mult_key_( ((velocity_multiplier==NULL) ? csmp::Index() : sg.Database().StorageKey(velocity_multiplier)) ),
-      stencils_(NULL),
       stencil_( adv1_key_, vel_key_, src_key_, velo_mult_key_ ),
       cfl_multiplier_(1.),
       firstCall_(true),
@@ -73,9 +71,6 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // fo
 
     gref_.UpdateMemberIndexes();
 
-    sg.InstantiateFiniteVolumes();
-    stencils_ = sg.FV_Manager();
-
     bool multiply_with_thickness_attribute = (elmt_thickness_attribute==NULL) ? false : true;
     InitializeFiniteVolumeData( multiply_with_thickness_attribute );
 
@@ -96,15 +91,6 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // fo
         cout <<"\nNodeCenteredFiniteVolumeTransport(constructor): Constructed successfully."<< endl << endl;
     }
 
-#if defined(_OPENMP )
-    this->fvmgrs_.resize(omp_get_max_threads());
-    this->femgrs_.resize(omp_get_max_threads());
-    for (size_t tid = 0 ; tid < omp_get_max_threads();tid ++){
-        this->fvmgrs_[tid].Initialize( sg.FE_Manager() );
-        this->femgrs_[tid].InitializeElements(dim,sg.FE_Manager().InterpolationOrder(),true);
-    }
-#endif
-
 } // end constructor (solute advection only)
 
 
@@ -121,8 +107,7 @@ Maybe later this can be made more flexible by turning the vectors into
 deque's that can grow on either side.
  */
 template<size_t dim>
-NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // for entire model
-                                                                           const char* group_name,
+NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( const char* group_name,
                                                                            Model<dim>& sg,
                                                                            const char* porosity,
                                                                            const char* diffusivity,
@@ -144,7 +129,6 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // fo
       src_key_(sg.Database().StorageKey(nodal_source)),
       thi_key_( ((elmt_thickness_attribute==NULL) ? csmp::Index() : sg.Database().StorageKey(elmt_thickness_attribute)) ),
       velo_mult_key_( ((velocity_multiplier==NULL) ? csmp::Index() : sg.Database().StorageKey(velocity_multiplier)) ),
-      stencils_(NULL),
       stencil_( adv1_key_, vel_key_, diff_key_, src_key_, velo_mult_key_ ),
       cfl_multiplier_(1.),
       firstCall_(true),
@@ -166,9 +150,6 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // fo
 
     gref_.UpdateMemberIndexes();
 
-    sg.InstantiateFiniteVolumes();
-    stencils_ = sg.FV_Manager();
-
     bool multiply_with_thickness_attribute = (elmt_thickness_attribute==NULL) ? false : true;
     InitializeFiniteVolumeData( multiply_with_thickness_attribute );
 
@@ -187,14 +168,6 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( // fo
         cout <<"\nBasic storage allocated data by transport algorithm (bytes): "<< allocated_memory <<"."<< endl;
     cout <<"\nNodeCenteredFiniteVolumeTransport(constructor): Constructed successfully."<< endl << endl;
     }
-#if defined(_OPENMP )
-    this->fvmgrs_.resize(omp_get_max_threads());
-    this->femgrs_.resize(omp_get_max_threads());
-    for (size_t tid = 0 ; tid < omp_get_max_threads();tid ++){
-        this->fvmgrs_[tid].Initialize( sg.FE_Manager() );
-        this->femgrs_[tid].InitializeElements(dim,sg.FE_Manager().InterpolationOrder(),true);
-    }
-#endif
 
 } // end constructor (solute transport)
 
@@ -584,7 +557,6 @@ size_t  NodeCenteredFiniteVolumeTransport<dim>::MeasureAllocatedMemory() const
 {
     size_t  allocated_memory(0);
 
-    allocated_memory += sizeof(stencils_);
     // simple arrays
     allocated_memory += sizeof(double64) * FVPOREVOL.capacity();
     allocated_memory += sizeof(double64) * FLUX_BALANCE.capacity();
@@ -1080,7 +1052,7 @@ double64  NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement()
 
     UpdateProjectedVelocitiesAndFluxBalances();
 
-    static DenseMatrix<DM_MIN>  DN;
+    DenseMatrix<DM_MIN>  DN;
     vector<double64>            grad(dim);
     const double64              zero(0.);
     double64                    courant_increment(8640000.); // 100 days
@@ -1361,15 +1333,12 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement( Tw
 
     UpdateProjectedVelocitiesAndFluxBalances();
 
-    static DenseMatrix<DM_MIN>  DN;
-    vector<double64>            gradPc(dim);
-    VectorVariable<dim>         vc;
-    double64                    velocity,
-
-            courant_increment(max_time_increment);
-    
-    const double64              millisecond(1.0e-3);
-    const bool                  multiply_with_cell_thickess = (thi_key_ == csmp::Index()) ? false : true;
+    DenseMatrix<DM_MIN>  DN;
+    vector<double64>     gradPc(dim);
+    VectorVariable<dim>  vc;
+    double64             velocity, courant_increment(max_time_increment);
+    const double64       millisecond(1.0e-3);
+    const bool           multiply_with_cell_thickess = (thi_key_ == csmp::Index()) ? false : true;
 
     for ( typename vector<Element<dim>*>::const_iterator
           eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
@@ -1462,10 +1431,9 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::CFL_Multiplier() const
 template<size_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::WithLsmGradientLimiter(Model<dim>& sg)
 {
-    assert(stencils_);
     with_lsmgrad_limiter_=true;
 
-    grad_advprop_limiter_=new GenericNodePropertyGradientLimiter<dim>( sg,*this->stencils_,advected_variable_.c_str());
+    grad_advprop_limiter_=new GenericNodePropertyGradientLimiter<dim>( sg, gref_.Name().c_str(), advected_variable_.c_str() );
     mass_center_key_=sg.Database().StorageKey("mass center");
     grad_advprop_key_=sg.Database().StorageKey((advected_variable_+std::string(" gradient")).c_str());
     grad_advprop_limiter_key_=sg.Database().StorageKey((advected_variable_+std::string(" limiter")).c_str());

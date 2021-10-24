@@ -1,5 +1,6 @@
 #include "ThermalVisitor.h"
 #include "Model.h"
+#include "Region.h"
 
 using namespace std;
 

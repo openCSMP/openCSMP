@@ -1,4 +1,5 @@
 #include "Boundary.h"
+#include "Region.h"
 #include "Box.h"
 
 #include "writeVariableIf.h"
@@ -15,6 +16,7 @@
 
 #include "binaryReadWrite.h"
 #include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "PL_Utilities.h"
 #include "variableOperations.h"
 
@@ -944,21 +946,28 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
 
       // finding the higher-dimensional element that sits adjacent to the lower-dimensional one
       std::string region_name = region.Name();
-      std::vector<csmp::Element<dim>*> inner_outter_elements;
+      std::vector<csmp::Element<dim>*> inner_outer_elements;
 
-      if ( !higherDimensionalNeighbors( *(*it), inner_outter_elements ) ) continue;
-      if ( inner_outter_elements.size() == 2 ) {
-        // created a new face
-        this->elmt_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
-                                                        inner_outter_elements[0], inner_outter_elements[1],
-                                                        lvsFaces, lvsIntegrationPoints ) );
-      }
-      else
-        // created a new face
-        this->elmt_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
-                                                        inner_outter_elements[0], static_cast<Element<dim>*>(nullptr),
-                                                        lvsFaces, lvsIntegrationPoints ) );
-
+      if ( !higherDimensionalNeighbors( *(*it), inner_outer_elements ) ) continue;
+      if ( inner_outer_elements.size() == 2 ) {
+          pair<size_t,size_t> face_ids = findAdjacentElementFaces( inner_outer_elements[0], inner_outer_elements[1] );
+          // created a new face
+          this->elmt_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
+                                                          inner_outer_elements[0], inner_outer_elements[1],
+                                                          face_ids.first, face_ids.second,
+                                                          lvsFaces, lvsIntegrationPoints ) );
+        }
+      else {
+          size_t face{0};
+          while( face < inner_outer_elements[0]->Neighbors() ) {
+               if ( inner_outer_elements[0]->Neighbor(face) == nullptr ) break;
+               face++;
+            }
+          // created a new boundary face
+          this->elmt_vec_.push_back( meshManager.AddBoundaryFace( inner_outer_elements[0], face,
+                                                                  lvsFaces, lvsIntegrationPoints ) );
+        }
+        
     } // region elements
 
     // free
@@ -1024,7 +1033,6 @@ in a 3D model are ignored.
 */
 template<size_t dim>
 bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
-                                  const FiniteElementManager& finiteElementManager,
                                   const Region<dim>& region,
                                   BOX_BOUNDARY boxBoundary )
 {
@@ -1080,7 +1088,6 @@ Variable storage is assigned for both, the faces and boundary itself.
 */
 template<size_t dim>
 bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
-                                   const FiniteElementManager& finiteElementManager,
                                    const Region<dim>& region1,
                                    const Region<dim>& region2 )
 {
@@ -1126,10 +1133,7 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
                  for ( size_t node = 0U; node < n_nodes; ++node )
                    nodes[node] = ePtr->N( fnids[node] );
                  // if the neighbor is in the boundary, the new Face is build
-                 FiniteElement* femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
-                 Face<dim>* const faceObj = meshManager.AddFace( femPtr, nullptr,
-                                                                 ePtr, ePtrNeighbor,
-                                                                 lvsFaces, lvsIntegrationPoints, nodes );
+                 Face<dim>* const faceObj = meshManager.AddFace( ePtr, ePtrNeighbor, lvsFaces, lvsIntegrationPoints, nodes );
                  // added to boundary
                  this->elmt_vec_.push_back( faceObj );
 

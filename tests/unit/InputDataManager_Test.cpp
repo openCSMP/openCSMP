@@ -11,6 +11,7 @@
 
 #include "InputDataManager.h"
 #include "Model.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "VSet.h"
 #include "ANSYS_Model3D.h"

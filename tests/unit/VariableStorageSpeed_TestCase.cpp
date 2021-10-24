@@ -1,6 +1,7 @@
 #include "VariableStorageSpeed_TestCase.h"
 
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 
 #include "Timer.hpp"
 

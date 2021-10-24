@@ -8,6 +8,7 @@
 
 #include "ModelSubDomain_Test.h"
 #include "Model.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "ANSYS_Model3D.h"
 #include "CSMP_highLevelUtilities.h"

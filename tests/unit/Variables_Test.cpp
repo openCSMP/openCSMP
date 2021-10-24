@@ -1,5 +1,6 @@
 #include "Variables_Test.h"
 #include "Boundary.h"
+#include "Region.h"
 
 #include "ANSYS_Model3D.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
@@ -695,8 +696,6 @@ void Variables_Test::runModel( Model<3>& model )
       // Note:  Repeat previous tests for element's in order to check that
       //        creation of FV stencil's and variables placed on it's integration points
       //        didn't affect the other variables placed on element and it's integration point
-      // Instantiation of Finite Volumes
-      model.InstantiateFiniteVolumes();
 
       // Initialization of Variables Placed on FV Integration Points
       // PLACEMENT: Sector Integration Point

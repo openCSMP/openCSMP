@@ -4,6 +4,7 @@
 
 #include "PropertyHandle_Test.h"
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "PropertyHandle.h"
 
 using namespace std;

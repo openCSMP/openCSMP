@@ -3,6 +3,7 @@
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
 #include "Boundary.h"
+#include "Region.h"
 #include "PL_Utilities.h"
 #include "VTU_Interface.h"
 #include "ANSYS_Interface.h"

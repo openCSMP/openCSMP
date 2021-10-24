@@ -152,13 +152,11 @@ class Boundary : public ModelSubDomain<dim, Face>,
     
     /// creates surface / perimeter line of Faces around the region ( only for volume regions in 3D and surface regions in 2D )
     bool CreateAround( MeshManager<dim>&,
-                       const FiniteElementManager&,
                        const Region<dim>& region,
                        BOX_BOUNDARY boxBoundary = IRREGULAR );
 
     /// creates surface / perimeter line of Faces between regions (the first is on the inside)
     bool CreateBetween( MeshManager<dim>&,
-                        const FiniteElementManager&,
                         const Region<dim>&,
                         const Region<dim>& );
 

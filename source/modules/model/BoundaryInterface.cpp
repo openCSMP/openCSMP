@@ -806,7 +806,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     const size_t model_regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
    
     if ( model_regions == 1 )
-       ErrorHandler::Instance().notice( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(), "is single valued; so there is only one patch." );
+       ErrorHandler::Instance().notice( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
+                                              "is single valued; so there is only one patch." );
 
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -892,7 +893,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // establish the storage requirements for face variables
     const LocalVariables             lvsFaces( model.Database().LocalVariablesAt(FACE) );
     const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
-    vector<vector<Face<dim>*> >       face_ptr_per_patch(patch_simplexes.size());
+    vector<vector<Face<dim>*> >      face_ptr_per_patch(patch_simplexes.size());
    
     size_t patch_counter(0);	
     for ( map<string,vector<FaceConstructionData> >::const_iterator
@@ -907,6 +908,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
              Face<dim>* const faceObj = model.Mesh().ReplaceElementByFace( model_domain.E((*pit).Element()),
                                                                            model_domain.E((*pit).InnerElement()),
                                                                            model_domain.E((*pit).OuterElement()),
+                                                                           (*pit).InnerElementFace(),
+                                                                           (*pit).OuterElementFace(),
                                                                            lvsFaces, lvsIntegrationPoints );
 			       face_vector.push_back(faceObj);
 			    }
@@ -1436,7 +1439,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( cons
                    throw csmp::Exception( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary", "created temp region to make boundary");
                    
                }
-             else succeeded = (*it.first).second.CreateBetween( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), gref1, gref2 );
+             else succeeded = (*it.first).second.CreateBetween( boundaryComplex->Mesh(), gref1, gref2 );
 
              std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(between): created boundary between " << group1 << " and " << group2 << std::endl;
              return make_pair(boundary_name,true);
@@ -1520,7 +1523,7 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::AddFaces( const char* region )
     if ( it.second )
       {
         //                                 BOUNDARY CREATION & generation of Face objects in the MeshManager
-        bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
+        bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), rref ) );
 		    assert( succeeded == true );
         //boundaryComplex->UpdateIndices(region);
         std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: created boundary around " << region << std::endl;
@@ -1740,10 +1743,9 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& 
                  }
         
                // creating the face in MeshManager
-			         Face<3U>* const faceObj = model.Mesh().AddFace( fem_ptr, nullptr,
-                                                                inner, outer,
-                                                                lvsFaces, lvsIntegrationPoints,
-                                                                segment_nodes );
+			         Face<3U>* const faceObj = model.Mesh().AddFace( inner, outer,
+                                                               lvsFaces, lvsIntegrationPoints,
+                                                               segment_nodes );
 			        shared_faces.push_back(faceObj);
            }
       }

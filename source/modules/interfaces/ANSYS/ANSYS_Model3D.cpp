@@ -285,7 +285,8 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
     ANSYS_Interface mesh_interface( isoparametric_elements );
 
     // 0. reading the mesh from ANSYS-CSMP-input files
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
+    const bool recreate_node_boundary_flags{true};
+    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
     // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.

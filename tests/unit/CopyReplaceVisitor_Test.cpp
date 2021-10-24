@@ -4,16 +4,15 @@
 #include "CopyReplaceVisitor.h"
 #include "Element.h"
 #include "Model.h"
+#include "Region.h"
 
-namespace csmp{
+namespace csmp {
 
   
 void CopyReplaceVisitor_Test::run()
 {
     // Test for 3D only, creating auxilliaries
     enum{DIM=3U};
-// TODO: why is this needed?    model_->UpdateIndices();
-    Region<DIM>& region = model_->Region( "Model" );
     ScalarVariable scalarValue( ROBIN, 2. );
     VectorVariable<DIM> vectorValue( ROBIN, 2. );
     TensorVariable<DIM> tensorValue( ROBIN, 2. );

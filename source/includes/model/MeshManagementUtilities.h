@@ -129,6 +129,10 @@ void distanceWeights( typename std::vector<Node<dim>*>::const_iterator nodes_beg
                       typename std::vector<Node<dim>*>::const_iterator nodes_end,
                       std::vector<std::vector<double64> >& distances_and_weight );
 
+/// assuming that the elements are adjacent, method finds their faces that are in contact with one another
+template<size_t dim>
+std::pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, const Element<dim>* const eptr2 );
+
 /// container of element pointers and local face ids of elements contacting each other across a split boundary
 typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_t> > OppositeElements;
 

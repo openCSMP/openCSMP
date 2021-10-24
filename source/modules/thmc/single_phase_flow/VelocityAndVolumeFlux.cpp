@@ -1,5 +1,6 @@
 #include "VelocityAndVolumeFlux.h"
 #include "Model.h"
+#include "Region.h"
 #include "MathOperatorLHS.h"
 #include "STL_utilities.h"
 #include "Element.h"

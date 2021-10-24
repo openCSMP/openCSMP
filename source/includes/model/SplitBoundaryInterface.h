@@ -83,10 +83,11 @@ class SplitBoundaryInterface {
 
     /// creating name for the case when the SplitBoundary was already present in the input mesh
     std::string CreateSplitBoundaryName( const std::pair<std::string, std::string>& juxtaposed_regions ) const;
-  
-    /// JCK: multiplicates the nodes of the boundaryin order to create split boundary TODO: method does not seem to be used!
-    void SplitNodes( const Boundary<dim>& boundary, csmp::SplitBoundary<dim>& splitboundary );
     
+    /// gets  MeshManager to multiplicate  nodes, update node manifolds and disconnect parent elements across future split boundary
+    void DuplicateNodesAndDisconnectParents( Boundary<dim>&  boundary_to_replace_by_splitboundary,
+                                             bool include_perimeter_nodes_inside_of_model );
+
     /// Since the construction of a new SplitBoundary may have affected existing ones, this method updates the connectivity of all SplitBoundary objects;
     void UpdateSplitBoundaryComplex();
  

@@ -1,4 +1,5 @@
 #include "UpwindControlVisitor.h"
+#include "Region.h"
 
 using namespace std;
 

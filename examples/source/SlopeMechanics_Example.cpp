@@ -275,8 +275,6 @@ void SlopeMechanics_Example::Run()
     vtk_output.OutputDataToVTK( model, "stress-y",     "stress-y",     1, true );
     vtk_output.OutputDataToVTK( model, "stress-xy",    "stress-xy",    1, true );
   
-   // from the dilatation (compression) we compute the change in pore pressure, fluid flow and then
-    model.InstantiateFiniteVolumes();
    // get the divergence
     dilatationInducedChangeInPorePressure( model );
     printRangeOfVariable( model, "fluid pressure" );

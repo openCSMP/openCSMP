@@ -8,6 +8,7 @@
 
 #include "MeshManagementUtilities.h"
 #include "MeshManager.h"
+#include "Region.h"
 #include "Element.h"
 #include "Node.h"
 #include "ErrorHandler.h"
@@ -534,7 +535,7 @@ template size_t connectNeighborsUsingNodeParents( Element<3U>* );
 /**
     Assigns nodes to the Face finding them from the nodes of the higher dimensional neighbors that share the Face.
        
-    Uses unordered set of sets to find the interface between the higher dimensional elements.
+    Uses  set of sets to find the interface between the higher dimensional elements.
     
     The nodes of the face are assigned directly
  */
@@ -700,6 +701,73 @@ template void findNodesViaHigherDimensionalNeighbors( const Element<2>* const, c
 template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, const Element<3>* const, InterFace<3>* const );
 
 
+
+
+
+/**
+     Finds the adjacent faces of the supplied elements via their shared nodes.
+     
+     @return pair of the local face ID numbers of element one and two.
+
+     @attention if no shared face can be found, function returns UNSPECIFIED.
+*/
+template<size_t dim>
+pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, const Element<dim>* const eptr2 )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   if ( eptr1 == nullptr ) {
+        csmp_error.notice( ERROR, "findAdjacentElementFaces", "null pointer to first element.");
+        return make_pair( UNSPECIFIED, UNSPECIFIED );
+     }
+   if ( eptr2 == nullptr ) {
+        csmp_error.notice( ERROR, "findAdjacentElementFaces", "null pointer to second element.");
+        return make_pair( UNSPECIFIED, UNSPECIFIED );
+     }
+    
+    // finding the shared face by their nodes
+     // 1. creating unique keys from the nodes of the first elements faces not located at a boundary
+    vector<set<Node<dim>*> > e1_face_keys;
+    const size_t n_faces(eptr1->Faces());
+    e1_face_keys.reserve(n_faces);
+    for ( size_t i{0}; i<n_faces; ++i )
+      if ( eptr1->Neighbor(i) != nullptr ) {
+          vector<size_t> fnids;
+          eptr1->FE()->NodesOfFace( i, fnids );
+          set<Node<dim>*> face_key;
+          for ( auto j : fnids )
+           face_key.insert( eptr1->N(j) );
+          e1_face_keys.emplace_back( face_key );
+       }
+      else e1_face_keys.emplace_back( set<Node<dim>*>{} );
+    
+    // 2. creating face keys for the outer element trying match them
+    //    with the faces of the inner one
+    set<size_t>    face_key_n;
+    const size_t n_faces2(eptr2->Faces());
+    for ( size_t i=0U; i<n_faces2; ++i ) {
+         vector<size_t> fnids;
+         eptr2->FE()->NodesOfFace( i, fnids );
+         set<Node<dim>*> face_key;
+         for ( auto j : fnids )
+           face_key.insert( eptr2->N(j) );
+         // is this a matching face
+         auto fit = find( e1_face_keys.begin(), e1_face_keys.end(), face_key );
+         if ( fit != e1_face_keys.end() ) {
+              size_t face_elmt1 = distance(e1_face_keys.begin(),fit);
+              size_t face_elmt2 = i;
+              return make_pair( face_elmt1, face_elmt2 );
+           }
+      }
+
+    return make_pair( UNSPECIFIED, UNSPECIFIED );
+    
+ } // end findAdjacentElementFaces
+ 
+template pair<size_t,size_t> findAdjacentElementFaces( const Element<3>* const, const Element<3>* const );
+template pair<size_t,size_t> findAdjacentElementFaces( const Element<2>* const, const Element<2>* const );
+template pair<size_t,size_t> findAdjacentElementFaces( const Element<1>* const, const Element<1>* const );
+ 
 
 
 

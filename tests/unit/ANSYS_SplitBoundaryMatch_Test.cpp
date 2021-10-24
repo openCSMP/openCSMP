@@ -1,6 +1,7 @@
 #include "ANSYS_SplitBoundaryMatch_Test.h"
 
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
 #include "PL_Utilities.h"

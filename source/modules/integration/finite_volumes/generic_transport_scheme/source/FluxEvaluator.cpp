@@ -9,6 +9,7 @@
 #include "Node.h"
 #include "Element.h"
 #include "Model.h"
+#include "Region.h"
 #include "TwoPhaseModel.h"
 #include "ExplicitTransport.h"
 #include "ImplicitTransport.h"

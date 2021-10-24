@@ -9,6 +9,7 @@
 #include "QuadrilateratorToCSMPbinary_Example.h"
 
 #include "Model.h"
+#include "Region.h"
 #include "ErrorHandler.h"
 #include "Quadrilaterator.h"
 #include "InputDataManager.h"

@@ -147,6 +147,52 @@ void NodeManifoldManager<dim>::SortManifoldsByVariableValue( std::string var_nam
 
  
  
+/**
+   replace two separate node manifolds by a single one that contains the union of their nodes
+   
+   @return bool: if the manifolds share nodes, they can indeed be merged, else they are kept separate.
+   
+   @attention the new Manifold does not get sorted
+*/
+template<size_t dim>
+bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeManifold<dim>* mnf2 )
+  {
+     // 1. making sure that the two manifolds actually share nodes
+     size_t sum_nodes = mnf1->Branches() + mnf2->Branches();
+     vector<pair<Node<dim>*,INTERFACE_SIDE> > combined_manifolds;
+     combined_manifolds.reserve(sum_nodes);
+     for ( size_t i{0}; i<mnf1->Branches(); ++i )
+       combined_manifolds.push_back( make_pair( mnf1->N(i), mnf1->InterFaceSide(i) ) );
+
+     // making the vector unique
+     sort( combined_manifolds.begin(), combined_manifolds.end() );
+     combined_manifolds.erase( unique(combined_manifolds.begin(), combined_manifolds.end()), combined_manifolds.end() );
+
+     // checking - if there are no shared nodes, the two manifolds cannot be merged
+     if ( combined_manifolds.size() == sum_nodes ) return false;
+     
+     // 2. creating a new temp manifold that gets assigned to mnf1
+     vector<Node<dim>*>     nodes; nodes.reserve( combined_manifolds.size() );
+     vector<INTERFACE_SIDE> sides; sides.reserve( combined_manifolds.size() );
+     for ( auto it : combined_manifolds ) {
+          nodes.push_back( it.first );
+          sides.push_back( it.second );
+       }
+       
+     NodeManifold<dim> merged_manifold( nodes, sides, ManifoldType::INTERFACE );
+     // making sure it is appropriately classified in terms of the manifold geometry
+     ManifoldType mtype = consistencyCheck( &merged_manifold );
+     merged_manifold.GeometricClassifier( mtype );
+     
+     // 3. replacing the first manifold with the new one
+     *mnf1 = merged_manifold;
+     // deleting the second one
+     Delete( mnf2 );
+
+     return true;
+     
+  } // end MergeManifolds
+  
  
 
 

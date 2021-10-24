@@ -1,6 +1,7 @@
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_Model3D.h"
 #include "Boundary.h"
+#include "Region.h"
 #include "VTU_Interface.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "Timer.hpp"
@@ -245,8 +246,6 @@ namespace csmp
       
       // testing model with finite volume variables
       ANSYS_Model3D modelOutput3( "FracBox", "FracBoxNoFrac", "Vset_TestCase.txt",true,true,true);
-      //Instantiate Finite Volumes
-      modelOutput3.InstantiateFiniteVolumes();
 
       Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector") );
       Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor") );
@@ -306,9 +305,6 @@ namespace csmp
             cout << "\nFacet IPs accessed: " << ctrFaIps << endl;
             cout << "\nSector IPs accessed: " << ctrSeIps << endl;
           }
-
-        // Instantiate Finite Volumes
-        modelInput3.InstantiateFiniteVolumes();
 
         ctrFaIps = 0;
         ctrSeIps = 0;

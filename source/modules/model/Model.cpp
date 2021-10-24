@@ -39,7 +39,6 @@ template<size_t dim>
 Model<dim>::Model()
   : model_name_("undefined"),
     database_(),
-    fvStencilManager_(nullptr),
     verbose_(true)
   {
   }
@@ -57,7 +56,6 @@ template<size_t dim>
 Model<dim>::Model( const char* varTextFile )
   : model_name_( "undefined" ),
     database_( varTextFile ),
-    fvStencilManager_( nullptr ),
     verbose_( true )
 {
   InitializeLocalVariableStorage();
@@ -69,7 +67,7 @@ Model<dim>::Model( const char* varTextFile )
 
 
 /**
-    Builds model from binary file set with a binary variables file that has the same name as the Model.
+    Re-constructor: builds model from binary file set with a binary variables file that has the same name as the Model.
     
     @author SKM
     @date 11/9/2019
@@ -78,8 +76,7 @@ Model<dim>::Model( const char* varTextFile )
 template<size_t dim>
 Model<dim>::Model( const std::string& binaryFileName )
   : model_name_( binaryFileName ),
-    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), set<string>() ),
-    fvStencilManager_( nullptr )
+    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), set<string>() )
 {
   InitializeLocalVariableStorage();
   set<string> empty_set;
@@ -97,8 +94,7 @@ Full input from CSMP-native binary file.
 template<size_t dim>
 Model<dim>::Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables )
   : model_name_( binaryFileName ),
-    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), subset_variables ),
-    fvStencilManager_( nullptr )
+    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), subset_variables )
 {
   InitializeLocalVariableStorage();
   InputFromBinaryFile( binaryFileName.c_str(), subset_variables );
@@ -129,7 +125,6 @@ template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_elements )
   : model_name_( "undefined" ),
     database_( var_file ),
-    fvStencilManager_( nullptr ),
     verbose_( true )
 {
   Initialize( isoparametric_elements, vset,
@@ -145,7 +140,6 @@ template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
   : model_name_( "undefined" ),
     database_(),
-    fvStencilManager_( nullptr ),
     verbose_(true)
 {
   Initialize( isoparametric_elements, vset,
@@ -199,7 +193,6 @@ Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* va
                    bool create_boundary_objects, bool box_shaped )
   : model_name_( mesh_topology.ModelName() ),
     database_( var_file ),
-    fvStencilManager_( nullptr ),
     verbose_( true )
 {
   Initialize( mesh_topology, vset,
@@ -212,8 +205,7 @@ Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* va
 
 template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, bool create_boundary_objects, bool box_shaped )
-  : model_name_( mesh_topology.ModelName() ),
-    fvStencilManager_( nullptr )
+  : model_name_( mesh_topology.ModelName() )
 {
   Initialize( mesh_topology, vset,
               create_boundary_objects,
@@ -242,7 +234,7 @@ Performs the following steps:
 
 3. builds finite element mesh and property storage -> done by MeshManager
 
-4. forms unique root Region called Model (is in unique regions if there are no other unique regions)
+4. forms unique Region called Model (is in unique regions if there are no other unique regions) else in non-unique Regions
 
 5. Tests with a flood-fill whether the model is contiguous
 
@@ -250,11 +242,11 @@ Performs the following steps:
 
 7. Associates supplied subregions with regions (model subdomains) -> done by FormRegionsFrom(topology)
 
-8. Forming Boundaries -> done by EstablishBoundaries()
+8. Forms Boundaries -> done by EstablishBoundaries()
 
-9. Adding potentially required property storage for regions and boundaries (however these properties are not initialised here
+9. Adds required property storage for regions and boundaries (however their properties are not initialised here)
 
-@attention MOST COMMONLY USED MODEL CONSTRUCTION  FROM EXTERNAL DATA METHOD - including ANSYS_Model3D
+@attention MOST COMMONLY USED MODEL CONSTRUCTION METHOD FOR  EXTERNAL DATA  - including ANSYS_Model3D, SKUA etc.
 */
 template<size_t dim>
 void Model<dim>::Initialize( const char* regions_file_prefix,
@@ -263,7 +255,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
                              bool create_boundaries,
                              bool fully_irregular_mesh )
 {
-  // 1. eliminating the unwanted mesh regions from topology and vset
+  // 1. eliminates unwanted mesh regions from topology and vset, rebuild boundary flags, checks element numbering etc.
   mesh_topology.ReduceToRegions( regions_file_prefix );
 
   // 2. building the model with variable storage
@@ -278,6 +270,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
  Actual Initialise() method used by previous method
  
  @attention MOST COMMONLY USED MODEL CONSTRUCTION  FROM EXTERNAL DATA METHOD - including ANSYS_Model3D
+ 
+ @attention a fully valid VSet is expected by this method.
 
 @note should only be used for models created externally.
 */
@@ -300,27 +294,18 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
         vset.ReduceTo( old_and_new_elmtids );
         old_and_new_elmtids.clear();
       }
-
-    // 2. initializing the finite-element manager true=isoparametric
-    fem_manager_.InitializeElements( dim,
-                                     mesh_topology.InterpolationOrder(),
-                                     mesh_topology.IsoparametricElements() );
+     // the VSet must be correct calling initialise
+     if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
+         csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
 
     // 3. building the finite element mesh and property storage
-    mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+    mesh_manager_.Initialize( Database(), vset );
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
       csmp_error.notice( INFO, "Model<dim>::Initialize(topo,vset,bool,bool):",
                          "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
-	  
-    // 4. building the finite volume functionality, initialising element FiniteVolumePolicy base classes (if finite volume properties are present)
-    if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
-         Database().VariableCount(FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACE_FACET_INTEGRATION_POINT) or
-         Database().VariableCount(INTER_FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(INTER_FACE_FACET_INTEGRATION_POINT) or
-         vset.ContainsFiniteVolumeIntegrationPointData() )
-      InstantiateFiniteVolumes();
 
-    // 5. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
+    // 4. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
     InputVariablesFrom( vset );
 
     // 5. forming default computational domain called "Model" and regions
@@ -387,6 +372,9 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 /**
     Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
     the creation of regions other than 'Model'.
+
+ @attention a fully valid VSet is expected by this method.
+
 */
 template<size_t dim>
 void Model<dim>::Initialize( bool isoparametric_elements,
@@ -396,18 +384,15 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  // 0. initializing the finite-element manager true=isoparametric
-  fem_manager_.InitializeElements( dim,
-                                   vset.OrderOfFiniteElementInterpolationFunctions(),
-                                   isoparametric_elements );
-
-  // 1. building the finite element mesh and property storage
-  mesh_manager_.Initialize( Database(), FE_Manager(), vset );
-
-  // 2. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
+  // 1. checking for neighbor connectivity if necessary
+  // the VSet must be correct calling initialise
   if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
     csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
                                               
+  // 2. building the finite element mesh and property storage
+  mesh_manager_.Initialize( Database(), vset );
+  
+  // 3. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
   const bool unique(true);
   const size_t elmts = this->FormModelRegion( unique );
   if ( elmts == 0U )
@@ -415,20 +400,13 @@ void Model<dim>::Initialize( bool isoparametric_elements,
   
   cout << "\nModel<dim>::Initialize: modek mesh has been built successfully..." << endl;
 
-  // 4. creating the finite volume mesh if necessary
-  if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACE_FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( INTER_FACE_FACET_INTEGRATION_POINT ) or
-       vset.ContainsFiniteVolumeIntegrationPointData() )
-    InstantiateFiniteVolumes();
-
-  // 5. assigning properties to mesh
+  // 4. assigning properties to mesh
   InputVariablesFrom( vset );
 
   cout << "\nModel<dim>::Initialize(VSet): ";
   cout << "Mesh has been built successfully..." << endl;
 
-  // 6. Forming Boundaries
+  // 5. Forming Boundaries
   if ( create_boundaries ) {
       if ( !non_box_shaped_model && this->BoxShaped() ) {
           this->EstablishBoxBoundaries();
@@ -452,7 +430,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
     }
   else cout << "\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
-  // 7. Adding potentially required property storage
+  // 6. Adding potentially required property storage
   InitializeLocalVariableStorage();
   UpdateSubdomainPropertyStorage();
 
@@ -468,7 +446,12 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 
 
 /**
-custom initialization for split boundaries
+      Custom initialization for split boundaries.
+      
+      @todo Is this really needed?
+      
+      @author ?
+      
 @note should only be used for models created externally.
 */
 template<size_t dim>
@@ -492,8 +475,16 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 
 
 /**
-custom initialization for split boundaries
+      Custom initialization for split boundaries from a  source external to CSMP.
+            
+      @todo Is this really needed?
+
+      @author ?
+      
 @note should only be used for models created externally.
+
+ @attention a fully valid VSet is expected by this method.
+
 */
 template<size_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology,
@@ -515,20 +506,14 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
   vset.ReduceTo( old_and_new_elmtids );
   old_and_new_elmtids.clear();
 
-  // 2. initializing the finite-element manager true=isoparametric
-  fem_manager_.InitializeElements( dim,
-                                   mesh_topology.InterpolationOrder(),
-                                   mesh_topology.IsoparametricElements() );
-
+  // 2. checking for neighbor connectivity if necessary
+  //    the VSet must be correct when calling initialise
+  if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
+    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(Toplogy,VSet):", "'pfverts' array is missing.");
+                                              
   // 3. building the finite element mesh (finite volume mesh) and property storage
-  mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+  mesh_manager_.Initialize( Database(), vset );
   cout << "\nModel<dim>::Initialize: model has been built successfully..." << endl;
-
-  if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACE_FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( INTER_FACE_FACET_INTEGRATION_POINT ) or
-       vset.ContainsFiniteVolumeIntegrationPointData() )
-    InstantiateFiniteVolumes();
 
   // 4. assigning properties to mesh; this does not depend on regions,
   //    so this is safe to do before we have established them.
@@ -610,29 +595,11 @@ void Model<dim>::Name( const char* new_name )
 
 
 
-/**
-Instantiates FiniteVolumeStencilManager and initialises FiniteVolumeStencils
-if correpoding pointers are NULL.
-
-delegates this step to MeshManager::InitializeFiniteVolumeStencils()
-*/
-template<size_t dim>
-void Model<dim>::InstantiateFiniteVolumes()
-{
-  if ( !fvStencilManager_ )
-    {
-      fvStencilManager_ = new FiniteVolumeStencilManager<dim>();
-      cout << "\nModel<dim>::InstantiateFiniteVolumeStencilManager: Created local FiniteVolumeStencilManager\n";
-    }
-  Mesh().InitializeFiniteVolumeStencils( Database(), fem_manager_, *fvStencilManager_ );
-}
-
 
 /// removes dynamically allocated finite volume stencil manager
 template<size_t dim>
 Model<dim>::~Model()
 {
-   delete fvStencilManager_;
 }
 
 
@@ -787,9 +754,6 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
   if ( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
   else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputVariablesFrom:", "No properties found in VSet." );
 
-  // checking whether there a finite volumes properties that require the generation of stencils
-  if ( vset.ContainsFiniteVolumeIntegrationPointData() and !fvStencilManager_ ) InstantiateFiniteVolumes();
-
   // properties and values stored on the model itself
   for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
   {
@@ -802,43 +766,44 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
     assert( (*pit).second.Size() / key.dataDepth == 1U );
 
     switch ( key.type )
-    {
-      case SCALAR: {
-        ScalarVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
+      {
+        case SCALAR: {
+              ScalarVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case VECTOR: {
+              VectorVariable<dim> value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case TENSOR: {
+              TensorVariable<dim> value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case ARRAY: {
+              ArrayVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case FLAGGEDARRAY: {
+              FlaggedArrayVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        default:
+          csmp_error.notice( ERROR, "Model<dim>::InputVariablesFrom:",
+                             (*pit).first, "type of Model variable not recognized." );
       }
-                   break;
-      case VECTOR: {
-        VectorVariable<dim> value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                   break;
-      case TENSOR: {
-        TensorVariable<dim> value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                   break;
-      case ARRAY: {
-        ArrayVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                  break;
-      case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                         break;
-      default:
-        csmp_error.notice( ERROR, "Model<dim>::InputVariablesFrom:",
-                           (*pit).first, "type of Model variable not recognized." );
-    }
   }
-}
+  
+} // end InputVariablesFrom
 
 
 
@@ -2265,7 +2230,6 @@ void Model<dim>::Out() const
 {
   cout << "\n\n\n\nModel<" << dim << ">::Out: ";
   database_.Out();
-  fem_manager_.Out();
   mesh_manager_.Out();
 
   cout << "\nunique Regions: ";
@@ -2915,20 +2879,8 @@ const PropertyDatabase<dim>& Model<dim>::Database() const { return database_; }
 
 template<size_t dim>
 const FiniteElementManager&  Model<dim>::FE_Manager() const
-{ return fem_manager_; }
+{ return mesh_manager_.FiniteElements(); }
 
-template<size_t dim>
-FiniteElementManager&  Model<dim>::FE_Manager()
-{ return fem_manager_; }
-
-
-template<size_t dim>
-const FiniteVolumeStencilManager<dim>* Model<dim>::FV_Manager() const
-{ return fvStencilManager_; }
-
-template<size_t dim>
-FiniteVolumeStencilManager<dim>*  Model<dim>::FV_Manager()
-{ return fvStencilManager_; }
 
 
 /**
@@ -3073,22 +3025,14 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   cout << "' from VSet... " << endl;
   vset.InputFrom( BinaryVsetFileName( model_name ).c_str(), model_time, subset_variables );
 
-  // 2. initializing the finite-element manager true=isoparametric
-  fem_manager_.InitializeElements( dim, vset.OrderOfFiniteElementInterpolationFunctions(), true );
-  cout << "\nModel<" << dim << ">::InputFromBinaryFile: it is assumed that the model is based on 'isoparametric' finite elements.\n\n";
+  // 2. rebuilds finite element mesh and associated property storage, initialising 'mtrl' identifiers and boundary flags
+  mesh_manager_.Initialize( database_, vset );
 
-  // 3. rebuilds finite element mesh and associated property storage, initialising 'mtrl' identifiers and boundary flags
-  mesh_manager_.Initialize( database_, fem_manager_, vset );
-
-  // 4. checking whether the FV stencils need to be initialised
-  if ( vset.ContainsFiniteVolumeIntegrationPointData() )
-    InstantiateFiniteVolumes();
-
-  // 5. assigning properties to mesh (this reads in the properties output to file via Region::OutputTo(VSet) )
+  // 3. assigning properties to mesh (this reads in the properties output to file via Region::OutputTo(VSet) )
   if ( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
   else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputFromBinaryFile:", "No properties found in VSet." );
 
-  // properties and values stored on the model itself
+  // 4. properties and values stored on the model itself
   for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
   {
     // apart from the name string key in the map, PropertyData contains the most important variable specifications
@@ -3137,7 +3081,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
       }
   }
 
-  // 6. reconstruction of the regions
+  // 5. reconstruction of the regions
   this->InputRegionsFromBinary( BinaryRegionsFileName( model_name ).c_str(), subset_variables );
 
   // making sure that the computational region has been built
@@ -3145,11 +3089,11 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
     if ( !this->ContainsRegion( "Model" ) )
       throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
 
-  // 7. reconstructing the boundaries, if any
+  // 6. reconstructing the boundaries, if any
   if ( vset.Faces() > 0 )
     this->InputBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
   
-  // 8. reconstructing the splitboundaries, if any
+  // 7. reconstructing the splitboundaries, if any
   if ( vset.InterFaces() > 0 )
     this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
 

@@ -61,8 +61,8 @@ class NodeCenteredFiniteVolumeTransport {
     /// single-phase passive advection, does NOT return courant increment, single timestep calculation
     /// no checks are made for courant condition.  Assumes external checks.
     virtual void AdvectVariableSingleStep( double64 time_increment,
-                                      bool apply_flux_balance_correction=true,
-                                      bool update_pore_volumes=false);
+                                           bool apply_flux_balance_correction=true,
+                                           bool update_pore_volumes=false);
 
     /// advection of one of two phases in two-phase flow handled by subclasses
     virtual double64 TransportPhase( TwoPhaseModel<dim>&, double64 time_interval );
@@ -149,11 +149,6 @@ class NodeCenteredFiniteVolumeTransport {
     virtual CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS& GetSolverSettings();
     virtual CSMP_DEFAULT_LINEAR_SOLVER* GetSolver();
 
-#if defined(_OPENMP )
-    std::vector<FiniteVolumeStencilManager<dim> > fvmgrs_; // one manager per thread
-    std::vector<FiniteElementManager> femgrs_; // one manager per thread
-#endif
-
     virtual void  Out() const;
 
     void Verbose(bool verbose){this->verbose_=verbose; if (this->baseAdvector_) this->baseAdvector_->Verbose(verbose);}
@@ -198,7 +193,7 @@ class NodeCenteredFiniteVolumeTransport {
                                  double64 time_interval, bool with_flux_balance_correction );
     // 2nd-order in space
     void AdvectVariable2ndOrder( NodeCenteredFiniteVolumeAlgorithm<dim>&,
-                                   double64 time_increment, bool with_flux_balance_correction );
+                                 double64 time_increment, bool with_flux_balance_correction );
 
     void AdvectVariable2ndOrderInSpaceAndTime( NodeCenteredFiniteVolumeAlgorithm<dim>&,
                                                  double64 time_increment, bool with_flux_balance_correction );
@@ -234,7 +229,6 @@ protected:
     double64                            cfl_multiplier_;
     size_t                              var_ncomponents_; /// default size is 1 if only a scalar is being advected. (Julian)
 
-    FiniteVolumeStencilManager<dim>*    stencils_;     ///< the finite volumes; build the stencil manager
     StencilProcessor<dim>               stencil_;
     bool                                firstCall_;
     bool                                with_lsmgrad_limiter_;
@@ -242,8 +236,8 @@ protected:
     double64 target_nonlinear_limiting_case_residual_; ///< targed residual in order to get correct 2nd order approximations
     size_t max_nonlinear_limiting_case_iterations_;    ///< maximum number of nonlinear iterations in 2nd order scheme
 
-    NodeCenteredFiniteVolumeAlgorithm<dim>*  baseAdvector_;
-    GenericNodePropertyGradientLimiter<dim>*  grad_advprop_limiter_;
+    NodeCenteredFiniteVolumeAlgorithm<dim>*  baseAdvector_ = nullptr;
+    GenericNodePropertyGradientLimiter<dim>*  grad_advprop_limiter_ = nullptr;
 };
 
 

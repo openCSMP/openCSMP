@@ -1,5 +1,6 @@
 #include "ComputeSinglePhaseGravityTermVisitor.h"
 #include "Model.h"
+#include "Region.h"
 #include "TwoPhaseModel.h"
 #include "ScalarVariable.h"
 #include "CSMP_physical_constants.h"
@@ -9,7 +10,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 template<size_t dim>
 ComputeSinglePhaseGravityTermVisitor<dim>::ComputeSinglePhaseGravityTermVisitor(Model<dim>& model,

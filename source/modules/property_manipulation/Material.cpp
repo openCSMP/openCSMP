@@ -7,6 +7,7 @@
 //
 
 #include "Material.h"
+#include "Region.h"
 #include "Model.h"
 #include "Exception.h"
 #include "ErrorHandler.h"

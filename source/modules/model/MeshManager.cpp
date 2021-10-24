@@ -20,7 +20,9 @@ namespace csmp {
 
 template<size_t dim>
 MeshManager<dim>::MeshManager()
-  : hybrid_element_mesh_( false )
+  : fem_manager_( dim, 1, true ), // linear interpolation functions, isoparametric elements
+    fvm_manager_(fem_manager_),
+    hybrid_element_mesh_( false )
 {
 }
 
@@ -31,15 +33,14 @@ MeshManager<dim>::MeshManager()
       input objects need to be fully constructed for this to work.
 */
 template<size_t dim>
-MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref,
-                               const FiniteElementManager& fem_manager,
-                               const VSet<dim>& vset )
-  : hybrid_element_mesh_( vset.HybridElementTypeMesh() )
+MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const VSet<dim>& vset )
+  : fem_manager_( dim, vset.OrderOfFiniteElementInterpolationFunctions(), vset.IsoparametricElementMesh() ),
+    fvm_manager_(fem_manager_),
+    hybrid_element_mesh_( vset.HybridElementTypeMesh() )
 {
    assert( pref.VariableCount() > 0 );
    assert( vset.Vertices() > 0 );
-   assert( fem_manager.Dimensions() == dim );
-   Initialize( pref, fem_manager, vset );
+   Initialize( pref, vset );
 }
 
 
@@ -269,9 +270,7 @@ multiple neighbors per face.
 
 */
 template<size_t dim>
-bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
-                                    const FiniteElementManager& fem_manager,
-                                    const VSet<dim>& vset )
+bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, const VSet<dim>& vset )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -286,6 +285,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   // ------------------------------------------------------------------------------------
   // 1. check availability of necessary finite element types, and valid model topology
   // ------------------------------------------------------------------------------------
+  // initializing the finite-element manager true=isoparametric
+  fem_manager_.InitializeElements( dim, vset.OrderOfFiniteElementInterpolationFunctions(), vset.IsoparametricElementMesh() );
 
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: checking the availability of the necessary finite element types..." << endl;
@@ -302,9 +303,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   for ( typename set<CSMP_FEM_TYPE>::const_iterator
         iit = input_etypes.begin(); iit != input_etypes.end(); iit++ ) {
       cerr << parseFiniteElementType( (*iit) ) << "  ";
-      if ( !fem_manager.ContainsElementType( *iit ) ) {
+      if ( !fem_manager_.ContainsElementType( *iit ) ) {
         cerr << "\n\n\tFinite element type not available: " << parseFiniteElementType( *iit ) << endl;
-        fem_manager.Out();
+        fem_manager_.Out();
         throw Exception( FATAL_ERROR,
                          "MeshManager<dim>::Initialize(VSet):",
                          "'FiniteElementManager' lacks finite-element type required by VSet." );
@@ -337,11 +338,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       size_t elmt_idx(0);
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
-          const int8_t csmpElementType = vset.ElementType( 0U );
+          const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( 0U ));
           while ( first != last )
             {
-              elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), nullptr, evars, cvars, vset.Pmtrl(elmt_idx) ) );
-              const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
+              elements_.push_back( new Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
+                                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
+              const size_t nodes( fem_manager_.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; ++j )
                 elements_[elmt_idx]->Assign( j, nodes_[ vset.Plist( elmt_idx, j )] );
               elmt_idx++;
@@ -352,9 +354,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       else {
           while ( first != last )
             {
-              const int8_t csmpElementType = vset.ElementType( elmt_idx );
-              elements_.push_back( new Element<dim>( elmt_idx, fem_manager.E( csmpElementType ), nullptr, evars, cvars, vset.Pmtrl(elmt_idx) ) );
-              const size_t nodes( fem_manager.E( csmpElementType )->Nodes() );
+              const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( elmt_idx ));
+              elements_.push_back( new Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
+                                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
+              const size_t nodes( fem_manager_.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; j++ )
                 elements_[elmt_idx]->Assign( j, nodes_[vset.Plist( elmt_idx, j )] );
               elmt_idx++;
@@ -372,7 +375,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
   if ( vset.WithNeighbourConnectivity() ) {
        for ( auto& e : elements_ ) {
             const int8_t csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e->Idx() );
-            const size_t neighbors( fem_manager.E( csmpElementType )->Neighbors() );
+            const size_t neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
 
             for ( size_t j = 0U, nidx = 0U; j < neighbors; ++j ) {
                   // if there is a neighbor (as is the case if the stored index is greater than zero)
@@ -414,12 +417,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        long64  face_idx(vset.Elements());
        typename deque<vector<long64> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
-            const int8_t csmpElementType = vset.ElementType( face_idx );
+            const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( face_idx ));
             if ( csmpElementType == UNKNOWN ) {
                  cerr <<"\n\t"<< parseFiniteElementType(csmpElementType) <<" encountered for Face "<< face_idx <<"\n";
                  csmp_error.notice( FATAL_ERROR, "MeshManager::Initialise:", "encountered UNKNOWN Face element type." );
               }
-            faces_.push_back( new Face<dim>( face_idx, fem_manager.E( csmpElementType ), evars, cvars ) );
+            faces_.push_back( new Face<dim>( face_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ), evars, cvars ) );
             const size_t nodes( faces_[face_idx]->Nodes() );
             // assigning nodes to faces
             for ( size_t j = 0U; j<nodes; ++j ) {
@@ -517,8 +520,11 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
        size_t interface_idx(vset.Elements() + vset.Faces());
        while ( first != last )
          {
-            const int8_t csmpElementType = vset.ElementType( interface_idx );
-            interfaces_.push_back( new InterFace<dim>( interface_idx, fem_manager.E( csmpElementType ), evars, cvars ) );
+            const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( interface_idx ));
+            interfaces_.push_back( new InterFace<dim>( interface_idx,
+                                                       fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
+                                                       evars, cvars ) );
+                                                       
             // number of nodes of the finite-element corresponding to the interface
             const size_t nodes( interfaces_[interface_idx]->FE()->Nodes() );
             // assigning nodes
@@ -767,41 +773,6 @@ void MeshManager<dim>::RebuildNodeParentElementRelationships( typename vector<El
 
 
 
-/**
-Assigns fem_manager to fvs_manager. Assigns the finite volume stencil pointers of the elements to the
-corresponding finite volume stencils.
-
-@attention If a stencil is assigned already, noting is done. Remove stencil first (NULL ptr in elements)
-
-@todo (2-C) This should not also assign the femManager to the stencilManager - method does too much
-*/
-template<size_t dim>
-void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& pref,
-                                                       const FiniteElementManager& fem_manager,
-                                                       FiniteVolumeStencilManager<dim>& fvs_manager )
-{
-  if ( Elements() <= 1U )
-    throw Exception( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
-                     "Currently no model exists to which stencils could be assigned." );
-
-  // 2. initialize the stencil manager (the stencils are build and assigned the correct properties
-  fvs_manager.Initialize( fem_manager );
-
-  // 3. Now the stencil pointers in each finite element are connected to the correct corresponding stencils and update variable
-  // storage for fv integration (sector/facet) point properties
-  const LocalVariables lvs( pref.LocalVariablesAt( ELEMENT ) );
-  const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt( ELEMENT ) );
-
-  for ( auto& e : elements_ ) {
-    if ( e->FV() == nullptr )
-      {
-        e->AssignFiniteVolume( fvs_manager.Stencil( e->FE_Type() ) );
-        e->ResizePropertyStorage( lvs, ipvs );
-      }
-    }
-
-} // end InitializeFiniteVolumeStencils
-
 
 
 
@@ -892,35 +863,24 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
    @date 17/9/21
 */
 template<size_t dim>
-Element<dim>*	const MeshManager<dim>::AddElement( csmp::FiniteElement* const fe_ptr,
-                                                  const csmp::FiniteVolumeStencil<dim>* const fv_ptr,
-                                                  const LocalVariables& lvars, const IntegrationPointVariables& ivars,
-                                                  const std::vector<Node<dim>*>& nodes, int32 material_id )
+Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
+                                                  const LocalVariables& lvars,
+                                                  const IntegrationPointVariables& ivars,
+                                                  const std::vector<Node<dim>*>& nodes,
+                                                  int32 material_id )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    // 0. verifying the input
-   // pointers
-   if ( fe_ptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "finite element pointer not initialised");
-   if ( fv_ptr == nullptr )
-     csmp_error.notice( INFO, "MeshManager<dim>::AddElement", "finite volume stencil pointer not initialised");
    // node vector
    if ( nodes.empty() )
      csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
-   if ( nodes.size() != fe_ptr->Nodes() )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "node vector has the wrong size");
-   for ( size_t i=0U; i<fe_ptr->Nodes(); ++i )
-     if ( nodes[i] == nullptr ) {
-          cerr <<"\n\tnode "<< i;
-          csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "node vector contains a nullptr ");
-          break;
-       }
 
    // 1. constructing new element
-   elements_.push_back( new Element<dim>( elements_.size(), fe_ptr, fv_ptr, lvars, ivars, material_id ) );
+   elements_.push_back( new Element<dim>( elements_.size(),
+                                          fem_manager_.E(etype), fvm_manager_.Stencil(etype),
+                                                                 lvars, ivars, material_id ) );
    Element<dim>* const eptr = elements_.back();
-
 
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
@@ -1035,6 +995,8 @@ template<size_t dim>
 Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* eptr,
                                                          csmp::Element<dim>* inner_eptr,
                                                          csmp::Element<dim>* outer_eptr,
+                                                         size_t adjacent_face_of_inner_element,
+                                                         size_t adjacent_face_of_outer_element,
                                                          const LocalVariables& lvars,
                                                          const IntegrationPointVariables& ivars )
  {
@@ -1062,10 +1024,12 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
 #endif
 
    // 1. constructing new face
-   const size_t face_id = faces_.size();
-   faces_.push_back( new Face<dim>( const_cast<Element<dim>&>(*eptr), inner_eptr, outer_eptr, lvars, ivars ) );
+   const size_t face_id = faces_.size(); // since the face will be added at the end of the deque
+   faces_.push_back( new Face<dim>( *eptr, inner_eptr, outer_eptr,
+                                     adjacent_face_of_inner_element, adjacent_face_of_outer_element,
+                                     lvars, ivars ) );
+                                     
    Face<dim>* const fptr = faces_.back();
-   if ( eptr->FV() != nullptr ) fptr->AssignFiniteVolume( eptr->FV() );
    fptr->Idx( face_id );
 
    // 2. assigning nodes
@@ -1089,8 +1053,8 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
        
   /// optionally, the neighbor element pointers might not be assigned; @note node pointers must be supplied in CCW order from outside looking in
 template<size_t dim>
-Face<dim>* const MeshManager<dim>::AddFace( csmp::FiniteElement* const feptr, const csmp::FiniteVolumeStencil<dim>* const fvptr,
-                                            Element<dim>* const inner_parent, Element<dim>* const outer_parent,
+Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent,
+                                            Element<dim>* const outer_parent,
                                             const LocalVariables& lvars,
                                             const IntegrationPointVariables& ivars,
                                             const std::vector<Node<dim>*>& nodes )
@@ -1099,44 +1063,17 @@ Face<dim>* const MeshManager<dim>::AddFace( csmp::FiniteElement* const feptr, co
    
    // 0. verifying the input
    // pointers
-   if ( feptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "element pointer not initialised");
-   if ( fvptr == nullptr )
-     csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "finite volume stencil pointer not initialised");
    if ( inner_parent == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on inside not initialised");
-//   if ( outer_parent == nullptr )
-//     csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on ouside not initialised");
-   bool with_valid_node_vector = ( nodes.empty() || nodes.size() != feptr->Faces() ) ? false : true;
-
-#ifdef DEBUG
-   // node vector
-   if ( with_valid_node_vector )
-     for ( size_t i=0U; i<nodes.size(); ++i )
-       if ( nodes[i] == nullptr ) {
-            cerr <<"\n\tnode "<< i;
-            csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "node vector contains a nullptr ");
-            with_valid_node_vector = false;
- break;
-         }
-#endif
-
+   if ( outer_parent == nullptr )
+     csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on ouside not initialised");
+   
    // 1. constructing new face
    const size_t face_id = faces_.size();
-   faces_.push_back( new Face<dim>( feptr, fvptr, lvars, ivars ) );
+   faces_.push_back( new Face<dim>( fem_manager_, fvm_manager_, inner_parent, outer_parent, lvars, ivars ) );
    Face<dim>* const fptr = faces_.back();
-   fptr->Assign( inner_parent, outer_parent );
    fptr->Idx( face_id );
 
-   // 2. assigning nodes
-   if ( with_valid_node_vector ) {
-       const size_t n_nodes(fptr->Nodes());
-       for ( size_t i=0U; i<n_nodes; ++i )
-         fptr->Assign( i, fptr->N(i) );
-     }
-   else // more costly but possible
-     findNodesViaHigherDimensionalNeighbors( inner_parent, outer_parent, fptr );
-   
    return fptr;
 
 } // end AddFace
@@ -1163,23 +1100,14 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    if ( eptr->Neighbor(local_face_id) != nullptr )
      csmp_error.notice( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it located at model boundary");
 
-   // 1. constructing new face
-   const size_t face_id = faces_.size();
-//   FiniteElement* fetype = fe_manager.E( eptr->FE()->ElementTypeOfFace(local_face_id) );
-   faces_.push_back( new Face<dim>( eptr->FE(), eptr->FV(), lvars, ivars ) );
-   Face<dim>* const fptr = faces_.back();
-   // higher-dimensional neighbors
-   fptr->Assign( eptr, static_cast<Element<dim>*>(nullptr) );
-   fptr->Idx( face_id );
+   // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
+   const size_t face_number{faces_.size()};
+   FiniteElement* fptr = fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) );
+   faces_.push_back( new Face<dim>( *eptr, fptr, fvm_manager_, local_face_id, lvars, ivars ) );
+   Face<dim>* const face_ptr = faces_.back();
+   face_ptr->Idx( face_number );
 
-   // 2. assigning nodes
-   vector<size_t> fnids;
-   eptr->FE()->NodesOfFace( local_face_id, fnids );
-   const size_t n_nodes(fnids.size());
-   for ( size_t i=0U; i<n_nodes; ++i )
-     fptr->Assign( i, eptr->N( fnids[i] ) );
-
-   return fptr;
+   return face_ptr;
 
 } // end AddBoundaryFace
 
@@ -1188,11 +1116,13 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
 
 
 
-                                 
+/**
+    This method is for connecting the matching Element faces of a node-matched split mesh as created, for instance by ANSYS.
+    Apart from creating the InterFace, Node manifolds are created and-or updated as necessary.
+*/
 template<size_t dim>
-InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const feptr, const csmp::FiniteVolumeStencil<dim>* const fvptr,
-                                                      Element<dim>* const inner_parent, Element<dim>* const outer_parent,
-                                                      Element<dim>* const intervening_elmt,
+InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_parent, size_t inner_element_face_id,
+                                                      Element<dim>* const outer_parent, size_t outer_element_face_id,
                                                       const LocalVariables& lvars,
                                                       const IntegrationPointVariables& ivars )
 {
@@ -1200,24 +1130,57 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const
    
    // 0. verifying the input
    // pointers
-   if ( feptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "element pointer not initialised");
-   if ( fvptr == nullptr )
-     csmp_error.notice( INFO, "MeshManager<dim>::AddInterFace", "finite volume stencil pointer not initialised");
    if ( inner_parent == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
    if ( outer_parent == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
 
-   // 1. constructing new face
+   assert( inner_element_face_id < inner_parent->Faces() );
+   assert( outer_element_face_id < outer_parent->Faces() );
+
+   // 1. establishing the finite element type if the interface
+   const CSMP_FEM_TYPE etype = inner_parent->FE()->ElementTypeOfFace( inner_element_face_id );
+
+   // 2. constructing new interface
    const size_t iface_id = interfaces_.size();
-   interfaces_.push_back( new InterFace<dim>( feptr, fvptr, lvars, ivars ) );
+   interfaces_.push_back( new InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
    InterFace<dim>* const ifptr = interfaces_.back();
-   ifptr->Assign( inner_parent, outer_parent );
+   const bool assign_nodes{true};
+   ifptr->Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
    ifptr->Idx( iface_id );
 
-   // 2. assigning nodes and face ids w.r.t. higher-dimensional element neighbors
-   findNodesViaHigherDimensionalNeighbors( inner_parent, outer_parent, ifptr );
+   assert( node_manifold_manager_ != nullptr );
+
+   // 3. assigning node manifolds
+   const size_t n_nodes{ifptr->FE()->Nodes()};
+   for ( size_t i{0}; i<n_nodes; ++i )
+     // if the inside node is different from the outside node so that there needs to be a manifold
+     if ( ifptr->N(i,INSIDE) != ifptr->N(i,OUTSIDE) ) {
+         // 1. if both nodes are not yet manifolds
+         if ( !ifptr->N(i,INSIDE)->IsManifold() && !ifptr->N(i,OUTSIDE)->IsManifold() ) {
+              node_manifold_manager_->NewManifold( ifptr->N(i,INSIDE), ifptr->N(i,OUTSIDE), ManifoldType::INTERFACE );
+              continue;
+           }
+         // 2. if both nodes are already manifolds, they are merged into single one
+         if ( ifptr->N(i,INSIDE)->IsManifold() && ifptr->N(i,OUTSIDE)->IsManifold() ) {
+              // if they are different from one-another, they are merged
+              if ( ifptr->N(i,INSIDE)->Manifold() != ifptr->N(i,OUTSIDE)->Manifold() )
+                node_manifold_manager_->MergeManifolds( ifptr->N(i,INSIDE)->Manifold(),
+                                                        ifptr->N(i,OUTSIDE)->Manifold() );
+              continue;
+           }
+         // 3. if the inside node is already a manifold and does not contain the second one
+         //    because the second is not a manifold
+         if ( ifptr->N(i,INSIDE)->IsManifold() ) {
+              // the outside node is added to it
+              ifptr->N(i,INSIDE)->Manifold()->Add( ifptr->N(i,OUTSIDE), OUTSIDE, ManifoldType::INTERSECTION );
+           }
+         // 4. if the outside node is already a manifold
+         else if ( ifptr->N(i,OUTSIDE)->IsManifold() ) {
+              // the inside node is added to the outside nodes manifold
+              ifptr->N(i,OUTSIDE)->Manifold()->Add( ifptr->N(i,INSIDE), INSIDE, ManifoldType::INTERSECTION );
+           }
+       }
    
    return ifptr;
 
@@ -1227,7 +1190,13 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( csmp::FiniteElement* const
 
 
 
-   /// compatibility checks are performed
+/**
+    Constructs a new Interface. The former nodes of the Face become those on the inside of the interface.
+    Duplicates the nodes identified by the vector, adding them to the required manifolds.
+    Other nodes will be shared across the sides of the interface.
+    
+    @attention assumes that nodes have already been duplicated as necessary and manifolds have been created and are uptodate
+*/
 template<size_t dim>
 InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>* fptr,
                                                                 const LocalVariables& lvars,
@@ -1244,14 +1213,20 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
    const size_t iface_id = interfaces_.size();
    interfaces_.push_back( new InterFace<dim>( fptr->FE(), fptr->FV(), lvars, ivars ) );
    InterFace<dim>* const ifptr = interfaces_.back();
+   // 2. also assigning nodes, expecting that the nodes on the opposite side are already there
    ifptr->Assign( fptr->InnerParent(), fptr->OuterParent() );
    ifptr->Idx( iface_id );
 
-   // 2. assigning nodes and face ids w.r.t. higher-dimensional neighbors
-   findNodesViaHigherDimensionalNeighbors( fptr->InnerParent(), fptr->OuterParent(), ifptr );
-        
-   // TODO: does connectivity of higher-dimensional neighbor elements need to be updated?
-     
+#ifdef DEBUG
+   // verifying that the nodes on the inside matching those of the face
+   for ( size_t i{0}; i<fptr->Nodes(); ++i ) {
+        assert( fptr->N(i) != nullptr );
+        assert( ifptr->N(i,INSIDE) != nullptr );
+        assert( fptr->N(i) == ifptr->N(i,INSIDE) );
+        assert( ifptr->N(i,OUTSIDE) != nullptr );
+     }
+#endif
+
    // 3. removing original face
    delete fptr;
    fptr = nullptr;
@@ -1259,6 +1234,9 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
    return ifptr;
 
 } // end ReplaceFaceByInterFace
+
+
+
 
 
 
@@ -4894,6 +4872,17 @@ void MeshManager<dim>::Out() const
         }
       n_node++;
     }
+ 
+  // finite element manager
+  fem_manager_.Out();
+  
+  // finite volume stencils
+  list<CSMP_FEM_TYPE> etypes;
+  fem_manager_.CurrentElementTypes( etypes );
+  cout <<"\nFinite volume stencils: ";
+  for ( auto fit : etypes )
+  fvm_manager_.Stencil(fit)->Out();
+  cout << endl;
   
   // node manifolds
   if ( node_manifold_manager_ != nullptr ) {

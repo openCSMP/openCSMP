@@ -1,4 +1,5 @@
 #include "StatisticalAnalyzer_Test.h"
+#include "Region.h"
 
 
 namespace csmp {

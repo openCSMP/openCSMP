@@ -22,8 +22,6 @@ ImplicitTransport<dim>::ImplicitTransport( Model<dim>& model, const std::string&
     linalg_sys_(subdomain_.Nodes()),
     second_order_(second_order_in_space)
  {
-    if ( model.FV_Manager() == nullptr ) model.InstantiateFiniteVolumes();
-
     const bool initialise_flux(false);
     initializeFiniteVolumeProperties( model, subdomain_, initialise_flux );
     

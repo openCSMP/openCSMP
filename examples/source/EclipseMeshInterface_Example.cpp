@@ -1,5 +1,5 @@
 #include "EclipseMeshInterface_Example.h"
-
+#include "Region.h"
 
 #include "CSMP_definitions.h"
 #include "VTU_Interface.h"

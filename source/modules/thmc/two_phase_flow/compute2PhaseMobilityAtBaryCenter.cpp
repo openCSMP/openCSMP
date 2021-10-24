@@ -1,5 +1,6 @@
 #include "compute2PhaseMobilityAtBaryCenter.h"
 #include "Model.h"
+#include "Region.h"
 #include "TwoPhaseModel.h"
 
 using namespace std;

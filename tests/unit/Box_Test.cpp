@@ -1,6 +1,7 @@
 #include "Box_Test.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "VTU_Interface.h"
 #include "vsetMakers.h"

@@ -1,4 +1,5 @@
 #include "SinglePhaseVelocityVisitor.h"
+#include "Region.h"
 #include "CSMP_mathUtilities.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "CSMP_physical_constants.h"

@@ -103,6 +103,9 @@ const char*        parseFiniteElementType( int8_t etype );
 FV_FACET_TYPE      parseFacetType( const std::string& ftype );
 const char*        parseFacetType( int8_t ftype );
 
+/// returns UNKNOWN if more information is required
+CSMP_FEM_TYPE      finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true );
+
 
 /**
 

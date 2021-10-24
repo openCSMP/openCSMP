@@ -1,4 +1,5 @@
 #include "RandomFieldGenerator.h"
+#include "Region.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
 

@@ -1955,7 +1955,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
                   nodes.push_back( ePtr->N( face_node_ids[nid] ) );
 
                 // getting the mesh manager to construct a new element
-                Element<dim>* elmtObj = meshManager.AddElement( femPtr, nullptr,
+                Element<dim>* elmtObj = meshManager.AddElement( femPtr->ElementType(),
                                                                 lvsElements, lvsIntegrationPoints,
                                                                 nodes, material_id );
                 // added to boundary

@@ -1,4 +1,5 @@
 #include "Box.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "Element.h"
 #include "Model.h"

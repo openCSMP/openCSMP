@@ -215,6 +215,16 @@ void VData::AddElementTypes( std::vector<int8_t>::const_iterator first,
   { pelmt.assign( first, last ); }
   
 
+    /// reports whether the model contains only isoparametric element types
+bool  VData::IsoparametricElementMesh() const
+ {
+     for ( auto it : pelmt )
+       if ( !CSMP_ElementSpecifications::IsIsoparametric(it) )
+         return false;
+     return true;
+ }
+
+
 
 //  aelement ID's 0...n-1              
 std::vector<long64>::iterator  VData::PlistBegin( size_t eidx ) {
@@ -2935,6 +2945,8 @@ void VData::EstablishElementConnectivity3D()
     map<size_t,set<size_t> >  line_elmt_that_share_node;
 
     const size_t n_elements(plist.size());
+    pfverts.resize( plist.size() );
+
     for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
       {
          // getting the element type (unfortunately this is known only at runtime)

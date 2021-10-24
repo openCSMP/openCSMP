@@ -24,7 +24,6 @@ DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* ta
     T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.)
 {
     InitializeVariablsAndKeys();
-    m.InstantiateFiniteVolumes();
     InitializeFiniteVolumeProperties();
     InitializeEvents();
     cout<<"\nDESAdvectionDiffusion constructed"<<endl;

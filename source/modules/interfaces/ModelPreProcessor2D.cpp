@@ -8,6 +8,7 @@
 
 #include "ModelPreProcessor2D.h"
 #include "Model.h"
+#include "Region.h"
 #include "FiniteDifferenceGrid.h"
 #include "FemToGridVisitor.h"
 

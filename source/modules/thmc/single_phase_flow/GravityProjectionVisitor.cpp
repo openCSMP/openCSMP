@@ -1,4 +1,5 @@
 #include "GravityProjectionVisitor.h"
+#include "Region.h"
 
 using namespace std;
 
