@@ -135,65 +135,63 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
                  Element<dim>* const outer_parent,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
- : idx_(NULL_IDX),
-   innerParent_(inner_parent),
-   outerParent_(outer_parent)
+  : idx_(NULL_IDX),
+    innerParent_(inner_parent),
+    outerParent_(outer_parent),
+    inner_parent_face_id_(UNSPECIFIED),
+    outer_parent_face_id_(UNSPECIFIED)
  {
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
+    if ( innerParent_ == outerParent_ ) {
+         cerr <<"\n\nFace<"<< dim <<">(ctor: of face between parents): supplied pointers point to the same element: ";
+         cerr << inner_parent->Idx();
+         inner_parent->Out();
+         innerParent_ = nullptr;
+         outerParent_ = nullptr;
+         assert( innerParent_ != outerParent_ );
+         return;
+      }
     
     // finding the face which is shared
     // --------------------------------
-    // creating a search vector with keys for faces of the inner element if not at boundary
-    vector<set<Node<dim>*> > inner_faces;
+    bool  matching_face_found{false};
     const size_t n_faces_inner{innerParent_->Faces()};
-    inner_faces.reserve(n_faces_inner);
     for ( size_t i{0}; i<n_faces_inner; ++i )
-      if ( inner_parent->Neighbor(i) != nullptr ) {
+      if ( inner_parent->Neighbor(i) == outer_parent ) {
+           inner_parent_face_id_ = i;
+           // assigning the finite element
+           const CSMP_FEM_TYPE etype = outer_parent->FE()->ElementTypeOfFace(i);
+           FiniteElementPolicy<dim,csmp::Face>::Assign( fem_manager.E(etype) );
+           FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager.Stencil(etype) );
+           node_connector_.resize(this->FE()->Nodes(),nullptr);
+           face_connector_.resize(this->FE()->Faces(),nullptr);
+           // assigning the nodes
            vector<size_t> fnids;
            inner_parent->FE()->NodesOfFace( i, fnids );
-           set<Node<dim>*> nodeptrs;
-           for ( auto nit : fnids )
-             nodeptrs.insert( inner_parent->N( fnids[nit]) );
-        }
-    // searching the outer element for the shared face
-    const size_t n_faces_outer{outerParent_->Faces()};
-    bool  matching_face_found{false};
-    for ( size_t i{0}; i<n_faces_outer; ++i )
-      if ( outerParent_->Neighbor(i) != nullptr ) {
-           vector<size_t> fnids;
-           outerParent_->FE()->NodesOfFace( i, fnids );
-           set<Node<dim>*> nodeptrs;
-           for ( auto nit : fnids )
-             nodeptrs.insert( inner_parent->N(fnids[nit]) );
-           // is this one of the inner elements faces?
-           auto fit = find( inner_faces.begin(), inner_faces.end(), nodeptrs );
-           if ( fit != inner_faces.end() ) {
-                 inner_parent_face_id_ = distance(inner_faces.begin(),fit);
-                 outer_parent_face_id_ = i;
-                 // assigning the finite element
-                 const CSMP_FEM_TYPE etype = outer_parent->FE()->ElementTypeOfFace(i);
-                 FiniteElementPolicy<dim,csmp::Face>::Assign( fem_manager.E(etype) );
-                 FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager.Stencil(etype) );
-                 node_connector_.resize(this->FE()->Nodes(),nullptr);
-                 face_connector_.resize(this->FE()->Faces(),nullptr);
-                 // assigning the nodes in reverse order because they need to match the inner element
-                 size_t j{0};
-                 for ( vector<size_t>::reverse_iterator
-                       nit=fnids.rbegin(); nit!=fnids.rend(); ++nit, ++j )
-                   node_connector_[j] = outer_parent->N(*nit);
-                 // for later checks
-                 matching_face_found = true;
-                 break;
-             }
+           const size_t n_face_nodes{fnids.size()};
+           for ( size_t k{0}; k < n_face_nodes; ++k )
+             node_connector_[k] = inner_parent->N( fnids[k] );
+           // finding the number of the shared face in the outer element
+           const size_t n_faces_outer{outerParent_->Faces()};
+           for ( size_t j{0}; j<n_faces_outer; ++j )
+             if ( outer_parent->Neighbor(j) == inner_parent ) {
+                  outer_parent_face_id_ = j;
+                  break;
+               }
+           matching_face_found = true;
+           break;
         }
  
     // reporting the failed construction
     if ( !matching_face_found ) {
-         cerr <<"\nFace<"<< dim <<">(ctor: face between parents): parent elements "<< inner_parent->Idx();
+         cerr <<"\n\nFace<"<< dim <<">(ctor: face between parents): parent elements "<< inner_parent->Idx();
          cerr <<" and "<< outer_parent->Idx() <<" do not seem to share a face:\n";
          inner_parent->Out();
          outer_parent->Out();
+         innerParent_ = nullptr;
+         outerParent_ = nullptr;
+         return;
       }
 
     // creating local storage for face and face integration point variables

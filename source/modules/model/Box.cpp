@@ -1401,7 +1401,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( eptr->Neighbor(b_face) != nullptr ) {
-         csmp_error.notice( ERROR, "atBoundary:", "element face is not a boundary face.");
+//         csmp_error.notice( ERROR, "atBoundary:", "element face is not a boundary face.");
          return NOT;
       }
     if ( b_face >= eptr->Neighbors() ) {

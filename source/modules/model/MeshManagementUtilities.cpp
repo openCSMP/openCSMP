@@ -703,6 +703,56 @@ template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, c
 
 
 
+/*
+    Finds the face between 2 elements (if any) via the neighbor connectivity.
+*/
+template<size_t dim>
+pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<dim>* const eptr1, const Element<dim>* const eptr2 )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   if ( eptr1 == nullptr ) {
+        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to first element.");
+        return make_pair( UNSPECIFIED, UNSPECIFIED );
+     }
+   if ( eptr2 == nullptr ) {
+        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to second element.");
+        return make_pair( UNSPECIFIED, UNSPECIFIED );
+     }
+   if ( eptr1 == eptr2 ) {
+        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "the supplied pointers point to the same element!");
+        return make_pair( UNSPECIFIED, UNSPECIFIED );
+     }
+    
+    // 1. finding which face of element 1 is shared with element 2
+    size_t face_elmt1 = UNSPECIFIED;
+    const size_t n_faces1(eptr1->Faces());
+    for ( size_t i{0}; i<n_faces1; ++i )
+      if ( eptr1->Neighbor(i) == eptr2 ) {
+           face_elmt1 = i;
+           break;
+        }
+
+    // 2. finding which face of element 2 is shared with element 1
+    size_t face_elmt2 = UNSPECIFIED;
+    const size_t n_faces2(eptr2->Faces());
+    for ( size_t i{0}; i<n_faces2; ++i )
+      if ( eptr2->Neighbor(i) == eptr1 ) {
+           face_elmt2 = i;
+           break;
+        }
+
+    return make_pair( face_elmt1, face_elmt2 );
+    
+ } // end findAdjacentElementFaces
+ 
+template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<3>* const, const Element<3>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<2>* const, const Element<2>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<1>* const, const Element<1>* const );
+ 
+
+
+
 
 /**
      Finds the adjacent faces of the supplied elements via their shared nodes.
@@ -722,6 +772,10 @@ pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, c
      }
    if ( eptr2 == nullptr ) {
         csmp_error.notice( ERROR, "findAdjacentElementFaces", "null pointer to second element.");
+        return make_pair( UNSPECIFIED, UNSPECIFIED );
+     }
+   if ( eptr1 == eptr2 ) {
+        csmp_error.notice( ERROR, "findAdjacentElementFaces", "the supplied pointers point to the same element!");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
     

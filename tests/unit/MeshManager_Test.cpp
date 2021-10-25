@@ -433,12 +433,22 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
                  Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, ManifoldType::INTERFACE );
                  outside_nodes.push_back( onptr );
               }
+            // find matching faces via the shared nodes
+            pair<size_t,size_t> face_ids1 = findAdjacentElementFaces( eptr, eptr->Neighbor(i) );
+            _test( i == face_ids1.first );
+            // find matching faces via neighbor element pointers (faster)
+            pair<size_t,size_t> face_ids2 = findAdjacentFacesFromNeighbors( eptr, eptr->Neighbor(i) );
+            _test( face_ids1.first == face_ids2.first );
+            _test( face_ids1.first == face_ids2.second );
+            //                        inner  outer
+            ifptr = mesh.AddInterFace( eptr, face_ids1.first, eptr->Neighbor(i), face_ids1.second, ifvars, iivars );
+            interface_constructed = true;
             // create an intervening element
             const int32 material_id(5);
             Element<3U>*	ieptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_TRIANGLE, ifvars, iivars, middle_nodes, material_id );
-            //                        inner  outer
-            ifptr = mesh.AddInterFace( eptr, eptr->Neighbor(i), ifvars, iivars );
-            interface_constructed = true;
+            
+            // connecting the InterFace to the middle element
+            ifptr->Assign( ieptr );
          }
     }
   cout<<"\n\tcreated faces: ";

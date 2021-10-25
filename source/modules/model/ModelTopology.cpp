@@ -2424,224 +2424,287 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VS
  
  
  
+ 
+ 
+ 
 bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const
   {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
-     // 0. Preliminary checks
-     if ( !BoxShapedModel() ) {
-          throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions:",
-                                         "Model is not box shaped.");
-          return false;
-       }
+     set<string> boundary_regions;
 
-     // getting rid of previous bflags
-     vset.RemoveBflags();
-     vset.ResizeBFlags();
+     // 0. Extracting the names of valid BOUNDARY regions from file
+     // -----------------------------------------------------------
+     //  region name  etypes-of-region  elmt-ids for region
+     //   map<string, pair<set<string>,vector<size_t> > >  model_regions;
+     for ( auto it : model_regions ) {
+          const string region_name{ it.first };
+          if ( region_name.find("BOUNDARY") != std::string::npos ||
+               region_name.find("IRREGULAR") != std::string::npos ) {
+               // if it is a lower dimensional region
+               const auto etype = it.second.first.begin(); // .first.begin());
+               if ( isLineElement( parseFiniteElementType(*etype) ) == true )
+                 boundary_regions.insert( region_name );
+            }
+       }
 
      // 1. Making node ID sets for each of the standard boundaries
      // box boundaries
      // expects "BOTTOM","LEFT","RIGHT","TOP","FRONT","BACK"
-     std::set<size_t>  bottom, right, left, top, front, back,
-                       front_left, front_right, front_bottom, front_top,
-                       bottom_left, bottom_right,
-                       back_bottom, back_left, back_top, back_right,
-                       top_left, top_right;
+     deque<size_t>  bottom, right, left, top, front, back,
+                    front_left, front_right, front_bottom, front_top,
+                    bottom_left, bottom_right,
+                    back_bottom, back_left, back_top, back_right,
+                    top_left, top_right, irregular;
 
      for ( auto it=ElementsOfRegionBegin("BOTTOM");
            it!=ElementsOfRegionEnd("BOTTOM"); it++ ) {
            // accessing contiguous ranges of element ID's with it->size_t
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
-             bottom.insert( (*vit) );
+             bottom.push_back( (*vit) );
        }
      for ( auto it=ElementsOfRegionBegin("LEFT");
            it!=ElementsOfRegionEnd("LEFT"); it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
-             left.insert( (*vit) );
+             left.push_back( (*vit) );
        }
      for ( auto it=ElementsOfRegionBegin("RIGHT");
            it!=ElementsOfRegionEnd("RIGHT"); it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
-             right.insert( (*vit) );
+             right.push_back( (*vit) );
        }
      for ( auto it=ElementsOfRegionBegin("TOP");
            it!=ElementsOfRegionEnd("TOP"); it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
-             top.insert( (*vit) );
+             top.push_back( (*vit) );
        }
      for ( auto it=ElementsOfRegionBegin("FRONT");
            it!=ElementsOfRegionEnd("FRONT"); it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
-             front.insert( (*vit) );
+             front.push_back( (*vit) );
        }
      for ( auto it=ElementsOfRegionBegin("BACK");
            it!=ElementsOfRegionEnd("BACK"); it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
-             back.insert( (*vit) );
+             back.push_back( (*vit) );
        }
+     for ( auto it : boundary_regions )
+       for ( auto bit=ElementsOfRegionBegin(it.c_str());
+             bit!=ElementsOfRegionEnd(it.c_str()); bit++ )
+         for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+           irregular.push_back( (*bit) );
+
+     // making these containers unique
+     sort( bottom.begin(), bottom.end() );
+     bottom.erase( unique( bottom.begin(), bottom.end() ), bottom.end() );
+
+     sort( right.begin(), right.end() );
+     right.erase( unique( right.begin(), right.end() ), right.end() );
+
+     sort( top.begin(), top.end() );
+     top.erase( unique( top.begin(), top.end() ), top.end() );
+
+     sort( left.begin(), left.end() );
+     left.erase( unique( left.begin(), left.end() ), left.end() );
+
+     sort( front.begin(), front.end() );
+     front.erase( unique( front.begin(), front.end() ), front.end() );
+
+     sort( back.begin(), back.end() );
+     back.erase( unique( back.begin(), back.end() ), back.end() );
+
+     sort( irregular.begin(), irregular.end() );
+     irregular.erase( unique( irregular.begin(), irregular.end() ), irregular.end() );
+
 
      // -------------------------------------------------------------------------------
      // intersecting the sides to identify the edges
      // -------------------------------------------------------------------------------
      // FRONT_LEFT
-     std::insert_iterator<std::set<size_t> >  fl_it(front_left,front_left.begin());
+     insert_iterator<deque<size_t> >  fl_it(front_left,front_left.begin());
      set_intersection( front.begin(), front.end(), left.begin(), left.end(), fl_it );
 
      // FRONT_RIGHT
-     std::insert_iterator<std::set<size_t> >  fr_it(front_right,front_right.begin());
+     insert_iterator<deque<size_t> >  fr_it(front_right,front_right.begin());
      set_intersection( front.begin(), front.end(), right.begin(), right.end(), fr_it );
 
      // FRONT_BOTTOM
-     std::insert_iterator<std::set<size_t> >  fb_it(front_bottom,front_bottom.begin());
+     insert_iterator<deque<size_t> >  fb_it(front_bottom,front_bottom.begin());
      set_intersection( front.begin(), front.end(), bottom.begin(), bottom.end(), fb_it );
 
      // FRONT_TOP
-     std::insert_iterator<std::set<size_t> >  ft_it(front_top,front_top.begin());
+     insert_iterator<deque<size_t> >  ft_it(front_top,front_top.begin());
      set_intersection( front.begin(), front.end(), top.begin(), top.end(), ft_it );
 
      // BOTTOM_LEFT
-     std::insert_iterator<std::set<size_t> >  bl_it(bottom_left,bottom_left.begin());
+     insert_iterator<deque<size_t> >  bl_it(bottom_left,bottom_left.begin());
      set_intersection( bottom.begin(), bottom.end(), left.begin(), left.end(), bl_it );
 
      // BOTTOM_RIGHT
-     std::insert_iterator<std::set<size_t> >  br_it(bottom_right,bottom_right.begin());
+     insert_iterator<deque<size_t> >  br_it(bottom_right,bottom_right.begin());
      set_intersection( bottom.begin(), bottom.end(), right.begin(), right.end(), br_it );
 
      // BACK_BOTTOM
-     std::insert_iterator<std::set<size_t> >  bb_it(back_bottom,back_bottom.begin());
+     insert_iterator<deque<size_t> >  bb_it(back_bottom,back_bottom.begin());
      set_intersection( back.begin(), back.end(), bottom.begin(), bottom.end(), bb_it );
 
      // BACK_LEFT
-     std::insert_iterator<std::set<size_t> >  bal_it(back_left,back_left.begin());
+     insert_iterator<deque<size_t> >  bal_it(back_left,back_left.begin());
      set_intersection( back.begin(), back.end(), left.begin(), left.end(), bal_it );
 
      // TOP_LEFT
-     std::insert_iterator<std::set<size_t> >  tl_it(top_left,top_left.begin());
+     insert_iterator<deque<size_t> >  tl_it(top_left,top_left.begin());
      set_intersection( top.begin(), top.end(), left.begin(), left.end(), tl_it );
 
      // BACK_TOP
-     std::insert_iterator<std::set<size_t> >  bt_it(back_top,back_top.begin());
+     insert_iterator<deque<size_t> >  bt_it(back_top,back_top.begin());
      set_intersection( back.begin(), back.end(), top.begin(), top.end(), bt_it );
 
      // TOP_RIGHT
-     std::insert_iterator<std::set<size_t> >  tr_it(top_right,top_right.begin());
+     insert_iterator<deque<size_t> >  tr_it(top_right,top_right.begin());
      set_intersection( top.begin(), top.end(), right.begin(), right.end(), tr_it );
 
      // BACK_RIGHT
-     std::insert_iterator<std::set<size_t> >  bar_it(back_right,back_right.begin());
+     insert_iterator<deque<size_t> >  bar_it(back_right,back_right.begin());
      set_intersection( back.begin(), back.end(), right.begin(), right.end(), bar_it );
 
      // 2. Flagging the nodes on the sides according to the boundaries
-     std::set<size_t>::const_iterator  sit;
-
-     // "BOTTOM","LEFT","RIGHT","TOP","FRONT","BACK"
-     for ( sit=bottom.begin(); sit!=bottom.end(); sit++ ) vset.AddBFlag( (*sit), BOTTOM_OUTSIDE );
-     for ( sit=left.begin();   sit!=left.end();   sit++ ) vset.AddBFlag( (*sit), LEFT_OUTSIDE );
-     for ( sit=right.begin();  sit!=right.end();  sit++ ) vset.AddBFlag( (*sit), RIGHT_OUTSIDE );
-     for ( sit=top.begin();    sit!=top.end();    sit++ ) vset.AddBFlag( (*sit), TOP_OUTSIDE );
-     for ( sit=front.begin();  sit!=front.end();  sit++ ) vset.AddBFlag( (*sit), FRONT_OUTSIDE );
-     for ( sit=back.begin();   sit!=back.end();   sit++ ) vset.AddBFlag( (*sit), BACK_OUTSIDE );
+     // zapping all previous box boundary flags
+     for ( auto bit=vset.BFlagsBegin(); bit!= vset.BFlagsEnd(); ++bit ) (*bit) = NOT;
+     // assigning "IRREGULAR","BOTTOM","LEFT","RIGHT","TOP","FRONT","BACK"
+     for ( auto it : irregular ) vset.AddBFlag( it, IRREGULAR_OUTSIDE );
+     for ( auto it : bottom ) vset.AddBFlag( it, BOTTOM_OUTSIDE );
+     for ( auto it : left ) vset.AddBFlag( it, LEFT_OUTSIDE );
+     for ( auto it : right ) vset.AddBFlag( it, RIGHT_OUTSIDE );
+     for ( auto it : top ) vset.AddBFlag( it, TOP_OUTSIDE );
+     for ( auto it : front ) vset.AddBFlag( it, FRONT_OUTSIDE );
+     for ( auto it : back ) vset.AddBFlag( it, BACK_OUTSIDE );
      // edges
-     for ( sit=back_bottom.begin();  sit!=back_bottom.end();  sit++ ) vset.AddBFlag( (*sit), BACK_BOTTOM );
-     for ( sit=back_right.begin();   sit!=back_right.end();   sit++ ) vset.AddBFlag( (*sit), BACK_RIGHT );
-     for ( sit=back_top.begin();     sit!=back_top.end();     sit++ ) vset.AddBFlag( (*sit), BACK_TOP );
-     for ( sit=back_left.begin();    sit!=back_left.end();    sit++ ) vset.AddBFlag( (*sit), BACK_LEFT );
-     for ( sit=bottom_left.begin();  sit!=bottom_left.end();  sit++ ) vset.AddBFlag( (*sit), BOTTOM_LEFT );
-     for ( sit=bottom_right.begin(); sit!=bottom_right.end(); sit++ ) vset.AddBFlag( (*sit), BOTTOM_RIGHT );
-     for ( sit=top_right.begin();    sit!=top_right.end();    sit++ ) vset.AddBFlag( (*sit), TOP_RIGHT );
-     for ( sit=top_left.begin();     sit!=top_left.end();     sit++ ) vset.AddBFlag( (*sit), TOP_LEFT );
-     for ( sit=front_bottom.begin(); sit!=front_bottom.end(); sit++ ) vset.AddBFlag( (*sit), FRONT_BOTTOM );
-     for ( sit=front_right.begin();  sit!=front_right.end();  sit++ ) vset.AddBFlag( (*sit), FRONT_RIGHT );
-     for ( sit=front_top.begin();    sit!=front_top.end();    sit++ ) vset.AddBFlag( (*sit), FRONT_TOP );
-     for ( sit=front_left.begin();   sit!=front_left.end();   sit++ ) vset.AddBFlag( (*sit), FRONT_LEFT );
+     for ( auto it : back_bottom ) vset.AddBFlag( it, BACK_BOTTOM );
+     for ( auto it : back_right ) vset.AddBFlag( it, BACK_RIGHT );
+     for ( auto it : back_top ) vset.AddBFlag( it, BACK_TOP );
+     for ( auto it : back_left ) vset.AddBFlag( it, BACK_LEFT );
+     for ( auto it : bottom_left ) vset.AddBFlag( it, BOTTOM_LEFT );
+     for ( auto it : bottom_right ) vset.AddBFlag( it, BOTTOM_RIGHT );
+     for ( auto it : top_right ) vset.AddBFlag( it, TOP_RIGHT );
+     for ( auto it : top_left ) vset.AddBFlag( it, TOP_LEFT );
+     for ( auto it : front_bottom ) vset.AddBFlag( it, FRONT_BOTTOM );
+     for ( auto it : front_right ) vset.AddBFlag( it, FRONT_RIGHT );
+     for ( auto it : front_top ) vset.AddBFlag( it, FRONT_TOP );
+     for ( auto it : front_left ) vset.AddBFlag( it, FRONT_LEFT );
 
      // Flagging the corner nodes
-     std::set<size_t>                    corner;
-     std::insert_iterator<std::set<size_t> >  cit(corner,corner.begin());
 
      // The -Z axis (backward) facing plane of the model
      // CNR1
-     set_intersection( back_left.begin(), back_left.end(),
-                       back_bottom.begin(), back_bottom.end(), cit );
+     {
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( back_left.begin(), back_left.end(),
+                         back_bottom.begin(), back_bottom.end(), cit );
 
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
-                                                           "CNR1 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MIN );
-     corner.erase( corner.begin(), corner.end() );
-
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
+                                                             "CNR1 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MIN );
+     }
+     
      // CNR2
-     set_intersection( back_bottom.begin(), back_bottom.end(),
-                       back_right.begin(), back_right.end(), cit );
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
-                                                           "CNR2 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXX );
-     corner.erase( corner.begin(), corner.end() );
-
+     {
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( back_bottom.begin(), back_bottom.end(),
+                         back_right.begin(), back_right.end(), cit );
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
+                                                             "CNR2 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXX );
+     }
      // CNR3
-     set_intersection( back_right.begin(), back_right.end(),
-                       back_top.begin(), back_top.end(), cit );
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
-                                                           "CNR3 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXX );
-     corner.erase( corner.begin(), corner.end() );
-
+     {
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( back_right.begin(), back_right.end(),
+                         back_top.begin(), back_top.end(), cit );
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
+                                                             "CNR3 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXX );
+     }
      // CNR4
-     set_intersection( back_left.begin(), back_left.end(),
-                       back_top.begin(), back_top.end(), cit );
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
-                                                           "CNR4 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MAX_MINXZ );
-     corner.erase( corner.begin(), corner.end() );
-
+     {
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( back_left.begin(), back_left.end(),
+                         back_top.begin(), back_top.end(), cit );
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
+                                                             "CNR4 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MAX_MINXZ );
+     }
      // The Z axis (forward) facing plane of the model
      // CNR5
-     set_intersection( front_left.begin(), front_left.end(),
-                       front_bottom.begin(), front_bottom.end(), cit );
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
-                                                           "CNR5 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXZ );
-     corner.erase( corner.begin(), corner.end() );
-
-     // CNR6
-     set_intersection( front_right.begin(), front_right.end(),
-                       front_bottom.begin(), front_bottom.end(), cit );
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
-                                                           "CNR6 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXXZ );
-     corner.erase( corner.begin(), corner.end() );
-
-     // CNR7
-     set_intersection( front_right.begin(), front_right.end(),
-                       front_top.begin(), front_top.end(), cit );
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
-                                                           "CNR7 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MAX );
-     corner.erase( corner.begin(), corner.end() );
-
-     // CNR8
-     set_intersection( front_left.begin(), front_left.end(),
-                       front_top.begin(), front_top.end(), cit );
-     if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagNodesUsingBoundaryRegions",
-                                                           "CNR8 could not be identified");
-     else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXZ );
-
-     if( csmp_error.Verbose() )
      {
-         std::cout <<"\nModelTopology<3>::FlagNodesUsingBoundaryRegions: ";
-         std::cout <<"Assigned CSMP associated boundary flags to the nodes."<< std::endl;
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( front_left.begin(), front_left.end(),
+                         front_bottom.begin(), front_bottom.end(), cit );
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
+                                                             "CNR5 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXZ );
      }
+     // CNR6
+     {
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( front_right.begin(), front_right.end(),
+                         front_bottom.begin(), front_bottom.end(), cit );
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
+                                                             "CNR6 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXXZ );
+     }
+     // CNR7
+     {
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( front_right.begin(), front_right.end(),
+                         front_top.begin(), front_top.end(), cit );
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology<3>::FlagNodesUsingBoundaryRegions",
+                                                             "CNR7 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MAX );
+     }
+     // CNR8
+     {
+       deque<size_t> corner;
+       insert_iterator<deque<size_t> >  cit(corner,corner.begin());
+       set_intersection( front_left.begin(), front_left.end(),
+                         front_top.begin(), front_top.end(), cit );
+       if ( corner.empty() )
+         throw csmp::Exception( ERROR, "ModelTopology::FlagNodesUsingBoundaryRegions",
+                                                             "CNR8 could not be identified");
+       else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXZ );
+     }
+
+     if ( csmp_error.Verbose() ) {
+          cout <<"\nModelTopology<3>::FlagNodesUsingBoundaryRegions: ";
+          cout <<"Assigned CSMP associated boundary flags to the nodes."<< std::endl;
+       }
 
      return true;
 
   } // end FlagNodesUsingBoundaryRegions
+
+// DEBUGGING
+//cerr <<"\nModelTopology::FlagNodesUsingBoundaryRegions: boundary flags:\n";
+//size_t counter{0};
+//for ( auto it=vset.BFlagsBegin(); it!=vset.BFlagsEnd(); ++it, ++counter )
+//  if ( static_cast<BOX_BOUNDARY>(*it) != NOT ) {
+//       cerr <<" "<< counter <<":"<< parseBoundary( static_cast<BOX_BOUNDARY>(*it) );
+//    }
+//cerr << endl << endl;
 
  
 

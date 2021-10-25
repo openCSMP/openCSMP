@@ -193,15 +193,15 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
     std::ifstream ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                       "ASCII geometry input file with extension '.asc' could not be opened");
+                                    "ASCII geometry input file with extension '.asc' could not be opened");
     
     if ( !ReadTitleASCII( ifs_asc, file_header_ ) )     // O.K.
       csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                    "File header not read correctly");
+                                 "File header not read correctly");
 
     if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) // O.K. - produces object_specs_
       csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
-                                    "Region and element type information not read correctly");
+                                 "Region and element type information not read correctly");
    
     convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_, dim );
     ifs_asc.close(); // '*.asc' geometry file

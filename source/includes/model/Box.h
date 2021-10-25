@@ -25,7 +25,7 @@ template<size_t> class Model;
 */
 
 /// fixed boundary identifiers; @attention do not alter numbering or sequence because it is used in iterations
-enum {
+enum : std::int8_t {
   IRREGULAR_OUTSIDE = -1,
   LEFT_OUTSIDE = -2,  ///< model boundary flags
   RIGHT_OUTSIDE = -3,  ///< ...

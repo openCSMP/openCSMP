@@ -330,7 +330,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
               this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */);
               // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
               cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
-              recreateBoxBoundaryFlags(*this);
             }
           // irregularly shaped models
           else {
@@ -409,8 +408,8 @@ void Model<dim>::Initialize( bool isoparametric_elements,
   // 5. Forming Boundaries
   if ( create_boundaries ) {
       if ( !non_box_shaped_model && this->BoxShaped() ) {
-          this->EstablishBoxBoundaries();
-          if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
+           this->EstablishBoxBoundaries();
+           if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
         }
       else {
           const bool contiguous_model( mesh_manager_.IsContiguous() );
@@ -535,9 +534,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     // if the model is box-shaped (albeit perhaps with irregular top surface)
     if ( !fully_irregular_mesh ) {
         this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
-        // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-        cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
-        recreateBoxBoundaryFlags( *this );
       }
     // irregularly shaped models
     else {

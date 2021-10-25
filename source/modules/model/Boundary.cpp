@@ -975,6 +975,7 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
 
   // creating the connectivity among the new faces
   meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+// WORKS MORE OFTEN -  meshManager.template BuildConnectivity<Face>( meshManager.FacesBegin(), meshManager.FacesEnd() );
 
   // initialize boundary essentials
   Initialize( boxBoundary );

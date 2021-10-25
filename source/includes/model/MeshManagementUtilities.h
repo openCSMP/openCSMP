@@ -129,7 +129,11 @@ void distanceWeights( typename std::vector<Node<dim>*>::const_iterator nodes_beg
                       typename std::vector<Node<dim>*>::const_iterator nodes_end,
                       std::vector<std::vector<double64> >& distances_and_weight );
 
-/// assuming that the elements are adjacent, method finds their faces that are in contact with one another
+/// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
+template<size_t dim>
+std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<dim>* const eptr1, const Element<dim>* const eptr2 );
+
+/// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (slower)
 template<size_t dim>
 std::pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, const Element<dim>* const eptr2 );
 
