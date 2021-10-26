@@ -1585,6 +1585,7 @@ static void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::
    
     // creating keys for the perimeter element faces of boundary1
     vector<size_t>  fnids;
+    // looping over the Face edges on the boundary, creating the keys from sets of node pointers
     for ( size_t i=boundary.InteriorElements(); i<boundary.Elements(); ++i )
       for ( size_t j=0U; j<boundary.PerimeterFaces(i); ++j )
         {
@@ -1623,7 +1624,7 @@ static void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
    
     // 1. making a map of the parent faces that each node is connected to
     //  key       faces that are connected to the node (should be 2 at most)
-    unordered_map<Node<3U>*,set<Face<3U>*> > parent_faces;
+    map<Node<3U>*,set<Face<3U>*> > parent_faces;
    
     for ( auto& it : line_faces ) {
          set<Face<3U>*> parents({it});
@@ -1687,15 +1688,22 @@ static void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
 
 
 /**
+    Creates a model boundary EDGE#  of Face objects that are line elements and have the boundary surface elements as higher dimensional neighbors.
+     
+     The method does not require the presence of line elements on the edge of interest but finds it by matching the edges of boundary perimeter faces.
+
     @param shared_faces is a vector of the Face objects that were created in the MeshManager in the boundary creation process
  
     @return if the operation was successful
 */
-static bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& boundary1, const Boundary<3U>& boundary2, std::vector<Face<3U>*>&  shared_faces )
+static bool createBoundaryFromSharedEdge( Model<3U>& model,
+                                          const Boundary<3U>& boundary1, const Boundary<3U>& boundary2,
+                                          vector<Face<3U>*>&  shared_faces )
  {
     if ( !shared_faces.empty() ) shared_faces.clear();
-   
-    // creating keys for the perimeter element faces of boundary1
+ 
+    // 1. creating keys for the perimeter element faces of boundary1
+    // ------------------------------------------------------------------
     map<set<csmp::Node<3U>*>,Face<3U>*>  perimeter_keys1, perimeter_keys2;
     createPerimeterKeysFor( boundary1, perimeter_keys1 );
     createPerimeterKeysFor( boundary2, perimeter_keys2 );
@@ -1713,39 +1721,53 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& 
          // if there is a matching face pair of adjacent Faces is captured
          // and their parent elements are discovered
          if ( it2 != perimeter_keys2.end() ) {
+               // 2. finding parent elements of Faces and their segments that coincide with the new line Face
+               // -------------------------------------------------------------------------------------------
+               Element<3U>*  parent1 = (*it1).second->InnerParent();
+               Element<3U>*  parent2 = (*it2).second->InnerParent();
+               if ( parent1 == parent2 ) parent2 = nullptr;
                vector<Node<3U>*>  segment_nodes;
-               // finding the parent elements of the neighbors faces as these will
-               // be used to create the higher dimensional neighbors of the edge Faces ?!
-               // convention: the element in the first map is the inner element
-               //             it is taken as the edge created from boundary which precedes the other in the enumeration
-               Element<3U>*   inner   = (*it1).second->InnerParent();
-               Element<3U>*   outer   = (*it2).second->InnerParent();
-               // the same finite element type represents all edges in volumetric elements
-               FiniteElement* fem_ptr = model.FE_Manager().E( inner->FE()->ElementTypeOfSegment(0) );
-               assert( fem_ptr != nullptr );
+               size_t segment_id_parent1 = UNSPECIFIED;
+               size_t segment_id_parent2 = UNSPECIFIED;
+               // 2.1 parent element of Face 1
+               // ----------------------------
                // establishing the face-node sequence of the inner element face that will be shared with the new Face object
-               for ( size_t i=0U; i<inner->Segments(); ++i ) {
+               for ( size_t i=0U; i<parent1->Segments(); ++i ) {
                     vector<size_t> snids; // local segment node ids
-                    inner->FE()->NodesOfSegment( i, snids );
+                    parent1->FE()->NodesOfSegment( i, snids );
                     set<csmp::Node<3U>*> nset;
-                    for ( size_t k=0U; k<snids.size(); ++k ) nset.insert( inner->N(snids[k]) );
+                    for ( size_t k=0U; k<snids.size(); ++k ) nset.insert( parent1->N(snids[k]) );
                     if ( nset == (*it1).first ) {
-                          // establishing the finite-element type associated with Segment (of
-                          // fem_ptr = model.FE_Manager().E( inner->FE()->ElementTypeOfSegment(i) );
-                          // assert( fem_ptr != nullptr );
+                          segment_id_parent1 = i;
                           // capturing the segment nodes for the construction of the Face object
                           segment_nodes.reserve( snids.size() );
                           for ( size_t j=0U; j<snids.size(); ++j )
-                            segment_nodes.push_back( inner->N(snids[j]) );
+                            segment_nodes.push_back( parent1->N(snids[j]) );
                           assert( segment_nodes.size() >= 2U );
+                          // 2.2 parent of Face 2
+                          // --------------------
+                          // finding which segment this in parent2 if it exists
+                          if ( parent2 != nullptr ) {
+                               for ( size_t j{0}; j<parent2->Segments(); ++j ) {
+                                    vector<size_t> snids2; // local segment node ids
+                                    parent2->FE()->NodesOfSegment( j, snids2 );
+                                    set<csmp::Node<3U>*> nset2; // search set of node pointers
+                                    for ( size_t n=0U; n<snids2.size(); ++n ) nset2.insert( parent2->N(snids2[n]) );
+                                    if ( nset == nset2 ) {
+                                         segment_id_parent2 = j;
+                                         break;
+                                      }
+                                 }
+                            }
                           break;
                       }
                  }
         
                // creating the face in MeshManager
-			         Face<3U>* const faceObj = model.Mesh().AddFace( inner, outer,
-                                                               lvsFaces, lvsIntegrationPoints,
-                                                               segment_nodes );
+			         Face<3U>* const faceObj = model.Mesh().AddEdgeFace( (*it1).second, segment_id_parent1,
+                                                                   (*it2).second, segment_id_parent2,
+                                                                   lvsFaces, lvsIntegrationPoints,
+                                                                   segment_nodes );
 			        shared_faces.push_back(faceObj);
            }
       }

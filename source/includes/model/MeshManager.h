@@ -150,6 +150,13 @@ public:
                             const IntegrationPointVariables&,
                             const std::vector<Node<dim>*>& nodes );
 
+  /// creates a lower-dimensional face with parents of adjacent higher-dimensional Face objects as parents; deduces element type
+  Face<dim>* const AddEdgeFace( Face<dim>* const adjacent_face1, size_t parent_elmt1_segm_id,
+                                Face<dim>* const adjacent_face2, size_t parent_elmt2_segm_id,
+                                const LocalVariables&,
+                                const IntegrationPointVariables&,
+                                const std::vector<Node<dim>*>& nodes );
+
   /// adds Face that caps a higher-dimensional Element at the model boundary
   Face<dim>* const AddBoundaryFace( csmp::Element<dim>* const innerParent,
                                     size_t local_face_id,

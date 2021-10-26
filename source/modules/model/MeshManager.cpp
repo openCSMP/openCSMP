@@ -1013,6 +1013,12 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
      csmp_error.notice( INFO, "MeshManager<dim>::ReplaceElementByFace", "finite volume stencil pointer not initialised");
    if ( inner_eptr == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "pointer to higher dimensional element on inside not initialised");
+   if ( inner_eptr == outer_eptr ) {
+        csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "cannot create Face"
+                                  "pointer to higher dimensional elements are the same");
+        return nullptr;
+     }
+       
 #ifdef DEBUG
    // node vector
    for ( size_t i=0U; i<eptr->Nodes(); ++i )
@@ -1067,7 +1073,11 @@ Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent,
      csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on inside not initialised");
    if ( outer_parent == nullptr )
      csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on ouside not initialised");
-   
+   if ( outer_parent == inner_parent ) {
+        csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "cannot create Face",
+                                 "pointers to higher dimensional elements are both the same.");
+        return nullptr;
+     }
    // 1. constructing new face
    const size_t face_id = faces_.size();
    faces_.push_back( new Face<dim>( fem_manager_, fvm_manager_, inner_parent, outer_parent, lvars, ivars ) );
@@ -1078,6 +1088,56 @@ Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent,
 
 } // end AddFace
 
+
+
+
+
+/*
+    Creates lower-dimensional (line-element) face between supplied faces.
+*/
+template<size_t dim>
+Face<dim>* const MeshManager<dim>::AddEdgeFace( Face<dim>* const adjacent_face1,
+                                                size_t parent_elmt1_segm_id,
+                                                Face<dim>* const adjacent_face2,
+                                                size_t parent_elmt2_segm_id,
+                                                const LocalVariables& lvars,
+                                                const IntegrationPointVariables& ivars,
+                                                const std::vector<Node<dim>*>& nodes )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( adjacent_face1 == nullptr ) {
+       csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional Face1 on inside not initialised");
+       return nullptr;
+    }
+   if ( adjacent_face1 == adjacent_face2 ) {
+       csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "Face pointers point to same Face", "Nothing was done");
+       return nullptr;
+     }
+
+   // 1. if there is only one higher-dimensional neighbor for line element face
+   if ( adjacent_face1->InnerParent() == adjacent_face2->InnerParent() ) {
+        // 1.1 if one of the two faces has yet a different parent
+        
+        // 1.2 if there is only one parent
+     }
+
+   // 2. if there are two neighbors so that the face can be constructed without issues
+   const size_t face_id = faces_.size();
+   const CSMP_FEM_TYPE etype = adjacent_face1->FE()->ElementTypeOfFace(adjacent_face1->InnerParentFaceID());
+   faces_.push_back( new Face<dim>( fem_manager_.E(etype), fvm_manager_,
+                                    adjacent_face1->InnerParent(), adjacent_face2->InnerParent(),
+                                    parent_elmt1_segm_id, parent_elmt2_segm_id,
+                                    nodes, lvars, ivars ) );
+   // assigning a face number
+   Face<dim>* const fptr = faces_.back();
+   fptr->Idx( face_id );
+
+   return fptr;
+
+} // end AddFace(from Face objects_)
 
 
 
@@ -1134,6 +1194,11 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
      csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
    if ( outer_parent == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+   if ( inner_parent == outer_parent ) {
+        csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
+                                  "inner and outer parent pointers are the same");
+        return nullptr;
+     }
 
    assert( inner_element_face_id < inner_parent->Faces() );
    assert( outer_element_face_id < outer_parent->Faces() );

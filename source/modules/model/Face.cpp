@@ -274,10 +274,9 @@ Face<dim>::Face( Element<dim>& e,
 
 
 /**
-    Constructs model-edge line-element face connected with two volumetric elements at model boundary sharing its nodes
+    Constructs model-edge line-element face connected with the two surface  elements of model boundary sharing its nodes
     
-    The volumetric elements have to be chosen such that that share an edge with the line element
-    and a boundary face which also shares one of its edges with the line element
+    The higher-dimensional Faces  have to share an edge with the line element.
     
     @param edge_nodes contains node pointers in the sequence in which they appear on the edge of
     the inner volumetric element that is adjacent to the Face
@@ -288,21 +287,25 @@ Face<dim>::Face( Element<dim>& e,
 template<size_t dim>
 Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
                  const FiniteVolumeStencilManager<dim>& fvm_manager,
-                 Element<dim>* const inner_parent,
-                 Element<dim>* const outer_parent,
+                 Element<dim>* const parent_of_face1,
+                 Element<dim>* const parent_of_face2,
+                 size_t parent_elmt1_segm_id,
+                 size_t parent_elmt2_segm_id,
                  const std::vector<Node<dim>*>&  edge_nodes,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
  : FiniteElementPolicy<dim,csmp::Face>(FE_type_of_boundary_face),
    FiniteVolumePolicy<dim,csmp::Face>(fvm_manager.Stencil(FE_type_of_boundary_face->ElementType())),
    idx_(NULL_IDX),
-   innerParent_(inner_parent),
-   outerParent_(outer_parent),
+   innerParent_(parent_of_face1),
+   outerParent_(parent_of_face2),
+   inner_parent_face_id_(parent_elmt1_segm_id),
+   outer_parent_face_id_(parent_elmt2_segm_id),
    node_connector_(edge_nodes),
    face_connector_(2U,nullptr)
  {
     assert( innerParent_ != nullptr );
-    assert( outerParent_ != nullptr );
+    // assert( outerParent_ != nullptr );
    
     // creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
