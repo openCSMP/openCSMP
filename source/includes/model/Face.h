@@ -95,13 +95,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-    /// PREFERED  constructor for MeshManager - initailse process creates face with together with variable storage
-    Face( csmp::FiniteElement*,
-          const csmp::FiniteVolumeStencil<dim>*,
-          const LocalVariables&,
-          const IntegrationPointVariables& );
-
-    /// for RECONSTRUCTION of model from binary file; with storage but without connectivity
+    /// for (RE)CONSTRUCTION of model from binary file; with storage but without connectivity
     Face( size_t index,
           csmp::FiniteElement*,
           const csmp::FiniteVolumeStencil<dim>*,

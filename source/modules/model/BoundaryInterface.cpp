@@ -1977,15 +1977,13 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
   @test updated by SKM 2016
   */
   template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-  bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions )
+  pair<set<string>,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions )
   {
 	  BOUNDARY_COMPLEX<dim>* boundaryComplex(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
 	  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
 
-	  std::vector<std::string> eligibleRegions;
-	  eligibleRegions.reserve(boundaryComplex->UniqueRegions());
-
-	  for ( typename std::map<std::string, csmp::Region<dim> >::iterator
+	  set<string> eligibleRegions;
+	  for ( typename map<std::string, csmp::Region<dim> >::iterator
 		      it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it )
       {
         if (!IsBoundaryName(it->first))
@@ -1996,7 +1994,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
             if ( containsVolumeElements(boundaryComplex->Region("Model")) and !containsSurfaceElements(it->second) )
               continue;
          }
-        eligibleRegions.push_back(it->first);
+        eligibleRegions.insert(it->first);
       }
 
 	  // if the boundary called 'Model_BOUNDARY' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
@@ -2004,7 +2002,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
 	  if ( eligibleRegions.empty() ) {
          csmp_error.notice( WARNING, "BoundaryInterface::EstablishBoundariesFromRegions",
                            "unable to find eligible lower-dimensional regions to create Boundary objects from");
-         return false;
+         return make_pair( set<string>{"no boundaries created"}, false );
       }
 
 
@@ -2023,25 +2021,20 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
            boundaryComplex->RemoveRegion( it.c_str() );
       }
     else { // moving them out of the unique regions map into the non-unique regions
-        for (size_t i = 0; i < eligibleRegions.size(); ++i) {
-            auto& region_name = eligibleRegions[i];
-            if (region_name != "Model_BOUNDARY") {
-              std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromRegions: Removing region '";
-              std::cout << region_name << "' from 'Model' since it was transformed into Boundary...";
-              boundaryComplex->RemoveFromRegion("Model", region_name.c_str());
-              if (remove_original_lower_dimensional_regions)
-                boundaryComplex->RemoveRegion( region_name.c_str() );
-              else
-                boundaryComplex->MoveToNonUniqueRegions(region_name.c_str());
-            }
+        for ( auto it : eligibleRegions ) {
+            cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromRegions: Removing region '";
+            cout << it << "' from 'Model' since it was transformed into Boundary...";
+            boundaryComplex->RemoveFromRegion("Model", it.c_str());
+            if (remove_original_lower_dimensional_regions)
+              boundaryComplex->RemoveRegion( it.c_str() );
+            else
+              boundaryComplex->MoveToNonUniqueRegions( it.c_str() );
           }
      }
 
-
-	  std::cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
+	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     // if there are some unattributed faces left the method returs false
-    if ( this->ContainsBoundary("Model_Boundary") ) return false;
-	  return true;
+	  return make_pair( eligibleRegions, true );
 
   } // end EstablishBoundariesFromRegions
 

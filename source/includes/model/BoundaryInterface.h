@@ -101,11 +101,11 @@ class BoundaryInterface {
     /// for  creation of boundaries on the outside of the model; no partitioning based on contacting regions will occur
     bool CreateExternalBoundaryFrom( const char* dimension_minus1_region, BOX_BOUNDARY boxBoundary = NOT );
 
-    /// insert lower-dimensional Region between two equidimensional unique regions, and then converts it into Boundary; returns boundary name
-    std::pair<std::string,bool>  CreateBoundaryBetween( const char* region1, const char* region2 );
-
     /// converts lower dimensional element regions surrounding the target region and containing strings like BOUNDARY in their name into a Boundary<Face> object
     bool CreateBoundaryAround( const char* region, BOX_BOUNDARY boxBoundary = NOT );
+
+    /// insert lower-dimensional Region between two equidimensional unique regions, and then converts it into Boundary; returns boundary name
+    std::pair<std::string,bool>  CreateBoundaryBetween( const char* region1, const char* region2 );
 
     /// Removes boundary with  deletion of its faces in the MeshManager
     void RemoveBoundary( const char* boundary );
@@ -140,7 +140,7 @@ class BoundaryInterface {
     bool EstablishBoxBoundaries();
   
     /// inserts  box boundary or irregular csmp::Boundary objects for all eligible regions in the model
-    bool EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
+    std::pair<std::set<std::string>,bool>  EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
 
     /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
     bool EstablishBoxBoundariesFromOrientation();

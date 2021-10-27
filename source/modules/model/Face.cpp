@@ -45,9 +45,11 @@ Face<dim>::Face()
     @attention the costly part of this constructor is the determination
     of the indices of the faces of the higher dimensional elements  that match this face
     
-    @author SKM 
-    @date   1/4/2016
+    @note used by MeshManager::ReplaceElementByFace
 
+    @author SKM
+    @date   1/4/2016
+    
 */
 template<size_t dim>
 Face<dim>::Face( const Element<dim>& elmt,
@@ -210,6 +212,11 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
 
 
 
+
+
+/**
+    @note used by MeshManager::AddFace
+*/
 template<size_t dim>
 Face<dim>::Face( const FiniteElementManager& fem_manager,
                  const FiniteVolumeStencilManager<dim>& fvm_manager,
@@ -289,12 +296,6 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
 
 
 
-
-
-
-
-
-
 /*
    // checking the type of element
    if ( feptr->ElementType() != outer_parent->FE()->ElementTypeOfFace(i) ) {
@@ -318,6 +319,8 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
  
     @note boundary element from which face is constructed may have multiple 
     boundary faces, therefore the nth_boundary face variable is required
+
+    @note used by MeshManager::AddBoundaryFace
 */
 template<size_t dim>
 Face<dim>::Face( Element<dim>& e,
@@ -375,6 +378,8 @@ Face<dim>::Face( Element<dim>& e,
     
     @attention in this case, the higher-dimensional neighbors of the Face do not share faces,
     but edges with the lower-dimensional element. Therefore the face_node_id's are not assigned.
+
+    @note used by MeshManager::AddEdgeFace
 */
 template<size_t dim>
 Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
@@ -411,38 +416,11 @@ Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
 
 
 
-/**
-    Constructor that just allocates storage for connections and  variable storage.
-    
-    @note used in most cases
-*/
-template<size_t dim>
-Face<dim>::Face( csmp::FiniteElement* f,
-                 const csmp::FiniteVolumeStencil<dim>* fvs,
-                 const LocalVariables& ep,
-                 const IntegrationPointVariables& ip )
-
-  : FiniteElementPolicy<dim,csmp::Face>(f),
-    FiniteVolumePolicy<dim,csmp::Face>(fvs),
-    idx_(UINT_MAX),
-    node_connector_(f->Nodes(),nullptr),
-    face_connector_(f->Neighbors(),nullptr),
-    innerParent_( nullptr ),
-    outerParent_( nullptr )
- {
-    // LVS must be resized here because the finite element pointer has to be initialised before
-    if ( this->UsesLocalCoordinates() )
-        this->ResizePropertyStorage( ep, ip );
-    else
-        this->ResizePropertyStorage( ep );
- }
-
-
 
 /**
     Re-constructor with storage but without connectivity.
     
-    @note used to reconstruct model from native binary file
+    @note used to reconstruct model from VSet::VData / native binary file (MeshManager::Initialise)
 */
 template<size_t dim>
 Face<dim>::Face( size_t index,
