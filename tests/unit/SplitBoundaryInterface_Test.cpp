@@ -1033,7 +1033,7 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
   // -------------------------------------------
   // do this sequentially according to neighbours, otherwise boundaries are not assgiend properly
   for ( auto it : region_final_pairs ) // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
-    modelIN->InsertSplitBoundary( it.first.c_str(), it.second.c_str() );
+    modelIN->CreateSplitBoundaryBetween( it.first.c_str(), it.second.c_str() );
   
   // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')

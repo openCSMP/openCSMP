@@ -51,7 +51,7 @@ class SplitBoundaryInterface {
     std::pair<std::string,bool>  CreateSplitBoundaryFrom( Boundary<dim>& );
 
     /// Creation of SplitBoundary between regions via boundary that gets deleted afterwards
-    std::pair<std::string,bool>  InsertSplitBoundary( const char* region1, const char* region2, bool createRegionBetween = false );
+    std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1, const char* region2 );
 
     /// inserts a lower-dimensional Region inside of the SplitBoundary, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the SplitBoundary followed by _REGION
     std::pair<std::string,bool>  InsertRegionIntoSplitBoundary( const char* split_boundary, int32 material_id_for_new_elements );

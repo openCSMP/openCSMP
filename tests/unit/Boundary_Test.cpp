@@ -264,7 +264,7 @@ void Boundary_Test::runLegacy()
     // LEFT
     TestBoxBoundary<2>( model2D, "LEFT", vtu2D );
     // BETWEEN
-    pair<string,bool> result = model2D.InsertBoundary( "MATRIX_LEFT", "MATRIX_RIGHT" );
+    pair<string,bool> result = model2D.CreateBoundaryBetween( "MATRIX_LEFT", "MATRIX_RIGHT" );
     _test( result.second == true );
     // this is the name according to the CSMP convention
     const std::string boundary2D_BETWEENname( std::string("BOUNDARY0_MATRIX_LEFT") + std::string("_") + std::string("MATRIX_RIGHT") );
@@ -393,7 +393,7 @@ void Boundary_Test::runLegacy()
 
     // CREATE BETWEEN
     if ( verbose_ ) cout << "\nAttempting to insert csmp:: Boundary for region1  "<< region1Name << " and region2 " << region2Name << " ...\n";
-    model.InsertBoundary( region1Name.data(), region2Name.data() );
+    model.CreateBoundaryBetween( region1Name.data(), region2Name.data() );
     std::string boundary12Name("BOUNDARY0_");
     boundary12Name += region1Name;
     boundary12Name += "_";
@@ -477,8 +477,8 @@ void Boundary_Test::runLegacy()
     */
     
     // CREATE AROUND
-    _test( model.AddFaces( "MATRIX_LEFT" ) );
-    Boundary<DIM3>& boundaryHullLeft( model.Boundary( std::string("MATRIX_LEFT_BOUNDARY") ) );
+    _test( model.CreateBoundaryAround( "MATRIX_LEFT" ) );
+    Boundary<DIM3>& boundaryHullLeft = model.Boundary( "BOUNDARY_MATRIX_LEFT" );
     _test( InputElementAreaAsVolumeVariable<DIM3>( model, boundaryHullLeft, "face variable" ) > 0 );
     vtu.OutputDataToVTU( "AddFaces", "face variable", boundaryHullLeft, static_cast<int>(0) );
     CheckFaceNeighbors(boundaryHullLeft);
@@ -531,8 +531,11 @@ void Boundary_Test::runLegacy()
       const bool binary_file(true);         /* true = binary, false = ascii */
       const bool use_regions_file(false);   /* true = reduce regions according to regions file, false = does not redure regions */
       const bool create_boundaries(false);  /* true = creates boundaries around model, false = does not create boundaries */
-      ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
-        _test( m02.Boundaries() == 0 );  
+      ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt",
+                          irregular_mesh, binary_file, use_regions_file, create_boundaries );
+                          
+      _test( m02.Boundaries() == 0 );
+        
       const size_t nodeCount( m01.Region("Model").Nodes() );
       _test( nodeCount == m02.Region("Model").Nodes() );
 
@@ -548,17 +551,18 @@ void Boundary_Test::runLegacy()
 
       if ( verbose_ ) cout << "\nNull neighbor count: " << nullNeighborCount << endl;
 
-      // for the case of an irregular model, check CreateAround and Split
-      m02.AddFaces("Model");
-      _test( m02.Boundaries() == 1 );
-
       _test( nodeCount == m02.Region("Model").Nodes() );
 
-      Boundary<3>& b0102( m02.Boundary( "Model_BOUNDARY" ) );
+      
+      // one big irregular boundary
+      bool remove_original_lower_dimensional_regions{true};
+      m02.EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
+      _test( m02.Boundaries() >= 1 );
+      Boundary<3U>& b0102 = m02.Boundary("IRREGULAR");
 
       VTU_Interface<3> v02(m02);
-      b0102.InputPropertyValue( "face variable", makeScalar( PLAIN, 1. ) );
-      v02.OutputDataToVTU( "ModelBoundary", "face variable", b0102, static_cast<int>(0) );
+      m02.InputPropertyValue( "face variable", makeScalar( PLAIN, 1. ) );
+      v02.OutputDataToVTU( "IRREGULAR", "face variable", b0102, static_cast<int>(0) );
 
       Model<3>::boundaryIterator boundary( m02.Boundary(b0102) );
       deque<string> regionsToRemove;
@@ -566,7 +570,6 @@ void Boundary_Test::runLegacy()
         {
           if( m02.IsBoundaryName( it->first ) )
             {
-              m02.DivideBoundary( boundary, it );
               regionsToRemove.push_back( it->first );
             }
           if( boundary->second.Elements() == 0 )

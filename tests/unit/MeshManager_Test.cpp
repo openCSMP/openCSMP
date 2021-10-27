@@ -365,9 +365,12 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
          }
        // if the face is within model, we construct a normal face
        if ( eptr->Neighbor(i) != nullptr && !interior_face_constructed ) {
-            vector<Node<3U>*> empty_nodes; // to test that this method can correctly identify them
-            //                                   inner  outer highher-dim nbor
-            fptr2 = mesh.AddFace( eptr, eptr->Neighbor(i), fvars, ivars, empty_nodes );
+            size_t opposite_face = UNSPECIFIED;
+            for ( size_t j{0}; j<eptr->Neighbor(i)->Faces(); ++j ) {
+                 if ( eptr->Neighbor(i)->Neighbor(j) == eptr ) opposite_face = j;
+                 break;
+              }
+            fptr2 = mesh.AddFace( eptr, i, eptr->Neighbor(i), opposite_face, fvars, ivars );
             interior_face_constructed = true;
          }
     }

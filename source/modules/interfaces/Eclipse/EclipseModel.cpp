@@ -115,9 +115,9 @@ void EclipseModel::Initialize()
 		const bool non_box_shaped_model(!mesh_topology.BoxShapedModel());
 
 		// all cells are lumped into the region "Eclipse Model" that is stored in the model topology
-		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false here.    
-    EstablishBoxBoundariesFromFlags();
-	}
+		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model ); // 	}
+
+   }
 	// ---------------------------------------------------
 	// catching all possible standard and csmp::Exceptions
 	// ---------------------------------------------------
@@ -210,12 +210,12 @@ void EclipseModel::CreateBoundariesAroundFaults( bool keep_fault_regions )
 {
 	this->MergeRegions(faults_, "FAULTS");
 	faults_.insert("FAULTS");
-	this->InsertBoundary(csmp::IRREGULAR, "FAULTS");
+	this->CreateInternalBoundaryFrom( "FAULTS" );
 
 	// create boundaries
 	for (std::set<std::string>::const_iterator
 		rit = faults_.begin(); rit != faults_.end(); ++rit)
-		this->InsertBoundary(csmp::IRREGULAR, (*rit).c_str());
+		this->CreateExternalBoundaryFrom( (*rit).c_str(), csmp::IRREGULAR );
 }
 
 

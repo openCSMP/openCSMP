@@ -122,7 +122,7 @@ void SplitBoundary_Example::Run()
   Region<2> region1_after(model.Region("MATRIX_RIGHT"));
 //  printNeigboursOfPerimeterElements( ansys_model.Database(), region1_before );
   
-  model.InsertSplitBoundary( "MATRIX_RIGHT", "MATRIX_LEFT" );
+  model.CreateSplitBoundaryBetween( "MATRIX_RIGHT", "MATRIX_LEFT" );
   // putting a lower dimensional region inside of all split boundaries
   const int32 material_id_for_new_elements(8);
   set<string>  newly_created_regions = model.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id_for_new_elements );  

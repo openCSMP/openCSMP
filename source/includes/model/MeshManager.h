@@ -145,10 +145,10 @@ public:
                                          const IntegrationPointVariables& face_integration_point_variables );
      
   /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in; deduces element type
-  Face<dim>* const AddFace( Element<dim>* const inner_parent, Element<dim>* const outer_parent,
+  Face<dim>* const AddFace( Element<dim>* const inner_parent, size_t inner_parent_face_id,
+                            Element<dim>* const outer_parent, size_t outer_parent_face_id,
                             const LocalVariables&,
-                            const IntegrationPointVariables&,
-                            const std::vector<Node<dim>*>& nodes );
+                            const IntegrationPointVariables& );
 
   /// creates a lower-dimensional face with parents of adjacent higher-dimensional Face objects as parents; deduces element type
   Face<dim>* const AddEdgeFace( Face<dim>* const adjacent_face1, size_t parent_elmt1_segm_id,

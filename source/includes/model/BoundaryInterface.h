@@ -94,22 +94,19 @@ class BoundaryInterface {
     // Boundary creation, modification & removal
     // -----------------------------------------------
     
-    /// creates uniquely named boundary patches, returning their names if successful; the patches are created from meshed surface inside of model which will be removed by default
+    /// creates Faces and uniquely named boundary patches, returning their names if successful; the patches are created from meshed surface inside of model which will be removed by default
     std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region, 
                                                                        bool remove_dim_minus1_region=true );
+                                                                       
+    /// for  creation of boundaries on the outside of the model; no partitioning based on contacting regions will occur
+    bool CreateExternalBoundaryFrom( const char* dimension_minus1_region, BOX_BOUNDARY boxBoundary = NOT );
 
     /// insert lower-dimensional Region between two equidimensional unique regions, and then converts it into Boundary; returns boundary name
-    std::pair<std::string,bool>  InsertBoundary( const char* region1, const char* region2, bool createRegionBetween = false );
+    std::pair<std::string,bool>  CreateBoundaryBetween( const char* region1, const char* region2 );
 
     /// converts lower dimensional element regions surrounding the target region and containing strings like BOUNDARY in their name into a Boundary<Face> object
-    bool InsertBoundary( BOX_BOUNDARY boxBoundary, const char* region = "Model" );
+    bool CreateBoundaryAround( const char* region, BOX_BOUNDARY boxBoundary = NOT );
 
-    /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
-    bool EstablishBoxBoundariesFromOrientation();
-    
-    /// using the assigned box boundary flags, tries to create corresponding Boundary objects
-    bool EstablishBoxBoundariesFromFlags();
-    
     /// Removes boundary with  deletion of its faces in the MeshManager
     void RemoveBoundary( const char* boundary );
     
@@ -139,29 +136,15 @@ class BoundaryInterface {
                       typename std::vector<Face<dim>*>::iterator facesEnd,
                       BOX_BOUNDARY );
 
-    /// creates new boundary from existing faces
-    bool InsertBoundary( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                         const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                         const std::string& bName );
-
     /// inserts csmp::Boundary for box boundaries
     bool EstablishBoxBoundaries();
   
-    /// inserts irregular csmp::Boundary for all eligible regions in the model
+    /// inserts  box boundary or irregular csmp::Boundary objects for all eligible regions in the model
     bool EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
 
-    /// construct Boundary<Face> objects around a region
-    bool AddFaces(const char* region);
-
-    /// Splits boundary based on regions into new boundaries
-    bool DivideBoundary( typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
-                         const typename std::map<std::string, Region<dim> >::const_iterator subRegion );
-
-    /// Splits boundary into remainder and new name with parameter name
-    bool DivideBoundary( typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
-                         const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                         const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                         const std::string& bName );
+    /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
+    bool EstablishBoxBoundariesFromOrientation();
+    
     // EDGES
     
     /// creates edge Boundary objects for box-shaped model from side boundaries

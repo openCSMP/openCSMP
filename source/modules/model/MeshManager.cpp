@@ -51,23 +51,13 @@ MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const VSet<dim
      
      @note Only the nodes of the volumetric elements are deleted because they are shared  with the surface mesh.
      @note Any pointer used to delete an object is set to null after the deletion.
-     
-     Sequence of operations
-     
-     1. Delete the nodes
-     2. For each of the mesh trees, do a deletion traversal
-     
+          
  */
 template<size_t dim>
 MeshManager<dim>::~MeshManager()
   {
-     delete node_manifold_manager_;
-     
      // erasing nodes, elements, faces, and interfaces
-     for ( auto& nit : nodes_ ) {
-          delete nit;
-          nit = nullptr;
-       }
+     // (in the opposite order of dependencies
      for ( auto& eit : elements_ ) {
           delete eit;
           eit = nullptr;
@@ -80,6 +70,12 @@ MeshManager<dim>::~MeshManager()
           delete it;
           it = nullptr;
        }
+     for ( auto& nit : nodes_ ) {
+          delete nit;
+          nit = nullptr;
+       }
+     delete node_manifold_manager_;
+     
     
  } // end destructor
 
@@ -1059,11 +1055,10 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
        
   /// optionally, the neighbor element pointers might not be assigned; @note node pointers must be supplied in CCW order from outside looking in
 template<size_t dim>
-Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent,
-                                            Element<dim>* const outer_parent,
+Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent, size_t inner_parent_face_id,
+                                            Element<dim>* const outer_parent, size_t outer_parent_face_id,
                                             const LocalVariables& lvars,
-                                            const IntegrationPointVariables& ivars,
-                                            const std::vector<Node<dim>*>& nodes )
+                                            const IntegrationPointVariables& ivars )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1080,7 +1075,8 @@ Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent,
      }
    // 1. constructing new face
    const size_t face_id = faces_.size();
-   faces_.push_back( new Face<dim>( fem_manager_, fvm_manager_, inner_parent, outer_parent, lvars, ivars ) );
+   faces_.push_back( new Face<dim>( fem_manager_, fvm_manager_, inner_parent, outer_parent,
+                                            inner_parent_face_id, outer_parent_face_id, lvars, ivars ) );
    Face<dim>* const fptr = faces_.back();
    fptr->Idx( face_id );
 
@@ -1483,7 +1479,7 @@ size_t MeshManager<dim>::Delete( typename deque<Node<dim>*>::iterator first,
           else if ( (*first)->IsManifold() ){
                (*first)->Manifold()->Remove( (*first) );
                // if no manifold remains it is removed from the manager
-               if ( (*first)->Manifold()->Branches() == 0U )
+               if ( (*first)->Manifold()->Branches() == 1U )
                node_manifold_manager_->Delete( (*first)->Manifold() );
             }
           delete (*first);

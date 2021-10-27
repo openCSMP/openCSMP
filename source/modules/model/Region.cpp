@@ -2218,12 +2218,12 @@ bool Region<dim>::Includes( const Region<dim>& g ) const
 
 } // end Includes
 
-bool  hasLowerDimensionalRepresentation( const Element<3U>& element )
+static bool  hasLowerDimensionalRepresentation( const Element<3U>& element )
 {
   return !element.FE()->IsVolumeElement();
 }
 
-bool  hasLowerDimensionalRepresentation( const Element<2U>& element )
+static bool  hasLowerDimensionalRepresentation( const Element<2U>& element )
 {
   return !element.FE()->IsSurfaceElement();
 }

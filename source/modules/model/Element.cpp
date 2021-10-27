@@ -177,6 +177,7 @@ Element<dim>::~Element()
     // disconnecting the neighbor elements that are connected to this element
     for ( auto it : elmt_connector_ )
       if ( it != nullptr )
+        // looping over the neighbors of the neighbor
         for ( auto nit : it->elmt_connector_ )
           if ( nit == this ) {
                nit = nullptr;

@@ -681,69 +681,6 @@ template void Boundary<3>::InputVariableFrom<TensorVariable<3U> >( const char*, 
 
 
 
-/**
-    Breaks boundary up into individual patches.
-*/
-template<size_t dim>
-bool Boundary<dim>::Divide( const Region<dim>& subsetRegion, Boundary<dim>& subsetBoundaryToForm )
-{
-  // make a map with faces of THIS boundary as value and their nodes as key
-  map<set<Node<dim>*>, Face<dim>*>  thisFaces;
-  set<Node<dim>*>                  faceNodes;
-  for ( typename vector<Face<dim>*>::const_iterator it( this->ElementsBegin() ); it != this->ElementsEnd(); ++it )
-  {
-    faceNodes.clear();
-    for ( size_t i = 0U; i< (*it)->Nodes(); i++ )
-      faceNodes.insert( (*it)->N( i ) );
-    thisFaces.insert( make_pair( faceNodes, (*it) ) );
-  }
-  faceNodes.clear();
-
-  // make a set with sets of nodes of elements of subsetRegion
-  set<set<Node<dim>*> > regionElementNodes;
-  for ( typename vector<Element<dim>*>::const_iterator it( subsetRegion.ElementsBegin() ); it != subsetRegion.ElementsEnd(); ++it )
-    regionElementNodes.insert( set<Node<dim>*>( (*it)->NodesBegin(), (*it)->NodesEnd() ) );
-
-  // create a vector that contains those faces of THIS which have an equivalent key in the
-  // region element nodes set --> simplexVector
-  vector<Face<dim>*> subsetBoundaryToFormFaces;
-  subsetBoundaryToFormFaces.reserve( subsetRegion.Elements() );
-  for ( typename map<set<Node<dim>*>, Face<dim>*>::const_iterator it( thisFaces.begin() ); it != thisFaces.end(); ++it )
-    if ( regionElementNodes.find( it->first ) != regionElementNodes.end() )
-      subsetBoundaryToFormFaces.push_back( it->second );
-
-  // create a method in Boundary that creates a boundary using a vector of faces
-  // if empty(simplexVector) exit
-  if ( subsetBoundaryToFormFaces.empty() )
-    return false;
-
-  return Divide( subsetBoundaryToFormFaces.begin(), subsetBoundaryToFormFaces.end(), subsetBoundaryToForm );
-}
-
-
-
-
-
-
-
-template<size_t dim>
-bool Boundary<dim>::Divide( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                            const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                            Boundary<dim>& subsetBoundaryToForm )
-{
-  // use subsetBoundaryToForm.CreateFrom( simplexVector )
-  subsetBoundaryToForm.CreateFrom( facesBegin, facesEnd );
-
-  // remove faces in simplexVector from THIS boundary
-  vector<Face<dim>*> subsetBoundaryToFormFaces( facesBegin, facesEnd );
-  csmp::removeVectorElements( this->elmt_vec_, subsetBoundaryToFormFaces );
-
-  if ( this->Elements() != 0 )
-    Initialize( AtBoundary() /* box boundary flag */ );
-
-  return true;
-}
-
 
 
 
@@ -906,9 +843,8 @@ the created face unit normal points outward.
 @attention This method will work as well for a split boundary.
 */
 template<size_t dim>
-bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
-                                const Region<dim>& region,
-                                const csmp::Index& mtrl_key, ///< to distinguish parent regions
+bool Boundary<dim>::CreateFrom( const Region<dim>& region,
+                                MeshManager<dim>& meshManager,
                                 BOX_BOUNDARY boxBoundary )
 {
   // assert lower dimensional representation
@@ -975,7 +911,6 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
 
   // creating the connectivity among the new faces
   meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
-// WORKS MORE OFTEN -  meshManager.template BuildConnectivity<Face>( meshManager.FacesBegin(), meshManager.FacesEnd() );
 
   // initialize boundary essentials
   Initialize( boxBoundary );
@@ -1033,8 +968,8 @@ in a 3D model are ignored.
 @date Aug 2011
 */
 template<size_t dim>
-bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
-                                  const Region<dim>& region,
+bool Boundary<dim>::CreateAround( const Region<dim>& region,
+                                  MeshManager<dim>& meshManager,
                                   BOX_BOUNDARY boxBoundary )
 {
   // LVS
@@ -1047,19 +982,35 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
 
   const size_t n_faces_before = meshManager.Faces();
 
+  // looping over the perimeter elements of the region
   for ( size_t i = region.InteriorElements(); i<region.Elements(); ++i )
     {
       // ignoring dim-2 elements because they share the nodes with the higher-dim ones
-      if ( (dim == 3 and !region.E( i )->IsVolumeElement()) or
-           (dim == 2 and !region.E( i )->IsSurfaceElement()) )
-        continue;
+      if constexpr ( dim == 3 ) if ( !region.E( i )->IsVolumeElement() ) continue;
+      if constexpr ( dim == 2 ) if ( !region.E( i )->IsSurfaceElement() ) continue;
 
       // for each perimeter face
       const size_t perimeter_faces( region.PerimeterFaces( i ) );
-      for ( size_t j = 0U; j<perimeter_faces; ++j )
-        // push back pointer to face into face container
-        this->elmt_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
-                                                                lvsFaces, lvsIntegrationPoints ) );
+      for ( size_t j = 0U; j<perimeter_faces; ++j ) {
+           // if this indeed an element at the model boundary
+           if ( region.E(i)->Neighbor(j) == nullptr ) {
+               this->elmt_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
+                                                                       lvsFaces, lvsIntegrationPoints ) );
+             }
+           // if this will be a Face in the interior of the model
+           else {
+               // finding which face of the outer element will be at the boundary
+               size_t shared_face = UNSPECIFIED;
+               const size_t n_neighbors{region.E(i)->Neighbor(j)->Neighbors()};
+               for ( size_t k{0}; k<n_neighbors; ++k ) {
+                    if ( region.E(i)->Neighbor(j) == region.E(i) ) shared_face = k;
+                    break;
+                 }
+               this->elmt_vec_.push_back( meshManager.AddFace( region.E(i), j,
+                                                               region.E(i)->Neighbor(j), shared_face,
+                                                               lvsFaces, lvsIntegrationPoints ) );
+             }
+        }
     }
   // free up excessive storage
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
@@ -1079,18 +1030,23 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
 
 
 /**
+    Uses Region boundary face vectors to find the interface between the supplied regions, if any.
+    Gets MeshManager to constructs Face objects along this interface and then forms a boundary from them.
+        
 @author P. Lang
 @date 25/8/2011
+@date 27/10/21 SKM refactored
 
-This method assumes that elements are uniquely and throughgoingly numbered.
-The Faces are build so that their normals point from region1 to region2.
-Variable storage is assigned for both, the faces and boundary itself.
+This method assumes that the connectivity between the elements is up to date.
+
+@attention The Faces are build such that their normals point from region1 to region2.
+Variable storage is assigned to the faces.
 
 */
 template<size_t dim>
-bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
-                                   const Region<dim>& region1,
-                                   const Region<dim>& region2 )
+bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
+                                   const Region<dim>& region2,
+                                   MeshManager<dim>& meshManager )
 {
   if ( string(region1.Name()) == region2.Name() )
     throw csmp::Exception( ERROR, "Boundary<dim>::CreateBetween:", "input region1 = input region2; nothing was done." );
@@ -1112,6 +1068,7 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
   const size_t n_faces_before = meshManager.Faces();
 
   // for the perimeter elements of the region
+  size_t contacting_elements{0};
   for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
     {
       Element<dim>* const ePtr = region1.E( i );
@@ -1126,25 +1083,29 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
           if ( ePtrNeighbor != nullptr )
             if ( region2.IsPerimeterElement( ePtrNeighbor ) )
               {
-                 // creating node vector
-                 ePtr->FE()->NodesOfFace( face, fnids );
-                 const size_t n_nodes(fnids.size());
-                 vector<Node<dim>*> nodes;
-                 nodes.reserve( n_nodes );
-                 for ( size_t node = 0U; node < n_nodes; ++node )
-                   nodes[node] = ePtr->N( fnids[node] );
                  // if the neighbor is in the boundary, the new Face is build
-                 Face<dim>* const faceObj = meshManager.AddFace( ePtr, ePtrNeighbor, lvsFaces, lvsIntegrationPoints, nodes );
-                 // added to boundary
-                 this->elmt_vec_.push_back( faceObj );
+                 size_t face2 = UNSPECIFIED;
+                 const size_t n_neighbors{ePtrNeighbor->Neighbors()};
+                 for ( size_t k{0}; k<n_neighbors; ++k ) {
+                      if ( ePtrNeighbor->Neighbor(k) == ePtr ) face2 = k;
+                      break;
+                   }
+                 this->elmt_vec_.push_back( meshManager.AddFace( ePtr, face,
+                                                                 ePtrNeighbor, face2,
+                                                                 lvsFaces, lvsIntegrationPoints ) );
+                 contacting_elements++;
 
               } // neighboring elements
 
         } // perimeter faces
 
     } // perimeter elements
+    
+  // if no contact between the two regions was found
+  if ( contacting_elements == 0 ) {
+       return false;
+    }
 
-  // free
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize boundary essentials

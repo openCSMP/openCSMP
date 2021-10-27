@@ -677,11 +677,11 @@ The original boundary gets removed.
 
  */
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( const char* region1, const char* region2, bool createRegionBetween )
+pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryBetween( const char* region1, const char* region2 )
  {
    SPLITBOUNDARY_COMPLEX<dim>*  splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
    
-   pair<string,bool> result = splitboundaryComplex->InsertBoundary( region1, region2, createRegionBetween );
+   pair<string,bool> result = splitboundaryComplex->BoundaryInterface::CreateBoundaryBetween( region1, region2 );
    
    return CreateSplitBoundaryFrom( splitboundaryComplex->Boundary(result.first) );
 

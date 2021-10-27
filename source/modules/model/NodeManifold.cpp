@@ -347,14 +347,12 @@ bool NodeManifold<dim>::Remove( Node<dim>* nd )
          nd->Assign( static_cast<NodeManifold<dim>*>(nullptr) );
          // removing the Node entry from the branch list
          branches_.erase( remove( branches_.begin(), branches_.end(), nit ) );
-         // checking whether this still is a manifold (entries >= 2), if not, the manifold should be deleted
-         assert( branches_.size() >= 2 );
          return true;
        }
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( INFO, "NodeManifold<dim>::Remove(Node<dim>*)",
-                             "Node does not exist in manifold. Nothing was done.");
+    csmp_error.notice( WARNING, "NodeManifold<dim>::Remove(Node<dim>*)",
+                                "Node does not exist in manifold. Nothing was done.");
     return false;
 
 }

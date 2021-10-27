@@ -128,37 +128,24 @@ class Boundary : public ModelSubDomain<dim, Face>,
     //  boundary initialisation & modification
     // ----------------------------------------
 
-    /// reestablish nodes based on element container
-    void CreateNodePointerVector();
-  
-    /// if parts of this boundary coincide with subsetRegion, this part will pasted to subsetBoundaryToForm
-    bool Divide( const Region<dim>& subsetRegion,
-                 Boundary<dim>& subsetBoundaryToForm );
-
-    /// Removes faces from this boundary and assigns to subsetBoundaryToForm
-    bool Divide( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                 const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                 Boundary<dim>& subsetBoundaryToForm );
-
     /// creating from supplied vector of faces
     bool CreateFrom( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
                      const typename std::vector<Face<dim>*>::const_iterator facesEnd );
 
     /// create faces from lower dimensional region
-    bool CreateFrom( MeshManager<dim>& meshManager,
-                     const Region<dim>& region,
-                     const csmp::Index& mtrl_key,
+    bool CreateFrom( const Region<dim>& lower_dimensional_region,
+                     MeshManager<dim>& meshManager,
                      BOX_BOUNDARY boxBoundary );
     
     /// creates surface / perimeter line of Faces around the region ( only for volume regions in 3D and surface regions in 2D )
-    bool CreateAround( MeshManager<dim>&,
-                       const Region<dim>& region,
+    bool CreateAround( const Region<dim>& region,
+                       MeshManager<dim>&,
                        BOX_BOUNDARY boxBoundary = IRREGULAR );
 
     /// creates surface / perimeter line of Faces between regions (the first is on the inside)
-    bool CreateBetween( MeshManager<dim>&,
+    bool CreateBetween( const Region<dim>&,
                         const Region<dim>&,
-                        const Region<dim>& );
+                        MeshManager<dim>& );
 
 
     // ----------------------------------------
@@ -193,6 +180,9 @@ class Boundary : public ModelSubDomain<dim, Face>,
     /// establishes connectivity between Faces if not already there, assigns boundary flag and finds perimeter
     void Initialize( BOX_BOUNDARY boxBoundary );
 
+    /// reestablish nodes based on element container
+    void CreateNodePointerVector();
+  
     /// returns local variables stored at face integration points
     IntegrationPointVariables FaceIntegrationPointVariables() const;
 

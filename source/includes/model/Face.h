@@ -66,7 +66,17 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-     /// constructs face shared by the two volumetric elements inside of the model auto-detecting the nodes
+    /// constructs face shared by the two volumetric elements inside of the model 
+    Face( const FiniteElementManager&,
+          const FiniteVolumeStencilManager<dim>&,
+          Element<dim>* const inner_parent,
+          Element<dim>* const outer_parent,
+          size_t inner_parent_face_id,
+          size_t outer_parent_face_id,
+          const LocalVariables&,
+          const IntegrationPointVariables& );
+
+   /// constructs face shared by the two volumetric elements inside of the model auto-detecting shared faces and nodes
     Face( const FiniteElementManager&,
           const FiniteVolumeStencilManager<dim>&,
           Element<dim>* const inner_parent,
@@ -74,11 +84,13 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-   /// constructs model-edge line-element face connected with two volumetric elements at model boundary sharing its nodes
+    /// constructs model-edge line-element face connected with one or two Element objects that share their edge nodes with the Face on the model boundary
     Face( csmp::FiniteElement* FE_type_of_boundary_face,
           const FiniteVolumeStencilManager<dim>&,
-          Element<dim>* const inner_parent,
-          Element<dim>* const outer_parent,
+          Element<dim>* const parent_of_face1,
+          Element<dim>* const parent_of_face2,
+          size_t parent_elmt1_segm_id,
+          size_t parent_elmt2_segm_id,
           const std::vector<Node<dim>*>&  edge_nodes,
           const LocalVariables&,
           const IntegrationPointVariables& );
@@ -231,8 +243,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // not references or constant pointers because these may need to change during remeshing
     Element<dim>*            innerParent_;        ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
     Element<dim>*            outerParent_;        ///< higher-dimensional neighbor element in direction of interface normal
-    size_t inner_parent_face_id_ = UNSPECIFIED;   ///< face number of inside higher-dimensional parent element
-    size_t outer_parent_face_id_ = UNSPECIFIED;   ///< face number of outside higher-dimensional parent element
+    size_t inner_parent_face_id_ = UNSPECIFIED;   ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
+    size_t outer_parent_face_id_ = UNSPECIFIED;   ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
 };
 
 } // csmp
