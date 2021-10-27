@@ -195,7 +195,7 @@ void ANSYS_Model3D::Initialize( bool isoparametric,
     const size_t vertices( vset.Vertices() );
     node_coords_.reserve( vertices );
     for ( size_t i = 0U; i<vertices; ++i )
-      node_coords_.emplace_back( Point<3U>( vset.Px( i ), vset.Py( i ), vset.Pz( i ) ) );
+      node_coords_.push_back( Point<3U>{ vset.Px( i ), vset.Py( i ), vset.Pz( i ) } );
 
     // 3. construct model based on obtained model topology and vset
     if ( use_regions_file )
@@ -313,7 +313,7 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
     const size_t vertices( vset.Vertices() );
     node_coords_.reserve( vertices );
     for ( size_t i = 0U; i<vertices; ++i )
-      node_coords_.emplace_back( Point<3U>( vset.Px( i ), vset.Py( i ), vset.Pz( i ) ) );
+      node_coords_.emplace_back( Point<3U>{ vset.Px( i ), vset.Py( i ), vset.Pz( i ) } );
 
     // 3. construct model based on obtained model topology and vset
     if ( use_regions_file )
@@ -391,6 +391,7 @@ Renumbers the nodes (0..n) as in the original ANSYS model.
 */
 bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
 {
+  assert( !node_coords_.empty() );
   // making a binary tree of the original node numbers, searchable for point coordinates
   map<Point<3U>, size_t>  original_node_numbers;
   for ( size_t i = 0U; i<node_coords_.size(); ++i )
@@ -424,8 +425,9 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
 } // end RestoreOriginalNodeNumbering 
 
 
-/// inline functions
+/// node coordinate iterators 
 std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesBegin() const { return node_coords_.begin(); }
+
 std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesEnd() const { return node_coords_.end(); }
 
 

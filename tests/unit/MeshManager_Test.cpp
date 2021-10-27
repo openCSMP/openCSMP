@@ -33,18 +33,19 @@ MeshManager_Test::MeshManager_Test( bool reconstruct_model_from_CSMP_binary_file
 	cout << "\n----------------------------";
 	cout << "\nMeshManager_Test::TestBasics";
 	cout << "\n----------------------------";
-	// variables file
 	string varFileName("CSMP-1phase-variables.txt");
 	model3d_name_ = "PyramidHexaPatch";
 	const bool   skewed_elements(false); // otherwise model is not a box anymore
 	VSet<3U>     vset;
 	test_Create_Pyramid_Hexa_VSet(vset, skewed_elements);
-	vset.Out();
 	model3d_ = new Model<3U>(vset, varFileName.c_str(), true);
 	TestBasics();	
 	delete model3d_;
 
 	// ansys 2d model - contiguous
+	cout << "\n------------------------------------------";
+	cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
+	cout << "\n------------------------------------------";
 	model2d_name_ = "box2d_fault";
 	model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
 	cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
@@ -74,6 +75,9 @@ MeshManager_Test::MeshManager_Test( bool reconstruct_model_from_CSMP_binary_file
 	}
 
 	// ansys 3d model - discontiguous
+	cout << "\n-------------------------------------------------------";
+	cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
+	cout << "\n-------------------------------------------------------";
 	varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
 	model3d_name_ = "ModelDykeAllLayersSplit";
 	model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true, true);
@@ -106,6 +110,9 @@ MeshManager_Test::MeshManager_Test( bool reconstruct_model_from_CSMP_binary_file
 	delete model3d_;
 
 	// ansys 3d model - contiguous
+	cout << "\n-------------------------------------------------------";
+	cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
+	cout << "\n-------------------------------------------------------";
 	model3d_name_ = "prism_test";
 	model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
 	cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";

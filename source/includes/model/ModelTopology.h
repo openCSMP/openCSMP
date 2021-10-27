@@ -138,11 +138,15 @@ class ModelTopology {
                                     size_t elm );
     void        AddRegionElementIds( const char* rname,
                                      const std::vector<size_t>& elms );
+                                     
+    /// adds unique (non-overlapping) regions to topology, using the name, element types and element indices supplied
     bool        AddRegions( const std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >& unique_regions );
     
-    bool        AddRegionsWithoutEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
-                                                       const std::multimap<std::string,std::vector<size_t> >& object_elements );
-                                                       
+    /// adds unique (non-overlapping) regions to topology, using the region specifications (name and element types) and element index lists supplied
+    bool        AddRegions( const std::multimap<std::string,std::string>& object_specs,
+                            const std::multimap<std::string,std::vector<size_t> >& object_elements );
+     
+    /// adds regions to topology, eliminating lower-dimensional regions with the same name as the ones with the same dimension as the model
     bool        AddRegionsWithEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
                                                     const std::multimap<std::string,std::vector<size_t> >& object_elements );
     template<size_t dim>
@@ -161,22 +165,22 @@ class ModelTopology {
     // consistency checks and restoration of missing information
     // ---------------------------------------------------------
 
-    /// checks and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes, neighbor connectivity etc.
+    /// initialises topology object and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes, neighbor connectivity etc.
     template<size_t dim>
-    bool        CheckTopology( VSet<dim>& vset,
-                               const std::multimap<std::string,std::string>& object_specs,
-                               const std::multimap<std::string,std::vector<size_t> >& object_elements,
-                               bool require_unique_names_for_vol_surf_lines  = true,
-                               bool interactive_property_assignment = false,
-                               bool correct_orientation_of_surface_elements = false,
-                               bool reassign_boundary_flags = true );
+    bool        EstablishTopology( VSet<dim>& vset,
+                                   const std::multimap<std::string,std::string>& object_specs,
+                                   const std::multimap<std::string,std::vector<size_t> >& object_elements,
+                                   bool require_unique_names_for_vol_surf_lines  = true,
+                                   bool interactive_property_assignment = false,
+                                   bool correct_orientation_of_surface_elements = false,
+                                   bool reassign_boundary_flags = true );
   
-    /// calls CheckTopology with a reduced set of options
+    /// calls EstablishTopology with a reduced set of options
     template<size_t dim>
-    bool        CheckTopology( VSet<dim>& vset,
-                               bool require_unique_names_for_vol_surf_lines = true,
-                               bool correct_orientation_of_surface_elements = false,
-                               bool reassign_boundary_flags = true );
+    bool        EstablishTopology( VSet<dim>& vset,
+                                   bool require_unique_names_for_vol_surf_lines = true,
+                                   bool correct_orientation_of_surface_elements = false,
+                                   bool reassign_boundary_flags = true );
   
     /// checks that 2D model contains the boundaries LEFT, RIGHT, BOTTOM, TOP
     bool RectangleShapedModel() const;

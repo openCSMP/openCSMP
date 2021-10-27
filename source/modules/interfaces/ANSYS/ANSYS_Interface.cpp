@@ -195,11 +195,12 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                     "ASCII geometry input file with extension '.asc' could not be opened");
     
-    if ( !ReadTitleASCII( ifs_asc, file_header_ ) )     // O.K.
+    if ( !ReadTitleASCII( ifs_asc, file_header_ ) )
       csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                  "File header not read correctly");
 
-    if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) // O.K. - produces object_specs_
+    // initialise object_specs_ that is used in the construction of the model topology further below
+    if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) )
       csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                  "Region and element type information not read correctly");
    
@@ -260,17 +261,17 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
          std::cout << meshfile <<"' read successfully."<< std::endl;
     }
 
-    // check topology (a long list of VSet manipulations that are not expected to be carried out by mesh_topology
+    // build the model topology
     const bool require_unique_names_of_volumes_surfaces_and_lines = true;
     const bool correct_orientation_of_surface_elements = true;
     const bool interactive_property_assignment = false;
     mesh_topology.ModelName( meshfile.c_str() );
-    mesh_topology.CheckTopology( vset,
-                                 object_specs_, object_elements_,
-                                 require_unique_names_of_volumes_surfaces_and_lines,
-                                 interactive_property_assignment,
-                                 correct_orientation_of_surface_elements,
-                                 reassign_boundary_flags );
+    mesh_topology.EstablishTopology( vset,
+                                     object_specs_, object_elements_,
+                                     require_unique_names_of_volumes_surfaces_and_lines,
+                                     interactive_property_assignment,
+                                     correct_orientation_of_surface_elements,
+                                     reassign_boundary_flags );
     Clear();
 
  } // ReadMeshBinary
@@ -346,11 +347,12 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
        csmp_error.notice( ERROR, "ANSYS_Interface::ReadMeshASCII",
                                  "ASCII geometry input file with extension '.asc' could not be opened");
 
-    if ( !ReadTitleASCII( ifs_asc, file_header_ ) ) {     // O.K.
+    if ( !ReadTitleASCII( ifs_asc, file_header_ ) ) {
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "File header not read correctly");
       }
-    if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) { // O.K.
+    // initialises 'object_specs_' that is used in EstablishTopology, see below
+    if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) {
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Region and element type information not read correctly");
       }
@@ -417,12 +419,12 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
     const bool correct_orientation_of_surface_elements = true;
     const bool interactive_property_assignment = false;
     mesh_topology.ModelName( meshfile.c_str() );
-    mesh_topology.CheckTopology( vset,
-                                 object_specs_, object_elements_,
-                                 require_unique_names_of_volumes_surfaces_and_lines,
-                                 interactive_property_assignment,
-                                 correct_orientation_of_surface_elements,
-                                 reassign_boundary_flags );
+    mesh_topology.EstablishTopology( vset,
+                                     object_specs_, object_elements_,
+                                     require_unique_names_of_volumes_surfaces_and_lines,
+                                     interactive_property_assignment,
+                                     correct_orientation_of_surface_elements,
+                                     reassign_boundary_flags );
     Clear();
 
  } // ReadMeshASCII

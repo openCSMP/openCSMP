@@ -125,6 +125,7 @@ Face<dim>::Face( const Element<dim>& elmt,
 
 /**
       Constructs face on the inside of the model, auto detecting their common face
+                                     ^^^^^^^^^^^^^
       and shared nodes. Only a pointer to the finite element matching the face has to be supplied.
       
     @note the node numbering of the inner parent element will be adopted for the new Face.

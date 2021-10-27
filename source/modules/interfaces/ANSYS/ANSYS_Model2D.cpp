@@ -145,7 +145,7 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
 
     // 0. reading the mesh from ANSYS CSMP-input files
     //    and eliminating the unwanted line/surface element regions
-    const bool recreate_node_boundary_flags{true};
+    const bool recreate_node_boundary_flags{true}; // does this using the lower-dimensional boundary regions 
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
     vset.RemovePfverts();

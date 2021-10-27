@@ -1233,11 +1233,11 @@ The method will report the names and element types of regions that were
 excluded from the merged regions map.
 */
 
-bool ModelTopology::AddRegionsWithoutEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
-                                                           const std::multimap<std::string,std::vector<size_t> >& object_elements )
+bool ModelTopology::AddRegions( const std::multimap<std::string,std::string>& object_specs,
+                                const std::multimap<std::string,std::vector<size_t> >& object_elements )
  {
     if ( object_specs.empty() || object_elements.empty() )
-      throw csmp::Exception( ERROR, "ModelTopology::AddRegionsWithoutEquidimensionalCheck:", "Method did not receive any region data." );
+      throw csmp::Exception( ERROR, "ModelTopology::AddRegions:", "Method did not receive any region data." );
 
     // 1. make a unique set of region names
     // ------------------------------------
@@ -1286,15 +1286,14 @@ bool ModelTopology::AddRegionsWithoutEquidimensionalCheck( const std::multimap<s
 
     return AddRegions( model_regions );
 
- } // end AddRegionsWithoutEquidimensionalCheck
+ } // end AddRegions
 
 
 
 
 
-bool ModelTopology
-::AddRegionsWithEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
-                                      const std::multimap<std::string,std::vector<size_t> >& object_elements )
+bool ModelTopology::AddRegionsWithEquidimensionalCheck( const multimap<string,string>& object_specs,
+                                                        const multimap<string,vector<size_t> >& object_elements )
  {
     if ( object_specs.empty() || object_elements.empty() )
       throw csmp::Exception( WARNING, "ModelTopology::AddRegionsWithEquidimensionalCheck:", "Method did not receive any region data." );
@@ -1884,22 +1883,23 @@ template void ModelTopology::RenumberElements( csmp::VSet<3U>&,bool );
 
 */
 template<size_t dim>
-bool ModelTopology::CheckTopology( VSet<dim>& vset,
-                                   const std::multimap<std::string,std::string>& object_specs,
-                                   const std::multimap<std::string,std::vector<size_t> >& object_elements,
-                                   bool require_unique_names_for_vol_surf_lines,
-                                   bool interactive_property_assignment,
-                                   bool correct_orientation_of_surface_elements,
-                                   bool reassign_boundary_flags )
+bool ModelTopology::EstablishTopology( VSet<dim>& vset,
+                                       const multimap<string,string>& object_specs,
+                                       const multimap<string,vector<size_t> >& object_elements,
+                                       bool require_unique_names_for_vol_surf_lines,
+                                       bool interactive_property_assignment,
+                                       bool correct_orientation_of_surface_elements,
+                                       bool reassign_boundary_flags )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     // 1. eliminating lower-dimensional regions that have the same name as higher-dimensional ones
     // -------------------------------------------------------------------------------------------
+    // the chosen regions get added to the ModelTopology object
     if ( require_unique_names_for_vol_surf_lines )
         AddRegionsWithEquidimensionalCheck( object_specs, object_elements );
     else
-        AddRegionsWithoutEquidimensionalCheck( object_specs, object_elements );
+        AddRegions( object_specs, object_elements );
 
     // 2. check element numbering
     // -------------------------------------------------------
@@ -1908,15 +1908,12 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     const bool check_whether_max_value_is_size_minus1(true);
     if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( object_elements, check_whether_max_value_is_size_minus1 ) )
       RenumberElements( vset, false );
-    if ( vset.Elements() != Elements() )
-        csmp_error.notice( ERROR, "ModelTopology::CheckTopology:",
-                          "the number of elements in the VSet is inconsistent with the ones stored in ModelTopology." );
 
     // 3. assign boundary flags to box-shaped model
     // --------------------------------------------
     if ( reassign_boundary_flags ) {
         if ( !AssignBoxShapedModelFlags(vset) )
-          csmp_error.notice( WARNING, "ModelTopology::CheckTopology:",
+          csmp_error.notice( WARNING, "ModelTopology::EstablishTopology:",
                             "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
      }
      
@@ -1938,16 +1935,16 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     return true;
 }
 
-template bool ModelTopology::CheckTopology( VSet<1U>&,const std::multimap<std::string,std::string>&,const std::multimap<std::string,std::vector<size_t> >&,bool,bool,bool,bool);
-template bool ModelTopology::CheckTopology( VSet<2U>&,const std::multimap<std::string,std::string>&,const std::multimap<std::string,std::vector<size_t> >&,bool,bool,bool,bool);
-template bool ModelTopology::CheckTopology( VSet<3U>&,const std::multimap<std::string,std::string>&,const std::multimap<std::string,std::vector<size_t> >&,bool,bool,bool,bool);
+template bool ModelTopology::EstablishTopology( VSet<1U>&,const std::multimap<std::string,std::string>&,const std::multimap<std::string,std::vector<size_t> >&,bool,bool,bool,bool);
+template bool ModelTopology::EstablishTopology( VSet<2U>&,const std::multimap<std::string,std::string>&,const std::multimap<std::string,std::vector<size_t> >&,bool,bool,bool,bool);
+template bool ModelTopology::EstablishTopology( VSet<3U>&,const std::multimap<std::string,std::string>&,const std::multimap<std::string,std::vector<size_t> >&,bool,bool,bool,bool);
 
 
 
 
 
 template<size_t dim>
-bool ModelTopology::CheckTopology( VSet<dim>& vset,
+bool ModelTopology::EstablishTopology( VSet<dim>& vset,
                                    bool require_unique_names_for_vol_surf_lines,
                                    bool correct_orientation_of_surface_elements,
                                    bool reassign_boundary_flags )
@@ -1955,7 +1952,7 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     bool checks_passed(true);
   
-    // 1. merge region
+    // 1. merge regions
     // -------------------------------------------------------
     if ( require_unique_names_for_vol_surf_lines )
         RemoveLowDimElementsFromRegions( vset );
@@ -1966,7 +1963,7 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     CreateNewElementNumbers( old_and_new_elmtids, false );
     bool check_whether_max_value_is_size_minus1( true );
     if ( !ConsecutiveSequenceChecker::IsKeyRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) ) {
-         csmp_error.notice( WARNING, "ModelTopology::CheckTopology:", "input element number range is not consecutive.");
+         csmp_error.notice( WARNING, "ModelTopology::EstablishTopology:", "input element number range is not consecutive.");
          // looking at the input  range
          std::cerr <<"\n\tfirst element-Idx stored in model topology: "<< (*old_and_new_elmtids.begin()).first;
          std::cerr <<"\n\tlast element-Idx stored in model topology: "<< (*old_and_new_elmtids.rbegin()).first <<"\n";
@@ -1986,7 +1983,7 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
       }
 
     if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) ) {
-         csmp_error.notice( WARNING, "ModelTopology::CheckTopology:", "output (new) element number range is not consecutive.");
+         csmp_error.notice( WARNING, "ModelTopology::EstablishTopology:", "output (new) element number range is not consecutive.");
          RenumberElements( vset, check_whether_max_value_is_size_minus1=false ); // false=done already
          checks_passed = false;
       }
@@ -1995,7 +1992,7 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     // -----------------------------------------------
     if ( reassign_boundary_flags ) {
          if ( !AssignBoxShapedModelFlags(vset) )
-           csmp_error.notice( ERROR, "ModelTopology::CheckTopology:",
+           csmp_error.notice( ERROR, "ModelTopology::EstablishTopology:",
                              "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
       }
       
@@ -2008,9 +2005,9 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     return checks_passed;
 }
 
-template bool ModelTopology::CheckTopology( VSet<1U>&,bool,bool,bool);
-template bool ModelTopology::CheckTopology( VSet<2U>&,bool,bool,bool);
-template bool ModelTopology::CheckTopology( VSet<3U>&,bool,bool,bool);
+template bool ModelTopology::EstablishTopology( VSet<1U>&,bool,bool,bool);
+template bool ModelTopology::EstablishTopology( VSet<2U>&,bool,bool,bool);
+template bool ModelTopology::EstablishTopology( VSet<3U>&,bool,bool,bool);
 
 
 
