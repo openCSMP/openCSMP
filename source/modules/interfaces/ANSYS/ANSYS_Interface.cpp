@@ -266,8 +266,9 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
     const bool correct_orientation_of_surface_elements = true;
     const bool interactive_property_assignment = false;
     mesh_topology.ModelName( meshfile.c_str() );
+    
     mesh_topology.EstablishTopology( vset,
-                                     object_specs_, object_elements_,
+                                     object_specs_, object_elements_, // region names, element types and elements per region
                                      require_unique_names_of_volumes_surfaces_and_lines,
                                      interactive_property_assignment,
                                      correct_orientation_of_surface_elements,

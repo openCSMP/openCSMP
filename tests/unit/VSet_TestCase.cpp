@@ -36,6 +36,7 @@ void VSet_TestCase::run()
    _test( Test_EstablishElementConnectivity2D() );
    _test( Test_ModelConstructionAndSaving2D() );
    Test_ANSYS_ModelConstructionAndSaving2D( "HorFracs2D" );
+   Test_ANSYS_ModelConstructionAndSaving3D(); // prism_test
     
 } // end VSet_TestCase
 
@@ -184,7 +185,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
     // Testing model without boundaries, variable&topology tests
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+".txt").c_str(),true,true,true,false);
+    ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,false);
     ArrayVariable na( "nodal array", modelOutput1.Database(), 2., ROBIN );
     const size_t elementCount1( modelOutput1.Region("Model").Elements() );
     const size_t nodeCount1( modelOutput1.Region("Model").Nodes() );
@@ -217,7 +218,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
     // Testing model without boundaries, variable&topology tests
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+".txt").c_str(),true,true,true,true);
+    ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,true);
     Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
     Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
     Index regionVectorKey = modelOutput2.Database().StorageKey("region vector");
@@ -253,7 +254,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
 
     // testing model with finite volume variables
-    ANSYS_Model3D modelOutput3( input_file_name.data(),(this->getName()+".txt").c_str(),true,true,true,true);
+    ANSYS_Model3D modelOutput3( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,true);
     NodeCenteredFiniteVolumeTransport<3> fvModule1( "Model", modelOutput3, "diffusivity", "nodal variable", "element vector", "nodal variable", false, false );
     Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector") );
     Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor") );

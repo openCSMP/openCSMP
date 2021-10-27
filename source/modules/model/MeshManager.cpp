@@ -1670,7 +1670,7 @@ size_t MeshManager<dim>::EraseNullPointerCells()
 template<size_t dim>
 template<template<size_t> class CELL>
 void  MeshManager<dim>::BuildConnectivity( typename deque<CELL<dim>*>::iterator first,
-                                          typename deque<CELL<dim>*>::iterator last )
+                                           typename deque<CELL<dim>*>::iterator last )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( distance(first,last) == 0U ) {
@@ -1681,7 +1681,7 @@ void  MeshManager<dim>::BuildConnectivity( typename deque<CELL<dim>*>::iterator 
  
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "\n\tBuilding a multimap of the faces of the cells...\n";
+    cout << "\n\tBuilding a vector of face keys for all cells...\n";
     //       key             face number,neighbor
     multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
                                                         surface_neighbor_keys,
@@ -1848,6 +1848,12 @@ template void MeshManager<2>::BuildConnectivity<InterFace>( typename deque<Inter
 template void MeshManager<1>::BuildConnectivity<Element>( typename deque<Element<1>*>::iterator, typename deque<Element<1>*>::iterator );
 template void MeshManager<1>::BuildConnectivity<Face>( typename deque<Face<1>*>::iterator, typename deque<Face<1>*>::iterator );
 template void MeshManager<1>::BuildConnectivity<InterFace>( typename deque<InterFace<1>*>::iterator, typename deque<InterFace<1>*>::iterator );
+
+
+
+
+
+
 
 
 

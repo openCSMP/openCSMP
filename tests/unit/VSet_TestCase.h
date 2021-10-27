@@ -26,7 +26,7 @@ class VSet_TestCase : public Test
       /// using VSet from VSet makers
       bool Test_ModelConstructionAndSaving2D();
       void Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_set="HorFracs2D" );
-      void Test_ANSYS_ModelConstructionAndSaving3D( const std::string& input_file_set );
+      void Test_ANSYS_ModelConstructionAndSaving3D( const std::string& input_file_set="prism_test" );
       
       /// uses  VSet maker-made model with line elements from vset_makers
       bool Test_EstablishElementConnectivity2D();
