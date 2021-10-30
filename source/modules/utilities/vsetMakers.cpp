@@ -2019,9 +2019,103 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
       }
   	}
   	
+    // SKM fix
+    vector<int8_t> bflags(vset.Vertices(),NOT);
+    // overwriting with the boundary flags
+    // bottom
+    bflags[13] = BOTTOM;
+    bflags[17] = BOTTOM;
+    bflags[37] = BOTTOM;
+    bflags[39] = BOTTOM;
+    // right
+    bflags[21] = RIGHT;
+    bflags[27] = RIGHT;
+    bflags[41] = RIGHT;
+    bflags[43] = RIGHT;
+    // top
+    bflags[13] = TOP;
+    bflags[17] = TOP;
+    bflags[37] = TOP;
+    bflags[39] = TOP;
+    // left
+    bflags[14] = LEFT;
+    bflags[24] = LEFT;
+    bflags[38] = LEFT;
+    bflags[42] = LEFT;
+    // back
+    bflags[14] = BACK;
+    bflags[24] = BACK;
+    bflags[38] = BACK;
+    bflags[42] = BACK;
+    // front
+    bflags[50] = FRONT;
+    bflags[53] = FRONT;
+    bflags[56] = FRONT;
+    bflags[58] = FRONT;
+    // edges
+    bflags[12] = EDGE1;
+    bflags[36] = EDGE1;
+   
+    bflags[51] = EDGE2;
+    bflags[57] = EDGE2;
+   
+    bflags[31] = EDGE3;
+    bflags[45] = EDGE3;
+   
+    bflags[11] = EDGE4;
+    bflags[23] = EDGE4;
+   
+    bflags[12] = EDGE5;
+    bflags[36] = EDGE5;
+   
+    bflags[20] = EDGE6;
+    bflags[40] = EDGE6;
+   
+    bflags[35] = EDGE7;
+    bflags[47] = EDGE7;
+   
+    bflags[31] = EDGE8;
+    bflags[45] = EDGE8;
+   
+    bflags[49] = EDGE9;
+    bflags[52] = EDGE9;
+   
+    bflags[55] = EDGE10;
+    bflags[59] = EDGE10;
+   
+    bflags[60] = EDGE11;
+    bflags[62] = EDGE11;
+   
+    bflags[51] = EDGE12;
+    bflags[57] = EDGE12;
+    
+    // corners
+    bflags[8]  = CNR1;
+    bflags[18] = CNR2;
+    bflags[61] = CNR3;
+    bflags[29] = CNR4;
+    bflags[48] = CNR5;
+    bflags[54] = CNR6;
+    bflags[63] = CNR7;
+    bflags[61] = CNR8;
+    
+    // verification of boundary flags
+    for ( size_t i{0}; i<vset.Vertices(); ++i ) {
+         if ( vset.BoundaryFlag(i) != bflags[i] )
+// original data were not correct:   cerr <<"\n\t"<< (int)vset.BoundaryFlag(i) <<" vs. "<< (int)bflags[i];
+         vset.AddBFlag( i, bflags[i] );
+      }
+
     vset.EstablishZeroBasedNumbering();
-    vset.Out();
-}
+    
+    // additional must haves
+    vector<int32> pmtrl(vset.Elements(),1); // all the same material=1
+    // fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    
+//    vset.Out();
+
+} // end test_Create_Prism_Hexa_VSet
 
 
 
@@ -2178,6 +2272,9 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	
     
     //--------------------------ELEMENTS
+    vector<int8_t> vecElementTypes(1,ISOPARAMETRIC_LINEAR_PRISM);
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+
     //define prism elements (elements 0->54), assign nodes per element
     std::deque<std::vector<long64> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
@@ -2348,8 +2445,18 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	}
   	
     vset.EstablishZeroBasedNumbering();
-    vset.Out();
-}
+
+    // SKM_FIX add ons
+    // ---------------
+    // additional must haves
+    // adding corresponding materials to VSet
+    vector<int32> pmtrl(vset.Elements(),1); // matrix
+    // fill( next(pmtrl.begin(),42), pmtrl.end(), 7 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
+//    vset.Out();
+
+} // end
 
 
 
@@ -2360,7 +2467,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
-void test_Create_Pyramid_VSet(VSet<3U> & vset, bool bSkewed )
+void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
 {
   	IsoparametricLinearPyramid iso_pyramid;
   	
@@ -2731,7 +2838,8 @@ void test_Create_Pyramid_VSet(VSet<3U> & vset, bool bSkewed )
   	}
  
     vset.EstablishZeroBasedNumbering();
-}
+    
+} // end test_Create_Pyramid_VSet
 
 
 

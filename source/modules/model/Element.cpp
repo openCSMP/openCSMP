@@ -430,6 +430,7 @@ typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd(
 template<size_t dim>
 void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor elements
 {
+  assert( this->FE() != nullptr );
   assert( elmt_connector_.size() == this->Neighbors() );
   assert( i < this->Neighbors() );
 
@@ -459,6 +460,7 @@ void Element<dim>::Unassign( const Element<dim>* e_ptr )
 template<size_t dim>
 void Element<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 {
+  assert( this->FE() != nullptr );
   assert( node_connector_.size() == this->Nodes() );
   assert( i < this->Nodes() );
   assert( nd_ptr != nullptr );
@@ -570,6 +572,7 @@ double64 x = (*element.N(2))->x();
 template<size_t dim>
 csmp::Node<dim>*  Element<dim>::N( size_t n ) const
 {
+  assert( this->FE() != nullptr );
   assert( node_connector_.size() == this->Nodes() );
   assert( n < this->Nodes() );
   return node_connector_[n];

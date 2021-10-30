@@ -338,7 +338,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
      
      = LOCAL METHOD ONLY KNOWN TO THIS COMPILATION UNIT
  
-     - finds the IDs of the higher dimensional neibors of the current element
+     - finds the IDs of the higher dimensional neghibors of the current element
  
      - identifies which of the neighbors is on the inside and which on the outside
        as indicated by the normal direction of the lower dimensional element
@@ -1117,17 +1117,13 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const 
          return false;
       }
     
-    // establishing region name using BOX_BOUNDARY flag if supplied,
-    //    or the name of the region is used if it contains boundary
-    //    or a boundary name is created
-    string regionName( parseBoundary(boxBoundary) );
-    if ( regionName == "UNDEFINED" ) {
-         // searching for BOUNDARY within it (case insensitive comparison)
-         regionName = dim_m1_region;
-         if ( regionName.find("BOUNDARY") == string::npos &&
-              regionName.find("boundary") == string::npos )
-           regionName = "BOUNDARY_" + regionName;
-      }
+    // establishing region name from the name of the region supplied if it contains boundary
+    // else, a boundary name is created from string 'BOUNDARY_' preceding the region name
+    string regionName( dim_m1_region );
+    if ( regionName.find("BOUNDARY") == string::npos &&
+         regionName.find("boundary") == string::npos )
+       regionName = "BOUNDARY_" + regionName;
+    
     string bName( regionName );
     
     // inserting boundary if not existing yet
@@ -1135,7 +1131,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const 
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
-        cout << "\nBoundaryInterface<"<< dim <<">::CreateExternalBoundaryFrom: " << parseBoundary( boxBoundary ) << endl;
+        cout << "\nBoundaryInterface<"<< dim <<">::CreateExternalBoundaryFrom: done: " << regionName << endl;
         bool succeeded( (*it.first).second.CreateFrom( rref, boundaryComplex->Mesh(), boxBoundary ) );
         // cout << "\nBoundaryInterface<"<< dim <<">::CreateExternalBoundaryFrom: created boundary " <<  parseBoundary( boxBoundary ) << endl;
         return succeeded;
@@ -1980,10 +1976,12 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
   pair<set<string>,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions )
   {
 	  BOUNDARY_COMPLEX<dim>* boundaryComplex(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
-	  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
+	  cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
+
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
 	  set<string> eligibleRegions;
-	  for ( typename map<std::string, csmp::Region<dim> >::iterator
+	  for ( typename map<std::string, csmp::Region<dim> >::const_iterator
 		      it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it )
       {
         if (!IsBoundaryName(it->first))
@@ -1993,12 +1991,14 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
         if constexpr (dim == 3U ) {
             if ( containsVolumeElements(boundaryComplex->Region("Model")) and !containsSurfaceElements(it->second) )
               continue;
-         }
+          }
         eligibleRegions.insert(it->first);
+        if ( !CreateExternalBoundaryFrom( it->first.c_str(), IRREGULAR ) )
+          csmp_error.notice( WARNING, "BoundaryInterface::EstablishBoundariesFromRegions",
+                                      "unable to create Boundary", it->first );
       }
 
 	  // if the boundary called 'Model_BOUNDARY' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
-    ErrorHandler& csmp_error(ErrorHandler::Instance());
 	  if ( eligibleRegions.empty() ) {
          csmp_error.notice( WARNING, "BoundaryInterface::EstablishBoundariesFromRegions",
                            "unable to find eligible lower-dimensional regions to create Boundary objects from");

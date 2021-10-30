@@ -8,6 +8,7 @@
 #include "ArrayVariable.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "vsetMakers.h"
+#include "VTK_Interface.h"
 
 // File I/O and Initialization
 #include "ANSYS_Model3D.h"
@@ -34,9 +35,10 @@ VSet_TestCase::~VSet_TestCase()
 void VSet_TestCase::run()
 {
    _test( Test_EstablishElementConnectivity2D() );
+   _test( Test_EstablishElementConnectivity3D() );
    _test( Test_ModelConstructionAndSaving2D() );
    Test_ANSYS_ModelConstructionAndSaving2D( "HorFracs2D" );
-   Test_ANSYS_ModelConstructionAndSaving3D(); // prism_test
+   Test_ANSYS_ModelConstructionAndSaving3D( "FracBox" ); 
     
 } // end VSet_TestCase
 
@@ -185,7 +187,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
     // Testing model without boundaries, variable&topology tests
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,false);
+    ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,false,false);
     ArrayVariable na( "nodal array", modelOutput1.Database(), 2., ROBIN );
     const size_t elementCount1( modelOutput1.Region("Model").Elements() );
     const size_t nodeCount1( modelOutput1.Region("Model").Nodes() );
@@ -216,9 +218,9 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
       _test( aVal == na );
       }
     
-    // Testing model without boundaries, variable&topology tests
+    // Testing model without boundaries, variable&topology tests (requires 'FracBox' model)
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,true);
+    ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,true,false);
     Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
     Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
     Index regionVectorKey = modelOutput2.Database().StorageKey("region vector");
@@ -351,6 +353,70 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
     return true;
     
  } // end Test_CreateConsistentLineElementOrientations2D
+
+
+
+
+
+
+
+bool VSet_TestCase::Test_EstablishElementConnectivity3D()
+ {
+    VSet<3U> vset;
+    test_Create_Prism_Hexa_VSet( vset);
+    BoundaryFlagsToVTK( vset );
+
+    // making a backup copy
+    VSet<3U> backup_vset( vset );
+    
+    // removing the neighbor information and recreating it
+    vset.RemovePfverts();
+    vset.EstablishElementConnectivity3D();
+
+    // comparison - but only checking for the existing element neighbors since atBoundary(elmt) is not used further
+    cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity3D: errors if any: ";
+    auto itb=backup_vset.PfvertsBegin();
+    size_t elmt{0U}, vec_mismatches{0U};
+    for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
+        for ( size_t i=0U; i<(*it).size(); ++i )
+          if ( (*it)[i] >= 0 && (*it)[i] != (*itb)[i] ) {
+               cerr <<"\n\t"<< elmt <<":";
+               for ( auto i : (*itb) ) cerr <<" "<< i;
+               cerr <<" vs. ";
+               for ( auto i : (*it) ) cerr <<" "<< i;
+               vec_mismatches++;
+            }
+        elmt++;
+      }
+    if ( vec_mismatches == 0 ) cout <<"NONE\n";
+    cout << endl;
+    
+    if ( vec_mismatches > 0 ) return false;
+    return true;
+    
+ } // end Test_CreateConsistentLineElementOrientations3D
+
+
+
+
+
+/**
+   Creates model and writes boundary flags to 'nodal variable' variable
+*/
+void VSet_TestCase::BoundaryFlagsToVTK( VSet<3>& vset )
+ {
+    const string variable_file{"Vset_TestCase-variables.txt"};
+    const bool isoparametric{true};
+    Model<3> model( vset, variable_file.c_str(), isoparametric );
+    
+    VTK_Interface<3>  vtk_out;
+    
+    boxFlagsToVariable( model, "nodal variable", "element number" );
+    
+    vtk_out.OutputDataToVTK( model, "BoundaryFlagsToVTK_output", "nodal variable", static_cast<int>(0) );
+    
+ } // BoundaryFlagsToVTK
+
 
 
 

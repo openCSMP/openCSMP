@@ -394,6 +394,7 @@ template<size_t dim>
 void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE side )
 {
    assert( nptr != nullptr );
+   assert( this->FE() != nullptr );
    
    const size_t finite_element_nodes( this->FE()->Nodes() );
    assert( n_local < finite_element_nodes );

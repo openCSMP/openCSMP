@@ -1017,8 +1017,6 @@ bool VData::CheckFix()
 */
 void VData::EstablishZeroBasedNumbering()
  {
-//    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    
     // test whether nodes are not already numbered 0..1
     const deque<vector<long64> >::const_iterator constElementsEnd(plist.end());
     for ( deque<vector<long64> >::const_iterator
@@ -2965,7 +2963,7 @@ void VData::EstablishElementConnectivity3D()
                     const size_t face_node = plist[elmt_idx][ CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, j ) ];
                     key.insert( face_node );
                  }
-               // inserting newly generated keys into multimap
+               // inserting newly generated keys into map
                if ( CSMP_ElementSpecifications::VolumeElement( etype ) ) {
                     pair<map<set<size_t>,map<size_t,size_t> >::iterator,bool>
                       vit = volume_neighbor_keys.insert( make_pair( key, map<size_t,size_t>{{elmt_idx,face}} ) );
@@ -3233,6 +3231,7 @@ void VData::EstablishElementConnectivity3D()
               else if ( (*it).second.size() == 1 ) {
                   const size_t elmt          = (*(*it).second.begin()).first;
                   const size_t boundary_face = (*(*it).second.begin()).second;
+                  // TODO: one could narrow down which boundary this is, but it will not be used later
                   pfverts[elmt][boundary_face] = IRREGULAR;
                 }
           }

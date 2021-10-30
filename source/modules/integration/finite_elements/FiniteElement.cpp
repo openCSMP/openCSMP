@@ -1022,37 +1022,39 @@ void  FiniteElement::Out() const
  
  
  
- 
+/**
+      Ordered in sequence of most common queries to speed up
+*/
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
   {
+     if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return SURFACE;
+     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return SURFACE;
      if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return LINE;
-     if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return LINE; 						
-     if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return LINE; 
-     if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return SURFACE;  					
-     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return SURFACE;
-     if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return SURFACE; 					 
+     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return LINE;
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return SURFACE;
+     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;
      if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ) return SURFACE; 		
+     if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return LINE;
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return SURFACE;
      if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE ) return SURFACE;
-     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return VOLUME; 					
-     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return VOLUME; 			    
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return VOLUME;
      if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return VOLUME;   
      if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON ) return VOLUME;
-     if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) return VOLUME;						 
-     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) return VOLUME; 					
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) return VOLUME;
      if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ) return VOLUME;     				
      if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID ) return VOLUME;
-     if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) return VOLUME;  						
-     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) return VOLUME;         			
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) return VOLUME;
      if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ) return VOLUME;           			
      if ( etype == ISOPARAMETRIC_CUBIC_PRISM ) return VOLUME;
-     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return SURFACE;                  
-     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return SURFACE;    
-     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;            
-     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;  
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return SURFACE;
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;
      if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return SURFACE;  		
      if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ) return SURFACE;
-     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return VOLUME;              		
-     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return VOLUME;       		
+     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return VOLUME;
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return VOLUME; 				
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return VOLUME;
      if ( etype == LINEAR_CUBOID) return VOLUME;

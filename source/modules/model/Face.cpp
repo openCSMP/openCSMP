@@ -584,6 +584,7 @@ template<size_t dim>
 void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
  {
     assert( nd_ptr != nullptr );
+    assert( this->FE() != nullptr );
     assert( i < Nodes()*2U );
     assert( !node_connector_.empty() );
 
@@ -595,7 +596,7 @@ void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 template<size_t dim>
 void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  {
-    assert( f_ptr != nullptr );
+    assert( this->FE() != nullptr );
     assert( i < Neighbors() );
     assert( face_connector_.size() == this->FE()->Neighbors() );
 
@@ -604,9 +605,10 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
 
 
 template<size_t dim>
-bool Face<dim>::Unassign(Face<dim>* f_ptr)
+bool Face<dim>::Unassign( Face<dim>* f_ptr )
 {
-	assert(f_ptr != nullptr);	
+	assert( f_ptr != nullptr );
+  assert( this->FE() != nullptr );
 	assert(face_connector_.size() == this->FE()->Neighbors());
 	for (size_t i(0); i < face_connector_.size(); ++i)
 		if (f_ptr == face_connector_[i])

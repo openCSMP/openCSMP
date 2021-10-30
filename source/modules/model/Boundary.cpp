@@ -714,7 +714,8 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   // establishing boundary node container
   this->CreateNodePointerVector();
   
-  // checks whether Faces are interconnected because this info must be there to identify the perimeter
+  // checks whether Faces are interconnected using the last face
+  // (this info must be there to identify the perimeter)
   const Face<dim>* const fptr = this->elmt_vec_.back();
   const long nbors(fptr->ConnectedNeighbors()), min_nbors(fptr->Faces() - (dim-1));
   bool faces_are_interconnected = ( nbors >= max(1L,min_nbors) ) ? true : false;
@@ -841,6 +842,8 @@ When establishing face connectivity(parent elements) the convention is as outlin
 the created face unit normal points outward.
 
 @attention This method will work as well for a split boundary.
+
+@attention This method will not create line elements
 */
 template<size_t dim>
 bool Boundary<dim>::CreateFrom( const Region<dim>& region,
@@ -857,9 +860,6 @@ bool Boundary<dim>::CreateFrom( const Region<dim>& region,
   // 3D ( only line elements),
   // 2D ( only line elements )
 
-  // for the case of a 3D model containing surface elements
-  const bool regionContainsSurfaceElements( containsSurfaceElements( region ) );
-
   // LVS
   const LocalVariables lvsFaces( FaceVariables() );
   const IntegrationPointVariables lvsIntegrationPoints( FaceIntegrationPointVariables() );
@@ -870,37 +870,37 @@ bool Boundary<dim>::CreateFrom( const Region<dim>& region,
   // memorizing the last Face in the MeshManager before new faces were generated
   const size_t n_faces_before = meshManager.Faces();
   
+  string region_name{region.Name()};
   // looping over regions elements, assuring that it's an eligible face type, creating new face with variable storage,
   // establishing connectivity and inserting into boundary element container
   const typename vector<Element<dim>*>::const_iterator regionElementsEnd( region.ElementsEnd() );
   for ( typename vector<Element<dim>*>::const_iterator it = region.ElementsBegin(); it != regionElementsEnd; ++it )
     {
-      // in 3D, there still could be line elements in the region which are not eligible as face,
+      // in 3D, there still could be line elements in the region which are not eligible to become faces,
       // unless the Region consist only of line elements
-      if ( dim == 3 && (*it)->IsLineElement() && regionContainsSurfaceElements )
-        continue;
+      if constexpr ( dim == 3 ) if ( (*it)->IsLineElement() ) continue;
 
-      // finding the higher-dimensional element that sits adjacent to the lower-dimensional one
-      std::string region_name = region.Name();
-      std::vector<csmp::Element<dim>*> inner_outer_elements;
+      // finding the higher-dimensional element(s) that sit(s) adjacent to the lower-dimensional one
+      const vector<Node<dim>*> face_nodes_in_correct_order( (*it)->NodesBegin(), (*it)->NodesEnd() );
+      pair<Element<dim>*,Element<dim>*>  inner_outer_elements = parentElementsSharedByFace( face_nodes_in_correct_order );
 
-      if ( !higherDimensionalNeighbors( *(*it), inner_outer_elements ) ) continue;
-      if ( inner_outer_elements.size() == 2 ) {
-          pair<size_t,size_t> face_ids = findAdjacentElementFaces( inner_outer_elements[0], inner_outer_elements[1] );
-          // created a new face
+      // if there is an outer element
+      if ( inner_outer_elements.second != nullptr ) {
+          pair<size_t,size_t> face_ids = findAdjacentElementFaces( inner_outer_elements.first, inner_outer_elements.second );
+          // create new internal face
           this->elmt_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
-                                                          inner_outer_elements[0], inner_outer_elements[1],
+                                                          inner_outer_elements.first, inner_outer_elements.second,
                                                           face_ids.first, face_ids.second,
                                                           lvsFaces, lvsIntegrationPoints ) );
         }
-      else {
+      else { // if this is a Face at the model boundary
           size_t face{0};
-          while( face < inner_outer_elements[0]->Neighbors() ) {
-               if ( inner_outer_elements[0]->Neighbor(face) == nullptr ) break;
+          while( face < inner_outer_elements.first->Neighbors() ) {
+               if ( inner_outer_elements.first->Neighbor(face) == nullptr ) break;
                face++;
             }
-          // created a new boundary face
-          this->elmt_vec_.push_back( meshManager.AddBoundaryFace( inner_outer_elements[0], face,
+          // create new boundary face
+          this->elmt_vec_.push_back( meshManager.AddBoundaryFace( inner_outer_elements.first, face,
                                                                   lvsFaces, lvsIntegrationPoints ) );
         }
         

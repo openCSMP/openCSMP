@@ -30,6 +30,10 @@ class VSet_TestCase : public Test
       
       /// uses  VSet maker-made model with line elements from vset_makers
       bool Test_EstablishElementConnectivity2D();
+      bool Test_EstablishElementConnectivity3D();
+      
+      // helpers
+      void BoundaryFlagsToVTK( VSet<3>& vset );
       
     private:
       const bool verbose_;

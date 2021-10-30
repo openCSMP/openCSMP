@@ -130,6 +130,13 @@ class Node : public LocalVariableStorage<dim,Node> {
     friend class FiniteElement_TestData; // for testing 
 };
 
+
+// FUNCTIONS INVOLVING NODES
+
+/// returns parent elements shared by face, inner side is reported first; outer next else application: give nodes of lower-dimensional face to find element on either side
+template<size_t dim>
+std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( const std::vector<Node<dim>*>& face_nodes_in_correct_order );
+
 } // csmp
 
 #endif

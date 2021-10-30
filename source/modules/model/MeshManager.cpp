@@ -1678,164 +1678,55 @@ void  MeshManager<dim>::BuildConnectivity( typename deque<CELL<dim>*>::iterator 
          return;
       }
     cout << "\nMeshManager<"<< dim <<">::BuildConnectivity: Establishing CSMP FE neighbor connectivity...\n";
- 
-    // 1. making separate search vectors of face keys for surface and line elements
-    // ----------------------------------------------------------------------------
-    cout << "\n\tBuilding a vector of face keys for all cells...\n";
-    //       key             face number,neighbor
-    multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
-                                                        surface_neighbor_keys,
-                                                        line_neighbor_keys;
-    vector<size_t>                 fnids;
-    typename std::set<Node<dim>*>  key; // region, boundary and split boundary all use nodes
-
-    while ( first != last ) {
-          const size_t faces((*first)->Faces());
-          for ( size_t face=0U; face<faces; ++face )
-            {
-               if ( (*first) == nullptr ) {
-                    csmp_error.notice( ERROR, "MeshManager<dim>::BuildConnectivity:",
-                                      "supplied input range contains null pointers; nothing was done." );
-                    return;
-                 }
-               // creating face key of node pointers from indices of face nodes
-               (*first)->FE()->NodesOfFace( face, fnids );
-               const size_t nodes(fnids.size());
-               for ( size_t j=0U; j<nodes; ++j )
-                 key.insert( (*first)->N( fnids[j] ) );
-                 
-               // inserting newly generated keys into multimap
-               if ( (*first)->IsVolumeElement() )
-                 volume_neighbor_keys.insert( make_pair( key, make_pair( face, (*first) ) ) );
-               else if ( (*first)->IsSurfaceElement() )
-                 surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*first) ) ) );
-               else // for all line elements
-                 line_neighbor_keys.insert( make_pair( key, make_pair( face, (*first) ) ) );
-               key.clear();
-            }
-          first++;
-        }
-
-    // 2. (re)building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "  (Re)building neighbor connectivity...";
-
-    // 2.1 line elements
-    // -----------------
-    if ( !line_neighbor_keys.empty() )
-      {
-
-csmp_error.notice( ERROR, "MeshManager::BuildConnectivity:", "line element neighbor connectivity calculation most likely faulty.");
-
-        CELL<dim>* e1Ptr(nullptr);
-        CELL<dim>* e2Ptr(nullptr);
-
-        cout << "\n\t\tline elements...";
-        //                key                  n-face, neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                              it2(line_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != line_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning the two cells face neighbors to one another
-                   //                        face pointer  nbor face idx   neighbor pointer
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // line elements
     
-    // 2.2 surface elements
-    // --------------------
-    if ( dim >= 2U and !surface_neighbor_keys.empty() )
-      {
-        cout << "\n\t\tsurface elements...";
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
-                                                                                 it2(surface_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != surface_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                    assert( (*it1).second.second != nullptr );
-                    assert( (*it2).second.second != nullptr );
-                    CELL<dim>* e1Ptr((*it1).second.second);
-                    CELL<dim>* e2Ptr((*it2).second.second);
-                    if ( e1Ptr != e2Ptr ) {
-                         ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                         ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                      }
-                    else csmp_error.notice( WARNING, "MeshManager::BuildConnectivity:",
-                                            "discovered potentially duplicate surface simplex.");
-                    ++it1;
-                    ++it2;
-                }
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
+    // making subranges for the volume, surface, and line elements
+    vector<CELL<dim>*> volume_cells, surface_cells, line_cells;
+    const size_t n_cells_max = distance(first,last);
+    const auto   cellsEnd{last};
+    
+    // if we are dealing with element connectivity in 3D
+    if constexpr ( dim == 3 && is_same< CELL<dim>,Element<dim> >::value ) {
+        volume_cells.reserve( n_cells_max );
+        surface_cells.reserve( n_cells_max/3 );
+        line_cells.reserve( n_cells_max/6 );
+        while ( first != cellsEnd ) {
+             if      ( (*first)->FE()->IsVolumeElement() )  volume_cells.push_back(*first);
+             else if ( (*first)->FE()->IsSurfaceElement() ) surface_cells.push_back(*first);
+             else if ( (*first)->FE()->IsLineElement() )    line_cells.push_back(*first);
+             first++;
           }
-      } // surface elements
+        // connecting the elements found
+        if ( !volume_cells.empty() )  BuildVolumeElementConnectivity<Element>( volume_cells.begin(), volume_cells.end() );
+        if ( !surface_cells.empty() ) BuildSurfaceElementConnectivity<Element>( surface_cells.begin(), surface_cells.end() );
+        if ( !line_cells.empty() )    BuildLineElementConnectivity<Element>( line_cells.begin(), line_cells.end() );
+      }
       
-    // 2.3 volume elements
-    // -------------------
-    if ( dim == 3U and !volume_neighbor_keys.empty() ) {
-
-        CELL<dim>* e1Ptr(nullptr);
-        CELL<dim>* e2Ptr(nullptr);
-
-        cout << "\n\t\tvolume elements...\n";
-        //                key             n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
-                                                                              it2(volume_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != volume_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr );
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == volume_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
+    // else
+    if constexpr ( is_same< CELL<dim>,Face<dim> >::value || is_same< CELL<dim>,InterFace<dim> >::value  ) {
+        // 2D case
+        if constexpr ( dim == 3 || dim == 2 ) {
+             surface_cells.reserve( n_cells_max );
+             line_cells.reserve( n_cells_max/6 );
+             while ( first != cellsEnd ) {
+                  if ( (*first)->FE()->IsSurfaceElement() )   surface_cells.push_back(*first);
+                  else if ( (*first)->FE()->IsLineElement() ) line_cells.push_back(*first);
+                  first++;
+               }
+             // connecting the elements found
+             if ( !surface_cells.empty() ) BuildSurfaceElementConnectivity<CELL>( surface_cells.begin(), surface_cells.end() );
+             if ( !line_cells.empty() )    BuildLineElementConnectivity<CELL>( line_cells.begin(), line_cells.end() );
           }
-      } // dim=3
+        // 1D case
+        if constexpr ( dim == 1 ) {
+             line_cells.reserve( n_cells_max );
+             while ( first != cellsEnd ) {
+                  line_cells.push_back(*first);
+                  first++;
+               }
+          }
+      }
     
- } // end RebuildConnectivity
+ } // end BuildConnectivity
 
 template void MeshManager<3>::BuildConnectivity<Element>( typename deque<Element<3>*>::iterator, typename deque<Element<3>*>::iterator );
 template void MeshManager<3>::BuildConnectivity<Face>( typename deque<Face<3>*>::iterator, typename deque<Face<3>*>::iterator );
@@ -1851,8 +1742,370 @@ template void MeshManager<1>::BuildConnectivity<InterFace>( typename deque<Inter
 
 
 
+/**
+    Element connectivity because volumetric elements never are faces or interfaces.
+*/
+
+template<>
+template<template<size_t> class CELL>
+void MeshManager<3>::BuildVolumeElementConnectivity( typename std::vector<CELL<3U>*>::iterator first,
+                                                     typename std::vector<CELL<3U>*>::iterator last )
+   {
+      // this method applies only to volumetric elements and 3D
+      if constexpr ( is_same< CELL<3>,Element<3> >::value ) {
+           // creating search keys from the corner nodes of the element faces
+           // corner-nodes      elements that share face and their face id
+           map<set<Node<3>*>,map<Element<3>*,size_t> >  elmt_pairs;
+           vector<size_t> fnids;
+           const auto     elementsEnd{last};
+           
+           // pairing the elements up in the search map
+           while ( first != elementsEnd ) {
+                assert( (*first) != nullptr );
+                const size_t n_faces{ (*first)->Faces() };
+                for ( size_t face{0}; face < n_faces; ++face ) {
+                     // making the search key
+                     (*first)->FE()->NodesOfFace( face, fnids );
+                     set<Node<3>*> face_nodes;
+                     size_t n_corner_nodes{ fnids.size() };
+                     for ( size_t node{0}; node < n_corner_nodes; ++node ) {
+                          assert( (*first)->N(node) != nullptr );
+                          face_nodes.insert( (*first)->N(node) );
+                       }
+                     // trying to insert it into the map
+                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<Element<3>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the elements to one another
+           for ( auto it : elmt_pairs ) {
+                size_t n_face_nbors{ it.second.size() };
+                if ( n_face_nbors == 2 ) {
+                     Element<3>* const eptr1 = (*it.second.begin()).first;
+                     Element<3>* const eptr2 = (*it.second.rbegin()).first;
+                     const size_t face_e1    = (*it.second.begin()).second;
+                     const size_t face_e2    = (*it.second.rbegin()).second;
+                     eptr1->Assign( face_e1, eptr2 );
+                     eptr2->Assign( face_e2, eptr1 );
+                  }
+                // else no assignments have to be made as there is no neighbor
+                assert( n_face_nbors <= 2 );
+             }
+        }
+   
+   } // end BuildVolumdElementConnectivity
+
+template void MeshManager<3>::BuildVolumeElementConnectivity<Element>( typename vector<Element<3>*>::iterator,
+                                                                       typename vector<Element<3>*>::iterator );
 
 
+
+
+
+/**
+    Connects neighboring cells, disambiguating the potential manifolds by choosing co-planar elements.
+    
+    This is accomplished by finding the angle between 2 suface elements in 3D,  returning the acute angle in degrees (0..90o).
+*/
+template<size_t dim>
+template<template<size_t> class CELL>
+void MeshManager<dim>::BuildSurfaceElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                                        typename std::vector<CELL<dim>*>::iterator last )
+   {
+      // this method applies only to surface elements in 3D
+      if constexpr ( dim == 3 ) {
+           // creating search keys from the corner nodes of the element faces
+           // corner-nodes      elements that share face and their face id
+           map<set<Node<3>*>,map<CELL<3>*,size_t> >  elmt_pairs;
+           vector<size_t> fnids;
+           const auto     elementsEnd{last};
+           
+           // pairing the elements up in the search map
+           while ( first != elementsEnd ) {
+                assert( (*first) != nullptr );
+                const size_t n_faces{ (*first)->Faces() };
+                for ( size_t face{0}; face < n_faces; ++face ) {
+                     // making the search key
+                     (*first)->FE()->NodesOfFace( face, fnids );
+                     set<Node<3>*> face_nodes;
+                     size_t n_corner_nodes{ fnids.size() };
+                     for ( size_t node{0}; node < n_corner_nodes; ++node ) {
+                          assert( (*first)->N(node) != nullptr );
+                          face_nodes.insert( (*first)->N(node) );
+                       }
+                     // trying to insert it into the map
+                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<CELL<3>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the cells to one another
+           for ( auto it : elmt_pairs ) {
+                size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2 ) {
+                     CELL<3>* const ptr1  = (*it.second.begin()).first;
+                     CELL<3>* const ptr2  = (*it.second.rbegin()).first;
+                     const size_t face_e1 = (*it.second.begin()).second;
+                     const size_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is a manifold and two most suitable neighbors must be found
+                else if ( n_face_nbors > 2 ) { // TODO: test
+                     // finding all possible combinations of surface elements
+                     vector<long64> sequence( n_face_nbors );
+                     iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
+                     const size_t            n_samples{2};
+                     deque<vector<long64> >  combinations;
+                     const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
+                     // finding the combination of surfaces with the smallest acute angle between them
+                     map<double64,size_t>  ordered_combinations;
+                     for ( size_t i{0}; i < n_combinations; ++i ) {
+                          CELL<3>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
+                          CELL<3>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          const double64 angle = angleBetweenSurfaceCells( ptr1, ptr2 );
+                          const double64 acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          // ordering
+                          ordered_combinations.insert( make_pair(acute_angle,i) );
+                       }
+                     // the first element in the map has the smallest angle
+                     const size_t combi   = (*ordered_combinations.begin()).second;
+                     CELL<3>* const ptr1  = (*next(it.second.begin(),combinations[combi][0])).first;
+                     CELL<3>* const ptr2  = (*next(it.second.begin(),combinations[combi][1])).first;
+                     const size_t face_e1 = (*next(it.second.begin(),combinations[combi][0])).second;
+                     const size_t face_e2 = (*next(it.second.begin(),combinations[combi][1])).second;
+                     // uff! - finally.
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else no assignments have to be made as there is no neighbor
+             }
+        }
+ 
+      // for surface elements, faces or interfaces in a 2D model
+      if constexpr ( dim == 2 ) {
+           map<set<Node<2>*>,map<CELL<2>*,size_t> > elmt_pairs;
+           vector<size_t> fnids;
+           const auto     elementsEnd{last};
+           
+           // pairing the elements up in the search map
+           while ( first != elementsEnd ) {
+                assert( (*first) != nullptr );
+                const size_t n_faces{ (*first)->Faces() };
+                for ( size_t face{0}; face < n_faces; ++face ) {
+                     // making the search key
+                     (*first)->FE()->NodesOfFace( face, fnids );
+                     set<Node<2>*> face_nodes;
+                     size_t n_corner_nodes{ fnids.size() };
+                     for ( size_t node{0}; node < n_corner_nodes; ++node ) {
+                          assert( (*first)->N(node) != nullptr );
+                          face_nodes.insert( (*first)->N(node) );
+                       }
+                     // trying to insert it into the map
+                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<CELL<2>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the elements to one another
+           for ( auto it : elmt_pairs ) {
+                size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2 ) {
+                     CELL<2>* const ptr1  = (*it.second.begin()).first;
+                     CELL<2>* const ptr2  = (*it.second.rbegin()).first;
+                     const size_t face_e1 = (*it.second.begin()).second;
+                     const size_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is a manifold and two most suitable neighbors must be found
+             }
+        }
+ 
+   } // end BuildSurfaceElementConnectivity
+                                        
+template void MeshManager<3>::BuildSurfaceElementConnectivity<Element>( typename vector<Element<3>*>::iterator,
+                                                                        typename vector<Element<3>*>::iterator );
+template void MeshManager<2>::BuildSurfaceElementConnectivity<Element>( typename vector<Element<2>*>::iterator,
+                                                                        typename vector<Element<2>*>::iterator );
+
+template void MeshManager<3>::BuildSurfaceElementConnectivity<Face>( typename vector<Face<3>*>::iterator,
+                                                                     typename vector<Face<3>*>::iterator );
+template void MeshManager<2>::BuildSurfaceElementConnectivity<Face>( typename vector<Face<2>*>::iterator,
+                                                                     typename vector<Face<2>*>::iterator );
+
+template void MeshManager<3>::BuildSurfaceElementConnectivity<InterFace>( typename vector<InterFace<3>*>::iterator,
+                                                                          typename vector<InterFace<3>*>::iterator );
+template void MeshManager<2>::BuildSurfaceElementConnectivity<InterFace>( typename vector<InterFace<2>*>::iterator,
+                                                                          typename vector<InterFace<2>*>::iterator );
+
+
+
+
+/**
+   Line element manifolds exist in 3D and 2D.
+*/
+template<size_t dim>
+template<template<size_t> class CELL>
+void MeshManager<dim>::BuildLineElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                                     typename std::vector<CELL<dim>*>::iterator last )
+   {
+      // this method applies only to line elements in 2 and 3D
+      if constexpr ( dim != 1 ) {
+           // creating search keys from the corner nodes of the element faces
+           // corner-nodes      elements that share face and their face id
+           map<set<Node<dim>*>,map<CELL<dim>*,size_t> >  elmt_pairs;
+           vector<size_t> fnids;
+           const auto     elementsEnd{last};
+           
+           // pairing the elements up in the search map
+           while ( first != elementsEnd ) {
+                assert( (*first) != nullptr );
+                const size_t n_faces{ (*first)->Faces() };
+                for ( size_t face{0}; face < n_faces; ++face ) {
+                     // making the search key (only single nodes 0 or 1)
+                     const set<Node<dim>*> face_nodes{ (*first)->N(face) };
+                     // trying to insert it into the map
+                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<CELL<dim>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the cells to one another
+           for ( auto it : elmt_pairs ) {
+                size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2 ) {
+                     CELL<dim>* const ptr1  = (*it.second.begin()).first;
+                     CELL<dim>* const ptr2  = (*it.second.rbegin()).first;
+                     const size_t face_e1 = (*it.second.begin()).second;
+                     const size_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is a manifold and two most suitable neighbors must be found
+                else if ( n_face_nbors > 2 ) { // TODO: test
+                     // finding all possible combinations of surface elements
+                     vector<long64> sequence( n_face_nbors );
+                     iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
+                     const size_t            n_samples{2};
+                     deque<vector<long64> >  combinations;
+                     const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
+                     // finding the combination of surfaces with the smallest acute angle between them
+                     map<double64,size_t>  ordered_combinations;
+                     for ( size_t i{0}; i < n_combinations; ++i ) {
+                          CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
+                          CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          const double64 angle = angleBetweenLineCells( ptr1, ptr2 );
+                          const double64 acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          // ordering
+                          ordered_combinations.insert( make_pair(acute_angle,i) );
+                       }
+                     // the first element in the map has the smallest angle
+                     const size_t combi    = (*ordered_combinations.begin()).second;
+                     CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
+                     CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
+                     const size_t face_e1  = (*next(it.second.begin(),combinations[combi][0])).second;
+                     const size_t face_e2  = (*next(it.second.begin(),combinations[combi][1])).second;
+                     // uff! - finally.
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else no assignments have to be made as there is no neighbor
+             }
+        }
+ 
+      // for line elements, faces or interfaces in a 1D model
+      if constexpr ( dim == 1 ) {
+           map<set<Node<1>*>,map<CELL<1>*,size_t> >  elmt_pairs;
+           vector<size_t> fnids;
+           const auto     elementsEnd{last};
+           
+           // pairing the elements up in the search map
+           while ( first != elementsEnd ) {
+                assert( (*first) != nullptr );
+                const size_t n_faces{ (*first)->Faces() };
+                for ( size_t face{0}; face < n_faces; ++face ) {
+                     // making the search key
+                     (*first)->FE()->NodesOfFace( face, fnids );
+                     set<Node<1>*> face_nodes;
+                     size_t n_corner_nodes{ fnids.size() };
+                     for ( size_t node{0}; node < n_corner_nodes; ++node ) {
+                          assert( (*first)->N(node) != nullptr );
+                          face_nodes.insert( (*first)->N(node) );
+                       }
+                     // trying to insert it into the map
+                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<CELL<1>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the elements to one another
+           for ( auto it : elmt_pairs ) {
+                size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2 ) {
+                     CELL<1>* const ptr1  = (*it.second.begin()).first;
+                     CELL<1>* const ptr2  = (*it.second.rbegin()).first;
+                     const size_t face_e1 = (*it.second.begin()).second;
+                     const size_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is a manifold and two most suitable neighbors must be found
+             }
+        }
+        
+   } // end BuildLineElementConnectivity
+
+
+template void MeshManager<3>::BuildLineElementConnectivity<Element>( typename vector<Element<3>*>::iterator,
+                                                                     typename vector<Element<3>*>::iterator );
+template void MeshManager<2>::BuildLineElementConnectivity<Element>( typename vector<Element<2>*>::iterator,
+                                                                     typename vector<Element<2>*>::iterator );
+
+template void MeshManager<3>::BuildLineElementConnectivity<Face>( typename vector<Face<3>*>::iterator,
+                                                                  typename vector<Face<3>*>::iterator );
+template void MeshManager<2>::BuildLineElementConnectivity<Face>( typename vector<Face<2>*>::iterator,
+                                                                  typename vector<Face<2>*>::iterator );
+
+template void MeshManager<3>::BuildLineElementConnectivity<InterFace>( typename vector<InterFace<3>*>::iterator,
+                                                                       typename vector<InterFace<3>*>::iterator );
+template void MeshManager<2>::BuildLineElementConnectivity<InterFace>( typename vector<InterFace<2>*>::iterator,
+                                                                       typename vector<InterFace<2>*>::iterator );
 
 
 

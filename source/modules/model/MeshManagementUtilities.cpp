@@ -1415,13 +1415,14 @@ bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double64 tolera
 
 
 /**
-    Computes barycentre-to-node distances for all parent elements of node and returns them into the supplied vector
+    For the supplied range of nodes, for each node,
+    computes parent element barycentre-to-node distances for all parent elements and returns them into the supplied vector
     distances_and_weight vector [e1,e2...e_n,e_sum] with a size of parent elements+1
 */
 template<size_t dim>
-void distanceWeights( typename vector<Node<dim>*>::const_iterator nodes_begin,
-                      typename vector<Node<dim>*>::const_iterator nodes_end,
-                      vector<vector<double64> >& distances_and_weights )
+void distancesAndWeights( typename vector<Node<dim>*>::const_iterator nodes_begin,
+                          typename vector<Node<dim>*>::const_iterator nodes_end,
+                          vector<vector<double64> >& distances_and_weights )
  {
      distances_and_weights.resize(distance(nodes_begin,nodes_end));
      size_t  node_index(0U);
@@ -1446,9 +1447,9 @@ void distanceWeights( typename vector<Node<dim>*>::const_iterator nodes_begin,
    
  } // end distanceWeights
 
-template void distanceWeights<1>( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator, vector<vector<double64> >& );
-template void distanceWeights<2>( vector<Node<2>*>::const_iterator, vector<Node<2>*>::const_iterator, vector<vector<double64> >& );
-template void distanceWeights<3>( vector<Node<3>*>::const_iterator, vector<Node<3>*>::const_iterator, vector<vector<double64> >& );
+template void distancesAndWeights<1>( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator, vector<vector<double64> >& );
+template void distancesAndWeights<2>( vector<Node<2>*>::const_iterator, vector<Node<2>*>::const_iterator, vector<vector<double64> >& );
+template void distancesAndWeights<3>( vector<Node<3>*>::const_iterator, vector<Node<3>*>::const_iterator, vector<vector<double64> >& );
 
 
 
@@ -1711,8 +1712,56 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain 
 
 
 
+template<template<size_t> class CELL>
+double64 angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 )
+ {
+    assert( cell1 != nullptr );
+    assert( cell2 != nullptr );
+    assert( cell1->FE()->IsSurfaceElement() );
+    assert( cell2->FE()->IsSurfaceElement() );
+    
+    Point<3> nrml1( cell1->UnitNormal() );
+    Point<3> nrml2( cell2->UnitNormal() );
+    
+    // cos theta = dot-product over cross-product (length1 * length2)
+    // already in degrees
+    return angleBetweenEdges( make_pair( Point<3U>{0.,0.,0.}, nrml1 ),
+                              make_pair( Point<3U>{0.,0.,0.}, nrml2 ) );
+    
+ } // end angleBetweenSurfaceCells
+
+template double64 angleBetweenSurfaceCells<Element>( const Element<3>* const, const Element<3>* const );
+template double64 angleBetweenSurfaceCells<Face>( const Face<3>* const, const Face<3>* const );
+template double64 angleBetweenSurfaceCells<InterFace>( const InterFace<3>* const, const InterFace<3>* const );
 
 
+
+
+/**
+    Line elements can exist in all 3 spatial dimensions.
+*/
+template<size_t dim, template<size_t> class CELL>
+double64 angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 )
+ {
+    assert( cell1 != nullptr );
+    assert( cell2 != nullptr );
+    assert( cell1->FE()->IsLineElement() );
+    assert( cell2->FE()->IsLineElement() );
+    
+    // cos theta = dot-product over cross-product (length1 * length2)
+    // already in degrees
+    return angleBetweenEdges( make_pair( cell1->N(0)->Coordinate(), cell1->N(1)->Coordinate() ),
+                              make_pair( cell2->N(0)->Coordinate(), cell2->N(1)->Coordinate() ) );
+    
+ } // end angleBetweenSurfaceCells
+
+template double64 angleBetweenLineCells<3,Element>( const Element<3>* const, const Element<3>* const );
+template double64 angleBetweenLineCells<3,Face>( const Face<3>* const, const Face<3>* const );
+template double64 angleBetweenLineCells<3,InterFace>( const InterFace<3>* const, const InterFace<3>* const );
+
+template double64 angleBetweenLineCells<2,Element>( const Element<2>* const, const Element<2>* const );
+template double64 angleBetweenLineCells<2,Face>( const Face<2>* const, const Face<2>* const );
+template double64 angleBetweenLineCells<2,InterFace>( const InterFace<2>* const, const InterFace<2>* const );
 
 
 

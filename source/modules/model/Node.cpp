@@ -460,12 +460,121 @@ void Node<dim>::Out() const
          manifold_->Out();
       }
     
- } // end out
+ } // end Out
  
 
 template class Node<1U>;
 template class Node<2U>;
 template class Node<3U>;
+ 
+ 
+ 
+ // NON-MEMBER FUNCTIONS
+ 
+/**
+   returns parent elements shared by face, inner side is reported first; outer next else application: give nodes of lower-dimensional face to find element on either side
+*/
+template<size_t dim>
+pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( const vector<Node<dim>*>& face_nodes )
+ {
+    assert( !face_nodes.empty() );
+    // create sets of the parent elements of the face nodes checking which ones are shared
+    const typename vector<Node<dim>*>::const_iterator nodesEnd{face_nodes.end()};
+    typename vector<Node<dim>*>::const_iterator nit{face_nodes.begin()};
+
+    // creating a set of the parent elements of the first node
+    assert( (*nit)->Parents() > 0 );
+    const size_t n_parents{(*nit)->Parents()};
+    set<Element<dim>*> shared_parents;
+    for ( size_t i{0}; i<n_parents; ++i ) {
+         assert( (*nit)->Parent(i) != nullptr );
+         if ( dim == parseFiniteElementDimension( (*nit)->Parent(i)->FE()->ElementType() ) )
+           shared_parents.insert( (*nit)->Parent(i) );
+      }
+    nit++;
+
+    // searching for shared parent elements in the following nodes
+    while ( nit != nodesEnd ) {
+         set<Element<dim>*> temp;
+         const size_t n_parents{(*nit)->Parents()};
+         for ( size_t i{0}; i<n_parents; ++i ) {
+              assert( (*nit)->Parent(i) != nullptr );
+              if ( dim == parseFiniteElementDimension( (*nit)->Parent(i)->FE()->ElementType() ) )
+                if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
+                  temp.insert( (*nit)->Parent(i) );
+           }
+         // shared parents is narrowed down further
+         shared_parents = temp;
+         nit++;
+      }
+      
+    // drawing the results together
+    assert( !shared_parents.empty() );
+    if ( shared_parents.size() == 1 ) return make_pair( (*shared_parents.begin()), nullptr );
+    
+    // if two parent elements were found, the one on the inside needs to be determined
+    assert( shared_parents.size() == 2 );
+    // initial guess
+    pair<Element<dim>*,Element<dim>*> result( (*shared_parents.begin()), (*shared_parents.rbegin()) );
+    if constexpr ( dim == 3 ) {
+         // getting normal to face from the first 3 node coordinates
+         assert( face_nodes.size() >= 3 );
+         Point<3> vec1(face_nodes[0]->Coordinate() - face_nodes[1]->Coordinate()); // cw
+         Point<3> vec2(face_nodes[2]->Coordinate() - face_nodes[1]->Coordinate()); // ccw
+         Point<3> nrml =  crossProduct( vec2, vec1 );
+         // getting the barycentre of the face (just considering 3 nodes, assuming it is reasonably planar)
+         Point<3> fbarycentre = face_nodes[0]->Coordinate() + face_nodes[1]->Coordinate() + face_nodes[2]->Coordinate();
+         fbarycentre /= 3.;
+         // checking whether a vector from the faces barycentre to the parent element center yields a negative or positive dot product
+         Point<3> ebarycentre =(*shared_parents.begin())->BaryCenter();
+         Point<3> vec3(ebarycentre - fbarycentre);
+         // using dot-product to find inner element: if normal is pointing toward barycentre of first element, initial order needs to be reversed
+         if ( dotProduct( nrml, vec3 ) > 0. ) {
+              auto swap     = result.second;
+              result.second = result.first;
+              result.first  = swap;
+           }
+      }
+    if constexpr ( dim == 2 ) {
+         // 2D case where the face is line and the non-existing normal points out of the plane
+         assert( face_nodes.size() == 2 );
+         Point<2> vec(face_nodes[1]->Coordinate() - face_nodes[0]->Coordinate()); // line element node numbering
+         // rotating this line clockwise to get the normal
+         Point<2> nrml( -vec[1] /* -y */, vec[0] /* x */ );
+         // getting the barycentre of the face (just considering 3 nodes, assuming it is reasonably planar)
+         Point<2> fbarycentre = face_nodes[0]->Coordinate() + face_nodes[1]->Coordinate();
+         fbarycentre /= 2.;
+         // checking whether a vector from the faces barycentre to the parent element center yields a negative or positive dot product
+         Point<2> ebarycentre = (*shared_parents.begin())->BaryCenter();
+         Point<2> vec1(ebarycentre - fbarycentre);
+         // using the dot-product to find inner element, if the normal is pointing toward barycentre, initial order needs to be reversed
+         if ( dotProduct( nrml, vec1 ) > 0. ) {
+              auto swap     = result.second;
+              result.second = result.first;
+              result.first  = swap;
+           }
+      }
+ 
+     // in a 1D model faces coincide with nodes and have just a single node
+     if constexpr ( dim == 1 ) {
+         assert( face_nodes.size() == 1 );
+         // the inside element is that for which the node is node 2
+         const size_t parent_element{0};
+         if ( face_nodes[0]->ParentNodeNumber( parent_element ) == 0 ) {
+              auto swap     = result.second;
+              result.second = result.first;
+              result.first  = swap;
+           }
+      }
+
+    return result;
+    
+ } // end parentElementsSharedByFace
+
+template pair<Element<3>*,Element<3>*>  parentElementsSharedByFace( const vector<Node<3>*>& );
+template pair<Element<2>*,Element<2>*>  parentElementsSharedByFace( const vector<Node<2>*>& );
+template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( const vector<Node<1>*>& );
+
 
 } // end namespace csmp
 

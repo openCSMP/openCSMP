@@ -225,6 +225,20 @@ public:
   
   
 private:
+
+  template<template<size_t> class CELL>
+  void BuildVolumeElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                       typename std::vector<CELL<dim>*>::iterator last );
+                                       
+  template<template<size_t> class CELL>
+  void BuildSurfaceElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                        typename std::vector<CELL<dim>*>::iterator last );
+                                        
+  template<template<size_t> class CELL>
+  void BuildLineElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                     typename std::vector<CELL<dim>*>::iterator last );
+
+
   /// compacts deques, first filling in deleted cells with cells from the back; then erasing cells at the back
   size_t EraseNullPointerCells();
 

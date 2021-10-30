@@ -1726,7 +1726,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
            }
          // more than 4 flags
          else {
-              // edge amnd corner cases
+              // edge and corner cases
               auto sit = eflags.begin();
               const BOX_BOUNDARY flag1 = (*sit); sit++;
               const BOX_BOUNDARY flag2 = (*sit); sit++;
@@ -1980,8 +1980,20 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
   for ( auto nit = mregion.NodesBegin(); nit != mregion.NodesEnd(); nit++ )
     (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double64>((*nit)->AtBoundary()) ) );
 
-  for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ )
-    (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double64>(atBoundary(*eit)) ) );
+  for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ ) {
+       size_t face = UNSPECIFIED;
+       bool at_boundary{false};
+       for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+         if ( (*eit)->Neighbor(i) == nullptr ) {
+              face        = i;
+              at_boundary = true;
+              break;
+           }
+       if ( at_boundary )
+         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double64>(atBoundary(*eit,face)) ) );
+       else
+         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double64>(NOT) ) );
+    }
 
 } // end boxFlagsToVariable
 
