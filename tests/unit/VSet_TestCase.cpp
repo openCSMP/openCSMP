@@ -214,13 +214,18 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
       }
     for( vector<Node<3>*>::const_iterator it( modelInput1.Region("Model").NodesBegin() ); it != modelInput1.Region("Model").NodesEnd(); ++it )
       {
-      (*it)->Read( naKey1, aVal );
-      _test( aVal == na );
+        (*it)->Read( naKey1, aVal );
+        _test( aVal == na );
       }
     
-    // Testing model without boundaries, variable&topology tests (requires 'FracBox' model)
+    // Testing model with boundaries, variable&topology tests (requires 'FracBox' model)
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true,true,false);
+    const bool irregular_mesh{true}, binary_file{true}, use_regions_file{true},
+               create_boundaries{true}, create_splitboundaries{false};
+               
+    ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),
+                                irregular_mesh,binary_file,use_regions_file,create_boundaries,create_splitboundaries );
+    
     Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
     Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
     Index regionVectorKey = modelOutput2.Database().StorageKey("region vector");

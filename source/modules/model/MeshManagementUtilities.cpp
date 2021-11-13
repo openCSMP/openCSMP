@@ -65,7 +65,7 @@ The Idx numbering of elements and nodes is not altered by this method.
 
 @return number of nodes that were discovered.
 
-@attention this method assumes that all the nodes are connected to elements.
+@attention this method assumes that all  nodes have parent element connectivity.
 
 @attention nodes must have been assigned their parent elements for this method to work.
 
@@ -85,10 +85,11 @@ size_t findContiguousMeshPatch( csmp::Node<dim>* const root_node, std::deque<Ele
     csmp_error.notice( FATAL_ERROR, "findContiguousMeshPatch(node)",
                        "Root node must have been assigned parent elements; else this method cannot operate." );
 
-  if ( !elements.empty() )
-    csmp_error.notice( WARNING, "findContiguousMeshPatch(node)",
-                       "supplied element set not empty; deleting all its content." );
-  elements.clear();
+  if ( !elements.empty() ) {
+      csmp_error.notice( WARNING, "findContiguousMeshPatch(node)",
+                        "supplied element set not empty; deleting all its content." );
+      elements.clear();
+    }
 
   // 1. traversal of the existing mesh nodes to find all its elements
   set<csmp::Element<dim>*> explored_elements;
@@ -98,25 +99,29 @@ size_t findContiguousMeshPatch( csmp::Node<dim>* const root_node, std::deque<Ele
   discovered_nodes.insert( root_node );
   current_nodes.push_back( root_node );
 
-  // MESH TRAVERSAL
+  // MESH TRAVERSAL - via parent elements, breadth first
   while ( !current_nodes.empty() ) {
-    const csmp::Node<dim>*  n_ptr( *current_nodes.begin() );
-    // for all parent elements of the current node
-    for ( size_t i = 0U; i<n_ptr->Parents(); i++ ) {
-      // for all the nodes of each parent element
-      for ( size_t j = 0U; j<n_ptr->Parent( i )->Nodes(); j++ )
-        // if this node is not the one from which we started
-        if ( j != n_ptr->ParentNodeNumber( i ) ) {
-          pair<typename set<csmp::Node<dim>*>::iterator, bool>
-            new_node = discovered_nodes.insert( n_ptr->Parent( i )->N( j ) );
-          if ( new_node.second ) current_nodes.push_back( n_ptr->Parent( i )->N( j ) );
+      assert( (*current_nodes.begin()) != nullptr );
+      const csmp::Node<dim>*  n_ptr( *current_nodes.begin() );
+      // for all parent elements of the current node
+      const size_t n_node_parents{n_ptr->Parents()};
+      for ( size_t i{0}; i<n_node_parents; ++i ) {
+          assert( n_ptr->Parent(i)       != nullptr );
+          assert( n_ptr->Parent(i)->FE() != nullptr );
+          // for all the nodes of each parent element
+          const size_t n_parent_nodes{n_ptr->Parent(i)->Nodes()};
+          for ( size_t j{0}; j<n_parent_nodes; ++j )
+            // if this node is not the one from which we started
+            if ( j != n_ptr->ParentNodeNumber(i) ) {
+                auto new_node = discovered_nodes.insert( n_ptr->Parent(i)->N(j) );
+                if ( new_node.second ) current_nodes.push_back( n_ptr->Parent(i)->N(j) );
+              }
+          // storing the explored element
+          explored_elements.insert( n_ptr->Parent(i) );
         }
-      // storing the explored element
-      explored_elements.insert( n_ptr->Parent( i ) );
+      // removing the node from the discovered (but not yet explored) deque
+      current_nodes.pop_front();
     }
-    // removing the node from the discovered (but not yet explored) deque
-    current_nodes.pop_front();
-  }
 
   // 2. assigning and trimming excess storage from the element pointer vector
   elements.assign( explored_elements.begin(), explored_elements.end() );
@@ -191,7 +196,7 @@ void findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_cont
           for ( typename deque<CELL<dim>*>::const_iterator
                 nit=neighbor_cells.begin(); nit!=neighbor_cells.end(); ++nit )
             // if the element has not already been dealt with
-            if ( cells_contiguous_subset.find( (*nit) ) == cells_contiguous_subset.end() ) {
+            if ( cells_contiguous_subset.find( (*nit) ) != cells_contiguous_subset.end() ) {
                 const size_t  neighbors((*nit)->Neighbors());
                 // adding its neighbor ids to the element list to be processed next, if they haven't been dealt with already
                 for ( size_t j=0U; j<neighbors; ++j )
@@ -255,7 +260,14 @@ size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator be
       // detecting via a flood-fill whether the group can be partitioned, else nothing is done
       set<CELL<dim>*>  cells_contiguous_subset;
       findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
-      
+
+      // if no contiguous cells could be found
+      if ( cells_contiguous_subset.empty() ) {
+           csmp_error.notice( WARNING, "findStandAloneMeshPatches:",
+                                       "No contiguous cells found. Is the neighbor connectivity missing? - nothing was done" );
+           return 0U;
+        }
+
       // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
       if ( cells.size() <= cells_contiguous_subset.size() ) {
            std::cout <<"\nModel<" << dim << ">::findStandAloneMeshPatches: ";
@@ -268,24 +280,24 @@ size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator be
       // creating new contiguous group from the element subset
       while ( !cells.empty() )
         {
-           // creating name for contiguous patch from finite-element type
-           string patch_name( parseFiniteElementType( (*cells_contiguous_subset.begin())->FE_Type() ) );
-           // appending the patch number and the number of elements in patch
-           patch_name +="_patch";
-           patch_name += to_string( n_patches );
-           patch_name +="__";
-           patch_name += to_string( cells_contiguous_subset.size() );
-           patch_name +="cells";
-           if ( n_patches == 1U ) {
-                 std::cout <<"\nfindStandAloneMeshPatches: ";
-                 std::cout <<"mesh is divided into disconnected patch(es):\n";
-             }
-           std::cout <<"\t\t\t'"<< patch_name <<"'";
-           std::cout <<" ("<< cells_contiguous_subset.size() <<" elmts)"<< std::endl;
-
            // storing away the current contiguous subset
            if ( !cells_contiguous_subset.empty() )
              {
+                // creating name for contiguous patch from finite-element type
+                string patch_name( parseFiniteElementType( (*cells_contiguous_subset.begin())->FE_Type() ) );
+                // appending the patch number and the number of elements in patch
+                patch_name +="_patch";
+                patch_name += to_string( n_patches );
+                patch_name +="__";
+                patch_name += to_string( cells_contiguous_subset.size() );
+                patch_name +="cells";
+                if ( n_patches == 1U ) {
+                     cout <<"\nfindStandAloneMeshPatches: ";
+                     cout <<"mesh is divided into disconnected patch(es):\n";
+                  }
+                cout <<"\t\t\t'"<< patch_name <<"'";
+                cout <<" ("<< cells_contiguous_subset.size() <<" elmts)"<< std::endl;
+
                 pair<typename map<string,deque<CELL<dim>*> >::iterator,bool>
                   insertion = mesh_patches.insert( make_pair( patch_name,
                                                    move( deque<CELL<dim>*>( cells_contiguous_subset.begin(),
@@ -296,9 +308,7 @@ size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator be
                   }
                 n_patches++;
               }
-           else
-             csmp_error.notice( ERROR, "findStandAloneMeshPatches:", patch_name,
-                                       "patch contains no elements, nothing was done" );
+           else csmp_error.notice( ERROR, "findStandAloneMeshPatches:", "patch contains no elements, nothing was done" );
               
            // deleting the cells that constitute the contiguous subset from the cell storage
            cells.erase( remove_if( cells.begin(), cells.end(),
@@ -822,6 +832,46 @@ template pair<size_t,size_t> findAdjacentElementFaces( const Element<3>* const, 
 template pair<size_t,size_t> findAdjacentElementFaces( const Element<2>* const, const Element<2>* const );
 template pair<size_t,size_t> findAdjacentElementFaces( const Element<1>* const, const Element<1>* const );
  
+
+
+
+/// returs a set of pointers to the corners of the face of the supplied cell; used for matching faces by nodes, when there is no neighbor connectivity
+template<size_t dim, template<size_t> class CELL>
+set<Node<dim>*> cornerNodePointersOfFace( const CELL<dim>* const cptr, size_t face )
+ {
+    assert( cptr != nullptr );
+    assert( face < cptr->Faces() );
+    
+    vector<size_t> fnids;
+    cptr->FE()->NodesOfFace( face, fnids );
+    
+    // the assumption is made that in the node list of any cell / cell face the corner nodes come first
+    assert( cptr->FE()->Interpolation() <= 2 );
+    const size_t n_corner_nodes = (cptr->FE()->Interpolation()==1) ? fnids.size() : fnids.size()/2;
+    
+    // creating the set of node pointers
+    set<Node<dim>*> face_nodes;
+    for ( size_t node{0}; node < n_corner_nodes; ++node ) {
+         assert( cptr->N(fnids[node]) != nullptr );
+         face_nodes.insert( cptr->N( fnids[node] ) );
+      }
+           
+    return face_nodes;
+         
+ } // end cornerNodePointersOfFace
+
+template set<Node<3>*> cornerNodePointersOfFace( const Element<3>* const, size_t );
+template set<Node<2>*> cornerNodePointersOfFace( const Element<2>* const, size_t );
+template set<Node<1>*> cornerNodePointersOfFace( const Element<1>* const, size_t );
+
+template set<Node<3>*> cornerNodePointersOfFace( const Face<3>* const, size_t );
+template set<Node<2>*> cornerNodePointersOfFace( const Face<2>* const, size_t );
+template set<Node<1>*> cornerNodePointersOfFace( const Face<1>* const, size_t );
+
+// TODO: see how this works if there a different nodes on each side
+template set<Node<3>*> cornerNodePointersOfFace( const InterFace<3>* const, size_t );
+template set<Node<2>*> cornerNodePointersOfFace( const InterFace<2>* const, size_t );
+template set<Node<1>*> cornerNodePointersOfFace( const InterFace<1>* const, size_t );
 
 
 
@@ -1763,6 +1813,149 @@ template double64 angleBetweenLineCells<2,Element>( const Element<2>* const, con
 template double64 angleBetweenLineCells<2,Face>( const Face<2>* const, const Face<2>* const );
 template double64 angleBetweenLineCells<2,InterFace>( const InterFace<2>* const, const InterFace<2>* const );
 
+
+
+
+template<size_t dim, template<size_t> class CELL>
+void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
+                                 typename std::vector<CELL<dim>*>::const_iterator last,
+                                 std::vector<std::vector<CELL<dim>*> >& nbor_pointers )
+ {
+    nbor_pointers.clear();
+    nbor_pointers.reserve( distance(first,last) );
+    assert( nbor_pointers.capacity() > 1 );
+    
+    while ( first != last ) {
+         const size_t n_nbors{ (*first)->Neighbors() };
+         vector<CELL<dim>*>  nbors( n_nbors, nullptr );
+         for ( size_t i{0}; i<n_nbors; ++i )
+           if ( (*first)->Neighbor(i) != nullptr )
+             nbors.push_back( (*first)->Neighbor(i) );
+         nbor_pointers.emplace_back( nbors );
+         first++;
+      }
+ 
+ } // end backupNeighborConnectivity
+ 
+template void backupNeighborConnectivity( typename vector<Element<3>*>::const_iterator,
+                                          typename vector<Element<3>*>::const_iterator,
+                                          vector<vector<Element<3>*> >& );
+
+template void backupNeighborConnectivity( typename vector<Face<3>*>::const_iterator,
+                                          typename vector<Face<3>*>::const_iterator,
+                                          vector<vector<Face<3>*> >& );
+
+template void backupNeighborConnectivity( typename vector<Element<2>*>::const_iterator,
+                                          typename vector<Element<2>*>::const_iterator,
+                                          vector<vector<Element<2>*> >& );
+
+template void backupNeighborConnectivity( typename vector<Face<2>*>::const_iterator,
+                                          typename vector<Face<2>*>::const_iterator,
+                                          vector<vector<Face<2>*> >& );
+                                          
+                                          
+
+
+/**
+   Checks validity of FE policy, nodes, neighbors, node parents, node neighbors.
+*/
+template<size_t dim, template<size_t> class CELL>
+bool integrityCheck( typename deque<CELL<dim>*>::const_iterator first,
+                     typename deque<CELL<dim>*>::const_iterator last )
+ {
+    if ( first == last ) return false;
+    
+    vector<Node<dim>*>  shared_nodes;
+    size_t              issues{0};
+    shared_nodes.reserve( distance(first,last) * dim );
+       
+    while ( first != last ) {
+         // FE policy
+         if ( (*first)->FE() == nullptr ) {
+              cerr <<"\nCell "<< (*first)->Idx() <<": FE pointer corrupt.";
+              issues++;
+           }
+         else {
+             // connected nodes
+             for ( size_t i{0}; i<(*first)->Nodes(); ++i )
+               if ( (*first)->N(i) == nullptr ) {
+                    cerr <<"\nCell "<< (*first)->Idx() <<": node: "<< i <<": node pointer corrupt.";
+                    issues++;
+                 }
+               else shared_nodes.push_back( (*first)->N(i) );
+             // there should be at least one neighbor
+             size_t n_valid_nbors{0};
+             for ( size_t i{0}; i<(*first)->Neighbors(); ++i )
+               if ( (*first)->Neighbor(i) != nullptr )
+                 n_valid_nbors++;
+             if ( n_valid_nbors == 0 ) {
+                  cerr <<"\nCell "<< (*first)->Idx() <<": has no neighbors.";
+                  issues++;
+               }
+           }
+         first++;
+      }
+      
+   // checking node parent connectivity after removing duplicate nodes
+   shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
+   for ( auto nit : shared_nodes ) {
+        for ( size_t i{0}; i<nit->Parents(); ++i )
+          if ( nit->Parent(i) == nullptr ||
+               nit->Parent(i)->FE() == nullptr ) {
+               cerr <<"\nNode parent cell "<< nit->Parent(i)->Idx() <<": is corrupt.";
+               issues++;
+            }
+     }
+   // node to node connectivity is tested as well
+   for ( auto nit : shared_nodes ) {
+        for ( size_t i{0}; i<nit->Neighbors(); ++i )
+          if ( nit->Neighbor(i) == nullptr ) {
+               cerr <<"\nNeighbor "<< i <<" of node "<< nit->Idx() <<": is corrupt.";
+               issues++;
+            }
+     }
+      
+   if ( issues > 0 ) return false;
+   return true;
+ 
+ } // end integrityCheck
+ 
+template bool integrityCheck<3,Element>( typename deque<Element<3>*>::const_iterator, typename deque<Element<3>*>::const_iterator );
+template bool integrityCheck<2,Element>( typename deque<Element<2>*>::const_iterator, typename deque<Element<2>*>::const_iterator );
+template bool integrityCheck<1,Element>( typename deque<Element<1>*>::const_iterator, typename deque<Element<1>*>::const_iterator );
+
+template bool integrityCheck<3,Face>( typename deque<Face<3>*>::const_iterator, typename deque<Face<3>*>::const_iterator );
+template bool integrityCheck<2,Face>( typename deque<Face<2>*>::const_iterator, typename deque<Face<2>*>::const_iterator );
+template bool integrityCheck<1,Face>( typename deque<Face<1>*>::const_iterator, typename deque<Face<1>*>::const_iterator );
+
+template bool integrityCheck<3,InterFace>( typename deque<InterFace<3>*>::const_iterator, typename deque<InterFace<3>*>::const_iterator );
+template bool integrityCheck<2,InterFace>( typename deque<InterFace<2>*>::const_iterator, typename deque<InterFace<2>*>::const_iterator );
+template bool integrityCheck<1,InterFace>( typename deque<InterFace<1>*>::const_iterator, typename deque<InterFace<1>*>::const_iterator );
+                                          
+                                          
+                                          
+                                          
+template<size_t dim>
+pair<Point<dim>,Point<dim>>  boundingBox( typename vector<Node<dim>*>::const_iterator first, typename vector<Node<dim>*>::const_iterator last )
+ {
+    if ( first == last ) return make_pair( Point<dim>{}, Point<dim>{} );
+    
+    Point<dim> pmin((*first)->Coordinate()), pmax((*first)->Coordinate());
+    first++;
+    
+    while ( first != last ) {
+         pmin = min( pmin, (*first)->Coordinate() );
+         pmax = max( pmax, (*first)->Coordinate() );
+         first++;
+      }
+    
+    return make_pair( pmin, pmax );
+    
+ } // end boundingBox
+
+template pair<Point<3>,Point<3>>  boundingBox( vector<Node<3>*>::const_iterator, vector<Node<3>*>::const_iterator );
+template pair<Point<2>,Point<2>>  boundingBox( vector<Node<2>*>::const_iterator, vector<Node<2>*>::const_iterator );
+template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator );
 
 
 /* CLIPPING OF FACE NUMBERING FUNCTION FOR INTERFACE

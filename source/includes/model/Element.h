@@ -147,8 +147,6 @@ class Element : public FiniteElementPolicy<dim, Element>,
                 public FiniteVolumePolicy<dim, Element>,
                 public LocalVariableStorage<dim, Element> {
   public:
-    explicit Element( BOX_BOUNDARY bflag = IRREGULAR );
-
     /// constructor for testing element in isolation
     explicit Element( FiniteElement* );
 

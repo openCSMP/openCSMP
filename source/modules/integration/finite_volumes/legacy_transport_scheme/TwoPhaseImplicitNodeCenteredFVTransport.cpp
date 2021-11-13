@@ -783,7 +783,6 @@ template<size_t dim, template<size_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyIncludingTheCurrentNode()
 {
    typename vector<pair<double64,double64> >::iterator  sit(this->SMINMAX.begin());
-   Element<dim>     current_el;
    size_t  current_n_id,global_neighb_el_id;
    for ( typename vector<Node<dim>*>::const_iterator
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
@@ -796,11 +795,11 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
-               current_el = *this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el.Nodes();i++){
+               Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
+               for(size_t i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
-                   if(current_n_id!=current_el.N(i)->Idx()){
-                       const double64 adv_var(current_el.N(i)->Read( this->adv1_key_ ));
+                   if(current_n_id!=current_el->N(i)->Idx()){
+                       const double64 adv_var(current_el->N(i)->Read( this->adv1_key_ ));
                        (*sit).first  = std::min( (*sit).first,  adv_var );
                        (*sit).second = std::max( (*sit).second, adv_var );
                    }
@@ -815,7 +814,6 @@ template<size_t dim, template<size_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExceptTheCurrentNode()
 {
    typename vector<pair<double64,double64> >::iterator  sit(this->SMINMAX.begin());
-   Element<dim>     current_el;
    size_t  current_n_id,global_neighb_el_id;
    for ( typename vector<Node<dim>*>::const_iterator
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
@@ -829,11 +827,11 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
-               current_el = *this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el.Nodes();i++){
+               Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
+               for(size_t i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
-                   if(current_n_id!=current_el.N(i)->Idx()){
-                       const double64 adv_var(current_el.N(i)->Read( this->adv1_key_ ));
+                   if(current_n_id!=current_el->N(i)->Idx()){
+                       const double64 adv_var(current_el->N(i)->Read( this->adv1_key_ ));
                        (*sit).first  = std::min( (*sit).first,  adv_var );
                        (*sit).second = std::max( (*sit).second, adv_var );
                    }
@@ -1424,12 +1422,6 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
             // 2. fully-upstream weighted version of finite-volume scheme
             // looping over all FE-FV stencils
             if(this->with_lsmgrad_limiter_){
-                /*
-                //Element gradient of saturation
-                ElementToNodePropertyVisitor<VectorVariable<dim>,dim> ElmToNode(this->pref_,gradsn_elmt_name_,gradsn_node_name_,this->gref_.Nodes());
-                this->gref_.CopyGradientOfProperty_A_To_B(sn_name_,gradsn_elmt_name_);
-                this->gref_.Accept(ElmToNode);
-                */
                 this->grad_advprop_limiter_->CalculateGenericNodalGradient();
                 this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
 

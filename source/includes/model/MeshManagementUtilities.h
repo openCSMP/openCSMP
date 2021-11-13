@@ -134,6 +134,10 @@ double64 angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* co
 template<size_t dim, template<size_t> class CELL>
 double64 angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
 
+/// returs a set of pointers to the corners of the face of the supplied cell; used for matching faces by nodes, when there is no neighbor connectivity
+template<size_t dim, template<size_t> class CELL>
+std::set<Node<dim>*> cornerNodePointersOfFace( const CELL<dim>* const cell1, size_t face );
+
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
 template<size_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
@@ -157,6 +161,23 @@ bool findSplitInterfaceElements( const Region<dim>&,
                                  std::set<std::pair<std::pair<Element<dim>*, size_t>,
                                  std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
 
+// UTILITIES FOR TESTING ETC
+
+///  captures a snapshot of the current cell connectivity for the range of cells; developed for testing
+template<size_t dim, template<size_t> class CELL>
+void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
+                                 typename std::vector<CELL<dim>*>::const_iterator last,
+                                 std::vector<std::vector<CELL<dim>*> >& nbor_pointers );
+
+/// tests whether all the expected cell functionality is there and operational
+template<size_t dim, template<size_t> class CELL>
+bool integrityCheck( typename std::deque<CELL<dim>*>::const_iterator first,
+                     typename std::deque<CELL<dim>*>::const_iterator last );
+
+/// finds the min max corners of the bounding box for the supplied range of nodes
+template<size_t dim>
+std::pair<Point<dim>,Point<dim>>  boundingBox( typename std::vector<Node<dim>*>::const_iterator first,
+                                               typename std::vector<Node<dim>*>::const_iterator last );
 
 } // end csmp
 

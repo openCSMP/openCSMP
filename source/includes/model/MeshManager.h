@@ -83,6 +83,9 @@ public:
   typename std::deque<InterFace<dim>*>::iterator InterFacesBegin();
   typename std::deque<InterFace<dim>*>::iterator InterFacesEnd();
 
+  typename std::deque<NodeManifold<dim>*>::iterator NodeManifoldsBegin();
+  typename std::deque<NodeManifold<dim>*>::iterator NodeManifoldsEnd();
+
   // const versions
   typename std::deque<Node<dim>*>::const_iterator      NodesBegin() const;
   typename std::deque<Node<dim>*>::const_iterator      NodesEnd() const;
@@ -96,6 +99,9 @@ public:
   typename std::deque<InterFace<dim>*>::const_iterator InterFacesBegin() const;
   typename std::deque<InterFace<dim>*>::const_iterator InterFacesEnd() const;
   
+  typename std::deque<NodeManifold<dim>*>::const_iterator NodeManifoldsBegin() const;
+  typename std::deque<NodeManifold<dim>*>::const_iterator NodeManifoldsEnd() const;
+
   Node<dim>* const      N( size_t ) const;
   Element<dim>* const   E( size_t ) const;
   Face<dim>* const      F( size_t ) const;
@@ -179,9 +185,9 @@ public:
                                    INTERFACE_SIDE new_node_side,
                                    ManifoldType geometry );
 
-  /// Rebuild node-to-element parent relationships, for example after a region was removed
-  void RebuildNodeParentElementRelationships( typename std::vector<Element<dim>*>::iterator begin,
-                                              typename std::vector<Element<dim>*>::iterator end );
+  /// Starting with an existing node-to-parent element relationships, these are validated, removing excess connections, for example after a region was removed
+  void UpdateNodeParentElementRelationships( typename std::vector<Node<dim>*>::iterator begin,
+                                             typename std::vector<Node<dim>*>::iterator end );
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
   void UpdateConnectivity();
@@ -192,6 +198,18 @@ public:
   template<template<size_t> class CELL>
   void BuildConnectivity( typename std::deque<CELL<dim>*>::iterator first,
                           typename std::deque<CELL<dim>*>::iterator last );
+
+  template<template<size_t> class CELL>
+  void BuildVolumeConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                typename std::vector<CELL<dim>*>::iterator last );
+                                       
+  template<template<size_t> class CELL>
+  void BuildSurfaceConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                 typename std::vector<CELL<dim>*>::iterator last );
+                                        
+  template<template<size_t> class CELL>
+  void BuildLineConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                              typename std::vector<CELL<dim>*>::iterator last );
 
 
   // DELETIONS & MAINTANANCE OF MESH CONNECTIVITY
@@ -225,19 +243,6 @@ public:
   
   
 private:
-
-  template<template<size_t> class CELL>
-  void BuildVolumeElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
-                                       typename std::vector<CELL<dim>*>::iterator last );
-                                       
-  template<template<size_t> class CELL>
-  void BuildSurfaceElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
-                                        typename std::vector<CELL<dim>*>::iterator last );
-                                        
-  template<template<size_t> class CELL>
-  void BuildLineElementConnectivity( typename std::vector<CELL<dim>*>::iterator first,
-                                     typename std::vector<CELL<dim>*>::iterator last );
-
 
   /// compacts deques, first filling in deleted cells with cells from the back; then erasing cells at the back
   size_t EraseNullPointerCells();

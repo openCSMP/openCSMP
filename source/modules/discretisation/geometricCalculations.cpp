@@ -1,4 +1,4 @@
-﻿#include "GeometricCalculations.h"
+#include "GeometricCalculations.h"
 #include "CSMP_mathUtilities.h"
 #include "algorithm"
 
@@ -620,7 +620,7 @@ bool isTetra( const csmp::Point<3U>& pt1,
 
 /**
 Check whether provided 4 point create tetrahedron or quadrilateral.
-Return order of points which will give proper orientation of element
+Return order of points which will give counter-clockwise numbering in a righthand-rule coordinate system.
 */
 
 bool isTetra( const csmp::Point<1U>& pt1,
@@ -706,29 +706,29 @@ bool isTetra( const csmp::Point<3U>& pt1,
 }
 
 
-bool isValidElement( std::vector<Point<3U>>const & vertexList ) {
-  // ignoring checking element until adapting new criteria
+  // ignore checking element until adapting new criteria
+bool isValidElement( const std::vector<Point<3U> >& vertexList ) {
 
-  //switch (vertexList.size()) {
-  //case 4: {
-  //	return isTetrahedra(vertexList);
-  //}
-  //case 5: {
-  //	return isPyramid(vertexList);
-  //}
-  //case 6: {
-  //	return isPrism(vertexList);
-  //}
-  //case 8: {
-  //	return isHexahedron(vertexList);
-  //}
-  //default:
-  //	return false;
-  //}
+  switch (vertexList.size()) {
+  case 4: {
+      return isTetrahedron(vertexList);
+    }
+    case 5: {
+      return isPyramid(vertexList);
+    }
+    case 6: {
+    return isPrism(vertexList);
+    }
+    case 8: {
+      return isHexahedron(vertexList);
+    }
+    default:
+      return false;
+    }
   return true;
 }
 
-bool isTetrahedra( std::vector<Point<3U>> const & vertexList ) {
+bool isTetrahedron( const std::vector<Point<3U> >& vertexList ) {
   assert( vertexList.size() == 4 );
 
   //      0
@@ -758,7 +758,7 @@ bool isTetrahedra( std::vector<Point<3U>> const & vertexList ) {
 
 }
 
-bool isPyramid( std::vector<Point<3U>> const & vertexList ) {
+bool isPyramid( const std::vector<Point<3U> >& vertexList ) {
   assert( vertexList.size() == 5 );
 
   // using Equiangular Skewness, using Degree
@@ -790,7 +790,7 @@ bool isPyramid( std::vector<Point<3U>> const & vertexList ) {
   else return true;
 }
 
-bool isPrism( std::vector<Point<3U>> const & vertexList ) {
+bool isPrism( const std::vector<Point<3U> >& vertexList ) {
   assert( vertexList.size() == 6 );
   // using Equiangular Skewness, using Degree
   // check if the nodes at bottom face form a quadilateral
@@ -827,11 +827,12 @@ bool isPrism( std::vector<Point<3U>> const & vertexList ) {
 
 }
 
-bool isHexahedron( std::vector<Point<3U>> const & vertexList ) {
+/**
+  Using the degree of Equiangular Skewness,
+  checks whether the nodes at bottom face form a quadilateral.
+*/
+bool isHexahedron( const std::vector<Point<3U> >& vertexList ) {
   assert( vertexList.size() == 8 );
-  // using Equiangular Skewness, using Degree
-  // check if the nodes at bottom face form a quadilateral
-  // using Equiangular Skewness, using Degree
   double64 q01 = dihedralDegAngle( vertexList[3], vertexList[4], vertexList[0], vertexList[1] );
   double64 q12 = dihedralDegAngle( vertexList[0], vertexList[5], vertexList[1], vertexList[2] );
   double64 q23 = dihedralDegAngle( vertexList[1], vertexList[6], vertexList[2], vertexList[3] );
@@ -842,12 +843,10 @@ bool isHexahedron( std::vector<Point<3U>> const & vertexList ) {
   double64 q67 = dihedralDegAngle( vertexList[2], vertexList[5], vertexList[6], vertexList[7] );
   double64 q74 = dihedralDegAngle( vertexList[3], vertexList[6], vertexList[7], vertexList[4] );
 
-
   double64 q04 = dihedralDegAngle( vertexList[7], vertexList[5], vertexList[0], vertexList[4] );
   double64 q15 = dihedralDegAngle( vertexList[4], vertexList[6], vertexList[1], vertexList[5] );
   double64 q26 = dihedralDegAngle( vertexList[5], vertexList[7], vertexList[2], vertexList[6] );
   double64 q37 = dihedralDegAngle( vertexList[4], vertexList[6], vertexList[3], vertexList[7] );
-
 
   std::vector<double64> dihedraAngle{ q01, q12, q23, q30, q45, q56, q67, q74, q04, q15, q26, q37 };
   double64 qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );

@@ -11,16 +11,6 @@ using namespace std;
 
 namespace csmp {
 
-/// default constructor; @todo make private, decimate overall number of constructors
-template<size_t dim>
-Face<dim>::Face()
- : idx_(NULL_IDX),
-   innerParent_( nullptr ),
-   outerParent_( nullptr )
- {
- }
-
-
 /** 
     Constructs face as exact copy of a lower-dimensional element from which it is constructed.
     The lower-dimensional element gets attached to the middle element pointer.
@@ -104,9 +94,9 @@ Face<dim>::Face( const Element<dim>& elmt,
 
     // 1. creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
-        this->ResizePropertyStorage( ep, ip );
+      this->ResizePropertyStorage( ep, ip );
     else
-        this->ResizePropertyStorage( ep );
+      this->ResizePropertyStorage( ep );
 
     // 2. connecting the nodes of the face with those of the lower-dimensional element
     //   from which it was created
@@ -611,12 +601,11 @@ bool Face<dim>::Unassign( Face<dim>* f_ptr )
   assert( this->FE() != nullptr );
 	assert(face_connector_.size() == this->FE()->Neighbors());
 	for (size_t i(0); i < face_connector_.size(); ++i)
-		if (f_ptr == face_connector_[i])
-		{
-			face_connector_.erase(face_connector_.begin() + i);
-			face_connector_.swap(face_connector_);
-			return true;
-		}
+		if ( f_ptr == face_connector_[i] )
+      {
+         face_connector_[i] = nullptr;
+         return true;
+      }
 	return false;
   
 } // end Unassign

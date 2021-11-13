@@ -90,16 +90,6 @@ class Boundary : public ModelSubDomain<dim, Face>,
               const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
               BOX_BOUNDARY = IRREGULAR );
 
-    /// TODO: still needed? - re-constructor of boundary from index data stored in SubDomainInfo and faces from the MeshManager
-    /*
-    Boundary( const PropertyDatabase<dim>&,
-              const size_t&,
-              const std::deque<Node<dim>*>&,
-              const std::deque<Face<dim>*>&,
-              const SubDomainInfo&,
-              BOX_BOUNDARY = IRREGULAR );
-    */
-
     /// Visitors
     virtual void Accept( Visitor<dim>& );
 

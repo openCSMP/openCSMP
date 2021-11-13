@@ -74,7 +74,10 @@ class VData {
                  const std::deque<size_t>& npes,  ///< sizes for resizing the member vectors
                  const std::deque<size_t>& epes,
                  size_t nodes, size_t faces, size_t interfaces );
-  
+
+    /// for hybrid element meshes, increasing the storage for element types to the new size without invalidating existing types unless the storage is shrunk
+    void ResizeElementTypes( size_t elements );
+
     void ResizeNodes( size_t nodes );
     void ResizePlist( size_t elements );
     void ResizePlist( size_t elements, size_t nperelmt );
@@ -332,6 +335,12 @@ class VData {
 
     friend class VData_Test;
 };
+
+// RELATED FUNCTIONS
+
+/// converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
+void splitCornerTetrahedron( VData&, size_t cnr, size_t only_neighbor );
+    
 
 } // csmp
 

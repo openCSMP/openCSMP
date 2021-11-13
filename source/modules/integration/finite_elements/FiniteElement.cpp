@@ -156,6 +156,20 @@ bool isQuadrilateral( CSMP_FEM_TYPE etype )
  }
 
 
+bool isTetrahedral( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ||
+         etype == LINEAR_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON )
+      return true;
+
+    return false;
+ }
+
+
+
 bool isHexahedral( CSMP_FEM_TYPE etype )
  {
     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || 
@@ -204,7 +218,7 @@ bool FiniteElement::IsSimplex() const
 
 void  FiniteElement::ElementType( CSMP_FEM_TYPE etype ) { csp_fem_type = etype; }
 
-CSMP_FEM_TYPE  FiniteElement::ElementType() const       { return csp_fem_type; }
+CSMP_FEM_TYPE  FiniteElement::ElementType() const { return csp_fem_type; }
 
  size_t  FiniteElement::OrderOfShapeFunctions() const { return order_of_shape_functions; }
 

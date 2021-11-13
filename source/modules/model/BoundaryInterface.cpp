@@ -290,7 +290,9 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoxShaped() const
 
 
 /**
-    Creates boundary from already interconnected faces that also know their parent elements.
+    Creates boundary from Faces that already know their parent elements.
+    
+    The connectivity between the Faces is (re)established.
     
     @note the supplied Face pointer vector is moved into boundary and will therefore not be 
     accessible anymore after this method has been called.
@@ -306,6 +308,12 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
  {
     BOUNDARY_COMPLEX<dim>* const boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>* const>(this) );
     assert( boundaryComplex != nullptr );
+
+    // creating the connectivity among the new faces
+    if constexpr ( dim == 3 )
+      boundaryComplex->Mesh().template BuildSurfaceConnectivity<Face>( facesBegin, facesEnd );
+    if constexpr ( dim == 2 )
+      boundaryComplex->Mesh().template BuildLineConnectivity<Face>( facesBegin, facesEnd );
 
     // inserting boundary if it does not existing yet
     std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
@@ -1120,8 +1128,10 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const 
     // establishing region name from the name of the region supplied if it contains boundary
     // else, a boundary name is created from string 'BOUNDARY_' preceding the region name
     string regionName( dim_m1_region );
-    if ( regionName.find("BOUNDARY") == string::npos &&
-         regionName.find("boundary") == string::npos )
+    if ( !isDiagnosticBoxBoundaryClassifier(dim_m1_region) &&
+          regionName != "IRREGULAR" &&
+          regionName.find("BOUNDARY") == string::npos &&
+          regionName.find("boundary") == string::npos )
        regionName = "BOUNDARY_" + regionName;
     
     string bName( regionName );
@@ -1141,7 +1151,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const 
     // shouldn't get here
     return false;
     
-  } // end CreateAround
+  } // end CreateExternalBoundaryFrom
 
 
 
@@ -1566,7 +1576,7 @@ static void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
     map<Node<3U>*,set<Face<3U>*> > parent_faces;
    
     for ( auto& it : line_faces ) {
-         set<Face<3U>*> parents({it});
+         set<Face<3U>*> parents{it};
          for ( size_t i=0U; i<it->Nodes(); ++i ) {
               // inserting a new set or inserting a face pointer into the set if the node key already exists
               auto nit = parent_faces.insert( make_pair( it->N(i), parents ) );
@@ -1576,7 +1586,8 @@ static void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
       }
    
    // 2. connecting the faces with one another
-   //   (the assumption is that each face has 1-2 equidimensional neighbors that coincide with its corner nodes!=midside nodes if any)
+   //   (the assumption is that each face has 1-2 equidimensional neighbors that
+   //    coincide with its corner nodes!=midside nodes if any)
    ErrorHandler& csmp_error(ErrorHandler::Instance());
 
    for ( auto& it : parent_faces ) {
@@ -1584,10 +1595,21 @@ static void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
         // (there may only be one neighbor or a manifold interpreted as endpoint)
         if ( it.second.size() != 2 ) {
           if ( it.second.size() > 2 ) {
-               it.first->Out();
-               csmp_error.notice( ERROR, "creatLineFaceConnectivity(Face):",
-                                "edge node is connected to more than 2 line Faces;\
-                                 don't know how to deal with this manifold.");
+               // line faces only have a role on model edges
+               // ony those edge node parents are kept in the map which have two nodes flagged as edge
+               for ( auto iit=it.second.begin(); iit!=it.second.end(); ++iit ) {
+                    for ( size_t j{0}; j<(*iit)->Nodes(); ++j )
+                      if ( !isEdge( (*iit)->N(j)->AtBoundary() ) ) {
+                           // returns a valid iterator to the set after the erasure
+                           iit = it.second.erase( iit );
+                           break;
+                        }
+                    if ( iit == it.second.end() ) break;
+                 }
+               if ( it.second.size() != 2 )
+                 csmp_error.notice( ERROR, "creatLineFaceConnectivity(Face):",
+                                   "edge node is connected to more than 2 line Faces;\
+                                    don't know how to deal with this manifold.");
             }
            /* NOTHING NEEDS TO BE DONE BECAUSE FACE POINTERS ALREADY ARE NULLPTRs
              // this neighbor of the face is set to nullptr=no neighbor
@@ -1946,6 +1968,25 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
       std::cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
   }
+
+
+#ifdef DEBUG
+// checking the connectivity of the input box-boundary regions
+/* all elements have neighbors in 'prism_test'
+Region<dim>& back_ref = boundaryComplex->Region("BACK");
+boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( back_ref.ElementsBegin(), back_ref.ElementsEnd() );
+Region<dim>& bottom_ref = boundaryComplex->Region("BOTTOM");
+boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( bottom_ref.ElementsBegin(), bottom_ref.ElementsEnd() );
+Region<dim>& right_ref = boundaryComplex->Region("RIGHT");
+boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( right_ref.ElementsBegin(), right_ref.ElementsEnd() );
+Region<dim>& top_ref = boundaryComplex->Region("TOP");
+boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( top_ref.ElementsBegin(), top_ref.ElementsEnd() );
+Region<dim>& left_ref = boundaryComplex->Region("LEFT");
+boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( left_ref.ElementsBegin(), left_ref.ElementsEnd() );
+Region<dim>& front_ref = boundaryComplex->Region("FRONT");
+boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front_ref.ElementsBegin(), front_ref.ElementsEnd() );
+*/
+#endif
 
 
 

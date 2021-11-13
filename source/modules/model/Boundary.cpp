@@ -223,6 +223,7 @@ Boundary<dim>::Boundary( const string& boundary_name,
 {
   // moving the supplied Face pointers into the element storage
   this->elmt_vec_.assign( facesBegin, facesEnd );
+  
   // initialising node pointer vector, sorting nodes and elements, and creating boundary face vector
   Initialize( flag );
 }
@@ -706,23 +707,12 @@ template void Boundary<3>::InputVariableFrom<TensorVariable<3U> >( const char*, 
 template<size_t dim>
 void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
 {
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
   // assigns BOX_BOUNDARY flag to Boundary
   AtBoundary( boxBoundary );
 
   // establishing boundary node container
   this->CreateNodePointerVector();
   
-  // checks whether Faces are interconnected using the last face
-  // (this info must be there to identify the perimeter)
-  const Face<dim>* const fptr = this->elmt_vec_.back();
-  const long nbors(fptr->ConnectedNeighbors()), min_nbors(fptr->Faces() - (dim-1));
-  bool faces_are_interconnected = ( nbors >= max(1L,min_nbors) ) ? true : false;
-  if ( !faces_are_interconnected )
-    csmp_error.notice( ERROR, "Boundary<dim>::Initialize",
-                      "method requires connectivity of boundary faces");
-
   // sorts node and cell vectors into interior and exterior ranges; initialises boundary face vector bd_face_vec_
   this->IdentifyPerimeter();
 
@@ -910,7 +900,10 @@ bool Boundary<dim>::CreateFrom( const Region<dim>& region,
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // creating the connectivity among the new faces
-  meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+  if constexpr ( dim == 3 )
+    meshManager.template BuildSurfaceConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+  if constexpr ( dim == 2 )
+    meshManager.template BuildLineConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
 
   // initialize boundary essentials
   Initialize( boxBoundary );
@@ -980,8 +973,6 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
   // logic: the number of faces created can only be slightly larger than the number of boundary elements
   this->elmt_vec_.reserve( region.PerimeterElements() );
 
-  const size_t n_faces_before = meshManager.Faces();
-
   // looping over the perimeter elements of the region
   for ( size_t i = region.InteriorElements(); i<region.Elements(); ++i )
     {
@@ -1016,7 +1007,11 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
   
   // initialize boundary essentials
-  meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+  // creating the connectivity among the new faces
+  if constexpr ( dim == 3 )
+    meshManager.template BuildSurfaceConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+  if constexpr ( dim == 2 )
+    meshManager.template BuildLineConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
 
   Initialize( boxBoundary );
 
@@ -1062,11 +1057,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
   // searching for elements of region1 that are neighbors of ones in region2.
   // If so, there is a shared boundary and faces or interfaces are constructed.
   const size_t   n_elements( region1.Elements() );
-  vector<size_t> fnids;
   
-  // previous last Face
-  const size_t n_faces_before = meshManager.Faces();
-
   // for the perimeter elements of the region
   size_t contacting_elements{0};
   for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
@@ -1109,7 +1100,11 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize boundary essentials
-  meshManager.template BuildConnectivity<Face>( next(meshManager.FacesBegin(),n_faces_before), meshManager.FacesEnd() );
+  // creating the connectivity among the new faces
+  if constexpr ( dim == 3 )
+    meshManager.template BuildSurfaceConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+  if constexpr ( dim == 2 )
+    meshManager.template BuildLineConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
 
   Initialize( INTERNAL );
 

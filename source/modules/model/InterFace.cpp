@@ -24,6 +24,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f )
     outerParent_( nullptr ),
     collocated_nodes_(true)
 {
+   assert( f != nullptr );
 }
 
 
@@ -41,6 +42,8 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
     outerParent_( nullptr ),
     collocated_nodes_(true)
 {
+   assert( f   != nullptr );
+   assert( fvs != nullptr );
 }
 
 
@@ -61,10 +64,13 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
     outerParent_( nullptr ),
     collocated_nodes_(true)
 {
-  if ( this->UsesLocalCoordinates() )
-    this->ResizePropertyStorage( ep, ip );
-  else
-    this->ResizePropertyStorage( ep );
+   assert( f   != nullptr );
+   assert( fvs != nullptr );
+
+   if ( this->UsesLocalCoordinates() )
+     this->ResizePropertyStorage( ep, ip );
+   else
+     this->ResizePropertyStorage( ep );
 }
 
 
@@ -85,10 +91,13 @@ InterFace<dim>::InterFace( size_t index,
     outerParent_( nullptr ),
     collocated_nodes_(true)
 {
-  if ( this->UsesLocalCoordinates() )
-    this->ResizePropertyStorage( ep, ip );
-  else
-    this->ResizePropertyStorage( ep );
+   assert( f   != nullptr );
+   assert( fvs != nullptr );
+
+   if ( this->UsesLocalCoordinates() )
+     this->ResizePropertyStorage( ep, ip );
+   else
+     this->ResizePropertyStorage( ep );
 }
 
 

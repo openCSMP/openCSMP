@@ -832,22 +832,22 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
     // -----
     if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) {
           assert( face < 5U );
-          if ( face<=2U ) return 4U;
+          if ( face==1U || face==2U || face==3U ) return 4U;
           return 3U;
       }
     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) {
           assert( face < 5U );
-          if ( face<=2U ) return 8U;
+          if ( face==1U || face==2U || face==3U ) return 8U;
           return 6U;
       }
     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ) {
           assert( face < 5U );
-          if ( face<=2U ) return 9U;
+          if ( face==1U || face==2U || face==3U ) return 9U;
           return 6U;
       }
     if ( etype == ISOPARAMETRIC_CUBIC_PRISM ) {
           assert( face < 5U );
-          if ( face<=2U ) return 12U;
+          if ( face==1U || face==2U || face==3U ) return 12U;
           return 9U;
       }
 
@@ -855,22 +855,22 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
     // -------
     if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) {
           assert( face < 5U );
-          if ( face <=1U ) return 4U;
+          if ( face == 4U ) return 4U;
           return 3U;
       }
     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) {
           assert( face < 5U );
-          if ( face <=1U ) return 8U;
+          if ( face == 4U ) return 8U;
           return 6U;
       }
     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ) {
           assert( face < 5U );
-          if ( face <=1U ) return 9U;
+          if ( face == 4U ) return 9U;
           return 6U;
       }
     if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID ) {
           assert( face < 5U );
-          if ( face <=1U ) return 12U;
+          if ( face == 4U ) return 12U;
           return 8U;
       }
 
@@ -1258,31 +1258,26 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int8_t etype,
       {
           assert( face < 5U );
           if ( face==0U ) {
-               assert( face_node < 3U );
                if ( face_node==0U ) return 0U;
                if ( face_node==1U ) return 1U;
                if ( face_node==2U ) return 4U;
             }
           if ( face==1U ) {
-               assert( face_node < 4U );
                if ( face_node==0U ) return 1U;
                if ( face_node==1U ) return 2U;
                if ( face_node==2U ) return 4U;
             }
           if ( face==2U ) {
-               assert( face_node < 4U );
                if ( face_node==0U ) return 2U;
                if ( face_node==1U ) return 3U;
                if ( face_node==2U ) return 4U;
             }
           if ( face==3U ) {
-               assert( face_node < 4U );
                if ( face_node==0U ) return 0U;
                if ( face_node==1U ) return 4U;
                if ( face_node==2U ) return 3U;
             }
           if ( face==4U ) {
-               assert( face_node < 3U );
                if ( face_node==0U ) return 0U;
                if ( face_node==1U ) return 3U;
                if ( face_node==2U ) return 2U;

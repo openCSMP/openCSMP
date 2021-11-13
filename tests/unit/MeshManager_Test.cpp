@@ -6,6 +6,7 @@
 //  Copyright © 2018 Stephan Matthai. All rights reserved.
 //
 
+#include "CSMP_definitions.h"
 #include "MeshManager_Test.h"
 #include "MeshManagementUtilities.h"
 #include "vsetMakers.h"
@@ -28,104 +29,114 @@ namespace csmp {
 custom models
 uses "CSMP-1phase-variables.txt"
 */
-MeshManager_Test::MeshManager_Test( bool reconstruct_model_from_CSMP_binary_file )
+MeshManager_Test::MeshManager_Test()
+ : model2d_(nullptr), model3d_(nullptr)
 {
-	cout << "\n----------------------------";
-	cout << "\nMeshManager_Test::TestBasics";
-	cout << "\n----------------------------";
-	string varFileName("CSMP-1phase-variables.txt");
-	model3d_name_ = "PyramidHexaPatch";
-	const bool   skewed_elements(false); // otherwise model is not a box anymore
-	VSet<3U>     vset;
-	test_Create_Pyramid_Hexa_VSet(vset, skewed_elements);
-	model3d_ = new Model<3U>(vset, varFileName.c_str(), true);
-	TestBasics();	
-	delete model3d_;
+}
 
-	// ansys 2d model - contiguous
-	cout << "\n------------------------------------------";
-	cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
-	cout << "\n------------------------------------------";
-	model2d_name_ = "box2d_fault";
-	model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
-	cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
-  std::deque<Element<2>*> elements;
-	cout << "\nInterconnected Nodes: " << findContiguousMeshPatch( model2d_->Mesh().N(0U), elements ) << "\n";
-	cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-  std::map<std::string,std::deque<Element<2U>*> > patch_map;
-	cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
-	cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-  std::map<std::string,std::deque<Face<2U>*> >  face_map;
-	cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
-	cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-  std::map<std::string,std::deque<InterFace<2U>*> >  iface_map;
-	cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
-	if (reconstruct_model_from_CSMP_binary_file) {
-		model2d_->OutputToBinaryFile(model2d_name_.c_str());
-		delete model2d_;
-		model2d_ = new Model<2U>(model2d_name_);
-		cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
-		cout << "\nNode Groups: " << findContiguousMeshPatch( model2d_->Mesh().N(0U), elements ) << "\n";
-		cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-		cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
-		cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-		cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
-		cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-		cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
-	}
 
-	// ansys 3d model - discontiguous
-	cout << "\n-------------------------------------------------------";
-	cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
-	cout << "\n-------------------------------------------------------";
-	varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
-	model3d_name_ = "ModelDykeAllLayersSplit";
-	model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true, true);
-	cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
-  std::deque<Element<3>*> elements3;
-	cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
-	cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
-  std::map<std::string,std::deque<Element<3U>*> > patch_map3;
-	cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
-	cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
-  std::map<std::string,std::deque<Face<3U>*> >  face_map3;
-	cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
-	cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
-  std::map<std::string,std::deque<InterFace<3U>*> >  iface_map3;
-	cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
-	//writing ansys model to file deleting it and then recreating a csmp native model from the file
-	if (reconstruct_model_from_CSMP_binary_file) {
-		model3d_->OutputToBinaryFile(model3d_name_.c_str());
-		delete model3d_;
-		model3d_ = new Model<3U>(model3d_name_);
-		cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
-		cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
-		cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
-		cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
-		cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
-		cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
-		cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
-		cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
-	}
-	delete model3d_;
+void MeshManager_Test::Create_ANSYS2D_Model( bool reconstruct_from_file )
+ {
+    // ansys 2d model - contiguous
+    cout << "\n------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
+    cout << "\n------------------------------------------";
+    model2d_name_ = "box2d_fault";
+    string varFileName = "CSMP-variables.txt";
+    model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
+    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
+    std::deque<Element<2>*> elements;
+    cout << "\nInterconnected Nodes: " << findContiguousMeshPatch( model2d_->Mesh().N(0U), elements ) << "\n";
+    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+    std::map<std::string,std::deque<Element<2U>*> > patch_map;
+    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+    std::map<std::string,std::deque<Face<2U>*> >  face_map;
+    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+    std::map<std::string,std::deque<InterFace<2U>*> >  iface_map;
+    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    if (reconstruct_from_file) {
+        model2d_->OutputToBinaryFile(model2d_name_.c_str());
+        delete model2d_;
+        model2d_ = new Model<2U>(model2d_name_);
+        cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
+        cout << "\nNode Groups: " << findContiguousMeshPatch( model2d_->Mesh().N(0U), elements ) << "\n";
+        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+        cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+      }
+      
+ } // end Create_ANSYS2D_Model
+ 
+ 
+ 
+void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
+ {
+    // ansys 3d model - discontiguous
+   if ( !contiguous ) {
+        cout << "\n-------------------------------------------------------";
+        cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
+        cout << "\n-------------------------------------------------------";
+        string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
+        model3d_name_ = "ModelDykeAllLayersSplit";
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true, true);
+        cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
+        std::deque<Element<3>*> elements3;
+        cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
+        cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
+        std::map<std::string,std::deque<Element<3U>*> > patch_map3;
+        cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
+        cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
+        std::map<std::string,std::deque<Face<3U>*> >  face_map3;
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
+        cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
+        std::map<std::string,std::deque<InterFace<3U>*> >  iface_map3;
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
+        //writing ansys model to file deleting it and then recreating a csmp native model from the file
+        if ( reconstruct_from_file ) {
+            model3d_->OutputToBinaryFile(model3d_name_.c_str());
+            delete model3d_;
+            model3d_ = new Model<3U>(model3d_name_);
+            cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
+            cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
+            cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
+            cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
+            cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
+            cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
+            cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
+            cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
+          }
+        delete model3d_;
+        model3d_ = nullptr;
+        return;
+    }
 
 	// ansys 3d model - contiguous
 	cout << "\n-------------------------------------------------------";
 	cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
 	cout << "\n-------------------------------------------------------";
+  string varFileName = "CSMP-variables.txt";
 	model3d_name_ = "prism_test";
 	model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
+  std::deque<Element<3>*> elements3;
 	cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
 	cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
 	cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
+  map<string,deque<Element<3U>*> > patch_map3;
 	cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
 	cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
+  map<string,deque<Face<3U>*> >  face_map3;
 	cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
 	cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
+  map<string,deque<InterFace<3U>*> >  iface_map3;
 	cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
 
 	//writing ansys model to file deleting it and then recreating a csmp native model from the file
-	if (reconstruct_model_from_CSMP_binary_file) {
+	if ( reconstruct_from_file ) {
 		model3d_->OutputToBinaryFile(model3d_name_.c_str());
 		delete model3d_;
 		model3d_ = new Model<3U>(model3d_name_);
@@ -138,7 +149,9 @@ MeshManager_Test::MeshManager_Test( bool reconstruct_model_from_CSMP_binary_file
 		cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
 		cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
 	}
-}
+  
+ } // end Create_ANSYS3D_Model
+
 
 
 
@@ -148,7 +161,27 @@ THE MASTER TEST FUNCTION
 */
 void MeshManager_Test::run()
 {
-  TestBasics();
+  // basics
+   {
+      cout << "\n----------------------------";
+      cout << "\nMeshManager_Test::TestBasics";
+      cout << "\n----------------------------";
+      string varFileName("CSMP-1phase-variables.txt");
+      model3d_name_ = "PyramidHexaPatch";
+      const bool   skewed_elements(false); // otherwise model is not a box anymore
+      VSet<3U>     vset;
+      test_Create_Pyramid_Hexa_VSet(vset, skewed_elements);
+      model3d_ = new Model<3U>(vset, varFileName.c_str(), true);
+      TestBasics();
+      delete model3d_;
+      model3d_ = nullptr;
+   }
+
+  _test(Test_BuiltElementConnectivity2D()); // OK
+  _test(Test_BuiltElementConnectivity3D()); // OK
+  _test(Test_parentElementsSharedByFace()); // OK
+  
+
 	cout << "\n------------------------------------------------";
 	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
 	cout << "\n------------------------------------------------";
@@ -169,10 +202,9 @@ void MeshManager_Test::run()
 	cout << "\n------------------------------------------------------";
 	_test(TestInterFaceDeletionAndInsertion());
 
-	cout << "\n-------------------------------------------";
-	cout << "\nMeshManager_Test::TestEraseAllPrimitives";
-	cout << "\n-------------------------------------------";
 	_test(TestEraseAllPrimitives());
+ 
+  cout << endl;
 
 } // end run
 
@@ -216,10 +248,124 @@ void MeshManager_Test::TestBasics()
 
 
 
+// method with the same name
+bool MeshManager_Test::Test_parentElementsSharedByFace()
+ {
+    VSet<3U> vset;
+    // testing with element 13 with face 4 on the LEFT outside
+    test_Create_Prism_Hexa_VSet( vset, false );
+    Model<3U>    model( vset, "CSMP-variables.txt", true );
+    const size_t ELMT{13}; // 13 in VSet
+    Element<3>*  eptr = model.Mesh().E(ELMT);
+    //eptr->Out();
+    assert( eptr->Neighbor(4) == nullptr );
+    
+    // getting an inner face in the 3D model that is not on the boundary
+    vector<Node<3>*> face_nodes;
+    Element<3>*      inner_eptr(nullptr), *outer_eptr(nullptr);
+    for ( size_t i{0}; i<eptr->Neighbors(); ++i )
+     if ( eptr->Neighbor(i) != nullptr ) {
+          vector<size_t> fnids;
+          eptr->FE()->NodesOfFace(i,fnids);
+          face_nodes.reserve( fnids.size() );
+          for (size_t j{0}; j<fnids.size(); ++j )
+            face_nodes.push_back( eptr->N( fnids[j] ) );
+          inner_eptr = eptr;
+          outer_eptr = eptr->Neighbor(i);
+          break;
+       }
+    
+    // calling the function that is being tested
+    pair<Element<3>*,Element<3>*> parents = parentElementsSharedByFace( face_nodes );
+    
+    // test that the correct neighbor elements were found (inner one should be first
+    _test( parents.first  != nullptr );
+    _test( parents.second != nullptr );
+    _test( parents.first  == inner_eptr );
+    _test( parents.second == outer_eptr );
+    
+    // now testing for face 4 that is on the left outside
+    vector<size_t> fnids;
+    eptr->FE()->NodesOfFace(4,fnids);
+    face_nodes.resize( fnids.size() );
+    for (size_t j{0}; j<fnids.size(); ++j )
+      face_nodes[j] = eptr->N( fnids[j] );
+    inner_eptr = eptr;
+    outer_eptr = nullptr;
+
+    // calling the function that is being tested
+    parents = parentElementsSharedByFace( face_nodes );
+    
+    // test that the correct neighbor elements were found (inner one should be first
+    _test( parents.first  != nullptr );
+    _test( parents.second == nullptr );
+    _test( parents.first  == eptr );
+
+    return true;
+    
+ } // end Test_parentElementsSharedByFace
+
+
+
+
+// using VSetMakers to create and compare input data
+bool MeshManager_Test::Test_BuiltElementConnectivity2D()
+ {
+    // 2D functionality
+    VSet<2U> vset, vset_orig;
+    test_Create_TrianglePatch_VSet( vset );
+    vset_orig = vset;
+    Model<2> model( vset, "CSMP-variables.txt" );
+    Region<2>& model_domain = model.Region("Model");
+    
+    // testing the reconstruction of element connectivity from face node pointers (old one gets removed)
+    vector<vector<Element<2>*> > nbor_pointers;
+    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
+    // rebuilding the connectivity
+    model.Mesh().BuildConnectivity<Element>( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd() );
+    // getting the connectivity that was recreated
+    vector<vector<Element<2>*> > nbor_pointers2;
+    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
+    // comparing the connectivity with the original VSet
+    if ( nbor_pointers != nbor_pointers2 ) return false;
+    return true;
+    
+ } // end Test_BuiltElementConnectivity2D
+
+
+
+// using VSetMakers to create and compare input data
+bool MeshManager_Test::Test_BuiltElementConnectivity3D()
+ {
+    // 2D functionality
+    VSet<3U> vset, vset_orig;
+    test_Create_Pyramid_Hexa_VSet( vset, false );
+    vset_orig = vset;
+    Model<3> model( vset, "CSMP-variables.txt" );
+    Region<3>& model_domain = model.Region("Model");
+    
+    // testing the reconstruction of element connectivity from face node pointers (old one gets removed)
+    vector<vector<Element<3>*> > nbor_pointers;
+    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
+    // rebuilding the connectivity
+    model.Mesh().BuildConnectivity<Element>( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd() );
+    // getting the connectivity that was recreated
+    vector<vector<Element<3>*> > nbor_pointers2;
+    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
+    // comparing the connectivity with the original VSet
+    if ( nbor_pointers != nbor_pointers2 ) return false;
+    return true;
+    
+ } // end Test_BuiltElementConnectivity3D
+
+
+
 
 // TODO: needs to operate on model with faces and interfaces
 bool MeshManager_Test::TestEntityNumberingFunction()
 {
+  const bool contiguous{true}, reconstruct_from_CSMP_binary_file{false};
+  Create_ANSYS3D_Model( contiguous, reconstruct_from_CSMP_binary_file );
 	// nodes numbered via Model region
 	Region<3U>& model_domain(model3d_->Region("Model"));
 	model_domain.UpdateMemberIndexes();
@@ -485,6 +631,8 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
 */
 bool MeshManager_Test::TestEraseAllPrimitives()
 {
+   bool reconstruct_from_CSMP_binary_file{true};
+   Create_ANSYS2D_Model( reconstruct_from_CSMP_binary_file );
    MeshManager<2U>& mesh(model2d_->Mesh());
    const size_t     n_original_elmts(mesh.Elements());
    const size_t     n_original_faces(mesh.Faces());

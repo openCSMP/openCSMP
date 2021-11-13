@@ -12,31 +12,6 @@ using namespace std;
 namespace csmp {
 
 
-/**
-Element stub used to model an element at the model boundary. The key
-information here is the boundary flag.
-
-Default constructor associates Element with instance of
-fem_manager.DefaultElement() pointing to the default Element as specified in main.
-Also, vectors of pointers to nodes, constraint points and neighbor elements
-are constructed.
-
-@section application Application
-
-Elements are constructed inside the MeshManager. There are 2 methods
-for VSets and VSets respectively. VSets (a class that will be
-phased out in 1999) cannot hold different element types in one mesh. In
-this case the Element default constructor will initialize the FiniteElement
-pointer to zero.
-*/
-template<size_t dim>
-Element<dim>::Element( BOX_BOUNDARY bflag )
-  : idx_( UINT_MAX ),
-    material_id_(UNSPECIFIED)
-{
-}
-
-
 
 /**
 Constructor associates Element with instance of specific finite element.
@@ -62,11 +37,12 @@ them properly.
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  idx_( UINT_MAX ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  material_id_(UNSPECIFIED)
+    idx_( UINT_MAX ),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr ),
+    material_id_(UNSPECIFIED)
 {
+  assert( f != nullptr );
   elmt_connector_.resize( f->Neighbors(), nullptr );
   node_connector_.resize( f->Nodes(), nullptr );
 }
@@ -77,12 +53,14 @@ template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f,
                        const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-  idx_( UINT_MAX ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
+    idx_( UINT_MAX ),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr ),
+    material_id_(UNSPECIFIED)
 {
+  assert( f   != nullptr );
+  assert( fvs != nullptr );
 }
 
 
@@ -100,6 +78,8 @@ Element<dim>::Element( csmp::FiniteElement* f,
     node_connector_( f->Nodes(), nullptr ),
     material_id_(UNSPECIFIED)
 {
+  assert( f   != nullptr );
+  assert( fvs != nullptr );
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );
   else
@@ -127,6 +107,8 @@ Element<dim>::Element( size_t idx,
     node_connector_( f->Nodes(), nullptr ),
     material_id_(material)
 {
+  assert( f != nullptr );
+  assert( s != nullptr );
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );
   else
@@ -776,16 +758,16 @@ template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<
 template<size_t dim>
 void Element<dim>::Out() const
 {
-  string str( parseBoundary( atBoundary(this) ) );
   cout << "\n\nElement<" << dim << ">::Out: number: " << idx_;
   cout <<"\n\tMaterial ID: "<< material_id_;
   cout << " (" << parseFiniteElementType( this->FE_Type() ) << " = ";
   if ( this->IsLineElement() )    cout << "line element";
   else if ( this->IsSurfaceElement() ) cout << "surface element";
   else if ( this->IsVolumeElement() )  cout << "volume element";
-  cout << "), boundary flag: " << str << "\n";
+  cout <<"\n";
 
   cout << "\n\tconnected nodes (indices : boundary flags):  ";
+  string str("undefined");
   for ( size_t i = 0U; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i )->AtBoundary() );
     cout << N( i )->Idx() << ":" << str << "  ";

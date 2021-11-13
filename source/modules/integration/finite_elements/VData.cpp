@@ -749,6 +749,23 @@ void VData::ResizePlist( size_t elements )
 
 
 
+
+
+
+/**
+    increasing the storage for element types to the new size without invalidating existing types unless the storage is shrunk
+*/
+void VData::ResizeElementTypes( size_t elements )
+ {
+    if ( !HybridElementTypeMesh() ) return;
+    pelmt.resize( elements );
+    
+ } // end ResizeElementTypes
+ 
+ 
+ 
+
+
 /**
      Resizes 'plist' so that it can contain a different number of
      elements and neighbors per element.
@@ -760,7 +777,8 @@ void VData::ResizePlist( size_t elements )
 */
 void VData::ResizePlist( size_t elements, size_t nperelmt )
 {
-    assert( !hybrid_mesh_ );
+    assert( Faces() == 0 );
+    assert( InterFaces() == 0 );
     vector<long64>  empty_vec(nperelmt,0);
     const size_t old_size( plist.size() );
     assert( elements > old_size );
@@ -859,7 +877,6 @@ void VData::ResizePfverts( size_t elements, size_t nperelmt )
     if ( first_face_  != plist.size() || first_interface_ != plist.size() )
       throw logic_error( "VData::ResizePfverts(size_t,size_t): method does not handle VSets with Face and InterFace objects yet");
 
-    assert( !hybrid_mesh_ );
     vector<long64>  empty_vec(nperelmt,0);
     const size_t old_size( pfverts.size() );
     assert( elements >= old_size );
@@ -3236,6 +3253,41 @@ void VData::EstablishElementConnectivity3D()
                 }
           }
           
+         // 2.3.3 Remeshing tetrahedra that span a corner of the model
+         // ----------------------------------------------------------
+         // replacing the corner and inner elements with 3 new tetrahedra
+         const size_t n_elements{pelmt.size()};
+         // if this a tetrahedral only mesh no checks have to be performed
+         if ( !HybridElementTypeMesh() && isTetrahedral( parseFiniteElementTypeEnum(ElementType(0)) ) )
+           {
+              for ( size_t i{0}; i<n_elements; ++i ) {
+                   long n_neighbors{0}, neighbor(UNSPECIFIED);
+                   for ( size_t j{0}; j<PfvertsSize(i); ++j )
+                     if ( Pfvert(i,j) >= 0 ) {
+                          neighbor=Pfvert(i,j);
+                          n_neighbors++;
+                       }
+                   // if the tetrahedron has only one neighbor, it and its nbor need to be replaced
+                   if ( n_neighbors == 1 )
+                     splitCornerTetrahedron( *this, i, neighbor );
+                }
+           }
+         else { // for hybrid element type meshes the element type needs to be checked
+              for ( size_t i{0}; i<n_elements; ++i ) {
+                   long n_neighbors{0}, neighbor(UNSPECIFIED);
+                   for ( size_t j{0}; j<PfvertsSize(i); ++j )
+                     if ( Pfvert(i,j) >= 0 ) {
+                          neighbor=Pfvert(i,j);
+                          n_neighbors++;
+                       }
+                   // if the element has only one neighbor and is a tetrahedron, it and its nbor need to be replaced
+                   if ( n_neighbors == 1 &&
+                        isTetrahedral( parseFiniteElementTypeEnum(ElementType(i)) ) ) {
+                        splitCornerTetrahedron( *this, i, neighbor );
+                     }
+                }
+           }
+          
       } // volume elements
  
  } // end EstablishElementConnectivity3D
@@ -3320,6 +3372,97 @@ bool VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
  } // end ExtractNodeManifolds
 
 
+
+
+/**
+Assuming the following numbering:
+
+First tetra
+0 1 2 3 - ony one neighbor = nbr
+
+Second tetra
+0 3 2 4 -  4 neigbors: 0=, 1=, 2=, 3=cnr
+
+The new elements are formed
+0 1 2 4 - replacing cnr,             new neighbors: 0=new nbor, 1=nbor1, 2=new, 3=outside
+0 3 1 4 - new,                           new neighbors: 0=new nbor, 1=cnr, 2=nbor2, 3=outside
+1 3 2 4 - replacing neighbor,    new neighbors: 0=nbor0, 1=nbor1, 2=new, 3=outside
+
+The corresponding neighbor elements are.
+
+*/
+void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
+ {
+    assert( cnr < vdata.Elements() );
+    assert( nbr < vdata.Elements() );
+    
+    // 1. creation of space for new element (assuming that there are no Faces of InterFaces)
+    // -------------------------------------------------------------------------------------
+    assert( vdata.Faces() == 0 );
+    assert( vdata.InterFaces() == 0 );
+    const size_t n_elements_new{ vdata.Elements() + 1 };
+    if ( vdata.HybridElementTypeMesh() ) {
+         assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(cnr)) ) );
+         assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(nbr)) ) );
+         vdata.ResizeElementTypes( n_elements_new );
+         vdata.ElementType( n_elements_new-1U, vdata.ElementType( cnr ) );
+      }
+    else assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(0)) ) );
+    vdata.ResizePlist( n_elements_new, 4 ); // nodes of tetrahedron
+    vdata.ResizePfverts( n_elements_new, 4 ); // nbors of tetrahedron
+    
+    // 2. assignment of nodes
+    // ----------------------
+    // new element first
+    vdata.Plist( n_elements_new-1U, 0, vdata.Plist( cnr, 0 ) );
+    vdata.Plist( n_elements_new-1U, 1, vdata.Plist( cnr, 3 ) );
+    vdata.Plist( n_elements_new-1U, 2, vdata.Plist( cnr, 1 ) );
+    vdata.Plist( n_elements_new-1U, 3, vdata.Plist( nbr, 3 ) );
+    // temp numbers
+    const long cnr_n0{vdata.Plist(cnr,0)}, cnr_n1{vdata.Plist(cnr,3)},
+               cnr_n2{vdata.Plist(cnr,1)}, cnr_n3{vdata.Plist(nbr,3)},
+               nbr_n0{vdata.Plist(cnr,1)}, nbr_n1{vdata.Plist(cnr,3)},
+               nbr_n2{vdata.Plist(cnr,2)}, nbr_n3{vdata.Plist(nbr,3)};
+    // reshaped corner element
+    vdata.Plist( cnr, 0, cnr_n0 );
+    vdata.Plist( cnr, 1, cnr_n1 );
+    vdata.Plist( cnr, 2, cnr_n2 );
+    vdata.Plist( cnr, 3, cnr_n3 );
+    // reshaped neighbor element
+    vdata.Plist( nbr, 0, nbr_n0 );
+    vdata.Plist( nbr, 1, nbr_n1 );
+    vdata.Plist( nbr, 2, nbr_n2 );
+    vdata.Plist( nbr, 3, nbr_n3 );
+
+    // 3. assignment of neigbors
+    // -------------------------
+    // new element first
+    vdata.Pfvert( n_elements_new-1U, 0, nbr );
+    vdata.Pfvert( n_elements_new-1U, 1, cnr );
+    vdata.Pfvert( n_elements_new-1U, 2, vdata.Pfvert( nbr, 2 ) );
+    vdata.Pfvert( n_elements_new-1U, 3, vdata.Pfvert( cnr, 3 ) ); // outside
+    // temporaries
+    const long cnr_p0(nbr), cnr_p1{vdata.Pfvert(nbr,1)},
+               cnr_p2(n_elements_new-1), cnr_p3{vdata.Pfvert(nbr,3)},
+               nbr_p0{vdata.Pfvert(nbr,0)}, nbr_p1{vdata.Pfvert(nbr,1)},
+               nbr_p2(n_elements_new-1), nbr_p3{vdata.Pfvert(cnr,3)};
+    // reshaped corner element
+    // new neighbors: 0=new nbor, 1=nbor1, 2=new, 3=outside
+    vdata.Pfvert( cnr, 0, cnr_p0 );
+    vdata.Pfvert( cnr, 1, cnr_p1 );
+    vdata.Pfvert( cnr, 2, cnr_p2 );
+    vdata.Pfvert( cnr, 3, cnr_p3 ); // outside
+    // reshaped neighbor element
+    // new neighbors: 0=nbor0, 1=nbor1, 2=new, 3=outside
+    vdata.Pfvert( nbr, 0, nbr_p0 );
+    vdata.Pfvert( nbr, 1, nbr_p1 );
+    vdata.Pfvert( nbr, 2, nbr_p2 );
+    vdata.Pfvert( nbr, 3, nbr_p3 ); // outside
+    
+    cout <<"\nsplitCornerTetrahedron: replaced corner "<< cnr;
+    cout <<" and its neighbor "<< nbr <<", adding the new tetrahedron "<< n_elements_new;
+
+ } // end splitCornerTetrahedron
 
  
 } // end namespace csmp

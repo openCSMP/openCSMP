@@ -45,6 +45,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
 {
   public:
   
+    Face() = delete;
+
     // ------------------------------------------------------------------------
     // Functionality used in Face construction process (in that order)
     // ------------------------------------------------------------------------
@@ -215,7 +217,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
     void  Out() const;
 
   private:
-    Face();
     
     /// for exclusive use by MeshManager
     template<size_t> friend class MeshManager;

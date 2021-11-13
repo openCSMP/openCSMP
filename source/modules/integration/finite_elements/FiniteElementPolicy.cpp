@@ -36,7 +36,6 @@ CSMP_FEM_TYPE FiniteElementPolicy<dim,SIMPLEX>::FE_Type() const
 template<size_t dim, template<size_t> class SIMPLEX>
 FiniteElement* FiniteElementPolicy<dim,SIMPLEX>::FE() const
   {
-    assert( fptr_ != nullptr );
     return fptr_;
   }
 

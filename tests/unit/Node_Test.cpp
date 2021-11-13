@@ -1,6 +1,7 @@
 #include "Node_Test.h"
 #include "Node.h"
 #include "Element.h"
+#include "LinearTriangle.h"
 
 using namespace std;
 
@@ -8,8 +9,8 @@ namespace csmp{
 
 void Node_Test::run()
 {
-
-  Element<3U> e1,e2,e3;
+  LinearTriangle triangle;
+  Element<3U>    e1(&triangle), e2(&triangle), e3(&triangle);
   e1.Idx( 999 );
   e2.Idx( 9999 );
   e3.Idx( 99999 );

@@ -255,16 +255,16 @@ size_t  Node<dim>::Neighbors() const
     
     // subtracting number of lower dimensional parent elements as these node sharing
     // but otherwise inconsequential elements would lead to a wrong node count
-    if ( dim == 3U ) {
+    if constexpr ( dim == 3U ) {
          for ( typename vector<Element<dim>*>::const_iterator
-               it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); it++ )
-           if ( (*it)->FE()->IsSurfaceElement() or (*it)->FE()->IsLineElement() ) node_neighbors--; 
+               it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); ++it )
+           if ( (*it)->IsSurfaceElement() || (*it)->IsLineElement() ) node_neighbors--;
          return node_neighbors;
       }
-    if ( dim == 2U ) {
+    if constexpr ( dim == 2U ) {
          for ( typename vector<Element<dim>*>::const_iterator
                it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); it++ )
-           if ( (*it)->FE()->IsLineElement() ) node_neighbors--; 
+           if ( (*it)->IsLineElement() ) node_neighbors--;
          return node_neighbors;
       }
       
@@ -472,7 +472,7 @@ template class Node<3U>;
  // NON-MEMBER FUNCTIONS
  
 /**
-   returns parent elements shared by face, inner side is reported first; outer next else application: give nodes of lower-dimensional face to find element on either side
+   returns parent elements shared by nodes of face, inner side is reported first; outer next else application: give nodes of lower-dimensional face to find element on either side
 */
 template<size_t dim>
 pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( const vector<Node<dim>*>& face_nodes )
@@ -522,14 +522,10 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( const vector<Node
          Point<3> vec1(face_nodes[0]->Coordinate() - face_nodes[1]->Coordinate()); // cw
          Point<3> vec2(face_nodes[2]->Coordinate() - face_nodes[1]->Coordinate()); // ccw
          Point<3> nrml =  crossProduct( vec2, vec1 );
-         // getting the barycentre of the face (just considering 3 nodes, assuming it is reasonably planar)
-         Point<3> fbarycentre = face_nodes[0]->Coordinate() + face_nodes[1]->Coordinate() + face_nodes[2]->Coordinate();
-         fbarycentre /= 3.;
-         // checking whether a vector from the faces barycentre to the parent element center yields a negative or positive dot product
-         Point<3> ebarycentre =(*shared_parents.begin())->BaryCenter();
-         Point<3> vec3(ebarycentre - fbarycentre);
+         // checking whether a vector from the second element barycentre to the first parent element center yields a negative or positive dot product
+         Point<3> bvec = (*shared_parents.rbegin())->BaryCenter() - (*shared_parents.begin())->BaryCenter();
          // using dot-product to find inner element: if normal is pointing toward barycentre of first element, initial order needs to be reversed
-         if ( dotProduct( nrml, vec3 ) > 0. ) {
+         if ( dotProduct( nrml, bvec ) < 0. ) {
               auto swap     = result.second;
               result.second = result.first;
               result.first  = swap;
@@ -541,14 +537,10 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( const vector<Node
          Point<2> vec(face_nodes[1]->Coordinate() - face_nodes[0]->Coordinate()); // line element node numbering
          // rotating this line clockwise to get the normal
          Point<2> nrml( -vec[1] /* -y */, vec[0] /* x */ );
-         // getting the barycentre of the face (just considering 3 nodes, assuming it is reasonably planar)
-         Point<2> fbarycentre = face_nodes[0]->Coordinate() + face_nodes[1]->Coordinate();
-         fbarycentre /= 2.;
          // checking whether a vector from the faces barycentre to the parent element center yields a negative or positive dot product
-         Point<2> ebarycentre = (*shared_parents.begin())->BaryCenter();
-         Point<2> vec1(ebarycentre - fbarycentre);
-         // using the dot-product to find inner element, if the normal is pointing toward barycentre, initial order needs to be reversed
-         if ( dotProduct( nrml, vec1 ) > 0. ) {
+         Point<2> bvec = (*shared_parents.rbegin())->BaryCenter() - (*shared_parents.begin())->BaryCenter();
+         // using the dot-product to find inner element, if the normal is pointing toward first barycentre, initial order needs to be reversed
+         if ( dotProduct( nrml, bvec ) < 0. ) {
               auto swap     = result.second;
               result.second = result.first;
               result.first  = swap;

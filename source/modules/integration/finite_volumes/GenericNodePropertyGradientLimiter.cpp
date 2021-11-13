@@ -86,7 +86,6 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
     std::pair<size_t, size_t>                       ids;
     double64                                        max, min, val_left, phi_temp;
     Node<dim>*                                      cvit, neighbor_node;
-    Element<dim>                                    current_el;
     size_t                                          nloc_id, global_el_id, local_facet_id,node_id;
     
     // loop over finite volumes

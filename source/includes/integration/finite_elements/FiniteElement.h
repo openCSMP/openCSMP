@@ -94,6 +94,7 @@ bool isQuadrilateralElement( CSMP_FEM_TYPE );
 bool isLineElement( CSMP_FEM_TYPE );
 bool isTriangular( CSMP_FEM_TYPE );
 bool isQuadrilateral( CSMP_FEM_TYPE );
+bool isTetrahedral( CSMP_FEM_TYPE );
 bool isHexahedral( CSMP_FEM_TYPE );
 
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE );

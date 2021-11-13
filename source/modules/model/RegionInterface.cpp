@@ -336,19 +336,19 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName 
     csmp::Region<dim>&   subdomain         = iterUniqueRegion->second;
     pair<int32, int32>   spatialDimensions = subdomain.ElementSpatialDimensions();
 
-    // 1. disconnecting elements from their neighbors and deleting them
+    // 1. disconnects elements from neighbors and nodes, deletes them, and removes zero entries from pointer
     meshMgr.template Delete<Element>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
 
-    // 2. Rebuild node connections if necessary
+    // 2. Rebuild node to parent connections if necessary
     if ( spatialDimensions.second == dim ) {
-         // This is a region whose dimension is dim, so interior
-         // nodes must be removed.
+         // Unique dim-dimensional regions do not share interior nodes with other regions; they must therefore be removed.
+         // removes interior nodes
          meshMgr.template Delete<Node>( subdomain.NodesBegin(), subdomain.PerimeterNodesBegin() );
          // Update node connections on the region's perimeter nodes that were retained.
-         meshMgr.RebuildNodeParentElementRelationships( subdomain.PerimeterElementsBegin(), subdomain.ElementsEnd() );
+         meshMgr.UpdateNodeParentElementRelationships( subdomain.PerimeterNodesBegin(), subdomain.NodesEnd() );
       }
-    // This is a region whose dimension is less than dim (i.e. a boundary or split boundary). Just update nodes.
-    else meshMgr.RebuildNodeParentElementRelationships( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+    // This is a region whose dimension is less than dim (i.e. a boundary or split boundary).
+    else meshMgr.UpdateNodeParentElementRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
   }
 
   // if the region was found in the respective map, it is erased

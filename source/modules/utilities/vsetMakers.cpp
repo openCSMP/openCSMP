@@ -329,6 +329,10 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
   	vset.AddBFlag( 0, CNR4);
   	vset.AddBFlag( 1, TOP_OUTSIDE );
   	vset.AddBFlag( 4, RIGHT_OUTSIDE);
+   
+    //-------------------------MATERIALS
+    vector<int32> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
     
     vset.Out();
     
@@ -653,7 +657,11 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	vset.AddBFlag( 5, CNR6);
   	vset.AddBFlag( 6, CNR7);
   	vset.AddBFlag( 7, CNR8);
-    
+ 
+     //-------------------------MATERIALS
+    vector<int32> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
     vset.EstablishZeroBasedNumbering();
     vset.Out();
 }
@@ -850,6 +858,10 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
       }
   	}
   	
+    //-------------------------MATERIALS
+    vector<int32> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
     vset.EstablishZeroBasedNumbering();
     vset.Out();
 }
@@ -1105,6 +1117,10 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     vset.AddPlist( deqElements.begin(),deqElements.end());
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	    
+    //-------------------------MATERIALS
+    vector<int32> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
   vset.EstablishZeroBasedNumbering();
   vset.Out();
 }
@@ -1500,6 +1516,10 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
       }
   	}
   	
+    //-------------------------MATERIALS
+    vector<int32> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
     vset.EstablishZeroBasedNumbering();
     vset.Out();
 }
@@ -2207,6 +2227,10 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	vset.AddBFlag( 5, CNR6);
   	vset.AddBFlag( 6, CNR7);
     
+    //-------------------------MATERIALS
+    vector<int32> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
     vset.EstablishZeroBasedNumbering();
     vset.Out();
 }
@@ -2837,6 +2861,10 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
       }
   	}
  
+    //-------------------------MATERIALS
+    vector<int32> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+
     vset.EstablishZeroBasedNumbering();
     
 } // end test_Create_Pyramid_VSet

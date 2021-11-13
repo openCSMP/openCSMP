@@ -16,6 +16,7 @@
 #include "Standard_IO_Handler.h"
 #include "variableOperations.h"
 #include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "binaryReadWrite.h"
 #include "ModelTime.h"
 #include "FiniteVolumeStencilManager.h"
@@ -357,6 +358,14 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
+
     cout << "\n============================================================================";
     cout << "\nModel '"<< Name() <<"' has been established successfully!";
     cout << "\n============================================================================";
@@ -432,6 +441,14 @@ void Model<dim>::Initialize( bool isoparametric_elements,
   // 6. Adding potentially required property storage
   InitializeLocalVariableStorage();
   UpdateSubdomainPropertyStorage();
+
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
 
   cout << "\n================================================";
   cout << "\nModel has been established successfully!";
@@ -563,6 +580,14 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
   // 8. adding property storage to the Model
   InitializeLocalVariableStorage();  // for the model
   UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
+
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
 
   cout << "\n============================================================================";
   cout << "\nModel '" << Name() << "' has been established successfully!";
