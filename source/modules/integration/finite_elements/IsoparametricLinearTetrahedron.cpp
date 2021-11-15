@@ -120,10 +120,10 @@ the element.
 
 */
 void IsoparametricLinearTetrahedron::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    std::vector<double64>& N ) const
+                    double r,
+                    double s,
+                    double t,
+                    std::vector<double>& N ) const
 {
     N.resize(npe);
     N[0] = 1. - r - s - t; // L1
@@ -133,10 +133,10 @@ void IsoparametricLinearTetrahedron::Nrst(
  }
 
 void IsoparametricLinearTetrahedron::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    double64* N ) const
+                    double r,
+                    double s,
+                    double t,
+                    double* N ) const
 {
     N[0] = 1. - r - s - t; // L1
     N[1] = r; // L2
@@ -169,10 +169,10 @@ procedures for elements.
 
 */
 void IsoparametricLinearTetrahedron::dNr (
-                double64,
-                double64,
-                double64,
-                std::vector<double64>& DNR ) const
+                double,
+                double,
+                double,
+                std::vector<double>& DNR ) const
 {
    DNR.resize(npe);
    DNR[0] = -1.;
@@ -183,10 +183,10 @@ void IsoparametricLinearTetrahedron::dNr (
 
 
 void IsoparametricLinearTetrahedron::dNs(
-                double64,
-                double64,
-                double64,
-                std::vector<double64>& DNS ) const
+                double,
+                double,
+                double,
+                std::vector<double>& DNS ) const
 {
    DNS.resize(npe);
    DNS[0] = -1.0;
@@ -198,10 +198,10 @@ void IsoparametricLinearTetrahedron::dNs(
 
 
 void IsoparametricLinearTetrahedron::dNt(
-                double64,
-                double64,
-                double64,
-                std::vector<double64>& DNT ) const
+                double,
+                double,
+                double,
+                std::vector<double>& DNT ) const
 {
    DNT.resize(npe);
    DNT[0] = -1.;
@@ -229,10 +229,10 @@ void IsoparametricLinearTetrahedron::dNt(
 
 
 void
-IsoparametricLinearTetrahedron::N_AtBaryCenter( std::vector<double64>& N )
+IsoparametricLinearTetrahedron::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
-    const double64 OneFourth=0.25;
+    const double OneFourth=0.25;
     Nrst(OneFourth,OneFourth,OneFourth,N);
  }
 
@@ -350,7 +350,7 @@ CSMP_FEM_TYPE  IsoparametricLinearTetrahedron::ElementTypeOfFace( size_t )  cons
     return ISOPARAMETRIC_LINEAR_TRIANGLE;
  }
 
-double64 IsoparametricLinearTetrahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearTetrahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
 
 
 
@@ -419,11 +419,11 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 second method argument.
 
 */
-double64
+double
 IsoparametricLinearTetrahedron::dN( DenseMatrix<DM_MIN>& DN2,
-                                    const vector<double64>& xyz )
+                                    const vector<double>& xyz )
  {
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -433,7 +433,7 @@ IsoparametricLinearTetrahedron::dN( DenseMatrix<DM_MIN>& DN2,
     dNt( rst[0], rst[1], rst[2], DNT );
 
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     DN2.Resize(dim,dim);
     DN2  = JINV;
@@ -467,7 +467,7 @@ IsoparametricLinearTetrahedron::dN( DenseMatrix<DM_MIN>& DN2,
 within the Hexahedron.
 */
 void
-IsoparametricLinearTetrahedron::N( vector<double64>& N,const vector<double64>& xyz )
+IsoparametricLinearTetrahedron::N( vector<double>& N,const vector<double>& xyz )
 {
 
       DNR.resize(dim);
@@ -504,7 +504,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 
 */
-double64  IsoparametricLinearTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B,
+double  IsoparametricLinearTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B,
                                                       size_t nd )
  {
     assert( nd < npe );
@@ -514,7 +514,7 @@ double64  IsoparametricLinearTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B,
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 6 in global coordinates
     // by multiplication of JINV with local DN
@@ -535,7 +535,7 @@ double64  IsoparametricLinearTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B,
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
 void  IsoparametricLinearTetrahedron::IntegrationPoint( size_t ip,
-                                                        vector<double64>& xyz ) const
+                                                        vector<double>& xyz ) const
  {
     assert( ip < gpe );
     xyz.resize(3U); xyz[0]=xyz[1]=xyz[2]=0.;
@@ -556,8 +556,8 @@ void  IsoparametricLinearTetrahedron::IntegrationPoint( size_t ip,
 
 /** Projection function from rst->xyz
 */
-void IsoparametricLinearTetrahedron::ParametricToPhysical( vector<double64>& rst,
-                                                           vector<double64>& xyz )
+void IsoparametricLinearTetrahedron::ParametricToPhysical( vector<double>& rst,
+                                                           vector<double>& xyz )
 {
     Nrst(rst[0],rst[1],rst[2], DNR );
 
@@ -576,67 +576,67 @@ void IsoparametricLinearTetrahedron::ParametricToPhysical( vector<double64>& rst
 /** Projection function from xyz->rst
 */
 void IsoparametricLinearTetrahedron::PhysicalToParametric(
-                                       vector<double64>& rSt,
-                                       const vector<double64>& xyz )
+                                       vector<double>& rSt,
+                                       const vector<double>& xyz )
 {
 
-    const double64 x12( XY(0,0) - XY(1,0) );
-    const double64 x13( XY(0,0) - XY(2,0) );
-    const double64 x14( XY(0,0) - XY(3,0) );
-    const double64 x23( XY(1,0) - XY(2,0) );
-    const double64 x24( XY(1,0) - XY(3,0) );
-    const double64 x34( XY(2,0) - XY(3,0) );
-    const double64 x21( -x12 );
-    const double64 x31( -x13 );
-    const double64 x32( -x23 );
-    //const double64 x42( -x24 );
-    const double64 x43( -x34 );
+    const double x12( XY(0,0) - XY(1,0) );
+    const double x13( XY(0,0) - XY(2,0) );
+    const double x14( XY(0,0) - XY(3,0) );
+    const double x23( XY(1,0) - XY(2,0) );
+    const double x24( XY(1,0) - XY(3,0) );
+    const double x34( XY(2,0) - XY(3,0) );
+    const double x21( -x12 );
+    const double x31( -x13 );
+    const double x32( -x23 );
+    //const double x42( -x24 );
+    const double x43( -x34 );
 
-    const double64 y12( XY(0,1) - XY(1,1) );
-    const double64 y13( XY(0,1) - XY(2,1) );
-    const double64 y14( XY(0,1) - XY(3,1) );
-    const double64 y23( XY(1,1) - XY(2,1) );
-    const double64 y24( XY(1,1) - XY(3,1) );
-    const double64 y34( XY(2,1) - XY(3,1) );
-    const double64 y21( -y12 );
-    const double64 y31( -y13 );
-    //const double64 y32( -y23 );
-    //const double64 y42( -y24 );
-    const double64 y43( -y34 );
+    const double y12( XY(0,1) - XY(1,1) );
+    const double y13( XY(0,1) - XY(2,1) );
+    const double y14( XY(0,1) - XY(3,1) );
+    const double y23( XY(1,1) - XY(2,1) );
+    const double y24( XY(1,1) - XY(3,1) );
+    const double y34( XY(2,1) - XY(3,1) );
+    const double y21( -y12 );
+    const double y31( -y13 );
+    //const double y32( -y23 );
+    //const double y42( -y24 );
+    const double y43( -y34 );
 
-    const double64 z12( XY(0,2) - XY(1,2) );
-    const double64 z13( XY(0,2) - XY(2,2) );
-    const double64 z14( XY(0,2) - XY(3,2) );
-    const double64 z23( XY(1,2) - XY(2,2) );
-    const double64 z24( XY(1,2) - XY(3,2) );
-    const double64 z34( XY(2,2) - XY(3,2) );
-    const double64 z21( -z12 );
-    const double64 z31( -z13 );
-    //const double64 z32( -z23 );
-    //const double64 z42( -z24 );
-    const double64 z43( -z34 );
+    const double z12( XY(0,2) - XY(1,2) );
+    const double z13( XY(0,2) - XY(2,2) );
+    const double z14( XY(0,2) - XY(3,2) );
+    const double z23( XY(1,2) - XY(2,2) );
+    const double z24( XY(1,2) - XY(3,2) );
+    const double z34( XY(2,2) - XY(3,2) );
+    const double z21( -z12 );
+    const double z31( -z13 );
+    //const double z32( -z23 );
+    //const double z42( -z24 );
+    const double z43( -z34 );
 
-    //const double64 a1( y42*z32 - y32*z42 );
-    const double64 a2( y31*z43 - y34*z13 );
-    const double64 a3( y24*z14 - y14*z24 );
-    const double64 a4( y13*z21 - y12*z31 );
+    //const double a1( y42*z32 - y32*z42 );
+    const double a2( y31*z43 - y34*z13 );
+    const double a3( y24*z14 - y14*z24 );
+    const double a4( y13*z21 - y12*z31 );
 
-    //const double64 b1( x32*z42 - x42*z32 );
-    const double64 b2( x43*z31 - x13*z34 );
-    const double64 b3( x14*z24 - x24*z14 );
-    const double64 b4( x21*z13 - x31*z12 );
+    //const double b1( x32*z42 - x42*z32 );
+    const double b2( x43*z31 - x13*z34 );
+    const double b3( x14*z24 - x24*z14 );
+    const double b4( x21*z13 - x31*z12 );
 
-    //const double64 c1( x42*y32 - x32*y42 );
-    const double64 c2( x31*y43 - x34*y13 );
-    const double64 c3( x24*y14 - x14*y24 );
-    const double64 c4( x13*y21 - x12*y31 );
+    //const double c1( x42*y32 - x32*y42 );
+    const double c2( x31*y43 - x34*y13 );
+    const double c3( x24*y14 - x14*y24 );
+    const double c4( x13*y21 - x12*y31 );
 
-    const double64 V00( x21*( y23*z34 - y34*z23) + x32*(y34*z12 - y12*z34) + x43*(y12*z23 - y23*z12) );
+    const double V00( x21*( y23*z34 - y34*z23) + x32*(y34*z12 - y12*z34) + x43*(y12*z23 - y23*z12) );
 
-    //const double64 V01( XY(1,0) * ( XY(2,1)*XY(3,2) - XY(3,1)*XY(2,2) ) + XY(2,0) * ( XY(3,1)*XY(1,2) - XY(1,1)*XY(3,2) ) + XY(3,0) * ( XY(1,1)*XY(2,2) - XY(2,1)*XY(1,2) ) );
-    const double64 V02( XY(0,0) * ( XY(3,1)*XY(2,2) - XY(2,1)*XY(3,2) ) + XY(2,0) * ( XY(0,1)*XY(3,2) - XY(3,1)*XY(0,2) ) + XY(3,0) * ( XY(2,1)*XY(0,2) - XY(0,1)*XY(2,2) ) );
-    const double64 V03( XY(0,0) * ( XY(1,1)*XY(3,2) - XY(3,1)*XY(1,2) ) + XY(1,0) * ( XY(3,1)*XY(0,2) - XY(0,1)*XY(3,2) ) + XY(3,0) * ( XY(0,1)*XY(1,2) - XY(1,1)*XY(0,2) ) );
-    const double64 V04( XY(0,0) * ( XY(2,1)*XY(1,2) - XY(1,1)*XY(2,2) ) + XY(1,0) * ( XY(0,1)*XY(2,2) - XY(2,1)*XY(0,2) ) + XY(2,0) * ( XY(1,1)*XY(0,2) - XY(0,1)*XY(1,2) ) );
+    //const double V01( XY(1,0) * ( XY(2,1)*XY(3,2) - XY(3,1)*XY(2,2) ) + XY(2,0) * ( XY(3,1)*XY(1,2) - XY(1,1)*XY(3,2) ) + XY(3,0) * ( XY(1,1)*XY(2,2) - XY(2,1)*XY(1,2) ) );
+    const double V02( XY(0,0) * ( XY(3,1)*XY(2,2) - XY(2,1)*XY(3,2) ) + XY(2,0) * ( XY(0,1)*XY(3,2) - XY(3,1)*XY(0,2) ) + XY(3,0) * ( XY(2,1)*XY(0,2) - XY(0,1)*XY(2,2) ) );
+    const double V03( XY(0,0) * ( XY(1,1)*XY(3,2) - XY(3,1)*XY(1,2) ) + XY(1,0) * ( XY(3,1)*XY(0,2) - XY(0,1)*XY(3,2) ) + XY(3,0) * ( XY(0,1)*XY(1,2) - XY(1,1)*XY(0,2) ) );
+    const double V04( XY(0,0) * ( XY(2,1)*XY(1,2) - XY(1,1)*XY(2,2) ) + XY(1,0) * ( XY(0,1)*XY(2,2) - XY(2,1)*XY(0,2) ) + XY(2,0) * ( XY(1,1)*XY(0,2) - XY(0,1)*XY(1,2) ) );
 
     //N[0] = ( V01 + a1*xyz[0] + b1*xyz[1] + c1*xyz[2])/V00;
     //N[1] = ( V02 + a2*xyz[0] + b2*xyz[1] + c2*xyz[2])/V00;
@@ -666,13 +666,13 @@ and the shortest boundary segment.
 
 The Element is consulted for its global coordinates.
 */
-double64  IsoparametricLinearTetrahedron::AspectRatio()
+double  IsoparametricLinearTetrahedron::AspectRatio()
 {
    NRST.resize(spe);
 
    EdgeLengths( NRST );
 
-   double64 seg_max(NRST[0]), seg_min(NRST[0]);
+   double seg_max(NRST[0]), seg_min(NRST[0]);
 
    // find largest segment
    for ( size_t i=1; i<spe; i++ ) {
@@ -696,9 +696,9 @@ the second method argument.
 The segment lengths are computed as simple Euclidian distance between corner
 vertices of the edge.
 */
-void IsoparametricLinearTetrahedron::EdgeLengths( std::vector<double64>& len )
+void IsoparametricLinearTetrahedron::EdgeLengths( std::vector<double>& len )
 {
-    double64 sum;
+    double sum;
     len.resize(spe);
 
     // segment 1
@@ -749,9 +749,9 @@ the area is computed.
 
 @return The area (m2) of the finite element.
 */
-double64 IsoparametricLinearTetrahedron::Volume()
+double IsoparametricLinearTetrahedron::Volume()
 {
-    double64   area; // determinant
+    double   area; // determinant
     size_t  i;
 
     // numerical integration:
@@ -786,7 +786,7 @@ A reference to the parent Element, the number of the integration point.
 @param N The interpolation function values are returned into the third argument.
 
 */
-void IsoparametricLinearTetrahedron::N_AtIntegrationPoint( size_t ip, std::vector<double64>& N )
+void IsoparametricLinearTetrahedron::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
      // local interpolation function values
@@ -822,7 +822,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 
 */
-double64
+double
 IsoparametricLinearTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
@@ -835,7 +835,7 @@ IsoparametricLinearTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, s
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
@@ -851,10 +851,10 @@ IsoparametricLinearTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, s
  }
 
 
-double64
+double
 IsoparametricLinearTetrahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
-    double64 OneFourth=0.25;
+    double OneFourth=0.25;
 
     dNr( OneFourth,OneFourth,OneFourth, DNR );
     dNs( OneFourth,OneFourth,OneFourth, DNS );
@@ -862,7 +862,7 @@ IsoparametricLinearTetrahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -891,11 +891,11 @@ are relatively even-sided and have straight edges.
 
 The parent element is queried for its node coordinates.
 */
-double64
+double
 IsoparametricLinearTetrahedron::InnerRadius()
 {
    NRST.resize(spe);
-   double64  sum(0.);
+   double  sum(0.);
 
    EdgeLengths( NRST );
    for ( size_t i=0; i<spe; i++ ) sum += NRST[i];
@@ -960,8 +960,8 @@ to the nodes.  This involves the steps:
 */
 void
 IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
-                                                                            const vector<double64>& IVAR,
-                                                                            vector<double64>& NVAR	)
+                                                                            const vector<double>& IVAR,
+                                                                            vector<double>& NVAR	)
 const
 {
    assert( IVAR.size() >= (gpe*nvars) );
@@ -977,12 +977,12 @@ const
         return;
      }
 
-   static double64  a[4], b[4], c[4], d[4], intpol[4], volume6;
+   static double  a[4], b[4], c[4], d[4], intpol[4], volume6;
    static bool      first_call(true);
    size_t i;
-   int32     j;
+   int32_t     j;
 
-   vector<double64>  sum(nvars);
+   vector<double>  sum(nvars);
 
    // 0. Decide which case is dealt with in terms of the integration points
    //    which are used (rr and ss contain the integr.p. locations)
@@ -1022,10 +1022,10 @@ const
              d[i] += IP(n(i,1),0)*IP(n(i,3),1) - IP(n(i,1),1)*IP(n(i,3),0);
              d[i] += IP(n(i,2),0)*IP(n(i,1),1) - IP(n(i,2),1)*IP(n(i,1),0);
              //
-             a[i] *=  static_cast<double64>(j);
-             b[i] *=  static_cast<double64>(j);
-             c[i] *=  static_cast<double64>(j);
-             d[i] *=  static_cast<double64>(j);
+             a[i] *=  static_cast<double>(j);
+             b[i] *=  static_cast<double>(j);
+             c[i] *=  static_cast<double>(j);
+             d[i] *=  static_cast<double>(j);
              j    *= -1;
           }
         // computing local element volume x 6
@@ -1045,7 +1045,7 @@ const
         intpol[3] = (a[3] + b[3] * NXYZ(i,0) + c[3] * NXYZ(i,1) + d[3] * NXYZ(i,2)) / volume6;
 
         // carry out extrapolation
-        fill( sum.begin(), sum.end(), static_cast<double64>(0.0) );
+        fill( sum.begin(), sum.end(), static_cast<double>(0.0) );
         for ( size_t j=0; j<gpe; j++ )
           for ( size_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
 
@@ -1069,7 +1069,7 @@ void IsoparametricLinearTetrahedron::ReferenceCoordinates(DenseMatrix<DM_MIN> & 
 
 
 // Adriana 2005
-void IsoparametricLinearTetrahedron::JacobianAt( const std::vector<double64>& rst )
+void IsoparametricLinearTetrahedron::JacobianAt( const std::vector<double>& rst )
 {
     dNr( rst[0], rst[1], rst[2], DNR );
     dNs( rst[0], rst[1], rst[2], DNS );
@@ -1087,7 +1087,7 @@ void IsoparametricLinearTetrahedron::JacobianAt( const std::vector<double64>& rs
      
      @test OK 
 */
-void  IsoparametricLinearTetrahedron::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  IsoparametricLinearTetrahedron::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);

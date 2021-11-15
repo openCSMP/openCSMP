@@ -15,9 +15,9 @@ namespace csmp {
 
 template<size_t dim>
 void MeshDiagnostics<dim>::ElementVolumeRange( const Model<dim>& sg,
-                                               double64& vmin, double64& vmax ) const
+                                               double& vmin, double& vmax ) const
  {                                             
-    double64    vol;
+    double    vol;
     bool  first_element(true); 
     
     const Region<dim>& sgref(sg.Region("Model"));
@@ -51,8 +51,8 @@ template<size_t dim>
 void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( Model<dim>& sg ) const
   {
     std::vector<Point<dim> > bc_vec(0);
-    std::vector<size_t >     id_vec(0);
-    double64                 sign;
+    std::vector<size_t>     id_vec(0);
+    double                 sign;
     size_t                   id, cntr(0);
     
     cout <<"\nMeshDiagnostics::FixFiniteElementNeighborOrientationOfSurfaceMeshes: Checking for any clockwise ordered element neighbor IDs..." << endl;
@@ -144,7 +144,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
  {
     Region<3>&  sgroup(sg.Region("Model"));
     sgroup.UpdateMemberIndexes();
-    double64 l_segm, segm_length_ratio(DBL_MAX),
+    double l_segm, segm_length_ratio(DBL_MAX),
            segm_length_ratio_min(DBL_MAX), segm_length_ratio_max(0.),
            sl_min, sl_max,
            sl_min_e(-4e7), sl_max_e(4e7), // the equator of the earth
@@ -190,7 +190,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
       }
 
     // Segment length
-    vector<double64> lengths;
+    vector<double> lengths;
 
     cout <<"\n\nMeshDiagnostics<dim>::ScrutinizeMesh: Testing length of element segments..."<< endl;
     
@@ -220,7 +220,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
 
 
     // Element volume
-    double64        volume;
+    double        volume;
     bool            repeat(true);
     vector<size_t>  element_numbers;
    
@@ -320,7 +320,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
     // scalar node variables
     if ( key.type == SCALAR )
       for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
-           double64 value(numeric_limits<double64>::quiet_NaN());
+           double value(numeric_limits<double>::quiet_NaN());
            bool     detected_status(false);
            for ( size_t i=0U; i<(*eit)->Nodes(); ++i ) {
                 // finding status-flagged nodes and reading their stored values
@@ -330,7 +330,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
                   }
                 // if such nodes were already discovered, a comparison with previous values is made
                 if ( detected_status && (*eit)->N(i)->Status(key) == status ) {
-                     double64 next_value = (*eit)->N(i)->Read(key);
+                     double next_value = (*eit)->N(i)->Read(key);
                      if ( next_value != value ) {
                           cerr <<"\nMeshDiagnostics<dim>::DetectConflictingDirichletConditions: detected conflicting constrained ScalarVariable values ";
                           cerr << value <<" vs. "<< next_value <<" ";
@@ -353,7 +353,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
                     // for each variable component
                     for ( size_t j=0U; j<dim; j++ )
                       {
-                         double64 value(numeric_limits<double64>::quiet_NaN());
+                         double value(numeric_limits<double>::quiet_NaN());
                          // finding status-flagged nodes and reading their stored values
                          if ( !detected_status && vc.Flag(j) == status ) {
                               value = vc[j];
@@ -361,7 +361,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
                            }
                          // if such nodes were already discovered, a comparison with previous values is made
                          if ( detected_status && vc.Flag(j) == status ) {
-                              double64 next_value = vc[j];
+                              double next_value = vc[j];
                               if ( next_value != value ) {
                                    cerr <<"\nMeshDiagnostics<dim>::DetectConflictingDirichletConditions: detected conflicting constrained VectorVariable component values, component ";
                                    cerr << j <<": "<< value <<" vs. "<< next_value <<" ";
@@ -399,8 +399,8 @@ bool MeshDiagnostics<dim>::DetectNonMonotonicity( const Model<dim>& model, const
     // scalar node variables
     if ( key.type == SCALAR )
       for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
-           double64 n_value = (*nit)->Read(key);
-           double64 val_min(1e30), val_max(-1e30);
+           double n_value = (*nit)->Read(key);
+           double val_min(1e30), val_max(-1e30);
            for ( size_t i=0U; i<(*nit)->Neighbors(); ++i ) {
                 val_min = std::min( val_min, (*nit)->Neighbor(i)->Read(key) );
                 val_max = std::max( val_max, (*nit)->Neighbor(i)->Read(key) );

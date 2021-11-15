@@ -25,7 +25,7 @@ class NodeMonitor {
     ~NodeMonitor();
   
     /// prompts monitoring of the target property values at the current time
-    void  ScalarPropertyValues( const Model<dim>&, double64 current_time );
+    void  ScalarPropertyValues( const Model<dim>&, double current_time );
   
     /// zap all recorded values and property names
     void  Reset();
@@ -43,7 +43,7 @@ class NodeMonitor {
     // properties which are monitored
     std::list<std::string>        properties;
     //     model_time,            property,            nodename, property value
-    std::map<double64,std::map<std::string,std::map<std::string,double64> > >  values;
+    std::map<double,std::map<std::string,std::map<std::string,double> > >  values;
 };
 
 } // csmp

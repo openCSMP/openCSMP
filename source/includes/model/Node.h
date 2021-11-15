@@ -1,7 +1,6 @@
 #ifndef CSMP_NODE_H
 #define CSMP_NODE_H
 
-#include "CSMP_number_types.h"
 #include "Box.h"
 #include "Point.h"
 #include "LocalVariableStorage.h"
@@ -98,17 +97,17 @@ class Node : public LocalVariableStorage<dim,Node> {
     BOX_BOUNDARY     AtBoundary() const;
 
     /// accessors/mutators for specific node coordinates x=0, y=1, z=2 (z exists only in 3D)
-    double64         operator[]( size_t i ) const;
-    double64&        operator[]( size_t i );
-    double64&        operator()( size_t i );
+    double         operator[]( size_t i ) const;
+    double&        operator[]( size_t i );
+    double&        operator()( size_t i );
     
-    void             x( double64 );
-    void             y( double64 );
-    void             z( double64 );
+    void             x( double );
+    void             y( double );
+    void             z( double );
     
-    double64         x() const;
-    double64         y() const;
-    double64         z() const;
+    double         x() const;
+    double         y() const;
+    double         z() const;
 
     /// output current state of class Node
     void             Out() const;

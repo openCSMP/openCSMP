@@ -45,18 +45,18 @@ void ImplicitTransport<dim>::UpdateFluxesAndFluxBalances()
     Computation of time increment, flux balance, and temporary new concentration.
 */
 template<size_t dim>
-double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_increment ) const
+double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_increment ) const
  {
-     double64 dt_min(max_time_increment);
+     double dt_min(max_time_increment);
  
      // 1. processing interior and FVs for which all facet fluxes have been initialised
      const typename vector<Node<dim>*>::const_iterator interior_nodes_end(subdomain_.PerimeterNodesBegin());
      for ( typename vector<Node<dim>*>::const_iterator nit=subdomain_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
-          const double64 out_flow = this->FluxBalanceAndOutFlow( (*nit) );
+          const double out_flow = this->FluxBalanceAndOutFlow( (*nit) );
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( *nit, out_flow );
+          const double time_increment = this->OutFlowLessThanContentIncrement( *nit, out_flow );
           dt_min = std::min( dt_min, time_increment );
        }
 
@@ -65,7 +65,7 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      for ( typename vector<Node<dim>*>::const_iterator
            nit=subdomain_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
-          const double64 out_flow = this->FluxBalanceAndOutFlow( (*nit) );
+          const double out_flow = this->FluxBalanceAndOutFlow( (*nit) );
           // boundary fluxes must be part of the time-increment calculation
           dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( *nit, out_flow ) );
        }
@@ -81,7 +81,7 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
     Computation of time increment (default limited to 1 year).
 */
 template<size_t dim>
-double64 ImplicitTransport<dim>::TimeIncrement() const
+double ImplicitTransport<dim>::TimeIncrement() const
  {
     return TimeIncrementAndFluxBalance( 356. * 86400. );
  }
@@ -94,9 +94,9 @@ double64 ImplicitTransport<dim>::TimeIncrement() const
     Reports the volumetric flow into the computational region.
 */
 template<size_t dim>
-double64 ImplicitTransport<dim>::IncomingVolumetricFlow() const
+double ImplicitTransport<dim>::IncomingVolumetricFlow() const
  {
-     double64 inflow(0.);
+     double inflow(0.);
  
      const typename vector<Node<dim>*>::const_iterator nodes_end(subdomain_.NodesEnd());
      for ( typename vector<Node<dim>*>::const_iterator
@@ -111,7 +111,7 @@ double64 ImplicitTransport<dim>::IncomingVolumetricFlow() const
                // to get accurate predictions and without wasting computational cost, no-flow boundaries are excluded
                const VARIABLE_FLAG pf_flag = (*nit)->Status( this->Notation.key_PF );
                if ( pf_flag == DIRICH || pf_flag == NEUMANN ) {
-                    const double64 flow = this->VolumetricFlowBalance( (*nit) );
+                    const double flow = this->VolumetricFlowBalance( (*nit) );
                     if ( flow > 0. )
                       inflow += flow;
                  }
@@ -130,9 +130,9 @@ double64 ImplicitTransport<dim>::IncomingVolumetricFlow() const
     @todo SKM check whether the variable 'outflow' can be used for this, saving some computations.
 */
 template<size_t dim>
-double64 ImplicitTransport<dim>::OutgoingVolumetricFlow() const
+double ImplicitTransport<dim>::OutgoingVolumetricFlow() const
  {
-     double64 outflow(0.);
+     double outflow(0.);
  
      const typename vector<Node<dim>*>::const_iterator nodes_end(subdomain_.NodesEnd());
      for ( typename vector<Node<dim>*>::const_iterator
@@ -147,7 +147,7 @@ double64 ImplicitTransport<dim>::OutgoingVolumetricFlow() const
                // to get accurate predictions and without wasting computational cost, no-flow boundaries are excluded
                const VARIABLE_FLAG pf_flag = (*nit)->Status( this->Notation.key_PF );
                if ( pf_flag == DIRICH || pf_flag == NEUMANN ) {
-                    const double64 flow = this->VolumetricFlowBalance( (*nit) );
+                    const double flow = this->VolumetricFlowBalance( (*nit) );
                     if ( flow < 0. )
                       outflow += flow;
                  }
@@ -177,12 +177,12 @@ double64 ImplicitTransport<dim>::OutgoingVolumetricFlow() const
        next assembly.
 */
 template<size_t dim>
-void ImplicitTransport<dim>::AdvectVariable( double64 time_interval )
+void ImplicitTransport<dim>::AdvectVariable( double time_interval )
  {
    // 1. evaluation of time increment
-   double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
+   double time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
    
-   const double64 one(1.);
+   const double one(1.);
    cout <<"\nImplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
    cout <<"\n\tTime interval         = "<< time_interval;
    cout <<"\n\tScaled time increment = "<< time_increment;
@@ -190,7 +190,7 @@ void ImplicitTransport<dim>::AdvectVariable( double64 time_interval )
    
    cout <<"\n\n\nImplicitTransport::AdvectVariable: simulating "<< time_interval/60. <<" minutes of transport...\n";
    size_t   substep(1);
-   double64 time(0.);
+   double time(0.);
    
    // 2. setup matrix and vectors; initialise indices in subdomain
    this->SetUp(); 

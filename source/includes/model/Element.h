@@ -165,7 +165,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
              const FiniteVolumeStencil<dim>*,
              const LocalVariables& element_props,
              const IntegrationPointVariables& integration_point_props,
-             int32 material );
+             int32_t material );
 
     /// exact copy: same idx, properties, nodes and neighbor elements
     Element( const Element& );
@@ -246,8 +246,8 @@ class Element : public FiniteElementPolicy<dim, Element>,
     BOX_BOUNDARY AtBoundary( size_t boundary_face ) const;
     
     /// unique material identifier that matches number of parent unique region
-    int32 Material_ID() const;
-    void Material_ID( int32 id );
+    int32_t Material_ID() const;
+    void Material_ID( int32_t id );
 
     // ------------------------------------------------------------------------
     // Functionality
@@ -264,7 +264,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     Point<dim>  BaryCenter() const;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
-    double64    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    double    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
 
 
     // ------------------------------------------------------------------------
@@ -280,7 +280,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
 
   private:
     mutable size_t                 idx_;
-    int32                          material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
+    int32_t                          material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
     std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
     std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
 };

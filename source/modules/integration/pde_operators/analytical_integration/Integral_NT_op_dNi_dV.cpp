@@ -55,7 +55,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::SpatialDerivative( size_t num_xyz )
 
 
 template<size_t dim,class SIMPLEX>
-void Integral_NT_op_dNi_dV<dim,SIMPLEX>::MaterialPropertyTimeMultiplier( double64 time_increment )
+void Integral_NT_op_dNi_dV<dim,SIMPLEX>::MaterialPropertyTimeMultiplier( double time_increment )
  {
     prop2_time_multiplier = time_increment;
  }
@@ -109,7 +109,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     e.dN( DN );
     
-    double64 vol = e.Volume();
+    double vol = e.Volume();
 
     for ( size_t i=0; i<e.Nodes(); i++ ) 
       //                             gradZ        density    K          acc.gravity    element volume

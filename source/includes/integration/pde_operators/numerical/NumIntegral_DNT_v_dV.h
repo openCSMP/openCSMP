@@ -25,7 +25,7 @@ class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim> {
     virtual void ComputeContribution( CELL& e );
   
   private:
-    std::vector<double64>         IPOL;
+    std::vector<double>         IPOL;
     DenseMatrix<DM_MIN>           DN, DNT, OPMAT;
     Index                         rho_key,   rfac_key;
     ScalarVariable                rfac;

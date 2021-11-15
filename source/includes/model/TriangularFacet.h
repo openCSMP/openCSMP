@@ -13,11 +13,11 @@ namespace csmp {
 */
 
 /// triangle area
-double64 triangleArea( const Point<3U>&, 
+double triangleArea( const Point<3U>&, 
                        const Point<3U>&, 
                        const Point<3U>& );
 /// area  in 2D
-double64 triangleArea( const Point<2U>&,
+double triangleArea( const Point<2U>&,
                        const Point<2U>&,
                        const Point<2U>& );
 

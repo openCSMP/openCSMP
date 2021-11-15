@@ -92,7 +92,7 @@ void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     DNT *= VAR;
     
     // assigning element contribution & integrating the matrix
-    double64 volume = e.Volume();
+    double volume = e.Volume();
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     for ( size_t i=0; i<e.Nodes(); i++ )

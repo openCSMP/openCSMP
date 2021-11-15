@@ -1,7 +1,6 @@
 #include "VTU_Interface_Test.h"
 
 #include "VTU_Interface.h"
-#include "CSMP_number_types.h"
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
 #include "Region.h"
@@ -18,21 +17,21 @@ VTU_Interface_Test::VTU_Interface_Test()
 void VTU_Interface_Test::run()
 {
   enum{DIM=3U};
-  vector<double64> vector1; vector1.push_back(4.0); vector1.push_back(0.0); vector1.push_back(0.0);
-  vector<double64> vector2; vector2.push_back(0.0); vector2.push_back(0.5); vector2.push_back(0.0);
-  vector<double64> vector3; vector3.push_back(0.0); vector3.push_back(0.); vector3.push_back(2.0);
-  vector<vector<double64> > vectors;
+  vector<double> vector1; vector1.push_back(4.0); vector1.push_back(0.0); vector1.push_back(0.0);
+  vector<double> vector2; vector2.push_back(0.0); vector2.push_back(0.5); vector2.push_back(0.0);
+  vector<double> vector3; vector3.push_back(0.0); vector3.push_back(0.); vector3.push_back(2.0);
+  vector<vector<double> > vectors;
 
   
   vectors.push_back( vector1 ); vectors.push_back( vector2 ); vectors.push_back( vector3 );
   _test( VTU_Interface<DIM>::OutputVectorsToVTU( "3D_arrowsTest", "effective permeability", vectors ) );
 
-  vector<double64> xyzLengths( 3, 0. );
+  vector<double> xyzLengths( 3, 0. );
   xyzLengths.at( 0 ) = 1.0; xyzLengths.at( 1 ) = 5.0; xyzLengths.at( 2 ) = 10.0;
   _test( VTU_Interface<DIM>::OutputPrincipalVectorsToVTU( "3D_xzyTest", "effective permeability", xyzLengths ) );
   
 
-  vector<vector<double64> > tensor;
+  vector<vector<double> > tensor;
   tensor.push_back( vector1 ); tensor.push_back( vector2 ); tensor.push_back( vector3 );
   _test( VTU_Interface<DIM>::OutputTensorToVTU( "3D_tensorTest", "permeability tensor", tensor ) );
 

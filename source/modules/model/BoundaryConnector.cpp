@@ -208,15 +208,15 @@ size_t connectingFace( Element<dim>* const element, vector<size_t>& fnids, const
   }
 
 
-double pointRelativeToPlane( const Point<1>&, const Point<1>&, const vector<double64>& )
+double pointRelativeToPlane( const Point<1>&, const Point<1>&, const vector<double>& )
   { throw; return -1.; }
 
 double pointRelativeToPlane( const Point<2>& pointOnPlane, const Point<2>& pointToCheck,
-                             const vector<double64>& planeUnitNormal )
+                             const vector<double>& planeUnitNormal )
   { return planeUnitNormal[0]*(pointOnPlane[0]-pointToCheck[0])+planeUnitNormal[1]*(pointOnPlane[1]-pointToCheck[1]); }
 
 double pointRelativeToPlane( const Point<3>& pointOnPlane, const Point<3>& pointToCheck,
-                             const vector<double64>& planeUnitNormal )
+                             const vector<double>& planeUnitNormal )
   { return planeUnitNormal[0]*(pointOnPlane[0]-pointToCheck[0])+planeUnitNormal[1]*(pointOnPlane[1]-pointToCheck[1])+planeUnitNormal[2]*(pointOnPlane[2]-pointToCheck[2]); }
 
 
@@ -228,7 +228,7 @@ void BoundaryConnector<dim>::OuterAndInnerParent( Element<dim>* element, std::pa
     if( !parents.second || !parents.first )
       return;
     // 0. get the face UN
-    vector<double64> boundaryFaceUN(3,0.);
+    vector<double> boundaryFaceUN(3,0.);
     element->CoordinateMatrix();
     element->FE()->UnitNormal( boundaryFaceUN ); 
     // 1. node ids of boundary face

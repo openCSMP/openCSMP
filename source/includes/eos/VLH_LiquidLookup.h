@@ -14,40 +14,40 @@ namespace csmp
   {
 
   public:
-    VLH_LiquidLookup(const double64& externaltemperature);
+    VLH_LiquidLookup(const double& externaltemperature);
     ~VLH_LiquidLookup();
 
-    double64                ValueOf(const int& property_index);
+    double                ValueOf(const int& property_index);
 
-    double64                Temperature();
-    double64                Pressure();
-    double64                MassFractionNaCl();
-    double64                Density();
-    double64                Enthalpy();
-    double64                HeatCapacity();
-    double64                Compressibility();
-    double64                Viscosity();
-    double64                Pmax();
-    double64                Tmax();
-    double64                TfromP(const double64& press, const double64& t_estimate); 
-    double64                DPressureDT();
-    double64                DEnthalpyDT();
+    double                Temperature();
+    double                Pressure();
+    double                MassFractionNaCl();
+    double                Density();
+    double                Enthalpy();
+    double                HeatCapacity();
+    double                Compressibility();
+    double                Viscosity();
+    double                Pmax();
+    double                Tmax();
+    double                TfromP(const double& press, const double& t_estimate); 
+    double                DPressureDT();
+    double                DEnthalpyDT();
 
-    std::vector<double64>   properties_at_tmax;
+    std::vector<double>   properties_at_tmax;
 
   private:
 
-    const double64&         temperature;
+    const double&         temperature;
 
-    double64                tcurrent;
-    double64                pcurrent;
-    double64                xcurrent;
-    double64                tmax;
-    double64                pmax;
-    double64                pnorm;
-    double64                t_res; 
-    double64                tnorm; 
-    double64                dp;
+    double                tcurrent;
+    double                pcurrent;
+    double                xcurrent;
+    double                tmax;
+    double                pmax;
+    double                pnorm;
+    double                t_res; 
+    double                tnorm; 
+    double                dp;
 
     long                    it;
     long                    t_dim;
@@ -58,17 +58,17 @@ namespace csmp
 
     States                  state;
 
-    std::vector<double64>   storage_vector; // stores data in sequence t-p-x-rho-h at each Lookup point
+    std::vector<double>   storage_vector; // stores data in sequence t-p-x-rho-h at each Lookup point
 
     TriplePointNaCl         tp_nacl;
 
-    void GetTemperatureIndex(const double64& t);
+    void GetTemperatureIndex(const double& t);
 
     ErrorHandler&           csmp_error;
   };
 
-  inline double64 VLH_LiquidLookup::Tmax(){ return tmax; }
-  inline double64 VLH_LiquidLookup::Pmax(){ return pmax; }
+  inline double VLH_LiquidLookup::Tmax(){ return tmax; }
+  inline double VLH_LiquidLookup::Pmax(){ return pmax; }
 
   /**
      author: Thomas Driesner, ETH Zuerich
@@ -83,7 +83,7 @@ namespace csmp
 
      Driesner T. (2007): The system H2O-NaCl. Part II: Correlations for molar volume, enthalpy, and isobaric heat capacity from 0 to 1000oC, 1 to 5000 bar, and 0 to 1 XNaCl. Geochimica et Cosmochimica Acta 71, 4902-4919.
 
-     The lookup table "VLH_LiquidLookupTable.bin" is written as a binary file, and stores the properties listed above in a single, 1-dimensional std::vector<double64>.  The vector comprises subsequent blocks in each of which the values for one property are stored in sequence of ascending temperature from 0 C to the triple point of NaCl (re-check, pleae). Each block is of size t_dim (the number of entries, the first thing that is computed in the constructor), the sequence of property blocks is defined in the file "LookupPropertyIndex.h". The temperature spacing is variable (see member GetTemperatureIndex for details), being densest near the critical temperature of water and largest at the lowest and highest temperatures.
+     The lookup table "VLH_LiquidLookupTable.bin" is written as a binary file, and stores the properties listed above in a single, 1-dimensional std::vector<double>.  The vector comprises subsequent blocks in each of which the values for one property are stored in sequence of ascending temperature from 0 C to the triple point of NaCl (re-check, pleae). Each block is of size t_dim (the number of entries, the first thing that is computed in the constructor), the sequence of property blocks is defined in the file "LookupPropertyIndex.h". The temperature spacing is variable (see member GetTemperatureIndex for details), being densest near the critical temperature of water and largest at the lowest and highest temperatures.
    
      Known issues
      Pressure() still return bars, a legacy from the SoWat development.

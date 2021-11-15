@@ -50,12 +50,12 @@ void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::InitilizeRockProper
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 swr(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double swr(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: swr = get<0>(Otway_.rocktype_).Swi_; break;
         case 1: swr = get<1>(Otway_.rocktype_).Swi_; break;
@@ -84,12 +84,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 snr(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double snr(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: snr = get<0>(Otway_.rocktype_).Sgr_; break;
         case 1: snr = get<1>(Otway_.rocktype_).Sgr_; break;
@@ -118,12 +118,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 phi(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double phi(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: phi = get<0>(Otway_.rocktype_).phi_; break;
         case 1: phi = get<1>(Otway_.rocktype_).phi_; break;
@@ -153,12 +153,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 k(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double k(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: k = get<0>(Otway_.rocktype_).k_; break;
         case 1: k = get<1>(Otway_.rocktype_).k_; break;
@@ -187,12 +187,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK( Element<d
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 k(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double k(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: k = get<0>(Otway_.rocktype_).k_; break;
         case 1: k = get<1>(Otway_.rocktype_).k_; break;
@@ -221,12 +221,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV( Element<
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 swi_pc(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double swi_pc(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: swi_pc = get<0>(Otway_.rocktype_).Swi_pc_; break;
         case 1: swi_pc = get<1>(Otway_.rocktype_).Swi_pc_; break;
@@ -255,12 +255,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc( Eleme
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 m_VG(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double m_VG(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: m_VG = get<0>(Otway_.rocktype_).m_; break;
         case 1: m_VG = get<1>(Otway_.rocktype_).m_; break;
@@ -290,12 +290,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 m_low(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double m_low(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: m_low = get<2>(Otway_.rocktype_).m_low_; break;
         case 4: m_low = get<4>(Otway_.rocktype_).m_low_; break;
@@ -318,12 +318,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow( Elemen
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 pd(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double pd(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: pd = get<0>(Otway_.rocktype_).pd_; break;
         case 1: pd = get<1>(Otway_.rocktype_).pd_; break;
@@ -353,15 +353,15 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd( Element<
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd_VG( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd_VG( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 pd(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double pd(numeric_limits<double>::quiet_NaN());
     VectorVariable<dim> vt; 
     e->Read( User()->key_vt, vt); 
-    double64 vt_magnitude_x = fabs(vt[0]);
+    double vt_magnitude_x = fabs(vt[0]);
     if(dim==3U) vt_magnitude_x = pow( (pow(vt[0], 2.) + pow(vt[2], 2.)) , 0.5);
 
    
@@ -397,12 +397,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd_VG( Eleme
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 pd_low(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double pd_low(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: pd_low = get<2>(Otway_.rocktype_).pd_low_; break;
         case 4: pd_low = get<4>(Otway_.rocktype_).pd_low_; break;
@@ -425,12 +425,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow( Eleme
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 bcp(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double bcp(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: bcp = Bcp(e); break;
         case 1: bcp = Bcp(e); break;
@@ -460,12 +460,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 krw(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double krw(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: krw = get<0>(Otway_.rocktype_).Krw(Sw); break;
         case 1: krw = get<1>(Otway_.rocktype_).Krw(Sw); break;
@@ -484,12 +484,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 krn(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double krn(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 0: krn = get<0>(Otway_.rocktype_).Krn(Sw); break;
         case 1: krn = get<1>(Otway_.rocktype_).Krn(Sw); break;
@@ -509,12 +509,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 krw_parallel_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double krw_parallel_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: krw_parallel_drainage = get<2>(Otway_.rocktype_).Krw_ParallelDrainage( Sw ); break;
         case 5: krw_parallel_drainage = get<5>(Otway_.rocktype_).Krw_ParallelDrainage( Sw ); break;
@@ -530,15 +530,15 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelD
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage( Element<dim>* const e, double64 Sw, double64 vt_magnitude) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
 #ifdef TURN_OFF_RATE_AWARE
     vt_magnitude = 1.0e-12; //set to below capillary limit
 #endif 
-    const int32 rock_type = RockType(e);
-    double64 krw_parallel_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double krw_parallel_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 4: krw_parallel_drainage = get<4>(Otway_.rocktype_).Krw_ParallelDrainage( Sw, vt_magnitude ); break;
         case 6: krw_parallel_drainage = get<6>(Otway_.rocktype_).Krw_ParallelDrainage( Sw, vt_magnitude ); break;
@@ -556,12 +556,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelD
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    const int32 rock_type = RockType(e);
-    double64 krw_cross_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double krw_cross_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: krw_cross_drainage = get<2>(Otway_.rocktype_).Krw_CrossDrainage( Sw ); break;
         case 5: krw_cross_drainage = get<5>(Otway_.rocktype_).Krw_CrossDrainage( Sw ); break;
@@ -577,15 +577,15 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrai
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage( Element<dim>* const e, double64 Sw, double64 vt_magnitude) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
 #ifdef TURN_OFF_RATE_AWARE
     vt_magnitude = 1.0e-12; //set to below capillary limit
 #endif 
-    const int32 rock_type = RockType(e);
-    double64 krw_cross_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double krw_cross_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 4: krw_cross_drainage = get<4>(Otway_.rocktype_).Krw_CrossDrainage( Sw, vt_magnitude ); break;
         case 6: krw_cross_drainage = get<6>(Otway_.rocktype_).Krw_CrossDrainage( Sw, vt_magnitude ); break;
@@ -603,12 +603,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrai
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 Krn_parallel_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double Krn_parallel_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: Krn_parallel_drainage = get<2>(Otway_.rocktype_).Krn_ParallelDrainage( Sw ); break;
         case 5: Krn_parallel_drainage = get<5>(Otway_.rocktype_).Krn_ParallelDrainage( Sw ); break;
@@ -624,15 +624,15 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelD
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage( Element<dim>* const e, double64 Sw, double64 vt_magnitude) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
 #ifdef TURN_OFF_RATE_AWARE
     vt_magnitude = 1.0e-12; //set to below capillary limit
 #endif 
-    const int32 rock_type = RockType(e);
-    double64 Krn_parallel_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double Krn_parallel_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 4: Krn_parallel_drainage = get<4>(Otway_.rocktype_).Krn_ParallelDrainage( Sw, vt_magnitude ); break;
         case 6: Krn_parallel_drainage = get<6>(Otway_.rocktype_).Krn_ParallelDrainage( Sw, vt_magnitude ); break;
@@ -650,12 +650,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelD
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 Krn_cross_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double Krn_cross_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: Krn_cross_drainage = get<2>(Otway_.rocktype_).Krn_CrossDrainage( Sw ); break;
         case 5: Krn_cross_drainage = get<5>(Otway_.rocktype_).Krn_CrossDrainage( Sw ); break;
@@ -671,15 +671,15 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrai
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage( Element<dim>* const e, double64 Sw, double64 vt_magnitude) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
 #ifdef TURN_OFF_RATE_AWARE
     vt_magnitude = 1.0e-12; //set to below capillary limit
 #endif 
-    const int32 rock_type = RockType(e);
-    double64 Krn_cross_drainage(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double Krn_cross_drainage(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 4: Krn_cross_drainage = get<4>(Otway_.rocktype_).Krn_CrossDrainage( Sw, vt_magnitude ); break;
         case 6: Krn_cross_drainage = get<6>(Otway_.rocktype_).Krn_CrossDrainage( Sw, vt_magnitude ); break;
@@ -697,12 +697,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrai
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 LY_low(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double LY_low(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: LY_low = get<2>(Otway_.rocktype_).LY_low_; break;
         case 4: LY_low = get<4>(Otway_.rocktype_).LY_low_; break;
@@ -724,12 +724,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow( Eleme
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 LY_high(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double LY_high(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: LY_high = get<2>(Otway_.rocktype_).LY_high_; break;
         case 4: LY_high = get<4>(Otway_.rocktype_).LY_high_; break;
@@ -751,12 +751,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh( Elem
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKLow( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 k_low(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double k_low(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: k_low = get<2>(Otway_.rocktype_).k_low_; break;
         case 4: k_low = get<4>(Otway_.rocktype_).k_low_; break;
@@ -778,12 +778,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKLow( Elemen
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const int32 rock_type = RockType(e);
-    double64 k_high(numeric_limits<double64>::quiet_NaN());
+    const int32_t rock_type = RockType(e);
+    double k_high(numeric_limits<double>::quiet_NaN());
     switch( rock_type) {
         case 2: k_high = get<2>(Otway_.rocktype_).k_high_; break;
         case 4: k_high = get<4>(Otway_.rocktype_).k_high_; break;
@@ -806,9 +806,9 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh( Eleme
 
 /// get seff at the element barycentre
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
 {
-    double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     double Swi_pc = GetSwiPc(e);
     return seffL(Sw,Swi_pc);
 }
@@ -817,7 +817,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSatura
 
 /// get seff from the supplied saturation value
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double Sw ) const
 {
     assert( Sw >= 0. );
     assert( Sw <= 1. );
@@ -829,11 +829,11 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSatura
 
 
 template<size_t dim, template<size_t> class USER>
-int32 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::RockType( Element<dim>* const e ) const
+int32_t HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::RockType( Element<dim>* const e ) const
 {
-     const double64 rock_type = e->Read(User()->key_RRT);
+     const double rock_type = e->Read(User()->key_RRT);
      assert( !isnan(rock_type) );
-     return static_cast<int32>( rock_type );    
+     return static_cast<int32_t>( rock_type );    
 }
 
 
@@ -859,15 +859,15 @@ bool HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::IsComposite( Elemen
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp( Element<dim>* const e ) const
 {
     const int  rock_type = RockType(e);
     if(rock_type==0) return 0.; //WELL
     
     // VG m parameter
-    double64 m_VG= GetmVG(e);
+    double m_VG= GetmVG(e);
     // Brooks-Corey lambda parameter from VG m parameter, Lenhard et al. (1989)
-    double64 bcp = 0.5e-1 * std::exp(5.8 * m_VG) + 1.;
+    double bcp = 0.5e-1 * std::exp(5.8 * m_VG) + 1.;
 
     return bcp;
 }
@@ -875,12 +875,12 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp( Element<di
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp_low( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp_low( Element<dim>* const e ) const
 {    
     // VG m parameter
-    double64 m_low = GetmLow(e);
+    double m_low = GetmLow(e);
     // Brooks-Corey lambda parameter from VG m parameter, Lenhard et al. (1989)
-    double64 bcp_low= 0.5e-1 * std::exp(5.8 * m_low) + 1.;
+    double bcp_low= 0.5e-1 * std::exp(5.8 * m_low) + 1.;
         
     return bcp_low;
 }
@@ -902,9 +902,9 @@ VectorVariable<dim> HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Init
     if ( has_nan )
       csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::InitializeVelocity ", "the velocity variable has not been initialised.");
     
-    double64 vt_magnitude = vt.Length();
+    double vt_magnitude = vt.Length();
     // in zero velocity case, the horizontal relative permeability is set to dominate
-    if ( vt_magnitude <= numeric_limits<double64>::epsilon() * 100. ) {
+    if ( vt_magnitude <= numeric_limits<double>::epsilon() * 100. ) {
          if(dim == 2U) { 
              vt_normalised(0) = 1.; 
              vt_normalised(1) = 0.;
@@ -923,7 +923,7 @@ VectorVariable<dim> HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Init
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc( Element<dim>* const e ) const
 {
     const int  rock_type = RockType(e); 
     
@@ -936,7 +936,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc( Element<dim
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, double Sw ) const
 {
     const int  rock_type = RockType(e); 
     
@@ -948,32 +948,32 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at( Element<
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_BrookCorey( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_BrookCorey( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
  
     if ( !is_composite ) {
          // if BC-lambda = 0, pc is assumed to be pd, ie. constant
-         double64 bcp = Bcp(e);
+         double bcp = Bcp(e);
          assert(!isnan(bcp));
-         if ( bcp <= numeric_limits<double64>::epsilon() ) return GetPd(e);
-         double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-         double64 Swi_pc = GetSwiPc(e);
-         double64 pd = GetPd(e);
+         if ( bcp <= numeric_limits<double>::epsilon() ) return GetPd(e);
+         double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+         double Swi_pc = GetSwiPc(e);
+         double pd = GetPd(e);
          return min( pc_BC( Sw, Swi_pc, pd, bcp ), MaxCapillaryPressure() );
       }
         
     // for horizontal flow, weighted average is used
-    double64 bcp_low = Bcp_low(e);
-    double64 pd_low = GetPdLow(e);
-    double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-    double64 Swi_pc = GetSwiPc(e);
+    double bcp_low = Bcp_low(e);
+    double pd_low = GetPdLow(e);
+    double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    double Swi_pc = GetSwiPc(e);
     
-    const double64 pc_low = (bcp_low  == 0.) ? pd_low : pc_BC( Sw, Swi_pc, pd_low, bcp_low );
+    const double pc_low = (bcp_low  == 0.) ? pd_low : pc_BC( Sw, Swi_pc, pd_low, bcp_low );
     
     VectorVariable<dim> vt_normalised = InitializeVelocity(e);
     
-    double64 pc = pc_low * (vt_normalised[0]*vt_normalised[0]) + pc_low * (vt_normalised[1] * vt_normalised[1]);
+    double pc = pc_low * (vt_normalised[0]*vt_normalised[0]) + pc_low * (vt_normalised[1] * vt_normalised[1]);
     
     if(dim==3U) pc += pc_low * (vt_normalised[2]*vt_normalised[2]); 
                         
@@ -984,7 +984,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_BrookCorey( 
  
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_BrookCorey( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_BrookCorey( Element<dim>* const e, double Sw ) const
 {
     assert( Sw >= 0. );
     assert( Sw <= 1. );
@@ -993,26 +993,26 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_BrookCore
  
     if ( !is_composite ) {
          // if BC-lambda = 0, pc is assumed to be pd, ie. constant
-         double64 bcp = Bcp(e);
+         double bcp = Bcp(e);
          assert(!isnan(bcp));
-         if ( bcp <= numeric_limits<double64>::epsilon() ) return GetPd(e);
-         double64 Swi_pc = GetSwiPc(e);
-         double64 pd = GetPd(e);
+         if ( bcp <= numeric_limits<double>::epsilon() ) return GetPd(e);
+         double Swi_pc = GetSwiPc(e);
+         double pd = GetPd(e);
          return min( pc_BC( Sw, Swi_pc, pd, bcp ), MaxCapillaryPressure() );
       }
         
     // for horizontal flow, weighted average is used
-    double64 bcp_low = Bcp_low(e);
-    double64 pd_low = GetPdLow(e);
-    double64 Swi_pc = GetSwiPc(e);
+    double bcp_low = Bcp_low(e);
+    double pd_low = GetPdLow(e);
+    double Swi_pc = GetSwiPc(e);
     
-    const double64 pc_low = (bcp_low  == 0.) ? pd_low : pc_BC( Sw, Swi_pc, pd_low, bcp_low );
+    const double pc_low = (bcp_low  == 0.) ? pd_low : pc_BC( Sw, Swi_pc, pd_low, bcp_low );
 
     if(dim==1U) return min( pc_low, MaxCapillaryPressure()); 
 
     VectorVariable<dim> vt_normalised = InitializeVelocity(e);
     
-    double64 pc = pc_low * (vt_normalised[0]*vt_normalised[0]) + pc_low * (vt_normalised[1] * vt_normalised[1]);
+    double pc = pc_low * (vt_normalised[0]*vt_normalised[0]) + pc_low * (vt_normalised[1] * vt_normalised[1]);
 
     if(dim==3U) pc += pc_low * (vt_normalised[2]*vt_normalised[2]); 
                         
@@ -1023,30 +1023,30 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_BrookCore
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_VanGenuchten( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_VanGenuchten( Element<dim>* const e ) const
 { 
 
-    const double64 Pc_MAX(1.0e+7);
-    double64 Swi_pc = GetSwiPc(e);
-    double64 pd = GetPd_VG(e);
-    double64 m_VG = GetmVG(e);    
-    double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-    const double64 PC_LOW_SW_LIMIT = Swi_pc + 0.01;
-    const double64 PC_HIGH_SW_LIMIT = 1.0 - 0.01;
+    const double Pc_MAX(1.0e+7);
+    double Swi_pc = GetSwiPc(e);
+    double pd = GetPd_VG(e);
+    double m_VG = GetmVG(e);    
+    double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    const double PC_LOW_SW_LIMIT = Swi_pc + 0.01;
+    const double PC_HIGH_SW_LIMIT = 1.0 - 0.01;
 
     // linear regularization for lower part of sw range
     if ( Sw < PC_LOW_SW_LIMIT ){
-        const double64 pc_lim = pc_VG( PC_LOW_SW_LIMIT, pd, m_VG, Swi_pc );
-        const double64 seff_mult( 1.0/ (1.0 - Swi_pc ) );
-        const double64 dpcds_lim = dpcds_at_VG( e, PC_LOW_SW_LIMIT )/seff_mult;
-        const double64 pc = pc_lim + dpcds_lim*( Sw - PC_LOW_SW_LIMIT );
+        const double pc_lim = pc_VG( PC_LOW_SW_LIMIT, pd, m_VG, Swi_pc );
+        const double seff_mult( 1.0/ (1.0 - Swi_pc ) );
+        const double dpcds_lim = dpcds_at_VG( e, PC_LOW_SW_LIMIT )/seff_mult;
+        const double pc = pc_lim + dpcds_lim*( Sw - PC_LOW_SW_LIMIT );
         return std::min(pc, Pc_MAX);    
     
     // linear regularization for higher part of sw range
     }else if ( Sw > PC_HIGH_SW_LIMIT ){
-        const double64 pc_lim = pc_VG( PC_HIGH_SW_LIMIT, pd, m_VG, Swi_pc );
-        const double64 dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT ) );
-        const double64 pc = dpcds_lim*( Sw - 1.0 );
+        const double pc_lim = pc_VG( PC_HIGH_SW_LIMIT, pd, m_VG, Swi_pc );
+        const double dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT ) );
+        const double pc = dpcds_lim*( Sw - 1.0 );
         return std::max(pc, 0.);
     }
 
@@ -1057,29 +1057,29 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_VanGenuchten
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_VanGenuchten( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_VanGenuchten( Element<dim>* const e, double Sw ) const
 {
 
-    const double64 Pc_MAX(1.0e+7);
-    double64 Swi_pc = GetSwiPc(e);
-    double64 pd = GetPd_VG(e);
-    double64 m_VG = GetmVG(e);    
-    const double64 PC_LOW_SW_LIMIT = Swi_pc + 0.01;
-    const double64 PC_HIGH_SW_LIMIT = 1.0 - 0.01;
+    const double Pc_MAX(1.0e+7);
+    double Swi_pc = GetSwiPc(e);
+    double pd = GetPd_VG(e);
+    double m_VG = GetmVG(e);    
+    const double PC_LOW_SW_LIMIT = Swi_pc + 0.01;
+    const double PC_HIGH_SW_LIMIT = 1.0 - 0.01;
 
     // linear regularization for lower part of sw range
     if ( Sw < PC_LOW_SW_LIMIT ){
-        const double64 pc_lim = pc_VG( PC_LOW_SW_LIMIT, pd, m_VG, Swi_pc );
-        const double64 seff_mult( 1.0/ (1.0 - Swi_pc ) );
-        const double64 dpcds_lim = dpcds_at_VG( e, PC_LOW_SW_LIMIT )/seff_mult;
-        const double64 pc = pc_lim + dpcds_lim*( Sw - PC_LOW_SW_LIMIT );
+        const double pc_lim = pc_VG( PC_LOW_SW_LIMIT, pd, m_VG, Swi_pc );
+        const double seff_mult( 1.0/ (1.0 - Swi_pc ) );
+        const double dpcds_lim = dpcds_at_VG( e, PC_LOW_SW_LIMIT )/seff_mult;
+        const double pc = pc_lim + dpcds_lim*( Sw - PC_LOW_SW_LIMIT );
         return std::min(pc, Pc_MAX);    
     
     // linear regularization for higher part of sw range
     }else if ( Sw > PC_HIGH_SW_LIMIT ){
-        const double64 pc_lim = pc_VG( PC_HIGH_SW_LIMIT, pd, m_VG, Swi_pc );
-        const double64 dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT ) );
-        const double64 pc = dpcds_lim*( Sw - 1.0 );
+        const double pc_lim = pc_VG( PC_HIGH_SW_LIMIT, pd, m_VG, Swi_pc );
+        const double dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT ) );
+        const double pc = dpcds_lim*( Sw - 1.0 );
         return std::max(pc, 0.);
     }
 
@@ -1089,14 +1089,14 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_VanGenuch
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) const
 {
     const int  rock_type = RockType(e); 
     
     //use constant derivative at PC_LOW_SW_LIMIT for lower part of sw range
-    const double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-    const double64 Swi_pc = GetSwiPc(e);
-    const double64 PC_LOW_SW_LIMIT = Swi_pc + 0.01;
+    const double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    const double Swi_pc = GetSwiPc(e);
+    const double PC_LOW_SW_LIMIT = Swi_pc + 0.01;
     if(Sw < PC_LOW_SW_LIMIT) {
         //only rocktype 16 uses Brooks Corey
         if(rock_type == 16) return dpcds_at_BC(e, PC_LOW_SW_LIMIT);
@@ -1112,13 +1112,13 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds( Element<
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const e, double64 sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const e, double sw ) const
 {
     const int  rock_type = RockType(e); 
     
     //use constant derivative at PC_LOW_SW_LIMIT for lower part of sw range
-    const double64 Swi_pc = GetSwiPc(e);
-    const double64 PC_LOW_SW_LIMIT = Swi_pc + 0.01;
+    const double Swi_pc = GetSwiPc(e);
+    const double PC_LOW_SW_LIMIT = Swi_pc + 0.01;
     if(sw < PC_LOW_SW_LIMIT) {
         //only rocktype 16 uses Brooks Corey
         if(rock_type == 16) return dpcds_at_BC(e, PC_LOW_SW_LIMIT);
@@ -1134,32 +1134,32 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at( Eleme
   
    
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_BC( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_BC( Element<dim>* const e ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     return dpcds_Numerical_BC(e, h);  
 }
 
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_BC( Element<dim>* const e, double64 sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_BC( Element<dim>* const e, double sw ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     return dpcds_at_Numerical_BC(e, sw, h);  
 }
 
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_VG( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_VG( Element<dim>* const e ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     
     //use constant derivative at PC_LOW_SW_LIMIT for lower part of sw range
-    double64 Swi_pc = GetSwiPc(e);
-    const double64 PC_LOW_SW_LIMIT = Swi_pc + 0.01;
-    double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    double Swi_pc = GetSwiPc(e);
+    const double PC_LOW_SW_LIMIT = Swi_pc + 0.01;
+    double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     if(sw < PC_LOW_SW_LIMIT) return dpcds_at_Numerical_VG(e, PC_LOW_SW_LIMIT, h );
         
     return dpcds_Numerical_VG(e, h);  
@@ -1168,13 +1168,13 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_VG( Eleme
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_VG( Element<dim>* const e, double64 sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_VG( Element<dim>* const e, double sw ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     
     //use constant derivative at PC_LOW_SW_LIMIT for lower part of sw range
-    double64 Swi_pc = GetSwiPc(e);
-    const double64 PC_LOW_SW_LIMIT = Swi_pc + 0.01;
+    double Swi_pc = GetSwiPc(e);
+    const double PC_LOW_SW_LIMIT = Swi_pc + 0.01;
     if(sw < PC_LOW_SW_LIMIT) return dpcds_at_Numerical_VG(e, PC_LOW_SW_LIMIT, h );
 
     return dpcds_at_Numerical_VG(e, sw, h);  
@@ -1183,24 +1183,24 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_VG( El
  
  
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel( Element<dim>* const e, size_t direction ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel( Element<dim>* const e, size_t direction ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if(direction != 0 && direction != 2) 
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel", "wrong input flow direction, mush be 0 or 2");
     
-    double64 parallel_krw(numeric_limits<double64>::quiet_NaN());
+    double parallel_krw(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         parallel_krw = GetKrwParallelDrainage( e, Sw );
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ //composite and rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[direction]);
+        double vt_magnitude = fabs(vt[direction]);
         parallel_krw = GetKrwParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel", "this function only supports composite rock type");
@@ -1211,21 +1211,21 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel( E
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    double64 crossflow_krw(numeric_limits<double64>::quiet_NaN());
+    double crossflow_krw(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         crossflow_krw = GetKrwCrossDrainage( e, Sw );
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ //composite and rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[1]);
+        double vt_magnitude = fabs(vt[1]);
         crossflow_krw = GetKrwCrossDrainage( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_x", "this function only supports composite rock type");
@@ -1236,14 +1236,14 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow( 
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( Element<dim>* const e, double64 Sw, size_t direction ) const 
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const 
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if(direction != 0 && direction != 2) 
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at", "wrong input flow direction, mush be 0 or 2");    
     
-    double64 krw_parallel(numeric_limits<double64>::quiet_NaN());
+    double krw_parallel(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
@@ -1251,7 +1251,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ ////composite and rate-dependent
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[direction]);
+        double vt_magnitude = fabs(vt[direction]);
         krw_parallel = GetKrwParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at", "this function only supports composite rock type");
@@ -1262,11 +1262,11 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at( Element<dim>* const e, double64 Sw  ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at( Element<dim>* const e, double Sw  ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    double64 krw_crossflow(numeric_limits<double64>::quiet_NaN());
+    double krw_crossflow(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
@@ -1274,7 +1274,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_a
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ ////composite and rate-dependent
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[1]);
+        double vt_magnitude = fabs(vt[1]);
         krw_crossflow = GetKrwCrossDrainage ( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at", "this function only supports composite rock type");
@@ -1286,17 +1286,17 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_a
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityPerpendicularToLaminations( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityPerpendicularToLaminations( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
     assert( is_composite );
     
-    double64 L_low = GetLYLow(e);
-    double64 L_high = GetLYHigh(e);
-    const double64 sum_of_weights = L_low + L_high;
+    double L_low = GetLYLow(e);
+    double L_high = GetLYHigh(e);
+    const double sum_of_weights = L_low + L_high;
     
-    double64 k_high = GetKHigh(e);
-    double64 k_low = GetKLow(e);
+    double k_high = GetKHigh(e);
+    double k_low = GetKLow(e);
     
     return sum_of_weights / (L_high / k_high + L_low / k_low);    
 }
@@ -1304,23 +1304,23 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityPer
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityParallelToLaminations( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityParallelToLaminations( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
     assert( is_composite );
     
-    double64 L_low = GetLYLow(e);
-    double64 L_high = GetLYHigh(e);
+    double L_low = GetLYLow(e);
+    double L_high = GetLYHigh(e);
     
-    double64 k_high = GetKHigh(e);
-    double64 k_low = GetKLow(e);
+    double k_high = GetKHigh(e);
+    double k_low = GetKLow(e);
    
     return (L_high * k_high + L_low * k_low) / (L_high + L_low);
 }
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInFlowDirection( Element<dim>* const e,
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInFlowDirection( Element<dim>* const e,
                                                                                               const TensorVariable<dim>& KK) const
 {
     bool is_composite = IsComposite(e);
@@ -1331,7 +1331,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInF
     
     VectorVariable<dim> vt_normalised = InitializeVelocity(e);
     
-    if ( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double64>::epsilon() )
+    if ( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double>::epsilon() )
       // horizontal permeability
       return KK(0,0);
 
@@ -1345,16 +1345,16 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInF
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_flow_direction( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_flow_direction( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     bool is_composite = IsComposite(e);
-    double64 K_reduction(numeric_limits<double64>::quiet_NaN());
+    double K_reduction(numeric_limits<double>::quiet_NaN());
     
     if(is_composite) {
-        const double64 k_crossflow = PermeabilityPerpendicularToLaminations(e);
-        const double64 k_parallel  = PermeabilityParallelToLaminations(e);
+        const double k_crossflow = PermeabilityPerpendicularToLaminations(e);
+        const double k_parallel  = PermeabilityParallelToLaminations(e);
         // assuming that layers are horizontal and that the stored K is the horizontal one
         TensorVariable<dim> KK;
         KK = 0.; // all entries = zero
@@ -1362,7 +1362,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_
         KK(1,1) = k_crossflow;
         if(dim==3U) KK(2,2) = k_parallel; 
         // uses KK(0,0) internally
-        double64 K_flow_direction = PermeabilityInFlowDirection( e, KK );
+        double K_flow_direction = PermeabilityInFlowDirection( e, KK );
         K_reduction = K_flow_direction / k_parallel;         
         
     } else {
@@ -1376,28 +1376,28 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_
   
   
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
     if ( !is_composite ) {
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         return GetKrw(e, Sw); // krw_VG( Sw_, m_VG_ );
     }
     
     // to get the ensemble krw for the composite, the parallel and perpendicular values are blended
     // taking into account the flow direction 
     // --------------------------------------
-    double64 parallel_krw_x = krw_parallel(e,0); //x direction 
-    double64 crossflow_krw = krw_crossflow(e); //y direcction
+    double parallel_krw_x = krw_parallel(e,0); //x direction 
+    double crossflow_krw = krw_crossflow(e); //y direcction
     VectorVariable<dim> vt_normalised = InitializeVelocity(e);
     
-    double64 krw = parallel_krw_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krw * (vt_normalised[1]*vt_normalised[1]); 
+    double krw = parallel_krw_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krw * (vt_normalised[1]*vt_normalised[1]); 
     if(dim==3U) {
-        double64 parallel_krw_z = krw_parallel(e,2); //z direction 
+        double parallel_krw_z = krw_parallel(e,2); //z direction 
         krw += parallel_krw_z * (vt_normalised[2]*vt_normalised[2]); 
     }
     // scaling the relative permeability by the vertical permeability
-    double64 K_reduction = K_reduction_in_flow_direction(e);
+    double K_reduction = K_reduction_in_flow_direction(e);
     
     return max( krw * K_reduction, 0. );
 }
@@ -1406,7 +1406,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw( Element<di
    
  
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, double Sw ) const
 {
     bool is_composite = IsComposite(e);
     if ( !is_composite ) {
@@ -1416,18 +1416,18 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element
     // to get the ensemble krw for the composite, the parallel and perpendicular values are blended
     // taking into account the flow direction 
     // --------------------------------------
-    double64 parallel_krw_x = krw_parallel_at(e, Sw, 0); //x direction 
-    double64 crossflow_krw = krw_crossflow_at(e, Sw); //y direction
+    double parallel_krw_x = krw_parallel_at(e, Sw, 0); //x direction 
+    double crossflow_krw = krw_crossflow_at(e, Sw); //y direction
     VectorVariable<dim> vt_normalised = InitializeVelocity(e);
-    double64 krw = parallel_krw_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krw * (vt_normalised[1]*vt_normalised[1]); 
+    double krw = parallel_krw_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krw * (vt_normalised[1]*vt_normalised[1]); 
 
     if(dim==3U) { 
-        double64 parallel_krw_z = krw_parallel_at(e, Sw, 2); //z direction 
+        double parallel_krw_z = krw_parallel_at(e, Sw, 2); //z direction 
         krw += parallel_krw_z * (vt_normalised[2]*vt_normalised[2]); 
     } 
 
     // scaling the relative permeability by the vertical permeability
-    double64 K_reduction = K_reduction_in_flow_direction(e);
+    double K_reduction = K_reduction_in_flow_direction(e);
     
     return max( krw * K_reduction, 0. );
 }
@@ -1436,24 +1436,24 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Element<dim>* const e, size_t direction ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Element<dim>* const e, size_t direction ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if(direction != 0 && direction != 2) 
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel", "wrong input flow direction, mush be 0 or 2");     
     
-    double64 parallel_krn(numeric_limits<double64>::quiet_NaN());
+    double parallel_krn(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         parallel_krn = GetKrnParallelDrainage( e, Sw );
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ ////composite and rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[direction]);
+        double vt_magnitude = fabs(vt[direction]);
         parallel_krn = GetKrnParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel", "this function only supports composite rock type");
@@ -1464,21 +1464,21 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( E
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    double64 crossflow_krn(numeric_limits<double64>::quiet_NaN());
+    double crossflow_krn(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         crossflow_krn = GetKrnCrossDrainage( e, Sw );
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ ////composite and rate-dependent
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[1]);
+        double vt_magnitude = fabs(vt[1]);
         crossflow_krn = GetKrnCrossDrainage ( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow", "this function only supports composite rock type");
@@ -1489,14 +1489,14 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow( 
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( Element<dim>* const e, double64 Sw, size_t direction ) const 
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const 
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if(direction != 0 && direction != 2) 
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at", "wrong input flow direction, mush be 0 or 2");       
     
-    double64 krn_parallel(numeric_limits<double64>::quiet_NaN());
+    double krn_parallel(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
@@ -1504,7 +1504,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ ////composite and rate-dependent
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[direction]);
+        double vt_magnitude = fabs(vt[direction]);
         krn_parallel = GetKrnParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at", "this function only supports composite rock type");
@@ -1515,11 +1515,11 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    double64 krn_crossflow(numeric_limits<double64>::quiet_NaN());
+    double krn_crossflow(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
 
     if(rock_type==2 || rock_type==5 || rock_type==7 || rock_type==9) { //composite but not rate-dependent
@@ -1527,7 +1527,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_a
     } else if(rock_type==4 || rock_type==6 || rock_type==8 || rock_type==11 || rock_type==12 || rock_type==14){ ////composite and rate-dependent
         VectorVariable<dim> vt;
         e->Read( User()->key_vt, vt);
-        double64 vt_magnitude = fabs(vt[1]); 
+        double vt_magnitude = fabs(vt[1]); 
         krn_crossflow = GetKrnCrossDrainage ( e, Sw, vt_magnitude );
     } else { //not composite
         csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at", "this function only supports composite rock type");
@@ -1539,26 +1539,26 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_a
 
   
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
     if ( !is_composite ) {
-        double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+        double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
         return GetKrn(e, Sw); // krn_VG( Sw_, m_VG_ );
     }
     
-    double64 parallel_krn_x = krn_parallel(e, 0); //x direction
-    double64 crossflow_krn = krn_crossflow(e); //y direction
+    double parallel_krn_x = krn_parallel(e, 0); //x direction
+    double crossflow_krn = krn_crossflow(e); //y direction
     VectorVariable<dim> vt_normalised = InitializeVelocity(e);
-    double64 krn = parallel_krn_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krn * (vt_normalised[1]*vt_normalised[1]);
+    double krn = parallel_krn_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krn * (vt_normalised[1]*vt_normalised[1]);
     
     if(dim==3U) { 
-        double64 parallel_krn_z = krn_parallel(e, 2); //z direction 
+        double parallel_krn_z = krn_parallel(e, 2); //z direction 
         krn += parallel_krn_z * (vt_normalised[2]*vt_normalised[2]);
     }
     
     // scaling the relative permeability by the vertical permeability
-    double64 K_reduction = K_reduction_in_flow_direction(e);
+    double K_reduction = K_reduction_in_flow_direction(e);
     
     return max( krn * K_reduction, 0. );
 }
@@ -1567,7 +1567,7 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn( Element<di
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_at( Element<dim>* const e, double64 Sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_at( Element<dim>* const e, double Sw ) const
 {
     assert( Sw >= 0. );
     assert( Sw <= 1. );
@@ -1580,17 +1580,17 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_at( Element
     // to get the ensemble krw for the composite, the parallel and perpendicular values are blended
     // taking into account the flow direction 
     // --------------------------------------
-    double64 parallel_krn_x = krn_parallel_at(e, Sw, 0); //x direction
-    double64 crossflow_krn = krn_crossflow_at(e, Sw); //y direction
+    double parallel_krn_x = krn_parallel_at(e, Sw, 0); //x direction
+    double crossflow_krn = krn_crossflow_at(e, Sw); //y direction
     VectorVariable<dim> vt_normalised = InitializeVelocity(e);
-    double64 krn = parallel_krn_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krn * (vt_normalised[1]*vt_normalised[1]);
+    double krn = parallel_krn_x * (vt_normalised[0]*vt_normalised[0]) + crossflow_krn * (vt_normalised[1]*vt_normalised[1]);
     if(dim==3U) {
-        double64 parallel_krn_z = krn_parallel_at(e, Sw, 2); //z direction
+        double parallel_krn_z = krn_parallel_at(e, Sw, 2); //z direction
         krn += parallel_krn_z * (vt_normalised[2]*vt_normalised[2]);
     }
 
     // scaling the relative permeability by the vertical permeability
-    double64 K_reduction = K_reduction_in_flow_direction(e);
+    double K_reduction = K_reduction_in_flow_direction(e);
     
     return max( krn * K_reduction, 0. );
 }
@@ -1603,9 +1603,9 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_at( Element
  
 */
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     return dkrwds_Numerical(e, h);  
 }
 
@@ -1617,9 +1617,9 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds( Element
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const e, double64 sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const e, double sw ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     return dkrwds_at_Numerical(e, sw, h);  
 }
 
@@ -1631,9 +1631,9 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at( Elem
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     return dkrnds_Numerical(e, h);   
 }
    
@@ -1644,9 +1644,9 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds( Element
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const e, double64 sw ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const e, double sw ) const
 {
-    double64 h(0.001);
+    double h(0.001);
     return dkrnds_at_Numerical(e, sw, h);    
 }
 
@@ -1655,9 +1655,9 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at( Elem
 // Numerical derivative
   
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double h ) const
 {
-    double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
 
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -1666,27 +1666,27 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_Numerica
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 krw1 = krw_at(e, 1.);
-         double64 krw2 = krw_at(e, 1. - h);
+         double krw1 = krw_at(e, 1.);
+         double krw2 = krw_at(e, 1. - h);
          return (krw1 - krw2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 krw1 = krw_at(e, h);
-         double64 krw2 = krw_at(e, 0.);
+         double krw1 = krw_at(e, h);
+         double krw2 = krw_at(e, 0.);
          return (krw1 - krw2) / h;
     }
 
     // water saturation between the endpoints
-    double64 krw1 = krw_at(e, sw + h);
-    double64 krw2 = krw_at(e, sw - h);   
+    double krw1 = krw_at(e, sw + h);
+    double krw2 = krw_at(e, sw - h);   
     return (krw1 - krw2) / (2. * h);
 }
   
   
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -1695,29 +1695,29 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at_Numer
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 krw1 = krw_at(e, 1.);
-         double64 krw2 = krw_at(e, 1. - h);
+         double krw1 = krw_at(e, 1.);
+         double krw2 = krw_at(e, 1. - h);
          return (krw1 - krw2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 krw1 = krw_at(e, h);
-         double64 krw2 = krw_at(e, 0.);
+         double krw1 = krw_at(e, h);
+         double krw2 = krw_at(e, 0.);
          return (krw1 - krw2) / h;
     }
 
     // water saturation between the endpoints
-    double64 krw1 = krw_at(e, sw + h);
-    double64 krw2 = krw_at(e, sw - h);   
+    double krw1 = krw_at(e, sw + h);
+    double krw2 = krw_at(e, sw - h);   
     return (krw1 - krw2) / (2. * h);
 }
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double h ) const
 {
-    double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
 
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -1726,27 +1726,27 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_Numerica
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 krn1 = krn_at(e, 1.);
-         double64 krn2 = krn_at(e, 1. - h);
+         double krn1 = krn_at(e, 1.);
+         double krn2 = krn_at(e, 1. - h);
          return (krn1 - krn2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 krn1 = krn_at(e, h);
-         double64 krn2 = krn_at(e, 0.);
+         double krn1 = krn_at(e, h);
+         double krn2 = krn_at(e, 0.);
          return (krn1 - krn2) / h;
     }
 
     // water saturation between the endpoints
-    double64 krn1 = krn_at(e, sw + h);
-    double64 krn2 = krn_at(e, sw - h);   
+    double krn1 = krn_at(e, sw + h);
+    double krn2 = krn_at(e, sw - h);   
     return (krn1 - krn2) / (2. * h);
 }
  
   
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -1755,30 +1755,30 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at_Numer
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 krn1 = krn_at(e, 1.);
-         double64 krn2 = krn_at(e, 1. - h);
+         double krn1 = krn_at(e, 1.);
+         double krn2 = krn_at(e, 1. - h);
          return (krn1 - krn2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 krn1 = krn_at(e, h);
-         double64 krn2 = krn_at(e, 0.);
+         double krn1 = krn_at(e, h);
+         double krn2 = krn_at(e, 0.);
          return (krn1 - krn2) / h;
     }
 
     // water saturation between the endpoints
-    double64 krn1 = krn_at(e, sw + h);
-    double64 krn2 = krn_at(e, sw - h);   
+    double krn1 = krn_at(e, sw + h);
+    double krn2 = krn_at(e, sw - h);   
     return (krn1 - krn2) / (2. * h);
 }
  
   
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_BC( Element<dim>* const e, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_BC( Element<dim>* const e, double h ) const
 {
-    double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
 
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -1787,28 +1787,28 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 pc1 = pc_at_BrookCorey(e, 1.);
-         double64 pc2 = pc_at_BrookCorey(e, 1. - h);
+         double pc1 = pc_at_BrookCorey(e, 1.);
+         double pc2 = pc_at_BrookCorey(e, 1. - h);
          return (pc1 - pc2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 pc1 = pc_at_BrookCorey(e, h);
-         double64 pc2 = pc_at_BrookCorey(e, 0.);
+         double pc1 = pc_at_BrookCorey(e, h);
+         double pc2 = pc_at_BrookCorey(e, 0.);
          return (pc1 - pc2) / h;
     }
 
     // water saturation between the endpoints
-    double64 pc1 = pc_at_BrookCorey(e, sw + h);
-    double64 pc2 = pc_at_BrookCorey(e, sw - h);   
+    double pc1 = pc_at_BrookCorey(e, sw + h);
+    double pc2 = pc_at_BrookCorey(e, sw - h);   
     return (pc1 - pc2) / (2. * h);
 }
 
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerical_BC( Element<dim>* const e, double64 sw, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerical_BC( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -1817,21 +1817,21 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numeri
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 pc1 = pc_at_BrookCorey(e, 1.);
-         double64 pc2 = pc_at_BrookCorey(e, 1. - h);
+         double pc1 = pc_at_BrookCorey(e, 1.);
+         double pc2 = pc_at_BrookCorey(e, 1. - h);
          return (pc1 - pc2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 pc1 = pc_at_BrookCorey(e, h);
-         double64 pc2 = pc_at_BrookCorey(e, 0.);
+         double pc1 = pc_at_BrookCorey(e, h);
+         double pc2 = pc_at_BrookCorey(e, 0.);
          return (pc1 - pc2) / h;
     }
 
     // water saturation between the endpoints
-    double64 pc1 = pc_at_BrookCorey(e, sw + h);
-    double64 pc2 = pc_at_BrookCorey(e, sw - h);   
+    double pc1 = pc_at_BrookCorey(e, sw + h);
+    double pc2 = pc_at_BrookCorey(e, sw - h);   
     return (pc1 - pc2) / (2. * h);
 }
 
@@ -1839,68 +1839,68 @@ double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numeri
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_VG( Element<dim>* const e, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_VG( Element<dim>* const e, double h ) const
 {
-    double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     assert( sw >= 0. );
     assert( sw <= 1. );
     
     h = 0.001;
     
-    const double64 pd = GetPd_VG(e);
-    const double64 m_VG = GetmVG(e);
-    const double64 Swi_pc = GetSwiPc(e);     
+    const double pd = GetPd_VG(e);
+    const double m_VG = GetmVG(e);
+    const double Swi_pc = GetSwiPc(e);     
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 pc1 = pc_VG( 1., pd, m_VG, Swi_pc );
-         double64 pc2 = pc_VG( 1.-h, pd, m_VG, Swi_pc );
+         double pc1 = pc_VG( 1., pd, m_VG, Swi_pc );
+         double pc2 = pc_VG( 1.-h, pd, m_VG, Swi_pc );
          return (pc1 - pc2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 pc1 = pc_VG( h, pd, m_VG, Swi_pc );
-         double64 pc2 = pc_VG( 0., pd, m_VG, Swi_pc );
+         double pc1 = pc_VG( h, pd, m_VG, Swi_pc );
+         double pc2 = pc_VG( 0., pd, m_VG, Swi_pc );
          return (pc1 - pc2) / h;
     }
 
     // water saturation between the endpoints
-    double64 pc1 = pc_VG( sw + h, pd, m_VG, Swi_pc );
-    double64 pc2 = pc_VG( sw - h, pd, m_VG, Swi_pc );
+    double pc1 = pc_VG( sw + h, pd, m_VG, Swi_pc );
+    double pc2 = pc_VG( sw - h, pd, m_VG, Swi_pc );
     return (pc1 - pc2) / (2. * h);
 }
 
 
 
 template<size_t dim, template<size_t> class USER>
-double64 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerical_VG( Element<dim>* const e, double64 sw, double64 h ) const
+double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerical_VG( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
     assert( sw <= 1. );
 
     h = 0.001;
     
-    const double64 pd = GetPd_VG(e);
-    const double64 m_VG = GetmVG(e);
-    const double64 Swi_pc = GetSwiPc(e); 
+    const double pd = GetPd_VG(e);
+    const double m_VG = GetmVG(e);
+    const double Swi_pc = GetSwiPc(e); 
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 pc1 = pc_VG( 1., pd, m_VG, Swi_pc );
-         double64 pc2 = pc_VG( 1.-h, pd, m_VG, Swi_pc );
+         double pc1 = pc_VG( 1., pd, m_VG, Swi_pc );
+         double pc2 = pc_VG( 1.-h, pd, m_VG, Swi_pc );
          return (pc1 - pc2) / h;
     }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 pc1 = pc_VG( h, pd, m_VG, Swi_pc );
-         double64 pc2 = pc_VG( 0., pd, m_VG, Swi_pc );
+         double pc1 = pc_VG( h, pd, m_VG, Swi_pc );
+         double pc2 = pc_VG( 0., pd, m_VG, Swi_pc );
          return (pc1 - pc2) / h;
     }
 
     // water saturation between the endpoints
-    double64 pc1 = pc_VG( sw + h, pd, m_VG, Swi_pc );
-    double64 pc2 = pc_VG( sw - h, pd, m_VG, Swi_pc );
+    double pc1 = pc_VG( sw + h, pd, m_VG, Swi_pc );
+    double pc2 = pc_VG( sw - h, pd, m_VG, Swi_pc );
     return (pc1 - pc2) / (2. * h);
 }
 
@@ -1924,7 +1924,7 @@ void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::WriteRelativePermea
     
     ofs <<"rocktype="<< rocktype <<"="<< RT <<endl;
     ofs <<"sw\t krw \t krn \t pc \t dpcds"<<endl;
-    for ( double64 sw(0.); sw<1.005; sw+=0.005 )
+    for ( double sw(0.); sw<1.005; sw+=0.005 )
       {
          // dynamic parameters
          ofs << sw << "\t"<< krw_at(e, sw);
@@ -1943,7 +1943,7 @@ void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::OutputTestingResult
 
     VectorVariable<dim> vt; 
     vt=0.;
-    double64 vt_magnitude(0.);
+    double vt_magnitude(0.);
 
     //1. horizontal flows
     //1.1 vt(0) < CL

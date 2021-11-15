@@ -10,11 +10,11 @@ class DynamicViscosity {
   public:
     DynamicViscosity();
     ~DynamicViscosity();
-    double64  ViscosityFromTemperatureAndDensity( double64 t, double64 rho );
+    double  ViscosityFromTemperatureAndDensity( double t, double rho );
 
   private:
-    double64 ak[4], bij[6][5];
-    const double64 kelvin, rhostar, tstar;
+    double ak[4], bij[6][5];
+    const double kelvin, rhostar, tstar;
 
 };
 

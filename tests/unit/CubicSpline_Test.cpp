@@ -84,9 +84,9 @@ namespace csmp
         cspline1_copy = cspline1;
     }
 
-    void CubicSpline_Test::InitializeTest( const std::vector<double64>& rx,
-                                           const std::vector<double64>& rfx,
-                                           const double64 df1, const double64 dfn )
+    void CubicSpline_Test::InitializeTest( const std::vector<double>& rx,
+                                           const std::vector<double>& rfx,
+                                           const double df1, const double dfn )
     {
         cspline2.Initialize( rx, rfx, df1, dfn);
         cspline2_copy = new CubicSpline( cspline2 );
@@ -140,7 +140,7 @@ namespace csmp
 
     void CubicSpline_Test::MaxDerivativeTest()
     {
-        double64 mdv1 = cspline1.MaxDerivative();
+        double mdv1 = cspline1.MaxDerivative();
         if ( verbose_ ) {
             cout << "\nMaximum Derivative of input data f'(x)";
             cout << "\n" << setprecision(10) << mdv1 << fixed << endl;
@@ -153,7 +153,7 @@ namespace csmp
 
     void CubicSpline_Test::Range_xTest()
     {
-        double64 x_range = cspline1.Range_x();
+        double x_range = cspline1.Range_x();
         if ( verbose_ )  {
             cout << "\nRange of x data";
             cout << "\n" << setprecision(10) << x_range << fixed << endl;
@@ -166,7 +166,7 @@ namespace csmp
 
     void CubicSpline_Test::Range_fxTest()
     {
-        double64 fx_range = cspline1.Range_fx();
+        double fx_range = cspline1.Range_fx();
         if ( verbose_ ) {
             cout << "\nRange of f(x) data";
             cout << "\n" << setprecision(20) << fx_range << fixed << endl;

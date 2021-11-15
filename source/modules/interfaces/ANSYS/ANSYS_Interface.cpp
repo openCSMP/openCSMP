@@ -623,9 +623,9 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( std::ifstream& ifs )
     const char* const          delims =" ,\t,:,\n,\r";
     std::string                object_name;
     std::string                elmt_specifier;
-    int32                      n_regions(0), region(0);
+    int32_t                      n_regions(0), region(0);
     size_t                     n, n_elements;
-    int32                      material;
+    int32_t                      material;
     std::vector<size_t>        empty_list;
     std::set<std::string>      excluded_elmts;
     
@@ -787,7 +787,7 @@ bool ANSYS_Interface::ReadNodeCoordinatesASCII( std::ifstream& ifs, VSet<dim>& v
     SkipPotentialComment( ifs );
     
     // Px recornd
-    std::deque<double64> X(n_nodes);
+    std::deque<double> X(n_nodes);
     if ( n_nodes == 0U ) {
          throw csmp::Exception( ERROR, "ANSYS_Interface::ReadNodeCoordinatesASCII", 
                                     "No node coordinates are specified in file" );
@@ -796,11 +796,11 @@ bool ANSYS_Interface::ReadNodeCoordinatesASCII( std::ifstream& ifs, VSet<dim>& v
     for ( size_t i=0U; i<n_nodes; i++ ) ifs >> X[i];
 
     // Py record
-    std::deque<double64> Y(n_nodes);
+    std::deque<double> Y(n_nodes);
     for ( size_t i=0U; i<n_nodes; i++ ) ifs >> Y[i];
     
     // Pz record
-    std::deque<double64> Z(n_nodes);
+    std::deque<double> Z(n_nodes);
     for ( size_t i=0U; i<n_nodes; i++ ) ifs >> Z[i];
      
     if( csmp_error.Verbose() )
@@ -845,7 +845,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, V
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     int8_t        flag;
-    double64      bvalue;
+    double      bvalue;
     std::vector<bool>  bconds(vset.Vertices(),false);
     
     // Pbflags record
@@ -963,15 +963,15 @@ bool ANSYS_Interface::ReadPlistASCII( std::ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    std::map<size_t,std::vector<long64> >  plist;
-    std::vector<long64>          dummy;
+    std::map<size_t,std::vector<int64_t> >  plist;
+    std::vector<int64_t>          dummy;
     size_t                       total_items, 
                                  element(0), item(0), 
                                  id, nodes;
     const size_t                 n_nodes(vset.Vertices());
     
-    std::pair<std::map<size_t,std::vector<long64> >::iterator,bool>  it;
-    std::pair<size_t,std::vector<long64> > data;
+    std::pair<std::map<size_t,std::vector<int64_t> >::iterator,bool>  it;
+    std::pair<size_t,std::vector<int64_t> > data;
     
     // now the vset can be resized according to the new information
     std::deque<size_t>  ndele(vset.ElementTypes());
@@ -1077,24 +1077,24 @@ bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream& ifs, VSet<dim>& vset )
     
     // reading the pfvert file record
     size_t                       element(0), item(0);
-    std::map<size_t,std::vector<long64> >  pfverts;
-    std::vector<long64>               dummy;
+    std::map<size_t,std::vector<int64_t> >  pfverts;
+    std::vector<int64_t>               dummy;
 
     while ( item < total_items )
       {
          // getting the number of neighbors of the element to be read
          size_t neighbors = nbors[element];
          assert( neighbors >= 2  and  neighbors <= 32 );
-         std::pair<size_t,std::vector<long64> >  data(element,dummy);
+         std::pair<size_t,std::vector<int64_t> >  data(element,dummy);
         
          // insertion of empty std::vector
-         std::pair<std::map<size_t,std::vector<long64> >::iterator,bool>  it(pfverts.insert(data));
+         std::pair<std::map<size_t,std::vector<int64_t> >::iterator,bool>  it(pfverts.insert(data));
          assert( it.second );
          (*it.first).second.reserve(neighbors);
 
          // element ID's in file range 0...elements-1
          for ( size_t i=0; i<neighbors; ++i ) {
-              int32  idx;
+              int32_t  idx;
               ifs >> idx;
               if ( ifs.bad() ) {
                    std::cerr <<"\nread 'pfvert' record for element: "<< element <<", neighbor: "<< i <<", value: "<< idx;
@@ -1166,9 +1166,9 @@ bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream& ifs, VSet<dim>& vset )
       }
     
     // only for the volumetric elements material data are read from file
-    std::vector<int32> elmt_mtrls;
+    std::vector<int32_t> elmt_mtrls;
     elmt_mtrls.reserve(records);
-    int32   emtrl;
+    int32_t   emtrl;
     size_t  i(0);
     for ( i=0; i<records; ++i ) {
          ifs >> emtrl;
@@ -1208,8 +1208,8 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  uibytes = sizeof(uint32);
-    const size_t  dbytes  = sizeof(double64);
+    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  dbytes  = sizeof(double);
     size_t        entries(0);
 
     // reading node coordinates
@@ -1226,9 +1226,9 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
         std::cout.flush();
     }
     // reading node coordinates 'px', 'py', 'pz' (double)
-    double64* px = new double64[ entries ];
-    double64* py = new double64[ entries ];
-    double64* pz = new double64[ entries ];
+    double* px = new double[ entries ];
+    double* py = new double[ entries ];
+    double* pz = new double[ entries ];
     if ( fread( (void*) px, dbytes, entries, fp ) != entries )
      throw csmp::Exception( ERROR, "ANSYS_Interface::ReadNodeCoordinatesBinary",
                               "'px' array did not read correctly");
@@ -1256,22 +1256,22 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
 
     /*
     // coordinate range checking
-    double64* xmin=min_element( px, px + entries );
-    double64* xmax=max_element( px, px + entries );
-    double64* ymin=min_element( py, py + entries );
-    double64* ymax=max_element( py, py + entries );
-    double64* zmin=min_element( pz, pz + entries );
-    double64* zmax=max_element( pz, pz + entries );
+    double* xmin=min_element( px, px + entries );
+    double* xmax=max_element( px, px + entries );
+    double* ymin=min_element( py, py + entries );
+    double* ymax=max_element( py, py + entries );
+    double* zmin=min_element( pz, pz + entries );
+    double* zmax=max_element( pz, pz + entries );
 
-    if ( (*xmax) - (*xmin) < numeric_limits<double64>::epsilon() )
+    if ( (*xmax) - (*xmin) < numeric_limits<double>::epsilon() )
       throw csmp::Exception( FATAL_ERROR, "ANSYS_Interface::ReadNodeCoordinatesBinary:",
                                           "all nodes have same X-coordinate. 2D model must lie in YZ plane.");
 
-    if ( (*ymax) - (*ymin) < numeric_limits<double64>::epsilon() )
+    if ( (*ymax) - (*ymin) < numeric_limits<double>::epsilon() )
       throw csmp::Exception( FATAL_ERROR, "ANSYS_Interface::ReadNodeCoordinatesBinary:",
                                           "all nodes have same Y-coordinate. 2D model must lie in XZ plane.");
 
-    if ( (*zmax) - (*zmin) < numeric_limits<double64>::epsilon() )
+    if ( (*zmax) - (*zmin) < numeric_limits<double>::epsilon() )
       throw csmp::Exception( FATAL_ERROR, "ANSYS_Interface::ReadNodeCoordinatesBinary:",
                                           "all nodes have same Z-coordinate. 2D model must lie in XY plane.");
     */
@@ -1287,8 +1287,8 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  dbytes  = sizeof(double64);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  dbytes  = sizeof(double);
 
     // 1. reading boundary flags 'pbflags' (int)
     // ------------------------------------------
@@ -1298,9 +1298,9 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
         std::cout <<"\n\treading boundary flags 'pbflags'..."<< std::endl;
         std::cout.flush();
     }
-    int32        ival;
-    const int32  min28(-30), zero(0);
-    uint32       counter(0);
+    int32_t        ival;
+    const int32_t  min28(-30), zero(0);
+    uint32_t       counter(0);
     size_t nodes(vset.Vertices());
     for ( size_t i=0; i<nodes; i++ ){
          fread( (void*) &ival, ibytes, 1U, fp );
@@ -1324,7 +1324,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
         std::cout <<"\n\treading "<< counter <<" boundary values 'pbounds'..."<< std::endl;
         std::cout.flush();
       }
-    double64 dval;
+    double dval;
     for ( size_t i=1; i<=nodes; i++ ) {
          fread( (void*) &dval, dbytes, 1U, fp );
          // only if a boundary flag was stored, a boundary value is stored as well
@@ -1344,8 +1344,8 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // reading element-type information record 'pelement' (unsigned int)
@@ -1358,7 +1358,7 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
         std::cout <<"\n\treading "<< entries <<" finite-element type specifiers from 'pelement'..."<< std::endl;
         std::cout.flush();
     }
-    int32*  pelmt = new int32[ entries ];
+    int32_t*   pelmt = new int32_t[ entries ];
     fread( (void*) pelmt, ibytes, entries, fp );
     // checking the validity of the element types (valid range 2-23)
     for ( size_t i=0; i<entries; i++ )
@@ -1389,7 +1389,7 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // setting up the storage for 'plist' in VSet
@@ -1415,10 +1415,10 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     }
   
     // reading the plist
-    uint32* plist = new uint32[ entries ];
+    uint32_t*  plist = new uint32_t[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
-    std::deque<std::vector<long64> >::iterator  it(vset.PlistBegin());
+    std::deque<std::vector<int64_t> >::iterator  it(vset.PlistBegin());
     size_t                                      nentry(0U);
 
     // the elements of the plist (node ids) are assigned
@@ -1444,9 +1444,9 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  uibytes = sizeof(uint32);
-    long64        entries(0);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  uibytes = sizeof(uint32_t);
+    int64_t         entries(0);
 
     // setting up the storage for 'pfverts' in VSet
     const size_t   nelements(vset.ElementTypes());
@@ -1469,12 +1469,12 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
       }
     if ( entries >= 2147483647 )
       csmp_error.notice( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "too many elements in file to be read by this reader");
-    int32* pfverts = new int32[ entries ];
+    int32_t*  pfverts = new int32_t[ entries ];
     fread( (void*) pfverts, ibytes, entries, fp );
 
     // reading the C array into the resized pfverts deque inside VData
     // ---------------------------------------------------------------
-    std::deque<std::vector<long64> >::iterator it(vset.PfvertsBegin());
+    std::deque<std::vector<int64_t> >::iterator it(vset.PfvertsBegin());
     size_t  nentry(0U);
     for ( size_t i=0; i<nelements; i++, ++it ) {
         // minimum number of neighbors per element
@@ -1503,7 +1503,7 @@ template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<3U>& );
 /*
 std::cerr <<"\nReadPfvertsBinary: neighbor info\n:";
 size_t i(0);
- for ( std::deque<std::vector<long64> >::const_iterator
+ for ( std::deque<std::vector<int64_t> >::const_iterator
        ft=vset.PfvertsBegin(); ft!=vset.PfvertsEnd(); ft++, i++ )
    {
       std::cout << i <<": \t";
@@ -1521,8 +1521,8 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // reading material information 'pmtrl'
@@ -1535,9 +1535,9 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
         std::cout <<"\n\treading "<< entries <<" material-type specifiers for the elements from 'pmtrl'..."<< std::endl;
         std::cout.flush();
     }
-    int32* mtrls = new int32[ entries ];
+    int32_t*  mtrls = new int32_t[ entries ];
     fread( (void*) mtrls, ibytes, entries, fp );
-    std::vector<int32> elmt_mtrls;
+    std::vector<int32_t> elmt_mtrls;
     elmt_mtrls.assign( mtrls, mtrls + entries );
     
     vset.AddPmtrl( elmt_mtrls.begin(), elmt_mtrls.end() );

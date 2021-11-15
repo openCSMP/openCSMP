@@ -215,7 +215,7 @@ void StencilProcessor<dim>::ComputeBoundaryFluxMismatch(const FV_Parameter& para
                  const size_t n(e.FV()->FacetSurroundingSector(i,k));
                  e.FV()->FacetEdgeNodes( n, inside_node_, outside_node_ );
                  // if the sector node is the inside node then an incoming flux will create a positive source term
-                 double64 flux( (i == inside_node_) ? -param.FacetNormalVelocity(n) * param.FacetArea(n)
+                 double flux( (i == inside_node_) ? -param.FacetNormalVelocity(n) * param.FacetArea(n)
                                                           :  param.FacetNormalVelocity(n) * param.FacetArea(n) );
 
                  if (velo_mult_flag)
@@ -358,11 +358,11 @@ To avoid numerical oscillations in higher-order transport schemes.
 */
 template<size_t dim>
 void  StencilProcessor<dim>::IsotropicallyLimitTransportProperties( const Element<dim>& e,
-                                                                    const vector< pair<double64,double64> >& SMINMAX )
+                                                                    const vector< pair<double,double> >& SMINMAX )
  {
     eidx_ = e.Idx();
     size_t  n_upstr, n_dnstr;
-    const double64   zero(0.), xi(2.);
+    const double   zero(0.), xi(2.);
 
     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
       {
@@ -387,7 +387,7 @@ void  StencilProcessor<dim>::IsotropicallyLimitTransportProperties( const Elemen
 
 template<size_t dim>
 void  StencilProcessor<dim>::ApplyLeastSquareMethodToLimitTransportProperties( const Element<dim>& e,
-                                                                    const std::vector<std::pair<double64,double64> >& SMINMAX,
+                                                                    const std::vector<std::pair<double,double> >& SMINMAX,
                                                                     const csmp::Index& mass_center_key,
                                                                     const csmp::Index& grad_psi_key,
                                                                     const csmp::Index& grad_psi_limiter_key)
@@ -395,7 +395,7 @@ void  StencilProcessor<dim>::ApplyLeastSquareMethodToLimitTransportProperties( c
 
     eidx_ = e.Idx();
     size_t  n_upstr, n_dnstr;
-    const double64   zero(0.);
+    const double   zero(0.);
 
     for ( size_t i=0U; i<e.FV()->Facets(); i++ ){
 
@@ -440,13 +440,13 @@ Limiting of source terms for explicit (for instance as in IMPES)
 calculations.
  */
 template<size_t dim>
-double64  StencilProcessor<dim>::LimitExplicitSourceTerm(
+double  StencilProcessor<dim>::LimitExplicitSourceTerm(
                                        const Element<dim>& e,
-                                       const vector<pair<double64,double64> >& SMINMAX,
-                                       double64 inside_var_value,
-                                       double64 outside_var_value,
-                                       double64 psi_dash_f,        // average value at facet
-                                       double64 flux )
+                                       const vector<pair<double,double> >& SMINMAX,
+                                       double inside_var_value,
+                                       double outside_var_value,
+                                       double psi_dash_f,        // average value at facet
+                                       double flux )
  {
      if ( flux > 0. )
          return limitProperty( inside_var_value, outside_var_value, psi_dash_f, SMINMAX[ e.N(inside_node_)->Idx() ]);
@@ -464,15 +464,15 @@ time-level balancing method.
  */
 template<size_t dim>
 void StencilProcessor<dim>::EvaluateThetaValues( const Element<dim>& e,
-                                                    const vector<double64>&  FVPOREVOL, // vols of FV's
-                                                    const vector<double64>&  SAT0, // saturation at initial time-level
-                                                    const vector<vector<double64> >& FACETFLUXES0, // old timestep
-                                                    const vector<vector<double64> >& LTDSATS0, // old timestep
-                                                    double64 time_increment,
+                                                    const vector<double>&  FVPOREVOL, // vols of FV's
+                                                    const vector<double>&  SAT0, // saturation at initial time-level
+                                                    const vector<vector<double> >& FACETFLUXES0, // old timestep
+                                                    const vector<vector<double> >& LTDSATS0, // old timestep
+                                                    double time_increment,
                                                     bool  use_max_theta )
  {
     size_t  n_upstr, n_dnstr; // upstream & downstream elements
-    const double64 zero(0.);
+    const double zero(0.);
     theta_.resize(e.FV()->Facets());
 
     // for each sector divider
@@ -485,8 +485,8 @@ void StencilProcessor<dim>::EvaluateThetaValues( const Element<dim>& e,
          else                         { n_upstr=outside_node_; n_dnstr=inside_node_; }  // n_upstr = n_current
 
          // computing solute fluxes (eqn. 44, Pain et al.) across face 1 at time levels t and t + dt
-         double64 hf_t0 = FACETFLUXES0[eidx_][i] * LTDSATS0[eidx_][i]; // from last timestep
-         double64 hf_t1 = facet_flux_[i]         * ipsi1_[i];          // for current timestep
+         double hf_t0 = FACETFLUXES0[eidx_][i] * LTDSATS0[eidx_][i]; // from last timestep
+         double hf_t1 = facet_flux_[i]         * ipsi1_[i];          // for current timestep
 
          if ( !use_max_theta )
            theta_[i] = thetaLimiter( hf_t0, hf_t1,
@@ -558,8 +558,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
      assert( !isnan(relperm.CapillaryDiffusionMultiplier( )) );
      assert( !isnan(relperm.GravityMultiplier_dGds()) );
 
-     const double64 dfds = relperm.AdvectionMultiplier();
-     const double64 dGds = relperm.GravityMultiplier_dGds();
+     const double dfds = relperm.AdvectionMultiplier();
+     const double dGds = relperm.GravityMultiplier_dGds();
      if ( !(diff_key_.index == ULONG_MAX) )
        diff_coeff_ = -relperm.CapillaryDiffusionMultiplier( );
        
@@ -585,7 +585,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
           for ( size_t k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
                const size_t n(e.FV()->FacetSurroundingSector(j,k));
                // if the sector node is the inside node then an incoming flux will create a positive source term
-               const double64 fsign( (j == e.FV()->InsideNode(n)) ? -1. : 1. ); 
+               const double fsign( (j == e.FV()->InsideNode(n)) ? -1. : 1. ); 
                src_[j] += fsign * param.FacetArea(n) * 
                          (param.FacetNormalVelocity(n) * dfds + param.FacetNormalComponent(n,v) * dGds);
             }
@@ -605,8 +605,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
         //    saturation
         // ---------------------------------------------------------------------------
         // only if there is a density difference
-        if ( fabs( relperm.DensityWettingPhase() - relperm.DensityNonWettingPhase() ) > numeric_limits<double64>::epsilon() and
-             fabs( param.FacetNormalComponent(i, v) ) > numeric_limits<double64>::epsilon() )
+        if ( fabs( relperm.DensityWettingPhase() - relperm.DensityNonWettingPhase() ) > numeric_limits<double>::epsilon() and
+             fabs( param.FacetNormalComponent(i, v) ) > numeric_limits<double>::epsilon() )
         {
           // del_lambda_overbar / del_sn * k * -g(rho_w - rho_n)
           facet_flux_[i] += param.FacetNormalComponent(i, v) * dGds;
@@ -639,8 +639,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
      assert( !isnan(relperm.CapillaryDiffusionMultiplier( )) );
      assert( !isnan(relperm.GravityMultiplier_dGds()) );
 
-     const double64 dfds = relperm.AdvectionMultiplier();
-     const double64 dGds = relperm.GravityMultiplier_dGds();
+     const double dfds = relperm.AdvectionMultiplier();
+     const double dGds = relperm.GravityMultiplier_dGds();
      if ( !(diff_key_.index == ULONG_MAX) )
        diff_coeff_ = -relperm.CapillaryDiffusionMultiplier();
 
@@ -673,7 +673,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
        for ( size_t k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
          const size_t n(e.FV()->FacetSurroundingSector(j,k));
          // if the sector node is the inside node then an incoming flux will create a positive source term
-         const double64 fsign( (j == e.FV()->InsideNode(n) ) ? -1. : 1. );
+         const double fsign( (j == e.FV()->InsideNode(n) ) ? -1. : 1. );
          src_[j] += fsign * param.FacetArea(n) *
                     (param.FacetNormalVelocity(n) * dfds + param.FacetNormalComponent(n,v) * dGds);
        }
@@ -701,8 +701,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
        //    mixed saturation
        // ---------------------------------------------------------------------------
        // only if there is a density difference
-       if ( fabs( relperm.DensityWettingPhase() - relperm.DensityNonWettingPhase() ) > numeric_limits<double64>::epsilon() and
-            fabs( param.FacetNormalComponent(i, v) ) > numeric_limits<double64>::epsilon() )
+       if ( fabs( relperm.DensityWettingPhase() - relperm.DensityNonWettingPhase() ) > numeric_limits<double>::epsilon() and
+            fabs( param.FacetNormalComponent(i, v) ) > numeric_limits<double>::epsilon() )
        {
          // del_lambda_overbar / del_sn * k * -g(rho_w - rho_n)
          facet_flux_[i] += param.FacetNormalComponent(i, v) * dGds;
@@ -752,16 +752,16 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
     fill(upstream_node_.begin(),upstream_node_.end(),0U);
 
 
-    double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-    double64 upstream_fn(0.0),upstream_lambda_overbar(0.0);
-    double64 upstream_sn(0.0),upstream_sw(0.0);
-    double64 vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
+    double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+    double upstream_fn(0.0),upstream_lambda_overbar(0.0);
+    double upstream_sn(0.0),upstream_sw(0.0);
+    double vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
 
-    double64 linear_flux(0.0),nonlinear_flux(0.0);
-    double64 viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
-    double64 dsdn(0.0),dpcdn(0.0),dpcdsn(0.0);
+    double linear_flux(0.0),nonlinear_flux(0.0);
+    double viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
+    double dsdn(0.0),dpcdn(0.0),dpcdsn(0.0);
 
-    const double64 zero(0.);
+    const double zero(0.);
     const size_t v( (dim==1u) ? 0u : 1u );  // gravity direction
 
     relperm.Initialize( e );
@@ -775,7 +775,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -783,7 +783,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
-             const double64 dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative ove sn is needed
+             const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative ove sn is needed
              for ( size_t k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
@@ -798,15 +798,15 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
         // ------------------------------------------
         relperm.InitializeForNode( e, inside_node_ );
         relperm.EffectiveSaturation();
-        const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-        const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
-        const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
+        const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+        const double ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+        const double lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
         relperm.InitializeForNode( e, outside_node_ );
         relperm.EffectiveSaturation();
-        const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
-        const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
-        const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
+        const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+        const double ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+        const double lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
         relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -820,8 +820,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
 
         if( with_gravity_forces || with_capillary_spreading ){
 
-            double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-            double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+            double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+            double vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
 
             if( with_gravity_forces ){
 
@@ -985,7 +985,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
 
 template<size_t dim>
 void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson(
-                                          const vector<pair<double64,double64> >& SMINMAX,
+                                          const vector<pair<double,double> >& SMINMAX,
                                           const FV_Parameter& param,
                                           const Element<dim>& e,
                                           TwoPhaseModel<dim>& relperm,
@@ -1016,16 +1016,16 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
     fill(upstream_node_.begin(),upstream_node_.end(),0U);
 
 
-    double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-    double64 upstream_fn(0.0),upstream_lambda_overbar(0.0);
-    double64 upstream_sn(0.0),upstream_sw(0.0);
-    double64 vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
+    double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+    double upstream_fn(0.0),upstream_lambda_overbar(0.0);
+    double upstream_sn(0.0),upstream_sw(0.0);
+    double vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
 
-    double64 linear_flux(0.0),nonlinear_flux(0.0);
-    double64 viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
-    double64 dsdn(0.0),dpcdn(0.0),dpcdsn(0.0);
+    double linear_flux(0.0),nonlinear_flux(0.0);
+    double viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
+    double dsdn(0.0),dpcdn(0.0),dpcdsn(0.0);
 
-    const double64 zero(0.);
+    const double zero(0.);
     const size_t v( (dim==1u) ? 0u : 1u );  // gravity direction
 
     relperm.Initialize( e );
@@ -1038,7 +1038,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -1046,7 +1046,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
-             const double64 dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
+             const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
              for ( size_t k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
@@ -1062,11 +1062,11 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         // Saturation at the facet
         relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
         relperm.EffectiveSaturation();
-        double64 sn_facet        = relperm.Saturation(NONWETTING_PHASE);
+        double sn_facet        = relperm.Saturation(NONWETTING_PHASE);
 
         // Saturation at the nodes
-        const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-        const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+        const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+        const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
 
         // #######################################################################
@@ -1077,8 +1077,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         relperm.SaturationWettingPhase( 1. - limitProperty( sn_inside_node, sn_outside_node, sn_facet,
                                              SMINMAX[ e.N( inside_node_ )->Idx() ] ) );
         relperm.EffectiveSaturation();
-        const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
-        const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
+        const double ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+        const double lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
         // #######################################################################
         // Limited saturation at the outside node
@@ -1087,8 +1087,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         relperm.SaturationWettingPhase( 1. - limitProperty( sn_outside_node, sn_inside_node, sn_facet,
                                              SMINMAX[ e.N( outside_node_ )->Idx() ] ) );
         relperm.EffectiveSaturation();
-        const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
-        const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
+        const double ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+        const double lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
         relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -1103,8 +1103,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
         if( with_gravity_forces || with_capillary_spreading ){
 
-            double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-            double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+            double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+            double vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
 
             if( with_gravity_forces ){
 
@@ -1265,7 +1265,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
 template<size_t dim>
 void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson(
-                                          const vector<pair<double64,double64> >& SMINMAX,
+                                          const vector<pair<double,double> >& SMINMAX,
                                           const FV_Parameter& param,
                                           const Element<dim>& e,
                                           TwoPhaseModel<dim>& relperm,
@@ -1299,18 +1299,18 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
     fill(upstream_node_.begin(),upstream_node_.end(),0U);
 
 
-    double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-    double64 upstream_fn(0.0),upstream_lambda_overbar(0.0);
-    double64 upstream_sn(0.0),upstream_sw(0.0);
-    double64 vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
+    double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+    double upstream_fn(0.0),upstream_lambda_overbar(0.0);
+    double upstream_sn(0.0),upstream_sw(0.0);
+    double vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
 
-    double64 linear_flux(0.0),nonlinear_flux(0.0);
-    double64 viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
-    double64 dsdn(0.0),dpcdn(0.0),dpcdsn(0.0);
+    double linear_flux(0.0),nonlinear_flux(0.0);
+    double viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
+    double dsdn(0.0),dpcdn(0.0),dpcdsn(0.0);
 
-    double64 limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
+    double limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
 
-    const double64 zero(0.);
+    const double zero(0.);
     const size_t v( (dim==1u) ? 0u : 1u );  // gravity direction
 
     relperm.Initialize( e );
@@ -1323,7 +1323,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -1331,7 +1331,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
-             const double64 dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
+             const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
              for ( size_t k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
@@ -1349,8 +1349,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         relperm.EffectiveSaturation();
 
         // Saturation at the nodes
-        const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-        const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+        const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+        const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
 
         limitProperty_LSMGRAD<dim>( e, mass_center_key, grad_sn_key, grad_sn_limiter_key,
@@ -1366,8 +1366,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
         relperm.SaturationWettingPhase( 1. - limited_sn_inside_node );
         relperm.EffectiveSaturation();
-        const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
-        const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
+        const double ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+        const double lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
         // #######################################################################
         // Limited saturation at the outside node
@@ -1375,8 +1375,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
         relperm.SaturationWettingPhase( 1. - limited_sn_outside_node );
         relperm.EffectiveSaturation();
-        const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
-        const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
+        const double ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+        const double lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
         // LHS: Jacobian matrix calculations ( Linearized flux calculations )
@@ -1392,8 +1392,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
         if( with_gravity_forces || with_capillary_spreading ){
 
-            double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-            double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+            double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+            double vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
 
             if( with_gravity_forces ){
 
@@ -1558,7 +1558,7 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
                                                         const Element<dim>& e,
                                                         TwoPhaseModel<dim>& relperm,
                                                         size_t pnid,
-                                                        double64& flux,
+                                                        double& flux,
                                                         bool with_gravity_forces,
                                                         bool with_capillary_spreading)
  {
@@ -1570,7 +1570,7 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
 
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> velo;
-    double64 facetArea;
+    double facetArea;
 
     /*
     // Accumulate sources for correction at the boundary for LHS
@@ -1582,13 +1582,13 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
           const size_t i(e.FV()->FacetSurroundingSector(pnid,k));
           // if the sector node is the inside node then an incoming flux will create a positive source term
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1key_ );
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e ); // costly (interpolates rho and mu as well)
           relperm.EffectiveSaturation();
 
-          const double64 lhs_sign( (pnid == e.FV()->InsideNode(i)) ? -1. : 1. );
-          const double64 rhs_sign( (pnid == e.FV()->InsideNode(i)) ? -1. : 1. );
+          const double lhs_sign( (pnid == e.FV()->InsideNode(i)) ? -1. : 1. );
+          const double rhs_sign( (pnid == e.FV()->InsideNode(i)) ? -1. : 1. );
           src_[pnid] += lhs_sign * relperm.dfds() * (param.FacetNormalVelocity(i)) * param.FacetArea(i);
           rhs_src_[pnid] += rhs_sign * (relperm.f_Phase(NONWETTING_PHASE) * param.FacetNormalVelocity(i)) * param.FacetArea(i);
     }
@@ -1600,7 +1600,7 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
         e.dN_AtBaryCenter( DN_ );
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -1619,15 +1619,15 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
          e.Read( vel_key_, velo );
          facetArea = e.FacetArea(i);
 
-         const double64 viscous_vel_component = velo.DotProduct(n);
+         const double viscous_vel_component = velo.DotProduct(n);
 
          if( with_gravity_forces){
 
-             const double64 gravity_vel_component = n[v];
+             const double gravity_vel_component = n[v];
 
              if( with_capillary_spreading ){
 
-                 const double64 capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
+                 const double capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
 
                  if ( pnid == inside_node_ )
                      flux += (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.GravityMultiplier_G()*gravity_vel_component - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
@@ -1647,7 +1647,7 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
 
              if(with_capillary_spreading){
 
-                 const double64 capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
+                 const double capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
 
                  if ( pnid == inside_node_ )
                      flux += (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;

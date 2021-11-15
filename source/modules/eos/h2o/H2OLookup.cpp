@@ -136,47 +136,47 @@ H2OLookup::~H2OLookup()
 
 // functions that mimic the interface of Sebstian's former H2OPropertiesLookupTable
 
-double64 H2OLookup::SaturationTemperatureFromP( double64 p )
+double H2OLookup::SaturationTemperatureFromP( double p )
 {
   //	cout << "entering H2OLookup::SaturationTemperatureFromP\n"; 
   myt = TfromP( p );
   return myt;
   //	cout << "leaving H2OLookup::SaturationTemperatureFromP\n"; 
 }
-double64 H2OLookup::LiquidDensityFromP( double64 p ) { myt = TfromP( p ); return LiquidProperty( myt, density_index ); }
-double64 H2OLookup::LiquidEnthalpyFromP( double64 p ) { myt = TfromP( p ); return LiquidProperty( myt, enthalpy_index ); }
-double64 H2OLookup::LiquidHeatCapacityFromP( double64 p ) { myt = TfromP( p ); return LiquidProperty( myt, heatcapacity_index ); }
-double64 H2OLookup::LiquidViscosityFromP( double64 p ) { myt = TfromP( p ); return LiquidProperty( myt, viscosity_index ); }
-double64 H2OLookup::LiquidCompressibilityFromP( double64 p ) { myt = TfromP( p ); return LiquidProperty( myt, compressibility_index ); }
-double64 H2OLookup::VaporDensityFromP( double64 p ) { myt = TfromP( p ); return VaporProperty( myt, density_index ); }
-double64 H2OLookup::VaporEnthalpyFromP( double64 p ) { myt = TfromP( p ); return VaporProperty( myt, enthalpy_index ); }
-double64 H2OLookup::VaporHeatCapacityFromP( double64 p ) { myt = TfromP( p ); return VaporProperty( myt, heatcapacity_index ); }
-double64 H2OLookup::VaporViscosityFromP( double64 p ) { myt = TfromP( p ); return VaporProperty( myt, viscosity_index ); }
-double64 H2OLookup::VaporCompressibilityFromP( double64 p ) { myt = TfromP( p ); return VaporProperty( myt, compressibility_index ); }
-double64 H2OLookup::SaturationPressureFromT( double64 t ) { return LiquidProperty( t, pressure_index ); }
-double64 H2OLookup::DSaturationPressureFromTDT( double64 t ) {
+double H2OLookup::LiquidDensityFromP( double p ) { myt = TfromP( p ); return LiquidProperty( myt, density_index ); }
+double H2OLookup::LiquidEnthalpyFromP( double p ) { myt = TfromP( p ); return LiquidProperty( myt, enthalpy_index ); }
+double H2OLookup::LiquidHeatCapacityFromP( double p ) { myt = TfromP( p ); return LiquidProperty( myt, heatcapacity_index ); }
+double H2OLookup::LiquidViscosityFromP( double p ) { myt = TfromP( p ); return LiquidProperty( myt, viscosity_index ); }
+double H2OLookup::LiquidCompressibilityFromP( double p ) { myt = TfromP( p ); return LiquidProperty( myt, compressibility_index ); }
+double H2OLookup::VaporDensityFromP( double p ) { myt = TfromP( p ); return VaporProperty( myt, density_index ); }
+double H2OLookup::VaporEnthalpyFromP( double p ) { myt = TfromP( p ); return VaporProperty( myt, enthalpy_index ); }
+double H2OLookup::VaporHeatCapacityFromP( double p ) { myt = TfromP( p ); return VaporProperty( myt, heatcapacity_index ); }
+double H2OLookup::VaporViscosityFromP( double p ) { myt = TfromP( p ); return VaporProperty( myt, viscosity_index ); }
+double H2OLookup::VaporCompressibilityFromP( double p ) { myt = TfromP( p ); return VaporProperty( myt, compressibility_index ); }
+double H2OLookup::SaturationPressureFromT( double t ) { return LiquidProperty( t, pressure_index ); }
+double H2OLookup::DSaturationPressureFromTDT( double t ) {
   if ( t <= 5.0 ) return (SaturationPressureFromT( t + 0.01 ) - SaturationPressureFromT( t )) / 0.01;
   else return (SaturationPressureFromT( t + 0.01 ) - SaturationPressureFromT( t )) / 0.01;
 }
-double64 H2OLookup::LiquidDensityFromT( double64 t ) { return LiquidProperty( t, density_index ); }
-double64 H2OLookup::LiquidEnthalpyFromT( double64 t ) { return LiquidProperty( t, enthalpy_index ); }
-double64 H2OLookup::LiquidHeatCapacityFromT( double64 t ) { return LiquidProperty( t, heatcapacity_index ); }
-double64 H2OLookup::LiquidViscosityFromT( double64 t ) { return LiquidProperty( t, viscosity_index ); }
-double64 H2OLookup::LiquidCompressibilityFromT( double64 t ) { return LiquidProperty( t, compressibility_index ); }
-double64 H2OLookup::VaporDensityFromT( double64 t ) { return VaporProperty( t, density_index ); }
-double64 H2OLookup::VaporEnthalpyFromT( double64 t ) { return VaporProperty( t, enthalpy_index ); }
-double64 H2OLookup::VaporHeatCapacityFromT( double64 t ) { return VaporProperty( t, heatcapacity_index ); }
-double64 H2OLookup::VaporViscosityFromT( double64 t ) { return VaporProperty( t, viscosity_index ); }
-double64 H2OLookup::VaporCompressibilityFromT( double64 t ) { return VaporProperty( t, compressibility_index ); }
-double64 H2OLookup::Density( double64 t, double64 p ) { return SinglePhaseProperty( t, p, density_index ); }
-double64 H2OLookup::HeatCapacity( double64 t, double64 p ) { return SinglePhaseProperty( t, p, heatcapacity_index ); }
-double64 H2OLookup::Enthalpy( double64 t, double64 p ) { return SinglePhaseProperty( t, p, enthalpy_index ); }
-double64 H2OLookup::Viscosity( double64 t, double64 p ) { return SinglePhaseProperty( t, p, viscosity_index ); }
-double64 H2OLookup::Compressibility( double64 t, double64 p ) { return SinglePhaseProperty( t, p, compressibility_index ); }
-double64 H2OLookup::MolarVolume( double64 t, double64 p ) { return DensityAndX2MolarVolume( SinglePhaseProperty( t, p, density_index ), 0.0 ); }
-double64 H2OLookup::LiquidMolarVolumeFromP( double64 p ) { myt = TfromP( p ); return DensityAndX2MolarVolume( LiquidProperty( myt, density_index ), 0.0 ); }
-double64 H2OLookup::VaporMolarVolumeFromP( double64 p ) { myt = TfromP( p ); return DensityAndX2MolarVolume( VaporProperty( myt, density_index ), 0.0 ); }
-double64 H2OLookup::Dvdt( double64 t, double64 p )
+double H2OLookup::LiquidDensityFromT( double t ) { return LiquidProperty( t, density_index ); }
+double H2OLookup::LiquidEnthalpyFromT( double t ) { return LiquidProperty( t, enthalpy_index ); }
+double H2OLookup::LiquidHeatCapacityFromT( double t ) { return LiquidProperty( t, heatcapacity_index ); }
+double H2OLookup::LiquidViscosityFromT( double t ) { return LiquidProperty( t, viscosity_index ); }
+double H2OLookup::LiquidCompressibilityFromT( double t ) { return LiquidProperty( t, compressibility_index ); }
+double H2OLookup::VaporDensityFromT( double t ) { return VaporProperty( t, density_index ); }
+double H2OLookup::VaporEnthalpyFromT( double t ) { return VaporProperty( t, enthalpy_index ); }
+double H2OLookup::VaporHeatCapacityFromT( double t ) { return VaporProperty( t, heatcapacity_index ); }
+double H2OLookup::VaporViscosityFromT( double t ) { return VaporProperty( t, viscosity_index ); }
+double H2OLookup::VaporCompressibilityFromT( double t ) { return VaporProperty( t, compressibility_index ); }
+double H2OLookup::Density( double t, double p ) { return SinglePhaseProperty( t, p, density_index ); }
+double H2OLookup::HeatCapacity( double t, double p ) { return SinglePhaseProperty( t, p, heatcapacity_index ); }
+double H2OLookup::Enthalpy( double t, double p ) { return SinglePhaseProperty( t, p, enthalpy_index ); }
+double H2OLookup::Viscosity( double t, double p ) { return SinglePhaseProperty( t, p, viscosity_index ); }
+double H2OLookup::Compressibility( double t, double p ) { return SinglePhaseProperty( t, p, compressibility_index ); }
+double H2OLookup::MolarVolume( double t, double p ) { return DensityAndX2MolarVolume( SinglePhaseProperty( t, p, density_index ), 0.0 ); }
+double H2OLookup::LiquidMolarVolumeFromP( double p ) { myt = TfromP( p ); return DensityAndX2MolarVolume( LiquidProperty( myt, density_index ), 0.0 ); }
+double H2OLookup::VaporMolarVolumeFromP( double p ) { myt = TfromP( p ); return DensityAndX2MolarVolume( VaporProperty( myt, density_index ), 0.0 ); }
+double H2OLookup::Dvdt( double t, double p )
 {
   if ( t > cp_h2o.Temperature() ) dvdt = (MolarVolume( t + 0.01, p ) - MolarVolume( t, p )) / 0.01;
   else {
@@ -189,52 +189,52 @@ double64 H2OLookup::Dvdt( double64 t, double64 p )
   }
   return dvdt;
 }
-double64 H2OLookup::Dvdpbar( double64 t, double64 p ) { return -18015.0e0*Compressibility( t, p ) / Density( t, p )*1.0e5; }
+double H2OLookup::Dvdpbar( double t, double p ) { return -18015.0e0*Compressibility( t, p ) / Density( t, p )*1.0e5; }
 
 
 // Functions that retrieve data from the lookup table
 // No range check done, it's YOUR responsibility !!!
 //
 // May 2009:
-// - simple range check implemented in SinglePhaseProperty(const double64& t, const double64& p, const int& property_index).
+// - simple range check implemented in SinglePhaseProperty(const double& t, const double& p, const int& property_index).
 //   Any suggestions for better and/or more inexpensive and/or more intelligent range checks are welcome, 
 //   send to thomas.driesner@erdw.ethz.ch
 
 // These three were rather for debugging. You don't want to use these, rather got to the three following after these
-double64 H2OLookup::LiquidProperty( const long& it, const int& property_index ) { return satliq[t_dim_table[0] * property_index + it]; }
+double H2OLookup::LiquidProperty( const long& it, const int& property_index ) { return satliq[t_dim_table[0] * property_index + it]; }
 
-double64 H2OLookup::VaporProperty( const long& it, const int& property_index ) { return satvap[t_dim_table[1] * property_index + it]; }
+double H2OLookup::VaporProperty( const long& it, const int& property_index ) { return satvap[t_dim_table[1] * property_index + it]; }
 
-double64 H2OLookup::SinglePhaseProperty( const long& it, const long& ip, const int& property_index ) {
+double H2OLookup::SinglePhaseProperty( const long& it, const long& ip, const int& property_index ) {
   return singlephase[t_dim_table[2] * p_dim * property_index + p_dim*it + ip];
 }
 
 // The real stuff
-double64 H2OLookup::LiquidProperty( const double64& t, const int& property_index )
+double H2OLookup::LiquidProperty( const double& t, const int& property_index )
 {
   // Given t and property, return value on liquid side of boiling curve
   // Caution: range ends at tcrit
-  // 	cout << "H2OLookup::LiquidProperty(const double64& t, const int& property_index) : computing for property_index = " << property_index << endl;
+  // 	cout << "H2OLookup::LiquidProperty(const double& t, const int& property_index) : computing for property_index = " << property_index << endl;
   // 	cout << "                                                                           t was " << t << endl;
-  double64 tnorm;
+  double tnorm;
   it = GetTemperatureIndex( t );
   tnorm = t - satliq[t_dim_table[0] * temperature_index + it];
   tnorm /= satliq[t_dim_table[0] * temperature_index + it + 1] - satliq[t_dim_table[0] * temperature_index + it];
   return satliq[t_dim_table[0] * property_index + it] + tnorm*(satliq[t_dim_table[0] * property_index + it + 1] - satliq[t_dim_table[0] * property_index + it]);
 }
 
-double64 H2OLookup::VaporProperty( const double64& t, const int& property_index )
+double H2OLookup::VaporProperty( const double& t, const int& property_index )
 {
   // Given t and property, return value on vapor side of boiling curve
   // Caution: range ends at tcrit
-  double64 tnorm;
+  double tnorm;
   it = GetTemperatureIndex( t );
   tnorm = t - satvap[t_dim_table[0] * temperature_index + it];
   tnorm /= satvap[t_dim_table[0] * temperature_index + it + 1] - satvap[t_dim_table[0] * temperature_index + it];
   return satvap[t_dim_table[0] * property_index + it] + tnorm*(satvap[t_dim_table[0] * property_index + it + 1] - satvap[t_dim_table[0] * property_index + it]);
 }
 
-double64 H2OLookup::SinglePhaseProperty( const double64& t, const double64& p, const int& property_index )
+double H2OLookup::SinglePhaseProperty( const double& t, const double& p, const int& property_index )
 {
   ErrorHandler& csmp_err( ErrorHandler::Instance() );
   // Given t,p and property, return value for single phase
@@ -246,7 +246,7 @@ double64 H2OLookup::SinglePhaseProperty( const double64& t, const double64& p, c
     {
       // top back corner of lookup table
       csmp_err.notice( WARNING,
-                       "H2OLookup::SinglePhaseProperty(const double64& t, const double64& p, const int& property_index) -",
+                       "H2OLookup::SinglePhaseProperty(const double& t, const double& p, const int& property_index) -",
                        "temperature > 2000C and pressure > 1000MPa, i.e., out of valid range. Returning index for 2000C, 1000MPa properties" );
       cout << t << "\t" << p << endl;
       cin >> yesno;
@@ -257,7 +257,7 @@ double64 H2OLookup::SinglePhaseProperty( const double64& t, const double64& p, c
       // t extreme but p ok
       // p-interpolation is still missing but unlikely to make any difference
       csmp_err.notice( WARNING,
-                       "H2OLookup::SinglePhaseProperty(const double64& t, const double64& p, const int& property_index) -",
+                       "H2OLookup::SinglePhaseProperty(const double& t, const double& p, const int& property_index) -",
                        "temperature > 2000C, i.e., out of valid range. Returning index for 2000C properties" );
       cout << p << endl;
       it = GetTemperatureIndex( t );
@@ -281,7 +281,7 @@ double64 H2OLookup::SinglePhaseProperty( const double64& t, const double64& p, c
     // t ok but p extreme
     // t-interpolation is still missing but unlikely to make any real difference
     csmp_err.notice( WARNING,
-                     "H2OLookup::SinglePhaseProperty(const double64& t, const double64& p, const int& property_index) -",
+                     "H2OLookup::SinglePhaseProperty(const double& t, const double& p, const int& property_index) -",
                      "pressure > 1000 MPa, i.e., out of valid range. Returning index for 1000 MPa properties" );
     cout << p << endl;
     it = GetTemperatureIndex( t );
@@ -319,7 +319,7 @@ double64 H2OLookup::SinglePhaseProperty( const double64& t, const double64& p, c
 
 
 // some auxilliary functions
-double64 H2OLookup::AccidentalBoilingCurveEncounter( const double64& t, const double64& p, const int& property_index )
+double H2OLookup::AccidentalBoilingCurveEncounter( const double& t, const double& p, const int& property_index )
 {
   cout << "******************* accidentally hit boiling curve !!!! ***********************\n";
   cout << "\n have no idea, what to return as only property of one phase was requested!!! \n";
@@ -343,7 +343,7 @@ bool H2OLookup::BoilingCurveInInterpolationCell()
   else return false;
 }
 
-void H2OLookup::GetIndex_iA( const double64& tcurrent, const double64& pcurrent, const int& property_index )
+void H2OLookup::GetIndex_iA( const double& tcurrent, const double& pcurrent, const int& property_index )
 {
   // May 2009: CAUTION - this scheme may fail in case of tcurrent > tmax and pcurrent > pmax
   //           to do: improve range control!
@@ -385,10 +385,10 @@ void H2OLookup::GetIndex_iA( const double64& tcurrent, const double64& pcurrent,
 }
 
 
-double64 H2OLookup::DynamicViscosity( const double64& T, const double64& rho )  const
+double H2OLookup::DynamicViscosity( const double& T, const double& rho )  const
 {
-  const double64 tstar( 647.27e0 ), rhostar( 317.763e0 );
-  double64 trat, trat1, rhorat, rhorat1, n0, n;
+  const double tstar( 647.27e0 ), rhostar( 317.763e0 );
+  double trat, trat1, rhorat, rhorat1, n0, n;
   int i, j, k;
 
   trat = T / tstar;
@@ -422,9 +422,9 @@ double64 H2OLookup::DynamicViscosity( const double64& T, const double64& rho )  
 
 // the interpolation routines
 
-double64 H2OLookup::TfromP( const double64& press )
+double H2OLookup::TfromP( const double& press )
 {
-  double64 pnorm;
+  double pnorm;
   i_max = t_dim_table[0] - 1;
   i_guess = i_max / 2;
   i_min = 0;
@@ -450,7 +450,7 @@ double64 H2OLookup::TfromP( const double64& press )
 }
 
 
-double64 H2OLookup::NormalInterpolation( const double64& tcurrent, const double64& pcurrent, const int& property_index )
+double H2OLookup::NormalInterpolation( const double& tcurrent, const double& pcurrent, const int& property_index )
 {
   //d cout << "Using H2OLookup::NormalInterpolation( const int& property_index ) ...\n";
   // iA etc. must be known before this is called!
@@ -462,7 +462,7 @@ double64 H2OLookup::NormalInterpolation( const double64& tcurrent, const double6
   //   |         |
   //  -A---------B--> T
   //
-  double64 tnorm, pnorm;
+  double tnorm, pnorm;
   tnorm = (tcurrent - t_iA) / (t_iB - t_iA);
   pnorm = (pcurrent - p_iA) / (p_iD - p_iA);
   v_bottom = singlephase[iA] + tnorm*(singlephase[iB] - singlephase[iA]);
@@ -473,7 +473,7 @@ double64 H2OLookup::NormalInterpolation( const double64& tcurrent, const double6
 
 
 
-double64 H2OLookup::NearCriticalInterpolation( const double64& tcurrent, const double64& pcurrent, const int& property_index )
+double H2OLookup::NearCriticalInterpolation( const double& tcurrent, const double& pcurrent, const int& property_index )
 {
   //d cout << "using H2OLookup::NearCriticalInterpolation ...\n";
   it_A = GetTemperatureIndex( cp_h2o.Temperature() );
@@ -481,7 +481,7 @@ double64 H2OLookup::NearCriticalInterpolation( const double64& tcurrent, const d
   ip_A = GetPressureIndex( cp_h2o.Pressure() );
   ip_D = ip_A + 1;
 
-  double64 tnorm, pnorm;
+  double tnorm, pnorm;
   // topology is as follows:
   //
   //    D|_________|C    
@@ -573,10 +573,10 @@ double64 H2OLookup::NearCriticalInterpolation( const double64& tcurrent, const d
 }
 
 
-double64 H2OLookup::LiquidInterpolationNearBoilingCurve( const double64& tcurrent, const double64& pcurrent, const int& property_index )
+double H2OLookup::LiquidInterpolationNearBoilingCurve( const double& tcurrent, const double& pcurrent, const int& property_index )
 {
   //d	cout << "Using H2OLookup::LiquidInterpolationNearBoilingCurve(t,p,property_index) ...\n";
-  double64 tnorm, pnorm;
+  double tnorm, pnorm;
 
   tboil = TfromP( pcurrent );
 
@@ -701,10 +701,10 @@ double64 H2OLookup::LiquidInterpolationNearBoilingCurve( const double64& tcurren
 }
 
 
-double64 H2OLookup::VaporInterpolationNearBoilingCurve( const double64& tcurrent, const double64& pcurrent, const int& property_index )
+double H2OLookup::VaporInterpolationNearBoilingCurve( const double& tcurrent, const double& pcurrent, const int& property_index )
 {
   //d cout << "Using H2OLookup::VaporInterpolationNearBoilingCurve( const int& property_index ) ...\n";
-  double64 tnorm, pnorm;
+  double tnorm, pnorm;
 
   // a few data needed to determine topology
   tboil = TfromP( pcurrent );
@@ -853,7 +853,7 @@ void H2OLookup::BuildTable0And1()
   liqprops = newProp( 'T', 'p', 1 );
   properties = newProp( 'T', 'p', 1 );
 
-  std::vector<double64> vap_vector, liq_vector;
+  std::vector<double> vap_vector, liq_vector;
   vap_vector.resize( t_dim_table[0] * max_index );
   liq_vector.resize( t_dim_table[0] * max_index );
 
@@ -945,18 +945,18 @@ void H2OLookup::BuildTable0And1()
 void H2OLookup::BuildTable2()
 {
   Prop *properties, *liqprops, *vapprops;
-  double64 psat;
+  double psat;
 
   properties = newProp( 'T', 'p', 1 );
   liqprops = newProp( 'T', 'p', 1 );
   vapprops = newProp( 'T', 'p', 1 );
 
-  std::vector<double64> singlephase_vector;
+  std::vector<double> singlephase_vector;
   singlephase_vector.resize( t_dim_table[2] * p_dim*max_index );
 
   // new variables for region check
   // 9.9.2010 JPW
-  double64 dl, dv;
+  double dl, dv;
   int    reg;
   S_mliq MLiq;
   S_mpro MPro;
@@ -1074,13 +1074,13 @@ void H2OLookup::BuildTable2()
 
 }
 
-long H2OLookup::GetTemperatureIndex( const double64& t )
+long H2OLookup::GetTemperatureIndex( const double& t )
 {
-  double64 t_res;
+  double t_res;
   long      it;
   if ( t <    0.0e0 )
   {
-    cout << "H2OLookup::GetTemperatureIndex(const double64& t) : t < 0 (t = " << t << "), better terminate ...\n";
+    cout << "H2OLookup::GetTemperatureIndex(const double& t) : t < 0 (t = " << t << "), better terminate ...\n";
     cout << "or to continue, enter any key : ";
     char yesno;
     cin >> yesno;
@@ -1103,9 +1103,9 @@ long H2OLookup::GetTemperatureIndex( const double64& t )
   return it;
 }
 
-long H2OLookup::GetPressureIndex( const double64& p )
+long H2OLookup::GetPressureIndex( const double& p )
 {
-  double64 p_res;
+  double p_res;
   long      ip;
   /*!
   New version, August 24, 2009, Thomas Driesner

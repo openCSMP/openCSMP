@@ -59,7 +59,7 @@ void TransientPressure_Example::Specifications()
 */
 void TransientPressure_Example::Run()
 {
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
   // 1.0 Building quadratic triangular FE mesh
@@ -117,7 +117,7 @@ void TransientPressure_Example::Run()
 
   // 5.0 Calculating hydraulic conductivity from permeability using Interrelation subclass
   // ------------------------------------------------------------------------------------
-  const double64 fluid_viscosity(1.0e-03);
+  const double fluid_viscosity(1.0e-03);
   ConstantFactor<2U,divides>  conductivity( model.Database(),
                                                     "conductivity", "permeability",
                                                      fluid_viscosity );
@@ -146,8 +146,8 @@ void TransientPressure_Example::Run()
   // only write the results of the fault zone to jpg files because they will be too large otherwise
   JPEG_RegionInterface  jpg_output( model, "fault zone" );
 
-  const double64 day(86400.);  // 1 year in seconds
-  double64       maxtime(20. * day), time_increment(0.5 * day), well_pressure;
+  const double day(86400.);  // 1 year in seconds
+  double       maxtime(20. * day), time_increment(0.5 * day), well_pressure;
   size_t         timestep(1), save_counter(1), save_frequency;
   cout << "\nEnter after how many steps you would like to save the results (1 = every step) " << endl;
   cin  >> save_frequency;

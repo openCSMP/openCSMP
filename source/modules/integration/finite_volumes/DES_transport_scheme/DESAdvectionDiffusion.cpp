@@ -14,7 +14,7 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* target_region, double64 cfl_multiplier, double64 PEP_multiplier, bool tensor_k )
+DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* target_region, double cfl_multiplier, double PEP_multiplier, bool tensor_k )
   : sg_(m), 
     gref_(m.Region(target_region)),
     db_(m.Database()),
@@ -151,20 +151,20 @@ void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
          const size_t facets((*it)->Facets());
 
          // computing sector pore volumes
-         double64 phi = (*it)->Read( key_phi);
-         const double64 thickness = (*it)->Read( key_thi );
+         double phi = (*it)->Read( key_phi);
+         const double thickness = (*it)->Read( key_thi );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
          for ( size_t i=0U; i<sectors; ++i ) {
-              const double64 sector_volume = (*it)->SectorVolume(i);  
-              double64 pore_volume   = (*it)->N(i)->Read( key_fvPV );
+              const double sector_volume = (*it)->SectorVolume(i);  
+              double pore_volume   = (*it)->N(i)->Read( key_fvPV );
               pore_volume   += phi * sector_volume;
               (*it)->N(i)->Store( key_fvPV, makeScalar(PLAIN,pore_volume) );
          }
 
          // computing facet normals and areas
          for ( size_t j=0U; j<facets; ++j ) {
-              const double64 facet_area = (*it)->FacetArea(j);
+              const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
               Point<dim> nrml = (*it)->FacetNormal(j);
               VectorVariable<dim>  fnrml;
@@ -185,7 +185,7 @@ void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
              // computing facet normals and areas
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
-                  const double64 facet_area = eptr->FacetArea(j);
+                  const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
                   Point<dim> nrml = eptr->FacetNormal(j);
                   VectorVariable<dim>  fnrml;
@@ -203,7 +203,7 @@ void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
 
 //advect variable with TDS (time driven simulation)
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_TDS( double64 time_interval, size_t num_threads )
+void DESAdvectionDiffusion<dim>::AdvectVariable_TDS( double time_interval, size_t num_threads )
 {
 #if defined(_OPENMP )
     if (num_threads <= 0) {
@@ -233,7 +233,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS( double64 time_interval, siz
 
 //advect variable with DES (discrete event simulation)
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_DES( double64 model_time, size_t num_threads )
+void DESAdvectionDiffusion<dim>::AdvectVariable_DES( double model_time, size_t num_threads )
 {
 #if defined(_OPENMP )
     if (num_threads <= 0) {
@@ -306,7 +306,7 @@ void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
   assert( nd->Status( key_C0 ) != DIRICH);
 
   if(nd  != NULL && nd->Status( key_C0 ) != DIRICH) {
-    double64 flux_balance(0.), outflow(0.);
+    double flux_balance(0.), outflow(0.);
     
     VectorVariable<dim> vD, facetNrml;
     const size_t node_parent_elements(nd->Parents());
@@ -325,12 +325,12 @@ void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
             const size_t inside_node(eptr->FV()->InsideNode(iFacet));
                         
             eptr->Read( iFacet, 0U,  key_fn, facetNrml );
-            const double64  vD_n = vD.DotProduct(facetNrml);
-            const double64  facetArea = eptr->Read( iFacet, 0U, key_fA ); 
+            const double  vD_n = vD.DotProduct(facetNrml);
+            const double  facetArea = eptr->Read( iFacet, 0U, key_fA ); 
             
-            const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
+            const double sign = ( pnid == inside_node ) ? 1. : -1.;
             //compute facet fluid flux
-            double64 facet_flux = sign * vD_n * facetArea;
+            double facet_flux = sign * vD_n * facetArea;
             //update flux balance
             flux_balance += facet_flux;
             //update outflow
@@ -343,8 +343,8 @@ void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
     //CFL time increment 
     ArrayVariable array;
     nd->Read(key_time, array);
-    if (outflow < numeric_limits<double64>::epsilon())
-        array.Component(2, numeric_limits<double64>::max());
+    if (outflow < numeric_limits<double>::epsilon())
+        array.Component(2, numeric_limits<double>::max());
     else 
         array.Component(2, nd->Read( key_fvPV ) / outflow);  
     nd->Store(key_time, array);
@@ -365,7 +365,7 @@ void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
     rate_count_++;//recording
     nd->Store( key_rate, makeScalar( nd->Status(key_rate), nd->Read(key_rate) + 1 ) );
 
-    double64 accumulation(0.);
+    double accumulation(0.);
     VectorVariable<dim> vD, facetNrml;
     const size_t node_parent_elements(nd->Parents());
     
@@ -384,15 +384,15 @@ void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
             const size_t outside_node(eptr->FV()->OutsideNode(iFacet));            
             
             eptr->Read( iFacet, 0U, key_fn, facetNrml );
-            const double64  vD_n = vD.DotProduct(facetNrml);
-            const double64  facetArea = eptr->Read( iFacet, 0U, key_fA ); 
+            const double  vD_n = vD.DotProduct(facetNrml);
+            const double  facetArea = eptr->Read( iFacet, 0U, key_fA ); 
             
-            const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
+            const double sign = ( pnid == inside_node ) ? 1. : -1.;
             //compute facet fluid flux
-            double64 facet_flux = sign * vD_n * facetArea;
+            double facet_flux = sign * vD_n * facetArea;
             // finding the upstream node
             const size_t upstream_node = (vD_n < 0.) ? outside_node : inside_node;
-            const double64 C_upstream = eptr->N(upstream_node)->Read( key_C0 );
+            const double C_upstream = eptr->N(upstream_node)->Read( key_C0 );
             accumulation += facet_flux * C_upstream;  
         }
     }    
@@ -406,7 +406,7 @@ void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
 
 //schedule an event associated with a node/FV
 template<size_t dim>
-bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double64 t_end)
+bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double t_end)
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );
@@ -419,24 +419,24 @@ bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double64 t_end)
     nd->Store( key_schedule, makeScalar( nd->Status(key_schedule), nd->Read(key_schedule) + 1 ) );
     event->valid(true);
     //compute target change
-    double64 CFL = array[2];//CFL number
-    double64 PV = nd->Read(key_fvPV);//Pore volume
-    double64 ChangeRate = nd->Read( key_C1);//rate of change
-    double64 C0 = nd->Read( key_C0);//concentration
-    double64 flux_balance = nd->Read( key_FB);//flux balance
+    double CFL = array[2];//CFL number
+    double PV = nd->Read(key_fvPV);//Pore volume
+    double ChangeRate = nd->Read( key_C1);//rate of change
+    double C0 = nd->Read( key_C0);//concentration
+    double flux_balance = nd->Read( key_FB);//flux balance
 
-    double64 dC_CFL = -CFL*CFL_multiplier_/PV*(ChangeRate-C0*flux_balance);//targe change
+    double dC_CFL = -CFL*CFL_multiplier_/PV*(ChangeRate-C0*flux_balance);//targe change
 
-    if (fabs(dC_CFL) < numeric_limits<double64>::epsilon()){//idle node/FV
-        array.Component(5, numeric_limits<double64>::epsilon());//target change of solution
-        array.Component(3, numeric_limits<double64>::max());//target time increment          
+    if (fabs(dC_CFL) < numeric_limits<double>::epsilon()){//idle node/FV
+        array.Component(5, numeric_limits<double>::epsilon());//target change of solution
+        array.Component(3, numeric_limits<double>::max());//target time increment          
     } else {
         array.Component(5, dC_CFL);//target change of solution
         array.Component(3, CFL_multiplier_*CFL);//target time increment      
     };
 
-    double64 t_current = array[0];//current time stamp
-    double64 dt_target = array[3];//target time increment
+    double t_current = array[0];//current time stamp
+    double dt_target = array[3];//target time increment
     if ((dt_target + t_current) >= t_end) {
         event->t_schedule(t_end);
         array.Component(1, t_end);//schedule time stamp
@@ -455,7 +455,7 @@ bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double64 t_end)
 
 //update solution and check it against the specified range (with DES)
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double64 t_clock)
+void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double t_clock)
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );
@@ -468,20 +468,20 @@ void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     nd->Read(key_time, array);
 
     // 1. starting with the sum of facet flux-concentration products stored in C1
-    double64 ChangeRate = nd->Read( key_C1); 
-    double64 solution = nd->Read( key_C0);//concentration
+    double ChangeRate = nd->Read( key_C1); 
+    double solution = nd->Read( key_C0);//concentration
     // 2. correcting this sum for div vD using 'flux balance'   
     ChangeRate -= solution * nd->Read( key_FB ); 
     // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
-    double64 t_current = array[0]; //current time stamp
-    double64 new_solution = solution - ((t_clock - t_current)/nd->Read(key_fvPV)) * ChangeRate;
+    double t_current = array[0]; //current time stamp
+    double new_solution = solution - ((t_clock - t_current)/nd->Read(key_fvPV)) * ChangeRate;
     // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
     // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
-    const double64 source(nd->Read(key_NQC)); //kg/m3/s
+    const double source(nd->Read(key_NQC)); //kg/m3/s
     // new concentration
     new_solution += source * (t_clock - t_current);
 
-    double64 C_last = nd->Read(key_C0);//last concentration
+    double C_last = nd->Read(key_C0);//last concentration
         
     if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(key_C0, makeScalar( status, new_solution ));//store solution value to key_C0
     else {
@@ -490,8 +490,8 @@ void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double64 t_clock)
         else if ( new_solution < lower_limit_ ) nd->Store( key_C0, makeScalar( status, lower_limit_ ) );
     }
         
-    double64 C_current = nd->Read(key_C0);//current concentration
-    double64 dC_cumulative = array[4];
+    double C_current = nd->Read(key_C0);//current concentration
+    double dC_cumulative = array[4];
     array.Component(4, dC_cumulative + (C_current-C_last));//update cumulative change
         
     array.Component(0, t_clock); //current time stamp
@@ -504,7 +504,7 @@ void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double64 t_clock)
 
 //update solution and check it against the specified range (with TDS)
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
+void DESAdvectionDiffusion<dim>::Update_TDS(Event<dim>* event, double delta_t)
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );    
@@ -515,15 +515,15 @@ void DESAdvectionDiffusion<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
     const VARIABLE_FLAG status(nd->Status( key_C0 ));
     
     // 1. starting with the sum of facet flux-concentration products stored in C1
-    double64 ChangeRate = nd->Read(key_C1);   
-    double64 solution = nd->Read(key_C0);//concentration
+    double ChangeRate = nd->Read(key_C1);   
+    double solution = nd->Read(key_C0);//concentration
     // 2. correcting this sum for div vD using 'flux balance'   
     ChangeRate -= solution * nd->Read( key_FB ); 
     // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
-    double64 new_solution = solution - (delta_t/nd->Read(key_fvPV)) * ChangeRate;
+    double new_solution = solution - (delta_t/nd->Read(key_fvPV)) * ChangeRate;
     // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
     // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
-    const double64 source(nd->Read( key_NQC)); //kg/m3/s
+    const double source(nd->Read( key_NQC)); //kg/m3/s
     // new concentration
     new_solution += source * delta_t;
  
@@ -542,7 +542,7 @@ void DESAdvectionDiffusion<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
 
 //Synchronize neighbor nodes/FVs
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double64 t_clock, double64& t_remove )
+void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, double& t_remove )
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL ); 
@@ -567,11 +567,11 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double64 t_clock
                     Update_DES(neighbor_event,t_clock);
                     ArrayVariable neighbor_array;
                     neighbor_node->Read(key_time, neighbor_array); 
-                    double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
-                    double64 dC_target = neighbor_array[5];//target change of solution
+                    double dC_cumulative = neighbor_array[4];//cumulative change of solution
+                    double dC_target = neighbor_array[5];//target change of solution
                     if (fabs(dC_cumulative) >= fabs(dC_target)) {
                         #if defined(_OPENMP)
-                        double64 t_begin = omp_get_wtime();
+                        double t_begin = omp_get_wtime();
                         #else
                         clock_t t_begin = clock();
                         #endif
@@ -598,12 +598,12 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double64 t_clock
 
 //advect variable with TDS (time-driven simulation), serial mode
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double64 time_interval )
+void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval )
 {
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial "<<endl;
 
-    double64 begin=clock();
-    double64 time_increment(time_interval); 
+    double begin=clock();
+    double time_increment(time_interval); 
     
     clock_t T_begin= clock();
     const typename vector<Event<dim>*>::iterator stack_end(PEPList.end());
@@ -612,18 +612,18 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double64 time_interv
         ComputeRateofChange((*it));  
         ArrayVariable array;
         (*it)->getNode()->Read(key_time, array);
-        double64 dt_CFL = array[2];//CFL time increment
+        double dt_CFL = array[2];//CFL time increment
         time_increment=min(time_increment, dt_CFL*CFL_multiplier_);
     }
     T_RateOfChange_ += clock() - T_begin; 
 
-    const double64 one(1.);
+    const double one(1.);
     cout <<"\n\tTime interval         = "<< time_interval;
     cout <<"\n\tScaled time increment = "<< time_increment;
     cout <<"\n\tSolution steps needed = "<< max(floor(time_interval/time_increment),one);
 
     size_t   substep(1);
-    double64 time(0.);
+    double time(0.);
     
     while (time < time_interval)
     {
@@ -637,13 +637,13 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double64 time_interv
         T_Update_ += clock() - T_begin;
         
         T_begin= clock();
-        double64 new_time_increment(time_interval); 
+        double new_time_increment(time_interval); 
         for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
         { 
             ComputeRateofChange((*it));
             ArrayVariable array2;
             (*it)->getNode()->Read(key_time, array2);
-            double64 dt_CFL = array2[2];//CFL time increment
+            double dt_CFL = array2[2];//CFL time increment
             new_time_increment=min(new_time_increment, dt_CFL*CFL_multiplier_);
         };
         T_RateOfChange_ += clock() - T_begin; 
@@ -657,13 +657,13 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double64 time_interv
     cout <<"Finish DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
     cout <<"update_count_ = "<<update_count_<<endl; 
-    cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Update_  = "<< T_Update_  /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Synchronize_ = "<< T_Synchronize_/double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Schedule_ = "<< T_Schedule_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Update_  = "<< T_Update_  /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Synchronize_ = "<< T_Synchronize_/double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double(CLOCKS_PER_SEC) << endl;
 }
 
 
@@ -671,15 +671,15 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double64 time_interv
 #if defined(_OPENMP)
 //advect variable with TDS (time-driven simulation), parallel mode
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double64 time_interval )
+void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interval )
 {
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel "<<endl;
     cout<<"Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
 
-    double64 begin=omp_get_wtime();
-    double64 time_increment(time_interval); 
+    double begin=omp_get_wtime();
+    double time_increment(time_interval); 
     
-    double64 T_begin;
+    double T_begin;
     T_begin = omp_get_wtime();
     
     size_t PEPList_size = PEPList.size();
@@ -699,19 +699,19 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double64 time_inte
         Event<dim>* event = *it;     
         ArrayVariable array;
         (*it)->getNode()->Read(key_time, array);
-        double64 dt_CFL = array[2];//CFL time increment
+        double dt_CFL = array[2];//CFL time increment
         time_increment=min(time_increment, dt_CFL*CFL_multiplier_);
     }
     
     T_RateOfChange_ += omp_get_wtime() - T_begin;
 
-    const double64 one(1.);
+    const double one(1.);
     cout <<"\n\tTime interval         = "<< time_interval;
     cout <<"\n\tScaled time increment = "<< time_increment;
     cout <<"\n\tSolution steps needed = "<< max(floor(time_interval/time_increment),one);
 
     size_t   substep(1);
-    double64 time(0.);
+    double time(0.);
     
     while (time < time_interval)
     {
@@ -741,7 +741,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double64 time_inte
             auto it = PEPList.begin()+i;
             ArrayVariable array2;
             (*it)->getNode()->Read(key_time, array2);
-            double64 dt_CFL = array2[2];//CFL time increment
+            double dt_CFL = array2[2];//CFL time increment
             time_increment=min(time_increment, dt_CFL*CFL_multiplier_);
         };
 
@@ -772,11 +772,11 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double64 time_inte
 
 //advect variable with DES (discrete event simulation), serial mode
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double64 model_time )
+void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
 {
-    double64 begin=clock();
+    double begin=clock();
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial "<<endl;
-    double64 time(0.);
+    double time(0.);
     bool Finished = false;
     //uncomment for recording events at each time interval
     /*
@@ -803,7 +803,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double64 model_time 
                 T_Schedule_ += clock() - T_begin; 
                 if (isactive) {
                     T_begin= clock();
-                    double64 scheduled_time = event->t_schedule();
+                    double scheduled_time = event->t_schedule();
                     size_t index = event->getNode()->Read(key_EventIndex);
                     Heap_Node* heap_node = new Heap_Node(scheduled_time,index);
                     EventHeap.insert(heap_node);
@@ -831,7 +831,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double64 model_time 
 
         PEPList.clear();
     
-        double64 dt_PEP=numeric_limits<double64>::max();
+        double dt_PEP=numeric_limits<double>::max();
         size_t count = 0U;
         while (!EventHeap.empty())
         {
@@ -850,9 +850,9 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double64 model_time 
             count++;            
             ArrayVariable array;
             top_event->getNode()->Read(key_time, array);
-            double64 dt_target = array[3];//target time stamp
+            double dt_target = array[3];//target time stamp
             dt_PEP = min(dt_PEP, PEP_multiplier_*dt_target);
-            double64 t_schedule = array[1];//scheduled time stamp
+            double t_schedule = array[1];//scheduled time stamp
             if (t_schedule > (time+dt_PEP)) break;            
             if (top_event->inPEPStack() == false) {
                 PEPList.push_back(top_event);
@@ -868,7 +868,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double64 model_time 
             T_RemoveFromHeap_ += clock() - T_begin;
             
             T_begin= clock();
-            double64 t_remove(0.);    
+            double t_remove(0.);    
             Synchronize(top_event,time,t_remove);
             T_RemoveFromHeap_ += t_remove;
             T_Synchronize_ += clock() - T_begin - t_remove;
@@ -881,13 +881,13 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double64 model_time 
     cout<<"Finish DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
     cout <<"update_count_ = "<<update_count_<<endl; 
-    cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Update_  = "<< T_Update_  /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Synchronize_ = "<< T_Synchronize_/double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Schedule_ = "<< T_Schedule_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Update_  = "<< T_Update_  /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Synchronize_ = "<< T_Synchronize_/double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double(CLOCKS_PER_SEC) << endl;
 }   
 
 
@@ -895,12 +895,12 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double64 model_time 
 #if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), parallel mode
 template<size_t dim>
-void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double64 model_time, size_t num_threads)
+void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time, size_t num_threads)
 {
-    double64 begin=omp_get_wtime();
+    double begin=omp_get_wtime();
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel "<<endl;
     cout << "Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
-    double64 time(0.);
+    double time(0.);
     bool Finished = false;
     //uncomment for recording events at each time interval
     /*
@@ -913,7 +913,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double64 model_tim
 
     while (!Finished)
     {   
-        double64 T_begin;
+        double T_begin;
         T_begin = omp_get_wtime();
                 
         size_t PEPList_size = PEPList.size();
@@ -944,7 +944,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double64 model_tim
         {
             auto it = tempList.begin()+i;
             Event<dim>* event = *it;                 
-            double64 scheduled_time = event->t_schedule();
+            double scheduled_time = event->t_schedule();
             size_t index = event->getNode()->Read(key_EventIndex);
             Heap_Node* heap_node = new Heap_Node(scheduled_time,index);                    
             EventHeap.insert(heap_node);
@@ -970,7 +970,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double64 model_tim
 
         PEPList.clear();
     
-        double64 dt_PEP=numeric_limits<double64>::max();
+        double dt_PEP=numeric_limits<double>::max();
         size_t count = 0U;
         while (!EventHeap.empty())
         {           
@@ -989,9 +989,9 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double64 model_tim
             count++;            
             ArrayVariable array;
             top_event->getNode()->Read(key_time, array);
-            double64 dt_target = array[3];//target time stamp
+            double dt_target = array[3];//target time stamp
             dt_PEP = min(dt_PEP, PEP_multiplier_*dt_target);
-            double64 t_schedule = array[1];//scheduled time stamp
+            double t_schedule = array[1];//scheduled time stamp
             if (t_schedule > (time+dt_PEP)) break;            
             if (top_event->inPEPStack() == false) {
                 PEPList.push_back(top_event);
@@ -1007,7 +1007,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double64 model_tim
             T_RemoveFromHeap_ += omp_get_wtime() - T_begin;
             
             T_begin= omp_get_wtime();
-            double64 t_remove(0.);    
+            double t_remove(0.);    
             Synchronize(top_event,time,t_remove);
             T_RemoveFromHeap_ += t_remove;
             T_Synchronize_ += omp_get_wtime() - T_begin - t_remove;

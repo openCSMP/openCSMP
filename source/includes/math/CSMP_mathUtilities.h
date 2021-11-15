@@ -15,7 +15,7 @@ namespace csmp {
 @{
 */
 
-const double64 PI( 3.14159265358979324 );
+const double PI( 3.14159265358979324 );
 
 /**
 @}
@@ -27,8 +27,8 @@ const double64 PI( 3.14159265358979324 );
 */
 
 /// all trigonomic functions in C++ take arguments in radians
-inline double64 degreesToRadians( double64 deg ) { return deg * PI/180.; }
-inline double64 radiansToDegrees( double64 rad ) { return rad * 180./PI; }
+inline double degreesToRadians( double deg ) { return deg * PI/180.; }
+inline double radiansToDegrees( double rad ) { return rad * 180./PI; }
 
 
 /**
@@ -38,7 +38,7 @@ inline double64 radiansToDegrees( double64 rad ) { return rad * 180./PI; }
     @param scale 10^decimal places, i.e. 1e-5 to get 5 decimal places
     
 */
-inline double64 quantiseToScale(double64 x, double64 scale)
+inline double quantiseToScale(double x, double scale)
 {
     double ipart;
     const double frac = std::modf(x, &ipart);
@@ -59,26 +59,26 @@ inline T square( T val ) {
 }
 
 /// Reciprocal square root function
-double64
-rsqrt( double64 val );
+double
+rsqrt( double val );
 
 /// for conversion of numbers to strings use to_string() function
 
 /// erf() and erfc() approximated with Chebyshev polynomials
-double64  erf_Chebyshev( double64 );
-double64  erfc_Chebyshev( double64 );
+double  erf_Chebyshev( double );
+double  erfc_Chebyshev( double );
 
 /// L1 norm
-double64 vector_norm1( std::vector<double64>& x, std::vector<double64>& scale );
+double vector_norm1( std::vector<double>& x, std::vector<double>& scale );
 
 /// L2 norm
-double64 vector_norm2( std::vector<double64>& x, std::vector<double64>& scale );
+double vector_norm2( std::vector<double>& x, std::vector<double>& scale );
 
 /// L-infinity norm
-double64 vector_norm_inf( std::vector<double64>& x, std::vector<double64>& scale );
+double vector_norm_inf( std::vector<double>& x, std::vector<double>& scale );
 
 /// randomly perturbs the values stored in the supplied floating-point vector
-void     vector_randomize( std::vector<double64>& x, double64 scale_fac=1. );
+void     vector_randomize( std::vector<double>& x, double scale_fac=1. );
 
 /// averaging the floating-point values of scalar, vector and tensor variables in CSMP
 template<typename Var> void average( const std::vector<Var>&, Var& );
@@ -91,27 +91,27 @@ void  dN_To3DOF( size_t nodes, DenseMatrix<DM_MIN>& DN );
 
 
 /// auxiliary functions for spline interpolation
-double64 splineValue( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
-double64 splineDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
-double64 splineSecondDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
+double splineValue( double x, double x1, double x2, double y1, double y2, double k1, double k2);
+double splineDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2);
+double splineSecondDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2);
   
 
 // ROOT FINDING
 
 /// finding root of function f(x) by Secant method within the x range [xmin,xmax]
-double64 secant_method( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance);
+double secant_method( double xmin, double xmax, double (*function)( double ), double tolerance);
 
 /// in the range [xmin,xmax], finds the intersection of the nonlinear function (flinear) with a linear function (fnonlinear) with the given x-axis intercept
-double64 secant_line( double64 x_intercept, double64 xmin, double64 xmax, double64 (*flinear)( double64 ), double64 (*fnonlinear)( double64 ), double64 tolerance );
+double secant_line( double x_intercept, double xmin, double xmax, double (*flinear)( double ), double (*fnonlinear)( double ), double tolerance );
   
 /// finding the x value, in the range [xmin,xmax],  where function f(x) is maximum by using golden-section search
-double64 maximum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance);
+double maximum_of_function( double xmin, double xmax, double (*function)( double ), double tolerance);
 
 /// finding the x value, in the range [xmin,xmax],  where function f(x) is minimum by using golden-section search
-double64 minimum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance);
+double minimum_of_function( double xmin, double xmax, double (*function)( double ), double tolerance);
 
 /// finding the x value, in the range [xmin,xmax],  where function the "df(x)/dx=(f(x)-f(x1))/(x-x1)".. this line is the secant and tangent to f(x) at that point
-double64 g( double64 x, double64 x1, double64 (*function)( double64 ), double64 (*dfunction)( double64 ) );
+double g( double x, double x1, double (*function)( double ), double (*dfunction)( double ) );
   
 
 /**
@@ -155,7 +155,7 @@ T vector_product( const std::vector<T>& a,
 
 /// linearly interpolate between two values
 template<typename T>
-T lerp(const double64 t, T x0, T x1) {
+T lerp(const double t, T x0, T x1) {
     return (1.0-t) * x0 + t * x1;
 }
 

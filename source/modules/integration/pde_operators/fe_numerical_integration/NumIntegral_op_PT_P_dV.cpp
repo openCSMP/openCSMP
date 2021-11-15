@@ -46,7 +46,7 @@ void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( CELL& e )
 
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
-    double64 volume = e.Volume();
+    double volume = e.Volume();
     size_t  k(0);
 
     if ( MathOperatorRHS<dim>::LumpedFormulation() )

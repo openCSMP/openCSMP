@@ -38,10 +38,10 @@ template<size_t dim, template<size_t> class USER>
 class Integrator {
   public:
     /// m=n since solution matrix is square, limits should include permitted tolerances
-    Integrator( size_t m_x_n, double64 lower_limit, double64 upper_limit );
+    Integrator( size_t m_x_n, double lower_limit, double upper_limit );
 
     /// uses IntegralEquation and Accumulator to build system and Solver to solve it
-    void IntegrateOver( double64 time_increment );
+    void IntegrateOver( double time_increment );
    
     /// transform solver settings from initial use to reuse of settings and previous solution 
     void ReconfigureSolverForRepeatedUse();
@@ -53,7 +53,7 @@ class Integrator {
     void SolveLinearAlgebraicSystem();
     
     /// transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error
-    double64 VerifyAndAssignResults( bool show_range, bool do_range_check );
+    double VerifyAndAssignResults( bool show_range, bool do_range_check );
 
   private:
     /// shorthand for accessing the class that this is a policy of
@@ -62,7 +62,7 @@ class Integrator {
     
     SAMG_Settings   settings_;
     SAMG_Solver     solver_;
-    const double64  upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
+    const double  upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
 };
 
 } // end csmp

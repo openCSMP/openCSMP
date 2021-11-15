@@ -18,9 +18,9 @@ class LookUpStorage {
     void Initialize( fT x_dim, fT y_dim, fT xres, fT yres );
     
     LookUpStorage& operator=( const LookUpStorage& g );
-    fT&   operator()( int32 row, int32 col );
-    int32 Rows() const;
-    int32 Columns() const;
+    fT&   operator()( int32_t row, int32_t col );
+    int32_t Rows() const;
+    int32_t Columns() const;
 
     // setting grid values
     bool  BinaryOut( const char* bin_name ) const;
@@ -30,20 +30,20 @@ class LookUpStorage {
     std::vector<fT> grid;
     fT              xresolution, yresolution;
     fT              x_max, y_max;
-    int32           size_x, size_y, rowlength;
+    int32_t           size_x, size_y, rowlength;
 
  };
 
 template<typename fT>
-inline fT&  LookUpStorage<fT>::operator()( int32 row, int32 col ) 
+inline fT&  LookUpStorage<fT>::operator()( int32_t row, int32_t col ) 
   {
       return grid[ static_cast<size_t>(row*rowlength + col) ];
   }
 template<typename fT>
-inline int32   LookUpStorage<fT>::Rows() const { return size_y-1; }
+inline int32_t   LookUpStorage<fT>::Rows() const { return size_y-1; }
     
 template<typename fT>
-inline int32   LookUpStorage<fT>::Columns() const { return size_x-1; }
+inline int32_t   LookUpStorage<fT>::Columns() const { return size_x-1; }
 
 
 

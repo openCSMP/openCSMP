@@ -35,9 +35,9 @@ class Triangulator {
   private:
      size_t m_mtrx, n_mtrx;
      size_t n_vertices, n_elements;
-     double64 elperm, elperm2;
+     double elperm, elperm2;
 
-     short TestOutline( unsigned int m, unsigned int n, const Matrix& perm, double64& el_perm );
+     short TestOutline( unsigned int m, unsigned int n, const Matrix& perm, double& el_perm );
      unsigned long MapVertex( unsigned int m, unsigned int n );
 };  
 

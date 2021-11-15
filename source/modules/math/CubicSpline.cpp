@@ -6,46 +6,46 @@ using namespace std;
 
 namespace csmp {
 
-double64 CubicSpline::Value( double64 x ) const
+double CubicSpline::Value( double x ) const
  {
     return splint( xa_, ya_, y2a_, x );
  } 
 
 /// two point derivative about x(x-1% of range,x+1% of range
-double64 CubicSpline::Derivative( double64 x ) const
+double CubicSpline::Derivative( double x ) const
  {
     return (Value(x+x_range_/100.)-Value(x-x_range_/100.)) / (x_range_/50.);
  } 
  
 
-double64 CubicSpline::MaxDerivative() const
+double CubicSpline::MaxDerivative() const
  {
     return (*std::max_element( y2a_.begin(), y2a_.end() ));
  } 
 
 
-double64 CubicSpline::Range_x() const
+double CubicSpline::Range_x() const
  {
     return x_range_;
  } 
 
 
-double64 CubicSpline::Range_fx() const
+double CubicSpline::Range_fx() const
  {
     return y_range_;
  } 
  
 
 // function prototypes
-void spline( const std::vector<double64>& x, // x values    (0..n-1) 
-             const std::vector<double64>& y, // f(x) values (0..n-1)
-             double64 yp1, double64 ypn,    // slope at beginning and end
-	           std::vector<double64>& y2 );    // f''(x) at above points
+void spline( const std::vector<double>& x, // x values    (0..n-1) 
+             const std::vector<double>& y, // f(x) values (0..n-1)
+             double yp1, double ypn,    // slope at beginning and end
+	           std::vector<double>& y2 );    // f''(x) at above points
 
 
 CubicSpline::CubicSpline()
- : x_range_(std::numeric_limits<double64>::quiet_NaN()),
-   y_range_(std::numeric_limits<double64>::quiet_NaN())
+ : x_range_(std::numeric_limits<double>::quiet_NaN()),
+   y_range_(std::numeric_limits<double>::quiet_NaN())
  {
  }
 
@@ -108,12 +108,12 @@ void CubicSpline::Initialize( const char* datafile )
     // blankline
     ifs.getline( cstr, 256U );
     // number of value pairs
-    uint32 value_pairs, n(0U);
+    uint32_t value_pairs, n(0U);
     ifs >> value_pairs;
     xa_.reserve( value_pairs );
     ya_.reserve( value_pairs );
     y2a_.resize( value_pairs );
-    double64 x, y, y1, yn;
+    double x, y, y1, yn;
     // reading the function derivatives at the origin and the endpoint
     ifs >> y1 >> yn;    
     // reading the value pairs
@@ -142,8 +142,8 @@ void CubicSpline::Initialize( const char* datafile )
  
  } // end Initialize
 
-void  CubicSpline::Initialize( const std::vector<double64>& xa, const std::vector<double64>& ya,
-                               const double64 y1, const double64 yn )
+void  CubicSpline::Initialize( const std::vector<double>& xa, const std::vector<double>& ya,
+                               const double y1, const double yn )
 {
 
   if ( !xa_.empty() ) xa_.erase( xa_.begin(), xa_.end() );
@@ -175,10 +175,10 @@ void CubicSpline::Out() const
  {
     cout <<"\nCubicSpline: internal data: ";
     cout <<"\n x, f(x) and f'(x) at "<< xa_.size() <<" user defined points.";
-    vector<double64>::const_iterator  it1(ya_.begin());
-    vector<double64>::const_iterator  it2(y2a_.begin());
+    vector<double>::const_iterator  it1(ya_.begin());
+    vector<double>::const_iterator  it2(y2a_.begin());
     
-    for ( vector<double64>::const_iterator
+    for ( vector<double>::const_iterator
           it=xa_.begin(); it!=xa_.end(); it++, it1++, it2++ )
       cout <<"\n"<< *it <<" "<< *it1 <<" "<< *it2;
     cout << endl;
@@ -188,19 +188,19 @@ void CubicSpline::Out() const
 
 
 /// creates cubic spline from input points
-void spline( const std::vector<double64>& x, // x values    (0..n-1) 
-             const std::vector<double64>& y, // f(x) values (0..n-1)
-             double64 yp1, double64 ypn,    // slope at beginning and end
-	           std::vector<double64>& y2 )     // f''(x) at above points
+void spline( const std::vector<double>& x, // x values    (0..n-1) 
+             const std::vector<double>& y, // f(x) values (0..n-1)
+             double yp1, double ypn,    // slope at beginning and end
+	           std::vector<double>& y2 )     // f''(x) at above points
 {
   assert( x.size() == y.size() );
   assert( x.size() >= 3U ); 
   y2.resize( x.size() );
 
-	double64 p, qn, sig, un;
+	double p, qn, sig, un;
 
 	const size_t n(y2.size());
-	std::vector<double64>  u(n-1);
+	std::vector<double>  u(n-1);
 	
 	if (yp1 > 0.99e30) y2[0]=u[0]=0.;
 	else {
@@ -208,7 +208,7 @@ void spline( const std::vector<double64>& x, // x values    (0..n-1)
   		u[0]  = (3./(x[1]-x[0]))*((y[1]-y[0])/(x[1]-x[0])-yp1);
   	}
 
-	for ( uint32 i=1;i<n-1;i++) {
+	for ( uint32_t i=1;i<n-1;i++) {
   		 sig=(x[i]-x[i-1])/(x[i+1]-x[i-1]);
   		 p=sig*y2[i-1]+2.;
   		 y2[i]=(sig-1.)/p;
@@ -225,9 +225,9 @@ void spline( const std::vector<double64>& x, // x values    (0..n-1)
 	y2[n-1]=(un-qn*u[n-2])/(qn*y2[n-2]+1.);
 	
 	// is this legitimate with an unsigned int?
-	for ( int32 k=static_cast<int32>(n-2U); k>=0; k-- )
-		y2[static_cast<uint32>(k)] = 
-		  y2[static_cast<uint32>(k)] * y2[static_cast<uint32>(k+1)] + u[static_cast<uint32>(k)];
+	for ( int32_t k=static_cast<int32_t>(n-2U); k>=0; k-- )
+		y2[static_cast<uint32_t>(k)] = 
+		  y2[static_cast<uint32_t>(k)] * y2[static_cast<uint32_t>(k+1)] + u[static_cast<uint32_t>(k)];
 		
 } // end spline
 
@@ -236,10 +236,10 @@ void spline( const std::vector<double64>& x, // x values    (0..n-1)
 
 
 /// spline based interpolation, NumRecipes Chapter 3, p.118 modified
-double64 splint( const vector<double64>& xa, 
-                  const vector<double64>& ya, 
-                  const vector<double64>& y2a, 
-                  double64 x )
+double splint( const vector<double>& xa, 
+                  const vector<double>& ya, 
+                  const vector<double>& y2a, 
+                  double x )
 {
   assert( xa.size() >= 3U );
 
@@ -252,18 +252,18 @@ double64 splint( const vector<double64>& xa,
   		else klo=k;
   	}
   	
-	const double64 h(xa[khi] - xa[klo]);
+	const double h(xa[khi] - xa[klo]);
 	
-	if ( fabs(h) < numeric_limits<double64>::epsilon() ) {
+	if ( fabs(h) < numeric_limits<double>::epsilon() ) {
 	     string err("\nsplint: Bad xa input to routine splint: ");
 	     cout << err << x <<" ("<< h <<"), xa:"<< std::endl;
-	     for ( uint32 i=0U; i<xa.size(); i++ ) cout <<" "<< xa[i];
+	     for ( uint32_t i=0U; i<xa.size(); i++ ) cout <<" "<< xa[i];
 	     cout << endl;
 	     throw range_error( err.c_str() );
 	  }
 	  
-	double64 a((xa[khi]-x) / h);
-	double64 b((x-xa[klo]) / h);
+	double a((xa[khi]-x) / h);
+	double b((x-xa[klo]) / h);
 	
   return a*ya[klo]+b*ya[khi]+((a*a*a-a)*y2a[klo]
 	     	 +(b*b*b-b)*y2a[khi])*(h*h)/6.;

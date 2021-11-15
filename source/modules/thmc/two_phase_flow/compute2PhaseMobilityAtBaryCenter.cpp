@@ -6,7 +6,7 @@
 using namespace std;
 namespace csmp
 {
-template<size_t dim,template<size_t > class SIMPLEX >
+template<size_t dim,template<size_t> class SIMPLEX >
 void compute2PhaseMobilityAtBaryCenter( ModelSubDomain<dim,SIMPLEX>& sg,
                                         TwoPhaseModel<dim>& relperm)
 {

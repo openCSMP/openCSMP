@@ -18,7 +18,7 @@ class JPEG_Interface {
                            
     bool OutputDataToJPG ( Model<2U>&,
                            const char* file_name, const char* var_name, long timestep, 
-                           double64 data_min, double64 data_max, bool gray=false, 
+                           double data_min, double data_max, bool gray=false, 
                            bool sqrt_of_value=false );  
   
   private:

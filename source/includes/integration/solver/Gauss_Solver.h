@@ -17,13 +17,13 @@ public:
     virtual ~Gauss_Solver();
 protected:
     virtual void SolveWithMeschach(csmp::SparseMatrix& A,
-                                   std::vector<double64>& b,
-                                   std::vector<double64>& x,
-                                   double64 solver_tolerance);
+                                   std::vector<double>& b,
+                                   std::vector<double>& x,
+                                   double solver_tolerance);
 
 private:
     Gauss_SolverSettings settings;
-    double64 pivot_factor;
+    double pivot_factor;
 };
 
 } // end namespace csmp

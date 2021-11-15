@@ -110,7 +110,7 @@ void Corey<dim>::Initialize( const Element<dim>& e )
 
     if( TwoPhaseModel<dim>::tensor_permeability_){
         e.Read( TwoPhaseModel<dim>::perm_key_, TwoPhaseModel<dim>::K_);
-        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double64>(dim);
+        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double>(dim);
     }else{
         TwoPhaseModel<dim>::k_ = e.Read( TwoPhaseModel<dim>::perm_key_ );
         TwoPhaseModel<dim>::K_.operator=( VectorVariable<dim>(PLAIN, TwoPhaseModel<dim>::k_ ) );
@@ -139,10 +139,10 @@ void Corey<dim>::Initialize( const Element<dim>& e )
 
 
 template<size_t dim>
-double64 Corey<dim>::krw_Phase() const
+double Corey<dim>::krw_Phase() const
  { 
  
-    if ( TwoPhaseModel<dim>::seff_ <= 0. ) return static_cast<double64>(0.);
+    if ( TwoPhaseModel<dim>::seff_ <= 0. ) return static_cast<double>(0.);
     if ( TwoPhaseModel<dim>::seff_ >= 1. ) return krw_;
 
     return krw_ * std::pow( TwoPhaseModel<dim>::seff_, expw_ );
@@ -151,33 +151,33 @@ double64 Corey<dim>::krw_Phase() const
 
 
 template<size_t dim>
-double64 Corey<dim>::krn_Phase() const
+double Corey<dim>::krn_Phase() const
  { 
     if ( TwoPhaseModel<dim>::seff_ <= 0. ) return krn_;
-    if ( TwoPhaseModel<dim>::seff_ >= 1. ) return static_cast<double64>(0.);
+    if ( TwoPhaseModel<dim>::seff_ >= 1. ) return static_cast<double>(0.);
    	   	
     return krn_ * std::pow( 1.0 - TwoPhaseModel<dim>::seff_, expn_ ) ;
  }
 
 template<size_t dim>
-double64 Corey<dim>::dkrwds_Phase() const
+double Corey<dim>::dkrwds_Phase() const
  {
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
     return krw_ * expw_* std::pow( TwoPhaseModel<dim>::seff_, expw_ - 1.0)*seff_mult;
  }
 
 
 
 template<size_t dim>
-double64 Corey<dim>::dkrnds_Phase() const
+double Corey<dim>::dkrnds_Phase() const
  {
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
     return -krn_ * expn_ * std::pow( 1.0 - TwoPhaseModel<dim>::seff_ , expn_ -1.0 )*seff_mult ;
  }
 
 /// pc covers the full saturation range, pc is capped based on maximum dpcds
 template<size_t dim>
-double64 Corey<dim>::pc_Phase( ) const
+double Corey<dim>::pc_Phase( ) const
 {
     // linear relperm model
     if ( lambda_ == 0. ){
@@ -195,17 +195,17 @@ double64 Corey<dim>::pc_Phase( ) const
    if ( entry_pressure_ == 0. )
        return 0.;
 
-   const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+   const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
    // compute maximum capillary pressure based on maximum dpcds of MAXIMUM_DPCDS
    // applying the limit on capillary pressure
-   double64 pcmax = entry_pressure_ * pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
+   double pcmax = entry_pressure_ * pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
                                            ( -1. / ( 1. + lambda_ ) ) );
 
    if ( TwoPhaseModel<dim>::seff_ <= std::pow( pcmax / entry_pressure_, -lambda_ ) )
    {
       // compute minimun effective saturation for which dpcds = MAXIMUM_DPCDS
-       const double64 Se_min =  pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
+       const double Se_min =  pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
                                 ( lambda_ / ( 1. + lambda_ ) ) );
        // assuming linear changes in capillary pressure below Se_min with slope of MAXIMUM_DPCDS
        return pcmax + ( Se_min - TwoPhaseModel<dim>::seff_ ) * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult;
@@ -217,7 +217,7 @@ double64 Corey<dim>::pc_Phase( ) const
 
 /// dpcdS covers the full saturation range, dpcds is capped based on maximum dpcds
 template<size_t dim>
-double64 Corey<dim>::dpcds_Phase( ) const
+double Corey<dim>::dpcds_Phase( ) const
 {
 
     // linear relperm model
@@ -226,7 +226,7 @@ double64 Corey<dim>::dpcds_Phase( ) const
          if ( ( TwoPhaseModel<dim>::seff_ < 0. ) || ( TwoPhaseModel<dim>::seff_ > 1. ) )
              return 0.;
 
-         const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+         const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
          return -( pc_max_ - entry_pressure_ )*seff_mult;
 
@@ -236,10 +236,10 @@ double64 Corey<dim>::dpcds_Phase( ) const
     if ( entry_pressure_ == 0. )
        return 0.;
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // compute minimun effective saturation for which dpcds = MAXIMUM_DPCDS
-    const double64 Se_min = pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
+    const double Se_min = pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
                             ( lambda_ / ( 1. + lambda_ ) ) );
 
     // below Se_min, capillary pressure's derivative is constant and equal to MAXIMUM_DPCDS
@@ -253,7 +253,7 @@ double64 Corey<dim>::dpcds_Phase( ) const
 }
     
 template<size_t dim>
-double64 Corey<dim>::Sw_Phase( double64 pc ) const
+double Corey<dim>::Sw_Phase( double pc ) const
 {
 
      // linear relperm model
@@ -281,17 +281,17 @@ double64 Corey<dim>::Sw_Phase( double64 pc ) const
     if ( entry_pressure_ == 0. )
         return TwoPhaseModel<dim>::sat_;
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // compute maximum capillary pressure based on maximum dpcds of MAXIMUM_DPCDS
     // applying the limit on capillary pressure
-    double64 pcmax = entry_pressure_ * pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
+    double pcmax = entry_pressure_ * pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
                                             ( -1. / ( 1. + lambda_ ) ) );
 
     if ( pc >= pcmax )
     {
        // compute minimun effective saturation for which dpcds = MAXIMUM_DPCDS
-        const double64 Se_min =  pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
+        const double Se_min =  pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
                                  ( lambda_ / ( 1. + lambda_ ) ) );
 
         // assuming linear changes in capillary pressure below Se_min with slope of MAXIMUM_DPCDS
@@ -307,7 +307,7 @@ double64 Corey<dim>::Sw_Phase( double64 pc ) const
 }
 
 template<size_t dim>
-double64 Corey<dim>::dsdpc_Phase( double64 pc ) const
+double Corey<dim>::dsdpc_Phase( double pc ) const
 {
 
     // linear relperm model
@@ -317,7 +317,7 @@ double64 Corey<dim>::dsdpc_Phase( double64 pc ) const
         if ( pc_max_ == entry_pressure_ )
             return 0.0;
 
-        const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+        const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
         return -1.0/( pc_max_ - entry_pressure_ )/seff_mult;
 
     }
@@ -325,12 +325,12 @@ double64 Corey<dim>::dsdpc_Phase( double64 pc ) const
     if ( entry_pressure_ == 0. )
         return 0.0;
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
     // compute minimun effective saturation for which dpcds = MAXIMUM_DPCDS
-    const double64 Se_min =  pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
+    const double Se_min =  pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
                                 ( lambda_ / ( 1. + lambda_ ) ) );
 
-    const double64 Seff = (TwoPhaseModel<dim>::Sw_at( pc )- TwoPhaseModel<dim>::swr_ ) *seff_mult;
+    const double Seff = (TwoPhaseModel<dim>::Sw_at( pc )- TwoPhaseModel<dim>::swr_ ) *seff_mult;
 
     if( Seff<= Se_min )
         return -1.0/TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_;
@@ -341,7 +341,7 @@ double64 Corey<dim>::dsdpc_Phase( double64 pc ) const
 
 
 template<size_t dim>
-double64 Corey<dim>::MaxFractionalFlowDerivative() const
+double Corey<dim>::MaxFractionalFlowDerivative() const
 {
     // this is NOT the maximum of dfdS !!
     // since this function is used to compute the CFL criterion, which

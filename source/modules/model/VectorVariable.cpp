@@ -7,7 +7,7 @@ namespace csmp {
 
 VectorVariable<3U>::VectorVariable()
   : flag{ { ANY,ANY,ANY } },
-  data{ { std::numeric_limits<double64>::quiet_NaN(),std::numeric_limits<double64>::quiet_NaN(),std::numeric_limits<double64>::quiet_NaN() } }
+  data{ { std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN() } }
 {
 }
 
@@ -15,7 +15,7 @@ VectorVariable<3U>::VectorVariable()
 
 
 
-VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f, double64 val )
+VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f, double val )
   : flag{ { f,f,f } },
   data{ { val,val,val } }
 {
@@ -25,7 +25,7 @@ VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f, double64 val )
 
 
 VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
-                                    double64  val1, double64  val2, double64  val3 )
+                                    double  val1, double  val2, double  val3 )
   : flag{ { f1,f2,f3 } },
   data{ { val1,val2,val3 } }
 {
@@ -46,13 +46,13 @@ VectorVariable<3U>&  VectorVariable<3U>::operator=( const VectorVariable<3U>& v 
 
 
 // 1D specializations
-VectorVariable<1U> makeVector( VARIABLE_FLAG fx, double64 vx )
+VectorVariable<1U> makeVector( VARIABLE_FLAG fx, double vx )
 {
   return std::move( VectorVariable<1U>( fx, vx ) );
 }
 
 // 2D specializations
-VectorVariable<2U> makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, double64 vx, double64 vy )
+VectorVariable<2U> makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, double vx, double vy )
 {
   return std::move( VectorVariable<2U>( fx, fy, vx, vy ) );
 }
@@ -60,17 +60,17 @@ VectorVariable<2U> makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, double64 vx, 
 
 // 3D specializations
 
-VectorVariable<3U> makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, VARIABLE_FLAG fz, double64 vx, double64 vy, double64 vz )
+VectorVariable<3U> makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, VARIABLE_FLAG fz, double vx, double vy, double vz )
 {
   return std::move( VectorVariable<3U>( fx, fy, fz, vx, vy, vz ) );
 }
 
-VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG, 3U>& flags, const std::array<double64, 3U>& vals )
+VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG, 3U>& flags, const std::array<double, 3U>& vals )
 {
   return std::move( VectorVariable<3U>( flags[0], flags[1], flags[2], vals[0], vals[1], vals[2] ) );
 }
 
-VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>& flags, const std::vector<double64>& vals )
+VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>& flags, const std::vector<double>& vals )
 {
   assert( flags.size() == 3U );
   assert( vals.size() == 3U );
@@ -87,7 +87,7 @@ VectorVariable<3U>::VectorVariable( const VectorVariable<3U>& v )
 
 
 
-double64& VectorVariable<3U>::operator()( size_t i )
+double& VectorVariable<3U>::operator()( size_t i )
 {
 #ifdef NDEBUG 
   if ( i >= 3U ) {
@@ -98,7 +98,7 @@ double64& VectorVariable<3U>::operator()( size_t i )
   return data[i];
 }
 
-const double64& VectorVariable<3U>::operator()( size_t i ) const
+const double& VectorVariable<3U>::operator()( size_t i ) const
 {
 #ifdef NDEBUG 
   if ( i >= 3U ) {
@@ -110,7 +110,7 @@ const double64& VectorVariable<3U>::operator()( size_t i ) const
 }
 
 
-double64  VectorVariable<3U>::operator[]( size_t i ) const
+double  VectorVariable<3U>::operator[]( size_t i ) const
 {
 #ifndef NDEBUG 
   if ( i >= 3U ) {
@@ -123,7 +123,7 @@ double64  VectorVariable<3U>::operator[]( size_t i ) const
 
 
 
-void  VectorVariable<3U>::Component( size_t i, double64 val )
+void  VectorVariable<3U>::Component( size_t i, double val )
 {
   assert( i < 3U );
   data[i] = val;
@@ -132,7 +132,7 @@ void  VectorVariable<3U>::Component( size_t i, double64 val )
 
 
 
-double64  VectorVariable<3U>::Component( size_t i ) const
+double  VectorVariable<3U>::Component( size_t i ) const
 {
   assert( i < 3U );
   return data[i];
@@ -169,7 +169,7 @@ size_t VectorVariable<3U>::Size() const
   return 3U;
 }
 
-void VectorVariable<3U>::Resize( size_t, double64 newValue )
+void VectorVariable<3U>::Resize( size_t, double newValue )
 {
   data[0] = newValue;
   data[1] = newValue;
@@ -186,7 +186,7 @@ VectorVariable<3U>::~VectorVariable()
 
 
 
-VectorVariable<3U>::VectorVariable( const std::vector<double64>& v )
+VectorVariable<3U>::VectorVariable( const std::vector<double>& v )
   : flag{ { ANY,ANY,ANY } },
   data{ { v[0],v[1],v[2] } }
 {
@@ -202,7 +202,7 @@ VectorVariable<3U>::VectorVariable( const csmp::Point<3U>& p )
 
 
 
-VectorVariable<3U>&  VectorVariable<3U>::operator+=( double64 val )
+VectorVariable<3U>&  VectorVariable<3U>::operator+=( double val )
 {
   data[0] += val;
   data[1] += val;
@@ -214,7 +214,7 @@ VectorVariable<3U>&  VectorVariable<3U>::operator+=( double64 val )
 
 
 
-VectorVariable<3U>&  VectorVariable<3U>::operator-=( double64 val )
+VectorVariable<3U>&  VectorVariable<3U>::operator-=( double val )
 {
   data[0] -= val;
   data[1] -= val;
@@ -226,7 +226,7 @@ VectorVariable<3U>&  VectorVariable<3U>::operator-=( double64 val )
 
 
 
-VectorVariable<3U>&  VectorVariable<3U>::operator*=( double64 val )
+VectorVariable<3U>&  VectorVariable<3U>::operator*=( double val )
 {
   data[0] *= val;
   data[1] *= val;
@@ -238,7 +238,7 @@ VectorVariable<3U>&  VectorVariable<3U>::operator*=( double64 val )
 
 
 
-VectorVariable<3U>&  VectorVariable<3U>::operator/=( double64 val )
+VectorVariable<3U>&  VectorVariable<3U>::operator/=( double val )
 {
   data[0] /= val;
   data[1] /= val;
@@ -350,7 +350,7 @@ VectorVariable<3U>&  VectorVariable<3U>::operator/=( const VectorVariable<3U>& v
 // ASSIGNMENT OPERATORS
 // --------------------
 
-VectorVariable<3U>&  VectorVariable<3U>::operator=( double64 val )
+VectorVariable<3U>&  VectorVariable<3U>::operator=( double val )
 {
   data[0] = val;
   data[1] = val;
@@ -410,7 +410,7 @@ bool VectorVariable<3U>::operator<( const VectorVariable<3U>& v ) const
 
 void VectorVariable<3U>::EuclideanNormalize()
 {
-  const double64 fNorm( std::sqrt( data[0] * data[0] + data[1] * data[1] + data[2] * data[2] ) );
+  const double fNorm( std::sqrt( data[0] * data[0] + data[1] * data[1] + data[2] * data[2] ) );
 
   if ( fNorm == 0. ) return; //added AP
 
@@ -420,12 +420,12 @@ void VectorVariable<3U>::EuclideanNormalize()
 }
 
 
-double64 VectorVariable<3U>::DotProduct( const csmp::Point<3U>& p ) const
+double VectorVariable<3U>::DotProduct( const csmp::Point<3U>& p ) const
 {
   return data[0] * p[0] + data[1] * p[1] + data[2] * p[2];
 }
 
-double64 VectorVariable<3U>::DotProduct( const VectorVariable& v ) const
+double VectorVariable<3U>::DotProduct( const VectorVariable& v ) const
 {
   return data[0] * v[0] + data[1] * v[1] + data[2] * v[2];
 }
@@ -446,7 +446,7 @@ VectorVariable<3U> VectorVariable<3U>::CrossProduct( const VectorVariable& v ) c
                              data[0] * v[1] - data[1] * v[0] );
 }
 
-double64  VectorVariable<3U>::Length() const
+double  VectorVariable<3U>::Length() const
 {
   return std::sqrt( data[0] * data[0] + data[1] * data[1] + data[2] * data[2] );
 }
@@ -460,7 +460,7 @@ Point<3U>  VectorVariable<3U>::P() const
 
 
 
-bool  VectorVariable<3U>::IsWithinRange( double64 vmin, double64 vmax ) const
+bool  VectorVariable<3U>::IsWithinRange( double vmin, double vmax ) const
 {
   if ( data[0] < vmin || data[0] > vmax ) return false;
   if ( data[1] < vmin || data[1] > vmax ) return false;
@@ -474,14 +474,14 @@ bool  VectorVariable<3U>::IsWithinRange( double64 vmin, double64 vmax ) const
 
 bool VectorVariable<3U>::Out( std::fstream& fp ) const
 {
-  const int32 flag_0( this->flag[0] );
-  const int32 flag_1( this->flag[1] );
-  const int32 flag_2( this->flag[2] );
-  const size_t flag_size = sizeof( int32 );
+  const int32_t flag_0( this->flag[0] );
+  const int32_t flag_1( this->flag[1] );
+  const int32_t flag_2( this->flag[2] );
+  const size_t flag_size = sizeof( int32_t );
   fp.write( (char*)&flag_0, flag_size );
   fp.write( (char*)&flag_1, flag_size );
   fp.write( (char*)&flag_2, flag_size );
-  const size_t data_size = sizeof( double64 );
+  const size_t data_size = sizeof( double );
   fp.write( (char*)&this->data[0], data_size );
   fp.write( (char*)&this->data[1], data_size );
   fp.write( (char*)&this->data[2], data_size );
@@ -490,11 +490,11 @@ bool VectorVariable<3U>::Out( std::fstream& fp ) const
 
 bool VectorVariable<3U>::In( std::fstream& fp )
 {
-  const size_t flag_size = sizeof( int32 );
+  const size_t flag_size = sizeof( int32_t );
   fp.read( (char*)&this->flag[0], flag_size );
   fp.read( (char*)&this->flag[1], flag_size );
   fp.read( (char*)&this->flag[2], flag_size );
-  const size_t data_size = sizeof( double64 );
+  const size_t data_size = sizeof( double );
   fp.read( (char*)&this->data[0], data_size );
   fp.read( (char*)&this->data[1], data_size );
   fp.read( (char*)&this->data[2], data_size );
@@ -612,7 +612,7 @@ VectorVariable<3U>  VectorVariable<3U>::operator/( const VectorVariable<3U>& v )
 
 
 
-VectorVariable<3U>  VectorVariable<3U>::operator+( double64 val ) const
+VectorVariable<3U>  VectorVariable<3U>::operator+( double val ) const
 {
   return std::move( VectorVariable( flag[0], flag[1], flag[2],
                     data[0] + val, data[1] + val, data[2] + val ) );
@@ -620,7 +620,7 @@ VectorVariable<3U>  VectorVariable<3U>::operator+( double64 val ) const
 
 
 
-VectorVariable<3U>  VectorVariable<3U>::operator-( double64 val ) const
+VectorVariable<3U>  VectorVariable<3U>::operator-( double val ) const
 {
   return std::move( VectorVariable( flag[0], flag[1], flag[2],
                     data[0] - val, data[1] - val, data[2] - val ) );
@@ -628,7 +628,7 @@ VectorVariable<3U>  VectorVariable<3U>::operator-( double64 val ) const
 
 
 
-VectorVariable<3U>  VectorVariable<3U>::operator*( double64 val ) const
+VectorVariable<3U>  VectorVariable<3U>::operator*( double val ) const
 {
   return std::move( VectorVariable( flag[0], flag[1], flag[2],
                     data[0] * val, data[1] * val, data[2] * val ) );
@@ -636,7 +636,7 @@ VectorVariable<3U>  VectorVariable<3U>::operator*( double64 val ) const
 
 
 
-VectorVariable<3U>  VectorVariable<3U>::operator/( double64 val ) const
+VectorVariable<3U>  VectorVariable<3U>::operator/( double val ) const
 {
   return std::move( VectorVariable( flag[0], flag[1], flag[2],
                     data[0] / val, data[1] / val, data[2] / val ) );
@@ -645,7 +645,7 @@ VectorVariable<3U>  VectorVariable<3U>::operator/( double64 val ) const
 
 
 
-VectorVariable<3U>  VectorVariable<3U>::operator^( double64 val ) const
+VectorVariable<3U>  VectorVariable<3U>::operator^( double val ) const
 {
   return std::move( VectorVariable( flag[0], flag[1], flag[2],
                     std::pow( data[0], val ), std::pow( data[1], val ), std::pow( data[2], val ) ) );
@@ -667,14 +667,14 @@ VectorVariable<3U>  VectorVariable<3U>::operator%( const VectorVariable<3U>& v )
 
 
 /// return angle in degrees
-double64  VectorVariable<3U>::AngleTo( const VectorVariable<3U>& v ) const
+double  VectorVariable<3U>::AngleTo( const VectorVariable<3U>& v ) const
 {
-  double64 ab = data[0] * v.data[0] + data[1] * v.data[1] + data[2] * v.data[2];
-  double64 a_dot_b = std::sqrt( (data[0] * data[0] + data[1] * data[1] + data[2] * data[2]) *
+  double ab = data[0] * v.data[0] + data[1] * v.data[1] + data[2] * v.data[2];
+  double a_dot_b = std::sqrt( (data[0] * data[0] + data[1] * data[1] + data[2] * data[2]) *
                                 (v.data[0] * v.data[0] + v.data[1] * v.data[1] + v.data[2] * v.data[2]) );
   // a b
   // ---
-  double64 cos_angle = ab / a_dot_b;
+  double cos_angle = ab / a_dot_b;
 
   // if zero intercept
   if ( cos_angle == 0.0 ) return  90.0;
@@ -682,7 +682,7 @@ double64  VectorVariable<3U>::AngleTo( const VectorVariable<3U>& v ) const
   if ( cos_angle >  1.0 ) return   0.0;
   if ( cos_angle < -1.0 ) return 180.0;
 
-  return (static_cast<double64>(180.) / static_cast<double64>(3.14159265358979324)) * std::acos( cos_angle );
+  return (static_cast<double>(180.) / static_cast<double>(3.14159265358979324)) * std::acos( cos_angle );
 }
 
 
@@ -715,9 +715,9 @@ void  VectorVariable<3U>::Invert()
 
 /// projects this vector variable onto the supplied vector v and returns the projection vector
 
-VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const std::vector<double64>& v ) const
+VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const std::vector<double>& v ) const
 {
-  double64 ratio( (data[0] * v[0] + data[1] * v[1] + data[2] * v[2]) / (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) );
+  double ratio( (data[0] * v[0] + data[1] * v[1] + data[2] * v[2]) / (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) );
 
   return std::move( VectorVariable<3U>( flag[0], flag[1], flag[2], v[0] * ratio, v[1] * ratio, v[2] * ratio ) );
 }
@@ -726,7 +726,7 @@ VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const std::vector<double64>
 
 VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const VectorVariable<3U>& v ) const
 {
-  double64 ratio( (data[0] * v.data[0] + data[1] * v.data[1] + data[2] * v.data[2]) /
+  double ratio( (data[0] * v.data[0] + data[1] * v.data[1] + data[2] * v.data[2]) /
                   (v.data[0] * v.data[0] + v.data[1] * v.data[1] + v.data[2] * v.data[2]) );
 
   return std::move( VectorVariable<3U>( flag[0], flag[1], flag[2],

@@ -19,8 +19,8 @@ Parameter::Parameter()
  :  name("unspecified"),
     notation("-"),
     unit("-"),
-//    min(numeric_limits<double64>::quiet_NaN()), - all hell breaks loose!
-//    max(numeric_limits<double64>::quiet_NaN()),
+//    min(numeric_limits<double>::quiet_NaN()), - all hell breaks loose!
+//    max(numeric_limits<double>::quiet_NaN()),
     min(-1.0e+25), // must be numbers that can be represented
     max(1.0e+25),
     usage("???"),
@@ -98,7 +98,7 @@ bool Parameter::operator<( const csmp::Parameter& p ) const
  }
 
 
-void  Parameter::Range( double64& vmin, double64& vmax ) const
+void  Parameter::Range( double& vmin, double& vmax ) const
  {
      vmin = min;
      vmax = max;
@@ -125,7 +125,7 @@ ostream&  operator<<( ostream& stream, const Parameter& p )
  }
 
 /// checks whether the supplied value is in the range stored in the parameter data
-bool Parameter::IsWithinRange( double64 value ) const
+bool Parameter::IsWithinRange( double value ) const
  {
     if ( value > max || value < min ) return false;
     return true;
@@ -151,8 +151,8 @@ bool Parameter::Out( std::fstream& fp ) const
   binaryFileWrite( fp,  notation.c_str() );
   binaryFileWrite( fp,  unit.c_str() );
   key.Out(fp);
-  fp.write( (char*) &min, sizeof(double64) );
-  fp.write( (char*) &max, sizeof(double64) );
+  fp.write( (char*) &min, sizeof(double) );
+  fp.write( (char*) &max, sizeof(double) );
   binaryFileWrite( fp,  usage.c_str() );
   binaryFileWrite( fp,  explanation.c_str() );
   binaryFileWrite( fp,  reference.c_str() );
@@ -171,8 +171,8 @@ bool Parameter::In( fstream& fp )
   binaryFileRead( fp,  buf );
   unit = buf;
   key.In(fp);
-  fp.read( (char*) &min, sizeof(double64) );
-  fp.read( (char*) &max, sizeof(double64) );
+  fp.read( (char*) &min, sizeof(double) );
+  fp.read( (char*) &max, sizeof(double) );
   binaryFileRead( fp,  buf );
   usage = buf;
   binaryFileRead( fp,  buf );

@@ -21,12 +21,12 @@ computations, see Cook et al. p. 21.
 
 @section arguments Input Arguments 
 
-Young's modulus and  Poisson's ratio as double64 variables and a 
+Young's modulus and  Poisson's ratio as double variables and a 
 Meschach matrix into which the result is returned.  
 
 */
-void planeStressMatrix( double64 E,  // Young's modulus,
-                        double64 nu, // Poisson's ratio 
+void planeStressMatrix( double E,  // Young's modulus,
+                        double nu, // Poisson's ratio 
                         DenseMatrix<DM_MIN>& D )
  {
     D.Resize(3,3);
@@ -47,7 +47,7 @@ void planeStressMatrix( double64 E,  // Young's modulus,
     stiffness form: to compute stresses from strains
 
 */
-void planeStrainMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D )
+void planeStrainMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )
  {
     D.Resize(3,3);
     D.Zero();
@@ -66,13 +66,13 @@ void planeStrainMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D )
 
 is this in compliance form? - i.e.  e = D * signma
 
-void stiffnessMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D )
+void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )
  {
     D.Resize(6,6);
     assert( nu < 0.5 );
     assert( E > 0. );
-    const double64 frac  = nu / (1. - nu);
-    const double64 coeff = (E*(1. - nu)) / ((1. + nu)*(1. - 2.*nu));
+    const double frac  = nu / (1. - nu);
+    const double coeff = (E*(1. - nu)) / ((1. + nu)*(1. - 2.*nu));
     
     D.Zero();
     D(0,0) = D(1,1) = D(2,2) = 1.;
@@ -96,14 +96,14 @@ void stiffnessMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D )
     
     see also AFEM.Ch09, p. 9-14
 */
-void stiffnessMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D )
+void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )
  {
     D.Resize(6,6);
     assert( nu < 0.5 );
     assert( E > 0. );
-    const double64 oneMinNu      = (1. - nu);
-    const double64 oneMin2NuDiv2 = (1./2. - nu);
-    const double64 multiplier    =  E / ((1. + nu)*(1. - 2.*nu));
+    const double oneMinNu      = (1. - nu);
+    const double oneMin2NuDiv2 = (1./2. - nu);
+    const double multiplier    =  E / ((1. + nu)*(1. - 2.*nu));
     
     D.Zero();
     D(0,0) = D(1,1) = D(2,2) = oneMinNu;
@@ -116,7 +116,7 @@ void stiffnessMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D )
 
 
 /// 1D linear bar
-void stiffnessMatrix( double64 E, DenseMatrix<DM_MIN>& D, double64 length )
+void stiffnessMatrix( double E, DenseMatrix<DM_MIN>& D, double length )
   {
     D.Resize(2,2);
     D.Zero(); 
@@ -231,12 +231,12 @@ void sortEigenVectorsAndValues( VectorVariable<2U>& vc, TensorVariable<2U>& ts )
     if ( vc[0U] >= vc[1U] ) return;
     
     // the eigenvalues and vectors must be flipped
-    double64 swap1 = vc[0U];
+    double swap1 = vc[0U];
     vc(0U) = vc[1U];
     vc(1U) = swap1;
     // now the vectors
     swap1           = ts(0,0);
-    double64 swap2 = ts(0,1); 
+    double swap2 = ts(0,1); 
     ts(0,0) = ts(1,0);
     ts(0,1) = ts(1,1);
     ts(1,0) = swap1;
@@ -251,23 +251,23 @@ void sortEigenVectorsAndValues( VectorVariable<3U>& vc, TensorVariable<3U>& ts )
     if ( vc[0U] >= vc[1U] and vc[1U] >= vc[2U] ) return;
     
     // the eigenvalues and vectors are ordered using less
-    multimap<double64,size_t>  eorder;
+    multimap<double,size_t>  eorder;
     eorder.insert( make_pair(vc[0U],0) );
     eorder.insert( make_pair(vc[1U],1) );
     eorder.insert( make_pair(vc[2U],2) );
     
-    multimap<double64,size_t>::reverse_iterator  it(eorder.rbegin());
-    double64 v00 = ts( (*it).second, 0 );
-    double64 v01 = ts( (*it).second, 1 );
-    double64 v02 = ts( (*it).second, 2 );
+    multimap<double,size_t>::reverse_iterator  it(eorder.rbegin());
+    double v00 = ts( (*it).second, 0 );
+    double v01 = ts( (*it).second, 1 );
+    double v02 = ts( (*it).second, 2 );
     vc(0) = (*it++).first;
-    double64 v10 = ts( (*it).second, 0 );
-    double64 v11 = ts( (*it).second, 1 );
-    double64 v12 = ts( (*it).second, 2 );
+    double v10 = ts( (*it).second, 0 );
+    double v11 = ts( (*it).second, 1 );
+    double v12 = ts( (*it).second, 2 );
     vc(1) = (*it++).first;
-    double64 v20 = ts( (*it).second, 0 );
-    double64 v21 = ts( (*it).second, 1 );
-    double64 v22 = ts( (*it).second, 2 );
+    double v20 = ts( (*it).second, 0 );
+    double v21 = ts( (*it).second, 1 );
+    double v22 = ts( (*it).second, 2 );
     vc(2) = (*it).first; 
 
     // assigning the sorted values to the tensor of eigenvectors
@@ -308,22 +308,22 @@ function arguments.
 */
 void normalAndShearStressOnPlane( const TensorVariable<3U>& ts,
                                   const Point<3U>& un, 
-                                  double64& sigma_n, double64& sigma_s )
+                                  double& sigma_n, double& sigma_s )
  {
    // Cauchy's formula applied to find traction vector components, P&F, p. 213
    // VectorVariable<3U> t = ts * un.Coordinates();
-   double64  tx = ts(0,0) * un[0] + ts(1,0) * un[1] + ts(2,0) * un[2]; 
-   double64  ty = ts(0,1) * un[0] + ts(1,1) * un[1] + ts(2,1) * un[2]; 
-   double64  tz = ts(0,2) * un[0] + ts(1,2) * un[1] + ts(2,2) * un[2]; 
+   double  tx = ts(0,0) * un[0] + ts(1,0) * un[1] + ts(2,0) * un[2]; 
+   double  ty = ts(0,1) * un[0] + ts(1,1) * un[1] + ts(2,1) * un[2]; 
+   double  tz = ts(0,2) * un[0] + ts(1,2) * un[1] + ts(2,2) * un[2]; 
  
     // (t . n) n (eqn. 6.49, P&F, p.216)
     sigma_n  = ts(0,0) * un[0] * un[0] + ts(1,1) * un[1] * un[1] + ts(2,2) * un[2] * un[2];
     sigma_n += 2. * ts(0,1) * un[0] * un[1] + 2. * ts(1,2) * un[1] * un[2] + 2. * ts(2,0) * un[2] * un[0];
     
     // n x (t x n) (eqn. 6.52, P&F, p. 216) -> vector product, vp
-    double64  vpx = ((1. - un[0] * un[0]) * tx - un[0] * un[1] * ty - un[0] * un[2] * tz);  // * ex;
-    double64  vpy = (-un[0] * un[1] * tx + (1. - un[1] * un[1]) * ty - un[1] * un[2] * tz); // * ey;
-    double64  vpz = (-un[2] * un[0] * tx - un[2] * un[1] * ty + (1. - un[2] * un[2]) * tz); // * ez;
+    double  vpx = ((1. - un[0] * un[0]) * tx - un[0] * un[1] * ty - un[0] * un[2] * tz);  // * ex;
+    double  vpy = (-un[0] * un[1] * tx + (1. - un[1] * un[1]) * ty - un[1] * un[2] * tz); // * ey;
+    double  vpz = (-un[2] * un[0] * tx - un[2] * un[1] * ty + (1. - un[2] * un[2]) * tz); // * ez;
     
     // the shear stress is the magnitude of the vector product
     sigma_s = sqrt(vpx * vpx + vpy * vpy + vpz * vpz);
@@ -339,13 +339,13 @@ void normalAndShearStressOnPlane( const TensorVariable<3U>& ts,
 */
 void normalAndShearStressOnPlane( const TensorVariable<3U>& ts,
                                   const Point<3U>& un, 
-                                  double64& sigma_n, VectorVariable<3U>& sigma_s )
+                                  double& sigma_n, VectorVariable<3U>& sigma_s )
  {
    // Cauchy's formula applied to find traction vector components, P&F, p. 213
    // VectorVariable<3U> t = ts * un.Coordinates();
-   double64  tx = ts(0,0) * un[0] + ts(1,0) * un[1] + ts(2,0) * un[2]; 
-   double64  ty = ts(0,1) * un[0] + ts(1,1) * un[1] + ts(2,1) * un[2]; 
-   double64  tz = ts(0,2) * un[0] + ts(1,2) * un[1] + ts(2,2) * un[2]; 
+   double  tx = ts(0,0) * un[0] + ts(1,0) * un[1] + ts(2,0) * un[2]; 
+   double  ty = ts(0,1) * un[0] + ts(1,1) * un[1] + ts(2,1) * un[2]; 
+   double  tz = ts(0,2) * un[0] + ts(1,2) * un[1] + ts(2,2) * un[2]; 
  
     // (t . n) n (eqn. 6.49, P&F, p.216)
     sigma_n  = ts(0,0) * un[0] * un[0] + ts(1,1) * un[1] * un[1] + ts(2,2) * un[2] * un[2];

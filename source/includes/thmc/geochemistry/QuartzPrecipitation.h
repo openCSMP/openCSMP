@@ -13,14 +13,14 @@ class QuartzPrecipitation : public Interrelation<dim> {
     Operand<dim>&        Q;   /// < amount of quartz precipitated
     ScalarVariable      rho, reactant;
     VectorVariable<dim>  flux, dSdz, dSpr;
-    double64                      grad_S, dt, mass_flux;
-    double64                      sign, angle;
+    double                      grad_S, dt, mass_flux;
+    double                      sign, angle;
     
   public:
-    QuartzPrecipitation( const PropertyDatabase<dim>& p, double64 time_increment );
+    QuartzPrecipitation( const PropertyDatabase<dim>& p, double time_increment );
     ~QuartzPrecipitation() {};
     void Calculate();
-    void SetTimeIncrement( double64 time_increment ) { dt=time_increment; };
+    void SetTimeIncrement( double time_increment ) { dt=time_increment; };
 };
 
 } // csmp

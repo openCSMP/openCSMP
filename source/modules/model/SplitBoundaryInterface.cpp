@@ -257,8 +257,8 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
   {
      BinaryFileSectionWrite sect(fp, "SPLITBDRY");
   
-     const long64 records( this->SplitBoundaries() );
-     fp.write( reinterpret_cast<const char*>(&records), sizeof( long64 ) );
+     const int64_t  records( this->SplitBoundaries() );
+     fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
 
      for ( auto bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
        {
@@ -323,9 +323,9 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
     BinaryFileSectionRead sect(fp, "SPLITBDRY");
    
     SubDomainInfo  info;
-    long64         records(0);  // region records
+    int64_t          records(0);  // region records
     // getting number of unique region records from file
-    fp.read( reinterpret_cast<char*>(&records), sizeof(long64) );
+    fp.read( reinterpret_cast<char*>(&records), sizeof(int64_t ) );
     if ( records > 0 )
       // reading the regions sequentially
       for ( size_t i=0U; i<records; ++i )
@@ -710,7 +710,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 */
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
 std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionIntoSplitBoundary( const char* split_boundary,
-                                                                                                                int32 material_id )
+                                                                                                                int32_t material_id )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -827,7 +827,7 @@ TODO: like Boundary patches, the split boundary patches should have unique names
 */
 /*
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSplitBoundaries( const char* region_name, int32 material_id )
+bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSplitBoundaries( const char* region_name, int32_t material_id )
 {
   SPLITBOUNDARY_COMPLEX<dim>*       splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
   MeshManager<dim>&                 mesh    = splitboundaryComplex->Mesh();
@@ -959,7 +959,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
        @date 26/1/2020
 */
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-set<string>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertLowerDimensionalRegionsIntoSplitBoundaries( int32 material_id )
+set<string>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertLowerDimensionalRegionsIntoSplitBoundaries( int32_t material_id )
 {
   ErrorHandler&                csmp_error(ErrorHandler::Instance());
   SPLITBOUNDARY_COMPLEX<dim>*  splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));

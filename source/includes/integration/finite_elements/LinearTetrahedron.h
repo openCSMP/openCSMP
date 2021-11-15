@@ -11,7 +11,7 @@ class LinearTetrahedron : public FiniteElement {
     LinearTetrahedron();
     virtual ~LinearTetrahedron();
 
-    virtual double64       Volume();
+    virtual double       Volume();
     virtual void           CounterClockwiseNodes( std::vector<size_t>& ids ) const;
     virtual size_t         CornerNodes() const  { return 4U; }
     virtual void           CornerNodes( std::vector<size_t>& ids ) const;
@@ -20,9 +20,9 @@ class LinearTetrahedron : public FiniteElement {
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( size_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( size_t /* segment */ ) const { return LINEAR_BAR; };
   
-    virtual void           UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const;
+    virtual void           UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
 
-    virtual   void         N( std::vector<double64>& N, const std::vector<double64>& xyz );
+    virtual   void         N( std::vector<double>& N, const std::vector<double>& xyz );
     virtual   void         dN( DenseMatrix<DM_MIN>& M );
     virtual   void         IntegralNN( DenseMatrix<DM_MIN>& M );
 

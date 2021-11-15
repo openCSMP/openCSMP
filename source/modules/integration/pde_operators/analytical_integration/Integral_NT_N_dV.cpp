@@ -46,7 +46,7 @@ void Integral_NT_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     else
       {
          MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
-         double64 vol_div3 = e.Volume() / static_cast<double64>(e.Nodes());
+         double vol_div3 = e.Volume() / static_cast<double>(e.Nodes());
          for ( size_t i=0; i<e.Nodes(); i++ )
            for ( size_t j=0; j<e.Nodes(); j++ )
              if ( i == j ) MathOperatorLHS<dim>::LHS(i,j) = vol_div3;

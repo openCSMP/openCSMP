@@ -206,27 +206,27 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ModelSetup(){
     inlet_boundary_name_ = "LEFT";
     outlet_boundary_name_ = "RIGHT";
 
-    const double64 frac_aperture=0.001;
-    const double64 matrix_porosity=0.15;
-    const double64 fracture_porosity=1.0*frac_aperture;
-    const double64 visc_nonwet=1.0e-3;
-    const double64 visc_wet=1.0e-3;
-    const double64 dens_wet(1000.);
-    const double64 dens_nonwet(800.);
-    const double64 Km(1.0e-15);
-    const double64 Kf(8.33e-8);// acording to power law with Kf=a^2/12 with a=0.001
-    const double64 swres=0.0;
-    const double64 snres=0.0;
+    const double frac_aperture=0.001;
+    const double matrix_porosity=0.15;
+    const double fracture_porosity=1.0*frac_aperture;
+    const double visc_nonwet=1.0e-3;
+    const double visc_wet=1.0e-3;
+    const double dens_wet(1000.);
+    const double dens_nonwet(800.);
+    const double Km(1.0e-15);
+    const double Kf(8.33e-8);// acording to power law with Kf=a^2/12 with a=0.001
+    const double swres=0.0;
+    const double snres=0.0;
 
-    const double64 entry_pres(0.0);
+    const double entry_pres(0.0);
 
-    double64 lambda=2.;     //Brooks Corey
+    double lambda=2.;     //Brooks Corey
 
-    const double64 wet_sat(0.0);
-    const double64 nonwet_sat(1.0);
-    const double64 fluid_pres(0.0);
-    const double64 fluid_pres_LB(1.0e+7);
-    const double64 fluid_pres_RB(1.0e+5);
+    const double wet_sat(0.0);
+    const double nonwet_sat(1.0);
+    const double fluid_pres(0.0);
+    const double fluid_pres_LB(1.0e+7);
+    const double fluid_pres_RB(1.0e+5);
 
     csmp::Region<dim>& mat_ref( model_->Region( "MATRIX" ) );
     csmp::Region<dim>& frac_ref( model_->Region( "FRACS" ) );
@@ -396,11 +396,11 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     //*/****************************************************************************************************
     // Simulation parameters
 
-    double64 dt;
-    int32 save_frequency;
+    double dt;
+    int32_t save_frequency;
 
     // max time increment: 100 days
-    const double64 MAX_TIME(86400. * 100.);
+    const double MAX_TIME(86400. * 100.);
 
     switch(dim){
 
@@ -601,7 +601,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     printRangeOfVariable( *model_, total_velocity_.c_str() );
 
     // average total velocity
-    double64 vel(model_->Region("Model").Average(total_velocity_.c_str()));
+    double vel(model_->Region("Model").Average(total_velocity_.c_str()));
     cout<<"Velocity="<<vel<<endl;
 
     // Output to VTU files
@@ -683,8 +683,8 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
     //*/****************************************************************************************************
 
-    double64 model_time;
-    int32 save_counter,time;
+    double model_time;
+    int32_t save_counter,time;
     model_time= 0.;
     time = 0;
     save_counter = 1;
@@ -738,12 +738,12 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
         ModelComparator<dim> comparitor;
 
-        double64 shouldBeZero( comparitor.CompareVSetsRenumberedNodes((this->getName()+".vset").c_str(), (this->getName()+"_Comparison.vset").c_str(),
+        double shouldBeZero( comparitor.CompareVSetsRenumberedNodes((this->getName()+".vset").c_str(), (this->getName()+"_Comparison.vset").c_str(),
                                                         "saturation water", "saturation water", 
 														"IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt", "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt", true ) );
 
         VSet<dim> vset_comparison;
-        double64 model_time_comparison(model_time);
+        double model_time_comparison(model_time);
         vset_comparison.InputFrom( (this->getName()+"_Comparison.vset").c_str(), model_time_comparison );
         const Model<dim> model_comparison( vset_comparison, "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt", true );
         VTU_Interface<dim> vtu_comparison( model_comparison);
@@ -764,7 +764,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     unsigned long millisec ((end - start) * 1000 / CLOCKS_PER_SEC);
 
     cout<<"\nIncompressibleTwoPhaseFlowFractures_Viscous_VVCase:"<<endl;
-    cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double64)(millisec)/1000.<<" sec; "<<(double64)(millisec)/60000.<<" min; "<<(double64)(millisec)/3600000.<<" hours)"<<endl;
+    cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double)(millisec)/1000.<<" sec; "<<(double)(millisec)/60000.<<" min; "<<(double)(millisec)/3600000.<<" hours)"<<endl;
 
     // terminate
     cout << "\nThat's it..."<< endl;

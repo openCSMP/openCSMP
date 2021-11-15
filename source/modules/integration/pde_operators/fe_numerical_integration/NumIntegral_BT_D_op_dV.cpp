@@ -208,7 +208,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( CELL& e )
 
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
-         double64  detJ = e.dN_AtIntegrationPoint( B, i, dim );
+         double  detJ = e.dN_AtIntegrationPoint( B, i, dim );
 
          if ( detJ <= 0. ) {
               cout <<"\nDeterminant of Jacobian at Gauss point: "<< i <<": "<< detJ << endl;

@@ -33,26 +33,26 @@ class Fluid {
     Fluid();
 
     /// the node property fluid viscosity (Pa.s) returned has been interpolated to the user-specified target placement (argument parameter)
-    double64 Viscosity( Node<dim>* const, size_t phase ) const;
+    double Viscosity( Node<dim>* const, size_t phase ) const;
     /// the node property fluid viscosity (Pa.s) interpolated to element barycentre
-    double64 Viscosity( Element<dim>* const, size_t phase ) const;
+    double Viscosity( Element<dim>* const, size_t phase ) const;
     /// the node property fluid viscosity (Pa.s) at the node i of the element
-    double64 Viscosity( Element<dim>* const, size_t node, size_t phase ) const;
+    double Viscosity( Element<dim>* const, size_t node, size_t phase ) const;
 
     /// the returned node property fluid density (of phase) (kg/m3) interpolated to the user-specified target placement (argument parameter)
-    double64 Density( Node<dim>* const, size_t phase ) const;
-    double64 Density( Element<dim>* const, size_t phase ) const;
-    double64 Density( Element<dim>* const, size_t node, size_t phase ) const;
+    double Density( Node<dim>* const, size_t phase ) const;
+    double Density( Element<dim>* const, size_t phase ) const;
+    double Density( Element<dim>* const, size_t node, size_t phase ) const;
 
     /// returns saturation-weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement
-    double64 MixtureDensity( Node<dim>* const ) const;
-    double64 MixtureDensity( Element<dim>* const ) const;
-    double64 MixtureDensity( Element<dim>* const, size_t node ) const;
+    double MixtureDensity( Node<dim>* const ) const;
+    double MixtureDensity( Element<dim>* const ) const;
+    double MixtureDensity( Element<dim>* const, size_t node ) const;
 
     /// returns the ratio of the phase viscosities at the target placement
-    double64 ViscosityRatio( Node<dim>* const ) const;
-    double64 ViscosityRatio( Element<dim>* const ) const;
-    double64 ViscosityRatio( Element<dim>* const, size_t node ) const;
+    double ViscosityRatio( Node<dim>* const ) const;
+    double ViscosityRatio( Element<dim>* const ) const;
+    double ViscosityRatio( Element<dim>* const, size_t node ) const;
 
   protected:
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
@@ -62,29 +62,29 @@ class Fluid {
 
 //  unit conversions
 
-inline double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
+inline double  molalNaClToMassFracNaClInAqueousPhase( double mSalt); // no CO2
 
-inline double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
+inline double  massFracNaClToMolalNaClInAqueousPhase( double massFracSalt); // no CO2
 
-inline double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
+inline double  massFracNaClToMolarFracNaClInAqueousPhase( double massFracSalt);// no CO2
 
-inline double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
+inline double  molalNaClToMolarFracNaClInAqueousPhase( double mSalt);// no CO2
 
-inline double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
+inline double  ppmNaClToMolalNaClInAqueousPhase( double ppmSalt );
 
-inline double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
+inline double  molalNaClToPpmInAqueousPhase( double mSalt );
 
-inline double64  psiToPa( double64 pressureInPsi );
+inline double  psiToPa( double pressureInPsi );
 
-inline double64  paToPsi( double64 pressureInPa );
+inline double  paToPsi( double pressureInPa );
 
-inline double64  paTobar( double64 pressureInPa );
+inline double  paTobar( double pressureInPa );
 
-inline double64  barTopa( double64 pressureInbar );
+inline double  barTopa( double pressureInbar );
 
-inline double64  degreeCToKelvin( double64 temperatureInC );
+inline double  degreeCToKelvin( double temperatureInC );
 
-inline double64  KelvinTodegreeC( double64 temperatureInK );
+inline double  KelvinTodegreeC( double temperatureInK );
 
 } // end csmp
 

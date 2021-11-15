@@ -192,7 +192,7 @@ class Region : public ModelSubDomain<dim, Element>,
     size_t AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start,
                                   typename std::vector<csmp::Element<dim>*>::const_iterator end,
                                   const char* property,
-                                  double64 min, double64 max );
+                                  double min, double max );
 
     /// accumulates region of elements whose barycenter lies within the defined bounding box
     size_t AccumulateRectangularRegion( typename std::vector<csmp::Element<dim>*>::const_iterator start,
@@ -214,7 +214,7 @@ class Region : public ModelSubDomain<dim, Element>,
                         const FiniteElementManager&,
                         const Region<dim>&,
                         const Region<dim>&,
-                        int32 material_id_for_new_region );
+                        int32_t material_id_for_new_region );
 
     // ----------------------------------------
     // geometry manipulations
@@ -234,19 +234,19 @@ class Region : public ModelSubDomain<dim, Element>,
     bool   Includes( const Region& ) const;
 
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in subdomain
-    std::pair<int32, int32>  ElementSpatialDimensions() const;
+    std::pair<int32_t, int32_t>  ElementSpatialDimensions() const;
 
     /// returns either the lenght of the perimeter (2D) or the surface area of the region (3D)
-    double64  SurfaceArea() const;
+    double  SurfaceArea() const;
 
     /// returns either the area of a surface region, the length of a line region or the region's volume
-    double64  Volume( bool multiply_with_porosity = false ) const;
+    double  Volume( bool multiply_with_porosity = false ) const;
 
     /// integration over volume elements
-    double64  VolumeIntegral( const char* property, bool multiply_with_porosity, bool verbose = true ) const;
+    double  VolumeIntegral( const char* property, bool multiply_with_porosity, bool verbose = true ) const;
 
     /// integration over volume and surface elements using thickness attribute (=1 for volume elements)
-    double64  VolumeIntegral_x_Thickness( const char* property, bool multiply_with_porosity = false ) const;
+    double  VolumeIntegral_x_Thickness( const char* property, bool multiply_with_porosity = false ) const;
 
     // ----------------------------------------
     // screen output

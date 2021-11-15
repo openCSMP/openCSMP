@@ -35,7 +35,7 @@ class IntegrationPointToNodePropertyVisitor : public Visitor<dim> {
     csmp::Index       cprop_key_, nprop_key_;
     Var               variable_;
     std::vector<Var>  vars_vector_; 
-    std::vector<double64>   cp_vars_, nd_vars_, 
+    std::vector<double>   cp_vars_, nd_vars_, 
                       summed_weights_;
     BoolVector        weighting_completed_;
 };

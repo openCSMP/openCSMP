@@ -35,17 +35,17 @@ class Quadrilaterator {
   
     /// reads 0..256 valued point matrix of color-coded permeability values from ascii text file and creates a regular, yet scaled quadrilateral mesh from it
     void QuadrilateralsFromRegularGrid( VSet<2U>& vset, const char* file_name,
-                                        double64 x_extend, double64 y_extend, bool from_bitmap=true );
+                                        double x_extend, double y_extend, bool from_bitmap=true );
   
     /// creates a regular quadrilateral mesh with row_nodes-1 elements in the vertical, anr column_nodes-1 elements in the horizontal direction
-    void QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_extend, double64 y_extend, size_t row_nodes, size_t column_nodes );
+    void QuadrilateralsFromRegularGrid( VSet<2U>& vset, double x_extend, double y_extend, size_t row_nodes, size_t column_nodes );
 
   private:
-     double64  HarmonicPermeabilityAverage( unsigned int m, unsigned int n, const csmp::Matrix& perm ) const;
+     double  HarmonicPermeabilityAverage( unsigned int m, unsigned int n, const csmp::Matrix& perm ) const;
      void      ReadPixelMatrix( bool from_bitmap );
      void      ReadPixelMatrix( const char* name, bool from_bitmap );
      void      ScaleModelRange( VSet<2U>& vset_scaled ) const;
-     void      ScaleModelRange( VSet<2U>& vset_scaled, double64 x_dim, double64 y_dim ) const;
+     void      ScaleModelRange( VSet<2U>& vset_scaled, double x_dim, double y_dim ) const;
      size_t    MapVertex( unsigned int m, unsigned int n ) const;
      void      GenerateVSet( VSet<2U>& vset ) const;
 

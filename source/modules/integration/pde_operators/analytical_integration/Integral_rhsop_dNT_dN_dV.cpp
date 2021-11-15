@@ -13,7 +13,7 @@ Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::Integral_rhsop_dNT_dN_dV( const Prope
                                                                 const char*             oper,
                                                                 const char*             basic,
                                                                 const char*             test,
-                                                                double64 prefactor ) 
+                                                                double prefactor ) 
   : MathOperatorRHS<dim>(pref,oper,basic),
     DN(2,3), DNT(3,2),
     basic_(pref.Parameter(test)),
@@ -71,7 +71,7 @@ void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::ComputeContribution( SIMPLEX& e 
 
     // assigning element contribution & integrating the matrix
     fill(MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.);
-    double64 volume = e.Volume();
+    double volume = e.Volume();
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     for (size_t i = 0; i < e.Nodes(); ++i) {

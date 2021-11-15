@@ -64,9 +64,9 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( CELL& e )
     
     DenseMatrix<DM_MIN> RHS_TEMP(e.Nodes(), e.Nodes()), UNITY(e.Nodes(), 1);
     
-    vector<double64>  N( e.Nodes() );
-    double64          det( 0.0 );
-    double64          volume( 0.0 ); // NT.N = element volume
+    vector<double>  N( e.Nodes() );
+    double          det( 0.0 );
+    double          volume( 0.0 ); // NT.N = element volume
     size_t   k(0);
     
     UNITY = 1.0;

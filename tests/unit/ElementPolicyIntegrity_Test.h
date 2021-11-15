@@ -58,15 +58,15 @@ class ElementOnly {
     void       CoordinateMatrix() const;
     void       CoordinateMatrix( DenseMatrix<DM_MIN>& XY )  const;
   
-    // maybe?    double64   AspectRatio() const;
-    double64   LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    // maybe?    double   AspectRatio() const;
+    double   LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
     Point<dim> BaryCenter() const;
     size_t     Segments() const { return 3U; /* type dependent number, static FEM_specifications class? */ }
     Point<dim> SegmentMidPoint( size_t segm ) const;
-    double64   SegmentLength( size_t segm ) const;
-    void       SegmentLengths( std::vector<double64>& ) const;
-    double64   AspectRatio() const;
-    double64   InnerRadius() const;
+    double   SegmentLength( size_t segm ) const;
+    void       SegmentLengths( std::vector<double>& ) const;
+    double   AspectRatio() const;
+    double   InnerRadius() const;
   
   private:
     mutable size_t                  idx_;

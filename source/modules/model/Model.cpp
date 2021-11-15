@@ -832,7 +832,7 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
 /**
 InputVariableFrom() lets you input variable data stored in a FEM_Data
 template class object to a Model variable. class T here is a place
-holder for the data type which may be a double64 or any basic CSP variable.
+holder for the data type which may be a double or any basic CSP variable.
 
 @param input_prop the name of the variable to which the data
 are to be assigned.
@@ -1006,8 +1006,8 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
                                          VARIABLE_TYPE vtype,
                                          PLACEMENT vplace,
                                          size_t vsize,
-                                         double64 vmin,
-                                         double64 vmax,
+                                         double vmin,
+                                         double vmax,
                                          string usage )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1262,7 +1262,7 @@ Also if no status changes were made, the method will report this.
 */
 template<size_t dim>
 void Model<dim>::ChangePropertyStatusWhere( const char* var,
-                                            double64 vmin, double64 vmax,
+                                            double vmin, double vmax,
                                             VARIABLE_FLAG new_status )
 {
   this->Region( "Model" ).ChangePropertyStatusWhere( var, new_status, vmin, vmax );
@@ -1733,8 +1733,8 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   csmp::Region<dim>&  super_group( this->Region( "Model" ) );
 
   assert( bvalues.size() >= 2U );
-  double64  v1 = bvalues[0]();
-  double64  v2 = bvalues[1]();
+  double  v1 = bvalues[0]();
+  double  v2 = bvalues[1]();
 
   csmp::Point<dim>  xyz_min, xyz_max;
   MinMaxCoordinates( xyz_min, xyz_max );
@@ -1756,8 +1756,8 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
   if ( isSide( side ) ) {
     assert( bvalues.size() == 4U );
-    double64  v3 = bvalues[2]();
-    double64  v4 = bvalues[3]();
+    double  v3 = bvalues[2]();
+    double  v4 = bvalues[3]();
 
     switch ( side )
     {
@@ -2697,7 +2697,7 @@ MinMaxOf() will report an error if the property of interest is unknown
 to the PropertyDatabase.
 */
 template<size_t dim>
-void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) const
+void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2747,7 +2747,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
   if ( prop_key.place == REGION ) {
     typename std::map<std::string, csmp::Region<dim> >::const_iterator  git( this->UniqueRegionsBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
-    double64  gmin( vmin ), gmax( vmax );
+    double  gmin( vmin ), gmax( vmax );
     while ( git != this->UniqueRegionsEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
       gmin = std::min( gmin, vmin );
@@ -2771,7 +2771,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ) {
     typename map<std::string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
-    double64  gmin( vmin ), gmax( vmax );
+    double  gmin( vmin ), gmax( vmax );
     while ( git != this->BoundariesEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
       gmin = std::min( gmin, vmin );
@@ -2789,7 +2789,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
        prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
     typename map<std::string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
-    double64  gmin( vmin ), gmax( vmax );
+    double  gmin( vmin ), gmax( vmax );
     while ( git != this->SplitBoundariesEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
       gmin = std::min( gmin, vmin );
@@ -2812,7 +2812,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
 template<size_t dim>
 bool Model<dim>::IsWithinRange( const char* var_name, const char* model_subdomain ) const
  {
-    double64  omin(DBL_MAX), omax(DBL_MIN), pmin, pmax;
+    double  omin(DBL_MAX), omax(DBL_MIN), pmin, pmax;
     
     // is the subdomain a region, boundary, or split boundary?
     if ( this->ContainsRegion( string(model_subdomain) ) )
@@ -2939,7 +2939,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string )
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   // 0. reporting
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   cout << "\nModel<" << dim << ">::OutputToBinaryFile: Saving model '" << Name();
   cout << "' at current time level, t = " << model_time << " secs." << endl;
 
@@ -3039,7 +3039,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   // 1. The binary data are read into VSet
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   VSet<dim>  vset;
   cout << "\nModel<" << dim;
   cout << ">::InputFromBinaryFile: Reading '" << model_name;
@@ -3141,7 +3141,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
 Calculates the x, y, z extent of the model and returns these lengths into its arguments.
 The return value is a string that contains the dimensions with explanations.
 */
-std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z )
+std::string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z )
 {
   Point<3U>  xyz_min, xyz_max;
   sg.MinMaxCoordinates( xyz_min, xyz_max );
@@ -3194,10 +3194,10 @@ The result is printed to the screen.
 
 */
 template<size_t  dim>
-double64 printRangeOfVariable( const Model<dim>& sg,
+double printRangeOfVariable( const Model<dim>& sg,
                                const char* var, bool max_or_min )
  {
-     double64 pmin, pmax;
+     double pmin, pmax;
      sg.MinMaxOf( var, pmin, pmax );
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax << endl;
@@ -3209,17 +3209,17 @@ double64 printRangeOfVariable( const Model<dim>& sg,
 
 
 template<size_t  dim>
-double64 printRangeOfVariable( const Model<dim>& sg,
+double printRangeOfVariable( const Model<dim>& sg,
                                Standard_IO_Handler& io,
                                const char* var, bool max_or_min )
  {
-     double64  pmin, pmax;
+     double  pmin, pmax;
      sg.MinMaxOf( var, pmin, pmax );
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax << endl;
      
      // recording the measured variable value range at given timestep
-     double64& model_time( ModelTime::Instance().modelTime );
+     double& model_time( ModelTime::Instance().modelTime );
      char   info[100];
      sprintf( info, "%lf", model_time );
      string var_info(info);
@@ -3245,10 +3245,10 @@ double64 printRangeOfVariable( const Model<dim>& sg,
 
 /// as above, but for individual model regions
 template<size_t  dim>
-double64 printRangeOfVariable( const Model<dim>& sg,
+double printRangeOfVariable( const Model<dim>& sg,
                                const char* group, const char* var, bool max_or_min )
  {
-     double64  pmin, pmax;
+     double  pmin, pmax;
      const PropertyDatabase<dim>& p_ref = sg.Database();
      const PLACEMENT place = sg.Database().Placement(var);
      
@@ -3258,7 +3258,7 @@ double64 printRangeOfVariable( const Model<dim>& sg,
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
-          return std::numeric_limits<double64>::signaling_NaN();
+          return std::numeric_limits<double>::signaling_NaN();
        }
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
      cout << var <<"' in subdomain of model '"<< group <<"': "<< pmin <<" to "<< pmax << endl;
@@ -3271,13 +3271,13 @@ double64 printRangeOfVariable( const Model<dim>& sg,
 
 
 template<size_t  dim>
-double64 printRangeOfVariable( const Model<dim>& sg,
+double printRangeOfVariable( const Model<dim>& sg,
                                 Standard_IO_Handler& io,
                                 const char* group,
                                 const char* var, bool max_or_min )
  {
-     double64& model_time( ModelTime::Instance().modelTime );
-     double64         pmin, pmax;
+     double& model_time( ModelTime::Instance().modelTime );
+     double         pmin, pmax;
      const PropertyDatabase<dim>& p_ref = sg.Database();
      const PLACEMENT place = sg.Database().Placement(var);
 
@@ -3287,7 +3287,7 @@ double64 printRangeOfVariable( const Model<dim>& sg,
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
-          return std::numeric_limits<double64>::signaling_NaN();
+          return std::numeric_limits<double>::signaling_NaN();
        }
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax <<" in subdomain of model '"<< group <<"'"<< endl;
@@ -3337,7 +3337,7 @@ is returned, if 'false' the long axis is returned.
 @return The intermediate or long axis of the current model.
 */
 template<size_t  dim>
-double64  printModelDimensions( const Model<dim>& sg, bool intermed_or_max )
+double  printModelDimensions( const Model<dim>& sg, bool intermed_or_max )
  {
     Point<dim> xyz_min, xyz_max;
     sg.MinMaxCoordinates( xyz_min, xyz_max );
@@ -3346,12 +3346,12 @@ double64  printModelDimensions( const Model<dim>& sg, bool intermed_or_max )
     if ( dim != 1U ) cout <<"ymin, ymax (vertical upward):     "<< xyz_min[1] <<" "<< xyz_max[1] << endl;
     if ( dim == 3U ) cout <<"zmin, zmax (horizontal to front): "<< xyz_min[2] <<" "<< xyz_max[2] << endl << endl;
 
-    set<double64,greater<double64> >  axis;
+    set<double,greater<double> >  axis;
     axis.insert( xyz_max[0] - xyz_min[0] );
     if ( dim != 1U ) axis.insert( xyz_max[1] - xyz_min[1] );
     if ( dim == 3U ) axis.insert( xyz_max[2] - xyz_min[2] );
     
-    set<double64,greater<double64> >::const_iterator  it = axis.begin();
+    set<double,greater<double> >::const_iterator  it = axis.begin();
     
     if ( !intermed_or_max ) return *it;
     
@@ -3374,7 +3374,7 @@ Point<dim>  centerOfGravity( const Model<dim>& model )
     const Region<dim>& mref(model.Region("Model"));
     typename vector<Element<dim>*>::const_iterator it(mref.ElementsBegin());
     Point<dim>  center((*it)->BaryCenter());
-    double64    counter(0.);
+    double    counter(0.);
     it++;
    
     while( it != mref.ElementsEnd() ) {
@@ -3409,58 +3409,58 @@ template Point<3U>  centerOfGravity( const Model<3U>& );
 
 // template instantiations
 template
-double64  printModelDimensions( const Model<1U>& sg, bool intermed_or_max );
+double  printModelDimensions( const Model<1U>& sg, bool intermed_or_max );
 
 template
-double64  printRangeOfVariable( const Model<1U>& sg,
+double  printRangeOfVariable( const Model<1U>& sg,
                                 const char* var, bool max_or_min );
 template
-double64  printRangeOfVariable( const Model<1U>& sg,
+double  printRangeOfVariable( const Model<1U>& sg,
 	                              Standard_IO_Handler& io, const char* var,
 	                              bool max_instead_of_min );
 template
-double64  printRangeOfVariable( const Model<1U>& sg,
+double  printRangeOfVariable( const Model<1U>& sg,
                                 const char* group, const char* var, bool max_or_min );
 template
-double64  printRangeOfVariable( const Model<1U>& sg,
+double  printRangeOfVariable( const Model<1U>& sg,
                                 Standard_IO_Handler& io,
                                 const char* group, const char* var,
                                 bool max_instead_of_min );
 
 template
-double64  printModelDimensions( const Model<2U>& sg, bool intermed_or_max );
+double  printModelDimensions( const Model<2U>& sg, bool intermed_or_max );
 
 template
-double64  printRangeOfVariable( const Model<2U>& sg,
+double  printRangeOfVariable( const Model<2U>& sg,
                                 const char* var, bool max_or_min );
 template
-double64  printRangeOfVariable( const Model<2U>& sg,
+double  printRangeOfVariable( const Model<2U>& sg,
                                 Standard_IO_Handler& io, const char* var,
                                 bool max_instead_of_min );
 template
-double64  printRangeOfVariable( const Model<2U>& sg,
+double  printRangeOfVariable( const Model<2U>& sg,
                                 const char* group, const char* var, bool max_or_min );
 template
-double64  printRangeOfVariable( const Model<2U>& sg,
+double  printRangeOfVariable( const Model<2U>& sg,
                                 Standard_IO_Handler& io,
                                 const char* group, const char* var,
                                 bool max_instead_of_min );
 
 template
-double64  printModelDimensions( const Model<3U>& sg, bool intermed_or_max );
+double  printModelDimensions( const Model<3U>& sg, bool intermed_or_max );
 
 template
-double64  printRangeOfVariable( const Model<3U>& sg,
+double  printRangeOfVariable( const Model<3U>& sg,
                                 const char* var, bool max_or_min );
 template
-double64  printRangeOfVariable( const Model<3U>& sg,
+double  printRangeOfVariable( const Model<3U>& sg,
                                 Standard_IO_Handler& io, const char* var,
                                 bool max_instead_of_min );
 template
-double64  printRangeOfVariable( const Model<3U>& sg,
+double  printRangeOfVariable( const Model<3U>& sg,
                                 const char* group, const char* var, bool max_or_min );
 template
-double64  printRangeOfVariable( const Model<3U>& sg,
+double  printRangeOfVariable( const Model<3U>& sg,
                                 Standard_IO_Handler& io,
                                 const char* group, const char* var,
                                 bool max_instead_of_min );
@@ -3544,7 +3544,7 @@ tensor variable.
 
 */
 template<size_t dim>
-void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max_value )
+void randomPerturb( Model<dim>& sg, const char* prop, double by_percent_of_max_value )
  {
     csmp::Index prop_key = sg.Database().StorageKey(prop);
     Region<dim>&  sgroup(sg.Region("Model"));
@@ -3553,7 +3553,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
       throw csmp::Exception( ERROR, "Model::RandomPerturb",
                                      "Can only perturb scalar values so far" );
 
-    double64 dmin, dmax;
+    double dmin, dmax;
     ScalarVariable  sc;
     sgroup.MinMaxOf( prop, dmin, dmax );
     
@@ -3612,9 +3612,9 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
       
  } // end RandomPerturb
 
-template void randomPerturb( Model<1U>&, const char*, double64 );
-template void randomPerturb( Model<2U>&, const char*, double64 );
-template void randomPerturb( Model<3U>&, const char*, double64 );
+template void randomPerturb( Model<1U>&, const char*, double );
+template void randomPerturb( Model<2U>&, const char*, double );
+template void randomPerturb( Model<3U>&, const char*, double );
 
 
 
@@ -3644,7 +3644,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
                     nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
                 {
                    // overwrites variable value with integer value of its flag enum
-                   double64 value = static_cast<double64>( (*nit)->Status(prop_key) );
+                   double value = static_cast<double>( (*nit)->Status(prop_key) );
                    (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
                 }
            break;
@@ -3653,7 +3653,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
                     eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                 {
-                   double64 value = static_cast<double64>( (*eit)->Status(prop_key) );
+                   double value = static_cast<double>( (*eit)->Status(prop_key) );
                    (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
                 }
            break;
@@ -3661,7 +3661,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
               for ( typename vector<Element<dim>*>::iterator
                     eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
                 {
-                   double64 value = static_cast<double64>( (*eit)->Status(prop_key) );
+                   double value = static_cast<double>( (*eit)->Status(prop_key) );
                    (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
                 }
            break;
@@ -3709,7 +3709,7 @@ void flagToNumber( Model<dim>& model, const char* flag_variable, const char* val
                         nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
                     {
                        // retrieves status of the flag variable
-                       double64 value = static_cast<double64>( (*nit)->Status(flag_key) );
+                       double value = static_cast<double>( (*nit)->Status(flag_key) );
                        // overwrites value of value variable with integer value of its flag enum
                        (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
                     }
@@ -3721,7 +3721,7 @@ void flagToNumber( Model<dim>& model, const char* flag_variable, const char* val
                     {
                        (*nit)->Read( flag_key, vc );
                        for ( size_t i=0U; i<dim; ++ i )
-                         vc(i) = static_cast<double64>( vc.Flag(i) );
+                         vc(i) = static_cast<double>( vc.Flag(i) );
                        (*nit)->Store( prop_key, vc );
                     }
                 }
@@ -3797,7 +3797,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                                     "The requested property is not an element variable");
 
      if ( prop_key.type != SCALAR ) {
-          throw csmp::Exception( WARNING, "stripDomainEdgesFor<double64oat,2U>::StripDomainEdgesFor",
+          throw csmp::Exception( WARNING, "stripDomainEdgesFor<doubleoat,2U>::StripDomainEdgesFor",
                                    "only SCALAR variables are handled so far");
           return;
        }
@@ -3819,7 +3819,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                // because the element is located at a region boundary
                // ---------------------------------------------------
                // 1. counting the surrounding values that are different from el-value
-               double64     sc_sum(0U);
+               double     sc_sum(0U);
                unsigned int counter(0U);
                for ( size_t i=0U; i<super_group.E(n)->Neighbors(); i++ ) {
                    assert( super_group.E(n)->Neighbor(i) != nullptr );
@@ -3831,7 +3831,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                // if more than 2 neighbors have a different property value, this value
                // is assigned to the element
                // TODO: if were are not dealing with triangular elements, this number (2U) is not correct
-               if ( counter >= 2U ) sc = sc_sum / static_cast<double64>(counter);
+               if ( counter >= 2U ) sc = sc_sum / static_cast<double>(counter);
           
                // storing the new values of only those elements that must be changed
                new_sc_data[ n ] = sc;
@@ -3911,9 +3911,9 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
     if ( gref.Nodes() != vset.Vertices() ) cout <<"\ncompareConnectivity: node number mismatch."<< endl;
   
     // 1. plist
-    for ( uint32 i=0U; i<gref.Elements(); i++ )
+    for ( uint32_t i=0U; i<gref.Elements(); i++ )
       {
-         for ( uint32 j=0U; j<gref.E(i)->Nodes(); j++ )
+         for ( uint32_t j=0U; j<gref.E(i)->Nodes(); j++ )
            if ( gref.E(i)->N(j)->Idx() != vset.Plist( gref.E(i)->Idx(), j ) ) {
                  cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->N(j)->Idx();
                  cerr <<" vs. vset nid: "<< vset.Plist( gref.E(i)->Idx(), j );
@@ -3922,11 +3922,11 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
       }
     
     // 2. pfverts
-    for ( uint32 i=0U; i<gref.Elements(); i++ )
+    for ( uint32_t i=0U; i<gref.Elements(); i++ )
       {
-         for ( uint32 j=0U; j<gref.E(i)->Neighbors(); j++ )
+         for ( uint32_t j=0U; j<gref.E(i)->Neighbors(); j++ )
            if ( gref.E(i)->Neighbor(j) and
-                static_cast<int32>(gref.E(i)->Neighbor(j)->Idx()) != vset.Pfvert( gref.E(i)->Idx(), j ) ) {
+                static_cast<int32_t>(gref.E(i)->Neighbor(j)->Idx()) != vset.Pfvert( gref.E(i)->Idx(), j ) ) {
                  cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->Neighbor(j)->Idx();
                  cerr <<" vs. vset nid: "<< vset.Pfvert( gref.E(i)->Idx(), j );
                  correct = false;
@@ -3956,11 +3956,11 @@ template bool compareConnectivity<3U>( const Model<3U>&, const VSet<3U>& );
     @author SKM 7/9/2014
 */
 template<size_t dim>
-void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double64 limit_value )
+void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double limit_value )
  {
     Region<dim>&  rref(model.Region(region));
     csmp::Index   prop_key(model.Database().StorageKey(variable));
-    double64      min, max;
+    double      min, max;
     model.Database().RangeOf( variable, min, max );
    
     if ( upper_limit && limit_value > max ) {
@@ -3988,7 +3988,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                case ELEMENT:
                   for ( typename vector<Element<dim>*>::iterator
                         it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
-                      double64 val = (*it)->Read( prop_key );
+                      double val = (*it)->Read( prop_key );
                       (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::min(limit_value,val) ) );
                    }
                  break;
@@ -3996,14 +3996,14 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                   for ( typename vector<Element<dim>*>::iterator
                         it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
                     for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
-                         double64 val = (*it)->Read( i, prop_key );
+                         double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::min(limit_value,val) ) );
                       }
                  break;
                case NODE:
                   for ( typename vector<Node<dim>*>::iterator
                         it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
-                      double64 val = (*it)->Read( prop_key );
+                      double val = (*it)->Read( prop_key );
                       (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::min(limit_value,val) ) );
                    }
                  break;
@@ -4022,7 +4022,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                case ELEMENT:
                   for ( typename vector<Element<dim>*>::iterator
                         it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
-                      double64 val = (*it)->Read( prop_key );
+                      double val = (*it)->Read( prop_key );
                       (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::max(limit_value,val) ) );
                    }
                  break;
@@ -4030,14 +4030,14 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                   for ( typename vector<Element<dim>*>::iterator
                         it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
                     for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
-                         double64 val = (*it)->Read( i, prop_key );
+                         double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::max(limit_value,val) ) );
                       }
                  break;
                case NODE:
                   for ( typename vector<Node<dim>*>::iterator
                         it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
-                      double64 val = (*it)->Read( prop_key );
+                      double val = (*it)->Read( prop_key );
                       (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::max(limit_value,val) ) );
                    }
                  break;
@@ -4053,7 +4053,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
           {
              case MODEL: {
                     model.Read( prop_key, vc );
-                    const double64 vmagnitude = vc.Length();
+                    const double vmagnitude = vc.Length();
                     assert( vmagnitude > 0. );
                     // if the vector is too long it gets scaled back
                     if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
@@ -4063,7 +4063,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                break;
              case REGION: {
                     rref.Read( prop_key, vc );
-                    const double64 vmagnitude = vc.Length();
+                    const double vmagnitude = vc.Length();
                     assert( vmagnitude > 0. );
                     if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
                     else if ( vmagnitude < min ) vc *= (min / vmagnitude);
@@ -4074,7 +4074,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                 for ( typename vector<Element<dim>*>::iterator
                       it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
                     (*it)->Read( prop_key, vc );
-                    const double64 vmagnitude = vc.Length();
+                    const double vmagnitude = vc.Length();
                     assert( vmagnitude > 0. );
                     if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
                     else if ( vmagnitude < min ) vc *= (min / vmagnitude);
@@ -4086,7 +4086,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                       it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
                        (*it)->Read( i, prop_key, vc );
-                        const double64 vmagnitude = vc.Length();
+                        const double vmagnitude = vc.Length();
                         assert( vmagnitude > 0. );
                         if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
                         else if ( vmagnitude < min ) vc *= (min / vmagnitude);
@@ -4097,7 +4097,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                 for ( typename vector<Node<dim>*>::iterator
                       it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
                     (*it)->Read( prop_key, vc );
-                    const double64 vmagnitude = vc.Length();
+                    const double vmagnitude = vc.Length();
                     assert( vmagnitude > 0. );
                     if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
                     else if ( vmagnitude < min ) vc *= (min / vmagnitude);
@@ -4112,9 +4112,9 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
 
  } // end imposeLimitOn
 
-template void imposeLimitOn( Model<1U>&, const char*, const char*, bool, double64 );
-template void imposeLimitOn( Model<2U>&, const char*, const char*, bool, double64 );
-template void imposeLimitOn( Model<3U>&, const char*, const char*, bool, double64 );
+template void imposeLimitOn( Model<1U>&, const char*, const char*, bool, double );
+template void imposeLimitOn( Model<2U>&, const char*, const char*, bool, double );
+template void imposeLimitOn( Model<3U>&, const char*, const char*, bool, double );
 
 
 

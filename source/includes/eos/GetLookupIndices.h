@@ -5,9 +5,9 @@
 
 namespace csmp
 {
-    long     GetTemperatureIndex(const double64& t);
-    long     GetPressureIndex(const double64& p);
-    double64 GetTemperatureResolution(const double64& t);
-    double64 GetPressureResolution(const double64& p);
+    long     GetTemperatureIndex(const double& t);
+    long     GetPressureIndex(const double& p);
+    double GetTemperatureResolution(const double& t);
+    double GetPressureResolution(const double& p);
 }
 #endif

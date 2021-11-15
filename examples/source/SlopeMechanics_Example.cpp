@@ -156,7 +156,7 @@ void SlopeMechanics_Example::Run()
                                                          "fluid pressure", "fluid pressure" );
 
   // cin >> "\nmain: Enter the acceleration of gravity (kg/m.s2): in the area of interest: ";
-  double64 acc_gravity(9.81);
+  double acc_gravity(9.81);
   // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
   NumIntegral_NT_op_dNi_dV<DIM>  hydrostatic_gravity( model.Database(), "element fluid density",
                                                                  "conductivity", "fluid pressure", acc_gravity );
@@ -164,7 +164,7 @@ void SlopeMechanics_Example::Run()
   hydrostatic_pressure.Add( &hydrostatic_gravity );
 
   // "\nmain: Enter the amount of total dissolved solids (ppm = g/tonne; normal seawater=12000 g/t): ";
-  double64 total_dissolved_solids(0.); // g->kg (157500-ppm = 157kg salt)
+  double total_dissolved_solids(0.); // g->kg (157500-ppm = 157kg salt)
   total_dissolved_solids /= 1000.; // gets kg/m3
   printRangeOfVariable( model, "element fluid density" );
   PropertyHandle<DIM>  rhof( model, "element fluid density", SCALAR, ELEMENT );
@@ -177,7 +177,7 @@ void SlopeMechanics_Example::Run()
   printRangeOfVariable( model, "fluid pressure" );
 /*
   cout << "\n\n\nmain: Iterating fluid pressure to find correct fluid density and viscosity... " << endl;
-  for ( uint32 i=0; i<=5U; i++ ) {
+  for ( uint32_t i=0; i<=5U; i++ ) {
        cout <<"\n\titeration "<< i+1U <<":"<< endl;
        model.Apply( hydrostatic_pressure );
 //printRangeOfVariable( model, "fluid pressure" );
@@ -335,16 +335,16 @@ void dilatationInducedChangeInPorePressure( Model<DIM>& model )
     for ( auto it=model_domain.NodesBegin(); it!=model_domain.NodesEnd(); ++it )
       {
          // get the inputs
-         double64 pf         = (*it)->Read( pf_key );
-         double64 fluid_compressibility = (*it)->Read(bf_key);
+         double pf         = (*it)->Read( pf_key );
+         double fluid_compressibility = (*it)->Read(bf_key);
          // finite volume average dilatation
-         double64 fv_dilatation(0.), fv_volume(0.);
+         double fv_dilatation(0.), fv_volume(0.);
          for ( size_t i=0U; i<(*it)->Parents(); ++i ) {
              // needed: sector volumes and elemental dilatation values
              Element<DIM>*  eptr((*it)->Parent(i));
-             double64 sector_dilatation = eptr->Read( dil_key );
+             double sector_dilatation = eptr->Read( dil_key );
              size_t esector = (*it)->ParentNodeNumber(i);
-             double64 sector_volume  = eptr->SectorVolume(esector);
+             double sector_volume  = eptr->SectorVolume(esector);
              fv_dilatation += sector_dilatation * sector_volume;
              fv_volume     += sector_volume;
            }
@@ -368,9 +368,9 @@ void permeabilityPorosityCorrelation( Model<DIM>& model )
    
     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
       {
-         double64 porosity = (*it)->Read( phi_key );
+         double porosity = (*it)->Read( phi_key );
          // TODO: introduce proper relationship here
-         double64 permeability = porosity * 1.0e-12;
+         double permeability = porosity * 1.0e-12;
          (*it)->Store( k_key, makeScalar((*it)->Status(k_key), permeability) );
       }
  
@@ -405,7 +405,7 @@ void porePressureBiotAlphaProduct( Model<DIM>& model, const char* target_region 
     for ( typename vector<Element<DIM>*>::iterator
           it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
       {
-         const double64 alpha((*it)->Read( alpha_key ));
+         const double alpha((*it)->Read( alpha_key ));
          if ( alpha < 0. or alpha > 1. ) {
               cerr <<"\n\tBiot coefficient alpha (1 - K_dry/K_grain): "<< alpha;
               throw csmp::Exception( ERROR, "porePressureBiotAlphaProduct:", "Biot coefficient alpha is out of range." );
@@ -424,7 +424,7 @@ void porePressureBiotAlphaProduct( Model<DIM>& model, const char* target_region 
 /**
     Computing the specific gravity force that acts on the rock skeleton from the "dry rock density"
 */
-void gravityForce( Model<DIM>& model, double64 acc_gravity )
+void gravityForce( Model<DIM>& model, double acc_gravity )
  {
     csmp::Region<DIM>& ref = model.Region("Model");
 

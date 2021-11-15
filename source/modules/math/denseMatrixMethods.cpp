@@ -28,7 +28,7 @@ void LU_Decomposition( DenseMatrix<dim>& A )
 
 
 template<size_t dim>
-void LU_BackSubstitution( const DenseMatrix<dim>& A, std::vector<double64>& z )
+void LU_BackSubstitution( const DenseMatrix<dim>& A, std::vector<double>& z )
  {
     assert( A.Rows() == A.Columns() /* LU decompositions makes sense only for square matrices */ );
     z.resize(A.Rows());

@@ -87,7 +87,7 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
                                    "range property is not defined in the database (file)");
 
     // getting geometric data from the existing regions
-    double64  volume;
+    double  volume;
 
     // unique regions
     for ( typename map<string,Region<dim> >::const_iterator
@@ -96,7 +96,7 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
         if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
         else                              volume = (*git).second.Volume(false);
         // surface area of region                = the length of the 1D model
-        const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
+        const double  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
         // recording the geometric properties
         string regionname=(*git).first;
@@ -111,7 +111,7 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
           if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
           else                              volume = (*git).second.Volume(false);
           // surface area of region
-          const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
+          const double  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
           // recording the geometric properties
           group_specs_[ (*git).first ] = make_pair(volume,surface_area);
@@ -160,7 +160,7 @@ void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg,
                                    "range property is not defined in the database (file)");
 
     // getting geometric data from the existing groups
-    double64  volume;
+    double  volume;
 
     for ( typename map<string,Region<dim> >::const_iterator
           git=sg.UniqueRegionsBegin(); git!=sg.UniqueRegionsEnd(); git++ ) {
@@ -168,7 +168,7 @@ void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg,
         if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
         else                              volume = (*git).second.Volume(false);
         // surface area of group
-        const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
+        const double  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
         // recording the geometric properties
         group_specs_[ (*git).first ] = make_pair(volume,surface_area);
@@ -180,7 +180,7 @@ void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg,
           if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
           else                              volume = (*git).second.Volume(false);
           // surface area of group
-          const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
+          const double  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
           // recording the geometric properties
           group_specs_[ (*git).first ] = make_pair(volume,surface_area);
@@ -244,10 +244,10 @@ void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property_regi
 }
 
 template<size_t dim>
-void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double64 time,
+void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
                                                            string property,
                                                            string regionname,
-                                                           double64 value )
+                                                           double value )
 {
     string property_column_entry=property+"_"+regionname;
     for(int i = 0; i < property_column_entry.length(); i++)
@@ -270,9 +270,9 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double64 time,
 
 
 template<size_t dim>
-void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double64 time,
+void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
                                                            string property_regionname,
-                                                           double64 value )
+                                                           double value )
 {
     string property_column_entry=property_regionname;
     for(int i = 0; i < property_column_entry.length(); i++)
@@ -301,9 +301,9 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double64 time,
     @attention non-unique regions that bear the name of model boundaries are ignored.
 */
 template<size_t dim>
-void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64 time )
+void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double time )
 {
-    double64  integral;
+    double  integral;
     
     // for all properties which shall be integrated over the groups
     for ( typename list<string>::const_iterator
@@ -329,7 +329,7 @@ void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64
             }
             // normalization
             if ( divide_by_volume_ ) {
-                typename map<string,std::pair<double64,double64> >::const_iterator
+                typename map<string,std::pair<double,double> >::const_iterator
                         gr_it=group_specs_.find( (*git).first );
                 // integral value gets divided by volume/area represented by group
                 integral /= (*gr_it).second.first;
@@ -359,7 +359,7 @@ void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64
                 }
                 // normalization
                 if ( divide_by_volume_ ) {
-                    typename map<string,pair<double64,double64> >::const_iterator
+                    typename map<string,pair<double,double> >::const_iterator
                             gr_it=group_specs_.find( (*git).first );
                     // integral value gets divided by volume/area represented by group
                     integral /= (*gr_it).second.first;
@@ -380,9 +380,9 @@ void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64
     @attention non-unique regions that bear the name of model boundaries are ignored.
 */
 template<size_t dim>
-void RegionMonitor<dim>::ScalarPropertyRanges( const Model<dim>& sg, double64 time )
+void RegionMonitor<dim>::ScalarPropertyRanges( const Model<dim>& sg, double time )
 {
-    double64  rmin, rmax;
+    double  rmin, rmax;
     
     // for all properties for which ranges shall be monitored
     for ( typename list<string>::const_iterator
@@ -453,7 +453,7 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
     // outputting geometric properties of groups
     // -----------------------------------------
     ofs <<"\nregion_name \t volume \t surface area "<< endl;
-    for ( typename map<string,pair<double64,double64> >::const_iterator
+    for ( typename map<string,pair<double,double> >::const_iterator
           gr_it=group_specs_.begin(); gr_it!=group_specs_.end(); gr_it++ ) {
         ofs << (*gr_it).first <<"\t"<< (*gr_it).second.first <<"\t"<< (*gr_it).second.second;
         ofs << endl;
@@ -471,7 +471,7 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
         // the column headers: time, group1, group2...
         ofs <<" time\t";
-        for ( typename map<string,pair<double64,double64> >::const_iterator
+        for ( typename map<string,pair<double,double> >::const_iterator
               gr_it=group_specs_.begin(); gr_it!=group_specs_.end(); gr_it++ ){
              ofs << (*gr_it).first <<"\t";
           }
@@ -479,15 +479,15 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
         // for all timesteps
         //         model_time,  property, groupname, property value
-        for ( typename map<double64,map<string,map<string,double64> > >::const_iterator
+        for ( typename map<double,map<string,map<string,double> > >::const_iterator
               int_it=integrals_.begin(); int_it!=integrals_.end(); int_it++ ) {
             // print the time at the beginning of the row
             ofs << (*int_it).first <<"\t";
             // find property record in the map
-            typename map<string,map<string,double64> >::const_iterator iprop_it=(*int_it).second.find(*iit);
+            typename map<string,map<string,double> >::const_iterator iprop_it=(*int_it).second.find(*iit);
             assert( iprop_it != (*int_it).second.end() );
             // for all groups print the recorded property values
-            for ( typename map<string,double64>::const_iterator
+            for ( typename map<string,double>::const_iterator
                   ipit=(*iprop_it).second.begin(); ipit!=(*iprop_it).second.end(); ipit++ )
                 // writing values to file
                 ofs << (*ipit).second <<"\t";
@@ -509,22 +509,22 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
         // the column headers: time, group1, group2...
         ofs <<" time\t\t";
-        for ( typename map<string,pair<double64,double64> >::const_iterator
+        for ( typename map<string,pair<double,double> >::const_iterator
               gr_it=group_specs_.begin(); gr_it!=group_specs_.end(); gr_it++ )
             ofs << (*gr_it).first <<"\t\t";
         ofs << endl;
 
         // for all timesteps
         //         model_time,  property, groupname, property ranges
-        for ( typename map<double64,map<string,map<string,pair<double64,double64> > > >::const_iterator
+        for ( typename map<double,map<string,map<string,pair<double,double> > > >::const_iterator
               ran_it=ranges_.begin(); ran_it!=ranges_.end(); ran_it++ ) {
             // the time
             ofs << (*ran_it).first <<"\t";
             // the property data-record searched in the map
-            typename map<string,map<string,pair<double64,double64> > >::const_iterator rprop_it=(*ran_it).second.find(*iit);
+            typename map<string,map<string,pair<double,double> > >::const_iterator rprop_it=(*ran_it).second.find(*iit);
             if ( rprop_it != (*ran_it).second.end() )
                 // for all property values recorded for the groups
-                for ( typename map<string,pair<double64,double64> >::const_iterator
+                for ( typename map<string,pair<double,double> >::const_iterator
                       rpit=(*rprop_it).second.begin(); rpit!=(*rprop_it).second.end(); rpit++ )
                     // writing values to file
                     ofs << (*rpit).second.first <<"\t" << (*rpit).second.second <<"\t";
@@ -550,9 +550,9 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
         ofsext.width(10);
         ofsext.setf(ios::scientific);
-        double64 value;
+        double value;
         // now the time information, in ascending order (downwards in the file).
-        for ( typename std::map<double64,std::map<std::string,double64> >::const_iterator
+        for ( typename std::map<double,std::map<std::string,double> >::const_iterator
               extp_it=ext_properties_.begin(); extp_it!=ext_properties_.end(); extp_it++ ) {
             ofsext<<extp_it->first;
             for ( typename set<string>::const_iterator

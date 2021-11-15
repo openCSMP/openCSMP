@@ -393,7 +393,7 @@ size_t  ModelTopology::FiniteElementTypes( std::set<std::string>& etypes ) const
      return etypes.size();
  }
 
-size_t  ModelTopology::FiniteElementTypes( std::set<int32>& etypes ) const
+size_t  ModelTopology::FiniteElementTypes( std::set<int32_t>& etypes ) const
  {
      for ( std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator
            it=model_regions.begin(); it!=model_regions.end(); it++ )
@@ -1377,7 +1377,7 @@ void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset )
  {
     size_t elmtdim;
     size_t elmtid;
-    int32  elmttype;
+    int32_t  elmttype;
     for ( std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::iterator
           rit=model_regions.begin(); rit!=model_regions.end(); rit++ )
     {
@@ -1455,7 +1455,7 @@ The method expects that the file name has the appendage and extension
 */
 void  ModelTopology::PropertiesOfRegions( const char* regions_file,
                                           std::list<std::string>& properties,
-                                          std::map<std::string,std::list<double64> >& props ) const
+                                          std::map<std::string,std::list<double> >& props ) const
  {
     char               text_line[500];
     char*              token(0);
@@ -1464,8 +1464,8 @@ void  ModelTopology::PropertiesOfRegions( const char* regions_file,
     strcpy( text_line, regions_file );
     strcat( text_line, "-regions.txt" );
     std::ifstream        ifs(text_line);
-    std::list<double64>  prop_vals;
-    double64             val;
+    std::list<double>  prop_vals;
+    double             val;
     std::string          region;
 
     if ( !ifs.is_open() )
@@ -1514,10 +1514,10 @@ void  ModelTopology::PropertiesOfRegions( const char* regions_file,
     for ( std::list<std::string>::const_iterator
           pit=properties.begin(); pit!=properties.end(); pit++ ) std::cout << (*pit) <<" ";
     std::cout <<"\n\nValues of these properties for listed regions: "<< std::endl;
-    for ( std::map<std::string,std::list<double64> >::const_iterator
+    for ( std::map<std::string,std::list<double> >::const_iterator
           it=props.begin(); it!=props.end(); it++ ) {
          std::cout <<"\t"<< (*it).first <<": ";
-         for ( std::list<double64>::const_iterator
+         for ( std::list<double>::const_iterator
                dit=(*it).second.begin(); dit!=(*it).second.end(); dit++ )
            std::cout << (*dit) <<"  ";
          std::cout << std::endl;
@@ -1553,7 +1553,7 @@ void ModelTopology::AssignMaterialProperties( VSet<dim>& vset,
                                               const std::multimap<std::string,std::vector<size_t> >& object_elements )
  {
     std::string     prop_name;
-    double64        prop_val;
+    double        prop_val;
     std::set<std::string> box_boundaries;
 
     BoundariesOfBoxShapedModel( box_boundaries );
@@ -1580,7 +1580,7 @@ void ModelTopology::AssignMaterialProperties( VSet<dim>& vset,
       }
 
     std::cout <<"\n\tEnter for how many (scalar) properties you would like to assign values to regions: ";
-    int32 assignments;
+    int32_t assignments;
     std::cin >> assignments;
     if ( assignments == 0 ) return;
 
@@ -1588,7 +1588,7 @@ void ModelTopology::AssignMaterialProperties( VSet<dim>& vset,
     PropertyData  scdata( ELEMENT, SCALAR, dim );
     data.Resize( vset.Elements(), vset.Elements() );
 
-    for ( int32 i=0; i<assignments; i++ ) {
+    for ( int32_t i=0; i<assignments; i++ ) {
          std::cout <<"\n\tEnter property name: ";
          std::cin  >> prop_name;
 
@@ -2216,28 +2216,28 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
 
      for ( bit=ElementsOfRegionBegin("BOTTOM");
            bit!=ElementsOfRegionEnd("BOTTOM"); bit++ )
-       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_bottom.push_back( (*nit) );
        
      for ( bit=ElementsOfRegionBegin("RIGHT");
            bit!=ElementsOfRegionEnd("RIGHT"); bit++ )
-       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_right.push_back( (*nit) );
        
      for ( bit=ElementsOfRegionBegin("TOP");
            bit!=ElementsOfRegionEnd("TOP"); bit++ )
-       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_top.push_back( (*nit) );
        
      for ( bit=ElementsOfRegionBegin("LEFT");
            bit!=ElementsOfRegionEnd("LEFT"); bit++ )
-       for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+       for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_left.push_back( (*nit) );
  
       for ( auto it : boundary_regions )
        for ( bit=ElementsOfRegionBegin(it.c_str());
              bit!=ElementsOfRegionEnd(it.c_str()); bit++ )
-         for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
            nodes_irregular.push_back( (*bit) );
 
      // making these containers unique
@@ -2272,7 +2272,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
      // 3. finding the corners of a box-shaped model, if any
      // ----------------------------------------------------
      if ( !nodes_left.empty() && !nodes_bottom.empty() ) {
-          vector<long64> cnr;
+          vector<int64_t> cnr;
           set_intersection( nodes_left.begin(), nodes_left.end(),
                             nodes_bottom.begin(), nodes_bottom.end(),
                             back_inserter( cnr ) );
@@ -2282,7 +2282,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
        }
 
      if ( !nodes_right.empty() && !nodes_bottom.empty() ) {
-          vector<long64> cnr;
+          vector<int64_t> cnr;
           set_intersection( nodes_right.begin(), nodes_right.end(),
                             nodes_bottom.begin(), nodes_bottom.end(),
                             back_inserter( cnr ) );
@@ -2292,7 +2292,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
        }
 
      if ( !nodes_right.empty() && !nodes_top.empty() ) {
-          vector<long64> cnr;
+          vector<int64_t> cnr;
           set_intersection( nodes_right.begin(), nodes_right.end(),
                             nodes_top.begin(), nodes_top.end(),
                             back_inserter( cnr ) );
@@ -2302,7 +2302,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
        }
 
      if ( !nodes_left.empty() && !nodes_top.empty() ) {
-          vector<long64> cnr;
+          vector<int64_t> cnr;
           set_intersection( nodes_left.begin(), nodes_left.end(),
                             nodes_top.begin(), nodes_top.end(),
                             back_inserter( cnr ) );
@@ -2317,7 +2317,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
      // if there is an irregular boundary on the model top instead of TOP
      if ( !nodes_irregular.empty() && nodes_top.empty() ) {
          if ( !nodes_left.empty() ) {
-              vector<long64> cnr;
+              vector<int64_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
@@ -2325,7 +2325,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
               vset.AddBFlag( cnr[0], CNR4 );
            }
          if ( !nodes_right.empty() ) {
-              vector<long64> cnr;
+              vector<int64_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
@@ -2337,7 +2337,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
      // if there is an irregular boundary on the model bottom instead of BOTTOM
      if ( !nodes_irregular.empty() && nodes_bottom.empty() ) {
          if ( !nodes_left.empty() ) {
-              vector<long64> cnr;
+              vector<int64_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
@@ -2345,7 +2345,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
               vset.AddBFlag( cnr[0], CNR1 );
            }
          if ( !nodes_right.empty() ) {
-              vector<long64> cnr;
+              vector<int64_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
@@ -2488,7 +2488,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const
      for ( auto it : boundary_regions )
        for ( auto bit=ElementsOfRegionBegin(it.c_str());
              bit!=ElementsOfRegionEnd(it.c_str()); bit++ )
-         for ( vector<long64>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
+         for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
            irregular.push_back( (*bit) );
 
      // making these containers unique

@@ -22,8 +22,8 @@ Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Jacobian_Integral_dNT_op_dN_dV( con
                                                             				const char* test_orig,
                                                             				const char* lambda,
                                                             				const char* d_lambda,
-                                                            				const double64 delta,
-                                                            				const double64 prefactor)
+                                                            				const double delta,
+                                                            				const double prefactor)
  
   : MathOperatorLHS<dim>(pref,oper,basic,test),
     DN(2,3),
@@ -111,9 +111,9 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& 
     res_.Resize(e.Nodes(),e.Nodes());
     res_.Fill(0.0);
   
-    const double64 global_factor = prefactor_ * e.Volume() / (delta_ * static_cast<double64>(e.Nodes()) );
+    const double global_factor = prefactor_ * e.Volume() / (delta_ * static_cast<double>(e.Nodes()) );
     for (size_t j = 0; j < e.Nodes(); ++j) {
-      const double64 j_factor = el_d_lambda[j]() - el_lambda[j]();
+      const double j_factor = el_d_lambda[j]() - el_lambda[j]();
       for (size_t i = 0; i < e.Nodes(); ++i) {
         for (size_t k = 0; k < e.Nodes(); ++k) {
           res_(i, j) += DNT(i, k) * el_test_orig[k]() * j_factor * global_factor;

@@ -65,7 +65,7 @@ number of elements of region.
 
 The binary file ('*.dat') contains: 
 
-1. NODE COORDINATE DATA (double64):
+1. NODE COORDINATE DATA (double):
 
 PX, PY, PZ records: preceded by a single unsigned long indicating the size of
 these records which (individually) contain (with or without line breaks):
@@ -74,28 +74,28 @@ px: -> x-coordinates of the nodes
 py: -> y-coordinates of the nodes
 pz: -> z-coordinates of the nodes
 
-(all entries in these records have the format double64 and
+(all entries in these records have the format double and
 the node-IDs are implicit from 0 to nodes-1):
 
 Such records could be written as shown in the C++ code example
 below:
 
 @code
-double64*        ptr; // data pointer
+double*        ptr; // data pointer
 ...
 unsigned long  n0(0), n1(1);
 
-if ( (records=px.size()) > 0 && (ptr=const_cast<double64*>(px.Data())) != NULL ) 
+if ( (records=px.size()) > 0 && (ptr=const_cast<double*>(px.Data())) != NULL ) 
   {
      fwrite( (void*) &records, sizeof(unsigned long), 1, fp );
-     fwrite( (void*) ptr, sizeof(double64), records, fp );
+     fwrite( (void*) ptr, sizeof(double), records, fp );
   }
 else fwrite( (void*) &n0, sizeof(unsigned long), 1, fp );
 @endcode
 
 2. NODE FLAGS (int)
 
-PBFLAGS: Same record length as the record set above but in int32 format.
+PBFLAGS: Same record length as the record set above but in int32_t format.
 
 - if a node lies on a model boundary, a negative integer value
   is assigned to identify that boundary uniquely in terms of the 
@@ -125,9 +125,9 @@ PBFLAGS: Same record length as the record set above but in int32 format.
 @endcode
    
     
-3. BOUNDARY CONDITIONS APPLIED TO NODES (double64)
+3. BOUNDARY CONDITIONS APPLIED TO NODES (double)
 
-PBVALS: Analogous to the record sets above but in double64 format:
+PBVALS: Analogous to the record sets above but in double format:
 
 - Corresponding to the non-zero flags from above, where a node is 
   located at a model boundary, a boundary value as previously assigned 
@@ -199,7 +199,7 @@ In summary, a complete record for a CSMP variable consists of:
 name(string)    placement(enum PLACEMENT)   type (VARIABLE_TYPE)    (array length (int32))
 number of data entries (int32)
 flag values (int32)
-property values (double64)
+property values (double)
 
 Since the names can contain whitespace, they are placed in quotation marks.
 
@@ -355,7 +355,7 @@ class SKUA_FiniteElementMeshInterface {
 
 
 /// returns the corresponding CSMP element type, taking into account whether an isoparametric FEM formulation is used
-CSMP_FEM_TYPE convertSKUA_ElementType( int32 etype, bool isoparametric );
+CSMP_FEM_TYPE convertSKUA_ElementType( int32_t etype, bool isoparametric );
 
 
 

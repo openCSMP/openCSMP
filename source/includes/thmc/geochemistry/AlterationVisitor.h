@@ -185,18 +185,18 @@ is disabled by setting the second 'boolean' argument.
 template<size_t dim>
 class AlterationVisitor : public Visitor<dim> {
   public:
-    AlterationVisitor( Model<dim>& sg, const char* rea_file, double64 dt );
+    AlterationVisitor( Model<dim>& sg, const char* rea_file, double dt );
     virtual ~AlterationVisitor();
 
     void Equilibrate( Model<dim>& sg, bool show_results=true );
     
-    void AdjustTimeIncrement( double64 new_dt );
+    void AdjustTimeIncrement( double new_dt );
 
-    void Precision( double64 tol );
+    void Precision( double tol );
 
-    void ThresholdReactantChangeFactor( double64 fac );
+    void ThresholdReactantChangeFactor( double fac );
 
-    void ThresholdReactantChangeRate( double64 rate );
+    void ThresholdReactantChangeRate( double rate );
 
     virtual void Visit( Node<dim>* ); 
     
@@ -205,7 +205,7 @@ class AlterationVisitor : public Visitor<dim> {
   private:
     std::string              group_name;  // if vis is restricted to Region
     const PropertyDatabase<dim>&  pref;
-    double64                 val_tolerance, 
+    double                 val_tolerance, 
                              rate_tolerance, 
                              fvol, fmass, 
                              rho_r_new, sum;
@@ -221,16 +221,16 @@ class AlterationVisitor : public Visitor<dim> {
 
     // ODE solver related variables 
     ODE_StiffSolver                               solver;
-    double64                                      time_increment, tolerance;
-    std::vector<std::pair<int32,std::string> >    coefs, dependent_comps, independent_comps;
+    double                                      time_increment, tolerance;
+    std::vector<std::pair<int32_t,std::string> >    coefs, dependent_comps, independent_comps;
      // concentrations, and rates of change from the last timestep
-    typename std::vector<std::vector<double64> >  amounts, rates;
+    typename std::vector<std::vector<double> >  amounts, rates;
 
     typedef enum { SOLID=1, AQUEOUS=2, GAS=3 }  PHASE_STATE;
     // index (ODE solver)  charge or density
-    std::map<uint32,std::pair<Index,Reactant> >  phase_properties;   
+    std::map<uint32_t,std::pair<Index,Reactant> >  phase_properties;   
 
-    double64 TestChargeBalance();
+    double TestChargeBalance();
     size_t   ReadDependentVariablePhaseState( const char* fname );
 };
 

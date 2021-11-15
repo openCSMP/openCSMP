@@ -75,7 +75,7 @@ FiniteVolumeStencil_Test::FiniteVolumeStencil_Test( bool verbose )
 	    for( size_t i = 0; i < (*vIterFEs)->Nodes(); i++ )
 	     for( size_t d = 0; d < dim; d++ )
 	     {
-	       const double64 v(matCoords(i,d)); 
+	       const double v(matCoords(i,d)); 
 	       (*vIterFEs)->XYZ(i, d, isnan(v)?0.:v);
 	     }
 	  }	 
@@ -506,7 +506,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
 			   
 			    //1. Test Length
 			    //length of normal, should be 1		
-			    const double64 fLength(vecNormal.Length());
+			    const double fLength(vecNormal.Length());
 			    //test if normals are unit vectors
 					cout << setprecision(15) << "\nLength of Normal: " << fLength << endl;
 			    _equal( fLength, 1., 1.e-7 );
@@ -725,7 +725,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                         tangent += weights.first * nt;
                         bitangent += weights.second * nt;
                     }
-                    double64 length = exteriorProductLength(tangent, bitangent);
+                    double length = exteriorProductLength(tangent, bitangent);
                     tangent.NormalizeLengthTo(1.0);
                     computedNormal = bitangent - dotProduct(tangent,bitangent) * tangent;
                     computedNormal.NormalizeLengthTo(length);
@@ -755,12 +755,12 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                   mappedNormal = 0.5 * (nt1 - nt0);
                 }
 
-                double64 computedNormalLength(computedNormal.Length());
+                double computedNormalLength(computedNormal.Length());
                 computedNormal.NormalizeLengthTo(1.0);
                 if ( verbose_ ) cout << "\nComputed normal: " << computedNormal[0] << ", " << computedNormal[1] << ", " << computedNormal[2];
                 if ( verbose_ ) cout << "\nComputed normal length: " << computedNormalLength;
 
-              double64 mappedNormalLength(mappedNormal.Length());
+              double mappedNormalLength(mappedNormal.Length());
               _test(mappedNormalLength > 0);
               mappedNormal.NormalizeLengthTo(1.0);
 
@@ -824,7 +824,7 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
 		//the dimension is given by the number of columns
 		const size_t iDim(matCoords.Cols());
 		
-		double64 fFacetWeight(0.), fFacetArea(0.);		
+		double fFacetWeight(0.), fFacetArea(0.);		
   		
 		vector< Point<3U> > vecOfPointsOfTheFacet;
 		//for each facet, get the area, and compare it to the weight of the integration point
@@ -935,10 +935,10 @@ void FiniteVolumeStencil_Test::weightsOfSectorIntegrationPointsTest() // argumen
  { 
   if ( verbose_ ) cout << "TESTING: weightsOfSectorIntegrationPointsTest()" << endl;
     //calculate total weight of sectors, which should correspond to the total volume of the finite element
- 	double64 fSumOfWeights(0.);
+ 	double fSumOfWeights(0.);
  	
  	//map types to total area
- 	map<CSMP_FEM_TYPE, double64> mapFEMTypeToArea;
+ 	map<CSMP_FEM_TYPE, double> mapFEMTypeToArea;
  	mapFEMTypeToArea.insert(make_pair(ISOPARAMETRIC_LINEAR_BAR, 2.));
  	mapFEMTypeToArea.insert(make_pair(ISOPARAMETRIC_LINEAR_TRIANGLE, 1./2.));
  	mapFEMTypeToArea.insert(make_pair(ISOPARAMETRIC_LINEAR_QUADRILATERAL, 4.));
@@ -1126,8 +1126,8 @@ void FiniteVolumeStencil_Test::shapeFunctionsTest()
   	//print type
     if ( verbose_ ) cout << "\nType: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
   	
-  	std::vector<double64> sf;
-  	double64 sum(0.);
+  	std::vector<double> sf;
+  	double sum(0.);
   	    
   	//check that they sum up at the integration points
   	for(size_t i = 0; i < (*vIterFEs)->IntegrationPoints(); i++)
@@ -1182,7 +1182,7 @@ void FiniteVolumeStencil_Test::shapeFunctionDerivativesTest()
   	//print type
     if ( verbose_ ) cout << "\nType: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
   	
-  	double64 sum(0.);
+  	double sum(0.);
   	DenseMatrix<DM_MIN> sf;
   	  
   	//check that they sum up at the integration points

@@ -107,7 +107,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
 
     // 2. building static FiniteDifferenceGrid for repeated data output
     // ----------------------------------------------------------------
-    double64  rmin, rmax;
+    double  rmin, rmax;
     
     if ( !regular_grid.IsInitialized() ) 
       {
@@ -133,7 +133,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     // 5. Writing grid to JPG file
     // ---------------------------
     //                                      grayscale output 
-    regular_grid.SaveToJPG( file_name, static_cast<int32>(timestep), gray, sqrt_of_value );
+    regular_grid.SaveToJPG( file_name, static_cast<int32_t>(timestep), gray, sqrt_of_value );
 
     return true;
 
@@ -149,15 +149,15 @@ values to prevent missing a part of the spectrum.
 
 @section arguments Input Arguments 
 
-As above, except for 2 double64 arguments permitting the user to 
+As above, except for 2 double arguments permitting the user to 
 specify the output range.  
 */
 bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
                                           const char* file_name, 
                                           const char* var_name, 
                                           long   timestep, 
-                                          double64    data_min, 
-                                          double64    data_max,
+                                          double    data_min, 
+                                          double    data_max,
                                           bool        gray,  
                                           bool        sqrt_of_value )
  {
@@ -180,7 +180,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
 
     // 2. building static FiniteDifferenceGrid for repeated data output
     // ----------------------------------------------------------------
-    double64  rmin, rmax;
+    double  rmin, rmax;
     
     if ( !regular_grid.IsInitialized() ) 
       {
@@ -205,7 +205,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     
     // 5. Writing grid to JPG file
     // ---------------------------
-    regular_grid.SaveToJPG( file_name, static_cast<int32>(timestep), data_min, data_max, gray, sqrt_of_value );
+    regular_grid.SaveToJPG( file_name, static_cast<int32_t>(timestep), data_min, data_max, gray, sqrt_of_value );
 
     return true;
 

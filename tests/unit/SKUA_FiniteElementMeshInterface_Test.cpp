@@ -90,7 +90,7 @@ void SKUA_FiniteElementMeshInterface_Test::OutputRegionsToVTK( const Model<3U>& 
      for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
           std::cout <<" "<< (*rit).second.Elements() <<" elements,";
-          std::pair<int32, int32> rdim = (*rit).second.ElementSpatialDimensions();
+          std::pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3 )
             std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           else if ( rdim.second == 2 )
@@ -168,9 +168,9 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNodePropertyAssignment( const Mod
          vector<Node<3U>*> ordered_nodes(domain.Nodes());
 
          for ( vector<Node<3U>*>::const_iterator nit=domain.NodesBegin(); nit!=domain.NodesEnd(); ++nit ) {
-              if ( fabs((*nit)->Read(nn_key) - (*nit)->Read(nu_key)) > numeric_limits<double64>::epsilon() ) { 
+              if ( fabs((*nit)->Read(nn_key) - (*nit)->Read(nu_key)) > numeric_limits<double>::epsilon() ) { 
                    cerr <<"\n\tnode number vs. number: "<< (*nit)->Read(nn_key) <<" vs. "<< (*nit)->Read(nu_key);
-                   _equal( (*nit)->Read(nn_key), (*nit)->Read(nu_key), numeric_limits<double64>::epsilon() );
+                   _equal( (*nit)->Read(nn_key), (*nit)->Read(nu_key), numeric_limits<double>::epsilon() );
                 }
               ordered_nodes[ static_cast<size_t>((*nit)->Read(nn_key)) ] = (*nit);
            }

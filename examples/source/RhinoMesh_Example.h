@@ -14,7 +14,7 @@ public:
   virtual void Specifications();
 private:
   void SideBoundaryConditions( Model<3U>& );
-  void ConcentrationRectangle( Model<3U>&, double64 );
+  void ConcentrationRectangle( Model<3U>&, double );
 };
 
 } // csmp

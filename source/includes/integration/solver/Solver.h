@@ -1,9 +1,7 @@
 #ifndef CSMP_SOLVER_H
 #define CSMP_SOLVER_H
 
-#include "CSMP_number_types.h"
-#include <cstdlib>
-#include <vector>
+#include "CSMP_definitions.h"
 #include "SolverSettings.h"
 
 namespace csmp {
@@ -46,7 +44,7 @@ other methods.
 @section participants Participants
 
 Each inversion involves a sparse global solution matrix of type SpMat,
-a righthand, and a solution vector of type vector<double64>.
+a righthand, and a solution vector of type vector<double>.
 
 
 @section implementation Implementation
@@ -82,36 +80,36 @@ public:
   bool  Verbose() const;
   
   void  Solve( SparseMatrix& G,
-               std::vector<double64>& rh,
-               std::vector<double64>& x,
+               std::vector<double>& rh,
+               std::vector<double>& x,
                size_t no_unknowns = 1U );
 
   void  Solve( CompressedRowMatrix& G,
-               std::vector<double64>& rh,
-               std::vector<double64>& x,
+               std::vector<double>& rh,
+               std::vector<double>& x,
                size_t no_unknowns = 1U );
 
   void  Out( const SparseMatrix& mat,
              const char* fname = "SparseMatrix" ) const;
 
-  void  Out( const std::vector<double64>& vec,
+  void  Out( const std::vector<double>& vec,
              const char* fname = "CSP_Vec" ) const;
 
-  double64  CalculateResidual( const SparseMatrix& A,
-                               const std::vector<double64>& b,
-                               const std::vector<double64>& x ) const;
+  double  CalculateResidual( const SparseMatrix& A,
+                               const std::vector<double>& b,
+                               const std::vector<double>& x ) const;
 
   virtual SolverSettings* GetSolverSettings();
 
 protected:
   virtual void  SolveMatrixEquation( SparseMatrix& A,
-                                     std::vector<double64>& b,
-                                     std::vector<double64>& x,
+                                     std::vector<double>& b,
+                                     std::vector<double>& x,
                                      size_t no_unknowns ) = 0;
 
   virtual void  SolveMatrixEquation( CompressedRowMatrix& A,
-                                     std::vector<double64>& b,
-                                     std::vector<double64>& x,
+                                     std::vector<double>& b,
+                                     std::vector<double>& x,
                                      size_t no_unknowns ) = 0;
 
   SolverSettings* solver_settings_;

@@ -13,7 +13,7 @@ class GocadHeader {
     bool         cn;    // control nodes y/n
     bool         solid; 
     long         sample_size;
-    double64    no_data_values;
+    double    no_data_values;
     std::map<std::string,GocadPropertyClassHeader>  properties;
 
   public:
@@ -35,8 +35,8 @@ class GocadHeader {
     bool        InitializeFrom( std::ifstream& ifs );
     void        WriteToText( std::ofstream& ofs ) const;
    
-    void        AddProperty( const char* pname, double64 loclip, double64 hiclip, 
-                             int32 pclip=99, int32 comp=1 );
+    void        AddProperty( const char* pname, double loclip, double hiclip, 
+                             int32_t pclip=99, int32_t comp=1 );
     
     void Out() const;
 };      

@@ -1,10 +1,6 @@
 #ifndef CSMP_BOX_H
 #define CSMP_BOX_H
 
-#include <iostream>
-#include <vector>
-#include <deque>
-#include "CSMP_number_types.h"
 #include "Point.h"
 
 namespace csmp {
@@ -102,7 +98,7 @@ are identified by BOX_BOUNDARY flags.
 class Box {
 public:
   void UnitNormalTo( BOX_BOUNDARY bdry, size_t dim,
-                     std::vector<double64>& nrml ) const;
+                     std::vector<double>& nrml ) const;
 
 };
 
@@ -203,7 +199,7 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 );
 /// reports the range of property values on the nodes flagged with the BOX_BOUNDARY identifier
 template<size_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
-                               const char* node_property, double64& bmin, double64& bmax );
+                               const char* node_property, double& bmin, double& bmax );
 
 
 } // end namespace csmp

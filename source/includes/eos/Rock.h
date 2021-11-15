@@ -11,17 +11,17 @@ namespace csmp
   public:
     
     Rock(); // to be used with t-dependent heat capacity
-    Rock( double64 heatcapacity ); // to be used with constant heat capacity
+    Rock( double heatcapacity ); // to be used with constant heat capacity
     ~Rock();
 
-    double64 HeatCapacity( double64 t);
-    double64 MinimumHeatCapacity();
-    double64 Enthalpy( double64 t);
+    double HeatCapacity( double t);
+    double MinimumHeatCapacity();
+    double Enthalpy( double t);
     
   private:
 
     //Rock();
-    const double64  cp;
+    const double  cp;
     const bool t_dependent;
   };
 }

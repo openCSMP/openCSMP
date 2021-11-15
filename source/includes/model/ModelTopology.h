@@ -95,7 +95,7 @@ class ModelTopology {
     
     /// return total number and CSMP names of FE-types in the model
     size_t      FiniteElementTypes( std::set<std::string>& etypes ) const;
-    size_t      FiniteElementTypes( std::set<int32>& etypes ) const;
+    size_t      FiniteElementTypes( std::set<int32_t>& etypes ) const;
     void        ChangeElementType( const std::string& old_element_type, std::string new_element_type );
     void        EliminateElementType( const char* etype );
     void        EliminateElementTypes( const std::list<std::string>& etypes );
@@ -158,7 +158,7 @@ class ModelTopology {
     /// properties of regions
     void        PropertiesOfRegions( const char* regions_file,
                                      std::list<std::string>& properties,
-                                     std::map<std::string,std::list<double64> >& props ) const;
+                                     std::map<std::string,std::list<double> >& props ) const;
 
 
     // ---------------------------------------------------------

@@ -13,52 +13,52 @@ namespace csmp
   {
     
   public:
-    HaliteLookup(const double64& externaltemperature, 
-                 const double64& externalpressure);
+    HaliteLookup(const double& externaltemperature, 
+                 const double& externalpressure);
     ~HaliteLookup();
 
-    double64        MassFractionNaCl();// [mass fraction NaCl]
-    double64        Density();         // [kg m-3]
-    double64        Enthalpy();        // [J kg-3]
-    double64        HeatCapacity();    // [J kg-1 K-1]
-    double64        Compressibility(); // [Pa-1]
-    double64        Viscosity();       // [Pa-1], dummy for completeness
-    double64        ValueOf(const int& property_index);
+    double        MassFractionNaCl();// [mass fraction NaCl]
+    double        Density();         // [kg m-3]
+    double        Enthalpy();        // [J kg-3]
+    double        HeatCapacity();    // [J kg-1 K-1]
+    double        Compressibility(); // [Pa-1]
+    double        Viscosity();       // [Pa-1], dummy for completeness
+    double        ValueOf(const int& property_index);
 
   private:
 
-    const double64& temperature_;     ///< reference to temperature [C] in flow code
-    const double64& pressure_;        ///< reference to pressure [Pa] in flow code
+    const double& temperature_;     ///< reference to temperature [C] in flow code
+    const double& pressure_;        ///< reference to pressure [Pa] in flow code
 
-    double64        tcurrent_;        ///< temperature [C] for internal use 
-    double64        pcurrent_;        ///< pressure [Pa], internal use
-    double64        tdummy_;          ///< another temperature variable [C] for internal use 
-    double64        pdummy_;          ///< another pressure variable [Pa] for internal use
-    double64        t_res_;           ///< temperature interval [C] in lookup table
-    double64        p_res_;           ///< pressure interval [bar] in lookup table
-    double64        tnorm_;           ///< normalized temperature inside lookup cell
-    double64        pnorm_;           ///< normalized pressure inside lookup cell
-    double64        t_iA_;            ///< temperature at low-T, low-P corner of lookup cell
-    double64        t_iB_;            ///< temperature at high-T, low-P corner of lookup cell
-    double64        t_iC_;            ///< temperature at high-T, high-P corner of lookup cell
-    double64        t_iD_;            ///< temperature at low-T, high-P left corner of lookup cell
-    double64        p_iA_;            ///< pressure at low-T, low-P corner of lookup cell
-    double64        p_iB_;            ///< pressure at high-T, low-P corner of lookup cell
-    double64        p_iC_;            ///< pressure at high-T, high-P corner of lookup cell
-    double64        p_iD_;            ///< pressure at low-T, high-P left corner of lookup cell
-    double64        v_bottom_;        ///< value of interest at low-P endpoint of isothermal interpolation
-    double64        v_top_;           ///< value of interest at high-P endpoint of isothermal interpolation
-    double64        v_interpolated_;  ///< interpolated value of interest in lookup cell
-    double64        v_iA_;            ///< pressure at low-T, low-P corner of lookup cell
-    double64        v_iB_;            ///< pressure at high-T, low-P corner of lookup cell
-    double64        v_iC_;            ///< pressure at high-T, high-P corner of lookup cell
-    double64        v_iD_;            ///< pressure at low-T, high-P left corner of lookup cell
-    double64        v_before_;        ///< value of interest at low-T endpoint of isobaric interpolation
-    double64        v_behind_;        ///< value of interest at high-T endpoint of isobaric interpolation
-    double64        v_vlh_;           ///< value of interest on intersection with Vapor-Halite-Liquid coexistence surface
-    double64        v_vlh_behind_;    ///< value of interest on intersection with Vapor-Halite-Liquid coexistence surface if higher T
-    double64        v_vlh_before_;    ///< value of interest on intersection with Vapor-Halite-Liquid coexistence surface if lower T
-    double64        tvlh_;            ///< temperature at intersection with Vapor-Halite-Liquid coexistence surface
+    double        tcurrent_;        ///< temperature [C] for internal use 
+    double        pcurrent_;        ///< pressure [Pa], internal use
+    double        tdummy_;          ///< another temperature variable [C] for internal use 
+    double        pdummy_;          ///< another pressure variable [Pa] for internal use
+    double        t_res_;           ///< temperature interval [C] in lookup table
+    double        p_res_;           ///< pressure interval [bar] in lookup table
+    double        tnorm_;           ///< normalized temperature inside lookup cell
+    double        pnorm_;           ///< normalized pressure inside lookup cell
+    double        t_iA_;            ///< temperature at low-T, low-P corner of lookup cell
+    double        t_iB_;            ///< temperature at high-T, low-P corner of lookup cell
+    double        t_iC_;            ///< temperature at high-T, high-P corner of lookup cell
+    double        t_iD_;            ///< temperature at low-T, high-P left corner of lookup cell
+    double        p_iA_;            ///< pressure at low-T, low-P corner of lookup cell
+    double        p_iB_;            ///< pressure at high-T, low-P corner of lookup cell
+    double        p_iC_;            ///< pressure at high-T, high-P corner of lookup cell
+    double        p_iD_;            ///< pressure at low-T, high-P left corner of lookup cell
+    double        v_bottom_;        ///< value of interest at low-P endpoint of isothermal interpolation
+    double        v_top_;           ///< value of interest at high-P endpoint of isothermal interpolation
+    double        v_interpolated_;  ///< interpolated value of interest in lookup cell
+    double        v_iA_;            ///< pressure at low-T, low-P corner of lookup cell
+    double        v_iB_;            ///< pressure at high-T, low-P corner of lookup cell
+    double        v_iC_;            ///< pressure at high-T, high-P corner of lookup cell
+    double        v_iD_;            ///< pressure at low-T, high-P left corner of lookup cell
+    double        v_before_;        ///< value of interest at low-T endpoint of isobaric interpolation
+    double        v_behind_;        ///< value of interest at high-T endpoint of isobaric interpolation
+    double        v_vlh_;           ///< value of interest on intersection with Vapor-Halite-Liquid coexistence surface
+    double        v_vlh_behind_;    ///< value of interest on intersection with Vapor-Halite-Liquid coexistence surface if higher T
+    double        v_vlh_before_;    ///< value of interest on intersection with Vapor-Halite-Liquid coexistence surface if lower T
+    double        tvlh_;            ///< temperature at intersection with Vapor-Halite-Liquid coexistence surface
 
     long            it_;              ///< lookup grid line index along temperature axis
     long            ip_;              ///< lookup grid line index along pressure axis
@@ -75,19 +75,19 @@ namespace csmp
     int             state_iC_;        ///< phase state of system at high-T, high-P corner of lookup cell (always H for halite)
     int             state_iD_;        ///< phase state of system at low-T, high-P left corner of lookup cell (always H for halite)
     
-    std::vector<double64> storage_vector; ///< stores lookup data in sequence t-p-x-rho-h at each Lookup point
+    std::vector<double> storage_vector; ///< stores lookup data in sequence t-p-x-rho-h at each Lookup point
     // should the next one be <size_t> or <uint> rather than <int>?
     std::vector<int>      state_vector;   ///< stores phase state at each Lookup point
 
-    double64 NormalInterpolation( const int& property_index );
-    double64 NearVLHInterpolationLowT( const int& property_index );
-    double64 NearVLHInterpolationHighT( const int& property_index );
-    double64 NearNaClMeltInterpolation( const int& property_index );
+    double NormalInterpolation( const int& property_index );
+    double NearVLHInterpolationLowT( const int& property_index );
+    double NearVLHInterpolationHighT( const int& property_index );
+    double NearNaClMeltInterpolation( const int& property_index );
    
     void     SetTemperatureAndPressure();
     void     GetIndex_iA(const int& property_index);
-    void     GetTemperatureIndex(const double64& t);
-    void     GetPressureIndex(const double64& p);
+    void     GetTemperatureIndex(const double& t);
+    void     GetPressureIndex(const double& p);
 
     NaClMeltingCurveHaliteLookup    naclmelt_h_lookup;
   };
@@ -116,8 +116,8 @@ namespace csmp
      Upon construction, HaliteLookup will check if the lookup tables do already exist. If not, they will be re-computed and written. The respective files are "HalitePropertiesLookupTable.bin" and "HaliteStateLookupTable.bin".
 
      @code                                                                                                            
-     double64 t; // temperature [C] in user's application
-     double64 p; // pressure [Pa] in user's application                                                             
+     double t; // temperature [C] in user's application
+     double p; // pressure [Pa] in user's application                                                             
      HaliteLookup haliteLookup(t,p);
      ...
      t = some_value;

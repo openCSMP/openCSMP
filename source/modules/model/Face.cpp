@@ -992,7 +992,7 @@ void Face<dim>::VectorToInnerElementBaryCenter( VectorVariable<dim>& vectorToInn
 
 /// returns area (3D) or length (2D) of face
 template<size_t dim>
-double64 Face<dim>::Area() const
+double Face<dim>::Area() const
  {
     return this->Volume();
  }
@@ -1073,7 +1073,7 @@ Point<dim>  Face<dim>::BaryCenter() const
     for ( size_t i=1U; i<n_nodes; ++i )
       pt += N(i)->Coordinate();
 
-    return pt / static_cast<double64>(Nodes());
+    return pt / static_cast<double>(Nodes());
   }
 
 
@@ -1103,21 +1103,21 @@ when evaluating the quality of a certain mesh.
 
 */
 template<size_t dim>
-double64  Face<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
+double  Face<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
   {
-    double64 fMinTemp( static_cast<double64>( DBL_MAX) );
-    double64 fMaxTemp( static_cast<double64>(-DBL_MAX) );
+    double fMinTemp( static_cast<double>( DBL_MAX) );
+    double fMaxTemp( static_cast<double>(-DBL_MAX) );
 
     // this normalisation is necessary because the vector variable
     // being any physical quantity may have any magnitude
-    const double64 fMagnitudeOfDirection(vecDirection.Length());
+    const double fMagnitudeOfDirection(vecDirection.Length());
     // avoid division by zero
-    assert( fMagnitudeOfDirection >= numeric_limits<double64>::epsilon() );
+    assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
     const size_t n_nodes(Nodes());
     for ( size_t i=0; i<n_nodes; ++i ) {
         // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
-        double64 fTemp(vecDirection.DotProduct( N(i)->Coordinate() ));
+        double fTemp(vecDirection.DotProduct( N(i)->Coordinate() ));
         fTemp /= fMagnitudeOfDirection;
 
         // update minimum value

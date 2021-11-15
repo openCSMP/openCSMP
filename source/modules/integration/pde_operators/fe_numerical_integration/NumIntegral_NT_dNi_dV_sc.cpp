@@ -55,7 +55,7 @@ void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( CELL& e )
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim>::LHS.Zero();
-    double64 det;
+    double det;
     IPOL.resize( e.Nodes() );
     TEMP.Resize( e.Nodes(), e.Nodes() );
     for ( size_t i=0; i<e.IntegrationPoints(); i++ )

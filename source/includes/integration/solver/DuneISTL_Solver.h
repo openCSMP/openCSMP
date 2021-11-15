@@ -250,8 +250,8 @@ class DuneISTL_Solver : public Solver
 protected:
 
     virtual void SolveMatrixEquation( SparseMatrix& A,
-                                    std::vector<double64>& b,
-                                    std::vector<double64>& x,
+                                    std::vector<double>& b,
+                                    std::vector<double>& x,
                                     size_t no_unknowns )
     {
         // Todo: optimise conversion

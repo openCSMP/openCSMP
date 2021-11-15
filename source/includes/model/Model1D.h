@@ -17,56 +17,56 @@ public:
 
     /// creates an uniform mesh
     Model1D( const std::string& model_name,
-             double64 length,
+             double length,
              size_t   elements,
-             const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+             const std::vector<double>& splitnode_coordinates = std::vector<double>(),
              const Point<dim>& origin = Point<dim>(),
              const Point<dim>& destination = Point<dim>() );
 
     /// creates an uniform mesh
     Model1D( const std::string& model_name,
              const std::string& variable_file,
-             double64 length,
+             double length,
              size_t   elements,
-             const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+             const std::vector<double>& splitnode_coordinates = std::vector<double>(),
              const Point<dim>& origin = Point<dim>(),
              const Point<dim>& destination = Point<dim>() );
 
     /// creates a refined mesh
     Model1D( const std::string& model_name,
-             double64 length,
-             double64 dx_min,
-             double64 dx_max,
-             double64 width_of_transition_zone,
+             double length,
+             double dx_min,
+             double dx_max,
+             double width_of_transition_zone,
              MeshDensity* density,
-             const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+             const std::vector<double>& splitnode_coordinates = std::vector<double>(),
              const Point<dim>& origin = Point<dim>(),
              const Point<dim>& destination = Point<dim>() );
 
     /// creates a refined mesh
     Model1D( const std::string& model_name,
              const std::string& variable_file,
-             double64 length,
-             double64 min_size,
-             double64 max_size,
-             double64 width_of_transition_zone,
+             double length,
+             double min_size,
+             double max_size,
+             double width_of_transition_zone,
              MeshDensity* density,
-             const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+             const std::vector<double>& splitnode_coordinates = std::vector<double>(),
              const Point<dim>& origin = Point<dim>(),
              const Point<dim>& destination = Point<dim>() );
 
     /// creates a custom mesh with vector( 1D node coordinates )
     Model1D( const std::string& model_name,
-             const std::vector<double64>& node_coordinates,
-             const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+             const std::vector<double>& node_coordinates,
+             const std::vector<double>& splitnode_coordinates = std::vector<double>(),
              const Point<dim>& origin = Point<dim>(),
              const Point<dim>& destination = Point<dim>() );
 
     /// creates a custom mesh with vector( 1D node coordinates )
     Model1D( const std::string& model_name,
              const std::string& variable_file,
-             const std::vector<double64>& node_coordinates,
-             const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+             const std::vector<double>& node_coordinates,
+             const std::vector<double>& splitnode_coordinates = std::vector<double>(),
              const Point<dim>& origin = Point<dim>(),
              const Point<dim>& destination = Point<dim>() );
 
@@ -92,20 +92,20 @@ public:
     void Initialize( VSet<dim>& );
 
     /// creates an uniform mesh
-    void Initialize( double64 length, size_t elements,
-                     const std::vector<double64>&,
+    void Initialize( double length, size_t elements,
+                     const std::vector<double>&,
                      const Point<dim>&, const Point<dim>& );
 
     /// creates an exponentially refined mesh
-    void Initialize( double64 length, double64 dx_min, double64 dx_max,
-                     double64 width_of_transition_zone,
+    void Initialize( double length, double dx_min, double dx_max,
+                     double width_of_transition_zone,
                      MeshDensity* density,
-                     const std::vector<double64>&,
+                     const std::vector<double>&,
                      const Point<dim>&, const Point<dim>& );
 
     /// creates a custom mesh with vector( 1D node coordinates )
-    void Initialize( const std::vector<double64>&,
-                     const std::vector<double64>&,
+    void Initialize( const std::vector<double>&,
+                     const std::vector<double>&,
                      const Point<dim>&, const Point<dim>& );
 
     /// creates a custom mesh with vector( 1D, 2D or 3D node coordinates )

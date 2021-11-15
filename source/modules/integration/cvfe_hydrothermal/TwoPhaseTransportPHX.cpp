@@ -33,7 +33,7 @@ TwoPhaseTransportPHX<dim>::TwoPhaseTransportPHX( Model<dim>& model,
     svfo_key  =  model.Database().StorageKey( "shell vapor flux out" );
     T_key     =  model.Database().StorageKey( "temperature" );
 
-    cout <<"\n\nTwoPhaseTransportPHX<"<< typeid(double64).name() <<","<< dim;
+    cout <<"\n\nTwoPhaseTransportPHX<"<< typeid(double).name() <<","<< dim;
     cout <<">: Constructed successfully."<< endl;
 
     
@@ -47,7 +47,7 @@ TwoPhaseTransportPHX<dim>::~TwoPhaseTransportPHX()
 
 /** modify maximum size of time step */
 template<size_t dim>
-void TwoPhaseTransportPHX<dim>::SetLargestTimeStep( const double64& max_time_step )
+void TwoPhaseTransportPHX<dim>::SetLargestTimeStep( const double& max_time_step )
  {
     fv_transport_liquid.SetMaximumTimeStep( max_time_step );
     fv_transport_vapor.SetMaximumTimeStep( max_time_step );
@@ -55,7 +55,7 @@ void TwoPhaseTransportPHX<dim>::SetLargestTimeStep( const double64& max_time_ste
 
 /** main function to coordinate two-phase flow */
 template<size_t dim>
-double64  TwoPhaseTransportPHX<dim>::AdvectMassConserved( const double64& time_increment )
+double  TwoPhaseTransportPHX<dim>::AdvectMassConserved( const double& time_increment )
  {
  
    cfl_dt               = time_increment;
@@ -100,7 +100,7 @@ void  TwoPhaseTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimestep()
   time_step_factor = 1.0;
 
   unsigned int idx;
-  double64 LHS, Outflow, temp_factor;
+  double LHS, Outflow, temp_factor;
      
   // time step is only cut if the primary variable (liquid + vapor mass) is running dry
   for ( typename vector<Node<dim>*>::const_iterator 

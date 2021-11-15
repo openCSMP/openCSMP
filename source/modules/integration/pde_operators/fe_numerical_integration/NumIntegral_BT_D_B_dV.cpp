@@ -182,7 +182,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( CELL& e )
     // -----------------------------
     if ( !e.FE()->UsesLocalCoordinates() )
       {
-         const double64 volume(e.Volume());
+         const double volume(e.Volume());
          // setting C to 1 and its diagonal to 2
          MathOperatorLHS<dim>::LHS = volume / 12.;
          for ( size_t f=0; f<(e.Nodes()*dim); f++ ) 
@@ -227,7 +227,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( CELL& e )
 
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
-         double64 detJ = e.dN_AtIntegrationPoint( B, i, dim );
+         double detJ = e.dN_AtIntegrationPoint( B, i, dim );
 
          if ( detJ <= 0. ) {
               cerr <<"\n\tElement "<< e.Idx() <<": determinant of Jacobian at Gauss point "<< i <<": "<< detJ << endl;

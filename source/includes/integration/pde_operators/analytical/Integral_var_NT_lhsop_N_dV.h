@@ -19,7 +19,7 @@ class Integral_var_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
                                const char* basic,
                                const char* test,
                                const char* var,
-                               const double64 prefactor = 1.0);
+                               const double prefactor = 1.0);
     
     virtual void GetOperands( SIMPLEX& e );
 
@@ -31,7 +31,7 @@ class Integral_var_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
     ScalarVariable                op_;
     Parameter                     var_;
     std::vector<ScalarVariable >  vvar_;
-    const double64                prefactor_;
+    const double                prefactor_;
 };
 
 

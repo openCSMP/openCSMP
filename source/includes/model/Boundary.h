@@ -143,13 +143,13 @@ class Boundary : public ModelSubDomain<dim, Face>,
     // ----------------------------------------
 
     /// surface area of the boundary
-    double64  Area() const;
+    double  Area() const;
 
     /// length of the boundary perimeter in 3D, else NaN
-    double64  Perimeter() const;
+    double  Perimeter() const;
 
     /// surface integral over the variable of interest
-    double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
+    double  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
     
     /// reports whether the boundary lies on the outside of the whole model
     bool IsExternal() const;
@@ -161,7 +161,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
     BOX_BOUNDARY AtBoundary() const { return boundaryFlag_; }
 
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in boundary
-    std::pair<int32, int32>  FaceSpatialDimensions() const;
+    std::pair<int32_t, int32_t>  FaceSpatialDimensions() const;
 
     void Out() const;
 

@@ -34,7 +34,7 @@ class ScalarVariable_Test : public Test
     void IsWithinRange_Function();
 	
   private:
-    double64 fTolerance;
+    double fTolerance;
   
 }; //end class
 

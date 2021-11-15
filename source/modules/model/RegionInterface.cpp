@@ -246,14 +246,14 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs( bool re
     size_t               n_regions(0U);
 
     // checking the existence of valid material ID values (mapping the element ids)
-    map<int32,vector<Element<dim>*> >  mtrl_ids;
+    map<int32_t,vector<Element<dim>*> >  mtrl_ids;
     const typename deque<Element<dim>*>::const_iterator elmts_end(mesh.ElementsEnd());
     typename deque<Element<dim>*>::const_iterator       eit(mesh.ElementsBegin());
     string                                              region_name("undefined");
     
     // collecting the elements that make up the different materials of the model
     while ( eit != elmts_end ) {
-         pair<typename map<int32,vector<Element<dim>*> >::iterator,bool>
+         pair<typename map<int32_t,vector<Element<dim>*> >::iterator,bool>
            it = mtrl_ids.insert( make_pair( (*eit)->Material_ID(), vector<Element<dim>*>{} ) );
          // if ( it.second ) (*it.first).second = "MATERIAL" + to_string( (*eit)->Material_ID() );
          (*it.first).second.push_back( (*eit) );
@@ -334,7 +334,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName 
     REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
     MeshManager<dim>&    meshMgr           = regionComplex->Mesh();
     csmp::Region<dim>&   subdomain         = iterUniqueRegion->second;
-    pair<int32, int32>   spatialDimensions = subdomain.ElementSpatialDimensions();
+    pair<int32_t, int32_t>   spatialDimensions = subdomain.ElementSpatialDimensions();
 
     // 1. disconnects elements from neighbors and nodes, deletes them, and removes zero entries from pointer
     meshMgr.template Delete<Element>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
@@ -421,10 +421,10 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
   {
     BinaryFileSectionWrite hdr( fp, "UNIQREGN" );
 
-    long64 records = this->UniqueRegions();
+    int64_t  records = this->UniqueRegions();
     
     // writing number of unique regions
-    fp.write( reinterpret_cast<const char*>(&records), sizeof( long64 ) );
+    fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
 
     for ( typename std::map<std::string, csmp::Region<dim> >::const_iterator
           git = UniqueRegionsBegin(); git != UniqueRegionsEnd(); ++git )
@@ -444,9 +444,9 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
     cout << "\n\n\tNon-unique regions overlapping unique ones and potentially each other: ";
     BinaryFileSectionWrite hdr( fp, "NONUREGN" );
 
-    long64 records = this->Regions() - this->UniqueRegions();
+    int64_t  records = this->Regions() - this->UniqueRegions();
 
-    fp.write( reinterpret_cast<const char*>(&records), sizeof( long64 ) );
+    fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
 
     for ( auto git = RegionsBegin(); git != RegionsEnd(); git++ )
       {
@@ -528,8 +528,8 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
     {
       BinaryFileSectionRead hdr( fp, "UNIQREGN" );
       // getting number of unique region records from file
-      long64  records( 0 );  // region records
-      fp.read( reinterpret_cast<char*>(&records), sizeof( long64 ) );
+      int64_t   records( 0 );  // region records
+      fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
       if ( records > 0 )
           // reading the regions sequentially
           for ( size_t i = 0U; i<records; i++ )
@@ -563,8 +563,8 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
   {
     BinaryFileSectionRead hdr( fp, "NONUREGN" );
     // getting number of non-unique region records from file
-    long64  records( 0 );
-    fp.read( reinterpret_cast<char*>(&records), sizeof( long64 ) );
+    int64_t   records( 0 );
+    fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
     if ( records > 0 )
       // reading the regions sequentially
       for ( size_t i = 0U; i<records; i++ )
@@ -683,7 +683,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
                            "method can only be applied to Node, Element, and Element-IP variables",
                            "no assignments were made" );
 
-  map<double64,string>  groups;
+  map<double,string>  groups;
 
   // 1. Making a map with one entry for each property value
   // ------------------------------------------------------
@@ -693,7 +693,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
   {
     case NODE:
       for ( auto& nit : model_domain.NodeVector() ) {
-          double64 sc = nit->Read( prop_key );
+          double sc = nit->Read( prop_key );
           groups[sc] = "undefined";
         }
       break;
@@ -701,14 +701,14 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
       for ( auto eit : model_domain.CellVector() ) {
         for ( size_t i = 0U; i < eit->IntegrationPoints(); i++ )
           {
-            double64 sc = eit->Read( i, prop_key );
+            double sc = eit->Read( i, prop_key );
             groups[sc] = "undefined";
           }
       }
       break;
     case ELEMENT:
       for ( auto eit : model_domain.CellVector() ) {
-          double64 sc = eit->Read( prop_key );
+          double sc = eit->Read( prop_key );
           groups[sc] = "undefined";
         }
       break;
@@ -727,7 +727,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
   size_t  group_idx( 0U );
   char    num[30U];
 
-  for ( typename std::map<double64, std::string>::iterator
+  for ( typename std::map<double, std::string>::iterator
         it = groups.begin(); it != groups.end(); it++ )
   {
     std::cout << "\nProperty value: " << (*it).first;
@@ -738,8 +738,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
       {
         assert( !ContainsRegion( (*it).second.c_str() ) );
         FormRegionFrom( (*it).second.c_str(), prop,
-                        (*it).first - std::numeric_limits<double64>::epsilon(),
-                        (*it).first + std::numeric_limits<double64>::epsilon(), true );
+                        (*it).first - std::numeric_limits<double>::epsilon(),
+                        (*it).first + std::numeric_limits<double>::epsilon(), true );
 
         group_names.insert( (*it).second );
       }
@@ -965,7 +965,7 @@ elements with the desired properties were found.
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupname,
                                                              const char* prop,
-                                                             double64 min, double64 max,
+                                                             double min, double max,
                                                              bool unique_group )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1125,7 +1125,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
   // 2. assigning the regions to groups in the Model
   std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::FormRegionsFrom: Forming the regions: ";
 
-  int32 new_regions( 0U );
+  int32_t new_regions( 0U );
   for ( typename std::list<std::string>::const_iterator lit = regions.begin(); lit != regions.end(); lit++ )
     {
       std::string group_name( *lit );
@@ -1192,7 +1192,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& regi
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  std::pair<int32, int32>  dimensionality = mref.ElementSpatialDimensions();
+  std::pair<int32_t, int32_t>  dimensionality = mref.ElementSpatialDimensions();
   if ( dimensionality.first > 1U ) {
     csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::IsContiguous:",
                        "method can determine contiguity only for regions which consist only of same spatial dimension elements; returned false." );
@@ -1698,7 +1698,7 @@ their faces coincides with the group boundary.
 @section arguments Input Arguments
 
 Assigns the finite elements that are located in a rectangular region that
-is given by the double64 arguments (x = horizontal, y = vertical) as
+is given by the double arguments (x = horizontal, y = vertical) as
 members of a new group with the name char* (first argument).
 
 @section implementation Implementation
@@ -2324,7 +2324,7 @@ faces only.
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::RegionBetween( const char* group1, const char* group2,
-                                                            const char* region_between, int32 material_id )
+                                                            const char* region_between, int32_t material_id )
 {
   REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2558,7 +2558,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelRegions( const char* r
   region_names.resize( UniqueRegions() );
   size_t regions( 0 );
   for ( auto it = UniqueRegionsBegin(); it != UniqueRegionsEnd(); it++ ) {
-    (*it).second.InputPropertyValue( rvariable.c_str(), makeScalar( PLAIN, static_cast<double64>(regions) ) );
+    (*it).second.InputPropertyValue( rvariable.c_str(), makeScalar( PLAIN, static_cast<double>(regions) ) );
     region_names[regions] = (*it).first;
     regions++;
   }
@@ -2681,7 +2681,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
           std::cout <<" "<< (*rit).second.Elements() <<" elements,";
-          std::pair<int32, int32> rdim = (*rit).second.ElementSpatialDimensions();
+          std::pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3 )
             std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           else if ( rdim.second == 2 )
@@ -2692,7 +2692,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
           std::cout <<" "<< (*rit).second.Elements() <<" elements,"<< (*rit).second.Volume();
-          std::pair<int32, int32> rdim = (*rit).second.ElementSpatialDimensions();
+          std::pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3 )
             std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           else if ( rdim.second == 2 )

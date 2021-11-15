@@ -76,51 +76,51 @@ class ExperimentalSaturationFunctions {
     explicit ExperimentalSaturationFunctions( const char* filename );
   
     /// TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
-    double64 EffectiveSaturation( Element<dim>* const ) const;
+    double EffectiveSaturation( Element<dim>* const ) const;
     
     /// TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
-    double64 EffectiveSaturation_at( Element<dim>* const, double64 sw ) const;
+    double EffectiveSaturation_at( Element<dim>* const, double sw ) const;
 
     // pc, kri, and derivative methods that use a user supplied saturation value
   
-    double64 pc_at( Element<dim>* const, double64 sw ) const;
+    double pc_at( Element<dim>* const, double sw ) const;
  
-    double64 dpcds_at( Element<dim>* const, double64 sw ) const;
+    double dpcds_at( Element<dim>* const, double sw ) const;
 
-    double64 krw_at( Element<dim>* const, double64 sw ) const;
+    double krw_at( Element<dim>* const, double sw ) const;
   
-    double64 krn_at( Element<dim>* const, double64 sw ) const;
+    double krn_at( Element<dim>* const, double sw ) const;
 
-    double64 dkrwds_at( Element<dim>* const, double64 sw ) const;
+    double dkrwds_at( Element<dim>* const, double sw ) const;
  
-    double64 dkrnds_at( Element<dim>* const, double64 sw ) const;
+    double dkrnds_at( Element<dim>* const, double sw ) const;
 
-    double64 dpcdsw_at_Numerical( Element<dim>* const p, double64 sw, double64 h ) const;
+    double dpcdsw_at_Numerical( Element<dim>* const p, double sw, double h ) const;
 
-    double64 dkrwds_at_Numerical( Element<dim>* const p, double64 sw, double64 h ) const ;
+    double dkrwds_at_Numerical( Element<dim>* const p, double sw, double h ) const ;
 
-    double64 dkrnds_at_Numerical( Element<dim>* const p, double64 sw, double64 h ) const;
+    double dkrnds_at_Numerical( Element<dim>* const p, double sw, double h ) const;
   
   
     // pc, kri, and derivative methods that use saturation values at the element barycentre (for FE mobility calculations etc.)
   
-    double64 pc( Element<dim>* const ) const;
+    double pc( Element<dim>* const ) const;
   
-    double64 dpcds( Element<dim>* const ) const;
+    double dpcds( Element<dim>* const ) const;
   
-    double64 krw( Element<dim>* const ) const;
+    double krw( Element<dim>* const ) const;
   
-    double64 krn( Element<dim>* const ) const;
+    double krn( Element<dim>* const ) const;
   
-    double64 dkrwds( Element<dim>* const ) const;
+    double dkrwds( Element<dim>* const ) const;
   
-    double64 dkrnds( Element<dim>* const ) const;
+    double dkrnds( Element<dim>* const ) const;
 
-    double64 dpcdsw_Numerical( Element<dim>* const p, double64 h ) const;
+    double dpcdsw_Numerical( Element<dim>* const p, double h ) const;
 
-    double64 dkrwds_Numerical( Element<dim>* const p, double64 h ) const;
+    double dkrwds_Numerical( Element<dim>* const p, double h ) const;
 
-    double64 dkrnds_Numerical( Element<dim>* const p, double64 h ) const;
+    double dkrnds_Numerical( Element<dim>* const p, double h ) const;
   
     /// @return number of RRTs (reservoir rock types) for which saturation function values are stored
     size_t RockTypes() const;
@@ -138,8 +138,8 @@ class ExperimentalSaturationFunctions {
     size_t RockType( Element<dim>* const ) const;
   
     std::vector<csmp::CubicSpline> kr1_, kr2_, pc_;
-    const double64 max_derivative_         = 5.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
-    const double64 max_capillary_pressure_ = 2.0e+7; ///< 20 MPa ~ tensile strength of the rock
+    const double max_derivative_         = 5.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
+    const double max_capillary_pressure_ = 2.0e+7; ///< 20 MPa ~ tensile strength of the rock
 };
   
 } // end namespace csmp

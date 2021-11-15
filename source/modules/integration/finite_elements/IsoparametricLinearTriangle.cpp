@@ -123,9 +123,9 @@ the element.
 */
 void
 IsoparametricLinearTriangle::Nrs(
-                    double64 r,
-                    double64 s,
-                    std::vector<double64>& N ) const
+                    double r,
+                    double s,
+                    std::vector<double>& N ) const
 {
    N.resize(npe);
    N[0] = 1-r-s;
@@ -135,9 +135,9 @@ IsoparametricLinearTriangle::Nrs(
 
 void
 IsoparametricLinearTriangle::Nrs(
-                    double64 r,
-                    double64 s,
-                    double64* N ) const
+                    double r,
+                    double s,
+                    double* N ) const
 {
    N[0] = 1-r-s;
    N[1] = r;
@@ -172,9 +172,9 @@ procedures for elements.
 */
 void
 IsoparametricLinearTriangle::dNr (
-                double64,
-                double64,
-                std::vector<double64>& DNR ) const
+                double,
+                double,
+                std::vector<double>& DNR ) const
 {
    DNR.resize(npe);
    DNR[0] = -1.;
@@ -184,9 +184,9 @@ IsoparametricLinearTriangle::dNr (
 
 
 void IsoparametricLinearTriangle::dNs(
-                double64 ,
-                double64 ,
-                std::vector<double64>& DNS ) const
+                double ,
+                double ,
+                std::vector<double>& DNS ) const
 {
    DNS.resize(npe);
    DNS[0] = -1.;
@@ -206,7 +206,7 @@ A reference to the parent Element, the number of the integration point.
 
 */
 void
-IsoparametricLinearTriangle::N_AtIntegrationPoint( size_t ip, std::vector<double64>& N )
+IsoparametricLinearTriangle::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
 
@@ -335,11 +335,11 @@ CSMP_FEM_TYPE IsoparametricLinearTriangle::ElementTypeOfFace( size_t )  const
  }
 
 
-double64 IsoparametricLinearTriangle::WeightAtIntegrationPoint( size_t i )
+double IsoparametricLinearTriangle::WeightAtIntegrationPoint( size_t i )
 const { return W[i]; }
 
 
-void  IsoparametricLinearTriangle::N_AtBaryCenter( std::vector<double64>& N )
+void  IsoparametricLinearTriangle::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
     Nrs(1./3.,1./3.,N);
@@ -368,19 +368,19 @@ and the shortest boundary segment.
 
 The Element is consulted for its global coordinates.
 */
-double64
+double
 IsoparametricLinearTriangle::AspectRatio()
 {
-   vector<double64> vec(spe);
+   vector<double> vec(spe);
 
    EdgeLengths( vec );
 
    // order segment
-   set<double64> segms;
+   set<double> segms;
 
    for ( size_t i=0; i<spe; i++ ) segms.insert( vec[i] );
 
-   double64 segm1 = (*segms.begin()),
+   double segm1 = (*segms.begin()),
              segm2 = (*segms.rbegin());
 
    return segm2 / segm1;
@@ -402,20 +402,20 @@ are relatively even-sided and have straight edges.
 
 The parent element is queried for its node coordinates.
 */
-double64  IsoparametricLinearTriangle::InnerRadius()
+double  IsoparametricLinearTriangle::InnerRadius()
 {
    // Alternative radius
 /*
-   vector<double64> rsCenter(parametricDimehsions), rsBaseR(parametricDimehsions);
+   vector<double> rsCenter(parametricDimehsions), rsBaseR(parametricDimehsions);
    rsCenter[0]=1-0.5*sqrt(2.0); rsCenter[1]=1-0.5*sqrt(2.0);
    rsBaseR [0]=1-0.5*sqrt(2.0); rsBaseR[1]=0.0;
 
-   vector<double64> xyzCenter(dim),xyzBaseR(dim);
+   vector<double> xyzCenter(dim),xyzBaseR(dim);
 
    ParametricToPhysical(rsCenter,xyzCenter);
    ParametricToPhysical(rsBaseR,xyzBaseR);
 
-   double64 radius1=0.;
+   double radius1=0.;
 
    if(dim==2){
 
@@ -441,7 +441,7 @@ double64  IsoparametricLinearTriangle::InnerRadius()
   */
 
     NRST.resize(spe);
-    double64  sum(0.);
+    double  sum(0.);
 
     EdgeLengths( NRST );
     for ( size_t i=0; i<spe; i++ ) sum += NRST[i];
@@ -474,9 +474,9 @@ For example, when stresses are to be applied at the element side, the
 (area=length at unit thickness) must be taken into account.
 */
 void
-IsoparametricLinearTriangle::EdgeLengths( std::vector<double64>& len )
+IsoparametricLinearTriangle::EdgeLengths( std::vector<double>& len )
 {
-    double64 sum=0.0;
+    double sum=0.0;
     len.resize(spe);
 
     if(dim==3)
@@ -533,9 +533,9 @@ the area is computed.
 
 @return The area (m2) of the finite element.
 */
-double64  IsoparametricLinearTriangle::Volume()
+double  IsoparametricLinearTriangle::Volume()
 {
-    double64  area;
+    double  area;
     size_t  i;
 
     // numerical integration:
@@ -581,13 +581,13 @@ void
 IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN3 )
   {
      DN3.Resize(dim,npe);
-     double64 detJ(std::numeric_limits<double>::quiet_NaN());
+     double detJ(std::numeric_limits<double>::quiet_NaN());
 
      // Jacobian transformation to global coordinate system
      if ( use2Dto3Djacobi )
        {
-          vector<double64> EFG(dim);
-          double64 det_inverse;
+          vector<double> EFG(dim);
+          double det_inverse;
 
           for ( size_t i=0; i<npe; i++ ) {
                 RS[0] = NXY(i,0);
@@ -632,10 +632,10 @@ IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN3 )
 
 /// Projection function from rs->xy(z)
 void
-IsoparametricLinearTriangle::ParametricToPhysical(std::vector<double64> &rst,
-                                                  std::vector<double64>& xyz)
+IsoparametricLinearTriangle::ParametricToPhysical(std::vector<double> &rst,
+                                                  std::vector<double>& xyz)
 {
-    vector<double64> N(npe);
+    vector<double> N(npe);
     Nrs(rst[0],rst[1], N );
 
     for(size_t i=0; i<dim; i++)
@@ -664,8 +664,8 @@ IsoparametricLinearTriangle::ParametricToPhysical(std::vector<double64> &rst,
 */
 void
 IsoparametricLinearTriangle::PhysicalToParametric(
-                                                std::vector<double64>& rSt,
-                                                const std::vector<double64>& xyz
+                                                std::vector<double>& rSt,
+                                                const std::vector<double>& xyz
                                                  )
 {
 
@@ -673,22 +673,22 @@ IsoparametricLinearTriangle::PhysicalToParametric(
     {
 
         // no sign is taken, thus method works with cw and ccw node numbering
-        double64 ae2 = 1.0 /( ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) +
+        double ae2 = 1.0 /( ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) +
                                 XY(0,1)*XY(2,0) - XY(2,1)*XY(0,0) -
                                 XY(2,0)*XY(1,1) - XY(1,0)*XY(0,1) ) );
 
         // calculation the exponents of the interpolation functions
-        //const double64 a0 = XY(1,0) * XY(2,1) - XY(2,0) * XY(1,1);
-        const double64 a1 = XY(2,0) * XY(0,1) - XY(0,0) * XY(2,1);
-        const double64 a2 = XY(0,0) * XY(1,1) - XY(1,0) * XY(0,1);
+        //const double a0 = XY(1,0) * XY(2,1) - XY(2,0) * XY(1,1);
+        const double a1 = XY(2,0) * XY(0,1) - XY(0,0) * XY(2,1);
+        const double a2 = XY(0,0) * XY(1,1) - XY(1,0) * XY(0,1);
 
-        //const double64 b0 = XY(1,1) - XY(2,1);
-        const double64 b1 = XY(2,1) - XY(0,1);
-        const double64 b2 = XY(0,1) - XY(1,1);
+        //const double b0 = XY(1,1) - XY(2,1);
+        const double b1 = XY(2,1) - XY(0,1);
+        const double b2 = XY(0,1) - XY(1,1);
 
-        //const double64 c0 = XY(2,0) - XY(1,0);
-        const double64 c1 = XY(0,0) - XY(2,0);
-        const double64 c2 = XY(1,0) - XY(0,0);
+        //const double c0 = XY(2,0) - XY(1,0);
+        const double c1 = XY(0,0) - XY(2,0);
+        const double c2 = XY(1,0) - XY(0,0);
 
         //N[0] = ae2 * (a0 + b0 * xyz[0] + c0 * xyz[1]);
         //N[1] = ae2 * (a1 + b1 * xyz[0] + c1 * xyz[1]);
@@ -702,56 +702,56 @@ IsoparametricLinearTriangle::PhysicalToParametric(
     }else{
 
         //Edges of triangle 123
-        const double64  X12 = XY(1,0) - XY(0,0);
-        const double64  X23 = XY(2,0) - XY(1,0);
-        const double64  X31 = XY(0,0) - XY(2,0);
-        const double64  Y12 = XY(1,1) - XY(0,1);
-        const double64  Y23 = XY(2,1) - XY(1,1);
-        const double64  Y31 = XY(0,1) - XY(2,1);
-        const double64  Z12 = XY(1,2) - XY(0,2);
-        const double64  Z23 = XY(2,2) - XY(1,2);
-        const double64  Z31 = XY(0,2) - XY(2,2);
+        const double  X12 = XY(1,0) - XY(0,0);
+        const double  X23 = XY(2,0) - XY(1,0);
+        const double  X31 = XY(0,0) - XY(2,0);
+        const double  Y12 = XY(1,1) - XY(0,1);
+        const double  Y23 = XY(2,1) - XY(1,1);
+        const double  Y31 = XY(0,1) - XY(2,1);
+        const double  Z12 = XY(1,2) - XY(0,2);
+        const double  Z23 = XY(2,2) - XY(1,2);
+        const double  Z31 = XY(0,2) - XY(2,2);
 
         //Vectors from point P to the points of triangle 123
-        const double64  XP1 = XY(0,0) - xyz[0];
-        //const double64  XP2 = XY(1,0) - xyz[0];
-        const double64  XP3 = XY(2,0) - xyz[0];
-        const double64  YP1 = XY(0,1) - xyz[1];
-        //const double64  YP2 = XY(1,1) - xyz[1];
-        const double64  YP3 = XY(2,1) - xyz[1];
-        const double64  ZP1 = XY(0,2) - xyz[2];
-        //const double64  ZP2 = XY(1,2) - xyz[2];
-        const double64  ZP3 = XY(2,2) - xyz[2];
+        const double  XP1 = XY(0,0) - xyz[0];
+        //const double  XP2 = XY(1,0) - xyz[0];
+        const double  XP3 = XY(2,0) - xyz[0];
+        const double  YP1 = XY(0,1) - xyz[1];
+        //const double  YP2 = XY(1,1) - xyz[1];
+        const double  YP3 = XY(2,1) - xyz[1];
+        const double  ZP1 = XY(0,2) - xyz[2];
+        //const double  ZP2 = XY(1,2) - xyz[2];
+        const double  ZP3 = XY(2,2) - xyz[2];
 
         // XNRM,YNRM,ZNRM is normal to triangle (not unit normal!)
-        const double64  XNRM = -Y12*Z31 + Z12*Y31;
-        const double64  YNRM = -Z12*X31 + X12*Z31;
-        const double64  ZNRM = -X12*Y31 + Y12*X31;
+        const double  XNRM = -Y12*Z31 + Z12*Y31;
+        const double  YNRM = -Z12*X31 + X12*Z31;
+        const double  ZNRM = -X12*Y31 + Y12*X31;
 
         // XN12,YN12,ZN12 is normal to the edge 12 in triangle plane
-        const double64  XN12 = Y12*ZNRM - Z12*YNRM;
-        const double64  YN12 = Z12*XNRM - X12*ZNRM;
-        const double64  ZN12 = X12*YNRM - Y12*XNRM;
+        const double  XN12 = Y12*ZNRM - Z12*YNRM;
+        const double  YN12 = Z12*XNRM - X12*ZNRM;
+        const double  ZN12 = X12*YNRM - Y12*XNRM;
 
         // XN23,YN23,ZN23 is normal to the edge 23 in triangle plane
-        //const double64  XN23 = Y23*ZNRM - Z23*YNRM;
-        //const double64  YN23 = Z23*XNRM - X23*ZNRM;
-        //const double64  ZN23 = X23*YNRM - Y23*XNRM;
+        //const double  XN23 = Y23*ZNRM - Z23*YNRM;
+        //const double  YN23 = Z23*XNRM - X23*ZNRM;
+        //const double  ZN23 = X23*YNRM - Y23*XNRM;
 
         // XN31,YN31,ZN31 is normal to the edge 31 in triangle plane
-        const double64  XN31 = Y31*ZNRM - Z31*YNRM;
-        const double64  YN31 = Z31*XNRM - X31*ZNRM;
-        const double64  ZN31 = X31*YNRM - Y31*XNRM;
+        const double  XN31 = Y31*ZNRM - Z31*YNRM;
+        const double  YN31 = Z31*XNRM - X31*ZNRM;
+        const double  ZN31 = X31*YNRM - Y31*XNRM;
 
         //Scalar product of the edge and correponding normal to the neighbor edge = 2* Square of triangle
-        //const double64  A123 = XN23*X12 + YN23*Y12 + ZN23*Z12;
-        const double64  A231 = XN31*X23 + YN31*Y23 + ZN31*Z23;
-        const double64  A312 = XN12*X31 + YN12*Y31 + ZN12*Z31;
+        //const double  A123 = XN23*X12 + YN23*Y12 + ZN23*Z12;
+        const double  A231 = XN31*X23 + YN31*Y23 + ZN31*Z23;
+        const double  A312 = XN12*X31 + YN12*Y31 + ZN12*Z31;
 
         //Scalar product of the vector from point P and correponding normal to the edge = 2* Square of triangle P(edge): (P23), (P31), (P12)
-        //const double64  AP23  = XN23*XP2 + YN23*YP2 + ZN23*ZP2;
-        const double64  AP31  = XN31*XP3 + YN31*YP3 + ZN31*ZP3;
-        const double64  AP12  = XN12*XP1 + YN12*YP1 + ZN12*ZP1;
+        //const double  AP23  = XN23*XP2 + YN23*YP2 + ZN23*ZP2;
+        const double  AP31  = XN31*XP3 + YN31*YP3 + ZN31*ZP3;
+        const double  AP12  = XN12*XP1 + YN12*YP1 + ZN12*ZP1;
 
         // Finds the values of three basis functions  at point 'xyz' given
         // points of triangle in 3d, X(1-3),Y(1-3),Z(1-3).
@@ -767,50 +767,50 @@ IsoparametricLinearTriangle::PhysicalToParametric(
         /*
         // alternative approach
         //Edges of triangle 123
-        const double64  X12 = XY(1,0) - XY(0,0);
-        //const double64  X23 = XY(2,0) - XY(1,0);
-        const double64  X31 = XY(0,0) - XY(2,0);
-        const double64  Y12 = XY(1,1) - XY(0,1);
-        //const double64  Y23 = XY(2,1) - XY(1,1);
-        const double64  Y31 = XY(0,1) - XY(2,1);
-        const double64  Z12 = XY(1,2) - XY(0,2);
-        //const double64  Z23 = XY(2,2) - XY(1,2);
-        const double64  Z31 = XY(0,2) - XY(2,2);
+        const double  X12 = XY(1,0) - XY(0,0);
+        //const double  X23 = XY(2,0) - XY(1,0);
+        const double  X31 = XY(0,0) - XY(2,0);
+        const double  Y12 = XY(1,1) - XY(0,1);
+        //const double  Y23 = XY(2,1) - XY(1,1);
+        const double  Y31 = XY(0,1) - XY(2,1);
+        const double  Z12 = XY(1,2) - XY(0,2);
+        //const double  Z23 = XY(2,2) - XY(1,2);
+        const double  Z31 = XY(0,2) - XY(2,2);
 
         //Vectors from point P to the points of triangle 123
-        const double64  XP1 = XY(0,0) - xyz[0];
-        const double64  XP2 = XY(1,0) - xyz[0];
-        const double64  XP3 = XY(2,0) - xyz[0];
-        const double64  YP1 = XY(0,1) - xyz[1];
-        const double64  YP2 = XY(1,1) - xyz[1];
-        const double64  YP3 = XY(2,1) - xyz[1];
-        const double64  ZP1 = XY(0,2) - xyz[2];
-        const double64  ZP2 = XY(1,2) - xyz[2];
-        const double64  ZP3 = XY(2,2) - xyz[2];
+        const double  XP1 = XY(0,0) - xyz[0];
+        const double  XP2 = XY(1,0) - xyz[0];
+        const double  XP3 = XY(2,0) - xyz[0];
+        const double  YP1 = XY(0,1) - xyz[1];
+        const double  YP2 = XY(1,1) - xyz[1];
+        const double  YP3 = XY(2,1) - xyz[1];
+        const double  ZP1 = XY(0,2) - xyz[2];
+        const double  ZP2 = XY(1,2) - xyz[2];
+        const double  ZP3 = XY(2,2) - xyz[2];
 
         // 2 * ( Area of Triangle 123 )
-        const double64  XN312 = -Y12*Z31 + Z12*Y31;
-        const double64  YN312 = -Z12*X31 + X12*Z31;
-        const double64  ZN312 = -X12*Y31 + Y12*X31;
-        const double64  A123  = sqrt(XN312*XN312 + YN312*YN312 + ZN312*ZN312);
+        const double  XN312 = -Y12*Z31 + Z12*Y31;
+        const double  YN312 = -Z12*X31 + X12*Z31;
+        const double  ZN312 = -X12*Y31 + Y12*X31;
+        const double  A123  = sqrt(XN312*XN312 + YN312*YN312 + ZN312*ZN312);
 
         // 2 * ( Area of Triangle P31 )
-        const double64  XN3P1 = -YP1*ZP3 + ZP1*YP3;
-        const double64  YN3P1 = -ZP1*XP3 + XP1*ZP3;
-        const double64  ZN3P1 = -XP1*YP3 + YP1*XP3;
-        const double64  AP31  = sqrt(XN3P1*XN3P1 + YN3P1*YN3P1 + ZN3P1*ZN3P1);
+        const double  XN3P1 = -YP1*ZP3 + ZP1*YP3;
+        const double  YN3P1 = -ZP1*XP3 + XP1*ZP3;
+        const double  ZN3P1 = -XP1*YP3 + YP1*XP3;
+        const double  AP31  = sqrt(XN3P1*XN3P1 + YN3P1*YN3P1 + ZN3P1*ZN3P1);
 
         // 2 * ( Area of Triangle P12 )
-        const double64  XN1P2 = -YP1*ZP2 + ZP1*YP2;
-        const double64  YN1P2 = -ZP1*XP2 + XP1*ZP2;
-        const double64  ZN1P2 = -XP1*YP2 + YP1*XP2;
-        const double64  AP12  = sqrt(XN1P2*XN1P2 + YN1P2*YN1P2 + ZN1P2*ZN1P2);
+        const double  XN1P2 = -YP1*ZP2 + ZP1*YP2;
+        const double  YN1P2 = -ZP1*XP2 + XP1*ZP2;
+        const double  ZN1P2 = -XP1*YP2 + YP1*XP2;
+        const double  AP12  = sqrt(XN1P2*XN1P2 + YN1P2*YN1P2 + ZN1P2*ZN1P2);
 
         // 2 * ( Area of Triangle P23 )
-        //const double64  XN2P3 = -YP2*ZP3 + ZP2*YP3;
-        //const double64  YN2P3 = -ZP2*XP3 + XP2*ZP3;
-        //const double64  ZN2P3 = -XP2*YP3 + YP2*XP3;
-        //const double64  AP23  = sqrt(XN2P3*XN2P3 + YN2P3*YN2P3 + ZN2P3*ZN2P3);
+        //const double  XN2P3 = -YP2*ZP3 + ZP2*YP3;
+        //const double  YN2P3 = -ZP2*XP3 + XP2*ZP3;
+        //const double  ZN2P3 = -XP2*YP3 + YP2*XP3;
+        //const double  AP23  = sqrt(XN2P3*XN2P3 + YN2P3*YN2P3 + ZN2P3*ZN2P3);
 
         // Finds the values of three basis functions  at point 'xyz' given
         //N.resize(dim);
@@ -841,12 +841,12 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 @return The interpolation-function derivative matrix is returned into the
 second method argument.
 */
-double64
+double
 IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN2,
-                                 const vector<double64>& xyz  )
+                                 const vector<double>& xyz  )
 {
-  vector<double64> rst(dim);
-  double64 detJ(std::numeric_limits<double>::quiet_NaN());
+  vector<double> rst(dim);
+  double detJ(std::numeric_limits<double>::quiet_NaN());
 
   PhysicalToParametric(rst, xyz);
 
@@ -855,8 +855,8 @@ IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN2,
   dNs( rst[0], rst[1], DNS );
 
   if ( use2Dto3Djacobi ){
-     vector<double64> EFG(dim);
-     double64 det_inverse;
+     vector<double> EFG(dim);
+     double det_inverse;
 
        for ( size_t i=0; i<npe; i++ ) {
               detJ = Jacobi( rst, EFG, JMAT );
@@ -917,9 +917,9 @@ A second overloaded function exists that returns only the jacobi and uses the
 reference to the parent element and the vector containing the local coordinates
 as input arguments.
 */
-double64
-IsoparametricLinearTriangle::Jacobi(    const vector<double64>& rs,
-                                        vector<double64>& EFG,
+double
+IsoparametricLinearTriangle::Jacobi(    const vector<double>& rs,
+                                        vector<double>& EFG,
                                         DenseMatrix<DM_MIN>& J )
  {
     // 1. Compute 3x2 Jacobian Matrix
@@ -953,7 +953,7 @@ IsoparametricLinearTriangle::Jacobi(    const vector<double64>& rs,
  }  // end Jacobi
 
 
-double64 IsoparametricLinearTriangle::Jacobi( const vector<double64>& rs )
+double IsoparametricLinearTriangle::Jacobi( const vector<double>& rs )
 {
     // 1. Compute 2x3 Jacobian Matrix
     dNr( rs[0], rs[1], DNR );
@@ -972,7 +972,7 @@ double64 IsoparametricLinearTriangle::Jacobi( const vector<double64>& rs )
     // using equation J' = ( E * g - F^2 )^0.5 see FEM-development-in-CSP.doc equation (15)
 
     // compute E, F, and g
-    double64 E(0.0), F(0.0), G(0.0);
+    double E(0.0), F(0.0), G(0.0);
 
     for ( size_t i=0; i<dim; i++ ) {
          E += JMAT(0,i) * JMAT(0,i);
@@ -1024,9 +1024,9 @@ element.
 
  */
 void
-IsoparametricLinearTriangle::N( vector<double64>& N, const vector<double64>& xyz )
+IsoparametricLinearTriangle::N( vector<double>& N, const vector<double>& xyz )
 {
-   vector<double64> rs(parametricDimehsions);
+   vector<double> rs(parametricDimehsions);
 
    PhysicalToParametric(rs, xyz);
 
@@ -1059,21 +1059,21 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 
 */
-double64
+double
 IsoparametricLinearTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B,
                                                     size_t gauss_point )
  {
-    double64 det;
+    double det;
 
     assert( gauss_point < gpe );
 
     if ( use2Dto3Djacobi ){
-         vector<double64> EFG(dim);
+         vector<double> EFG(dim);
          RS[0] = rr[gauss_point];
          RS[1] = ss[gauss_point];
 
          det = Jacobi( RS, EFG, JMAT );
-         double64 det_inverse = 1.0 / ( det * det );
+         double det_inverse = 1.0 / ( det * det );
 
          B.Resize(dim,npe);
 
@@ -1133,22 +1133,22 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double64
+double
 IsoparametricLinearTriangle::dN_AtNode(
                                         DenseMatrix<DM_MIN>& B,
                                         size_t nd
                                       )
 {
-  double64  det;
+  double  det;
 
   assert( nd < npe );
     if ( use2Dto3Djacobi ){
-     vector<double64> EFG(dim);
+     vector<double> EFG(dim);
      RS[0] = NXY(nd,0);
      RS[1] = NXY(nd,1);
 
        det = Jacobi( RS, EFG, JMAT );
-       double64 det_inverse = 1.0 / ( det * det );
+       double det_inverse = 1.0 / ( det * det );
 
        B.Resize(dim,npe);
 
@@ -1186,17 +1186,17 @@ IsoparametricLinearTriangle::dN_AtNode(
 }
 
 
-double64 IsoparametricLinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
+double IsoparametricLinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 {
-  const double64 OneThird=1./3.0;
+  const double OneThird=1./3.0;
 
   if ( use2Dto3Djacobi ) {
-     vector<double64> EFG(dim);
+     vector<double> EFG(dim);
      RS[0] = OneThird;
      RS[1] = OneThird;
 
-     double64 det = Jacobi( RS, EFG, JMAT );
-     double64 det_inverse = 1.0 / ( det * det );
+     double det = Jacobi( RS, EFG, JMAT );
+     double det_inverse = 1.0 / ( det * det );
 
      B.Resize(dim,npe);
 
@@ -1218,7 +1218,7 @@ double64 IsoparametricLinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS );
-    double64 det = JacobianInverse();
+    double det = JacobianInverse();
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
@@ -1404,14 +1404,14 @@ to the nodes.  This involves the steps:
 */
 void
 IsoparametricLinearTriangle::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
-                                                        const vector<double64>& IVAR,
-                                                              vector<double64>& NVAR )
+                                                        const vector<double>& IVAR,
+                                                              vector<double>& NVAR )
 const
 {
-   static double64 a[3], b[3], c[3], intpol[3], ae2;
+   static double a[3], b[3], c[3], intpol[3], ae2;
    static bool      first_call(true);
 
-   vector<double64>  sum(nvars);
+   vector<double>  sum(nvars);
 
    // 0. Decide which case is dealt with in terms of the integration points
    //    which are used (rr and ss contain the integr.p. locations)
@@ -1464,14 +1464,14 @@ const
 
 
 /// overwrites the base class method in order to get 2D to 3D mapping functionality
-double64  IsoparametricLinearTriangle::JacobianInverse()
+double  IsoparametricLinearTriangle::JacobianInverse()
 {
     if ( use2Dto3Djacobi )
       {
         // Compute Jacobi J' := "determinant" of the 3x2 Jacobian
         // ------------------------------------------------------
         // using equation J' = ( E * g - F^2 )^0.5 see FEM-development-in-CSP.doc equation (15)
-          vector<double64> EFG(dim);
+          vector<double> EFG(dim);
           fill( EFG.begin(), EFG.end(), 0.0 );
 
              for ( size_t i=0; i<dim; i++ ) {
@@ -1480,8 +1480,8 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
                  EFG[2] += JAC(1,i) * JAC(1,i);
                }
 
-         double64 detJ=sqrt( EFG[0] * EFG[2] - EFG[1] * EFG[1] );
-         double64 det1 = 1.0 / detJ;
+         double detJ=sqrt( EFG[0] * EFG[2] - EFG[1] * EFG[1] );
+         double det1 = 1.0 / detJ;
 
          //Standard inverse Jacobian definition with 3rd stroka all 1.0
          //JAC(2,0)=JAC(2,1)=JAC(2,2)=1.0;
@@ -1502,10 +1502,10 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
 
     // the 2D case
     // compute determinant
-    double64 detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
+    double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
 
     // inversion of J
-    double64 dum = JAC(0,0) / detJ;
+    double dum = JAC(0,0) / detJ;
     JINV.Resize( 2, 2 );
     JINV(0,0)  =  JAC(1,1) / detJ;
     JINV(0,1)  = -JAC(0,1) / detJ;
@@ -1531,19 +1531,19 @@ double64  IsoparametricLinearTriangle::JacobianInverse()
      
      @test OK - SKM 3/3/2016
 */
-void IsoparametricLinearTriangle::UnitNormal( std::vector<double64>& vc ) const
+void IsoparametricLinearTriangle::UnitNormal( std::vector<double>& vc ) const
  {
     vc.resize(3);
 
     // normal points into non-existant third dimension
     if ( dim == 2U ) {
-         vc[0] = static_cast<double64>(0.);
-         vc[1] = static_cast<double64>(0.);
-         vc[2] = static_cast<double64>(1.);
+         vc[0] = static_cast<double>(0.);
+         vc[1] = static_cast<double>(0.);
+         vc[2] = static_cast<double>(1.);
          return;
       }
 
-    double64 X12 = XY(1,0) - XY(0,0), // X
+    double X12 = XY(1,0) - XY(0,0), // X
              X31 = XY(0,0) - XY(2,0),
              Y12 = XY(1,1) - XY(0,1), // Y
              Y31 = XY(0,1) - XY(2,1),
@@ -1556,7 +1556,7 @@ void IsoparametricLinearTriangle::UnitNormal( std::vector<double64>& vc ) const
     vc[2]  = -X12*Y31 + Y12*X31;
    
     // normalization to unit length
-    double64 length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
+    double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
     vc[0] /= length;
     vc[1] /= length;
     vc[2] /= length;
@@ -1572,7 +1572,7 @@ void IsoparametricLinearTriangle::UnitNormal( std::vector<double64>& vc ) const
     
     @test OK - for 3D version
 */
-void  IsoparametricLinearTriangle::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  IsoparametricLinearTriangle::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      // if this is a planar element in a 2D model
@@ -1652,7 +1652,7 @@ void  IsoparametricLinearTriangle::UnitNormalToFace( size_t face, std::vector<do
 
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be updated
-void  IsoparametricLinearTriangle::IntegrationPoint( size_t ip, vector<double64>& xyz ) const
+void  IsoparametricLinearTriangle::IntegrationPoint( size_t ip, vector<double>& xyz ) const
  {
     assert( ip < gpe );
     xyz.resize(NXY.Cols());
@@ -1693,7 +1693,7 @@ IsoparametricLinearTriangle::JacobianAtIntegrationPoint( size_t gauss_point )
          return;
     }
 
-   vector<double64> EFG(3);
+   vector<double> EFG(3);
    RS[0] = rr[gauss_point];
    RS[1] = ss[gauss_point];
 
@@ -1707,9 +1707,9 @@ void
 IsoparametricLinearTriangle::IntegrationPointsFromParToPhys(DenseMatrix<DM_MIN>&  IPPHYS)
  {
     IPPHYS.Resize(gpe,dim);
-    vector<double64> outxyz(dim);
+    vector<double> outxyz(dim);
     const size_t numberOfParametricDims=2;
-    vector<double64> rst(numberOfParametricDims);
+    vector<double> rst(numberOfParametricDims);
 
     for(size_t i=0;i<gpe;i++){
         rst[0]=rr[i];rst[1]=ss[i];
@@ -1733,12 +1733,12 @@ IsoparametricLinearTriangle::ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoord
 }
 
 
-double64  IsoparametricLinearTriangle::JacobianDeterminant()
+double  IsoparametricLinearTriangle::JacobianDeterminant()
 {
   if (dim == 3)
     {
       // compute E, F, and g
-      std::vector<double64> EFG(3);
+      std::vector<double> EFG(3);
       fill( EFG.begin(), EFG.end(), 0.0 );
 
       for ( size_t i=0; i<dim; i++ )
@@ -1756,7 +1756,7 @@ double64  IsoparametricLinearTriangle::JacobianDeterminant()
 }
 
 
-void IsoparametricLinearTriangle::JacobianAt( const std::vector<double64>& rst )
+void IsoparametricLinearTriangle::JacobianAt( const std::vector<double>& rst )
 {
     if ( !use2Dto3Djacobi )
     {
@@ -1766,7 +1766,7 @@ void IsoparametricLinearTriangle::JacobianAt( const std::vector<double64>& rst )
          return;
     }
 
-  vector<double64> EFG;
+  vector<double> EFG;
   Jacobi( rst, EFG, JAC );
 }
 

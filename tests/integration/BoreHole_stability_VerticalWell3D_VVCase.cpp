@@ -44,7 +44,7 @@ const double Pmud( 31.5e+06 );
 const double SV( 88.2e+06 );
 const double Pp( 31.5e+06);
 const ScalarVariable zeroScalar( PLAIN, 0. );
-const double64 displacement( 0. );
+const double displacement( 0. );
 const VectorVariable<3U> zeroVector( PLAIN, 0. );
 //const VectorVariable<3U> zeroVectorDirichlet( DIRICH, 0. );
 const VectorVariable<3U> DisplacementVectorBOTTOM(PLAIN, DIRICH ,PLAIN,0., displacement, 0.); // it can not move in the Y direction

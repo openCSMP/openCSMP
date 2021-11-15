@@ -9,7 +9,7 @@ namespace csmp {
 
 
 RegionMonitor_Test::RegionMonitor_Test()
-: fTolerance(numeric_limits<double64>::epsilon() * 1000.) // scaled with the larges number that will be encountered
+: fTolerance(numeric_limits<double>::epsilon() * 1000.) // scaled with the larges number that will be encountered
 {
 }
 
@@ -55,7 +55,7 @@ void RegionMonitor_Test::RegionMonitorScalarPropertyIntegrals2D()
 
     std::ifstream fin("RM_out.txt");
     std::string input;
-    double64 val1, val2, val3, val4, val5, val6, val7;
+    double val1, val2, val3, val4, val5, val6, val7;
     
     std::getline(fin, input);
     std::getline(fin, input);
@@ -391,7 +391,7 @@ void RegionMonitor_Test::RegionMonitorScalarPropertyIntegrals3D()
 
     std::ifstream fin("RM_out.txt");
     std::string input;
-    double64 val1, val2, val3, val4, val5, val6, val7;
+    double val1, val2, val3, val4, val5, val6, val7;
     
     std::getline(fin, input);
     std::getline(fin, input);

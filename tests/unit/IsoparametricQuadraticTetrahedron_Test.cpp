@@ -232,7 +232,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
 
   if ( verbose_ ) {
        //setName( "interactive user-defined interpolation function test" );
-       vector<double64> IP(element_.Nodes()), xyz(3U);
+       vector<double> IP(element_.Nodes()), xyz(3U);
 
         cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Interpolation functions at point xyz:"<< endl;
         // cout <<"Enter point: ";
@@ -249,7 +249,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
         // computing position of element barycenter
         csmp::Point<3U> bcenter(0.,0.,0.);
         for ( size_t i=0; i<element_.Nodes(); i++ ) bcenter += element_.N(i)->Coordinate();
-        bcenter /= static_cast<double64>(element_.Nodes());
+        bcenter /= static_cast<double>(element_.Nodes());
         cout <<"\nelement barycenter: "; bcenter.Out();
         // versus 4-node approximation
         bcenter = 0.;
@@ -309,31 +309,31 @@ void IsoparametricQuadraticTetrahedron_Test::run()
 
   // Volume: +/- 1.0e-7, but calculated from corner nodes only
 
-  //const double64 correct_volume(907.730082);
+  //const double correct_volume(907.730082);
 
-  const double64 a1 = 20.615528128; // edge 0-3
-  const double64 a2 = 20.627577796; // edge 1-3
-  const double64 a3 = 19.723082923; // edge 2-3
-  const double64 a4 = 20.052231936; // edge 0-1
-  const double64 a5 = 18.856772659; // edge 1-2
-  const double64 a6 = 18.867962264; // edge 0-2
+  const double a1 = 20.615528128; // edge 0-3
+  const double a2 = 20.627577796; // edge 1-3
+  const double a3 = 19.723082923; // edge 2-3
+  const double a4 = 20.052231936; // edge 0-1
+  const double a5 = 18.856772659; // edge 1-2
+  const double a6 = 18.867962264; // edge 0-2
 
   //  // generic way of calculating edge lengths
 
-  //  const double64 a1 = (element_.N(0)->Coordinate()-element_.N(3)->Coordinate()).Length(); // edge 0-3
-  //  const double64 a2 = (element_.N(1)->Coordinate()-element_.N(3)->Coordinate()).Length(); // edge 1-3
-  //  const double64 a3 = (element_.N(2)->Coordinate()-element_.N(3)->Coordinate()).Length(); // edge 2-3
-  //  const double64 a4 = (element_.N(0)->Coordinate()-element_.N(1)->Coordinate()).Length(); // edge 0-1
-  //  const double64 a5 = (element_.N(1)->Coordinate()-element_.N(2)->Coordinate()).Length(); // edge 1-2
-  //  const double64 a6 = (element_.N(0)->Coordinate()-element_.N(2)->Coordinate()).Length(); // edge 0-2
+  //  const double a1 = (element_.N(0)->Coordinate()-element_.N(3)->Coordinate()).Length(); // edge 0-3
+  //  const double a2 = (element_.N(1)->Coordinate()-element_.N(3)->Coordinate()).Length(); // edge 1-3
+  //  const double a3 = (element_.N(2)->Coordinate()-element_.N(3)->Coordinate()).Length(); // edge 2-3
+  //  const double a4 = (element_.N(0)->Coordinate()-element_.N(1)->Coordinate()).Length(); // edge 0-1
+  //  const double a5 = (element_.N(1)->Coordinate()-element_.N(2)->Coordinate()).Length(); // edge 1-2
+  //  const double a6 = (element_.N(0)->Coordinate()-element_.N(2)->Coordinate()).Length(); // edge 0-2
 
-  const double64 s1 = (a1+a2+a4)/2.;
-  const double64 s2 = (a2+a3+a5)/2.;
-  const double64 s3 = (a3+a6+a1)/2.;
-  const double64 s4 = (a4+a5+a6)/2.;
+  const double s1 = (a1+a2+a4)/2.;
+  const double s2 = (a2+a3+a5)/2.;
+  const double s3 = (a3+a6+a1)/2.;
+  const double s4 = (a4+a5+a6)/2.;
 
-  double64 correct_surface_area = 676.82886432673; // should be around this value
-  double64 correct_volume       = 907.73008226913; // should be around this value
+  double correct_surface_area = 676.82886432673; // should be around this value
+  double correct_volume       = 907.73008226913; // should be around this value
 
   // generic way of calculating volume and surface area
 
@@ -355,8 +355,8 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   _equal( element_.Volume(), correct_volume, correct_volume/1000. );
   
   // location of the barycenter in physical space
-  //const double64 bc[] = { 10.007, 5.51306, 4.39915 };
-  const double64 bc[] = { 10.01304482, 5.511488632, 4.25 };
+  //const double bc[] = { 10.007, 5.51306, 4.39915 };
+  const double bc[] = { 10.01304482, 5.511488632, 4.25 };
   Point<3U> bcenter = element_.BaryCenter();
   //setName( "location of barycenter test (x-coordinate)" );
   _equal( bcenter[0], bc[0], 1.0e-5 );
@@ -375,7 +375,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   // ---------------------------------------------------------------------------------
   Point<3U> rst_center(0.25,0.25,0.25);
   element_.FE()->JacobianAtIntegrationPoint( 0 ); // near the origin
-  const double64 detJ = element_.FE()->JacobianInverse();
+  const double detJ = element_.FE()->JacobianInverse();
   if ( verbose_ ) {
       cout <<"\ninverted Jacobian matrix (should be unit-diagonal):";
       element_.FE()->JINV.Out();
@@ -396,7 +396,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   // interpolation from the nodes to the element integration points
   CheckInterpolation( element_ );
 
-  vector<double64> IPVF(4), NVF(10);
+  vector<double> IPVF(4), NVF(10);
   fill( IPVF.begin(), IPVF.end(), 2. );
         
   // 5.1 linear extrapolation of integration point values to the nodes
@@ -461,7 +461,7 @@ void IsoparametricQuadraticTetrahedron_Test::TestInterpolationFunctionValues( co
  {
     //setName( "are ipol-function values 1 at corresponding nodes and zero everywhere else?" );
    
-    vector<double64> IPOL(element_.Nodes()), xyz(3U);
+    vector<double> IPOL(element_.Nodes()), xyz(3U);
 
     for ( size_t i=0; i<e.Nodes(); i++ ) {
          Point<3U> pt = e.N(i)->Coordinate();
@@ -469,11 +469,11 @@ void IsoparametricQuadraticTetrahedron_Test::TestInterpolationFunctionValues( co
          e.N_AtGlobalPoint( IPOL, xyz );
          // testing
          // 1 at point
-         _equal( IPOL[i], 1., tolerance_factor_ * numeric_limits<double64>::epsilon() );
+         _equal( IPOL[i], 1., tolerance_factor_ * numeric_limits<double>::epsilon() );
          // zero everywhere else
          for ( size_t j=0; j<IPOL.size(); j++ )
            if ( j != i )
-             _equal( IPOL[j], 0., tolerance_factor_ * numeric_limits<double64>::epsilon() );
+             _equal( IPOL[j], 0., tolerance_factor_ * numeric_limits<double>::epsilon() );
          // sum = 1 (is given
       }
 
@@ -493,21 +493,21 @@ void IsoparametricQuadraticTetrahedron_Test::TestSumOfInterpolationFunctionValue
  {
     //setName( "do ipol-function sum to 1 at ips and barycentre ?" );
 
-    vector<double64> IPOL(element_.Nodes());
+    vector<double> IPOL(element_.Nodes());
 
     // at integration points
     for ( size_t i=0; i<e.IntegrationPoints(); i++ ) {
          e.N_AtIntegrationPoint( i, IPOL );
-         double64 sum(0.);
+         double sum(0.);
          for ( size_t j=0; j<IPOL.size(); j++ ) sum += IPOL[j];
-        _equal( sum, 1., tolerance_factor_ * numeric_limits<double64>::epsilon() );
+        _equal( sum, 1., tolerance_factor_ * numeric_limits<double>::epsilon() );
       }
    
     // at element barycenter
     e.N_AtBaryCenter( IPOL );
-    double64 sum(0.);
+    double sum(0.);
     for ( size_t j=0; j<IPOL.size(); j++ ) sum += IPOL[j];
-  _equal( sum, 1., tolerance_factor_ * numeric_limits<double64>::epsilon() );
+  _equal( sum, 1., tolerance_factor_ * numeric_limits<double>::epsilon() );
    
  } // end
  
@@ -534,22 +534,22 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
     // ------------------------------------------------------------
     // using the negative sum of the global coordinates as an interpolant:
     // At all nodes, val = -x + -y + -z.
-    vector<double64>  node_vals(e.Nodes());
+    vector<double>  node_vals(e.Nodes());
     for ( size_t i=0U; i<e.Nodes(); i++ )
       node_vals[i] = -e.N(i)->x() + -e.N(i)->y() + -e.N(i)->z();
 
     // interpolating nodal values to integration points and checking these against theoretic values
-    vector<double64> IPOL;
+    vector<double> IPOL;
     for ( size_t i=0U; i<element_.IntegrationPoints(); i++ ) {
          // interpolation
          e.N_AtIntegrationPoint( i, IPOL );
-         double64 ivalue(0.);
+         double ivalue(0.);
          for ( size_t j=0; j<e.Nodes(); j++ )
            ivalue += IPOL[j] * node_vals[j];
          // checking ivalue (IntegrationPoint returns the location of the integration point in physical space)
          Point<3U> xyz(element_.IntegrationPoint(i));
-         double64 correct_value = -xyz[0] + -xyz[1] + -xyz[2];
-        _equal( ivalue, correct_value, tolerance_factor_ * numeric_limits<double64>::epsilon() );
+         double correct_value = -xyz[0] + -xyz[1] + -xyz[2];
+        _equal( ivalue, correct_value, tolerance_factor_ * numeric_limits<double>::epsilon() );
       }
    
  } // end CheckInterpolation
@@ -567,10 +567,10 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
 */
 void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const Element<3U>& e )
  {
-    vector<double64>   nrml;
+    vector<double>   nrml;
     VectorVariable<3>  flux(PLAIN,PLAIN,PLAIN,0.3,0.5,1.0);
-    vector<double64>   IPOL(6);
-    double64           flux_balance(0.);
+    vector<double>   IPOL(6);
+    double           flux_balance(0.);
  
     cout <<"\nElement "<< e.Idx() <<", volume: "<< e.Volume();
  
@@ -582,11 +582,11 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
          VectorVariable<3U>  fn(nrml);
          // projecting flux onto normal
          // dot product fn . vc
-         double64 projflux  = dotProduct(fn,flux);
+         double projflux  = dotProduct(fn,flux);
          cout <<"\nFace "<< i <<", projected flux:         "<< projflux;
          
          // integrating flux over the face
-         double64 fflux = projflux * e.FaceArea( i );
+         double fflux = projflux * e.FaceArea( i );
       
          // summing flux balance
          flux_balance += fflux;  
@@ -595,7 +595,7 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
     cout <<"\n";
 
    // accuracy is limited by the single-precision representation of the point coordinates
-   //_equal( flux_balance, 0., tolerance_factor_ * numeric_limits<double64>::epsilon() );
+   //_equal( flux_balance, 0., tolerance_factor_ * numeric_limits<double>::epsilon() );
    _equal( flux_balance, 0., 1.0e-7 );
     cout <<"\nFlux balance of element "<< e.Idx() <<": "<< flux_balance << endl;
       
@@ -613,9 +613,9 @@ void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const
  {
      // 0. generating values, first integration point=0, second=1...
      // ------------------------------------------------------------
-    vector<pair<Point<3U>,double64> >  ipoint_data(element_.IntegrationPoints()); // locations in physical space
+    vector<pair<Point<3U>,double> >  ipoint_data(element_.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
-    double64 display_value(0.);
+    double display_value(0.);
     for ( size_t i=0U; i<element_.IntegrationPoints(); i++ ) {
          Point<3U> xyz = element_.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
@@ -636,7 +636,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const
      // --------------------------------------
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << ipoint_data.size() <<" float"<< endl;
-     for ( vector<pair<Point<3U>,double64> >::const_iterator
+     for ( vector<pair<Point<3U>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           ofs << (*it).first[0] <<" "<< (*it).first[1] <<" "<< (*it).first[2] << endl;
        }
@@ -663,7 +663,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const
      ofs <<"POINT_DATA "<< ipoint_data.size() << endl;
      ofs <<"SCALARS "<< "point_number" <<" float"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl;
-     for ( vector<pair<Point<3U>,double64> >::const_iterator
+     for ( vector<pair<Point<3U>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           ofs << (*it).second <<" "<< endl;
        }
@@ -685,7 +685,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const
 */
 void IsoparametricQuadraticTetrahedron_Test::OutputFaceNormalsToVTK( const char* file, const Element<3U>& e ) const
  {
-    vector<double64>    nrml;
+    vector<double>    nrml;
     size_t              counter(0);
     map<size_t,pair<Point<3>,Point<3> > >  normals;
 

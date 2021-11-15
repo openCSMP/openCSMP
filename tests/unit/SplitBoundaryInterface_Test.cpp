@@ -16,7 +16,7 @@ namespace csmp
 {
 
 template<size_t dim>
-void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double64 xShift, double64 yShift, double64 zShift )
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
 {
   const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
   if ( dim == 2 )
@@ -50,7 +50,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side,
 
 
 template<size_t dim>
-void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double64 shift )
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
 {
   VectorVariable<dim> displacementPerpedicularToInterface( ANY, 0.0 );
   Point<dim> displacementToBaryCenter;
@@ -185,7 +185,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double64 shift )
 
 
 template<size_t dim>
-void shiftInterfaceTips( Region<dim>& region, double64 shift )
+void shiftInterfaceTips( Region<dim>& region, double shift )
 {
   Point<dim> displacement;
   Point<dim> baryCenter;
@@ -223,7 +223,7 @@ void shiftInterfaceTips( Region<dim>& region, double64 shift )
 
 
 template<size_t dim>
-void shiftRegion( Region<dim>& region, double64 xShift, double64 yShift, double64 zShift )
+void shiftRegion( Region<dim>& region, double xShift, double yShift, double zShift )
 {
   if ( dim == 2 )
     for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
@@ -242,7 +242,7 @@ void shiftRegion( Region<dim>& region, double64 xShift, double64 yShift, double6
 
 
 template<size_t dim>
-void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
+void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
 {
   if ( dim == 2 )
   {
@@ -283,7 +283,7 @@ void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 lin
 
 
 template<size_t dim>
-void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
+void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
 {
   if ( dim == 2 )
   {
@@ -324,7 +324,7 @@ void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double64 lin
 
 
 template<size_t dim>
-void scaleRegionSymmetricOverZero( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
+void scaleRegionSymmetricOverZero( Region<dim>& region, double xScale, double yScale, double zScale )
 {
   if ( dim == 2 )
     for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
@@ -343,7 +343,7 @@ void scaleRegionSymmetricOverZero( Region<dim>& region, double64 xScale, double6
 
 
 template<size_t dim>
-void scaleRegion( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
+void scaleRegion( Region<dim>& region, double xScale, double yScale, double zScale )
 {
   Point<dim> min_point;
   Point<dim> max_point;
@@ -507,7 +507,7 @@ void SplitBoundaryInterface_Test::TestUnitNormals( Model<dim>& model, const std:
   // SplitBoundary Normals
   // -----------------------------
 
-  std::vector<double64> zero_vec( dim, 0.0 );
+  std::vector<double> zero_vec( dim, 0.0 );
 
   VectorVariable<dim> nrml_in( zero_vec );
   VectorVariable<dim> nrml_out( zero_vec );
@@ -612,7 +612,7 @@ void SplitBoundaryInterface_Test::VisualiseSplitBoundaries( Model<dim>& model, c
 
 
 template<size_t dim>
-void SplitBoundaryInterface_Test::PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& interfaces, double64 displacement )
+void SplitBoundaryInterface_Test::PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& interfaces, double displacement )
 {
   // pull apart SplitBoundaries
   std::string split_boundary_name;
@@ -628,7 +628,7 @@ void SplitBoundaryInterface_Test::PullApartSplitboundaries( Model<dim>& model, s
 
 
 template<size_t dim>
-void SplitBoundaryInterface_Test::PullApartSplitboundaries( Model<dim>& model, double64 displacement )
+void SplitBoundaryInterface_Test::PullApartSplitboundaries( Model<dim>& model, double displacement )
 {
   //pPull apart SplitBoundaries
   for ( typename Model<dim>::splitBoundaryIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
@@ -986,10 +986,10 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
   std::vector<std::string> regions;
   regions.reserve( modelIN->UniqueRegions() );
 
-  const pair<int32, int32>  model_dim = modelIN->Region( "Model" ).SpatialDimensions();
+  const pair<int32_t, int32_t>  model_dim = modelIN->Region( "Model" ).SpatialDimensions();
   for ( typename std::map<std::string, csmp::Region<dim> >::iterator
         it = modelIN->UniqueRegionsBegin(); it != modelIN->UniqueRegionsEnd(); ++it ) {
-    const pair<int32, int32>  sub_dim = (*it).second.SpatialDimensions();
+    const pair<int32_t, int32_t>  sub_dim = (*it).second.SpatialDimensions();
     if ( sub_dim.second == model_dim.second ) // check whether the highest dimension of the region is equal to the highest dimension of the model
       regions.push_back( (*it).second.Name() );
   }
@@ -1037,8 +1037,8 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
   
   // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  const int32 rocktype(8);
-  const int32 material_id_for_new_elements(rocktype);
+  const int32_t rocktype(8);
+  const int32_t material_id_for_new_elements(rocktype);
   set<string> new_regions = modelIN->InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id_for_new_elements );
 
   // read Model from Binary
@@ -1058,14 +1058,14 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
   // tests
   TestSplitNodeAssignment( model ); 
   TestUnitNormals( model, test_name.c_str() );
-  double64 displacement( 0.001 );
+  double displacement( 0.001 );
   PullApartSplitboundaries( model, displacement );
   VisualiseSplitBoundaries( model, test_name );
   */ //added
 
   //added
   // tests
-  double64 displacement( 0.001 );
+  double displacement( 0.001 );
   PullApartSplitboundaries( *modelIN, displacement );
   VisualiseSplitBoundaries( *modelIN, test_name );  
 

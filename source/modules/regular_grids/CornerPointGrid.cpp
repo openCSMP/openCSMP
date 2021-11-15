@@ -94,14 +94,14 @@ CornerPointGrid::GetCellActivity()
 /**
 Builds the pillars and columns.
 */
-void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double64>& zcorn )
+void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double>& zcorn )
 {
   const size_t NXxNY = NX_ * NY_;
   size_t node_count = 0;
 
   {
     // 1. Build pillars
-    std::vector<double64> zcoord;
+    std::vector<double> zcoord;
     zcoord.reserve( 4 * (NZ_ + 1) );
     for ( size_t i = 0; i <= NX_; ++i )
     {
@@ -224,7 +224,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
       Pillar& p2 = (*this)(i + 1, j + 1); //se
       Pillar& p3 = (*this)(i + 0, j + 1); //sw
 
-      double64 z[4][2];
+      double z[4][2];
       z[0][0] = p0.GetZCoord( cell.z[0][0] );
       z[0][1] = p0.GetZCoord( cell.z[0][1] );
       z[1][0] = p1.GetZCoord( cell.z[1][0] );
@@ -392,7 +392,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   std::cerr << " removed invalid lines: " << badLines_ << '\n';
 
   // 3. store node coordinates
-  deque<double64> x, y, z;
+  deque<double> x, y, z;
   for ( size_t i = 0; i <= NX_; ++i ) {
     for ( size_t j = 0; j <= NY_; ++j ) {
       Pillar& pillar = (*this)(i, j);
@@ -431,7 +431,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   vector<std::int8_t> pbflags( vset.Vertices(), 0 ); // boundary flags
   for ( size_t i = 0U; i < vset.Vertices(); ++i )
     {
-      vector<double64> coord( 3U );
+      vector<double> coord( 3U );
       for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
       Point<3U> pt( coord );
       if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
@@ -1370,7 +1370,7 @@ The PolygonGridManager is used to construct the pillars.
 void CornerPointGrid::CreateModel( const std::string&     model_name,
                                        csmp::VSet<3U>&       vset,
                                        csmp::ModelTopology&   model_topology,
-                                       const std::vector<double64>& zcorn,
+                                       const std::vector<double>& zcorn,
                                        std::set<std::string>& regions,
                                        std::set<std::string>& faults,
                                        std::set<std::string>& wells,

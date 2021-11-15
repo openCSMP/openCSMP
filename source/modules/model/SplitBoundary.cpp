@@ -416,7 +416,7 @@ second value returns the highest spatial dimension contained.
 @author SKM 1/11/2013
 */
 template<size_t dim>
-pair<int32, int32>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
+pair<int32_t, int32_t>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
 {
   return this->SpatialDimensions();
 
@@ -473,7 +473,7 @@ Computes length (m) of the SplitBoundary object's perimeter curve.
 Operation makes sense only in 33 because the perimeter of a line are just its end points.
 */
 template<size_t dim>
-double64  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
+double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -483,7 +483,7 @@ double64  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
     return 1.;
   }
 
-  double64        perimeter_length( 0. );
+  double        perimeter_length( 0. );
   vector<size_t>  fnids;
   size_t          n( 0U );
 
@@ -505,9 +505,9 @@ Is calculated on the basis of the Splitboundary bisector if the split nodes were
 moved apart in the simulation process; else a particular side is used.
 */
 template<size_t dim>
-double64  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
+double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
 {
-  double64  integrated_area( 0. );
+  double  integrated_area( 0. );
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( dim == 3U ) {
@@ -547,7 +547,7 @@ objects, multiplying the boundary normal componet with their area.
 @author SKM 21/8/2018
 */
 template<size_t dim>
-double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property,
+double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property,
                                               INTERFACE_SIDE side ) const
 {
   csmp::Index prop_key = p.StorageKey( property );
@@ -555,16 +555,16 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
   if ( prop_key.type == TENSOR ) {
     throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
                            property, "is a tensor property; no implementation for tensor normal projections yet." );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double>::quiet_NaN();
   }
 
   if ( prop_key.place == FACE or prop_key.place == BOUNDARY or prop_key.place == REGION ) {
     throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
                            property, "placed on FACE, BOUNDARY or REGION cannot be assigned on split boundary." );
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double>::quiet_NaN();
   }
 
-  double64  property_integral( 0. );
+  double  property_integral( 0. );
 
   // 1. if the property is a scalar various options exist
   // - scalar placed on SplitBoundary
@@ -579,9 +579,9 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
     if ( prop_key.place == ELEMENT ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      double64 property_integral( 0. ), prop_value;
+      double property_integral( 0. ), prop_value;
       for ( auto ife : this->elmt_vec_ ) {
-        double64 face_area = ife->Parent( side )->FaceArea( ife->ParentFaceID( side ) );
+        double face_area = ife->Parent( side )->FaceArea( ife->ParentFaceID( side ) );
         if ( side != MIDDLE ) prop_value = ife->Parent( side )->Read( prop_key );
         else {
           if ( ife->HasInterveningElement() ) prop_value = ife->InterveningElement()->Read( prop_key );
@@ -597,7 +597,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
     if ( prop_key.place == INTER_FACE ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      double64 property_integral( 0. );
+      double property_integral( 0. );
       for ( auto ife : this->elmt_vec_ )
         property_integral += ife->Area() * ife->Read( prop_key );
 
@@ -607,10 +607,10 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
     if ( prop_key.place == NODE ) {
       // the property value is interpolated to the interface integration points and then integrated
       // using their integration weights
-      double64        property_integral( 0. );
+      double        property_integral( 0. );
       ScalarVariable  sc;
       for ( auto ife : this->elmt_vec_ ) {
-        const double64 interface_area = ife->Area( side );
+        const double interface_area = ife->Area( side );
         for ( size_t i = 0U; i<ife->IntegrationPoints(); ++i ) {
           ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * sc();
@@ -621,9 +621,9 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
 
     if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
       // the property value is integrated using corresponding integration weights
-      double64 property_integral( 0. );
+      double property_integral( 0. );
       for ( auto ife : this->elmt_vec_ ) {
-        const double64 interface_area = ife->Area( side );
+        const double interface_area = ife->Area( side );
         for ( size_t i = 0U; i<ife->IntegrationPoints(); ++i )
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
       }

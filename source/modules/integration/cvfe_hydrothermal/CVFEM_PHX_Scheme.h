@@ -34,16 +34,16 @@ class CVFEM_PHX_Scheme {
     explicit CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravity = true);
     ~CVFEM_PHX_Scheme( );
     
-    void SetLargestTimeStep( double64 timestep ); // modifying maximum size of time step
-    void ChangeTimeStepTo( double64 timestep ); // adjusting timestep
+    void SetLargestTimeStep( double timestep ); // modifying maximum size of time step
+    void ChangeTimeStepTo( double timestep ); // adjusting timestep
     void InitialFluidPropertiesFromPTX(); // initialize fluid properties from current PTX conditions
     void PrepareTransientCalculations(); // preparation before transient calculations, calculating pressure gradient and updwind nodes from current status
-    double64 Apply(); // main function to apply CVFEM scheme in transeint calculations, returns time step used for calculations
+    double Apply(); // main function to apply CVFEM scheme in transeint calculations, returns time step used for calculations
 
-    void TemperatureDependentHeatCapacityRock( double64 cpr_min_ext, double64 t_min_ext,
-                                               double64 cpr_max_ext, double64 t_max_ext ); // modify calculations of temperature-dependent heat capacity of the rock
-    void OpenBoundaries( double64 T_gradC, double64 p_Pa, double64 wt ); // switch on open top, specifying temperature, pressure and salinity of inflowing fluid
-    void OpenBoundaries( double64 wt ); // switch on open top, specifying salinity of inflowing fluid
+    void TemperatureDependentHeatCapacityRock( double cpr_min_ext, double t_min_ext,
+                                               double cpr_max_ext, double t_max_ext ); // modify calculations of temperature-dependent heat capacity of the rock
+    void OpenBoundaries( double T_gradC, double p_Pa, double wt ); // switch on open top, specifying temperature, pressure and salinity of inflowing fluid
+    void OpenBoundaries( double wt ); // switch on open top, specifying salinity of inflowing fluid
     void CheckConsistency( bool check ); // switch consostency check on or off - currently disabled
 
     void SetBrickWallLimiterTo( bool limit ); // switch brick wall limiter for fluid pressure on or off
@@ -51,10 +51,10 @@ class CVFEM_PHX_Scheme {
     void AddAdvectionVariable( const char* balanced_variable,
                                const char* new_lhs_liquid, const char* new_rhs_liquid,
                                const char* new_lhs_vapor,  const char* new_rhs_vapor  ); // add further variables for FV calculations
-    void Adjust_CFL_Criterion( double64 scale_factor, bool take_pore_velocity); // modifying cfl criterion
+    void Adjust_CFL_Criterion( double scale_factor, bool take_pore_velocity); // modifying cfl criterion
 
     void GetFacetFluxFromInsideNodeToOutsideNode( Element<dim>& e, unsigned int facet_idx,
-                                                  double64& flux_liquid, double64& flux_vapor ); // access function to transient fluxes
+                                                  double& flux_liquid, double& flux_vapor ); // access function to transient fluxes
 
 
 private:
@@ -108,11 +108,11 @@ private:
 
     Limiter<dim> pressure_limiter_transport, pressure_limiter_fluid;
 
-    double64 dt, cfl_dt, largest_timestep;
-    double64 current_dt, control_dt, old_dt;
-    double64 min_value, max_value;
-    double64 cfl_min_l, cfl_min_v, cfl_max_l, cfl_max_v;
-    double64 temp;
+    double dt, cfl_dt, largest_timestep;
+    double current_dt, control_dt, old_dt;
+    double min_value, max_value;
+    double cfl_min_l, cfl_min_v, cfl_max_l, cfl_max_v;
+    double temp;
 
     int timestep;
 

@@ -6,7 +6,7 @@ using namespace std;
 
 namespace csmp{
 
-StressRegime::StressRegime( double64 Sv, double64 SH, double64 Sh, double64 trend )
+StressRegime::StressRegime( double Sv, double SH, double Sh, double trend )
   : Sv_( Sv ),
     SH_( SH ),
     Sh_( Sh ),
@@ -22,7 +22,7 @@ StressRegime::StressRegime( double64 Sv, double64 SH, double64 Sh, double64 tren
 void StressRegime::EstablishPrincipalStressUnitVectors()
 {
   //establishing stress vectors for given regime
-  double64 alpha;
+  double alpha;
   //vertical
   Svv_(0) = 0.;
   Svv_(1) = 0.;
@@ -48,7 +48,7 @@ void StressRegime::EstablishPrincipalStressUnitVectors()
 
 void StressRegime::EstablishMinimumHorizontalStressVector()
 {
-  double64 alpha = trend_ + 90;
+  double alpha = trend_ + 90;
   if( alpha > 180. )
     alpha -= 180.;
   if( alpha >= 90. ){
@@ -65,25 +65,25 @@ void StressRegime::EstablishMinimumHorizontalStressVector()
 
 }
 
-double64 StressRegime::VerticalStressMagnitude() const{
+double StressRegime::VerticalStressMagnitude() const{
 
   return Sv_;
 
 }
 
-double64 StressRegime::MaximumHorizontalStressMagnitude() const{
+double StressRegime::MaximumHorizontalStressMagnitude() const{
 
   return SH_;
 
 }
 
-double64 StressRegime::MinimumHorizontalStressMagnitude() const{
+double StressRegime::MinimumHorizontalStressMagnitude() const{
 
   return Sh_;
 
 }
 
-double64 StressRegime::MaximumHorizontalStressTrend() const{
+double StressRegime::MaximumHorizontalStressTrend() const{
 
   return trend_;
 

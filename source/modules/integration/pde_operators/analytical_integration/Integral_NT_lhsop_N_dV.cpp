@@ -67,7 +67,7 @@ void Integral_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
       {
          MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
          MathOperatorLHS<dim>::LHS.Zero();
-         MathOperatorLHS<dim>::LHS(0,0) = (e.Volume() * scalar_value_) / static_cast<double64>(e.Nodes());
+         MathOperatorLHS<dim>::LHS(0,0) = (e.Volume() * scalar_value_) / static_cast<double>(e.Nodes());
          for ( size_t i=1; i<e.Nodes(); i++ ) 
            MathOperatorLHS<dim>::LHS(i,i) = MathOperatorLHS<dim>::LHS(0,0); 
       }

@@ -17,7 +17,7 @@ public:
 
 private:
 
-    void scaleRegion( Model<2U>& sg, double64 scale_factor );
+    void scaleRegion( Model<2U>& sg, double scale_factor );
     void constructVelocityVector( Model<2U>& mdl );
     void assignFluxToPointSource( Model<2U>& mdl, const char* flux );
 

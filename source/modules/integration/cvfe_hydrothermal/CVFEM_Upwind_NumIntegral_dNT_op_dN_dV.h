@@ -40,8 +40,8 @@ class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> 
     
     DenseMatrix<DM_MIN>  B, upwind;
 
-    double64 area, normal_component;
-    double64 contribution, operand;
+    double area, normal_component;
+    double contribution, operand;
     size_t inside_node_, outside_node_;
     
     std::vector<ScalarVariable> el_uvar;

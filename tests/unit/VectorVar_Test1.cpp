@@ -70,7 +70,7 @@ void VectorVariable_Test1::Assignment_Operator1()
    
    
    //Testing for point assignment
-   vector<double64> vector1;
+   vector<double> vector1;
    vector1.push_back( 15 );
    Point<1U> point1( vector1 );
    csmpvector2 = point1;
@@ -98,7 +98,7 @@ void VectorVariable_Test1::Addition_Operator1()
    
    
    //Testing for point addition
-   vector<double64> vector1;
+   vector<double> vector1;
    vector1.push_back( 15 );
    Point<1U> point1( vector1 );
    Point<1U> point2;
@@ -126,7 +126,7 @@ void VectorVariable_Test1::Subtraction_Operator1()
    
    
    //Testing for point subtraction
-   vector<double64> vector1;
+   vector<double> vector1;
    vector1.push_back( 15 );
    Point<1U> point1( vector1 );
    Point<1U> point2;
@@ -154,7 +154,7 @@ void VectorVariable_Test1::Multiplication_Operator1()
    
    
    //Testing for point multiplication
-   vector<double64> vector1;
+   vector<double> vector1;
    vector1.push_back( 5 );
    Point<1U> point1( vector1 );
    Point<1U> point2;
@@ -182,7 +182,7 @@ void VectorVariable_Test1::Division_Operator1()
    
    
    //Testing for point division
-   vector<double64> vector1;
+   vector<double> vector1;
    vector1.push_back( 2 );
    Point<1U> point1( vector1 );
    Point<1U> point2;
@@ -327,7 +327,7 @@ void VectorVariable_Test1::Length_Function1()
 void VectorVariable_Test1::DotProduct_Function1()
 {
    VectorVariable<1U> csmpvector1( ROBIN, 2.0 );
-   vector<double64> vector1;
+   vector<double> vector1;
    
    vector1.push_back( 4 );
    
@@ -342,7 +342,7 @@ void VectorVariable_Test1::CrossProduct_Function1()
    VectorVariable<1U> csmpvector1( ROBIN, 2.0 );
    VectorVariable<1U> csmpvector2( ROBIN, 0.0 );
    VectorVariable<1U> csmpvector3;
-   vector<double64> vector1;
+   vector<double> vector1;
    
    vector1.push_back( 3 );
    Point<1U> point1( vector1 );
@@ -380,7 +380,7 @@ void VectorVariable_Test1::ProjectOnto_Function1()
    VectorVariable<1U> csmpvectorv( ROBIN, 2.0 );
    VectorVariable<1U> csmpvectoru( DIRICH, -1.0 );
    VectorVariable<1U> csmpvector;
-   vector<double64> vectoru;
+   vector<double> vectoru;
    
    vectoru.push_back(-1.0);
    

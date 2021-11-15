@@ -63,7 +63,7 @@ void Element_Test::ElementLengthTest2D()
   e.Assign( 3, &n4 );
 
   VectorVariable<2U> direction(PLAIN, PLAIN);
-  double64 fLength(0.);
+  double fLength(0.);
   
   //test 1
   //direction
@@ -132,7 +132,7 @@ void Element_Test::ElementLengthTest3D()
   e.Assign( 3, &n4 );
   
   VectorVariable<3U> direction(PLAIN, PLAIN);
-  double64 fLength(0.);
+  double fLength(0.);
   
   //test 1
   //direction
@@ -159,7 +159,7 @@ void Element_Test::ElementLengthTest3D()
   
 /**
     Tests FiniteVolumePolicy:
-       - UnitNormalToFace( size_t face, std::vector<double64>& );
+       - UnitNormalToFace( size_t face, std::vector<double>& );
  
     Tests prism_test model because it contains elements of all
     types.
@@ -180,7 +180,7 @@ void Element_Test::UnitNormalTest()
      //    testing whether normals are aligned with vectors
      //    between barycenter and face barycenters
      // ------------------------------------------------------------
-     std::vector<double64> unrml;
+     std::vector<double> unrml;
      const Region<3U>& model_domain(model.Region("Model"));
      if ( verbose_ ) cout <<"\nElement_Test::UnitNormalTest: testing normal directions...\n";
      for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
@@ -196,7 +196,7 @@ void Element_Test::UnitNormalTest()
                (*it)->UnitNormalToFace( face, unrml );
                Point<3U> unitnormal(unrml);
                // the normals are aligned if dotproduct is positive
-               double64 dotproduct = dotProduct( outward_vec, unitnormal );
+               double dotproduct = dotProduct( outward_vec, unitnormal );
                _test( dotproduct > 0. );
                if ( verbose_ and dotproduct < 0. ) {
                     cerr <<"\nunit normal to face "<< face <<" is inward pointing:";

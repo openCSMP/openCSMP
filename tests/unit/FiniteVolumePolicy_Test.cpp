@@ -104,9 +104,9 @@ void FiniteVolumePolicy_Test::Test_CreateVSet()
   	VSet<2U>  vset( 4U, 4U, ISOPARAMETRIC_LINEAR_QUADRILATERAL, iNodes, iNrOfElements );
 
   	//define nodes
-  	std::deque<double64> px(iNodes);
-  	std::deque<double64> py(iNodes);
-  	std::deque<double64> pz(iNodes);
+  	std::deque<double> px(iNodes);
+  	std::deque<double> py(iNodes);
+  	std::deque<double> pz(iNodes);
 
   	px[0]=0.;py[0]=0.;pz[0]=0.;
   	px[1]=1.;py[1]=0.;pz[1]=0.;
@@ -122,8 +122,8 @@ void FiniteVolumePolicy_Test::Test_CreateVSet()
   	vset.AddXYZ( px, py, pz );
 
     //define elements
-    std::deque<std::vector<long64> > deqElements(iNrOfElements);
-    std::vector<long64> vecNodes(4);
+    std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
+    std::vector<int64_t> vecNodes(4);
     vecNodes[0]=0;
     vecNodes[1]=1;
     vecNodes[2]=4;
@@ -148,8 +148,8 @@ void FiniteVolumePolicy_Test::Test_CreateVSet()
     vset.AddPlist( deqElements.begin(),deqElements.end());
 
     //define neighbors
-    std::deque<std::vector<long64> > deqElementNeighbors(iNrOfElements);
-    std::vector<long64> vecNeighbors(4);
+    std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
+    std::vector<int64_t> vecNeighbors(4);
     vecNeighbors[0]=BOTTOM_OUTSIDE;
     vecNeighbors[1]=2;
     vecNeighbors[2]=4;
@@ -257,7 +257,7 @@ void FiniteVolumePolicy_Test::run() // runs all the tests for the class (registe
 /**  Method:
 
 
-void FiniteVolumePolicy_Test<dim>::IsoparametricLinearLineElement_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test<dim>::IsoparametricLinearLineElement_Test(double fTolerance, double fToleranceInternal)
 
 
 
@@ -280,12 +280,12 @@ This test does the following:
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
 @section arguments Input Arguments
-double64 fTolerance - specifies the tolerance of the test
+double fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Bar element, for all dimensions.
 
 tested: is a test function*/
-void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double64 fTolerance, double64)
+void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double fTolerance, double)
  {
 	FiniteElement* feptr			= new IsoparametricLinearLineElement(1U);
 	FiniteVolumeStencil<1U>* fvptr	= new FiniteVolumeStencil<1U>("ISOPARAMETRIC_LINEAR_BAR");
@@ -324,11 +324,11 @@ void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double64 fTole
 	if ( m_bTestFacetAreas )
 	  {
 
-    double64 fArea = ( elmt_ ).FacetArea( 0U );
+    double fArea = ( elmt_ ).FacetArea( 0U );
 		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
-    double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+    double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
@@ -336,18 +336,18 @@ void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double64 fTole
 
 	if ( m_bTestParametricFacetArea )
 	  {
-    double64 fArea = ( elmt_ ).ParametricFacetArea( 0U );
+    double fArea = ( elmt_ ).ParametricFacetArea( 0U );
 		_info("Area is: " << fArea);
 		_equal( fArea, elmt_.FV()->FacetIntegrationWeight(0U,0U), fTolerance );
 	  }
 
 	//test sector volumes
 	//testing: fT   SectorVolume( size_t sector ) const;
-    double64 fVolSum(0.f);
+    double fVolSum(0.f);
 
     if ( m_bTestSectorVolumes )
 	  {
-    double64 fSectorVolume = ( elmt_ ).SectorVolume( 0U );
+    double fSectorVolume = ( elmt_ ).SectorVolume( 0U );
 		_info("Volume is: " << setprecision(15) << fSectorVolume);
 		if(dim == 1)
 			_equal( fSectorVolume, 0.3159597, fTolerance );
@@ -381,8 +381,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double64 fTole
 	     	vVariable(iD)=3.;
 	     }
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 			_equal(fProjectionVal, fProjectionValP, fTolerance);
@@ -456,7 +456,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double64 fTole
 
 
 void FiniteVolumePolicy_Test<dim>::IsoparametricLinearTriangle_Test(
-                     double64 fTolerance, double64 fToleranceInternal)
+                     double fTolerance, double fToleranceInternal)
 
 
 
@@ -482,7 +482,7 @@ This test does the following:
 
 @section arguments Input Arguments
 
-double64 fTolerance - specifies the tolerance of the test
+double fTolerance - specifies the tolerance of the test
 
 @section application Application
 
@@ -491,7 +491,7 @@ Runs the test for the Isoparametric Linear Triangle element, for all dimensions 
 
 tested: is a test function*/
 template<size_t dim>
-void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance, double fToleranceInternal)
 {
 	FiniteElement* feptr			= new IsoparametricLinearTriangle(dim);
 	FiniteVolumeStencil<dim>* fvptr	= new FiniteVolumeStencil<dim>("ISOPARAMETRIC_LINEAR_TRIANGLE");
@@ -524,7 +524,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestFacetAreas )
 	  {
-    double64 fArea = ( elmt_ ).FacetArea( 0U );
+    double fArea = ( elmt_ ).FacetArea( 0U );
 		_info("Area is: " << fArea);
 		_equal( fArea, 0.2733262, fTolerance );
 
@@ -537,7 +537,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 		_equal( fArea, 0.3399482, fTolerance );
 
 		//test mapped vs original
-    double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+    double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.2733262, fTolerance );
 
@@ -559,7 +559,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearTriangle_Test: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 3; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -647,7 +647,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearTriangle_Test<3>: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 3; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -669,14 +669,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
-        double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+        double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
       }
 	  }
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<dim>  vecNormal;
@@ -698,9 +698,9 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 	//testing: fT   SectorVolume( size_t sector ) const;
 	if ( m_bTestSectorVolumes )
 	  {
-		double64 fVolSum(0.);
+		double fVolSum(0.);
 
-    double64 fSectorVolume = ( elmt_ ).SectorVolume( 0U );
+    double fSectorVolume = ( elmt_ ).SectorVolume( 0U );
 		_info("Volume is: " << fSectorVolume);
 		_equal( fSectorVolume, 1./6., fTolerance );
 		fVolSum+=fSectorVolume;
@@ -731,8 +731,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 	     	vVariable(iD)=3.;
 	     }
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		_equal(fProjectionVal, fProjectionValP, fTolerance);
@@ -862,7 +862,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 /**  Method:
 
 
-void FiniteVolumePolicy_Test<dim>::IsoparametricLinearQuadrilateral_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test<dim>::IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal)
 
 
 
@@ -886,13 +886,13 @@ This test does the following:
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
 @section arguments Input Arguments
-double64 fTolerance - specifies the tolerance of the test
+double fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Quadrilateral element, for all dimensions != 1.
 
 tested: is a test function*/
 template<size_t dim>
-void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal)
 {
 
    FiniteElement* feptr			    = new IsoparametricLinearQuadrilateral(dim);
@@ -938,7 +938,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
    //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
     if ( m_bTestFacetAreas )
 	  {
-      double64 fArea = ( elmt_ ).FacetArea( 0U );
+      double fArea = ( elmt_ ).FacetArea( 0U );
       _info("Area is: " << fArea);
 	    _equal( fArea, 1., fTolerance );
 
@@ -955,7 +955,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	    _equal( fArea, 1.2207746, fTolerance );
 
 	    //mapped area
-      double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+      double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 			_info("Mapped Area is: " << fAreaMapped);
 	    _equal( fAreaMapped, 1., fTolerance );
 
@@ -981,7 +981,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearQuadrilateral_Test<" << dim<< ">: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 4; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -1071,7 +1071,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearQuadrilateral_Test<3>: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 4; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -1094,14 +1094,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
-        double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+        double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
           }
 	  }
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<dim> vecNormal;
@@ -1124,9 +1124,9 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
    //testing: fT   SectorVolume( size_t sector ) const;
    if ( m_bTestSectorVolumes )
 	 {
-	   double64 fVolSum(0.);
+	   double fVolSum(0.);
 
-     double64 fSectorVolume = ( elmt_ ).SectorVolume( 0U );
+     double fSectorVolume = ( elmt_ ).SectorVolume( 0U );
 		 _info("Volume is: " << fSectorVolume);
 	   _equal( fSectorVolume, 1., fTolerance );
 	   fVolSum+=fSectorVolume;
@@ -1160,8 +1160,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 
 			 _info("LENGTH::::::::" << vVariable.Length());
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		  _equal(fProjectionVal, fProjectionValP, fTolerance);
@@ -1332,7 +1332,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 /**  Method:
 
 
-void FiniteVolumePolicy_Test<3>::IsoparametricLinearTetrahedron_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test<3>::IsoparametricLinearTetrahedron_Test(double fTolerance, double fToleranceInternal)
 
 
 
@@ -1356,12 +1356,12 @@ This test does the following:
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
 @section arguments Input Arguments
-double64 fTolerance - specifies the tolerance of the test
+double fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Tetrahedron element, for 3D.
 
 tested: is a test function*/
-void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTolerance, double64 fToleranceInternal )
+void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fTolerance, double fToleranceInternal )
 {
    FiniteElement* feptr			    = new IsoparametricLinearTetrahedron();
    FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3U>("ISOPARAMETRIC_LINEAR_TETRAHEDRON");
@@ -1402,7 +1402,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
    //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
    if ( m_bTestFacetAreas )
 	 {
-     double64 fArea = ( elmt_ ).FacetArea( 0U );
+     double fArea = ( elmt_ ).FacetArea( 0U );
      _info("Area is: " << setprecision(15) << fArea);
 	   _equal( fArea, 0.0979896825, fTolerance );
 
@@ -1427,7 +1427,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 	   _equal( fArea, 0.0722797155, fTolerance );
 
 	   //mapped area
-     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+     double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		 _info("Mapped Area is: " << setprecision(15) << fAreaMapped);
 	   _equal( fAreaMapped, 0.0979896825, fTolerance );
 
@@ -1461,7 +1461,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearTetrahedron_Test<3>: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 6; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -1570,7 +1570,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearTetrahedron_Test<3>: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 6; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -1593,14 +1593,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
-        double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+        double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
           }
 	  }
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<3U> vecNormal;
@@ -1621,8 +1621,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
    //testing: fT   SectorVolume( size_t sector ) const;
     if ( m_bTestSectorVolumes )
 	 {
-       double64 fVolSum(0.);
-	   double64 fSectorVolume(0.);
+       double fVolSum(0.);
+	   double fSectorVolume(0.);
 	   for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 	   {
        fSectorVolume = ( elmt_ ).SectorVolume( iSector );
@@ -1646,8 +1646,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 
 			 _info("LENGTH::::::::" << vVariable.Length());
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
   		_equal(fProjectionVal, fProjectionValP, fTolerance);
@@ -1801,7 +1801,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 /**  Method:
 
 
-void FiniteVolumePolicy_Test<3>::IsoparametricLinearPyramid_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test<3>::IsoparametricLinearPyramid_Test(double fTolerance, double fToleranceInternal)
 
 
 
@@ -1825,12 +1825,12 @@ This test does the following:
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
 @section arguments Input Arguments
-double64 fTolerance - specifies the tolerance of the test
+double fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Pyramid element, for 3D.
 
 tested: is a test function*/
-void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance, double fToleranceInternal)
 {
 
    FiniteElement* feptr			    = new IsoparametricLinearPyramid();
@@ -1880,7 +1880,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
    //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
    if ( m_bTestFacetAreas )
 	 {
-       double64 fArea = ( elmt_ ).FacetArea( 0U );
+       double fArea = ( elmt_ ).FacetArea( 0U );
      _info("Area is: " << fArea);
 	   _equal( fArea, 0.25, fTolerance );
 
@@ -1948,7 +1948,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 #endif
 
 	   //Mapped Area
-     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+     double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.25, fTolerance );
 
@@ -2025,7 +2025,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearPyramid_Test<3>: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -2101,7 +2101,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 #else
      //overload tolerance for this bit
      {
-     const double64 fTolerance = 1.e-6;
+     const double fTolerance = 1.e-6;
 
      vecNormal = ( elmt_ ).FacetNormal(4U);
      _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
@@ -2209,7 +2209,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 #else
      //overload tolerance for this bit
      {
-     const double64 fTolerance = 1.e-6;
+     const double fTolerance = 1.e-6;
 
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
      _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
@@ -2283,7 +2283,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 		 size_t total_times(TIMES);
 		 file << "\nIsoparametricLinearPyramid_Test<3>: ";
 
-		 clock_t ticks = clock();  double64 j(0);
+		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -2306,14 +2306,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
-        double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+        double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
           }
 	  }
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<3U> vecNormal;
@@ -2333,9 +2333,9 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
    //testing: fT   SectorVolume( size_t sector ) const;
    if ( m_bTestSectorVolumes )
 	 {
-	   double64 fVolSum(0.);
+	   double fVolSum(0.);
 
-	   double64 fSectorVolume(0.);
+	   double fSectorVolume(0.);
 	   for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors()-1; iSector++ )
 	   {
        fSectorVolume = ( elmt_ ).SectorVolume( iSector );
@@ -2365,8 +2365,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 	     	vVariable(iD)=3.;
 	     }
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		_equal(fProjectionVal, fProjectionValP, fTolerance);
@@ -2573,7 +2573,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 /**  Method:
 
 
-void FiniteVolumePolicy_Test<3>::IsoparametricLinearHexahedron_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test<3>::IsoparametricLinearHexahedron_Test(double fTolerance, double fToleranceInternal)
 
 
 
@@ -2597,7 +2597,7 @@ This test does the following:
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
 @section arguments Input Arguments
-double64 fTolerance - specifies the tolerance of the test
+double fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Hexahedron element, for 3D.
 
@@ -2606,7 +2606,7 @@ where a,b, and c are the sides in each coordinate direction.  The volumetric cen
 0,0,0.
 
  */
-void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double fTolerance, double fToleranceInternal)
 {
 	 FiniteElement* feptr = new IsoparametricLinearHexahedron();
    FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
@@ -2673,7 +2673,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 	if ( m_bTestFacetAreas )
 	{
 		_info("Facet area test.  Method 1 (facetarea1 in FiniteVolumeTraits) ");
-    double64 fArea = ( elmt_ ).FacetArea( 0U );
+    double fArea = ( elmt_ ).FacetArea( 0U );
 		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
@@ -2723,7 +2723,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 
 		//area mapped
 		_info("Facet area test.  Method 2 (FaceAreaMapped in FiniteVolumeTraits) ");
-    double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+    double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
@@ -2782,7 +2782,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearHexahedron_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 12; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -2977,7 +2977,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearHexahedron_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -3000,14 +3000,14 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 	{
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
-      double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+      double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	{
 		Point<3U> vecNormal;
@@ -3027,8 +3027,8 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 	//testing: fT   SectorVolume( size_t sector ) const;
 	if ( m_bTestSectorVolumes )
 	{
-		double64 fVolSum(0.);
-		double64 fSectorVolume(0.);
+		double fVolSum(0.);
+		double fSectorVolume(0.);
 		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
@@ -3054,8 +3054,8 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 				vVariable(iD)=3.;
 			}
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 			_equal(fProjectionVal, fProjectionValP, fTolerance);
@@ -3072,7 +3072,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 // This set of tests uses a scaled-up unit iso parametric hexahedron.  That means that it is a Hexahedron with sides 2a*2b*2c
 // where a,b, and c are the sides in each coordinate direction.  The volumetric center of this hexahedron is the origin
 // 0,0,0.
-void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolerance, double fToleranceInternal)
 {
 	FiniteElement* feptr			= new IsoparametricLinearHexahedron();
     FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
@@ -3139,7 +3139,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 	if ( m_bTestFacetAreas )
 	{
 		_info("Facet area test.  Method 1 (facetarea1 in FiniteVolumeTraits) ");
-    double64 fArea = ( elmt_ ).FacetArea( 0U );
+    double fArea = ( elmt_ ).FacetArea( 0U );
 		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
@@ -3189,7 +3189,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 
 		//area mapped
 		_info("Facet area test.  Method 2 (FaceAreaMapped in FiniteVolumeTraits) ");
-    double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+    double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
@@ -3248,7 +3248,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearHexahedron_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 12; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -3439,7 +3439,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearHexahedron_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -3462,14 +3462,14 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 	{
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
-      double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+      double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	{
 		Point<3U> vecNormal;
@@ -3489,8 +3489,8 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 	//testing: fT   SectorVolume( size_t sector ) const;
 	if ( m_bTestSectorVolumes )
 	{
-		double64 fVolSum(0.);
-		double64 fSectorVolume(0.);
+		double fVolSum(0.);
+		double fSectorVolume(0.);
 		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
@@ -3531,8 +3531,8 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 				vVariable(iD)=3.;
 			}
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 			_equal(fProjectionVal, fProjectionValP, fTolerance);
@@ -3548,7 +3548,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 
 // This set of tests uses a random iso parametric hexahedron.  That means that it is a Hexahedron with geometry given by
 // the corner points defined below.  The volumetric center of the element is NOT the origin.
-void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolerance, double fToleranceInternal)
 {
 	FiniteElement* feptr			= new IsoparametricLinearHexahedron();
     FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
@@ -3613,7 +3613,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestFacetAreas )
 	{
-    double64 fArea = ( elmt_ ).FacetArea( 0U );
+    double fArea = ( elmt_ ).FacetArea( 0U );
 		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
@@ -3662,7 +3662,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		_equal( fArea, 1.13477501, fTolerance );
 
 		//area mapped
-    double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+    double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
@@ -3720,7 +3720,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearHexahedron_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 12; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -3912,7 +3912,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearHexahedron_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -3935,14 +3935,14 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 	{
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
-      double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+      double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	{
 		Point<3U> vecNormal;
@@ -3962,8 +3962,8 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 	//testing: fT   SectorVolume( size_t sector ) const;
 	if ( m_bTestSectorVolumes )
 	{
-		double64 fVolSum(0.);
-		double64 fSectorVolume(0.);
+		double fVolSum(0.);
+		double fSectorVolume(0.);
 		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
@@ -3980,9 +3980,9 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 	if(m_bProjectionOnFacetNormal)
 	{
 		const size_t iNrOfFacets(elmt_.FV()->Facets());
-		//double64 int_physicalspace(0.);
-		//double64 int_parametricspace(0.);
-		//double64 j_factor(0.);
+		//double int_physicalspace(0.);
+		//double int_parametricspace(0.);
+		//double j_factor(0.);
 
 		for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 		{
@@ -3999,8 +3999,8 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 			}
 
 			//This calculates the projection (dot product) of vVariable (3,3,3) onto the facet normal (also in physical space)
-      //double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      //double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
+      //double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      //double fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			//In previous versions the following part of the test used to be incorrect (or was not a real test!):
 			//
@@ -4026,7 +4026,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 
 			//create a point to use to pass to RstToXYZ
 			Point<3U> p(vVariable[0U],vVariable[1U],vVariable[2U]);
-      //double64	fProjectionValP =pFacetNormal.DotProduct(( elmt_ ).RstToXYZ(p));
+      //double	fProjectionValP =pFacetNormal.DotProduct(( elmt_ ).RstToXYZ(p));
 
       Point<3U> pPoint((( elmt_ ).RstToXYZ(p))[0U],(( elmt_ ).RstToXYZ(p))[1U],(( elmt_ ).RstToXYZ(p))[2U]);
 
@@ -4058,7 +4058,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 
 
 
-void FiniteVolumePolicy_Test<3>::IsoparametricLinearPrism_Test(double64 fTolerance)
+void FiniteVolumePolicy_Test<3>::IsoparametricLinearPrism_Test(double fTolerance)
 
 Description:
 Specifies the procedure of the test.
@@ -4080,12 +4080,12 @@ This test does the following:
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
 @section arguments Input Arguments
-double64 fTolerance - specifies the tolerance of the test
+double fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Prism element, for 3D.
 
 tested: is a test function*/
-void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance, double64 fToleranceInternal)
+void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, double fToleranceInternal)
 {
 	FiniteElement* feptr			= new IsoparametricLinearPrism();
     FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_PRISM");
@@ -4139,7 +4139,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestFacetAreas )
 	{
-    double64 fArea = ( elmt_ ).FacetArea( 0U );
+    double fArea = ( elmt_ ).FacetArea( 0U );
 		_info("Area is: " << fArea);
 		_equal( fArea, 0.295435364, fTolerance );
 
@@ -4176,7 +4176,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 		_equal( fArea, 0.333553967, fTolerance );
 
 		//area mapped
-    double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
+    double fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
 		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.295435364, fTolerance );
 
@@ -4222,7 +4222,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearPrism_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 9; i++)
         j += ( elmt_ ).FacetArea( i );
@@ -4368,7 +4368,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 		size_t total_times(TIMES);
 		file << "\nIsoparametricLinearPrism_Test<3>: ";
 
-		clock_t ticks = clock();  double64 j(0);
+		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
 			for(size_t i = 0; i < 9; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
@@ -4391,14 +4391,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	{
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
-      double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
+      double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	{
 		Point<3U> vecNormal;
@@ -4419,8 +4419,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	//testing: fT   SectorVolume( size_t sector ) const;
 	if ( m_bTestSectorVolumes )
 	{
-		double64 fVolSum(0.);
-		double64 fSectorVolume(0.);
+		double fVolSum(0.);
+		double fSectorVolume(0.);
 		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
@@ -4459,8 +4459,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	     	vVariable(iD)=3.;
 			}
 
-      double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
-      double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
+      double fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
+      double fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
 
 			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		  _equal(fProjectionVal, fProjectionValP, fTolerance);

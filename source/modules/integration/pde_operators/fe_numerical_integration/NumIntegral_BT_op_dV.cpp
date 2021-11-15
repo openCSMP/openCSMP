@@ -66,7 +66,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
     // initialize output vector
     MathOperatorRHS<dim>::RHS.resize( dim * e.Nodes() );
     
-    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), static_cast<double64>(0.) );
+    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), static_cast<double>(0.) );
 
     // mapping element-placed operand from material matrix into 1-column matrix
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
@@ -83,7 +83,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
-         double64 detJ = e.dN_AtIntegrationPoint( B, i, dim );
+         double detJ = e.dN_AtIntegrationPoint( B, i, dim );
 
          if ( detJ <= 0. ) {
               cout <<"\nDeterminant of Jacobian at Gauss point: "<< i <<": "<< detJ << endl;

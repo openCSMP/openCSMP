@@ -11,12 +11,12 @@ class HydrostaticPressure : public Interrelation<dim> {
     Operand<dim>&    P;    // absolute fluid pressure
     Operand<dim>&    E;    // vertical elevation (zero at model base)
     ScalarVariable  height, pres;
-    const double64  rho0, g, zmax; // g = acceleration of gravity
+    const double  rho0, g, zmax; // g = acceleration of gravity
     
   public:
     HydrostaticPressure( const PropertyDatabase<dim>& p,
-                         double64 highest_elevation, 
-                         double64 ref_density=1000. );
+                         double highest_elevation, 
+                         double ref_density=1000. );
     ~HydrostaticPressure() {};
     void Calculate();
 };

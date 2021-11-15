@@ -18,10 +18,10 @@ namespace csmp
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareModels( const Model<dim>& model1, const Model<dim>& model2,
+double ModelComparator<dim>::CompareModels( const Model<dim>& model1, const Model<dim>& model2,
                                               const char* property1, const char* property2, const char* region ) const
 {
-    double64 error( 0. );
+    double error( 0. );
 
     const Index model1Key( model1.Database().StorageKey( property1 ) );
     const Index model2Key( model2.Database().StorageKey( property2 ) );
@@ -42,11 +42,11 @@ double64 ModelComparator<dim>::CompareModels( const Model<dim>& model1, const Mo
 }
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareVSets( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
+double ModelComparator<dim>::CompareVSets( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
                                              const char* variablesFile1, const char* variablesFile2,
                                              bool isoparametric, const char* region ) const
 {
-    double64 error( 0. );
+    double error( 0. );
 
     Model<dim> model1( vset1, variablesFile1, isoparametric );
     Model<dim> model2( vset2, variablesFile2, isoparametric );
@@ -58,14 +58,14 @@ double64 ModelComparator<dim>::CompareVSets( VSet<dim>& vset1, VSet<dim>& vset2,
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareVSets( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
+double ModelComparator<dim>::CompareVSets( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
                                              const char* variablesFile1, const char* variablesFile2,
                                              bool isoparametric, const char* region ) const
 {
-    double64 error( 0. );
+    double error( 0. );
 
     VSet<dim> vset1, vset2;
-    double64 modelTime( 0. );
+    double modelTime( 0. );
     vset1.InputFrom( vset1File, modelTime );
     vset2.InputFrom( vset2File, modelTime );
 
@@ -76,7 +76,7 @@ double64 ModelComparator<dim>::CompareVSets( const char* vset1File, const char* 
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareRegionScalarVariable( const Model<dim>& model1, const Model<dim>& model2,
+double ModelComparator<dim>::CompareRegionScalarVariable( const Model<dim>& model1, const Model<dim>& model2,
                                                             const Index model1Key, const Index model2Key, const char* region ) const
 {
     deque<ScalarVariable> model1Values;
@@ -107,17 +107,17 @@ double64 ModelComparator<dim>::CompareRegionScalarVariable( const Model<dim>& mo
                          "Comparison for this variable placement not implemented." );
     }
 
-    double64 error( CompareScalarDequesL2( model1Values, model2Values ) );
+    double error( CompareScalarDequesL2( model1Values, model2Values ) );
 
     return error;
 }
 
 /// L2 norm comparison of two deques containing scalar variables
 template<size_t dim>
-double64 ModelComparator<dim>::CompareScalarDequesL2( const std::deque<ScalarVariable>& deque1,
+double ModelComparator<dim>::CompareScalarDequesL2( const std::deque<ScalarVariable>& deque1,
                                                       const std::deque<ScalarVariable>& deque2 ) const
 {
-    double64 error( 0. );
+    double error( 0. );
 
     if( deque1.size() != deque2.size() )
         throw Exception( ERROR,
@@ -179,10 +179,10 @@ void ModelComparator<dim>::ReadRegionNodalScalarVariable( const Region<dim>& reg
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareModelsRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
+double ModelComparator<dim>::CompareModelsRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
                                               const char* property1, const char* property2, const char* region )
 {
-    double64 error( 0. );
+    double error( 0. );
 
     const Index model1Key( model1.Database().StorageKey( property1 ) );
     const Index model2Key( model2.Database().StorageKey( property2 ) );
@@ -203,11 +203,11 @@ double64 ModelComparator<dim>::CompareModelsRenumberedNodes( Model<dim>& model1,
 }
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareVSetsRenumberedNodes( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
+double ModelComparator<dim>::CompareVSetsRenumberedNodes( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
                                              const char* variablesFile1, const char* variablesFile2,
                                              bool isoparametric, const char* region )
 {
-    double64 error( 0. );
+    double error( 0. );
 
     Model<dim> model1( vset1, variablesFile1, isoparametric );
     Model<dim> model2( vset2, variablesFile2, isoparametric );
@@ -219,14 +219,14 @@ double64 ModelComparator<dim>::CompareVSetsRenumberedNodes( VSet<dim>& vset1, VS
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareVSetsRenumberedNodes( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
+double ModelComparator<dim>::CompareVSetsRenumberedNodes( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
                                              const char* variablesFile1, const char* variablesFile2,
                                              bool isoparametric, const char* region )
 {
-    double64 error( 0. );
+    double error( 0. );
 
     VSet<dim> vset1, vset2;
-    double64 modelTime( 0. );
+    double modelTime( 0. );
     vset1.InputFrom( vset1File, modelTime );
     vset2.InputFrom( vset2File, modelTime );
 
@@ -240,7 +240,7 @@ double64 ModelComparator<dim>::CompareVSetsRenumberedNodes( const char* vset1Fil
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareRegionScalarVariableRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
+double ModelComparator<dim>::CompareRegionScalarVariableRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
                                                                     const char* property1, const char* property2, const char* region )
 {
     map<Point<dim>, ScalarVariable > points_and_values1, points_and_values2;
@@ -269,7 +269,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariableRenumberedNodes( Model
                          "Comparison for this variable placement not implemented." );
     }
 
-    double64 error( 0. );
+    double error( 0. );
     ScalarVariable scalarValue( PLAIN, 0. );
     // L2 norm comparison
 
@@ -322,10 +322,10 @@ void ModelComparator<dim>::ReadRegionNodalScalarVariableAndNodeCoordinates(const
 /////////////////////////////////////////////////////////////////////////////////////////
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareModelsAtPoints( Model<dim>& model1, Model<dim>& model2,
+double ModelComparator<dim>::CompareModelsAtPoints( Model<dim>& model1, Model<dim>& model2,
                                               const char* property1, const char* property2, const char* region )
 {
-    double64 error( 0. );
+    double error( 0. );
 
     Index model1Key( model1.Database().StorageKey( property1 ) );
     Index model2Key( model2.Database().StorageKey( property2 ) );
@@ -351,12 +351,12 @@ double64 ModelComparator<dim>::CompareModelsAtPoints( Model<dim>& model1, Model<
 }
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareVSetsAtPoints( VSet<dim>& vset1, VSet<dim>& vset2,
+double ModelComparator<dim>::CompareVSetsAtPoints( VSet<dim>& vset1, VSet<dim>& vset2,
                                                      const char* property1, const char* property2,
                                                      const char* variablesFile1, const char* variablesFile2,
                                                      bool isoparametric, const char* region )
 {
-    double64 error( 0. );
+    double error( 0. );
 
     Model<dim> model1( vset1, variablesFile1, isoparametric );
     Model<dim> model2( vset2, variablesFile2, isoparametric );
@@ -368,15 +368,15 @@ double64 ModelComparator<dim>::CompareVSetsAtPoints( VSet<dim>& vset1, VSet<dim>
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareVSetsAtPoints( const char* vset1File, const char* vset2File,
+double ModelComparator<dim>::CompareVSetsAtPoints( const char* vset1File, const char* vset2File,
                                                      const char* property1, const char* property2,
                                                      const char* variablesFile1, const char* variablesFile2,
                                                      bool isoparametric, const char* region )
 {
-    double64 error( 0. );
+    double error( 0. );
 
     VSet<dim> vset1, vset2;
-    double64 modelTime( 0. );
+    double modelTime( 0. );
     vset1.InputFrom( vset1File, modelTime );
     vset2.InputFrom( vset2File, modelTime );
 
@@ -390,11 +390,11 @@ double64 ModelComparator<dim>::CompareVSetsAtPoints( const char* vset1File, cons
 
 
 template<size_t dim>
-double64 ModelComparator<dim>::CompareRegionScalarVariableAtPoints( Model<dim>& model1, Model<dim>& model2,
+double ModelComparator<dim>::CompareRegionScalarVariableAtPoints( Model<dim>& model1, Model<dim>& model2,
                                                                     const char* property1, const char* property2, const char* region )
 {
     std::vector<ScalarVariable> values;
-    std::map<size_t, std::vector<double64> > points;
+    std::map<size_t, std::vector<double> > points;
 
     const Region<dim>& rref1( model1.Region( region ) );
     const Region<dim>& rref2( model2.Region( region ) );
@@ -421,7 +421,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariableAtPoints( Model<dim>& 
                          "Comparison for this variable placement not implemented." );
     }
 
-    double64 error( 0. );
+    double error( 0. );
 
     // finds values of certain property at given points
     PropertyAtPointVisitor<dim> pAt(model2, points, property2);
@@ -448,7 +448,7 @@ template<size_t dim>
 void ModelComparator<dim>::ReadRegionNodalScalarVariableAndNodeCoordinates(const Region<dim>& region,
                                                           const Index propKey,
                                                           std::vector<ScalarVariable> & values,
-                                                          map<size_t, std::vector<double64> >& points)
+                                                          map<size_t, std::vector<double> >& points)
 {
     size_t index(0U);
     ScalarVariable scalarValue( PLAIN, 0. );

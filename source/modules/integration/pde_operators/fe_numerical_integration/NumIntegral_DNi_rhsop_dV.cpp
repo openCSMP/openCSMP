@@ -75,13 +75,13 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( CELL& e )
 
     // if the agregated finite element is a simplex, the Jacobian and element-interpolation derivative matrix is constant throughout it
     const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1);
-    double64 det = (is_simplex_element_type) ? e.dN_AtBaryCenter( MathOperatorRHS<dim>::DERIV ) : 0.;
+    double det = (is_simplex_element_type) ? e.dN_AtBaryCenter( MathOperatorRHS<dim>::DERIV ) : 0.;
 
     for ( size_t i=0; i<e.IntegrationPoints(); i++ )
       {
          // computing gradient of operand
          if ( !is_simplex_element_type ) det = e.dN_AtIntegrationPoint( MathOperatorRHS<dim>::DERIV, i );
-         double64 grad_op(0.);
+         double grad_op(0.);
          const size_t nodes(e.Nodes());
          for ( size_t j=0; j<nodes; ++j )
            grad_op += MathOperatorRHS<dim>::DERIV(xyz_,j) * op_vec_[j]();

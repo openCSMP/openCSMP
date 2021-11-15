@@ -15,7 +15,7 @@ template<size_t> class Model;
 template<size_t> class TwoPhaseModel;
 
 
-/// flow "velocity" & "volume flux" are output as vector<double64> and scalar variables, respecitively
+/// flow "velocity" & "volume flux" are output as vector<double> and scalar variables, respecitively
 /// upon request these properties are extrapolated to the nodes and averaged between adjacent elements
 template<size_t dim,class SIMPLEX=Element<dim> >
 class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
@@ -90,9 +90,9 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     csmp::Index                     facet_normal_idx_,              // Facet Normal property index
                                     facet_area_idx_,                // Facet Area property index
                                     sector_volume_idx_;             // Sector Volume property index
-    std::pair<double64,double64>    minmaxV_, minmaxF_;
+    std::pair<double,double>    minmaxV_, minmaxF_;
     DenseMatrix<DM_MIN>             DERIV_, RESULT_;
-    std::vector<double64>           VELOFLUX_, IVELOFLUX_, VELOFLUX_W_, VELOFLUX_NW_,
+    std::vector<double>           VELOFLUX_, IVELOFLUX_, VELOFLUX_W_, VELOFLUX_NW_,
                                     IPVF_, NVF_, veloflux_,
                                     IPOL_;
 
@@ -100,7 +100,7 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
                                     mult_vec_,
                                     rho_w_vec_, rho_nw_vec_;
 
-    std::vector<std::list<std::vector<double64> > >  temp_veloflux_;
+    std::vector<std::list<std::vector<double> > >  temp_veloflux_;
 
     VectorVariable<dim>             vt_, ivelo_, velo_nw_, velo_w_, gproj_;
     VectorVariable<dim>             facet_n_;
@@ -108,7 +108,7 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     ScalarVariable                  sc_;
     DenseMatrix<DM_MIN>             DN_;
     Point<dim>                      dsdn_;
-    double64                        sum_, ac_gravity_, gravTerm_, rho_fac_,rhot_fac_, rho_w_fac_, rho_nw_fac_, mult_fac_, cell_thickness_;
+    double                        sum_, ac_gravity_, gravTerm_, rho_fac_,rhot_fac_, rho_w_fac_, rho_nw_fac_, mult_fac_, cell_thickness_;
 
 };
 

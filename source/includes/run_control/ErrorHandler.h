@@ -1,7 +1,6 @@
 #ifndef CSMP_ERROR_HANDLER_H
 #define CSMP_ERROR_HANDLER_H
 
-#include "CSMP_number_types.h"
 #include "GenericSingleton.h"
 #include "Exception.h"
 #include "BE_Time.h"

@@ -49,20 +49,20 @@ inline bool smallerThanWithinTolerance( T valueInQuestion, T referenceValue, T t
 
 /// returns the maximum difference found on any node/element between two properties property
 template<size_t dim, template<size_t> class NodeOrElement>
-double64 maximumDifference( Model<dim>& model, const char* nodeProp1, const char* nodeProp2, const char* region = "Model" );
+double maximumDifference( Model<dim>& model, const char* nodeProp1, const char* nodeProp2, const char* region = "Model" );
 
 /// returns the averaged difference found on all nodes/elements between two properties property
 template<size_t dim, template<size_t> class NodeOrElement>
-double64 averageDifference( Model<dim>& model, const char* nodeProp1, const char* nodeProp2, const char* region = "Model" );
+double averageDifference( Model<dim>& model, const char* nodeProp1, const char* nodeProp2, const char* region = "Model" );
 
 
 /// returns the maximum value on any node/element of a property
 template<size_t dim, template<size_t> class NodeOrElement>
-double64 maximumOfProperty( Model<dim>& model, const char* prop, const char* region = "Model" );
+double maximumOfProperty( Model<dim>& model, const char* prop, const char* region = "Model" );
 
 /// returns arithmetic average of parent elements prop to node
 template<size_t dim>
-double64 elementToNodeProperty( Node<dim>* node, Index key )
+double elementToNodeProperty( Node<dim>* node, Index key )
   {
     double cacheDouble = 0.;
     for( size_t parent = 0; parent < node->Parents(); ++parent )
@@ -93,7 +93,7 @@ void bubbleSortNodes1D( std::vector<Node<1U>*>::iterator NODES_BEGIN,
 
 
 /// adjusts the size of the model by the provided factor
-void scaleModelByFactor( Model<3U>& model, double64 xFactor, double yFactor, double zFactor );
+void scaleModelByFactor( Model<3U>& model, double xFactor, double yFactor, double zFactor );
 
 /// returns points which CONTAIN the lowest and largest x,y,z coordinates. not equal to MinMaxCoordinates() !!!
 void minMaxXYZ( Point<3U>& min, Point<3U>& max, const Model<3U>& model, const char* regionName = "Model" );
@@ -140,12 +140,12 @@ void singlePhaseVelocity( Model<dim>& model, const std::string& regionName,
     for ( typename std::vector<Element<dim>*>::iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
       {
         // vt = -k (lt grad p)
-        const double64 conductivity = (*it)->Read( conductivityKey );
+        const double conductivity = (*it)->Read( conductivityKey );
         velo = 0.;
         (*(*it)).dN_AtBaryCenter( DERIV, 1U );
         for ( size_t i = 0; i < (*it)->Nodes(); ++i )
           {
-            double64 pf = (*it)->N(i)->Read( fluidPresssureKey );
+            double pf = (*it)->N(i)->Read( fluidPresssureKey );
             for( size_t xyz = 0; xyz < dim; ++xyz )
               velo( xyz ) += pf * -DERIV( xyz, i ) * conductivity;
           }

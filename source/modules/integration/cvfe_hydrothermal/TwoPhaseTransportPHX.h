@@ -24,8 +24,8 @@ class TwoPhaseTransportPHX {
 
     ~TwoPhaseTransportPHX( );
     
-    double64  AdvectMassConserved( const double64& time_increment); // main function to coordinate two-phase flow
-    void SetLargestTimeStep( const double64& max_time_step ); // modify maximum size of time step
+    double  AdvectMassConserved( const double& time_increment); // main function to coordinate two-phase flow
+    void SetLargestTimeStep( const double& max_time_step ); // modify maximum size of time step
     void WithGravityComponentLiquidAndVapor(); // active gravity component
     void UpdateProjection( ); // update projection of velocity onto facet normal
     void AddAdvectionVariable( const char* new_lhs_liquid, const char* new_rhs_liquid,
@@ -43,8 +43,8 @@ class TwoPhaseTransportPHX {
     void  PerformFacetFluxes( ); // finalize FV calculations
     void  TrackFluxes( ); // special function to track fluxes of magmatic fluids
 
-    double64    cfl_dt, time_step_factor;
-    double64    upper_shell_T, lower_shell_T;
+    double    cfl_dt, time_step_factor;
+    double    upper_shell_T, lower_shell_T;
 
     // tracking fluxes
     csmp::Index          tffi_key, tffo_key,

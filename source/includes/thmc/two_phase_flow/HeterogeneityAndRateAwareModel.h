@@ -58,7 +58,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     virtual ~HeterogeneityAndRateAwareModel();
     
     /// return integer key of rocktype
-    int32 RockType( const Element<dim>& ) const;
+    int32_t RockType( const Element<dim>& ) const;
   
     /// reads vt and makes some initiaisations
     void InitializeVelocity( const Element<dim>& );
@@ -69,26 +69,26 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     virtual void Initialize( const Element<dim>& );
 
     /// updating model parameters for testing and plotting
-    void Initialize( long rocktype, double64 Sw, const VectorVariable<dim>& vt );
+    void Initialize( long rocktype, double Sw, const VectorVariable<dim>& vt );
 
     /// average effective saturation as required by 2-phase model
-    virtual double64 EffectiveSaturation() const;
+    virtual double EffectiveSaturation() const;
   
    // relative permeabilities
     /// heterogeneity-aware, rate-dependent versions, Nc is calculated in the background
-    virtual double64 krw_Phase() const;
-    virtual double64 krn_Phase() const;
+    virtual double krw_Phase() const;
+    virtual double krn_Phase() const;
   
     /// capillary pressure of the non-wetting phase; cap value is applied
-    virtual double64 pc_Phase() const;
-    double64 pc_Phase_at(double64 sw) const; 
+    virtual double pc_Phase() const;
+    double pc_Phase_at(double sw) const; 
   
     /// numeric implementation of capillary pressure derivative; cap value is applied
-    virtual double64 dpcds_Phase() const;
-    double64 dpcds_Phase_at(double64 sw) const;
+    virtual double dpcds_Phase() const;
+    double dpcds_Phase_at(double sw) const;
     
     // maximum absolute value returned by dfdS
-    virtual double64 MaxFractionalFlowDerivative() const;
+    virtual double MaxFractionalFlowDerivative() const;
 
     /// Outputs the relperms for the current model initialisation to a plot for visual examination; filename appends rocktype and Ncap calculated
     void WriteRelativePermeabilityTable( const char* filename, long rocktype, const VectorVariable<dim>& vt );
@@ -99,21 +99,21 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     /// takes permeability values (from Model or Rocktypes) and initialises scalar permeability k and tensor K in TwoPhaseModel base class
     void InitialisePermeability( const Element<dim>& e, bool k_from_rocktypes );
     /// weighted average
-    double64  PermeabilityParallelToLaminations() const;
+    double  PermeabilityParallelToLaminations() const;
     /// harmonic mean
-    double64  PermeabilityPerpendicularToLaminations() const;
+    double  PermeabilityPerpendicularToLaminations() const;
     /// kv, kh tensor decomposition
-    double64  PermeabilityInFlowDirection( const VectorVariable<dim>& normalised_mixture_velocity ) const;
+    double  PermeabilityInFlowDirection( const VectorVariable<dim>& normalised_mixture_velocity ) const;
     /// Prominent direction of flow
     FLOW_DIRECTION ProminentFlowDirection( const VectorVariable<dim>& vt ) const;
     /// volume averaged irreducible water saturation
-    double64  Swr_Composite() const;
+    double  Swr_Composite() const;
     /// Magnitude of the pressure gradient
-    double64  PressureGradientMagnitude( const Element<dim>& ) const;
+    double  PressureGradientMagnitude( const Element<dim>& ) const;
     /// Capillary number, pressure gradient form: Nc = k ||grad p|| / sigma
-    double64  Nc_kgradP_Version( double64 pf_gradient_magnitude ) const;
+    double  Nc_kgradP_Version( double pf_gradient_magnitude ) const;
     /// Ratio between viscous and capillary forces
-    double64  RVC( double64 Ncap ) const;
+    double  RVC( double Ncap ) const;
      
     // TODO: add function that assesses whether we are dealing with imbibition or drainage
   
@@ -130,13 +130,13 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     mutable VectorVariable<dim>  vc_; ///< for all kinds of purposes
     
     // dynamic variables
-    mutable double64 Sw_;
+    mutable double Sw_;
 
     // composite is modelled as a dual of two rock types
     OtwayRockTypes Otway_;
     long     rocktype_;
     bool     is_composite_;
-    double64 K_flow_direction_, k_low_, k_high_, K_reduction_in_flow_direction_,
+    double K_flow_direction_, k_low_, k_high_, K_reduction_in_flow_direction_,
              L_low_, L_high_,                ///< permeability in flow direction; smallest over highest permeability
              vt_magnitude_,
              vt_magnitude_x_, vt_magnitude_y_, 
@@ -148,8 +148,8 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
              pd_flow_direction_, pc_flow_direction_;         
 
     // derived quantities
-    double64  grad_p_magnitude_; ///< magnitude of the fluid pressure gradient reduced by hydrostatic gradient
-    double64  Nc_; // capillary mumber
+    double  grad_p_magnitude_; ///< magnitude of the fluid pressure gradient reduced by hydrostatic gradient
+    double  Nc_; // capillary mumber
 };
 
 } // end namespace csmp

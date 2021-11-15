@@ -76,7 +76,7 @@ The method is implemented from the various FiniteVolume<fT, dim>Visitors
 
 */
 template<size_t dim>
-void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vector<pair<double64,double64> >& MINMAX, int counter )
+void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vector<pair<double,double> >& MINMAX, int counter )
   {
     ScalarVariable                                  val1, val2, phi;
     VectorVariable<dim>                             grad, dist;
@@ -84,7 +84,7 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
     Node<dim>                                       fv;
     typename std::vector<size_t>::iterator          nit;
     std::pair<size_t, size_t>                       ids;
-    double64                                        max, min, val_left, phi_temp;
+    double                                        max, min, val_left, phi_temp;
     Node<dim>*                                      cvit, neighbor_node;
     size_t                                          nloc_id, global_el_id, local_facet_id,node_id;
     
@@ -102,8 +102,8 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
             // read the gradient at the node
             (*cvit).Read( grad_key,  grad );
             
-            //double64  node_x =  (*cvit).x();
-            //double64  node_y =  (*cvit).y();
+            //double  node_x =  (*cvit).x();
+            //double  node_y =  (*cvit).y();
 
             // read concentration at the fv at its center of mass
             (*cvit).Read( u_key, val1 );
@@ -214,11 +214,11 @@ void GenericNodePropertyGradientLimiter<dim>::SetPropertyKey( csmp::Index& key )
 
 /**
 
-@return double64 Returns the storage in bytes required by the GenericNodePropertyGradientLimiter object
+@return double Returns the storage in bytes required by the GenericNodePropertyGradientLimiter object
 
 */    
 template<size_t dim>
-double64 GenericNodePropertyGradientLimiter<dim>::SizeOf() const
+double GenericNodePropertyGradientLimiter<dim>::SizeOf() const
   {
     return sizeof( *this );
   }

@@ -143,16 +143,16 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     INTERFACE_SIDE  RegionLocation( const Region<dim>& );
 
     /// output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced
-    double64  Area( INTERFACE_SIDE=MIDDLE ) const;
+    double  Area( INTERFACE_SIDE=MIDDLE ) const;
   
     /// outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models
-    double64  Perimeter( INTERFACE_SIDE=MIDDLE ) const;
+    double  Perimeter( INTERFACE_SIDE=MIDDLE ) const;
   
     /// integrates the property over the boundary line or surface
-    double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property, INTERFACE_SIDE=INSIDE  ) const;
+    double  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property, INTERFACE_SIDE=INSIDE  ) const;
 
     /// returns 1) interfaces of how many different spatial dimensions are contained, and 2) the highest interface spatial dimension in subdomain
-    std::pair<int32,int32>  InterFaceSpatialDimensions() const;
+    std::pair<int32_t,int32_t>  InterFaceSpatialDimensions() const;
     
     /// reports box-boundary flag equivalent which is always INTERNAL because SplitBoundary objects can only exist on the interior of a model
     BOX_BOUNDARY AtBoundary() const { return INTERNAL; }

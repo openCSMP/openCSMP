@@ -77,7 +77,7 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
                              bool create_splitboundaries,
                              bool isoparametric )
 {
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
   // -------------------------------------------------

@@ -45,61 +45,61 @@ inline std::string number_to_string( const T& value ) {
 }
 
 /// evaluates the distance between 2 points
-bool areFartherApartThan( const double64* pn, const double64* pw, double64 distance );
+bool areFartherApartThan( const double* pn, const double* pw, double distance );
 
 // finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
 template<size_t dim>
-long  findNode( const Model<dim>&, const Point<dim>& pxyz, double64 tolerance, bool verbose = false );
+long  findNode( const Model<dim>&, const Point<dim>& pxyz, double tolerance, bool verbose = false );
 
 /// find node by its position as identified from its coordinates: tolerance should take into account single-precision of CAD tools
 size_t  findNode( const Model<1U>&,
-                  double64 nx, double64 tolerance );
+                  double nx, double tolerance );
 /// 2D version
 size_t  findNode( const Model<2U>&,
-                  double64 nx, double64 ny, double64 tolerance );
+                  double nx, double ny, double tolerance );
 /// 3D version
 size_t  findNode( const Model<3U>&,
-                  double64 nx, double64 ny, double64 nz, double64 tolerance );
+                  double nx, double ny, double nz, double tolerance );
 
 /// prints sorted global element node numbers in a compact way
 template<size_t dim, template<size_t> class CELL>
 void printNodes( const CELL<dim>& );
 
 /// linear interpolation to point between 2 points in 1D
-double64 linearInterpolate( const std::pair<Point<1U>, double64>&,
-                            const std::pair<Point<1U>, double64>&,
+double linearInterpolate( const std::pair<Point<1U>, double>&,
+                            const std::pair<Point<1U>, double>&,
                             const Point<1U>& );
 
 /// bilinear interpolation to point between 2 points in 2D
-double64 linearInterpolate( const std::pair<Point<2U>, double64>&,
-                            const std::pair<Point<2U>, double64>&,
+double linearInterpolate( const std::pair<Point<2U>, double>&,
+                            const std::pair<Point<2U>, double>&,
                             const Point<2U>& );
 
 /// 3D trilinear interpolation
-double64 linearInterpolate( const std::pair<Point<3U>, double64>&,
-                            const std::pair<Point<3U>, double64>&,
+double linearInterpolate( const std::pair<Point<3U>, double>&,
+                            const std::pair<Point<3U>, double>&,
                             const Point<3U>& );
 
 /// just a stub (ignores the bilinear)
-double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
+double bilinearInterpolate( size_t idx_x, size_t idx_y,
                               const Point<1U>& xy1,
                               const Point<1U>& xy2,
                               const Point<1U>& coord,
-                              double64 p1, double64 p2, double64, double64 );
+                              double p1, double p2, double, double );
 
-double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
+double bilinearInterpolate( size_t idx_x, size_t idx_y,
                               const Point<2U>& xy1,
                               const Point<2U>& xy2,
                               const Point<2U>& coord,
                               //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
-                              double64 p1, double64 p2, double64 p3, double64 p4 );
+                              double p1, double p2, double p3, double p4 );
 
-double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
+double bilinearInterpolate( size_t idx_x, size_t idx_y,
                               const Point<3U>& xy1,
                               const Point<3U>& xy2,
                               const Point<3U>& coord,
                               //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
-                              double64 p1, double64 p2, double64 p3, double64 p4 );
+                              double p1, double p2, double p3, double p4 );
 
 /// extrapolate element property values stored in VSet to the vertices
 template<size_t dim, class VarType>
@@ -146,8 +146,8 @@ size_t removeVectorElements( std::vector<T>& toRemoveFrom, std::vector<T>& toRem
 }
 
 /// find all possible combinations of the numbers provided in 'sequence', where 'samples' specified how many numbers shall be combined; combinations are returned into deque.
-size_t createUniqueCombinations( std::vector<long64>& sequence, long samples,
-                                 std::deque<std::vector<long64> >& combinations );
+size_t createUniqueCombinations( std::vector<int64_t>& sequence, size_t samples,
+                                 std::deque<std::vector<int64_t> >& combinations );
 
 
 

@@ -6,7 +6,7 @@ namespace csmp {
 
 template<size_t dim>
 ConcentrationFluidVolumeSource<dim>::ConcentrationFluidVolumeSource( const PropertyDatabase<dim>& p,
-                                                                     double64 max_rho ) 
+                                                                     double max_rho ) 
       : Interrelation<dim>(p),
         CONCN( Interrelation<dim>::GlobalProperty("concentration") ),
         CONCP( Interrelation<dim>::GlobalProperty("previous concentration") ),

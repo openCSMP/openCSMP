@@ -14,13 +14,13 @@ using namespace std;
 
 namespace csmp
 {
-  H2ONaClFluidProperties::H2ONaClFluidProperties(const double64& externaltemperature_in_C,
-                                                 const double64& externalpressure_in_Pa,
-                                                 const double64& externalcomposition_in_mole_fraction,
-                                                 const double64& external_fluid_enthalpy_in_J_per_kg,
-                                                 const double64& external_cp_rock,
-                                                 const double64& external_rho_rock,
-                                                 const double64& external_phi, const bool& verbose ) 
+  H2ONaClFluidProperties::H2ONaClFluidProperties(const double& externaltemperature_in_C,
+                                                 const double& externalpressure_in_Pa,
+                                                 const double& externalcomposition_in_mole_fraction,
+                                                 const double& external_fluid_enthalpy_in_J_per_kg,
+                                                 const double& external_cp_rock,
+                                                 const double& external_rho_rock,
+                                                 const double& external_phi, const bool& verbose ) 
   : temperature(externaltemperature_in_C),
     pressure(externalpressure_in_Pa),
     composition(externalcomposition_in_mole_fraction),
@@ -97,7 +97,7 @@ namespace csmp
   }
 
 
-  double64 H2ONaClFluidProperties::BulkEnthalpy()
+  double H2ONaClFluidProperties::BulkEnthalpy()
   {
     pcurrent = pressure;
     tcurrent = temperature;
@@ -106,7 +106,7 @@ namespace csmp
     low_x        = false;
     fatal        = false;
 
-    if(definitelyLessThan( xcurrent, 2.0*numeric_limits<double64>::epsilon() ) )
+    if(definitelyLessThan( xcurrent, 2.0*numeric_limits<double>::epsilon() ) )
       {
         bulk               = fluid_water.BulkPropertiesFromTHP();
         return bulk.h;
@@ -114,9 +114,9 @@ namespace csmp
 
     else if( essentiallyEqual( xcurrent, 1.0e0 ) )
       {
-        if( definitelyLessThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double64>::epsilon()) )
+        if( definitelyLessThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double>::epsilon()) )
           { UpdateEnthalpyHalite(); return bulk.h;}
-        else if( definitelyGreaterThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double64>::epsilon()) )
+        else if( definitelyGreaterThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double>::epsilon()) )
           { UpdateEnthalpyNaClMelt(); return bulk.h;}
         else if ( !definitelyLessThan( enthalpy, naclmelt_l.Enthalpy() ) )
           { UpdateEnthalpyNaClMelt(); return bulk.h;}
@@ -223,7 +223,7 @@ namespace csmp
                 //************************************* re-check for complete control statements !!! *************************
 
                 // Now VLH case #1
-                if( essentiallyEqual( tcurrent, t_vlh_high, 5.0*numeric_limits<double64>::epsilon()) )
+                if( essentiallyEqual( tcurrent, t_vlh_high, 5.0*numeric_limits<double>::epsilon()) )
                   { 
                     //d cout << "H2ONaClFluidEnthalpy::UpdateEnthalpy() - VLH case 1\n";
                     // Check if V only
@@ -309,7 +309,7 @@ namespace csmp
                   }
 
                 // Now VLH case #2
-                if( essentiallyEqual( tcurrent, t_vlh_low, 5.0*numeric_limits<double64>::epsilon()) )
+                if( essentiallyEqual( tcurrent, t_vlh_low, 5.0*numeric_limits<double>::epsilon()) )
                   { 
                     //d cout << "H2ONaClFluidEnthalpy::UpdateEnthalpy() - VLH case 2\n";
                     // Check if V only
@@ -570,7 +570,7 @@ namespace csmp
                           }
                       }
 
-                    // *** DEBUG info: double64 check the following conditions !(...)
+                    // *** DEBUG info: double check the following conditions !(...)
                     else if( /*! (definitelyGreaterThan( twophase_v.MassFractionNaCl(), 0.0 ) 
                                &&*/					
                             definitelyLessThan( xcurrent, twophase_l.MinXResolution() )
@@ -584,7 +584,7 @@ namespace csmp
                             // !definitelyLessThan( xcurrent, twophase_v.MassFractionNaCl() )
 
                             /*&&
-                              definitelyGreaterThan( twophase_l.MassFractionNaCl(), twophase_v.MassFractionNaCl(), safety_limit*numeric_limits<double64>::epsilon()) )*/
+                              definitelyGreaterThan( twophase_l.MassFractionNaCl(), twophase_v.MassFractionNaCl(), safety_limit*numeric_limits<double>::epsilon()) )*/
                              )
                       // At least one of the above conditions is not fulfilled, which very likely means very low x
                       // probably requires enthalpy-based special treatment
@@ -713,11 +713,11 @@ namespace csmp
       }
     
       // SKM FIX: else return value may not be defined (compilation problem)
-      return std::numeric_limits<double64>::quiet_NaN();
+      return std::numeric_limits<double>::quiet_NaN();
   }
 
 
-void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthalpy)
+void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double enthalpy)
   {
     // The correct assignment of bulk.h and other properties in this function depends on the
     // assumption that prior to calling this function there was a check that enthalpy is
@@ -741,7 +741,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
     return;
   }
 
-  void H2ONaClFluidProperties::UpdateEnthalpyAtVLH_For_P(double64 enthalpy){
+  void H2ONaClFluidProperties::UpdateEnthalpyAtVLH_For_P(double enthalpy){
     // TD, 06-Feb-2006, modified 12-Sep-2006
 
     // tcurrent, pcurrent, xcurrent are known externally when this function is called;
@@ -850,7 +850,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
 
   void H2ONaClFluidProperties::UpdateProperties()
   {
-    // // using this way of comparing double64s
+    // // using this way of comparing doubles
     // if( essentiallyEqual( pcurrent, pressure    ) && 
     // 	essentiallyEqual( tcurrent, temperature ) && 
     // 	essentiallyEqual( xcurrent, composition ) && 
@@ -870,11 +870,11 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
     low_x        = false;
     fatal        = false;
 
-    //d cout << "xcurrent = " << xcurrent << " " << numeric_limits<double64>::epsilon() << endl;
+    //d cout << "xcurrent = " << xcurrent << " " << numeric_limits<double>::epsilon() << endl;
     // ---------------------------------------------------------------------------------
     // If pure water, let H2ONaClFluidPropertiesWater do  the job
     // if( essentiallyEqual( xcurrent, 0.0 ) ) // "== 0.0"
-    if(definitelyLessThan( xcurrent, 2.0*numeric_limits<double64>::epsilon() ) )
+    if(definitelyLessThan( xcurrent, 2.0*numeric_limits<double>::epsilon() ) )
       {
         //d cout << "H2ONaClFluidProperties::UpdateProperties() - pure water case\n";
         bulk               = fluid_water.BulkPropertiesFromTHP();
@@ -893,14 +893,14 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
       {
         //d cout << "H2ONaClFluidProperties::UpdateProperties() - pure NaCl case\n";
         // t-based check if halite
-        if( definitelyLessThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double64>::epsilon()) )
+        if( definitelyLessThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double>::epsilon()) )
           { UpdatePropertiesHalite(); return; }
 
         // t-based check if NaCl melt
-        else if( definitelyGreaterThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double64>::epsilon()) )
+        else if( definitelyGreaterThan(tcurrent, naclmelt_l.TfromP(pcurrent), 5.0*numeric_limits<double>::epsilon()) )
           { UpdatePropertiesNaClMelt(); return; }
 
-        // remainig possibilities: very near true tmelt, hence, double64-check via enthalpy
+        // remainig possibilities: very near true tmelt, hence, double-check via enthalpy
         else if ( !definitelyLessThan( enthalpy, naclmelt_l.Enthalpy() ) )
           { UpdatePropertiesNaClMelt(); return; }
 
@@ -1043,10 +1043,10 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
               // cout << "tcurrent         = " << tcurrent   << endl;
               // cout << "current-low rel  = " << (tcurrent-t_vlh_low)/tcurrent << endl;
               // cout << "high-current rel = " << (t_vlh_high-tcurrent)/tcurrent << endl;
-              // cout << "5*epsilon        = " << 5.0*numeric_limits<double64>::epsilon() << endl;
+              // cout << "5*epsilon        = " << 5.0*numeric_limits<double>::epsilon() << endl;
 
               // Now VLH case #1
-              if( essentiallyEqual( tcurrent, t_vlh_high, 5.0*numeric_limits<double64>::epsilon()) )
+              if( essentiallyEqual( tcurrent, t_vlh_high, 5.0*numeric_limits<double>::epsilon()) )
                 { 
                   //d cout << "H2ONaClFluidProperties::UpdateProperties() - VLH case 1\n";
                   // Check if V only
@@ -1127,7 +1127,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
                 }
 
               // Now VLH case #2
-              if( essentiallyEqual( tcurrent, t_vlh_low, 5.0*numeric_limits<double64>::epsilon()) )
+              if( essentiallyEqual( tcurrent, t_vlh_low, 5.0*numeric_limits<double>::epsilon()) )
                 { 
                   //d cout << "H2ONaClFluidProperties::UpdateProperties() - VLH case 2\n";
                   // Check if V only
@@ -1366,7 +1366,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
                           return; }
                     }
 
-                  // *** DEBUG info: double64 check the following conditions !(...)
+                  // *** DEBUG info: double check the following conditions !(...)
                   else if( /*! (definitelyGreaterThan( twophase_v.MassFractionNaCl(), 0.0 ) 
                              &&*/					
                           definitelyLessThan( xcurrent, twophase_l.MinXResolution() )
@@ -1380,7 +1380,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
                           // !definitelyLessThan( xcurrent, twophase_v.MassFractionNaCl() )
 
                           /*&&
-                            definitelyGreaterThan( twophase_l.MassFractionNaCl(), twophase_v.MassFractionNaCl(), safety_limit*numeric_limits<double64>::epsilon()) )*/
+                            definitelyGreaterThan( twophase_l.MassFractionNaCl(), twophase_v.MassFractionNaCl(), safety_limit*numeric_limits<double>::epsilon()) )*/
                            )
                     // At least one of the above conditions is not fulfilled, which very likely means very low x
                     // probably requires enthalpy-based special treatment
@@ -1497,7 +1497,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
     }
   }
 
-  void H2ONaClFluidProperties::UpdatePropertiesNaClMeltingCurve_ForP(double64 enthalpy)
+  void H2ONaClFluidProperties::UpdatePropertiesNaClMeltingCurve_ForP(double enthalpy)
   {
     // The correct assignment of bulk.h and other properties in this function depends on the
     // assumption that prior to calling this function there was a check that enthalpy is
@@ -1636,7 +1636,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
 
 
 
-  void H2ONaClFluidProperties::UpdatePropertiesAtVLH_For_P(double64 enthalpy){
+  void H2ONaClFluidProperties::UpdatePropertiesAtVLH_For_P(double enthalpy){
     // TD, 06-Feb-2006, modified 12-Sep-2006
 
     // tcurrent, pcurrent, xcurrent are known externally when this function is called;
@@ -1726,18 +1726,18 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
     xcurrent         = composition;
 
     // new threephase compressibility
-    double64 dvdh;
+    double dvdh;
     dvdh             = (1.0-vap.smf)/liq.rho;      
     dvdh            += (liq.smf-1.0)/vap.rho;      
     dvdh            += (vap.smf-liq.smf)/salt.rho; 
     dvdh            /= liq.h*(1.0-vap.smf)+vap.h*(liq.smf-1.0)+salt.h*(vap.smf-liq.smf); // Nenner
 
-    double64 cptot  = liq.mf*liq.rho*liq.cp;
+    double cptot  = liq.mf*liq.rho*liq.cp;
     cptot           += vap.mf*vap.rho*vap.cp;
     cptot           += salt.mf*salt.rho*salt.cp;
     cptot           *= phi;
     cptot           += (1.0-phi)*rock.HeatCapacity(tcurrent)/*cpr*/*rr;
-    double64 dpdt   = vlh_l.DPressureDT()*1.0e5;
+    double dpdt   = vlh_l.DPressureDT()*1.0e5;
 
     bulk.beta        = 1.0/phi;// the minus sign is skipped becaus Grant&Sorey forgot the added/released convention
     bulk.beta       *= dvdh;// *phi
@@ -2148,7 +2148,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
         bulk.h        = enthalpy;
 
         // to reduce expesnive calls to the "fromp" functions in "water", we go via "fromt"
-        double64 th2o = water.SaturationTemperatureFromP( pcurrent );
+        double th2o = water.SaturationTemperatureFromP( pcurrent );
         liq.h         = water.LiquidEnthalpyFromT( th2o );
         vap.h         = water.VaporEnthalpyFromT(  th2o );
         liq.rho       = water.LiquidDensityFromT(  th2o );
@@ -2159,7 +2159,7 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
         liq.s         = (liq.mf/liq.rho)/(liq.mf/liq.rho+vap.mf/vap.rho);
         vap.s         = 1.0e0-liq.s;
 
-        double64   kd = -1.11605*pow(cp_h2o.Temperature()-tsat,0.15201)-0.027387*(cp_h2o.Temperature()-tsat);
+        double   kd = -1.11605*pow(cp_h2o.Temperature()-tsat,0.15201)-0.027387*(cp_h2o.Temperature()-tsat);
         kd            = pow(10.0,kd);
         liq.x         = xcurrent/(kd+liq.mf*(1.0-kd));
         vap.x         = kd*liq.x;
@@ -2287,9 +2287,9 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
     salt.InitToBogus();
   }
 
-  // double64 H2ONaClFluidProperties::NewTwophaseCompressibility(){
+  // double H2ONaClFluidProperties::NewTwophaseCompressibility(){
 
-  //     double64 Clapeyron;
+  //     double Clapeyron;
   //     dldt  = (1.0-liq.mf)*vap.dhdt-liq.mf*liq.dhdt;
   //     dldt += -dliqmfdt*(vap.h+liq.h);
   //     dldp  = (1.0-liq.mf)*vap.dhdp-liq.mf*liq.dhdp;
@@ -2301,12 +2301,12 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
   //     cout.setf(ios::scientific);
   // //    cout << pcurrent << "\t" << -Clapeyron - (-dldt/(dldp*1.0e-5)) << endl;
   // //    cout << pcurrent << "\t" << (vap.h-liq.h)/((tcurrent+273.15)*(vap.v-liq.v)) << endl;
-  //     double64 dVdT;
+  //     double dVdT;
   //     dVdT  = dliqmfdt*(1.0/liq.rho-1.0/vap.rho);
   //     dVdT += liq.mf*(liq.alfa/liq.rho-vap.alfa/vap.rho);
   //     dVdT += vap.alfa/vap.rho;
 
-  //     double64 dVdP;
+  //     double dVdP;
   //     dVdP  = dliqmfdp*(1.0/liq.rho-1.0/vap.rho);
   //     dVdP += liq.mf*(-liq.beta/liq.rho+vap.beta/vap.rho);
   //     dVdP -= vap.beta/vap.rho;
@@ -2325,28 +2325,28 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthal
     return;
   }
 
-  double64 H2ONaClFluidProperties::TwophaseCompressibility()
+  double H2ONaClFluidProperties::TwophaseCompressibility()
   {
-    // double64 t        = tcurrent;
-    // double64 p        = water.SaturationPressureFromT(t);
-    // double64 bl       = water.LiquidCompressibilityFromP(p);
-    // double64 bv       = water.VaporCompressibilityFromP(p);
-    // double64 rl       = water.LiquidDensityFromP(p);
-    // double64 rv       = water.VaporDensityFromP(p);
-    // double64 hl       = water.LiquidEnthalpyFromP(p);
-    // double64 hv       = water.VaporEnthalpyFromP(p);
-    // double64 cpl      = water.LiquidHeatCapacityFromP(p);
-    // double64 cpv      = water.VaporHeatCapacityFromP(p);
-    // double64 L        = hv-hl;
-    // double64 dhldpsat = water.LiquidEnthalpyFromP(p+1.0e-5)-hl;
-    // double64 dhvdpsat = water.VaporEnthalpyFromP(p+1.0e-5)-hv;
-    // double64 mfv      = (enthalpy-hl)/(hv-hl);     
-    // double64 mfl      = 1.0-mfv;
-    // double64 sl       = mfl/rl / (mfl/rl+mfv/rv);
-    // double64 sv       = 1.0-sl;
+    // double t        = tcurrent;
+    // double p        = water.SaturationPressureFromT(t);
+    // double bl       = water.LiquidCompressibilityFromP(p);
+    // double bv       = water.VaporCompressibilityFromP(p);
+    // double rl       = water.LiquidDensityFromP(p);
+    // double rv       = water.VaporDensityFromP(p);
+    // double hl       = water.LiquidEnthalpyFromP(p);
+    // double hv       = water.VaporEnthalpyFromP(p);
+    // double cpl      = water.LiquidHeatCapacityFromP(p);
+    // double cpv      = water.VaporHeatCapacityFromP(p);
+    // double L        = hv-hl;
+    // double dhldpsat = water.LiquidEnthalpyFromP(p+1.0e-5)-hl;
+    // double dhvdpsat = water.VaporEnthalpyFromP(p+1.0e-5)-hv;
+    // double mfv      = (enthalpy-hl)/(hv-hl);     
+    // double mfl      = 1.0-mfv;
+    // double sl       = mfl/rl / (mfl/rl+mfv/rv);
+    // double sv       = 1.0-sl;
     
-    // double64 dmfvdp   = (-dhldpsat-mfv*(dhvdpsat-dhldpsat))/L;
-    // double64 b        = sl*bl + sv*bv;
+    // double dmfvdp   = (-dhldpsat-mfv*(dhvdpsat-dhldpsat))/L;
+    // double b        = sl*bl + sv*bv;
     // b       += -1.0/(mfl/rl+mfv/rv)*(1.0/rv-1.0/rl)*dmfvdp;
     
     if(xcurrent == 0.0e0 && state == VL){

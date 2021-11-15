@@ -59,19 +59,19 @@ class ColorPalette {
   public:
     ColorPalette();
     /// for autoscaling
-    ColorPalette( float32 low, float32 max );  
+    ColorPalette( float low, float max );  
     ~ColorPalette();
     ColorPalette( const ColorPalette& a ); 
     ColorPalette& operator=( const ColorPalette& a ); 
 
-    void  GiveRgb( float32 val, float32* vessel ); 
-    void  GiveHsv( float32 val, float32* vessel ); 
-    void  Saturation( float32 sat );  
-    float32 Saturation() const; 
-    void  Lightness( float32 light ); 
-    float32 Lightness() const;
-    void  Blend( float32 alpha ); 
-    float32 Blend() const; 
+    void  GiveRgb( float val, float* vessel ); 
+    void  GiveHsv( float val, float* vessel ); 
+    void  Saturation( float sat );  
+    float Saturation() const; 
+    void  Lightness( float light ); 
+    float Lightness() const;
+    void  Blend( float alpha ); 
+    float Blend() const; 
     void  PaletteSize( size_t size ); 
     size_t  PaletteSize() const; 
     void  MakeRainbowPalette();
@@ -88,32 +88,32 @@ class ColorPalette {
     bool  WriteHsvColorPaletteFile( const char* file );
     void  WriteHsvColorPaletteToStdout(); 
     void  WriteHsvColorPaletteToStdoutWithLineNumbers(); 
-    void  RgbToHsv( const std::vector<float32>& rgb, std::vector<float32>& hsv );
-    void  HsvToRgb( const std::vector<float32>& hsv, std::vector<float32>& rgb );
+    void  RgbToHsv( const std::vector<float>& rgb, std::vector<float>& hsv );
+    void  HsvToRgb( const std::vector<float>& hsv, std::vector<float>& rgb );
     void  RgbToHsv();
     void  HsvToRgb();
-    void  InverseRgb( std::vector<float32>& rgb );
-    void  InversePalette( std::vector<std::vector<float32> >& rgb );
+    void  InverseRgb( std::vector<float>& rgb );
+    void  InversePalette( std::vector<std::vector<float> >& rgb );
     void  AdjustPaletteSize();
-    void  ScaleColorRangeTo( float32 new_min, float32 new_max );
+    void  ScaleColorRangeTo( float new_min, float new_max );
     void  ColorRangeRGB() const;
 
   private:
-    void RGB_To_HSV( float32 r, float32 g, float32 b, float32& h, float32& s, float32& v );
-    void HSV_To_RGB( float32& r, float32& g, float32& b, float32 h, float32 s, float32 v );
+    void RGB_To_HSV( float r, float g, float b, float& h, float& s, float& v );
+    void HSV_To_RGB( float& r, float& g, float& b, float h, float s, float v );
 
-    std::vector<std::vector<float32> >  rgbColors, hsvColors;     ///< x*{R,G,B},x*{H,S,V}
-    float32                   blend;                              ///< alpha value
-    float32                   saturation;
-    float32                   lightness;
+    std::vector<std::vector<float> >  rgbColors, hsvColors;     ///< x*{R,G,B},x*{H,S,V}
+    float                   blend;                              ///< alpha value
+    float                   saturation;
+    float                   lightness;
     const char*               inputPaletteFile;
     const char*               outputPaletteFile;
     size_t                    paletteSize;                        ///< how many colors
     bool                      autoScaling;                        ///< different than 0-255
-    float32                   autoScalingLow;  
-    float32                   autoScalingHigh;
-    float32                   upperPaletteBound;
-    float32                   lowerPaletteBound;
+    float                   autoScalingLow;  
+    float                   autoScalingHigh;
+    float                   upperPaletteBound;
+    float                   lowerPaletteBound;
 };
 
 } // csmp

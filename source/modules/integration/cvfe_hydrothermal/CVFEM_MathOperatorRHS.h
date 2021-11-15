@@ -24,7 +24,7 @@ class CVFEM_MathOperatorRHS : public MathOperatorRHS<dim> {
     ~CVFEM_MathOperatorRHS();
     
     virtual void GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key );
-    virtual std::vector<double64> GetContribution();
+    virtual std::vector<double> GetContribution();
 
     virtual CVFEM_MathOperatorRHS<dim>* clone() const { return new CVFEM_MathOperatorRHS<dim> (*this); }
 

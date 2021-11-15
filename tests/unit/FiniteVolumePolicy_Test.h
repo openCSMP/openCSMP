@@ -29,17 +29,17 @@ class FiniteVolumePolicy_Test : public Test {
     FiniteVolumePolicy_Test();
     ~FiniteVolumePolicy_Test();
     void run(); // runs all the tests for the class (register other methods)
-    void IsoparametricLinearLineElement_Test(double64 fTolerance, double64 fToleranceInternal);
-    template<size_t dim> void IsoparametricLinearTriangle_Test(double64 fTolerance, double64 fToleranceInternal);
-    template<size_t dim> void IsoparametricLinearQuadrilateral_Test(double64 fTolerance, double64 fToleranceInternal);
-    void IsoparametricLinearTetrahedron_Test(double64 fTolerance, double64 fToleranceInternal);
-    void IsoparametricLinearPyramid_Test(double64 fTolerance, double64 fToleranceInternal);
-    void IsoparametricLinearPrism_Test(double64 fTolerance, double64 fToleranceInternal);
+    void IsoparametricLinearLineElement_Test(double fTolerance, double fToleranceInternal);
+    template<size_t dim> void IsoparametricLinearTriangle_Test(double fTolerance, double fToleranceInternal);
+    template<size_t dim> void IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal);
+    void IsoparametricLinearTetrahedron_Test(double fTolerance, double fToleranceInternal);
+    void IsoparametricLinearPyramid_Test(double fTolerance, double fToleranceInternal);
+    void IsoparametricLinearPrism_Test(double fTolerance, double fToleranceInternal);
 
     //Revised by J.E.M. 08-09-2010
-    void Test_UnitaryIsoparametricLinearHexahedron(double64 fTolerance, double64 fToleranceInternal);
-    void Test_IsoparametricLinearHexahedron1(double64 fTolerance, double64 fToleranceInternal);
-    void Test_IsoparametricLinearHexahedron2(double64 fTolerance, double64 fToleranceInternal);
+    void Test_UnitaryIsoparametricLinearHexahedron(double fTolerance, double fToleranceInternal);
+    void Test_IsoparametricLinearHexahedron1(double fTolerance, double fToleranceInternal);
+    void Test_IsoparametricLinearHexahedron2(double fTolerance, double fToleranceInternal);
     void Test_CreateVSet();
 	
 private:

@@ -33,7 +33,7 @@ class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim> {
     
     SPATIAL_DERIVATIVE     xyz_;     ///< direction of partial derivative
     bool                   transp_;  ///< transpose element matrix or not
-    std::vector<double64>  IPOL;     ///< interpolaton function vector
+    std::vector<double>  IPOL;     ///< interpolaton function vector
     DenseMatrix<DM_MIN>    DN, TEMP; ///< temporary matrices
 };
 

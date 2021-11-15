@@ -7,17 +7,17 @@
 namespace csmp {
 
 
-void planeStressMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D );
+void planeStressMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
 
 
 
-void planeStrainMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D );
+void planeStrainMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
 
 
 
-void stiffnessMatrix( double64 E, double64 nu, DenseMatrix<DM_MIN>& D );
+void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
 
-void stiffnessMatrix( double64 E, DenseMatrix<DM_MIN>& D, double64 length );
+void stiffnessMatrix( double E, DenseMatrix<DM_MIN>& D, double length );
 
 
 
@@ -44,8 +44,8 @@ void sortEigenVectorsAndValues( VectorVariable<3U>& vc, TensorVariable<3U>& ts )
 void convertColumnTo( const DenseMatrix<DM_MIN>& INP, size_t column, TensorVariable<2U>& ts );
 void convertColumnTo( const DenseMatrix<DM_MIN>& INP, size_t column, TensorVariable<3U>& ts );
 
-void convertTo( const std::vector<double64>& INP, size_t entry, TensorVariable<2U>& ts );
-void convertTo( const std::vector<double64>& INP, size_t entry, TensorVariable<3U>& ts );
+void convertTo( const std::vector<double>& INP, size_t entry, TensorVariable<2U>& ts );
+void convertTo( const std::vector<double>& INP, size_t entry, TensorVariable<3U>& ts );
 
 void extractRowTo( const DenseMatrix<DM_MIN>& INP, size_t row, VectorVariable<2U>& vc );
 void extractRowTo( const DenseMatrix<DM_MIN>& INP, size_t row, VectorVariable<3U>& vc );
@@ -56,12 +56,12 @@ void extractRowTo( const DenseMatrix<DM_MIN>& INP, size_t row, VectorVariable<3U
 /// uses Cauchy's formula to resolve normal and magnitude of shear stress on a surface defined by its normal
 void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
                                   const Point<3U>& plane_normal, 
-                                  double64& sigma_n, double64& sigma_s );
+                                  double& sigma_n, double& sigma_s );
 
 /// uses Cauchy's formula to resolve normal and shear stress on a surface defined by its normal
 void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
                                   const Point<3U>& plane_normal, 
-                                  double64& sigma_n, VectorVariable<3U>& sigma_s );
+                                  double& sigma_n, VectorVariable<3U>& sigma_s );
 
 
 
@@ -116,10 +116,10 @@ inline void convertColumnTo( const DenseMatrix<DM_MIN>& INP,
 
 /** Extracts linearily stored tensor from vector into TensorVariable.
 */
-inline void convertTo( const std::vector<double64>& INP, 
+inline void convertTo( const std::vector<double>& INP, 
                        size_t ip, TensorVariable<2U>& ts ) 
  {
-    const uint32 components(3U);
+    const uint32_t components(3U);
     // diagonal elements
     ts(0,0) = INP[ ip * components ];
     ts(1,1) = INP[ ip * components + 1U ];
@@ -128,10 +128,10 @@ inline void convertTo( const std::vector<double64>& INP,
  }
 
 
-inline void convertTo( const std::vector<double64>& INP, 
+inline void convertTo( const std::vector<double>& INP, 
                        size_t ip, TensorVariable<3U>& ts ) 
  {
-    const uint32 components(6U);
+    const uint32_t components(6U);
     // diagonal elements
     ts(0,0) = INP[ ip * components ];
     ts(1,1) = INP[ ip * components + 1U ];

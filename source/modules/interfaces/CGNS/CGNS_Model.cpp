@@ -97,7 +97,7 @@ Uses the method Initialize.
                                     bool use_regions_file,
                                     bool create_boundaries )
   {
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     model_time = 0.;
 
     // -------------------------------------------------

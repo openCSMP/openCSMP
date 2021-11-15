@@ -19,7 +19,7 @@ class QuartzSolubilityNaCl : public Interrelation<dim> {
     Operand<dim>&    X; /// < weight fraction NaCl
     Operand<dim>&    S; /// < quartz solubility (kg silica / kg fluid)
     ScalarVariable  tC, rho, x_salt;
-    double64                  K, rho_e, A, B, C, 
+    double                  K, rho_e, A, B, C, 
                         m,    /// < molality of SiO2 in saline solution
                         logV, /// < decadic log of volume (g cm-3)
                         h,    /// < cation hydration number (denoting fraction of bound solvent)

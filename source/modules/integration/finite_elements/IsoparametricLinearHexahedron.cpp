@@ -99,8 +99,8 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( size_t integration
 
         // Location of the integration points in r-s-t coordinates see Lo, p. 68
         // note that L1 = 1 - r - s - t
-        double64 oneDivSqrtThree=1./sqrt(3.0);
-        double64 sqrtTwoThirds=sqrt(2.0/3.0);
+        double oneDivSqrtThree=1./sqrt(3.0);
+        double sqrtTwoThirds=sqrt(2.0/3.0);
 
         IP(0,0) = 0.0,              IP(0,1) = -sqrtTwoThirds, 	IP(0,2) = -oneDivSqrtThree;
         IP(1,0) = 0.0,              IP(1,1) = sqrtTwoThirds,	IP(1,2) = -oneDivSqrtThree;
@@ -113,7 +113,7 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( size_t integration
         for(size_t i=0; i<integrationPoints;i++)
             W[i] = 1.0;
 
-        double64 a1 = 0.577350269189626;
+        double a1 = 0.577350269189626;
 
         IP(0,0) =-a1,	IP(0,1) =-a1, 	IP(0,2) =-a1;
         IP(1,0) = a1,	IP(1,1) =-a1, 	IP(1,2) =-a1;
@@ -161,7 +161,7 @@ Uses My coordinate system:
  to transfer to CSP: x==Z, y==X, z==Y
                      0=>2  1=>0  2==1
  Coordinate axes mapped, but work for cube at COFC??*/
-double64
+double
 IsoparametricLinearHexahedron::VolumeOfTetra(
                             size_t verticeIndex1,
                             size_t verticeIndex2,
@@ -195,7 +195,7 @@ IsoparametricLinearHexahedron::VolumeOfTetra(
     if(d4TimesXYi2<0.0) cout<< " IsoparametricLinearHexahedron::VolTetra d4TimesXYi2 <0.0"<<endl;
     //if(d4TimesXYi2<0.0) throw std::range_error(" IsoparametricLinearHexahedron::VolTetra d4TimesXYi2 <0.0");
 
-    double64 volume =fabs(d1Times1) + fabs(d2TimesXYi0) + fabs(d3TimesXYi1) + fabs(d4TimesXYi2);
+    double volume =fabs(d1Times1) + fabs(d2TimesXYi0) + fabs(d3TimesXYi1) + fabs(d4TimesXYi2);
 
     return volume/6.0;
 }
@@ -421,7 +421,7 @@ CSMP_FEM_TYPE  IsoparametricLinearHexahedron::ElementTypeOfFace( size_t )  const
 
 
 
-double64 IsoparametricLinearHexahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearHexahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
 
 
 
@@ -432,10 +432,10 @@ double64 IsoparametricLinearHexahedron::WeightAtIntegrationPoint( size_t i ) con
 Function gives analytic volume of Hex, based on summ of six consistuting elements of the Tets
 Indexing of ANSYS is correct?
 */
-double64
+double
 IsoparametricLinearHexahedron::VolumeOfHexa()
 {
-      double64 volume= VolumeOfTetra(0,1,3,4)+VolumeOfTetra(4,1,3,5)+VolumeOfTetra(4,5,3,7)+
+      double volume= VolumeOfTetra(0,1,3,4)+VolumeOfTetra(4,1,3,5)+VolumeOfTetra(4,5,3,7)+
                         VolumeOfTetra(1,2,3,6)+VolumeOfTetra(3,1,6,5)+VolumeOfTetra(5,6,3,7);
 
     cout<<" Vertices:"<<endl;
@@ -590,17 +590,17 @@ Method is used to compute property values at the integration points of
 the element.
 */
 void IsoparametricLinearHexahedron::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    std::vector<double64>& N ) const
+                    double r,
+                    double s,
+                    double t,
+                    std::vector<double>& N ) const
 {
-   const double64 rPlus(1.0+r);
-   const double64 sPlus(1.0+s);
-   const double64 tPlus(1.0+t);
-   const double64 rMinus(1.0-r);
-   const double64 sMinus(1.0-s);
-   const double64 tMinus(1.0-t);
+   const double rPlus(1.0+r);
+   const double sPlus(1.0+s);
+   const double tPlus(1.0+t);
+   const double rMinus(1.0-r);
+   const double sMinus(1.0-s);
+   const double tMinus(1.0-t);
 
    N.resize(npe);
    N[0] = 0.125*rMinus*sMinus*tMinus;
@@ -615,17 +615,17 @@ void IsoparametricLinearHexahedron::Nrst(
 }
 
 void IsoparametricLinearHexahedron::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    double64* N ) const
+                    double r,
+                    double s,
+                    double t,
+                    double* N ) const
 {
-   const double64 rPlus(1.0+r);
-   const double64 sPlus(1.0+s);
-   const double64 tPlus(1.0+t);
-   const double64 rMinus(1.0-r);
-   const double64 sMinus(1.0-s);
-   const double64 tMinus(1.0-t);
+   const double rPlus(1.0+r);
+   const double sPlus(1.0+s);
+   const double tPlus(1.0+t);
+   const double rMinus(1.0-r);
+   const double sMinus(1.0-s);
+   const double tMinus(1.0-t);
 
    N[0] = 0.125*rMinus*sMinus*tMinus;
    N[1] = 0.125*rPlus*sMinus*tMinus;
@@ -675,15 +675,15 @@ procedures for elements.
 
  */
 void IsoparametricLinearHexahedron::dNr(
-                double64 /*r*/,
-                double64 s,
-                double64 t,
-                std::vector<double64>& DNR ) const
+                double /*r*/,
+                double s,
+                double t,
+                std::vector<double>& DNR ) const
 {
-   const double64 sPlus(1.0+s);
-   const double64 tPlus(1.0+t);
-   const double64 sMinus(1.0-s);
-   const double64 tMinus(1.0-t);
+   const double sPlus(1.0+s);
+   const double tPlus(1.0+t);
+   const double sMinus(1.0-s);
+   const double tMinus(1.0-t);
 
    DNR.resize(npe);
    DNR[0] = -0.125*sMinus*tMinus;
@@ -710,15 +710,15 @@ void IsoparametricLinearHexahedron::dNr(
 */
 // tested: OK AAM
 void IsoparametricLinearHexahedron::dNs(
-                double64 r,
-                double64 /*s*/,
-                double64 t,
-                std::vector<double64>& DNS ) const
+                double r,
+                double /*s*/,
+                double t,
+                std::vector<double>& DNS ) const
 {
-   const double64 rPlus(1.0+r);
-   const double64 tPlus(1.0+t);
-   const double64 rMinus(1.0-r);
-   const double64 tMinus(1.0-t);
+   const double rPlus(1.0+r);
+   const double tPlus(1.0+t);
+   const double rMinus(1.0-r);
+   const double tMinus(1.0-t);
 
    DNS.resize(npe);
    DNS[0] = -0.125*rMinus*tMinus;
@@ -744,15 +744,15 @@ void IsoparametricLinearHexahedron::dNs(
    DNT[7] =  1./8. * (1. + -1. * r) * (1. +  1. * s);
 */
 void IsoparametricLinearHexahedron::dNt(
-                double64 r,
-                double64 s,
-                double64 /*t*/,
-                std::vector<double64>& DNT ) const
+                double r,
+                double s,
+                double /*t*/,
+                std::vector<double>& DNT ) const
 {
-   const double64 rPlus(1.0+r);
-   const double64 sPlus(1.0+s);
-   const double64 rMinus(1.0-r);
-   const double64 sMinus(1.0-s);
+   const double rPlus(1.0+r);
+   const double sPlus(1.0+s);
+   const double rMinus(1.0-r);
+   const double sMinus(1.0-s);
 
    DNT.resize(npe);
    DNT[0] = -0.125*rMinus*sMinus;
@@ -830,12 +830,12 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 @return The interpolation-function derivative matrix is returned into the
 second method argument.
 */
-double64
+double
 IsoparametricLinearHexahedron::dN_At( DenseMatrix<DM_MIN>& DN2,
-                                      const vector<double64>& xyz  )
+                                      const vector<double>& xyz  )
   {
 
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -845,7 +845,7 @@ IsoparametricLinearHexahedron::dN_At( DenseMatrix<DM_MIN>& DN2,
     dNt( rst[0], rst[1], rst[2], DNT );
 
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     DN2.Resize(dim,dim);
     DN2  = JINV;
@@ -872,11 +872,11 @@ within the Hexahedron.
 */
 void
 IsoparametricLinearHexahedron::N(
-                    std::vector<double64>& N,
-                    const std::vector<double64>& xyz
+                    std::vector<double>& N,
+                    const std::vector<double>& xyz
                     )
 {
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -907,7 +907,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double64
+double
 IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
  {
     assert( nd < npe );
@@ -917,7 +917,7 @@ IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -940,8 +940,8 @@ IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 // Projection function from rst->xyz
 //
 //********************************************************************************
-void IsoparametricLinearHexahedron::ParametricToPhysical( vector<double64>& rst,
-                                                          vector<double64>& xyz )
+void IsoparametricLinearHexahedron::ParametricToPhysical( vector<double>& rst,
+                                                          vector<double>& xyz )
 {
     Nrst(rst[0],rst[1],rst[2], NRST );
 
@@ -960,7 +960,7 @@ void IsoparametricLinearHexahedron::ParametricToPhysical( vector<double64>& rst,
 
 
 void IsoparametricLinearHexahedron::IntegrationPoint( size_t ip,
-                                                      vector<double64>& xyz ) const
+                                                      vector<double>& xyz ) const
 {
    assert( ip < gpe );
    Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
@@ -978,11 +978,11 @@ void IsoparametricLinearHexahedron::IntegrationPoint( size_t ip,
 
 
 void
-IsoparametricLinearHexahedron::ReferenceCubeParametricToPhysical( vector<double64>& rst,
-                                                                  vector<double64>& xyz )
+IsoparametricLinearHexahedron::ReferenceCubeParametricToPhysical( vector<double>& rst,
+                                                                  vector<double>& xyz )
 {
 
-vector<double64> N(npe);
+vector<double> N(npe);
 
 Nrst(rst[0],rst[1],rst[2], N );
 
@@ -1008,28 +1008,28 @@ for(size_t i=0; i<npe; i++)
 
 void
 IsoparametricLinearHexahedron::PhysicalToParametric(
-                                       std::vector<double64>& rSt,
-                                       const std::vector<double64>& xyz
+                                       std::vector<double>& rSt,
+                                       const std::vector<double>& xyz
                                         )
 {
 
-    vector<double64> outxyz(dim);
-    vector<double64> rstHatK(dim);
+    vector<double> outxyz(dim);
+    vector<double> rstHatK(dim);
 
-    std::vector<double64> distanceFromGivenPointLinf(dim,0.0);
-    double64 distanceFromGivenPointL2;
+    std::vector<double> distanceFromGivenPointLinf(dim,0.0);
+    double distanceFromGivenPointL2;
 
     // Find largest and smallest segments in order to define precision
-    vector<double64> vec(spe);
+    vector<double> vec(spe);
     EdgeLengths( vec );
-    double64 seg_max(vec[0]), seg_min(vec[0]);
+    double seg_max(vec[0]), seg_min(vec[0]);
     for ( size_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
     }
 
-    const double64 geometricTolerance = 0.005*seg_min;
+    const double geometricTolerance = 0.005*seg_min;
 
     // First guess as BaryCenter
     rstHatK[0] = 0.0;
@@ -1052,17 +1052,17 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
     //    (distanceFromGivenPointLinf[2] > geometricTolerance)  )
     {
 
-        vector<double64> rstHatK_PlusOne(dim);
-        double64 minDistanceFromGivenPoint;
+        vector<double> rstHatK_PlusOne(dim);
+        double minDistanceFromGivenPoint;
 
-        const double64 constantMu               = 1.0;
+        const double constantMu               = 1.0;
         const size_t numberOfFirstIterrations   = 5;
         const size_t maxNumberOfIterrations     = 20;
         const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
-        const double64 incrementR = 2.0/(numberOfFirstIterrations-1);
-        const double64 incrementS = 2.0/(numberOfFirstIterrations-1);
-        const double64 incrementT = 2.0/(numberOfFirstIterrations-1);
+        const double incrementR = 2.0/(numberOfFirstIterrations-1);
+        const double incrementS = 2.0/(numberOfFirstIterrations-1);
+        const double incrementT = 2.0/(numberOfFirstIterrations-1);
 
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
@@ -1139,7 +1139,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
                 dNt( rstHatK[0], rstHatK[1], rstHatK[2], DNT );
                 Jacobian( DNR, DNS, DNT );
                 // Check whether Jacobian is positive ( might be not true for the point outside the element )
-                //const double64 detJ = JacobianDeterminant();
+                //const double detJ = JacobianDeterminant();
                 //if( detJ > 0.0 )
                 JacobianInverse();
             }
@@ -1188,7 +1188,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
                <<"s = "<<rstHatK[1]<<" ;\t"
                <<"t = "<<rstHatK[2]<<"\n";
 
-            std::vector<double64> N(npe,0.0);
+            std::vector<double> N(npe,0.0);
             Nrst(rstHatK[0], rstHatK[1], rstHatK[2], N );
             cout<<" IsoparametricLinearHexahedron::PhysicalToParametric: Shape functions:\t"
                 <<"N[0] = "<<N[0]<<" ;\t"
@@ -1222,7 +1222,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
      
      @test OK
 */
-void  IsoparametricLinearHexahedron::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  IsoparametricLinearHexahedron::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);
@@ -1305,13 +1305,13 @@ and the shortest boundary segment.
 
 The Element is consulted for its global coordinates.
 */
-double64  IsoparametricLinearHexahedron::AspectRatio()
+double  IsoparametricLinearHexahedron::AspectRatio()
 {
-   vector<double64> vec(spe);
+   vector<double> vec(spe);
 
    EdgeLengths( vec );
 
-   double64 seg_max(vec[0]), seg_min(vec[0]);
+   double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
    for ( size_t i=1; i<spe; i++ ) {
@@ -1338,9 +1338,9 @@ The segment lengths are computed as simple Euclidian distance between corner
 vertices of the edge.
  */
 void
-IsoparametricLinearHexahedron::EdgeLengths( std::vector<double64>& len )
+IsoparametricLinearHexahedron::EdgeLengths( std::vector<double>& len )
 {
-    double64 sum;
+    double sum;
     len.resize(spe);
 
     // segment 1
@@ -1421,10 +1421,10 @@ the area is computed.
 @return The area (m2) of the finite element.
 
 */
-double64
+double
 IsoparametricLinearHexahedron::Volume()
 {
-    double64   area; // determinant
+    double   area; // determinant
     size_t  i;
 
     // numerical integration:
@@ -1460,7 +1460,7 @@ A reference to the parent Element, the number of the integration point.
 
 */
 inline void
-IsoparametricLinearHexahedron::N_AtIntegrationPoint( size_t ip, std::vector<double64>& N )
+IsoparametricLinearHexahedron::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
 
  {
     assert( ip < gpe );
@@ -1492,7 +1492,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double64
+double
 IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
@@ -1504,7 +1504,7 @@ IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, si
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
@@ -1535,7 +1535,7 @@ IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, si
 
 // tested: (values come from the regular interpolation functions)
 void
-IsoparametricLinearHexahedron::N_AtBaryCenter( std::vector<double64>& N )
+IsoparametricLinearHexahedron::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
     N[0] = 0.125;
@@ -1561,11 +1561,11 @@ are relatively even-sided and have straight edges.
 
 The parent element is queried for its node coordinates.
 */
-double64
+double
 IsoparametricLinearHexahedron::InnerRadius()
 {
-   vector<double64>  segms(spe);
-   double64          sum(0.0);
+   vector<double>  segms(spe);
+   double          sum(0.0);
 
    EdgeLengths( segms );
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
@@ -1632,7 +1632,7 @@ IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary( const vector<size_t>&
  } // end ConsecutiveNodesAtBoundary
 
 
-double64
+double
 IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
     dNr( 0.0, 0.0, 0.0, DNR );
@@ -1641,7 +1641,7 @@ IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -1665,8 +1665,8 @@ IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  IsoparametricLinearHexahedron::IntegrationPointsFromParToPhys(DenseMatrix<DM_MIN>&  IPPHYS)
  {
     IPPHYS.Resize(gpe,dim);
-    vector<double64> outxyz(dim);
-    vector<double64> rst(dim);
+    vector<double> outxyz(dim);
+    vector<double> rst(dim);
 
     for(size_t i=0;i<gpe;i++)
         {
@@ -1701,8 +1701,8 @@ to the nodes.  This involves the steps:
 void
 IsoparametricLinearHexahedron::ExtrapolateIntegrationPointVariableToNodes(
                                                         size_t nvars,
-                                                        const vector<double64>& IVAR,
-                                                        vector<double64>& NVAR
+                                                        const vector<double>& IVAR,
+                                                        vector<double>& NVAR
                                                                 )
 const
 {
@@ -1752,7 +1752,7 @@ const
   {
     DenseMatrix<DM_MIN> MATRIX_A(gpe,gpe), TEMP_IP(gpe,1), TEMP_N(npe,1);
     // coefficients of the matrix A
-    double64 a=0.25*(5+3.0*sqrt(3.0)), b=-0.25*(sqrt(3.0)+1), c=0.25*(sqrt(3.0)-1.0), d=0.25*(5-3.*sqrt(3.));
+    double a=0.25*(5+3.0*sqrt(3.0)), b=-0.25*(sqrt(3.0)+1), c=0.25*(sqrt(3.0)-1.0), d=0.25*(5-3.*sqrt(3.));
 
       MATRIX_A(0,0)=MATRIX_A(1,1)=MATRIX_A(2,2)=MATRIX_A(3,3)
      =MATRIX_A(4,4)=MATRIX_A(5,5)=MATRIX_A(6,6)=MATRIX_A(7,7) =a;
@@ -1799,7 +1799,7 @@ const
 
 
 
-void IsoparametricLinearHexahedron::JacobianAt( const std::vector<double64>& rst )
+void IsoparametricLinearHexahedron::JacobianAt( const std::vector<double>& rst )
 {
     dNr( rst[0], rst[1], rst[2], DNR );
     dNs( rst[0], rst[1], rst[2], DNS );

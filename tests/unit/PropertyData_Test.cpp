@@ -74,20 +74,20 @@ void PropertyData_Test::run()
     VARIABLE_FLAG  Flag( size_t nth_value, size_t ith_row, size_t jth_col ) const;
  
     /// scalars
-    double64&      Value( size_t nth_value );
-    double64       Value( size_t nth_value ) const;
+    double&      Value( size_t nth_value );
+    double       Value( size_t nth_value ) const;
     /// vectors and array variables
-    double64&      Value( size_t nth_value, size_t ith_dim );
-    double64       Value( size_t nth_value, size_t ith_dim ) const;
+    double&      Value( size_t nth_value, size_t ith_dim );
+    double       Value( size_t nth_value, size_t ith_dim ) const;
     /// tensors
-    double64&      Value( size_t nth_value, size_t ith_row, size_t jth_col );
-    double64       Value( size_t nth_value, size_t ith_row, size_t jth_col ) const;
+    double&      Value( size_t nth_value, size_t ith_row, size_t jth_col );
+    double       Value( size_t nth_value, size_t ith_row, size_t jth_col ) const;
 */
     /// range check; all values included
     pushBack( dataset1, sc1 );
     pushBack( dataset1, sc2 );
     // pushBack( dataset1, sc3 ); // NaN
-    double64 tmin, tmax;
+    double tmin, tmax;
     dataset1.MinMaxOf( tmin, tmax );
     _equal( tmin, 2., 1e-10 );
     _equal( tmax, 5., 1e-10 );
@@ -216,7 +216,7 @@ void PropertyData_Test::run()
     ary2(3) = 4.;
     // comparing with that element in the array storage
     dataset9.Value( 1, 3 ) = 4.;
-    _equal( ary2(3), dataset9.Value(1,3), numeric_limits<double64>::epsilon() );
+    _equal( ary2(3), dataset9.Value(1,3), numeric_limits<double>::epsilon() );
    
  } // end run
 

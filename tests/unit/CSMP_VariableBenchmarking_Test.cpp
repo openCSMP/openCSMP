@@ -16,19 +16,19 @@ using namespace std;
 namespace csmp {
 
 // LOOSER - cannot use move constructor
-inline const ScalarVariable&  makeScalarConstRef( const VARIABLE_FLAG flag, const double64 val )
+inline const ScalarVariable&  makeScalarConstRef( const VARIABLE_FLAG flag, const double val )
   {
      return ScalarVariable(flag,val);
   }
 
 // implicit invocation of move constructor
-inline ScalarVariable  makeScalar2( const VARIABLE_FLAG flag, const double64 val )
+inline ScalarVariable  makeScalar2( const VARIABLE_FLAG flag, const double val )
   {
      return ScalarVariable(flag,val);
   }
 
 // not inlined version
-ScalarVariable  makeScalarNotInlined( const VARIABLE_FLAG flag, const double64 val )
+ScalarVariable  makeScalarNotInlined( const VARIABLE_FLAG flag, const double val )
   {
      return ScalarVariable(flag,val);
   }

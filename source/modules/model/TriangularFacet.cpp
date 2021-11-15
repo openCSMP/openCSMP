@@ -3,7 +3,7 @@
 
 namespace csmp {
 
-double64 triangleArea( const Point<3U>& pt0, 
+double triangleArea( const Point<3U>& pt0, 
                        const Point<3U>& pt1, 
                        const Point<3U>& pt2 )
 {
@@ -11,7 +11,7 @@ double64 triangleArea( const Point<3U>& pt0,
 }
 
 
-double64 triangleArea( const Point<2U>& pt0, 
+double triangleArea( const Point<2U>& pt0, 
                        const Point<2U>& pt1, 
                        const Point<2U>& pt2 )
 {

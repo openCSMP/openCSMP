@@ -25,8 +25,8 @@ The transported variable on current and future time level is denoted as C0 and C
 
 All interim results are stored on the model.
 
-@todo   double64  FluxBalanceFromGradP_K_mu_C0( Node<dim>* const ) const;
-@todo   double64  FluxBalanceFromGradP_KK_mu_C0( Node<dim>* const ) const;
+@todo   double  FluxBalanceFromGradP_K_mu_C0( Node<dim>* const ) const;
+@todo   double  FluxBalanceFromGradP_KK_mu_C0( Node<dim>* const ) const;
 @todo   include dispersion and options for diffusive fluxes
 
 */
@@ -65,16 +65,16 @@ class FluxEvaluator {
     void  FluxBalancesFromFacetFluxes( Node<dim>* const ) const;
 
      /// stores FV flux balances computed from current facet fluxes and C0 concentrations; returns outflow from cell
-    double64  FluxBalanceAndOutFlow( Node<dim>* const ) const;
+    double  FluxBalanceAndOutFlow( Node<dim>* const ) const;
   
     /// computes the volumetric flow into the current cell; @return inflow which is always positive
-    double64  InFlow( const Node<dim>* const ) const;
+    double  InFlow( const Node<dim>* const ) const;
   
     /// computes the volumetric flow outside of the current cell; @return outflow which is always positive
-    double64  OutFlow( const Node<dim>* const ) const;
+    double  OutFlow( const Node<dim>* const ) const;
 
     /// computes the volumetric flow outside of the current cell; @return outflow which is always positive
-    double64  VolumetricFlowBalance( const Node<dim>* const ) const;
+    double  VolumetricFlowBalance( const Node<dim>* const ) const;
 
   private:
     /// shorthand for accessing the class that FluxEvaluator is a policy of

@@ -2,11 +2,8 @@
 #define MODELTIME_H
 
 #include "GenericSingleton.h"
-#include "CSMP_number_types.h"
 
-
-namespace csmp
-{
+namespace csmp {
 
 /**
 
@@ -35,7 +32,7 @@ class ModelTime  : public GenericSingleton<ModelTime>{
     ~ModelTime();
 
   public:
-    double64 modelTime;
+    double modelTime;
 
   private:
     ModelTime() : modelTime( 0. ) {}

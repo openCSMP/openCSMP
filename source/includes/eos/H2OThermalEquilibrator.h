@@ -24,18 +24,18 @@ namespace csmp
   class H2OThermalEquilibrator
   {
   public: 
-    H2OThermalEquilibrator(const double64& external_mass_rock,  // [kg]
-                           const double64& external_cp_rock,    // [J/kg/K]
-                           const double64& external_rho_rock,   // [kg/m^3]
-                           const double64& external_porosity,   // [dimensionless]
-                           const double64& external_mass_fluid, // [kg]
-                           const double64& external_t_previous, // [C]
-                           const double64& external_p_current,  // [Pa]
-                           const double64& external_H_current,  // [J] NOT [J/kg]
-                           const double64& external_H_previous, // [J]
+    H2OThermalEquilibrator(const double& external_mass_rock,  // [kg]
+                           const double& external_cp_rock,    // [J/kg/K]
+                           const double& external_rho_rock,   // [kg/m^3]
+                           const double& external_porosity,   // [dimensionless]
+                           const double& external_mass_fluid, // [kg]
+                           const double& external_t_previous, // [C]
+                           const double& external_p_current,  // [Pa]
+                           const double& external_H_current,  // [J] NOT [J/kg]
+                           const double& external_H_previous, // [J]
                            const bool&      fixed_external_t,
-                           const double64& t_fix,
-                           const double64& external_t_diff);
+                           const double& t_fix,
+                           const double& external_t_diff);
 
     ~H2OThermalEquilibrator();
     
@@ -43,69 +43,69 @@ namespace csmp
     Fluidproperties        Vapor();
     Fluidproperties        Bulk();
 
-    Fluidproperties        ReportLiquidProperties( const double64& t, const double64& p, const double64& h );
-    Fluidproperties        ReportVaporProperties(  const double64& t, const double64& p, const double64& h );
-    Fluidproperties        ReportBulkProperties(   const double64& t, const double64& p, const double64& h );
+    Fluidproperties        ReportLiquidProperties( const double& t, const double& p, const double& h );
+    Fluidproperties        ReportVaporProperties(  const double& t, const double& p, const double& h );
+    Fluidproperties        ReportBulkProperties(   const double& t, const double& p, const double& h );
 
     int                    n_iterations();
     int                    EqType();
     bool                   Equilibrated();
     bool                   Fatal();
     
-    void                   TemperatureDependentHeatCapacityRock( double64 cpr_min_ext, 
-                                                                 double64 t_min_ext,
-                                                                 double64 cpr_max_ext, 
-                                                                 double64 t_max_ext );
+    void                   TemperatureDependentHeatCapacityRock( double cpr_min_ext, 
+                                                                 double t_min_ext,
+                                                                 double cpr_max_ext, 
+                                                                 double t_max_ext );
 
-    double64               TemperatureDependent_cpr( double64 T );
+    double               TemperatureDependent_cpr( double T );
     
   private:
 
-    const double64&        mass_rock;
-    const double64&        cp_rock;
-    const double64&        rho_rock;
-    const double64&        phi;
-    const double64&        mass_fluid;
-    const double64&        t_previous;
-    const double64&        p_current;
-    const double64&        H_current;
-    const double64&        H_previous;
-    const double64&        t_fix;
-    const double64&        t_diff;
+    const double&        mass_rock;
+    const double&        cp_rock;
+    const double&        rho_rock;
+    const double&        phi;
+    const double&        mass_fluid;
+    const double&        t_previous;
+    const double&        p_current;
+    const double&        H_current;
+    const double&        H_previous;
+    const double&        t_fix;
+    const double&        t_diff;
     const bool&            fixed_t;
 				   
     bool                   equilibrated;
     bool                   fatal;
 
-    const double64         convergence_criterion; // fraction of fluid enthalpy
+    const double         convergence_criterion; // fraction of fluid enthalpy
 
-    double64               t_eq; 
-    double64               h_fluid_eq;
-    double64               tmin;
-    double64               tmax;
-    double64               resid; 
-    double64               Hmax; 
-    double64               Hmin;
+    double               t_eq; 
+    double               h_fluid_eq;
+    double               tmin;
+    double               tmax;
+    double               resid; 
+    double               Hmax; 
+    double               Hmin;
 
     int                    icrit;
     int                    icrit_max;
 
-    double64               mass_rock_eq;
-    double64               cp_rock_eq;
-    double64               mass_fluid_eq;
-    double64               t_previous_eq;
-    double64               p_current_eq;
-    double64               H_current_eq;
-    double64               H_previous_eq;
-    double64               H_test;
-    double64               tdummy;
-    double64               hdummy;
+    double               mass_rock_eq;
+    double               cp_rock_eq;
+    double               mass_fluid_eq;
+    double               t_previous_eq;
+    double               p_current_eq;
+    double               H_current_eq;
+    double               H_previous_eq;
+    double               H_test;
+    double               tdummy;
+    double               hdummy;
 
-    double64               cpr_min; 
-    double64               cpr_max; 
-    double64               t_min; 
-    double64               t_max; 
-    double64               cpr_t_dep;
+    double               cpr_min; 
+    double               cpr_max; 
+    double               t_min; 
+    double               t_max; 
+    double               cpr_t_dep;
 
     bool                   t_dependent_cpr;
 
@@ -116,7 +116,7 @@ namespace csmp
     Fluidproperties        vaporprops;
     Fluidproperties        bulkprops;
 
-    double64               ComputeTotalEnthalpyAtTemperature( const double64& t );
+    double               ComputeTotalEnthalpyAtTemperature( const double& t );
     void                   ErrorCheckHmin(const int& i);
     void                   ErrorCheckHmax(const int& i);
 
@@ -148,7 +148,7 @@ namespace csmp
 
      The main calls are Liquid(), Vapor(), and Bulk(). Calling one of them triggers a full equilibration (except if the values of those properties referenced in the constructor havn't changed, then the last equilibration results are assumed to be correct). It returns fluid property values as Fluidproperties objects (see documentation there for full property set). These fluidproperties refer to the phase indicate by the name of the function call.
 
-     Another set of calls - ReportLiquidProperties(const double64& t, const double64& p, const double64& h), ReportVaporProperties(const double64& t, const double64& p, const double64& h), ReportBulkProperties(const double64& t, const double64& p, const double64& h) - lets you query the properties for a desired combination of temperature, pressure and specific fluid enthalpy. Use with care because getting the logic for this right in a simulation context is non-trivial.  
+     Another set of calls - ReportLiquidProperties(const double& t, const double& p, const double& h), ReportVaporProperties(const double& t, const double& p, const double& h), ReportBulkProperties(const double& t, const double& p, const double& h) - lets you query the properties for a desired combination of temperature, pressure and specific fluid enthalpy. Use with care because getting the logic for this right in a simulation context is non-trivial.  
      @section dependencies Dependencies
      requires "H2OFluidProperties.h", "Fluidproperties.h", "States.h"
      

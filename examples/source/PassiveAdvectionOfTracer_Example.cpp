@@ -84,7 +84,7 @@ void PassiveAdvectionOfTracer_Example::Run()
   model3D.SplitBoundariesOut();
 
   MeshDiagnostics<3U>  mesh_check;
-  double64             vol_min, vol_max;
+  double             vol_min, vol_max;
   mesh_check.ElementVolumeRange( model3D, vol_min, vol_max );
   cout <<"\nmain: element volume range: "<< vol_min <<" to "<< vol_max << endl;
   cout <<"\tlarge element-volume range (>10^3) can pose problems for the linear solver.2\n";
@@ -121,7 +121,7 @@ void PassiveAdvectionOfTracer_Example::Run()
  // -----------------------------------------------------------------------
  // 4. hydraulic conductivity and other interrelations
  // -----------------------------------------------------------------------
-  const double64  fluid_viscosity(1.0e-03);
+  const double  fluid_viscosity(1.0e-03);
   ConstantFactor<3U,divides>  conductivity( model3D.Database(),
                                            "conductivity", "permeability",
                                             fluid_viscosity );
@@ -164,8 +164,8 @@ void PassiveAdvectionOfTracer_Example::Run()
   cout <<"3=implicit, 4=implicit O(2), 5=4+bijective mapping, 6,7=tests of volume integration. ";
   cout <<"8=TestNodeCenteredFiniteVolumeStencil ";
   cout <<" Try (3)=implicit single-step computation to get an idea of transport distance: ";
-  int32     tmethod;
-  double64  max_error(1.0e-5);
+  int32_t     tmethod;
+  double  max_error(1.0e-5);
   cin >>    tmethod;
 
   switch( tmethod ) {
@@ -269,7 +269,7 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableExplicit( Model<3U>& sg, bo
    else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
    cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
    cout <<"\nEnter advection time: ";
-   double64 time_interval;
+   double time_interval;
    cin >> time_interval;
 
    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -300,7 +300,7 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableExplicit( Model<3U>& sg, co
    else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
    cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
    cout <<"\nEnter advection time: ";
-   double64 time_interval;
+   double time_interval;
    cin >> time_interval;
 
    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -331,7 +331,7 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableFirstOrderImplicit( Model<3
     cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement();
     cout.flush();
     cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-    double64 time_interval, Courant_multiplier;
+    double time_interval, Courant_multiplier;
     cin >> time_interval >> Courant_multiplier;
     cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
     clock_t ticks = clock();
@@ -362,7 +362,7 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableFirstOrderImplicit( Model<3
   cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
 
   cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-  double64 time_interval, Courant_multiplier;
+  double time_interval, Courant_multiplier;
   cin >> time_interval >> Courant_multiplier;
 
   cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -391,7 +391,7 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableSecondOrderImplicit( Model<
   else                     cout <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
   cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
   cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-  double64 time_interval, Courant_multiplier;
+  double time_interval, Courant_multiplier;
   cin >> time_interval >> Courant_multiplier;
 
   cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -419,7 +419,7 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableSecondOrderImplicit( Model<
     else                     cout <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
     cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
     cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-    double64 time_interval, Courant_multiplier;
+    double time_interval, Courant_multiplier;
     cin >> time_interval >> Courant_multiplier;
 
     cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -440,7 +440,7 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableSecondOrderImplicit( Model<
   are reported to the variables "finite volume" and "nodal flux mismatch", respectively.
   do not use when surface elements are also present in model!
 */
-double64  PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg )
+double  PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -471,7 +471,7 @@ double64  PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTranspor
   csmp::Index          fv_key   = sg.Database().StorageKey("finite volume");
   csmp::Index          prop_key = sg.Database().StorageKey("nodal flux mismatch");
   ScalarVariable       sc;
-  double64             emax(0.);
+  double             emax(0.);
   Region<3>&  gref(sg.Region("Model"));
 
   // for all interior nodes we calculate the normalised flux balance
@@ -487,7 +487,7 @@ double64  PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTranspor
 
   // finding the worst finite volume and analyzing it
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
-    if ( fabs(emax - fabs((*it)->Read( prop_key ))) <= numeric_limits<double64>::epsilon() ) {
+    if ( fabs(emax - fabs((*it)->Read( prop_key ))) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
@@ -530,7 +530,7 @@ void PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport( Mo
   csmp::Index     fv_key   = sg.Database().StorageKey("finite volume");
   csmp::Index     prop_key = sg.Database().StorageKey("nodal flux mismatch");
   ScalarVariable  sc;
-  double64        emax(0.);
+  double        emax(0.);
   Region<3>&  gref(sg.Region("Model"));
 
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) {
@@ -544,7 +544,7 @@ void PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport( Mo
 
   // finding the worst finite volume and analyzing it
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
-    if ( fabs(emax - (*it)->Read( prop_key )) <= numeric_limits<double64>::epsilon() ) {
+    if ( fabs(emax - (*it)->Read( prop_key )) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
@@ -601,9 +601,9 @@ bool PassiveAdvectionOfTracer_Example::NCFVT_methods( Model<3U>& model3D,
           *
           * -- 1.)AdvectVariable -----------------------------
           */
-          const double64 timeInterval(1.e3);
-          const double64 courantMultiplier(1.e5);
-          double64 courantIncrement;
+          const double timeInterval(1.e3);
+          const double courantMultiplier(1.e5);
+          double courantIncrement;
           cout << "\n\n\n\n\n";
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 1.)AdvectVariable -----------------------------\n";
@@ -684,7 +684,7 @@ bool PassiveAdvectionOfTracer_Example::NCFVT_methods( Model<3U>& model3D,
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 7.)CFL_Multiplier -----------------------------\n";
 
-          double64 CFLcheck(1.e2);
+          double CFLcheck(1.e2);
           advector3D.CFL_Multiplier(CFLcheck);
           //         ^^^^^^^^^^^^^^
           assert(CFLcheck == advector3D.CFL_Multiplier());
@@ -699,9 +699,9 @@ bool PassiveAdvectionOfTracer_Example::NCFVT_methods( Model<3U>& model3D,
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 8.)Model Inflow/Outflow -----------------------\n";
 
-          double64 outflow(advector3D.ModelOutflow());
+          double outflow(advector3D.ModelOutflow());
           //                          ^^^^^^^^^^^^
-          double64 inflow(advector3D.ModelInflow());
+          double inflow(advector3D.ModelInflow());
           //                         ^^^^^^^^^^^^
 
           cout << "\nadvector.ModelOutflow(): " << outflow ;
@@ -714,7 +714,7 @@ bool PassiveAdvectionOfTracer_Example::NCFVT_methods( Model<3U>& model3D,
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 9.)BoundaryFluxes -----------------------------\n";
 
-          double64 boundaryFluxes(advector3D.BoundaryFluxes(inflow, outflow));
+          double boundaryFluxes(advector3D.BoundaryFluxes(inflow, outflow));
           //                                 ^^^^^^^^^^^^^^
           cout << "\nBoundary Fluxes with previous as Input";
           cout << " arguments returns: " << boundaryFluxes ;
@@ -726,7 +726,7 @@ bool PassiveAdvectionOfTracer_Example::NCFVT_methods( Model<3U>& model3D,
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 10.)FluxBalance -------------------------------\n";
 
-          double64 fmin, fmax;
+          double fmin, fmax;
           advector3D.FluxBalance(fmin, fmax);
           //         ^^^^^^^^^^^
           cout << "\nFluxBalance returns " << fmin << " as minimum and ";
@@ -749,7 +749,7 @@ bool PassiveAdvectionOfTracer_Example::NCFVT_methods( Model<3U>& model3D,
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS------------------------";
           cout << "\n\n/** -- 12.)VolumeIntegrateScalarFiniteVolumeVariable --\n";
 
-          double64 poreVolume(0.);
+          double poreVolume(0.);
           poreVolume =
           advector3D.VolumeIntegrateScalarFiniteElementVariable("porosity", true);
           //         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -787,7 +787,7 @@ bool PassiveAdvectionOfTracer_Example::NCFVT_methods( Model<3U>& model3D,
           */
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
           cout << "\n\n/** -- 15.)AssignScalarBoundaryValues ------------------\n";
-          double64 customPressure(2.e7);
+          double customPressure(2.e7);
           advector3D.AssignScalarBoundaryValues(LEFT, "fluid pressure", DIRICH, customPressure, true);
           //         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

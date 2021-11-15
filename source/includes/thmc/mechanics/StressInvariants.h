@@ -21,30 +21,30 @@ class StressInvariants {
     explicit StressInvariants( const TensorVariable<3U>& );
   
     /// theta angle in Mohr-Coulomb diagram that at which shear stresses are maximized
-    double64 LodeAngle( const TensorVariable<2U>& ) const;
-    double64 LodeAngle( const TensorVariable<3U>& ) const;
+    double LodeAngle( const TensorVariable<2U>& ) const;
+    double LodeAngle( const TensorVariable<3U>& ) const;
   
     /// mean stress = average of principal stresses
-    double64 MeanStress() const;
+    double MeanStress() const;
   
     /// maximum of the deviatoric stresses = nonisostatic stresses
-    double64 DeviatoricStress() const;
+    double DeviatoricStress() const;
   
     /// sigma1 = maximum principal stress (Pa)
-    double64 /* sigma1 */ MaximumPrincipalStress1() const;
+    double /* sigma1 */ MaximumPrincipalStress1() const;
     /// sigma2
-    double64 /* sigma2 */ IntermediatePrincipalStress2() const;
+    double /* sigma2 */ IntermediatePrincipalStress2() const;
     /// sigma3
-    double64 /* sigma3 */ LeastPrincipalStress3() const;
+    double /* sigma3 */ LeastPrincipalStress3() const;
 
     /// K(theta), see Zienkiewitz, volume 2, chapter 4.5.1, p. 233, alpha is in degrees
-    double64 MohrCoulombYieldEnvelope( double64 friction_angle_alpha ) const;
+    double MohrCoulombYieldEnvelope( double friction_angle_alpha ) const;
 
     /// K(theta), see Zienkiewitz, volume 2, chapter 4.5.11, alpha is in degrees
-    double64 SmoothMohrCoulombYieldEnvelope( double64 friction_angle_alpha ) const;
+    double SmoothMohrCoulombYieldEnvelope( double friction_angle_alpha ) const;
 
   private:
-    const double64 sqrt3_, sqrt32_,
+    const double sqrt3_, sqrt32_,
                    degrees_to_radians_,
                    s_, t_, theta_;
 };

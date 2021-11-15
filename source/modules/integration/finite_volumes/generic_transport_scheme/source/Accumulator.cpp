@@ -38,7 +38,7 @@ void Accumulator<dim,USER>::SetUp()
     Inside of the domain and for the halo stencils, accumulation by stencil is used, while truncated boundary FVs need to be accumulated finite volume by finite volume (only certain terms)
 */
 template<size_t dim, template<size_t> class USER>
-void Accumulator<dim,USER>::Accumulate( double64 time_increment )
+void Accumulator<dim,USER>::Accumulate( double time_increment )
  {
     ErrorHandler& error_handler( ErrorHandler::Instance() );
 
@@ -55,7 +55,7 @@ void Accumulator<dim,USER>::Accumulate( double64 time_increment )
                  continue;  
               }
             // imposing operation onto MatrixOperator (time-increment was set before)
-            double64 factor(1.);
+            double factor(1.);
             switch( (*et).first.OperationType() ) {
                  case SUBTRACT: factor *= -1.;
                    break;
@@ -91,8 +91,8 @@ void Accumulator<dim,USER>::Accumulate( double64 time_increment )
     /// compensate (+) balance at inflow boundaries, (-) balance at outflow boundaries, and any potential divergence of flow at no-flow boundaries              
 template<size_t dim, template<size_t> class USER>
 void Accumulator<dim,USER>::BalanceFlowsThroughTruncatedBoundaryFiniteVolumes( SparseMatrix& lhs, 
-                                                                               vector<double64>& rhs,
-                                                                               double64 time_increment )
+                                                                               vector<double>& rhs,
+                                                                               double time_increment )
  {
     // 1. compensate outflows by adding the (-) flux balances to the diagonal of the solution matrix
     
@@ -131,7 +131,7 @@ template<size_t dim, template<size_t> class USER>
 void Accumulator<dim,USER>::AccumulateByStencil( typename vector<Element<dim>*>::const_iterator first, 
                                                            typename vector<Element<dim>*>::const_iterator last,
                                                            const VectorOperator<dim>* const vec_op,
-                                                           vector<double64>& rhs ) const
+                                                           vector<double>& rhs ) const
  {
    const typename vector<Element<dim>*>::const_iterator cells_end(last);
    // accumulation
@@ -164,7 +164,7 @@ template<size_t dim,template<size_t> class USER>
 void Accumulator<dim,USER>::AccumulateByFiniteVolume( typename std::vector<Node<dim>*>::const_iterator nit,
                                                                 typename std::vector<Node<dim>*>::const_iterator end,
                                                                 const VectorOperator<dim>* const vec_op, ///< modified to contain operation information
-                                                                std::vector<double64>& rhs ) const
+                                                                std::vector<double>& rhs ) const
 {
    const typename std::vector<Node<dim>*>::const_iterator nodes_end(end);
    while( nit != nodes_end ) {

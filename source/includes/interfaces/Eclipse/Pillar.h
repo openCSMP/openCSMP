@@ -34,15 +34,15 @@ class Pillar {
     /// returns the starting point of the pillar at the largest Z
     const Point<3>& EndPoint() const { return end_; }
 
-    void AddZCoord( double64 z );
+    void AddZCoord( double z );
   
-    void SetZCoords( const std::vector<double64>& zcoords );
+    void SetZCoords( const std::vector<double>& zcoords );
 
-    double64 GetZCoord( size_t zid ) const;
+    double GetZCoord( size_t zid ) const;
 
     csmp::Point<3U> GetPoint( size_t zid ) const;
 
-    size_t FindPoint( double64 z ) const;
+    size_t FindPoint( double z ) const;
 
     void SetFirstNodeNum(size_t node_num);
   
@@ -59,7 +59,7 @@ class Pillar {
     csmp::Point<3U> end_;  /// end of line
 
     /// cells data
-    std::vector<double64>  points_;                    ///< points, called beads
+    std::vector<double>  points_;                    ///< points, called beads
 };
 
 

@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-IAPWS_H2O_Storativity<dim>::IAPWS_H2O_Storativity( const PropertyDatabase<dim>& pref, double64 z_rock ) 
+IAPWS_H2O_Storativity<dim>::IAPWS_H2O_Storativity( const PropertyDatabase<dim>& pref, double z_rock ) 
       : Interrelation<dim>(pref),
         B( Interrelation<dim>::GlobalProperty("fluid compressibility") ),
         X( Interrelation<dim>::GlobalProperty("porosity") ),

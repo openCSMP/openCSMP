@@ -322,14 +322,14 @@ void PDE_Integrator_UoM_Test::TestTwoScalarVariables() {
     pde_test->Add(sourceVolume);    
     pde_test->EstablishMatrixSetupTest(region);
     pde_test->EnumerateAndFixMatrixSize(region);
-    std::map<size_t, double64> result;
+    std::map<size_t, double> result;
     for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       if ((*nIter)->Status(pressureKey) != DIRICH) {
         result[(*nIter)->Idx()] = (*nIter)->Read(pressureKey);
       } 
     }
 
-    std::vector<double64>* valid_x = pde_test->GetX();
+    std::vector<double>* valid_x = pde_test->GetX();
     size_t idx(0);
     for (auto& it : result) {
       (*valid_x)[idx] = it.second;

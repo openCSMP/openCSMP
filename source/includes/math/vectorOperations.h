@@ -14,7 +14,7 @@
 namespace csmp {
 
 template<size_t dim>
-double64 valueAverage( const VectorVariable<dim>& );
+double valueAverage( const VectorVariable<dim>& );
 
 } // end csmp
 

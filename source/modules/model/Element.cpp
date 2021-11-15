@@ -98,7 +98,7 @@ Element<dim>::Element( size_t idx,
                        const FiniteVolumeStencil<dim>* s,
                        const LocalVariables& ep,
                        const IntegrationPointVariables& cp,
-                       int32 material )
+                       int32_t material )
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( s ),
@@ -475,14 +475,14 @@ void  Element<dim>::Idx( size_t idx_to_assign ) const
 
 /// unique material identifier that matches number of parent unique region
 template<size_t dim>
-int32 Element<dim>::Material_ID() const
+int32_t Element<dim>::Material_ID() const
  {
     return material_id_;
  }
  
  
 template<size_t dim>
-void Element<dim>::Material_ID( int32 id )
+void Element<dim>::Material_ID( int32_t id )
  {
     material_id_ = id;
  }
@@ -546,7 +546,7 @@ information about the target object. For instance when you want to retrieve
 a Node coordinate:
 
 @code
-double64 x = (*element.N(2))->x();
+double x = (*element.N(2))->x();
 @endcode
 
 @return return A pointer to the Target object, e.g. a Node.
@@ -647,7 +647,7 @@ Point<dim>  Element<dim>::BaryCenter() const
   for ( size_t i = 1U; i<n_nodes; ++i )
     pt += N( i )->Coordinate();
 
-  return pt / static_cast<double64>(Nodes());
+  return pt / static_cast<double>(Nodes());
 }
 
 
@@ -676,21 +676,21 @@ when evaluating the quality of a certain mesh.
 
 */
 template<size_t dim>
-double64  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
+double  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
 {
-  double64 fMinTemp( static_cast<double64>(DBL_MAX) );
-  double64 fMaxTemp( static_cast<double64>(-DBL_MAX) );
+  double fMinTemp( static_cast<double>(DBL_MAX) );
+  double fMaxTemp( static_cast<double>(-DBL_MAX) );
 
   // this normalisation is necessary because the vector variable
   // being any physical quantity may have any magnitude
-  const double64 fMagnitudeOfDirection( vecDirection.Length() );
+  const double fMagnitudeOfDirection( vecDirection.Length() );
   // avoid division by zero
-  assert( fMagnitudeOfDirection >= numeric_limits<double64>::epsilon() );
+  assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
   const size_t n_nodes( Nodes() );
   for ( size_t i = 0; i<n_nodes; ++i ) {
     // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
-    double64 fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
+    double fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
     fTemp /= fMagnitudeOfDirection;
 
     // update minimum value
@@ -794,7 +794,7 @@ void Element<dim>::Out() const
       cout << "\n\tbarycentre at (xyz): " << pt[0] << ", " << pt[1] << ", " << pt[2] << endl;
 
     // length, area, volue
-    const double64 volume( this->Volume() );
+    const double volume( this->Volume() );
     if ( this->IsLineElement() ) {
       if ( volume > 0. ) cout << "\n\tlength: " << volume << endl;
       else cerr << "\n\tlength: ERROR (negative value indicates numbering problem): " << volume << endl;

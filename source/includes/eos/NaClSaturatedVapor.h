@@ -25,55 +25,55 @@ namespace csmp
 
   public:
 
-    NaClSaturatedVapor(const double64& externaltemperature, // [C]
-                       const double64& externalpressure);   // [Pa]
+    NaClSaturatedVapor(const double& externaltemperature, // [C]
+                       const double& externalpressure);   // [Pa]
     ~NaClSaturatedVapor();
     
-    double64 MassFractionNaCl();                            // [mass fraction NaCl]
+    double MassFractionNaCl();                            // [mass fraction NaCl]
 
   private:
     NaClSaturatedVapor();
 
-    const double64& temperature_;                           ///< internal reference to temperature [C] in flow code
-    const double64& pressure_;                              ///< internal reference to pressure [Pa] in flow code
+    const double& temperature_;                           ///< internal reference to temperature [C] in flow code
+    const double& pressure_;                              ///< internal reference to pressure [Pa] in flow code
     
-    const double64 k0_;                                     ///< parameter k0 of Driesner & Heinrich, GCA, 2007
-    const double64 k1_;                                     ///< parameter k1 of Driesner & Heinrich, GCA, 2007
-    const double64 k2_;                                     ///< parameter k2 of Driesner & Heinrich, GCA, 2007
-    const double64 k3_;                                     ///< parameter k3 of Driesner & Heinrich, GCA, 2007
-    const double64 k4_;                                     ///< parameter k4 of Driesner & Heinrich, GCA, 2007
-    const double64 k5_;                                     ///< parameter k5 of Driesner & Heinrich, GCA, 2007
-    const double64 k6_;                                     ///< parameter k6 of Driesner & Heinrich, GCA, 2007
-    const double64 k7_;                                     ///< parameter k7 of Driesner & Heinrich, GCA, 2007
-    const double64 k8_;                                     ///< parameter k8 of Driesner & Heinrich, GCA, 2007
-    const double64 k9_;                                     ///< parameter k9 of Driesner & Heinrich, GCA, 2007
-    const double64 k10_;                                    ///< parameter k10 of Driesner & Heinrich, GCA, 2007
-    const double64 k11_;                                    ///< parameter k11 of Driesner & Heinrich, GCA, 2007
-    const double64 k12_;                                    ///< parameter k12 of Driesner & Heinrich, GCA, 2007
-    const double64 k13_;                                    ///< parameter k13 of Driesner & Heinrich, GCA, 2007
-    const double64 k14_;                                    ///< parameter k14 of Driesner & Heinrich, GCA, 2007
-    const double64 k15_;                                    ///< parameter k15 of Driesner & Heinrich, GCA, 2007
+    const double k0_;                                     ///< parameter k0 of Driesner & Heinrich, GCA, 2007
+    const double k1_;                                     ///< parameter k1 of Driesner & Heinrich, GCA, 2007
+    const double k2_;                                     ///< parameter k2 of Driesner & Heinrich, GCA, 2007
+    const double k3_;                                     ///< parameter k3 of Driesner & Heinrich, GCA, 2007
+    const double k4_;                                     ///< parameter k4 of Driesner & Heinrich, GCA, 2007
+    const double k5_;                                     ///< parameter k5 of Driesner & Heinrich, GCA, 2007
+    const double k6_;                                     ///< parameter k6 of Driesner & Heinrich, GCA, 2007
+    const double k7_;                                     ///< parameter k7 of Driesner & Heinrich, GCA, 2007
+    const double k8_;                                     ///< parameter k8 of Driesner & Heinrich, GCA, 2007
+    const double k9_;                                     ///< parameter k9 of Driesner & Heinrich, GCA, 2007
+    const double k10_;                                    ///< parameter k10 of Driesner & Heinrich, GCA, 2007
+    const double k11_;                                    ///< parameter k11 of Driesner & Heinrich, GCA, 2007
+    const double k12_;                                    ///< parameter k12 of Driesner & Heinrich, GCA, 2007
+    const double k13_;                                    ///< parameter k13 of Driesner & Heinrich, GCA, 2007
+    const double k14_;                                    ///< parameter k14 of Driesner & Heinrich, GCA, 2007
+    const double k15_;                                    ///< parameter k15 of Driesner & Heinrich, GCA, 2007
 
-    double64 pdummy_;                                       ///< internal pressure parameter [Pa]
-    double64 tdummy_;                                       ///< internal temperature parameter [C]
-    double64 tcurrent_;                                     ///< internal temperature parameter [C]
-    double64 pcurrent_;                                     ///< internal pressure parameter [bar]
-    double64 pnorm_;                                        ///< normalized pressure, equation 16 of Driesner & Heinrich, GCA, 2007
-    double64 massfractionnacl_;                             ///< self-explanatory ;-)
-    double64 xsat_;                                         ///< mole fraction NaCl on liquidus
-    double64 xsatatpnacl_;                                  ///< mole fraction NaCl on liquidus at NaCl sublimation pressure
-    double64 delxsat_;                                      ///< represents one of the term in equation 15 of Driesner & Heinrich, GCA, 2007
-    double64 delxgsat_;                                     ///< represents one of the term in equation 15 of Driesner & Heinrich, GCA, 2007
-    double64 delx_;                                         ///< variable used for computing equation 15 of Driesner & Heinrich, GCA, 2007
-    double64 j0_;                                           ///< parameter j0 of Driesner & Heinrich, GCA, 2007
-    double64 j1_;                                           ///< parameter j1 of Driesner & Heinrich, GCA, 2007
-    double64 j2_;                                           ///< parameter j2 of Driesner & Heinrich, GCA, 2007
-    double64 j3_;                                           ///< parameter j3 of Driesner & Heinrich, GCA, 2007
-    double64 pnacl_;                                        ///< NaCl sublimation pressure [bar]
-    double64 pcrit_;                                        ///< Critical pressure of H2O-NaCl [bar]
+    double pdummy_;                                       ///< internal pressure parameter [Pa]
+    double tdummy_;                                       ///< internal temperature parameter [C]
+    double tcurrent_;                                     ///< internal temperature parameter [C]
+    double pcurrent_;                                     ///< internal pressure parameter [bar]
+    double pnorm_;                                        ///< normalized pressure, equation 16 of Driesner & Heinrich, GCA, 2007
+    double massfractionnacl_;                             ///< self-explanatory ;-)
+    double xsat_;                                         ///< mole fraction NaCl on liquidus
+    double xsatatpnacl_;                                  ///< mole fraction NaCl on liquidus at NaCl sublimation pressure
+    double delxsat_;                                      ///< represents one of the term in equation 15 of Driesner & Heinrich, GCA, 2007
+    double delxgsat_;                                     ///< represents one of the term in equation 15 of Driesner & Heinrich, GCA, 2007
+    double delx_;                                         ///< variable used for computing equation 15 of Driesner & Heinrich, GCA, 2007
+    double j0_;                                           ///< parameter j0 of Driesner & Heinrich, GCA, 2007
+    double j1_;                                           ///< parameter j1 of Driesner & Heinrich, GCA, 2007
+    double j2_;                                           ///< parameter j2 of Driesner & Heinrich, GCA, 2007
+    double j3_;                                           ///< parameter j3 of Driesner & Heinrich, GCA, 2007
+    double pnacl_;                                        ///< NaCl sublimation pressure [bar]
+    double pcrit_;                                        ///< Critical pressure of H2O-NaCl [bar]
     
     void   CheckState();
-    double64 MassFractionNaCl(const double64& t, const double64& p);
+    double MassFractionNaCl(const double& t, const double& p);
  
     NaClSublimationCurve   naclsubl;
     CriticalCurve          critcurve;
@@ -101,7 +101,7 @@ namespace csmp
 
      @code
 
-     double64 t(somevalue), p(anothervalue); // temperature [C] and pressure [in Pa] in user's application
+     double t(somevalue), p(anothervalue); // temperature [C] and pressure [in Pa] in user's application
      ...
      NaClSaturatedVapor naclsatvap(t,p); 
      ...

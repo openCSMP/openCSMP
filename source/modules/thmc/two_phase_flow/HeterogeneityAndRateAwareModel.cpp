@@ -29,33 +29,33 @@ HeterogeneityAndRateAwareModel<dim>::HeterogeneityAndRateAwareModel( const Prope
    rocktype_(0), // WELL
    is_composite_(false),
    K_flow_direction_(HORIZONTAL), 
-   k_low_(numeric_limits<double64>::quiet_NaN()), 
-   k_high_(numeric_limits<double64>::quiet_NaN()), 
-   K_reduction_in_flow_direction_(numeric_limits<double64>::quiet_NaN()),
-   L_low_(numeric_limits<double64>::quiet_NaN()), 
-   L_high_(numeric_limits<double64>::quiet_NaN()),       ///< permeability in flow direction; smallest over highest permeability
-   vt_magnitude_(numeric_limits<double64>::quiet_NaN()),
-   vt_magnitude_x_(numeric_limits<double64>::quiet_NaN()),
-   vt_magnitude_y_(numeric_limits<double64>::quiet_NaN()), 
-   krw_(numeric_limits<double64>::quiet_NaN()), 
-   krn_(numeric_limits<double64>::quiet_NaN()),
-   krw_parallel_(numeric_limits<double64>::quiet_NaN()), 
-   krw_crossflow_(numeric_limits<double64>::quiet_NaN()),
-   krn_parallel_(numeric_limits<double64>::quiet_NaN()), 
-   krn_crossflow_(numeric_limits<double64>::quiet_NaN()),
-   phi_(numeric_limits<double64>::quiet_NaN()), 
-   pd_(numeric_limits<double64>::quiet_NaN()), 
-   pd_high_(numeric_limits<double64>::quiet_NaN()), 
-   pd_low_(numeric_limits<double64>::quiet_NaN()), 
-   m_VG_(numeric_limits<double64>::quiet_NaN()), 
-   bcp_(numeric_limits<double64>::quiet_NaN()), 
-   bcp_high_(numeric_limits<double64>::quiet_NaN()), 
-   bcp_low_(numeric_limits<double64>::quiet_NaN()), 
-   Swi_pc_(numeric_limits<double64>::quiet_NaN()), 
-   dPc_(numeric_limits<double64>::quiet_NaN()),
-   pd_flow_direction_(numeric_limits<double64>::quiet_NaN()), 
-   pc_flow_direction_(numeric_limits<double64>::quiet_NaN()),
-   grad_p_magnitude_(numeric_limits<double64>::quiet_NaN()) 
+   k_low_(numeric_limits<double>::quiet_NaN()), 
+   k_high_(numeric_limits<double>::quiet_NaN()), 
+   K_reduction_in_flow_direction_(numeric_limits<double>::quiet_NaN()),
+   L_low_(numeric_limits<double>::quiet_NaN()), 
+   L_high_(numeric_limits<double>::quiet_NaN()),       ///< permeability in flow direction; smallest over highest permeability
+   vt_magnitude_(numeric_limits<double>::quiet_NaN()),
+   vt_magnitude_x_(numeric_limits<double>::quiet_NaN()),
+   vt_magnitude_y_(numeric_limits<double>::quiet_NaN()), 
+   krw_(numeric_limits<double>::quiet_NaN()), 
+   krn_(numeric_limits<double>::quiet_NaN()),
+   krw_parallel_(numeric_limits<double>::quiet_NaN()), 
+   krw_crossflow_(numeric_limits<double>::quiet_NaN()),
+   krn_parallel_(numeric_limits<double>::quiet_NaN()), 
+   krn_crossflow_(numeric_limits<double>::quiet_NaN()),
+   phi_(numeric_limits<double>::quiet_NaN()), 
+   pd_(numeric_limits<double>::quiet_NaN()), 
+   pd_high_(numeric_limits<double>::quiet_NaN()), 
+   pd_low_(numeric_limits<double>::quiet_NaN()), 
+   m_VG_(numeric_limits<double>::quiet_NaN()), 
+   bcp_(numeric_limits<double>::quiet_NaN()), 
+   bcp_high_(numeric_limits<double>::quiet_NaN()), 
+   bcp_low_(numeric_limits<double>::quiet_NaN()), 
+   Swi_pc_(numeric_limits<double>::quiet_NaN()), 
+   dPc_(numeric_limits<double>::quiet_NaN()),
+   pd_flow_direction_(numeric_limits<double>::quiet_NaN()), 
+   pc_flow_direction_(numeric_limits<double>::quiet_NaN()),
+   grad_p_magnitude_(numeric_limits<double>::quiet_NaN()) 
 {
 }
 
@@ -69,10 +69,10 @@ HeterogeneityAndRateAwareModel<dim>::~HeterogeneityAndRateAwareModel()
  
 
 template<size_t dim>
-int32 HeterogeneityAndRateAwareModel<dim>::RockType( const Element<dim>& e ) const {
-     const double64 rock_type = e.Read(RRT_key_);
+int32_t HeterogeneityAndRateAwareModel<dim>::RockType( const Element<dim>& e ) const {
+     const double rock_type = e.Read(RRT_key_);
      assert( !isnan(rock_type) );
-     return static_cast<int32>( rock_type );
+     return static_cast<int32_t>( rock_type );
   }
 
 
@@ -94,7 +94,7 @@ void HeterogeneityAndRateAwareModel<dim>::InitializeVelocity( const Element<dim>
     vt_magnitude_x_ = fabs(vt_[0]);
     vt_magnitude_y_ = fabs(vt_[1]);
     // in zero velocity case, the horizontal relative permeability is set to dominate
-    if ( vt_magnitude_ <= numeric_limits<double64>::epsilon() * 100. ) {
+    if ( vt_magnitude_ <= numeric_limits<double>::epsilon() * 100. ) {
          vt_normalised_(0) = 1.; 
          vt_normalised_(1) = 0.; 
       }
@@ -468,7 +468,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     grad_p_magnitude_ = PressureGradientMagnitude(e); 
     Nc_               = Nc_kgradP_Version( grad_p_magnitude_ ); // capillary number
 
-    const double64 lambda_t = TwoPhaseModel<dim>::TotalMobility();
+    const double lambda_t = TwoPhaseModel<dim>::TotalMobility();
     if ( isnan(lambda_t) ) {
          Out(1); // 1=wetting phase
          throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
@@ -480,7 +480,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
          throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
                                       "mobt is negative.");
       }
-    if ( lambda_t <= numeric_limits<double64>::epsilon() ) {
+    if ( lambda_t <= numeric_limits<double>::epsilon() ) {
          Out(1);
          throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
                                       "mobt is zero.");
@@ -528,7 +528,7 @@ throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
       Intialises model for testing and plotting
 */
 template<size_t dim>
-void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw, const VectorVariable<dim>& vt )
+void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double Sw, const VectorVariable<dim>& vt )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -548,7 +548,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
     vt_magnitude_        = vt.Length();
     vt_magnitude_x_        = fabs(vt[0]); 
     vt_magnitude_y_        = fabs(vt[1]);
-    if ( vt_magnitude_ > numeric_limits<double64>::epsilon() )
+    if ( vt_magnitude_ > numeric_limits<double>::epsilon() )
       vt_normalised_    /= vt_magnitude_;
     else {
          vt_normalised_(0) = 1.;
@@ -930,8 +930,8 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double64 Sw
     if ( is_composite_ ) {
          // permeability
          // TwoPhaseModel<dim>::tensor_permeability_ = true; // anisotropy is not communicated to base class
-         const double64 k_crossflow_ = PermeabilityPerpendicularToLaminations();
-         const double64 k_parallel_  = PermeabilityParallelToLaminations();
+         const double k_crossflow_ = PermeabilityPerpendicularToLaminations();
+         const double k_parallel_  = PermeabilityParallelToLaminations();
          // assuming that layers are horizontal and that the stored K is the horizontal one
          TwoPhaseModel<dim>::K_ = 0.;
          TwoPhaseModel<dim>::K_(0,0)    = k_parallel_;
@@ -1011,7 +1011,7 @@ void HeterogeneityAndRateAwareModel<1U>::InitialisePermeability( const Element<1
 
 /// weighted permeability average for flow along layers
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityParallelToLaminations() const
+double HeterogeneityAndRateAwareModel<dim>::PermeabilityParallelToLaminations() const
  {
     assert( is_composite_ );
     return (L_high_ * k_high_ + L_low_ * k_low_) / (L_high_ + L_low_);
@@ -1021,10 +1021,10 @@ double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityParallelToLaminations(
  
 /// weigthed harmonic mean of permeability for flow across layers
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminations() const
+double HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminations() const
  {
     assert( is_composite_ );
-    const double64 sum_of_weights = L_low_ + L_high_;
+    const double sum_of_weights = L_low_ + L_high_;
     return sum_of_weights / (L_high_ / k_high_ + L_low_ / k_low_);
  }
 
@@ -1039,13 +1039,13 @@ double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminat
     
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const VectorVariable<dim>& vt_normalised ) const
+double HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const VectorVariable<dim>& vt_normalised ) const
  {
     assert( is_composite_ );
     assert( TwoPhaseModel<dim>::K_(0,0) > 0. );
     assert( TwoPhaseModel<dim>::K_(1,1) > 0. );
     
-    if ( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double64>::epsilon() )
+    if ( fabs(vt_normalised.Length() - 1.) <= numeric_limits<double>::epsilon() )
       // horizontal permeability
       return TwoPhaseModel<dim>::K_(0,0);
 
@@ -1070,9 +1070,9 @@ template<size_t dim>
 typename HeterogeneityAndRateAwareModel<dim>::FLOW_DIRECTION 
 HeterogeneityAndRateAwareModel<dim>::ProminentFlowDirection( const VectorVariable<dim>& vt ) const
  {
-     if ( fabs(vt[0])+fabs(vt[1]) <= numeric_limits<double64>::epsilon() ) return HORIZONTAL;
+     if ( fabs(vt[0])+fabs(vt[1]) <= numeric_limits<double>::epsilon() ) return HORIZONTAL;
      // comparing the vertical component with the horizontal magnitude of the flow
-     const double64 horizontal_magnitude = ( dim == 2U ) ? vt[0] : sqrt( vt[0]*vt[0] + vt[2]*vt[2] );
+     const double horizontal_magnitude = ( dim == 2U ) ? vt[0] : sqrt( vt[0]*vt[0] + vt[2]*vt[2] );
      FLOW_DIRECTION direction = ( fabs(vt[1]) > horizontal_magnitude ) ? VERTICAL : HORIZONTAL;
      return direction;
  }
@@ -1084,19 +1084,19 @@ HeterogeneityAndRateAwareModel<dim>::ProminentFlowDirection( const VectorVariabl
     Returns the magnitude of the pressure gradient corrected for the hydrostatic component which causes no flow
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Element<dim>& e ) const
+double HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Element<dim>& e ) const
  {
-    array<double64,dim> gradP = {0.}; // the unspecified elements are initialised to zero
+    array<double,dim> gradP = {0.}; // the unspecified elements are initialised to zero
     e.dN_AtBaryCenter( DN_ );
     for ( size_t i=0U; i<e.Nodes(); ++i ) {
-         const double64 pf = e.N(i)->Read( pf_key_ );
+         const double pf = e.N(i)->Read( pf_key_ );
          for ( size_t j=0U; j<dim; ++j )
          gradP[j] += DN_(j,i) * pf;
       }
     // elimination of the hydrostatic pressure gradient
     gradP[dim-1U] -= TwoPhaseModel<dim>::acc_gravity_ * (Sw_*TwoPhaseModel<dim>::rhw_ + (1.-Sw_)*TwoPhaseModel<dim>::rhn_);
     // magnitude of the reduced pressure gradient
-    double64 grad_p_magnitude(0.);
+    double grad_p_magnitude(0.);
     for ( size_t j=0U; j<dim; ++j ) grad_p_magnitude += gradP[j] * gradP[j];
     return sqrt(grad_p_magnitude);
 
@@ -1109,7 +1109,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const E
      @attention uses horizontal permeability only
 */
 template<size_t dim>
-double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version( double64 pf_gradient_magnitude ) const
+double csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version( double pf_gradient_magnitude ) const
  {
      assert( pf_gradient_magnitude != UNSPECIFIED );
      if ( !is_composite_ ) return TwoPhaseModel<dim>::K_(0,0) * pf_gradient_magnitude / TwoPhaseModel<dim>::ift_;
@@ -1126,7 +1126,7 @@ double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version( double64 
     @attention this method just transfers the saturation because the effective saturation is calculated later
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::EffectiveSaturation() const
+double HeterogeneityAndRateAwareModel<dim>::EffectiveSaturation() const
  {
     TwoPhaseModel<dim>::sat_  = Sw_;
     TwoPhaseModel<dim>::seff_ = Sw_;
@@ -1144,14 +1144,14 @@ double64 HeterogeneityAndRateAwareModel<dim>::EffectiveSaturation() const
     The result is limited to greater than or equal to zero.
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
+double HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
  {
     if ( !is_composite_ ) return krw_; // krw_VG( Sw_, m_VG_ );
    
     // to get the ensemble krw for the composite, the parallel and perpendicular values are blended
     // taking into account the flow direction 
     // --------------------------------------
-    const double64 krw = krw_parallel_ * (vt_normalised_[0]*vt_normalised_[0]) + krw_crossflow_ * (vt_normalised_[1]*vt_normalised_[1]);
+    const double krw = krw_parallel_ * (vt_normalised_[0]*vt_normalised_[0]) + krw_crossflow_ * (vt_normalised_[1]*vt_normalised_[1]);
 
     // scaling the relative permeability by the vertical permeability
     return max( krw * K_reduction_in_flow_direction_, 0. );
@@ -1165,11 +1165,11 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
     CO2 relative permeability
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
+double HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
  {
      if ( !is_composite_ ) return krn_; // krn_BC( Sw_ );
 
-     const double64 krn = krn_parallel_ * (vt_normalised_[0]*vt_normalised_[0]) + krn_crossflow_ * (vt_normalised_[1]*vt_normalised_[1]);
+     const double krn = krn_parallel_ * (vt_normalised_[0]*vt_normalised_[0]) + krn_crossflow_ * (vt_normalised_[1]*vt_normalised_[1]);
 
      // scaling the relative permeability by the vertical permeability
      return max( krn * K_reduction_in_flow_direction_, 0. );
@@ -1186,9 +1186,9 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
 
 /// for the wetting phase
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::MaxFractionalFlowDerivative() const
+double HeterogeneityAndRateAwareModel<dim>::MaxFractionalFlowDerivative() const
  {
-    return static_cast<double64>(5.6); // as computed with dfds method
+    return static_cast<double>(5.6); // as computed with dfds method
  }
 
 
@@ -1204,34 +1204,34 @@ Not directionally dependent.
 
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
+double HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
  {
     //rocktype 16 uses BC
     if (rocktype_==16) {
         // if the BC parameter is set to zero, a linear capillary pressure model should be used
-        if ( bcp_ <= numeric_limits<double64>::epsilon() ) {
+        if ( bcp_ <= numeric_limits<double>::epsilon() ) {
              return pd_ + ( 1. - Sw_) * (TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ - pd_); 
           }
         return min( pc_BC( Sw_, Swi_pc_, pd_, bcp_ ), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );    
      }
     
-    const double64 Pc_MAX(1.0e+7);
-    const double64 PC_LOW_SW_LIMIT  = Swi_pc_ + 0.01;
-    const double64 PC_HIGH_SW_LIMIT = 1.0 - 0.01;
+    const double Pc_MAX(1.0e+7);
+    const double PC_LOW_SW_LIMIT  = Swi_pc_ + 0.01;
+    const double PC_HIGH_SW_LIMIT = 1.0 - 0.01;
     // linear regularization for lower part of sw range
     if ( Sw_ < PC_LOW_SW_LIMIT ) {
-        const double64 pc_lim = pc_Phase_at( PC_LOW_SW_LIMIT );
-        const double64 seff_mult( 1.0/ (1.0 - Swi_pc_ ) );
-        const double64 dpcds_lim = dpcds_Phase_at( PC_LOW_SW_LIMIT )/seff_mult;
-        const double64 pc = pc_lim + dpcds_lim*( Sw_ - PC_LOW_SW_LIMIT );
+        const double pc_lim = pc_Phase_at( PC_LOW_SW_LIMIT );
+        const double seff_mult( 1.0/ (1.0 - Swi_pc_ ) );
+        const double dpcds_lim = dpcds_Phase_at( PC_LOW_SW_LIMIT )/seff_mult;
+        const double pc = pc_lim + dpcds_lim*( Sw_ - PC_LOW_SW_LIMIT );
         return std::min(pc, Pc_MAX);    
     
       }
     // linear regularization for higher part of sw range
     else if ( Sw_ > PC_HIGH_SW_LIMIT ) {
-        const double64 pc_lim = pc_Phase_at( PC_HIGH_SW_LIMIT );
-        const double64 dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT ) );
-        const double64 pc = dpcds_lim*( Sw_ - 1.0 );
+        const double pc_lim = pc_Phase_at( PC_HIGH_SW_LIMIT );
+        const double dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT ) );
+        const double pc = dpcds_lim*( Sw_ - 1.0 );
         return std::max(pc, 0.);
      } 
 
@@ -1242,7 +1242,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
 
 
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase_at(double64 sw) const
+double HeterogeneityAndRateAwareModel<dim>::pc_Phase_at(double sw) const
 {
     return pc_VG( sw, pd_, m_VG_, Swi_pc_ );   
 }
@@ -1260,42 +1260,42 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase_at(double64 sw) const
     to avoid that CFL is influenced while capillary spreading is not possible.
 */
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::dpcds_Phase() const
+double HeterogeneityAndRateAwareModel<dim>::dpcds_Phase() const
  {
     assert( Sw_ >= 0. );
     assert( Sw_ <= 1. );
     
     //use constant derivative at PC_LOW_SW_LIMIT for lower part of sw range
-    const double64 PC_LOW_SW_LIMIT   = Swi_pc_ + 0.01;
-    const double64 MIN_PC_DERIVATIVE = -1.0e6;    
+    const double PC_LOW_SW_LIMIT   = Swi_pc_ + 0.01;
+    const double MIN_PC_DERIVATIVE = -1.0e6;    
     
     if(Sw_ < PC_LOW_SW_LIMIT) return max( MIN_PC_DERIVATIVE, dpcds_Phase_at(PC_LOW_SW_LIMIT ) );
         
-    const double64  h(0.01), sw(Sw_); // backing up the water saturation
+    const double  h(0.01), sw(Sw_); // backing up the water saturation
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
          Sw_ = 1.;
-         double64 pc1 = pc_Phase();
+         double pc1 = pc_Phase();
          Sw_ = 1. - h;
-         double64 pc2 = pc_Phase();
+         double pc2 = pc_Phase();
          return max( MIN_PC_DERIVATIVE, (pc1 - pc2) / h );
       }
   
     // low water saturation
     if ( sw <= h ) {
          Sw_ = h;
-         double64 pc1 = pc_Phase();
+         double pc1 = pc_Phase();
          Sw_ = 0.;
-         double64 pc2 = pc_Phase();
+         double pc2 = pc_Phase();
          return max( MIN_PC_DERIVATIVE, (pc1 - pc2) / h );
       }
 
     // water saturation between the endpoints
     Sw_ = sw + h;
-    double64 pc1 = pc_Phase();
+    double pc1 = pc_Phase();
     Sw_ = sw - h;
-    double64 pc2 = pc_Phase();
+    double pc2 = pc_Phase();
     // resetting sw value
     Sw_ = sw;
    
@@ -1305,29 +1305,29 @@ double64 HeterogeneityAndRateAwareModel<dim>::dpcds_Phase() const
 
 
 template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::dpcds_Phase_at(double64 sw) const
+double HeterogeneityAndRateAwareModel<dim>::dpcds_Phase_at(double sw) const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );
-    const double64  h(0.005);
+    const double  h(0.005);
 
     // more common case of a high water saturation first
     if ( sw >= (1. - h) ) {
-         double64 pc1 = pc_Phase_at(1.);
-         double64 pc2 = pc_Phase_at(1. - h);
+         double pc1 = pc_Phase_at(1.);
+         double pc2 = pc_Phase_at(1. - h);
          return (pc1 - pc2) / h;
       }
   
     // low water saturation
     if ( sw <= h ) {
-         double64 pc1 = pc_Phase_at(h);
-         double64 pc2 = pc_Phase_at(0.);
+         double pc1 = pc_Phase_at(h);
+         double pc2 = pc_Phase_at(0.);
          return (pc1 - pc2) / h;
       }
 
     // water saturation between the endpoints
-    double64 pc1 = pc_Phase_at(sw + h);
-    double64 pc2 = pc_Phase_at(sw - h);
+    double pc1 = pc_Phase_at(sw + h);
+    double pc2 = pc_Phase_at(sw - h);
    
     return (pc1 - pc2) / (2. * h);
 }
@@ -1345,7 +1345,7 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
                                                                           const VectorVariable<dim>& vt )
  {
     // computing the capillary number from V, mu & k, assuming mu = muw at test conditions
-    const double64 dyn_visc(0.00054843338222415),
+    const double dyn_visc(0.00054843338222415),
                    Nc = (dyn_visc * vt.Length()) / TwoPhaseModel<dim>::ift_;
 
     std::string text_file(filename);
@@ -1357,12 +1357,12 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
     ofstream  ofs( string(text_file) + ".txt" );
    
     const string   rocktype(parseRockType(RT));
-    const double64 original_sw(Sw_);
+    const double original_sw(Sw_);
     
     ofs <<"rocktype="<< rocktype <<"="<< RT <<"\n";
     ofs <<"sw\t krw(sw,Nc="<< Nc <<"),\t krnw(sw,Nc) \t pc(sw,Nc)\n";
-    //for ( double64 sw(0.); sw<1.05; sw+=0.05 )
-    for ( double64 sw(0.); sw<1.005; sw+=0.005 )
+    //for ( double sw(0.); sw<1.05; sw+=0.05 )
+    for ( double sw(0.); sw<1.005; sw+=0.005 )
       {
          // dynamic parameters
          Initialize(RT,sw,vt);
@@ -1389,10 +1389,10 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
 
 */
 template<size_t dim>
-double64 csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double64 Ncap ) const
+double csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double Ncap ) const
  {
-    const double64 rvc_low_k  = ((Ncap * TwoPhaseModel<dim>::ift_) * L_low_) / (dPc_ * k_low_);
-    const double64 rvc_high_k = ((Ncap * TwoPhaseModel<dim>::ift_) * L_high_) / (dPc_ * k_high_);
+    const double rvc_low_k  = ((Ncap * TwoPhaseModel<dim>::ift_) * L_low_) / (dPc_ * k_low_);
+    const double rvc_high_k = ((Ncap * TwoPhaseModel<dim>::ift_) * L_high_) / (dPc_ * k_high_);
     // 
     return (rvc_high_k * L_high_ + rvc_low_k * L_low_) / (L_low_ + L_high_);
  }

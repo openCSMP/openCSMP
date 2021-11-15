@@ -39,7 +39,7 @@ class ModelPreProcessor2D {
   // UTILITIES FOR PROPERTY MANIPULATION
   private:
     /// computes an average grid-spacing from the distance beween cell centers in a given coordinate direction
-//    double64 AverageGridSpacing( char x_or_y ) const;
+//    double AverageGridSpacing( char x_or_y ) const;
     
   private:
     Model<2U>*  model_ptr_ = 0;

@@ -54,7 +54,7 @@ public:
   void CreateModel( const std::string&     model_name,
                     csmp::VSet<3U>&       vset,
                     csmp::ModelTopology&   model_topology,
-                    const std::vector<double64>& zcorn,
+                    const std::vector<double>& zcorn,
                     std::set<std::string>& regions,
                     std::set<std::string>& faults,
                     std::set<std::string>& wells,
@@ -108,7 +108,7 @@ private:
 
   // These are the model-building steps in order
   void InitializeGridSpecs();
-  void ConstructPillarsAndColumns( const std::vector<double64>& zcorn );
+  void ConstructPillarsAndColumns( const std::vector<double>& zcorn );
   void ConstructFiniteElementsFromColumns( VSet<3U>& vset );
   bool ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_HEXAHEDRON
   bool ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_310_312

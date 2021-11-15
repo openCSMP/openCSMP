@@ -17,7 +17,7 @@ class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
                            		  const char* test,
                            		  const char* upwind,
                            		  const char* trigger,
-                           		  const double64 prefactor = 1. );
+                           		  const double prefactor = 1. );
     
     void ComputeContribution( SIMPLEX& e );
     void GetOperands( SIMPLEX& e );
@@ -31,7 +31,7 @@ class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
     std::vector<ScalarVariable > el_uvar;
     std::vector<ScalarVariable > el_tvar;
     
-    const double64 prefactor_;
+    const double prefactor_;
 };
 
 

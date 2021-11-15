@@ -4,7 +4,6 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <iostream>
-#include "CSMP_number_types.h"
 #ifdef _WIN32
 #include <windows.h>
 #include <iostream>
@@ -69,7 +68,7 @@ std::string CompareFileModifiedTimeStamps(std::string file0_name,std::string fil
     t0 = mktime(&tm0);
     t1 = mktime(&tm1);
 
-    double64 seconds = difftime(t0,t1);
+    double seconds = difftime(t0,t1);
     if (seconds> 0)
         earlier=file1_name;
     else

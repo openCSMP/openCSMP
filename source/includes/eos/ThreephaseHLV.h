@@ -16,41 +16,41 @@ namespace csmp
   public:
 
     /// Pressure-temperature coordinates of threephase Halite+Liquid+Vapor coexistence
-    ThreephaseHLV(const double64& externaltemperature); // [C]
+    ThreephaseHLV(const double& externaltemperature); // [C]
     ~ThreephaseHLV();
 
-    double64            Temperature() const;    // [C]
-    double64            Pressure();             // [Pa]
-    double64            DPressureDT();          // [Pa C-1]
-    double64            Tmax();                 // temperature for the pressure maximum near 590 C
-    double64            Pmax();                 // pressure at that maximum
+    double            Temperature() const;    // [C]
+    double            Pressure();             // [Pa]
+    double            DPressureDT();          // [Pa C-1]
+    double            Tmax();                 // temperature for the pressure maximum near 590 C
+    double            Pmax();                 // pressure at that maximum
 
   private:
 
     ThreephaseHLV();                            // disable default construction
 
-    const double64&     temperature_;           ///< const ref to temperature [C] in flow code
+    const double&     temperature_;           ///< const ref to temperature [C] in flow code
 
-    const double64      f0;                     ///< parameter f0  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f1;                     ///< parameter f1  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f2;                     ///< parameter f2  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f3;                     ///< parameter f3  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f4;                     ///< parameter f4  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f5;                     ///< parameter f5  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f6;                     ///< parameter f6  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f7;                     ///< parameter f7  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f8;                     ///< parameter f8  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f9;                     ///< parameter f9  for eq. 10 in Driesner&Heinrich (2007)
-    const double64      f10;                    ///< parameter f10 for eq. 10 in Driesner&Heinrich (2007)
+    const double      f0;                     ///< parameter f0  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f1;                     ///< parameter f1  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f2;                     ///< parameter f2  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f3;                     ///< parameter f3  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f4;                     ///< parameter f4  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f5;                     ///< parameter f5  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f6;                     ///< parameter f6  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f7;                     ///< parameter f7  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f8;                     ///< parameter f8  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f9;                     ///< parameter f9  for eq. 10 in Driesner&Heinrich (2007)
+    const double      f10;                    ///< parameter f10 for eq. 10 in Driesner&Heinrich (2007)
  
-    double64            tcurrent_;              ///< temperature [C] for internal use
-    double64            myt_;                   ///< tcurrent_/nacl_triple.Temperature() both in [C]
-    double64            pressure_;              ///< pressure [bar], internal use
-    double64            dpressuredt_;           ///< pressure [bar] derivative w.r.t. temperature, internal use
+    double            tcurrent_;              ///< temperature [C] for internal use
+    double            myt_;                   ///< tcurrent_/nacl_triple.Temperature() both in [C]
+    double            pressure_;              ///< pressure [bar], internal use
+    double            dpressuredt_;           ///< pressure [bar] derivative w.r.t. temperature, internal use
 
     void                CheckStatus();
-    double64            Pressure(const double64& myt);
-    double64            DPressureDT(const double64& myt, const double64& t);
+    double            Pressure(const double& myt);
+    double            DPressureDT(const double& myt, const double& t);
 
     TriplePointNaCl     nacl_triple;
   };

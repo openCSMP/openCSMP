@@ -25,54 +25,54 @@ namespace csmp
   {
 
   public:
-    TwophaseLiquid(const double64& externaltemperature, // [C]
-                   const double64& externalpressure,    // [Pa]
-                   const double64& ph2o);               // [Pa]
+    TwophaseLiquid(const double& externaltemperature, // [C]
+                   const double& externalpressure,    // [Pa]
+                   const double& ph2o);               // [Pa]
     ~TwophaseLiquid();
     
-    double64 MassFractionNaCl();                        // [mass fraction NaCl]
+    double MassFractionNaCl();                        // [mass fraction NaCl]
 
   private:
 
     TwophaseLiquid();
 
-    const double64&        temperature_;                ///< internal reference to temperature [C] in flow code
-    const double64&        pressure_;                   ///< internal reference to fluid pressure [P] in flow code
-    const double64&        ph2o_;                       ///< internal reference to water boiling pressure (from Water object, which must have been constructed with the same temperature and fluid pressure variables as constructor arguments)
+    const double&        temperature_;                ///< internal reference to temperature [C] in flow code
+    const double&        pressure_;                   ///< internal reference to fluid pressure [P] in flow code
+    const double&        ph2o_;                       ///< internal reference to water boiling pressure (from Water object, which must have been constructed with the same temperature and fluid pressure variables as constructor arguments)
 
-    const double64         h1_;                         ///< parameter h1 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h2_;                         ///< parameter h2 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h3_;                         ///< parameter h3 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h4_;                         ///< parameter h4 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h5_;                         ///< parameter h5 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h6_;                         ///< parameter h6 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h7_;                         ///< parameter h7 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h8_;                         ///< parameter h8 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h9_;                         ///< parameter h9 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h10_;                        ///< parameter h10 of equation 11 of Driesner & Heinrich, GCA, 2007
-    const double64         h11_;                        ///< parameter h11 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h1_;                         ///< parameter h1 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h2_;                         ///< parameter h2 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h3_;                         ///< parameter h3 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h4_;                         ///< parameter h4 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h5_;                         ///< parameter h5 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h6_;                         ///< parameter h6 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h7_;                         ///< parameter h7 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h8_;                         ///< parameter h8 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h9_;                         ///< parameter h9 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h10_;                        ///< parameter h10 of equation 11 of Driesner & Heinrich, GCA, 2007
+    const double         h11_;                        ///< parameter h11 of equation 11 of Driesner & Heinrich, GCA, 2007
 
-    double64               pdummy_;                     ///< internal pressure variable [Pa] for interfacing with HaliteLiquidus
-    double64               tdummy_;                     ///< internal temperature variable [C] for interfacing with HaliteLiquidus
-    double64               tcurrent_;                   ///< internal temperature variable [C]
-    double64               pcurrent_;                   ///< internal pressure variable [bar]
-    double64               massfractionnacl_;           ///< internal variable for composition 
-    double64               xsat_;                       ///< internal variable for liquidus composition [mole fraction NaCl]
-    double64               xl_;                         ///< internal variable for liquid composition [mole fraction NaCl]
-    double64               pcrit_;                      ///< pressure on critical curve [bar]
-    double64               xcrit_;                      ///< composition on critical curve [mole fraction NaCl]
-    double64               pnacl_;                      ///< NaCl boiling pressure [bar]
-    double64               psat_;                       ///< pressure of threephase vapor+liquid+halite coexistence [bar]
-    double64               ph2obar_;                    ///< water boiling pressure [bar]
-    double64               pcritminph2o_;               ///< pcrit_-ph2o_
-    double64               psatsq_;                     ///< psat_*psat_
-    double64               ph2osq_;                     ///< ph2obar_*ph2obar_
-    double64               g1_;                         ///< parameter g1 of equation 11 of Driesner & Heinrich, GCA, 2007
-    double64               g2_;                         ///< parameter g2 of equation 11 of Driesner & Heinrich, GCA, 2007
+    double               pdummy_;                     ///< internal pressure variable [Pa] for interfacing with HaliteLiquidus
+    double               tdummy_;                     ///< internal temperature variable [C] for interfacing with HaliteLiquidus
+    double               tcurrent_;                   ///< internal temperature variable [C]
+    double               pcurrent_;                   ///< internal pressure variable [bar]
+    double               massfractionnacl_;           ///< internal variable for composition 
+    double               xsat_;                       ///< internal variable for liquidus composition [mole fraction NaCl]
+    double               xl_;                         ///< internal variable for liquid composition [mole fraction NaCl]
+    double               pcrit_;                      ///< pressure on critical curve [bar]
+    double               xcrit_;                      ///< composition on critical curve [mole fraction NaCl]
+    double               pnacl_;                      ///< NaCl boiling pressure [bar]
+    double               psat_;                       ///< pressure of threephase vapor+liquid+halite coexistence [bar]
+    double               ph2obar_;                    ///< water boiling pressure [bar]
+    double               pcritminph2o_;               ///< pcrit_-ph2o_
+    double               psatsq_;                     ///< psat_*psat_
+    double               ph2osq_;                     ///< ph2obar_*ph2obar_
+    double               g1_;                         ///< parameter g1 of equation 11 of Driesner & Heinrich, GCA, 2007
+    double               g2_;                         ///< parameter g2 of equation 11 of Driesner & Heinrich, GCA, 2007
     
     void                   CheckState();
     void                   UpdateParameters();
-    double64               MassFractionNaCl(const double64& t, const double64& p);
+    double               MassFractionNaCl(const double& t, const double& p);
 
     TriplePointNaCl        nacl_triple;
     NaClBoilingCurve       naclboil;
@@ -105,9 +105,9 @@ namespace csmp
      @attention The water boling pressure as constructor argument requires that a Water object is being instantiated before twophase liquid, with the same temperature and fluid pressure as its constructor arguments. Also, before querying TwophaseLiquid::MassFractionNaCl(), one has to makie sure that ph2o has been updated. See code example. I apologize for this odd design but for performance reasons it made sense when created originally.
 
      @code
-     double64 t(somevalue);          // temperature [C] in user's application
-     double64 p(anothervalue);       // fluid pressure [in Pa] in user's application
-     double64 ph2o(yetanothervalue); // water boling pressure [in Pa] in user's application
+     double t(somevalue);          // temperature [C] in user's application
+     double p(anothervalue);       // fluid pressure [in Pa] in user's application
+     double ph2o(yetanothervalue); // water boling pressure [in Pa] in user's application
      ...
      Water          water(t,p);
      TwophaseLiquid twophase_liquid(t,p,ph2o); 

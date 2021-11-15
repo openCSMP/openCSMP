@@ -86,7 +86,7 @@ void RegionProperties_Example::Run()
     printRangeOfVariable( model, "hydraulic conductivity", true );
     // divide it by the node variable 'viscosity' to obtain 'hydraulic conductivity' on integration points
     cout <<"\nmain: dividing it by a constant viscosity:\n";    
-    const double64  viscosity(1.6e-3);
+    const double  viscosity(1.6e-3);
     ConstantFactor<DIM,divides>  Kdiv_mu( model.Database(), "hydraulic conductivity", "hydraulic conductivity", viscosity );
     model.Apply( Kdiv_mu );
     printRangeOfVariable( model, "hydraulic conductivity", true );

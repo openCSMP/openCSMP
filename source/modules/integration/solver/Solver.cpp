@@ -104,8 +104,8 @@ is given inside of the AMG output (see above). It is found as the L2
 vector norm.  
 */ 
 void  Solver::Solve( SparseMatrix& A, 
-                     std::vector<double64>& b,
-                     std::vector<double64>& x,
+                     std::vector<double>& b,
+                     std::vector<double>& x,
                      size_t no_unknowns )
  {
     // checking for consistent sizes 
@@ -113,7 +113,7 @@ void  Solver::Solve( SparseMatrix& A,
       throw csmp::Exception( ERROR, "Solver::Solve", "sparse matrix G cols is not equal to RHS rows");
 
     x.resize( b.size() );
-    vector<double64>(x).swap(x);
+    vector<double>(x).swap(x);
 
     if ( Verbose() ) {
       if ( A.Symmetric() )
@@ -150,8 +150,8 @@ void  Solver::Solve( SparseMatrix& A,
 
 */
 void  Solver::Solve( CompressedRowMatrix& A,
-                     std::vector<double64>& b,
-                     std::vector<double64>& x,
+                     std::vector<double>& b,
+                     std::vector<double>& x,
                      size_t no_unknowns )
 {
   // checking for consistent sizes 
@@ -159,7 +159,7 @@ void  Solver::Solve( CompressedRowMatrix& A,
     throw csmp::Exception( ERROR, "Solver::Solve", "sparse matrix G cols is not equal to RHS rows" );
 
   x.resize( b.size() );
-  vector<double64>( x ).swap( x );
+  vector<double>( x ).swap( x );
 
   if ( Verbose() ) {    
     cout << "\nSolver::SolveMatrixEquation: Global matrix before solution:" << endl;
@@ -216,7 +216,7 @@ A successful write will be reported.
 */
 void  Solver::Out( const SparseMatrix& mat, const char* fname ) const
  {
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     char   file[200], gtime[30];
 
     // appending the global runtime to the file name
@@ -259,9 +259,9 @@ to another solver.
 
 A failure to open the output file or a successful write will be reported. 
 */
-void  Solver::Out( const vector<double64>& vec, const char* fname ) const
+void  Solver::Out( const vector<double>& vec, const char* fname ) const
  {
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     FILE  *fp;
     char   file[200], gtime[30];
 
@@ -273,14 +273,14 @@ void  Solver::Out( const vector<double64>& vec, const char* fname ) const
     strcat( file,".text" );
 
     if ((fp = fopen (file,"wt")) == NULL )
-      throw csmp::Exception( ERROR, "Solver::Out (vector<double64>)", "output file could not be created" );
+      throw csmp::Exception( ERROR, "Solver::Out (vector<double>)", "output file could not be created" );
 
     out( vec );
 
     fclose( fp );
     cout <<"\nSolver:Out: file '"<< file <<"' written successfully."<< endl;
 
- } // end Out vector<double64>   
+ } // end Out vector<double>   
 
 
 
@@ -300,9 +300,9 @@ The global solution matrix, the righthand vector, and the solution vector.
 To calculate the residual of a solution to see whether the solver reached 
 some convergence and how good the solution actually is.  
 */
-double64 Solver::CalculateResidual( const SparseMatrix& A, 
-                                      const vector<double64>& b, 
-                                      const vector<double64>& x ) const
+double Solver::CalculateResidual( const SparseMatrix& A, 
+                                      const vector<double>& b, 
+                                      const vector<double>& x ) const
  {
     if ( b.size() != x.size() ) {
          cout <<"\nSolver::CalculateResidual: Size of solution vector 'x' differs from ";
@@ -311,7 +311,7 @@ double64 Solver::CalculateResidual( const SparseMatrix& A,
       }
  
     const size_t   len(x.size());
-    vector<double64> tvec(len,0.);
+    vector<double> tvec(len,0.);
     
     // calculating residual for actual solution
     for ( size_t i=0U; i<len; i++ ) {
@@ -320,7 +320,7 @@ double64 Solver::CalculateResidual( const SparseMatrix& A,
       }
     
     // calculate the L1 norm
-    vector<double64> scale_vec;
+    vector<double> scale_vec;
     return vector_norm2( tvec, scale_vec );
  }
 

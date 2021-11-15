@@ -100,7 +100,7 @@ void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX&
        for ( size_t k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
        
      // global intpol. function derivative matrix and determinant of Jacobian matrix
-     const double64 volume(e.Volume());
+     const double volume(e.Volume());
      
      // copying scaled derivative matrix so that spatial derivatives are rotated by 90o
      if ( dim == 2U ) for ( size_t j=0; j<e.Nodes(); j++ ) {

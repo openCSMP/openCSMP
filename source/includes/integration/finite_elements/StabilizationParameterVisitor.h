@@ -13,13 +13,13 @@ class StabilizationParameterVisitor : public Visitor<dim> {
   public:
     /// constant viscosity version
     StabilizationParameterVisitor( Model<dim>&,
-                                   double64 mu,    ///< constant viscosity
-                                   double64 coeff, ///< stabilization coefficient
+                                   double mu,    ///< constant viscosity
+                                   double coeff, ///< stabilization coefficient
                                    const char* stab_param );
 
     /// for 'viscosity' as element variable varying from element to element
     StabilizationParameterVisitor( Model<dim>&,
-                                   double64 coeff,
+                                   double coeff,
                                    const char* stab_param );
   
     ~StabilizationParameterVisitor();
@@ -33,10 +33,10 @@ class StabilizationParameterVisitor : public Visitor<dim> {
     csmp::Index stparam_key;
     csmp::Index visc_key_;
     
-    double64 viscosity;
-    double64 coefficient;
-    std::vector<double64> segments;
-    double64 min_segment;
+    double viscosity;
+    double coefficient;
+    std::vector<double> segments;
+    double min_segment;
     ScalarVariable sp;
 };
 

@@ -93,7 +93,7 @@ namespace csmp {
 
 void LinearCuboid_Test::TestInterpolationFunctionValues(const Element<3U>& e)
 	{
-		vector<double64> IPOL(element_.Nodes()), xyz(3U);
+		vector<double> IPOL(element_.Nodes()), xyz(3U);
 		for (size_t i = 0; i < e.Nodes(); i++) {
 			Point<3U> pt = e.N(i)->Coordinate();
 			xyz = pt.Coordinates();
@@ -111,7 +111,7 @@ void LinearCuboid_Test::TestInterpolationFunctionValues(const Element<3U>& e)
 
 void LinearCuboid_Test::TestSumShapesAtBaryCenter(const Element<3U>& e)
 	{
-		std::vector<double64> M;
+		std::vector<double> M;
 		element_.N_AtBaryCenter(M);
 		double sum = 0.;
 		for (size_t i = 0; i < M.size(); ++i) sum += M[i];

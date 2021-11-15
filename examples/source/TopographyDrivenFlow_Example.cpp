@@ -74,14 +74,14 @@ void TopographyDrivenFlow_Example::Run()
     model.InputPropertyValue ( "fluid volume source", makeScalar(PLAIN,0.) );
 
     // atmospheric fluid pressure is assigned to earth surface
-    const double64  p_atm(101325.);
+    const double  p_atm(101325.);
     model.InputBoundaryValue( TOP, "absolute fluid pressure", makeScalar(DIRICH,p_atm) );
 
 
   // --------------------------------------------------------------
   // 2. calculate hydraulic conductivity from permeability
   // --------------------------------------------------------------
-    const double64  fluid_viscosity(1.6e-3); // Pa s-1
+    const double  fluid_viscosity(1.6e-3); // Pa s-1
     ConstantFactor<2U,divides>  conductivity( model.Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );

@@ -51,31 +51,31 @@ class VSet : public VData {
                  size_t nodes, size_t faces, size_t interfaces );
 
     /// node coordinates
-    void AddXYZ( const std::deque<double64>& x,
-                 const std::deque<double64>& y,
-                 const std::deque<double64>& z );
+    void AddXYZ( const std::deque<double>& x,
+                 const std::deque<double>& y,
+                 const std::deque<double>& z );
       
     /// the IDs of the nodes that make up each element 
-    void AddPlist( typename std::map<size_t,std::vector<long64> >::const_iterator first,
-                   typename std::map<size_t,std::vector<long64> >::const_iterator last );
+    void AddPlist( typename std::map<size_t,std::vector<int64_t> >::const_iterator first,
+                   typename std::map<size_t,std::vector<int64_t> >::const_iterator last );
 
-    void AddPlist( typename std::deque<std::vector<long64> >::const_iterator first,
-                   typename std::deque<std::vector<long64> >::const_iterator last );
+    void AddPlist( typename std::deque<std::vector<int64_t> >::const_iterator first,
+                   typename std::deque<std::vector<int64_t> >::const_iterator last );
 
     /// the equi-dimensional neighbors adjacent to the numbered element faces plus boundary identifiers where there is no neighbor
-    void AddPfverts( typename std::map<size_t,std::vector<long64> >::const_iterator first,
-                     typename std::map<size_t,std::vector<long64> >::const_iterator last );
+    void AddPfverts( typename std::map<size_t,std::vector<int64_t> >::const_iterator first,
+                     typename std::map<size_t,std::vector<int64_t> >::const_iterator last );
 
-    void AddPfverts( typename std::deque<std::vector<long64> >::const_iterator first,
-                     typename std::deque<std::vector<long64> >::const_iterator last );
+    void AddPfverts( typename std::deque<std::vector<int64_t> >::const_iterator first,
+                     typename std::deque<std::vector<int64_t> >::const_iterator last );
   
     /// adds BOX_BOUNDARY flag values to VData
     void AddBFlags( typename std::vector<std::int8_t>::const_iterator first,
                     typename std::vector<std::int8_t>::const_iterator last );
 
     /// rocktype identifiers for elements only
-    void AddPmtrl( typename std::vector<int32>::const_iterator first,
-                   typename std::vector<int32>::const_iterator last );
+    void AddPmtrl( typename std::vector<int32_t>::const_iterator first,
+                   typename std::vector<int32_t>::const_iterator last );
   
     /// checks whether the VSet contains any distributed variable values stored in PropertyData objects
     bool  DataEmpty() const;
@@ -90,10 +90,10 @@ class VSet : public VData {
     bool ContainsFiniteVolumeIntegrationPointData() const;
   
     /// const iterators for the material ID record (one for each element; none for face and interface objects)
-    std::vector<int32>::const_iterator PmtrlBegin() const;
-    std::vector<int32>::const_iterator PmtrlEnd() const;
+    std::vector<int32_t>::const_iterator PmtrlBegin() const;
+    std::vector<int32_t>::const_iterator PmtrlEnd() const;
     
-    int32 Pmtrl( size_t elmt ) const { return pmtrl_.at(elmt); }
+    int32_t Pmtrl( size_t elmt ) const { return pmtrl_.at(elmt); }
 
     /// const iterators for the propery collection
     std::map<std::string,PropertyData>::const_iterator PropertyValuesBegin() const;
@@ -102,20 +102,20 @@ class VSet : public VData {
     void RemoveData( const char* s );
 
     /// writes complete VSet to binary file with the given time stamp
-    bool  OutputTo( const char* bin_file, double64 time ) const;
+    bool  OutputTo( const char* bin_file, double time ) const;
   
     /// reads binary files written with OutputTo() and initialises the VSet with it; the time stamp is returned in second argument
-    bool  InputFrom( const char* bin_file, double64& time );
+    bool  InputFrom( const char* bin_file, double& time );
 
     /// reads binary files written with OutputTo() and initialises the VSet with it; the time stamp is returned in second argument; it can read only a subset of variables by using third argument
-    bool  InputFrom( const char* bin_file, double64& time, const std::set<std::string>& subset_variables );
+    bool  InputFrom( const char* bin_file, double& time, const std::set<std::string>& subset_variables );
   
     /// permits to initialise a VSet from a text file (see detailed DOxygen documentation for format)
     bool  InputFromTextFile( const char* file_dot_txt );
   
     /// output VSet to binary file which has partitions and halos defining their overlap
-    bool  ParallelOutputTo( const char* bin_file, double64 time, size_t first_outerhalo ) const;
-    bool  ParallelInputFrom( const char* bin_file, double64& time, size_t& first_outerhalo );
+    bool  ParallelOutputTo( const char* bin_file, double time, size_t first_outerhalo ) const;
+    bool  ParallelInputFrom( const char* bin_file, double& time, size_t& first_outerhalo );
 
     /// select elements specific elements from the VSet that shall be retained while all others are deleted (including nodes)
     void  ReduceTo( const std::map<size_t,size_t>& old_and_new_consecutive_element_ids );
@@ -124,7 +124,7 @@ class VSet : public VData {
     void  Erase();
     
     /// uses the node coordinates to infer the model dimension: if Z-range=zero, dim=2, if Y-range=2, dim=1, else dim=3
-    int32 MeshDimension( bool check_coordinates = false ) const;
+    int32_t MeshDimension( bool check_coordinates = false ) const;
   
     /// prints the VSet to the console
     void  Out( bool data_as_well=true ) const;
@@ -132,7 +132,7 @@ class VSet : public VData {
   protected:
 
     std::map<std::string,PropertyData>  property_map_;  ///< container for variables distributed on the mesh
-    std::vector<int32>                  pmtrl_;         ///<  rocktype identifiers; one per element; for transfer to 'material_id_'
+    std::vector<int32_t>                  pmtrl_;         ///<  rocktype identifiers; one per element; for transfer to 'material_id_'
 
     friend class VSet_Test;
 };

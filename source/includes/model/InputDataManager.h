@@ -243,7 +243,7 @@ class  InputDataManager {
 
     /// FRED was a FRACMAN consortium of Golder Associates, this interface is used in the Fracman GUI
     bool ConfigureFRED_ModelFromFile( Model<dim>&, const char* fname,
-                                      std::map<std::string,std::vector<double64> >& well_data,
+                                      std::map<std::string,std::vector<double> >& well_data,
                                       ComputationalSettings& settings );
 
     /// configures box-shaped ANSYS models output using ANSYS' csp input interface
@@ -256,7 +256,7 @@ private:
     bool ReadBlocks( Model<dim>&,
                      std::ifstream&,
                      std::set<std::string>& regions,
-                     std::map<std::string,std::vector<double64> >& well_data,
+                     std::map<std::string,std::vector<double> >& well_data,
                      ComputationalSettings& settings,
                      bool region_specifications,      // region name from parameter range
                      bool default_property_values,    // default property values

@@ -7,7 +7,7 @@ namespace csmp {
 
 // an ID which is icremented as a fracture is constructed or
 // decremented when it is destructed to count all fractures
-uint32 FRED_Fracture::global_id = 0;
+uint32_t FRED_Fracture::global_id = 0;
 
 
 FRED_Fracture::FRED_Fracture()
@@ -21,10 +21,10 @@ FRED_Fracture::FRED_Fracture()
  }
  
 
-FRED_Fracture::FRED_Fracture( double64        ap,
-                              double64        compr,
-                              double64        perm,
-                              const list<double64>& properties,
+FRED_Fracture::FRED_Fracture( double        ap,
+                              double        compr,
+                              double        perm,
+                              const list<double>& properties,
                               const list<mjl::Point3D>& bry )
  :  id(++global_id),
     fracture_set_id(1),
@@ -51,7 +51,7 @@ FRED_Fracture::FRED_Fracture( const FRED_Fracture& ffr )
  }
  
 
-uint32  FRED_Fracture::ID() const
+uint32_t  FRED_Fracture::ID() const
  {
     return id;
  }
@@ -132,7 +132,7 @@ bool  FRED_Fracture::InitializeFrom( int nprops, ifstream& ifs )
     // 1.1 ID number of fracture
     token           = strtok( text_line, delims ); 
     if ( token == NULL ) return false;
-    id              = static_cast<uint32>(atoi( token )); 
+    id              = static_cast<uint32_t>(atoi( token )); 
     // 1.2 number of points defining it
     token           = strtok( NULL, delims );
     if ( token == NULL ) return false;
@@ -237,7 +237,7 @@ bool FRED_Fracture::operator<( const FRED_Fracture& ffr ) const
 void FRED_Fracture::BaryCenter( mjl::Point3D& ctr ) const
  {
     list<mjl::Point3D>::const_iterator  ita;
-    double64                             points;
+    double                             points;
   
     for ( ctr.Set(0.,0.,0.), points=0.0, 
           ita=boundary.begin(); ita!=boundary.end(); ita++, 
@@ -248,7 +248,7 @@ void FRED_Fracture::BaryCenter( mjl::Point3D& ctr ) const
  }
 
 
-void FRED_Fracture::BaryCenter( double64& x, double64& y, double64& z ) const
+void FRED_Fracture::BaryCenter( double& x, double& y, double& z ) const
  {
     mjl::Point3D  ctr(0.,0.,0.);
     
@@ -259,11 +259,11 @@ void FRED_Fracture::BaryCenter( double64& x, double64& y, double64& z ) const
  }
  
  
-double64  FRED_Fracture::Perimeter() const
+double  FRED_Fracture::Perimeter() const
  {
     list<mjl::Point3D>::const_iterator  ita, itb = boundary.begin();
     mjl::Edge3D                         edge;
-    double64                             perim(0.0);
+    double                             perim(0.0);
   
     // getting segments from point to point
     for ( itb++, ita=boundary.begin(); itb!=boundary.end(); ita++, itb++ ) 
@@ -281,7 +281,7 @@ double64  FRED_Fracture::Perimeter() const
 
 
 // returns diameter of assuming that the fracture has a circular shape
-double64  FRED_Fracture::Diameter() const
+double  FRED_Fracture::Diameter() const
  {
     // u = 2 pi r
     return Perimeter() / PI; 
@@ -312,7 +312,7 @@ void FRED_Fracture::Erase()
  }
 
 // move entire fracture by specified amount 
-void FRED_Fracture::Move( double64 dx, double64 dy, double64 dz )
+void FRED_Fracture::Move( double dx, double dy, double dz )
  {
     list<mjl::Point3D>::iterator  ita;
     mjl::Point3D                  displacement(dx,dy,dz);
@@ -323,7 +323,7 @@ void FRED_Fracture::Move( double64 dx, double64 dy, double64 dz )
 
  
 // move entire fracture by specified amount 
-void FRED_Fracture::Scale( double64 xfac, double64 yfac, double64 zfac )
+void FRED_Fracture::Scale( double xfac, double yfac, double zfac )
  {
     list<mjl::Point3D>::iterator  ita;
     mjl::Point3D                  scale(xfac,yfac,zfac);
@@ -345,7 +345,7 @@ void FRED_Fracture::Out() const
     cout <<"\nPermeability:           "<< permeability;
     
     if ( props.size() > 3 ) {
-         list<double64>::const_iterator  pit = props.begin();
+         list<double>::const_iterator  pit = props.begin();
          cout <<"\nOther property data:    "<< endl;
          pit++, pit++, pit++;
          

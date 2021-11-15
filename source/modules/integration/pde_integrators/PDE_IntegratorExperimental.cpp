@@ -135,7 +135,7 @@ PDE_IntegratorExperimental.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 bool  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Transient() const
- { return !(time_increment_ < numeric_limits<double64>::epsilon()); }
+ { return !(time_increment_ < numeric_limits<double>::epsilon()); }
 
 
 
@@ -151,7 +151,7 @@ Set the time-increment of an PDE_IntegratorExperimental before you Apply() it to
 Model or target Region objects.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void   PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TimeIncrement( double64 dt )
+void   PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TimeIncrement( double dt )
  {
     time_increment_ = dt;
  }
@@ -171,7 +171,7 @@ To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32 precision )
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
    G_.Out( precision );
@@ -334,9 +334,9 @@ instance to use it as initial guess in another time step. (Use method
 FirstGuess)
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double64>& sol ) const {
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double>& sol ) const {
   sol.resize(x_.size());
-  vector<double64>( sol ).swap( sol );
+  vector<double>( sol ).swap( sol );
   copy(x_.begin(), x_.end(), sol.begin());
 }
 
@@ -357,7 +357,7 @@ NOTE: Make sure that you actually use an algebraic multigrid solver object and t
 parameter ifirst in its SAMG_Settings object is set to 0.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double64>& guess ) {
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double>& guess ) {
   assert(guess.size() == x_.size());
   copy(guess.begin(), guess.end(), x_.begin());
 }
@@ -754,10 +754,10 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
    // ----------------------------------------------------------------------
    G_.Resize( offset );
    rh_.resize( offset );
-   if ( trim_vectors_ ) vector<double64>( rh_ ).swap( rh_ );
+   if ( trim_vectors_ ) vector<double>( rh_ ).swap( rh_ );
    fill( rh_.begin(), rh_.end(), 0. );
    x_.resize( offset );
-   if ( trim_vectors_ ) vector<double64>( x_ ).swap( x_ );
+   if ( trim_vectors_ ) vector<double>( x_ ).swap( x_ );
    setup_established_ = true;
 
  } // end EstablishMatrixSetup
@@ -1329,7 +1329,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
                   position = (*gfirst)->Idx() + offset;
                   position = DOF_indexes_[position];
                   if (position != NULL_IDX) {
-                    const double64 sc = this->x_[position];
+                    const double sc = this->x_[position];
                     (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
                   }
                   gfirst++;
@@ -1794,14 +1794,14 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
 
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
-    if ( trim_vectors_ ) vector<double64>(this->rh_).swap(this->rh_);
+    if ( trim_vectors_ ) vector<double>(this->rh_).swap(this->rh_);
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
-    if ( trim_vectors_ ) vector<double64>(this->x_).swap(this->x_);
+    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
 
     pivotVector_.resize(DOF);
     fill(pivotVector_.begin(), pivotVector_.end(), 0.);
-    if ( trim_vectors_ ) vector<double64>(this->x_).swap(this->x_);
+    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
 
  } // end ReduceSystemSizeEliminatingEssentialConditions
 
@@ -1856,15 +1856,15 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMap
     std::map<Parameter,size_t>                   test_operands_;
 
     SparseMatrix            G_;
-    std::vector<double64>   rh_;
-    std::vector<double64>   x_;
+    std::vector<double>   rh_;
+    std::vector<double>   x_;
     Solver*                 solver_;
 
     const size_t            dim2_;
     size_t                  dof_per_node_;
     bool                    setup_established_, retain_matrix_;
     const bool              newed_Solver_object;
-    double64                time_increment_;
+    double                time_increment_;
 
     struct SIZES {
         size_t nodes;
@@ -1873,7 +1873,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMap
 
   private:
 
-    double64                scale_factor_; ///< for essential conditions
+    double                scale_factor_; ///< for essential conditions
     bool                    verbose_;
 
 */

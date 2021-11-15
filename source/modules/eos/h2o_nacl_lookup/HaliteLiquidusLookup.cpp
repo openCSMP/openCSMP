@@ -14,8 +14,8 @@ using namespace std;
 
 namespace csmp
 {
-  HaliteLiquidusLookup::HaliteLiquidusLookup(const double64& externaltemperature, 
-                                             const double64& externalpressure)
+  HaliteLiquidusLookup::HaliteLiquidusLookup(const double& externaltemperature, 
+                                             const double& externalpressure)
     : temperature(externaltemperature), 
       pressure(externalpressure), 
       tcurrent(0.0),
@@ -253,24 +253,24 @@ namespace csmp
 
 
   // The data interpolation routines
-  double64 HaliteLiquidusLookup::Temperature(){     SetTemperatureAndPressure(); return ValueOf(temperature_index);    }
-  double64 HaliteLiquidusLookup::Pressure(){        SetTemperatureAndPressure(); return ValueOf(pressure_index);       }
-  double64 HaliteLiquidusLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
-  double64 HaliteLiquidusLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
-  double64 HaliteLiquidusLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
-  double64 HaliteLiquidusLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
-  double64 HaliteLiquidusLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
-  double64 HaliteLiquidusLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
+  double HaliteLiquidusLookup::Temperature(){     SetTemperatureAndPressure(); return ValueOf(temperature_index);    }
+  double HaliteLiquidusLookup::Pressure(){        SetTemperatureAndPressure(); return ValueOf(pressure_index);       }
+  double HaliteLiquidusLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
+  double HaliteLiquidusLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
+  double HaliteLiquidusLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
+  double HaliteLiquidusLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
+  double HaliteLiquidusLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
+  double HaliteLiquidusLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
 
-  double64 HaliteLiquidusLookup::ReportComposition(){ return ValueOf(composition_index); }
-  double64 HaliteLiquidusLookup::ReportEnthalpy(){    return ValueOf(enthalpy_index); }
+  double HaliteLiquidusLookup::ReportComposition(){ return ValueOf(composition_index); }
+  double HaliteLiquidusLookup::ReportEnthalpy(){    return ValueOf(enthalpy_index); }
 
   // *******************************************************************************
   // for the following three ones, the case of being very close to the melting curve 
   // probably needs special attention
   // *******************************************************************************
 
-  double64 HaliteLiquidusLookup::DCompositionDT()
+  double HaliteLiquidusLookup::DCompositionDT()
   {
     SetTemperatureAndPressure(); 
     tdummy    = tcurrent;
@@ -280,7 +280,7 @@ namespace csmp
     return (x_high-ReportComposition())/0.1;
   }
 
-  double64 HaliteLiquidusLookup::DEnthalpyDT()
+  double HaliteLiquidusLookup::DEnthalpyDT()
   {
     SetTemperatureAndPressure(); 
     tdummy    = tcurrent;
@@ -290,7 +290,7 @@ namespace csmp
     return (x_high-ReportEnthalpy())/0.1;
   }
 
-  double64 HaliteLiquidusLookup::DSaltMassFractionDT()
+  double HaliteLiquidusLookup::DSaltMassFractionDT()
   {
     SetTemperatureAndPressure(); 
     tdummy    = tcurrent;
@@ -302,7 +302,7 @@ namespace csmp
 
 
 
-  double64 HaliteLiquidusLookup::ValueOf(const int& property_index)
+  double HaliteLiquidusLookup::ValueOf(const int& property_index)
   {
     SetTemperatureAndPressure();
 
@@ -400,7 +400,7 @@ namespace csmp
   }
 
 	
-  double64 HaliteLiquidusLookup::NormalInterpolation( const int& property_index )
+  double HaliteLiquidusLookup::NormalInterpolation( const int& property_index )
   {
     //d     cout << "Using HaliteLiquidusLookup::NormalInterpolation( const int& property_index ) ...\n";
 
@@ -426,7 +426,7 @@ namespace csmp
     return value_interpolated;
   }
 
-  double64 HaliteLiquidusLookup::NearVLHMaxInterpolation(const int& property_index)
+  double HaliteLiquidusLookup::NearVLHMaxInterpolation(const int& property_index)
   {
     // Feb. 2011
     // The following treatment strongl;y relies on a correct detrmination that we are
@@ -579,7 +579,7 @@ namespace csmp
       }
   }
 
-  double64 HaliteLiquidusLookup::NearVLHInterpolationLowT( const int& property_index )
+  double HaliteLiquidusLookup::NearVLHInterpolationLowT( const int& property_index )
   {
     //d 	cout << "Using HaliteLiquidusLookup::NearVLHInterpolationLowT( const int& property_index ) ...\n";
     tvlh      = vlh_liquid.TfromP(pcurrent,300.0e0);
@@ -725,7 +725,7 @@ namespace csmp
 
 
 
-  double64 HaliteLiquidusLookup::NearVLHInterpolationHighT( const int& property_index )
+  double HaliteLiquidusLookup::NearVLHInterpolationHighT( const int& property_index )
   {
     //d  cout << "Using HaliteLiquidusLookup::NearVLHInterpolationHighT( const int& property_index ) ...\n";
     tvlh      = vlh_liquid.TfromP(pcurrent,700.0e0);
@@ -862,7 +862,7 @@ namespace csmp
 
 
 
-  double64 HaliteLiquidusLookup::NearNaClMeltInterpolation( const int& property_index )
+  double HaliteLiquidusLookup::NearNaClMeltInterpolation( const int& property_index )
   {
     //    cout << "Using HaliteLiquidusLookup::NearNaClMeltInterpolation( const int& property_index ) ...\n";
 
@@ -1008,7 +1008,7 @@ namespace csmp
   }
 
 
-  void HaliteLiquidusLookup::GetTemperatureIndex(const double64& t)
+  void HaliteLiquidusLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-  0.0)/t_res ); }
@@ -1027,7 +1027,7 @@ namespace csmp
     // t_dim is therefore (1000-550)/10+285 + 1 = 331
   }
     
-  void HaliteLiquidusLookup::GetPressureIndex(const double64& p)
+  void HaliteLiquidusLookup::GetPressureIndex(const double& p)
   {
     // new version
     if(     p <=   20.0e5){ p_res =   0.5e5; ip =     static_cast<long>( (p-   0.5e5)/p_res ); }    

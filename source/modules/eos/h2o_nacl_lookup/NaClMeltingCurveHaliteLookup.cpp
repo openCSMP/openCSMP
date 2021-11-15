@@ -11,8 +11,8 @@ using namespace std;
 
 namespace csmp
 {
-  NaClMeltingCurveHaliteLookup::NaClMeltingCurveHaliteLookup(const double64& externaltemperature,
-                                                             const double64& externalpressure)
+  NaClMeltingCurveHaliteLookup::NaClMeltingCurveHaliteLookup(const double& externaltemperature,
+                                                             const double& externalpressure)
     : temperature(externaltemperature),
       pressure(externalpressure),
       tcurrent(0.0),
@@ -156,17 +156,17 @@ namespace csmp
 
 
   // The data interpolation routines
-  double64 NaClMeltingCurveHaliteLookup::TmeltFromP(){ pcurrent = pressure; return TfromP(pcurrent); }
-  double64 NaClMeltingCurveHaliteLookup::PmeltFromT(){      return ValueOf(pressure_index); }
-  double64 NaClMeltingCurveHaliteLookup::MassFractionNaCl(){return ValueOf(composition_index); }
-  double64 NaClMeltingCurveHaliteLookup::Density(){         return ValueOf(density_index); }
-  double64 NaClMeltingCurveHaliteLookup::Enthalpy(){        return ValueOf(enthalpy_index); }
-  double64 NaClMeltingCurveHaliteLookup::HeatCapacity(){    return ValueOf(heatcapacity_index); }
-  double64 NaClMeltingCurveHaliteLookup::Compressibility(){ return ValueOf(compressibility_index); }
-  double64 NaClMeltingCurveHaliteLookup::Viscosity(){       return ValueOf(viscosity_index); }
+  double NaClMeltingCurveHaliteLookup::TmeltFromP(){ pcurrent = pressure; return TfromP(pcurrent); }
+  double NaClMeltingCurveHaliteLookup::PmeltFromT(){      return ValueOf(pressure_index); }
+  double NaClMeltingCurveHaliteLookup::MassFractionNaCl(){return ValueOf(composition_index); }
+  double NaClMeltingCurveHaliteLookup::Density(){         return ValueOf(density_index); }
+  double NaClMeltingCurveHaliteLookup::Enthalpy(){        return ValueOf(enthalpy_index); }
+  double NaClMeltingCurveHaliteLookup::HeatCapacity(){    return ValueOf(heatcapacity_index); }
+  double NaClMeltingCurveHaliteLookup::Compressibility(){ return ValueOf(compressibility_index); }
+  double NaClMeltingCurveHaliteLookup::Viscosity(){       return ValueOf(viscosity_index); }
     
     
-  double64 NaClMeltingCurveHaliteLookup::ValueOf(const int& property_index)
+  double NaClMeltingCurveHaliteLookup::ValueOf(const int& property_index)
   {
     tcurrent = temperature;
     GetTemperatureIndex(tcurrent);
@@ -177,7 +177,7 @@ namespace csmp
     
     
   // data indexing
-  void NaClMeltingCurveHaliteLookup::GetTemperatureIndex(const double64& t)
+  void NaClMeltingCurveHaliteLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-  0.0)/t_res ); }
@@ -198,7 +198,7 @@ namespace csmp
   }
 
 
-  double64 NaClMeltingCurveHaliteLookup::TfromP(const double64& press)
+  double NaClMeltingCurveHaliteLookup::TfromP(const double& press)
   {
     i_max    = it_max;
     i_guess  = it_max/2;

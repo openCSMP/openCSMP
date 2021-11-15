@@ -30,10 +30,10 @@ void printVector( const std::vector<double>& v )
 
 The target vector.  
 */
-void printVector( const vector<vector<double64> >& array )
+void printVector( const vector<vector<double> >& array )
  {
-    vector<vector<double64> >::const_iterator    it;
-    vector<double64>::const_iterator             tit;
+    vector<vector<double> >::const_iterator    it;
+    vector<double>::const_iterator             tit;
     size_t n;
 
     cout.setf(ios::scientific);
@@ -66,10 +66,10 @@ Prints argument vector of vectors to screen for examination.
 
 The target vector.  
 */
-void printVector( const char* headline, const vector<vector<double64> >& array )
+void printVector( const char* headline, const vector<vector<double> >& array )
  {
-    vector<vector<double64> >::const_iterator    it;
-    vector<double64>::const_iterator             tit;
+    vector<vector<double> >::const_iterator    it;
+    vector<double>::const_iterator             tit;
     size_t n;
 
     cout <<"\n"<< headline << endl;

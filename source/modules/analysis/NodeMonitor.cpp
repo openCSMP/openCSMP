@@ -39,11 +39,11 @@ NodeMonitor<dim>::~NodeMonitor()
     
     
 template<size_t dim>
-void NodeMonitor<dim>::ScalarPropertyValues( const Model<dim>& sg, double64 time )
+void NodeMonitor<dim>::ScalarPropertyValues( const Model<dim>& sg, double time )
  {
     list<string>::const_iterator        lit;
     map<string,size_t>::const_iterator  nit;
-    double64                            value;
+    double                            value;
     const Region<dim>&          sgroup(sg.Region("Model"));
     
     // for all properties for which values shall be monitored
@@ -113,15 +113,15 @@ void NodeMonitor<dim>::Out( const char* text_file ) const
 
          // for all timesteps
          // model_time       property      groupname property ranges
-         for ( typename map<double64,map<std::string,map<std::string,double64> > >::const_iterator
+         for ( typename map<double,map<std::string,map<std::string,double> > >::const_iterator
                it=values.begin(); it!=values.end(); it++ ) {
               // the time
               ofs << (*it).first <<"\t";
               // the property data-record searched in the map
-              typename map<string,map<std::string,double64> >::const_iterator prop_it=(*it).second.find(*iit);
+              typename map<string,map<std::string,double> >::const_iterator prop_it=(*it).second.find(*iit);
               if ( prop_it != (*it).second.end() )
                 // for all property values recorded for the groups
-                for ( typename map<std::string,double64>::const_iterator
+                for ( typename map<std::string,double>::const_iterator
                       pit=(*prop_it).second.begin(); pit!=(*prop_it).second.end(); pit++ )
                   // writing values to file
                   ofs << (*pit).second <<"\t";

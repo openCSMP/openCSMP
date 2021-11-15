@@ -46,7 +46,7 @@ class DenseMatrix {
   public:
     DenseMatrix();
     DenseMatrix( size_t m, size_t n );
-    DenseMatrix( size_t m, size_t n, double64 val );
+    DenseMatrix( size_t m, size_t n, double val );
     DenseMatrix( const DenseMatrix& );
     DenseMatrix( DenseMatrix&& )= default;
     ~DenseMatrix();
@@ -54,12 +54,12 @@ class DenseMatrix {
     size_t Cols() const;
     void Resize( size_t m, size_t n );
     /// accessors M(i,j)
-    double64&       operator()( size_t m, size_t n );
-    const double64& operator()( size_t m, size_t n ) const;
+    double&       operator()( size_t m, size_t n );
+    const double& operator()( size_t m, size_t n ) const;
     /// assignment
     DenseMatrix& operator=( const DenseMatrix& );
     DenseMatrix& operator=( DenseMatrix&& ) = default;
-    DenseMatrix& operator=( double64 );
+    DenseMatrix& operator=( double );
     DenseMatrix& operator+=( const DenseMatrix& );
     DenseMatrix& operator-=( const DenseMatrix& );
     DenseMatrix  operator+( const DenseMatrix& ) const;
@@ -67,24 +67,24 @@ class DenseMatrix {
     /// matrix - matrix multiplication -> M(A.rows,B.cols) (NB: creates temporary M)
     DenseMatrix& operator*=( const DenseMatrix& );
     /// matrix vector multiplication
-    DenseMatrix& operator*=( const std::vector<double64>& );
+    DenseMatrix& operator*=( const std::vector<double>& );
     /// rhs is a C-array
-    DenseMatrix& operator*=( const double64* );
-    DenseMatrix& operator*=( double64 );
+    DenseMatrix& operator*=( const double* );
+    DenseMatrix& operator*=( double );
     /// C = A B, matrix - matrix multiplication -> M(A.rows,B.cols) returns temporary matrix
     DenseMatrix  operator*( const DenseMatrix& ) const;
 
 
     void Identity();
-    void AssignToDiagonal( size_t diag_elmts, const double64& sc );
+    void AssignToDiagonal( size_t diag_elmts, const double& sc );
     /// returns vec = Mat * unity vector
-    void RowCondenseTo( std::vector<double64>& ) const;
+    void RowCondenseTo( std::vector<double>& ) const;
     void Zero();
     void ZeroRow( size_t row );
     void ZeroCol( size_t col );
-    void Fill( double64 val );
-    void FillRow( size_t row, double64 val );
-    void FillCol( size_t col, double64 val );
+    void Fill( double val );
+    void FillRow( size_t row, double val );
+    void FillCol( size_t col, double val );
     /// RES = M^T into its argument
     void Transposed( DenseMatrix& ) const;
     /// RES = M^T M
@@ -93,12 +93,12 @@ class DenseMatrix {
     void MultiplyWithTransposedOf( const DenseMatrix&, DenseMatrix& ) const;
     /// RES = A^T B
     void MultiplyTransposedOfWith( const DenseMatrix&, DenseMatrix& ) const;
-    double64   RowSum( size_t row ) const;
-    double64   ColSum( size_t col ) const;
+    double   RowSum( size_t row ) const;
+    double   ColSum( size_t col ) const;
     /// unscaled L1 matrix norm
-    double64   NormL1() const;
+    double   NormL1() const;
     /// L_infinity matrix norm
-    double64   NormL_Infinity() const;
+    double   NormL_Infinity() const;
 
     void In();
     void Out( long digits=5L ) const;
@@ -161,7 +161,7 @@ class DenseMatrix {
 #endif
   
   private:
-   std::array<std::array<double64,mn_max>, mn_max> data;
+   std::array<std::array<double,mn_max>, mn_max> data;
    size_t  rows, cols;
    
    bool  CheckRange( size_t m, size_t n, const char* originator ) const;
@@ -183,12 +183,12 @@ DenseMatrix<mn_max>  operator*( const DenseMatrix<mn_max>& a,
                                 const DenseMatrix<mn_max>& b );
 
 template<size_t mn_max>
-std::vector<double64>  operator*( const DenseMatrix<mn_max>& mat,
-                                  const std::vector<double64>& );
+std::vector<double>  operator*( const DenseMatrix<mn_max>& mat,
+                                  const std::vector<double>& );
 
 /// v^T = (v^T M)^T
 template<size_t mn_max>
-DenseMatrix<mn_max>  operator*( const std::vector<double64>& v,
+DenseMatrix<mn_max>  operator*( const std::vector<double>& v,
                                 const DenseMatrix<mn_max>& M );
 
 } // csmp

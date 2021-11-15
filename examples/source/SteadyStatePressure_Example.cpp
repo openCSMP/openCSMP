@@ -90,9 +90,9 @@ void SteadyStatePressure_Example::Run()
   // 0.4 Scaling the geometrical input object that will become the Region
   //    The origin of the object is assumed to be zero.
   cout <<"\nmain: Please enter the horizontal and vertical dimensions of the model (m): ";
-  double64 extent1, extent2;
+  double extent1, extent2;
   cin >> extent1 >> extent2;
-  double64 zero(0.);
+  double zero(0.);
   vset.ScaleCoordinateToRange( 'x', zero, extent1 );
   vset.CoordinateRange( 'x', zero, extent1 );
   cout <<"\nAssigned X range: "<< zero <<" to "<< extent1 << " meter." << endl;
@@ -122,7 +122,7 @@ void SteadyStatePressure_Example::Run()
   // 4. Calculation of hydraulic conductivity from permeability using Interrelation subclass
   // ---------------------------------------------------------------------------------------
   //  model.OutputVariableToScreen("permeability");
-  const double64 fluid_viscosity(1.0e-03);
+  const double fluid_viscosity(1.0e-03);
   ConstantFactor<2U,divides>  conductivity( model.Database(),
                                            "conductivity", "permeability",
                                             fluid_viscosity );
@@ -208,7 +208,7 @@ void SteadyStatePressure_Example::Run()
   model.FormRegionFrom( "granite", "permeability", 1.0e-21, 1.0e-18 );
 
   // add fluid volume source term to region granite and repeat computation
-  const double64 source_term(1.0e-13); // m3 m-2 s-1
+  const double source_term(1.0e-13); // m3 m-2 s-1
   model.Region("granite").InputPropertyValue( "fluid volume source", makeScalar(PLAIN,source_term) );
 
   // fixing pressure at perimeter of group
@@ -233,8 +233,8 @@ void SteadyStatePressure_Example::Run()
   // ---------------------------------------------------------------------------------------
   // 9. finding the pressure value at a point of interest
   // ---------------------------------------------------------------------------------------
-  map<size_t,std::vector<double64> >  points;
-  vector<double64>  point1(2);
+  map<size_t,std::vector<double> >  points;
+  vector<double>  point1(2);
   point1[0] = 5000.; point1[1] = 2000.;
   cout <<"\nmain: Please enter the x and y coordinates of a point at which you would like to know the 'fluid pressure' (m): ";
   cin >> point1[0] >> point1[1];

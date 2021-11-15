@@ -350,7 +350,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
   // Storage for nodes
    {
-      vector<double64> coord( dim );
+      vector<double> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
           for ( size_t j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
@@ -362,7 +362,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    {
       const LocalVariables evars( phys_vars.LocalVariablesAt( ELEMENT ) );
       const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
-      typename deque<vector<long64>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
+      typename deque<vector<int64_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
       size_t elmt_idx(0);
       // 2.1 If the MeshManager contains only one element type
@@ -400,7 +400,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
 
-  const long64 n_elmts(elements_.size());
+  const int64_t  n_elmts(elements_.size());
   if ( vset.WithNeighbourConnectivity() ) {
        for ( auto& e : elements_ ) {
             const int8_t csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e->Idx() );
@@ -409,7 +409,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             for ( size_t j = 0U, nidx = 0U; j < neighbors; ++j ) {
                   // if there is a neighbor (as is the case if the stored index is greater than zero)
                   if ( j < vset.PfvertsSize( e->Idx() ) ) {
-                      const long64 index(vset.Pfvert( e->Idx(), j ));
+                      const int64_t  index(vset.Pfvert( e->Idx(), j ));
                       if ( index >= n_elmts ) {
                            cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
                            csmp_error.notice( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
@@ -442,8 +442,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( FACE ) );
 
        // the faces are numbered  elements to (elements + faces - 1), but they are stored in connector at Face 0..n-1
-       long64  face_idx(vset.Elements());
-       typename deque<vector<long64> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
+       int64_t   face_idx(vset.Elements());
+       typename deque<vector<int64_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
             const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( face_idx ));
             if ( csmpElementType == UNKNOWN ) {
@@ -472,7 +472,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
          csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for Face objects; nothing was done." );
        else
          {
-            const long64 n_faces(faces_.size());
+            const int64_t  n_faces(faces_.size());
             for ( auto& e : faces_ )
               {
                  // Equidimensional Face neighbors first
@@ -482,7 +482,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                    {
                       // if there is a neighbor (as is the case if the stored index is greater than zero)
                       // (e->Idx() starts with elements=first face)
-                      const long64 index( vset.Pfvert( e->Idx(), j ) );
+                      const int64_t  index( vset.Pfvert( e->Idx(), j ) );
                       if ( index >= n_elmts+n_faces ) {
                            cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + n_faces << endl;
                            csmp_error.notice( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
@@ -500,7 +500,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  // (are stored in VSet 'pfverts' record after the equidimensional neighbors)
                  // index of inner neighbor element i which is always there
                  // Inside neighbor 1
-                 const long64 index1( vset.Pfvert( e->Idx(), neighbors ) );
+                 const int64_t  index1( vset.Pfvert( e->Idx(), neighbors ) );
                  if ( index1 >= n_elmts ) {
                       cerr <<"\n\tFace "<< e->Idx() <<": "<< index1 <<" vs. "<< n_elmts <<" elements.\n";
                       csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of first higher-dimensional element of Face out of range.");
@@ -511,7 +511,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                    }
 
                  // Outside neighbor 2: outer neighbor element will only be there if Face on INTERNAL model boundary
-                 const long64 index2( vset.Pfvert( e->Idx(), neighbors + 1U ) );
+                 const int64_t  index2( vset.Pfvert( e->Idx(), neighbors + 1U ) );
                  if ( index2 >= n_elmts ) {
                       cerr <<"\n\tFace "<< e->Idx() <<": "<< index2 <<" vs. "<< n_elmts <<" elements.\n";
                       csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of second higher-dimensional element of Face out of range.");
@@ -542,7 +542,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        const LocalVariables evars( phys_vars.LocalVariablesAt( INTER_FACE ) );
        const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( INTER_FACE ) );
 
-       typename deque<vector<long64> >::const_iterator  first( vset.PlistInterFacesBegin() ),
+       typename deque<vector<int64_t> >::const_iterator  first( vset.PlistInterFacesBegin() ),
                                                         last( vset.PlistInterFacesEnd() );
 
        size_t interface_idx(vset.Elements() + vset.Faces());
@@ -585,8 +585,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        // necessary info is stored in 'pfverts' record for InterFace: inner nbors first, then outer, then higher-dimensional ones
        if ( csmp_error.Verbose() )
          cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
-       const long64 n_faces(faces_.size()), n_interfaces(interfaces_.size());
-       const long64 cells(n_elmts+n_faces+n_interfaces);
+       const int64_t  n_faces(faces_.size()), n_interfaces(interfaces_.size());
+       const int64_t  cells(n_elmts+n_faces+n_interfaces);
        // connecting interfaces to their higher-dimensional neighbors
        for ( auto& e : interfaces_ )
          {
@@ -596,7 +596,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             for ( size_t j = 0U; j<neighbors; ++j )
               {
                  // if there is a neighbor (as is the case if the stored index is greater than zero)
-                 const long64 index( vset.Pfvert( e->Idx(), j ) );
+                 const int64_t  index( vset.Pfvert( e->Idx(), j ) );
                  if ( index >= cells ) {
                       cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< cells << endl;
                       csmp_error.notice( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
@@ -623,8 +623,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                 csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace out of range.");
              }
            // assignment: inner and outer Element objects
-           const long64 index1 = vset.Pfvert( e->Idx(), neighbors );
-           const long64 index2 = vset.Pfvert( e->Idx(), neighbors+1U );
+           const int64_t  index1 = vset.Pfvert( e->Idx(), neighbors );
+           const int64_t  index2 = vset.Pfvert( e->Idx(), neighbors+1U );
            assert( index1 < cells );
            assert( index2 < cells );
            assert( index1 > MULTIPLE );
@@ -640,7 +640,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
            e->ParentFaceID( INSIDE,  inner_face_id );
            e->ParentFaceID( OUTSIDE, outer_face_id );
            // assignment: intervening Element or neighbor boundary flag
-           const long64 index3 = vset.Pfvert( e->Idx(), neighbors+4U );
+           const int64_t  index3 = vset.Pfvert( e->Idx(), neighbors+4U );
            assert( index3 < elements_.size() );
            assert( index3 > MULTIPLE );
            Element<dim>* const middleElement = (index3 < 0) ? nullptr : elements_[index3];
@@ -894,10 +894,10 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
 
    // searching the mesh tree for a node with the same location (using the provided point as a start location)
    Node<dim>*            nptr( nodes_[nearby_node] );
-   double64              new_distance(pt.DistanceTo(nptr->Coordinate())), old_distance(1e30);
-   map<double64,size_t>  distances;
+   double              new_distance(pt.DistanceTo(nptr->Coordinate())), old_distance(1e30);
+   map<double,size_t>  distances;
    // estimating a tolerance on the basis of the distance of the point to the node and the first node
-   const double64 tolerance = 1.0e-7 * (new_distance + pt.DistanceTo(nodes_[0]->Coordinate())) / 2.;
+   const double tolerance = 1.0e-7 * (new_distance + pt.DistanceTo(nodes_[0]->Coordinate())) / 2.;
    while ( old_distance > new_distance )
      {
         // tree travel: looping the neighbor nodes of the current node, finding the one that is the closest to the point
@@ -934,7 +934,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
                                                   const LocalVariables& lvars,
                                                   const IntegrationPointVariables& ivars,
                                                   const std::vector<Node<dim>*>& nodes,
-                                                  int32 material_id )
+                                                  int32_t material_id )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -996,7 +996,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
                                                              const LocalVariables& lvars,
                                                              const IntegrationPointVariables& ivars,
                                                              const vector<Node<dim>*>& nodes,
-                                                             int32 material_id )
+                                                             int32_t material_id )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1930,20 +1930,20 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                 // else this is a manifold and two most suitable neighbors must be found
                 else if ( n_face_nbors > 2 ) { // TODO: test
                      // finding all possible combinations of surface elements
-                     vector<long64> sequence( n_face_nbors );
+                     vector<int64_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
                      const size_t            n_samples{2};
-                     deque<vector<long64> >  combinations;
+                     deque<vector<int64_t> >  combinations;
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces or line elements with the smallest acute angle between them
-                     map<double64,size_t>  ordered_combinations;
+                     map<double,size_t>  ordered_combinations;
                      for ( size_t i{0}; i < n_combinations; ++i ) {
                           CELL<3>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<3>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
-                          const double64 angle = ( ptr1->IsSurfaceElement() && ptr2->IsSurfaceElement() ) ?
+                          const double angle = ( ptr1->IsSurfaceElement() && ptr2->IsSurfaceElement() ) ?
                                                    angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
                           // using smallest angle
-                          const double64 acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
                           // ordering
                           ordered_combinations.insert( make_pair(acute_angle,i) );
                        }
@@ -2098,18 +2098,18 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                 // else this is a manifold and two most suitable neighbors must be found
                 else if ( n_face_nbors > 2 ) { // TODO: test
                      // finding all possible combinations of surface elements
-                     vector<long64> sequence( n_face_nbors );
+                     vector<int64_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
                      const size_t            n_samples{2};
-                     deque<vector<long64> >  combinations;
+                     deque<vector<int64_t> >  combinations;
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces with the smallest acute angle between them
-                     map<double64,size_t>  ordered_combinations;
+                     map<double,size_t>  ordered_combinations;
                      for ( size_t i{0}; i < n_combinations; ++i ) {
                           CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
-                          const double64 angle = angleBetweenLineCells( ptr1, ptr2 );
-                          const double64 acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          const double angle = angleBetweenLineCells( ptr1, ptr2 );
+                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
                           // ordering
                           ordered_combinations.insert( make_pair(acute_angle,i) );
                        }
@@ -2699,7 +2699,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   
   // 'pmtrl' stored exclusively on elements
   // =========================================
-  vector<int32> pmtrl;
+  vector<int32_t> pmtrl;
   pmtrl.reserve( elements_.size() );
   for ( auto e : elements_ )
     pmtrl.push_back( e->Material_ID() );
@@ -5026,7 +5026,7 @@ bool  MeshManager<dim>::HybridElementMesh() const
        @date 2018
 */
 template<size_t dim>
-int32  MeshManager<dim>::CheckElementConnectivity() const
+int32_t  MeshManager<dim>::CheckElementConnectivity() const
 {
   cout <<"\nMeshManager::CheckElementConnectivity: checking mesh..."<< endl;
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -5037,7 +5037,7 @@ int32  MeshManager<dim>::CheckElementConnectivity() const
   // --------------------------------------------------------------------
   // 3. detecting whether region contains lower-dimensional elements
   // --------------------------------------------------------------------
-  int32 errors(0);
+  int32_t errors(0);
 
   bool with_volume_elements( false );
   bool with_surface_elements( false );
@@ -5049,8 +5049,8 @@ int32  MeshManager<dim>::CheckElementConnectivity() const
       else if ( !with_volume_elements && it->IsVolumeElement() )		with_volume_elements = true;
     }
 
-  int32 dimension_counter( 0 );
-  int32 highest_spatial_dim( 1 );
+  int32_t dimension_counter( 0 );
+  int32_t highest_spatial_dim( 1 );
   if ( with_volume_elements )  dimension_counter++;
   if ( with_surface_elements ) dimension_counter++;
   if ( with_line_elements )    dimension_counter++;

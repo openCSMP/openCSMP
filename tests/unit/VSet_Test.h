@@ -93,7 +93,7 @@ void VSet_Test::run()
 
   // .)DATA OPS
   // TODO: use PropertyData interface rather than the deprecated FEM_Data interface
-  std::deque<double64> px, py, pz;
+  std::deque<double> px, py, pz;
   for( size_t i = 0; i < 13; ++i )
   {
     px.push_back( (double)i*10 );
@@ -107,14 +107,14 @@ void VSet_Test::run()
     _test( vset4.Py( i ) == (double)i*10 );
     _test( vset4.Pz( i ) == (double)i*10 );
   }
-  std::map<size_t,std::vector<long64> > plist;
-  std::vector<long64> plist1;
+  std::map<size_t,std::vector<int64_t> > plist;
+  std::vector<int64_t> plist1;
   plist1.push_back( 0 ); plist1.push_back( 1 ); plist1.push_back( 4 ); plist1.push_back( 3 );
   plist1.push_back( 6 ); plist1.push_back( 7 ); plist1.push_back( 10 ); plist1.push_back( 9 );
-  std::vector<long64> plist2;
+  std::vector<int64_t> plist2;
   plist2.push_back( 1 ); plist2.push_back( 2 ); plist2.push_back( 5 ); plist2.push_back( 4 );
   plist2.push_back( 7 ); plist2.push_back( 8 ); plist2.push_back( 11 ); plist2.push_back( 10 );
-  std::vector<long64> plist3;
+  std::vector<int64_t> plist3;
   plist3.push_back( 2 ); plist3.push_back( 5 ); plist3.push_back( 11 ); plist3.push_back( 8 ); plist3.push_back( 12 );
   plist.insert( make_pair( 0, plist1 ) );
   plist.insert( make_pair( 1, plist2 ) );
@@ -126,7 +126,7 @@ void VSet_Test::run()
   _test( vset4.Plist( 1, 0 ) == 1 ); _test( vset4.Plist( 1, 1 ) == 2 ); _test( vset4.Plist( 1, 2 ) == 5 ); _test( vset4.Plist( 1, 3 ) == 4 );
   _test( vset4.Plist( 1, 4 ) == 7 ); _test( vset4.Plist( 1, 5 ) == 8 ); _test( vset4.Plist( 1, 6 ) == 11 ); _test( vset4.Plist( 1, 7 ) == 10 );
   _test( vset4.Plist( 2, 0 ) == 2 ); _test( vset4.Plist( 2, 1 ) == 5 ); _test( vset4.Plist( 2, 2 ) == 11 ); _test( vset4.Plist( 2, 3 ) == 8 ); _test( vset4.Plist( 2, 4 ) == 12 );
-  std::deque<std::vector<long64> > plistDeque;
+  std::deque<std::vector<int64_t> > plistDeque;
   plistDeque.push_back( plist1 );
   plistDeque.push_back( plist2 );
   plistDeque.push_back( plist3 );
@@ -137,13 +137,13 @@ void VSet_Test::run()
   _test( vset4.Plist( 1, 0 ) == 1 ); _test( vset4.Plist( 1, 1 ) == 2 ); _test( vset4.Plist( 1, 2 ) == 5 ); _test( vset4.Plist( 1, 3 ) == 4 );
   _test( vset4.Plist( 1, 4 ) == 7 ); _test( vset4.Plist( 1, 5 ) == 8 ); _test( vset4.Plist( 1, 6 ) == 11 ); _test( vset4.Plist( 1, 7 ) == 10 );
   _test( vset4.Plist( 2, 0 ) == 2 ); _test( vset4.Plist( 2, 1 ) == 5 ); _test( vset4.Plist( 2, 2 ) == 11 ); _test( vset4.Plist( 2, 3 ) == 8 ); _test( vset4.Plist( 2, 4 ) == 12 );
-  std::vector<long64> pfverts1;
+  std::vector<int64_t> pfverts1;
   pfverts1.push_back( 99 ); pfverts1.push_back( 1 ); pfverts1.push_back( 99 ); pfverts1.push_back( 99 ); pfverts1.push_back( 99 ); pfverts1.push_back( 99 );
-  std::vector<long64> pfverts2;
+  std::vector<int64_t> pfverts2;
   pfverts2.push_back( 99 ); pfverts2.push_back( 3 ); pfverts2.push_back( 99 ); pfverts2.push_back( 0 ); pfverts2.push_back( 99 ); pfverts2.push_back( 99 );
-  std::vector<long64> pfverts3;
+  std::vector<int64_t> pfverts3;
   pfverts3.push_back( 1 ); pfverts3.push_back( 99 ); pfverts3.push_back( 99 ); pfverts3.push_back( 99 ); pfverts3.push_back( 99 ); pfverts3.push_back( 99 );
-  std::map<size_t,std::vector<long64> > pfverts;
+  std::map<size_t,std::vector<int64_t> > pfverts;
   pfverts.insert( make_pair( 0, pfverts1 ) );
   pfverts.insert( make_pair( 1, pfverts2 ) );
   pfverts.insert( make_pair( 2, pfverts3 ) );
@@ -154,7 +154,7 @@ void VSet_Test::run()
   _test( vset4.Pfvert( 1, 3 ) == 0 );  _test( vset4.Pfvert( 1, 4 ) == 99 );  _test( vset4.Pfvert( 1, 5 ) == 99 );
   _test( vset4.Pfvert( 2, 0 ) == 1 );  _test( vset4.Pfvert( 2, 1 ) == 99 );  _test( vset4.Pfvert( 2, 2 ) == 99 );
   _test( vset4.Pfvert( 2, 3 ) == 99 );  _test( vset4.Pfvert( 2, 4 ) == 99 );
-  std::deque<std::vector<long64> > pfvertsDeque;
+  std::deque<std::vector<int64_t> > pfvertsDeque;
   pfvertsDeque.push_back( pfverts1 ); pfvertsDeque.push_back( pfverts2 ); pfvertsDeque.push_back( pfverts3 );
   vset4.AddPfverts( pfvertsDeque.begin(), pfvertsDeque.end() );
   _test( vset4.Pfvert( 0, 0 ) == 99 );  _test( vset4.Pfvert( 0, 1 ) == 1 );  _test( vset4.Pfvert( 0, 2 ) == 99 );

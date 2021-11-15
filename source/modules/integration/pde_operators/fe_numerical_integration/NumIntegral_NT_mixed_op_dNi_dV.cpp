@@ -59,7 +59,7 @@ void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::SpatialDerivative( size_t num_xyz
 
 
 template<size_t dim,class CELL>
-void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::MaterialPropertyTimeMultiplier( double64 time_increment )
+void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::MaterialPropertyTimeMultiplier( double time_increment )
  {
     mtrl_time_multiplier = time_increment;
  }
@@ -128,7 +128,7 @@ computed.  */
 template<size_t dim,class CELL>
 void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
 {
-    double64         ip_value, op_value, nmult_fac, detJ;
+    double         ip_value, op_value, nmult_fac, detJ;
     size_t  i, j;
     
     DNI.resize(e.Nodes());

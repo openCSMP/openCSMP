@@ -502,7 +502,7 @@ void TensorVariable_Test2::DiagonalValues_Function2()
                                           3.0, 4.0 );
    VectorVariable<2U> vectorvariable1( PLAIN, PLAIN,
                                                   10.0, 10.0 );
-   vector<double64> vector1;
+   vector<double> vector1;
    
    //Testing for vector
    vector1.push_back(100);

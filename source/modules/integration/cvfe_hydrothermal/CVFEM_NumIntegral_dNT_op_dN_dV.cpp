@@ -53,7 +53,7 @@ void CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( Element<d
         for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
-             double64 detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
+             double detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
 
              // transposing B -> BT  O.K.
              B.Transposed( BT );
@@ -74,7 +74,7 @@ void CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( Element<d
       }
     else { // NODE or ELEMENT_INTEGRATION_POINT
         for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
-             double64 detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
+             double detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
              B.Transposed( BT );
              BT *= MathOperatorLHS<dim>::MTRL[i];
              BT *= B;

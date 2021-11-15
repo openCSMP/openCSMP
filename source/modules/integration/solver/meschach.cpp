@@ -11,7 +11,7 @@ void convert_CSP_SparseMatrix_to_SPMAT( const csmp::SparseMatrix& mcsp, SPMAT* s
     // this is done before:  spmat = sp_resize( spmat, static_cast<int>(mcsp.Rows()), static_cast<int>(mcsp.Cols()) );
 
     // iterator to row elements
-    std::map<size_t,double64>::const_iterator  it;
+    std::map<size_t,double>::const_iterator  it;
 
     // assigning the elements to the SPMAT structure
     std::cout <<"\nconvert_CSP_SparseMatrix_to_SPMAT: Converting the matrix..."<< std::endl;

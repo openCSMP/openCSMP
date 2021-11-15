@@ -13,38 +13,38 @@ namespace csmp
   {
     
   public:
-    VLH_HaliteLookup(const double64& externaltemperature);
+    VLH_HaliteLookup(const double& externaltemperature);
     ~VLH_HaliteLookup();
     
-    double64                Temperature();
-    double64                Pressure();
-    double64                MassFractionNaCl();
-    double64                Density();
-    double64                Enthalpy();
-    double64                HeatCapacity();
-    double64                Compressibility();
-    double64                Viscosity();
-    double64                Pmax();
-    double64                Tmax();
-    double64                DEnthalpyDT();
-    double64                TfromP(const double64& press, const double64& t_estimate); 
-    double64                ValueOf(const int& property_index);
+    double                Temperature();
+    double                Pressure();
+    double                MassFractionNaCl();
+    double                Density();
+    double                Enthalpy();
+    double                HeatCapacity();
+    double                Compressibility();
+    double                Viscosity();
+    double                Pmax();
+    double                Tmax();
+    double                DEnthalpyDT();
+    double                TfromP(const double& press, const double& t_estimate); 
+    double                ValueOf(const int& property_index);
 
-    std::vector<double64>   properties_at_tmax;
+    std::vector<double>   properties_at_tmax;
 
   private:
 
-    const double64&         temperature;
+    const double&         temperature;
 
-    double64                tcurrent;
-    double64                pcurrent;
-    double64                xcurrent;
-    double64                t_res;
-    double64                tnorm;
-    double64                pnorm;
-    double64                dp;
-    double64                tmax;
-    double64                pmax;
+    double                tcurrent;
+    double                pcurrent;
+    double                xcurrent;
+    double                t_res;
+    double                tnorm;
+    double                pnorm;
+    double                dp;
+    double                tmax;
+    double                pmax;
 
     long                    it;
     long                    t_dim;
@@ -54,17 +54,17 @@ namespace csmp
     long                    it_p_max;
     States                  state;
     
-    std::vector<double64>   storage_vector; // stores data in sequence t-p-x-rho-h at each Lookup point
+    std::vector<double>   storage_vector; // stores data in sequence t-p-x-rho-h at each Lookup point
 
     TriplePointNaCl         tp_nacl;
 
-    void GetTemperatureIndex(const double64& myt);
+    void GetTemperatureIndex(const double& myt);
 
     ErrorHandler&           csmp_error;
   };
 
-  inline double64 VLH_HaliteLookup::Tmax(){ return tmax; }
-  inline double64 VLH_HaliteLookup::Pmax(){ return pmax; }
+  inline double VLH_HaliteLookup::Tmax(){ return tmax; }
+  inline double VLH_HaliteLookup::Pmax(){ return pmax; }
 }// namespace csmp
 #endif
 

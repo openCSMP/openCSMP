@@ -102,9 +102,9 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
                                                   size_t n_vpts ) 
  {
     m_facet_integration_points.resize( n_isrf );   vector<vector<Point<dim> > >( m_facet_integration_points ).swap( m_facet_integration_points );
-    m_facet_integration_weights.resize( n_isrf );  vector<vector<double64> >( m_facet_integration_weights ).swap( m_facet_integration_weights );
+    m_facet_integration_weights.resize( n_isrf );  vector<vector<double> >( m_facet_integration_weights ).swap( m_facet_integration_weights );
 
-    m_projection_weights.resize( n_isrf );         vector<vector<double64> >(m_projection_weights).swap(m_projection_weights);
+    m_projection_weights.resize( n_isrf );         vector<vector<double> >(m_projection_weights).swap(m_projection_weights);
 
     m_facet_normals.resize( n_isrf );              vector<Point<dim> >(m_facet_normals).swap(m_facet_normals);
     m_facets_surrounding_node.resize( n_ivol );    vector<vector<size_t> >(m_facets_surrounding_node).swap(m_facets_surrounding_node);
@@ -118,15 +118,15 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
          m_facet_integration_points[i].resize( n_spts );
          vector<Point<dim> >(m_facet_integration_points[i]).swap(m_facet_integration_points[i]);
          m_facet_integration_weights[i].resize(n_spts);
-         vector<double64>(m_facet_integration_weights[i]).swap(m_facet_integration_weights[i]);
+         vector<double>(m_facet_integration_weights[i]).swap(m_facet_integration_weights[i]);
          m_projection_weights[i].resize(n_spts);
-         vector<double64>(m_projection_weights[i]).swap(m_projection_weights[i]);
+         vector<double>(m_projection_weights[i]).swap(m_projection_weights[i]);
       } 
     
     m_volume_integration_points1.resize( n_ivol );     
     vector<vector<Point<dim> > >(m_volume_integration_points1).swap(m_volume_integration_points1);
     m_volume_integration_weights.resize( n_ivol );     
-    vector<vector<double64> >(m_volume_integration_weights).swap(m_volume_integration_weights);
+    vector<vector<double> >(m_volume_integration_weights).swap(m_volume_integration_weights);
     m_par_volume_integration_points.resize( n_ivol );  
     vector<vector<Point<dim> > >(m_par_volume_integration_points).swap(m_par_volume_integration_points);
 
@@ -136,7 +136,7 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
          m_par_volume_integration_points[i].resize( n_vpts );
          vector<Point<dim> >(m_par_volume_integration_points[i]).swap(m_par_volume_integration_points[i]);
          m_volume_integration_weights[i].resize(n_vpts);
-         vector<double64>(m_volume_integration_weights[i]).swap(m_volume_integration_weights[i]);
+         vector<double>(m_volume_integration_weights[i]).swap(m_volume_integration_weights[i]);
       } 
     
 //    m_facet_edge_midpoints.resize( n_isrf );  vector<Point<dim> >(m_facet_edge_midpoints).swap(m_facet_edge_midpoints);
@@ -166,7 +166,7 @@ void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationPoints(
 
 template<size_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationWeights( 
-                                       std::vector<std::vector<double64> >&  volume_integration_weights ) const
+                                       std::vector<std::vector<double> >&  volume_integration_weights ) const
 {
   volume_integration_weights = m_volume_integration_weights;
 }
@@ -182,7 +182,7 @@ void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationPoints(
 
 template<size_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationWeights( 
-                                      std::vector<std::vector<double64> >&  facet_integration_weights ) const
+                                      std::vector<std::vector<double> >&  facet_integration_weights ) const
 {
    facet_integration_weights = m_facet_integration_weights;
 }
@@ -190,14 +190,14 @@ void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationWeights(
 
 template<size_t dim>
 void FV_IntegrationPointsAndWeights<dim>::ProjectionWeights( 
-                                                std::vector<std::vector<double64> >&  projection_weights ) const
+                                                std::vector<std::vector<double> >&  projection_weights ) const
 {
    projection_weights = m_projection_weights;
 }
 
 template<size_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetNormalTransformations( 
-                                                   std::vector<std::vector<std::pair<double64,double64>>>&  facet_normal_xforms ) const
+                                                   std::vector<std::vector<std::pair<double,double>>>&  facet_normal_xforms ) const
 {
    facet_normal_xforms = m_facet_normal_xforms;
 }
@@ -291,7 +291,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
   m_facet_normals[0][0]               = 1.; 
    
   // Subdivided line volume integration points (x,y,z, but dependent on element dimension, only some will be non zero)
-  const double64 vip[2U][3U] = {
+  const double vip[2U][3U] = {
                       {-0.5, 0., 0. }, 
                       { 0.5, 0., 0. } 
                    }; 
@@ -365,7 +365,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
        m_volume_integration_weights[i][j]=1./6.;
      
   // facet integration points
-  const double64 fip[3U][3U]=
+  const double fip[3U][3U]=
      {
          { 5./12., 1./6.,  0. }, 
          { 5./12., 5./12., 0. }, // point adjacent to hypotenuse
@@ -385,17 +385,17 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
       m_facet_integration_points[i][0][j]=fip[i][j];  
   
    // facet unit normals  
-   const double64 cosAlpha1(static_cast<double64>(2./sqrt(5.)));
-   const double64 sinAlpha1(static_cast<double64>(1./sqrt(5.)));
-   const double64 cosAlpha2(static_cast<double64>(sqrt(2.)/2.));
-   const double64 sinAlpha2(cosAlpha2);
+   const double cosAlpha1(static_cast<double>(2./sqrt(5.)));
+   const double sinAlpha1(static_cast<double>(1./sqrt(5.)));
+   const double cosAlpha2(static_cast<double>(sqrt(2.)/2.));
+   const double sinAlpha2(cosAlpha2);
 
    m_facet_normals[0][0]= cosAlpha1; m_facet_normals[0][1]= sinAlpha1;
    m_facet_normals[1][0]=-cosAlpha2; m_facet_normals[1][1]= sinAlpha2;
    m_facet_normals[2][0]=-sinAlpha1; m_facet_normals[2][1]=-cosAlpha1; 
    
    // triangle sector integration points
-   const double64 vip[3U][3U] =
+   const double vip[3U][3U] =
     {
       { 7./36.,  7./36., 0. },
       { 11./18., 7./36., 0. },
@@ -426,12 +426,12 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
     m_barycenter[1] = 1./3.;
     
     // tested: 25/Oct/2017 AJB
-    double64 facet_normal_transform_scale[3] = {
+    double facet_normal_transform_scale[3] = {
         4.0 * sqrt(5.0) / 3.0,
         8.0 / (3.0 * sqrt(2.0)),
         4.0 * sqrt(5.0) / 3.0
     };
-    const double64 facet_normal_transforms[3][2][3] = {
+    const double facet_normal_transforms[3][2][3] = {
         { { -1.0/6.0,-1.0/6.0,1.0/3.0 }, { -5.0/12.0,1.0/3.0,1.0/12.0 } },
         { { 1.0/3.0,-1.0/6.0,-1.0/6.0 }, { 1.0/12.0,-5.0/12.0,1.0/3.0 } },
         { { -1.0/6.0,1.0/3.0,-1.0/6.0 }, { 1.0/3.0,1.0/12.0,-5.0/12.0 } }
@@ -513,7 +513,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
       m_volume_integration_weights[i][j]=1.;
      
   // facet integration points
-  const double64 fip[4U][3U]=
+  const double fip[4U][3U]=
      {
          { 0.0,-0.5, 0. },
          { 0.5, 0.0, 0. },
@@ -532,7 +532,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
     }
  
    // Subdivided Quad Volume integration points
-   const double64 vip[4U][3U] =
+   const double vip[4U][3U] =
     {
       {-0.5,-0.5, 0. },
       {0.5 ,-0.5, 0. },
@@ -571,7 +571,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
     m_barycenter[0] = 0.;
     m_barycenter[1] = 0.;
 
-    const double64 facet_normal_transforms[4][2][4] = {
+    const double facet_normal_transforms[4][2][4] = {
         { { -1.0/4.0, -1.0/4.0, 1.0/4.0, 1.0/4.0 }, { -3.0/8.0, 3.0/8.0, 1.0/8.0, -1.0/8.0 } },
         { { 1.0/4.0, -1.0/4.0, -1.0/4.0, 1.0/4.0 }, { -1.0/8.0, -3.0/8.0, 3.0/8.0, 1.0/8.0 } },
         { { 1.0/4.0, 1.0/4.0, -1.0/4.0, -1.0/4.0 }, { 1.0/8.0, -1.0/8.0, -3.0/8.0, 3.0/8.0 } },
@@ -653,7 +653,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
        // Hard coded, check multiple points!
        m_volume_integration_weights[i][j]=1./24.;
 	
-    const double64 fip[6U][3U] =
+    const double fip[6U][3U] =
     {
      {13./36.,5./36.,5./36.},
      {13./36.,13./36.,5./36.},
@@ -669,7 +669,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     	  m_facet_integration_points[i][0][j]=fip[i][j];
     		  		
     // Subdivided Tet Volume integration points
-    const double64 vip[4U][3U] =
+    const double vip[4U][3U] =
     {
      {23./144.,23./144.,23./144.},
      {25./48.,23./144.,23./144.},
@@ -807,7 +807,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_facet_points[5][3] = pt_c134;
 
     // tested: 18/Oct/2017 AJB
-    const double64 facet_normal_transforms[6][2][4] = {
+    const double facet_normal_transforms[6][2][4] = {
         { { -1.0/8.0,-1.0/8.0,-1.0/24.0,7.0/24.0 }, { -1.0/8.0,-1.0/8.0,7.0/24.0,-1.0/24.0 } },
         { { -1.0/24.0,-1.0/8.0,-1.0/8.0,7.0/24.0 }, { 7.0/24.0,-1.0/8.0,-1.0/8.0,-1.0/24.0 } },
         { { -1.0/8.0,-1.0/24.0,-1.0/8.0,7.0/24.0 }, { -1.0/8.0,7.0/24.0,-1.0/8.0,-1.0/24.0 } },
@@ -927,7 +927,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
         }
 
 	// face integration points (3D element)
-	const double64 fip[12U][3U] =
+	const double fip[12U][3U] =
     {
      // Lower
      {0., - 0.5,-0.5},
@@ -953,7 +953,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
          m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];
     		
     // Subdivided volume integration points for hexahedron
-    const double64 vip[8U][3U]=
+    const double vip[8U][3U]=
         {
             {-0.5,-0.5,-0.5},
             {0.5,-0.5,-0.5}, 
@@ -1189,7 +1189,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_facet_points[11][3] = pt_c5678;
 
     // tested: 18/Oct/2017 AJB
-    const double64 facet_normal_transforms[12][2][8] = {
+    const double facet_normal_transforms[12][2][8] = {
         { { -3.0/16.0, -3.0/16.0, -1.0/16.0, -1.0/16.0, 3.0/16.0, 3.0/16.0, 1.0/16.0, 1.0/16.0 },
           { -3.0/16.0, -3.0/16.0, 3.0/16.0, 3.0/16.0, -1.0/16.0, -1.0/16.0, 1.0/16.0, 1.0/16.0 } },
         { { -1.0/16.0, -3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0, 3.0/16.0, 1.0/16.0 },
@@ -1381,7 +1381,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_projection_weights[8][0]=0.145828940771960402;
 
 	// face integration points
-    const double64 fip[9U][NumberOfPhysicalDimensions] =
+    const double fip[9U][NumberOfPhysicalDimensions] =
     {
       {5./12.,1./6.,-1./2.},
       {5./12.,5./12.,-1./2.},
@@ -1401,7 +1401,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
          m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];
     		
     // Subdivided Tet Volume integration points
-    const double64 vip[6U][NumberOfPhysicalDimensions]=
+    const double vip[6U][NumberOfPhysicalDimensions]=
     {
      {5./24.,5./24.,-1./2.},
      {7./12.,5./24.,-1./2.}, 
@@ -1417,11 +1417,11 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     	for(size_t k=0;k<NumberOfPhysicalDimensions; k++)
     		m_volume_integration_points1[i][j][k]=vip[i*NumOfIPperVolume+j][k];
     		
-    const double64 cosAlpha1(static_cast<double64>(2./sqrt(5.0)));
-    const double64 sinAlpha1(static_cast<double64>(1./sqrt(5.0)));
+    const double cosAlpha1(static_cast<double>(2./sqrt(5.0)));
+    const double sinAlpha1(static_cast<double>(1./sqrt(5.0)));
    
-    const double64 cosAlpha2(static_cast<double64>(sqrt(2.0)/2.0));
-    const double64 sinAlpha2(cosAlpha2);
+    const double cosAlpha2(static_cast<double>(sqrt(2.0)/2.0));
+    const double sinAlpha2(cosAlpha2);
 
 
    // Facet normals pointing outside the internal face, all together 6 normals!
@@ -1585,7 +1585,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_points[8][3] = pt_c456;
 
     // tested: 18/Oct/2017 AJB
-    const double64 facet_normal_transforms[9][2][6] = {
+    const double facet_normal_transforms[9][2][6] = {
         { { -5.0/24.0, -5.0/24.0, -1.0/12.0, 5.0/24.0, 5.0/24.0, 1.0/12.0 },
           { -1.0/8.0, -1.0/8.0, 1.0/4.0, -1.0/24.0, -1.0/24.0, 1.0/12.0 } },
         { { -1.0/4.0, 1.0/8.0, 1.0/8.0, -1.0/12.0, 1.0/24.0, 1.0/24.0 },
@@ -1734,7 +1734,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_volume_integration_weights[4][0]=1./3.;//0.351851852;//
     
     // Subdivided pyramid volume integration points
-    const double64 vip[5U][3U]=
+    const double vip[5U][3U]=
       {
          {-31./72.,-31./72.,23./144.},
          {31./72.,-31./72.,23./144.},
@@ -1751,7 +1751,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
 
 	  //face integration points
-    const double64 fip[8U][3U] =
+    const double fip[8U][3U] =
    	 {
   	   {0.,-4./9., 5./36.},
          {4./9.,0.,5./36.},
@@ -2034,7 +2034,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_volume_integration_weights[4][0]=1./3.;
     
     // Subdivided pyramid volume integration points
-    const double64 vip[5U][3U]=
+    const double vip[5U][3U]=
       {
          {-31./72.,-31./72.,23./144.},
          {31./72.,-31./72.,23./144.},
@@ -2050,7 +2050,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     	  m_volume_integration_points1[i][j][k]=vip[i*NumOfIPperVolume+j][k];
 
 	  //face integration points
-    const double64 fip[12U][3U] =
+    const double fip[12U][3U] =
    	 {
   	   {0.,-4./9., 5./36.},
        {4./9.,0.,5./36.},
@@ -2276,8 +2276,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
 
     // tested: 18/Oct/2017 AJB
-    const double64 sqrt2 = 1.41421356237309504880168872420969807856967187537694807317667973799;
-    const double64 facet_normal_transforms[12][2][5] = {
+    const double sqrt2 = 1.41421356237309504880168872420969807856967187537694807317667973799;
+    const double facet_normal_transforms[12][2][5] = {
         { { -11.0/96.0, -11.0/96.0, -1.0/32.0, -1.0/32.0, 7.0/24.0 },
             { -19.0/96.0, -19.0/96.0, 7.0/32.0, 7.0/32.0, -1.0/24.0 } },
         { { -1.0/32.0, -11.0/96.0, -11.0/96.0, -1.0/32.0, 7.0/24.0 },

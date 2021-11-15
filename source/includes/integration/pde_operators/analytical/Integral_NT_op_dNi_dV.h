@@ -23,20 +23,20 @@ class Integral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
     void SpatialDerivative( size_t xyz=2 );
     
     /// in stead of MultiplyWithTimeIncrement() since that would multiply whole contribution
-    void MaterialPropertyTimeMultiplier( double64 time_increment );
+    void MaterialPropertyTimeMultiplier( double time_increment );
 
     virtual Integral_NT_op_dNi_dV<dim,SIMPLEX>* clone() const { return new Integral_NT_op_dNi_dV<dim,SIMPLEX> (*this); }
   
   private:
-    std::vector<double64>             IPOL;
+    std::vector<double>             IPOL;
     DenseMatrix<DM_MIN>      DN;
     csmp::Index                  prop_key;
     ScalarVariable          prop1, prop2;
     VectorVariable<dim>      bcenter;
-    double64                          gravity;   // acceleration of gravity
+    double                          gravity;   // acceleration of gravity
     size_t                   xyz; // 1=x, 2=y, 3=z
-    double64                          prop2_time_multiplier;
-    std::vector<double64>                  coord;
+    double                          prop2_time_multiplier;
+    std::vector<double>                  coord;
     std::vector<ScalarVariable > OP;
 };
 

@@ -67,7 +67,7 @@ void PT_op<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
      for ( size_t j=0U; j<dim; j++ )
          // forces must be divided by number of elements they will be accumulated from
          // to avoid multiple accumulation
-         MathOperatorRHS<dim>::RHS[ i * dim + j ] = NODAL_FORCE[i][j] / static_cast<double64>(e.N(i)->Parents());
+         MathOperatorRHS<dim>::RHS[ i * dim + j ] = NODAL_FORCE[i][j] / static_cast<double>(e.N(i)->Parents());
 
 } // end ComputeContribution
      

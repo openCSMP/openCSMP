@@ -7,8 +7,8 @@
 using namespace std;
 
 namespace csmp{
-  NaClMeltingCurveLiquidLookup::NaClMeltingCurveLiquidLookup(const double64& externaltemperature,
-                                                             const double64& externalpressure)
+  NaClMeltingCurveLiquidLookup::NaClMeltingCurveLiquidLookup(const double& externaltemperature,
+                                                             const double& externalpressure)
     : temperature(externaltemperature),
       pressure(externalpressure),
       tcurrent(0.0),
@@ -149,17 +149,17 @@ namespace csmp{
     
     
   // The data interpolation routines
-  double64 NaClMeltingCurveLiquidLookup::TmeltFromP(){ pcurrent = pressure; return TfromP(pcurrent); }
-  double64 NaClMeltingCurveLiquidLookup::PmeltFromT(){      return ValueOf(pressure_index); }
-  double64 NaClMeltingCurveLiquidLookup::MassFractionNaCl(){return ValueOf(composition_index); }
-  double64 NaClMeltingCurveLiquidLookup::Density(){         return ValueOf(density_index); }
-  double64 NaClMeltingCurveLiquidLookup::Enthalpy(){        return ValueOf(enthalpy_index); }
-  double64 NaClMeltingCurveLiquidLookup::HeatCapacity(){    return ValueOf(heatcapacity_index); }
-  double64 NaClMeltingCurveLiquidLookup::Compressibility(){ return ValueOf(compressibility_index); }
-  double64 NaClMeltingCurveLiquidLookup::Viscosity(){       return ValueOf(viscosity_index); }
+  double NaClMeltingCurveLiquidLookup::TmeltFromP(){ pcurrent = pressure; return TfromP(pcurrent); }
+  double NaClMeltingCurveLiquidLookup::PmeltFromT(){      return ValueOf(pressure_index); }
+  double NaClMeltingCurveLiquidLookup::MassFractionNaCl(){return ValueOf(composition_index); }
+  double NaClMeltingCurveLiquidLookup::Density(){         return ValueOf(density_index); }
+  double NaClMeltingCurveLiquidLookup::Enthalpy(){        return ValueOf(enthalpy_index); }
+  double NaClMeltingCurveLiquidLookup::HeatCapacity(){    return ValueOf(heatcapacity_index); }
+  double NaClMeltingCurveLiquidLookup::Compressibility(){ return ValueOf(compressibility_index); }
+  double NaClMeltingCurveLiquidLookup::Viscosity(){       return ValueOf(viscosity_index); }
     
     
-  double64 NaClMeltingCurveLiquidLookup::ValueOf(const int& property_index)
+  double NaClMeltingCurveLiquidLookup::ValueOf(const int& property_index)
   {
     tcurrent = temperature;
     GetTemperatureIndex(tcurrent);
@@ -170,7 +170,7 @@ namespace csmp{
     
     
   // data indexing
-  void NaClMeltingCurveLiquidLookup::GetTemperatureIndex(const double64& t)
+  void NaClMeltingCurveLiquidLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-  0.0)/t_res ); }
@@ -191,7 +191,7 @@ namespace csmp{
   }
     
     
-  double64 NaClMeltingCurveLiquidLookup::TfromP(const double64& press)
+  double NaClMeltingCurveLiquidLookup::TfromP(const double& press)
   {
     i_max    = it_max;
     i_guess  = it_max/2;

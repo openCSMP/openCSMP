@@ -12,10 +12,10 @@ FV_Parameter::FV_Parameter( size_t sectors, size_t facets, size_t dim, bool with
     if ( !with_normals ) return;
     
     facet_unit_normal_.resize( facets );
-    vector<vector<double64> >(facet_unit_normal_).swap(facet_unit_normal_);
+    vector<vector<double> >(facet_unit_normal_).swap(facet_unit_normal_);
     for ( auto it : facet_unit_normal_ ) {
          it.resize(dim); // n-dimensional
-         vector<double64>( it ).swap( it );
+         vector<double>( it ).swap( it );
       }
  }
 
@@ -25,17 +25,17 @@ FV_Parameter::FV_Parameter( size_t sectors, size_t facets, size_t dim, bool with
 void FV_Parameter::Resize( size_t sectors, size_t facets, size_t dim, bool with_normals )
  {
     sector_volume_.resize( sectors );  
-    vector<double64>(sector_volume_).swap(sector_volume_);
+    vector<double>(sector_volume_).swap(sector_volume_);
     
     facet_v_and_A_.resize( facets );   
-    vector<pair<double64,double64> >(facet_v_and_A_).swap(facet_v_and_A_);
+    vector<pair<double,double> >(facet_v_and_A_).swap(facet_v_and_A_);
     
     if ( with_normals ) {
           facet_unit_normal_.resize( facets );
-          vector<vector<double64> >(facet_unit_normal_).swap(facet_unit_normal_);
+          vector<vector<double> >(facet_unit_normal_).swap(facet_unit_normal_);
           for ( auto it : facet_unit_normal_ ) {
                it.resize(dim); // n-dimensional
-               vector<double64>( it ).swap( it );
+               vector<double>( it ).swap( it );
             }
       }
  }
@@ -45,16 +45,16 @@ void FV_Parameter::Resize( size_t sectors, size_t facets, size_t dim, bool with_
 
 size_t  FV_Parameter::Bytes() const 
  {
-    size_t bytes = (sector_volume_.size() + facet_v_and_A_.size()) * sizeof(double64) + sizeof(size_t);
-    return (facet_unit_normal_.empty()) ? bytes : bytes + facet_unit_normal_.size() * facet_unit_normal_[0].size() * sizeof(double64); 
+    size_t bytes = (sector_volume_.size() + facet_v_and_A_.size()) * sizeof(double) + sizeof(size_t);
+    return (facet_unit_normal_.empty()) ? bytes : bytes + facet_unit_normal_.size() * facet_unit_normal_[0].size() * sizeof(double); 
  }
 
 
 
 
 /// dot product fn . vc
-double64 FV_Parameter::FacetNormalProjection( size_t facet, 
-                                               const std::vector<double64>& cxyz ) const
+double FV_Parameter::FacetNormalProjection( size_t facet, 
+                                               const std::vector<double>& cxyz ) const
  {
     if ( facet_unit_normal_.empty() or 
          facet_unit_normal_[facet].empty() or 
@@ -74,12 +74,12 @@ double64 FV_Parameter::FacetNormalProjection( size_t facet,
          return 0.; 
       }
  
-    std::vector<double64>::const_iterator fit=facet_unit_normal_[facet].begin();
-    std::vector<double64>::const_iterator it=cxyz.begin();
-    double64  dotpr(0.);
+    std::vector<double>::const_iterator fit=facet_unit_normal_[facet].begin();
+    std::vector<double>::const_iterator it=cxyz.begin();
+    double  dotpr(0.);
 
     while ( it != cxyz.end() ) {
-         dotpr += static_cast<double64>(*fit) * static_cast<double64>(*it);
+         dotpr += static_cast<double>(*fit) * static_cast<double>(*it);
          fit++;
          it++;
       }

@@ -12,9 +12,9 @@ namespace csmp{
       
 @attention Use only this conctructor. TwophaseLiquid computes the NaCl concentration of liquid on the twophase liquid+vapor surface as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, TwophaseLiquid is able to decipher their current values when being queried for the NaCl concentration. Only this constructor is allowed to ensure that functionality, default constructor has been made private. See reamrks on thirs constructor variable in full class documentation and code example.
   */
-  TwophaseLiquid::TwophaseLiquid(const double64& externaltemperature, 
-                                 const double64& externalpressure,
-                                 const double64& ph2o)
+  TwophaseLiquid::TwophaseLiquid(const double& externaltemperature, 
+                                 const double& externalpressure,
+                                 const double& ph2o)
     : 
     temperature_(externaltemperature), 
     pressure_(externalpressure), 
@@ -64,7 +64,7 @@ namespace csmp{
   /** Value of mass fraction of dissolved NaCl in liquid on twophase liquid+vapor surface
       @attention The value is based on converting the mole fraction computed from equation 11 in Driesner & Heinrich (2007). Conversion is based on ConvertConcentrationUnitsNaCl.h; to stay consistent, use values and functions provide therein for further computations if you need unit conversion.
    */
-  double64 TwophaseLiquid::MassFractionNaCl()
+  double TwophaseLiquid::MassFractionNaCl()
   { 
     CheckState(); 
     return massfractionnacl_; 
@@ -121,7 +121,7 @@ namespace csmp{
 
   /** Equation 11 of Driesner and Heinrich (2007), modified to return mass fraction rather than mole fraction NaCl
    */
-  double64 TwophaseLiquid::MassFractionNaCl(const double64& t_, const double64& p_)
+  double TwophaseLiquid::MassFractionNaCl(const double& t_, const double& p_)
   {
     if(t_ < cp_h2o.Temperature())
       {

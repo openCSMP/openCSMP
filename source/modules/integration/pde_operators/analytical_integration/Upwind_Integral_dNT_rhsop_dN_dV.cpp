@@ -18,7 +18,7 @@ Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Upwind_Integral_dNT_rhsop_dN_dV( c
                                                                           const char* test,
                                                                           const char* upwind,
                                                                           const char* trigger,
-                                                                          const double64 prefactor)
+                                                                          const double prefactor)
   : MathOperatorRHS<dim>(pref,oper,basic),
     DN(3,3),
     DNT(3,3),
@@ -101,12 +101,12 @@ void Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX&
       for (size_t i = 0; i < e.Nodes(); ++i) {
           for (size_t j = 0; j < e.Nodes(); ++j) {;
               if (i != j) {
-                  const double64 decision = DNT(i, j)*(trigger_var_[j]() - trigger_var_[i]());
+                  const double decision = DNT(i, j)*(trigger_var_[j]() - trigger_var_[i]());
                   if      (decision > 0) DNT(i, j) *= upwind_var_[i]();
                   else if (decision < 0) DNT(i, j) *= upwind_var_[j]();
                   else                   DNT(i, j) *= 0.5*(upwind_var_[i]() + upwind_var_[j]());
               }
-              else                     DNT(i, j) = static_cast<double64>(0.0);
+              else                     DNT(i, j) = static_cast<double>(0.0);
           }
       }
     

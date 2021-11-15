@@ -47,7 +47,7 @@ template<typename Var, size_t dim>
 void IntegrationPointToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolatedValues()
  {
      
-    if ( summed_weights_[0] > numeric_limits<double64>::epsilon() )
+    if ( summed_weights_[0] > numeric_limits<double>::epsilon() )
        throw csmp::Exception( ERROR, "IntegrationPointToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
                           "this visitor has to be applied beforehand to collect the weights for the nodes");
 
@@ -91,7 +91,7 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
          eptr->N(i)->Read( nprop_key_, variable_ );
          
          // using 1 / (distance from barycenter to node)  as a weight
-         const double64 weight = 1. / (bc - eptr->N(i)->Coordinate()).Length();
+         const double weight = 1. / (bc - eptr->N(i)->Coordinate()).Length();
          assert( eptr->N(i)->Idx() < summed_weights_.size() );
          summed_weights_[ eptr->N(i)->Idx() ] += weight;
          

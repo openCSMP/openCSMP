@@ -8,11 +8,11 @@ namespace csmp {
 template<size_t dim>
 class ModifyPropertyWhere : public Interrelation<dim> {
     Operand<dim>&  k;
-    double64                if_value, to_value;
+    double                if_value, to_value;
     
   public:
     ModifyPropertyWhere( const PropertyDatabase<dim>& p, 
-                         const char* prop, double64 where, double64 to );
+                         const char* prop, double where, double to );
                          
     ~ModifyPropertyWhere() {};
     void Calculate();

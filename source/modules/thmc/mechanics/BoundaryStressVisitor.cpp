@@ -188,7 +188,7 @@ void BoundaryStressVisitor<dim>::ApplyConstantStressBoundaryConditions( Face<dim
    
    // going from specific- to area-integrated stress values to nodal forces
    const size_t  face_nodes(f->Nodes());
-   force_ = bstress_ * (f->Area() / static_cast<double64>(face_nodes));
+   force_ = bstress_ * (f->Area() / static_cast<double>(face_nodes));
   
    // adding the normal stress forces to the nodal forces of the nodes of the face
    for ( size_t i=0U; i<face_nodes; i++ ) {
@@ -209,16 +209,16 @@ void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim
  {
    ScalarVariable Sv;
    f->Parent(INSIDE)->PropertyValueAtBaryCenter(Sv_key_, Sv );
-   double64 SH = SHmax_() * Sv();
-   double64 Sh = Shmin_() * Sv();
+   double SH = SHmax_() * Sv();
+   double Sh = Shmin_() * Sv();
    assert( Sv() > 0. );
    assert( SH > 0. );
    assert( Sh > 0. );
-   //double64  Ss_magnitude = hypot(SH,Sh);
+   //double  Ss_magnitude = hypot(SH,Sh);
    //assert( Ss_magnitude );
 
    // if the values are negligibly small nothing needs to be done
-   if ( fabs(Sv()) < numeric_limits<double64>::epsilon() ) return;
+   if ( fabs(Sv()) < numeric_limits<double>::epsilon() ) return;
 
    // creating the Andersonian stress tensor. SH always needs to be be greater than or equal to Sh.
    // TODO: check for rotations when one of the principal stresses is not aligned with a
@@ -245,7 +245,7 @@ void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim
    // -------------------------------------------
    // going from specific- to area-integrated stress values to nodal forces
    const size_t  face_nodes(f->Nodes());
-   faceStressVector = faceStressVector * (f->Area() / static_cast<double64>(face_nodes));
+   faceStressVector = faceStressVector * (f->Area() / static_cast<double>(face_nodes));
   
    // adding the normal stress forces to the nodal forces of the nodes of the face
    for ( size_t i=0U; i<face_nodes; i++ ) {
@@ -288,11 +288,11 @@ void BoundaryStressVisitor<dim>::RetrieveNormalWithCorrectDirection( Face<dim>* 
           assert( f->Parent(INSIDE) != nullptr );
           const Point<dim> parent_ctr = f->Parent(INSIDE)->BaryCenter();
           // normalizing a copy of the unit normal with the distance between the 2 barycenters
-          const double64 face_parent_ctr_distance(parent_ctr.DistanceTo(face_ctr));
+          const double face_parent_ctr_distance(parent_ctr.DistanceTo(face_ctr));
           Point<dim> pnrml;
           for ( size_t i=0U; i<dim; i++ ) pnrml[i] = nrml[i];
           pnrml /= face_parent_ctr_distance;
-          const double64 face_parent_nrml_tip_distance(parent_ctr.DistanceTo(face_ctr + pnrml));
+          const double face_parent_nrml_tip_distance(parent_ctr.DistanceTo(face_ctr + pnrml));
           // now normal is added to face center, if this gets a point closer to parent center
           // the normal is inward pointing and needs correction
           if ( face_parent_nrml_tip_distance < face_parent_ctr_distance ) nrml *= -1.;

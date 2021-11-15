@@ -23,17 +23,17 @@ public:
 
 protected:
   virtual void SolveMatrixEquation( SparseMatrix& A,
-                                    std::vector<double64>& b,
-                                    std::vector<double64>& x,
+                                    std::vector<double>& b,
+                                    std::vector<double>& x,
                                     size_t no_unknowns );
 
   virtual void SolveMatrixEquation( CompressedRowMatrix& A,
-                                    std::vector<double64>& b,
-                                    std::vector<double64>& x,
+                                    std::vector<double>& b,
+                                    std::vector<double>& x,
                                     size_t no_unknowns );
 
 private:
-  void GaussJordan( SparseMatrix& A, std::vector<double64>& b );
+  void GaussJordan( SparseMatrix& A, std::vector<double>& b );
 
   void SwapSparseMatrixElements( SparseMatrix& M,
                                  long row1,

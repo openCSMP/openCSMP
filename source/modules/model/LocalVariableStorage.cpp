@@ -105,11 +105,11 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( size_t newDataComp
 
     // resizing
     data_.flags.resize( newFlagComponentCount, ANY );
-    data_.data.resize( newDataComponentCount, std::numeric_limits<double64>::quiet_NaN() );
+    data_.data.resize( newDataComponentCount, std::numeric_limits<double>::quiet_NaN() );
 
     // trimming excess capacity
     std::vector<VARIABLE_FLAG>( data_.flags ).swap( data_.flags );
-    std::vector<double64>( data_.data ).swap( data_.data );
+    std::vector<double>( data_.data ).swap( data_.data );
   }
 
 
@@ -254,7 +254,7 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
         for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
             for ( size_t i=dataBounds[cycle1][cycle2].first; i<dataBounds[cycle1][cycle2].second; ++i )
-                data_.data[i] = std::numeric_limits<double64>::quiet_NaN();
+                data_.data[i] = std::numeric_limits<double>::quiet_NaN();
     // Adding non-initialized flags of new variable
     for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
         for (int cycle2=0; cycle2<nipCycles2; ++cycle2  )
@@ -411,7 +411,7 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
     if ( data_.scalars > 0U ) {
       csmp::Index  idx(SCALAR,varPlacement,0U);
       while ( idx.index < data_.scalars ) {
-        double64 sc = Read( idx );
+        double sc = Read( idx );
         std::cout << std::endl <<"\t\t"<< sc;
         idx.index++;
         idx.dataOffset++;
@@ -498,7 +498,7 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
 
 /// Scalar variable value
 template<size_t dim, template<size_t> class STOREE>
-double64 LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx ) const  
+double LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx ) const  
  {
 #ifndef NDEBUG
  AssertPlacement(idx);
@@ -794,13 +794,13 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, FlaggedArra
 */
 template<size_t dim, template<size_t> class STOREE>
 bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx, 
-                                                      double64 vmin, double64 vmax ) const
+                                                      double vmin, double vmax ) const
   {
 #ifndef NDEBUG
   AssertPlacement( idx );
 #endif
     if ( idx.type == SCALAR ) {
-      const double64 val = Read( idx );
+      const double val = Read( idx );
       return ( val >= vmin and val <= vmax ) ? true : false;
       }
     if ( idx.type == VECTOR ) {
@@ -841,7 +841,7 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx,
 
 /// Scalar variable value at integration point
 template<size_t dim, template<size_t> class STOREE>
-double64 LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::Index& idx ) const  
+double LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::Index& idx ) const  
   {
     const size_t offset(DATA_OFFSET_IP);
 
@@ -1140,14 +1140,14 @@ void LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::Index& idx, 
 
 template<size_t dim, template<size_t> class STOREE>
 bool LocalVariableStorage<dim,STOREE>::IsWithinRange( size_t ip, const csmp::Index& idx, 
-                                                      double64 vmin, double64 vmax ) const
+                                                      double vmin, double vmax ) const
   {
 #ifndef NDEBUG
   AssertIntegrationPointPlacement(idx);
 #endif
 
     if ( idx.type == SCALAR ) {
-      const double64 val = Read( ip, idx );
+      const double val = Read( ip, idx );
       return ( val >= vmin and val <= vmax ) ? true : false;
       }
     if ( idx.type == VECTOR ) {
@@ -1200,7 +1200,7 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( size_t ip, const csmp::Ind
     Scalar variable value at sector or facet integration points only.
 */
 template<size_t dim, template<size_t> class STOREE>
-double64 LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size_t ip, const csmp::Index& idx ) const  
+double LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size_t ip, const csmp::Index& idx ) const  
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
     // offset to first instance of idx variable in the data vector
@@ -1661,7 +1661,7 @@ void LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size_t ip, 
 template<size_t dim, template<size_t> class STOREE>
 bool LocalVariableStorage<dim,STOREE>::IsWithinRange( size_t sector_or_facet, size_t ip,
                                                       const csmp::Index& idx,
-                                                      double64 vmin, double64 vmax ) const
+                                                      double vmin, double vmax ) const
   {
 #ifndef NDEBUG
    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
@@ -1670,7 +1670,7 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( size_t sector_or_facet, si
 #endif
 
     if ( idx.type == SCALAR ) {
-         const double64 val = Read( sector_or_facet, ip, idx );
+         const double val = Read( sector_or_facet, ip, idx );
          return ( val >= vmin and val <= vmax ) ? true : false;
       }
     if ( idx.type == VECTOR ) {

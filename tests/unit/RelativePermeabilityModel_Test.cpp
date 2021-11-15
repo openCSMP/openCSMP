@@ -32,16 +32,16 @@ namespace csmp {
 RelativePermeabilityModel_Test::RelativePermeabilityModel_Test( bool verbose )
  : model_ptr_(0), verbose_(verbose)
  {
-    const uint32  N_ELEMENTS(100);
+    const uint32_t  N_ELEMENTS(100);
     model_ptr_ = new Model1D<1U>("Model1D", "CSMP-2phase-variables_upscaled.txt", 50., N_ELEMENTS );
     if ( verbose_ ) cerr << "Number of elemnts: " << model_ptr_ -> Mesh().Elements() << endl;
     // making some groups: rock (elements 1-40, 61-100) and fracture (elements 41-60)
     vector<size_t>   elms;  elms.reserve( N_ELEMENTS );
-    for ( uint32 i=0; i<40; i++ ) elms.push_back(i);
-    for ( uint32 i=60; i<N_ELEMENTS; i++ ) elms.push_back(i);
+    for ( uint32_t i=0; i<40; i++ ) elms.push_back(i);
+    for ( uint32_t i=60; i<N_ELEMENTS; i++ ) elms.push_back(i);
     model_ptr_->FormRegionFrom( "ROCK", elms );
     elms.erase( elms.begin(), elms.end() );
-    for ( uint32 i=40; i<60; i++ ) elms.push_back(i);
+    for ( uint32_t i=40; i<60; i++ ) elms.push_back(i);
     model_ptr_->FormRegionFrom( "FRACTURE", elms );
  }
 
@@ -271,7 +271,7 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
 
     const csmp::Index   satw_key = model_ptr_->Database().StorageKey("saturation water");
     const csmp::Index   satn_key = model_ptr_->Database().StorageKey("saturation oil");
-    const double64      sat_incr(1./model_ptr_->Mesh().Nodes());
+    const double      sat_incr(1./model_ptr_->Mesh().Nodes());
     ScalarVariable  saturation;
     
     // memorizing the original saturation values
@@ -292,9 +292,9 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
     // creating an output file name
     string  relperm_model_name( typeid(relperm).name() );
     // exception for LinearTwoPhaseModel
-    double64 lmin, lmax;
+    double lmin, lmax;
     model_ptr_->MinMaxOf("brooks corey parameter", lmin, lmax );
-    if ( lmax <= numeric_limits<double64>::epsilon() ) relperm_model_name = typeid(LinearTwoPhaseModel<1U>).name();
+    if ( lmax <= numeric_limits<double>::epsilon() ) relperm_model_name = typeid(LinearTwoPhaseModel<1U>).name();
     // removing not permitted characters 
     for ( string::iterator it=relperm_model_name.begin(); it!=relperm_model_name.end(); it++ )
          if ( !isalpha(*it) and !isdigit(*it) ) (*it) = '_'; 
@@ -325,7 +325,7 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          /// @todo (2-C) Rm rtti
          // water saturation & effective water saturation
          // ---------------------------------------------
-         const double64 sw(relperm.Saturation(1U));
+         const double sw(relperm.Saturation(1U));
          if ( sw < 0. or sw > 1. ) {
               if ( verbose_ ) {
                   cerr <<"\nRelativePermeabilityModel_Test::Test:(";

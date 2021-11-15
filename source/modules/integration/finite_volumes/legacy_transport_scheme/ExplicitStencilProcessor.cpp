@@ -184,10 +184,10 @@ using the MINMOD limiter to prevent oscillations.
 */
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2( 
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
-                                     vector<double64>& res ) 
+                                     vector<double>& res ) 
  {
      eidx_ = e.Idx();
             
@@ -195,17 +195,17 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
-          const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
     
           // ------------------------------------------
           // 1. accumulation of linear facet flux, O.K.
           // ------------------------------------------
-          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double64>::epsilon() ) {
+          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double>::epsilon() ) {
 
-              double64 psi_facet   = ( e ).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
+              double psi_facet   = ( e ).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
 
-              double64 linear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i);
+              double linear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i);
 	           
               if ( param.FacetNormalVelocity(i) > 0. ) {
 	                linear_flux *= limitProperty( psi_inside_node, psi_outside_node, psi_facet, 
@@ -227,31 +227,31 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
-                                     vector<double64>& res,
+                                     vector<double>& res,
                                      const csmp::Index& mass_center_key,
                                      const csmp::Index& grad_psi_key,
                                      const csmp::Index& grad_psi_limiter_key)
  {
      eidx_ = e.Idx();
 
-     double64  limited_psi_inside_node, limited_psi_outside_node;
+     double  limited_psi_inside_node, limited_psi_outside_node;
 
      for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
-          const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
           // ------------------------------------------
           // 1. accumulation of linear facet flux, O.K.
           // ------------------------------------------
-          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double64>::epsilon() ) {
+          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double>::epsilon() ) {
 
-              double64 linear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i);
+              double linear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i);
 
               limitProperty_LSMGRAD<dim>( e, mass_center_key, grad_psi_key, grad_psi_limiter_key,
                                           inside_node_,outside_node_, i,
@@ -285,13 +285,13 @@ template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolution1(
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
-                                     vector<double64>& res,
+                                     vector<double>& res,
                                      const VARIABLE_TYPE &vt, 
                                      const size_t var_comp_nr )
  {
-     const double64  zero(0.);
+     const double  zero(0.);
 
-     double64  linear_flux;
+     double  linear_flux;
 
      eidx_ = e.Idx();
      // ---------------------------------------------------------
@@ -300,9 +300,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      // ---------------------------------------------------------
 
      e.dN_AtBaryCenter( DN_ );
-     double64 psi_node;
-     double64 psi_inside_node;  
-     double64 psi_outside_node; 
+     double psi_node;
+     double psi_inside_node;  
+     double psi_outside_node; 
 
      fill( grad_.begin(), grad_.end(), zero );
      for ( size_t j=0U; j<DN_.Cols(); j++ ) {
@@ -368,7 +368,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           // 2. diffusion (1st order flux)
           // -----------------------------------------
           // NB: a special boundary treatment seems to be required to avoid oscillations which arise at small gradients
-          const double64 diffusive_flux = e.Read( diff_key_ ) * -param.FacetNormalProjection( i, grad_ )*param.FacetArea(i);
+          const double diffusive_flux = e.Read( diff_key_ ) * -param.FacetNormalProjection( i, grad_ )*param.FacetArea(i);
 
           res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
           res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
@@ -382,14 +382,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
 */
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolution2( 
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
-                                     vector<double64>& res)
+                                     vector<double>& res)
  {
-     const double64  zero(0.);
+     const double  zero(0.);
 
-     double64  linear_flux;
+     double  linear_flux;
 
      eidx_ = e.Idx();
      // ---------------------------------------------------------
@@ -401,7 +401,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
 
      fill( grad_.begin(), grad_.end(), zero );
      for ( size_t j=0U; j<DN_.Cols(); j++ ) {
-          double64 psi_node = e.N(j)->Read( adv1_key_ );
+          double psi_node = e.N(j)->Read( adv1_key_ );
           for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
             
@@ -409,15 +409,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
-          const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
     
           // ------------------------------------------
           // 1. accumulation of linear facet flux, O.K.
           // ------------------------------------------
           if ( param.FacetNormalVelocity(i) != zero ) {
 
-               double64 psi_facet = (e).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
+               double psi_facet = (e).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
 
                linear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i);
 	           
@@ -434,7 +434,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           // 2. diffusion (1st order flux)
           // -----------------------------------------
           // NB: a special boundary treatment seems to be required to avoid oscillations which arise at small gradients
-          const double64 diffusive_flux = e.Read( diff_key_ ) * -param.FacetNormalProjection( i, grad_ )*param.FacetArea(i);
+          const double diffusive_flux = e.Read( diff_key_ ) * -param.FacetNormalProjection( i, grad_ )*param.FacetArea(i);
 
           res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
           res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
@@ -445,17 +445,17 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolution2(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
-                                     vector<double64>& res,
+                                     vector<double>& res,
                                      const csmp::Index& mass_center_key,
                                      const csmp::Index& grad_psi_key,
                                      const csmp::Index& grad_psi_limiter_key)
  {
-     const double64  zero(0.);
-     double64  linear_flux;
-     double64  limited_psi_inside_node, limited_psi_outside_node;
+     const double  zero(0.);
+     double  linear_flux;
+     double  limited_psi_inside_node, limited_psi_outside_node;
 
      eidx_ = e.Idx();
      // ---------------------------------------------------------
@@ -467,7 +467,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
 
      fill( grad_.begin(), grad_.end(), zero );
      for ( size_t j=0U; j<DN_.Cols(); j++ ) {
-          double64 psi_node = e.N(j)->Read( adv1_key_ );
+          double psi_node = e.N(j)->Read( adv1_key_ );
           for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
 
@@ -475,8 +475,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
-          const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
           // ------------------------------------------
           // 1. accumulation of linear facet flux, O.K.
@@ -502,7 +502,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           // 2. diffusion (1st order flux)
           // -----------------------------------------
           // NB: a special boundary treatment seems to be required to avoid oscillations which arise at small gradients
-          const double64 diffusive_flux = e.Read( diff_key_ ) * param.FacetArea(i) * -param.FacetNormalProjection( i, grad_ );
+          const double diffusive_flux = e.Read( diff_key_ ) * param.FacetArea(i) * -param.FacetNormalProjection( i, grad_ );
           res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
           res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
        }
@@ -568,9 +568,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
                                                         const FV_Parameter& param,
                                                         const Element<dim>& e,
                                                         TwoPhaseModel<dim>& relperm,
-                                                        vector<double64>& res)
+                                                        vector<double>& res)
  {
-     const double64 zero(0.);
+     const double zero(0.);
      // irreducible saturation water
      // irreducible saturation oil
      // Brooks Corey parameter
@@ -582,15 +582,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
      e.dN_AtBaryCenter( DN_ );
      fill( dsdn_.begin(), dsdn_.end(), 0. );
      for ( size_t j=0U; j<e.Nodes(); j++ ) {
-          const double64 sn = e.N(j)->Read( adv1_key_);
+          const double sn = e.N(j)->Read( adv1_key_);
           for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
      for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
           
           // 0. average values and effective saturation
           // ------------------------------------------
@@ -619,21 +619,21 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
           /*
           if( with_capillary_spreading ){
 
-              const double64 ds = (sn_outside_node - sn_inside_node);
+              const double ds = (sn_outside_node - sn_inside_node);
 
               if ( ds != zero ) {
 
-                   const double64 dsdn(param.FacetNormalProjection( i, dsdn_ ));
+                   const double dsdn(param.FacetNormalProjection( i, dsdn_ ));
 
                    // identifying the upstream node
                    // flow will be out of a facet if proj. of sat-gradient onto normal is negative
-                   const double64  psi_hat_c( (dsdn < zero) ? sn_inside_node : sn_outside_node );
+                   const double  psi_hat_c( (dsdn < zero) ? sn_inside_node : sn_outside_node );
 
                    // computing flow properties at upstream node
                    relperm.SaturationWettingPhase( 1. - psi_hat_c );
                    relperm.EffectiveSaturation();
 
-                   const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
+                   const double capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
 
                    res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
                    res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
@@ -657,13 +657,13 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
  	           // identifying the upstream node
  	           // flow of the lighter phase will always be out of a facet whose normal
  	           // is pointing upward
-               const double64  psi_hat_c( (param.FacetNormalComponent(i,v) < zero) ? sn_outside_node : sn_inside_node );
+               const double  psi_hat_c( (param.FacetNormalComponent(i,v) < zero) ? sn_outside_node : sn_inside_node );
 
                // computing flow properties at upstream node
                relperm.SaturationWettingPhase( 1. - psi_hat_c );
                relperm.EffectiveSaturation();
 
-               const double64 gravity_induced_flux = param.FacetNormalComponent(i,v) * param.FacetArea(i) * 
+               const double gravity_induced_flux = param.FacetNormalComponent(i,v) * param.FacetArea(i) * 
                                                      relperm.GravityMultiplier_G();
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
@@ -678,14 +678,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
           // --------------------------------------------------------------
           if ( param.FacetNormalVelocity(i) != zero ) {
  	           // identifying the upstream saturation (to get psi_hat_c, n_upstream = n_current )
-               const double64  psi_hat_c( (param.FacetNormalVelocity(i) < zero) ? sn_outside_node : sn_inside_node );
+               const double  psi_hat_c( (param.FacetNormalVelocity(i) < zero) ? sn_outside_node : sn_inside_node );
                // fsat is sn interpolated to facet integration point by relperm model
                // NB: Improve this value using up and downstream values together with Kurganov's scheme?
 	           relperm.SaturationWettingPhase( 1. - psi_hat_c );
 	           relperm.EffectiveSaturation();        
 
                // try whether upcasting does not work
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2u);
+               const double nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2u);
 
 	           // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
 	           res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux; 
@@ -709,12 +709,12 @@ Second-order accurate solution with advection and source term limiting
 @section implementation Implementation
 
 The following capillary flow implementation also works fine but
-needs extra source term vector<double64> for accumulation:
+needs extra source term vector<double> for accumulation:
 
 @code
 {
    capillary_flux *= param.FacetArea(i) * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE);
-   const double64 sn_ltd = LimitExplicitSourceTerm( mapping, SMINMAX,
+   const double sn_ltd = LimitExplicitSourceTerm( mapping, SMINMAX,
                                               sn_inside_node, sn_outside_node,
                                               sn_facet, capillary_flux );
 
@@ -734,11 +734,11 @@ but it does it only for the divergence recorded by the FLUX_BALANCE
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
                                      TwoPhaseModel<dim>& relperm,
-                                     vector<double64>& res)
+                                     vector<double>& res)
  {
      eidx_ = e.Idx();
 
@@ -750,15 +750,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
           // --------------------------------------------------------
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
           relperm.EffectiveSaturation();
-          double64 sn_facet        = relperm.Saturation(NONWETTING_PHASE);
+          double sn_facet        = relperm.Saturation(NONWETTING_PHASE);
           // get non-wetting-phase saturations for the inside and the outside nodes
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
           // -----------------------------------------
           // 1. accumulation of nonlinear facet fluxes
           // -----------------------------------------
-          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double64>::epsilon() )
+          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double>::epsilon() )
             {
                // identifying the upstream node (to get psi_hat_c, n_upstream = n_current )
                if ( param.FacetNormalVelocity(i)> 0. )
@@ -770,7 +770,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
                // computing flow properties at upstream node
                relperm.EffectiveSaturation();
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
+               const double nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -785,18 +785,18 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
                                      TwoPhaseModel<dim>& relperm,
-                                     vector<double64>& res,
+                                     vector<double>& res,
                                      const csmp::Index& mass_center_key,
                                      const csmp::Index& grad_sn_key,
                                      const csmp::Index& grad_sn_limiter_key)
  {
      eidx_ = e.Idx();
 
-     double64 limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
+     double limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
 
      for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
@@ -808,14 +808,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
           relperm.EffectiveSaturation();
 
           // get non-wetting-phase saturations for the inside and the outside nodes
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
 
           // -----------------------------------------
           // 1. accumulation of nonlinear facet fluxes
           // -----------------------------------------
-          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double64>::epsilon() )
+          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double>::epsilon() )
             {
 
               limitProperty_LSMGRAD<dim>( e, mass_center_key, grad_sn_key, grad_sn_limiter_key,
@@ -832,7 +832,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
                // computing flow properties at upstream node
                relperm.EffectiveSaturation();
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
+               const double nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -847,15 +847,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
                                      TwoPhaseModel<dim>& relperm,
-                                     vector<double64>& res)
+                                     vector<double>& res)
  {
      eidx_ = e.Idx();
 
-     const double64 zero(0.);
+     const double zero(0.);
 
      // 0. computing capillary pressure gradient from pc at nodes
      // ---------------------------------------------------------
@@ -871,7 +871,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      fill( pc_grad_.begin(), pc_grad_.end(), 0. );
      for ( size_t j=0U; j<e.Nodes(); j++ ) {
           relperm.SaturationWettingPhase( 1. - e.N(j)->Read( adv1key_ ) );
-          const double64 pc_at_node = relperm.pc_Phase(NONWETTING_PHASE);
+          const double pc_at_node = relperm.pc_Phase(NONWETTING_PHASE);
           for ( size_t k=0U; k<dim; k++ ) pc_grad_[k] += DN_(k,j) * pc_at_node;
      }*/
 
@@ -880,7 +880,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
      fill( dsdn_.begin(), dsdn_.end(), 0. );
      for ( size_t j=0U; j<e.Nodes(); j++ ) {
-          const double64 sn = e.N(j)->Read( adv1_key_);
+          const double sn = e.N(j)->Read( adv1_key_);
           for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
@@ -893,15 +893,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           // --------------------------------------------------------
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
           relperm.EffectiveSaturation();
-          double64 sn_facet = relperm.Saturation(NONWETTING_PHASE);
+          double sn_facet = relperm.Saturation(NONWETTING_PHASE);
           // get non-wetting-phase saturations for the inside and the outside nodes
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
           // -----------------------------------------
           // 1. accumulation of nonlinear facet fluxes
           // -----------------------------------------
-          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double64>::epsilon() ) // economising on the computations
+          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double>::epsilon() ) // economising on the computations
             {
 
                // first-order unconditionally stable scheme if at model boundary
@@ -924,7 +924,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                relperm.EffectiveSaturation();
 
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
+               const double nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -942,14 +942,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
           // note: doesn't give the right results!
 
-          const double64 dpcdn(param.FacetNormalProjection( i, pc_grad_ ));
+          const double dpcdn(param.FacetNormalProjection( i, pc_grad_ ));
 
-          if ( fabs(dpcdn) > numeric_limits<double64>::epsilon() )
+          if ( fabs(dpcdn) > numeric_limits<double>::epsilon() )
           {
                relperm.SaturationWettingPhase( 1. - sn_facet );
                relperm.EffectiveSaturation();
                // =  - div . [k * lambda_overbar * dpc/dn]
-               const double64 capillary_flux = param.FacetArea(i) * relperm.Permeability() * relperm.G() * -dpcdn;
+               const double capillary_flux = param.FacetArea(i) * relperm.Permeability() * relperm.G() * -dpcdn;
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
                res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
           }
@@ -960,21 +960,21 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           /// (Roman, 2013 )
           /*
 
-          const double64 ds = (sn_outside_node - sn_inside_node);
+          const double ds = (sn_outside_node - sn_inside_node);
 
           if ( ds != 0.0 ) {
 
-               const double64 dsdn(param.FacetNormalProjection( i, dsdn_ ));
+               const double dsdn(param.FacetNormalProjection( i, dsdn_ ));
 
                // identifying the upstream node
                // flow will be out of a facet if proj. of sat-gradient onto normal is negative
-               const double64  psi_hat_c( (dsdn < zero) ? sn_inside_node : sn_outside_node );
+               const double  psi_hat_c( (dsdn < zero) ? sn_inside_node : sn_outside_node );
 
                // computing flow properties at upstream node
                relperm.SaturationWettingPhase( 1. - psi_hat_c );
                relperm.EffectiveSaturation();
 
-               const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
+               const double capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
 
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
                res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
@@ -988,19 +988,19 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
                                      TwoPhaseModel<dim>& relperm,
-                                     vector<double64>& res,
+                                     vector<double>& res,
                                      const csmp::Index& mass_center_key,
                                      const csmp::Index& grad_sn_key,
                                      const csmp::Index& grad_sn_limiter_key)
  {
      eidx_ = e.Idx();
 
-     double64 limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
-     const double64 zero(0.0);
+     double limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
+     const double zero(0.0);
 
      // 0. computing capillary pressure gradient from pc at nodes
      // ---------------------------------------------------------
@@ -1010,7 +1010,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
      fill( dsdn_.begin(), dsdn_.end(), 0. );
      for ( size_t j=0U; j<e.Nodes(); j++ ) {
-          const double64 sn = e.N(j)->Read( adv1_key_);
+          const double sn = e.N(j)->Read( adv1_key_);
           for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
@@ -1026,13 +1026,13 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           relperm.EffectiveSaturation();
 
           // get non-wetting-phase saturations for the inside and the outside nodes
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
           // -----------------------------------------
           // 1. accumulation of nonlinear facet fluxes
           // -----------------------------------------
-          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double64>::epsilon() ) // economising on the computations
+          if ( fabs(param.FacetNormalVelocity(i)) > numeric_limits<double>::epsilon() ) // economising on the computations
             {
 
               limitProperty_LSMGRAD<dim>( e, mass_center_key, grad_sn_key, grad_sn_limiter_key,
@@ -1050,7 +1050,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                relperm.EffectiveSaturation();
 
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
+               const double nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -1067,21 +1067,21 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           /// (Roman, 2013 )
 
           /*
-          const double64 ds = (sn_outside_node - sn_inside_node);
+          const double ds = (sn_outside_node - sn_inside_node);
 
           if ( ds != 0.0 ) {
 
-               const double64 dsdn(param.FacetNormalProjection( i, dsdn_ ));
+               const double dsdn(param.FacetNormalProjection( i, dsdn_ ));
 
                // identifying the upstream node
                // flow will be out of a facet if proj. of sat-gradient onto normal is negative
-               const double64  psi_hat_c( (dsdn < zero) ? sn_inside_node : sn_outside_node );
+               const double  psi_hat_c( (dsdn < zero) ? sn_inside_node : sn_outside_node );
 
                // computing flow properties at upstream node
                relperm.SaturationWettingPhase( 1. - psi_hat_c );
                relperm.EffectiveSaturation();
 
-               const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
+               const double capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
 
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
                res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
@@ -1103,7 +1103,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
                                                         const FV_Parameter& param,
                                                         const Element<dim>& e,
                                                         TwoPhaseModel<dim>& relperm,
-                                                        vector<double64>& res,
+                                                        vector<double>& res,
                                                         bool with_gravity_forces,
                                                         bool with_capillary_spreading)
  {
@@ -1114,16 +1114,16 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
     relperm.Initialize( e );
 
     const size_t v( (dim==1u) ? 0u : 1u );
-    const double64 zero(0.);
+    const double zero(0.);
 
-    double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-    double64 upstream_fn(0.0),upstream_lambda_overbar(0.0);
-    double64 upstream_sn(0.0),upstream_sw(0.0);
-    double64 vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
+    double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+    double upstream_fn(0.0),upstream_lambda_overbar(0.0);
+    double upstream_sn(0.0),upstream_sw(0.0);
+    double vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
 
-    double64 nonlinear_flux(0.0);
-    double64 viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
-    double64 dsdn(0.0),dpcdn(0.0);
+    double nonlinear_flux(0.0);
+    double viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
+    double dsdn(0.0),dpcdn(0.0);
 
 
     if(with_capillary_spreading){
@@ -1132,7 +1132,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -1146,15 +1146,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
           // ------------------------------------------
           relperm.InitializeForNode( e, inside_node_ );
           relperm.EffectiveSaturation();
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
-          const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
           relperm.InitializeForNode( e, outside_node_ );
           relperm.EffectiveSaturation();
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
-          const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
-          const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -1166,8 +1166,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
 
           if( with_gravity_forces || with_capillary_spreading ){
 
-              double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-              double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+              double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+              double vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
 
               if( with_gravity_forces ){
 
@@ -1298,11 +1298,11 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
                                      TwoPhaseModel<dim>& relperm,
-                                     vector<double64>& res,
+                                     vector<double>& res,
                                      bool with_gravity_forces,
                                      bool with_capillary_spreading)
  {
@@ -1314,16 +1314,16 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
     relperm.Initialize( e );
 
     const size_t v( (dim==1u) ? 0u : 1u );
-    const double64 zero(0.);
+    const double zero(0.);
 
-    double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-    double64 upstream_fn(0.0),upstream_lambda_overbar(0.0);
-    double64 upstream_sn(0.0),upstream_sw(0.0);
-    double64 vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
+    double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+    double upstream_fn(0.0),upstream_lambda_overbar(0.0);
+    double upstream_sn(0.0),upstream_sw(0.0);
+    double vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
 
-    double64 nonlinear_flux(0.0);
-    double64 viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
-    double64 dsdn(0.0),dpcdn(0.0);
+    double nonlinear_flux(0.0);
+    double viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
+    double dsdn(0.0),dpcdn(0.0);
 
     if(with_capillary_spreading){
 
@@ -1331,7 +1331,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -1346,11 +1346,11 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           // Saturation at the facet
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
           relperm.EffectiveSaturation();
-          double64 sn_facet        = relperm.Saturation(NONWETTING_PHASE);
+          double sn_facet        = relperm.Saturation(NONWETTING_PHASE);
 
           // Saturation at the nodes
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
           // #######################################################################
           // Limited saturation at the inside node
@@ -1360,8 +1360,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                                                SMINMAX[ e.N( inside_node_ )->Idx() ] ) );
           relperm.EffectiveSaturation();
 
-          const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
-          const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
+          const double ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
 
           // #######################################################################
@@ -1372,8 +1372,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                                                SMINMAX[ e.N( outside_node_ )->Idx() ] ) );
           relperm.EffectiveSaturation();
 
-          const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
-          const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
+          const double ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -1385,8 +1385,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
           if( with_gravity_forces || with_capillary_spreading ){
 
-              double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-              double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+              double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+              double vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
 
               if( with_gravity_forces ){
 
@@ -1514,11 +1514,11 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
 template<size_t dim>
 void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
-                                     const vector<pair<double64,double64> >& SMINMAX,
+                                     const vector<pair<double,double> >& SMINMAX,
                                      const FV_Parameter& param,
                                      const Element<dim>& e,
                                      TwoPhaseModel<dim>& relperm,
-                                     vector<double64>& res,
+                                     vector<double>& res,
                                      bool with_gravity_forces,
                                      bool with_capillary_spreading,
                                      const csmp::Index& mass_center_key,
@@ -1533,17 +1533,17 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
     relperm.Initialize( e );
 
     const size_t v( (dim==1u) ? 0u : 1u );
-    const double64 zero(0.);
+    const double zero(0.);
 
-    double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-    double64 upstream_fn(0.0),upstream_lambda_overbar(0.0);
-    double64 upstream_sn(0.0),upstream_sw(0.0);
-    double64 vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
-    double64 limited_sn_inside_node(0.0),limited_sn_outside_node(0.0);
+    double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+    double upstream_fn(0.0),upstream_lambda_overbar(0.0);
+    double upstream_sn(0.0),upstream_sw(0.0);
+    double vn_at_facet_int_point(0.0),vw_at_facet_int_point(0.0);
+    double limited_sn_inside_node(0.0),limited_sn_outside_node(0.0);
 
-    double64 nonlinear_flux(0.0);
-    double64 viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
-    double64 dsdn(0.0),dpcdn(0.0);
+    double nonlinear_flux(0.0);
+    double viscous_velocity_component(0.0),gravity_velocity_component(0.0),capillary_velocity_component(0.0);
+    double dsdn(0.0),dpcdn(0.0);
 
     if(with_capillary_spreading){
 
@@ -1551,7 +1551,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -1568,8 +1568,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           relperm.EffectiveSaturation();
 
           // Saturation at the nodes
-          const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
+          const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
+          const double sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
 
           limitProperty_LSMGRAD<dim>( e, mass_center_key, grad_sn_key, grad_sn_limiter_key,
                                       inside_node_,outside_node_, i,
@@ -1585,8 +1585,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           relperm.SaturationWettingPhase( 1. - limited_sn_inside_node );
           relperm.EffectiveSaturation();
 
-          const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
-          const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
+          const double ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
 
           // #######################################################################
@@ -1596,8 +1596,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           relperm.SaturationWettingPhase( 1. - limited_sn_outside_node );
           relperm.EffectiveSaturation();
 
-          const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
-          const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
+          const double ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -1609,8 +1609,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
           if( with_gravity_forces || with_capillary_spreading ){
 
-              double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-              double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+              double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+              double vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
 
               if( with_gravity_forces ){
 
@@ -1743,7 +1743,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
                                                         const Element<dim>& e,
                                                         TwoPhaseModel<dim>& relperm,
                                                         size_t pnid,
-                                                        double64& flux,
+                                                        double& flux,
                                                         bool with_gravity_forces,
                                                         bool with_capillary_spreading)
  {
@@ -1756,14 +1756,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
 
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> velo;
-    double64 facetArea;
+    double facetArea;
 
     if(with_capillary_spreading){
 
         e.dN_AtBaryCenter( DN_ );
         fill( dsdn_.begin(), dsdn_.end(), 0. );
         for ( size_t j=0U; j<e.Nodes(); j++ ) {
-             const double64 sn = e.N(j)->Read( adv1_key_);
+             const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
@@ -1783,15 +1783,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
          e.Read( vel_key_, velo );
          facetArea = e.FacetArea(i);
 
-         const double64 viscous_vel_component = velo.DotProduct(n);
+         const double viscous_vel_component = velo.DotProduct(n);
 
          if( with_gravity_forces){
 
-             const double64 gravity_vel_component = n[v];
+             const double gravity_vel_component = n[v];
 
              if(with_capillary_spreading){
 
-                 const double64 capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
+                 const double capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
 
                  if ( pnid == inside_node_ )
                      flux += (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.GravityMultiplier_G()*gravity_vel_component - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
@@ -1811,7 +1811,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
 
              if(with_capillary_spreading){
 
-                 const double64 capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
+                 const double capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
 
                  if ( pnid == inside_node_ )
                      flux += (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;

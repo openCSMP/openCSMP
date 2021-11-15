@@ -36,15 +36,15 @@ Quadrilaterator::~Quadrilaterator()
 Calculates the harmonic permeability average of the four corner nodes of the 
 quadrilateral. 
 */
-double64 Quadrilaterator::HarmonicPermeabilityAverage( unsigned int m, unsigned int n, 
+double Quadrilaterator::HarmonicPermeabilityAverage( unsigned int m, unsigned int n, 
                                                        const Matrix& perm ) const
  {
-     double64 kinv  = 1. / perm( m, n  );
+     double kinv  = 1. / perm( m, n  );
      kinv += 1.0/perm(m+1,n  );
      kinv += 1.0/perm(m+1,n+1);
      kinv += 1.0/perm(m,  n+1);
      
-     double64 k = 4. / kinv;
+     double k = 4. / kinv;
        
      return k;  
 
@@ -119,7 +119,7 @@ void Quadrilaterator::ReadPixelMatrix( const char* name, bool from_bitmap )
 
 void Quadrilaterator::ScaleModelRange( VSet<2U>& vset_scaled ) const
  {
-    double64 zero(0.0),  extent1,  extent2;
+    double zero(0.0),  extent1,  extent2;
     // Scaling the geometrical input object that will become the Model
     // The origin of the object is assumed to be zero.
     cout <<"\nQuadrilaterator<"<< 2U <<">::ScaleModelRange: ";
@@ -138,9 +138,9 @@ void Quadrilaterator::ScaleModelRange( VSet<2U>& vset_scaled ) const
  
  
 
-void Quadrilaterator::ScaleModelRange( VSet<2U>& vset_scaled, double64 x_dim, double64 y_dim ) const
+void Quadrilaterator::ScaleModelRange( VSet<2U>& vset_scaled, double x_dim, double y_dim ) const
  {
-    double64 zero(0.0);
+    double zero(0.0);
     // Scaling the geometrical input object that will become the Model
     // The origin of the object is assumed to be zero.
     cout <<"\nQuadrilaterator<"<< 2U <<">::ScaleModelRange: ";
@@ -210,7 +210,7 @@ void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, bool from_b
 
 
 void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, const char* file_name, 
-                                                     double64 x_extend, double64 y_extend, bool from_bitmap )
+                                                     double x_extend, double y_extend, bool from_bitmap )
  {
    // read the colorcoded permeability textfile
    ReadPixelMatrix( file_name, from_bitmap );
@@ -246,7 +246,7 @@ void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, const char*
     @attention x_nodes actually refers to the number of rows in the matrix, i.e. nodes along the Y (vertical) axes,
     y_nodes are the number of nodes in the horizontal=x direction.
 */
-void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_extend, double64 y_extend, size_t x_nodes, size_t y_nodes )
+void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, double x_extend, double y_extend, size_t x_nodes, size_t y_nodes )
   {
     cout << "\nQuadrilaterator< dim>::QuadrilateralsFromRegularGrid: Generating Vset for finite element mesh... " << endl;
 
@@ -280,13 +280,13 @@ void Quadrilaterator::QuadrilateralsFromRegularGrid( VSet<2U>& vset, double64 x_
 
 void Quadrilaterator::GenerateVSet( VSet<2U>& vset ) const
  {
-   deque<vector<long64> >     plist( n_elements, vector<long64>(4) ); 
-   deque<vector<long64> >     pfvert( n_elements, vector<long64>(4) );
+   deque<vector<int64_t> >     plist( n_elements, vector<int64_t>(4) ); 
+   deque<vector<int64_t> >     pfvert( n_elements, vector<int64_t>(4) );
    //FEM_Data<ScalarVariable >  edata( ELEMENT, n_elements );
    PropertyData               edata( ELEMENT, SCALAR, 2U );
    
    unsigned int    i, j, n; 
-   long64          fed1, fed2, fed3, fed4;
+   int64_t           fed1, fed2, fed3, fed4;
   
    // n counts the elements
    n = 0;
@@ -358,13 +358,13 @@ void Quadrilaterator::GenerateVSet( VSet<2U>& vset ) const
         // fed3 = element neighboring local nodes 2 and 3 (top)
         // fed4 = element neighboring local nodes 3 and 4 (left)        
         if ( i == 1 )        fed3 = TOP_OUTSIDE;
-        else                 fed3 = static_cast<long64>((n+1)-(rows-1) - 1);
+        else                 fed3 = static_cast<int64_t>((n+1)-(rows-1) - 1);
         if ( i == (rows-1) ) fed1 = BOTTOM_OUTSIDE;
-        else                 fed1 = static_cast<long64>((n+1)+(rows-1) - 1);
+        else                 fed1 = static_cast<int64_t>((n+1)+(rows-1) - 1);
         if ( j == 1 )        fed4 = LEFT_OUTSIDE;
-        else                 fed4 = static_cast<long64>((n+1)-2);
+        else                 fed4 = static_cast<int64_t>((n+1)-2);
         if ( j == (cols-1) ) fed2 = RIGHT_OUTSIDE;
-        else                 fed2 = static_cast<long64>((n+1));
+        else                 fed2 = static_cast<int64_t>((n+1));
         pfvert[n][0] = fed1;
         pfvert[n][1] = fed2;
         pfvert[n][2] = fed3;
@@ -381,7 +381,7 @@ void Quadrilaterator::GenerateVSet( VSet<2U>& vset ) const
    vset.AddData( "permeability", edata );
    
    // Flipping the Y-axis
-   double64 ymax = vset.Py(0U);
+   double ymax = vset.Py(0U);
    for ( i=1; i<vset.Vertices(); i++ ) 
        if ( vset.Py(i) > ymax ) ymax = vset.Py(i);
    ymax += 1.0; // scale from 1 to rows      

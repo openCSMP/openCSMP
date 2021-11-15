@@ -116,10 +116,10 @@ bool doesPointExist( const std::map<std::set<size_t>,GridNode*>& additional_poin
 bool doesPointExist( const std::map<std::set<size_t>,GridNode*>& additional_points, GridNode*& pt, GridNode* const pt0, GridNode* const pt1 );
 
 
-bool containRemeshedFaces( const std::map<std::set<size_t >,GridNode*>& additional_points, const std::vector<GridNode*>& nodes, const std::vector<std::vector<size_t> >& face_nodes );
+bool containRemeshedFaces( const std::map<std::set<size_t>,GridNode*>& additional_points, const std::vector<GridNode*>& nodes, const std::vector<std::vector<size_t> >& face_nodes );
 
 
-bool containRemeshedEdges( const std::map<std::set<size_t >,GridNode*>& additional_points, const std::vector<GridNode*>& nodes, const std::vector<std::vector<size_t> >& face_nodes );
+bool containRemeshedEdges( const std::map<std::set<size_t>,GridNode*>& additional_points, const std::vector<GridNode*>& nodes, const std::vector<std::vector<size_t> >& face_nodes );
 
 
 bool chooseFaceCentroid( std::map<std::set<size_t>,GridNode*>& additional_points, GridNode& pt, GridNode* pt0, GridNode* pt1, GridNode* pt2, GridNode* pt3 );
@@ -154,20 +154,20 @@ bool addFaceCentroid( PolygonGridManager* pgm, std::map<std::set<size_t>,GridNod
 
 /// extra useful meshing techiques
 
-bool addCellCentroid( PolygonGridManager* pgm, std::map<std::set<size_t >,GridNode*>& additional_points,
-                      std::set<std::set<size_t > >& additional_edges,
+bool addCellCentroid( PolygonGridManager* pgm, std::map<std::set<size_t>,GridNode*>& additional_points,
+                      std::set<std::set<size_t> >& additional_edges,
                       GridNode*& cgn, const std::vector<GridNode*>& nodes,
                       const std::vector<std::vector<size_t> >& quad_face_nodes );
 
 
-bool addCellFaceCentroids( PolygonGridManager* pgm, std::map<std::set<size_t >,GridNode*>& additional_points,
-                           std::set<std::set<size_t > >& additional_edges,
+bool addCellFaceCentroids( PolygonGridManager* pgm, std::map<std::set<size_t>,GridNode*>& additional_points,
+                           std::set<std::set<size_t> >& additional_edges,
                            const std::vector<GridNode*>& nodes,
                            const std::vector<std::vector<size_t> >& face_nodes );
 
 
-bool addOverlappingCellFaceCentroids( PolygonGridManager* pgm, std::map<std::set<size_t >,GridNode*>& additional_points,
-                                      std::set<std::set<size_t > >& additional_edges,
+bool addOverlappingCellFaceCentroids( PolygonGridManager* pgm, std::map<std::set<size_t>,GridNode*>& additional_points,
+                                      std::set<std::set<size_t> >& additional_edges,
                                       GridNode*& cgn, const std::vector<GridNode*>& nodes,
                                       const std::vector<std::vector<size_t> >& face_nodes );
 
@@ -185,8 +185,8 @@ typedef std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > Cel
 // break up - far too many options make debugging impossible
 bool processCellWithCentroids( bool add_edge_centroid, bool add_face_centroid, bool add_cell_centroid, bool is_volumetric_element, bool tetra_mesh,
                                PolygonGridManager* pgm,
-                               std::map<std::set<size_t >,GridNode*>& additional_points,
-                               std::set<std::set<size_t > >& additional_edges,
+                               std::map<std::set<size_t>,GridNode*>& additional_points,
+                               std::set<std::set<size_t> >& additional_edges,
                                std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
                                CellFaces& faces,
                                std::vector<GridNode* >& extra_nodes,

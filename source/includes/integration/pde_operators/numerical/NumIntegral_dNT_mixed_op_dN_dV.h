@@ -23,7 +23,7 @@ class NumIntegral_dNT_mixed_op_dN_dV : public MathOperatorLHS<dim> {
   private:
     DenseMatrix<DM_MIN>     B, BT, NVAL;
     Index                   nkey; ///< nodal multiplier for operand
-    std::vector<double64>   ip_nmult;
+    std::vector<double>   ip_nmult;
 };
 
 } // csmp

@@ -86,7 +86,7 @@ void Tutorial4_Example::Run()
     // ------------------------------------
 
     // input material and fluid properties
-    const double64 viscosity(0.001); // in Pa sec
+    const double viscosity(0.001); // in Pa sec
     model.InputPropertyValue( "viscosity",   makeScalar(PLAIN,viscosity) );
     model.InputPropertyValue( "porosity",    makeScalar(PLAIN,1.0) );
     model.InputPropertyValue( "zero",        makeScalar(PLAIN,0.0) ); // dummy variable needed to close coupled FE algorithm
@@ -225,7 +225,7 @@ void Tutorial4_Example::Run()
 
     // record timing of the simulation
     clock_t end(clock());
-    cerr << "\n\nmain: CPU time was " << static_cast<double64>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl << endl;
+    cerr << "\n\nmain: CPU time was " << static_cast<double>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl << endl;
 
     // terminate
     cerr <<"\n\nmain: That's it, run completed successfully..."<< endl;
@@ -254,7 +254,7 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   csmp::Index       tf_key(mdl.Database().StorageKey(temp_flux.c_str())),
                     f_key(mdl.Database().StorageKey(flux));
   ScalarVariable    tf, f;
-  double64          y[2], area, length(0.0);
+  double          y[2], area, length(0.0);
   size_t            j;
 
   cout << "\nassignFluxToPointSource: Translating '" << flux << "' into a nodal point source" << endl;
@@ -287,7 +287,7 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
                   area = y[0] - y[1];
                   if ( area < 0.0 ) area *= -1.0;
                   length += area;
-                  area /= static_cast<double64>(j); // 2 nodes per triangle or quadrilateral
+                  area /= static_cast<double>(j); // 2 nodes per triangle or quadrilateral
                 }
           // second loop to calculate and scale nodal flux
           for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
@@ -334,10 +334,10 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
 
 
   /// scale the size of the CSMP model (NB divides by the provided factor!)
-  void Tutorial4_Example::scaleRegion( Model<2U>& mdl, double64 scale_factor )
+  void Tutorial4_Example::scaleRegion( Model<2U>& mdl, double scale_factor )
   {
-    double64       x_, y_;
-    const double64 factor(scale_factor);
+    double       x_, y_;
+    const double factor(scale_factor);
 
     static const Region<2U>& mref = mdl.Region("Model");
     vector<Node<2U>* >::const_iterator nit;

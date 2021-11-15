@@ -316,7 +316,7 @@ PDE_Integrator.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 bool  PDE_Integrator<dim,COMPUTATION_DOMAIN>::Transient() const
- { return !(time_increment_ < numeric_limits<double64>::epsilon()); }
+ { return !(time_increment_ < numeric_limits<double>::epsilon()); }
 
 
 
@@ -332,7 +332,7 @@ Set the time-increment of an PDE_Integrator before you Apply() it to the
 Model or target Region objects.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void   PDE_Integrator<dim,COMPUTATION_DOMAIN>::TimeIncrement( double64 dt )
+void   PDE_Integrator<dim,COMPUTATION_DOMAIN>::TimeIncrement( double dt )
  {
     time_increment_ = dt;
  }
@@ -352,7 +352,7 @@ To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32 precision )
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
 
@@ -513,9 +513,9 @@ instance to use it as initial guess in another time step. (Use method
 FirstGuess)
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double64>& sol ) const {
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double>& sol ) const {
   sol.resize(x_.size());
-  vector<double64>( sol ).swap( sol );
+  vector<double>( sol ).swap( sol );
   copy(x_.begin(), x_.end(), sol.begin());
 }
 
@@ -536,7 +536,7 @@ NOTE: Make sure that you actually use an algebraic multigrid solver object and t
 parameter ifirst in its SAMG_Settings object is set to 0.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double64>& guess ) {
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double>& guess ) {
   assert(guess.size() == x_.size());
   copy(guess.begin(), guess.end(), x_.begin());
 }
@@ -915,15 +915,15 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
    // * Change: resize x as well
    G_.Resize( offset );
    rh_.resize( offset );
-   vector<double64>( rh_ ).swap( rh_ );
+   vector<double>( rh_ ).swap( rh_ );
    fill( rh_.begin(), rh_.end(), 0. );
    x_.resize( offset );
-   vector<double64>( x_ ).swap( x_ );
+   vector<double>( x_ ).swap( x_ );
 #if defined(_OPENMP )
    for (size_t tid = 0 ; tid < omp_get_max_threads() ; tid++){
        this->thread_G_[tid].Resize(offset);
        this->thread_rh_[tid].resize(offset);
-       vector<double64>( thread_rh_[tid] ).swap( thread_rh_[tid] );
+       vector<double>( thread_rh_[tid] ).swap( thread_rh_[tid] );
        fill( thread_rh_[tid].begin(), thread_rh_[tid].end(), 0. );
    }
 #endif
@@ -1089,7 +1089,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
     @author SKM 1/10/2014
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ScaleEssentialConditions( double64 scale_factor )
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ScaleEssentialConditions( double scale_factor )
  {
     scale_factor_ = scale_factor;
    
@@ -1362,7 +1362,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
               it_lhs=this->thread_lhs_operators_[tid].begin(); it_lhs!=this->thread_lhs_operators_[tid].end(); it_lhs++ ){
             if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() ){
 #pragma omp for
-                for ( int32 e = 0 ; e < gref.Elements(); e++ )
+                for ( int32_t e = 0 ; e < gref.Elements(); e++ )
                 {
 //                    cout<<"element: "<<e<<endl;
 // TODO: check what is going on here with the parallel accumulation
@@ -1398,7 +1398,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
               it_rhs=this->thread_rhs_operators_[tid].begin(); it_rhs!=this->thread_rhs_operators_[tid].end(); it_rhs++ ){
             if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() ){
 #pragma omp for
-                for ( int32 e = 0 ; e < gref.Elements(); e++ )
+                for ( int32_t e = 0 ; e < gref.Elements(); e++ )
                 {
                     typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
                     fe_tmp=eit->FE(); //save old pointer.
@@ -1594,7 +1594,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
          {
             case SCALAR:
                  while ( gfirst != gref.NodesEnd() ) {
-                      const double64 sc = x_[ (*gfirst)->Idx() + offset ];
+                      const double sc = x_[ (*gfirst)->Idx() + offset ];
                       (*gfirst)->Store( prop_key, makeScalar((*gfirst)->Status(prop_key),sc) );
                       gfirst++;
                    }

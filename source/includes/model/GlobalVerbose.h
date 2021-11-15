@@ -2,11 +2,8 @@
 #define GLOBAL_VERBOSE_H
 
 #include "GenericSingleton.h"
-#include "CSMP_number_types.h"
 
-
-namespace csmp
-{
+namespace csmp {
 
  /**
  @brief Globally visible switch to turn console output from classes on/off.

@@ -458,7 +458,7 @@ void boundaryMinMaxCoordinates( BOX_BOUNDARY boundary,
 /**
 Returns a normal (vector) to the specified boundary of a box-shaped model.
 */
-void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double64>& nrml ) const
+void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double>& nrml ) const
 {
   nrml.resize( dim );
 
@@ -1978,7 +1978,7 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
   Region<dim>&  mregion( model.Region( "Model" ) );
 
   for ( auto nit = mregion.NodesBegin(); nit != mregion.NodesEnd(); nit++ )
-    (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double64>((*nit)->AtBoundary()) ) );
+    (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double>((*nit)->AtBoundary()) ) );
 
   for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ ) {
        size_t face = UNSPECIFIED;
@@ -1990,9 +1990,9 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
               break;
            }
        if ( at_boundary )
-         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double64>(atBoundary(*eit,face)) ) );
+         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double>(atBoundary(*eit,face)) ) );
        else
-         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double64>(NOT) ) );
+         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double>(NOT) ) );
     }
 
 } // end boxFlagsToVariable
@@ -2006,7 +2006,7 @@ template void boxFlagsToVariable( Model<3>&, const char*, const char* );
 
 template<size_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
-                               const char* node_property, double64& bmin, double64& bmax )
+                               const char* node_property, double& bmin, double& bmax )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2193,9 +2193,9 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 )
 
 
 
-template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double64&, double64& );
-template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double64&, double64& );
-template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double64&, double64& );
+template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double&, double& );
+template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double&, double& );
+template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double&, double& );
 
 
 

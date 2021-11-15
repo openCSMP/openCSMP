@@ -13,9 +13,9 @@ namespace csmp{
 @attention Use only this conctructor. TwophaseVapor computes the NaCl concentration of liquid on the twophase liquid+vapor surface as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, TwophaseVapor is able to decipher their current values when being queried for the NaCl concentration. Only this constructor is allowed to ensure that functionality, default constructor has been made private. See remarks on thirs constructor variable in full class documentation and code example.
   */
 
-  TwophaseVapor::TwophaseVapor(const double64& externaltemperature, 
-                               const double64& externalpressure,
-                               const double64& ph2o)
+  TwophaseVapor::TwophaseVapor(const double& externaltemperature, 
+                               const double& externalpressure,
+                               const double& ph2o)
     : 
     temperature_(externaltemperature), 
     pressure_(externalpressure),
@@ -40,7 +40,7 @@ namespace csmp{
   /** Value of mass fraction of dissolved NaCl in vapor on twophase liquid+vapor surface
       @attention The value is based on converting the mole fraction computed from equations 12-17 in Driesner & Heinrich (2007). Conversion is based on ConvertConcentrationUnitsNaCl.h; to stay consistent, use values and functions provide therein for further computations if you need unit conversion.
    */
-  double64 TwophaseVapor::MassFractionNaCl()                  
+  double TwophaseVapor::MassFractionNaCl()                  
   { 
     CheckState(); 
     return massfractionnacl_; 
@@ -59,8 +59,8 @@ namespace csmp{
 
   /** Equation 13 of Driesner and Heinrich (2007)
    */
-  double64 TwophaseVapor::MoleFractionNaCl(){
-    double64 result;
+  double TwophaseVapor::MoleFractionNaCl(){
+    double result;
     result  = Massfraction2XNaCl(naclsatvap.MassFractionNaCl());
     result *= Massfraction2XNaCl(twophase_l.MassFractionNaCl());
     result /= Massfraction2XNaCl(liquidus.MassFractionNaCl());

@@ -208,7 +208,7 @@ void BoundaryInterface_Test::run()
 
       // creating property values on the boundaries and outputting these to VTU
       model.InputPropertyValue("nodal variable", makeScalar(PLAIN, 0.) );
-      double64  bvalue(1.3e5);
+      double  bvalue(1.3e5);
       for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it ) {
            if ( verbose_ ) cout << "\n Boundary: " << (*it).first;
            (*it).second.InputPropertyValue("nodal variable", makeScalar(PLAIN, bvalue) );
@@ -327,7 +327,7 @@ size_t countAndLabelRegions( Model<dim>& model, const char* region_identifier, s
     region_names.resize(model.UniqueRegions());
     size_t regions(0);
     for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); it++ ) {
-         (*it).second.InputPropertyValue( rvariable.c_str(), makeScalar(PLAIN,static_cast<double64>(regions)) );
+         (*it).second.InputPropertyValue( rvariable.c_str(), makeScalar(PLAIN,static_cast<double>(regions)) );
          region_names[regions] = (*it).first;
          regions++;
       }
@@ -363,7 +363,7 @@ template size_t countAndLabelRegions( Model<3U>&, const char*, std::vector<std::
 */
 bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
  {
-    vector<double64> normal(3U), nbor_normal(3U);
+    vector<double> normal(3U), nbor_normal(3U);
    
     size_t non_surface_elements(0U);
     for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
@@ -376,7 +376,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
              if ( (*it)->Neighbor(i) != nullptr ) {
                   (*it)->Neighbor(i)->UnitNormal( nbor_normal );
                   // projection
-                  double64 result(0.);
+                  double result(0.);
                   for ( size_t j=0U; j<3U; ++ j )
                     result += normal[j] * nbor_normal[j];
                   if ( result < 0. )
@@ -577,7 +577,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const cs
    
     // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
     // -------------------------------------------------------------------------------------------------------------
-    vector<double64>  enrml, fnrml;
+    vector<double>  enrml, fnrml;
     e.UnitNormal( enrml );
     map<const Element<3U>*,size_t>::const_iterator  nbit(nbor_elmts.begin());
     bool inside_elmt_found(false);
@@ -591,7 +591,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const cs
     assert( (*nbit).first != nullptr );
     faces.first = (*nbit).second;
     (*nbit).first->UnitNormalToFace( faces.first, fnrml );
-    double64 dotproduct = enrml[0] * fnrml[0] + enrml[1] * fnrml[1] + enrml[2] * fnrml[2];
+    double dotproduct = enrml[0] * fnrml[0] + enrml[1] * fnrml[1] + enrml[2] * fnrml[2];
    
     // if the projection is negative, the first element lies on the outside
     if ( dotproduct < 0. ) {
@@ -659,7 +659,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
       }
     // verifying that we are indeed dealing with a region of surface elements only
     Region<3U>&  subdomain(model.Region(dim_1_region));
-    pair<int32,int32>  dimensionality = subdomain.ElementSpatialDimensions();
+    pair<int32_t,int32_t>  dimensionality = subdomain.ElementSpatialDimensions();
     //   number of dims in region      dimension of contained elements
     if ( dimensionality.first != 1 and dimensionality.second != 2 ) {
          ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "region does not consist of surface elements only; nothing was done." );
@@ -684,9 +684,9 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
          return 0;
       }
       {  // check whether there are multiple region identifiers
-         double64 rmin, rmax;
+         double rmin, rmax;
          model.MinMaxOf( diagnostic_elmt_variable, rmin, rmax );
-         if ( fabs(rmax - rmin) <= numeric_limits<double64>::epsilon() ) {
+         if ( fabs(rmax - rmin) <= numeric_limits<double>::epsilon() ) {
               ErrorHandler::Instance().notice( WARNING, "labelRegionPatches:", diagnostic_elmt_variable, "is single valued; so there is only one patch." );
               return 1;
            }
@@ -732,7 +732,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
           fdata.PatchNumber( (*it.first).second );
 
           // 3.3 recording the patch number as variable value
-          (*eit)->Store( pvar_key, makeScalar(PLAIN,static_cast<double64>((*it.first).second)) );
+          (*eit)->Store( pvar_key, makeScalar(PLAIN,static_cast<double>((*it.first).second)) );
         
           // 3.4 recording the data for the element that will later be used to construct the face from
           face_construction_data.push_back( fdata );

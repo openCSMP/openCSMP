@@ -12,12 +12,12 @@ namespace csmp
     CriticalPointH2O();
     ~CriticalPointH2O();
     
-    double64 Temperature()      const;
-    double64 Pressure()         const;
-    double64 MassFractionNaCl() const;
-    double64 Density()          const;
-    double64 MolarVolume()      const;
-    double64 Enthalpy()         const;
+    double Temperature()      const;
+    double Pressure()         const;
+    double MassFractionNaCl() const;
+    double Density()          const;
+    double MolarVolume()      const;
+    double Enthalpy()         const;
   };
   
 

@@ -78,7 +78,7 @@ void Region_Test::run()
 
     // we will solve a 3D steady state pressure problem (model contain 3 fractures)
     // calculate hydraulic conductivity, K = k / mu
-    const double64 fluid_viscosity(1.0e-03);
+    const double fluid_viscosity(1.0e-03);
 
     ConstantFactor<DIM,divides>  conductivity( model.Database(),
                                                "conductivity", "permeability",
@@ -194,7 +194,7 @@ void Region_Test::run()
     // loop over nodes for pressure test
     for ( vector<Node<DIM>*>::iterator npit= nodes_begin; npit!=nodes_end; npit++ )
       {
-          double64 pres;
+          double pres;
           pres = (*npit)->Read(PresKey);
           if ( (pres < 1.5e6 or pres > 1.8e6) ) tes++;
       }
@@ -205,7 +205,7 @@ void Region_Test::run()
     tes=0;
     for ( vector<Element<DIM>*>::iterator npit= Elements_begin; npit!=Elements_end; npit++ )
       {
-          double64 perm;
+          double perm;
           perm = (*npit)->Read(PermKey);
           if ( (perm > 1.e-11 or perm < 1.e-12 ) ) tes++;
       }
@@ -360,24 +360,24 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // corner_points
     Point<3U> xyz_min, xyz_max;
     model1.MinMaxCoordinates( xyz_min, xyz_max );
-    const double64 dx(xyz_max[0]-xyz_min[0]), dy(xyz_max[1]-xyz_min[1]), dz(xyz_max[2]-xyz_min[2]);
-    const double64 surface_area = 2.*dx*dy + 2.*dx*dz + 2.*dy*dz;
+    const double dx(xyz_max[0]-xyz_min[0]), dy(xyz_max[1]-xyz_min[1]), dz(xyz_max[2]-xyz_min[2]);
+    const double surface_area = 2.*dx*dy + 2.*dx*dz + 2.*dy*dz;
   
     const Region<3U>& model1_domain(model1.Region("Model"));
-    const double64 surface_area1 = model1_domain.SurfaceArea();
-    const double64 volume1       = model1_domain.Volume();
+    const double surface_area1 = model1_domain.SurfaceArea();
+    const double volume1       = model1_domain.Volume();
   
-    _equal( surface_area1, surface_area, numeric_limits<double64>::epsilon() * surface_area );
+    _equal( surface_area1, surface_area, numeric_limits<double>::epsilon() * surface_area );
   
     // extracting perimeter elements to set for comparison
     size_t perimeter_elements(model1_domain.PerimeterElements());
     // extracting the perimeter face vector for comparison with re-read model2
-    vector<vector<int8> > perimeter_faces;
+    vector<vector<int8_t> > perimeter_faces;
     perimeter_faces.reserve(model1_domain.PerimeterElements());
     for ( size_t e=model1_domain.InteriorElements(); e<model1_domain.Elements(); ++e ) {
-         vector<int8>  face_vec;
+         vector<int8_t>  face_vec;
          for ( size_t i=0U; i<model1_domain.PerimeterFaces(e); ++i )
-           face_vec.push_back( static_cast<int8>(model1_domain.PerimeterFace(e,i)) );
+           face_vec.push_back( static_cast<int8_t>(model1_domain.PerimeterFace(e,i)) );
          perimeter_faces.push_back( move(face_vec) );
       }
     // counting the perimeter faces
@@ -399,12 +399,12 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     _test( perimeter_elements = perimeter_elements2 );
   
     // test 1: re-read model2
-    vector<vector<int8> > perimeter_faces2;
+    vector<vector<int8_t> > perimeter_faces2;
     perimeter_faces2.reserve(model2_domain.PerimeterElements());
     for ( size_t e=model2_domain.InteriorElements(); e<model2_domain.Elements(); ++e ) {
-         vector<int8>  face_vec;
+         vector<int8_t>  face_vec;
          for ( size_t i=0U; i<model2_domain.PerimeterFaces(e); ++i )
-           face_vec.push_back( static_cast<int8>(model2_domain.PerimeterFace(e,i)) );
+           face_vec.push_back( static_cast<int8_t>(model2_domain.PerimeterFace(e,i)) );
          perimeter_faces2.push_back( move(face_vec) );
       }
     // counting the perimeter faces
@@ -420,11 +420,11 @@ bool Region_Test::TestBoundaryFaceFunctionality()
 
     // test 6: verifying that the outer surface area and volume of in the re-read CSMP native model is the same
     // region surface area
-    const double64 surface_area2 = model2_domain.SurfaceArea();
-    _equal( surface_area1, surface_area2, numeric_limits<double64>::epsilon() * surface_area1 );
+    const double surface_area2 = model2_domain.SurfaceArea();
+    _equal( surface_area1, surface_area2, numeric_limits<double>::epsilon() * surface_area1 );
     // region volume
-    const double64 volume2 = model2_domain.Volume();
-    _equal( volume1, volume2, numeric_limits<double64>::epsilon() * volume1 );
+    const double volume2 = model2_domain.Volume();
+    _equal( volume1, volume2, numeric_limits<double>::epsilon() * volume1 );
 
     // 3. getting extra diagnostics from the RegionMonitor
     // ----------------------------------------------------------
@@ -435,7 +435,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     model1.InputPropertyValue ( "nodal fluid volume source", makeScalar(PLAIN,0.) );
     model1.InputPropertyValue ( "concentration", makeScalar(PLAIN,0.) );
     // boundary conditions
-    const double64 pressure (10*101325.);
+    const double pressure (10*101325.);
     model1.InputBoundaryValue( LEFT,  "fluid pressure",   makeScalar(DIRICH, 0.) );
     model1.InputBoundaryValue( RIGHT, "fluid pressure",   makeScalar(DIRICH,pressure) ); // 1 bar
 
@@ -463,17 +463,17 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     // corner_points
     Point<3U> xyz_min, xyz_max;
     model1.MinMaxCoordinates( xyz_min, xyz_max );
-    const double64 dx(xyz_max[0]-xyz_min[0]), dy(xyz_max[1]-xyz_min[1]), dz(xyz_max[2]-xyz_min[2]);
-    const double64 surface_area = 2.*dx*dy + 2.*dx*dz + 2.*dy*dz;
+    const double dx(xyz_max[0]-xyz_min[0]), dy(xyz_max[1]-xyz_min[1]), dz(xyz_max[2]-xyz_min[2]);
+    const double surface_area = 2.*dx*dy + 2.*dx*dz + 2.*dy*dz;
 
     InputDataManager<DIM>  model_configuration;
     model_configuration.ConfigureFromFile( model1, model_name.c_str(),
                                            false, true, true, true, false  );
   
     const Region<3U>& model1_domain(model1.Region("Model"));
-    double64 surface_area1 = model1_domain.SurfaceArea();
+    double surface_area1 = model1_domain.SurfaceArea();
   
-    _equal( surface_area1, surface_area, numeric_limits<double64>::epsilon() * surface_area * 100. );
+    _equal( surface_area1, surface_area, numeric_limits<double>::epsilon() * surface_area * 100. );
   
     model1.OutputToBinaryFile("model1");
   
@@ -482,9 +482,9 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     _test( consistencyCheckNeighborVersusPerimeterFaces( model2 ) );
 
     const Region<3U>& model2_domain(model2.Region("Model"));
-    double64 surface_area2 = model2_domain.SurfaceArea();
+    double surface_area2 = model2_domain.SurfaceArea();
   
-    _equal( surface_area1, surface_area2, numeric_limits<double64>::epsilon() * surface_area1 * 100. );
+    _equal( surface_area1, surface_area2, numeric_limits<double>::epsilon() * surface_area1 * 100. );
   
     const bool integrate_pore_volume_only(true);
     RegionMonitor<3U>  monitor( model2, "porosity", "fluid pressure",  integrate_pore_volume_only);
@@ -516,12 +516,12 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
      size_t n_perimeter_nodes(domain.PerimeterNodes());
      size_t n_perimeter_elements(domain.PerimeterElements());
      // extracting the perimeter face vector for comparison with re-read model2
-     vector<vector<int8> > perimeter_faces;
+     vector<vector<int8_t> > perimeter_faces;
      perimeter_faces.reserve(domain.PerimeterElements());
      for ( size_t e=domain.InteriorElements(); e<domain.Elements(); ++e ) {
-          vector<int8>  face_vec;
+          vector<int8_t>  face_vec;
           for ( size_t i=0U; i<domain.PerimeterFaces(e); ++i )
-            face_vec.push_back( static_cast<int8>(domain.PerimeterFace(e,i)) );
+            face_vec.push_back( static_cast<int8_t>(domain.PerimeterFace(e,i)) );
           perimeter_faces.push_back( move(face_vec) );
        }
 
@@ -545,12 +545,12 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
      size_t n_perimeter_nodes2(domain2.PerimeterNodes());
      size_t n_perimeter_elements2(domain2.PerimeterElements());
      // extracting the perimeter face vector for comparison with re-read model2
-     vector<vector<int8> > perimeter_faces2;
+     vector<vector<int8_t> > perimeter_faces2;
      perimeter_faces2.reserve(domain2.PerimeterElements());
      for ( size_t e=domain2.InteriorElements(); e<domain2.Elements(); ++e ) {
-          vector<int8>  face_vec;
+          vector<int8_t>  face_vec;
           for ( size_t i=0U; i<domain2.PerimeterFaces(e); ++i )
-            face_vec.push_back( static_cast<int8>(domain2.PerimeterFace(e,i)) );
+            face_vec.push_back( static_cast<int8_t>(domain2.PerimeterFace(e,i)) );
           perimeter_faces2.push_back( move(face_vec) );
        }  
 	 

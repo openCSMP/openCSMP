@@ -48,7 +48,7 @@ bool Standard_IO_Handler::YesNo( const char question[150] )
     quest : { cout<<"\n\n"<< question << " [y/n] ";
               cout.flush();
               cin.get( c );
-              i = (int32)( c );
+              i = static_cast<int32_t>( c );
               if ( i == 121 ) answer = true;
               if ( i == 110 ) answer = false;
               if ( i != 121 && i != 110 ) 
@@ -110,7 +110,7 @@ void Standard_IO_Handler::Protocol( const char* info )
 @param parameter Number to be displayed after successfully opening file
 
 */
-void Standard_IO_Handler::Protocol( const char* info, double64 parameter )
+void Standard_IO_Handler::Protocol( const char* info, double parameter )
   {
     ofstream  ofs;
     string    s(protocol_file_);
@@ -143,10 +143,10 @@ void Standard_IO_Handler::Protocol( const char* info, double64 parameter )
 @return The user input
 */
 
-double64 Standard_IO_Handler::RecordChoice( const char* question )
+double Standard_IO_Handler::RecordChoice( const char* question )
  {
     cout <<"\n"<< question <<" ";
-    double64 result;
+    double result;
     cin >> result;
 
     string  communication(question);

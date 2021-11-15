@@ -187,7 +187,7 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in subdomain
-    std::pair<int32,int32>  SpatialDimensions() const;
+    std::pair<int32_t,int32_t>  SpatialDimensions() const;
 
     /// returns diagonally opposite points of bounding box
     void  MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
@@ -221,8 +221,8 @@ class ModelSubDomain {
     /// changes the flag of the scalar variable 'property' to new value if the scalar variable is withing the specified range
     void ChangePropertyStatusWhere( const char* property,
                                     VARIABLE_FLAG new_status_of_scalar,
-                                    double64 min_value_to_change,
-                                    double64 max_value_to_change );
+                                    double min_value_to_change,
+                                    double max_value_to_change );
 
     /// changes the flags of the vector variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter
     void ChangePropertyStatus( const char* property,
@@ -232,8 +232,8 @@ class ModelSubDomain {
     /// changes the flag of the vector variable 'property' to new value if the scalar variable is withing the specified range
     void ChangePropertyStatusWhere( const char* property,
                                     const std::vector<VARIABLE_FLAG>& new_status,
-                                    double64 min_value_to_change,
-                                    double64 max_value_to_change );
+                                    double min_value_to_change,
+                                    double max_value_to_change );
 
     /// changes the flag of a particular variable component to new value; applied either in the entire subdomain or its interior or perimeter
     void ChangePropertyStatus( const char* property,
@@ -245,15 +245,15 @@ class ModelSubDomain {
     void ChangePropertyStatusWhere( const char* property,
                                     size_t component,
                                     VARIABLE_FLAG new_status,
-                                    double64 min_value_to_change,
-                                    double64 max_value_to_change );
+                                    double min_value_to_change,
+                                    double max_value_to_change );
 
     /// by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned
     VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , size_t i=0 ) const;
 
     /// min/max property values (length of vectors and eigenvalues of tensors)
-    void MinMaxOf( const char* property,   double64& gmin, double64& gmax ) const;
-    void MinMaxOf( const csmp::Index&,     double64& gmin, double64& gmax ) const;
+    void MinMaxOf( const char* property,   double& gmin, double& gmax ) const;
+    void MinMaxOf( const csmp::Index&,     double& gmin, double& gmax ) const;
 
 
     // ----------------------------------------
@@ -274,7 +274,7 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// arithmetic (number as opposed to volume weighted) average
-    double64  Average( const char* property ) const;
+    double  Average( const char* property ) const;
     bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
     void CopyReplace( const char* from, const char* to );
 

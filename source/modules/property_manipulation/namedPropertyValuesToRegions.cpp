@@ -62,7 +62,7 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
   cout << "\n\t" << text_line << endl;
 
   // 1.3 reading the rocktype identifiers from file
-  map<int32,string>  prop_value_region_name_mapping;
+  map<int32_t,string>  prop_value_region_name_mapping;
 
   while ( !ifs.eof() )
   {
@@ -71,10 +71,10 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
     // only the first 2 tokens are used alllowing the user to add comments afterwards
     // rocktype
     token = strtok( text_line, delims );
-    int32 rocktype = (token != NULL) ? atoi( token ) : UNSPECIFIED;
+    int32_t rocktype = (token != nullptr) ? atoi( token ) : UNSPECIFIED;
     // facies name / association
-    token = strtok( NULL, delims );
-    string rocktype_name = (token != NULL) ? to_string( token ) : "UNSPECIFIED";
+    token = strtok( nullptr, delims );
+    string rocktype_name = (token != nullptr) ? token : "UNSPECIFIED";
 
     prop_value_region_name_mapping.insert( make_pair( rocktype, rocktype_name ) );
   }
@@ -93,18 +93,18 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
     }
   cout << "\n\n";
 
-  set<int32>   region_identifiers_without_name;
+  set<int32_t>   region_identifiers_without_name;
   Region<dim>&  model_domain( model.Region( "Model" ) );
   for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
   {
-    const double64 value = (*it)->Read( prop_key );
+    const double value = (*it)->Read( prop_key );
     // checking that the property value can indeed be converted into an integer in a meaningful range
     // using the modulus operator % to determine whether the number has a decimal fraction
     if ( fmod( value, 1. ) != 0 ) {
          cerr <<"\n\tproperty value: "<< value << endl;
          csmp::Exception( ERROR, "namedPropertyValuesToRegions", "region identifier contains decimal places and can therefore not be converted to integer.");
       }
-    const int32 region_identifier = static_cast<int32>(value);
+    const int32_t region_identifier = static_cast<int32_t>(value);
     
     // if the rocktype can be identified, we store the element id for the later creation of a region
     if ( prop_value_region_name_mapping.find( region_identifier ) == prop_value_region_name_mapping.end() )
@@ -128,7 +128,7 @@ template void namedPropertyValuesToRegions( Model<3U>&, const string&, const str
       To remove NO_DATA values which were converted to NAN.
 */
 template<size_t dim>
-size_t replaceElement_NAN_ValuesWith( Model<dim>& model, const std::string& element_var, double64 replacement_val )
+size_t replaceElement_NAN_ValuesWith( Model<dim>& model, const std::string& element_var, double replacement_val )
  {
     const csmp::Index key(model.Database().StorageKey(element_var.c_str()));
 
@@ -158,8 +158,8 @@ size_t replaceElement_NAN_ValuesWith( Model<dim>& model, const std::string& elem
     
  } // end replaceElement_NAN_ValuesWith
 
-template size_t replaceElement_NAN_ValuesWith( Model<1U>&, const std::string&, double64 );
-template size_t replaceElement_NAN_ValuesWith( Model<2U>&, const std::string&, double64 );
-template size_t replaceElement_NAN_ValuesWith( Model<3U>&, const std::string&, double64 );
+template size_t replaceElement_NAN_ValuesWith( Model<1U>&, const std::string&, double );
+template size_t replaceElement_NAN_ValuesWith( Model<2U>&, const std::string&, double );
+template size_t replaceElement_NAN_ValuesWith( Model<3U>&, const std::string&, double );
 
 } // end csmp

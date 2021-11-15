@@ -15,7 +15,7 @@ class PropertyAtPointVisitor : public Visitor<dim> {
 public:
     /// attempts to retrieve the value of the property at the point in the mesh
     PropertyAtPointVisitor( const Model<dim>&,
-                            const std::map<size_t,std::vector<double64> >& points_to_search,
+                            const std::map<size_t,std::vector<double> >& points_to_search,
                             const char* node_property_name );
   
     ~PropertyAtPointVisitor();
@@ -54,7 +54,7 @@ private:
 
     std::map<size_t,size_t>                     elements_ids_found_;
     std::map<size_t, Element<dim>* >            elements_found_;
-    std::vector<double64>                       props_;
+    std::vector<double>                       props_;
     std::map<size_t, ScalarVariable >           propS_;
     std::map<size_t, VectorVariable<dim> >      propV_;
     std::map<size_t, TensorVariable<dim> >      propT_;
@@ -67,8 +67,8 @@ private:
     std::vector<FlaggedArrayVariable >          NPFA_;      // flagged array property at the nodes
 
 
-    std::vector<double64>                       NI_;        // test-function vector
-    std::map <size_t, std::vector<double64> >   xyz_;       // cloud of points
+    std::vector<double>                       NI_;        // test-function vector
+    std::map <size_t, std::vector<double> >   xyz_;       // cloud of points
 
 
     bool                                        debug_;
@@ -80,12 +80,12 @@ private:
     size_t                                      startPoint_;
     size_t                                      maxIterations_;
     size_t                                      currIteration_;
-    std::map <size_t, double64>                 rangingOfCloud_;
-    double64                                    precision_;
+    std::map <size_t, double>                 rangingOfCloud_;
+    double                                    precision_;
 
-    bool isCloseToBarycenter        ( const std::vector<double64> currXyz, Element<dim>* e, VectorVariable<dim> bc );
-    bool FindPoint_BruteForceSearch ( const std::vector<double64> currXyz, Element<dim>* e, VectorVariable<dim> bc );
-    bool FindPoint_NeighborSearch   ( const std::vector<double64> currXyz, Element<dim>* e, VectorVariable<dim> bc );
+    bool isCloseToBarycenter        ( const std::vector<double> currXyz, Element<dim>* e, VectorVariable<dim> bc );
+    bool FindPoint_BruteForceSearch ( const std::vector<double> currXyz, Element<dim>* e, VectorVariable<dim> bc );
+    bool FindPoint_NeighborSearch   ( const std::vector<double> currXyz, Element<dim>* e, VectorVariable<dim> bc );
 
 };
 

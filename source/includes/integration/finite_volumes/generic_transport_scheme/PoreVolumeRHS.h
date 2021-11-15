@@ -31,11 +31,11 @@ class PoreVolumeRHS : public VectorOperator<dim> {
                    
     virtual ~PoreVolumeRHS() {}
   
-    virtual void AccumulateFiniteVolume( const Node<dim>&, std::vector<double64>& right_hand_vector ) const;
+    virtual void AccumulateFiniteVolume( const Node<dim>&, std::vector<double>& right_hand_vector ) const;
 
-    virtual void AccumulateStencil( const Element<dim>&, std::vector<double64>& right_hand_vector ) const;
-    // virtual void AccumulateStencil( const Face<dim>&, std::vector<double64>& right_hand_vector ) const;
-    // virtual void AccumulateStencil( const InterFace<dim>&, std::vector<double64>& right_hand_vector ) const;
+    virtual void AccumulateStencil( const Element<dim>&, std::vector<double>& right_hand_vector ) const;
+    // virtual void AccumulateStencil( const Face<dim>&, std::vector<double>& right_hand_vector ) const;
+    // virtual void AccumulateStencil( const InterFace<dim>&, std::vector<double>& right_hand_vector ) const;
   
   private:
     const INDEX<SCALAR,NODE>&                      fpv_key_;  ///< the pore volume of the FV as integrated over the sectors surrounding the node

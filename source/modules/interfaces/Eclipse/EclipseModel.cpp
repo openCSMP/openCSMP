@@ -43,7 +43,7 @@ void EclipseModel::Initialize()
 {
 	csmp::ErrorHandler& error_handler(csmp::ErrorHandler::Instance());
 
-	double64& model_time(csmp::ModelTime::Instance().modelTime);
+	double& model_time(csmp::ModelTime::Instance().modelTime);
 	model_time = 0.;
 
 	try {
@@ -247,9 +247,9 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 	auto& domain = this->Region(target_region);
 	vector<size_t>        fnids;
 	multimap<size_t, pair<BOX_BOUNDARY, Node<3U>*> >  boundary_nodes;
-	vector<double64>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
+	vector<double>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
 	Box                   box;
-	double64              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
+	double              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
 	BOX_BOUNDARY          bflag(NOT);
 
 	const size_t dim(3U);

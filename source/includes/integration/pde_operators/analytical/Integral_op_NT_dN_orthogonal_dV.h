@@ -20,8 +20,8 @@ class Integral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim> {
 
   private:
     DenseMatrix<DM_MIN>  M, DNORTHO, NT; 
-    std::vector<double64>         NPROP, IPOL, UNITY, RES;
-    const double64                zero, one;
+    std::vector<double>         NPROP, IPOL, UNITY, RES;
+    const double                zero, one;
 };
 
 } // csmp

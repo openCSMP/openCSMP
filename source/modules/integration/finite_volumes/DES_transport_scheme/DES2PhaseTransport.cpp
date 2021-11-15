@@ -16,9 +16,9 @@ DES2PhaseTransport<dim,FLOW_FUNCTIONS>::DES2PhaseTransport(  Model<dim>& m,
                                                              const char* target_region,
                                                              bool with_gravity_forces,
                                                              bool with_capillary_spreading,
-                                                             double64 cfl_multiplier,
-                                                             double64 PEP_multiplier, 
-                                                             double64 relaxing_factor,                                             
+                                                             double cfl_multiplier,
+                                                             double PEP_multiplier, 
+                                                             double relaxing_factor,                                             
                                                              bool tensor_k,
                                                              FLOW_FUNCTIONS<dim>& ff )
   : sg_(m), 
@@ -177,20 +177,20 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          const size_t facets((*it)->Facets());
 
          // computing sector pore volumes
-         double64 phi = (*it)->Read( key_phi);
-         const double64 thickness = (*it)->Read( key_thi );
+         double phi = (*it)->Read( key_phi);
+         const double thickness = (*it)->Read( key_thi );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
          for ( size_t i=0U; i<sectors; ++i ) {
-              const double64 sector_volume = (*it)->SectorVolume(i);  
-              double64 pore_volume   = (*it)->N(i)->Read( key_fvPV );
+              const double sector_volume = (*it)->SectorVolume(i);  
+              double pore_volume   = (*it)->N(i)->Read( key_fvPV );
               pore_volume   += phi * sector_volume;
               (*it)->N(i)->Store( key_fvPV, makeScalar(PLAIN,pore_volume) );
          }
 
          // computing facet normals and areas
          for ( size_t j=0U; j<facets; ++j ) {
-              const double64 facet_area = (*it)->FacetArea(j);
+              const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
               Point<dim> nrml = (*it)->FacetNormal(j);
               VectorVariable<dim>  fnrml;
@@ -201,7 +201,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          }     
          
          //compute wetting phase saturation at shock
-         double64 sw_shock = flowfunctions_.ShockHeight(*it);
+         double sw_shock = flowfunctions_.ShockHeight(*it);
          (*it)->Store( key_ssH2O, makeScalar( (*it)->Status( key_ssH2O), sw_shock ) );                  
    }
 
@@ -216,7 +216,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
              // computing facet normals and areas
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
-                  const double64 facet_area = eptr->FacetArea(j);
+                  const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
                   Point<dim> nrml = eptr->FacetNormal(j);
                   VectorVariable<dim>  fnrml;
@@ -227,7 +227,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
              }    
              
              //compute wetting phase saturation at shock
-             double64 sw_shock = flowfunctions_.ShockHeight(eptr);
+             double sw_shock = flowfunctions_.ShockHeight(eptr);
              eptr->Store( key_ssH2O, makeScalar( eptr->Status( key_ssH2O), sw_shock ) );  
                
              //determine whether FV node is truncated

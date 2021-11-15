@@ -7,7 +7,7 @@ namespace csmp {
 /** custom constructor */
 template<size_t dim>
 Limiter<dim>::Limiter( const PropertyDatabase<dim>& p,
-					    const char* prop, double64 min_value, double64 max_value )
+					    const char* prop, double min_value, double max_value )
       : Interrelation<dim>(p),
         op( Interrelation<dim>::GlobalProperty(prop) ),
         min(min_value),

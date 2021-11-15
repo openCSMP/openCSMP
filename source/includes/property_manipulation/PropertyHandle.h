@@ -180,7 +180,7 @@ class PropertyHandle {
 
     // assignment
     PropertyHandle&  operator=( const PropertyHandle& op );
-    PropertyHandle&  operator=( double64 val );
+    PropertyHandle&  operator=( double val );
     PropertyHandle&  operator=( const ScalarVariable& s );
     PropertyHandle&  operator=( const VectorVariable<dim>& v );
     PropertyHandle&  operator=( const TensorVariable<dim>& t );
@@ -188,10 +188,10 @@ class PropertyHandle {
     PropertyHandle&  operator=( const std::vector<TensorVariable<dim> >& ts ); 
 
     // "self-assign" calculation result to PropertyHandle on the left
-    PropertyHandle&  operator+=( double64 val );
-    PropertyHandle&  operator-=( double64 val );
-    PropertyHandle&  operator*=( double64 val );
-    PropertyHandle&  operator/=( double64 val );
+    PropertyHandle&  operator+=( double val );
+    PropertyHandle&  operator-=( double val );
+    PropertyHandle&  operator*=( double val );
+    PropertyHandle&  operator/=( double val );
 
     // "self-assign" results from spatially variable calculations
     PropertyHandle&  operator+=( const PropertyHandle& op );
@@ -205,8 +205,8 @@ class PropertyHandle {
     void          Ln();      // natural logarithm
     void          Log10();   // decadic logarithm
     void          Exp();
-    void          Pow( double64 raised_to );
-    void          ZapNAN( double64 with );
+    void          Pow( double raised_to );
+    void          ZapNAN( double with );
     void          Sin();
     void          Cos();
     void          Tan();
@@ -217,7 +217,7 @@ class PropertyHandle {
     // various operations
     const char*   VariableName() const;
     const csmp::Index&  Key() const;
-    void           Range( double64& omin, double64& omax ) const;
+    void           Range( double& omin, double& omax ) const;
     bool           IsWithinRange() const;
     VARIABLE_FLAG  OutputCondition() const;
     void           OutputCondition( VARIABLE_FLAG c );

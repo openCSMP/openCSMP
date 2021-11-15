@@ -165,7 +165,7 @@ void ODE_StiffSolver::FreeSolverMemory()
 */
 void ODE_StiffSolver::ZeroAllStorage()
  {
-    uint32 i, j;
+    uint32_t i, j;
 
     // starting values and final values
     for ( i=1; i<=dof; i++ )
@@ -244,10 +244,10 @@ objects which hold the ODEs.
 
 Called at each step which the ODE solver takes. 
 */
-void ODE_StiffSolver::derivs( double64 y[], double64 dydx[] )
+void ODE_StiffSolver::derivs( double y[], double dydx[] )
  {
     vector<SumOfProductsWithExponents>::const_iterator  oit;
-    int32 n;
+    int32_t n;
     
     for ( n=1, oit=odes.begin(); oit!=odes.end(); oit++ )
       dydx[n++] = (*oit).Sum( y );
@@ -281,7 +281,7 @@ class to obtain the specific derivative entries for the jacobian matrix.
 
 Called at each step of the ODE solver. 
 */
-void ODE_StiffSolver::jacobn( double64 y[], double64 dfdx[], double64** dfdy )
+void ODE_StiffSolver::jacobn( double y[], double dfdx[], double** dfdy )
  {
     size_t i, j;
     
@@ -289,7 +289,7 @@ void ODE_StiffSolver::jacobn( double64 y[], double64 dfdx[], double64** dfdy )
     for ( i=1; i<=odes.size(); i++ )
       for ( j=1; j<=odes.size(); j++ )
         // differentiate the i'th equation w.r.t. j'th species
-        dfdy[i][j] = odes[i-1].DerivativeWithRespectTo( static_cast<int32>(j)-1, y );        
+        dfdy[i][j] = odes[i-1].DerivativeWithRespectTo( static_cast<int32_t>(j)-1, y );        
     
  } // end jacobn
 
@@ -316,11 +316,11 @@ solution step.
 The method may print a warning if the solution matrix becomes singular
 in the diagonalization process. 
 */
-void ODE_StiffSolver::LU_Decomposition( double64 **a, size_t n, int32 *indx, double64& d )
+void ODE_StiffSolver::LU_Decomposition( double **a, size_t n, int32_t *indx, double& d )
 {
-	int32 i,imax,j,k;
-	double64 big,dum,sum,temp;
-	double64 *vv;
+	int32_t i,imax,j,k;
+	double big,dum,sum,temp;
+	double *vv;
 
 	vv=dvector(1,n);
 	d=1.0;
@@ -383,11 +383,11 @@ The method is documented in Numerical Recipes p. 47.
 
 LU_BackSubstitution() is called once for each step of the solver. 
 */
-void ODE_StiffSolver::LU_BackSubstitution(double64 **a, size_t n, int32 *indx, double64 b[])
+void ODE_StiffSolver::LU_BackSubstitution(double **a, size_t n, int32_t *indx, double b[])
 {
 	size_t  i,ii=0,j;
-	int32      ip;
-	double64  sum;
+	int32_t      ip;
+	double  sum;
 
 	for (i=1;i<=n;i++) {
 		ip=indx[i];
@@ -419,7 +419,7 @@ aqueous species and minerals.
 @param init A constant reference to an STL vector with the initial dependent variable
 values. 
 */
-void ODE_StiffSolver::InitialConditions( const vector<double64>& init )
+void ODE_StiffSolver::InitialConditions( const vector<double>& init )
  {
      assert( init.size() == dof+1 );
      for ( size_t i=1; i<=dof; i++ ) init_cond[i] = init[i];
@@ -492,17 +492,17 @@ matrix inversion routine failed to find a solution. Usually, a large
 percentage of bad steps indicates a problem with the system of equations.
 The most common problem may be that the system is too stiff, i.e. that 
 the dependent variable coefficients diverge by more than 16 orders of
-magnitude (about the limit for this double64-precision implementation of
+magnitude (about the limit for this double-precision implementation of
 the solver). 
 */
-bool ODE_StiffSolver::Solve(  double64 time, double64 init_stepsize, 
-                              size_t n_savesteps, double64 tolerance,
+bool ODE_StiffSolver::Solve(  double time, double init_stepsize, 
+                              size_t n_savesteps, double tolerance,
                               bool print_step_numbers )
  {
 //    ZeroAllStorage();
 
     // compute from x1 to x2
-	double64  hstart, x1 = 0., x2 = time;
+	double  hstart, x1 = 0., x2 = time;
 	size_t  nbad, nok, i, j;
 
     eps    = tolerance;
@@ -522,7 +522,7 @@ bool ODE_StiffSolver::Solve(  double64 time, double64 init_stepsize,
          result_yp.reserve(dof);
          for ( i=0; i<dof; i++ )
             {
-               result_yp.push_back( vector<double64>() );
+               result_yp.push_back( vector<double>() );
                result_yp[i].reserve(kmax);
                for ( j=0; j<kmax; j++ )  result_yp[i].push_back(0.0);
             }
@@ -659,16 +659,16 @@ Used by Solve() to evolve the system of ODEs.
 The method will exit and issue a warning if the limit of steps has been
 reached without finding a solution. 
 */
-void ODE_StiffSolver::odeint( double64 ystart[], size_t nvar, double64 x1, 
-                              double64 x2, double64 eps, double64 h1,
-	                            double64 hmin, size_t& nok, size_t& nbad )
+void ODE_StiffSolver::odeint( double ystart[], size_t nvar, double x1, 
+                              double x2, double eps, double h1,
+	                            double hmin, size_t& nok, size_t& nbad )
 {
 	size_t  nstp, i;
-  double64 nan(numeric_limits<double64>::quiet_NaN());
-	double64 xsav(nan), x, hnext, hdid;
+  double nan(numeric_limits<double>::quiet_NaN());
+	double xsav(nan), x, hnext, hdid;
 	x=x1;
 //	h=copysign(h1,x2-x1); this is not available on many platforms
-	double64 h = fabs(h1) * sign(x2-x1);
+	double h = fabs(h1) * sign(x2-x1);
 	nok = nbad = kount = 0;
 	for (i=1;i<=nvar;i++) odeint_y[i]=ystart[i];
 	if (kmax > 0) xsav=x-dxsav*2.0;
@@ -753,18 +753,18 @@ Called by odeint().
 If the stepsize reaches zero, the method has failed and a stepsize 
 underflow is reported. 
 */
-void ODE_StiffSolver::StiffBulirschStoer( double64 y[], double64 dydx[], size_t nv, 
-                                          double64& xx, double64 htry, double64 eps,
-	                                        double64 yscal[], double64& hdid, double64& hnext )
+void ODE_StiffSolver::StiffBulirschStoer( double y[], double dydx[], size_t nv, 
+                                          double& xx, double htry, double eps,
+	                                        double yscal[], double& hdid, double& hnext )
 {
-	int32 i,iq,k,kk,km;
-	static int32 first=1,kmax1,kopt,nvold = -1;
-	static double64 epsold = -1.0,xnew;
-	double64 eps1,errmax,fact,h,red,scale,work,wrkmin,xest;
-	static double64 a[9];                            // 9=IMAXX+1
-	static double64 alf[8][8];                       // 8=KMAXX+1
-	static int32 nseq[9]={0,2,6,10,14,22,34,50,70};  // 8=IMAXX+1
-	int32 reduct,exitflag=0;
+	int32_t i,iq,k,kk,km;
+	static int32_t first=1,kmax1,kopt,nvold = -1;
+	static double epsold = -1.0,xnew;
+	double eps1,errmax,fact,h,red,scale,work,wrkmin,xest;
+	static double a[9];                            // 9=IMAXX+1
+	static double alf[8][8];                       // 8=KMAXX+1
+	static int32_t nseq[9]={0,2,6,10,14,22,34,50,70};  // 8=IMAXX+1
+	int32_t reduct,exitflag=0;
 
 	if(eps != epsold || nv != nvold) {
 		hnext = xnew = -1.0e29;
@@ -777,7 +777,7 @@ void ODE_StiffSolver::StiffBulirschStoer( double64 y[], double64 dydx[], size_t 
 					((a[iq+1]-a[1]+1.0)*(2*k+1))));
 		}
 		epsold=eps;
-		nvold=static_cast<int32>(nv);
+		nvold=static_cast<int32_t>(nv);
 		a[1] += nv;
 		for (k=1;k<=KMAXX;k++) a[k+1]=a[k]+nseq[k+1];
 		for (kopt=2;kopt<KMAXX;kopt++)
@@ -877,11 +877,11 @@ See Numerical Recipes p. 731 for documentation.
 
 Used by StiffBulirschStoer(). 
 */
-void ODE_StiffSolver::pzextr( int32 iest, double64 xest, double64 yest[], 
-                              double64 yz[], double64 dy[], size_t nv )
+void ODE_StiffSolver::pzextr( int32_t iest, double xest, double yest[], 
+                              double yz[], double dy[], size_t nv )
 {
-	int32 k1,j;
-	double64 q,f2,f1,delta,*c;
+	int32_t k1,j;
+	double q,f2,f1,delta,*c;
 
 	c=dvector(1,nv);
 	pzextr_x[iest]=xest;
@@ -923,12 +923,12 @@ See documentation p. 743 in Numerical Recipes.
 
 Called by odeint(). 
 */
-void ODE_StiffSolver::simpr( double64 y[], double64 dydx[], double64 dfdx[], 
-                             double64 **dfdy, size_t n, double64 xs, double64 htot, 
-                             int32 nstep, double64 yout[] )
+void ODE_StiffSolver::simpr( double y[], double dydx[], double dfdx[], 
+                             double **dfdy, size_t n, double xs, double htot, 
+                             int32_t nstep, double yout[] )
 {
-	int32 i,j,nn,*indx;
-	double64 d,h,x,**a,*del,*ytemp;
+	int32_t i,j,nn,*indx;
+	double d,h,x,**a,*del,*ytemp;
 
 	indx=ivector(1,n);
 	a=dmatrix(1,n,1,n);
@@ -969,41 +969,36 @@ void ODE_StiffSolver::simpr( double64 y[], double64 dydx[], double64 dfdx[],
 
 
 // allocate an int vector with subscript range v[nl..nh] 
-int32 *ODE_StiffSolver::ivector(size_t nl, size_t nh)
+int32_t *ODE_StiffSolver::ivector(size_t nl, size_t nh)
 {
-	int32 *v;
-
-	v=(int32 *)malloc((size_t) ((nh-nl+1+NR_END)*sizeof(int32)));
+	int32_t* v =(int32_t*)malloc((size_t) ((nh-nl+1+NR_END)*sizeof(int32_t)));
 	if (!v) cout<<"\nallocation failure in ivector()"<< endl;
 	return v-nl+NR_END;
 }
 
 
-// allocate a double64 vector with subscript range v[nl..nh] 
-double64 *ODE_StiffSolver::dvector(size_t nl, size_t nh)
+// allocate a double vector with subscript range v[nl..nh] 
+double *ODE_StiffSolver::dvector(size_t nl, size_t nh)
 {
-	double64 *v;
-
-	v=(double64 *)malloc((size_t) ((nh-nl+1+NR_END)*sizeof(double64)));
+	double* v =(double*)malloc((size_t) ((nh-nl+1+NR_END)*sizeof(double)));
 	if (!v) cout<<"\nallocation failure in dvector()"<< endl;
 	return v-nl+NR_END;
 }
 
 
-// allocate a double64 matrix with subscript range m[nrl..nrh][ncl..nch] 
-double64 **ODE_StiffSolver::dmatrix(size_t nrl, size_t nrh, size_t ncl, size_t nch)
+// allocate a double matrix with subscript range m[nrl..nrh][ncl..nch] 
+double **ODE_StiffSolver::dmatrix(size_t nrl, size_t nrh, size_t ncl, size_t nch)
 {
 	size_t i, nrow=nrh-nrl+1,ncol=nch-ncl+1;
-	double64 **m;
 
 	// allocate pointers to rows 
-	m=(double64 **) malloc((size_t)((nrow+NR_END)*sizeof(double64*)));
+	double** m=(double **) malloc((size_t)((nrow+NR_END)*sizeof(double*)));
 	if (!m) cout<<"\nallocation failure 1 in matrix()"<< endl;
 	m += NR_END;
 	m -= nrl;
 
 	// allocate rows and set pointers to them 
-	m[nrl]=(double64 *) malloc((size_t)((nrow*ncol+NR_END)*sizeof(double64)));
+	m[nrl]=(double *) malloc((size_t)((nrow*ncol+NR_END)*sizeof(double)));
 	if (!m[nrl]) cout<<"\nallocation failure 2 in matrix()"<< endl;
 	m[nrl] += NR_END;
 	m[nrl] -= ncl;
@@ -1016,20 +1011,19 @@ double64 **ODE_StiffSolver::dmatrix(size_t nrl, size_t nrh, size_t ncl, size_t n
 
 
 // allocate a int matrix with subscript range m[nrl..nrh][ncl..nch] 
-int32 **ODE_StiffSolver::imatrix(size_t nrl, size_t nrh, size_t ncl, size_t nch)
+int32_t **ODE_StiffSolver::imatrix(size_t nrl, size_t nrh, size_t ncl, size_t nch)
 {
 	size_t i, nrow=nrh-nrl+1,ncol=nch-ncl+1;
-	int32 **m;
 
 	// allocate pointers to rows 
-	m=(int32 **) malloc((size_t)((nrow+NR_END)*sizeof(int32*)));
+	int32_t** m=(int32_t **) malloc((size_t)((nrow+NR_END)*sizeof(int32_t* )));
 	if (!m) cout<<"\nallocation failure 1 in matrix()"<< endl;
 	m += NR_END;
 	m -= nrl;
 
 
 	// allocate rows and set pointers to them 
-	m[nrl]=(int32 *) malloc((size_t)((nrow*ncol+NR_END)*sizeof(int32)));
+	m[nrl]=(int32_t*) malloc((size_t)((nrow*ncol+NR_END)*sizeof(int32_t)));
 	if (!m[nrl]) cout<<"\nallocation failure 2 in matrix()"<< endl;
 	m[nrl] += NR_END;
 	m[nrl] -= ncl;
@@ -1042,21 +1036,21 @@ int32 **ODE_StiffSolver::imatrix(size_t nrl, size_t nrh, size_t ncl, size_t nch)
 
 
 // free an int vector allocated with ivector()
-void ODE_StiffSolver::free_ivector( int32 *v, size_t nl )
+void ODE_StiffSolver::free_ivector( int32_t *v, size_t nl )
 {
 	free( (char*) (v+nl-NR_END));
 }
 
 
-// free a double64 vector allocated with dvector() 
-void ODE_StiffSolver::free_dvector( double64 *v, size_t nl )
+// free a double vector allocated with dvector() 
+void ODE_StiffSolver::free_dvector( double *v, size_t nl )
 {
 	free( (char*) (v+nl-NR_END));
 }
 
 
-// free a double64 matrix allocated by dmatrix() 
-void ODE_StiffSolver::free_dmatrix( double64 **m, size_t nrl, size_t ncl )
+// free a double matrix allocated by dmatrix() 
+void ODE_StiffSolver::free_dmatrix( double **m, size_t nrl, size_t ncl )
 {
 	free( (char*) (m[nrl]+ncl-NR_END));
 	free( (char*) (m+nrl-NR_END));
@@ -1064,7 +1058,7 @@ void ODE_StiffSolver::free_dmatrix( double64 **m, size_t nrl, size_t ncl )
 
 
 // free an int matrix allocated by imatrix() 
-void ODE_StiffSolver::free_imatrix( int32 **m, size_t nrl, size_t ncl )
+void ODE_StiffSolver::free_imatrix( int32_t **m, size_t nrl, size_t ncl )
 {
 	free( (char*) (m[nrl]+ncl-NR_END));
 	free( (char*) (m+nrl-NR_END));
@@ -1095,7 +1089,7 @@ of equations has been correctly parsed from the input file.
 */
 void ODE_StiffSolver::Out() const
  {
-    int32 n;
+    int32_t n;
     cout <<"\nODE_StiffSolver::Out:"<< endl;
     cout <<"\nrighthand sides of ODEs: "<< endl;
     vector<SumOfProductsWithExponents>::const_iterator  it;
@@ -1127,7 +1121,7 @@ void ODE_StiffSolver::Out() const
 
 All of these output routines assume an indexing from 1...n. 
 */
-void ODE_StiffSolver::Out( const vector<int32>& vec ) const
+void ODE_StiffSolver::Out( const vector<int32_t>& vec ) const
  {
     cout <<"\nvector n ("<< vec.size() <<")"<< endl;
     for ( size_t i=0; i<vec.size(); i++ ) cout << vec[i] <<"  ";
@@ -1135,35 +1129,35 @@ void ODE_StiffSolver::Out( const vector<int32>& vec ) const
  }                
 
 
-void ODE_StiffSolver::Out( int32* vec, int32 n ) 
+void ODE_StiffSolver::Out( int32_t*  vec, int32_t n ) 
  {
     cout <<"\nvector n ("<< n <<")"<< endl;
-    for ( int32 i=1; i<=n; i++ ) cout << vec[i] <<"  ";
+    for ( int32_t i=1; i<=n; i++ ) cout << vec[i] <<"  ";
     cout << endl;
  }
 
 
-void ODE_StiffSolver::Out( double64* vec, int32 n ) 
+void ODE_StiffSolver::Out( double* vec, int32_t n ) 
  {
     cout <<"\nvector n ("<< n <<")"<< endl;
-    for ( int32 i=1; i<=n; i++ ) cout << vec[i] <<"  ";
+    for ( int32_t i=1; i<=n; i++ ) cout << vec[i] <<"  ";
     cout << endl;
  }
  
                 
-void ODE_StiffSolver::Out( double64** vec, int32 m, int32 n )
+void ODE_StiffSolver::Out( double** vec, int32_t m, int32_t n )
  {
     cout <<"\nmatrix m x n ("<< m <<","<< n <<")"<< endl;
-    for ( int32 i=1; i<=m; i++ )
+    for ( int32_t i=1; i<=m; i++ )
       {
-         for ( int32 j=1; j<=n; j++ ) cout << vec[i][j] <<"  ";
+         for ( int32_t j=1; j<=n; j++ ) cout << vec[i][j] <<"  ";
          cout << endl;
       }
     cout << endl;  
  }
 
 
-void ODE_StiffSolver::Out( const vector<double64>& vec ) const
+void ODE_StiffSolver::Out( const vector<double>& vec ) const
  {
     cout <<"\nvector n ("<<vec.size() <<")"<< endl;
     for ( size_t i=0; i<vec.size(); i++ ) cout << vec[i] <<"  ";
@@ -1172,7 +1166,7 @@ void ODE_StiffSolver::Out( const vector<double64>& vec ) const
 
 
 
-void ODE_StiffSolver::Out( const vector<vector<double64> >& vec ) const
+void ODE_StiffSolver::Out( const vector<vector<double> >& vec ) const
  {
     cout <<"\nmatrix n x m ("<<vec.size()-1 <<","<< vec[0].size()-1 <<")"<< endl;
     for ( size_t i=1; i<vec.size(); i++ )
@@ -1245,8 +1239,8 @@ dependent variables.
 void ODE_StiffSolver::ReadODEsFrom( const char* file )
  {
     char    c, text_line[3000];
-    double64  exp, K;
-    int32     coeff_idx, idx, i, eq_counter = 0;
+    double  exp, K;
+    int32_t     coeff_idx, idx, i, eq_counter = 0;
     char    *token, *sub1, *sub2, 
             temp[3000], temp1[3000], temp2[3000];
     const char* const white_delims =" ,\t,\n,\r";
@@ -1254,7 +1248,7 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file )
     const char* const sum_delim    = "+";
     const char* const coeff_delim  =" ";
          
-    map<int32,pair<double64,double64> >  product; 
+    map<int32_t,pair<double,double> >  product; 
 	SumOfProductsWithExponents             ode;
 	list<string>                       tokens, tokens1;
 	list<string>::iterator    tik, tik1;
@@ -1274,7 +1268,7 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file )
     ifs.getline( text_line, 256 ); // line of --------
     ifs.getline( text_line, 256 ); // SPECIES definition
     map<string,int>  species;
-    int32 n = 0; // species names must not contain whitespace
+    int32_t n = 0; // species names must not contain whitespace
     token = strtok( text_line, white_delims ); 
     do {
           species[ string(token) ] = n++;
@@ -1285,7 +1279,7 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file )
     // 2. reading equilibrium constants for reactions (same sequence as species) O.K.
     // -------------------------------------------------------------------------
     // spec.idx
-    map<string,pair<int,double64> >  coeffs;
+    map<string,pair<int,double> >  coeffs;
     string  kname;
     ifs.getline( text_line, 256 ); // title line
     ifs.getline( text_line, 256 ); // line of -------
@@ -1310,9 +1304,9 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file )
     // 3. reading ordinary differential equations using the terminology established
     //    above (if expressions do not comply errors are raised)
     // ----------------------------------------------------------------------------
-    map<string,pair<int32,double64> >::const_iterator  cit;
-    map<string,int32>::const_iterator               sit;
-    map<string,int32>::const_iterator               current_lhs;
+    map<string,pair<int32_t,double> >::const_iterator  cit;
+    map<string,int32_t>::const_iterator               sit;
+    map<string,int32_t>::const_iterator               current_lhs;
     ifs.getline( text_line, 256 ); // title line
     ifs.getline( text_line, 256 ); // line of -------
     
@@ -1527,13 +1521,13 @@ of differential equations does not correspond to the number of
 dependent variables. 
 */
 void ODE_StiffSolver::ReadODEsFrom( const char* file, 
-                                    vector<pair<int32,string> >& coefs, 
-                                    vector<pair<int32,string> >& dependent_comps,
-                                    vector<pair<int32,string> >& independent_comps )
+                                    vector<pair<int32_t,string> >& coefs, 
+                                    vector<pair<int32_t,string> >& dependent_comps,
+                                    vector<pair<int32_t,string> >& independent_comps )
  {
     char    c, text_line[5000];
-    double64  exp, K;
-    int32     coeff_idx, idx, i, n, eq_counter = 0;
+    double  exp, K;
+    int32_t     coeff_idx, idx, i, n, eq_counter = 0;
     char    *token, *sub1, 
             temp[5000], temp1[5000], temp2[5000];
     const char* const white_delims =" ,\t,\n,\r";
@@ -1542,7 +1536,7 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file,
     const char* const coeff_delim  =" ";
     bool    is_constraint, negative_term;
          
-    map<int32,pair<double64,double64> >  product; 
+    map<int32_t,pair<double,double> >  product; 
 	SumOfProductsWithExponents             ode;
 	list<string>                       tokens, tokens1;
 	list<string>::iterator             tik, tik1;
@@ -1567,9 +1561,9 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file,
     ifs.getline( text_line, 1000 ); // title of definition of species line
     ifs.getline( text_line, 1000 ); // line of --------
     ifs.getline( text_line, 1000 ); // SPECIES definition
-    map<string,pair<int,double64> >  indep_species;
+    map<string,pair<int,double> >  indep_species;
     string  spec_name;
-    double64      constraint;
+    double      constraint;
     bool        empty_line = true;
   
     n = 0;
@@ -1607,9 +1601,9 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file,
     
     // 1.3 generating a list of all involved species
     // ---------------------------------------------
-    map<string,int32>::const_iterator               sit;
-    map<string,pair<int32,double64> >::const_iterator  cit;
-    map<string,int32>                               species;
+    map<string,int32_t>::const_iterator               sit;
+    map<string,pair<int32_t,double> >::const_iterator  cit;
+    map<string,int32_t>                               species;
     for ( n=0, sit=dep_species.begin(); sit!=dep_species.end();   sit++ ) species[ (*sit).first ] = n++;
     for (    cit=indep_species.begin(); cit!=indep_species.end(); cit++ ) species[ (*cit).first ] = n++;
    
@@ -1617,7 +1611,7 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file,
     // 2. reading equilibrium constants for reactions (same sequence as species) 
     // -------------------------------------------------------------------------
     // spec.idx
-    map<string,pair<int,double64> >  coeffs;
+    map<string,pair<int,double> >  coeffs;
     string  kname;
     ifs.getline( text_line, 1000 ); // title line
     ifs.getline( text_line, 1000 ); // line of -------
@@ -1642,8 +1636,8 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file,
     // 3. reading ordinary differential equations using the terminology established
     //    above (if expressions do not comply errors are raised)
     // ----------------------------------------------------------------------------
-    map<string,pair<int32,double64> >::const_iterator  vit; // constraint species
-    map<string,int32>::const_iterator               current_lhs;
+    map<string,pair<int32_t,double> >::const_iterator  vit; // constraint species
+    map<string,int32_t>::const_iterator               current_lhs;
     ifs.getline( text_line, 1000 ); // title line
     ifs.getline( text_line, 1000 ); // line of -------
     // removing previously defined reactions
@@ -1948,7 +1942,7 @@ system of equations. This may apply for instance if PT-dependent
 equilibrium constants are used in a model in which the temperature varies. 
 */
 void ODE_StiffSolver::AssignIndependentProductTerms( vector<pair<int,string> >& ind, 
-                                                     vector<double64>&                vals )
+                                                     vector<double>&                vals )
  {
     ResetIndependentProductTerms( ind, vals );
 
@@ -1994,17 +1988,17 @@ coefficients while the ODE solver converges to a solution allows to
 modify, for instance, the activities of chemical species as their 
 concentrations change over time. 
 */
-void ODE_StiffSolver::ResetIndependentProductTerms( vector<pair<int32,string> >& ind, 
-                                                    vector<double64>&  vals )
+void ODE_StiffSolver::ResetIndependentProductTerms( vector<pair<int32_t,string> >& ind, 
+                                                    vector<double>&  vals )
  {
-    vector<pair<int32,string> >::const_iterator  it;
+    vector<pair<int32_t,string> >::const_iterator  it;
     vector<SumOfProductsWithExponents>::iterator     pit;
     vector<sumofproducts_pair>::iterator             sit;
-    map<int32,pair<double64,double64> >::iterator  tit;
+    map<int32_t,pair<double,double> >::iterator  tit;
 
     // SumOfProductWithExpondents is defined as 
     //    c.idx/coefficient    e.idx/exponent
-    // pair<pair<int,double64>,map<int,pair<double64,double64>,less<int> > >  
+    // pair<pair<int,double>,map<int,pair<double,double>,less<int> > >  
 
     // 1. for all independent variables in ODES
     // ----------------------------------------
@@ -2025,8 +2019,8 @@ void ODE_StiffSolver::ResetIndependentProductTerms( vector<pair<int32,string> >&
     // 2. for all independent variables in algebraic equations
     // -------------------------------------------------------
     vector<SumOfProducts>::iterator         oit;
-    vector<map<int32,double64> >::iterator soit;
-    map<int32,double64>::iterator          ot;
+    vector<map<int32_t,double> >::iterator soit;
+    map<int32_t,double>::iterator          ot;
 
     for ( it=ind.begin(); it!=ind.end(); it++ )
       // in every algebraic equation
@@ -2078,7 +2072,7 @@ if and only if independent parameters were modified between solution steps.
 Currently, the method reports the calculated values for each product term. 
 */
 //                                                                  from 1...n               from 0...n-1
-void ODE_StiffSolver::EvaluateIndependentProductTerms( const double64 dependent_vals[], vector<double64>& vals )
+void ODE_StiffSolver::EvaluateIndependentProductTerms( const double dependent_vals[], vector<double>& vals )
  {
     assert ( eqns.size() == vals.size() );
     for ( size_t i=0; i<eqns.size(); i++ ) 

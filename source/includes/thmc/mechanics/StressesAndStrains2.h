@@ -54,7 +54,7 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U> {
     const size_t  components_;  /// < stress strain components
     
     csmp::Index strain_key_, stress_key_,                 ///< tensor variables
-               strain1_key_, strain2_key_, strain3_key_,  ///< vector<double64> variables (Eigenvectors)
+               strain1_key_, strain2_key_, strain3_key_,  ///< vector<double> variables (Eigenvectors)
                sigma1_key_, sigma2_key_, sigma3_key_,     ///< eigenvectors scaled to unit length
                pstrain_key_, pstress_key_,                ///< principal strains / stresses (Eigenvalues)
                means_key_, dilat_key_;                    ///< scalar variables
@@ -64,8 +64,8 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U> {
                             EGP_, SGP_, PEGP_, PSGP_,
                             PR_, EIG_;
     
-    std::vector<double64>   EVAL_;
-    std::vector<double64>   IPSTRAIN_, IPSTRESS_,
+    std::vector<double>   EVAL_;
+    std::vector<double>   IPSTRAIN_, IPSTRESS_,
                             NSTRAIN_,  NSTRESS_,
                             eps_, sigma_, sum_;
     TensorVariable<2U>      ts_;
@@ -76,7 +76,7 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U> {
     
     bool  plane_strain_, verbose_, principal_e_and_sigma_;
   
-    std::vector<std::deque<std::vector<double64> > >  temp_strains_,
+    std::vector<std::deque<std::vector<double> > >  temp_strains_,
                                                       temp_stresses_;
     // to prevent duplicate node output
     std::vector<bool>  node_output_;

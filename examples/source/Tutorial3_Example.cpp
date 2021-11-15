@@ -82,7 +82,7 @@ void Tutorial3_Example::Run()
     // clocking the runtime
     clock_t start(clock());
 
-    double64 model_time(0.); // time
+    double model_time(0.); // time
 
     // ---------------------------------------------------
     // 1.0 Create Model directly from ANSYS-ICEM mesh
@@ -220,9 +220,9 @@ void Tutorial3_Example::Run()
     // -----------------------
 
     // define some constant variables
-    const double64    day(86400.0);
-    const double64    max_time (100. * day);   // run for 100 days
-    double64          time_increment(day);     // timestep 1 day
+    const double    day(86400.0);
+    const double    max_time (100. * day);   // run for 100 days
+    double          time_increment(day);     // timestep 1 day
     const long        save_frequency(5);       // write results to file every 10 day
     size_t	          time, save_counter(1);
 
@@ -282,7 +282,7 @@ void Tutorial3_Example::Run()
 
     // clocking the runtime
     clock_t end(clock());
-    cerr << "\nmain: CPU time was " << static_cast<double64>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl;
+    cerr << "\nmain: CPU time was " << static_cast<double>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl;
 
     // terminate
     cerr << "\nmain: That's it..."<< endl;
@@ -296,8 +296,8 @@ void  Tutorial3_Example::computeTotalMobility( Model<2U>& mdl, TwoPhaseModel<2U>
     const Index  mobt_key(mdl.Database().StorageKey("total mobility"));
     const Index  satw_key(mdl.Database().StorageKey("saturation water"));
     const Index  sato_key(mdl.Database().StorageKey("saturation oil"));
-    const double64  one(1.);
-    double64        sw;
+    const double  one(1.);
+    double        sw;
     ScalarVariable  mob_t;
 
     // 1. Computing the saturation of water = 1 - So

@@ -12,16 +12,16 @@ namespace csmp
     : cp(880.),
       t_dependent(true)
   {
-    cout << "Rock::Rock( const double64& temperature ) constructor:\n";
+    cout << "Rock::Rock( const double& temperature ) constructor:\n";
     cout << "      creating default Rock with temperature-dependent\n";
     cout << "      heat capacity\n\n";
   }
 
-  Rock::Rock( double64 heatcapacity )
+  Rock::Rock( double heatcapacity )
     : cp(heatcapacity), 
       t_dependent(false)
   {
-    cout << "Rock::Rock( const double64& temperature, double64 heatcapacity )\n";
+    cout << "Rock::Rock( const double& temperature, double heatcapacity )\n";
     cout << "constructor:\n";
     cout << "      creating Rock with temperature-independent\n";
     cout << "      heat capacity of " << cp << "J/kg/K\n\n";
@@ -31,7 +31,7 @@ namespace csmp
   {
   }
 
-  double64 Rock::HeatCapacity( double64 t )
+  double Rock::HeatCapacity( double t )
   {
     if(!t_dependent) return cp;
     else
@@ -42,13 +42,13 @@ namespace csmp
       }
   }
 
-  double64 Rock::MinimumHeatCapacity()
+  double Rock::MinimumHeatCapacity()
   {
     return cp;
   }
 
 
-  double64 Rock::Enthalpy( double64 t )
+  double Rock::Enthalpy( double t )
   {
     if(!t_dependent) return cp*t; 
     else

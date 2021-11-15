@@ -60,9 +60,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
           return;
        }
      bool  debug(false);
-     map<pair<double64,double64>,long64>  nodeIDs;
-     typename map<pair<double64,double64>,long64>::iterator  ndit;
-     double64 x, y;
+     map<pair<double,double>,int64_t>  nodeIDs;
+     typename map<pair<double,double>,int64_t>::iterator  ndit;
+     double x, y;
 
      xmin = xmax = vset.Px(0);
      ymin = ymax = vset.Py(0);
@@ -78,7 +78,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
           if ( x > xmax ) xmax = x;
           if ( y < ymin ) ymin = y;
           if ( y > ymax ) ymax = y;
-          nodeIDs[ pair<double64,double64>(x,y) ] = static_cast<long64>(i);
+          nodeIDs[ pair<double,double>(x,y) ] = static_cast<int64_t>(i);
        }
          
      // 2. copying already existing boundary flags and values
@@ -100,7 +100,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
      size_t  nID(nodeIDs.size()); // new node ID tracker
      int8_t  bflag;
 
-     for ( typename deque<vector<long64> >::iterator
+     for ( typename deque<vector<int64_t> >::iterator
            pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
       {
          // The Plist node ID vector is resized and the new node coordinates are entered
@@ -112,7 +112,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
  
          if ( debug ) cout <<"\nmidpoint face 1 (nodes:"<< (*pit)[0] <<","<< (*pit)[1] <<"): "<< x <<", "<< y;
  
-         pair<map<pair<double64,double64>,long64>::iterator, bool>
+         pair<map<pair<double,double>,int64_t>::iterator, bool>
            test_it = nodeIDs.insert( make_pair(make_pair(x,y),nID) );
          // if the middle-node point already exists in the list
          // the node ID which was found for it inside the map is used
@@ -176,11 +176,11 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
        
     // 4. Creating new 'px' and 'py' arrays and assigning them to VSet<dim>
     // -------------------------------------------------------------------
-    deque<double64>  px( nodeIDs.size() ),
+    deque<double>  px( nodeIDs.size() ),
                      py( nodeIDs.size() ),  // new node-point coordinates
                      pz( nodeIDs.size() );
     
-    for ( typename map<pair<double64,double64>,long64>::const_iterator
+    for ( typename map<pair<double,double>,int64_t>::const_iterator
           nit=nodeIDs.begin(); nit!=nodeIDs.end(); ++nit )
       {
          px[ (*nit).second ] = (*nit).first.first;
@@ -235,9 +235,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
        }
       
      bool  debug(false);
-     map<mjl::Point3D,long64>                     nodeIDs;
+     map<mjl::Point3D,int64_t>                     nodeIDs;
      typename map<mjl::Point3D,size_t>::iterator  ndit;
-     double64 x, y, z;
+     double x, y, z;
 
      xmin = xmax = vset.Px(0);
      ymin = ymax = vset.Py(0);
@@ -273,10 +273,10 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
      //    (faceverts stay exactly as they were before)
      // to test whether new node point is already part of the mesh or whether
      // it must be created     
-     long64  nID(nodeIDs.size()); // new node ID tracker
+     int64_t   nID(nodeIDs.size()); // new node ID tracker
      int8_t  bflag;
 
-     for ( typename deque<vector<long64> >::iterator
+     for ( typename deque<vector<int64_t> >::iterator
            pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
       {
          // The Plist node ID vector is resized and the new node coordinates are entered
@@ -291,7 +291,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
          if ( debug ) 
            cout <<"\nmidpoint face 1 (nodes:"<< (*pit)[0] <<","<< (*pit)[1] <<"): "<< x <<", "<< y <<", "<< z;
  
-         pair<map<mjl::Point3D,long64>::iterator, bool>
+         pair<map<mjl::Point3D,int64_t>::iterator, bool>
            test_it = nodeIDs.insert( make_pair(mjl::Point3D(x,y,z),nID) );
          // if the middle-node point already exists in the list
          // the node ID which was found for it inside the map is used
@@ -364,11 +364,11 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
        
     // 4. Creating new 'px' and 'py' arrays and assigning them to VSet<dim>
     // -------------------------------------------------------------------
-    deque<double64>  px( nodeIDs.size() ),
+    deque<double>  px( nodeIDs.size() ),
                       py( nodeIDs.size() ),  // new node-point coordinates
                       pz( nodeIDs.size() );
                     
-    for ( typename map<mjl::Point3D,long64>::const_iterator
+    for ( typename map<mjl::Point3D,int64_t>::const_iterator
           nit=nodeIDs.begin(); nit!=nodeIDs.end(); nit++ )
       {
          px[ (*nit).second ] = (*nit).first.X();
@@ -447,18 +447,18 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
     assert( dim == 2U );
 
      bool  debug(true);
-     map<pair<double64,double64>,size_t>        nodeIDs;
-     typename map<pair<double64,double64>,size_t>::iterator  ndit;
-     double64  x, y;
+     map<pair<double,double>,size_t>        nodeIDs;
+     typename map<pair<double,double>,size_t>::iterator  ndit;
+     double  x, y;
       
      xmin = xmax = vset.Px(0);
      ymin = ymax = vset.Py(0);
 
      // 1. mapping already existing node points
      // ---------------------------------------
-     for ( typename deque<vector<long64> >::iterator
+     for ( typename deque<vector<int64_t> >::iterator
            pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
-       for ( typename vector<long64>::iterator 
+       for ( typename vector<int64_t>::iterator 
              it=(*pit).begin(); it!=(*pit).end(); it++ )
          {
             x = vset.Px( (*it) );
@@ -486,11 +486,11 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
      //    (faceverts stay exactly as they were before)
      // to test whether new node point is already part of the mesh or whether
      // it must be created     
-     double64  cx, cy;
+     double  cx, cy;
      size_t    nID(nodeIDs.size()); // new node ID tracker
-     int32     bflag;
+     int32_t     bflag;
 
-     for ( typename deque<vector<long64> >::iterator
+     for ( typename deque<vector<int64_t> >::iterator
            pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
       {
          // The Plist node ID vector is resized and the new node coordinates are entered
@@ -503,7 +503,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
  
          if ( debug ) cout <<"\nmidpoint face 1 (nodes:"<< (*pit)[0] <<","<< (*pit)[1] <<"): "<< x <<", "<< y;
  
-         pair<map<pair<double64,double64>,size_t>::iterator, bool>
+         pair<map<pair<double,double>,size_t>::iterator, bool>
            test_it = nodeIDs.insert( make_pair(make_pair(x,y),nID) );
          // if the middle-node point already exists in the list
          // the node ID which was found for it inside the map is used
@@ -592,11 +592,11 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
        
     // 4. Creating new 'px' and 'py' arrays and assigning them to VSet<dim>
     // -------------------------------------------------------------------
-    deque<double64>  px( nodeIDs.size() ),
+    deque<double>  px( nodeIDs.size() ),
                      py( nodeIDs.size() ),  // new node-point coordinates
                      pz( nodeIDs.size() );
 
-    for ( typename map<pair<double64,double64>,size_t>::const_iterator
+    for ( typename map<pair<double,double>,size_t>::const_iterator
           nit=nodeIDs.begin(); nit!=nodeIDs.end(); nit++ )
       {
          px[ (*nit).second ] = (*nit).first.first;
@@ -1005,7 +1005,7 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 
 
 template<size_t dim>
-int8_t  VSetConverter<dim>::TestForBoundaryFlags3D( double64 x, double64 y, double64 z ) const
+int8_t  VSetConverter<dim>::TestForBoundaryFlags3D( double x, double y, double z ) const
   {
      assert( dim == 3U );
   
@@ -1132,7 +1132,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
 
      // 3D CASE finding corners nodes on the basis of their coordinates
      // and flagging them accordingly
-     const double64 tol(5.0e-3); // 5 mm to deal with potential imprecision of ANSYS Tetra
+     const double tol(5.0e-3); // 5 mm to deal with potential imprecision of ANSYS Tetra
 
      size_t n_node(0U);
      for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, n_node++ )
@@ -1207,10 +1207,10 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
 
     // 1. while looping over all triangles build ordered triangles using the first three
     //    nodes
-    typename deque<vector<long64> >::iterator  pit(vset.PlistBegin());
+    typename deque<vector<int64_t> >::iterator  pit(vset.PlistBegin());
     vector<size_t>  pdata(6U);
-    typename deque<vector<long64> >::iterator  fit(vset.PfvertsBegin());
-    vector<long64>   pfvert(3U);
+    typename deque<vector<int64_t> >::iterator  fit(vset.PfvertsBegin());
+    vector<int64_t>   pfvert(3U);
     map<mjl::Point,size_t>  ordered_nodes;
 
     while( pit!=vset.PlistEnd()  and  fit!=vset.PfvertsEnd() )
@@ -1272,7 +1272,7 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
      dependent on their location.
 */
 template<size_t dim>
-void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double64 tol ) const
+void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double tol ) const
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1288,7 +1288,7 @@ void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double64 tol ) const
           return;
        }
      // finding min-max of x, and y coordinates of boundary nodes
-     map<size_t,double64>  bflags;
+     map<size_t,double>  bflags;
 
      // 3D CASE finding the edges on the basis of their coordinates
      // and flagging them accordingly. note there is no 2D case since in 2D we
@@ -1399,10 +1399,10 @@ void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSe
     assert( dim == 2U );
     // 1. while looping over all triangles build ordered triangles using the first three
     //    nodes
-    typename deque<vector<long64> >::iterator  pit(vset.PlistBegin());
+    typename deque<vector<int64_t> >::iterator  pit(vset.PlistBegin());
     vector<size_t>                             pdata(7);
-    typename deque<vector<long64> >::iterator  fit(vset.PfvertsBegin());
-    vector<long64>                             pfvert(3);
+    typename deque<vector<int64_t> >::iterator  fit(vset.PfvertsBegin());
+    vector<int64_t>                             pfvert(3);
     map<mjl::Point,size_t>                     ordered_nodes;
     typename map<mjl::Point,size_t>::const_iterator  it;
 
@@ -1548,8 +1548,8 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
        }
      
      bool                      debug(false);
-     map<mjl::Point3D,long64>  nodeIDs;
-     double64                  x, y, z;
+     map<mjl::Point3D,int64_t>  nodeIDs;
+     double                  x, y, z;
 
      xmin = xmax = vset.Px(0);
      ymin = ymax = vset.Py(0);
@@ -1569,7 +1569,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
           if ( z < zmin ) zmin = z;
           if ( z > zmax ) zmax = z;
           // nodes are numbered from 1...n-nodes
-          nodeIDs[ mjl::Point3D(x,y,z) ] = static_cast<long64>(i + 1);
+          nodeIDs[ mjl::Point3D(x,y,z) ] = static_cast<int64_t>(i + 1);
        }
                
      // 2. copying already existing boundary flags and values
@@ -1590,7 +1590,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
      
      // iterator to test whether new node point is already part of the mesh or whether
      // it must be created     
-     long64   nID(nodeIDs.size()+1); // new node ID tracker
+     int64_t    nID(nodeIDs.size()+1); // new node ID tracker
 
      for ( auto pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
       {
@@ -1609,7 +1609,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
               cout << x <<", "<< y <<", "<< z << endl;
            }
  
-         pair<typename map<mjl::Point3D,long64>::iterator,bool>
+         pair<typename map<mjl::Point3D,int64_t>::iterator,bool>
            test_it = nodeIDs.insert( make_pair(mjl::Point3D(x,y,z),nID) );
          // if the middle-node point already exists in the list
          // the node ID which was found for it inside the map is used
@@ -1798,7 +1798,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
        
     // 4. Creating new 'px' and 'py' arrays and assigning them to VSet<dim>
     // -------------------------------------------------------------------
-    deque<double64>  px( nodeIDs.size() ),
+    deque<double>  px( nodeIDs.size() ),
                       py( nodeIDs.size() ),  // new node-point coordinates
                       pz( nodeIDs.size() );
     map<mjl::Point3D,size_t>::const_iterator  nit;
@@ -1900,8 +1900,8 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
           return;
        }
      
-     map<mjl::Point3D,long64>  nodeIDs;
-     double64                  x, y, z;
+     map<mjl::Point3D,int64_t>  nodeIDs;
+     double                  x, y, z;
      bool                      debug(false);
 
      xmin = xmax = vset.Px(0);
@@ -1940,7 +1940,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
      
      // iterator to test whether new node point is already part of the mesh or whether
      // it must be created
-     long64   nID(nodeIDs.size()+1); // new node ID tracker
+     int64_t    nID(nodeIDs.size()+1); // new node ID tracker
      int8_t   bflag;
 
      for ( auto pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
@@ -1960,7 +1960,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
               cout << x <<", "<< y <<", "<< z << endl;
            }
  
-         pair<typename map<mjl::Point3D,long64>::iterator,bool>
+         pair<typename map<mjl::Point3D,int64_t>::iterator,bool>
            test_it = nodeIDs.insert( make_pair(mjl::Point3D(x,y,z),nID) );
          // if the middle-node point already exists in the list
          // the node ID which was found for it inside the map is used
@@ -2120,7 +2120,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
        
     // 4. Creating new 'px', 'py', and 'pz' arrays and assigning them to VSet<dim>
     // --------------------------------------------------------------------------
-    deque<double64>  px( nodeIDs.size() ),
+    deque<double>  px( nodeIDs.size() ),
                       py( nodeIDs.size() ),  // new node-point coordinates
                       pz( nodeIDs.size() );
 
@@ -2157,7 +2157,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
 // brute force approach: based on their position the nodes are flagged as boundary nodes
 // tested: O.K.
 template<size_t dim>
-void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, double64 tol )
+void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, double tol )
  {
      // 0. getting rid of the existing boundary conditions
      // --------------------------------------------------
@@ -2171,7 +2171,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
      ymin = ymax = vset.Py(0);
      zmin = zmax = vset.Pz(0);
 
-     double64  x, y, z;
+     double  x, y, z;
 
      for ( size_t i=0U; i<vset.Vertices(); i++ )  
        {

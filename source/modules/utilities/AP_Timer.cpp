@@ -15,7 +15,7 @@ namespace csmp {
    typedef unsigned long long LARGE_INTEGER;
 #endif
 
-const double64 AP_Timer::m_secondsPerTick(AP_Timer::GetSecondsPerClockTick());
+const double AP_Timer::m_secondsPerTick(AP_Timer::GetSecondsPerClockTick());
 
 //Constructor.
 AP_Timer::AP_Timer ()
@@ -25,16 +25,16 @@ AP_Timer::AP_Timer ()
 
 
 //Get processor spped from windows registry and set fSecondsPerTick accordingly.
-double64 AP_Timer::GetSecondsPerClockTick()
+double AP_Timer::GetSecondsPerClockTick()
 {
-  static double64 sec_per_tick(0);
+  static double sec_per_tick(0);
 
   if (sec_per_tick == 0.0f)
   {
 #ifdef _WIN32
     LARGE_INTEGER frequency;
     QueryPerformanceFrequency(&frequency);
-    sec_per_tick = static_cast<double64>(1.0f / frequency.QuadPart);
+    sec_per_tick = static_cast<double>(1.0f / frequency.QuadPart);
 #elif __APPLE__
     mach_timebase_info_data_t info;
     mach_timebase_info(&info);
@@ -42,7 +42,7 @@ double64 AP_Timer::GetSecondsPerClockTick()
 #else
     struct timespec ts;
     clock_getres(CLOCK_MONOTONIC, &ts);
-    sec_per_tick = static_cast<double64>(ts.tv_sec);
+    sec_per_tick = static_cast<double>(ts.tv_sec);
 #endif
   }
   return sec_per_tick;
@@ -75,8 +75,8 @@ AP_Timer & AP_Timer::Stop()
 
 
 //Return the currently elapsed time.
-//return elapsed time return as double64.
-double64  AP_Timer::ElapsedTime()
+//return elapsed time return as double.
+double  AP_Timer::ElapsedTime()
 {
   if ( m_bTimerIsRunning )
   {
@@ -92,7 +92,7 @@ AP_Timer & AP_Timer::Continue()
 {
   if ( !m_bTimerIsRunning )
   {
-    double64 tmp  = m_fElapsedTime;
+    double tmp  = m_fElapsedTime;
     UpdateTimes();
     m_fStartTime += m_fElapsedTime  - tmp;
     m_bTimerIsRunning = true;
@@ -104,7 +104,7 @@ AP_Timer & AP_Timer::Continue()
 //Set the currently elapsed time.
 //param: elapsedTime
 //       the time you want the timer to contiue from.
-void AP_Timer::SetElapsedTime(const double64 & elapsedTime)
+void AP_Timer::SetElapsedTime(const double & elapsedTime)
 {
   if ( m_bTimerIsRunning )
   {
@@ -127,7 +127,7 @@ std::string AP_Timer::AsString()
   size_t uTotalSeconds(static_cast<size_t>(fabs(m_fElapsedTime)));
   size_t uHours(uTotalSeconds/60/60);
   size_t uMinutes(uTotalSeconds/60%60);
-  double64 fSeconds(fabs(m_fElapsedTime) - uTotalSeconds + uTotalSeconds%60);
+  double fSeconds(fabs(m_fElapsedTime) - uTotalSeconds + uTotalSeconds%60);
   char timeStr[1024];
   sprintf(timeStr, "time: %lu h %02lu m %06.3f s", uHours, uMinutes, fabs(fSeconds));
   return( timeStr );
@@ -144,11 +144,11 @@ std::string AP_Timer::AverageTimeAsString(size_t uSteps)
   {
     UpdateTimes();
   }
-  double64 fAverageElapsedTime(m_fElapsedTime/static_cast<double64>(uSteps));
+  double fAverageElapsedTime(m_fElapsedTime/static_cast<double>(uSteps));
   size_t uTotalSeconds(static_cast<size_t>(fabs(fAverageElapsedTime)));
   size_t uHours(uTotalSeconds/60/60);
   size_t uMinutes(uTotalSeconds/60%60);
-  double64 fSeconds(fabs(fAverageElapsedTime) - uTotalSeconds + uTotalSeconds%60);
+  double fSeconds(fabs(fAverageElapsedTime) - uTotalSeconds + uTotalSeconds%60);
   char timeStr[50];
   sprintf(timeStr, "time: %lu h %02lu m %06.3f s", uHours, uMinutes, fabs(fSeconds));
   return( timeStr );
@@ -160,11 +160,11 @@ void  AP_Timer::UpdateTimes()
 #ifdef _WIN32
     LARGE_INTEGER now;
     QueryPerformanceCounter(&now);
-    double64 endTime = static_cast<double64>(now.QuadPart) * m_secondsPerTick;
+    double endTime = static_cast<double>(now.QuadPart) * m_secondsPerTick;
     m_fElapsedTime = endTime - m_fStartTime;
 #elif __APPLE__
     uint64_t now = mach_absolute_time();
-    double64 endTime = static_cast<double64>(now) * m_secondsPerTick;
+    double endTime = static_cast<double>(now) * m_secondsPerTick;
     m_fElapsedTime = endTime - m_fStartTime;
 #else
     timeval now;

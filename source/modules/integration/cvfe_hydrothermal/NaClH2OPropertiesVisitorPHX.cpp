@@ -148,7 +148,7 @@ namespace csmp
     ReadAllVariables( n );
 
     old_state = int(state()+0.01); // should always give the correct result
-    state_p() = double64(old_state);
+    state_p() = double(old_state);
 
     // ****************************************
     // 2. Initialize some bools
@@ -201,7 +201,7 @@ namespace csmp
 
     PrepareVariablesForStorage();
 
-    // if (essentiallyEqual(sh(),1.0,numeric_limits<double64>::epsilon()))
+    // if (essentiallyEqual(sh(),1.0,numeric_limits<double>::epsilon()))
     //   {
     // 	csmp_error.notice( FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
     // 			"\nPure Halite!");
@@ -249,13 +249,13 @@ namespace csmp
                         "received message Fatal() from equilibrator ... teminating!!!");
       }
     current_state = Bulk.state; // that should be type safe
-    state()       = double64(current_state);    
+    state()       = double(current_state);    
   }
 
 
 
   template<size_t dim>
-  void NaClH2OPropertiesVisitorPHX<dim>::SetTimeIncrement( double64 time_increment )
+  void NaClH2OPropertiesVisitorPHX<dim>::SetTimeIncrement( double time_increment )
   {
     dt_ = time_increment;
   }
@@ -707,11 +707,11 @@ namespace csmp
 
 
   template<size_t dim>
-  double64 NaClH2OPropertiesVisitorPHX<dim>::TwoPhasePureWaterCompressibility(double64 cpl, double64 cpv)
+  double NaClH2OPropertiesVisitorPHX<dim>::TwoPhasePureWaterCompressibility(double cpl, double cpv)
   {
     // compressibility of liquid/vapor mixture after Grant and Sory, WRR 15(3) p. 684-686
     // compressibility modified as to add the vapor contribution cpv * rv * sv * phi as well
-    double64 product, b; 
+    double product, b; 
     product = ( rl() - rv() ) / ( ( hv() - hl() ) * rl() * rv() );
     b  = ( 1.0 - phi() ) * cpr() * rr();
     b += phi() * rl() * cpl * sl();
@@ -1150,21 +1150,21 @@ namespace csmp
     cout <<"\nSOWAT parameters:"<< endl;
     cout <<"\nBulk.state = "<<Bulk.state<<", previous_state = "<<previous_state<< endl;
 
-    cout <<"double64 rho_rock   = "<<rr()<<";\n";
-    cout <<"double64 phi        = "<<phi()<<";\n";
-    cout <<"double64 h_fluid    = "<<h_fluid_<<"; // this is one passed to FRE"<<endl;
-    cout <<"double64 m_fluid    = "<<m_fluid_<<";\n";
-    cout <<"double64 hf         = "<<hf()<<"; // this is one coming back from FRE"<<endl;
-    cout <<"double64 m_rock     = "<<m_rock_<<";\n";
-    cout <<"double64 t          = "<<t_<<";\n";
-    cout <<"double64 p          = "<<p_bar_<<";\n";
-    cout <<"double64 x          = "<<x_<<";\n";
-    cout <<"double64 cp_rock    = "<<cp_rock_<<";\n";
-    cout <<"double64 wt         = "<<wt_<<";\n";
-    cout <<"double64 t_previous = "<<tp_<<";\n";
-    cout <<"double64 p_current  = "<<p_current_<<";\n";
-    cout <<"double64 H_current  = "<<H_current_<<";\n";
-    cout <<"double64 H_previous = "<<H_previous_<< ";\n"; 
+    cout <<"double rho_rock   = "<<rr()<<";\n";
+    cout <<"double phi        = "<<phi()<<";\n";
+    cout <<"double h_fluid    = "<<h_fluid_<<"; // this is one passed to FRE"<<endl;
+    cout <<"double m_fluid    = "<<m_fluid_<<";\n";
+    cout <<"double hf         = "<<hf()<<"; // this is one coming back from FRE"<<endl;
+    cout <<"double m_rock     = "<<m_rock_<<";\n";
+    cout <<"double t          = "<<t_<<";\n";
+    cout <<"double p          = "<<p_bar_<<";\n";
+    cout <<"double x          = "<<x_<<";\n";
+    cout <<"double cp_rock    = "<<cp_rock_<<";\n";
+    cout <<"double wt         = "<<wt_<<";\n";
+    cout <<"double t_previous = "<<tp_<<";\n";
+    cout <<"double p_current  = "<<p_current_<<";\n";
+    cout <<"double H_current  = "<<H_current_<<";\n";
+    cout <<"double H_previous = "<<H_previous_<< ";\n"; 
     cout <<"\n    x - 1.0    = "<<(x_-1.0)<<endl;
     cout <<"\n    wt - 100.  = "<<(wt_-100.0)<<endl;
 
@@ -1273,8 +1273,8 @@ namespace csmp
 
   // JPW Nov 2010
   template<size_t dim>
-  void NaClH2OPropertiesVisitorPHX<dim>::TemperatureDependentHeatCapacityRock( double64 cpr_min_ext, double64 t_min_ext,
-                                                                                      double64 cpr_max_ext, double64 t_max_ext )
+  void NaClH2OPropertiesVisitorPHX<dim>::TemperatureDependentHeatCapacityRock( double cpr_min_ext, double t_min_ext,
+                                                                                      double cpr_max_ext, double t_max_ext )
   {
     T_dependent_cpr = true;
     //      equilibrator.TemperatureDependentHeatCapacityRock(cpr_min_ext,t_min_ext,cpr_max_ext,t_max_ext);
@@ -1282,8 +1282,8 @@ namespace csmp
 
   // JPW  Nov 2010
   template<size_t dim>
-  void NaClH2OPropertiesVisitorPHX<dim>::WithOpenBoundaries( double64 reference_specific_enthalpy,
-                                                                    double64 reference_salinity )
+  void NaClH2OPropertiesVisitorPHX<dim>::WithOpenBoundaries( double reference_specific_enthalpy,
+                                                                    double reference_salinity )
   {
     open_boundaries = true;
     const_top_pressure = true;
@@ -1293,7 +1293,7 @@ namespace csmp
 
   // JPW  Nov 2010
   template<size_t dim>
-  void NaClH2OPropertiesVisitorPHX<dim>::WithOpenBoundaries( double64 reference_salinity )
+  void NaClH2OPropertiesVisitorPHX<dim>::WithOpenBoundaries( double reference_salinity )
   {
     open_boundaries = true;
     const_top_pressure = false;
@@ -1302,36 +1302,36 @@ namespace csmp
 
   // JPW  Nov 2010
   /*  template< size_t dim>
-      double64 NaClH2OPropertiesVisitorPHX<dim>::BoundaryFlow()
+      double NaClH2OPropertiesVisitorPHX<dim>::BoundaryFlow()
       {
 
-      double64 bfm_l(0.), bfm_v(0.), bfm_h(0.);
+      double bfm_l(0.), bfm_v(0.), bfm_h(0.);
 
       bfe() = 0.;
       bfs() = 0.;
 
-      if (definitelyGreaterThan(bfm(),0.,numeric_limits<double64>::epsilon()) &&
-      definitelyLessThan(sh(),1.,numeric_limits<double64>::epsilon()))
+      if (definitelyGreaterThan(bfm(),0.,numeric_limits<double>::epsilon()) &&
+      definitelyLessThan(sh(),1.,numeric_limits<double>::epsilon()))
       {
       krl = EffectiveLiquidSaturationHalitePresent( slp(), svp() );
       krv = 1.0 - krl;
-      double64 mob_l(0.), mob_v(0.), mob(0.);
+      double mob_l(0.), mob_v(0.), mob(0.);
       if (slp()>0.) mob_l = krl*rlp()/mulp();
       if (svp()>0.) mob_v = krv*rvp()/muvp();
       mob = mob_l+mob_v;
       if (mob>0.) mob_l /= mob;
       if (mob>0.) mob_v /= mob;
 
-      if (!definitelyGreaterThan(bfm(),(mlp()+mvp()),numeric_limits<double64>::epsilon()))
+      if (!definitelyGreaterThan(bfm(),(mlp()+mvp()),numeric_limits<double>::epsilon()))
       {
       bfm_l = bfm()*mob_l;
       bfm_v = bfm()*mob_v;
-      if (definitelyGreaterThan(bfm_v,mvp(),numeric_limits<double64>::epsilon()))
+      if (definitelyGreaterThan(bfm_v,mvp(),numeric_limits<double>::epsilon()))
       {
       bfm_l += bfm_v-mvp();
       bfm_v = mvp();
       }
-      else if (definitelyGreaterThan(bfm_l,mlp(),numeric_limits<double64>::epsilon()))
+      else if (definitelyGreaterThan(bfm_l,mlp(),numeric_limits<double>::epsilon()))
       {
       bfm_v += bfm_l-mlp();
       bfm_l = mlp();
@@ -1352,12 +1352,12 @@ namespace csmp
       {
       bfm_v = (bfm()-mtp())*mob_v;
       bfm_l = (bfm()-mtp())*mob_l;
-      if (definitelyGreaterThan(bfm_v,dmv_,numeric_limits<double64>::epsilon()))
+      if (definitelyGreaterThan(bfm_v,dmv_,numeric_limits<double>::epsilon()))
       {
       bfm_l += bfm_v-dmv_;
       bfm_v = dmv_;
       }
-      else if (definitelyGreaterThan(bfm_l,dml_,numeric_limits<double64>::epsilon()))
+      else if (definitelyGreaterThan(bfm_l,dml_,numeric_limits<double>::epsilon()))
       {
       bfm_v += bfm_l-dml_;
       bfm_l = dml_;
@@ -1375,7 +1375,7 @@ namespace csmp
       }
 
       }
-      if (definitelyLessThan(bfm(),0.,numeric_limits<double64>::epsilon()))
+      if (definitelyLessThan(bfm(),0.,numeric_limits<double>::epsilon()))
       {
       bfe() = bfm()*ref_spec_h*phi();
       bfs() = bfm()*ref_sal;
@@ -1391,7 +1391,7 @@ namespace csmp
       ms() = 0.;
       }
       wt() = ms()/mt()*100.;
-      if (definitelyGreaterThan(wt(),100.,numeric_limits<double64>::epsilon()))
+      if (definitelyGreaterThan(wt(),100.,numeric_limits<double>::epsilon()))
       wt() = 100.;
       wt_ = wt();
 
@@ -1418,23 +1418,23 @@ namespace csmp
   */
   // JPW  Oct 2011 correctipon
   template<size_t dim>
-  double64 NaClH2OPropertiesVisitorPHX<dim>::BoundaryFlow()
+  double NaClH2OPropertiesVisitorPHX<dim>::BoundaryFlow()
   {
 
-    double64 bfm_l(0.), bfm_v(0.), bfm_h(0.);
-    double64 old_liquid(0.), old_vapor(0.), old_salt(0.);
-    double64 new_liquid(0.), new_vapor(0.);
+    double bfm_l(0.), bfm_v(0.), bfm_h(0.);
+    double old_liquid(0.), old_vapor(0.), old_salt(0.);
+    double new_liquid(0.), new_vapor(0.);
 
-    if (definitelyGreaterThan(mtp(),mlp()+mvp(),numeric_limits<double64>::epsilon()))
+    if (definitelyGreaterThan(mtp(),mlp()+mvp(),numeric_limits<double>::epsilon()))
       old_salt   = mtp() - mlp() - mvp();
     old_liquid = mlp() + std::min(0.,dml_);
     old_vapor  = mvp() + std::min(0.,dmv_);
     new_liquid = std::max(0.,dml_);
     new_vapor  = std::max(0.,dmv_);
-    double64 total(old_salt+old_liquid+old_vapor+new_liquid+new_vapor);
+    double total(old_salt+old_liquid+old_vapor+new_liquid+new_vapor);
 
 
-    if (!essentiallyEqual(mt(),total,numeric_limits<double64>::epsilon()*total))
+    if (!essentiallyEqual(mt(),total,numeric_limits<double>::epsilon()*total))
       {
         cout << "old_salt: " << old_salt << endl;
         cout << "old_liquid: " << old_liquid << endl;
@@ -1450,28 +1450,28 @@ namespace csmp
     bfe() = 0.;
     bfs() = 0.;
 
-    if (definitelyGreaterThan(bfm(),0.,numeric_limits<double64>::epsilon()) &&
-        definitelyLessThan(sh(),1.,numeric_limits<double64>::epsilon()))
+    if (definitelyGreaterThan(bfm(),0.,numeric_limits<double>::epsilon()) &&
+        definitelyLessThan(sh(),1.,numeric_limits<double>::epsilon()))
       {
         krl = EffectiveLiquidSaturationHalitePresent( slp(), svp() );
         krv = 1.0 - krl;
-        double64 mob_l(0.), mob_v(0.), mob(0.);
+        double mob_l(0.), mob_v(0.), mob(0.);
         if (slp()>0.) mob_l = krl*rlp()/mulp();
         if (svp()>0.) mob_v = krv*rvp()/muvp();
         mob = mob_l+mob_v;
         if (mob>0.) mob_l /= mob;
         if (mob>0.) mob_v /= mob;
 
-        if (!definitelyGreaterThan(bfm(),(old_liquid+old_vapor),numeric_limits<double64>::epsilon()))
+        if (!definitelyGreaterThan(bfm(),(old_liquid+old_vapor),numeric_limits<double>::epsilon()))
           {
             bfm_l = bfm()*mob_l;
             bfm_v = bfm()*mob_v;
-            if (definitelyGreaterThan(bfm_v,old_vapor,numeric_limits<double64>::epsilon()))
+            if (definitelyGreaterThan(bfm_v,old_vapor,numeric_limits<double>::epsilon()))
               {
                 bfm_l += bfm_v-old_vapor;
                 bfm_v = old_vapor;
               }
-            else if (definitelyGreaterThan(bfm_l,old_liquid,numeric_limits<double64>::epsilon()))
+            else if (definitelyGreaterThan(bfm_l,old_liquid,numeric_limits<double>::epsilon()))
               {
                 bfm_v += bfm_l-old_liquid;
                 bfm_l = old_liquid;
@@ -1487,18 +1487,18 @@ namespace csmp
         bfe() = phi()*(bfm_l*hlp()+bfm_v*hvp()+bfm_h*hhp());
         bfs() = bfm_l*xlp()+bfm_v*xvp()+bfm_h;
 
-        double64 old_mass(bfm_l+bfm_v+bfm_h);
+        double old_mass(bfm_l+bfm_v+bfm_h);
 
-        if (definitelyGreaterThan(bfm(),old_mass,numeric_limits<double64>::epsilon()))
+        if (definitelyGreaterThan(bfm(),old_mass,numeric_limits<double>::epsilon()))
           {
             bfm_v = (bfm()-old_mass)*mob_v;
             bfm_l = (bfm()-old_mass)*mob_l;
-            if (definitelyGreaterThan(bfm_v,new_vapor,numeric_limits<double64>::epsilon()))
+            if (definitelyGreaterThan(bfm_v,new_vapor,numeric_limits<double>::epsilon()))
               {
                 bfm_l += bfm_v-new_vapor;
                 bfm_v = new_vapor;
               }
-            else if (definitelyGreaterThan(bfm_l,new_liquid,numeric_limits<double64>::epsilon()))
+            else if (definitelyGreaterThan(bfm_l,new_liquid,numeric_limits<double>::epsilon()))
               {
                 bfm_v += bfm_l-new_liquid;
                 bfm_l = new_liquid;
@@ -1518,7 +1518,7 @@ namespace csmp
           }
 
       }
-    if (definitelyLessThan(bfm(),0.,numeric_limits<double64>::epsilon()))
+    if (definitelyLessThan(bfm(),0.,numeric_limits<double>::epsilon()))
       {
         bfe() = bfm()*ref_spec_h*phi();
         bfs() = bfm()*ref_sal;
@@ -1534,7 +1534,7 @@ namespace csmp
         ms() = 0.;
       }
     wt() = ms()/mt()*100.;
-    if (definitelyGreaterThan(wt(),100.,numeric_limits<double64>::epsilon()))
+    if (definitelyGreaterThan(wt(),100.,numeric_limits<double>::epsilon()))
       wt() = 100.;
     wt_ = wt();
 
@@ -1561,10 +1561,10 @@ namespace csmp
   {
     //    cout << "enter. " << endl;
 
-    double64 mt_backup, ms_backup, H_backup;
-    double64 bfm_min, bfm_max;
-    double64 vol, vol_min, vol_max;
-    double64 crit;
+    double mt_backup, ms_backup, H_backup;
+    double bfm_min, bfm_max;
+    double vol, vol_min, vol_max;
+    double crit;
     bool outflow(false);
 
     mt_backup = mt();
@@ -1573,7 +1573,7 @@ namespace csmp
 
     if (!const_top_pressure) ref_spec_h = reference_enthalpy_top();
 
-    if ( essentiallyEqual( mt(), rho_bulk(), numeric_limits<double64>::epsilon()) )
+    if ( essentiallyEqual( mt(), rho_bulk(), numeric_limits<double>::epsilon()) )
       {
         bfm() = 0;
         bfe() = 0;
@@ -1589,13 +1589,13 @@ namespace csmp
 
         //***********************
         // old code:
-        /*    if (definitelyGreaterThan(mt()-rho_bulk(), 0.0, numeric_limits<double64>::epsilon()))
+        /*    if (definitelyGreaterThan(mt()-rho_bulk(), 0.0, numeric_limits<double>::epsilon()))
               outflow = true;
 
               bfm() = 0;
 
               vol = BoundaryFlow();
-              if (outflow && definitelyLessThan( vol, 1., numeric_limits<double64>::epsilon() ))
+              if (outflow && definitelyLessThan( vol, 1., numeric_limits<double>::epsilon() ))
               {
               //      int temp;
               cout << "Problem at initial open top" << endl;
@@ -1608,7 +1608,7 @@ namespace csmp
               cout << "wt: " << wt() <<endl;
               //      cin >> temp;
               }
-              else if (!outflow && definitelyGreaterThan( vol, 1., numeric_limits<double64>::epsilon() ))
+              else if (!outflow && definitelyGreaterThan( vol, 1., numeric_limits<double>::epsilon() ))
               {
               //      int temp;
               cout << "Problem at initial open top" << endl;
@@ -1627,7 +1627,7 @@ namespace csmp
         bfm() = 0;
         vol = BoundaryFlow();
 
-        if (definitelyGreaterThan( vol, 1., numeric_limits<double64>::epsilon()))
+        if (definitelyGreaterThan( vol, 1., numeric_limits<double>::epsilon()))
           outflow = true;
 
         if (outflow)
@@ -1649,16 +1649,16 @@ namespace csmp
         //    if (bfm() > (ml()+mv()))
         //        bfm() = (ml()+mv());
         //    bfm() = mt()/100.;
-        if (outflow && definitelyLessThan(bfm(),0.,numeric_limits<double64>::epsilon()))
+        if (outflow && definitelyLessThan(bfm(),0.,numeric_limits<double>::epsilon()))
           bfm() *= -1.;
-        if (!outflow && definitelyGreaterThan(bfm(),0.,numeric_limits<double64>::epsilon()))
+        if (!outflow && definitelyGreaterThan(bfm(),0.,numeric_limits<double>::epsilon()))
           bfm() *= -1.;
         vol = BoundaryFlow();
 
         // determine bfm_min and bfm_max
         if (outflow)
           {
-            if (definitelyLessThan(vol,1.,numeric_limits<double64>::epsilon()))
+            if (definitelyLessThan(vol,1.,numeric_limits<double>::epsilon()))
               // maximum has been found
               {
                 vol_max = vol;
@@ -1683,7 +1683,7 @@ namespace csmp
                     //          cout << "outflow bfm(). " << endl;
                     vol = BoundaryFlow();
 
-                    if (definitelyLessThan(vol,1.,numeric_limits<double64>::epsilon()) || count_vol_max > 100)
+                    if (definitelyLessThan(vol,1.,numeric_limits<double>::epsilon()) || count_vol_max > 100)
                       // found the maximum
                       {
                         vol_max = vol;
@@ -1707,7 +1707,7 @@ namespace csmp
           }
         else // inflow
           {
-            if (definitelyGreaterThan(vol,1.,numeric_limits<double64>::epsilon()))
+            if (definitelyGreaterThan(vol,1.,numeric_limits<double>::epsilon()))
               {
                 vol_min = vol;
                 bfm_min = bfm();
@@ -1725,7 +1725,7 @@ namespace csmp
                     //      cout << "inflow bfm(). " << endl;
                     vol = BoundaryFlow();
 
-                    if (definitelyGreaterThan(vol,1.,numeric_limits<double64>::epsilon()))
+                    if (definitelyGreaterThan(vol,1.,numeric_limits<double>::epsilon()))
                       {
                         vol_min = vol;
                         bfm_min = bfm();
@@ -1747,9 +1747,9 @@ namespace csmp
           }
 
 
-        if (definitelyGreaterThan( bfm_min, bfm_max, numeric_limits<double64>::epsilon() ) ||
-            definitelyLessThan( vol_min, 1., numeric_limits<double64>::epsilon() ) ||
-            definitelyGreaterThan( vol_max, 1., numeric_limits<double64>::epsilon() ))
+        if (definitelyGreaterThan( bfm_min, bfm_max, numeric_limits<double>::epsilon() ) ||
+            definitelyLessThan( vol_min, 1., numeric_limits<double>::epsilon() ) ||
+            definitelyGreaterThan( vol_max, 1., numeric_limits<double>::epsilon() ))
           {
             cout << "Problem in boundary flow calculations." << endl;
             cout << "bfm_min: " << bfm_min << endl;
@@ -1772,7 +1772,7 @@ namespace csmp
 
         // Bisection iteration
         //   while (crit > 1.e-4 &&
-        //          essentiallyEqual( bfm_min, bfm_max, numeric_limits<double64>::epsilon()))
+        //          essentiallyEqual( bfm_min, bfm_max, numeric_limits<double>::epsilon()))
         while (crit > 1.e-4)
           {
             count++;
@@ -1840,7 +1840,7 @@ namespace csmp
     time_factor_h = 1.0;
     time_factor_s = 1.0;      
 
-    const double64 threshold_p(0.1);
+    const double threshold_p(0.1);
 
     expected_dp = 1.0/mt()/Bulk.beta * ( mt()-Bulk.rho ); // if bulk.rho < mt -> pressure increase (squeeze back); if bulk.rho > mt() -> pressure decrease (expand)
     time_factor() =  1.0;
@@ -1937,7 +1937,7 @@ namespace csmp
           if(p() > 38.0e6 && p() < 40.e6 &&
           t() > 590. && t() < 605.)
           {
-          double64 factor(fabs(p()-39.e6)/1.0e6);
+          double factor(fabs(p()-39.e6)/1.0e6);
           if (nQ() > 0. && nQ() > factor*factor*mt() )//&&
           {
           nQ() = factor*factor*mt();
@@ -1950,7 +1950,7 @@ namespace csmp
           }*/
 
     // new quick fix to avoid extreme pressure changes
-    /*    double64 old_nQ = nQ();
+    /*    double old_nQ = nQ();
     //    if (p() > 25.e6 && p.Flag() == PLAIN && sl() < 1. )
     if (p() > 25.e6 && p.Flag() == PLAIN)
     {
@@ -2011,7 +2011,7 @@ namespace csmp
   template<size_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::PrepareVariablesForStorage()
   {
-    state()   = static_cast<double64>(Bulk.state);
+    state()   = static_cast<double>(Bulk.state);
 
     Htp()     = H_current_;
     msp()     = ms();

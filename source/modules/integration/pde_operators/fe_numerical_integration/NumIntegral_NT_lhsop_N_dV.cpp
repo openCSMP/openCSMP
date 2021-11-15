@@ -61,20 +61,20 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( CELL& e )
 
     if ( MathOperatorLHS<dim>::LumpedFormulation() )
       {
-         const double64 volume = e.Volume();
+         const double volume = e.Volume();
 
          if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ||
               MathOperatorLHS<dim>::MaterialOperandPlacement() == FACE ||
               MathOperatorLHS<dim>::MaterialOperandPlacement() == INTER_FACE)
            {
             for ( size_t j=0; j<e.Nodes(); j++ )
-                this->LHS(j,j) = (this->MTRL[0](0,0)*volume) / static_cast<double64>(e.Nodes());
+                this->LHS(j,j) = (this->MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
            {
             for ( size_t j=0; j<e.Nodes(); j++ )
-                this->LHS(j,j) = (this->MTRL[j](0,0)*volume) / static_cast<double64>(e.Nodes());
+                this->LHS(j,j) = (this->MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
       }  
 
@@ -87,7 +87,7 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( CELL& e )
          for ( size_t i=0U; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
-              const double64 det = e.det_JINV_AtIntegrationPoint( i );
+              const double det = e.det_JINV_AtIntegrationPoint( i );
                    
               for ( size_t j=0U; j<e.Nodes(); j++ )
                 for ( size_t k=0U; k<e.Nodes(); k++ )

@@ -26,7 +26,7 @@ bool Point<dim>::operator>( const Point<dim>& )  const
 
 
 template<size_t dim>
-void  Point<dim>::NormalizeLengthTo( double64 len )
+void  Point<dim>::NormalizeLengthTo( double len )
  {
     *this /= Length(); 
     *this *= len;
@@ -69,14 +69,14 @@ Point<dim>::~Point()
 
 /*
 template<size_t dim>
-double64& Point<dim>::operator[](size_t i)
+double& Point<dim>::operator[](size_t i)
  {
     return xyz_[i];
  }
  
  
 template<size_t dim>
-double64 Point<dim>::operator[](size_t i) const
+double Point<dim>::operator[](size_t i) const
  {
     return xyz_[i];
  }
@@ -90,7 +90,7 @@ double64 Point<dim>::operator[](size_t i) const
 //
 // ----------------------------------------------------------------------------
 
-Point<1U>::Point( double64 val ) : x_(val)
+Point<1U>::Point( double val ) : x_(val)
  {
  }
 
@@ -98,7 +98,7 @@ Point<1U>::Point( const Point<1U>& pt ) : x_(pt.x_)
  {
  }
 
-Point<1U>::Point( const std::vector<double64>& v )
+Point<1U>::Point( const std::vector<double>& v )
  : x_(v[0])
  {
     assert( v.size() == 1U );
@@ -109,18 +109,18 @@ Point<1U>::~Point()
  }
 
 
-double64& Point<1U>::operator[](size_t)
+double& Point<1U>::operator[](size_t)
  {
     return x_;
  }
 
-const double64& Point<1U>::operator[](size_t) const
+const double& Point<1U>::operator[](size_t) const
  {
     return x_;
  }
 
 
-void Point<1U>::Set( const std::vector<double64>& v )
+void Point<1U>::Set( const std::vector<double>& v )
  {
     x_ = v[0];
  }
@@ -132,7 +132,7 @@ Point<1U>& Point<1U>::operator=( const Point<1U>& pt )
     return *this;
  }
 
-Point<1U>& Point<1U>::operator=( double64 val )
+Point<1U>& Point<1U>::operator=( double val )
  {
     x_ = val;
     return *this;
@@ -160,22 +160,22 @@ Point<1U>  Point<1U>::operator/( const Point<1U>& pt ) const
  }
     
 
-Point<1U>  Point<1U>::operator+( double64 val ) const
+Point<1U>  Point<1U>::operator+( double val ) const
  {
     return (Point<1U>(x_ + val));
  }
 
-Point<1U> Point<1U>::operator-( double64 val ) const
+Point<1U> Point<1U>::operator-( double val ) const
  {
     return (Point<1U>(x_ - val));
  }
 
-Point<1U> Point<1U>::operator*( double64 val ) const
+Point<1U> Point<1U>::operator*( double val ) const
  {
     return (Point<1U>(x_ * val));
  }
 
-Point<1U> Point<1U>::operator/( double64 val ) const
+Point<1U> Point<1U>::operator/( double val ) const
  {
     return (Point<1U>(x_ / val));
  }
@@ -207,25 +207,25 @@ Point<1U>& Point<1U>::operator/=( const Point<1U>& pt )
  }
  
 
-Point<1U>& Point<1U>::operator+=( double64 val )
+Point<1U>& Point<1U>::operator+=( double val )
  {
     x_ += val;
     return *this;
  }
 
-Point<1U>& Point<1U>::operator-=( double64 val )
+Point<1U>& Point<1U>::operator-=( double val )
  {
     x_ -= val;
     return *this;
  }
 
-Point<1U>& Point<1U>::operator*=( double64 val )
+Point<1U>& Point<1U>::operator*=( double val )
  {
     x_ *= val;
     return *this;
  }
 
-Point<1U>& Point<1U>::operator/=( double64 val )
+Point<1U>& Point<1U>::operator/=( double val )
  {
     x_ /= val;
     return *this;
@@ -257,31 +257,31 @@ bool Point<1U>::operator>( const Point<1U>& pt ) const
  }
 
 
-double64  Point<1U>::Length() const
+double  Point<1U>::Length() const
  {
     return std::fabs(x_);
  }
 
-double64  Point<1U>::SquaredLength() const
+double  Point<1U>::SquaredLength() const
  {
     return x_ * x_; 
  }
 
 
-void Point<1U>::NormalizeLengthTo( double64 len ) 
+void Point<1U>::NormalizeLengthTo( double len ) 
  {
     x_ = len; 
  }
 
 
-double64  Point<1U>::DistanceTo( const Point<1U>& pt ) const
+double  Point<1U>::DistanceTo( const Point<1U>& pt ) const
  {
     return std::fabs(pt.x_ - x_); 
  }
 
 
 bool Point<1U>::CoincidesWithWithinTolerance( const Point<1U>& pt, 
-                                              double64 tolerance ) const
+                                              double tolerance ) const
  {
     if ( std::fabs(pt.x_ - x_) > tolerance ) return false;
     return true;
@@ -294,9 +294,9 @@ bool Point<1U>::IsBetween( const Point<1U>& pt1, const Point<1U>& pt2)
  }
 
 
-std::vector<double64> Point<1U>::Coordinates() const
+std::vector<double> Point<1U>::Coordinates() const
  {
-    return std::vector<double64>(1U,x_);
+    return std::vector<double>(1U,x_);
  }
 
 
@@ -316,12 +316,12 @@ void Point<1U>::Out() const
 //
 // ----------------------------------------------------------------------------
 
-Point<2U>::Point(double64 val)
+Point<2U>::Point(double val)
  : x_(val), y_(val)
  {
  }
 
-Point<2U>::Point( double64 px, double64 py ) : x_(px), y_(py)
+Point<2U>::Point( double px, double py ) : x_(px), y_(py)
  {
  }
 
@@ -329,7 +329,7 @@ Point<2U>::Point( const Point<2U>& pt ) : x_(pt.x_), y_(pt.y_)
  {
  }
 
-Point<2U>::Point( const std::vector<double64>& v )
+Point<2U>::Point( const std::vector<double>& v )
  : x_(v[0]), y_(v[1])
  {
  }
@@ -339,18 +339,18 @@ Point<2U>::~Point()
  }
 
 
-double64& Point<2U>::operator[]( size_t i )
+double& Point<2U>::operator[]( size_t i )
  {
     return (i == 0U) ? x_ : y_;
  }
 
-const double64& Point<2U>::operator[]( size_t i ) const
+const double& Point<2U>::operator[]( size_t i ) const
  {
     return (i == 0U) ? x_ : y_;
  }
 
 
-void Point<2U>::Set( const std::vector<double64>& v )
+void Point<2U>::Set( const std::vector<double>& v )
  {
     assert( v.size() == 2U );
     x_ = v[0];
@@ -358,7 +358,7 @@ void Point<2U>::Set( const std::vector<double64>& v )
  }
 
 
-void Point<2U>::Set( double64 px, double64 py )
+void Point<2U>::Set( double px, double py )
  {
     x_ = px;
     y_ = py;
@@ -375,7 +375,7 @@ Point<2U>& Point<2U>::operator=( const Point<2U>& pt )
  }
 
 
-Point<2U>& Point<2U>::operator=( double64 val )
+Point<2U>& Point<2U>::operator=( double val )
  {
     x_ = val;
     y_ = val;
@@ -404,22 +404,22 @@ Point<2U>  Point<2U>::operator/( const Point<2U>& pt ) const
  }
     
 
-Point<2U>  Point<2U>::operator+( double64 val ) const
+Point<2U>  Point<2U>::operator+( double val ) const
  {
     return (Point<2U>(x_ + val, y_ + val));
  }
 
-Point<2U>  Point<2U>::operator-( double64 val ) const
+Point<2U>  Point<2U>::operator-( double val ) const
  {
     return (Point<2U>(x_ - val, y_ - val));
  }
 
-Point<2U>  Point<2U>::operator*( double64 val ) const
+Point<2U>  Point<2U>::operator*( double val ) const
  {
     return (Point<2U>(x_ * val, y_ * val));
  }
 
-Point<2U>  Point<2U>::operator/( double64 val ) const
+Point<2U>  Point<2U>::operator/( double val ) const
  {
     return (Point<2U>(x_ / val, y_ / val));
  }
@@ -455,28 +455,28 @@ Point<2U>& Point<2U>::operator/=( const Point<2U>& pt )
  }
  
 
-Point<2U>& Point<2U>::operator+=( double64 val )
+Point<2U>& Point<2U>::operator+=( double val )
  {
     x_ += val;
     y_ += val;
     return *this;
  }
 
-Point<2U>& Point<2U>::operator-=( double64 val )
+Point<2U>& Point<2U>::operator-=( double val )
  {
     x_ -= val;
     y_ -= val;
     return *this;
  }
 
-Point<2U>& Point<2U>::operator*=( double64 val )
+Point<2U>& Point<2U>::operator*=( double val )
  {
     x_ *= val;
     y_ *= val;
     return *this;
  }
 
-Point<2U>& Point<2U>::operator/=( double64 val )
+Point<2U>& Point<2U>::operator/=( double val )
  {
     x_ /= val;
     y_ /= val;
@@ -506,32 +506,32 @@ bool Point<2U>::operator>( const Point<2U>& pt )  const
  }
 
 
-double64  Point<2U>::Length() const
+double  Point<2U>::Length() const
  {
     return std::hypot( x_, y_ );
  }
 
-double64  Point<2U>::SquaredLength() const
+double  Point<2U>::SquaredLength() const
  {
     return x_*x_ + y_*y_;
  }
 
 
-void Point<2U>::NormalizeLengthTo( double64 len )
+void Point<2U>::NormalizeLengthTo( double len )
  {
     *this /= Length();
     *this *= len; 
  }
 
 
-double64  Point<2U>::DistanceTo( const Point<2U>& pt ) const
+double  Point<2U>::DistanceTo( const Point<2U>& pt ) const
  {
     return Point<2U>(pt - *this).Length();
  }
 
 
 bool Point<2U>::CoincidesWithWithinTolerance( const Point<2U>& pt, 
-                                              double64 tolerance ) const
+                                              double tolerance ) const
  {
     if ( Point<2U>(pt - *this).Length() > tolerance ) return false;
     return true;
@@ -544,9 +544,9 @@ bool Point<2U>::IsBetween( const Point<2U>& pt1, const Point<2U>& pt2 )
 }
 
 
-std::vector<double64> Point<2U>::Coordinates() const
+std::vector<double> Point<2U>::Coordinates() const
  {
-    return std::vector<double64>{x_,y_};
+    return std::vector<double>{x_,y_};
  }
 
 
@@ -569,12 +569,12 @@ void Point<2U>::Out() const
 //
 // ----------------------------------------------------------------------------
 
-Point<3U>::Point( double64 val )
+Point<3U>::Point( double val )
  : x_(val), y_(val), z_(val)
  {
  }
 
-Point<3U>::Point( double64 px, double64 py, double64 pz ) : x_(px), y_(py), z_(pz)
+Point<3U>::Point( double px, double py, double pz ) : x_(px), y_(py), z_(pz)
  {
  }
 
@@ -582,7 +582,7 @@ Point<3U>::Point( const Point<3U>& pt ) : x_(pt.x_), y_(pt.y_), z_(pt.z_)
  {
  }
 
-Point<3U>::Point( const std::vector<double64>& v )
+Point<3U>::Point( const std::vector<double>& v )
  : x_(v[0]), y_(v[1]), z_(v[2])
  {
     assert( v.size() == 3U );
@@ -592,18 +592,18 @@ Point<3U>::~Point()
  {
  }
 
-double64& Point<3U>::operator[]( size_t i )
+double& Point<3U>::operator[]( size_t i )
  {
     return ((i==0U) ? x_ : ((i==1U) ? y_ : z_));
  }
 
-const double64& Point<3U>::operator[]( size_t i ) const
+const double& Point<3U>::operator[]( size_t i ) const
  {
     return ((i==0U) ? x_ : ((i==1U) ? y_ : z_));
  }
 
 
-void Point<3U>::Set( const std::vector<double64>& v )
+void Point<3U>::Set( const std::vector<double>& v )
  {
     assert( v.size() == 3U );
     x_ = v[0];
@@ -612,7 +612,7 @@ void Point<3U>::Set( const std::vector<double64>& v )
  }
 
 
-void Point<3U>::Set( double64 px, double64 py, double64 pz )
+void Point<3U>::Set( double px, double py, double pz )
  {
     x_ = px;
     y_ = py;
@@ -631,7 +631,7 @@ Point<3U>& Point<3U>::operator=( const Point<3U>& pt )
  }
 
 
-Point<3U>& Point<3U>::operator=( double64 val )
+Point<3U>& Point<3U>::operator=( double val )
  {
     x_ = val;
     y_ = val;
@@ -661,22 +661,22 @@ Point<3U>  Point<3U>::operator/( const Point<3U>& pt ) const
  }
     
 
-Point<3U>  Point<3U>::operator+( double64 val ) const
+Point<3U>  Point<3U>::operator+( double val ) const
  {
     return (Point<3U>(x_ + val, y_ + val, z_ + val));
  }
 
-Point<3U>  Point<3U>::operator-( double64 val ) const
+Point<3U>  Point<3U>::operator-( double val ) const
  {
     return (Point<3U>(x_ - val, y_ - val, z_ - val));
  }
 
-Point<3U>  Point<3U>::operator*( double64 val ) const
+Point<3U>  Point<3U>::operator*( double val ) const
  {
     return (Point<3U>(x_ * val, y_ * val, z_ * val));
  }
 
-Point<3U>  Point<3U>::operator/( double64 val ) const
+Point<3U>  Point<3U>::operator/( double val ) const
  {
     return (Point<3U>(x_ / val, y_ / val, z_ / val));
  }
@@ -715,7 +715,7 @@ Point<3U>& Point<3U>::operator/=( const Point<3U>& pt )
  }
  
 
-Point<3U>& Point<3U>::operator+=( double64 val )
+Point<3U>& Point<3U>::operator+=( double val )
  {
     x_ += val;
     y_ += val;
@@ -723,7 +723,7 @@ Point<3U>& Point<3U>::operator+=( double64 val )
     return *this;
  }
 
-Point<3U>& Point<3U>::operator-=( double64 val )
+Point<3U>& Point<3U>::operator-=( double val )
  {
     x_ -= val;
     y_ -= val;
@@ -731,7 +731,7 @@ Point<3U>& Point<3U>::operator-=( double64 val )
     return *this;
  }
 
-Point<3U>& Point<3U>::operator*=( double64 val )
+Point<3U>& Point<3U>::operator*=( double val )
  {
     x_ *= val;
     y_ *= val;
@@ -739,7 +739,7 @@ Point<3U>& Point<3U>::operator*=( double64 val )
     return *this;
  }
 
-Point<3U>& Point<3U>::operator/=( double64 val )
+Point<3U>& Point<3U>::operator/=( double val )
  {
     x_ /= val;
     y_ /= val;
@@ -769,32 +769,32 @@ bool Point<3U>::operator>( const Point<3U>& p )  const
  }
 
 
-double64  Point<3U>::Length() const
+double  Point<3U>::Length() const
  {
     return std::sqrt( x_ * x_ + y_ * y_ + z_ * z_ );
  }
 
-double64  Point<3U>::SquaredLength() const
+double  Point<3U>::SquaredLength() const
  {
     return x_ * x_ + y_ * y_ + z_ * z_;
  }
 
 
-void Point<3U>::NormalizeLengthTo( double64 len )
+void Point<3U>::NormalizeLengthTo( double len )
  {
     *this /= Length();
     *this *= len; 
  }
 
 
-double64  Point<3U>::DistanceTo( const Point<3U>& pt ) const
+double  Point<3U>::DistanceTo( const Point<3U>& pt ) const
  {
     return Point<3U>(pt - *this).Length(); 
  }
 
 
 bool Point<3U>::CoincidesWithWithinTolerance( const Point<3U>& pt, 
-                                                     double64 tolerance ) const
+                                                     double tolerance ) const
  {
     if ( Point<3U>(pt - *this).Length() > tolerance ) return false;
     return true;
@@ -808,9 +808,9 @@ bool Point<3U>::IsBetween( const Point<3U>& pt1, const Point<3U>& pt2 )
 }
 
 
-std::vector<double64> Point<3U>::Coordinates() const
+std::vector<double> Point<3U>::Coordinates() const
  {
-    return std::vector<double64>{x_,y_,z_};
+    return std::vector<double>{x_,y_,z_};
  }
 
 
@@ -833,27 +833,27 @@ void Point<3U>::Out() const
 //
 // -------------------------------------------------------------------------------
 template<size_t dim>
-double64  Point<dim>::DistanceTo( const Point& pt ) const
+double  Point<dim>::DistanceTo( const Point& pt ) const
  {
     return Point<dim>( pt - *this ).Length();
  }
 
 /*
 template<size_t dim>
-Point<dim> operator-( double64 val, const Point<dim>& pt )
+Point<dim> operator-( double val, const Point<dim>& pt )
  {
     Point<dim> temp(val);
     return (temp - pt);
  } 
 
 template<size_t dim>
-Point<dim> operator+( double64 val, const Point<dim>& pt )
+Point<dim> operator+( double val, const Point<dim>& pt )
  {
     return (pt + val);
  } 
   
 template<size_t dim>
-Point<dim> operator*( double64 val, const Point<dim>& pt )
+Point<dim> operator*( double val, const Point<dim>& pt )
  {
     return (pt * val);
  }   
@@ -861,51 +861,51 @@ Point<dim> operator*( double64 val, const Point<dim>& pt )
 
 // 1D
 
-Point<1U> operator-( double64 val, const Point<1U>& pt )
+Point<1U> operator-( double val, const Point<1U>& pt )
  {
     return (Point<1U>( val - pt.x_ ));
  }   
 
-Point<1U> operator+( double64 val, const Point<1U>& pt )
+Point<1U> operator+( double val, const Point<1U>& pt )
  {
     return (Point<1U>( pt.x_ + val ));
  }   
 
-Point<1U> operator*( double64 val, const Point<1U>& pt )
+Point<1U> operator*( double val, const Point<1U>& pt )
  {
     return (Point<1U>( pt.x_ * val ));
  }   
 
 // 2D
 
-Point<2U> operator-( double64 val, const Point<2U>& pt )
+Point<2U> operator-( double val, const Point<2U>& pt )
  {
     return (Point<2U>( val - pt.x_, val - pt.y_ ));
  }   
 
-Point<2U> operator+( double64 val, const Point<2U>& pt )
+Point<2U> operator+( double val, const Point<2U>& pt )
  {
     return (Point<2U>( pt.x_ + val, pt.y_ + val ));
  }   
 
-Point<2U> operator*( double64 val, const Point<2U>& pt )
+Point<2U> operator*( double val, const Point<2U>& pt )
  {
     return (Point<2U>( pt.x_ * val, pt.y_ * val ));
  }   
  
 // 3D
 
-Point<3U> operator-( double64 val, const Point<3U>& pt )
+Point<3U> operator-( double val, const Point<3U>& pt )
  {
     return (Point<3U>( val - pt.x_, val - pt.y_, val - pt.z_ ));
  }   
 
-Point<3U> operator+( double64 val, const Point<3U>& pt )
+Point<3U> operator+( double val, const Point<3U>& pt )
  {
     return (Point<3U>( pt.x_ + val, pt.y_ + val, pt.z_ + val ));
  }   
 
-Point<3U> operator*( double64 val, const Point<3U>& pt )
+Point<3U> operator*( double val, const Point<3U>& pt )
  {
     return (Point<3U>( pt.x_ * val, pt.y_ * val, pt.z_ * val ));
  }   
@@ -924,17 +924,17 @@ template Point<3U>  midPoint( const Point<3U>&, const Point<3U>& );
 
 
 // dot = scalar product
-double64 dotProduct( const Point<1U>& p1, const Point<1U>& p2 )
+double dotProduct( const Point<1U>& p1, const Point<1U>& p2 )
   {
     return p1[0U] * p2[0U];
   }
 
-double64 dotProduct( const Point<2U>& p1, const Point<2U>& p2 )
+double dotProduct( const Point<2U>& p1, const Point<2U>& p2 )
   {
     return p1[0U] * p2[0U] + p1[1U] * p2[1U];
   }
 
-double64 dotProduct( const Point<3U>& p1, const Point<3U>& p2 )
+double dotProduct( const Point<3U>& p1, const Point<3U>& p2 )
   {
     return p1[0U] * p2[0U] + p1[1U] * p2[1U] + p1[2U] * p2[2U];
   }
@@ -948,19 +948,19 @@ Point<1U> crossProduct( const Point<1U>& p1, const Point<1U>& p2 )
 
 
 template<>
-double64 exteriorProductLength( const Point<1u>& p1, const Point<1u>& p2 )
+double exteriorProductLength( const Point<1u>& p1, const Point<1u>& p2 )
 {
     return 0.0;
 }
 
 template<>
-double64 exteriorProductLength( const Point<2u>& p1, const Point<2u>& p2 )
+double exteriorProductLength( const Point<2u>& p1, const Point<2u>& p2 )
 {
     return p1[0] * p2[1] - p1[1] * p2[0];
 }
 
 template<>
-double64 exteriorProductLength( const Point<3u>& p1, const Point<3u>& p2 )
+double exteriorProductLength( const Point<3u>& p1, const Point<3u>& p2 )
 {
     return crossProduct(p1,p2).Length();
 }
@@ -984,7 +984,7 @@ To avoid ambiguities, NAN is returned in the second component of Point.
 */
 Point<2U> crossProduct( const Point<2U>& p1, const Point<2U>& p2 )
   {
-     return (Point<2U>( p1[0U] * p2[1U] - p2[0U] * p1[1U], std::numeric_limits<double64>::quiet_NaN() ));
+     return (Point<2U>( p1[0U] * p2[1U] - p2[0U] * p1[1U], std::numeric_limits<double>::quiet_NaN() ));
   }
 
  // tested: SKM O.K.
@@ -1005,7 +1005,7 @@ template<size_t dim>
 Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
   {
      cerr <<"\ncrossProduct<dim>: not defined for generic case."<< endl;
-     return std::numeric_limits<double64>::signaling_NaN();
+     return std::numeric_limits<double>::signaling_NaN();
   }
 
 
@@ -1017,23 +1017,23 @@ Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
           acute_angle = (angle > 90.) ? 180. -angle : angle;
 */
 template<size_t dim>
-double64 angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const pair<Point<dim>,Point<dim> >& edge2 )
+double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const pair<Point<dim>,Point<dim> >& edge2 )
  {
     const Point<dim> a(edge1.second - edge1.first), b(edge2.second - edge2.first);
     
     // a . b
     // -----
-    double64 ab{0.};
+    double ab{0.};
     for ( size_t i{0}; i<dim; ++i ) ab += a[i] * b[i];
     
     // ||a||  ||b||
     // ------------
-    double64 a_b{std::numeric_limits<double64>::quiet_NaN()};
+    double a_b{std::numeric_limits<double>::quiet_NaN()};
     if constexpr (dim == 2) a_b = std::sqrt( (a[0]*a[0]+a[1]*a[1]) * (b[0]*b[0]+b[1]*b[1]) );
     else if constexpr (dim == 3 )
       a_b = std::sqrt( (a[0]*a[0]+a[1]*a[1]+a[2]*a[2]) * (b[0]*b[0]+b[1]*b[1]+b[2]*b[2]) );
       
-    double64 cos_angle = ab / a_b;
+    double cos_angle = ab / a_b;
 
     // if zero intercept
     if ( cos_angle == 0. ) return 90.;
@@ -1045,8 +1045,8 @@ double64 angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, cons
 
  } // end angleBetweenEdges
 
-template double64 angleBetweenEdges( const std::pair<Point<2>,Point<2> >&, const pair<Point<2>,Point<2> >& );
-template double64 angleBetweenEdges( const std::pair<Point<3>,Point<3> >&, const pair<Point<3>,Point<3> >& );
+template double angleBetweenEdges( const std::pair<Point<2>,Point<2> >&, const pair<Point<2>,Point<2> >& );
+template double angleBetweenEdges( const std::pair<Point<3>,Point<3> >&, const pair<Point<3>,Point<3> >& );
 
 
 

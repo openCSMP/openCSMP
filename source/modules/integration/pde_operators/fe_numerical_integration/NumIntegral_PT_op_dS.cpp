@@ -84,8 +84,8 @@ void NumIntegral_PT_op_dS<dim>::ComputeContribution( Face<dim>& f )
    {
      N.clear();
      f.N_AtIntegrationPoint( i, N );
-     double64 const detJ = f.det_JINV_AtIntegrationPoint(i);
-     double64 const weight = f.WeightAtIntegrationPoint(i);
+     double const detJ = f.det_JINV_AtIntegrationPoint(i);
+     double const weight = f.WeightAtIntegrationPoint(i);
      for( size_t j(0); j < f.Nodes(); ++j )
        for( int df(0); df < dim; ++df )
          MathOperatorRHS<dim>::RHS[j*dim+df] += N[j] * weight * detJ * oper_(df) ;

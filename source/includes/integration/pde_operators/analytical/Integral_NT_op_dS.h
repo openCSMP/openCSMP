@@ -23,8 +23,8 @@ class Integral_NT_op_dS : public MathOperatorRHS<dim> {
   private:
     ScalarVariable          sc;
     VectorVariable<dim>     vc, vc2, pvc;
-    std::vector<double64>   fn;
-    double64                face_value, edge;
+    std::vector<double>   fn;
+    double                face_value, edge;
     bool                    faces;
     SG_BOUNDARY             at_boundary;
 };

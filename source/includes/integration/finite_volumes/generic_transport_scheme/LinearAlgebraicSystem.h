@@ -21,8 +21,8 @@ struct LinearAlgebraicSystem {
     void     Resize( size_t m_x_n );
     
     SparseMatrix           LHS;
-    std::vector<double64>  RHS;
-    std::vector<double64>  X;
+    std::vector<double>  RHS;
+    std::vector<double>  X;
 };
 
 } // end csmp

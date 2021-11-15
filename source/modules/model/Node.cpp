@@ -301,13 +301,13 @@ Node<dim>*  Node<dim>::Neighbor( size_t neighbor_node ) const
 
 
 template<size_t dim>
-double64  Node<dim>::operator[]( size_t i ) const { return xyz_[i]; }
+double  Node<dim>::operator[]( size_t i ) const { return xyz_[i]; }
 
 template<size_t dim>
-double64&  Node<dim>::operator[]( size_t i ) { return xyz_[i]; }
+double&  Node<dim>::operator[]( size_t i ) { return xyz_[i]; }
 
 template<size_t dim>
-double64&  Node<dim>::operator()( size_t i ) { return xyz_[i]; }
+double&  Node<dim>::operator()( size_t i ) { return xyz_[i]; }
 
 template<size_t dim>
 Point<dim>  Node<dim>::Coordinate() const { return xyz_; }
@@ -389,23 +389,23 @@ BOX_BOUNDARY  Node<dim>::AtBoundary() const { return at_boundary_; }
 
 /// Set or return the coordinates of the current node.
 template<size_t dim>
-void            Node<dim>::x( double64 xc )  { xyz_[0u] = xc; }
+void            Node<dim>::x( double xc )  { xyz_[0u] = xc; }
 
 template<size_t dim>
-void            Node<dim>::y( double64 yc )  { xyz_[1u] = yc; }
+void            Node<dim>::y( double yc )  { xyz_[1u] = yc; }
 
 template<size_t dim>
-void            Node<dim>::z( double64 zc )  { xyz_[2u] = zc; }
+void            Node<dim>::z( double zc )  { xyz_[2u] = zc; }
 
 
 template<size_t dim>
-double64          Node<dim>::x() const { return xyz_[0u]; }
+double          Node<dim>::x() const { return xyz_[0u]; }
 
 template<size_t dim>
-double64          Node<dim>::y() const { return xyz_[1u]; }
+double          Node<dim>::y() const { return xyz_[1u]; }
 
 template<size_t dim>
-double64          Node<dim>::z() const { return xyz_[2u]; }
+double          Node<dim>::z() const { return xyz_[2u]; }
 
 
 // MANIFOLDS

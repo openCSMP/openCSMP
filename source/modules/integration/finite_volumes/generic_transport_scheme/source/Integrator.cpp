@@ -16,7 +16,7 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim,template<size_t> class USER>
-Integrator<dim,USER>::Integrator( size_t m_x_n, double64 lower_limit, double64 upper_limit )
+Integrator<dim,USER>::Integrator( size_t m_x_n, double lower_limit, double upper_limit )
  : solver_(&settings_),
    lower_limit_(lower_limit), upper_limit_(upper_limit)
  {
@@ -50,7 +50,7 @@ void Integrator<dim,USER>::ReconfigureSolverForRepeatedUse()
    assuming that the IntegralEquation and Accumulator have already been applied  to build system and Solver to solve it
 */
 template<size_t dim, template<size_t> class USER>
-void Integrator<dim,USER>::IntegrateOver( double64 time_increment )
+void Integrator<dim,USER>::IntegrateOver( double time_increment )
  {
 //    if ( time_increment > 0. ) AssignInitialConditions( subdomain );
 //    AssignEssentialConditions( subdomain );
@@ -105,11 +105,11 @@ void Integrator<dim,USER>::SolveLinearAlgebraicSystem()
     of saturation are stored.
 */
 template<size_t dim, template<size_t> class USER>
-double64 Integrator<dim,USER>::VerifyAndAssignResults( bool show_range, bool do_range_check )
+double Integrator<dim,USER>::VerifyAndAssignResults( bool show_range, bool do_range_check )
   {
-    double64 amin(+std::numeric_limits<double64>::max());
-    double64 amax(-std::numeric_limits<double64>::max());
-    double64 difference_to_last_output(0.);
+    double amin(+std::numeric_limits<double>::max());
+    double amax(-std::numeric_limits<double>::max());
+    double difference_to_last_output(0.);
     size_t   error_counter(0);
     
     const typename vector<Node<dim>*>::iterator  nodes_end(User()->ComputationDomain().NodesEnd());
@@ -119,12 +119,12 @@ double64 Integrator<dim,USER>::VerifyAndAssignResults( bool show_range, bool do_
       if ( status != DIRICH )
         {
           // reading the newly computed saturation values
-          const double64 c1 = User()->LinearSystem().X[ (*nit)->Idx() ];
+          const double c1 = User()->LinearSystem().X[ (*nit)->Idx() ];
           amin = std::min( amin, c1 );
           amax = std::max( amax, c1 );
           
           // reading the previous values and calculating the maximum change per node
-          const double64 C0 = (*nit)->Read( User()->key_C0 );
+          const double C0 = (*nit)->Read( User()->key_C0 );
 
           difference_to_last_output = std::max( difference_to_last_output, fabs(c1 - C0) );
           

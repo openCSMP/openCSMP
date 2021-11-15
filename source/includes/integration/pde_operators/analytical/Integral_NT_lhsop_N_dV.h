@@ -23,7 +23,7 @@ class Integral_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
     virtual Integral_NT_lhsop_N_dV<dim,SIMPLEX>* clone() const { return new Integral_NT_lhsop_N_dV<dim,SIMPLEX> (*this); }
 
   private:
-    double64 scalar_value_;
+    double scalar_value_;
 };
 
 

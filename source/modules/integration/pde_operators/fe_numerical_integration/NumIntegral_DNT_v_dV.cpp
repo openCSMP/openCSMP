@@ -124,7 +124,7 @@ template<size_t dim,class CELL>
 void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-    double64 detJ, fdensity;
+    double detJ, fdensity;
     
     for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
          // interpolation functions to interpolate density and velocity

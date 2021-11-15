@@ -28,7 +28,7 @@ class LHS_Integral_dNT_dN_dV : public MathOperatorLHS<dim> {
   
   private:
     DenseMatrix<DM_MIN>          DN, DNT;
-    const std::vector<double64>  unity;
+    const std::vector<double>  unity;
 };
 
 } // csmp

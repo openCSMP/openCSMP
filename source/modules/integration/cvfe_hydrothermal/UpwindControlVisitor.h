@@ -39,9 +39,9 @@ class UpwindControlVisitor : public Visitor<dim> {
     void Recalculate( bool recalc ); // ser boolean recalculate 
     void Gravity( bool with_gravity ); // activate or deactivate gravity component
     void WithVelocity( bool with_velocity ); // activate or deactive velocity calculations
-    void SetLargestTimeStep( double64 timestep ); // change maximum time step size
+    void SetLargestTimeStep( double timestep ); // change maximum time step size
 
-    void Adjust_CFL_Criterion( double64 scale_factor, bool take_pore_velocity); // modify cfl criterion
+    void Adjust_CFL_Criterion( double scale_factor, bool take_pore_velocity); // modify cfl criterion
     
     DenseMatrix<DM_MIN> UpwindMatrix(csmp::Index rho_index, size_t eidx); // access function to specific upwind matrix
     std::vector<DenseMatrix<DM_MIN> >& UpwindMatrices(csmp::Index rho_index); // access function to specific vector of upwind matrices
@@ -67,17 +67,17 @@ class UpwindControlVisitor : public Visitor<dim> {
 
     std::vector<ScalarVariable> cfl;
 
-    std::vector<std::vector<double64> >  facet_pore_velocity;
+    std::vector<std::vector<double> >  facet_pore_velocity;
 
-    std::vector<double64>  facet_normal;
+    std::vector<double>  facet_normal;
     
-    uint32                  VERTICAL_AXIS;
-    double64 gravity, pot_crit;
-    double64 decision1, decision2;
-    double64 velocity, abs_velocity, norm, mobility, density, sat;
-    double64 normal_component, g;
-    double64 distance, largest_time_step;
-    double64 cfl_scaling;
+    uint32_t                  VERTICAL_AXIS;
+    double gravity, pot_crit;
+    double decision1, decision2;
+    double velocity, abs_velocity, norm, mobility, density, sat;
+    double normal_component, g;
+    double distance, largest_time_step;
+    double cfl_scaling;
 
     size_t       xyz;       // 1=x, 2=y, 3=z
     size_t       inside_node_, outside_node_;

@@ -73,7 +73,7 @@ void TemperatureDensityPressure_Example::Run()
   // 1. builds 4km-tall 1D model
     // -------------------------------------------
     VSet<1U>       mesh_container;
-    const uint32   N_ELEMENTS(4000);  // 4,000 meter tall model
+    const uint32_t   N_ELEMENTS(4000);  // 4,000 meter tall model
     LineElementMesher<1U>   mesher;
     mesher.BuildUniformMesh( mesh_container, 1., N_ELEMENTS+1 );
 
@@ -100,7 +100,7 @@ void TemperatureDensityPressure_Example::Run()
     // 3. Dirichlet boundary conditions for pressure and temperature
     // -------------------------------------------------------------
     cout <<"\nmain: Enter top and bottom temperature, and radiogenic heat source for the model: ";
-    double64 T_top, T_bottom, heat_source;
+    double T_top, T_bottom, heat_source;
     cin >> T_top >> T_bottom >> heat_source;
 
     model.InputBoundaryValue( CNR1, "temperature", makeScalar(DIRICH,T_bottom) );
@@ -164,7 +164,7 @@ void TemperatureDensityPressure_Example::Run()
     NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
 
     cout <<"\nmain: enter the acceleration of gravity (kg/m.s2): in the area of interest: ";
-    double64 acc_gravity(9.81);
+    double acc_gravity(9.81);
     cin >> acc_gravity;
     // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
     NumIntegral_NT_op_dNi_dV<1U,Element<1U> >  hydrostatic_gravity( model.Database(), "element fluid density",
@@ -180,7 +180,7 @@ void TemperatureDensityPressure_Example::Run()
     // fluid salinity is accounted for in the crudest fashion: the weight of the
     // total dissolved solids is simply added to the fluid density
     cout <<"\nmain: Enter the amount of total dissolved solids (ppm = g/tonne; normal seawater=12000 g/t): ";
-    double64 total_dissolved_solids(12000./1000.); // g->kg (157500-ppm = 157kg salt)
+    double total_dissolved_solids(12000./1000.); // g->kg (157500-ppm = 157kg salt)
     cin >> total_dissolved_solids;
     total_dissolved_solids /= 1000.; // gets kg/m3
     printRangeOfVariable( model, "element fluid density" );
@@ -190,7 +190,7 @@ void TemperatureDensityPressure_Example::Run()
     printRangeOfVariable( model, "element fluid density" );
 
     cout << "\n\n\nmain: Iterating fluid pressure to find correct fluid properties... " << endl;
-    for ( uint32 i=0; i<=5U; i++ ) {
+    for ( uint32_t i=0; i<=5U; i++ ) {
          cout <<"\n\titeration "<< i+1U <<":"<< endl;
          model.Apply( hydrostatic_pressure );
          model.Accept( properties_visitor );

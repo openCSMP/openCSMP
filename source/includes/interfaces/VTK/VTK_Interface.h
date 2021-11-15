@@ -126,7 +126,7 @@ class VTK_Interface {
    std::map<size_t,std::vector<size_t> >    plist;
    std::deque<std::vector<size_t> >         transformed_plist;
    std::map<size_t,PointDescriptor>         node_mapping;
-   std::map<size_t,std::vector<double64> >  pxyz_data;
+   std::map<size_t,std::vector<double> >  pxyz_data;
    PLACEMENT                                last_visualized_;
    bool                                     node_output_of_element_data_;
 
@@ -164,43 +164,43 @@ class VTK_Interface {
    void RetrieveData( const Region<dim>&,
                       const csmp::Index&,
                       const std::map<size_t,PointDescriptor>& obj_nums,
-                      std::map<size_t,std::vector<double64> >& sgdata );
+                      std::map<size_t,std::vector<double> >& sgdata );
 
    void NodeCoordinates( const Region<dim>&,
                          const std::map<size_t,PointDescriptor>& node_nums,
-                         std::map<size_t,std::vector<double64> >& pxyz_data );
+                         std::map<size_t,std::vector<double> >& pxyz_data );
 
    void IntegrationPointData( const Region<dim>&,
                              const csmp::Index&,
-                             std::map<size_t,std::vector<double64> >& pxyz_data );   
+                             std::map<size_t,std::vector<double> >& pxyz_data );   
 
    void ElmtIntegrationPointData( const Region<dim>&,
                              const csmp::Index&,
-                             std::map<size_t,std::vector<double64> >& pxyz_data );   
+                             std::map<size_t,std::vector<double> >& pxyz_data );   
 
    void FacetIntegrationPointData( const Region<dim>&,
                              const csmp::Index&,
-                             std::map<size_t,std::vector<double64> >& pxyz_data );   
+                             std::map<size_t,std::vector<double> >& pxyz_data );   
 
    void NodeData( const Region<dim>&,
                   const csmp::Index&,
                   const std::map<size_t,PointDescriptor>& node_nums,
-                  std::map<size_t,std::vector<double64> >& pxyz_data );
+                  std::map<size_t,std::vector<double> >& pxyz_data );
 
    void ElementData( const Region<dim>&,
                      const csmp::Index&,
                      const std::map<size_t,size_t>& node_nums,
-                     std::map<size_t,std::vector<double64> >& pxyz_data );
+                     std::map<size_t,std::vector<double> >& pxyz_data );
 
    void ElementPointData( const Region<dim>&,
                           const csmp::Index&,
                           const std::map<size_t,PointDescriptor>& node_nums,
-                          std::map<size_t,std::vector<double64> >& pxyz_data );
+                          std::map<size_t,std::vector<double> >& pxyz_data );
 
    void CellData( const Region<dim>&,
                   const csmp::Index&,
                   const std::map<size_t,std::vector<size_t> >& plist,
-                  std::map<size_t,std::vector<double64> >& pxyz_data );
+                  std::map<size_t,std::vector<double> >& pxyz_data );
 };
 
 } // csmp

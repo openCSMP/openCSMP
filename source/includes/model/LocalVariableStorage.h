@@ -71,8 +71,8 @@ class LocalVariableStorage {
     void            DeleteProperty          ( const csmp::Index& );
 
     // local variables access
-    bool            IsWithinRange( const csmp::Index&, double64, double64 ) const;
-    double64        Read    ( const csmp::Index& )                          const;
+    bool            IsWithinRange( const csmp::Index&, double, double ) const;
+    double        Read    ( const csmp::Index& )                          const;
     void            Read    ( const csmp::Index&, ScalarVariable& )         const;
     void            Read    ( const csmp::Index&, VectorVariable<dim>& )    const;
     void            Read    ( const csmp::Index&, TensorVariable<dim>& )    const;
@@ -89,8 +89,8 @@ class LocalVariableStorage {
     void            Status  ( const csmp::Index&, size_t, VARIABLE_FLAG );  // vectors & tensors & flagged arrays
 
     // integration point variables (will fail at COMPILE TIME when used for storees without integration points)
-    bool            IsWithinRange( size_t ip, const csmp::Index&, double64, double64 )  const;
-    double64        Read    ( size_t ip, const csmp::Index& )                           const;
+    bool            IsWithinRange( size_t ip, const csmp::Index&, double, double )  const;
+    double        Read    ( size_t ip, const csmp::Index& )                           const;
     void            Read    ( size_t ip, const csmp::Index&, ScalarVariable& )          const;
     void            Read    ( size_t ip, const csmp::Index&, VectorVariable<dim>& )     const;
     void            Read    ( size_t ip, const csmp::Index&, TensorVariable<dim>& )     const;
@@ -107,8 +107,8 @@ class LocalVariableStorage {
     void            Status  ( size_t ip, const csmp::Index&, size_t, VARIABLE_FLAG );  // vectors & tensors  & flagged arrays
 
     // finite volume integration point variables (will fail at COMPILE TIME when used for storees without fv integration points)
-    bool            IsWithinRange( size_t sector_or_facet, size_t ip, const csmp::Index&, double64, double64 )  const;
-    double64        Read    ( size_t sector_or_facet, size_t ip, const csmp::Index& )                           const;
+    bool            IsWithinRange( size_t sector_or_facet, size_t ip, const csmp::Index&, double, double )  const;
+    double        Read    ( size_t sector_or_facet, size_t ip, const csmp::Index& )                           const;
     void            Read    ( size_t sector_or_facet, size_t ip, const csmp::Index&, ScalarVariable& )          const;
     void            Read    ( size_t sector_or_facet, size_t ip, const csmp::Index&, VectorVariable<dim>& )     const;
     void            Read    ( size_t sector_or_facet, size_t ip, const csmp::Index&, TensorVariable<dim>& )     const;
@@ -129,7 +129,7 @@ class LocalVariableStorage {
     // -----------------------------------------------------------------------------------------------------------------------
     // SKM 20/6/2020
     // nodes, elements, faces, interfaces
-    template<PLACEMENT place> double64 Read( const csmp::INDEX<SCALAR,place>& ) const;
+    template<PLACEMENT place> double Read( const csmp::INDEX<SCALAR,place>& ) const;
     template<PLACEMENT place> void     Read( const csmp::INDEX<SCALAR,place>&, ScalarVariable& ) const;
     template<PLACEMENT place> void     Read( const csmp::INDEX<VECTOR,place>&, VectorVariable<dim>& ) const;
     template<PLACEMENT place> void     Read( const csmp::INDEX<TENSOR,place>&, TensorVariable<dim>& ) const;
@@ -155,7 +155,7 @@ class LocalVariableStorage {
     // TODO: IsWithinRange() methods have not been adapted to INDEX yet
 
     // integration point variables (will fail at COMPILE TIME when used for storees without integration points)
-    template<PLACEMENT place> double64        Read  ( size_t ip, const csmp::INDEX<SCALAR,place>& ) const;
+    template<PLACEMENT place> double        Read  ( size_t ip, const csmp::INDEX<SCALAR,place>& ) const;
     template<PLACEMENT place> void            Read  ( size_t ip, const csmp::INDEX<SCALAR,place>&, ScalarVariable& ) const;
     template<PLACEMENT place> void            Read  ( size_t ip, const csmp::INDEX<VECTOR,place>&, VectorVariable<dim>& ) const;
     template<PLACEMENT place> void            Read  ( size_t ip, const csmp::INDEX<TENSOR,place>&, TensorVariable<dim>& ) const;
@@ -178,7 +178,7 @@ class LocalVariableStorage {
     template<PLACEMENT place> void            Status( size_t ip, const csmp::INDEX<FLAGGEDARRAY,place>&, size_t, VARIABLE_FLAG );
 
     // finite volume integration point variables (will fail at COMPILE TIME when used for storees without fv integration points)
-    template<PLACEMENT place> double64        Read  ( size_t sector_or_facet, size_t ip, const csmp::INDEX<SCALAR,place>& ) const;
+    template<PLACEMENT place> double        Read  ( size_t sector_or_facet, size_t ip, const csmp::INDEX<SCALAR,place>& ) const;
     template<PLACEMENT place> void            Read  ( size_t sector_or_facet, size_t ip, const csmp::INDEX<SCALAR,place>&, ScalarVariable& ) const;
     template<PLACEMENT place> void            Read  ( size_t sector_or_facet, size_t ip, const csmp::INDEX<VECTOR,place>&, VectorVariable<dim>& ) const;
     template<PLACEMENT place> void            Read  ( size_t sector_or_facet, size_t ip, const csmp::INDEX<TENSOR,place>&, TensorVariable<dim>& ) const;
@@ -215,7 +215,7 @@ class LocalVariableStorage {
     struct Data
       {
         typedef std::vector<VARIABLE_FLAG> FlagContainer; 
-        typedef std::vector<double64>      DataContainer;
+        typedef std::vector<double>      DataContainer;
 
         FlagContainer flags;
         DataContainer data;
@@ -295,11 +295,11 @@ class LocalVariableStorage {
 // nodes, elements, faces, interfaces
   
 /**
-double64        Read    ( const csmp::INDEX<SCALAR,NODE>& ) const;
+double        Read    ( const csmp::INDEX<SCALAR,NODE>& ) const;
 */
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
-inline double64 LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<SCALAR,place>& idx ) const  
+inline double LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<SCALAR,place>& idx ) const  
  {
     static_assert( TypeMatchesVariablePlacement<STOREE,place>::value, "LocalVariableStorage: STOREE type does not match PLACEMENT enumeration" );
 #ifndef NDEBUG
@@ -715,7 +715,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( const csmp::INDEX<FLAGGEDARR
 /// Scalar variable value at integration point
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
-inline double64 LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX<SCALAR,place>& idx ) const  
+inline double LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX<SCALAR,place>& idx ) const  
   {
     const size_t offset(DATA_OFFSET_IP);
 
@@ -1155,7 +1155,7 @@ inline void LocalVariableStorage<dim,STOREE>::Read( size_t ip, const csmp::INDEX
 */
 template<size_t dim, template<size_t> class STOREE>
 template<PLACEMENT place> 
-inline double64 LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size_t ip, const csmp::INDEX<SCALAR,place>& idx ) const  
+inline double LocalVariableStorage<dim,STOREE>::Read( size_t sector_or_facet, size_t ip, const csmp::INDEX<SCALAR,place>& idx ) const  
   {
     static_assert( TypeMatchesVariableType<ScalarVariable,SCALAR>::value, "LocalVariableStorage: variable type does not match VARIABLE_TYPE enumeration" );
     static_assert( place == SECTOR_INTEGRATION_POINT || place == FACET_INTEGRATION_POINT ||

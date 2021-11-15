@@ -30,17 +30,17 @@ public:
   AP_Timer & Continue();
 
   /// Return the currently elapsed time. 
-  double64 ElapsedTime();
+  double ElapsedTime();
 
   /// Set the currently elapsed time
-  void SetElapsedTime(const double64 & elapsedTime);
+  void SetElapsedTime(const double & elapsedTime);
 
   /// Returns the elapsed time as a string.
   std::string AsString();
 
   std::string AverageTimeAsString(size_t uSteps);
 
-  static double64 GetSecondsPerClockTick();
+  static double GetSecondsPerClockTick();
 
 protected:
   
@@ -53,13 +53,13 @@ protected:
   bool m_bTimerIsRunning;
 
   /// the absolute time the timer was created or restarted
-  double64 m_fStartTime;
+  double m_fStartTime;
 
   /// the relative time since the timer was created or restarted
-  double64 m_fElapsedTime;
+  double m_fElapsedTime;
 
   /// precision of the system clock
-  static const double64 m_secondsPerTick;
+  static const double m_secondsPerTick;
 
   /// output to stream
   friend std::ostream & operator << (std::ostream & os, AP_Timer & timer);

@@ -14,32 +14,32 @@ namespace csmp {
 
 /// recovers scalar value, vector length, or average of tensor eigenvalues for variable with given csmp::Index
 template<size_t dim,template<size_t> class PLACE>
-double64 magnitude( const PLACE<dim>&, const csmp::Index& );
+double magnitude( const PLACE<dim>&, const csmp::Index& );
 
 /// returns magnitude of tensor in the direction (transect) given by the supplied vector variable
 template<size_t dim>
-inline double64 tensorMagnitudeInDirection( const TensorVariable<dim>& ts, const VectorVariable<dim>& vc ) {
+inline double tensorMagnitudeInDirection( const TensorVariable<dim>& ts, const VectorVariable<dim>& vc ) {
     VectorVariable<dim>  prod(ts * vc);
     return prod.Length();
  }
 
 
 ///  t = (ts . n) n + n x (ts x n)
-double64 tensorProjectionOnPlane( const TensorVariable<3U>&,
+double tensorProjectionOnPlane( const TensorVariable<3U>&,
                                   const Point<3U>&,
-                                  double64& component_n );
+                                  double& component_n );
 
-double64 tensorProjectionOnPlane( const TensorVariable<3U>&,
+double tensorProjectionOnPlane( const TensorVariable<3U>&,
                                   const VectorVariable<3U>&,
-                                  double64& component_n );
+                                  double& component_n );
 
 
 ///  tensor component acting tangential to a plane: n x (ts x n) (Cauchy's formula); returns component tc and its magnitude
-double64 tangentialTensorProjection( const TensorVariable<3U>&, const Point<3U>& unit_normal, Point<3U>& tangential_component );
+double tangentialTensorProjection( const TensorVariable<3U>&, const Point<3U>& unit_normal, Point<3U>& tangential_component );
 
 
 ///  tensor component acting normal to a plane: (ts . n) n (Cauchy's formula)
-inline double64 normalTensorProjection( const TensorVariable<3U>& ts, const Point<3U>& un )
+inline double normalTensorProjection( const TensorVariable<3U>& ts, const Point<3U>& un )
  {
     // (t . n) n (eqn. 6.49, P&F, p.216)
     return ts(0,0) * un[0] * un[0] + ts(1,1) * un[1] * un[1] +
@@ -47,7 +47,7 @@ inline double64 normalTensorProjection( const TensorVariable<3U>& ts, const Poin
            2. * ts(1,2) * un[1] * un[2] + 2. * ts(2,0) * un[2] * un[0];
  }
 
-inline double64 normalTensorProjection( const TensorVariable<3U>& ts, const VectorVariable<3U>& un )
+inline double normalTensorProjection( const TensorVariable<3U>& ts, const VectorVariable<3U>& un )
  {
     // (t . n) n (eqn. 6.49, P&F, p.216)
     return ts(0,0) * un[0] * un[0] + ts(1,1) * un[1] * un[1] +

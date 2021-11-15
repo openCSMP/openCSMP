@@ -29,13 +29,13 @@ class HydroFractureVisitor : public Visitor<dim> {
      const PropertyDatabase<dim>&  pref;
      BoolVector               fractured;
      csmp::Index              Pe_key, S_key, K_key, V_key; 
-     double64                 q, dp;
+     double                 q, dp;
      ScalarVariable           K, Kf, Pe, Pf, S;
      VectorVariable<dim>      V, dPdxy;
      bool                     over_pressured;
-     uint32                   i;
-     const double64           GRAD_LIMIT, K_LIMIT;
-     std::vector<double64>    pres;
+     uint32_t                   i;
+     const double           GRAD_LIMIT, K_LIMIT;
+     std::vector<double>    pres;
 };
 
 } // csmp

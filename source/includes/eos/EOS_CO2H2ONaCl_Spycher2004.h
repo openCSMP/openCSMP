@@ -12,17 +12,17 @@ using namespace std;
 
 namespace csmp {
 
-    double64  psiToPa( double64 pressureInPsi );
+    double  psiToPa( double pressureInPsi );
 
-    double64  paToPsi( double64 pressureInPa );
+    double  paToPsi( double pressureInPa );
 
-    double64  paTobar( double64 pressureInPa );
+    double  paTobar( double pressureInPa );
 
-    double64  barTopa( double64 pressureInbar );
+    double  barTopa( double pressureInbar );
 
-    double64  degreeCToKelvin( double64 temperatureInC );
+    double  degreeCToKelvin( double temperatureInC );
 
-    double64  KelvinTodegreeC( double64 temperatureInK );
+    double  KelvinTodegreeC( double temperatureInK );
 
 
 
@@ -35,271 +35,271 @@ class EOS_CO2H2ONaCl_Spycher04 {
 // thermodynamic properties as a function of P, T and salt molality
 
     // compressed volume molar CO2
-    double64  V_Co2(double64 pressure,double64 temperature );
+    double  V_Co2(double pressure,double temperature );
 
 // molar fractions
 
     /// mole fraction (0..1) of CO2 in carbonic phase (the rest is H2O)
-    double64  y_Co2(double64 pressure,double64 temperature, double64 msalt );
+    double  y_Co2(double pressure,double temperature, double msalt );
 
     /// mole fraction (0..1) of H20 in carbonic phase
-    double64  y_H2o(double64 pressure,double64 temperature, double64 msalt );
+    double  y_H2o(double pressure,double temperature, double msalt );
 
     /// mole fraction (0..1) of CO2 in aqueous phase
-    double64  x_Co2(double64 pressure,double64 temperature, double64 msalt );
+    double  x_Co2(double pressure,double temperature, double msalt );
 
     /// mole fraction (0..1) of H20 in aqueous phase (the rest is CO2)
-    double64  x_H2o(double64 pressure,double64 temperature, double64 msalt );
+    double  x_H2o(double pressure,double temperature, double msalt );
 
     /// mole fraction of salt from salt molality in aqueous phase (may contain CO2 : molality)
-    double64  x_salt( double64 molalityCO2, double64 msalt );
+    double  x_salt( double molalityCO2, double msalt );
 
     /// mass fraction (0..1) of salt in aqueous phase (weight percent)
-    double64  X_salt(double64 pressure,double64 temperature, double64 msalt );
+    double  X_salt(double pressure,double temperature, double msalt );
 
     /// mass fraction of CO2 in carbonic phase (weight percent)
-    double64  Y_Co2(double64 pressure,double64 temperature, double64 msalt );
+    double  Y_Co2(double pressure,double temperature, double msalt );
 
     /// mass fraction of H2O in carbonic phase (weight percent)
-    double64  Y_H2o(double64 pressure,double64 temperature, double64 msalt );
+    double  Y_H2o(double pressure,double temperature, double msalt );
 
     /// mass fraction of CO2 in aqueous phase (weight percent)
-    double64  X_Co2(double64 pressure,double64 temperature, double64 msalt );
+    double  X_Co2(double pressure,double temperature, double msalt );
 
     /// mass fraction H2O in aqueous phase (weight percent)
-    double64  X_H2o(double64 pressure,double64 temperature, double64 msalt );
+    double  X_H2o(double pressure,double temperature, double msalt );
 
     /// mass fraction total dissolved salts in aqueous phase (weight percent)
-    double64  X_s( double64 pressure, double64 temperature, double64 msalt );
+    double  X_s( double pressure, double temperature, double msalt );
 
 
     /// molality of CO2 in aqueous phase
-    double64  m_Co2(double64 pressure,double64 temperature, double64 msalt );
+    double  m_Co2(double pressure,double temperature, double msalt );
 
 // transport properties as a function of P, T and msalt
 
     /// molar volume of dissolved CO2 in brine
-    double64  Vdiss_Co2(double64 temperature );
+    double  Vdiss_Co2(double temperature );
 
     /// density brine
-    double64  Rho_brine(double64 pressure,double64 temperature, double64 msalt );
+    double  Rho_brine(double pressure,double temperature, double msalt );
 
     /// viscosity brine
-    double64  mu_brine(double64 pressure,double64 temperature, double64 msalt );
+    double  mu_brine(double pressure,double temperature, double msalt );
 
     /// compressibility of brine
-    double64  C_brine(double64 pressure,double64 temperature, double64 msalt );
+    double  C_brine(double pressure,double temperature, double msalt );
 
     /// density of aqueous phase with contained dissolved CO2
-    double64  Rho_AqueousPhase(double64 pressure,double64 temperature, double64 msalt );
+    double  Rho_AqueousPhase(double pressure,double temperature, double msalt );
 
     /// viscosity of aqueous phase with contain dissolved CO2
-    double64  mu_AqueousPhase(double64 pressure,double64 temperature, double64 msalt );
+    double  mu_AqueousPhase(double pressure,double temperature, double msalt );
 
     /// compressibility of aqueous phase with dissolved CO2
-    double64  C_AqueousPhase(double64 pressure,double64 temperature, double64 msalt );
+    double  C_AqueousPhase(double pressure,double temperature, double msalt );
 
     /// density of the carbonic phase
-    double64  Rho_CarbonicPhase(double64 pressure,double64 temperature);
+    double  Rho_CarbonicPhase(double pressure,double temperature);
 
     /// viscosity of the carbonic phase
-    double64  mu_CarbonicPhase(double64 pressure,double64 temperature );
+    double  mu_CarbonicPhase(double pressure,double temperature );
 
     /// compressibility of the carbonic phase
-    double64  C_CarbonicPhase(double64 pressure,double64 temperature );
+    double  C_CarbonicPhase(double pressure,double temperature );
 
     /// Z compressibility factor for carbonic phase
-    double64  Z_CarbonicPhase(double64 pressure,double64 temperature);
+    double  Z_CarbonicPhase(double pressure,double temperature);
 
     /// molecular diffusion coefficient of CO2 in brine
-    double64  D_Co2(double64 pressure,double64 temperature, double64 msalt );
+    double  D_Co2(double pressure,double temperature, double msalt );
 
     /// equilibrium const KCO2
-    double64  KCo2(double64 pressure,double64 temperature );
+    double  KCo2(double pressure,double temperature );
 
     /// equilibrium const KH2O
-    double64  KH2o(double64 pressure,double64 temperature );
+    double  KH2o(double pressure,double temperature );
 
 //  Reservoir properties as a function of T, P and msalt
 
     /// reservoir solution water-CO2 ratio
-    double64  Rs(double64 pressure, double64 temperature, double64 msalt );
+    double  Rs(double pressure, double temperature, double msalt );
 
     /// gas (CO2) formation volume factor, Bg
-    double64  Bg(double64 pressure, double64 temperature );
+    double  Bg(double pressure, double temperature );
 
     /// water formation volume factor, Bw
-    double64  Bw(double64 pressure, double64 temperature ,double64 msalt);
+    double  Bw(double pressure, double temperature ,double msalt);
 
 
 //  unit conversions
 
-    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // input NaCl molality
+    double  molalNaClToMassFracNaClInAqueousPhase( double mSalt); // input NaCl molality
 
-    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // input XNaCl
+    double  massFracNaClToMolalNaClInAqueousPhase( double massFracSalt); // input XNaCl
 
-    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// input XNaCl
+    double  massFracNaClToMolarFracNaClInAqueousPhase( double massFracSalt);// input XNaCl
 
-    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt); // input NaCl molality
+    double  molalNaClToMolarFracNaClInAqueousPhase( double mSalt); // input NaCl molality
 
-    double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
+    double  ppmNaClToMolalNaClInAqueousPhase( double ppmSalt );
 
-    double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
+    double  molalNaClToPpmInAqueousPhase( double mSalt );
 
-    double64           CompressedVolumeCo2( double64 pressure, double64 temperature );
+    double           CompressedVolumeCo2( double pressure, double temperature );
 
-    double64           FugacityCo2( double64 pressure,
-                                    double64 temperature,
-                                    double64 phaseVolumeCo2 );
+    double           FugacityCo2( double pressure,
+                                    double temperature,
+                                    double phaseVolumeCo2 );
 
-    double64           FugacityH2o( double64 pressure,
-                                    double64 temperature,
-                                    double64 phaseVolumeH2o );
+    double           FugacityH2o( double pressure,
+                                    double temperature,
+                                    double phaseVolumeH2o );
 
-    double64           thermEquilConstCo2L( double64 temperature );
+    double           thermEquilConstCo2L( double temperature );
 
-    double64           thermEquilConstCo2G( double64 temperature );
+    double           thermEquilConstCo2G( double temperature );
 
-    double64           thermEquilConstH2o( double64 temperature );
+    double           thermEquilConstH2o( double temperature );
 
 
     // need conversion (iterative approach) Equation A8 Spychler 2004
-    double64           activityCoefficientDrummond1981( double64 pressure,double64 temperature,
-                                                        double64 mSalt );
+    double           activityCoefficientDrummond1981( double pressure,double temperature,
+                                                        double mSalt );
 
-    double64           activityCoefficientDuanSun2003( double64 temperature,
-                                                       double64 pressure,
-                                                       double64 mSalt );
+    double           activityCoefficientDuanSun2003( double temperature,
+                                                       double pressure,
+                                                       double mSalt );
     /// ready to use
-    double64           activityCoefficientBattistelliEtal1997( double64 temperature,
-                                                               double64 mSalt );
+    double           activityCoefficientBattistelliEtal1997( double temperature,
+                                                               double mSalt );
 
     /// needs conversion (iterative approach) Equation A8 Spychler 2004
-    double64           activityCoefficientRumpf1994( double64 pressure,double64 temperature,
-                                                     double64 mSalt );
+    double           activityCoefficientRumpf1994( double pressure,double temperature,
+                                                     double mSalt );
 
-    double64           calculateSpycherA( double64 pressure,
-                                          double64 temperature,
-                                          double64 kH2o,
-                                          double64 phiH2o );
+    double           calculateSpycherA( double pressure,
+                                          double temperature,
+                                          double kH2o,
+                                          double phiH2o );
 
-    double64           calculateSpycherB( double64 pressure,
-                                          double64 temperature,
-                                          double64 phaseVolumeCo2,
-                                          double64  phiCo2,
-                                          double64 kCo2L,
-                                          double64 kCo2G,
-                                          double64 activityCoeffCO2 );
+    double           calculateSpycherB( double pressure,
+                                          double temperature,
+                                          double phaseVolumeCo2,
+                                          double  phiCo2,
+                                          double kCo2L,
+                                          double kCo2G,
+                                          double activityCoeffCO2 );
 
-    double64           molarFracH2oCarbon( double64 spycherA,
-                                           double64 spycherB,
-                                           double64 mSalt );
-
-
-    double64           molarFracCO2Brine( double64 yH2o,
-                                          double64 spycherB );
-
-    double64           molalNaClToMolarFracNaClInCo2SatAqueousPhase( double64 molalCo2,
-                                                                     double64 mSalt );
-
-    double64           molarFracH2oBrine ( double64 xCo2,
-                                           double64 xSalt );
-
-    double64           molarFracCo2Carbon( double64 yH2oBrine );
+    double           molarFracH2oCarbon( double spycherA,
+                                           double spycherB,
+                                           double mSalt );
 
 
-    double64           massFracCo2InCarbonicPhase( double64 molarFracCo2InCarbonicPhase,
-                                                   double64 molarFracH2oInCarbonicPhase );
+    double           molarFracCO2Brine( double yH2o,
+                                          double spycherB );
 
-    double64           massFracH2oInCarbonicPhase( double64 molarFracCo2InCarbonicPhase,
-                                                   double64 molarFracH2oInCarbonicPhase );
+    double           molalNaClToMolarFracNaClInCo2SatAqueousPhase( double molalCo2,
+                                                                     double mSalt );
 
-    double64           massFracCo2inAqueousPhase( double64 molarFracCo2InAqueousPhase,
-                                                  double64 molarFracH2oInAqueousPhase,
-                                                  double64 molarFracNaclInAqueousPhase );
+    double           molarFracH2oBrine ( double xCo2,
+                                           double xSalt );
 
-    double64           massFracH2oInAqueousPhase( double64 molarFracCo2InAqueousPhase,
-                                                  double64 molarFracH2oInAqueousPhase,
-                                                  double64 molarFracNaclInAqueousPhase );
+    double           molarFracCo2Carbon( double yH2oBrine );
 
-    double64           massFracNaClInAqueousPhase( double64 molarFracCo2InAqueousPhase,
-                                                   double64 molarFracH2oInAqueousPhase,
-                                                   double64 molarFracNaclInAqueousPhase );
 
-    double64           molalCo2FromBrineMoleFractionCo2( double64 xCo2,
-                                                         double64 mSalt );
+    double           massFracCo2InCarbonicPhase( double molarFracCo2InCarbonicPhase,
+                                                   double molarFracH2oInCarbonicPhase );
+
+    double           massFracH2oInCarbonicPhase( double molarFracCo2InCarbonicPhase,
+                                                   double molarFracH2oInCarbonicPhase );
+
+    double           massFracCo2inAqueousPhase( double molarFracCo2InAqueousPhase,
+                                                  double molarFracH2oInAqueousPhase,
+                                                  double molarFracNaclInAqueousPhase );
+
+    double           massFracH2oInAqueousPhase( double molarFracCo2InAqueousPhase,
+                                                  double molarFracH2oInAqueousPhase,
+                                                  double molarFracNaclInAqueousPhase );
+
+    double           massFracNaClInAqueousPhase( double molarFracCo2InAqueousPhase,
+                                                   double molarFracH2oInAqueousPhase,
+                                                   double molarFracNaclInAqueousPhase );
+
+    double           molalCo2FromBrineMoleFractionCo2( double xCo2,
+                                                         double mSalt );
 
     // I havent used them???
-    double64           molalCo2FromPureWaterMolarFracCo2( double64 MolarFracCo2 );
+    double           molalCo2FromPureWaterMolarFracCo2( double MolarFracCo2 );
 
-    double64           molalCo2FromPureWaterMolalCo2( double64 molalCo2Pure,
-                                                      double64 activityCoeff );
+    double           molalCo2FromPureWaterMolalCo2( double molalCo2Pure,
+                                                      double activityCoeff );
 
-    double64           molarFracCo2FromBrineMolalCo2( double64 molalCo2,
-                                                      double64 mSalt);
+    double           molarFracCo2FromBrineMolalCo2( double molalCo2,
+                                                      double mSalt);
 
     // caculation of a_co2 = a_mix as a function of T
 
     // activity of Co2 a_co2
-    double64  a_Co2(double64 temperature );
+    double  a_Co2(double temperature );
 
     // activity of mixture a_mix
-    double64  a_mix(double64 temperature );
+    double  a_mix(double temperature );
 
 
     //  Auxilliary Functions
-    complex<double64>  complex_acos(const complex<double64> & x);
+    complex<double>  complex_acos(const complex<double> & x);
 
 
     //  Transport Properties
-    double64           volumePartialMolarCo2( double64 temperature );
+    double           volumePartialMolarCo2( double temperature );
 
-    double64           densityBrine( double64 pressure,
-                                     double64 temperature,
-                                     double64 mSalt );
+    double           densityBrine( double pressure,
+                                     double temperature,
+                                     double mSalt );
 
 
-    double64           viscosityBrine( double64 pressure,
-                                       double64 temperature,
-                                       double64 mSalt );
+    double           viscosityBrine( double pressure,
+                                       double temperature,
+                                       double mSalt );
 
-    double64           compressibilityBrine( double64 densBrine,
-                                             double64 pressure,
-                                             double64 densBrineRef );
+    double           compressibilityBrine( double densBrine,
+                                             double pressure,
+                                             double densBrineRef );
 
-    double64           densityAqueousPhase( double64 vPartialmolar,
-                                            double64 densBrine,
-                                            double64 xCo2 );
+    double           densityAqueousPhase( double vPartialmolar,
+                                            double densBrine,
+                                            double xCo2 );
 
-    double64           densityCarbonicPhase( double64 phaseVolumeCo2 );
+    double           densityCarbonicPhase( double phaseVolumeCo2 );
 
-    double64           compressibilityCarbonicPhase( double64 temperature,
-                                                     double64 phaseVolumeCo2 );
+    double           compressibilityCarbonicPhase( double temperature,
+                                                     double phaseVolumeCo2 );
 
-    double64           compressibilityCarbonicPhaseZ( double64 pressure,
-                                                      double64 temperature,
-                                                      double64 phaseVolumeCo2 );
+    double           compressibilityCarbonicPhaseZ( double pressure,
+                                                      double temperature,
+                                                      double phaseVolumeCo2 );
 
-    double64           viscosityCarbonicPhase( double64 temperature,
-                                               double64 phaseVolumeCo2 );
+    double           viscosityCarbonicPhase( double temperature,
+                                               double phaseVolumeCo2 );
 
-    double64           molecularDiffCoeffCo2intoBrine( double64 temperature,
-                                                       double64 muBrine );
+    double           molecularDiffCoeffCo2intoBrine( double temperature,
+                                                       double muBrine );
 
-    double64           equilKH2o( double64 temperature,
-                                  double64 pressure,
-                                  double64 kH2o );
+    double           equilKH2o( double temperature,
+                                  double pressure,
+                                  double kH2o );
 
-    double64           equilKCo2( double64 temperature,
-                                  double64 pressure,
-                                  double64 kCo2G );
+    double           equilKCo2( double temperature,
+                                  double pressure,
+                                  double kCo2G );
 
     //  Reservoir Properties
-    double64           solutionAqueousCarbonicRatio( double64 pressure, double64 temperature ,double64 msalt );
+    double           solutionAqueousCarbonicRatio( double pressure, double temperature ,double msalt );
 
-    double64           GasFormationVolumeFactor( double64 pressure, double64 temperature );
+    double           GasFormationVolumeFactor( double pressure, double temperature );
 
-    double64           WaterFormationVolumeFactor( double64 pressure, double64 temperature ,double64 msalt);
+    double           WaterFormationVolumeFactor( double pressure, double temperature ,double msalt);
 
 
 
@@ -312,11 +312,11 @@ class EOS_CO2H2ONaCl_Spycher04 {
 
     void plot_thermodynamics();
 
-    const double64 R, molarMassH2o, molarMassCo2, molarMassNacl;
+    const double R, molarMassH2o, molarMassCo2, molarMassNacl;
 
   private:
     // constants
-    const double64 a_h2oco2, b_co2, b_h2o, b_mix,
+    const double a_h2oco2, b_co2, b_h2o, b_mix,
                    stoichio,p0,vH2o, vCo2,
                    pSC,tSC;
 };

@@ -62,7 +62,7 @@ namespace csmp{
         element->dN_AtBaryCenter( DERIV_, 1U );
         for ( size_t i = 0; i < element->Nodes(); ++i )
         {
-          double64 pf = element->N(i)->Read( fluidPressureKey_ );
+          double pf = element->N(i)->Read( fluidPressureKey_ );
           for( size_t xyz = 0; xyz < dim; ++xyz )
             velo_( xyz ) += pf * -DERIV_( xyz, i ) * saturationFunctions_->TotalMobility(); // total mobility already includes multiplication with k
         }

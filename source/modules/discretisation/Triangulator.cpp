@@ -33,11 +33,11 @@ or downward diagonal triangles.
 */
 short Triangulator::TestOutline( unsigned int m, unsigned int n, 
                                  const Matrix& perm, 
-                                 double64& el_perm )
+                                 double& el_perm )
  {
      short c = DOWN_DIAG; // default 
      // clock-wise, inner and outer square numbering 
-     double64 k1, k2, k3, k4, k5, k6, k7;
+     double k1, k2, k3, k4, k5, k6, k7;
      
      // Reading the required permeabilities/hydraul. conductivities 
      // security for array indices avoiding to go beyond boundaries 
@@ -134,7 +134,7 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
  {
    unsigned int i, j;
    short        split, t;
-   long64       fed1, fed2, fed3;
+   int64_t        fed1, fed2, fed3;
    const short  bleft   = LEFT_OUTSIDE,
                 bright  = RIGHT_OUTSIDE,
                 btop    = TOP_OUTSIDE,
@@ -151,8 +151,8 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
                 LinearTriangle().ElementType(), 
                 n_vertices, n_elements );
                                    
-   deque<vector<long64> >     plist( n_elements, vector<long64>(3) );
-   deque<vector<long64> >     pfvert( n_elements, vector<long64>(3) );
+   deque<vector<int64_t> >     plist( n_elements, vector<int64_t>(3) );
+   deque<vector<int64_t> >     pfvert( n_elements, vector<int64_t>(3) );
    // FEM_Data<ScalarVariable >  edata( ELEMENT, n_elements );
    PropertyData               edata( ELEMENT, SCALAR, 2U );
    edata.Resize( n_elements );
@@ -240,8 +240,8 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              if ( i == 1 ) fed1 = TOP_OUTSIDE;  // O.K.
              else  {
                   if ( (t=TestOutline( (i-1), j, grid, elperm2 )) != DOWN_DIAG )
-                    fed1 = static_cast<int32>((n+1) - 2 * n_mtrx);       
-                  else fed1 = static_cast<int32>((n+1) - 2 * n_mtrx - 1); 
+                    fed1 = static_cast<int32_t>((n+1) - 2 * n_mtrx);       
+                  else fed1 = static_cast<int32_t>((n+1) - 2 * n_mtrx - 1); 
                } 
              fed2 = n; // O.K.
              if( j >= n_mtrx ) fed3 = RIGHT_OUTSIDE; // O.K.
@@ -290,15 +290,15 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              if ( j == n_mtrx ) vset.AddBFlag( plist[n][2], bright );
 
              // 3.1.6 getting face-edge values, setting 
-             fed1 = static_cast<int32>((n+1) + 1);  // O.K.
+             fed1 = static_cast<int32_t>((n+1) + 1);  // O.K.
              if ( i == 1 ) fed2 = TOP_OUTSIDE;      // O.K.
              else {
                   if ( (t=TestOutline( (i-1), j, grid, elperm2 )) != DOWN_DIAG )
-                    fed2 = static_cast<int32>((n+1) - 2 * n_mtrx + 1);   
-		              else fed2 = static_cast<int32>((n+1) - 2 * n_mtrx);  
+                    fed2 = static_cast<int32_t>((n+1) - 2 * n_mtrx + 1);   
+		              else fed2 = static_cast<int32_t>((n+1) - 2 * n_mtrx);  
 		           }
              if( j == 1 ) fed3 = LEFT_OUTSIDE; // O.K.
-             else fed3 = static_cast<int32>(n); // O.K.
+             else fed3 = static_cast<int32_t>(n); // O.K.
              if ( fed1 > 0 ) fed1--;
              if ( fed2 > 0 ) fed2--;
              if ( fed3 > 0 ) fed3--;
@@ -367,7 +367,7 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
    vset.AddData( "permeability", edata );
    
    // Flipping the Y-axis
-   double64 ymax = vset.Py(0);
+   double ymax = vset.Py(0);
    for ( i=1; i<vset.Vertices(); i++ ) if ( vset.Py(i) > ymax ) ymax = vset.Py(i);
    for ( i=0; i<vset.Vertices(); i++ ) {
         vset.Py( i, ymax - vset.Py(i) );
@@ -412,9 +412,9 @@ VSet<2U> readTextPixelData()
     // 0.4 Scaling the geometrical input object that will become the Region
     //    The origin of the object is assumed to be zero.
     cout <<"\nreadTextPixelData: Please enter the horizontal and vertical dimensions of the model (m): ";
-    double64 extent1, extent2;
+    double extent1, extent2;
     cin >> extent1 >> extent2;
-    double64 zero(0.);
+    double zero(0.);
     vset.ScaleCoordinateToRange( 'x', zero, extent1 );
     vset.CoordinateRange( 'x', zero, extent1 );
     cout <<"\nAssigned X range: "<< zero <<" to "<< extent1 << " meter." << endl;

@@ -451,7 +451,7 @@ inheritance process is given in the introduction to the class above.
 Within Calculate() the user has access to Operands defined
 in the private data section of the Interrelation subclass. These Operands 
 can be used in mathematical and logical expressions, or associated
-variables can be assigned to local variables of double64, scalar, vector
+variables can be assigned to local variables of double, scalar, vector
 or tensor type. Please refer to the documentation of the Operand 
 interface to learn about the overloaded operators.  
 

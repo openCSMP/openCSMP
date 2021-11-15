@@ -33,7 +33,7 @@ class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim> {
     virtual NumIntegral_BT_D_B_dV<dim,CELL>* clone() const { return new NumIntegral_BT_D_B_dV<dim,CELL> (*this); }
   private:
     csmp::Index            nu_key_;   ///< Poisson's ratio
-    std::vector<double64>  E_, nu_;   ///< variable in which Poisson's ratio will be stored
+    std::vector<double>  E_, nu_;   ///< variable in which Poisson's ratio will be stored
     DenseMatrix<DM_MIN>    D, B, BT;  ///< material property matrix
     bool                   plane_strain_;
 };

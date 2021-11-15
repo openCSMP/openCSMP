@@ -47,7 +47,7 @@ namespace csmp {
   void ExplicitAdvection2D_VVCase::run()
   {
     //tolerance
-    double64 fTolerance(1.e-7);
+    double fTolerance(1.e-7);
     // isoparametric parameter
     const bool       isoparametric(true);
     ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
@@ -74,7 +74,7 @@ namespace csmp {
     Standard_IO_Handler  stdio;
     printModelDimensions( model2D, true );
     MeshDiagnostics<2U>  mesh_check;
-    double64             vol_min, vol_max;
+    double             vol_min, vol_max;
     mesh_check.ElementVolumeRange( model2D, vol_min, vol_max );
 
     // Configuring the built model (adding boundary condition info, etc, from input files:
@@ -109,7 +109,7 @@ namespace csmp {
     cout <<"\nConfiguring Explicit TRANSPORT simulation (1rst Order): ";
     cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
     //cout <<"\nEnter advection time: ";
-    double64 time_interval;
+    double time_interval;
     //cin >> time_interval;
     time_interval=10000U;
 

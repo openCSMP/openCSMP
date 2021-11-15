@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-QuartzPrecipitation<dim>::QuartzPrecipitation( const PropertyDatabase<dim>& p, double64 time_increment ) 
+QuartzPrecipitation<dim>::QuartzPrecipitation( const PropertyDatabase<dim>& p, double time_increment ) 
       : Interrelation<dim>(p), dt(time_increment),
         F( Interrelation<dim>::GlobalProperty("velocity") ),
         DS( Interrelation<dim>::GlobalProperty("quartz solubility gradient") ),

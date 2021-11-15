@@ -18,7 +18,7 @@ namespace csmp {
   template<size_t dim>
   struct VariableTypeTraits<dim,SCALAR>
   {
-    typedef double64 ReturnType;
+    typedef double ReturnType;
     typedef ScalarVariable VariableType;
   };
 
@@ -38,7 +38,7 @@ namespace csmp {
   template<size_t dim>
   struct VariableTypeTraits<dim,ARRAY>
   {
-    typedef std::vector<double64> ReturnType;
+    typedef std::vector<double> ReturnType;
     typedef ArrayVariable VariableType;
   };
 

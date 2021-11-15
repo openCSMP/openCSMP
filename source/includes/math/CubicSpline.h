@@ -14,29 +14,29 @@ class CubicSpline {
     ~CubicSpline();
     CubicSpline& operator=( const CubicSpline& );
     void Initialize( const char* datafile );
-    void Initialize( const std::vector<double64>&,
-                     const std::vector<double64>&,
-                     const double64, const double64 );
+    void Initialize( const std::vector<double>&,
+                     const std::vector<double>&,
+                     const double, const double );
     
-    double64 Value( double64 x ) const;
-    double64 Derivative( double64 x ) const;
+    double Value( double x ) const;
+    double Derivative( double x ) const;
     
     // of the input values
-    double64 MaxDerivative() const;
-    double64 Range_x() const;
-    double64 Range_fx() const;
+    double MaxDerivative() const;
+    double Range_x() const;
+    double Range_fx() const;
     
     void Out() const;
     
   private:
-    std::vector<double64> xa_, ya_, y2a_;
-    double64  x_range_, y_range_, xa_min, xa_max, ya_min, ya_max;
+    std::vector<double> xa_, ya_, y2a_;
+    double  x_range_, y_range_, xa_min, xa_max, ya_min, ya_max;
 };
 
-double64 splint( const std::vector<double64>& xa, 
-                 const std::vector<double64>& ya,
-                 const std::vector<double64>& y2a,
-                 double64 x );
+double splint( const std::vector<double>& xa, 
+                 const std::vector<double>& ya,
+                 const std::vector<double>& y2a,
+                 double x );
                       
  } // csmp
 

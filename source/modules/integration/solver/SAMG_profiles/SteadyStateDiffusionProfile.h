@@ -21,11 +21,11 @@ class SteadyStateDiffusionProfile : public SAMG_Profile {
                                  const char* diffusingVariable,
                                  const char* spatialSourceVariable,
                                  const char* gradientVariable,
-                                 double64 gradient_multiplier );
+                                 double gradient_multiplier );
 
 
     /// Solve for steadystate pressure diffusion
-    virtual bool Solve( double64 modelTime );
+    virtual bool Solve( double modelTime );
 
     /// bridging to solver
     SteadyStateDiffusor<dim,Region>& Solver() { return ssds_; }

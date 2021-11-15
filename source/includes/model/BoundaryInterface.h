@@ -20,7 +20,7 @@ FaceConstructionData  higherDimensionalNeighbors( const csmp::Element<dim>&, con
 /// finds inside neighbor of dim-1 element, and the face that connects to it; index records neighbor materials
 template<size_t dim>
 const csmp::Element<dim>* const  higherDimensionalNeighbor( const csmp::Element<dim>&, const csmp::Index&,
-                                                            size_t& local_face_number_of_e, double64& material_ID  );
+                                                            size_t& local_face_number_of_e, double& material_ID  );
 template<size_t dim>
 bool  higherDimensionalNeighbors( const Element<dim>& , std::vector<Element<dim>*>& );
 

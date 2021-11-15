@@ -54,10 +54,10 @@ class SplitBoundaryInterface {
     std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1, const char* region2 );
 
     /// inserts a lower-dimensional Region inside of the SplitBoundary, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the SplitBoundary followed by _REGION
-    std::pair<std::string,bool>  InsertRegionIntoSplitBoundary( const char* split_boundary, int32 material_id_for_new_elements );
+    std::pair<std::string,bool>  InsertRegionIntoSplitBoundary( const char* split_boundary, int32_t material_id_for_new_elements );
 
     /// Creates isolated lower-dimensional mesh regions between split boundaries with unique names matching those of the SplitBoundary objects; set will be empty if none created
-    std::set<std::string>  InsertLowerDimensionalRegionsIntoSplitBoundaries( int32 material_id_for_new_elements );
+    std::set<std::string>  InsertLowerDimensionalRegionsIntoSplitBoundaries( int32_t material_id_for_new_elements );
 
     /// Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful
     bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );

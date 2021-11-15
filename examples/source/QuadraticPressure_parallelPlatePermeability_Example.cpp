@@ -114,7 +114,7 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
 
     // 6. Calculating hydraulic conductivity from permeability using Interrelation subclass
     // ------------------------------------------------------------------------------------
-    const double64 fluid_viscosity(1.0e-03);
+    const double fluid_viscosity(1.0e-03);
     ConstantFactor<2U,divides>  conductivity( model.Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );

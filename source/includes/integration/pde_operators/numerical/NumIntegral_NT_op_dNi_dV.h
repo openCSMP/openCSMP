@@ -24,13 +24,13 @@ class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
     NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>&,
                               const char* oper,    // e.g., fluid density
                               const char* test,    // e.g., fluid pressure
-                              double64 acc_gravity=9.8601 ); // m/s2
+                              double acc_gravity=9.8601 ); // m/s2
 
     NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>&,
                               const char* oper,    // e.g., fluid density
                               const char* mtrl,    // e.g., conductivity
                               const char* test,    // e.g., fluid pressure
-                              double64 acc_gravity=9.8601 );
+                              double acc_gravity=9.8601 );
     
     virtual void GetOperands( CELL& );
 
@@ -40,13 +40,13 @@ class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
     virtual NumIntegral_NT_op_dNi_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_dNi_dV<dim,CELL> (*this); }
   
   private:
-    std::vector<double64>         IPOL;
+    std::vector<double>         IPOL;
     DenseMatrix<DM_MIN>           DN;
     Index                         mtrl_key;
-    double64                      oper_eprop, eprop;
-    const double64                gravity;   ///< acceleration of gravity (m/s2)
+    double                      oper_eprop, eprop;
+    const double                gravity;   ///< acceleration of gravity (m/s2)
     size_t                        xyz;       ///< 0=x, 1=y, 2=z
-    double64                      mtrl_time_multiplier;
+    double                      mtrl_time_multiplier;
     std::vector<ScalarVariable >  oper_nprop;
 };
 

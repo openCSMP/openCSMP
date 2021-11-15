@@ -42,7 +42,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
 
     // 0. visualising the model and its regions
     // ----------------------------------------
-     double64 evar(1.);
+     double evar(1.);
      cerr <<"\nrun: assigning values to unique regions:\n";
      for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it ) {
           cerr <<"\t'"<< (*it).first <<"'";
@@ -51,7 +51,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
        }
      cerr << endl;
      // painting internal boundary elements (they are flagged neither REGION_BOUNDARY nor IRREGULAR
-     const double64 color(0.);
+     const double color(0.);
      const csmp::Index evar_key(model.Database().StorageKey("element variable"));
      for ( auto eit=model_domain.PerimeterElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit )
        (*eit)->Store( evar_key, makeScalar(PLAIN,color) );
@@ -136,7 +136,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
    // split boundary variable "interface flux" OK
    const csmp::Index key = model.Database().StorageKey("split boundary flux");
    splitdomain.Store( key, makeScalar(ANY,1.0e-5) );
-   _equal( splitdomain.Read(key), 1.0e-5, numeric_limits<double64>::epsilon() );
+   _equal( splitdomain.Read(key), 1.0e-5, numeric_limits<double>::epsilon() );
 
    // 4. write altered element properties on either side to VTK
    // ---------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
    if ( verbose_ ) {
         for ( auto rit=model.UniqueRegionsBegin(); rit!= model.UniqueRegionsEnd(); ++rit ) {
           cout <<"\nrun: saving region: "<< (*rit).first <<"\n";
-          pair<int32,int32> region_shape = (*rit).second.SpatialDimensions();
+          pair<int32_t,int32_t> region_shape = (*rit).second.SpatialDimensions();
           if ( region_shape.first == 1 and region_shape.second == 3 )
             vtk_output.OutputDataToVTK( model, (*rit).first, filename, string("nodal variable"), 2U );
           }

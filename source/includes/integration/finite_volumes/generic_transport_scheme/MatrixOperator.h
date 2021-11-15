@@ -39,16 +39,16 @@ class MatrixOperator {
 //    virtual void AccumulateStencil( Face<dim>& fe, SparseMatrix& lhs ) const = 0;
 
     /// includes the time increment in the multiplication factor for this operator
-    void MultiplyWithTimeIncrement( double64 dt ) { factor_ *= dt; }
+    void MultiplyWithTimeIncrement( double dt ) { factor_ *= dt; }
 
     /// set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-1), multiplication or division (fac=1/value)
-    void     Factor( double64 value ) { factor_ = value; }
-    double64 Factor() const { return factor_; }
+    void     Factor( double value ) { factor_ = value; }
+    double Factor() const { return factor_; }
 
     // virtual void Out() const = 0; TODO: rather use verbose function to print term to be accumulated
 
   private:
-    double64 factor_ = 1.; ///<  1=add, -1=subtract, factor=val = multiply, factor=1/val divide,  factor=time_increment if so needed
+    double factor_ = 1.; ///<  1=add, -1=subtract, factor=val = multiply, factor=1/val divide,  factor=time_increment if so needed
 };
 
 

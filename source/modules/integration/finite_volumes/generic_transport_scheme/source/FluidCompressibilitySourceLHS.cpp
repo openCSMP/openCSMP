@@ -30,14 +30,14 @@ FluidCompressibilitySourceLHS<dim>::FluidCompressibilitySourceLHS( const csmp::I
 template<size_t dim>
 void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& e, SparseMatrix& mat ) const
   {
-    const double64 phi = e.Read( key_PHI_ );
-    const double64 ct  = e.Read( key_CT_ );
+    const double phi = e.Read( key_PHI_ );
+    const double ct  = e.Read( key_CT_ );
 
     const size_t sectors(e.Sectors());
     for ( size_t i=0U; i<sectors; ++i ) 
      {
-        const double64 sector_PV = (interpolate_pf_to_sector_ip_) ? e.Read( i, 0U, key_SPV_ ) : e.SectorVolume(i) * phi;  
-        double64 pf0(0.), pf1(0.);
+        const double sector_PV = (interpolate_pf_to_sector_ip_) ? e.Read( i, 0U, key_SPV_ ) : e.SectorVolume(i) * phi;  
+        double pf0(0.), pf1(0.);
         // getting pressures p0 and p1 at sector integration points 
         if ( interpolate_pf_to_sector_ip_ == true ) {
              const size_t s_ip(0U), n_nodes(e.Nodes()); // sector integration point and element nodes
@@ -75,10 +75,10 @@ void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& 
         const Element<dim>* const eptr = fv.Parent(i);
         const size_t n_node = fv.ParentNodeNumber(i); 
 
-        const double64 sector_PV = (interpolate_pf_to_sector_ip_) ? eptr->Read( n_node, 0U, key_SPV_ ) : 
+        const double sector_PV = (interpolate_pf_to_sector_ip_) ? eptr->Read( n_node, 0U, key_SPV_ ) : 
                                                                     eptr->SectorVolume(n_node) * eptr->Read( key_PHI_ );  
-        const double64 ct = eptr->Read( key_CT_ ); 
-        double64 pf0(0.), pf1(0.);
+        const double ct = eptr->Read( key_CT_ ); 
+        double pf0(0.), pf1(0.);
         // getting pressures p0 and p1 at sector integration points 
         if ( interpolate_pf_to_sector_ip_ == true ) {
              const size_t s_ip(0U), n_nodes(eptr->Nodes()); // sector integration point and element nodes

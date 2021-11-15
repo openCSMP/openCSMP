@@ -59,7 +59,7 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   model.MinMaxCoordinates( min, max );
   const double length( max[0]-min[0] ), height( max[1]-min[1] );
   printModelDimensions( model, true );
-  double64 domain_volume = model.Region("Model").Volume();
+  double domain_volume = model.Region("Model").Volume();
   cout <<"\nThe model has a volume of: "<< domain_volume <<" m^3."<< endl;
   // END GEOMETRY SECTION
   // -----------------------------------
@@ -79,7 +79,7 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
 
   rightBoundary.InputPropertyValue( "fluid pressure", zeroScalarDirichlet );
   leftBoundary.InputPropertyValue( "fluid pressure",fluid_pressure_left);
-  double64 min1,max1;
+  double min1,max1;
   rightBoundary.MinMaxOf("fluid pressure",min1,max1);
   std::cout<<"min max at right boundary"<<min1<<" "<<max1<<endl;
   leftBoundary.MinMaxOf("fluid pressure",min1,max1);
@@ -141,7 +141,7 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   csmp::Index  p_key(model.Database().StorageKey("fluid pressure"));
   vector<Node<DIM>*>::iterator nodes_end=model.Region("Model").NodesEnd();
   vector<Node<DIM>*>::iterator nodes_begin=model.Region("Model").NodesBegin();
-  double64 press;
+  double press;
   for (vector<Node<DIM>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++)
   {
     press=(*npit)->Read(p_key);

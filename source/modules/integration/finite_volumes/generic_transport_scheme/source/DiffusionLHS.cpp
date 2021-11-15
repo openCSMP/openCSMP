@@ -39,10 +39,10 @@ template<size_t dim>
 void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix& A ) const
  {
     // assuming a scalar diffusivity
-    const double64  diffusion_coeff = fe.Read( diff_key_ );
+    const double  diffusion_coeff = fe.Read( diff_key_ );
    
     // if there is only a single Jacobian needed because the element is a simplex
-    double64 detJ(0U);
+    double detJ(0U);
     if ( fe.FE()->IsSimplex() ) {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

@@ -21,7 +21,7 @@ class DispersivityVisitor : public Visitor< dim> {
                          const char* diffusivity,  const char* dispersion_long, const char* dispersion_trans );
                                                   
     DispersivityVisitor( Model< dim>&, const char* dispersivity, const char* pore_velocity, 
-                          double64 diffusivity, double64 dispersion_long, double64 dispersion_trans );
+                          double diffusivity, double dispersion_long, double dispersion_trans );
                  
     virtual ~DispersivityVisitor();
     
@@ -32,7 +32,7 @@ class DispersivityVisitor : public Visitor< dim> {
     const PropertyDatabase<dim>&   pref;
     csmp::Index               dp_key, disp_key, at_key, al_key, vel_key;
     ScalarVariable            dp, alpha_t, alpha_l;
-    double64                  v_abs, vx, vy, vz, off_diag;
+    double                  v_abs, vx, vy, vz, off_diag;
     VectorVariable<dim>       vel;
     TensorVariable<dim>       disp;
     bool                      read_values;

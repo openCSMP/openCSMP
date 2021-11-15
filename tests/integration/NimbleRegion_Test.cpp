@@ -76,7 +76,7 @@ NimbleRegion_Test::NimbleRegion_Test( const string& model, const string& variabl
     central.InputPropertyValue("saturation water", makeScalar(DIRICH, 0.1));
    
    // flagging the nimble region nodes and elements as 1, which is a value that gets incremented as the nimble egion evolves
-    double64 nimble_val(1.);
+    double nimble_val(1.);
     model2D_->InputPropertyValue("nimble nodes", makeScalar(PLAIN, 0.));
     model2D_->InputPropertyValue("nimble elements", makeScalar(PLAIN, 0.));
     central.InputPropertyValue("nimble nodes", makeScalar(PLAIN, nimble_val));
@@ -109,7 +109,7 @@ void NimbleRegion_Test::run()
     const csmp::Index  ne_key(model2D_->Database().StorageKey("nimble elements"));
     
     for ( auto nit=plume_region.PerimeterNodesBegin(); nit!=plume_region.NodesEnd(); ++nit ) {
-         double64 nval = (*nit)->Read( nn_key ) + 2.;
+         double nval = (*nit)->Read( nn_key ) + 2.;
          (*nit)->Store( nn_key, makeScalar(PLAIN,nval) );
       }
     vtu.OutputDataToVTU("nimble-nodes", "nimble nodes", "Model", 0 );
@@ -150,7 +150,7 @@ void NimbleRegion_Test::run()
           (*nit)->Store( nn_key, makeScalar(PLAIN,1.) );
       }
     for ( auto nit=plume_region.PerimeterNodesBegin(); nit!=plume_region.NodesEnd(); ++nit ) {
-         double64 nval = (*nit)->Read( nn_key ) + 2.;
+         double nval = (*nit)->Read( nn_key ) + 2.;
          (*nit)->Store( nn_key, makeScalar(PLAIN,nval) );
       }
     vtu.OutputDataToVTU("nimble-nodes", "nimble nodes", "Model", 1 );

@@ -211,7 +211,7 @@ namespace femDataBinaryDispatch {
       const size_t dataDepth( arrayVariables.size() );
 
       // size
-      fp.write((char*) &dataDepth, sizeof(size_t));
+      fp.write( reinterpret_cast<const char*>(&dataDepth), sizeof(size_t));
 
       // data
       for ( size_t i(0); i < dataDepth; ++i )
@@ -226,7 +226,7 @@ namespace femDataBinaryDispatch {
     {   
       // size
       size_t dataDepth(0);
-      fp.read( (char*) &dataDepth, sizeof(size_t));
+      fp.read( reinterpret_cast<char*>(&dataDepth), sizeof(size_t));
       arrayVariables = vector<ArrayVariable>( dataDepth, ArrayVariable() );
 
       // data
@@ -243,7 +243,7 @@ namespace femDataBinaryDispatch {
       const size_t dataDepth( flaggedArrayVariables.size() );
 
       // size
-      fp.write((char*) &dataDepth, sizeof(size_t));
+      fp.write( reinterpret_cast<const char*>(&dataDepth), sizeof(size_t));
 
       // data
       for ( size_t i(0); i < dataDepth; ++i )
@@ -258,7 +258,7 @@ namespace femDataBinaryDispatch {
     {
       // size
       size_t dataDepth(0);
-      fp.read( (char*) &dataDepth, sizeof(size_t));
+      fp.read( reinterpret_cast<char*>(&dataDepth), sizeof(size_t));
       flaggedArrayVariables = vector<FlaggedArrayVariable>( dataDepth, FlaggedArrayVariable() );
 
       // data
@@ -284,8 +284,8 @@ template<typename csp_type>
 bool FEM_Data<csp_type>::OutBinary( fstream& fp ) const
  {
      // writing the variable placement
-     int32  var_placement = static_cast<int32>(place);
-     fp.write((char*) &var_placement, sizeof(int32));
+     int32_t  var_placement = static_cast<int32_t>(place);
+     fp.write( reinterpret_cast<const char*>(&var_placement), sizeof(int32_t));
      
      // writing the dataset
      return femDataBinaryDispatch::outBinary( fp, data );
@@ -296,8 +296,8 @@ template<typename csp_type>
 void FEM_Data<csp_type>::InBinary( fstream& fp )
  {
      // reading the variable placement
-     int32  var_placement(UNSPECIFIED);
-     fp.read( (char*) &var_placement, sizeof(int32));
+     int32_t  var_placement(UNSPECIFIED);
+     fp.read( reinterpret_cast<char*>(&var_placement), sizeof(int32_t));
      place = static_cast<PLACEMENT>(var_placement);
      
      // reading the dataset
@@ -335,7 +335,7 @@ bool  FEM_Data<csp_type>::operator==( const FEM_Data<csp_type>& d ) const
 main()
  {
     FEM_Data<ScalarVariable > test_data( NODE, 100 );
-    double64 min, max;
+    double min, max;
     
     test_data.Range( min, max );
     test_data.ScaleRangeTo( 0.001, 7.2 );

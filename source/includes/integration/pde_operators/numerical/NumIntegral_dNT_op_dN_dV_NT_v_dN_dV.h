@@ -38,15 +38,15 @@ class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
                                 DenseMatrix<DM_MIN>& MULT );
     
     DenseMatrix<DM_MIN>  DN, DNT, // derivatives of basis functions
-                                VIP,     // 'v' (velocity) vector<double64> variable
+                                VIP,     // 'v' (velocity) vector<double> variable
                                 EMULT;   // element based multiplier for 'v'
-    std::vector<double64>             IPOL;    // basis function values (at integration point)
+    std::vector<double>             IPOL;    // basis function values (at integration point)
     std::vector<DenseMatrix<DM_MIN> >  NT3;     // IPOL at integration points stored in columns of matrix NTNTNT
-    std::vector<double64>             NMULT,   // node based scalar multiplier for 'v'
+    std::vector<double>             NMULT,   // node based scalar multiplier for 'v'
                                 NGRAD,   // variable to compute gradient of for calculation of 'v'
                                 RDENS;   // relative density if so specified
                     
-    std::vector<ScalarVariable >  sc_prop_vec, // vector<double64> to read node properties into
+    std::vector<ScalarVariable >  sc_prop_vec, // vector<double> to read node properties into
                                       rrho_vec; 
          
     csmp::Index      grad_key,    // key to variable to compute gradient of for calculation of 'v'
@@ -55,7 +55,7 @@ class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
                     rrho_key;    // relative fluid density at nodes or similar operand
                     
     bool            with_gravity;
-    const double64        gravity;
+    const double        gravity;
     size_t       xyz;
 };
 

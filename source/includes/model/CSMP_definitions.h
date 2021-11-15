@@ -7,23 +7,12 @@
 @author S.K. Matthai (1995)
 
 Global declarations and definitions for the CSMP++ code for the simulation
-of complex earth systems.
-This file is included by all headers in the C++ namespace csmp which contains
-the CSMP++ application programmer interface. To make
-porting to different platforms easier, this file includes all necessary
-C++ / STL header files.
+of complex natural systems.
+This file includes the most important C++ header files to make the use
+of the library easier for the less experienced cross platform-, cross-compiler user and
+It is included by most headers in the CSMP C++ library,
+Last updated for use with C++17 in November 2021.
 */
-
-
-/*
-=============================================================================
-Intel math library if available
-(because it affects the standard namespace this block must come first)
-=============================================================================
-*/
-
-#include <cmath>
-
 
 /*
 ==============================================================
@@ -31,6 +20,7 @@ Backward compatibility with C
 ==============================================================
 */
 
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstddef>
@@ -78,49 +68,9 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <unordered_map>
 
 /*
-===========================
-g++ issues
-===========================
-*/
-
-#ifndef to_string
-template<typename T> std::string to_string( T& number ) {
-     std::ostringstream  stream;
-     stream << number;
-     return stream.str();
-  }
-#endif
-
-#ifndef isnan
-#define isnan(x) std::isnan(x)
-#endif
-
-#ifndef isinf
-#define isinf(x) std::isinf(x)
-#endif
-
-/*
-============================================================================
-Platform-independent integer and floating point types. NOTE:
-
-!!! The 'CSMP_number_types.h' file must be generated for each compiler
-    and platform by compiling and running the program:
-
-     'CSMP_number_types_main.cpp'
-
-    in the main-library source code directory. Only after this has been
-    done, CSMP should be compiled.
-
-The CSMP size_t variable will be equivalent to size_t, which is used
-by the STL as index variable for random access arrays.
-
-============================================================================
-*/
-#include "CSMP_number_types.h"
-
-/*
 =======================
 JPEG Interface
+to create images etc.
 =======================
 */
 #define CSMP_WITH_IMAGE_OUTPUT
@@ -133,13 +83,14 @@ The Complex Systems Modeling Platform (CSMP++) is an application programmer inte
 complex space and time domains trough applicaton of combinations of FEM and FVM methods.
 It was created in 1995 by Stephan K. Matthai and Stephen G. Roberts at Stanford University.
 
-CSMP has been designed for the simulation of complex physics in geometrically complex and scale-variant domains. 
-Its modular structure facilitates the analysis of the emergent properties of the studied system via large-scale mathematical simulations with models 
-incorporating fundamental laws of nature, integrated for scenarios based on observations, problems and possible solutions.
+CSMP++ has been designed for the simulation of complex physics in geometrically complex and scale-variant domains.
+Its modular structure aims to support analysis of the emergent properties of the studied system via mathematical simulations.
 Governing PDEs are integrated using FEM and FVM methods and combinations thereof. 
 
-CSMP can be licensed for academic, commercial and public sector  (NGO) use. The license can be obtained from the CSMP Originator group.
-Currently (March 2016) the official contact point is the Technology Transfer of the ETHZ, Switzerland ("Meyns Silke (F&W)" <silke.meyns@sl.ethz.ch>).
+This core library of CSMP++ is  distributed under the L-GPL license for general and including commercial use.
+Until Dezember 2021,  CSMP++ had to be licensed and the official contact point was the Technology Transfer of the ETHZ, Switzerland
+("Meyns Silke (F&W)" <silke.meyns@sl.ethz.ch>).
+
 */
 
 
@@ -151,4 +102,4 @@ Currently (March 2016) the official contact point is the Technology Transfer of 
 #include "CSMP_global_enumerations.h"
 
 
-#endif
+#endif /* CSMP_DEFINITIONS_H */

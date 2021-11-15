@@ -284,32 +284,32 @@ IsoparametricQuadraticPrism::ElementTypeOfFace( size_t )  const
     return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9;
  }
 
-double64 IsoparametricQuadraticPrism::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricQuadraticPrism::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
 
 
 
 void
 IsoparametricQuadraticPrism::GenerateIntegrationPoints(
                                                     DenseMatrix<DM_MIN> &Ip,
-                                                    std::vector<double64>& We)
+                                                    std::vector<double>& We)
 {
     const size_t numberOfTriaIntegrationPoints=3; // order 2
     const size_t numberOfDimensionsInPlane=2;
     DenseMatrix<DM_MIN> IPTRIA(numberOfTriaIntegrationPoints,numberOfDimensionsInPlane);
-    const double64 constA=0.577350269189626, constT1=0.66666666666667, constT2=0.16666666666667;
+    const double constA=0.577350269189626, constT1=0.66666666666667, constT2=0.16666666666667;
 
     IPTRIA(0,0)=constT1; IPTRIA(0,1)=constT2;
     IPTRIA(1,0)=constT2; IPTRIA(1,1)=constT1;
     IPTRIA(2,0)=constT2; IPTRIA(2,1)=constT2;
 
-    vector<double64> WTRIA(numberOfTriaIntegrationPoints);
+    vector<double> WTRIA(numberOfTriaIntegrationPoints);
     // Weights for the base integration
     WTRIA[0]=constT2;
     WTRIA[1]=constT2;
     WTRIA[2]=constT2;
 
     const size_t numberOfLineIntegrationPoints=2;
-    vector<double64> IPLINE(numberOfLineIntegrationPoints),WLINE(numberOfLineIntegrationPoints);
+    vector<double> IPLINE(numberOfLineIntegrationPoints),WLINE(numberOfLineIntegrationPoints);
 
     IPLINE[0]=-constA;  IPLINE[1]=constA;
     WLINE [0]= 1.0;     WLINE [1]=1.0;
@@ -453,13 +453,13 @@ the element.
 
 */
 void IsoparametricQuadraticPrism::Nrst(
-                    double64 r, // L2
-                    double64 s, // L3
-                    double64 t,
-                    std::vector<double64>& N ) const
+                    double r, // L2
+                    double s, // L3
+                    double t,
+                    std::vector<double>& N ) const
 {
    N.resize(npe);
-   const double64 L1=1.-r-s;
+   const double L1=1.-r-s;
    N[0] =  0.5*L1*(2*L1-1.)*t*(t-1.);
    N[1] =  0.5*r*(2*r-1.)*t*(t-1.);
    N[2] =  0.5*s*(2*s-1.)*t*(t-1.);
@@ -483,12 +483,12 @@ void IsoparametricQuadraticPrism::Nrst(
 }
 
 void IsoparametricQuadraticPrism::Nrst(
-                    double64 r, // L2
-                    double64 s, // L3
-                    double64 t,
-                    double64* N ) const
+                    double r, // L2
+                    double s, // L3
+                    double t,
+                    double* N ) const
 {
-   const double64 L1=1.-r-s;
+   const double L1=1.-r-s;
    N[0] =  0.5*L1*(2*L1-1.)*t*(t-1.);
    N[1] =  0.5*r*(2*r-1.)*t*(t-1.);
    N[2] =  0.5*s*(2*s-1.)*t*(t-1.);
@@ -538,12 +538,12 @@ procedures for elements.
 
 */
 void IsoparametricQuadraticPrism::dNr (
-                double64 r,
-                double64 s,
-                double64 t,
-                std::vector<double64>& DNR ) const
+                double r,
+                double s,
+                double t,
+                std::vector<double>& DNR ) const
 {
-   const double64 L1=1-r-s;
+   const double L1=1-r-s;
    DNR.resize(npe);
    DNR[0] =-0.5*(1.-2.*r-2.*s)*t*(t-1.)-1.0*L1*t*(t-1.);
    DNR[1] = 0.5*(2.*r-1.)*t*(t-1.)+1.0*r*t*(t-1.);
@@ -573,12 +573,12 @@ void IsoparametricQuadraticPrism::dNr (
 
 
 void IsoparametricQuadraticPrism::dNs(
-                double64 r,
-                double64 s,
-                double64 t,
-                std::vector<double64>& DNS ) const
+                double r,
+                double s,
+                double t,
+                std::vector<double>& DNS ) const
 {
-   const double64 L1=1.-r-s;
+   const double L1=1.-r-s;
    DNS.resize(npe);
    DNS[0] =-.5*(1.-2.*r-2.*s)*t*(t-1.)-1.0*L1*t*(t-1.);
    DNS[1] =0.0;
@@ -608,13 +608,13 @@ void IsoparametricQuadraticPrism::dNs(
 
 
 void IsoparametricQuadraticPrism::dNt(
-                double64 r,
-                double64 s,
-                double64 t,
-                std::vector<double64>& DNT ) const
+                double r,
+                double s,
+                double t,
+                std::vector<double>& DNT ) const
 {
 
-   const double64 L1=1.-r-s;
+   const double L1=1.-r-s;
    DNT.resize(npe);
    DNT[0] =.5*L1*(1.-2.*r-2.*s)*(t-1.)+.5*L1*(1.-2.*r-2.*s)*t;
    DNT[1] =.5*r*(2.*r-1.)*(t-1.)+.5*r*(2.*r-1.)*t;
@@ -718,12 +718,12 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 second method argument.
 
 */
-double64
+double
 IsoparametricQuadraticPrism::dN_At( DenseMatrix<DM_MIN>& DN2,
-                                                    const vector<double64>& xyz  )
+                                                    const vector<double>& xyz  )
   {
 
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -733,7 +733,7 @@ IsoparametricQuadraticPrism::dN_At( DenseMatrix<DM_MIN>& DN2,
     dNt( rst[0], rst[1], rst[2], DNT );
 
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     DN2.Resize(dim,dim);
     DN2  = JINV;
@@ -760,11 +760,11 @@ within the Hexahedron.
  */
 void
 IsoparametricQuadraticPrism::N(
-                    std::vector<double64>& N,
-                    const std::vector<double64>& xyz
+                    std::vector<double>& N,
+                    const std::vector<double>& xyz
                     )
 {
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -794,7 +794,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double64
+double
 IsoparametricQuadraticPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
  {
     assert( nd < npe );
@@ -805,7 +805,7 @@ IsoparametricQuadraticPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -821,7 +821,7 @@ IsoparametricQuadraticPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 /** Projection function from rst->xyz
 */
 void
-IsoparametricQuadraticPrism::ParametricToPhysical(std::vector<double64> &rst, std::vector<double64>& xyz)
+IsoparametricQuadraticPrism::ParametricToPhysical(std::vector<double> &rst, std::vector<double>& xyz)
 {
 Nrst(rst[0],rst[1],rst[2], NRST );
 
@@ -839,27 +839,27 @@ for(size_t i=0; i<npe; i++)
 */
 void
 IsoparametricQuadraticPrism::PhysicalToParametric(
-                                       std::vector<double64>& rSt,
-                                       const std::vector<double64>& xyz
+                                       std::vector<double>& rSt,
+                                       const std::vector<double>& xyz
                                         )
 {
-    vector<double64> outxyz(dim);
-    vector<double64> rstHatK(dim);
+    vector<double> outxyz(dim);
+    vector<double> rstHatK(dim);
 
-    std::vector<double64> distanceFromGivenPointLinf(dim,0.0);
-    double64 distanceFromGivenPointL2;
+    std::vector<double> distanceFromGivenPointLinf(dim,0.0);
+    double distanceFromGivenPointL2;
 
     // Find largest and smallest segments in order to define precision
-    vector<double64> vec(spe);
+    vector<double> vec(spe);
     EdgeLengths( vec );
-    double64 seg_max(vec[0]), seg_min(vec[0]);
+    double seg_max(vec[0]), seg_min(vec[0]);
     for ( size_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
     }
 
-    const double64 geometricTolerance = 0.005*seg_min;
+    const double geometricTolerance = 0.005*seg_min;
 
     // First guess as BaryCenter
     rstHatK[0] = 1.0/3.0;
@@ -882,17 +882,17 @@ IsoparametricQuadraticPrism::PhysicalToParametric(
     //    (distanceFromGivenPointLinf[2] > geometricTolerance)  )
     {
 
-        vector<double64> rstHatK_PlusOne(dim);
-        double64 minDistanceFromGivenPoint;
+        vector<double> rstHatK_PlusOne(dim);
+        double minDistanceFromGivenPoint;
 
-        const double64 constantMu               = 1.0;
+        const double constantMu               = 1.0;
         const size_t numberOfFirstIterrations   = 5;
         const size_t maxNumberOfIterrations     = 20;
         const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
-        const double64 incrementR = 1.0/(numberOfFirstIterrations-1);
-        const double64 incrementS = 1.0/(numberOfFirstIterrations-1);
-        const double64 incrementT = 2.0/(numberOfFirstIterrations-1);
+        const double incrementR = 1.0/(numberOfFirstIterrations-1);
+        const double incrementS = 1.0/(numberOfFirstIterrations-1);
+        const double incrementT = 2.0/(numberOfFirstIterrations-1);
 
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
@@ -969,7 +969,7 @@ IsoparametricQuadraticPrism::PhysicalToParametric(
                 dNt( rstHatK[0], rstHatK[1], rstHatK[2], DNT );
                 Jacobian( DNR, DNS, DNT );
                 // Check whether Jacobian is positive ( might be not true for the point outside the element )
-                //const double64 detJ = JacobianDeterminant();
+                //const double detJ = JacobianDeterminant();
                 //if( detJ > 0.0 )
                 JacobianInverse();
             }
@@ -1018,7 +1018,7 @@ IsoparametricQuadraticPrism::PhysicalToParametric(
                <<"s = "<<rstHatK[1]<<" ;\t"
                <<"t = "<<rstHatK[2]<<"\n";
 
-            std::vector<double64> N(npe,0.0);
+            std::vector<double> N(npe,0.0);
             Nrst(rstHatK[0], rstHatK[1], rstHatK[2], N );
             cout<<" IsoparametricQuadraticPrism::PhysicalToParametric: Shape functions:\t"
                 <<"N[0] = "<<N[0]<<" ;\t"
@@ -1059,13 +1059,13 @@ and the shortest boundary segment.
 
 The Element is consulted for its global coordinates.
 */
-double64  IsoparametricQuadraticPrism::AspectRatio()
+double  IsoparametricQuadraticPrism::AspectRatio()
 {
-   vector<double64> vec(spe);
+   vector<double> vec(spe);
 
    EdgeLengths( vec );
 
-   double64 seg_max(vec[0]), seg_min(vec[0]);
+   double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
    for ( size_t i=1; i<spe; i++ ) {
@@ -1087,9 +1087,9 @@ The segment lengths are computed as simple Euclidian distance between corner
 vertices of the edge.
 */
 void
-IsoparametricQuadraticPrism::EdgeLengths( std::vector<double64>& len )
+IsoparametricQuadraticPrism::EdgeLengths( std::vector<double>& len )
 {
-    double64 sum;
+    double sum;
     len.resize(spe);
 
     // segment 1
@@ -1155,7 +1155,7 @@ the area is computed.
 @return The area (m2) of the finite element.
 */
 /*
-double64
+double
 IsoparametricQuadraticPrism::VolumeThroughHex()
 {
     // determinant
@@ -1235,7 +1235,7 @@ IsoparametricQuadraticPrism::VolumeThroughHex()
   element1.ConnectToNodes ( 25, n25 );
   element1.ConnectToNodes ( 26, n26 );
 
-  double64   areaQ=element1.Volume();
+  double   areaQ=element1.Volume();
   cout<<" Quadratic Volume of Prism="<<areaQ<<endl;
 
   Node<dim1>  n0, n1, n2, n3, n4, n5, n6, n7, n8;
@@ -1262,7 +1262,7 @@ IsoparametricQuadraticPrism::VolumeThroughHex()
   element2.ConnectToNodes ( 6, n6 );
   element2.ConnectToNodes ( 7, n7 );
 
-  double64   areaL=element2.Volume();
+  double   areaL=element2.Volume();
 
   DenseMatrix<DM_MIN>  IPPHYS(gpe,dim);
   linear_hexahedron.IntegrationPointsFromParToPhys(IPPHYS);
@@ -1289,10 +1289,10 @@ the area is computed.
 
 @return The area (m2) of the finite element.
 */
-double64
+double
 IsoparametricQuadraticPrism::Volume()
 {
-    double64   area; // determinant
+    double   area; // determinant
     size_t  i;
 
     // numerical integration:
@@ -1328,7 +1328,7 @@ A reference to the parent Element, the number of the integration point.
 
 */
 inline void
-IsoparametricQuadraticPrism::N_AtIntegrationPoint( size_t ip, std::vector<double64>& N )
+IsoparametricQuadraticPrism::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
      // local interpolation function values
@@ -1359,7 +1359,7 @@ the second method argument (matrix d of Akin, p420). The method also
 returns the determinantof the Jacobian matrix since it is often needed
 in integration procedures.
 */
-double64
+double
 IsoparametricQuadraticPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
  {
     //
@@ -1375,7 +1375,7 @@ IsoparametricQuadraticPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 27 in global coordinates
     // by multiplication of JINV with local DN
@@ -1481,11 +1481,11 @@ are relatively even-sided and have straight edges.
 
 The parent element is queried for its node coordinates.
 */
-double64
+double
 IsoparametricQuadraticPrism::InnerRadius()
 {
-   vector<double64> segms(spe);
-   double64                 sum(0.0);
+   vector<double> segms(spe);
+   double                 sum(0.0);
 
    EdgeLengths( segms );
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
@@ -1499,7 +1499,7 @@ IsoparametricQuadraticPrism::InnerRadius()
 
 
 /// @todo (3) Check barycenter
-double64
+double
 IsoparametricQuadraticPrism::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
 
@@ -1509,7 +1509,7 @@ IsoparametricQuadraticPrism::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -1528,7 +1528,7 @@ IsoparametricQuadraticPrism::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
 /// @todo (3) Check barycenter
 void
-IsoparametricQuadraticPrism::N_AtBaryCenter( std::vector<double64>& N )
+IsoparametricQuadraticPrism::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
 
@@ -1567,8 +1567,8 @@ nodes.
 */
 void
 IsoparametricQuadraticPrism::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
-                                                                         const vector<double64>& IVAR,
-                                                                         vector<double64>&       NVAR )
+                                                                         const vector<double>& IVAR,
+                                                                         vector<double>&       NVAR )
  const
 {
    static bool          first_call(true);
@@ -1593,7 +1593,7 @@ IsoparametricQuadraticPrism::ExtrapolateIntegrationPointVariableToNodes( size_t 
         first_call = false;
      }
 
-    vector<double64> Nj(npe), sum1(npe);
+    vector<double> Nj(npe), sum1(npe);
 // test function coefficients
     for(k=0;k<nvars;k++)
         {
@@ -1605,7 +1605,7 @@ IsoparametricQuadraticPrism::ExtrapolateIntegrationPointVariableToNodes( size_t 
                     //N_AtIntegrationPoint(i,Nj);
                     sum1[j]+=Nj[j]*IVAR[k*nvars+i];
                 }
-                sum1[j]/=static_cast<double64>(gpe);
+                sum1[j]/=static_cast<double>(gpe);
             NVAR[k*npe+j]=sum1[j];
           }
         }
@@ -1619,7 +1619,7 @@ IsoparametricQuadraticPrism::IntegralNN( DenseMatrix<DM_MIN>& IntNN )
 {
     size_t  i; // index;
       IntNN.Resize(gpe,gpe);
-    vector<double64> Ni(npe);
+    vector<double> Ni(npe);
       static DenseMatrix<DM_MIN>  BEHAT(gpe,gpe);
       static DenseMatrix<DM_MIN>  GDER(dim,gpe); //global der at IP
 
@@ -1683,7 +1683,7 @@ IsoparametricQuadraticPrism::IntegralNN( DenseMatrix<DM_MIN>& IntNN )
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
 void  IsoparametricQuadraticPrism::IntegrationPoint( size_t ip,
-                                                     vector<double64>& xyz ) const
+                                                     vector<double>& xyz ) const
  {
     assert( ip < gpe );
     xyz.resize(3U); xyz[0]=xyz[1]=xyz[2]=0.;

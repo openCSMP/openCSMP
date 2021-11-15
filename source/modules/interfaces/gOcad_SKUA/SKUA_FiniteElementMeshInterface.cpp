@@ -539,9 +539,9 @@ bool SKUA_FiniteElementMeshInterface::ReadRegionsAndElementTypesASCII( ifstream&
     const char* const          delims =" ,\t,:,\n,\r";
     string                object_name;
     string                elmt_specifier;
-    int32                      n_regions(0), region(0);
+    int32_t                      n_regions(0), region(0);
     size_t                     n, n_elements;
-    int32                      material;
+    int32_t                      material;
     vector<size_t>        empty_list;
     set<string>      excluded_elmts;
     
@@ -703,7 +703,7 @@ bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesASCII( ifstream& ifs, V
     SkipPotentialComment( ifs );
     
     // Px recornd
-    deque<double64> X(n_nodes);
+    deque<double> X(n_nodes);
     if ( n_nodes == 0U ) {
          throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesASCII", 
                                     "No node coordinates are specified in file" );
@@ -712,11 +712,11 @@ bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesASCII( ifstream& ifs, V
     for ( size_t i=0U; i<n_nodes; i++ ) ifs >> X[i];
 
     // Py record
-    deque<double64> Y(n_nodes);
+    deque<double> Y(n_nodes);
     for ( size_t i=0U; i<n_nodes; i++ ) ifs >> Y[i];
     
     // Pz record
-    deque<double64> Z(n_nodes);
+    deque<double> Z(n_nodes);
     for ( size_t i=0U; i<n_nodes; i++ ) ifs >> Z[i];
      
     if( csmp_error.Verbose() )
@@ -760,8 +760,8 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsASCII( ifstr
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    int32         flag;
-    double64      bvalue;
+    int32_t         flag;
+    double      bvalue;
     vector<bool>  bconds(vset.Vertices(),false);
     
     // Pbflags record
@@ -897,7 +897,7 @@ void readVectorOfVectors( ifstream& ifs, const deque<size_t>& vector_sizes, size
              for ( size_t i=0; i<entries_per_vector; ++i ) {
                   ifs >> id;
                   // assumption: there are not more nodes that elements * nodes_per_element
-                  assert( id < static_cast<long64>(total_items) ); 
+                  assert( id < static_cast<int64_t>(total_items) ); 
                   data.push_back( id );
                   item++;
                }
@@ -920,7 +920,7 @@ void readVectorOfVectors( ifstream& ifs, const deque<size_t>& vector_sizes, size
              T id;
              for ( size_t i=0; i<entries_per_vector; ++i ) {
                   ifs >> id;
-                  assert( id < static_cast<long64>(total_items) );
+                  assert( id < static_cast<int64_t>(total_items) );
                   data.push_back( id );
                   item++;
                }
@@ -936,7 +936,7 @@ void readVectorOfVectors( ifstream& ifs, const deque<size_t>& vector_sizes, size
  } // end read inlined vector
 
 template void readVectorOfVectors( ifstream&, const deque<size_t>& vector_sizes, size_t, deque<vector<size_t> >& );
-template void readVectorOfVectors( ifstream&, const deque<size_t>& vector_sizes, size_t, deque<vector<long64> >& );
+template void readVectorOfVectors( ifstream&, const deque<size_t>& vector_sizes, size_t, deque<vector<int64_t> >& );
 
 
 
@@ -985,14 +985,14 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
       }
       
     // reading plist
-    deque<vector<long64> >  file_records;
+    deque<vector<int64_t> >  file_records;
     readVectorOfVectors( ifs, ndele, total_items, file_records );   
 
     // testing whether the nodes are numbered consecutively from 0..n-1
     if ( test_for_consecutive_node_numbering ) {
          set<size_t> node_ids;
-         for ( deque<vector<long64> >::const_iterator it=file_records.begin(); it!=file_records.end(); ++it )
-           for ( vector<long64>::const_iterator nit=(*it).begin(); nit!=(*it).end(); ++nit )
+         for ( deque<vector<int64_t> >::const_iterator it=file_records.begin(); it!=file_records.end(); ++it )
+           for ( vector<int64_t>::const_iterator nit=(*it).begin(); nit!=(*it).end(); ++nit )
              node_ids.insert( (*nit) );
          // does the record start with 0 and ends with n-1?
          if ( (*node_ids.begin()) != 0U ) {
@@ -1069,7 +1069,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
       }
       
     // reading the pfvert file record
-    deque<vector<long64> >  file_records; 
+    deque<vector<int64_t> >  file_records; 
     readVectorOfVectors( ifs, nbors, total_items, file_records );   
 
     // negative element numbers must now be identified as model boundaries
@@ -1136,9 +1136,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialASCII( ifstream& ifs, VSet<di
       }
     
     // only for the volumetric elements material data are read from file
-    vector<int32> elmt_mtrls;
+    vector<int32_t> elmt_mtrls;
     elmt_mtrls.reserve( records );
-    int32         emtrl;
+    int32_t         emtrl;
     for ( size_t i=0; i<records; ++i ) {
          ifs >> emtrl;
          elmt_mtrls.push_back(emtrl);
@@ -1176,7 +1176,7 @@ Each property record consists of :
 name(string)    placement(enum PLACEMENT)   type (VARIABLE_TYPE)    (array length (int32))
 number of data entries (int32)
 flag values (int32)
-property values (double64)
+property values (double)
 
 for variable placement and type, upper case or lower case spellings are accepted.
 
@@ -1197,7 +1197,7 @@ template<size_t dim>
 bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    int32          integer;
+    int32_t          integer;
    
     AdvancePastCommentLine( ifs );
    
@@ -1211,10 +1211,10 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
                             "text file does not contain any property data"); 
          return true;
       }
-    const int32 number_of_properties(integer);
+    const int32_t number_of_properties(integer);
 
     // 1. looping over the properties and storing them in the VSet
-    for ( int32 n=0; n<number_of_properties; ++n )
+    for ( int32_t n=0; n<number_of_properties; ++n )
       {
         // 1.1 reading variable name, placement and type
         string property_name, str;
@@ -1232,7 +1232,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
         ifs >> str;
         VARIABLE_TYPE type = parseType( str.c_str() );
         // 1.2 reading array length, if variable is an array or flagged array
-        int32  array_length(0);
+        int32_t  array_length(0);
         if ( type == ARRAY || type == FLAGGEDARRAY ) {
              ifs >> integer;
              if ( integer <= 0 ) {
@@ -1260,7 +1260,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
         // property data are read from file, flags first, then values
         PropertyData pdata( place, type, dim, array_length );
         pdata.Reserve( records );
-        double64 value;
+        double value;
         
         // flags and values
         if ( type == SCALAR || type == VECTOR || type == FLAGGEDARRAY )
@@ -1361,8 +1361,8 @@ bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE* fp, VSet<
     if ( fp == nullptr )
       csmp_error.notice( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary", "file pointer is zero.");
 
-    const size_t  uibytes = sizeof(int32);
-    const size_t  dbytes  = sizeof(double64);
+    const size_t  uibytes = sizeof(int32_t);
+    const size_t  dbytes  = sizeof(double);
     size_t        entries(0);
 
     // reading node coordinates
@@ -1379,9 +1379,9 @@ bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE* fp, VSet<
           cout.flush();
       }
     // reading node coordinates 'px', 'py', 'pz' (double)
-    double64* px = new double64[ entries ];
-    double64* py = new double64[ entries ];
-    double64* pz = new double64[ entries ];
+    double* px = new double[ entries ];
+    double* py = new double[ entries ];
+    double* pz = new double[ entries ];
     if ( fread( (void*) px, dbytes, entries, fp ) != entries )
      throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary",
                               "'px' array did not read correctly");
@@ -1409,22 +1409,22 @@ cerr <<"\n"<< i<<": "<< px[i] <<","<< py[i] <<","<< pz[i];
 
     if ( extra_checks_on_binary_file_ ) {
         // coordinate range checking
-        double64* xmin=min_element( px, px + entries );
-        double64* xmax=max_element( px, px + entries );
-        double64* ymin=min_element( py, py + entries );
-        double64* ymax=max_element( py, py + entries );
-        double64* zmin=min_element( pz, pz + entries );
-        double64* zmax=max_element( pz, pz + entries );
+        double* xmin=min_element( px, px + entries );
+        double* xmax=max_element( px, px + entries );
+        double* ymin=min_element( py, py + entries );
+        double* ymax=max_element( py, py + entries );
+        double* zmin=min_element( pz, pz + entries );
+        double* zmax=max_element( pz, pz + entries );
 
-        if ( (*xmax) - (*xmin) < numeric_limits<double64>::epsilon() )
+        if ( (*xmax) - (*xmin) < numeric_limits<double>::epsilon() )
           throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
                                               "all nodes have same X-coordinate, but this is a 3D SKUA model.");
 
-        if ( (*ymax) - (*ymin) < numeric_limits<double64>::epsilon() )
+        if ( (*ymax) - (*ymin) < numeric_limits<double>::epsilon() )
           throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
                                               "all nodes have same Y-coordinate, but this is a 3D SKUA model.");
 
-        if ( (*zmax) - (*zmin) < numeric_limits<double64>::epsilon() )
+        if ( (*zmax) - (*zmin) < numeric_limits<double>::epsilon() )
           throw csmp::Exception( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary:",
                                               "all nodes have same Z-coordinate, but this is a 3D SKUA model.");
       }
@@ -1445,8 +1445,8 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  dbytes  = sizeof(double64);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  dbytes  = sizeof(double);
 
     // 1. reading boundary flags 'pbflags' (int)
     // ------------------------------------------
@@ -1457,12 +1457,12 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE
           cout.flush();
       }
     set<size_t>  bnodes;
-    int32        ival;
-    const int32  min28(-30), zero(0);
-    uint32       counter(0);
+    int32_t        ival;
+    const int32_t  min28(-30), zero(0);
+    uint32_t       counter(0);
     size_t nodes(vset.Vertices());
     for ( size_t i=0; i<nodes; i++ ){
-         // TODO: to read models with 10s of billions of cells, ibytes must be long64
+         // TODO: to read models with 10s of billions of cells, ibytes must be int64_t 
          fread( (void*) &ival, ibytes, 1U, fp );
          if ( ival < min28 || ival > zero )
            throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
@@ -1482,7 +1482,7 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE
         cout <<"\n\treading "<< counter <<" boundary values 'pbounds'..."<< endl;
         cout.flush();
     }
-    double64 dval;
+    double dval;
     for ( size_t i=1; i<=nodes; i++ ) {
          fread( (void*) &dval, dbytes, 1U, fp );
          // only if a boundary flag was stored, a boundary value is stored as well
@@ -1506,8 +1506,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementBinary( FILE* fp, VSet<dim>& v
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // reading element-type information record 'pelement' (unsigned int)
@@ -1520,7 +1520,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementBinary( FILE* fp, VSet<dim>& v
         cout <<"\n\treading "<< entries <<" finite-element type specifiers from 'pelement'..."<< endl;
         cout.flush();
     }
-    int32*  pelmt = new int32[ entries ];
+    int32_t*   pelmt = new int32_t[ entries ];
     fread( (void*) pelmt, ibytes, entries, fp );
     // checking the validity of the element types (valid range 2-23)
     for ( size_t i=0; i<entries; i++ )
@@ -1551,7 +1551,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistBinary( FILE* fp, VSet<dim>& vset
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // setting up the storage for 'plist' in VSet
@@ -1577,10 +1577,10 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistBinary( FILE* fp, VSet<dim>& vset
     }
   
     // reading the plist
-    uint32* plist = new uint32[ entries ];
+    uint32_t*  plist = new uint32_t[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
-    deque<vector<long64> >::iterator  it(vset.PlistBegin());
+    deque<vector<int64_t> >::iterator  it(vset.PlistBegin());
     size_t                            nentry(0U);
 
     // the elements of the plist (node ids) are assigned
@@ -1606,8 +1606,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vs
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // setting up the storage for 'pfverts' in VSet
@@ -1629,13 +1629,13 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vs
          cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< endl;
          cout.flush();
       }
-    // TODO: eventually this must be an array of 'long64' records
-    int32* pfverts = new int32[ entries ];
+    // TODO: eventually this must be an array of 'int64_t ' records
+    int32_t*  pfverts = new int32_t[ entries ];
     fread( (void*) pfverts, ibytes, entries, fp );
 
     // reading the C array into the resized pfverts deque inside VData
     // ---------------------------------------------------------------
-    deque<vector<long64> >::iterator it(vset.PfvertsBegin());
+    deque<vector<int64_t> >::iterator it(vset.PfvertsBegin());
     size_t  nentry(0U);
     for ( size_t i=0; i<nelements; i++, it++ )
       if (nbors[i] > 2) // SKM: not sure anymore why the restriction was imposed => JC: check it later due to some errors without this restriction especially for fault_boundary_test in BoundaryInterface_Test.
@@ -1662,7 +1662,7 @@ template bool SKUA_FiniteElementMeshInterface::ReadPfvertsBinary( FILE*, VSet<3U
 /*
 cerr <<"\nReadPfvertsBinary: neighbor info\n:";
 size_t i(0);
- for ( deque<vector<long64> >::const_iterator
+ for ( deque<vector<int64_t> >::const_iterator
        ft=vset.PfvertsBegin(); ft!=vset.PfvertsEnd(); ft++, i++ )
    {
       cout << i <<": \t";
@@ -1680,8 +1680,8 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialBinary( FILE* fp, VSet<dim>& 
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  ibytes  = sizeof(int32);
-    const size_t  uibytes = sizeof(uint32);
+    const size_t  ibytes  = sizeof(int32_t);
+    const size_t  uibytes = sizeof(uint32_t);
     size_t        entries(0);
 
     // reading material information 'pmtrl' (unsigned int)
@@ -1695,9 +1695,9 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialBinary( FILE* fp, VSet<dim>& 
         cout <<"\n\treading "<< entries <<" material-type specifiers for the elements from 'pmtrl'..."<< endl;
         cout.flush();
     }
-    int32* mtrls = new int32[ entries ];
+    int32_t*  mtrls = new int32_t[ entries ];
     fread( (void*) mtrls, ibytes, entries, fp );
-    vector<int32> elmt_mtrls;
+    vector<int32_t> elmt_mtrls;
     elmt_mtrls.assign( mtrls, mtrls + entries );
     delete[] mtrls;
 
@@ -1716,7 +1716,7 @@ template bool SKUA_FiniteElementMeshInterface::ReadPmaterialBinary( FILE*, VSet<
 
 /** returns the corresponding CSMP element type, taking into account whether an isoparametric FEM formulation is used
 */
-CSMP_FEM_TYPE  convertSKUA_ElementType( int32 etype, bool isoparametric )
+CSMP_FEM_TYPE  convertSKUA_ElementType( int32_t etype, bool isoparametric )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

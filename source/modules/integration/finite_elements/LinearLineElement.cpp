@@ -90,7 +90,7 @@ second method argument.
 */
 void LinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
   {
-     double64  len;
+     double  len;
      DN.Resize(dim,npe);
 
      // 2-dimensional edge
@@ -139,11 +139,11 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 
 @return The interpolation-function derivative matrix is returned into the
 second method argument and the length of the Line element is returned
-as a double64 variable.
+as a double variable.
  */
-double64 LinearLineElement::dN_At( DenseMatrix<DM_MIN>& DN, const vector<double64>& )
+double LinearLineElement::dN_At( DenseMatrix<DM_MIN>& DN, const vector<double>& )
  {
-     double64  len(std::numeric_limits<double>::quiet_NaN());
+     double  len(std::numeric_limits<double>::quiet_NaN());
      DN.Resize(dim,npe);
 
      // 2-dimensional edge
@@ -190,7 +190,7 @@ the area is computed.
 
 @return The volume (m3) of the finite element.
 */
-double64 LinearLineElement::Volume()
+double LinearLineElement::Volume()
 {
    // 2-dimensional models
    if ( dim == 2 ) {
@@ -242,9 +242,9 @@ coordinates the interpolation function values are found.
 To interpolate a property value withing the quadratic triangular
 element.
 */
-void LinearLineElement::N( vector<double64>& FN, const vector<double64>& xy )
+void LinearLineElement::N( vector<double>& FN, const vector<double>& xy )
  {
-     double64  len, l1, l2;
+     double  len, l1, l2;
 
      // 2-dimensional edge
      if ( dim == 2 ) {
@@ -309,7 +309,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double64 LinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t )
+double LinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t )
  {
     dN( DN );
 /*
@@ -330,7 +330,7 @@ double64 LinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t )
 
 
 
-double64 LinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN )
+double LinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN )
  {
     dN( DN );
 /*
@@ -349,9 +349,9 @@ double64 LinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN )
     return 0.0;
  }
 
-void LinearLineElement::N_AtBaryCenter(std::vector<double64>& N)
+void LinearLineElement::N_AtBaryCenter(std::vector<double>& N)
 {
-	vector<double64> p;
+	vector<double> p;
 	p.resize(dim);
 	for (size_t i = 0; i < dim; ++i) p[i] = 0.5*(XY(0, i) + XY(1, i));
 	LinearLineElement::N(N, p);
@@ -363,7 +363,7 @@ void LinearLineElement::N_AtBaryCenter(std::vector<double64>& N)
     In 3D, the input vector must contain the rotation axis around which
     the edge is turned to create the unit normal.
 */
-void  LinearLineElement::UnitNormal( vector<double64>& vc ) const
+void  LinearLineElement::UnitNormal( vector<double>& vc ) const
  {
     vc.resize(dim);
     static bool first_call(true);
@@ -413,7 +413,7 @@ void  LinearLineElement::IntegralNN( DenseMatrix<DM_MIN>& M )
     
     @note convention: face 1 is located at the first node.
 */
-void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
    
@@ -438,7 +438,7 @@ void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& u
               unrml[0] = XY(0,0) - XY(1,0);
               unrml[1] = XY(0,1) - XY(1,1);
               // normalise to length
-              const double64 length = hypot(unrml[0], unrml[1]);
+              const double length = hypot(unrml[0], unrml[1]);
               unrml[0] /= length;
               unrml[1] /= length;
               return;
@@ -446,7 +446,7 @@ void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& u
          if ( face == 1 ) {
               unrml[0] = XY(1,0) - XY(0,0);
               unrml[1] = XY(1,1) - XY(0,1);
-              const double64 length = hypot(unrml[0], unrml[1]);
+              const double length = hypot(unrml[0], unrml[1]);
               unrml[0] /= length;
               unrml[1] /= length;
               return;
@@ -462,7 +462,7 @@ void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& u
               unrml[1] = XY(0,1) - XY(1,1);
               unrml[2] = XY(0,2) - XY(1,2);
               // normalise to length
-              const double64 length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
+              const double length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
               unrml[0] /= length;
               unrml[1] /= length;
               unrml[2] /= length;
@@ -472,7 +472,7 @@ void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& u
               unrml[0] = XY(1,0) - XY(0,0);
               unrml[1] = XY(1,1) - XY(0,1);
               unrml[2] = XY(1,2) - XY(0,2);
-              const double64 length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
+              const double length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
               unrml[0] /= length;
               unrml[1] /= length;
               unrml[2] /= length;

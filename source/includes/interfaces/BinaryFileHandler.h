@@ -90,7 +90,7 @@ void BinaryFileHandler<S,T>::SaveAs( const char* s, const std::map<S,T>& obj_lis
 
 
 
-/// Objects of type S are added in the vector<double64> 'obj_list'
+/// Objects of type S are added in the vector<double> 'obj_list'
 template<class S,class T>
 bool BinaryFileHandler<S,T>::Read( const char* s, std::vector<S>& obj_list )
  {

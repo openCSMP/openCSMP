@@ -24,13 +24,13 @@ void ModelComparator_Test::run()
   model.OutputToBinaryFile( "ComparatorTestVSet2" );
 
   ModelComparator<3U> comparitor;
-  double64 shouldBeZero( comparitor.CompareVSets( "ComparatorTestVSet1.vset", "ComparatorTestVSet1.vset",
+  double shouldBeZero( comparitor.CompareVSets( "ComparatorTestVSet1.vset", "ComparatorTestVSet1.vset",
                                                   "permeability", "permeability",
                                                   "CSMP-1phase-variables.txt","CSMP-1phase-variables.txt",
                                                   true ) );
   _equal( shouldBeZero, 0., 1.0E-3 );
 
-  double64 shouldBeAlsoZero( comparitor.CompareVSetsAtPoints( "ComparatorTestVSet1.vset", "ComparatorTestVSet1.vset",
+  double shouldBeAlsoZero( comparitor.CompareVSetsAtPoints( "ComparatorTestVSet1.vset", "ComparatorTestVSet1.vset",
                                                   "fluid pressure", "fluid pressure",
                                                   "CSMP-1phase-variables.txt", "CSMP-1phase-variables.txt",
                                                    true ) );

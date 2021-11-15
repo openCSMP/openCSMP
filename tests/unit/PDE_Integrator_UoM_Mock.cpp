@@ -21,12 +21,12 @@ namespace csmp {
   }
 
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
-  std::vector<double64> const* PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetRH() const {
+  std::vector<double> const* PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetRH() const {
     return &this->rh_;
   }
   
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
-  std::vector<double64>* PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetX() {
+  std::vector<double>* PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetX() {
 	  return &this->x_;
   }
 

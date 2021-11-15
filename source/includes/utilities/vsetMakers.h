@@ -13,12 +13,12 @@ namespace csmp {
     // ----------------------
     void test_Create_TrianglePatch_VSet( VSet<2U>& );
     
-    void test_Create_One_Square_VSet(VSet<2U>&, double64 length_of_sides, bool bSkewed=false );
+    void test_Create_One_Square_VSet(VSet<2U>&, double length_of_sides, bool bSkewed=false );
     
-    void test_Create_Square_VSet( VSet<2U>&, size_t size_sides, double64 dimension, bool skewed=false );
+    void test_Create_Square_VSet( VSet<2U>&, size_t size_sides, double dimension, bool skewed=false );
     
-    void test_Create_SlitRectangle_VSet(VSet<2U>&, size_t x_dimension, size_t y_dimension, double64 x_length, 
-                                        double64 y_length, size_t depth_of_slit, bool bSkewed=false );
+    void test_Create_SlitRectangle_VSet(VSet<2U>&, size_t x_dimension, size_t y_dimension, double x_length, 
+                                        double y_length, size_t depth_of_slit, bool bSkewed=false );
                                         
     // 2D poly-element sets and topology info
     // --------------------------------------

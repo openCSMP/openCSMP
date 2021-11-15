@@ -14,7 +14,7 @@ namespace csmp
 {
 
 template<size_t dim>
-void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double64 xShift, double64 yShift, double64 zShift )
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
 {
   const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
   if ( dim == 2 )
@@ -48,7 +48,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side,
 
 
 template<size_t dim>
-void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double64 shift )
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
 {
   VectorVariable<dim> displacementPerpedicularToInterface( ANY, 0.0 );
   Point<dim> displacementToBaryCenter;
@@ -183,7 +183,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double64 shift )
 
 
 template<size_t dim>
-void shiftInterfaceTips( Region<dim>& region, double64 shift )
+void shiftInterfaceTips( Region<dim>& region, double shift )
 {
   Point<dim> displacement;
   Point<dim> baryCenter;
@@ -221,7 +221,7 @@ void shiftInterfaceTips( Region<dim>& region, double64 shift )
 
 
 template<size_t dim>
-void shiftRegion( Region<dim>& region, double64 xShift, double64 yShift, double64 zShift )
+void shiftRegion( Region<dim>& region, double xShift, double yShift, double zShift )
 {
   if ( dim == 2 )
     for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
@@ -240,7 +240,7 @@ void shiftRegion( Region<dim>& region, double64 xShift, double64 yShift, double6
 
 
 template<size_t dim>
-void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
+void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
 {
   if ( dim == 2 )
   {
@@ -281,7 +281,7 @@ void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 lin
 
 
 template<size_t dim>
-void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
+void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
 {
   if ( dim == 2 )
   {
@@ -322,7 +322,7 @@ void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double64 lin
 
 
 template<size_t dim>
-void scaleRegionSymmetricOverZero( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
+void scaleRegionSymmetricOverZero( Region<dim>& region, double xScale, double yScale, double zScale )
 {
   if ( dim == 2 )
     for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
@@ -341,7 +341,7 @@ void scaleRegionSymmetricOverZero( Region<dim>& region, double64 xScale, double6
 
 
 template<size_t dim>
-void scaleRegion( Region<dim>& region, double64 xScale, double64 yScale, double64 zScale )
+void scaleRegion( Region<dim>& region, double xScale, double yScale, double zScale )
 {
   Point<dim> min_point;
   Point<dim> max_point;

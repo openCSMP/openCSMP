@@ -15,13 +15,13 @@ namespace csmp {
 template<size_t dim>
 class Limiter : public Interrelation<dim> {
     Operand<dim>&  op;
-    double64 min, max;
+    double min, max;
     
   public:
     Limiter( const PropertyDatabase<dim>& p,
              const char* prop,              // variable name of property
-			 double64 min_value,            // minimum value of specified range
-			 double64 max_value );          // maximum value of specified range
+			 double min_value,            // minimum value of specified range
+			 double max_value );          // maximum value of specified range
                          
     ~Limiter() {};
     void Calculate();

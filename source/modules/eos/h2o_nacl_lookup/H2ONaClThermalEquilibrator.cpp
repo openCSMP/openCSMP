@@ -9,19 +9,19 @@ using namespace std;
 
 namespace csmp
 {
-  H2ONaClThermalEquilibrator::H2ONaClThermalEquilibrator(const double64& external_mass_rock,  // [kg]
-                                                         const double64& external_cp_rock,    // [J/kg/K]
-                                                         const double64& external_rho_rock,   // [kg/m^3]
-                                                         const double64& external_porosity,   // [dimensionless]
-                                                         const double64& external_mass_fluid, // [kg]
-                                                         const double64& external_wt_current, // [wt% NaCl]
-                                                         const double64& external_t_previous, // [C]
-                                                         const double64& external_p_current,  // [bar]
-                                                         const double64& external_H_current,  // [J] NOT [J/kg]
-                                                         const double64& external_H_previous, // [J]
+  H2ONaClThermalEquilibrator::H2ONaClThermalEquilibrator(const double& external_mass_rock,  // [kg]
+                                                         const double& external_cp_rock,    // [J/kg/K]
+                                                         const double& external_rho_rock,   // [kg/m^3]
+                                                         const double& external_porosity,   // [dimensionless]
+                                                         const double& external_mass_fluid, // [kg]
+                                                         const double& external_wt_current, // [wt% NaCl]
+                                                         const double& external_t_previous, // [C]
+                                                         const double& external_p_current,  // [bar]
+                                                         const double& external_H_current,  // [J] NOT [J/kg]
+                                                         const double& external_H_previous, // [J]
                                                          const bool&      fixed_external_t,
-                                                         const double64& t_fix,
-                                                         const double64& external_t_diff, 
+                                                         const double& t_fix,
+                                                         const double& external_t_diff, 
                                                          const bool& verbose)
   : mass_rock(external_mass_rock),
     cp_rock(external_cp_rock),
@@ -81,7 +81,7 @@ namespace csmp
     icrit_max(0),
   // fluid initialization: since p and x are given coordinates for iteration,
   // only the variable t and h are initialized via "dummy", which is needed
-  // for member ComputeTotalEnthalpyAtTemperature( const double64& t )
+  // for member ComputeTotalEnthalpyAtTemperature( const double& t )
     fluid(tdummy, p_current_eq, x_current_eq, hdummy, cp_rock, rho_rock, phi, verbose),
     water_equilibrator(mass_rock, cp_rock, rho_rock, phi, mass_fluid,t_previous,
                        p_current, H_current, H_previous, fixed_t, t_fix, t_diff),
@@ -89,8 +89,8 @@ namespace csmp
   {
     // compute number of bisections (icrit_max) that would lead to reaching numerical precision
     //     following the formula (tmax-tmin) * 0.5^icrit_max <= epsilon;
-    double64 dummy;
-    dummy               = log(numeric_limits<double64>::epsilon()/(tmax-tmin));
+    double dummy;
+    dummy               = log(numeric_limits<double>::epsilon()/(tmax-tmin));
     dummy              /= log(0.5);
     icrit_max           = int(dummy)+1; // +1 for possible rounding problem
     icrit_max          += 1;            // +1 to ensure above formula works properly
@@ -135,7 +135,7 @@ namespace csmp
   }
 
 
-  double64 H2ONaClThermalEquilibrator::Resid()
+  double H2ONaClThermalEquilibrator::Resid()
   { 
     return resid;
   }
@@ -176,7 +176,7 @@ namespace csmp
     H_current_eq    = H_current;
     H_previous_eq   = H_previous;
 
-    if( essentiallyEqual( x_current_eq, 0.0, numeric_limits<double64>::epsilon()) )
+    if( essentiallyEqual( x_current_eq, 0.0, numeric_limits<double>::epsilon()) )
       {
         bulkprops   = water_equilibrator.Bulk();
         liquidprops = water_equilibrator.Liquid();
@@ -247,8 +247,8 @@ namespace csmp
         // 2a. Compute new t_eq at mid-point between tmin and tmax, determine enthalpies,
         //     and compute residual
         if(icrit < 10
-           && !essentiallyEqual( tmin, tmax, numeric_limits<double64>::epsilon())
-           && !essentiallyEqual( Hmin, Hmax, numeric_limits<double64>::epsilon())
+           && !essentiallyEqual( tmin, tmax, numeric_limits<double>::epsilon())
+           && !essentiallyEqual( Hmin, Hmax, numeric_limits<double>::epsilon())
            )
           t_eq    = tmin + (H_current_eq-Hmin)/(Hmax-Hmin)*(tmax-tmin); //0.5*(tmin+tmax);
         else t_eq = 0.5*(tmin+tmax);
@@ -259,7 +259,7 @@ namespace csmp
         // 2b. Check for convergence
         //     It is absolutely crucial that the comparison is between the two fabs, since halite enthalpy
         //     can formally have negative values!!!
-        if( definitelyLessThan( fabs(resid), 1.0, numeric_limits<double64>::epsilon()) )
+        if( definitelyLessThan( fabs(resid), 1.0, numeric_limits<double>::epsilon()) )
           {
             //d cerr << "converged with \n";
             //d cerr << "resid         = " << resid             << endl;
@@ -277,9 +277,9 @@ namespace csmp
           }
 	
         // 2c. If not converged, check if tmin == tmax, that'd be definite non-convergence
-        if( essentiallyEqual( tmin, tmax, numeric_limits<double64>::epsilon()) )
+        if( essentiallyEqual( tmin, tmax, numeric_limits<double>::epsilon()) )
           {
-            double64 new_resid;
+            double new_resid;
             new_resid = (Hmax - Hmin)/mass_fluid_ini;
             cerr << "*** new_resid                  = " << new_resid << "***\n";
             cerr << "*** (1.0e-1)*fabs(h_fluid_test) = " << (1.0e-1)*fabs(h_fluid_test) << "***\n";
@@ -292,11 +292,11 @@ namespace csmp
                 //d PrintStatusToCerr();
                 return;
                 // since the loose criterion can cause very small negative saturations, these will be taken care of here
-                // if(vaporprops.s < 0.0 && essentiallyEqual(vaporprops.s, 0.0, 5.0*numeric_limits<double64>::epsilon()))
+                // if(vaporprops.s < 0.0 && essentiallyEqual(vaporprops.s, 0.0, 5.0*numeric_limits<double>::epsilon()))
                 //   { vaporprops.s = 0.0; return; }
-                // else if(liquidprops.s < 0.0 && essentiallyEqual(liquidprops.s, 0.0, 5.0*numeric_limits<double64>::epsilon()))
+                // else if(liquidprops.s < 0.0 && essentiallyEqual(liquidprops.s, 0.0, 5.0*numeric_limits<double>::epsilon()))
                 //   { liquidprops.s = 0.0; return; }
-                // else if(vaporprops.s < 0.0 && essentiallyEqual(vaporprops.s, 0.0, 5.0*numeric_limits<double64>::epsilon()))
+                // else if(vaporprops.s < 0.0 && essentiallyEqual(vaporprops.s, 0.0, 5.0*numeric_limits<double>::epsilon()))
                 //   { vaporprops.s = 0.0; return; }
                 // else return;
               }
@@ -318,7 +318,7 @@ namespace csmp
         //     However, there remains a vague chance that tmin ot tmax may essentially be
         //     equal to t_eq, which may eventually show up either as an error at 2c or as
         //     icrit > icrit_max. I guess this remains to be seen by just running the code.
-        if( definitelyLessThan( H_test, H_current_eq, numeric_limits<double64>::epsilon()) ) 
+        if( definitelyLessThan( H_test, H_current_eq, numeric_limits<double>::epsilon()) ) 
           {
             tmin = t_eq;
             Hmin = ComputeTotalEnthalpyAtTemperature( tmin );
@@ -336,7 +336,7 @@ namespace csmp
         //d cerr << icrit << "\t" << Hmin << "\t" << H_current_eq << "\t" << Hmax << "\t" << resid << "\t" << bulkprops.h << endl;
         // 2e. It shouldn't happen but let's nevertheless check if tmin accidentally got larger than
         //     tmax, that's be fatal
-        if( definitelyGreaterThan( tmin, tmax, numeric_limits<double64>::epsilon()) )
+        if( definitelyGreaterThan( tmin, tmax, numeric_limits<double>::epsilon()) )
           {	    
             csmp_error.notice( FATAL_ERROR,
                                //csmp_error.notice( WARNING,
@@ -373,7 +373,7 @@ namespace csmp
     return;
   }
 
-  double64 H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double64& t )
+  double H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double& t )
   {
     //    cerr << "H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature = " << t << endl;
     tdummy    =  t;
@@ -383,11 +383,11 @@ namespace csmp
     h_fluid_test = fluid.BulkEnthalpy();
     if(fluid.Fatal())
       {
-        // cerr << "H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double64& t ) encountered fatal from Fluid objetc\n";
+        // cerr << "H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double& t ) encountered fatal from Fluid objetc\n";
         PrintStatusToCerr();
         csmp_error.notice( FATAL_ERROR,
                            //                           csmp_error.notice( WARNING,
-                           "H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double64& t ) encountered fatal from Fluid objetc\n",
+                           "H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double& t ) encountered fatal from Fluid objetc\n",
                            "send above data to responsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch"
                            ); 
       }
@@ -398,7 +398,7 @@ namespace csmp
 
   void H2ONaClThermalEquilibrator::ErrorCheckHmin(const int& i)
   {
-    if( definitelyLessThan( H_current_eq, Hmin, numeric_limits<double64>::epsilon()) )
+    if( definitelyLessThan( H_current_eq, Hmin, numeric_limits<double>::epsilon()) )
       {
         ErrorConditionsToScreen();
         liquidprops  = fluid.ReportLiquidProperties();
@@ -422,7 +422,7 @@ namespace csmp
 
   void H2ONaClThermalEquilibrator::ErrorCheckHmax(const int& i)
   {
-    if( definitelyGreaterThan( H_current_eq, Hmax, numeric_limits<double64>::epsilon()) )
+    if( definitelyGreaterThan( H_current_eq, Hmax, numeric_limits<double>::epsilon()) )
       {
         ErrorConditionsToScreen();
         liquidprops  = fluid.ReportLiquidProperties();
@@ -448,77 +448,77 @@ namespace csmp
   void H2ONaClThermalEquilibrator::FluidPropertiesErrorCheck()
   { 
     if( 
-       definitelyLessThan( bulkprops.t, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.t, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.p, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.p, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.x, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.x, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.wt, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.wt, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.rho, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.rho, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.cp, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.cp, 0.0, numeric_limits<double>::epsilon())
        ||
-       // definitelyLessThan( bulkprops.dhdt, 0.0, numeric_limits<double64>::epsilon())
+       // definitelyLessThan( bulkprops.dhdt, 0.0, numeric_limits<double>::epsilon())
        // ||
-       definitelyLessThan( bulkprops.beta, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.beta, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.s, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.s, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.mf, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.mf, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.mu, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.mu, 0.0, numeric_limits<double>::epsilon())
        ||
 
-       definitelyLessThan( liquidprops.t, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.t, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.p, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.p, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.x, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.x, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.wt, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.wt, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.rho, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.rho, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.h, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.h, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.cp, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.cp, 0.0, numeric_limits<double>::epsilon())
        ||
-       // definitelyLessThan( liquidprops.dhdt, 0.0, numeric_limits<double64>::epsilon())
+       // definitelyLessThan( liquidprops.dhdt, 0.0, numeric_limits<double>::epsilon())
        // ||
-       definitelyLessThan( liquidprops.beta, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.beta, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.s, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.s, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.mf, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.mf, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.mu, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.mu, 0.0, numeric_limits<double>::epsilon())
        ||
 
-       definitelyLessThan( vaporprops.t, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.t, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.p, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.p, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.x, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.x, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.wt, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.wt, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.rho, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.rho, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.h, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.h, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.cp, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.cp, 0.0, numeric_limits<double>::epsilon())
        ||
-       // definitelyLessThan( vaporprops.dhdt, 0.0, numeric_limits<double64>::epsilon())
+       // definitelyLessThan( vaporprops.dhdt, 0.0, numeric_limits<double>::epsilon())
        // ||
-       definitelyLessThan( vaporprops.beta, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.beta, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.s, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.s, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.mf, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.mf, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.mu, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.mu, 0.0, numeric_limits<double>::epsilon())
         )
       {
         cerr << "H2ONaClThermalEquilibrator::FluidPropertiesErrorCheck() found a match\n";
@@ -631,7 +631,7 @@ namespace csmp
 
 
 
-  Fluidproperties H2ONaClThermalEquilibrator::ReportLiquidProperties(const double64& t, const double64& p, const double64& x, const double64& h)
+  Fluidproperties H2ONaClThermalEquilibrator::ReportLiquidProperties(const double& t, const double& p, const double& x, const double& h)
   {
     h_fluid_eq    = h;
     t_eq          = t;
@@ -641,7 +641,7 @@ namespace csmp
     return fluid.LiquidProperties();
   }
 
-  Fluidproperties H2ONaClThermalEquilibrator::ReportVaporProperties(const double64& t, const double64& p, const double64& x, const double64& h)
+  Fluidproperties H2ONaClThermalEquilibrator::ReportVaporProperties(const double& t, const double& p, const double& x, const double& h)
   {
     h_fluid_eq    = h;
     t_eq          = t;
@@ -651,7 +651,7 @@ namespace csmp
     return fluid.VaporProperties();
   }
 
-  Fluidproperties H2ONaClThermalEquilibrator::ReportBulkProperties(const double64& t, const double64& p, const double64& x, const double64& h)
+  Fluidproperties H2ONaClThermalEquilibrator::ReportBulkProperties(const double& t, const double& p, const double& x, const double& h)
   {
     h_fluid_eq    = h;
     t_eq          = t;
@@ -661,7 +661,7 @@ namespace csmp
     return fluid.BulkProperties();
   }
 
-  Fluidproperties H2ONaClThermalEquilibrator::ReportSaltProperties(const double64& t, const double64& p, const double64& x, const double64& h)
+  Fluidproperties H2ONaClThermalEquilibrator::ReportSaltProperties(const double& t, const double& p, const double& x, const double& h)
   {
     h_fluid_eq    = h;
     t_eq          = t;

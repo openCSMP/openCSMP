@@ -67,13 +67,13 @@ The locations of the points that shall be evaluated.
 
 @return The minimum distance that the points should be apart from one another.
 */
-bool areFartherApartThan( const double64* pn, const double64* pw, double64 distance )
+bool areFartherApartThan( const double* pn, const double* pw, double distance )
  {
-    double64 dx = pn[0] - pw[0];
-    double64 dy = pn[1] - pw[1];
-    double64 dz = pn[2] - pw[2];
+    double dx = pn[0] - pw[0];
+    double dy = pn[1] - pw[1];
+    double dz = pn[2] - pw[2];
     
-    double64 separation = sqrt( dx*dx + dy*dy + dz*dz );
+    double separation = sqrt( dx*dx + dy*dy + dz*dz );
     
     if ( distance < separation ) return true;
     
@@ -116,8 +116,8 @@ identify points that cannot be grouped into individual families using
 the ANSYS mesher.  
 
 */
-size_t  findNode( const Model<3U>& sg, double64 nx, double64 ny, double64 nz, 
-                  double64 tolerance )
+size_t  findNode( const Model<3U>& sg, double nx, double ny, double nz, 
+                  double tolerance )
  {
     const Region<3>&  sgroup(sg.Region("Model"));
  
@@ -143,8 +143,8 @@ size_t  findNode( const Model<3U>& sg, double64 nx, double64 ny, double64 nz,
 
 
 
-size_t  findNode( const Model<2U>& sg, double64 nx, double64 ny,  
-                  double64 tolerance )
+size_t  findNode( const Model<2U>& sg, double nx, double ny,  
+                  double tolerance )
  {
     const Region<2>&  sgroup(sg.Region("Model"));
  
@@ -168,7 +168,7 @@ size_t  findNode( const Model<2U>& sg, double64 nx, double64 ny,
 
 
 
-size_t  findNode( const Model<1U>& sg, double64 nx, double64 tolerance )
+size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
  {
     const Region<1>&  sgroup(sg.Region("Model"));
  
@@ -202,7 +202,7 @@ size_t  findNode( const Model<1U>& sg, double64 nx, double64 tolerance )
     @author SKM 22/9/2014.
 */
 template<size_t dim>
-long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double64 tolerance, bool verbose )
+long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, bool verbose )
  {
     const Region<dim>&  sgroup(sg.Region("Model"));
  
@@ -223,9 +223,9 @@ long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double64 tolerance
      
 } // end find_node
 
-template long findNode( const Model<1U>&, const Point<1U>&, double64, bool );
-template long findNode( const Model<2U>&, const Point<2U>&, double64, bool );
-template long findNode( const Model<3U>&, const Point<3U>&, double64, bool );
+template long findNode( const Model<1U>&, const Point<1U>&, double, bool );
+template long findNode( const Model<2U>&, const Point<2U>&, double, bool );
+template long findNode( const Model<3U>&, const Point<3U>&, double, bool );
 
 
 
@@ -333,14 +333,14 @@ size_t  renumberElementNodes( vector<Element<3U>*>::iterator first,
 
 
 
-void printRangeOfVectorOfVectors( const vector<vector<double64> >&  data )
+void printRangeOfVectorOfVectors( const vector<vector<double> >&  data )
  {
     assert( !data.empty() );
-    double64 vmin(data[0][0]), 
+    double vmin(data[0][0]), 
               vmax(data[0][0]);
     
-    for ( vector<vector<double64> >::const_iterator it=data.begin(); it!=data.end(); it++ )
-      for ( vector<double64>::const_iterator  dit=(*it).begin(); dit!=(*it).end(); dit++ ) {
+    for ( vector<vector<double> >::const_iterator it=data.begin(); it!=data.end(); it++ )
+      for ( vector<double>::const_iterator  dit=(*it).begin(); dit!=(*it).end(); dit++ ) {
            vmin = std::min( vmin, (*dit) );
            vmax = std::max( vmax, (*dit) );
         }
@@ -352,13 +352,13 @@ void printRangeOfVectorOfVectors( const vector<vector<double64> >&  data )
 
 
  
-void printRangeOf( const vector<pair<double64,double64> >&  data )
+void printRangeOf( const vector<pair<double,double> >&  data )
  {
     assert( !data.empty() );
-    double64 vmin(data[0].first), 
+    double vmin(data[0].first), 
               vmax(data[0].second);
     
-    for ( vector<pair<double64,double64> >::const_iterator it=data.begin(); it!=data.end(); it++ ) {
+    for ( vector<pair<double,double> >::const_iterator it=data.begin(); it!=data.end(); it++ ) {
            vmin = std::min( vmin, (*it).first );
            vmax = std::max( vmax, (*it).second );
         }
@@ -374,7 +374,7 @@ void printRangeOf( const vector<pair<double64,double64> >&  data )
     replaces no-data values of target variable with nearest-neighbor values until there are none left, by default NAN's are no-data values
 */
 template<size_t dim>  
-void nearestNeighborFill( Model<dim>& model, const char* target_region, const char* variable, double64 no_data_value )
+void nearestNeighborFill( Model<dim>& model, const char* target_region, const char* variable, double no_data_value )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !model.Database().IsDefined(variable) ) {
@@ -403,7 +403,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
          // counting no-data values, and memorizing pointers to elements with such values
          set<Element<dim>*> elementsMissingDataValues, filledValues;
          for ( typename vector<Element<dim>*>::const_iterator it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
-           if ( isnan((*it)->Read(var_key)) || fabs(no_data_value-(*it)->Read(var_key)) < numeric_limits<double64>::epsilon() )
+           if ( isnan((*it)->Read(var_key)) || fabs(no_data_value-(*it)->Read(var_key)) < numeric_limits<double>::epsilon() )
              elementsMissingDataValues.insert( (*it) );
           
          if ( elementsMissingDataValues.empty() ) {
@@ -419,22 +419,22 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
                  for ( typename set<Element<dim>*>::iterator
                        it=elementsMissingDataValues.begin(); it!=elementsMissingDataValues.end(); it++ )
                    {
-                      set<pair<double64,double64> > valuesAndWeights;
+                      set<pair<double,double> > valuesAndWeights;
                       for ( size_t i=0U; i<(*it)->Neighbors(); i++ )
                         if ( (*it)->Neighbor(i) != NULL )
                           {
                              Point<dim> bctr = (*it)->BaryCenter();
-                             double64   nval = (*it)->Neighbor(i)->Read(var_key);
+                             double   nval = (*it)->Neighbor(i)->Read(var_key);
                              // if the neighbor element exists and has a valid variable value, the barycentric distance is determined and stored
-                             if ( !isnan(nval) && fabs(no_data_value-nval) > numeric_limits<double64>::epsilon() ) {
-                                  double64   distance  = bctr.DistanceTo( (*it)->Neighbor(i)->BaryCenter() );
+                             if ( !isnan(nval) && fabs(no_data_value-nval) > numeric_limits<double>::epsilon() ) {
+                                  double   distance  = bctr.DistanceTo( (*it)->Neighbor(i)->BaryCenter() );
                                   valuesAndWeights.insert( make_pair(nval,1./distance) );
                                }
                           }
                       // assigned a weighted average to the element if possible
                       if ( !valuesAndWeights.empty() ) {
-                           double64  sumOfWeights(0.), sumOfWeightedVals(0.);
-                           for ( set<pair<double64,double64> >::const_iterator
+                           double  sumOfWeights(0.), sumOfWeightedVals(0.);
+                           for ( set<pair<double,double> >::const_iterator
                                  vit=valuesAndWeights.begin(); vit!=valuesAndWeights.end(); vit++ ) {
                                 sumOfWeightedVals += (*vit).first * (*vit).second;
                                 sumOfWeights      += (*vit).second;
@@ -461,7 +461,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
          // counting no-data values, and memorizing pointers to elements with such values
          set<Node<dim>*> nodesMissingDataValues, filledValues;
          for ( typename vector<Node<dim>*>::const_iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
-           if ( isnan((*it)->Read(var_key)) || fabs(no_data_value-(*it)->Read(var_key)) < numeric_limits<double64>::epsilon() )
+           if ( isnan((*it)->Read(var_key)) || fabs(no_data_value-(*it)->Read(var_key)) < numeric_limits<double>::epsilon() )
              nodesMissingDataValues.insert( (*it) );
           
          if ( nodesMissingDataValues.empty() ) {
@@ -477,22 +477,22 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
                  for ( typename set<Node<dim>*>::iterator
                        it=nodesMissingDataValues.begin(); it!=nodesMissingDataValues.end(); it++ )
                    {
-                      set<pair<double64,double64> > valuesAndWeights;
+                      set<pair<double,double> > valuesAndWeights;
                       for ( size_t i=0U; i<(*it)->Neighbors(); i++ )
                         if ( (*it)->Neighbor(i) != NULL )
                           {
                              Point<dim> nxyz = (*it)->Coordinate();
-                             double64   nval = (*it)->Neighbor(i)->Read(var_key);
+                             double   nval = (*it)->Neighbor(i)->Read(var_key);
                              // if the neighbor element exists and has a valid variable value, the barycentric distance is determined and stored
-                             if ( !isnan(nval) && fabs(no_data_value-nval) > numeric_limits<double64>::epsilon() ) {
-                                  double64   distance  = nxyz.DistanceTo( (*it)->Neighbor(i)->Coordinate() );
+                             if ( !isnan(nval) && fabs(no_data_value-nval) > numeric_limits<double>::epsilon() ) {
+                                  double   distance  = nxyz.DistanceTo( (*it)->Neighbor(i)->Coordinate() );
                                   valuesAndWeights.insert( make_pair(nval,1./distance) );
                                }
                           }
                       // assigned a weighted average to the element if possible
                       if ( !valuesAndWeights.empty() ) {
-                           double64  sumOfWeights(0.), sumOfWeightedVals(0.);
-                           for ( set<pair<double64,double64> >::const_iterator
+                           double  sumOfWeights(0.), sumOfWeightedVals(0.);
+                           for ( set<pair<double,double> >::const_iterator
                                  vit=valuesAndWeights.begin(); vit!=valuesAndWeights.end(); vit++ ) {
                                 sumOfWeightedVals += (*vit).first * (*vit).second;
                                 sumOfWeights      += (*vit).second;
@@ -513,17 +513,17 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
 
  } // end nearestNeighborFill
  
-template void nearestNeighborFill( Model<1U>&, const char*, const char*, double64 );
-template void nearestNeighborFill( Model<2U>&, const char*, const char*, double64 );
-template void nearestNeighborFill( Model<3U>&, const char*, const char*, double64 );
+template void nearestNeighborFill( Model<1U>&, const char*, const char*, double );
+template void nearestNeighborFill( Model<2U>&, const char*, const char*, double );
+template void nearestNeighborFill( Model<3U>&, const char*, const char*, double );
 
 
 
-double64 bilinearInterpolate( size_t idx_x, size_t, 
+double bilinearInterpolate( size_t idx_x, size_t, 
                               const Point<1U>& xy1, 
                               const Point<1U>& xy2,
                               const Point<1U>& coord, 
-                              double64 p1, double64 p2, double64, double64 )
+                              double p1, double p2, double, double )
 {
       // If min-coords. are equivalent to max-coords. the boundary-value average 
       // is assigned.
@@ -538,7 +538,7 @@ double64 bilinearInterpolate( size_t idx_x, size_t,
       if ( p1 == p2 ) return p1;
     
       // 4. computing interpolation function. Num. Recip. p. 105
-      double64 t = (coord[idx_x] - xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      double t = (coord[idx_x] - xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
       
       // 5 bi-linear interpolation
       return (1. - t) * p1 + t * p2;   
@@ -575,7 +575,7 @@ which is to be interpolated. They are the corner points of the rectangle
 listed in counter-clockwise fashion (e.g., lower left, lower right, upper
 right and upper left corners, respectively). 
 
-@return The result of the interpolation is returned into a double64 type variable. 
+@return The result of the interpolation is returned into a double type variable. 
 
 @section application Application
 
@@ -586,11 +586,11 @@ Function is used by AssignBoundaryValues().
 The function will report an error and return the average value of the 
 four cornerpoints if their coordinates are identical. 
 */
-double64 bilinearInterpolate( size_t idx_x, size_t idx_y, 
+double bilinearInterpolate( size_t idx_x, size_t idx_y, 
                               const Point<2U>& xy1,
                               const Point<2U>& xy2,
                               const Point<2U>& coord, 
-                              double64 p1, double64 p2, double64 p3, double64 p4 )
+                              double p1, double p2, double p3, double p4 )
 {
       // If min-coords. are equivalent to max-coords. the boundary-value average 
       // is assigned.
@@ -604,8 +604,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
       if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;
     
       // 4. computing interpolation functions. Num. Recip. p. 105
-      double64 t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
-      double64 u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
+      double t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      double u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
       
       // 5 bi-linear interpolation
       return (1.-t) * (1.-u) * p1 + t * (1.-u) * p2 + t * u * p3 + (1.-t) * u * p4;   
@@ -641,7 +641,7 @@ which is to be interpolated. They are the corner points of the rectangle
 listed in counter-clockwise fashion (e.g., lower left, lower right, upper
 right and upper left corners, respectively). 
 
-@return The result of the interpolation is returned into a double64 type variable. 
+@return The result of the interpolation is returned into a double type variable. 
 
 @section application Application
 
@@ -652,11 +652,11 @@ Function is used by AssignBoundaryValues().
 The function will report an error and return the average value of the 
 four cornerpoints if their coordinates are identical. 
 */
-double64 bilinearInterpolate( size_t idx_x, size_t idx_y, 
+double bilinearInterpolate( size_t idx_x, size_t idx_y, 
                               const Point<3U>& xy1,
                               const Point<3U>& xy2,
                               const Point<3U>& coord, 
-                              double64 p1, double64 p2, double64 p3, double64 p4 )
+                              double p1, double p2, double p3, double p4 )
 {
       // If min-coords. are equivalent to max-coords. the boundary-value average 
       // is assigned.
@@ -670,8 +670,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
       if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;
     
       // 4. computing interpolation functions. Num. Recip. p. 105
-      double64 t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
-      double64 u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
+      double t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      double u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
       
       // 5 bi-linear interpolation
       return (1.-t) * (1.-u) * p1 + t * (1.-u) * p2 + t * u * p3 + (1.-t) * u * p4;   
@@ -680,18 +680,18 @@ double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
 
 
 /// interpolate along boundaries of 2D rectangle-shaped model
-double64 linearInterpolate( const pair<Point<1U>,double64>& p1, // endpoint1, value1
-                            const pair<Point<1U>,double64>& p2, // endpoint2, value2
+double linearInterpolate( const pair<Point<1U>,double>& p1, // endpoint1, value1
+                            const pair<Point<1U>,double>& p2, // endpoint2, value2
                             const Point<1U>& pt )                // current point x,y,z
 {
     // endmember value range
-    double64 dval = p2.second - p1.second;
+    double dval = p2.second - p1.second;
     
     // distance between endpoints
-    double64 dx = p2.first[0] - p1.first[0];
+    double dx = p2.first[0] - p1.first[0];
     
     // distance between current point and point 1
-    double64 dist = pt[0] - p1.first[0];
+    double dist = pt[0] - p1.first[0];
 
     // computing the interpolated value (y = b + mx)
     //     min     normalized distance    gradient
@@ -702,19 +702,19 @@ double64 linearInterpolate( const pair<Point<1U>,double64>& p1, // endpoint1, va
 
 
 /// interpolate along boundaries of 2D rectangle-shaped model
-double64 linearInterpolate( const pair<Point<2U>,double64>& p1, // endpoint1, value1
-                            const pair<Point<2U>,double64>& p2, // endpoint2, value2
+double linearInterpolate( const pair<Point<2U>,double>& p1, // endpoint1, value1
+                            const pair<Point<2U>,double>& p2, // endpoint2, value2
                             const Point<2U>& pt )                // current point x,y,z
 {
     // endmember value range
-    double64 dval = p2.second - p1.second;
+    double dval = p2.second - p1.second;
     
     // distance between endpoints
-    double64 dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
+    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
                            (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) );
     
     // distance between current point and point 1
-    double64 dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
+    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
                            (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) );
 
     // computing the interpolated value (y = b + mx)
@@ -725,20 +725,20 @@ double64 linearInterpolate( const pair<Point<2U>,double64>& p1, // endpoint1, va
 
 
 /// interpolate along boundaries of 2D rectangle-shaped model
-double64 linearInterpolate( const pair<Point<3U>,double64>& p1, // endpoint1, value1
-                             const pair<Point<3U>,double64>& p2, // endpoint2, value2
+double linearInterpolate( const pair<Point<3U>,double>& p1, // endpoint1, value1
+                             const pair<Point<3U>,double>& p2, // endpoint2, value2
                              const Point<3U>& pt )                // current point x,y,z
 {
     // endmember value range
-    double64 dval = p2.second - p1.second;
+    double dval = p2.second - p1.second;
     
     // distance between endpoints
-    double64 dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
+    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
                            (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) +
                            (p2.first[2]-p1.first[2])*(p2.first[2]-p1.first[2]) );
     
     // distance between current point and point 1
-    double64 dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
+    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
                            (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) +
                            (pt[2]-p1.first[2])*(pt[2]-p1.first[2]) );
 
@@ -788,7 +788,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearHexahedron     fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<long64>::iterator
+                    for ( std::vector<int64_t>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -805,7 +805,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearPyramid        fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<long64>::iterator
+                    for ( std::vector<int64_t>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -822,7 +822,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearPrism fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<long64>::iterator
+                    for ( std::vector<int64_t>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -839,7 +839,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearTetrahedron fem;
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<long64>::iterator
+                    for ( std::vector<int64_t>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -856,7 +856,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearQuadrilateral  fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<long64>::iterator
+                    for ( std::vector<int64_t>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -873,7 +873,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearTriangle fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<long64>::iterator
+                    for ( std::vector<int64_t>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -890,7 +890,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                     csmp::IsoparametricLinearLineElement    fem(3);
                     fem.XY.Resize( enodes, dim );
                     lnid = 0;
-                    for ( std::vector<long64>::iterator
+                    for ( std::vector<int64_t>::iterator
                           nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
                     {
                         nid = (*nit);
@@ -908,7 +908,7 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
             }
             var *= volume;
             /// summ up data
-            for ( std::vector<long64>::iterator
+            for ( std::vector<int64_t>::iterator
                   nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit )
             {
                 nid = (*nit);
@@ -1233,12 +1233,12 @@ Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& qu
 
         // 2. Test against axis-aligned bounding box
 
-        double64 minx = +std::numeric_limits<double64>::max();
-        double64 miny = +std::numeric_limits<double64>::max();
-        double64 minz = +std::numeric_limits<double64>::max();
-        double64 maxx = -std::numeric_limits<double64>::max();
-        double64 maxy = -std::numeric_limits<double64>::max();
-        double64 maxz = -std::numeric_limits<double64>::max();
+        double minx = +std::numeric_limits<double>::max();
+        double miny = +std::numeric_limits<double>::max();
+        double minz = +std::numeric_limits<double>::max();
+        double maxx = -std::numeric_limits<double>::max();
+        double maxy = -std::numeric_limits<double>::max();
+        double maxz = -std::numeric_limits<double>::max();
         const size_t iNrNodes = (*eit)->Nodes();
         for ( size_t iNode = 0; iNode < iNrNodes; ++iNode ) {
           auto n = (*eit)->N(iNode);
@@ -1271,8 +1271,8 @@ Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& qu
 
             auto normal = crossProduct(p2-p0, p1-p0);
             normal.NormalizeLengthTo(1.0f);
-            const double64 queryDotNormal = dotProduct(query, normal);
-            const double64 p0DotNormal = dotProduct(p0, normal);
+            const double queryDotNormal = dotProduct(query, normal);
+            const double p0DotNormal = dotProduct(p0, normal);
 
             if (queryDotNormal < p0DotNormal) {
               reject = true;
@@ -1324,7 +1324,7 @@ void readVectorOfVectors( ifstream& ifs, size_t total_items, size_t entries_per_
          // node ID's in file range 0...nodes-1
          vector<T> data;
          data.reserve( entries_per_vector );
-         int32 id;
+         int32_t id;
          for ( size_t i=0; i<entries_per_vector; ++i ) {
               ifs >> id;
               assert( id >= 0 && id << total_items ); // assumption that there are not more nodes that elements*nodes_per_element
@@ -1358,8 +1358,8 @@ template void readVectorOfVectors( ifstream&, size_t, size_t, deque<vector<size_
       @date 4/10/2021
       
  */
-size_t createUniqueCombinations( std::vector<long64>& sequence, long64 samples,
-                                 std::deque<std::vector<long64> >& combinations )
+size_t createUniqueCombinations( std::vector<int64_t>& sequence, size_t samples,
+                                 std::deque<std::vector<int64_t> >& combinations )
  {
     // checking the input
     if ( sequence.empty() ) return 0U;
@@ -1376,7 +1376,7 @@ size_t createUniqueCombinations( std::vector<long64>& sequence, long64 samples,
     bitmask.resize(N, 0);            // adding (N - samples) trailing 0's
  
     do {
-        combinations.push_back( std::vector<long64>{} );
+        combinations.push_back( std::vector<int64_t>{} );
         combinations.back().reserve( samples );
         for ( size_t i=0; i < N; ++i ) { // [0..N-1] integers
              if ( bitmask[i] == 1 )
@@ -1393,9 +1393,9 @@ size_t createUniqueCombinations( std::vector<long64>& sequence, long64 samples,
 // usage example for createUniqueCombinations()
 static void test_createUniqueCombinations()
  {
-   vector<long>          sequence{0,123,20,43,17,5,8};
-   const long            samples{2};
-   deque<vector<long> >  combinations;
+   vector<int64_t>          sequence{0,123,20,43,17,5,8};
+   const int64_t            samples{2};
+   deque<vector<int64_t> >  combinations;
    
    size_t n_combinations = createUniqueCombinations( sequence, samples, combinations );
    

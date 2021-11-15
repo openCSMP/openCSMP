@@ -10,10 +10,10 @@ class PicardIntegrator : public IterativeIntegrator<dim,COMPUTATION_DOMAIN> {
   public:
     PicardIntegrator();
     
-    virtual double64 Residual();
+    virtual double Residual();
     
   private:
-    std::vector<double64> resid_;
+    std::vector<double> resid_;
 };
 
 

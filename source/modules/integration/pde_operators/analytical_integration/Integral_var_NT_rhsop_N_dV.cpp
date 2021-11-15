@@ -17,7 +17,7 @@ Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_rhsop_N_dV( const Prope
                                                                           const char* basic,
                                                                           const char* test,
                                                                           const char* var,
-                                                                          const double64 prefactor)
+                                                                          const double prefactor)
   : MathOperatorRHS<dim>(pref,oper,basic),
     basic_(pref.Parameter(test)),
     var_(pref.Parameter(var)),

@@ -320,7 +320,7 @@ typename std::vector<CELL<dim>*>::iterator  ModelSubDomain<dim,CELL>::ElementsEn
 
 */
 template<size_t dim, template<size_t> class CELL>
-pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
+pair<int32_t,int32_t>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
  {
     bool with_volume_elements(false);
     bool with_surface_elements(false);
@@ -333,11 +333,11 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
          else if ( (*it)->IsVolumeElement() )  with_volume_elements = true;
       }
 
-    int32 counter(0);
+    int32_t counter(0);
     if ( with_volume_elements )  counter++;
     if ( with_surface_elements ) counter++;
     if ( with_line_elements )    counter++;
-    int32 highest_spatial_dim(LINE);
+    int32_t highest_spatial_dim(LINE);
     if      ( with_volume_elements )  highest_spatial_dim = VOLUME;
     else if ( with_surface_elements ) highest_spatial_dim = SURFACE;
 
@@ -530,7 +530,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     // 0. detecting whether this region contains lower-dimensional elements
     // --------------------------------------------------------------------
     // pair contains: 1) number of spatial element dimensions in region, 2)  highest contained dimension
-    const pair<int32,int32>  elmt_dim = SpatialDimensions();
+    const pair<int32_t,int32_t>  elmt_dim = SpatialDimensions();
 
     // -----------------------------------------------------------------
     // 1. distinguishing boundary from interior elements, same for nodes
@@ -733,7 +733,7 @@ cout.flush();
     // 2. rebuilding the element vector
     // --------------------------------------------------
 //    assert( interior_elmts.size() + boundary_elmts.size() == this->elmt_vec_.size() );
-    // appending the boundary element vector<double64> to the interior element vector
+    // appending the boundary element vector<double> to the interior element vector
     this->elmt_vec_.clear();
     this->elmt_vec_.assign( interior_elmts.begin(), interior_elmts.end() );
     back_insert_iterator<vector<CELL<dim>*> >  back_it(this->elmt_vec_);
@@ -1063,7 +1063,7 @@ size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
 
 /**
 
-Returns a vector<double64> with the ID numbers of the Elements which belong
+Returns a vector<double> with the ID numbers of the Elements which belong
 to the Region.
 */
 template<size_t dim, template<size_t> class CELL>
@@ -1360,7 +1360,7 @@ void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* chara
 /**
 
 Assigns node coordinates to the supplied node variable which may be either
-of scalar or vector<double64> type. If either the X, Y, or Z coordinate are to be
+of scalar or vector<double> type. If either the X, Y, or Z coordinate are to be
 assigned to a scalar variable an index from 0...dim-1 must be supplied
 to indicate which coordinate axis shall be mapped.
 
@@ -1395,7 +1395,7 @@ void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo(  const char* vector_vari
 
       if ( prop_key.type != VECTOR )
        throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
-                                    "Node coordinates can only be assigned to a vector<double64> variable");
+                                    "Node coordinates can only be assigned to a vector<double> variable");
 
      if ( prop_key.place != NODE )
        throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
@@ -1465,7 +1465,7 @@ void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo( const char* scalar_varia
 /** Returns min/max of property values inside a region into its arguments.
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double64& gmin, double64& gmax ) const
+void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double& gmin, double& gmax ) const
  {
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
@@ -1487,11 +1487,11 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double64& gmin, d
     @todo SKM this wants to be a lambda function in the next method.
 */
 template<size_t dim>
-void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64& tmax )
+void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tmax )
  {
     VectorVariable<dim>  evals;
     ts.EigenValues( evals );
-    std::set<double64> min_max;
+    std::set<double> min_max;
     for ( size_t i=0U; i<dim; i++ ) min_max.insert( evals[i] );
     tmin = (*min_max.begin());
     tmax = (*min_max.rbegin());
@@ -1507,7 +1507,7 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64&
     @attention for tensor variables the maximum Eigenvalue is recovered.
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& vmin, double64& vmax ) const
+void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vmin, double& vmax ) const
  {
      if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf",
@@ -1560,7 +1560,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             vmin = vmax = vc.Length();
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, vc );
-                 const double64  vlength(vc.Length());
+                 const double  vlength(vc.Length());
                  vmin = std::min( vmin, vlength );
                  vmax = std::max( vmax, vlength );
                  nit++;
@@ -1571,7 +1571,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*nit)->Read(prop_key,ts); nit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, ts );
                  minMaxEigenValues( ts, tmin, tmax );
@@ -1585,7 +1585,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*nit)->Read(prop_key,a); nit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -1599,7 +1599,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*nit)->Read(prop_key,a); nit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -1631,7 +1631,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             vmin = vmax = vc.Length();
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, vc );
-                 const double64  vlength(vc.Length());
+                 const double  vlength(vc.Length());
                  vmin = std::min( vmin, vlength );
                  vmax = std::max( vmax, vlength );
                  eit++;
@@ -1642,7 +1642,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, ts );
                  minMaxEigenValues( ts, tmin, tmax );
@@ -1656,7 +1656,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -1670,7 +1670,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -1705,7 +1705,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, vc );
-                     const double64  vlength(vc.Length());
+                     const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
                      vmax = std::max( vmax, vlength );
                   }
@@ -1717,7 +1717,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(0U,prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, ts );
@@ -1733,7 +1733,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, a );
@@ -1749,7 +1749,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, a );
@@ -1791,7 +1791,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
                      (*eit)->Read( i, j, prop_key, vc );
-                     const double64  vlength(vc.Length());
+                     const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
                      vmax = std::max( vmax, vlength );
                   }
@@ -1803,7 +1803,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(0U,0U,prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
@@ -1820,7 +1820,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
@@ -1837,7 +1837,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
@@ -1880,7 +1880,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
                      (*eit)->Read( i, j, prop_key, vc );
-                     const double64  vlength(vc.Length());
+                     const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
                      vmax = std::max( vmax, vlength );
                   }
@@ -1892,7 +1892,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(0U,0U,prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
@@ -1909,7 +1909,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
@@ -1926,7 +1926,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
@@ -1941,7 +1941,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
          }
      } // end sector integration points for any element, face or interface
 
-    vmin = vmax = std::numeric_limits<double64>::signaling_NaN();
+    vmin = vmax = std::numeric_limits<double>::signaling_NaN();
 
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
     csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
@@ -2607,8 +2607,8 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              VARIABLE_FLAG new_status_of_scalar,
-                                                             double64 min_value_to_change,
-                                                             double64 max_value_to_change )
+                                                             double min_value_to_change,
+                                                             double max_value_to_change )
  {
     vector<VARIABLE_FLAG>  status(1U,new_status_of_scalar);
     ChangePropertyStatusWhere( property, status, min_value_to_change, max_value_to_change );
@@ -3031,7 +3031,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              const std::vector<VARIABLE_FLAG>& status,
-                                                             double64 pmin, double64 pmax )
+                                                             double pmin, double pmax )
  {
     csmp::Index  prop_key = pref_.StorageKey(property);
 
@@ -3232,7 +3232,7 @@ template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              size_t position,
                                                              VARIABLE_FLAG status,
-                                                             double64 pmin, double64 pmax )
+                                                             double pmin, double pmax )
  {
     csmp::Index  prop_key = pref_.StorageKey(property);
 
@@ -3549,7 +3549,7 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty( const
           return;
        }
 
-     vector<double64>  IPOL;
+     vector<double>  IPOL;
 
      switch( c_key.type )
        {
@@ -3908,24 +3908,24 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
      // 2. The element property values are weighted by the area of the element and then
      //    added for each node to a property array vector, the number of additions to each
      //    node is counted
-     vector<double64>  sum( Nodes(), 0. );
+     vector<double>  sum( Nodes(), 0. );
 
      RenumberNodes();
 
      // SCALAR VARIABLES
      // ----------------
      if ( e_key.type == SCALAR ) {
-          vector<double64>  sc_data( Nodes(), 0. );
+          vector<double>  sc_data( Nodes(), 0. );
           if ( !by_distance )
             {
                for ( typename vector<CELL<dim>*>::const_iterator
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     // getting the properties
-                    double64 sc = (*eit)->Read( e_key );
+                    double sc = (*eit)->Read( e_key );
 
                     // weighting property value by element volume
-                    double64 volume = (*eit)->Volume();
+                    double volume = (*eit)->Volume();
                     sc *= volume;
 
                     for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
@@ -3940,13 +3940,13 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   {
                      // reading element property
-                     double64 sc = (*eit)->Read( e_key );
+                     double sc = (*eit)->Read( e_key );
                      // measuring distances from element to nodes to
                      // weight property values
                      Point<dim>  ctr((*eit)->BaryCenter());
 
                      for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
-                          double64 dist((ctr - (*eit)->N(i)->Coordinate()).Length());
+                          double dist((ctr - (*eit)->N(i)->Coordinate()).Length());
                           // memorizing distances and weighted values
                           sc_data[ (*eit)->N(i)->Idx() ] += sc / dist;
                           sum[ (*eit)->N(i)->Idx() ]     += 1. / dist;
@@ -3976,7 +3976,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     (*eit)->Read( e_key, vc );
-                    double64  volume = (*eit)->Volume();
+                    double  volume = (*eit)->Volume();
                     vc *= volume;
 
                     for ( size_t i=0; i<(*eit)->Nodes(); i++ )
@@ -3998,7 +3998,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      Point<dim>  ctr((*eit)->BaryCenter());
 
                      for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
-                          double64 dist((ctr - (*eit)->N(i)->Coordinate()).Length());
+                          double dist((ctr - (*eit)->N(i)->Coordinate()).Length());
                           // memorizing distances and weighted values
                           vc_data[ (*eit)->N(i)->Idx() ] += vc / dist;
                           sum[ (*eit)->N(i)->Idx() ]     += 1. / dist;
@@ -4026,7 +4026,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     (*eit)->Read( e_key, ts );
-                    double64 volume = (*eit)->Volume();
+                    double volume = (*eit)->Volume();
                     ts *= volume;
 
                     for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
@@ -4048,7 +4048,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      Point<dim>  ctr((*eit)->BaryCenter());
 
                      for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
-                          double64 dist((ctr - (*eit)->N(i)->Coordinate()).Length());
+                          double dist((ctr - (*eit)->N(i)->Coordinate()).Length());
                           // memorizing distances and weighted values
                           ts_data[ (*eit)->N(i)->Idx() ] += ts / dist;
                           sum[ (*eit)->N(i)->Idx() ]     += 1. / dist;
@@ -4131,11 +4131,11 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
     RenumberNodes();
 
     // required vectors
-    vector<double64>  cp_var, n_var;
+    vector<double>  cp_var, n_var;
 
     // SCALAR PROPERTIES
     if ( n_key.type == SCALAR ) {
-         vector<double64> temp( Nodes(), 0. ), sum( Nodes(), 0. );
+         vector<double> temp( Nodes(), 0. ), sum( Nodes(), 0. );
          const size_t  variable_components(1U);
          for ( typename vector<CELL<dim>*>::const_iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
@@ -4145,12 +4145,12 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               // extrapolating it to nodes
               n_var.resize( (*it)->Nodes() );                 // components = 1
               (*it)->ExtrapolateIntegrationPointVariableToNodes( variable_components, cp_var, n_var );
-              // weighting and accumulating it into vector<double64> for later averaging
+              // weighting and accumulating it into vector<double> for later averaging
               const Point<dim>  barycenter((*it)->BaryCenter());
               for ( size_t i=0U; i<(*it)->Nodes(); i++ )
                 {
                    // finding the distance of the node from the barycentre
-                   const double64 distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
+                   const double distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
                    temp[ (*it)->N(i)->Idx() ] += n_var[i] / distance;
                    sum[  (*it)->N(i)->Idx() ] += 1. / distance;
                 }
@@ -4162,7 +4162,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
 
     // VECTOR PROPERTIES
     else if ( n_key.type == VECTOR ) {
-         // creating a zero-initialized temporary vector<double64>
+         // creating a zero-initialized temporary vector<double>
          VectorVariable<dim>  zero_vec; zero_vec=0.;
          vector<VectorVariable<dim> > cpvec, temp( Nodes(), zero_vec ), sum( Nodes(), zero_vec );
          const size_t  vcomponents(dim);
@@ -4172,7 +4172,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               cpvec.resize( (*it)->IntegrationPoints() );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 (*it)->Read( i, c_key, cpvec[i] );
-              // rolling the vector<double64> variables out into linear vector<double64> cp_var
+              // rolling the vector<double> variables out into linear vector<double> cp_var
               cp_var.resize( (*it)->IntegrationPoints() * vcomponents );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 for ( size_t j=0U; j<vcomponents; j++ ) cp_var[ i * vcomponents + j ] = cpvec[i][j];
@@ -4180,13 +4180,13 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               n_var.resize( (*it)->Nodes() * vcomponents ); // components = 1
               (*it)->ExtrapolateIntegrationPointVariableToNodes( vcomponents, cp_var, n_var );
 
-              // weighting and accumulating it into vector<double64> for later averaging
+              // weighting and accumulating it into vector<double> for later averaging
               const Point<dim>  barycenter((*it)->BaryCenter());
-              // accumulating result into vector<double64> for later averaging
+              // accumulating result into vector<double> for later averaging
               for ( size_t i=0U; i<(*it)->Nodes(); i++ )
                 {
                    // finding the distance of the node from the barycentre
-                   const double64 distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
+                   const double distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
                    for ( size_t j=0U; j<vcomponents; j++ ) {
                          temp[ (*it)->N(i)->Idx() ](j) += n_var[ i * vcomponents + j ] / distance;
                          sum[  (*it)->N(i)->Idx() ](j) += 1. / distance;
@@ -4196,7 +4196,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
           // distance weighting and averaging the extrapolated node values
          for ( typename vector<csmp::Node<dim>*>::iterator it=NodesBegin(); it!=NodesEnd(); it++ )
            {
-              // averaging the vector<double64> variable
+              // averaging the vector<double> variable
               for ( size_t j=0U; j<vcomponents; j++ ) {
                    temp[ (*it)->Idx() ](j) /= sum[ (*it)->Idx() ](j);
                    temp[ (*it)->Idx() ].Flag(j) = (*it)->Status( n_key, j );
@@ -4210,7 +4210,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
     if ( n_key.type == TENSOR ) {
           csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                             "distance weighting is not applied; tensor values are simply averaged at the nodes.");
-         // creating a zero-initialized temporary vector<double64>
+         // creating a zero-initialized temporary vector<double>
          TensorVariable<dim>  zero_ts; zero_ts=0.;
          vector<TensorVariable<dim> > cpts, temp( Nodes(), zero_ts );
          const size_t  tcomponents(dim * dim);
@@ -4220,7 +4220,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               cpts.resize( (*it)->IntegrationPoints() );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 (*it)->Read( i, c_key, cpts[i] );
-              // rolling the tensor variable rows out sequentially into the linear vector<double64> cp_var
+              // rolling the tensor variable rows out sequentially into the linear vector<double> cp_var
               cp_var.resize( (*it)->IntegrationPoints() * tcomponents );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 for ( size_t j=0U; j<dim; j++ )
@@ -4228,7 +4228,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               // extrapolating constraint point property to nodes
               n_var.resize( (*it)->Nodes() * tcomponents ); // components = 1
               (*it)->ExtrapolateIntegrationPointVariableToNodes( tcomponents, cp_var, n_var );
-              // accumulating result into tensor variable vector<double64> for later averaging
+              // accumulating result into tensor variable vector<double> for later averaging
               for ( size_t i=0U; i<(*it)->Nodes(); i++ )
                 for ( size_t j=0U; j<dim; j++ )
                   for ( size_t k=0U; k<dim; k++ )
@@ -4240,7 +4240,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               // averaging the tensor variable
               for ( size_t j=0U; j<dim; j++ )
                 for ( size_t k=0U; k<dim; k++ )
-                  temp[ (*it)->Idx() ](j,k) /= static_cast<double64>( (*it)->Parents() );
+                  temp[ (*it)->Idx() ](j,k) /= static_cast<double>( (*it)->Parents() );
               // storing it
               (*it)->Store( n_key, temp[ (*it)->Idx() ] );
            }
@@ -4266,7 +4266,7 @@ or elements that belong to the region, depending on where the target property is
 @param prop The name of the property which shall be averaged.
 */
 template<size_t dim, template<size_t> class CELL>
-double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
+double  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
  {
     const csmp::Index  idx = pref_.StorageKey(prop);
     size_t             counter(0U);
@@ -4286,37 +4286,37 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
         case INTER_FACE:
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, sc );
                       avg += sc();
                    }
-                 return avg / static_cast<double64>(elmt_vec_.size());
+                 return avg / static_cast<double>(elmt_vec_.size());
               }
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, vc );
                       avg += vc.Length();
                    }
-                 return avg /= static_cast<double64>(elmt_vec_.size());
+                 return avg /= static_cast<double>(elmt_vec_.size());
               }
             if ( idx.type == TENSOR ) {
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, ts );
                       ts.EigenValues( evals );
-                      double64 ts_avg(0.);
+                      double ts_avg(0.);
                       for ( size_t j=0U; j<dim; j++ ) ts_avg += evals[j];
-                      avg += ts_avg / static_cast<double64>(dim);
+                      avg += ts_avg / static_cast<double>(dim);
                    }
-                 return avg / static_cast<double64>(elmt_vec_.size());
+                 return avg / static_cast<double>(elmt_vec_.size());
               }
           break;
         case ELEMENT_INTEGRATION_POINT:
@@ -4324,7 +4324,7 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
             counter = 0U;
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
@@ -4332,11 +4332,11 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
                         counter++;
                         avg += sc();
                      }
-                 return avg / static_cast<double64>(elmt_vec_.size());
+                 return avg / static_cast<double>(elmt_vec_.size());
               }
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
@@ -4344,66 +4344,66 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
                         counter++;
                         avg += vc.Length();
                      }
-                 return avg /= static_cast<double64>(counter);
+                 return avg /= static_cast<double>(counter);
               }
             if ( idx.type == TENSOR ) {
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         (*eit)->Read( i, idx, ts );
                         counter++;
                         ts.EigenValues( evals );
-                        double64 ts_avg(0.);
+                        double ts_avg(0.);
                         for ( size_t j=0U; j<dim; j++ ) ts_avg += evals[j];
-                        avg += ts_avg / static_cast<double64>(dim);
+                        avg += ts_avg / static_cast<double>(dim);
                      }
-                 return avg / static_cast<double64>(counter);
+                 return avg / static_cast<double>(counter);
               }
           break;
         case NODE:
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<csmp::Node<dim>*>::const_iterator
                        it=node_vec_.begin(); it!=node_vec_.end(); it++ ) {
                       (*it)->Read( idx, sc );
                       avg += sc();
                    }
-                 return avg / static_cast<double64>(node_vec_.size());
+                 return avg / static_cast<double>(node_vec_.size());
               }
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<csmp::Node<dim>*>::const_iterator
                        it=node_vec_.begin(); it!=node_vec_.end(); it++ ) {
                       (*it)->Read( idx, vc );
                       avg += vc.Length();
                    }
-                 return avg /= static_cast<double64>(node_vec_.size());
+                 return avg /= static_cast<double>(node_vec_.size());
               }
             if ( idx.type == TENSOR ) {
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<csmp::Node<dim>*>::const_iterator
                        it=node_vec_.begin(); it!=node_vec_.end(); it++ ) {
                       (*it)->Read( idx, ts );
                       ts.EigenValues( evals );
-                      double64 ts_avg(0.);
+                      double ts_avg(0.);
                       for ( size_t j=0U; j<dim; j++ ) ts_avg += evals[j];
-                      avg += ts_avg / static_cast<double64>(dim);
+                      avg += ts_avg / static_cast<double>(dim);
                    }
-                 return avg / static_cast<double64>(node_vec_.size());
+                 return avg / static_cast<double>(node_vec_.size());
               }
          break;
          default:
             throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RegionAverage:", "property placement not handled yet.");
        }
 
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
 
  } // end Average
 
@@ -4413,7 +4413,7 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
 /**
 
 Provided that property 'a' is a scalar node variable and property 'b' is a
-vector<double64> variable placed on the element, CopyGradientOfProperty_A_To_B() will
+vector<double> variable placed on the element, CopyGradientOfProperty_A_To_B() will
 calculate the gradient of property 'a' for each element and assign the
 result to the element variable 'b'.
 
@@ -4421,7 +4421,7 @@ result to the element variable 'b'.
 
 The method takes two name strings as arguments. The first string specifies
 the scalar node variable of which the gradient will be calculated and the
-second string identifies the vector<double64> variable placed on the element which
+second string identifies the vector<double> variable placed on the element which
 will store the calculated gradient of property 'a'.
 
 @section application Application
@@ -4566,7 +4566,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                       for ( size_t j=0U; j<dim; j++ )
                         ts(i,j) += DN(i,n) * VC[n][j];
 
-                  // saving the resulting vector<double64>
+                  // saving the resulting vector<double>
                   (*eit)->Store( b_key, ts );
                }
              return true;
@@ -4589,7 +4589,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                           for ( size_t j=0U; j<dim; j++ )
                             ts(i,j) += DN(i,n) * VC[n][j];
 
-                      // saving the resulting vector<double64>
+                      // saving the resulting vector<double>
                       (*eit)->Store( i, b_key, ts );
                     }
                }
@@ -4673,7 +4673,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                for ( size_t j=0U; j<dim; j++ )
                  vc(j) += DN(j,i) * SC[i]();
 
-             // saving the resulting vector<double64>
+             // saving the resulting vector<double>
              (*eit)->Store( b_key, vc );
           }
       }
@@ -4702,7 +4702,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                  for ( size_t j=0U; j<dim; j++ )
                    ts(i,j) += DN(i,n) * VC[n][j];
 
-             // saving the resulting vector<double64>
+             // saving the resulting vector<double>
              (*eit)->Store( b_key, ts );
           }
       }

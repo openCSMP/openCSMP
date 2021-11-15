@@ -108,7 +108,7 @@ class PropertyData {
     void PushBack( VARIABLE_FLAG );
 
     /// 'raw' inserter for values (user must ascertain that stride is correct); use pushBack() for objects
-    void PushBack( double64 );
+    void PushBack( double );
   
     /// inserter from another PropertyData
     void PushBackFrom( const PropertyData& data, size_t nth_value );
@@ -125,26 +125,26 @@ class PropertyData {
     VARIABLE_FLAG  Flag( size_t nth_value, size_t ith_row, size_t jth_col ) const;
  
     /// scalars
-    double64&      Value( size_t nth_value );
-    double64       Value( size_t nth_value ) const;
+    double&      Value( size_t nth_value );
+    double       Value( size_t nth_value ) const;
     /// vectors and array variables
-    double64&      Value( size_t nth_value, size_t ith_dim );
-    double64       Value( size_t nth_value, size_t ith_dim ) const;
+    double&      Value( size_t nth_value, size_t ith_dim );
+    double       Value( size_t nth_value, size_t ith_dim ) const;
     /// tensors
-    double64&      Value( size_t nth_value, size_t ith_row, size_t jth_col );
-    double64       Value( size_t nth_value, size_t ith_row, size_t jth_col ) const;
+    double&      Value( size_t nth_value, size_t ith_row, size_t jth_col );
+    double       Value( size_t nth_value, size_t ith_row, size_t jth_col ) const;
   
     /// checks range; all values included
-    void MinMaxOf( double64& tmin, double64& tmax ) const;
+    void MinMaxOf( double& tmin, double& tmax ) const;
   
     /// scales the current variable range to the new one; all values are scaled
-    void ScaleRangeTo( double64 tmin, double64 tmax );
+    void ScaleRangeTo( double tmin, double tmax );
 
     /// add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes)
-    void OffsetRangeBy( double64 offset_value );
+    void OffsetRangeBy( double offset_value );
   
     /// takes a pointer to a typical math function like double sqrt(double) as argument; applied this function to all values
-    void TransformValues( double64 (*f)(double64) );
+    void TransformValues( double (*f)(double) );
 
     /// writing stored flag and data values to file
     bool OutBinary( std::fstream& fp ) const;
@@ -161,7 +161,7 @@ class PropertyData {
     const size_t                flag_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
     const size_t                data_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
     std::vector<VARIABLE_FLAG>  flags_;        ///< variable flags
-    std::vector<double64>       data_;         ///< variable values
+    std::vector<double>       data_;         ///< variable values
  };
 
 

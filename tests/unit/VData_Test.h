@@ -24,11 +24,11 @@ public:
 
 /** TESTING DATA MEMBERS
 
-    std::vector<double64>             px, py, pz; (1)
+    std::vector<double>             px, py, pz; (1)
     std::deque<std::vector<size_t> >  plist;      (2)
-    std::deque<std::vector<int32> >   pfverts;    (3)
-    std::map<size_t,int32>            bflags;     (4)
-    std::vector<int32>                pelmt;      (5)
+    std::deque<std::vector<int32_t> >   pfverts;    (3)
+    std::map<size_t,int32_t>            bflags;     (4)
+    std::vector<int32_t>                pelmt;      (5)
 
     (1) ... size of node# goes from 0..(n-1): node coordinates
     (2) ... plist: deque size of element#. each entry contains

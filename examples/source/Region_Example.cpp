@@ -71,7 +71,7 @@ void Region_Example::Run()
    delete log_k;
 
    // calculate hydraulic conductivity, K = k / mu
-   const double64 fluid_viscosity(1.0e-03);
+   const double fluid_viscosity(1.0e-03);
    ConstantFactor<DIM,divides>  conductivity( model.Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );
@@ -284,7 +284,7 @@ void Region_Example::Run()
    xyz_max.Out();
 
    cout <<"\n\n\nmain: fluid pressure min/max: ";
-   double64  gmin, gmax;
+   double  gmin, gmax;
    model.Region("FRACS").MinMaxOf( "fluid pressure", gmin, gmax );
    //  test: O.K.        ^^^^^^^^
    cout << gmin <<" - "<< gmax << endl;

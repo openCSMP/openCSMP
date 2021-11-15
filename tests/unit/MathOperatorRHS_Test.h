@@ -2,7 +2,6 @@
 #define CSMP_MATH_OPERATOR_RHS_TEST_H
 
 #include "Test.h"
-#include "CSMP_number_types.h"
 #include "Model1D.h"
 #include "PropertyDatabase.h"
 
@@ -39,7 +38,7 @@ public:
   void MathOperatorRHS_TestFunctionOperand();
     
 private:
-  double64 fTolerance;
+  double fTolerance;
   Model1D<1U>* model_;
   PropertyDatabase<1>& database_;
   

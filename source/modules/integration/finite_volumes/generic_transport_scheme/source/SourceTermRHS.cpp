@@ -27,7 +27,7 @@ SourceTermRHS<dim>::SourceTermRHS( const csmp::INDEX<SCALAR,ELEMENT>& source_var
 
 
 template<size_t dim>
-void SourceTermRHS<dim>::AccumulateFiniteVolume( const Node<dim>& n, std::vector<double64>& rhs ) const
+void SourceTermRHS<dim>::AccumulateFiniteVolume( const Node<dim>& n, std::vector<double>& rhs ) const
  {
     rhs[ n.Idx() ] += n.Read( nsrc_key_ ) * n.Read( adv_key_ );
  }
@@ -35,13 +35,13 @@ void SourceTermRHS<dim>::AccumulateFiniteVolume( const Node<dim>& n, std::vector
 
     /// accumulates distributed values of the source term on the finite volume
 template<size_t dim>
-void SourceTermRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<double64>& rhs ) const
+void SourceTermRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<double>& rhs ) const
  {
-    double64 esource = e.Read( esrc_key_ );
-    if ( fabs(esource) < numeric_limits<double64>::epsilon() ) return;
+    double esource = e.Read( esrc_key_ );
+    if ( fabs(esource) < numeric_limits<double>::epsilon() ) return;
     
     const size_t nodes = e.Nodes();
-    esource /= static_cast<double64>(nodes);
+    esource /= static_cast<double>(nodes);
     for ( size_t i=0U; i<nodes; ++i )
       rhs[ e.N(i)->Idx() ] += esource * e.N(i)->Read( adv_key_ );
  }

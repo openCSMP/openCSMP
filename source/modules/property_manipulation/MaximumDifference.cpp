@@ -33,11 +33,11 @@ template class MaximumDifference<3U>;
 
 
 template<size_t dim>
-double64 maximumDifference( const Model<dim>& sg,
+double maximumDifference( const Model<dim>& sg,
                             const char* new_property, const char* old_property, bool normalise )
  {
    const bool      absolute(!normalise);
-   double64        residual(0.), temp;
+   double        residual(0.), temp;
    ScalarVariable  new_prop, old_prop;
    
    const csmp::Region<dim>&  sgref(sg.Region("Model"));
@@ -92,9 +92,9 @@ double64 maximumDifference( const Model<dim>& sg,
    return residual;
 }
 
-template double64 maximumDifference( const Model<1U>&, const char*, const char*, bool );
-template double64 maximumDifference( const Model<2U>&, const char*, const char*, bool );
-template double64 maximumDifference( const Model<3U>&, const char*, const char*, bool );
+template double maximumDifference( const Model<1U>&, const char*, const char*, bool );
+template double maximumDifference( const Model<2U>&, const char*, const char*, bool );
+template double maximumDifference( const Model<3U>&, const char*, const char*, bool );
 
 
 

@@ -1,7 +1,6 @@
 #ifndef CSMP_NEW_EVENT_H
 #define CSMP_NEW_EVENT_H
 
-#include "CSMP_number_types.h"
 #include "Node.h"
 
 namespace csmp {
@@ -23,9 +22,9 @@ class Event {
     void inPEPStack(bool boolean) {inPEPStack_ = boolean;}
     bool inQueue() const {return inQueue_;}
     void inQueue(bool boolean) {inQueue_ = boolean;}    
-    double64 t_schedule() const {return t_schedule_;}
-    void t_schedule(double64 time) {t_schedule_ = time;}
-    std::vector<double64> facetAreaCollection;
+    double t_schedule() const {return t_schedule_;}
+    void t_schedule(double time) {t_schedule_ = time;}
+    std::vector<double> facetAreaCollection;
     std::vector<Point<dim>> facetNormalCollection;
 
   private:
@@ -33,7 +32,7 @@ class Event {
     bool valid_; //validity
     bool inPEPStack_; //whether in PEPStack  
     bool  inQueue_; //whether in event queue      
-    double64 t_schedule_; //scheduled time stamp used for sorting event queue
+    double t_schedule_; //scheduled time stamp used for sorting event queue
 };
 
 } // csmp

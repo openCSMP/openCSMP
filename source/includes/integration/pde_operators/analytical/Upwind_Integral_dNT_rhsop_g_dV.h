@@ -15,7 +15,7 @@ class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim> {
                                    const char* test,
                                    const char* upwind,
                                    const char* trigger,
-                                   const double64 prefactor = 1. );
+                                   const double prefactor = 1. );
     
     virtual void GetOperands( SIMPLEX& e );
     /// integration etc.
@@ -25,14 +25,14 @@ class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim> {
   
   private:
     DenseMatrix<DM_MIN>  DN, DNT, coords;
-    double64                          gravity;   // acceleration of gravity
+    double                          gravity;   // acceleration of gravity
     size_t                   xyz;       // 1=x, 2=y, 3=z
     
     Parameter upwind_;
     Parameter trigger_;
     std::vector<ScalarVariable > upwind_var_;
     std::vector<ScalarVariable > trigger_var_;
-    const double64 prefactor_;
+    const double prefactor_;
 };
 
 

@@ -65,10 +65,10 @@ template<size_t> class Model;
       void VisualiseSplitBoundaries( csmp::Model<dim>&, const std::string&test_name  );
 
       template<size_t dim>
-      void PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& fractures, double64 displacement );
+      void PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& fractures, double displacement );
 
       template<size_t dim>
-      void PullApartSplitboundaries( Model<dim>& model, double64 displacement );
+      void PullApartSplitboundaries( Model<dim>& model, double displacement );
 
       template<size_t dim>
       void LoadModel( const std::string& model_name );

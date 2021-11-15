@@ -158,7 +158,7 @@ void ANSYS_Model3D::Initialize( bool isoparametric,
                                 bool create_boundaries,
                                 bool create_splitboundaries )
 {
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
   // -------------------------------------------------
@@ -270,7 +270,7 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
                                 bool create_boundaries,
                                 bool create_splitboundaries )
 {
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
   // -------------------------------------------------

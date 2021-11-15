@@ -51,8 +51,8 @@ Criterion:  comparison with TOUGH
     size_t flag(0);
     size_t nPoints;
     ScalarVariable result( PLAIN, 0.0 );
-    map<size_t, std::vector<double64> > points;
-    vector<double64>  values;
+    map<size_t, std::vector<double> > points;
+    vector<double>  values;
     
     fin = fopen(file.c_str(), "r");
     if (fin == NULL)
@@ -257,10 +257,10 @@ Criterion:  comparison with TOUGH
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     //! time
-    double64 global_time        = 0.;
-    double64 max_time           = 3.15e9*30; //3000 years  
-    double64 time_increment     = 3.15e7; //1 year
-	double64 time_increment_advection, time_advection;
+    double global_time        = 0.;
+    double max_time           = 3.15e9*30; //3000 years  
+    double time_increment     = 3.15e7; //1 year
+	double time_increment_advection, time_advection;
 	size_t time_step            = 0;
       
 

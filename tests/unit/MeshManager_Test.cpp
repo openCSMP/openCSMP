@@ -458,7 +458,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	_test( mesh.Nodes() == n_original_nodes + 5 );
 
   // create new PYRAMID element
-  int32 material_id(1); // new element's rock_tye
+  int32_t material_id(1); // new element's rock_tye
   vector<Node<3U>*>    nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
   Element<3U>*         neptr( mesh.E(4) ); // just a neighbor to try
 	Element<3U>*	ptr_e1 = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes, material_id );
@@ -600,7 +600,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
             ifptr = mesh.AddInterFace( eptr, face_ids1.first, eptr->Neighbor(i), face_ids1.second, ifvars, iivars );
             interface_constructed = true;
             // create an intervening element
-            const int32 material_id(5);
+            const int32_t material_id(5);
             Element<3U>*	ieptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_TRIANGLE, ifvars, iivars, middle_nodes, material_id );
             
             // connecting the InterFace to the middle element

@@ -51,16 +51,16 @@ public:
     void SetPropertyKey( csmp::Index& key );
     
     // storage requirements
-    double64 SizeOf() const;
+    double SizeOf() const;
     
     // TODO: why are these not private?
     Region<dim>&                        gref_;
-    double64                            tolerance;
+    double                            tolerance;
     csmp::Index                         u_key;
     const csmp::Index                   grad_key, mctr_key;
     std::vector<PropertyHandle<dim>* >  gradient;
     PropertyHandle<dim>                 mass_center;
-    std::vector<double64>               det, sum_x2, sum_y2, sum_z2, sum_xy,sum_xz, sum_yz;
+    std::vector<double>               det, sum_x2, sum_y2, sum_z2, sum_xy,sum_xz, sum_yz;
     std::vector<size_t>                 zero_grad_index_;
     std::vector<std::vector<size_t> >   neighbors_; ///< global indices of parent nodes; [node_id] -> vector with id's
     
@@ -76,10 +76,10 @@ public:
      
     void PushBackAvoidDuplicate( std::vector<size_t>& old_vector, std::vector<size_t>& possible_new_entries );
      
-    void ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c, std::vector<double64>& global_c );
+    void ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c, std::vector<double>& global_c );
      
     std::vector<std::vector<VectorVariable<dim> > >  distance;
-    std::vector<std::pair<VectorVariable<dim>, double64> > center_of_mass_;
+    std::vector<std::pair<VectorVariable<dim>, double> > center_of_mass_;
     std::vector<VectorVariable<dim> >                 inner_;
     std::vector< std::vector<VectorVariable<dim> > >  middle_;
 };

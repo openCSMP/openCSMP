@@ -30,7 +30,7 @@ void MaximumDifference<dim>::Reset()
 
 
 template<size_t dim>
-double64  MaximumDifference<dim>::Value() const
+double  MaximumDifference<dim>::Value() const
  {
     return max_difference;
      

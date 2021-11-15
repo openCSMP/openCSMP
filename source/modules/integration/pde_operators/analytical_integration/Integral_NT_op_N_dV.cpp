@@ -68,7 +68,7 @@ void Integral_NT_op_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     // lumped formulation  
     else
       {
-         double64 res = (e.Volume() * sc()) / static_cast<double64>(e.Nodes());
+         double res = (e.Volume() * sc()) / static_cast<double>(e.Nodes());
          fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), res );
       }
 

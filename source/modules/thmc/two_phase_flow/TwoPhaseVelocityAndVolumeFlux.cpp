@@ -481,7 +481,7 @@ A reference to the Element for which the post-processing is done.
 template<size_t dim,class SIMPLEX>
 void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
-    typename list<vector<double64> >::const_iterator  lit;
+    typename list<vector<double> >::const_iterator  lit;
 
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
 
@@ -521,7 +521,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                 for ( size_t i=0; i<e.Nodes(); i++ ){
                     satFunc_.InitializeForNode(e,i);
                     satFunc_.EffectiveSaturation();
-                    const double64 pc ( satFunc_.pc_Phase( ));
+                    const double pc ( satFunc_.pc_Phase( ));
                     for ( size_t j=0; j<dim; j++ )
                         vt_( j ) += pc  * -DERIV_(j,i) * satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase );
                 }
@@ -564,7 +564,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                     for ( size_t i=0; i<e.Nodes(); i++ ){
                         satFunc_.InitializeForNode(e,i);
                         satFunc_.EffectiveSaturation();
-                        const double64 pc ( satFunc_.pc_Phase());
+                        const double pc ( satFunc_.pc_Phase());
                         for ( size_t j=0; j<dim; j++ )
                             velo_nw_( j ) += pc  * -DERIV_(j,i) * satFunc_.Permeability()* satFunc_.MobilityPhase( non_wet_phase);
                     }
@@ -676,7 +676,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                     for ( size_t n=0; n<e.Nodes(); n++ ){
                         satFunc_.InitializeForNode(e,n);
                         satFunc_.EffectiveSaturation();
-                        const double64 pc ( satFunc_.pc_Phase( ));
+                        const double pc ( satFunc_.pc_Phase( ));
                         for ( size_t j=0; j<dim; j++ )
                             VELOFLUX_[j] += ( PF_[n]() + pc ) * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[i](j,j);
                     }
@@ -737,7 +737,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                         for ( size_t n=0; n<e.Nodes(); n++ ){
                             satFunc_.InitializeForNode(e,n);
                             satFunc_.EffectiveSaturation();
-                            const double64 pc ( satFunc_.pc_Phase( ));
+                            const double pc ( satFunc_.pc_Phase( ));
                             for ( size_t j=0; j<dim; j++ )
                                 VELOFLUX_NW_[ j ] += pc  * -DERIV_(j,n) * satFunc_.Permeability()* satFunc_.MobilityPhase( non_wet_phase);
                         }
@@ -774,13 +774,13 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
             }
             // Averaging integration point values to get the element variables
             // ---------------------------------------------------------------
-            vt_     /= static_cast<double64>(e.FE()->IntegrationPoints());
-            flux_() /= static_cast<double64>(e.FE()->IntegrationPoints());
-            ivelo_  /= static_cast<double64>(e.FE()->IntegrationPoints());
+            vt_     /= static_cast<double>(e.FE()->IntegrationPoints());
+            flux_() /= static_cast<double>(e.FE()->IntegrationPoints());
+            ivelo_  /= static_cast<double>(e.FE()->IntegrationPoints());
 
             if( phase_velocities_ ){
-                velo_nw_  /= static_cast<double64>(e.FE()->IntegrationPoints());
-                velo_w_   /= static_cast<double64>(e.FE()->IntegrationPoints());
+                velo_nw_  /= static_cast<double>(e.FE()->IntegrationPoints());
+                velo_w_   /= static_cast<double>(e.FE()->IntegrationPoints());
             }
 
         } else {
@@ -845,7 +845,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                     for ( sum_=0.0,lit =temp_veloflux_[ e.N(i)->Idx() ].begin(); lit!=temp_veloflux_[ e.N(i)->Idx() ].end(); lit++ )
                         sum_ += (*lit)[j];
 
-                    sum_ /= static_cast<double64>(temp_veloflux_[ e.N(i)->Idx() ].size());
+                    sum_ /= static_cast<double>(temp_veloflux_[ e.N(i)->Idx() ].size());
 
                     RESULT_(j,i) = sum_;
                 }
@@ -873,23 +873,23 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 {
 
     // initialize output value
-    double64 value = 0.0;
+    double value = 0.0;
 
     size_t inside_node,outside_node;
-    double64 vtn(0.0),facetArea(1.0);
+    double vtn(0.0),facetArea(1.0);
     size_t advected_phase_n(2U), advected_phase_w(1U);
-    const double64 zero(0.0); //can be num_epsilon or so
-    //const double64 zero( std::numeric_limits<double64>::min()); //can be num_epsilon or so
-    //const double64 zero(1.0e-15); //can be num_epsilon or so
+    const double zero(0.0); //can be num_epsilon or so
+    //const double zero( std::numeric_limits<double>::min()); //can be num_epsilon or so
+    //const double zero(1.0e-15); //can be num_epsilon or so
 
-    double64 sign(0.0);
+    double sign(0.0);
     Element<dim>* eptr;
 
     this->ApplicationCycle(1);
 
     if( (!with_gravity_) && (!with_capillary_) ){
 
-        double64 fn(1.0);
+        double fn(1.0);
 
         for ( size_t t=0U; t<n_ref.Parents(); t++ )
         {
@@ -915,8 +915,8 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
                 vtn  = dotProduct( vt_, facet_n_);
                 // --------------------------------------------------------------------------
                 // Calculate values of saturations for inside & ouside nodes
-                const double64 sn_inside_node  = 1.0 - eptr->N(inside_node)->Read(this->satFunc_.WettingPhaseSaturationKey() );
-                const double64 sn_outside_node = 1.0 - eptr->N(outside_node)->Read(this->satFunc_.WettingPhaseSaturationKey() );
+                const double sn_inside_node  = 1.0 - eptr->N(inside_node)->Read(this->satFunc_.WettingPhaseSaturationKey() );
+                const double sn_outside_node = 1.0 - eptr->N(outside_node)->Read(this->satFunc_.WettingPhaseSaturationKey() );
 
                 // --------------------------------------------------------------------------
                 // Initilize saturation functions for Facet Integration Point
@@ -945,18 +945,18 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 
     }else if( !with_gravity_ ){
 
-        double64 sn_inside_node (0.0), ln_inside_node (0.0),  lw_inside_node(0.0);
-        double64 sn_outside_node(0.0), ln_outside_node (0.0), lw_outside_node(0.0);
+        double sn_inside_node (0.0), ln_inside_node (0.0),  lw_inside_node(0.0);
+        double sn_outside_node(0.0), ln_outside_node (0.0), lw_outside_node(0.0);
 
-        //double64 upstream_sn(0.0), upstream_sw(0.0);
-        double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-        double64 upstream_fn(0.0);
-        //double64 upstream_lambda_overbar(0.0);
+        //double upstream_sn(0.0), upstream_sw(0.0);
+        double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+        double upstream_fn(0.0);
+        //double upstream_lambda_overbar(0.0);
 
-        double64 dsdn(1.0),dpcdn(1.0);
-        //double64 viscous_velocity_component(1.0), capillary_velocity_component(1.0);
-        double64 vn_capillary_component_of_velocity (1.0), vw_capillary_component_of_velocity (1.0);
-        double64 vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
+        double dsdn(1.0),dpcdn(1.0);
+        //double viscous_velocity_component(1.0), capillary_velocity_component(1.0);
+        double vn_capillary_component_of_velocity (1.0), vw_capillary_component_of_velocity (1.0);
+        double vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
 
 
         for ( size_t t=0U; t<n_ref.Parents(); t++ )
@@ -978,7 +978,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
             eptr->dN_AtBaryCenter( DN_ );
             dsdn_ = 0.0;
             for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
-                 const double64 sn = eptr->N(j)->Read( this->TestOperandKey() );
+                 const double sn = eptr->N(j)->Read( this->TestOperandKey() );
                  for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
             }
 
@@ -1104,18 +1104,18 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 
     }else{
 
-        double64 sn_inside_node (0.0), ln_inside_node (0.0),  lw_inside_node(0.0);
-        double64 sn_outside_node(0.0), ln_outside_node (0.0), lw_outside_node(0.0);
+        double sn_inside_node (0.0), ln_inside_node (0.0),  lw_inside_node(0.0);
+        double sn_outside_node(0.0), ln_outside_node (0.0), lw_outside_node(0.0);
 
-        //double64 upstream_sn(0.0), upstream_sw(0.0);
-        double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
-        double64 upstream_fn(0.0), upstream_lambda_overbar(0.0);
+        //double upstream_sn(0.0), upstream_sw(0.0);
+        double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);
+        double upstream_fn(0.0), upstream_lambda_overbar(0.0);
 
-        double64 dsdn(1.0),dpcdn(1.0),gproj_n(0.0);
-        double64 viscous_velocity_component(1.0), capillary_velocity_component(1.0), gravity_velocity_component(1.0);
-        double64 vn_capillary_component_of_velocity (1.0), vw_capillary_component_of_velocity (1.0);
-        double64 vn_gravity_component_of_velocity (1.0), vw_gravity_component_of_velocity (1.0);
-        double64 vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
+        double dsdn(1.0),dpcdn(1.0),gproj_n(0.0);
+        double viscous_velocity_component(1.0), capillary_velocity_component(1.0), gravity_velocity_component(1.0);
+        double vn_capillary_component_of_velocity (1.0), vw_capillary_component_of_velocity (1.0);
+        double vn_gravity_component_of_velocity (1.0), vw_gravity_component_of_velocity (1.0);
+        double vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
 
         for ( size_t t=0U; t<n_ref.Parents(); t++ )
         {
@@ -1138,7 +1138,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 
                 dsdn_ = 0.0;
                 for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
-                     const double64 sn = eptr->N(j)->Read( this->TestOperandKey() );
+                     const double sn = eptr->N(j)->Read( this->TestOperandKey() );
                      for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
                 }
 

@@ -34,7 +34,7 @@ class BrittleFailure  {
     static FAILURE Evaluate( const MechanicalProperties&, const csmp::StressInvariants& );
 
     /// evaluates failure criteria -1 to 4 with consideration of pore pressure
-    static FAILURE Evaluate( const MechanicalProperties&, const csmp::StressInvariants&, double64 pf );
+    static FAILURE Evaluate( const MechanicalProperties&, const csmp::StressInvariants&, double pf );
 };
 
 } // csmp

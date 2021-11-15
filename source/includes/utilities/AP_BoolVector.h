@@ -35,7 +35,7 @@ public:
 
 private:
   /// bit vector
-  uint8* pBits_;
+  uint8_t* pBits_;
 
   /// size of the vector in bytes
   size_t uSize_;

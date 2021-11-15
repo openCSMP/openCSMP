@@ -232,8 +232,8 @@ CSMP_FEM_TYPE  FiniteElement::ElementType() const { return csp_fem_type; }
  size_t  FiniteElement::IntegrationPointNeighbors() const { return cne; }
  size_t  FiniteElement::IntegrationPoints() const { return gpe; }
 
- double64  FiniteElement::XYZ( size_t i, size_t j ) const { return XY(i,j); }
- void    FiniteElement::XYZ( size_t i, size_t j, double64 val ) { XY(i,j) = val; }
+ double  FiniteElement::XYZ( size_t i, size_t j ) const { return XY(i,j); }
+ void    FiniteElement::XYZ( size_t i, size_t j, double val ) { XY(i,j) = val; }
 
 
 
@@ -256,23 +256,23 @@ void FiniteElement::SurfaceElement()  { element_category = SURFACE; }
 void FiniteElement::VolumeElement()   { element_category = VOLUME; }
 
 
-double64 FiniteElement::AspectRatio()
+double FiniteElement::AspectRatio()
   {
      InstructUser("FiniteElement::AspectRatio()");
      cout <<"\ncalled by object: "<< object_id << endl;
      return 0.0;
   }
   
-double64 FiniteElement::InnerRadius()
+double FiniteElement::InnerRadius()
   {
      InstructUser("FiniteElement::InnerRadius()");
      cout <<"\ncalled by object: "<< object_id << endl;
      return 0.0;
   }
   
-void FiniteElement::EdgeLengths( vector<double64>& vec )
+void FiniteElement::EdgeLengths( vector<double>& vec )
   {
-     InstructUser("FiniteElement::EdgeLengths(vector<double64>)");
+     InstructUser("FiniteElement::EdgeLengths(vector<double>)");
      out(vec);
      cout <<"\ncalled by object: "<< object_id << endl;
   }
@@ -397,7 +397,7 @@ CSMP_FEM_TYPE FiniteElement::ElementTypeOfSegment( size_t ) const
 
 
 
-void  FiniteElement::UnitNormal( vector<double64>& ) const
+void  FiniteElement::UnitNormal( vector<double>& ) const
   {
      InstructUser("FiniteElement::UnitNormal");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
@@ -413,7 +413,7 @@ void  FiniteElement::UnitNormal( vector<double64>& ) const
     
     method expects that the XY matrix is initialised with node coordinates
 */
-void  FiniteElement::UnitNormalToFace( size_t, std::vector<double64>& ) const
+void  FiniteElement::UnitNormalToFace( size_t, std::vector<double>& ) const
  {
      InstructUser("FiniteElement::UnitNormalToFace");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
@@ -431,7 +431,7 @@ void  FiniteElement::UnitNormalToFace( size_t, std::vector<double64>& ) const
      @note this method cannot be constant because it modifies matrices that are data members
      of the FiniteElement class.
 */
-void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double64>& )
+void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double>& )
  {
      InstructUser("FiniteElement::UnitNormalAtFaceBarycenter");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
@@ -441,7 +441,7 @@ void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double64>& 
 
 
 
-double64 FiniteElement::WeightAtIntegrationPoint( size_t ) const
+double FiniteElement::WeightAtIntegrationPoint( size_t ) const
   {
      throw invalid_argument("FiniteElement::WeightAtIntegrationPoint");
      return 0.5 * (1. / gpe); 
@@ -449,7 +449,7 @@ double64 FiniteElement::WeightAtIntegrationPoint( size_t ) const
 
 
 
-void  FiniteElement::IntegrationPoint( size_t i, std::vector<double64>& xyz ) const
+void  FiniteElement::IntegrationPoint( size_t i, std::vector<double>& xyz ) const
  { 
     cout <<"\nFiniteElement::IntegrationPoint: called for integration point "<< i;
     cout <<" and output data vector 'xyz' of size "<< xyz.size() << endl;
@@ -478,8 +478,8 @@ Expects input vector to be of size nvars * gauss points and in format
 
   */
 void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars, 
-                                                                 const vector<double64>&, 
-                                                                 vector<double64>& ) const
+                                                                 const vector<double>&, 
+                                                                 vector<double>& ) const
  {
      InstructUser("FiniteElement::ExtrapolateIntegrationPointVariableToNodes");
      cout <<"\nThis method must be defined for the FE element which you are using"<< endl;
@@ -490,7 +490,7 @@ void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
 
 
 
-double64 FiniteElement::Volume()
+double FiniteElement::Volume()
  {
     InstructUser("FiniteElement::Volume");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -499,11 +499,11 @@ double64 FiniteElement::Volume()
  } 
 
 
-void   FiniteElement::N( vector<double64>& N, const vector<double64>& xyz )
+void   FiniteElement::N( vector<double>& N, const vector<double>& xyz )
  {
     InstructUser("FiniteElement::N");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (N vector<double64>, xyz vector<double64>):"<< endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (N vector<double>, xyz vector<double>):"<< endl;
     out( N );
     for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
@@ -511,21 +511,21 @@ void   FiniteElement::N( vector<double64>& N, const vector<double64>& xyz )
  } 
 
 
-void   FiniteElement::N_AtIntegrationPoint( size_t ip, vector<double64>& N )
+void   FiniteElement::N_AtIntegrationPoint( size_t ip, vector<double>& N )
  {
     InstructUser("FiniteElement::N_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double64>):"<< ip << endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double>):"<< ip << endl;
     out( N );
     throw invalid_argument("FiniteElement::N_AtIntegrationPoint");
  } 
 
 
-void   FiniteElement::N_AtBaryCenter( vector<double64>& N )
+void   FiniteElement::N_AtBaryCenter( vector<double>& N )
  {
     InstructUser("FiniteElement::N_AtBaryCenter");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double64>):"<< endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double>):"<< endl;
     out( N );
     throw invalid_argument("FiniteElement::N_AtBaryCenter");
  }
@@ -550,11 +550,11 @@ void   FiniteElement::dN( DenseMatrix<DM_MIN>& M ) // coefficients
  } 
     
     
-double64 FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double64>& xyz  ) // derivatives at 'xy'
+double FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double>& xyz  ) // derivatives at 'xy'
  {
     InstructUser("FiniteElement::dN_At");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double64> xyz):"<< endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double> xyz):"<< endl;
     M.Out();
     for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
@@ -563,7 +563,7 @@ double64 FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double64>& x
  } 
 
 
-double64 FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point ) 
+double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point ) 
  {
     InstructUser("FiniteElement::dN_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -575,7 +575,7 @@ double64 FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t ga
  } 
 
 
-double64 FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node ) 
+double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node ) 
  {
     InstructUser("FiniteElement::dN_AtNode");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -587,7 +587,7 @@ double64 FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node )
  } 
 
 
-double64 FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& M ) 
+double FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& M ) 
  {
     InstructUser("FiniteElement::dN_AtBarycenter");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -636,7 +636,7 @@ void   FiniteElement::JacobianAtIntegrationPoint( size_t ip )
 
 
     // 1D
-void   FiniteElement::Nr( double64 r, vector<double64>& NR ) const
+void   FiniteElement::Nr( double r, vector<double>& NR ) const
  {
     InstructUser("FiniteElement::Nr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -652,7 +652,7 @@ void   FiniteElement::Nr( double64 r, vector<double64>& NR ) const
 
 
     // 1D
-void   FiniteElement::Nr( double64 r, double64* NR ) const
+void   FiniteElement::Nr( double r, double* NR ) const
  {
     InstructUser("FiniteElement::Nr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -665,7 +665,7 @@ void   FiniteElement::Nr( double64 r, double64* NR ) const
  }
 
 
-void   FiniteElement::dNr( double64 r, vector<double64>& DNR ) const
+void   FiniteElement::dNr( double r, vector<double>& DNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -680,7 +680,7 @@ void   FiniteElement::dNr( double64 r, vector<double64>& DNR ) const
 
 
     // 2D
-void   FiniteElement::Nrs( double64 r, double64 s, vector<double64>& NRS ) const
+void   FiniteElement::Nrs( double r, double s, vector<double>& NRS ) const
  {
     InstructUser("FiniteElement::Nrs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -694,7 +694,7 @@ void   FiniteElement::Nrs( double64 r, double64 s, vector<double64>& NRS ) const
  }
 
     // 2D
-void   FiniteElement::Nrs( double64 r, double64 s, double64* NRS ) const
+void   FiniteElement::Nrs( double r, double s, double* NRS ) const
  {
     InstructUser("FiniteElement::Nrs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -707,7 +707,7 @@ void   FiniteElement::Nrs( double64 r, double64 s, double64* NRS ) const
  }
 
 
-void   FiniteElement::dNr( double64 r, double64 s, vector<double64>& DNR ) const
+void   FiniteElement::dNr( double r, double s, vector<double>& DNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -721,7 +721,7 @@ void   FiniteElement::dNr( double64 r, double64 s, vector<double64>& DNR ) const
  }
 
 
-void   FiniteElement::dNs( double64 r, double64 s, vector<double64>& DNS ) const
+void   FiniteElement::dNs( double r, double s, vector<double>& DNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -736,7 +736,7 @@ void   FiniteElement::dNs( double64 r, double64 s, vector<double64>& DNS ) const
 
 
     // 3D
-void   FiniteElement::Nrst( double64 r, double64 s, double64 t, vector<double64>& NRST ) const
+void   FiniteElement::Nrst( double r, double s, double t, vector<double>& NRST ) const
  {
     InstructUser("FiniteElement::Nrst");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -751,7 +751,7 @@ void   FiniteElement::Nrst( double64 r, double64 s, double64 t, vector<double64>
 
 
     // 3D
-void   FiniteElement::Nrst( double64 r, double64 s, double64 t, double64* NRST ) const
+void   FiniteElement::Nrst( double r, double s, double t, double* NRST ) const
  {
     InstructUser("FiniteElement::Nrst");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -764,7 +764,7 @@ void   FiniteElement::Nrst( double64 r, double64 s, double64 t, double64* NRST )
  }
 
 
-void   FiniteElement::dNr( double64 r,  double64 s, double64 t, vector<double64>& DNR ) const
+void   FiniteElement::dNr( double r,  double s, double t, vector<double>& DNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -778,7 +778,7 @@ void   FiniteElement::dNr( double64 r,  double64 s, double64 t, vector<double64>
  }
 
 
-void   FiniteElement::dNs( double64 r,  double64 s, double64 t, vector<double64>& DNS ) const
+void   FiniteElement::dNs( double r,  double s, double t, vector<double>& DNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -792,7 +792,7 @@ void   FiniteElement::dNs( double64 r,  double64 s, double64 t, vector<double64>
  }
 
 
-void   FiniteElement::dNt( double64 r,  double64 s, double64 t, vector<double64>& DNT ) const
+void   FiniteElement::dNt( double r,  double s, double t, vector<double>& DNT ) const
  {
     InstructUser("FiniteElement::dNt");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -806,7 +806,7 @@ void   FiniteElement::dNt( double64 r,  double64 s, double64 t, vector<double64>
  }
 
 
-void FiniteElement::JacobianAt( const std::vector<double64>& rst )
+void FiniteElement::JacobianAt( const std::vector<double>& rst )
 {
     InstructUser("FiniteElement::JacobianAt");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -844,16 +844,16 @@ Compute the Jacobian matrix for the local coordinate point 'rst' in the
 finite element. 
 
 @param dnr The local shape function derivatives at the point of interest. These
-are provided as pointers to inbuilt arrays of type 'double64'. 
+are provided as pointers to inbuilt arrays of type 'double'. 
 Whether a third argument is supplied or not determines whether a 2D
 or a 3D Jacobian is output.  
 
 @return The Jacobian matrix is returned into the protected matrix JAC.
 */
-void  FiniteElement::Jacobian( const vector<double64>& dnr ) // 1D
+void  FiniteElement::Jacobian( const vector<double>& dnr ) // 1D
  {
     JAC.Resize(dim,dim);
-    JAC(0,0) = static_cast<double64>(0.0);
+    JAC(0,0) = static_cast<double>(0.0);
     for ( size_t j=0; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
       
  } // end Jacobian (1D)
@@ -861,12 +861,12 @@ void  FiniteElement::Jacobian( const vector<double64>& dnr ) // 1D
 
 
 
-void  FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double64>& dns ) // 2D
+void  FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& dns ) // 2D
  {
     JAC.Resize(dim,dim);
 
     for ( size_t i=0; i<dim; i++ ) {
-        JAC(0,i) = JAC(1,i) = static_cast<double64>(0.0);
+        JAC(0,i) = JAC(1,i) = static_cast<double>(0.0);
         for ( size_t j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
@@ -877,12 +877,12 @@ void  FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double6
  } // end Jacobian (2D)
 
 
-void FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double64>& dns, const vector<double64>& dnt )
+void FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& dns, const vector<double>& dnt )
  {
     JAC.Resize(dim,dim);
 
     for ( size_t i=0; i<dim; i++ ) {
-        JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double64>(0.);
+        JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double>(0.);
         for ( size_t j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
@@ -894,7 +894,7 @@ void FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double64
  } // end Jacobian (3D)
 
 
-double64 FiniteElement::JacobianDeterminant()
+double FiniteElement::JacobianDeterminant()
 {
     if ( dim == 3U ) 
 		 return JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
@@ -917,7 +917,7 @@ double64 FiniteElement::JacobianDeterminant()
     are printed to screen.
  
 */
-double64  FiniteElement::JacobianInverse()
+double  FiniteElement::JacobianInverse()
  {
     JINV.Resize(dim,dim);
     if ( dim == 1U ) {
@@ -929,10 +929,10 @@ double64  FiniteElement::JacobianInverse()
 
     if ( dim == 2U ) {
          // compute determinant  
-         double64 detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
+         double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
     
          // inversion of J
-         const double64 dum = JAC(0,0) / detJ;
+         const double dum = JAC(0,0) / detJ;
          JINV(0,0)  =  JAC(1,1) / detJ;
          JINV(0,1)  = -JAC(0,1) / detJ;
          JINV(1,0)  = -JAC(1,0) / detJ;
@@ -959,7 +959,7 @@ double64  FiniteElement::JacobianInverse()
       }
       
      // 3D case
-     const double64 detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
+     const double detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
                            JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
                            JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
 
@@ -980,7 +980,7 @@ double64  FiniteElement::JacobianInverse()
 //          detJ = fabs(detJ);
        }
 
-     double64 det1(1.0 / detJ);
+     double det1(1.0 / detJ);
      
      JINV(0,0) = ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) *  det1;
      JINV(1,0) = ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) * -det1;

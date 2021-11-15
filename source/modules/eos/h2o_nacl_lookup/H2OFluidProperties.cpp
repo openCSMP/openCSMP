@@ -13,12 +13,12 @@ using namespace std;
 
 namespace csmp
 {
-  H2OFluidProperties::H2OFluidProperties(const double64& externaltemperature_in_C,
-                                         const double64& externalpressure_in_Pa,
-                                         const double64& external_fluid_enthalpy_in_J_per_kg,
-                                         const double64& external_cp_rock,
-                                         const double64& external_rho_rock,
-                                         const double64& external_phi)
+  H2OFluidProperties::H2OFluidProperties(const double& externaltemperature_in_C,
+                                         const double& externalpressure_in_Pa,
+                                         const double& external_fluid_enthalpy_in_J_per_kg,
+                                         const double& external_cp_rock,
+                                         const double& external_rho_rock,
+                                         const double& external_phi)
     : temperature(externaltemperature_in_C),
       pressure(externalpressure_in_Pa),
     enthalpy(external_fluid_enthalpy_in_J_per_kg),
@@ -114,10 +114,10 @@ namespace csmp
         // this should be most sensitive and much better than temperature-based
         else
           {
-            if( definitelyLessThan( tcurrent, water.SaturationTemperatureFromP( pcurrent ), 5.0*numeric_limits<double64>::epsilon() ) )
+            if( definitelyLessThan( tcurrent, water.SaturationTemperatureFromP( pcurrent ), 5.0*numeric_limits<double>::epsilon() ) )
               { /*eqtype = 3;*/ below_pcrith2o = true; UpdatePropertiesF_LowT( below_pcrith2o ); return; }
 	
-            else if( definitelyGreaterThan( tcurrent, water.SaturationTemperatureFromP( pcurrent ), 5.0*numeric_limits<double64>::epsilon() ) )
+            else if( definitelyGreaterThan( tcurrent, water.SaturationTemperatureFromP( pcurrent ), 5.0*numeric_limits<double>::epsilon() ) )
               { /*eqtype = 4;*/ UpdatePropertiesV_LowT(); return; }
 	
             // Now we know that we are within 5 epsilons of tsat, i.e., we can do a simple check for VL
@@ -474,7 +474,7 @@ namespace csmp
     vap.InitToBogus();    
   }
   
-  double64 H2OFluidProperties::TwophaseCompressibility()
+  double H2OFluidProperties::TwophaseCompressibility()
   {
     // check if the references cpr and rr are properly being up-to-date
     b  = ( 1.0 - phi ) * cpr * rr;

@@ -28,16 +28,16 @@ inline bool isSubvertical( const Element<2U>* const eptr, size_t face )
     assert( eptr != nullptr );
     assert( face < eptr->Faces() );
 
-    vector<double64>  face_nrml, vertical({0.,1.});
+    vector<double>  face_nrml, vertical({0.,1.});
     eptr->UnitNormalToFace( face, face_nrml );
    
     // limit on the dot-product value from the permitted deviation angle of the normal
-    const double64 n_degrees(60.);
-    const double64 max_length( cos( degreesToRadians( n_degrees ) ) ); // positive
+    const double n_degrees(60.);
+    const double max_length( cos( degreesToRadians( n_degrees ) ) ); // positive
   
     // finding the dip of the face normal vector ignoring its azimuth
     // (if the dot-product is zero, the face is exactly vertical)
-    const double64 dot_product = face_nrml[0] * vertical[0] + face_nrml[1] * vertical[1];
+    const double dot_product = face_nrml[0] * vertical[0] + face_nrml[1] * vertical[1];
     if ( fabs(dot_product) >= max_length ) return false;
 
     return true;
@@ -50,16 +50,16 @@ inline bool isSubvertical( const Element<2U>* const eptr, size_t face )
     assert( eptr != nullptr );
     assert( face < eptr->Faces() );
 
-    vector<double64>  face_nrml, vertical({0.,1.,0.});
+    vector<double>  face_nrml, vertical({0.,1.,0.});
     eptr->UnitNormalToFace( face, face_nrml );
    
     // limit on the dot-product value from the permitted deviation angle of the normal
-    const double64 n_degrees(60.);
-    const double64 max_length( cos( degreesToRadians( n_degrees ) ) ); // positive
+    const double n_degrees(60.);
+    const double max_length( cos( degreesToRadians( n_degrees ) ) ); // positive
   
     // finding the dip of the face normal vector ignoring its azimuth
     // (if the dot-product is zero, the face is exactly vertical)
-    const double64 dot_product = face_nrml[0] * vertical[0] + face_nrml[1] * vertical[1] + face_nrml[2] * vertical[2];
+    const double dot_product = face_nrml[0] * vertical[0] + face_nrml[1] * vertical[1] + face_nrml[2] * vertical[2];
     if ( fabs(dot_product) >= max_length ) return false;
 
     return true;
@@ -89,7 +89,7 @@ void smoothElementData( Model<dim>& model,
      // ---------------------------------------------
      Region<dim>&  domain(model.Region(region_to_be_smoothed));
      csmp::Index   key = model.Database().StorageKey(variable_name.c_str());
-     double64      min_val_database, max_val_database;
+     double      min_val_database, max_val_database;
      model.Database().RangeOf( variable_name.c_str(), min_val_database, max_val_database );
      bool interpolation_problem(false);
 
@@ -168,7 +168,7 @@ void smoothElementData( Model<dim>& model,
       // 3. in-plane smoothing  of the data in multiple iterations
       // ---------------------------------------------------------
       else {
-          vector<double64> smoothed_vals(domain.InteriorElements());
+          vector<double> smoothed_vals(domain.InteriorElements());
           for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ )
             {
               size_t elmt(0U);
@@ -176,9 +176,9 @@ void smoothElementData( Model<dim>& model,
                 {
                   // the new value taken is the volume-weighted mean average of the element neighbors and its own value
                   // current element
-                  double64 average(0.), sum_of_weights(0.), min_val(0.), max_val(0.);
-                  double64 elmt_volume = (*it)->Volume();
-                  double64 val((*it)->Read(key));
+                  double average(0.), sum_of_weights(0.), min_val(0.), max_val(0.);
+                  double elmt_volume = (*it)->Volume();
+                  double val((*it)->Read(key));
                   min_val = min( min_val, val );
                   max_val = max( max_val, val );
                   average        += val * elmt_volume;

@@ -37,7 +37,7 @@ LinearTriangle::~LinearTriangle()
 
 
 
-double64 LinearTriangle::Volume()
+double LinearTriangle::Volume()
 {
    return std::fabs( 0.5 * ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) + 
                         XY(0,1)*XY(2,0) - XY(2,1)*XY(0,0) -
@@ -48,9 +48,9 @@ double64 LinearTriangle::Volume()
 
 
 
-void  LinearTriangle::EdgeLengths( std::vector<double64>& len )
+void  LinearTriangle::EdgeLengths( std::vector<double>& len )
 {
-    double64  sum;
+    double  sum;
     len.resize(npe);
 
     // segment 1
@@ -107,7 +107,7 @@ void LinearTriangle::dN( DenseMatrix<DM_MIN>& B )
 {
    B.Resize(dim,npe);
    // call to volume updates coordinate matrix
-   double64 ae2 = 2. * Volume();   
+   double ae2 = 2. * Volume();   
    B(0,0) = (XY(1,1) - XY(2,1)) / ae2;
    B(0,1) = (XY(2,1) - XY(0,1)) / ae2;
    B(0,2) = (XY(0,1) - XY(1,1)) / ae2;
@@ -121,11 +121,11 @@ void LinearTriangle::dN( DenseMatrix<DM_MIN>& B )
     The interpolation function derivates are constant inside of this linear element.
     The method returns the element area.
 */
-double64  LinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
+double  LinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
    B.Resize(dim,npe);
    // call to volume updates coordinate matrix
-   double64 ae2 = 2. * Volume();   
+   double ae2 = 2. * Volume();   
    B(0,0) = (XY(1,1) - XY(2,1)) / ae2;
    B(0,1) = (XY(2,1) - XY(0,1)) / ae2;
    B(0,2) = (XY(0,1) - XY(1,1)) / ae2;
@@ -143,7 +143,7 @@ double64  LinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     Thus, the location of the point itself does not have to be considered.
     The method returns the element area.
 */
-double64  LinearTriangle::dN_At( DenseMatrix<DM_MIN>& B, const std::vector<double64>& )
+double  LinearTriangle::dN_At( DenseMatrix<DM_MIN>& B, const std::vector<double>& )
  {
    return dN_AtBarycenter( B );
  }
@@ -243,18 +243,18 @@ CSMP_FEM_TYPE LinearTriangle::ElementTypeOfFace( size_t ) const
 
 
 
-double64  LinearTriangle::AspectRatio()
+double  LinearTriangle::AspectRatio()
 {
-   vector<double64>  vec(spe);
+   vector<double>  vec(spe);
 
    EdgeLengths( vec );
 
    // order segment
-   set<double64> segms;
+   set<double> segms;
 
    for ( size_t i=0; i<spe; i++ ) segms.insert( vec[i] );
 
-   double64 segm1 = (*segms.begin()), 
+   double segm1 = (*segms.begin()), 
             segm2 = (*segms.rbegin());
    
    return segm2 / segm1;
@@ -263,10 +263,10 @@ double64  LinearTriangle::AspectRatio()
 
 
 
-double64  LinearTriangle::InnerRadius()
+double  LinearTriangle::InnerRadius()
 {
-   vector<double64> segms(npe);
-   double64         sum(0.0), vol;
+   vector<double> segms(npe);
+   double         sum(0.0), vol;
 
    EdgeLengths( segms );
    for ( size_t i=0; i<segms.size(); i++ ) sum += segms[i];
@@ -279,10 +279,10 @@ double64  LinearTriangle::InnerRadius()
 
 
 
-void LinearTriangle::N( vector<double64>& N, const vector<double64>& xyz ) 
+void LinearTriangle::N( vector<double>& N, const vector<double>& xyz ) 
 {
    // no sign is taken, thus method works with cw and ccw node numbering
-   double64 ae2 = 1.0 / ( ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) + 
+   double ae2 = 1.0 / ( ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) + 
                           XY(0,1)*XY(2,0) - XY(2,1)*XY(0,0) -
                           XY(2,0)*XY(1,1) - XY(1,0)*XY(0,1) ) );
 
@@ -309,9 +309,9 @@ void LinearTriangle::N( vector<double64>& N, const vector<double64>& xyz )
 
 
 
-void LinearTriangle::N_AtBaryCenter( std::vector<double64>& IPOL )
+void LinearTriangle::N_AtBaryCenter( std::vector<double>& IPOL )
  {
-    vector<double64>  xyz(2);
+    vector<double>  xyz(2);
     xyz[0] = (XY(0,0) + XY(1,0) + XY(2,0)) / 3.;
     xyz[1] = (XY(0,1) + XY(1,1) + XY(2,1)) / 3.;
     
@@ -362,7 +362,7 @@ void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
 /**
      @author SKM 18/2/2016
 */
-void  LinearTriangle::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  LinearTriangle::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(2);

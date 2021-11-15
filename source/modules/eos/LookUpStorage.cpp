@@ -57,8 +57,8 @@ void LookUpStorage<fT>::Initialize( fT x_dmax, fT y_dmax,  fT xres, fT yres )
      yresolution = yres;
 
      // 1. getting the resolution
-     size_x = static_cast<int32>(x_max / xresolution + 1.);
-     size_y = static_cast<int32>(y_max / yresolution + 1.);
+     size_x = static_cast<int32_t>(x_max / xresolution + 1.);
+     size_y = static_cast<int32_t>(y_max / yresolution + 1.);
 
      // 2. extra data member for speed
      rowlength = size_x;
@@ -161,7 +161,7 @@ bool LookUpStorage<fT>::BinaryIn( const char* bin_name )
 
     fp.close();
     
-    cout <<"\nLookUpStorage<double64>::BinaryIn: grid build successfully from binary file." << endl;
+    cout <<"\nLookUpStorage<double>::BinaryIn: grid build successfully from binary file." << endl;
     cout.flush();
 
     return true;
@@ -169,7 +169,7 @@ bool LookUpStorage<fT>::BinaryIn( const char* bin_name )
 
 
 
-template class LookUpStorage<double64>;
+template class LookUpStorage<double>;
 
 
 } // end namespace csmp

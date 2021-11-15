@@ -39,11 +39,11 @@ class CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV : public CVFEM_MathOperatorRHS<dim
 
     DenseMatrix<DM_MIN>  B, upwind;
 
-    double64 area, normal_component;
-    double64 contribution, operand, grav;
+    double area, normal_component;
+    double contribution, operand, grav;
     size_t inside_node_, outside_node_;
         
-    double64                          gravity;// acceleration of gravity
+    double                          gravity;// acceleration of gravity
     size_t                   xyz;// 1=x, 2=y, 3=z
     
     csmp::Index rho_key;

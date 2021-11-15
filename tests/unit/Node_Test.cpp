@@ -54,7 +54,7 @@ void Node_Test::run()
   _test( n1.AtBoundary() == LEFT );
 
   // .) COORDINATE / POINT
-  vector<double64> p1Coordinates( 3, 9.9 );
+  vector<double> p1Coordinates( 3, 9.9 );
   p1Coordinates.at( 1 ) = 99.9;
   p1Coordinates.at( 2 ) = 999.9;
   Point<3> p1( p1Coordinates );
@@ -72,7 +72,7 @@ void Node_Test::run()
   n1[0] = 2.2;
   n1[1] = 22.2;
   n1[2] = 222.2;
-  double64 n1x( n1[0] ), n1y( n1[1] ), n1z( n1[2] );
+  double n1x( n1[0] ), n1y( n1[1] ), n1z( n1[2] );
   _test( n1x == n1.x() );
   _test( n1y == n1.y() );
   _test( n1z == n1.z() );

@@ -97,10 +97,10 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
          "element type is not linear or quadratic.");
    }
 
-   double64  Sn = f->Read( Sn_key_ ); // multiplied by -1. to make the compressive stresses positive
+   double Sn = f->Read( Sn_key_ ); // multiplied by -1. to make the compressive stresses positive
    // the shear stress in the plane of the face
    f->Read(Ss_key_, vs_);
-   const double64  Ss_magnitude = vs_.Length();
+   const double Ss_magnitude = vs_.Length();
 
    // stops the code if boundaries without boundary stresses (defined in the config file) are visited. 
    // This would accumulate NaN values to the rhs vector. 
@@ -111,8 +111,8 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    }
    
    // if the values are negligibly small nothing needs to be done
-   if (fabs(Sn) < std::numeric_limits<double64>::epsilon()  
-      and fabs(Ss_magnitude) < std::numeric_limits<double64>::epsilon())  
+   if (fabs(Sn) < std::numeric_limits<double>::epsilon()
+      and fabs(Ss_magnitude) < std::numeric_limits<double>::epsilon())
          return;
    
    // using normal from the face. 
@@ -126,8 +126,8 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
       BeginNodeNumber = f->FE()->CornerNodes();
    }
   
-   vs_ *= (f->Area() / static_cast<double64> (nodeNumbers));
-   nrml_ *= (f->Area() / static_cast<double64> (nodeNumbers));
+   vs_ *= (f->Area() / static_cast<double>(nodeNumbers));
+   nrml_ *= (f->Area() / static_cast<double>(nodeNumbers));
 
    // adding the normal stress as force contribution to the nodes of the face
    // for linear elements, nodal forces are applied at corner nodes by a factor of A/nodeNumbers

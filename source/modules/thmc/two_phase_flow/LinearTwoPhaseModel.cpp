@@ -9,8 +9,8 @@ namespace csmp {
 template<size_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                                               const char* permeability, 
-                                              double64 viscosity_nw, double64 viscosity_w,
-                                              double64 density_nw, double64 density_w,
+                                              double viscosity_nw, double viscosity_w,
+                                              double density_nw, double density_w,
                                               const char* pc_entry, const char* sw, const char* rsnw, const char* rsw,
                                               const bool sw_ro_mu_placement )
   :TwoPhaseModel<dim>(database, viscosity_nw, viscosity_w, density_nw, density_w,
@@ -25,8 +25,8 @@ LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& datab
 template<size_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                                          const char* permeability,
-                                         double64 viscosity_nw, double64 viscosity_w,
-                                         double64 density_nw, double64 density_w,
+                                         double viscosity_nw, double viscosity_w,
+                                         double density_nw, double density_w,
                                          const char* pc_entry,
                                          const bool sw_ro_mu_placement)
  :TwoPhaseModel<dim>(database, viscosity_nw, viscosity_w, density_nw, density_w,
@@ -67,8 +67,8 @@ LinearTwoPhaseModel<dim>::LinearTwoPhaseModel( const PropertyDatabase<dim>& data
 template<size_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                                          const char* permeability,
-                                         double64 viscosity_nw, double64 viscosity_w,
-                                         double64 density_nw, double64 density_w,
+                                         double viscosity_nw, double viscosity_w,
+                                         double density_nw, double density_w,
                                          const char* pc_entry,
                                          const char* maximum_pc,
                                          const bool sw_ro_mu_placement)
@@ -123,7 +123,7 @@ void LinearTwoPhaseModel<dim>::Initialize( const Element<dim>& e )
 
     if( TwoPhaseModel<dim>::tensor_permeability_){
         e.Read( TwoPhaseModel<dim>::perm_key_, TwoPhaseModel<dim>::K_);
-        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double64>(dim);
+        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double>(dim);
     }else{
         TwoPhaseModel<dim>::k_ = e.Read( TwoPhaseModel<dim>::perm_key_ );
         TwoPhaseModel<dim>::K_.operator=( VectorVariable<dim>(PLAIN, TwoPhaseModel<dim>::k_ ) );
@@ -150,7 +150,7 @@ void LinearTwoPhaseModel<dim>::Initialize( const Element<dim>& e )
  
  
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::krw_Phase() const
+double LinearTwoPhaseModel<dim>::krw_Phase() const
  {
     return TwoPhaseModel<dim>::seff_;
  }
@@ -158,30 +158,30 @@ double64 LinearTwoPhaseModel<dim>::krw_Phase() const
 
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::krn_Phase() const
+double LinearTwoPhaseModel<dim>::krn_Phase() const
  {
     return 1. - TwoPhaseModel<dim>::seff_;
  } 
  
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::dkrwds_Phase() const
+double LinearTwoPhaseModel<dim>::dkrwds_Phase() const
  {
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
     return seff_mult;
  }
 
 
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::dkrnds_Phase() const
+double LinearTwoPhaseModel<dim>::dkrnds_Phase() const
  {
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
     return -seff_mult;
  }
 
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::pc_Phase( ) const
+double LinearTwoPhaseModel<dim>::pc_Phase( ) const
 {
     if ( TwoPhaseModel<dim>::seff_ <= 0. )
         return pc_max_;
@@ -197,7 +197,7 @@ double64 LinearTwoPhaseModel<dim>::pc_Phase( ) const
 }
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::dpcds_Phase( ) const
+double LinearTwoPhaseModel<dim>::dpcds_Phase( ) const
 {
     if ( ( TwoPhaseModel<dim>::seff_ < 0. ) || ( TwoPhaseModel<dim>::seff_ > 1. ) )
         return 0.;
@@ -205,14 +205,14 @@ double64 LinearTwoPhaseModel<dim>::dpcds_Phase( ) const
 	if (entry_pressure_ == pc_max_)
 		return 0.0;
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     return -( pc_max_ - entry_pressure_ )*seff_mult;
 
 }
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::Sw_Phase( double64 pc ) const
+double LinearTwoPhaseModel<dim>::Sw_Phase( double pc ) const
 {
     // not unique solution
     if ( pc_max_ == entry_pressure_ )
@@ -236,13 +236,13 @@ double64 LinearTwoPhaseModel<dim>::Sw_Phase( double64 pc ) const
 }
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::dsdpc_Phase( double64 ) const
+double LinearTwoPhaseModel<dim>::dsdpc_Phase( double ) const
 {
     // not unique solution
     if ( pc_max_ == entry_pressure_ )
         return 0.0;
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
     return -1.0/( pc_max_ - entry_pressure_ )/seff_mult;
 
 }
@@ -250,7 +250,7 @@ double64 LinearTwoPhaseModel<dim>::dsdpc_Phase( double64 ) const
 
 /// for the wetting phase
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
+double LinearTwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
 {
     // linear relperm model
     // in the linear relperm model maximum dfds belongs to seff=0 or seff=1 depending on the viscosity of water and oil
@@ -264,13 +264,13 @@ double64 LinearTwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
 
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::dfds() const
+double LinearTwoPhaseModel<dim>::dfds() const
  {   
-   //if ( ( TwoPhaseModel<dim>::seff_ <= static_cast<double64>(0.) ) || ( TwoPhaseModel<dim>::seff_ >= static_cast<double64>(1.) ) )
-   //    return static_cast<double64>(0.);
+   //if ( ( TwoPhaseModel<dim>::seff_ <= static_cast<double>(0.) ) || ( TwoPhaseModel<dim>::seff_ >= static_cast<double>(1.) ) )
+   //    return static_cast<double>(0.);
        
-   const double64 mob_w = krw_Phase() / TwoPhaseModel<dim>::muw_;
-   const double64 mob_n = krn_Phase() / TwoPhaseModel<dim>::mun_;
+   const double mob_w = krw_Phase() / TwoPhaseModel<dim>::muw_;
+   const double mob_n = krn_Phase() / TwoPhaseModel<dim>::mun_;
 
    return 1. / ( ( 1. - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) * TwoPhaseModel<dim>::muw_ * TwoPhaseModel<dim>::mun_
               * ( mob_w + mob_n ) * ( mob_w + mob_n ) );
@@ -281,13 +281,13 @@ double64 LinearTwoPhaseModel<dim>::dfds() const
  
 
 template<size_t dim>
-double64 LinearTwoPhaseModel<dim>::dGds( ) const
+double LinearTwoPhaseModel<dim>::dGds( ) const
  {
-   //if ( ( TwoPhaseModel<dim>::seff_ <= static_cast<double64>(0.) ) || ( TwoPhaseModel<dim>::seff_ >= static_cast<double64>(1.) ) )
-   //    return static_cast<double64>(0.);
+   //if ( ( TwoPhaseModel<dim>::seff_ <= static_cast<double>(0.) ) || ( TwoPhaseModel<dim>::seff_ >= static_cast<double>(1.) ) )
+   //    return static_cast<double>(0.);
 
-   const double64 mob_w = krw_Phase() / TwoPhaseModel<dim>::muw_;
-   const double64 mob_n = krn_Phase() / TwoPhaseModel<dim>::mun_;
+   const double mob_w = krw_Phase() / TwoPhaseModel<dim>::muw_;
+   const double mob_n = krn_Phase() / TwoPhaseModel<dim>::mun_;
    
    return ( ( mob_n * mob_n / TwoPhaseModel<dim>::muw_ ) - ( mob_w * mob_w / TwoPhaseModel<dim>::mun_ ) ) /
             ( ( mob_w + mob_n ) * ( mob_w + mob_n ) ) / ( 1. - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ );

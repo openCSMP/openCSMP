@@ -108,7 +108,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( CELL& e )
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
     
-    double64 detJ;
+    double detJ;
     
     if ( ignore_operand ) {
         OPMAT.Resize( e.Nodes(), 1 );

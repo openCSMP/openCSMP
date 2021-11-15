@@ -35,16 +35,16 @@ ComputationalSettings::~ComputationalSettings()
 
 
 
-std::set<double64>::const_iterator ComputationalSettings::OutputTimesBegin() const
+std::set<double>::const_iterator ComputationalSettings::OutputTimesBegin() const
  { return output_times_.begin(); }
  
-std::set<double64>::const_iterator ComputationalSettings::OutputTimesEnd() const
+std::set<double>::const_iterator ComputationalSettings::OutputTimesEnd() const
  { return output_times_.end(); }
 
-std::set<double64>::const_iterator ComputationalSettings::MonitorTimesBegin() const
+std::set<double>::const_iterator ComputationalSettings::MonitorTimesBegin() const
  { return monitor_times_.begin(); }
 
-std::set<double64>::const_iterator ComputationalSettings::MonitorTimesEnd() const
+std::set<double>::const_iterator ComputationalSettings::MonitorTimesEnd() const
  { return monitor_times_.end(); }
 
 
@@ -68,8 +68,8 @@ PEDANTIC, CONSERVATIVE, MODERATE, AGGRESSIVE, DARING.
 decides by how much the Courant number shall be overstepped. 
 The latter must be <= 1 if the explicit advection scheme is used.  
 */
-void ComputationalSettings::EstablishMultipliers( double64& pf_multiplier, 
-                                                  double64& adv_multiplier ) const
+void ComputationalSettings::EstablishMultipliers( double& pf_multiplier, 
+                                                  double& adv_multiplier ) const
 {
     switch ( time_strategy_ ) {
     case PEDANTIC:  // this will invoke the explicit second-order scheme
@@ -120,7 +120,7 @@ void ComputationalSettings::EstablishMultipliers( double64& pf_multiplier,
 in the argument set.  Either over-writing or adding to existing list is optional.
 Overwrite is the default settings.
 */
-void ComputationalSettings::SetOutputTimes( const set<double64>& times ,bool overwrite)
+void ComputationalSettings::SetOutputTimes( const set<double>& times ,bool overwrite)
 {
     if ( times.empty() )
         cout <<"\nComputationalSettings::SetOutputTimes: Supplied set is empty."<< endl;
@@ -128,7 +128,7 @@ void ComputationalSettings::SetOutputTimes( const set<double64>& times ,bool ove
     if (overwrite)
         output_times_ = times;
     else
-        for (set<double64>::iterator sit = times.begin(); sit!=times.end();sit++)
+        for (set<double>::iterator sit = times.begin(); sit!=times.end();sit++)
             output_times_.insert(*sit);
 }
 
@@ -136,7 +136,7 @@ void ComputationalSettings::SetOutputTimes( const set<double64>& times ,bool ove
 in the argument set.  Either over-writing or adding to existing list is optional.
 Overwrite is the default settings.
 */
-void ComputationalSettings::SetMonitorTimes( const set<double64>& times ,bool overwrite)
+void ComputationalSettings::SetMonitorTimes( const set<double>& times ,bool overwrite)
 {
     if ( times.empty() )
         cout <<"\nComputationalSettings::SetMonitorTimes: Supplied set is empty."<< endl;
@@ -144,7 +144,7 @@ void ComputationalSettings::SetMonitorTimes( const set<double64>& times ,bool ov
     if (overwrite)
         monitor_times_ = times;
     else
-        for (set<double64>::iterator sit = times.begin(); sit!=times.end();sit++)
+        for (set<double>::iterator sit = times.begin(); sit!=times.end();sit++)
             monitor_times_.insert(*sit);
 }
 
@@ -154,16 +154,16 @@ void ComputationalSettings::SetMonitorTimes( const set<double64>& times ,bool ov
 Checks whether the nearest time-increment lies within the user-specified
 tolerance. If so the method returns true, else false.  
 */
-bool ComputationalSettings::IsOutputTime( double64 value, double64 tol ) const
+bool ComputationalSettings::IsOutputTime( double value, double tol ) const
 {
     // brute force approach
-    //    for ( set<double64>::const_iterator it=output_times_.begin();
+    //    for ( set<double>::const_iterator it=output_times_.begin();
     //          it!=output_times_.end(); it++ ) {
     //        if ( *it <= (value + tol) && *it >= (value - tol) ) return true;
     //    }
-    set<double64>  time_difference;
+    set<double>  time_difference;
 
-    for ( set<double64>::const_iterator it=output_times_.begin();
+    for ( set<double>::const_iterator it=output_times_.begin();
           it!=output_times_.end(); it++ )
         // if the output time has no occurred yet
         if ( (*it) - value >= 0. )
@@ -179,16 +179,16 @@ bool ComputationalSettings::IsOutputTime( double64 value, double64 tol ) const
 Checks whether the nearest time-increment lies within the user-specified
 tolerance. If so the method returns true, else false.
 */
-bool ComputationalSettings::IsMonitorTime( double64 value, double64 tol ) const
+bool ComputationalSettings::IsMonitorTime( double value, double tol ) const
 {
     // brute force approach
-    //    for ( set<double64>::const_iterator it=output_times_.begin();
+    //    for ( set<double>::const_iterator it=output_times_.begin();
     //          it!=output_times_.end(); it++ ) {
     //        if ( *it <= (value + tol) && *it >= (value - tol) ) return true;
     //    }
-    set<double64>  time_difference;
+    set<double>  time_difference;
 
-    for ( set<double64>::const_iterator it=monitor_times_.begin();
+    for ( set<double>::const_iterator it=monitor_times_.begin();
           it!=monitor_times_.end(); it++ )
         // if the output time has no occurred yet
         if ( (*it) - value >= 0. )
@@ -207,11 +207,11 @@ the object. If the output time occurs in the past, the time difference
 would be negative but it is not considered. Only output times which
 occur in the future are considered and they are all positive.  
 */
-double64  ComputationalSettings::TimeToNearestOutputTime( double64 current_time ) const
+double  ComputationalSettings::TimeToNearestOutputTime( double current_time ) const
 {
-    set<double64>  time_difference;
+    set<double>  time_difference;
     
-    for ( set<double64>::const_iterator it=output_times_.begin();
+    for ( set<double>::const_iterator it=output_times_.begin();
           it!=output_times_.end(); it++ )
         // if the output time has no occurred yet
         if ( (*it) - current_time > 0. )
@@ -230,11 +230,11 @@ the object. If the output time occurs in the past, the time difference
 would be negative but it is not considered. Only output times which
 occur in the future are considered and they are all positive.
 */
-double64  ComputationalSettings::TimeToNearestMonitorTime( double64 current_time ) const
+double  ComputationalSettings::TimeToNearestMonitorTime( double current_time ) const
 {
-    set<double64>  time_difference;
+    set<double>  time_difference;
 
-    for ( set<double64>::const_iterator it=monitor_times_.begin();
+    for ( set<double>::const_iterator it=monitor_times_.begin();
           it!=monitor_times_.end(); it++ )
         // if the output time has no occurred yet
         if ( (*it) - current_time > 0. )
@@ -252,11 +252,11 @@ double64  ComputationalSettings::TimeToNearestMonitorTime( double64 current_time
 Returns the nearest registered output time step with respect to the current_time.
  
 */
-double64  ComputationalSettings::NearestOutputTime( double64 current_time ) const
+double  ComputationalSettings::NearestOutputTime( double current_time ) const
 {
-    set<double64>  nextOutputTimes;
+    set<double>  nextOutputTimes;
     
-    for ( set<double64>::const_iterator it=output_times_.begin();
+    for ( set<double>::const_iterator it=output_times_.begin();
           it!=output_times_.end(); it++ )
         // if the output time has no occurred yet
         if ( (*it) - current_time > 0. )
@@ -273,11 +273,11 @@ double64  ComputationalSettings::NearestOutputTime( double64 current_time ) cons
 Returns the nearest registered monitoring time step with respect to the current_time.
 
 */
-double64  ComputationalSettings::NearestMonitorTime( double64 current_time ) const
+double  ComputationalSettings::NearestMonitorTime( double current_time ) const
 {
-    set<double64>  nextOutputTimes;
+    set<double>  nextOutputTimes;
 
-    for ( set<double64>::const_iterator it=monitor_times_.begin();
+    for ( set<double>::const_iterator it=monitor_times_.begin();
           it!=monitor_times_.end(); it++ )
         // if the output time has no occurred yet
         if ( (*it) - current_time > 0. )
@@ -292,28 +292,28 @@ double64  ComputationalSettings::NearestMonitorTime( double64 current_time ) con
 
 /** Adds a new output time increment to the current set of output times.
 */
-void ComputationalSettings::AddOutputTime( double64 time )
+void ComputationalSettings::AddOutputTime( double time )
 {
     output_times_.insert( time );
 }
 
 /** Adds a new output time increment to the current set of output times.
 */
-void ComputationalSettings::AddMonitorTime( double64 time )
+void ComputationalSettings::AddMonitorTime( double time )
 {
     monitor_times_.insert( time );
 }
 
 /** Sets the duration of the current run to the argument value.
 */
-void ComputationalSettings::Duration( double64 duration )
+void ComputationalSettings::Duration( double duration )
 {
     if ( duration < 0. ) {
         cout <<"\nComputationalSettings::Duration: Can't assign negative value: ";
         cout << duration << endl;
         return;
     }
-    if ( duration > static_cast<double64>(145065600000000000.) ) {
+    if ( duration > static_cast<double>(145065600000000000.) ) {
         cout <<"\nComputationalSettings::Duration: Longer than age of earth ?: ";
         cout << duration << endl;
         return;
@@ -324,7 +324,7 @@ void ComputationalSettings::Duration( double64 duration )
 
 /** Returns the scheduled duration of the current simulation.
 */
-double64 ComputationalSettings::Duration() const
+double ComputationalSettings::Duration() const
 {
     return run_duration_;
 }
@@ -355,22 +355,22 @@ TIME_STRATEGY ComputationalSettings::TimeSteppingApproach() const
 }
 
 
-size_t ComputationalSettings::OutputTimePosition(double64 time)
+size_t ComputationalSettings::OutputTimePosition(double time)
 {
     return distance(output_times_.begin(),output_times_.find(NearestOutputTime(time)));
 }
 
-size_t ComputationalSettings::MonitorTimePosition(double64 time)
+size_t ComputationalSettings::MonitorTimePosition(double time)
 {
     return distance(output_times_.begin(),output_times_.find(NearestOutputTime(time)));
 }
 
-void ComputationalSettings::TimeIncrement( double64 dt )
+void ComputationalSettings::TimeIncrement( double dt )
 {
     time_increment_ = dt;
 }
 
-double64 ComputationalSettings::TimeIncrement() const
+double ComputationalSettings::TimeIncrement() const
 {
     return time_increment_;
 }
@@ -395,17 +395,17 @@ computed if the velocity is below a minimum threshold (1.0e-15 m/s).
 
 */
 template<size_t dim>
-double64 ComputationalSettings::TimeIncrementFromVelocityChange( const Model<dim>& sg, 
-                                                                 double64 log_velocity_change,
-                                                                 double64 current_delta_t,
-                                                                 double64 max_delta_t )
+double ComputationalSettings::TimeIncrementFromVelocityChange( const Model<dim>& sg, 
+                                                                 double log_velocity_change,
+                                                                 double current_delta_t,
+                                                                 double max_delta_t )
 {
     csmp::Index  vfc_key(sg.Database().StorageKey("volume flux")),
             vfp_key(sg.Database().StorageKey("previous volume flux"));
-    double64           vfc, vfp, rate, time_increment(max_delta_t), local_increment;
-    const double64     zero(0.), min_change(0.01), max_change(100.);
-    const double64     min_velocity(1.0e-15);
-    const double64     log_min_velocity(log10(min_velocity));
+    double           vfc, vfp, rate, time_increment(max_delta_t), local_increment;
+    const double     zero(0.), min_change(0.01), max_change(100.);
+    const double     min_velocity(1.0e-15);
+    const double     log_min_velocity(log10(min_velocity));
 
     // test if a useful velocity change is provided
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -458,15 +458,15 @@ double64 ComputationalSettings::TimeIncrementFromVelocityChange( const Model<dim
     return time_increment;
 }
 
-template double64
+template double
 ComputationalSettings::TimeIncrementFromVelocityChange<1U>( const Model<1U>&, 
-double64, double64, double64 );
-template double64
+double, double, double );
+template double
 ComputationalSettings::TimeIncrementFromVelocityChange<2U>( const Model<2U>&, 
-double64, double64, double64 );
-template double64
+double, double, double );
+template double
 ComputationalSettings::TimeIncrementFromVelocityChange<3U>( const Model<3U>&, 
-double64, double64, double64 );
+double, double, double );
 
 
 
@@ -477,11 +477,11 @@ double64, double64, double64 );
 Increments the time-step iterator to the next stored output time and
 returns the corresponding time value.  
 */
-double64 ComputationalSettings::PopOutputTime()
+double ComputationalSettings::PopOutputTime()
 {
     if ( it_ == output_times_.end() ) it_ = output_times_.begin();
 
-    double64 output_time = *it_++;
+    double output_time = *it_++;
 
     return output_time;
 }
@@ -497,14 +497,14 @@ void ComputationalSettings::Out() const
     cout <<"\ntime strategy: "<< parseTimeStrategy( time_strategy_ );
     cout <<"\nrun duration:  "<< run_duration_;
     cout <<"\noutput times:  ";
-    for ( std::set<double64>::const_iterator oit=output_times_.begin();
+    for ( std::set<double>::const_iterator oit=output_times_.begin();
           oit!=output_times_.end(); oit++ )
         cout << (*oit) <<", ";
     cout << endl << endl;
 
     if (!monitor_times_.empty()){
         cout <<"\nmonitor times:  ";
-        for ( std::set<double64>::const_iterator oit=monitor_times_.begin();
+        for ( std::set<double>::const_iterator oit=monitor_times_.begin();
               oit!=monitor_times_.end(); oit++ )
             cout << (*oit) <<", ";
         cout << endl << endl;
@@ -530,7 +530,7 @@ void ComputationalSettings::Out( const char* filename ) const
     ofs <<"\ntime strategy: "<< parseTimeStrategy( time_strategy_ );
     ofs <<"\nrun duration:  "<< run_duration_;
     ofs <<"\noutput times:  ";
-    for ( std::set<double64>::const_iterator oit=output_times_.begin();
+    for ( std::set<double>::const_iterator oit=output_times_.begin();
           oit!=output_times_.end(); oit++ )
         ofs << (*oit) <<", ";
     ofs << endl << endl;

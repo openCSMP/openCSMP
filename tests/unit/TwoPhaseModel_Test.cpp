@@ -59,8 +59,8 @@ void TwoPhaseModel_Test::run()
     twoPhaseModel_->InitializeForNode( *(*it), 1U );
     twoPhaseModel_->EffectiveSaturation();
 
-    const double64 sw( twoPhaseModel_->Saturation(1U) );
-    const double64 seff( twoPhaseModel_->EffectiveSaturation() );
+    const double sw( twoPhaseModel_->Saturation(1U) );
+    const double seff( twoPhaseModel_->EffectiveSaturation() );
 
     // water saturation & effective water saturation
     // ---------------------------------------------

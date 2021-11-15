@@ -255,7 +255,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( CELL& e
          // -----------------------------------------
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (DN is already in global coordinates)
-         double64 detJ = e.dN_AtIntegrationPoint( DN, i, 1 );
+         double detJ = e.dN_AtIntegrationPoint( DN, i, 1 );
 
          // transposing DN -> DNT and saving it in DIFF (diffusion matrix)
          DN.Transposed( DNT );

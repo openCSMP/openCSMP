@@ -118,9 +118,9 @@ VSet<dim>::~VSet()
 Adds node coordinates to VSet
 */
 template<size_t dim>
-void VSet<dim>::AddXYZ( const deque<double64>& x,
-                        const deque<double64>& y,
-                        const deque<double64>& z )
+void VSet<dim>::AddXYZ( const deque<double>& x,
+                        const deque<double>& y,
+                        const deque<double>& z )
 {
 	if (x.size() != Vertices())
     {
@@ -155,10 +155,10 @@ to recuperate element types and the nodes per element information when
 reading the VSet.
 */
 template<size_t dim>
-void VSet<dim>::AddPlist( typename map<size_t, vector<long64> >::const_iterator first,
-						              typename map<size_t, vector<long64> >::const_iterator last)
+void VSet<dim>::AddPlist( typename map<size_t, vector<int64_t> >::const_iterator first,
+						              typename map<size_t, vector<int64_t> >::const_iterator last)
 {
-	typename deque<vector<long64> >::iterator it = PlistBegin();
+	typename deque<vector<int64_t> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
     {
@@ -177,10 +177,10 @@ void VSet<dim>::AddPlist( typename map<size_t, vector<long64> >::const_iterator 
 	reading the VSet.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPlist( typename deque<vector<long64> >::const_iterator first,
-                          typename deque<vector<long64> >::const_iterator last )
+void VSet<dim>::AddPlist( typename deque<vector<int64_t> >::const_iterator first,
+                          typename deque<vector<int64_t> >::const_iterator last )
 {
-	typename deque<vector<long64> >::iterator it = PlistBegin();
+	typename deque<vector<int64_t> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
     {
@@ -201,10 +201,10 @@ void VSet<dim>::AddPlist( typename deque<vector<long64> >::const_iterator first,
 	These manifolds cannot be captured by this classical neighbor record.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPfverts( typename map<size_t, vector<long64> >::const_iterator first,
-						                typename map<size_t, vector<long64> >::const_iterator last )
+void VSet<dim>::AddPfverts( typename map<size_t, vector<int64_t> >::const_iterator first,
+						                typename map<size_t, vector<int64_t> >::const_iterator last )
 {
-	typename deque<vector<long64> >::iterator it = PfvertsBegin();
+	typename deque<vector<int64_t> >::iterator it = PfvertsBegin();
 
 	while (first != last && it != PfvertsEnd())
     {
@@ -226,10 +226,10 @@ void VSet<dim>::AddPfverts( typename map<size_t, vector<long64> >::const_iterato
 	These manifolds cannot be captured by this classical neighbor record.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPfverts( typename deque<vector<long64> >::const_iterator first,
-						                typename deque<vector<long64> >::const_iterator last )
+void VSet<dim>::AddPfverts( typename deque<vector<int64_t> >::const_iterator first,
+						                typename deque<vector<int64_t> >::const_iterator last )
 {
-	typename deque<vector<long64> >::iterator it = PfvertsBegin();
+	typename deque<vector<int64_t> >::iterator it = PfvertsBegin();
 
 	while (first != last && it != PfvertsEnd())
     {
@@ -274,8 +274,8 @@ void VSet<dim>::AddBFlags( typename vector<std::int8_t>::const_iterator first,
        Material ID identifiers need to be provided for all elements, boundaries and split boundaries.
 */
 template<size_t dim>
-void VSet<dim>::AddPmtrl( typename std::vector<int32>::const_iterator first,
-                          typename std::vector<int32>::const_iterator last )
+void VSet<dim>::AddPmtrl( typename std::vector<int32_t>::const_iterator first,
+                          typename std::vector<int32_t>::const_iterator last )
  {
     pmtrl_.clear();
     pmtrl_.assign( first, last );
@@ -285,11 +285,11 @@ void VSet<dim>::AddPmtrl( typename std::vector<int32>::const_iterator first,
 
 
 template<size_t dim>
-std::vector<int32>::const_iterator VSet<dim>::PmtrlBegin() const
+std::vector<int32_t>::const_iterator VSet<dim>::PmtrlBegin() const
  { return pmtrl_.begin(); }
 
 template<size_t dim>
-std::vector<int32>::const_iterator VSet<dim>::PmtrlEnd() const
+std::vector<int32_t>::const_iterator VSet<dim>::PmtrlEnd() const
  { return pmtrl_.end(); }
 
 
@@ -412,7 +412,7 @@ The binary writing is done with the templatized set of functions declared
 in 'binaryReadWrite.h'. These can read and write all CSMP type of datasets.
 */
 template<size_t dim>
-bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
+bool  VSet<dim>::OutputTo( const char* bin_file, double time ) const
 {
 	char file_name[200], num[20];
 	sprintf(num, "%lf", time);
@@ -449,9 +449,9 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
 		BinaryFileSectionWrite sect(fp, "VSETMTRL");
     // number of property records
     records = pmtrl_.size();
-    fp.write((char*)&records, sizeof(int32));
+    fp.write( reinterpret_cast<const char*>(&records), sizeof(int32_t));
     // individual records (all together)
-    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), sizeof(int32) * records );
+    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), sizeof(int32_t) * records );
 	}
 
 	// 5. Writing the property data records to file
@@ -460,7 +460,7 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
 		if (!property_map_.empty()) {
         // number of property records
         records = property_map_.size();
-        fp.write((char*)&records, sizeof(size_t));
+        fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
         // individual records
         for (auto it = property_map_.begin(); it != property_map_.end(); ++it) {
           // writing the property name
@@ -471,7 +471,7 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
      }
 		else { // no data record is registered for later reading
 			records = 0U;
-			fp.write((char*)&records, sizeof(size_t));
+			fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
 		}
 	}
 
@@ -493,7 +493,7 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
 Key method for recovery of a model from binary file. 
 */
 template<size_t dim>
-bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
+bool  VSet<dim>::InputFrom( const char* bin_file, double& time )
 {
    const set<string> empty_subset;
    return InputFrom( bin_file, time, empty_subset );
@@ -504,7 +504,7 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
 Key method for recovery of a model from binary file. It can load only a subset of variables if neccesary.
 */
 template<size_t dim>
-bool  VSet<dim>::InputFrom( const char* bin_file, double64& time, const set<string>& subset_variables )
+bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string>& subset_variables )
 {
 	char file_name[NAME_STRING];
 	strcpy(file_name, bin_file);
@@ -543,17 +543,17 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double64& time, const set<stri
 	{
 		BinaryFileSectionRead sect(fp, "VSETMTRL");
     // number of property records
-    fp.read( reinterpret_cast<char*>(&records), sizeof(int32));
+    fp.read( reinterpret_cast<char*>(&records), sizeof(int32_t));
     pmtrl_.resize( records );
     // individual records (all together)
-    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), records * sizeof(int32) );
+    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), records * sizeof(int32_t) );
 	}
 
 	// Reading the property data records from file (PropertyData)
 	{
 		BinaryFileSectionRead sect(fp, "VSETPROP");
 
-		fp.read((char*)&records, sizeof(size_t));
+		fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
 		if (records > 0)
 			// reading the datasets sequentially
 			for (size_t i = 0; i<records; ++i)
@@ -604,7 +604,7 @@ TODO: @todo Refactor to work with PropertyData based variable storage
 
 */
 template<size_t dim>
-bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t first_outerhalo) const
+bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double time, size_t first_outerhalo) const
 {
 	char file_name[200], num[20];
 	sprintf(num, "%lf", time);
@@ -646,7 +646,7 @@ bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t fi
 TODO: @todo Refactor to work with PropertyData based variable storage
 */
 template<size_t dim>
-bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t& first_outerhalo)
+bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double& time, size_t& first_outerhalo)
 {
 	cerr << "\nVSet<dim>::ParallelInputFrom: variable output has not been implemented yet.\n";
 
@@ -694,7 +694,7 @@ bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t&
  
  */
 template<size_t dim>
-bool  VSet<dim>::InputFromTextFile(const char* text_file)
+bool  VSet<dim>::InputFromTextFile( const char* text_file )
 {
 	string file(text_file);
 	file += ".txt";
@@ -794,7 +794,7 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
     n_o_node_ids[o_n.second] = o_n.first;
   
   // material indentifiers
-  vector<int32> new_pmtrl;
+  vector<int32_t> new_pmtrl;
   new_pmtrl.reserve( n_o_elmt_ids.size() );
   for ( auto id : n_o_elmt_ids )
     new_pmtrl.push_back( pmtrl_[id] );
@@ -856,14 +856,14 @@ void VSet<dim>::Erase()
    uses the node coordinates to infer the model dimension: if Z-range=zero, dim=2, if Y-range=2, dim=1, else dim=3
 */
 template<size_t dim>
-int32  VSet<dim>::MeshDimension( bool check_coordinates ) const
+int32_t  VSet<dim>::MeshDimension( bool check_coordinates ) const
  {
     if ( !check_coordinates ) return dim;
     
     // if they are not empty but all coordinate values are zero, the model has no extent in these directions
-    pair<double64,double64> z_range = Z_Range(), y_range = Y_Range();
-    bool z_zero = ( fabs( z_range.second - z_range.first ) <= numeric_limits<double64>::epsilon() ) ? true : false; 
-    bool y_zero = ( fabs( y_range.second = y_range.first ) <= numeric_limits<double64>::epsilon() ) ? true : false; 
+    pair<double,double> z_range = Z_Range(), y_range = Y_Range();
+    bool z_zero = ( fabs( z_range.second - z_range.first ) <= numeric_limits<double>::epsilon() ) ? true : false; 
+    bool y_zero = ( fabs( y_range.second = y_range.first ) <= numeric_limits<double>::epsilon() ) ? true : false; 
     
     if ( z_zero and  y_zero ) return 1;
     if ( z_zero and !y_zero ) return 2;

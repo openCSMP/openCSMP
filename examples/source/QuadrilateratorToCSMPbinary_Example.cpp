@@ -57,7 +57,7 @@ void QuadrilateratorToCSMPbinary_Example::Run()
 
     // 50 x 20 m
     cout <<"\nmain: Enter x(horizontal) and y(vertical) extent of the model: "; 
-    double64 x_extend(10.), y_extend(5.);
+    double x_extend(10.), y_extend(5.);
     cin >> x_extend >> y_extend;
     const bool from_bitmap=true;
     // also converts integer values to permeability (see utilities/convertColorToPermeability.h)
@@ -93,16 +93,16 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     Region<2> model_domain(model.Region("Model"));
     
     for ( vector<Element<2>*>::iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-          const double64 permeability = (*it)->Read( k_key );
+          const double permeability = (*it)->Read( k_key );
           // porosity: phi = cubic root of permeability times constant factor + offset
-          const double64 scale_factor(2.5e3);
-          double64       porosity = scale_factor * cbrt( permeability );
+          const double scale_factor(2.5e3);
+          double       porosity = scale_factor * cbrt( permeability );
           (*it)->Store( phi_key, makeScalar(PLAIN,porosity) );
           // entry pressure: (decreases with permeability from 10 MPa to 1kPa at 1D)
-          double64       pd = 1.0e-9 * (1/permeability);
+          double       pd = 1.0e-9 * (1/permeability);
           (*it)->Store( pd_key, makeScalar(PLAIN,pd) );
           // Brooks-Corey parameter: (increases with permeability from 3 to 6)
-          double64       bcp = -log(permeability)/5. - 3.;
+          double       bcp = -log(permeability)/5. - 3.;
           (*it)->Store( bcp_key, makeScalar(PLAIN,bcp) );
       }
 

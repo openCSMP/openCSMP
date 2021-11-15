@@ -525,7 +525,7 @@ bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T> >& stl_c
     }
 
 	// writing the number of vector objects
-	const long64  elements(stl_ctner.size());
+	const int64_t   elements(stl_ctner.size());
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
@@ -581,7 +581,7 @@ bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
     }
 
 	// 1. reading number of vector records and assert this reading
-  const long64 elements = checkContainerSize( fp );
+  const int64_t  elements = checkContainerSize( fp );
 
 	size_t counter(0);
 	if ( elements > 0U ) {
@@ -730,7 +730,7 @@ bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner)
 	T       val;
 
 	// 1. read number of record in the map and assert reading
-  const long64 elements = checkContainerSize( fp );
+  const int64_t  elements = checkContainerSize( fp );
 
 	if (elements > 0) {
 		// 2. reading all map records

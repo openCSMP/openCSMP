@@ -56,8 +56,8 @@ void ModelPreProcessor2D::ModelToMatrix( const string& file_name, size_t rows, s
     model_ptr_->MinMaxCoordinates( xyz_min, xyz_max );
          //                             xmin        xmax        ymin        ymax       
     FiniteDifferenceGrid  regular_grid( xyz_min[0], xyz_max[0], xyz_min[1], xyz_max[1], 
-                                       (xyz_max[0]-xyz_min[0]) / static_cast<double64>(n_cells_x), 
-                                       (xyz_max[1]-xyz_min[1]) / static_cast<double64>(n_cells_y) );  
+                                       (xyz_max[0]-xyz_min[0]) / static_cast<double>(n_cells_x), 
+                                       (xyz_max[1]-xyz_min[1]) / static_cast<double>(n_cells_y) );  
 
     // 3. setting up static visitor to write repeatedly write data to grid
     // -------------------------------------------------------------------
@@ -75,10 +75,10 @@ void ModelPreProcessor2D::ModelToMatrix( const string& file_name, size_t rows, s
     const bool gray_scale(false);
     const bool sqrt_of_value(true);
 
-    regular_grid.SaveToJPG( file_name.c_str(), static_cast<int32>(0), gray_scale, sqrt_of_value );
+    regular_grid.SaveToJPG( file_name.c_str(), static_cast<int32_t>(0), gray_scale, sqrt_of_value );
     
     const bool with_frame(false);
-    regular_grid.Out( file_name.c_str(), static_cast<int32>(0), with_frame );
+    regular_grid.Out( file_name.c_str(), static_cast<int32_t>(0), with_frame );
 
 /*
     ofstream ofs( file_name );

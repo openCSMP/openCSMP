@@ -98,8 +98,8 @@ namespace csmp
       if ( verbose_ ) vtu.OutputDataToVTU( "InitialVelocityField", "nodal velocity", "Model", static_cast<int>(0) );
 
       // simulation settings
-      double64 model_time( 0. );
-      const double64 TIME_INCREMENT( 5000. ), SIMULATION_DURATION( 9000000. );
+      double model_time( 0. );
+      const double TIME_INCREMENT( 5000. ), SIMULATION_DURATION( 9000000. );
 
       // transient loop
       //while( model_time < SIMULATION_DURATION )
@@ -184,12 +184,12 @@ namespace csmp
       for ( vector<Element<3U>*>::iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
         {
           // computing the total velocity: vt = -k (lt grad p )
-          const double64 mob_t = (*it)->Read( totalMobilityKey );
+          const double mob_t = (*it)->Read( totalMobilityKey );
           velo = 0.;
           (*it)->dN_AtBaryCenter( DERIV, 1U );
           for ( size_t i = 0; i < (*it)->Nodes(); ++i )
             {
-              double64 pf = (*it)->N(i)->Read( fluidPresssureKey );
+              double pf = (*it)->N(i)->Read( fluidPresssureKey );
               velo(0)  += pf  * -DERIV(0,i) * mob_t;
               velo(1)  += pf  * -DERIV(1,i) * mob_t;
               velo(2)  += pf  * -DERIV(2,i) * mob_t;

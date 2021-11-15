@@ -11,10 +11,10 @@ class HydraulicHead : public Interrelation<dim> {
     Operand<dim>&   E;    // vertical elevation (zero at model base)
     Operand<dim>&   H;    // hydraulic head
     ScalarVariable height, pres;
-    double64                 rho0, g; // acceleration of gravity
+    double                 rho0, g; // acceleration of gravity
     
   public:
-    HydraulicHead( const PropertyDatabase<dim>& p, double64 ref_density=1000.0 );
+    HydraulicHead( const PropertyDatabase<dim>& p, double ref_density=1000.0 );
     ~HydraulicHead() {};
     void Calculate();
 };

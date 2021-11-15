@@ -121,13 +121,13 @@ void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
         e.FE_Type() == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
       {
          // watch out, this is not generic but restricted to 6-noded triangle in 2D
-         const double64 volume_div_n(e.Volume() / static_cast<double64>(e.FE()->MidSideNodes()));
+         const double volume_div_n(e.Volume() / static_cast<double>(e.FE()->MidSideNodes()));
          for ( size_t i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }
    else
      {
-         const double64 volume_div_n(e.Volume() / static_cast<double64>(e.Nodes()));
+         const double volume_div_n(e.Volume() / static_cast<double>(e.Nodes()));
          for ( size_t i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }

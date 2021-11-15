@@ -14,8 +14,8 @@ using namespace std;
 
 namespace csmp
 {
-  TwophaseLiquidLookup::TwophaseLiquidLookup(const double64& externaltemperature, 
-                                             const double64& externalpressure)
+  TwophaseLiquidLookup::TwophaseLiquidLookup(const double& externaltemperature, 
+                                             const double& externalpressure)
     : temperature(externaltemperature), 
       pressure(externalpressure), 
       tcurrent(0.0),
@@ -304,21 +304,21 @@ namespace csmp
     
     
   // The data interpolation routines
-  double64 TwophaseLiquidLookup::Temperature(){     SetTemperatureAndPressure(); return Interpolate(temperature_index);    }
-  double64 TwophaseLiquidLookup::Pressure(){        SetTemperatureAndPressure(); return Interpolate(pressure_index);       }
-  double64 TwophaseLiquidLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return Interpolate(composition_index);    }
-  double64 TwophaseLiquidLookup::Density(){         SetTemperatureAndPressure(); return Interpolate(density_index);        }
-  double64 TwophaseLiquidLookup::Enthalpy(){        SetTemperatureAndPressure(); return Interpolate(enthalpy_index);       }
-  double64 TwophaseLiquidLookup::HeatCapacity(){    SetTemperatureAndPressure(); return Interpolate(heatcapacity_index);   }
-  double64 TwophaseLiquidLookup::Compressibility(){ SetTemperatureAndPressure(); return Interpolate(compressibility_index);}
-  double64 TwophaseLiquidLookup::Viscosity(){       SetTemperatureAndPressure(); return Interpolate(viscosity_index);      }
+  double TwophaseLiquidLookup::Temperature(){     SetTemperatureAndPressure(); return Interpolate(temperature_index);    }
+  double TwophaseLiquidLookup::Pressure(){        SetTemperatureAndPressure(); return Interpolate(pressure_index);       }
+  double TwophaseLiquidLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return Interpolate(composition_index);    }
+  double TwophaseLiquidLookup::Density(){         SetTemperatureAndPressure(); return Interpolate(density_index);        }
+  double TwophaseLiquidLookup::Enthalpy(){        SetTemperatureAndPressure(); return Interpolate(enthalpy_index);       }
+  double TwophaseLiquidLookup::HeatCapacity(){    SetTemperatureAndPressure(); return Interpolate(heatcapacity_index);   }
+  double TwophaseLiquidLookup::Compressibility(){ SetTemperatureAndPressure(); return Interpolate(compressibility_index);}
+  double TwophaseLiquidLookup::Viscosity(){       SetTemperatureAndPressure(); return Interpolate(viscosity_index);      }
     
-  double64 TwophaseLiquidLookup::ReportMassFractionNaCl(){ return Interpolate(composition_index); }
-  double64 TwophaseLiquidLookup::ReportEnthalpy(){    return Interpolate(enthalpy_index); }
+  double TwophaseLiquidLookup::ReportMassFractionNaCl(){ return Interpolate(composition_index); }
+  double TwophaseLiquidLookup::ReportEnthalpy(){    return Interpolate(enthalpy_index); }
     
-  double64 TwophaseLiquidLookup::MinXResolution(){ return 1.0e-4; } //min x-res in H2ONaClLookup
+  double TwophaseLiquidLookup::MinXResolution(){ return 1.0e-4; } //min x-res in H2ONaClLookup
 
-  double64 TwophaseLiquidLookup::DEnthalpyDT()
+  double TwophaseLiquidLookup::DEnthalpyDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -377,7 +377,7 @@ namespace csmp
   }
     
     
-  double64 TwophaseLiquidLookup::DCompositionDT()
+  double TwophaseLiquidLookup::DCompositionDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -436,7 +436,7 @@ namespace csmp
   }
     
     
-  double64 TwophaseLiquidLookup::DSaltMassFractionDT()
+  double TwophaseLiquidLookup::DSaltMassFractionDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -516,7 +516,7 @@ namespace csmp
     
 
     
-  double64 TwophaseLiquidLookup::Interpolate(const int& property_index)
+  double TwophaseLiquidLookup::Interpolate(const int& property_index)
   {
     // do NOT set tcurrent and pcurrent here, do it outside this function too keep it versatile !!!
 	
@@ -612,7 +612,7 @@ namespace csmp
       }
   }
     
-  double64 TwophaseLiquidLookup::NormalInterpolation( const int& property_index )
+  double TwophaseLiquidLookup::NormalInterpolation( const int& property_index )
   {
     //d cout << "Using TwophaseLiquidLookup::NormalInterpolation( const int& property_index ) ...\n";
 	
@@ -637,7 +637,7 @@ namespace csmp
   }
     
     
-  double64 TwophaseLiquidLookup::NearVLHMaxInterpolation(const int& property_index)
+  double TwophaseLiquidLookup::NearVLHMaxInterpolation(const int& property_index)
   {
     // Feb. 2011
     // The following treatment strongl;y relies on a correct detrmination that we are
@@ -790,7 +790,7 @@ namespace csmp
      }
   }
 
-  double64 TwophaseLiquidLookup::NearCritpointInterpolation( const int& property_index )
+  double TwophaseLiquidLookup::NearCritpointInterpolation( const int& property_index )
   {
     // This is  the topology:
     //                           
@@ -837,7 +837,7 @@ namespace csmp
   }
 
 
-  double64 TwophaseLiquidLookup::NearCritcurveInterpolation( const int& property_index )
+  double TwophaseLiquidLookup::NearCritcurveInterpolation( const int& property_index )
   {
     //d cout << "Using TwophaseLiquidLookup::NearCritcurveInterpolation( const int& property_index ) ...\n";
     //d cout << "Critical Pressure at T of interest is " << critcurve.Pressure() << endl;
@@ -1001,7 +1001,7 @@ namespace csmp
 
 
 
-  double64 TwophaseLiquidLookup::NearBoilingCurveInterpolation( const int& property_index )
+  double TwophaseLiquidLookup::NearBoilingCurveInterpolation( const int& property_index )
   {
     //d cout << "Using TwophaseLiquidLookup::NearBoilingCurveInterpolation( const int& property_index ) ...\n";
 
@@ -1167,7 +1167,7 @@ namespace csmp
 
 
 
-  double64 TwophaseLiquidLookup::NearVLHInterpolationLowT( const int& property_index )
+  double TwophaseLiquidLookup::NearVLHInterpolationLowT( const int& property_index )
   {
     //d cout << "Using TwophaseLiquidLookup::NearVLHInterpolationLowT( const int& property_index ) ...\n";
 
@@ -1318,7 +1318,7 @@ namespace csmp
 
 
   // needs update
-  double64 TwophaseLiquidLookup::NearVLHInterpolationHighT( const int& property_index )
+  double TwophaseLiquidLookup::NearVLHInterpolationHighT( const int& property_index )
   {
     //d cout << "Using TwophaseLiquidLookup::NearVLHInterpolationHighT( const int& property_index ) ...\n";
 
@@ -1457,7 +1457,7 @@ namespace csmp
 
 
   // needs update
-  double64 TwophaseLiquidLookup::InterpolateBetweenBoilingCurveAndVLH( const int& property_index )
+  double TwophaseLiquidLookup::InterpolateBetweenBoilingCurveAndVLH( const int& property_index )
   {
     //d cout << "Using TwophaseLiquidLookup::InterpolateBetweenBoilingCurveAndVLH( const int& property_index ) ..\n";
 
@@ -1484,7 +1484,7 @@ namespace csmp
     //     else return 9.9e99;
   }
 
-  void TwophaseLiquidLookup::GetTemperatureIndex(const double64& t)
+  void TwophaseLiquidLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <    0.0e0){  t_res =  5.0; it = 0; }
@@ -1504,7 +1504,7 @@ namespace csmp
     // t_dim is therefore (1000-550)/10+285 + 1 = 331
   }
     
-  void TwophaseLiquidLookup::GetPressureIndex(const double64& p)
+  void TwophaseLiquidLookup::GetPressureIndex(const double& p)
   {
     // new version
     if(     p <=   20.0e5){ p_res =   0.5e5; ip =     static_cast<long>( (p-   0.5e5)/p_res ); }    

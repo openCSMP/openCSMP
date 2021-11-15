@@ -13,9 +13,9 @@ class RandomFieldGenerator  {
   public:
     RandomFieldGenerator();
     // generating the random field
-    void RandomElementField2D( Model<dim>& sg, const char* variable, double64 mean, double64 sigma, double64 xlength, double64 ylength, 
+    void RandomElementField2D( Model<dim>& sg, const char* variable, double mean, double sigma, double xlength, double ylength, 
                                bool logarithmic, const char* region="Model", size_t iterations=50 );
-    void RandomNodeField2D( Model<dim>& sg, const char* variable, double64 mean, double64 sigma, double64 xlength, double64 ylength, 
+    void RandomNodeField2D( Model<dim>& sg, const char* variable, double mean, double sigma, double xlength, double ylength, 
 		                    bool logarithmic, const char* region="Model", size_t iterations=50 );
     // saving the random field
     void OutputRandomNodeField( Model<dim>& sg);
@@ -26,12 +26,12 @@ class RandomFieldGenerator  {
 
   private:
     csmp::Matrix  m1_, m2_, m3_;
-    const double64 pi_;
-    std::vector<double64> k_;
+    const double pi_;
+    std::vector<double> k_;
     std::string fname;
     Matrix& UniformRandomMatrix(size_t m, size_t n);
     Matrix& NormalRandomMatrix(size_t m, size_t n);
-    double64 TheoreticalStandardDeviation(size_t m, double64 xl, double64 yl, double64 Lx, double64 Ly);
+    double TheoreticalStandardDeviation(size_t m, double xl, double yl, double Lx, double Ly);
 };
 
 } // csp

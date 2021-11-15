@@ -75,7 +75,7 @@ const double SV( 67000000. );
 const double Pp( 28000000. );
 
 const ScalarVariable zeroScalar( PLAIN, 0. );
-const double64 displacement( 0. );
+const double displacement( 0. );
 const VectorVariable<3U> zeroVector( PLAIN, 0. );
 //    const VectorVariable<3U> zeroVectorDirichlet( DIRICH, 0. );
 const VectorVariable<3U> DisplacementVectorBOTTOM(PLAIN, DIRICH ,PLAIN,0., displacement, 0.); // it can not move in the Y direction

@@ -146,13 +146,13 @@ convergence criterion, either absolute or residual, is subsequently used as stop
 is defined by "res <= eps". Relative convergence is defined by "res <= eps.res0" (res0 = starting residual).
 */
 template<size_t dim>
-bool TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::Solve( double64 modelTime )
+bool TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::Solve( double modelTime )
 {
   throw;
 }
 
 template<size_t dim>
-bool TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::Solve( double64 modelTime, TwoPhaseModel<dim>& saturationFunctions, double64 timeInterval )
+bool TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::Solve( double modelTime, TwoPhaseModel<dim>& saturationFunctions, double timeInterval )
 {
     /// SAMG output to file
     #ifdef SAMG_OUTPUT_TO_FILE

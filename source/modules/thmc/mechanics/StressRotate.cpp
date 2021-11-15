@@ -17,7 +17,7 @@ namespace csmp
 */
 StressRotate::StressRotate( const Point<3U>& n1, 
                             const Point<3U>& n3, 
-                            double64 sigma1, double64 sigma2, double64 sigma3 )
+                            double sigma1, double sigma2, double sigma3 )
   : original_n1_(n1), 
     original_n3_(n3),
     n1_(n1), n3_(n3), 
@@ -54,15 +54,15 @@ void StressRotate::Reset()
 
 
 /// maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor
-double64 StressRotate::Sigma1() const
+double StressRotate::Sigma1() const
   { return sigma1_; }
   
 /// intermediate principal stress (Pa/m2)
-double64 StressRotate::Sigma2() const
+double StressRotate::Sigma2() const
   { return sigma2_; }
   
 /// minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor
-double64 StressRotate::Sigma3() const
+double StressRotate::Sigma3() const
   { return sigma3_; }
   
 
@@ -80,16 +80,16 @@ void StressRotate::CartesianStressTensor( TensorVariable<3U>& stress ) const
     Point<3U> n2 (crossProduct(n3_,n1_));
     n2.NormalizeLengthTo(1.);
     
-    const double64 mxx ( n1_[0] ), mxy ( n1_[1] ), mxz ( n1_[2] ) ; 
-    const double64 myx ( n2[0] ), myy ( n2[1] ), myz ( n2[2] ) ; 
-    const double64 mzx ( n3_[0] ), mzy ( n3_[1] ), mzz ( n3_[2] ) ; 
+    const double mxx ( n1_[0] ), mxy ( n1_[1] ), mxz ( n1_[2] ) ; 
+    const double myx ( n2[0] ), myy ( n2[1] ), myz ( n2[2] ) ; 
+    const double mzx ( n3_[0] ), mzy ( n3_[1] ), mzz ( n3_[2] ) ; 
     
-    const double64 sxx (sigma1_*mxx*mxx + sigma2_*myx*myx + sigma3_*mzx*mzx);    
-    const double64 sxy (sigma1_*mxx*mxy + sigma2_*myx*myy + sigma3_*mzx*mzy);   
-    const double64 syy (sigma1_*mxy*mxy + sigma2_*myy*myy + sigma3_*mzy*mzy);   
-    const double64 szz (sigma1_*mxz*mxz + sigma2_*myz*myz + sigma3_*mzz*mzz);   
-    const double64 syz (sigma1_*mxy*mxz + sigma2_*myy*myz + sigma3_*mzy*mzz);   
-    const double64 szx (sigma1_*mxz*mxx + sigma2_*myz*myx + sigma3_*mzz*mzx);
+    const double sxx (sigma1_*mxx*mxx + sigma2_*myx*myx + sigma3_*mzx*mzx);    
+    const double sxy (sigma1_*mxx*mxy + sigma2_*myx*myy + sigma3_*mzx*mzy);   
+    const double syy (sigma1_*mxy*mxy + sigma2_*myy*myy + sigma3_*mzy*mzy);   
+    const double szz (sigma1_*mxz*mxz + sigma2_*myz*myz + sigma3_*mzz*mzz);   
+    const double syz (sigma1_*mxy*mxz + sigma2_*myy*myz + sigma3_*mzy*mzz);   
+    const double szx (sigma1_*mxz*mxx + sigma2_*myz*myx + sigma3_*mzz*mzx);
     
     stress(0,0) = sxx;
     stress(0,1) = sxy;
@@ -114,25 +114,25 @@ in order to take into account offset of current location from where the
 stress was measured.
       
  */
- void StressRotate::CartesianStressTensor( TensorVariable<3U>& stress, double64 iso_stress_offset ) const
+ void StressRotate::CartesianStressTensor( TensorVariable<3U>& stress, double iso_stress_offset ) const
   {
     Point<3U> n2 (crossProduct(n3_,n1_));
     n2.NormalizeLengthTo(1.);
     
-    const double64 mxx ( n1_[0] ), mxy ( n1_[1] ), mxz ( n1_[2] ) ; 
-    const double64 myx ( n2[0] ), myy ( n2[1] ), myz ( n2[2] ) ; 
-    const double64 mzx ( n3_[0] ), mzy ( n3_[1] ), mzz ( n3_[2] ) ; 
+    const double mxx ( n1_[0] ), mxy ( n1_[1] ), mxz ( n1_[2] ) ; 
+    const double myx ( n2[0] ), myy ( n2[1] ), myz ( n2[2] ) ; 
+    const double mzx ( n3_[0] ), mzy ( n3_[1] ), mzz ( n3_[2] ) ; 
     
-    const double64 s1_offs = sigma1_ + iso_stress_offset;
-    const double64 s2_offs = sigma2_ + iso_stress_offset;
-    const double64 s3_offs = sigma3_ + iso_stress_offset;
+    const double s1_offs = sigma1_ + iso_stress_offset;
+    const double s2_offs = sigma2_ + iso_stress_offset;
+    const double s3_offs = sigma3_ + iso_stress_offset;
     
-    const double64 sxx (s1_offs * mxx*mxx + s2_offs * myx*myx + s3_offs * mzx*mzx);
-    const double64 sxy (s1_offs * mxx*mxy + s2_offs * myx*myy + s3_offs * mzx*mzy);
-    const double64 syy (s1_offs * mxy*mxy + s2_offs * myy*myy + s3_offs * mzy*mzy);
-    const double64 szz (s1_offs * mxz*mxz + s2_offs * myz*myz + s3_offs * mzz*mzz);
-    const double64 syz (s1_offs * mxy*mxz + s2_offs * myy*myz + s3_offs * mzy*mzz);
-    const double64 szx (s1_offs * mxz*mxx + s2_offs * myz*myx + s3_offs * mzz*mzx);
+    const double sxx (s1_offs * mxx*mxx + s2_offs * myx*myx + s3_offs * mzx*mzx);
+    const double sxy (s1_offs * mxx*mxy + s2_offs * myx*myy + s3_offs * mzx*mzy);
+    const double syy (s1_offs * mxy*mxy + s2_offs * myy*myy + s3_offs * mzy*mzy);
+    const double szz (s1_offs * mxz*mxz + s2_offs * myz*myz + s3_offs * mzz*mzz);
+    const double syz (s1_offs * mxy*mxz + s2_offs * myy*myz + s3_offs * mzy*mzz);
+    const double szx (s1_offs * mxz*mxx + s2_offs * myz*myx + s3_offs * mzz*mzx);
     
     stress(0,0) = sxx;
     stress(0,1) = sxy;
@@ -162,7 +162,7 @@ stress was measured.
     @param axes   is either of the x, y or z coordinate axes in the Kartesian system
     @param angle  is the angle in degress (0..360)
 */
-void StressRotate::Rotate( char axis, double64 angle ) 
+void StressRotate::Rotate( char axis, double angle ) 
   {
     if ( axis != 'x' and axis != 'y' and axis != 'z' )
       throw Exception( ERROR, "StressRotate::Rotate", "axis parameter (1) could not be identified; should be x,y or z");
@@ -172,7 +172,7 @@ void StressRotate::Rotate( char axis, double64 angle )
 
     //conversion from degrees to radians
     //conversion from yaw-pitch-roll to right hand side rule
-    const double64 angle_r( -angle * PI / 180. );
+    const double angle_r( -angle * PI / 180. );
     
     TensorVariable<3U> rotation;
     

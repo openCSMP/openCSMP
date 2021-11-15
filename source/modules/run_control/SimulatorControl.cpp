@@ -71,9 +71,9 @@ void SimulatorControl<dim>::Initialize()
 
 
 template<size_t dim>
-double64 SimulatorControl<dim>::GetInitialSimulatorStartTimeFromIntervals()
+double SimulatorControl<dim>::GetInitialSimulatorStartTimeFromIntervals()
 {
-    double64 time = 10e52;
+    double time = 10e52;
     for (auto mit = this->GetIntervals().begin(); mit != this->GetIntervals().end();mit++){
         if (mit->first < time )
             time = mit-> first;
@@ -105,7 +105,7 @@ string SimulatorControl<dim>::ParseWellMode(WELL_MODE mode)
 }
 
 template<size_t dim>
-WELL_MODE SimulatorControl<dim>::ParseIntegerToWellMode(int32 i)
+WELL_MODE SimulatorControl<dim>::ParseIntegerToWellMode(int32_t i)
 {
     if (i==0)
         return SHUTIN;
@@ -118,22 +118,22 @@ WELL_MODE SimulatorControl<dim>::ParseIntegerToWellMode(int32 i)
 }
 
 template<size_t dim>
-size_t SimulatorControl<dim>::GetIntervalNumber(double64 current_time){
+size_t SimulatorControl<dim>::GetIntervalNumber(double current_time){
     //    auto ith = std::lower_bound(this->GetIntervals().begin(),this->GetIntervals().end(),make_pair(current_time,string("test_string")),
-    //                                [](pair<double64,string> lhs, pair<double64,string> rhs) -> bool { return lhs.second < rhs.second; });
+    //                                [](pair<double,string> lhs, pair<double,string> rhs) -> bool { return lhs.second < rhs.second; });
     auto ith = lower_bound( this->GetIntervals().begin(),this->GetIntervals().end(), make_pair(current_time,string("test_string")),
     
-                                [](pair<double64,string> lhs, pair<double64,string> rhs) -> bool { return lhs.first < rhs.first; } );
+                                [](pair<double,string> lhs, pair<double,string> rhs) -> bool { return lhs.first < rhs.first; } );
 
     size_t int_number = ith - this->GetIntervals().begin();
     return int_number;
 }
 
 template<size_t dim>
-string SimulatorControl<dim>::GetIntervalName(double64 current_time){
+string SimulatorControl<dim>::GetIntervalName(double current_time){
 
 //    auto ith = std::lower_bound(this->GetIntervals().begin(),this->GetIntervals().end(),make_pair(current_time,string("test_string")),
-//                                [](pair<double64,string> lhs, pair<double64,string> rhs) -> bool { return lhs.first < rhs.first; });
+//                                [](pair<double,string> lhs, pair<double,string> rhs) -> bool { return lhs.first < rhs.first; });
     string int_name = "unknown";
     size_t ith = 0;
     for (auto it = this->GetIntervals().begin(); it !=this->GetIntervals().end(); it++){
@@ -179,7 +179,7 @@ void SimulatorControl<dim>::OutputRestartFile(bool manually_triggered)
     ScalarVariable current_runtime;
     this->GetSS()->GetModel()->Read(run_time_Key_,current_runtime);
 
-    double64 runTimeSinceLastRestart=current_runtime() - runtimeOnLastRestart_;
+    double runTimeSinceLastRestart=current_runtime() - runtimeOnLastRestart_;
 
     if ((runTimeSinceLastRestart>=restartFileOuputRunTimeInterval_) || manually_triggered)
     {
@@ -209,7 +209,7 @@ void SimulatorControl<dim>::PrintRangeOfVariablesToScreen()
     cout<<"--------------------------------------------------------"<<endl;
     cout<<" Printing property ranges."<<endl;
     cout<<" Input Variables."<<endl;
-    double64 pmin, pmax;
+    double pmin, pmax;
     const PropertyDatabase<dim>& p_ref = this->GetSS()->GetModel()->Database();
     for ( lit = litbeg; lit != litend; lit++){
         string usage=lit->usage;
@@ -237,13 +237,13 @@ template <size_t dim>
 void SimulatorControl<dim>::UpdateCurrentRunTime()
 {
 #ifdef _OPENMP
-    double64 runtime=(omp_get_wtime()-this->initial_omp_wtime_);
+    double runtime=(omp_get_wtime()-this->initial_omp_wtime_);
     this->GetSS()->GetModel()->Store(run_time_Key_,makeScalar(PLAIN,runtime));
 #else
     unsigned long millisec ((clock() - startClockTicks_) * 1000000 / CLOCKS_PER_SEC);
-    double64 runtime=(double64)(millisec)/1000000.;
+    double runtime=(double)(millisec)/1000000.;
     //float runtime=float((clock() - startClockTicks_))/float(CLOCKS_PER_SEC);
-    //double64 runtime=double64((clock() - startClockTicks_))/double64(CLOCKS_PER_SEC);
+    //double runtime=double((clock() - startClockTicks_))/double(CLOCKS_PER_SEC);
 
     this->GetSS()->GetModel()->Store(run_time_Key_,makeScalar(PLAIN,runtime));
 #endif
@@ -283,12 +283,12 @@ void SimulatorControl<dim>::OutputVariableToRegionVTUFiles()
 }
 
 template<size_t dim>
-double64 SimulatorControl<dim>::GetCurrentIntervalEndTime(double64 current_simulation_time)
+double SimulatorControl<dim>::GetCurrentIntervalEndTime(double current_simulation_time)
 {
     /** Here we look in the stored time interval start times to see which is the the closest
     to the current simulation time.  If none is found then GetSimulationEndTime() is returned. */
 
-    set<double64>  possibleIntervalEndTimes;
+    set<double>  possibleIntervalEndTimes;
     /// check all simulation start times, and choose the closest one.
     for ( auto it=this->GetIntervals().begin();it!=this->GetIntervals().end(); it++ )
         if ( (it->first) - current_simulation_time > 0. )
@@ -302,13 +302,13 @@ double64 SimulatorControl<dim>::GetCurrentIntervalEndTime(double64 current_simul
 }
 
 template<size_t dim>
-double64 SimulatorControl<dim>::GetCurrentIntervalStartTime(double64 current_simulation_time)
+double SimulatorControl<dim>::GetCurrentIntervalStartTime(double current_simulation_time)
 {
     /** Here we look in the stored time interval start times to see which is the the closest
     previous to the current simulation time.
     If none is found then GetSimulationStartTime() is returned. */
 
-    set<double64>  possibleIntervalStartTimes;
+    set<double>  possibleIntervalStartTimes;
     for ( auto it=this->GetIntervals().begin();it!=this->GetIntervals().end(); it++ )
         if ( current_simulation_time - (it->first)  >= 0. )
             possibleIntervalStartTimes.insert( (it->first) );
@@ -359,11 +359,11 @@ bool SimulatorControl<dim>::InteractiveInputNodeValue(csmp::Index key, SUBDOMAIN
 {
     cout<<" Please type in the coordinates of the point where you would like to set an essential condition "<<endl;
 
-    cout<<" x: ";double64 x=this->GetRealInput();
-    cout<<" y: ";double64 y=this->GetRealInput();
-    cout<<" z: ";double64 z=this->GetRealInput();
+    cout<<" x: ";double x=this->GetRealInput();
+    cout<<" y: ";double y=this->GetRealInput();
+    cout<<" z: ";double z=this->GetRealInput();
     cout<<" Please type the value you would like to assign: ";
-    double64 value=this->GetRealInput();
+    double value=this->GetRealInput();
     cout<<" output :"<<value<<endl;
     this->SetValueNearestToPoint(key,x,y,z,value,DIRICH,sub);
     if (value >= 10e50){
@@ -381,10 +381,10 @@ template<size_t dim>
 void SimulatorControl<dim>::SetReferencePointValuesModelInterior()
 {
     for (auto it = this->GetReferencePointsAndValues().begin(); it != this->GetReferencePointsAndValues().end();it++){
-        double64 x=it->second.first[0];
-        double64 y=it->second.first[1];
-        double64 z=it->second.first[2];
-        double64 value=it->second.second;
+        double x=it->second.first[0];
+        double y=it->second.first[1];
+        double z=it->second.first[2];
+        double value=it->second.second;
         this->SetValueNearestToPoint(this->pdb_.StorageKey(it->first.c_str()),x,y,z,value,DIRICH,INTERIOR);
     }
 }
@@ -395,10 +395,10 @@ template<size_t dim>
 void SimulatorControl<dim>::SetReferencePointValuesModelPerimeter()
 {
     for (auto it = this->GetReferencePointsAndValues().begin(); it != this->GetReferencePointsAndValues().end();it++){
-        double64 x=it->second.first[0];
-        double64 y=it->second.first[1];
-        double64 z=it->second.first[2];
-        double64 value=it->second.second;
+        double x=it->second.first[0];
+        double y=it->second.first[1];
+        double z=it->second.first[2];
+        double value=it->second.second;
         this->SetValueNearestToPoint(this->pdb_.StorageKey(it->first.c_str()),x,y,z,value,DIRICH,INTERIOR);
     }
 }
@@ -434,11 +434,11 @@ void SimulatorControl<dim>::SetThicknessFactorFromWellRadii()
 template <size_t dim>
 void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
 {
-    map<int32,string> location_choice;
+    map<int32_t,string> location_choice;
     location_choice[1]="boundary";
     location_choice[2]="point";
     location_choice[3]="region";
-    int32 choice(0);
+    int32_t choice(0);
     bool finished(false);
     while (!finished){
         cout<<"----------------------------------------------------------------------------------------"<<endl;
@@ -474,7 +474,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
                     counter++;
                 }
                 cout<<" Please select a boundary to which you would like to assign an essential condition: ";
-                int32 bn=this->GetIntegerInput();
+                int32_t bn=this->GetIntegerInput();
 
                 string variable="";
                 size_t fcounter(0);
@@ -484,7 +484,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
                     if (this->pdb_.IsDefined(variable.c_str())){
                         cout<<" Property name found."<<endl;
                         cout<<" Please type the value you would like to assign: ";
-                        double64 value=this->GetRealInput();
+                        double value=this->GetRealInput();
                         VARIABLE_FLAG vflag;
                         cout<<" Would you like to set a Dirichlet flag on this region? (y/n) ";
                         if (this->YesOrNo())
@@ -529,7 +529,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
                     counter++;
                 }
                 cout<<" Please select a region to which you would like to assign an essential condition: ";
-                int32 regn=this->GetIntegerInput();
+                int32_t regn=this->GetIntegerInput();
 
                 string variable="";
                 size_t fcounter(0);
@@ -539,7 +539,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
                     if (this->pdb_.IsDefined(variable.c_str())){
                         cout<<" Property name found."<<endl;
                         cout<<" Please type the value you would like to assign: ";
-                        double64 value=this->GetRealInput();
+                        double value=this->GetRealInput();
                         VARIABLE_FLAG vflag;
                         cout<<" Would you like to set a Dirichlet flag on this region? (y/n) ";
                         if (this->YesOrNo())
@@ -597,7 +597,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
 //                choice="";
 //                getline(cin, choice);
 //                cout<<endl;
-//                double64 endtime=stringToNumber<double64>(choice);
+//                double endtime=stringToNumber<double>(choice);
 //                if (endtime < this->GetSS()->GetRunSettings().Duration())
 //                    this->interval_start_times_.insert(endtime);
 //                else
@@ -642,7 +642,7 @@ void SimulatorControl<dim>::ManageWellRates()
             cout<<" Note: Each well is associated to a particular flow rate variable."<<endl;
             cout<<" The following is a list of wells, their current state, and associated flow rate variable:"<<endl;
             size_t counter(1);
-            double64 well_rate_max(0),well_rate_min(0);
+            double well_rate_max(0),well_rate_min(0);
 
             for (vector<string>::iterator lit= this->GetSS()->GetWells().begin();lit!=this->GetSS()->GetWells().end();lit++){
                 this->GetSS()->GetModel()->Region( (*lit).c_str() ).MinMaxOf(this->GetSS()->GetWellRateVars().at(*lit).first.c_str() , well_rate_min, well_rate_max );
@@ -651,7 +651,7 @@ void SimulatorControl<dim>::ManageWellRates()
                 counter++;
             }
             cout<<" "<<counter<<". Quit well rate manager."<<endl;
-            int32 regn=this->GetSS()->GetWells().size()+2;
+            int32_t regn=this->GetSS()->GetWells().size()+2;
             while ( regn < 1 || regn > this->GetSS()->GetWells().size() ){
                 cout<<" Please select a well to which you would like to assign a rate, or "<<this->GetSS()->GetWells().size()+1<<" to quit."<<endl;
                 regn=GetIntegerInput();
@@ -661,7 +661,7 @@ void SimulatorControl<dim>::ManageWellRates()
                 }
                 if (regn >=1 && regn <= this->GetSS()->GetWells().size()){
                     cout<<" Please type the rate value you would like to assign to well '"<<wellnumbertoname[regn]<<"' :";
-                    double64 value=this->GetRealInput();
+                    double value=this->GetRealInput();
                     this->SetRegionValue((this->GetSS()->GetWellRateVars().at(wellnumbertoname[regn]).first),wellnumbertoname[regn],value,PLAIN);
                 }
             }
@@ -670,7 +670,7 @@ void SimulatorControl<dim>::ManageWellRates()
 }
 
 template <size_t dim>
-double64 SimulatorControl<dim>::GetRealInput(bool success)
+double SimulatorControl<dim>::GetRealInput(bool success)
 {
     std::string choice="";
     getline(cin, choice);
@@ -685,7 +685,7 @@ double64 SimulatorControl<dim>::GetRealInput(bool success)
 }
 
 template <size_t dim>
-int32 SimulatorControl<dim>::GetIntegerInput()
+int32_t SimulatorControl<dim>::GetIntegerInput()
 {
     std::string choice="";
     getline(cin, choice);
@@ -721,7 +721,7 @@ void SimulatorControl<dim>::SetPropertyFlagToTopBoundaries(const char* property_
 }
 
 template <size_t dim>
-void SimulatorControl<dim>::SetBoundaryValue(const char* prop_name,string boundary,double64 value,VARIABLE_FLAG flag)
+void SimulatorControl<dim>::SetBoundaryValue(const char* prop_name,string boundary,double value,VARIABLE_FLAG flag)
 {
     csmp::Index key=this->GetSS()->GetModel()->Database().StorageKey(prop_name);
     if (key.type==SCALAR)
@@ -731,7 +731,7 @@ void SimulatorControl<dim>::SetBoundaryValue(const char* prop_name,string bounda
 }
 
 template <size_t dim>
-void SimulatorControl<dim>::SetRegionValue(string prop_name,string region,double64 value,VARIABLE_FLAG flag)
+void SimulatorControl<dim>::SetRegionValue(string prop_name,string region,double value,VARIABLE_FLAG flag)
 {
     csmp::Index key=this->GetSS()->GetModel()->Database().StorageKey(prop_name.c_str());
     if (key.type==SCALAR)
@@ -751,13 +751,13 @@ void SimulatorControl<dim>::SetRegionFlag(const char* prop_name,string region,VA
 
 
 template <size_t dim>
-void SimulatorControl<dim>::SetFlagNearestToPoint(Index key,double64 x, double64 y, double64 z, VARIABLE_FLAG flag)
+void SimulatorControl<dim>::SetFlagNearestToPoint(Index key,double x, double y, double z, VARIABLE_FLAG flag)
 {
 
 }
 
 template <size_t dim>
-void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double64 x, double64 y, double64 z, double64 value,VARIABLE_FLAG flag,SUBDOMAIN_PART sub)
+void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double x, double y, double z, double value,VARIABLE_FLAG flag,SUBDOMAIN_PART sub)
 {
     typename vector<Node<dim>*>::iterator nodes_begin=this->GetSS()->GetModel()->Region("Model").NodesBegin();
     typename vector<Node<dim>*>::iterator nodes_end;
@@ -765,7 +765,7 @@ void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double64 x, double6
         nodes_end=this->GetSS()->GetModel()->Region("Model").NodesEnd();
     else if (sub==INTERIOR)
         nodes_end=this->GetSS()->GetModel()->Region("Model").PerimeterNodesBegin();
-    double64 mind(10e50),distance(0.);
+    double mind(10e50),distance(0.);
 
     Node<dim>* n(nullptr);
     for (typename vector<Node<dim>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++) {
@@ -808,7 +808,7 @@ bool SimulatorControl<dim>::CheckTimeIntervals()
     cout<<" You have entered the following time intervals "<<endl;
 
     size_t counter(0);
-    double64 fake_simulation_time(this->GetSimulationStartTime());
+    double fake_simulation_time(this->GetSimulationStartTime());
     for (auto it = this->GetIntervals().begin(); it != this->GetIntervals().end();it++){
         cout<<"-------------------------------------------------------------------------------------"<<endl;
         cout<<" Interval "<<counter+1<<" named: "<<it->second<<" from :"<<this->GetCurrentIntervalStartTime(fake_simulation_time)
@@ -867,7 +867,7 @@ void SimulatorControl<dim>::CatchSignals()
 }
 
 template <size_t dim>
-void SimulatorControl<dim>::SetSimulationTime(double64 t)
+void SimulatorControl<dim>::SetSimulationTime(double t)
 {
     this->simulationTime_=t;
 }
@@ -875,14 +875,14 @@ void SimulatorControl<dim>::SetSimulationTime(double64 t)
 /// returns run-time, in seconds, since an initial reference point
 /// normally set by the BeginInterval() method.
 template <size_t dim>
-double64 SimulatorControl<dim>::CalculateCurrentRunTime()
+double SimulatorControl<dim>::CalculateCurrentRunTime()
 {
 
 #ifdef _OPENMP
     return (omp_get_wtime()-this->initial_omp_wtime_);
 #else
     clock_t actual_runtime=clock();
-    return double64(actual_runtime-this->runTimeStart_)/CLOCKS_PER_SEC;
+    return double(actual_runtime-this->runTimeStart_)/CLOCKS_PER_SEC;
 #endif
 
 }
@@ -898,7 +898,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
                 simulator_setup_->GetModel()->Read( vtu_frames_Key_ )>0.0 )
         {
             this->SetOutputTimes(simulator_setup_->GetModel()->Read( vtu_frames_Key_ ), this->GetSimulationStartTime());
-            //            if (double64(simulator_setup_->GetModel()->Database().Components("output times"))>simulator_setup_->GetModel()->Read( vtu_frames_Key_) )
+            //            if (double(simulator_setup_->GetModel()->Database().Components("output times"))>simulator_setup_->GetModel()->Read( vtu_frames_Key_) )
             //                this->SetOutputTimes(simulator_setup_->GetModel()->Read( vtu_frames_Key_ ), this->GetSimulationStartTime());
             //            else
             //                throw csmp::Exception (ERROR,"SimulatorControl<dim>::SyncOutputTimesToModel()"
@@ -981,18 +981,18 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
 }
 
 template<size_t dim>
-void SimulatorControl<dim>::SetOutputTimes(size_t n, double64 starttime)
+void SimulatorControl<dim>::SetOutputTimes(size_t n, double starttime)
 {
     /** @todo double check if it isn't convenient to set the output intervals related
       to start time (i.e. (duration-starttime)/n).  At the moment, this does not seem so. --Julian
     */
-    double64 outputtimeinterval=this->RunSettings().Duration()/static_cast<double64>(n);
+    double outputtimeinterval=this->RunSettings().Duration()/static_cast<double>(n);
 
     cout<<" Generating "<<n <<" output times.";
-    set<double64> ots;
+    set<double> ots;
     ots.insert(starttime);
 
-    double64 outputtime(starttime);
+    double outputtime(starttime);
     for (size_t i = 0 ; i < n ;i++)
     {
         outputtime+=outputtimeinterval;
@@ -1002,15 +1002,15 @@ void SimulatorControl<dim>::SetOutputTimes(size_t n, double64 starttime)
 }
 
 template<size_t dim>
-void SimulatorControl<dim>::SetMonitorTimes(size_t n, double64 starttime)
+void SimulatorControl<dim>::SetMonitorTimes(size_t n, double starttime)
 {
-    double64 outputtimeinterval=this->RunSettings().Duration()/static_cast<double64>(n);
+    double outputtimeinterval=this->RunSettings().Duration()/static_cast<double>(n);
 
     cout<<" Generating "<<n <<" monitor times.";
-    set<double64> ots;
+    set<double> ots;
     ots.insert(starttime);
 
-    double64 outputtime(starttime);
+    double outputtime(starttime);
     for (size_t i = 0 ; i < n ;i++)
     {
         outputtime+=outputtimeinterval;
@@ -1024,7 +1024,7 @@ template<size_t dim>
 void SimulatorControl<dim>::LoadMonitoringTimesFromRestartedModel()
 {
 
-    set<double64> ots;
+    set<double> ots;
     ArrayVariable mtimes;
     this->GetSS()->GetModel()->Read(monitor_frames_Key_,mtimes);
     cout<<" Loading "<<mtimes.Size() <<" monitor times from restarted model.";
@@ -1079,7 +1079,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
             if (tok1.find("END TIME")!=std::string::npos) {
                 if (listoftokens.size()<3)
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for simulation duration"," set 'end time' in the -control.txt file.");
-                double64 time_value(0);
+                double time_value(0);
                 token=listoftokens[2];
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 std::string time_unit(token.substr(0,1));
@@ -1127,7 +1127,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 if (listoftokens.size()<3)
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for output times."," Please provide a unit type and at least one output time.");
 
-                double64 time_value(0);
+                double time_value(0);
                 token=listoftokens[1];
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 std::string time_unit(token.substr(0,1));
@@ -1154,7 +1154,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 if (listoftokens.size()<3)
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for monitor times."," Please provide a unit type and at least one output time.");
 
-                double64 time_value(0);
+                double time_value(0);
                 token=listoftokens[1];
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 std::string time_unit(token.substr(0,1));
@@ -1181,7 +1181,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 if (listoftokens.size()<2)
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for restart file output runtime interval."," Please provide a unit type and at least one output time.");
                 //                cout<<"reading restart options: "<<listoftokens[0]<<" "<<listoftokens[1]<<endl;
-                double64 value(0);
+                double value(0);
                 value=std::stod(listoftokens[1]);
                 //                cout<<" value: "<<value<<endl;
                 this->restartFileOuputRunTimeInterval_=value;
@@ -1193,7 +1193,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 if (listoftokens.size()<3)
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for simulation time interval"," check the interval settings of your -control.txt file.");
 
-                double64 time_value(0);
+                double time_value(0);
                 token=listoftokens[3];
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 string time_unit(token.substr(0,1));
@@ -1316,7 +1316,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
     this->GetSS()->GetVTUPropList().unique();
     this->GetSS()->GetMonitoredPropList().unique();
 
-    double64 starttime(10e32);
+    double starttime(10e32);
     for (auto it = this->GetIntervals().begin(); it != this->GetIntervals().end(); ++it ){
         if (it->first < starttime)
             starttime=it->first;
@@ -1333,7 +1333,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
 }
 
 template <size_t dim>
-void SimulatorControl<dim>::InsertNewTimeInterval(string interval_name,double64 starttime)
+void SimulatorControl<dim>::InsertNewTimeInterval(string interval_name,double starttime)
 {
     if (starttime >= this->GetSimulationTime()){
         this->GetIntervals().push_back(make_pair(starttime,interval_name));
@@ -1347,7 +1347,7 @@ void SimulatorControl<dim>::InsertNewTimeInterval(string interval_name,double64 
 
 */
 template <size_t dim>
-void SimulatorControl<dim>::OutputSimulationTimeToScreen(double64 time)
+void SimulatorControl<dim>::OutputSimulationTimeToScreen(double time)
 {
     size_t days    = std::floor(time/86400.0);
     size_t hours   = floor(( time - days*86400 )/3600);
@@ -1508,7 +1508,7 @@ void SimulatorControl<dim>::OutputSampleControlFile()
 }
 
 template <size_t dim>
-double64 SimulatorControl<dim>::MaxDifferenceScalarNodalProperty(Index &snp1Key, Index& snp2Key )
+double SimulatorControl<dim>::MaxDifferenceScalarNodalProperty(Index &snp1Key, Index& snp2Key )
 {
     Region<dim>& mref(this->GetSS()->GetModel()->Region("Model"));
 

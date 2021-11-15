@@ -18,8 +18,8 @@ GaussJordan_Solver::~GaussJordan_Solver(){
 /** Function to solve Ax = b with single column RHS
 */
 void GaussJordan_Solver::SolveMatrixEquation( SparseMatrix& A,
-                                              vector<double64>& b,
-                                              vector<double64>& x,
+                                              vector<double>& b,
+                                              vector<double>& x,
                                               size_t )
 {
     (*this).GaussJordan( A, b );
@@ -27,8 +27,8 @@ void GaussJordan_Solver::SolveMatrixEquation( SparseMatrix& A,
 }
 
 void GaussJordan_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
-                                              vector<double64>& b,
-                                              vector<double64>& x,
+                                              vector<double>& b,
+                                              vector<double>& x,
                                               size_t )
 {
   throw csmp::Exception( ERROR, "GaussJordan_Solver::SolveMatrixEquation", "Method not implemented for CompressedSparseRowMatrix yet" );
@@ -45,11 +45,11 @@ vector.
 @param A the Matrix A of the linear system Ax=b in nxn
 @param b the RHS vector b of the linear system Ax=b in n
 */
-void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double64>& b )
+void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double>& b )
  {
     size_t          i, icol(0), irow(0), j, k, l, ll;
     const size_t    n = A.Rows();
-    double64       big, dum, pivinv;
+    double       big, dum, pivinv;
     vector<size_t>  indxc(n,0), indxr(n,0), ipiv(n,0);
 
     for (j=0;j<n;j++) ipiv[j]=0;
@@ -119,7 +119,7 @@ void GaussJordan_Solver::SwapSparseMatrixElements( SparseMatrix& M,
                                                    long row2,
                                                    long col2 ) const
 {
-    double64 cache = M( row1, col1);
+    double cache = M( row1, col1);
     M.Assign(row1,col1, M(row2,col2));
     M.Assign(row2,col2, cache);
 }

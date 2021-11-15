@@ -24,50 +24,50 @@ class TwoPhaseFileBased : public TwoPhaseModel<dim> {
     virtual void Initialize( const Element<dim>& );
 
     // relative permeabilities
-    virtual double64 krn_Phase() const;
-    virtual double64 krw_Phase() const;
+    virtual double krn_Phase() const;
+    virtual double krw_Phase() const;
 
     // derivatives of relative permeabilities
-    virtual double64 dkrnds_Phase() const;
-    virtual double64 dkrwds_Phase() const;
+    virtual double dkrnds_Phase() const;
+    virtual double dkrwds_Phase() const;
 
     // derivative of fractional flow (advection multipliers)
-    virtual double64 dfds() const;
+    virtual double dfds() const;
 
     // maximum absolute value returned by dfds
-    virtual double64 MaxFractionalFlowDerivative() const;
+    virtual double MaxFractionalFlowDerivative() const;
 
     // derivatives of rel perm (advection multipliers)
-    virtual double64 dGds( ) const;
+    virtual double dGds( ) const;
 
     // capillary pressure
-    virtual double64 pc_Phase( ) const;
+    virtual double pc_Phase( ) const;
 
     // capillary pressure derivatives
-    virtual double64 dpcds_Phase( ) const;
+    virtual double dpcds_Phase( ) const;
 
     // inverse capillary pressure function
-    virtual double64 Sw_Phase( double64 pc_Phase ) const;
+    virtual double Sw_Phase( double pc_Phase ) const;
 
     // inverse capillary pressure derivative
-    virtual double64 dsdpc_Phase( double64 pc_Phase ) const;
+    virtual double dsdpc_Phase( double pc_Phase ) const;
 
-    int32             writeData();
+    int32_t             writeData();
 
   private:
     TwoPhaseFileBased();
     std::streampos    findPosition( std::ifstream& ) const;
-    int32             readData();
+    int32_t             readData();
 
     std::string       catchPhrase_;
     std::ifstream     relpermFile_;
 
-    std::vector<double64>   seff_;
-    std::vector<double64>   krw_;
-    std::vector<double64>   krn_;
-    std::vector<double64>   pc_;
+    std::vector<double>   seff_;
+    std::vector<double>   krw_;
+    std::vector<double>   krn_;
+    std::vector<double>   pc_;
 
-    const double64    GRAVITY_,
+    const double    GRAVITY_,
                       LOWER_LIMIT_,
                       MAX_CAPILLARY_PRESSURE_,
                       MAX_CAPILLARY_PRESSURE_SLOPE_;

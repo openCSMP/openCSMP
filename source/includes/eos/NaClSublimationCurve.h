@@ -15,18 +15,18 @@ namespace csmp
 
   public:
     // Constructor etc.
-    NaClSublimationCurve(const double64& externaltemperature);
+    NaClSublimationCurve(const double& externaltemperature);
 
     ~NaClSublimationCurve();
     
-    double64 VaporPressure();               // [Pa]
+    double VaporPressure();               // [Pa]
     
   private:
     
     NaClSublimationCurve();
     
-    const double64& temperature_; ///< reference to temperature [C] in flow code
-    double64 tcurrent_;           ///< temperature [C] for internal use 
+    const double& temperature_; ///< reference to temperature [C] in flow code
+    double tcurrent_;           ///< temperature [C] for internal use 
     
     TriplePointNaCl tp_nacl;
   };
@@ -49,7 +49,7 @@ namespace csmp
 
      @code
 
-     double64 t(somevalue); // temperature [C] in user's application
+     double t(somevalue); // temperature [C] in user's application
      ...
      NaClSublimationCurve naclboil(t); 
      ...

@@ -119,7 +119,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
       for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) 
         {
            // get dN = interpolation function derivate value at integration point
-           double64 ip_value =  oper_eprop(); // fluid density
+           double ip_value =  oper_eprop(); // fluid density
            ip_value   *= -gravity;
            ip_value   *=  e.WeightAtIntegrationPoint(i);
            ip_value   *=  e.dN_AtIntegrationPoint( DN, i ); // det_J
@@ -133,10 +133,10 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
       for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) 
         {
            e.N_AtIntegrationPoint( i, IPOL );
-           const double64 detJ = e.dN_AtIntegrationPoint( DN, i );
+           const double detJ = e.dN_AtIntegrationPoint( DN, i );
          
            // interpolating Operand value to integration point
-           double64  ip_value(IPOL[0] * oper_nprop[0]());
+           double  ip_value(IPOL[0] * oper_nprop[0]());
            for ( size_t j=1; j<e.Nodes(); j++ )
              ip_value  += IPOL[j] * oper_nprop[j]();
 
@@ -157,9 +157,9 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
 
 // now everything is assembled (using the  hydraulic diffusivity kappa = k / (S mu)
 template<size_t dim,class CELL>
-void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::MultiplyWithTimeFactor( double64 dt )
+void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::MultiplyWithTimeFactor( double dt )
  {
-    for ( typename vector<double64>::iterator 
+    for ( typename vector<double>::iterator 
           it=MathOperatorRHS<dim>::RHS.begin(); it!=MathOperatorRHS<dim>::RHS.end(); it++ ) {
           // not bad (no overshoot) 
          (*it) *= mtrl2_prop();

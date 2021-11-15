@@ -124,15 +124,15 @@ template<size_t dim,template<size_t> class CELL>
 size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<size_t>& );
 
 /// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
-bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double64 tolerance=1.0e-5 );
+bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double tolerance=1.0e-5 );
 
 /// returns angle (in degrees) between the normals of the two cells, which must be surfaces
 template<template<size_t> class CELL>
-double64 angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 );
+double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 );
 
 /// Line elements can exist in all 3 spatial dimensions.
 template<size_t dim, template<size_t> class CELL>
-double64 angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
+double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
 
 /// returs a set of pointers to the corners of the face of the supplied cell; used for matching faces by nodes, when there is no neighbor connectivity
 template<size_t dim, template<size_t> class CELL>
@@ -142,7 +142,7 @@ std::set<Node<dim>*> cornerNodePointersOfFace( const CELL<dim>* const cell1, siz
 template<size_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
                           typename std::vector<Node<dim>*>::const_iterator nodes_end,
-                          std::vector<std::vector<double64> >& distances_and_weight );
+                          std::vector<std::vector<double> >& distances_and_weight );
 
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
 template<size_t dim>

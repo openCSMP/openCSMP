@@ -140,20 +140,20 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
          return false;
       }
     // getting bounds for the property values to be read
-    vector<pair<double64,double64> > valid_ranges(items_per_line-first_prop,make_pair(-1.0e30,1.0e30));
-    double64 min_val, max_val;
+    vector<pair<double,double> > valid_ranges(items_per_line-first_prop,make_pair(-1.0e30,1.0e30));
+    double min_val, max_val;
     for ( size_t i=first_prop; i<items_per_line; i++ ) {
          model.Database().RangeOf( properties[i].c_str(), min_val, max_val );
          valid_ranges[i-first_prop] = make_pair( min_val, max_val ); // ATTENTION - different range
       }
     // containers
     //  elmt-id, values of properties in order given in property string and boolean to tell whether value is to be mapped
-    pair<size_t, vector<pair<bool, double64> > > elmt_prop_values; //(UINT_MAX, items_per_line - first_prop);
+    pair<size_t, vector<pair<bool, double> > > elmt_prop_values; //(UINT_MAX, items_per_line - first_prop);
     elmt_prop_values.second.resize( items_per_line - first_prop );
 
     // region by region values
     // region name, set of property values
-    map<string,deque<pair<size_t,vector<pair<bool,double64> > > > > region_data;
+    map<string,deque<pair<size_t,vector<pair<bool,double> > > > > region_data;
     // keeping statistics of range checks that failed and which properties were affected
     // property name, number of failures
     map<string,size_t> range_check_failures;
@@ -172,7 +172,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
 
         // reading the property values and performing range checks on the way
         for ( size_t i=first_prop; i<items_per_line; ++i ) {
-              const double64 prop_value = stod( data_tokens[i] );
+              const double prop_value = stod( data_tokens[i] );
               // checking the range, including no-data values
               assert( !isnan(prop_value) );
               if ( prop_value < valid_ranges[i-first_prop].first || prop_value > valid_ranges[i-first_prop].second ||
@@ -191,11 +191,11 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
         
         // inserting the record into a new or existing map entry
         // region name, elements inside with their associated data
-        // map<string,deque<pair<size_t,vector<pair<bool,double64> > > > >
-        map<string,deque<pair<size_t,vector<pair<bool,double64> > > > >::iterator it = region_data.find(region_name);
+        // map<string,deque<pair<size_t,vector<pair<bool,double> > > > >
+        map<string,deque<pair<size_t,vector<pair<bool,double> > > > >::iterator it = region_data.find(region_name);
         // if this is first element data set in the region data map
         if ( it == region_data.end() ) {
-             deque<pair<size_t,vector<pair<bool,double64> > > > new_data_set;
+             deque<pair<size_t,vector<pair<bool,double> > > > new_data_set;
              new_data_set.push_back( elmt_prop_values );
              region_data.insert( make_pair(region_name,new_data_set) );
           }
@@ -221,7 +221,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
     // 1.2 establishing a mapping between current elements and id numbers
     const csmp::Index e_key = model.Database().StorageKey("element number");
    
-    for ( map<string,deque<pair<size_t,vector<pair<bool,double64> > > > >::iterator
+    for ( map<string,deque<pair<size_t,vector<pair<bool,double> > > > >::iterator
           it=region_data.begin(); it!=region_data.end(); ++it )
       {
           // ignoring regions that do not exist in model
@@ -241,7 +241,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
                   elmt_correspondance_map.insert( make_pair( (*eit)->Read(e_key), (*eit) ) );
             
                // assign properties element by element if these are valid
-               for ( deque<pair<size_t,vector<pair<bool,double64> > > >::iterator
+               for ( deque<pair<size_t,vector<pair<bool,double> > > >::iterator
                      et=(*it).second.begin(); et!=(*it).second.end(); ++et ) {
                      // searching for 'element number' in map
                      typename map<size_t,Element<dim>*>::iterator elmt_it = elmt_correspondance_map.find( (*et).first );
@@ -507,7 +507,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
 
               // doing all subsequent points, assuming that values are symmetrically distributed around surface
               // and using the unit normal
-              const double64 dx = (*it)->Read( fth_key ) / static_cast<double64>(ary.Size()*2);
+              const double dx = (*it)->Read( fth_key ) / static_cast<double>(ary.Size()*2);
               for ( size_t i=1U; i<ary.Size(); i++ )
                 {
                    Point<3U> out_pt =  (dx * i) * nrml;
@@ -609,7 +609,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
         // reading the property values and performing range checks on the way
         int no_data_count = 0.;
         for ( size_t i=first_prop; i<items_per_line; ++i ) {
-              const double64 prop_value = stod( data_tokens[i] );
+              const double prop_value = stod( data_tokens[i] );
               // checking the value range, including no-data values
               assert( !isnan(prop_value) );
               if ( static_cast<long>(prop_value) == -9999 || static_cast<long>(prop_value) == -99999  )
@@ -757,7 +757,7 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
   cout << "\n\t" << text_line << endl;
 
   // 1.3 reading the rocktype identifiers from file
-  map<int32, string>  rocktype_identifiers;
+  map<int32_t, string>  rocktype_identifiers;
 
   while ( !ifs.eof() )
     {
@@ -766,10 +766,10 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
       // only the first 2 tokens are used alllowing the user to add comments afterwards
       // rocktype
       token = strtok( text_line, delims );
-      int32 rocktype = (token != NULL) ? atoi( token ) : UNSPECIFIED;
+      int32_t rocktype = (token != NULL) ? atoi( token ) : UNSPECIFIED;
       // facies name / association
       token = strtok( NULL, delims );
-      string rocktype_name = (token != NULL) ? to_string( token ) : "UNSPECIFIED";
+      string rocktype_name = (token != NULL) ? token : "UNSPECIFIED";
 
       rocktype_identifiers.insert( make_pair( rocktype, rocktype_name ) );
     }
@@ -788,11 +788,11 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
   }
   cout << "\n\n";
 
-  set<int32>   unknown_identifiers;
+  set<int32_t>   unknown_identifiers;
   Region<3U>&  model_domain( model.Region( "Model" ) );
   for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
     {
-      const int32 rocktype = static_cast<int32>((*it)->Read( rrt_key ));
+      const int32_t rocktype = static_cast<int32_t>((*it)->Read( rrt_key ));
       // if the rocktype can be identified, we store the element id for the later creation of a region
       if ( rocktype_identifiers.find( rocktype ) == rocktype_identifiers.end() )
         unknown_identifiers.insert( rocktype );

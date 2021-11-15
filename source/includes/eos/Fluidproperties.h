@@ -29,7 +29,7 @@ namespace csmp
 
     Fluidproperties(const Fluidproperties&);
     Fluidproperties& operator=(const Fluidproperties&);
-    double64 
+    double 
       t,     // temperature [C]
       p,     // pressure    [Pa]
       x,     // mole fraction NaCl []

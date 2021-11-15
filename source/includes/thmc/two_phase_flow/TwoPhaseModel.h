@@ -25,8 +25,8 @@ class TwoPhaseModel {
   public:
     /// for fixed values of fluid viscosities and densities
     TwoPhaseModel( const PropertyDatabase<dim>& database,
-                   double64 viscosity_nw, double64 viscosity_w,
-                   double64 density_nw, double64 density_w,
+                   double viscosity_nw, double viscosity_w,
+                   double density_nw, double density_w,
                    const char* kkk,   // permeability
                    const char* sat,   // saturation wetting phase
                    const char* snr,   // residual saturation non-wetting phase
@@ -72,11 +72,11 @@ class TwoPhaseModel {
     virtual void InterpolateNodeProperties( const Element<dim>& e );
 
     /// to set properties on the fly for compressible flow modelling
-    void SaturationWettingPhase( double64 s_wetting );
-    void ViscosityNonWettingPhase( double64 visc );
-    void ViscosityWettingPhase( double64 visc );
-    void DensityNonWettingPhase( double64 dens );
-    void DensityWettingPhase( double64 dens );
+    void SaturationWettingPhase( double s_wetting );
+    void ViscosityNonWettingPhase( double visc );
+    void ViscosityWettingPhase( double visc );
+    void DensityNonWettingPhase( double dens );
+    void DensityWettingPhase( double dens );
 
     /// Return of keys for calculation of two phase mobilities in transport
     csmp::Index WettingPhaseSaturationKey() const;
@@ -84,131 +84,131 @@ class TwoPhaseModel {
     csmp::Index TotalMobilityKey() const;
 
     /// accessors
-    double64   Permeability()  const;
-    void       Permeability( double64 permeability );
+    double   Permeability()  const;
+    void       Permeability( double permeability );
     TensorVariable<dim>   TensorPermeability()  const;
     void       TensorPermeability( TensorVariable<dim> permeability );
-    double64   Swr() const;
-    double64   Snr() const;
-    void       Swr( double64 swr );
-    void       Snr( double64 snr );    
+    double   Swr() const;
+    double   Snr() const;
+    void       Swr( double swr );
+    void       Snr( double snr );    
 
     /// fluid properties
-    double64   ViscosityNonWettingPhase() const;
-    double64   ViscosityWettingPhase() const;
-    double64   DensityNonWettingPhase() const;
-    double64   DensityWettingPhase() const;
-    double64   Saturation( size_t phase ) const;
-    double64   MobilityPhase( size_t phase ) const; // kr_i/mu_i
-    double64   ViscosityRatio() const;
+    double   ViscosityNonWettingPhase() const;
+    double   ViscosityWettingPhase() const;
+    double   DensityNonWettingPhase() const;
+    double   DensityWettingPhase() const;
+    double   Saturation( size_t phase ) const;
+    double   MobilityPhase( size_t phase ) const; // kr_i/mu_i
+    double   ViscosityRatio() const;
 
     /// sum of all phase mobilities * k
-    double64 TotalMobility() const;
+    double TotalMobility() const;
     
     /// sum of all phase mobilities
-    double64 TotalMobilityMultiplier() const;
+    double TotalMobilityMultiplier() const;
 
     // multiplier for diffusion coefficient in the case of non-linear diffusion
     // uses viscosity(phase) 
-    double64 DiffusionMultiplier( size_t phase ) const;
+    double DiffusionMultiplier( size_t phase ) const;
     
     /// driven by capillary pressure gradient
-    double64 CapillaryDiffusionMultiplier(  ) const;
+    double CapillaryDiffusionMultiplier(  ) const;
     
     /// multipliers for gravity-driven flow (advection multiplier and source term)
-    double64 GravityTerm() const;
-    double64 GravityMultiplier_G( ) const;
-    double64 GravityMultiplier_dGds( ) const;
+    double GravityTerm() const;
+    double GravityMultiplier_G( ) const;
+    double GravityMultiplier_dGds( ) const;
 
     /// G multiplier
-    double64 G() const;
+    double G() const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
-   	double64 AdvectionMultiplier() const;
+   	double AdvectionMultiplier() const;
 
     /// linearized diffusion multiplier for large-timestep calculations
-    virtual double64 DiffusionCharacteristic( size_t phase ) const;
+    virtual double DiffusionCharacteristic( size_t phase ) const;
 
     /// linearized fractional flow derivative
-    virtual double64 ShockSpeed() const;
-    virtual double64 ShockHeight() const;
-    void ShockSpeedHeight( double64& speed, double64& height) const;
+    virtual double ShockSpeed() const;
+    virtual double ShockHeight() const;
+    void ShockSpeedHeight( double& speed, double& height) const;
 
     /// maximum value of previous derivative
-    virtual double64 MaxFractionalFlowDerivative( ) const;
+    virtual double MaxFractionalFlowDerivative( ) const;
 
     /// maximum value of dpcdS
-    double64 MaxCapillaryPressure( size_t phase = 1U ) const;
+    double MaxCapillaryPressure( size_t phase = 1U ) const;
 
     /// always of the wetting phase by convention
-    virtual double64  EffectiveSaturation() const;
-    virtual double64  SeffToSw() const;
-    virtual double64  SeffToSw( double64 seff) const;
+    virtual double  EffectiveSaturation() const;
+    virtual double  SeffToSw() const;
+    virtual double  SeffToSw( double seff) const;
 
     /// fractional flow
-    double64 f_Phase( size_t phase ) const;
+    double f_Phase( size_t phase ) const;
   
     /// fractional flow of water at water saturation sw
-    double64 fw_at( double64 sw ) const;
-    double64 fn_at( double64 sw ) const;
+    double fw_at( double sw ) const;
+    double fn_at( double sw ) const;
 
     /// relative permeabilities
-    virtual double64 krn_Phase() const = 0;
-    virtual double64 krw_Phase() const = 0;
+    virtual double krn_Phase() const = 0;
+    virtual double krw_Phase() const = 0;
 
     /// derivatives of relative permeabilities
-    virtual double64 dkrnds_Phase() const;
-    virtual double64 dkrwds_Phase() const;
+    virtual double dkrnds_Phase() const;
+    virtual double dkrwds_Phase() const;
 
-    virtual double64 dlnds() const;
-    virtual double64 dlwds() const;
+    virtual double dlnds() const;
+    virtual double dlwds() const;
 
     /// capillary pressure (limit this to 4e7, the max strength of the rock)
     /// do this by computing seff for which pc=4e7, then use this seff as
     /// a limiting value
-    virtual double64 pc_Phase() const = 0;
+    virtual double pc_Phase() const = 0;
 
     /// capillary pressure derivatives (treat seff as for previous function)
-    virtual double64 dpcds_Phase() const = 0;
+    virtual double dpcds_Phase() const = 0;
 
     /// inverse capillary pressure function
-    virtual double64 Sw_Phase( double64 pc_Phase ) const;
+    virtual double Sw_Phase( double pc_Phase ) const;
 
     /// derivatives of inverse capillary pressure function
-    virtual double64 dsdpc_Phase( double64 pc_Phase ) const;
+    virtual double dsdpc_Phase( double pc_Phase ) const;
                                   
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    virtual double64 dfds() const;
+    virtual double dfds() const;
 
     /// derivatives of gravitational flow (advection multipliers)
-    virtual double64 dGds() const;
+    virtual double dGds() const;
     
     /// Numerical derivatives
     // mobility ratio?
-    double64  mobility_w_at( double64 ) const;
-    double64  mobility_n_at( double64 ) const;
-    double64  krw_at( double64 ) const;
-    double64  krn_at( double64 ) const;
-    double64  dkrwds_at( double64 ) const;
-    double64  dkrnds_at( double64 ) const;
-    double64  dfds_at( double64 se ) const;
-    double64  G_at( double64 se ) const;
-    double64  pc_at( double64 se ) const;
-    double64  dpcds_at( double64 se) const;
-    double64  Sw_at( double64 se) const;
-    double64  dsdpc_at( double64 se) const;
+    double  mobility_w_at( double ) const;
+    double  mobility_n_at( double ) const;
+    double  krw_at( double ) const;
+    double  krn_at( double ) const;
+    double  dkrwds_at( double ) const;
+    double  dkrnds_at( double ) const;
+    double  dfds_at( double se ) const;
+    double  G_at( double se ) const;
+    double  pc_at( double se ) const;
+    double  dpcds_at( double se) const;
+    double  Sw_at( double se) const;
+    double  dsdpc_at( double se) const;
 
-    virtual double64 dlwds_numerical(  double64 h = 0.001 ) const;
-    virtual double64 dlnds_numerical(  double64 h = 0.001 ) const;
-    virtual double64 dkrwds_numerical( double64 h = 0.001 ) const;
-    virtual double64 dkrnds_numerical( double64 h = 0.001 ) const;
-    virtual double64 dfds_numerical (  double64 h = 0.001 ) const;
-    virtual double64 dGds_numerical (  double64 h = 0.000001 ) const;
-    virtual double64 dpcds_numerical(  double64 h = 0.00001 ) const;
+    virtual double dlwds_numerical(  double h = 0.001 ) const;
+    virtual double dlnds_numerical(  double h = 0.001 ) const;
+    virtual double dkrwds_numerical( double h = 0.001 ) const;
+    virtual double dkrnds_numerical( double h = 0.001 ) const;
+    virtual double dfds_numerical (  double h = 0.001 ) const;
+    virtual double dGds_numerical (  double h = 0.000001 ) const;
+    virtual double dpcds_numerical(  double h = 0.00001 ) const;
 
-    double64 spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const;
-    double64 spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const;
-    double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const;
+    double spline_value( double x, double x1, double x2, double y1, double y2, double k1, double k2) const;
+    double spline_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const;
+    double spline_second_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const;
 
     /// default is the wetting phase
     virtual void Out( size_t phase=1U ) const;
@@ -227,16 +227,16 @@ class TwoPhaseModel {
                       rhw_key_,     // density of wetting phase (nodal property)
                       rhn_key_,     // density of non-wetting phase (nodal property)
                       lt_key_;      // total mobility
-    double64          swr_, snr_,   // irreducible saturations
+    double          swr_, snr_,   // irreducible saturations
                       k_,           // permeability
                       ift_,         // interfacial tension
                       mun_, muw_,   // viscosities of wetting and non-wetting phase
                       rhn_, rhw_;   // densities
     TensorVariable<dim> K_;         // tensor permeability
 
-    mutable double64  sat_,         // saturation of the wetting phase
+    mutable double  sat_,         // saturation of the wetting phase
                       seff_;        // actual saturation, effective saturation
-    const double64    acc_gravity_, // accelaration of gravity
+    const double    acc_gravity_, // accelaration of gravity
                       tolerance_,   // cut_off value for expensive calculations
                       MAX_CAPILLARY_PRESSURE_,      // maximum permitted capillary pressure
                       MAX_CAPILLARY_PRESSURE_SLOPE_;// maximum permitted capillary pressure slope

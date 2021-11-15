@@ -1439,7 +1439,7 @@ template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>
 /**
    Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane
 */
-bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double64 tolerance )
+bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double tolerance )
  {
     assert( tptr != nullptr );
     assert( tptr->FE()->ElementType() == LINEAR_TETRAHEDRON ||
@@ -1472,14 +1472,14 @@ bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double64 tolera
 template<size_t dim>
 void distancesAndWeights( typename vector<Node<dim>*>::const_iterator nodes_begin,
                           typename vector<Node<dim>*>::const_iterator nodes_end,
-                          vector<vector<double64> >& distances_and_weights )
+                          vector<vector<double> >& distances_and_weights )
  {
      distances_and_weights.resize(distance(nodes_begin,nodes_end));
      size_t  node_index(0U);
    
      while( nodes_begin != nodes_end )
        {
-          double64 weight(0.);
+          double weight(0.);
           const Point<dim> npt((*nodes_begin)->Coordinate());
           const size_t parents((*nodes_begin)->Parents());
           distances_and_weights[node_index].reserve(parents+1U);
@@ -1497,9 +1497,9 @@ void distancesAndWeights( typename vector<Node<dim>*>::const_iterator nodes_begi
    
  } // end distanceWeights
 
-template void distancesAndWeights<1>( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator, vector<vector<double64> >& );
-template void distancesAndWeights<2>( vector<Node<2>*>::const_iterator, vector<Node<2>*>::const_iterator, vector<vector<double64> >& );
-template void distancesAndWeights<3>( vector<Node<3>*>::const_iterator, vector<Node<3>*>::const_iterator, vector<vector<double64> >& );
+template void distancesAndWeights<1>( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator, vector<vector<double> >& );
+template void distancesAndWeights<2>( vector<Node<2>*>::const_iterator, vector<Node<2>*>::const_iterator, vector<vector<double> >& );
+template void distancesAndWeights<3>( vector<Node<3>*>::const_iterator, vector<Node<3>*>::const_iterator, vector<vector<double> >& );
 
 
 
@@ -1598,7 +1598,7 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
 
            // 2. finding the shared faces
            bool found( false );
-           long64 inner_face_id(-1), outer_face_id(-1);
+           int64_t  inner_face_id(-1), outer_face_id(-1);
            for ( auto inner_face : inner_elmt_faces ) {
              for ( auto outer_face : outer_elmt_faces ) {
                if ( inner_face.first == outer_face.first ) {
@@ -1680,7 +1680,7 @@ template bool containsElementsOfType<3U>( const Region<3>&, ELEMENT_DIMENSION );
 template<>
 bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
  {
-    vector<double64> normal(3U), nbor_normal(3U);
+    vector<double> normal(3U), nbor_normal(3U);
    
     size_t non_surface_elements(0U);
     for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
@@ -1693,7 +1693,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
              if ( (*it)->Neighbor(i) != nullptr ) {
                   (*it)->Neighbor(i)->UnitNormal( nbor_normal );
                   // projection
-                  double64 result(0.);
+                  double result(0.);
                   for ( size_t j=0U; j<3U; ++ j )
                     result += normal[j] * nbor_normal[j];
                   if ( result < 0. )
@@ -1713,7 +1713,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
 template<>
 bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain )
  {
-    vector<double64> normal(2U), nbor_normal(2U);
+    vector<double> normal(2U), nbor_normal(2U);
    
     size_t non_line_elements(0U);
     for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
@@ -1726,7 +1726,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
              if ( (*it)->Neighbor(i) != nullptr ) {
                   (*it)->Neighbor(i)->UnitNormal( nbor_normal );
                   // projection
-                  double64 result(0.);
+                  double result(0.);
                   for ( size_t j=0U; j<2U; ++ j )
                     result += normal[j] * nbor_normal[j];
                   if ( result < 0. )
@@ -1763,7 +1763,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain 
 
 
 template<template<size_t> class CELL>
-double64 angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 )
+double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 )
  {
     assert( cell1 != nullptr );
     assert( cell2 != nullptr );
@@ -1780,9 +1780,9 @@ double64 angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* co
     
  } // end angleBetweenSurfaceCells
 
-template double64 angleBetweenSurfaceCells<Element>( const Element<3>* const, const Element<3>* const );
-template double64 angleBetweenSurfaceCells<Face>( const Face<3>* const, const Face<3>* const );
-template double64 angleBetweenSurfaceCells<InterFace>( const InterFace<3>* const, const InterFace<3>* const );
+template double angleBetweenSurfaceCells<Element>( const Element<3>* const, const Element<3>* const );
+template double angleBetweenSurfaceCells<Face>( const Face<3>* const, const Face<3>* const );
+template double angleBetweenSurfaceCells<InterFace>( const InterFace<3>* const, const InterFace<3>* const );
 
 
 
@@ -1791,7 +1791,7 @@ template double64 angleBetweenSurfaceCells<InterFace>( const InterFace<3>* const
     Line elements can exist in all 3 spatial dimensions.
 */
 template<size_t dim, template<size_t> class CELL>
-double64 angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 )
+double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 )
  {
     assert( cell1 != nullptr );
     assert( cell2 != nullptr );
@@ -1805,13 +1805,13 @@ double64 angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* c
     
  } // end angleBetweenSurfaceCells
 
-template double64 angleBetweenLineCells<3,Element>( const Element<3>* const, const Element<3>* const );
-template double64 angleBetweenLineCells<3,Face>( const Face<3>* const, const Face<3>* const );
-template double64 angleBetweenLineCells<3,InterFace>( const InterFace<3>* const, const InterFace<3>* const );
+template double angleBetweenLineCells<3,Element>( const Element<3>* const, const Element<3>* const );
+template double angleBetweenLineCells<3,Face>( const Face<3>* const, const Face<3>* const );
+template double angleBetweenLineCells<3,InterFace>( const InterFace<3>* const, const InterFace<3>* const );
 
-template double64 angleBetweenLineCells<2,Element>( const Element<2>* const, const Element<2>* const );
-template double64 angleBetweenLineCells<2,Face>( const Face<2>* const, const Face<2>* const );
-template double64 angleBetweenLineCells<2,InterFace>( const InterFace<2>* const, const InterFace<2>* const );
+template double angleBetweenLineCells<2,Element>( const Element<2>* const, const Element<2>* const );
+template double angleBetweenLineCells<2,Face>( const Face<2>* const, const Face<2>* const );
+template double angleBetweenLineCells<2,InterFace>( const InterFace<2>* const, const InterFace<2>* const );
 
 
 
@@ -1989,7 +1989,7 @@ template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator,
 
         // 2. finding the shared faces
         bool found( false );
-        long64 inner_face_id( -1 ), outer_face_id( -1 );
+        int64_t  inner_face_id( -1 ), outer_face_id( -1 );
         for ( auto inner_face : inner_elmt_faces ) {
           for ( auto outer_face : outer_elmt_faces ) {
             if ( inner_face.first == outer_face.first ) {
@@ -2002,7 +2002,7 @@ template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator,
           if ( found ) break;
         }
 
-        vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
+        vset.Pfvert( eidx, j, static_cast<int32_t>(ptr->Idx()) );
       }
       else
         vset.Pfvert( eidx, j, REGION_BOUNDARY );

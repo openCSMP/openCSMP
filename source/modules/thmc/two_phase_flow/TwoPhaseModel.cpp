@@ -10,14 +10,14 @@ template<size_t dim>
 TwoPhaseModel<dim>::TwoPhaseModel()
  : mun_(2.0e-3), muw_(1.6e-3),
    rhn_(800.), rhw_(1000.),
-   sat_(std::numeric_limits<double64>::quiet_NaN()),
-   seff_(std::numeric_limits<double64>::quiet_NaN()),
+   sat_(std::numeric_limits<double>::quiet_NaN()),
+   seff_(std::numeric_limits<double>::quiet_NaN()),
    swr_(0.), snr_(0.),
-   k_(std::numeric_limits<double64>::quiet_NaN()),
-   K_(PLAIN,std::numeric_limits<double64>::quiet_NaN()),
+   k_(std::numeric_limits<double>::quiet_NaN()),
+   K_(PLAIN,std::numeric_limits<double>::quiet_NaN()),
    ift_(0.05), // N m-1 Danesh (2003), p. 292
    acc_gravity_(ACC_GRAVITY),
-   tolerance_(numeric_limits<double64>::epsilon()),
+   tolerance_(numeric_limits<double>::epsilon()),
    MAX_CAPILLARY_PRESSURE_(4e7),       // maximum tensile strength of a rock
    MAX_CAPILLARY_PRESSURE_SLOPE_(1e7), // maximum slope of the capillary pressure curve
    interpolate_fluid_properties_(false),
@@ -28,8 +28,8 @@ TwoPhaseModel<dim>::TwoPhaseModel()
  
 template<size_t dim>
 TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
-                                      double64 viscosity_nw, double64 viscosity_w,
-                                      double64 density_nw, double64 density_w,
+                                      double viscosity_nw, double viscosity_w,
+                                      double density_nw, double density_w,
                                       const char* kkk,
                                       const char* sat,
                                       const char* snr, 
@@ -42,11 +42,11 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
    mun_(viscosity_nw), muw_(viscosity_w),
    rhn_(density_nw), rhw_(density_w),
    lt_key_(database.StorageKey("total mobility")),
-   sat_(std::numeric_limits<double64>::quiet_NaN()),
-   seff_(std::numeric_limits<double64>::quiet_NaN()),
+   sat_(std::numeric_limits<double>::quiet_NaN()),
+   seff_(std::numeric_limits<double>::quiet_NaN()),
    swr_(0.), snr_(0.),
-   k_(std::numeric_limits<double64>::quiet_NaN()),
-   K_(PLAIN,std::numeric_limits<double64>::quiet_NaN()),
+   k_(std::numeric_limits<double>::quiet_NaN()),
+   K_(PLAIN,std::numeric_limits<double>::quiet_NaN()),
    ift_(0.05), // N m-1 Danesh (2003), p. 292
    acc_gravity_(ACC_GRAVITY),
    tolerance_(1.0e-17),
@@ -111,15 +111,15 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
    sat_key_(database.StorageKey(sat)),
    snr_key_(database.StorageKey(snr)),
    swr_key_(database.StorageKey(swr)),
-   sat_(std::numeric_limits<double64>::quiet_NaN()),
-   seff_(std::numeric_limits<double64>::quiet_NaN()),
+   sat_(std::numeric_limits<double>::quiet_NaN()),
+   seff_(std::numeric_limits<double>::quiet_NaN()),
    swr_(0.), snr_(0.),
-   k_(std::numeric_limits<double64>::quiet_NaN()),
+   k_(std::numeric_limits<double>::quiet_NaN()),
    ift_(0.05), // N m-1 Danesh (2003), p. 292
-   mun_(std::numeric_limits<double64>::quiet_NaN()),
-   muw_(std::numeric_limits<double64>::quiet_NaN()),
-   rhn_(std::numeric_limits<double64>::quiet_NaN()),
-   rhw_(std::numeric_limits<double64>::quiet_NaN()),
+   mun_(std::numeric_limits<double>::quiet_NaN()),
+   muw_(std::numeric_limits<double>::quiet_NaN()),
+   rhn_(std::numeric_limits<double>::quiet_NaN()),
+   rhw_(std::numeric_limits<double>::quiet_NaN()),
    acc_gravity_(ACC_GRAVITY),
    tolerance_(1.0e-17),
    MAX_CAPILLARY_PRESSURE_(4e7), // maximum strength of a rock
@@ -202,7 +202,7 @@ TwoPhaseModel<dim>::~TwoPhaseModel()
 
 
 template<size_t dim>
-double64 csmp::TwoPhaseModel<dim>::Swr() const
+double csmp::TwoPhaseModel<dim>::Swr() const
   {
     return swr_;
   }
@@ -227,32 +227,32 @@ void csmp::TwoPhaseModel<dim>::Snr( double wettingNonResidual )
 
 
 template<size_t dim>
-void TwoPhaseModel<dim>::SaturationWettingPhase( double64 s_wetting )
+void TwoPhaseModel<dim>::SaturationWettingPhase( double s_wetting )
 { sat_ = s_wetting; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::ViscosityNonWettingPhase( double64 visc )
+void TwoPhaseModel<dim>::ViscosityNonWettingPhase( double visc )
 { mun_ = visc; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::ViscosityWettingPhase( double64 visc )
+void TwoPhaseModel<dim>::ViscosityWettingPhase( double visc )
 { muw_ = visc; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::DensityNonWettingPhase( double64 dens )
+void TwoPhaseModel<dim>::DensityNonWettingPhase( double dens )
 { rhn_ = dens; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::DensityWettingPhase( double64 dens )
+void TwoPhaseModel<dim>::DensityWettingPhase( double dens )
 { rhw_ = dens; }
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Permeability() const
+double TwoPhaseModel<dim>::Permeability() const
 { return k_; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::Permeability( double64 permeability )
+void TwoPhaseModel<dim>::Permeability( double permeability )
   { k_ = permeability; }
 
 template<size_t dim>
@@ -264,41 +264,41 @@ void TwoPhaseModel<dim>::TensorPermeability( TensorVariable<dim> permeability )
   { K_ = permeability; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ViscosityNonWettingPhase() const
+double TwoPhaseModel<dim>::ViscosityNonWettingPhase() const
 { return mun_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ViscosityWettingPhase() const
+double TwoPhaseModel<dim>::ViscosityWettingPhase() const
 { return muw_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DensityNonWettingPhase() const
+double TwoPhaseModel<dim>::DensityNonWettingPhase() const
 { return rhn_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DensityWettingPhase() const
+double TwoPhaseModel<dim>::DensityWettingPhase() const
 { return rhw_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::MaxCapillaryPressure( size_t phase ) const
+double TwoPhaseModel<dim>::MaxCapillaryPressure( size_t phase ) const
 { 
    assert( phase == 1U or phase == 2U );
    if ( phase == 2U ) return MAX_CAPILLARY_PRESSURE_;
-   return static_cast<double64>(0.); 
+   return static_cast<double>(0.); 
 }
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Saturation( size_t phase ) const
+double TwoPhaseModel<dim>::Saturation( size_t phase ) const
 { 
    assert( phase == 1U or phase == 2U );
-   if ( phase == 2U ) return static_cast<double64>(1.) - sat_;
+   if ( phase == 2U ) return static_cast<double>(1.) - sat_;
    return sat_;
 }
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::MobilityPhase( size_t phase ) const 
+double TwoPhaseModel<dim>::MobilityPhase( size_t phase ) const 
  {
     assert( phase == 1U or phase == 2U );
     if ( phase == 1U ) return krw_Phase() / muw_;
@@ -307,19 +307,19 @@ double64 TwoPhaseModel<dim>::MobilityPhase( size_t phase ) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::TotalMobilityMultiplier() const 
+double TwoPhaseModel<dim>::TotalMobilityMultiplier() const 
  {
     return krn_Phase() / mun_ + krw_Phase() / muw_;
  }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::TotalMobility() const 
+double TwoPhaseModel<dim>::TotalMobility() const 
  {
     return k_ * TotalMobilityMultiplier();
  }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ViscosityRatio() const
+double TwoPhaseModel<dim>::ViscosityRatio() const
 {
   return mun_ / muw_;
 }
@@ -338,7 +338,7 @@ void TwoPhaseModel<dim>::Initialize( const Element<dim>& e )
     if( tensor_permeability_){
         e.Read( perm_key_, K_);
         // TODO: Skm: fix these unwanted averages of the tensor k
-        k_ = K_.Trace()/static_cast<double64>(dim);
+        k_ = K_.Trace()/static_cast<double>(dim);
     }else{
         k_ = e.Read( perm_key_ );
         K_.operator=( VectorVariable<dim>(PLAIN, k_ ) );
@@ -367,7 +367,7 @@ void TwoPhaseModel<dim>::InitializeAndStore( Element<dim>& e )
     if( tensor_permeability_){
         e.Read( perm_key_, K_);
         // TODO: Skm: fix these unwanted averages of the tensor k
-        k_ = K_.Trace()/static_cast<double64>(dim);
+        k_ = K_.Trace()/static_cast<double>(dim);
     }else{
         k_ = e.Read( perm_key_ );
         K_.operator=( VectorVariable<dim>(PLAIN, k_ ) );
@@ -464,7 +464,7 @@ phase; note also that Initialize() must be called first to get input
 parameters like residual saturations).  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::EffectiveSaturation() const 
+double TwoPhaseModel<dim>::EffectiveSaturation() const 
  {
     return seff_ = std::min( std::max( (sat_ - swr_) / (1. - swr_ - snr_), 0. ), 1. );
     
@@ -473,7 +473,7 @@ double64 TwoPhaseModel<dim>::EffectiveSaturation() const
 
 /// return wetting-phase saturation based on effective saturation
 template<size_t dim>
-double64 TwoPhaseModel<dim>::SeffToSw() const
+double TwoPhaseModel<dim>::SeffToSw() const
  {
     return sat_ = seff_*(1. - swr_ - snr_) + swr_;
 
@@ -481,7 +481,7 @@ double64 TwoPhaseModel<dim>::SeffToSw() const
 
 /// return wetting-phase saturation based on effective saturation ( useful for numerical calculations )
 template<size_t dim>
-double64 TwoPhaseModel<dim>::SeffToSw( double64 seff ) const
+double TwoPhaseModel<dim>::SeffToSw( double seff ) const
  {
     return sat_ = seff*(1. - swr_ - snr_) + swr_;
 
@@ -494,7 +494,7 @@ Computes the fractional flow of the wetting (phase=1) and non-wetting
 Initialize() must be called first.  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::f_Phase( size_t phase ) const
+double TwoPhaseModel<dim>::f_Phase( size_t phase ) const
  {
     assert( phase == 1U or phase == 2U );
       if ( phase == 1U )
@@ -510,9 +510,9 @@ Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf., van Duijn
 and de Neef (1998). Note that Initialize() must be called first.  
  */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::G() const
+double TwoPhaseModel<dim>::G() const
  {
-    const double64 lambda_w(krw_Phase() / muw_),
+    const double lambda_w(krw_Phase() / muw_),
              lambda_n(krn_Phase() / mun_);
              
 	return (lambda_w * lambda_n) / (lambda_w + lambda_n);
@@ -526,7 +526,7 @@ Returns the diffusion coefficient for the phase of interest. If not
 overloaeded, the hydraulic conductivity is returned.  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DiffusionMultiplier( size_t phase ) const
+double TwoPhaseModel<dim>::DiffusionMultiplier( size_t phase ) const
 {
      assert( phase == 1U or phase == 2U );
      return k_ / ( (phase==1u) ? muw_ : mun_ );
@@ -539,7 +539,7 @@ See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
 permeability in direction of flow  x  lambda_overbar  x pc-gradient.  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::CapillaryDiffusionMultiplier( ) const
+double TwoPhaseModel<dim>::CapillaryDiffusionMultiplier( ) const
 {
    return k_ * G() * dpcds_Phase( );
 } 
@@ -553,19 +553,19 @@ function at the current saturation of the wetting phase (see Helmig, 1997,
 p. 108, eqn. 3.74, term 2 (first part).  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::AdvectionMultiplier( ) const
+double TwoPhaseModel<dim>::AdvectionMultiplier( ) const
  {
     return dfds();
  } 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::GravityTerm() const
+double TwoPhaseModel<dim>::GravityTerm() const
 {
   // note that the projected gravity acts opposite the y-axis
-  const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
+  const double k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
 
     // economizing the calculation
-    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double64>(0.);
+    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double>(0.);
 
     // else compute result using G saturation derivative
     return k_g_drho;
@@ -574,13 +574,13 @@ double64 TwoPhaseModel<dim>::GravityTerm() const
 /** See Sebastian Geiger's thesis (2004), closed form.
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::GravityMultiplier_G( ) const
+double TwoPhaseModel<dim>::GravityMultiplier_G( ) const
 {
   // note that the projected gravity acts opposite the y-axis
-  const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
+  const double k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
 	
 	// economizing the calculation
-    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double64>(0.);
+    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double>(0.);
 
 	// else compute result using G saturation derivative
 	return k_g_drho * G();	
@@ -595,13 +595,13 @@ lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997,
 p. 108, eqn. 3.74, term 2 (second part).  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::GravityMultiplier_dGds( ) const
+double TwoPhaseModel<dim>::GravityMultiplier_dGds( ) const
 {
     // SKM flow equations worked out with Adrian
-    const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
+    const double k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
 	
 	// economizing the calculation
-    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double64>(0.);
+    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double>(0.);
 
 	// else compute result using G saturation derivative
     return k_g_drho * dGds(  );
@@ -633,7 +633,7 @@ template<size_t dim>
 void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
  {
     if ( interpolate_fluid_properties_ ) {
-         mun_ = muw_ = rhn_ = rhw_ = sat_ = static_cast<double64>(0.);
+         mun_ = muw_ = rhn_ = rhw_ = sat_ = static_cast<double>(0.);
          for ( size_t i=0U; i<e.Nodes(); i++ ) {
               sat_ += e.FE()->NRST[i] * e.N(i)->Read( sat_key_ );
               mun_ += e.FE()->NRST[i] * e.N(i)->Read( mun_key_ );
@@ -643,7 +643,7 @@ void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
            }
       }
     else {
-         sat_ = static_cast<double64>(0.);
+         sat_ = static_cast<double>(0.);
          for ( size_t i=0U; i<e.Nodes(); i++ )
            sat_ += e.FE()->NRST[i] * e.N(i)->Read( sat_key_ );
       }
@@ -652,28 +652,28 @@ void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
 
 /// relative permeabilities
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krw_Phase() const
+double TwoPhaseModel<dim>::krw_Phase() const
  {
     cout <<"\nTwoPhaseModel<dim>::krw_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::krw_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
  }
 
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krn_Phase() const
+double TwoPhaseModel<dim>::krn_Phase() const
  {
     cout <<"\nTwoPhaseModel<"<< dim <<">::krn_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::krn_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
  }
 
 /// derivatives of relative permeabilities
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrwds_Phase() const
+double TwoPhaseModel<dim>::dkrwds_Phase() const
  {
     return dkrwds_numerical();
  }
@@ -681,61 +681,61 @@ double64 TwoPhaseModel<dim>::dkrwds_Phase() const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrnds_Phase() const
+double TwoPhaseModel<dim>::dkrnds_Phase() const
  {
     return dkrnds_numerical();
  }
 
 /// capillary pressure
 template<size_t dim>
-double64 TwoPhaseModel<dim>::pc_Phase() const
+double TwoPhaseModel<dim>::pc_Phase() const
  {
     cout <<"\nTwoPhaseModel<"<< dim <<">::pc_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::pc_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
  }
 
 /// inverse capillary pressure function
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Sw_Phase(double64 ) const
+double TwoPhaseModel<dim>::Sw_Phase(double ) const
  {
     cout <<"\nTwoPhaseModel<"<< dim <<">::SwFromPc(base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::SwFromPc: Method not defined in subclass");
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
  }
 
     /// capillary pressure derivatives
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dpcds_Phase( ) const
+double TwoPhaseModel<dim>::dpcds_Phase( ) const
  {
     return dpcds_numerical();
  }
 
 /// derivatives of inverse capillary pressure function
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dsdpc_Phase( double64 ) const
+double TwoPhaseModel<dim>::dsdpc_Phase( double ) const
  {
     cout <<"\nTwoPhaseModel<"<<  dim <<">::dpcdsw_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
     throw logic_error("TwoPhaseModel<dim>::dpcdsw_Phase: Method not defined in subclass");
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
  }
 
 // linearized diffusion multiplier for large-timestep calculations
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DiffusionCharacteristic( size_t ) const
+double TwoPhaseModel<dim>::DiffusionCharacteristic( size_t ) const
 {
 cout <<"\nTwoPhaseModel<"<<  dim <<">::DiffusionCharacteristic (base class): ";
 cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
-return std::numeric_limits<double64>::signaling_NaN();
+return std::numeric_limits<double>::signaling_NaN();
 }
 
 
 /// derivative of wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlwds() const
+double TwoPhaseModel<dim>::dlwds() const
  {
     return dkrwds_Phase() / muw_;
 
@@ -743,7 +743,7 @@ double64 TwoPhaseModel<dim>::dlwds() const
 
 /// derivative of non-wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlnds() const
+double TwoPhaseModel<dim>::dlnds() const
  {
     return dkrnds_Phase() / mun_;
 
@@ -751,19 +751,19 @@ double64 TwoPhaseModel<dim>::dlnds() const
 
 /// derivative of fractional flow function (advection multipliers)
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dfds() const
+double TwoPhaseModel<dim>::dfds() const
  {
 
-    //if ( ( seff_ < static_cast<double64>(0.) ) || ( seff_ > static_cast<double64>(1.) ) )
-    //    return static_cast<double64>(0.);
+    //if ( ( seff_ < static_cast<double>(0.) ) || ( seff_ > static_cast<double>(1.) ) )
+    //    return static_cast<double>(0.);
 
-    const double64 lw  = krw_Phase() / muw_;
-    const double64 ln  = krn_Phase() / mun_;
-    const double64 lt  = lw + ln;
-    const double64 lt2 = lt*lt;
+    const double lw  = krw_Phase() / muw_;
+    const double ln  = krn_Phase() / mun_;
+    const double lt  = lw + ln;
+    const double lt2 = lt*lt;
 
-    const double64 dlwds = dkrwds_Phase() / muw_;
-    const double64 dlnds = dkrnds_Phase() / mun_;
+    const double dlwds = dkrwds_Phase() / muw_;
+    const double dlnds = dkrnds_Phase() / mun_;
 
     return ( dlwds*ln - dlnds*lw )/lt2;
 
@@ -773,22 +773,22 @@ double64 TwoPhaseModel<dim>::dfds() const
      
 /// derivatives of gravitational flow
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dGds( ) const
+double TwoPhaseModel<dim>::dGds( ) const
  {
 
-    //if ( ( seff_ < static_cast<double64>(0.) ) || ( seff_ > static_cast<double64>(1.) ) )
-    //    return static_cast<double64>(0.);
+    //if ( ( seff_ < static_cast<double>(0.) ) || ( seff_ > static_cast<double>(1.) ) )
+    //    return static_cast<double>(0.);
 
-    const double64 lw  = krw_Phase() / muw_;
-    const double64 ln  = krn_Phase() / mun_;
-    const double64 lt  = lw + ln;
-    const double64 lt2 = lt*lt;
-    const double64 ln2 = ln*ln;
-    const double64 lw2 = lw*lw;
+    const double lw  = krw_Phase() / muw_;
+    const double ln  = krn_Phase() / mun_;
+    const double lt  = lw + ln;
+    const double lt2 = lt*lt;
+    const double ln2 = ln*ln;
+    const double lw2 = lw*lw;
 
 
-    const double64 dlwds = dkrwds_Phase() / muw_;
-    const double64 dlnds = dkrnds_Phase() / mun_;
+    const double dlwds = dkrwds_Phase() / muw_;
+    const double dlnds = dkrnds_Phase() / mun_;
 
     return ( dlwds*ln2 + dlnds*lw2 )/lt2;
  }
@@ -799,7 +799,7 @@ double64 TwoPhaseModel<dim>::dGds( ) const
 
 /// derivative of wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlwds_numerical( double64 h ) const
+double TwoPhaseModel<dim>::dlwds_numerical( double h ) const
  {
     return dkrwds_numerical( h ) / muw_;
 
@@ -807,20 +807,20 @@ double64 TwoPhaseModel<dim>::dlwds_numerical( double64 h ) const
 
 /// derivative of non-wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlnds_numerical( double64 h) const
+double TwoPhaseModel<dim>::dlnds_numerical( double h) const
  {
     return dkrnds_numerical( h ) / mun_;
 
  }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrwds_numerical( double64 h ) const
+double TwoPhaseModel<dim>::dkrwds_numerical( double h ) const
 {
 
   //if ( seff_ < 0.0 || seff_ > 1.0 )
-  //      return static_cast<double64>(0.);
+  //      return static_cast<double>(0.);
 
-  const double64 dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
+  const double dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
 
   if( seff_ < 0.+h )
       return (krw_at( seff_ + h ) - krw_at( seff_ ) ) / h * dSedSw;
@@ -832,12 +832,12 @@ double64 TwoPhaseModel<dim>::dkrwds_numerical( double64 h ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrnds_numerical( double64 h ) const
+double TwoPhaseModel<dim>::dkrnds_numerical( double h ) const
 {
   //if ( seff_ < 0.0 || seff_ > 1.0 )
-  //      return static_cast<double64>(0.);
+  //      return static_cast<double>(0.);
 
-  const double64 dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
+  const double dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
 
   if( seff_ < 0.+h )
       return ( krn_at( seff_ + h ) - krn_at( seff_ ) ) / h * dSedSw;
@@ -849,15 +849,15 @@ double64 TwoPhaseModel<dim>::dkrnds_numerical( double64 h ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dfds_numerical( double64 h) const
+double TwoPhaseModel<dim>::dfds_numerical( double h) const
 {
 
   //if ( seff_ < 0.0 || seff_ > 1.0 )
-  //    return static_cast<double64>(0.);
+  //    return static_cast<double>(0.);
 
   /*
   // first version: direct differentiation
-  const double64 dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
+  const double dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
 
   if( seff_ < 0.+h )
       return ( fw_at( seff_ + h ) - fw_at( seff_ ) ) / h * dSedSw;
@@ -870,13 +870,13 @@ double64 TwoPhaseModel<dim>::dfds_numerical( double64 h) const
 
   ///*
   // second version: mixed analytical and numerical differentiation
-  const double64 lw  = krw_Phase() / muw_;
-  const double64 ln  = krn_Phase() / mun_;
-  const double64 lt  = lw + ln;
-  const double64 lt2 = lt*lt;
+  const double lw  = krw_Phase() / muw_;
+  const double ln  = krn_Phase() / mun_;
+  const double lt  = lw + ln;
+  const double lt2 = lt*lt;
 
-  const double64 dlwds = dkrwds_numerical( h )/muw_;
-  const double64 dlnds = dkrnds_numerical( h )/mun_;
+  const double dlwds = dkrwds_numerical( h )/muw_;
+  const double dlnds = dkrnds_numerical( h )/mun_;
 
   return ( dlwds*ln - dlnds*lw )/lt2;
   //*/
@@ -884,14 +884,14 @@ double64 TwoPhaseModel<dim>::dfds_numerical( double64 h) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dGds_numerical( double64 h ) const
+double TwoPhaseModel<dim>::dGds_numerical( double h ) const
 {
   //if ( seff_ < 0.0 || seff_ > 1.0 )
-  //      return static_cast<double64>(0.);
+  //      return static_cast<double>(0.);
 
   /*
   // first version: direct differentiation
-  const double64 dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
+  const double dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
   h = 0.0000001;
   if( seff_ < 0.+h )
       return ( G_at( seff_ + h ) - G_at( seff_ ) ) / h * dSedSw;
@@ -903,30 +903,30 @@ double64 TwoPhaseModel<dim>::dGds_numerical( double64 h ) const
   */
 
   // second version: mixed analytical and numerical differentiation
-  const double64 lw  = krw_Phase() / muw_;
-  const double64 ln  = krn_Phase() / mun_;
-  const double64 lt  = lw + ln;
-  const double64 lt2 = lt*lt;
-  const double64 ln2 = ln*ln;
-  const double64 lw2 = lw*lw;
+  const double lw  = krw_Phase() / muw_;
+  const double ln  = krn_Phase() / mun_;
+  const double lt  = lw + ln;
+  const double lt2 = lt*lt;
+  const double ln2 = ln*ln;
+  const double lw2 = lw*lw;
 
 
-  const double64 dlwds = dkrwds_numerical( h )/muw_;
-  const double64 dlnds = dkrnds_numerical( h )/mun_;
+  const double dlwds = dkrwds_numerical( h )/muw_;
+  const double dlnds = dkrnds_numerical( h )/mun_;
 
   return ( dlwds*ln2 + dlnds*lw2 )/lt2;
 
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dpcds_numerical( double64 h) const
+double TwoPhaseModel<dim>::dpcds_numerical( double h) const
 {
 
   //if ( seff_ < 0.0 || seff_ > 1.0 )
-  //    return static_cast<double64>(0.);
+  //    return static_cast<double>(0.);
 
-  const double64 dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
-  double64 dpcds;
+  const double dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
+  double dpcds;
 
   if( seff_ < 0.+h )
       dpcds = ( pc_at( seff_ + h ) - pc_at( seff_ ) ) / h * dSedSw;
@@ -944,35 +944,35 @@ double64 TwoPhaseModel<dim>::dpcds_numerical( double64 h) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
+double TwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
  {
-    double64 speed, height;
+    double speed, height;
     ShockSpeedHeight( speed, height );
     return speed;
  }
 
     /// linearized fractional flow derivative
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ShockSpeed() const
+double TwoPhaseModel<dim>::ShockSpeed() const
  {
-    double64 speed, height;
+    double speed, height;
     ShockSpeedHeight( speed, height );
     return speed;
  }
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ShockHeight() const
+double TwoPhaseModel<dim>::ShockHeight() const
  {
-    double64 speed, height;
+    double speed, height;
     ShockSpeedHeight( speed, height );
     return height;
  }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::ShockSpeedHeight( double64& speed, double64& height)const
+void TwoPhaseModel<dim>::ShockSpeedHeight( double& speed, double& height)const
 {
-  double64 se(0.);
+  double se(0.);
   speed = 0;
 
   for( size_t i = 0; i<=100; ++i){
@@ -989,72 +989,72 @@ void TwoPhaseModel<dim>::ShockSpeedHeight( double64& speed, double64& height)con
 /// General accessory functions
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::mobility_w_at( double64 se ) const
+double TwoPhaseModel<dim>::mobility_w_at( double se ) const
 {
   return krw_at( se ) / muw_;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::mobility_n_at( double64 se ) const
+double TwoPhaseModel<dim>::mobility_n_at( double se ) const
 {
   return krn_at( se ) / mun_;
 }
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::fw_at( double64 se ) const
+double TwoPhaseModel<dim>::fw_at( double se ) const
 {
   return 1.0 / ( 1.0 + mobility_n_at( se ) / mobility_w_at( se ) );
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::fn_at( double64 se ) const
+double TwoPhaseModel<dim>::fn_at( double se ) const
 {
   return 1.0 / ( 1.0 + mobility_w_at( se ) / mobility_n_at( se ) );
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krw_at( double64 se) const
+double TwoPhaseModel<dim>::krw_at( double se) const
 {
 
-  const double64 cache = seff_;
+  const double cache = seff_;
   seff_ = se;
-  const double64 kr( krw_Phase() );
+  const double kr( krw_Phase() );
   seff_ = cache;
 
   return kr;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krn_at( double64 se) const
+double TwoPhaseModel<dim>::krn_at( double se) const
 {
 
-  const double64 cache = seff_;
+  const double cache = seff_;
   seff_ = se;
-  const double64 kr( krn_Phase() );
+  const double kr( krn_Phase() );
   seff_ = cache;
 
   return kr;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrwds_at( double64 se) const
+double TwoPhaseModel<dim>::dkrwds_at( double se) const
 {
-  const double64 cache = seff_;
+  const double cache = seff_;
   seff_ = se;
-  const double64 dkrwds( dkrwds_Phase() );
+  const double dkrwds( dkrwds_Phase() );
   seff_ = cache;
 
   return dkrwds;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrnds_at( double64 se) const
+double TwoPhaseModel<dim>::dkrnds_at( double se) const
 {
 
-  const double64 cache = seff_;
+  const double cache = seff_;
   seff_ = se;
-  const double64 dkrnds( dkrnds_Phase() );
+  const double dkrnds( dkrnds_Phase() );
   seff_ = cache;
 
   return dkrnds;
@@ -1062,67 +1062,67 @@ double64 TwoPhaseModel<dim>::dkrnds_at( double64 se) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dfds_at( double64 se ) const
+double TwoPhaseModel<dim>::dfds_at( double se ) const
 {
 
-  const double64 cache = seff_;
+  const double cache = seff_;
   seff_ = se;
-  const double64 df = dfds();
+  const double df = dfds();
   seff_ = cache;
 
   return df;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::G_at( double64 se ) const
+double TwoPhaseModel<dim>::G_at( double se ) const
 {
 
-  const double64 cache = seff_;
+  const double cache = seff_;
   seff_ = se;
-  const double64 g = G();
+  const double g = G();
   seff_ = cache;
 
   return g;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::pc_at( double64 se ) const
+double TwoPhaseModel<dim>::pc_at( double se ) const
 {
 
-  const double64 cache = seff_;
+  const double cache = seff_;
   seff_ = se;
-  const double64 pc = pc_Phase( );
+  const double pc = pc_Phase( );
   seff_ = cache;
 
   return pc;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dpcds_at( double64 se) const
+double TwoPhaseModel<dim>::dpcds_at( double se) const
 {
-    double64 cache = seff_;
+    double cache = seff_;
     seff_ = se;
-    double64 dpcds( dpcds_Phase( ) );
+    double dpcds( dpcds_Phase( ) );
     seff_ = cache;
 
     return dpcds;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Sw_at( double64 pc ) const
+double TwoPhaseModel<dim>::Sw_at( double pc ) const
 {
-  const double64 cache = seff_;
-  const double64 Sw = Sw_Phase( pc );
+  const double cache = seff_;
+  const double Sw = Sw_Phase( pc );
   seff_ = cache;
 
   return Sw;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dsdpc_at( double64 pc ) const
+double TwoPhaseModel<dim>::dsdpc_at( double pc ) const
 {
-    const double64 cache = seff_;
-    const double64 dsdpc = dsdpc_Phase( pc );
+    const double cache = seff_;
+    const double dsdpc = dsdpc_Phase( pc );
     seff_ = cache;
 
     return dsdpc;
@@ -1131,33 +1131,33 @@ double64 TwoPhaseModel<dim>::dsdpc_at( double64 pc ) const
 
 /// Interpolations
 template<size_t dim>
-double64 TwoPhaseModel<dim>::spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
+double TwoPhaseModel<dim>::spline_value( double x, double x1, double x2, double y1, double y2, double k1, double k2) const
 {
-    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double64 t = ( x - x1) / ( x2 - x1 );
+    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double t = ( x - x1) / ( x2 - x1 );
 
     return (1. - t)*y1 + t*y2 + t*(1.-t)*( a*(1.-t) + b*t);
 
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
+double TwoPhaseModel<dim>::spline_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const
 {
-    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double64 t = ( x - x1) / ( x2 - x1 );
+    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double t = ( x - x1) / ( x2 - x1 );
 
     return (y2-y1)/( x2-x1 ) + (1.-2.*t)*( a*(1.-t)+b*t)/(x2-x1) + t*(1.-t)*(b-a)/(x2-x1);
 
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
+double TwoPhaseModel<dim>::spline_second_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const
 {
-    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double64 t = ( x - x1) / ( x2 - x1 );
+    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double t = ( x - x1) / ( x2 - x1 );
 
     return 2.*( b-2.*a +(a-b)*3.*t)/(x2-x1)/(x2-x1);
 

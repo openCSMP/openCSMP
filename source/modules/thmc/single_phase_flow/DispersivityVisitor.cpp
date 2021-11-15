@@ -13,8 +13,8 @@ namespace csmp {
 template<size_t dim>
 DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg, 
                                                 const char* dispersivity, const char* pore_velocity, 
-                                                double64 diffusivity, double64 dispersion_long, 
-                                                double64 dispersion_trans )
+                                                double diffusivity, double dispersion_long, 
+                                                double dispersion_trans )
   : pref(sg.Database()),
     vel_key(pref.StorageKey(pore_velocity)),
     disp_key(pref.StorageKey(dispersivity)),
@@ -109,7 +109,7 @@ void DispersivityVisitor< dim>::Visit(Element< dim>* n)
    // equations 3.14a-c from Ingebritsen's book Groundwater in Geologic Porcesses
    disp = 0.0;
 
-   double64 cross_term(0.0);
+   double cross_term(0.0);
 
    // diffusion
    for ( size_t i=0; i<dim; i++ ) disp(i,i) = dp();

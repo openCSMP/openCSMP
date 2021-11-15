@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-FluidDensityFromConcentration<dim>::FluidDensityFromConcentration( const PropertyDatabase<dim>& p, double64 rho_max )
+FluidDensityFromConcentration<dim>::FluidDensityFromConcentration( const PropertyDatabase<dim>& p, double rho_max )
       : Interrelation<dim>(p),
         CONC( Interrelation<dim>::GlobalProperty("concentration") ),
         DENS( Interrelation<dim>::GlobalProperty("fluid density") ),

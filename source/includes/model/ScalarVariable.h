@@ -1,7 +1,6 @@
 #ifndef CSMP_SCALAR_VARIABLE_H
 #define CSMP_SCALAR_VARIABLE_H
 
-#include "CSMP_number_types.h"
 #include "CSMP_definitions.h"
 
 namespace csmp {
@@ -25,7 +24,7 @@ but flags can be set, their values compared and the variable
 can be used together with VectorVariable and TensorVariable for the
 representation of physical variables in CSMP computations.
 The ScalarVariable type is templatized to allow its use with variables
-of different precision. The default use is with 'double64' variables
+of different precision. The default use is with 'double' variables
 defined as 8-byte doubles.
 
 
@@ -72,7 +71,7 @@ public:
   static constexpr VARIABLE_TYPE VariableType = SCALAR;
 
   ScalarVariable();
-  ScalarVariable( VARIABLE_FLAG f, double64 val );
+  ScalarVariable( VARIABLE_FLAG f, double val );
   ScalarVariable( const ScalarVariable& );
   ScalarVariable( ScalarVariable&& ) = default;
   ~ScalarVariable();
@@ -83,11 +82,11 @@ public:
   ScalarVariable&  operator/=( const ScalarVariable& );
 
   // for conformance with the interfaces of the other CSMP variables
-  ScalarVariable&  operator=( double64 val ) { data_ = val; return *this; }
-  ScalarVariable&  operator+=( double64 val ) { data_ += val; return *this; }
-  ScalarVariable&  operator-=( double64 val ) { data_ -= val; return *this; }
-  ScalarVariable&  operator*=( double64 val ) { data_ *= val; return *this; }
-  ScalarVariable&  operator/=( double64 val ) { data_ /= val; return *this; }
+  ScalarVariable&  operator=( double val ) { data_ = val; return *this; }
+  ScalarVariable&  operator+=( double val ) { data_ += val; return *this; }
+  ScalarVariable&  operator-=( double val ) { data_ -= val; return *this; }
+  ScalarVariable&  operator*=( double val ) { data_ *= val; return *this; }
+  ScalarVariable&  operator/=( double val ) { data_ /= val; return *this; }
 
   /// assignment operator
   ScalarVariable&  operator=( const ScalarVariable& );
@@ -107,23 +106,23 @@ public:
   bool             operator!=( const ScalarVariable& ) const;
 
   /// assignment as an lvalue
-  double64&        operator()( void );
-  double64         operator()( void ) const;
+  double&        operator()( void );
+  double         operator()( void ) const;
 
   /// tests whether the variable value lies within the given bounds
-  bool             IsWithinRange( double64 vmin, double64 vmax ) const;
+  bool             IsWithinRange( double vmin, double vmax ) const;
 
   /// universal way of assigning values to all CSMP variable types
-  void             Component( size_t, double64 val ) { data_ = val; }
+  void             Component( size_t, double val ) { data_ = val; }
 
   /// universal accessor of CSMP variable values which works for all variable types
-  double64         Component( size_t ) const { return data_; }
+  double         Component( size_t ) const { return data_; }
 
   /// returns size = number of components of the variable (=1 for scalar)
   size_t           Size() const;
 
   /// value assignment to scalar: cannot resize, but assigns user-defined or default value
-  void             Resize( size_t newSize, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
+  void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
 
   /// assigment: status of variable which determines how it is used in computations
   VARIABLE_FLAG&   Flag();
@@ -140,24 +139,24 @@ public:
 
 private:
   VARIABLE_FLAG flag_;
-  double64      data_;
+  double      data_;
 };
 
 /// creates scalar and returns; use for inserting scalars into functions
-ScalarVariable  makeScalar( VARIABLE_FLAG, double64 );
+ScalarVariable  makeScalar( VARIABLE_FLAG, double );
 
 ScalarVariable  operator+( const ScalarVariable&, const ScalarVariable& );
 ScalarVariable  operator-( const ScalarVariable&, const ScalarVariable& );
 ScalarVariable  operator*( const ScalarVariable&, const ScalarVariable& );
 ScalarVariable  operator/( const ScalarVariable&, const ScalarVariable& );
-ScalarVariable  operator+( const ScalarVariable&, const double64& );
-ScalarVariable  operator-( const ScalarVariable&, const double64& );
-ScalarVariable  operator*( const ScalarVariable&, const double64& );
-ScalarVariable  operator/( const ScalarVariable&, const double64& );
-ScalarVariable  operator+( const double64&, const ScalarVariable& );
-ScalarVariable  operator-( const double64&, const ScalarVariable& );
-ScalarVariable  operator*( const double64&, const ScalarVariable& );
-ScalarVariable  operator/( const double64&, const ScalarVariable& );
+ScalarVariable  operator+( const ScalarVariable&, const double& );
+ScalarVariable  operator-( const ScalarVariable&, const double& );
+ScalarVariable  operator*( const ScalarVariable&, const double& );
+ScalarVariable  operator/( const ScalarVariable&, const double& );
+ScalarVariable  operator+( const double&, const ScalarVariable& );
+ScalarVariable  operator-( const double&, const ScalarVariable& );
+ScalarVariable  operator*( const double&, const ScalarVariable& );
+ScalarVariable  operator/( const double&, const ScalarVariable& );
 
 /// multiplies each element of vector variable with scalar
 template<size_t dim>

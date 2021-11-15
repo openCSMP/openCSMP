@@ -96,7 +96,7 @@ SAMG_Settings::SAMG_Settings() :
 
 Involved subswitches: isym, irow
 */
-int32 SAMG_Settings::Get_matrix() const
+int32_t SAMG_Settings::Get_matrix() const
 {
     return 10*isym_ + irow_;
 }
@@ -110,7 +110,7 @@ if ifirst == 0, (end residual) / (start residual) <= eps
 
 rel_eps can be accessed with the function Get_rel_eps
 */
-int32 SAMG_Settings::Get_ifirst() const {
+int32_t SAMG_Settings::Get_ifirst() const {
     return itypu_;
 }
 
@@ -118,7 +118,7 @@ int32 SAMG_Settings::Get_ifirst() const {
 
 Involved subswitches: eps
 */
-double64 SAMG_Settings::Get_eps() const {
+double SAMG_Settings::Get_eps() const {
     return eps_;
 }
 
@@ -127,7 +127,7 @@ double64 SAMG_Settings::Get_eps() const {
 
 Involved subswitches: eps
 */
-double64 SAMG_Settings::Get_rel_eps() const {
+double SAMG_Settings::Get_rel_eps() const {
     return -rel_eps_;
 }
 
@@ -138,8 +138,8 @@ nint_weights, nint_pat
 
 For negative values of nsolve, call SetNegative_nsolve(true) first
 */
-int32 SAMG_Settings::Get_nsolve() const {
-    int32 temp = 10000000 * napproach_ + 1000000 * nxtyp_ + 100000 * internal_
+int32_t SAMG_Settings::Get_nsolve() const {
+    int32_t temp = 10000000 * napproach_ + 1000000 * nxtyp_ + 100000 * internal_
             + 1000 * nprim_ + 100 * npr_is_dummy_ + 10 * nint_weights_ + nint_pat_;
     return ( negative_nsolve_ ? -temp : temp );
 }
@@ -150,19 +150,19 @@ Involved subswitches: igam, ncgrad, nkdim, ncycle
 
 For negative values of ncyc, call SetNegative_ncyc( true ) first
 */
-int32 SAMG_Settings::Get_ncyc() const {
+int32_t SAMG_Settings::Get_ncyc() const {
     std::stringstream stream;
     if ( negative_ncyc_ )
         stream << "-";
     stream << igam_ << ncgrad_ << nkdim_ << ncycle_;
-    return static_cast<int32>( std::atoi( stream.str().c_str()));
+    return static_cast<int32_t>( std::atoi( stream.str().c_str()));
 }
 
 /** Returns value of iswit
 
 Involved subswitches: iswit, iextent, ndefault, norm_typ, ioscratch
  */
-int32 SAMG_Settings::Get_iswit() const {
+int32_t SAMG_Settings::Get_iswit() const {
     return iswit_;
 }
 
@@ -170,7 +170,7 @@ int32 SAMG_Settings::Get_iswit() const {
 
 Involved subswitches: iswit, iextent, ndefault, norm_typ, ioscratch
  */
-int32 SAMG_Settings::Get_iswtch() const {
+int32_t SAMG_Settings::Get_iswtch() const {
     return 1000000 * iswit_ + 100000 * iextent_ + 1000 * ndefault_ + 100 * norm_typ_ + ioscratch_;
 }
 
@@ -178,7 +178,7 @@ int32 SAMG_Settings::Get_iswtch() const {
 
 Involved subswitches: chktol
  */
-double64 SAMG_Settings::Get_chktol() const {
+double SAMG_Settings::Get_chktol() const {
     return chktol_;
 }
 
@@ -188,12 +188,12 @@ Involved subswitches: idmp, igdp, iadp, iwdp
 
 For negative values of idump, call SetNegative_idump( true ) first
  */
-int32 SAMG_Settings::Get_idump() const {
-    int32 temp = 1000 * idmp_ + 100 * igdp_ + 10 * iadp_ + iwdp_;
+int32_t SAMG_Settings::Get_idump() const {
+    int32_t temp = 1000 * idmp_ + 100 * igdp_ + 10 * iadp_ + iwdp_;
     return ( negative_idump_ ? -temp : temp );
 }
 
-int32 SAMG_Settings::Get_idmp() const {
+int32_t SAMG_Settings::Get_idmp() const {
     return idmp_;
 }
 
@@ -203,47 +203,47 @@ Involved subswitches: iout1, iout2
 
 For negative values of iout, call SetNegative_iout( true ) first
  */
-int32 SAMG_Settings::Get_iout() const {
-    int32 temp = 10 * iout1_ + iout2_;
+int32_t SAMG_Settings::Get_iout() const {
+    int32_t temp = 10 * iout1_ + iout2_;
     return ( negative_iout_ ? -temp : temp );
 }
 
 /** Returns value of a_cmplx switch
  */
-double64 SAMG_Settings::Get_a_cmplx() const {
+double SAMG_Settings::Get_a_cmplx() const {
     return a_cmplx_;
 }
 
 /** Returns value of g_cmplx switch
  */
-double64 SAMG_Settings::Get_g_cmplx() const {
+double SAMG_Settings::Get_g_cmplx() const {
     return g_cmplx_;
 }
 
 /** Returns value of p_cmplx switch
  */
-double64 SAMG_Settings::Get_p_cmplx() const {
+double SAMG_Settings::Get_p_cmplx() const {
     return p_cmplx_;
 }
 
 /** Returns value of w_avrge switch
  */
-double64 SAMG_Settings::Get_w_avrge() const {
+double SAMG_Settings::Get_w_avrge() const {
     return w_avrge_;
 }
 /** Returns value of optional levelx switch
  */
-int32 SAMG_Settings::Get_levelx() const {
+int32_t SAMG_Settings::Get_levelx() const {
     return levelx_;
 }
 /** Returns value of optional ioform switch
  */
-int32 SAMG_Settings::Get_ioform() const{
+int32_t SAMG_Settings::Get_ioform() const{
     return ioform_;
 }
 /** Returns value of ioform ASCII character length
  */
-int32 SAMG_Settings::Get_ioform_length() const{
+int32_t SAMG_Settings::Get_ioform_length() const{
     return ioform_length_;
 }
 
@@ -255,7 +255,7 @@ int* SAMG_Settings::Get_filnam_dump()
 }
 /** Returns value of filnam_dump ASCII character length
  */
-int32 SAMG_Settings::Get_filnam_dump_length() const{
+int32_t SAMG_Settings::Get_filnam_dump_length() const{
     if ( filnam_dump_length_ > 50 )
         std::cout << "SAMG_Settings::Get_filnam_dump_length 'The length of the output filename may not exceed 50 characters' \n";
 
@@ -271,25 +271,25 @@ whether to stick to the defaults or to use the settings stored in the
 SAMG_Settings object. A modification of a subswitch of ncg triggers the
 use of the ncg switch automatically.
  */
-int32 SAMG_Settings::Get_ncg() const {
+int32_t SAMG_Settings::Get_ncg() const {
     return 10000 * ncgtyp_ + 1000 * nred_ + 100 * nredlev_ + 10 * nxf_clean_ + npcol_;
 }
 
 /** Query to determine how many iteration cycles have been performed.
  */
-int32 SAMG_Settings::Get_ncyc_done() const {
+int32_t SAMG_Settings::Get_ncyc_done() const {
     return ncyc_done_;
 }
 
 /** Query to determine the minimum number of iteration cycles performed.
  */
-int32 SAMG_Settings::Get_ncyc_best() const {
+int32_t SAMG_Settings::Get_ncyc_best() const {
     return ncyc_best_;
 }
 
 /** Gets iter_pre which allows using SAMG as pre-conditioner for Bi-CGStab
  */
-int32 SAMG_Settings::Get_iter_pre() const {
+int32_t SAMG_Settings::Get_iter_pre() const {
     return iter_pre_;
 }
 
@@ -308,13 +308,13 @@ bool SAMG_Settings::UsePointBasedApproach() const {
 }
 /** Query to determine which SAMG multiple instance is used. The returned number indicates the SAMG library instance used.
  */
-int32 SAMG_Settings::GetSolverInstance() const{
+int32_t SAMG_Settings::GetSolverInstance() const{
     return solver_instance_;
 }
 
 /** Query to determine which SAMG multiple instance is used. The returned number indicates the SAMG library instance used.
  */
-int32 SAMG_Settings::Get_mode_mess() const{
+int32_t SAMG_Settings::Get_mode_mess() const{
     return mode_mess_;
 }
 
@@ -327,7 +327,7 @@ int32 SAMG_Settings::Get_mode_mess() const{
                     2	A is not symmetric
 
 */
-void SAMG_Settings::Set_isym(int32 isym ) {
+void SAMG_Settings::Set_isym(int32_t isym ) {
     isym_ = isym;
     if ( isym != 1 && isym != 2 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_isym",
@@ -341,7 +341,7 @@ void SAMG_Settings::Set_isym(int32 isym ) {
                     the solution will be normalized)
                     2	A is not a zero rowsum matrix
  */
-void SAMG_Settings::Set_irow( int32 irow ) {
+void SAMG_Settings::Set_irow( int32_t irow ) {
     irow_ = irow;
     if ( irow != 1 && irow != 2 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_irow",
@@ -365,7 +365,7 @@ the norm of the right-hand side vector:
 rel_eps can be accessed with the function Get_rel_eps
 
 */
-void SAMG_Settings::Set_itypu( int32 itypu ) {
+void SAMG_Settings::Set_itypu( int32_t itypu ) {
     itypu_ = itypu;
     if ( itypu != 0 && itypu != 1 && itypu != 2 && itypu != 3 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_itypu",
@@ -380,7 +380,7 @@ void SAMG_Settings::Set_itypu( int32 itypu ) {
 > 0.0	Iteration stops if res <= eps.res0 (res0 = starting residual)
 < 0.0	Iteration stops if res <= |eps|
  */
-void SAMG_Settings::Set_eps( double64 eps ) {
+void SAMG_Settings::Set_eps( double eps ) {
     eps_ = -eps;
 }
 
@@ -390,7 +390,7 @@ void SAMG_Settings::Set_eps( double64 eps ) {
 
 Relative convergence is used as stopping criterion "res <= eps.res0" (res0 = starting residual).
 */
-void SAMG_Settings::Set_rel_eps( double64 rel_eps ) {
+void SAMG_Settings::Set_rel_eps( double rel_eps ) {
     rel_eps_ = rel_eps;
     if ( rel_eps <= 0 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_rel_eps",
@@ -403,12 +403,12 @@ void SAMG_Settings::Set_rel_eps( double64 rel_eps ) {
 
  [1:1],napproach  1    Scalar approach (regardless of nsys)
                   2	Unknown-based (if used in scalar system napproach will be reset to 1)
-                  3-5	Point32 based approaches - selects type of interpolation to use
+                  3-5	Point32_t based approaches - selects type of interpolation to use
                   3: interp. is separate for each unknown
                   4: interp. is same " " "
                   5: interp. is point- (block-) wise
    */
-void SAMG_Settings::Set_napproach( int32 napproach ) {
+void SAMG_Settings::Set_napproach( int32_t napproach ) {
     napproach_ = napproach;
     if ( napproach < 1 || napproach > 5 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_napproach",
@@ -424,36 +424,36 @@ void SAMG_Settings::Set_napproach( int32 napproach ) {
                     3	Special box relaxation
                     5	Gauss-Seidel blockwise
 */
-void SAMG_Settings::Set_nxtyp( int32 nxtyp ) {
+void SAMG_Settings::Set_nxtyp( int32_t nxtyp ) {
     nxtyp_ = nxtyp;
     if ( nxtyp != 0 && nxtyp != 1 && nxtyp != 2 && nxtyp != 5 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nxtyp",
                                "nxtyp must have a value of 0, 1, 2 or 5" );
 }
 
-int32 SAMG_Settings::Get_nxtyp() const {
+int32_t SAMG_Settings::Get_nxtyp() const {
     return this->nxtyp_;
 }
 
-void SAMG_Settings::Set_nrd( int32 nrd ) {
+void SAMG_Settings::Set_nrd( int32_t nrd ) {
     nrd_ = nrd;
     if ( nrd > 999 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nrd",
                                "nrd must have one of three possible values. Read the samg manual" );
 }
 
-int32 SAMG_Settings::Get_nrd() const {
+int32_t SAMG_Settings::Get_nrd() const {
     return this->nrd_;
 }
 
-void SAMG_Settings::Set_nru( int32 nru ) {
+void SAMG_Settings::Set_nru( int32_t nru ) {
     nru_ = nru;
     if ( nru > 999 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nru",
                                "nru must have one of three possible values. Read the samg manual" );
 }
 
-int32 SAMG_Settings::Get_nru() const {
+int32_t SAMG_Settings::Get_nru() const {
     return this->nru_;
 }
 
@@ -466,7 +466,7 @@ int32 SAMG_Settings::Get_nru() const {
                   > 0	P is defined internally
 
  */
-void SAMG_Settings::Set_internal( int32 internal ) {
+void SAMG_Settings::Set_internal( int32_t internal ) {
     internal_ = internal;
     if ( internal < 0 || internal > 4 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_internal",
@@ -478,7 +478,7 @@ void SAMG_Settings::Set_internal( int32 internal ) {
 @section arguments Input Arguments
 [4:5],nprim
  */
-void SAMG_Settings::Set_nprim( int32 nprim ) {
+void SAMG_Settings::Set_nprim( int32_t nprim ) {
     nprim_ = nprim;
     if ( nprim < 0 || nprim > 99 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nprim",
@@ -493,7 +493,7 @@ void SAMG_Settings::Set_nprim( int32 nprim ) {
                       1	Primary unknown is a dummy
 
   */
-void SAMG_Settings::Set_npr_is_dummy( int32 npr_is_dummy ) {
+void SAMG_Settings::Set_npr_is_dummy( int32_t npr_is_dummy ) {
     npr_is_dummy_ = npr_is_dummy;
     if ( npr_is_dummy != 0 && npr_is_dummy != 1 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_npr_is_dummy",
@@ -505,7 +505,7 @@ void SAMG_Settings::Set_npr_is_dummy( int32 npr_is_dummy ) {
 @section arguments Input Arguments
 [7:7], nint_weights
  */
-void SAMG_Settings::Set_nint_weights( int32 nint_weights ) {
+void SAMG_Settings::Set_nint_weights( int32_t nint_weights ) {
     nint_weights_ = nint_weights;
     if ( nint_weights < 0 || nint_weights > 4 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nint_weights",
@@ -517,7 +517,7 @@ void SAMG_Settings::Set_nint_weights( int32 nint_weights ) {
 @section arguments Input Arguments
 [8:8], nint_pat
  */
-void SAMG_Settings::Set_nint_pat( int32 nint_pat ) {
+void SAMG_Settings::Set_nint_pat( int32_t nint_pat ) {
     nint_pat = nint_pat;
     if ( nint_pat < 0 || nint_pat > 2 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nint_pat",
@@ -533,7 +533,7 @@ void SAMG_Settings::Set_nint_pat( int32 nint_pat ) {
                     4	WW-cycle (very expensive)
 
 */
-void SAMG_Settings::Set_igam( int32 igam ) {
+void SAMG_Settings::Set_igam( int32_t igam ) {
     igam_ = igam;
     if ( igam < 1 || igam > 4 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_igam",
@@ -549,7 +549,7 @@ void SAMG_Settings::Set_igam( int32 igam ) {
                     3	Precon. for GMRES
 
  */
-void SAMG_Settings::Set_ncgrad( int32 ncgrad ) {
+void SAMG_Settings::Set_ncgrad( int32_t ncgrad ) {
     ncgrad_ = ncgrad;
     if ( ncgrad < 0 || ncgrad > 3 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_ncgrad",
@@ -565,7 +565,7 @@ void SAMG_Settings::Set_ncgrad( int32 ncgrad ) {
 dimension)        9	Dimension = 20
 
 */
-void SAMG_Settings::Set_nkdim( int32 nkdim ) {
+void SAMG_Settings::Set_nkdim( int32_t nkdim ) {
     nkdim_ = nkdim;
     if ( nkdim < 0 || nkdim > 9 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nkdim",
@@ -577,7 +577,7 @@ void SAMG_Settings::Set_nkdim( int32 nkdim ) {
 @section arguments Input Arguments
 [4: ]			Max. number of cycles to be performed
  */
-void SAMG_Settings::Set_ncycle( int32 ncycle ) {
+void SAMG_Settings::Set_ncycle( int32_t ncycle ) {
     ncycle_ = ncycle;
     if ( ncycle < 0 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_ncycle",
@@ -589,7 +589,7 @@ void SAMG_Settings::Set_ncycle( int32 ncycle ) {
 @section arguments Output Arguments
 [4: ]			Number of cycles performed
  */
-void SAMG_Settings::Set_ncyc_done( int32 ncyc_done ) {
+void SAMG_Settings::Set_ncyc_done( int32_t ncyc_done ) {
     ncyc_done_ = ncyc_done;
 }
 
@@ -598,7 +598,7 @@ void SAMG_Settings::Set_ncyc_done( int32 ncyc_done ) {
 @section arguments Output Arguments
 [4: ]			Benchmark variable for best number of cycles performed
  */
-void SAMG_Settings::Set_ncyc_best( int32 ncyc_best ) {
+void SAMG_Settings::Set_ncyc_best( int32_t ncyc_best ) {
     ncyc_best_ = ncyc_best;
 }
 
@@ -622,7 +622,7 @@ in solving a series of linear systems, the primary control process starts automa
 iswit(>5) is used, and it will terminate as soon as some iswit(≤ 5) is used.
 
  */
-void SAMG_Settings::Set_iswit( int32 iswit ) {
+void SAMG_Settings::Set_iswit( int32_t iswit ) {
     iswit_ = iswit;
     if ( iswit < 1 || iswit > 9 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_iswit",
@@ -644,7 +644,7 @@ void SAMG_Settings::Set_iswit( int32 iswit ) {
                is written to disk)
 
  */
-void SAMG_Settings::Set_iextent( int32 iextent ) {
+void SAMG_Settings::Set_iextent( int32_t iextent ) {
     iextent_ = iextent;
     if ( iextent < 0 || iextent > 3 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_iextent",
@@ -662,7 +662,7 @@ void SAMG_Settings::Set_iextent( int32 iextent ) {
           25-28	Same as prev with more effort in construction of interpolation
 
 tested: */
-void SAMG_Settings::Set_ndefault( int32 ndefault ) {
+void SAMG_Settings::Set_ndefault( int32_t ndefault ) {
     ndefault_ = ndefault;
     if ( !(ndefault == 0)  &&
          !( ndefault >= 10 && ndefault <= 13 ) &&
@@ -685,7 +685,7 @@ void SAMG_Settings::Set_ndefault( int32 ndefault ) {
           2	Maximum norm
 
  */
-void SAMG_Settings::Set_norm_typ( int32 norm_typ ) {
+void SAMG_Settings::Set_norm_typ( int32_t norm_typ ) {
     norm_typ_ = norm_typ;
     if ( norm_typ < 0 || norm_typ > 2 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_norm_typ",
@@ -699,7 +699,7 @@ void SAMG_Settings::Set_norm_typ( int32 norm_typ ) {
 [6:7],ioscratch	Unit number for scratch files used by SAMG for memory management
 
  */
-void SAMG_Settings::Set_ioscratch( int32 ioscratch ) {
+void SAMG_Settings::Set_ioscratch( int32_t ioscratch ) {
     ioscratch_ = ioscratch;
     if ( ioscratch < 0 || ioscratch > 99 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_ioscratch",
@@ -717,7 +717,7 @@ Used to control the amount of checking of the input matrix.
   >0.0d0 Enhanced checking. The concrete value of chktol serves as a tolerance.
   Standard value: 1.0d-7.
  */
-void SAMG_Settings::Set_chktol( double64 chktol ) {
+void SAMG_Settings::Set_chktol( double chktol ) {
     chktol_ = chktol;
     if ( /* DISABLES CODE */ (false) )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_chktol",
@@ -731,7 +731,7 @@ void SAMG_Settings::Set_chktol( double64 chktol ) {
               1 Standard print output (coarsening history).
 
  */
-void SAMG_Settings::Set_idmp( int32 idmp ) {
+void SAMG_Settings::Set_idmp( int32_t idmp ) {
     idmp_ = idmp;
     if ( idmp > 9 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_idmp",
@@ -749,7 +749,7 @@ Selects print output regarding the coarse levels.
               1 Display table on grids (full problem).
               2 Same for all submatrices (only if nsys>1).
      */
-void SAMG_Settings::Set_igdp( int32 igdp ) {
+void SAMG_Settings::Set_igdp( int32_t igdp ) {
     igdp_ = igdp;
     if ( igdp > 2 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_igdp",
@@ -768,7 +768,7 @@ Selects print output regarding the coarse-level matrices.
                2 In addition: same info for all submatrices.
                3 In addition: connectivity info between unknowns.
  */
-void SAMG_Settings::Set_iadp( int32 iadp ) {
+void SAMG_Settings::Set_iadp( int32_t iadp ) {
     iadp_ = iadp;
     if ( iadp > 3 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_iadp",
@@ -787,7 +787,7 @@ Selects print output regarding the interpolation matrices.
               2 In addition: same info for all submatrices.
               3 In addition: connectivity info between unknowns.
  */
-void SAMG_Settings::Set_iwdp( int32 iwdp ) {
+void SAMG_Settings::Set_iwdp( int32_t iwdp ) {
     iwdp_ = iwdp;
     if ( iwdp < 0 || iwdp > 3 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_iwdp",
@@ -804,7 +804,7 @@ void SAMG_Settings::Set_iwdp( int32 iwdp ) {
               4 Extended history: including all levels and even partial smoothing steps.
 
  */
-void SAMG_Settings::Set_iout1( int32 iout1 ) {
+void SAMG_Settings::Set_iout1( int32_t iout1 ) {
     iout1_ = iout1;
     if ( iout1 > 4 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_iout1",
@@ -821,7 +821,7 @@ void SAMG_Settings::Set_iout1( int32 iout1 ) {
               3 Display all SAMG hidden parameters in a single list.
 
  */
-void SAMG_Settings::Set_iout2( int32 iout2 ) {
+void SAMG_Settings::Set_iout2( int32_t iout2 ) {
     iout2_ = iout2;
     if ( iout2 > 3 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_iout2",
@@ -837,7 +837,7 @@ the total number of matrix entries (summed over all AMG levels) and the number o
 matrix (= nna). Depending on the problem and the strategy chosen, this may be a value as low as 1.2,
 but it may also be as high as 4.0, say. Typical values are 1.5-3.0.
  */
-void SAMG_Settings::Set_a_cmplx( double64 a_cmplx ) {
+void SAMG_Settings::Set_a_cmplx( double a_cmplx ) {
     a_cmplx_ = a_cmplx;
     if ( a_cmplx < 0 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_a_cmplx",
@@ -853,7 +853,7 @@ total number of variables (summed over all AMG levels) and the number of variabl
 problem (= nnu). Depending on the problem and the strategy chosen, this may be a value as low as 1.2.
 Usually, an upper limit is 2.0.
   */
-void SAMG_Settings::Set_g_cmplx( double64 g_cmplx ) {
+void SAMG_Settings::Set_g_cmplx( double g_cmplx ) {
     g_cmplx_ = g_cmplx;
     if ( g_cmplx < 0 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_g_cmplx",
@@ -870,7 +870,7 @@ number of points (summed over all AMG levels) and the number of points in the gi
 Depending on the problem and the strategy chosen, this may be a value as low as 1.2. Usually, an upper
 limit is 2.0.
 */
-void SAMG_Settings::Set_p_cmplx( double64 p_cmplx ) {
+void SAMG_Settings::Set_p_cmplx( double p_cmplx ) {
     p_cmplx_ = p_cmplx;
     if ( p_cmplx < 0 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_p_cmplx",
@@ -886,7 +886,7 @@ number of interpolation weights used by SAMG, summed over all levels, divided by
 variables (summed over all levels). Depending on the problem and the strategy chosen, this may be a
 value as low as 1.5, but it may also be as high as 6.0, say. A typical average value is 3.0.
 */
-void SAMG_Settings::Set_w_avrge( double64 w_avrge ) {
+void SAMG_Settings::Set_w_avrge( double w_avrge ) {
     w_avrge_ = w_avrge;
     if ( w_avrge < 0 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_w_avrge",
@@ -923,7 +923,7 @@ Standard choices: ncgtyp=1 or ncgtyp=4.
                   positive couplings are treated by absolute value.
 
  */
-void SAMG_Settings::Set_ncgtyp( int32 ncgtyp ) {
+void SAMG_Settings::Set_ncgtyp( int32_t ncgtyp ) {
     if ( ncgtyp < 1 || ncgtyp > 5 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_ncgtyp",
                                "ncgtyp must have an integer value between 1 and 5" );
@@ -948,7 +948,7 @@ is reduced from one level to the next. Standard choice: nred=0.
               6 Cluster coarsening & multi-pass interpolation.
 
  */
-void SAMG_Settings::Set_nred( int32 nred ) {
+void SAMG_Settings::Set_nred( int32_t nred ) {
     if ( nred < 0 || nred > 6 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nred",
                                "nred must have an integer value between 0 and 6" );
@@ -968,7 +968,7 @@ Only relevant if nred>0. Standard choice: nredlev=0.
                   9 On all levels (not recommended).
 
  */
-void SAMG_Settings::Set_nredlev( int32 nredlev ) {
+void SAMG_Settings::Set_nredlev( int32_t nredlev ) {
     if ( nredlev < 0 || nredlev > 9 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nredlev",
                                "nredlev must have an integer value between 0 and 9" );
@@ -989,7 +989,7 @@ of standard or cluster coarsening. Standard choice: nxf_clean=0.
                     2 Re-set all XF-variables to C-variables.
 
  */
-void SAMG_Settings::Set_nxf_clean( int32 nxf_clean ) {
+void SAMG_Settings::Set_nxf_clean( int32_t nxf_clean ) {
     if ( nxf_clean < 0 || nxf_clean > 2 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_nxf_clean",
                                "nxf_clean must have an integer value between 0 and 2" );
@@ -1010,7 +1010,7 @@ with aggressive or cluster coarsening. Standard choice: npcol=0.
                 2 Enforce strong F-to-F diagonal dominance (0.75).
 
  */
-void SAMG_Settings::Set_npcol( int32 npcol ) {
+void SAMG_Settings::Set_npcol( int32_t npcol ) {
     if ( npcol < 0 || npcol > 2 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_npcol",
                                "npcol must have an integer value between 0 and 2" );
@@ -1045,7 +1045,7 @@ display its convergence history also on coarser levels.
 Default = 25
 
 */
-void SAMG_Settings::Set_levelx( int32 levelx ) {
+void SAMG_Settings::Set_levelx( int32_t levelx ) {
     if ( levelx < -25 || levelx > 25 )
         throw csmp::Exception( ERROR, "SAMG_Settings::Set_levelx",
                                "levelx must have an integer value between -25 and 25" );
@@ -1094,7 +1094,7 @@ void SAMG_Settings::Set_filnam_dump( const std::string& filnam_dump ){
         std::cout <<"\n\n*** SAMG_Settings::Set_filnam_dump 'To take effect set idmp parameter between 2 and 10' ***\n\n\n";
 
     filnam_dump_ = filnam_dump;
-    filnam_dump_length_ = static_cast<int32>(filnam_dump_.length());
+    filnam_dump_length_ = static_cast<int32_t>(filnam_dump_.length());
     const char *ch = filnam_dump_.c_str();
     for( size_t i = 0; i < filnam_dump_length_; ++i ){
         filnam_dump_Array_[i] = int( ch[i] );
@@ -1106,7 +1106,7 @@ void SAMG_Settings::Set_filnam_dump( const std::string& filnam_dump ){
     as a pre-conditioner for the BI-CGStab solution. A maximum of 2 SAMG pre-
     condition calls is possible, i.e. 0 <= iter_pre <= 2;
  */
-void SAMG_Settings::Set_iter_pre(int32 iter_pre) {
+void SAMG_Settings::Set_iter_pre(int32_t iter_pre) {
     if (iter_pre < 0 || iter_pre > 2)
       throw csmp::Exception(ERROR, "SAMG_Settings::Set_iter_pre:",
                                    "iter_pre must have an integer value between 0 and 2");
@@ -1134,7 +1134,7 @@ void SAMG_Settings::ExplicitSecondary( bool explicit_secondary ) {
     explicit_secondary_ = explicit_secondary;
 }
 
-void SAMG_Settings::SetSolverInstance( int32 instance ) {
+void SAMG_Settings::SetSolverInstance( int32_t instance ) {
     solver_instance_ = instance;
 
     if ( instance < 0 || instance > 5 ) {
@@ -1144,7 +1144,7 @@ void SAMG_Settings::SetSolverInstance( int32 instance ) {
 }
 
 
-void SAMG_Settings::Set_mode_mess(int32 mode)
+void SAMG_Settings::Set_mode_mess(int32_t mode)
 {
     // This is a further attempt to manipulate samg output to the screen
 

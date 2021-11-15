@@ -21,72 +21,72 @@ class ComputationalSettings {
   
     // for output of results
   
-    void           SetOutputTimes( const std::set<double64>& times, bool overwrite=true );
-    void           AddOutputTime( double64 time );
+    void           SetOutputTimes( const std::set<double>& times, bool overwrite=true );
+    void           AddOutputTime( double time );
     
-    bool           IsOutputTime( double64 time, double64 tolerance ) const;
+    bool           IsOutputTime( double time, double tolerance ) const;
     
-    double64       TimeToNearestOutputTime( double64 current_time ) const;
-    double64       NearestOutputTime( double64 current_time ) const;
-    size_t         OutputTimePosition(double64 time);
+    double       TimeToNearestOutputTime( double current_time ) const;
+    double       NearestOutputTime( double current_time ) const;
+    size_t         OutputTimePosition(double time);
 
     // For output of monitoring data
 
-    void           SetMonitorTimes( const std::set<double64>& times, bool overwrite=true );
-    void           AddMonitorTime( double64 time );
+    void           SetMonitorTimes( const std::set<double>& times, bool overwrite=true );
+    void           AddMonitorTime( double time );
 
-    bool           IsMonitorTime( double64 time, double64 tolerance ) const;
+    bool           IsMonitorTime( double time, double tolerance ) const;
 
-    double64       TimeToNearestMonitorTime( double64 current_time ) const;
-    double64       NearestMonitorTime( double64 current_time ) const;
-    size_t         MonitorTimePosition(double64 time);
+    double       TimeToNearestMonitorTime( double current_time ) const;
+    double       NearestMonitorTime( double current_time ) const;
+    size_t         MonitorTimePosition(double time);
 
     // Time control
     
-    void           Duration( double64 duration );
-    double64       Duration() const;
+    void           Duration( double duration );
+    double       Duration() const;
     
     void           TimeSteppingApproach( TIME_STRATEGY time_stepping_approach );
     TIME_STRATEGY  TimeSteppingApproach() const;
     
-    void           TimeIncrement( double64 );
-    double64       TimeIncrement() const;
+    void           TimeIncrement( double );
+    double       TimeIncrement() const;
   
     /// based on the time-stepping strategy, pressure-step and saturation step multipliers are suggested 
-    void EstablishMultipliers( double64& pf_multiplier, 
-                               double64& adv_multiplier ) const;
+    void EstablishMultipliers( double& pf_multiplier, 
+                               double& adv_multiplier ) const;
 
     /// algorithm that monitors the flow velocity change from timestep to timestep and suggests a timeincrement on this basis
     template<size_t dim>
-    double64 TimeIncrementFromVelocityChange( const Model<dim>& sg, 
-                                              double64 log_velocity_change, 
-                                              double64 current_delta_t, 
-                                              double64 max_delta_t );
+    double TimeIncrementFromVelocityChange( const Model<dim>& sg, 
+                                              double log_velocity_change, 
+                                              double current_delta_t, 
+                                              double max_delta_t );
   
     void            RemoveAllOutputtimes() { output_times_.clear(); }
     void            RemoveAllMonitortimes(){ output_times_.clear(); }
 
     /// step through output times
-    double64                           PopOutputTime();
-    std::set<double64>::const_iterator OutputTimesBegin() const;
-    std::set<double64>::const_iterator OutputTimesEnd() const;
+    double                           PopOutputTime();
+    std::set<double>::const_iterator OutputTimesBegin() const;
+    std::set<double>::const_iterator OutputTimesEnd() const;
 
     /// step through monitor times
-    double64                           PopMonitorTime();
-    std::set<double64>::const_iterator MonitorTimesBegin() const;
-    std::set<double64>::const_iterator MonitorTimesEnd() const;
+    double                           PopMonitorTime();
+    std::set<double>::const_iterator MonitorTimesBegin() const;
+    std::set<double>::const_iterator MonitorTimesEnd() const;
     
     virtual void   Out() const;
     virtual void   Out( const char* filename ) const;
   
   private:
     TIME_STRATEGY       time_strategy_;
-    double64            run_duration_;
-    double64            time_increment_;
-    std::set<double64>  output_times_;
-    std::set<double64>  monitor_times_;
-    std::set<double64>::const_iterator  it_; // points to next output time
-    std::set<double64>::const_iterator  itm_; // points to next monitor time
+    double            run_duration_;
+    double            time_increment_;
+    std::set<double>  output_times_;
+    std::set<double>  monitor_times_;
+    std::set<double>::const_iterator  it_; // points to next output time
+    std::set<double>::const_iterator  itm_; // points to next monitor time
 };
 
 } // end namespace csmp
@@ -127,9 +127,9 @@ time stepping and output of data from a run:
  @code
   ComputationalSettings  run_settings;
   
-  double64        duration(run_settings.Duration());
+  double        duration(run_settings.Duration());
   
-  double64 time_until_output = run_settings.NearestOutputTime( model_time );
+  double time_until_output = run_settings.NearestOutputTime( model_time );
   
   if ( run_settings.IsOutputTime( model_time, 1. )  ) {
     ...

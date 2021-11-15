@@ -108,9 +108,9 @@ namespace csmp {
     //*****************************************************************
 
     // Simulation Data
-    double64 time_increment_, max_time_;
-    double64 tolerance_l2_,tolerance_linf_,tolerance_mean_;
-    double64 cfl_multiplier_,courant_increment_;
+    double time_increment_, max_time_;
+    double tolerance_l2_,tolerance_linf_,tolerance_mean_;
+    double cfl_multiplier_,courant_increment_;
 
     // RelPerm Models
     size_t relperm_model_type_;

@@ -20,8 +20,8 @@ namespace csmp
     TriplePointH2O();
     ~TriplePointH2O();
     
-    double64 Temperature() const;
-    double64 Pressure()    const;
+    double Temperature() const;
+    double Pressure()    const;
     
   private :
 

@@ -12,7 +12,7 @@ NewtonIntegrator<dim,COMPUTATION_DOMAIN>::NewtonIntegrator() :
   IterativeIntegrator<dim,COMPUTATION_DOMAIN>() {}
   
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-double64 NewtonIntegrator<dim,COMPUTATION_DOMAIN>::Residual() {
+double NewtonIntegrator<dim,COMPUTATION_DOMAIN>::Residual() {
   return std::sqrt(std::inner_product( this->rh_.begin(), 
                                        this->rh_.end(),
                                        this->rh_.begin(), 0.) );

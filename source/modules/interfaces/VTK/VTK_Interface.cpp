@@ -1507,7 +1507,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
     //    results are put into the first three elements of 'pxz_data'
     // --------------------------------------------------------------------------
     vector<double>  empty_vec;
-    for ( typename map<size_t,size_t >::const_iterator
+    for ( typename map<size_t,size_t>::const_iterator
           nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
@@ -2329,7 +2329,7 @@ template class VTK_Interface<3U>;
 template<size_t dim>
 void outputFaceNormalsToVTK( const Element<dim>& e, const char* file )
  {
-    vector<double64>    nrml;
+    vector<double>    nrml;
     size_t              counter(0);
     map<size_t,pair<Point<dim>,Point<dim> > >  normals;
 
@@ -2426,9 +2426,9 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
  {
      // 0. generating values, first integration point=0, second=1...
      // ------------------------------------------------------------
-    vector<pair<Point<dim>,double64> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
+    vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
-    double64 display_value(0.);
+    double display_value(0.);
     for ( size_t i=0U; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
@@ -2454,7 +2454,7 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
      // --------------------------------------
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << ipoint_data.size() <<" float"<< endl;
-     for ( typename vector<pair<Point<dim>,double64> >::const_iterator
+     for ( typename vector<pair<Point<dim>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           assert( dim != 1 );
           if ( dim == 2 ) ofs << (*it).first[0] <<" "<< (*it).first[1] <<" "<< 0. << endl;
@@ -2483,7 +2483,7 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
      ofs <<"POINT_DATA "<< ipoint_data.size() << endl;
      ofs <<"SCALARS "<< "point_number" <<" double"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl;
-     for ( typename vector<pair<Point<dim>,double64> >::const_iterator
+     for ( typename vector<pair<Point<dim>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           ofs << (*it).second <<" "<< endl;
        }
@@ -2513,9 +2513,9 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
   
      // 0. generating values, first integration point=0, second=1...
      // ------------------------------------------------------------
-    vector<pair<Point<dim>,double64> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
+    vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
-    double64 display_value(0.);
+    double display_value(0.);
     for ( size_t i=0U; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
@@ -2541,7 +2541,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
      // --------------------------------------
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << ipoint_data.size() <<" float"<< endl;
-     for ( typename vector<pair<Point<dim>,double64> >::const_iterator
+     for ( typename vector<pair<Point<dim>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           assert( dim != 1 );
           if ( dim == 2 ) ofs << (*it).first[0] <<" "<< (*it).first[1] <<" "<< 0. << endl;

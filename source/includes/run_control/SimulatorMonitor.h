@@ -27,10 +27,10 @@ public:
     ~SimulatorMonitor();
 
     /// calculates property integrals and stores these for the current time-step and property name
-    void ScalarPropertyIntegrals(std::vector<double64>& rowdata);
-    void ScalarPropertyRanges(std::vector<double64>& rowdata);
-    void ScalarPropertyValues(std::vector<double64>& rowdata);
-    void CalculateDimensionsAndPerimeters(std::vector<double64>& rowdata);
+    void ScalarPropertyIntegrals(std::vector<double>& rowdata);
+    void ScalarPropertyRanges(std::vector<double>& rowdata);
+    void ScalarPropertyValues(std::vector<double>& rowdata);
+    void CalculateDimensionsAndPerimeters(std::vector<double>& rowdata);
     void Monitor();
 
     /** adds in values in a separate container, to be output to a separate file
@@ -55,7 +55,7 @@ public:
 
     void ReadOldMonitoringData(std::string file_name );
 //    void ReadDualValueOldMonitoringData(std::string file_name );
-    void ReadModelTime(std::vector<double64>& rowdata);
+    void ReadModelTime(std::vector<double>& rowdata);
 
 private:
     // iternal helper for surface calculation
@@ -88,19 +88,19 @@ private:
     bool include_thickness_attribute_;    \
     bool verbose_,first_monitor_call_;
 
-    std::vector<double64> rowdata_;
-    double64 last_requested_monitor_time_, current_requested_monitor_time_;
+    std::vector<double> rowdata_;
+    double last_requested_monitor_time_, current_requested_monitor_time_;
 
     //    model_time,          property_groupname,   single property value
-    //std::map<double64,std::multimap<std::string,double64 > >   single_values_;
-    std::vector< std::vector<double64 > >   values_;
+    //std::map<double,std::multimap<std::string,double > >   single_values_;
+    std::vector< std::vector<double > >   values_;
 
     //    model_time,          property_groupname,   dual value pair
-    //std::map<double64,std::multimap<std::string,std::pair<double64,double64> > >   dual_values_;
-    //std::map<double64,pair<std::string,std::vector<pair <double64,double64 > > >   dual_values_;
+    //std::map<double,std::multimap<std::string,std::pair<double,double> > >   dual_values_;
+    //std::map<double,pair<std::string,std::vector<pair <double,double > > >   dual_values_;
 
     //    model_time,          groupname,   volume,surface area pair
-    //std::map<double64,std::multimap<std::string,std::pair<double64,double64> > >   volume_and_area_;
+    //std::map<double,std::multimap<std::string,std::pair<double,double> > >   volume_and_area_;
 
 };
 

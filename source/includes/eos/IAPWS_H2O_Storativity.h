@@ -10,7 +10,7 @@ namespace csmp {
 template<size_t dim>
 class IAPWS_H2O_Storativity : public Interrelation<dim> {
   public:
-    IAPWS_H2O_Storativity( const PropertyDatabase<dim>& p, double64 z_rock=1.0e-12 );
+    IAPWS_H2O_Storativity( const PropertyDatabase<dim>& p, double z_rock=1.0e-12 );
     ~IAPWS_H2O_Storativity() {};
     void Calculate();
   
@@ -19,7 +19,7 @@ class IAPWS_H2O_Storativity : public Interrelation<dim> {
     Operand<dim>&  X;  // porosity
     Operand<dim>&  S;  // storativity
     ScalarVariable beta, phi;
-    double64       Z, Z_rock;
+    double       Z, Z_rock;
 };
 
 } // end namespace csmp

@@ -8,8 +8,8 @@ template<size_t dim>
 StokesEinsteinDiffusivity<dim>::StokesEinsteinDiffusivity( 
                                       const PropertyDatabase<dim>& p, 
                                       const char* species_diffusivity, 
-                                      double64      diffusivity, 
-                                      double64      Omega ) 
+                                      double      diffusivity, 
+                                      double      Omega ) 
       : Interrelation<dim>(p),
         T( Interrelation<dim>::GlobalProperty("temperature") ),
         E( Interrelation<dim>::GlobalProperty("nodal fluid viscosity") ),

@@ -23,27 +23,27 @@ namespace csmp
 
   public:
     // Constructor etc.
-    TwophaseVapor(const double64& externaltemperature, // [C]
-                  const double64& externalpressure,    // [Pa]
-                  const double64& ph2o);               // [Pa]
+    TwophaseVapor(const double& externaltemperature, // [C]
+                  const double& externalpressure,    // [Pa]
+                  const double& ph2o);               // [Pa]
     ~TwophaseVapor();
 
-    double64 MassFractionNaCl();                       // [XNaCl]
+    double MassFractionNaCl();                       // [XNaCl]
 
   private:
 
     TwophaseVapor();
 
-    const double64& temperature_;                      ///< internal reference to temperature [C] in flow code
-    const double64& pressure_;                         ///< internal reference to fluid pressure [P] in flow code
-    const double64& ph2o_;                             ///< internal reference to water boiling pressure (from Water object, which must have been constructed with the same temperature and fluid pressure variables as constructor arguments)
+    const double& temperature_;                      ///< internal reference to temperature [C] in flow code
+    const double& pressure_;                         ///< internal reference to fluid pressure [P] in flow code
+    const double& ph2o_;                             ///< internal reference to water boiling pressure (from Water object, which must have been constructed with the same temperature and fluid pressure variables as constructor arguments)
 
-    double64 tcurrent_;                                ///< internal temperature variable [C]
-    double64 pcurrent_;                                ///< internal pressure variable [Pa]
-    double64 massfractionnacl_;                        ///< internal variable for composition 
+    double tcurrent_;                                ///< internal temperature variable [C]
+    double pcurrent_;                                ///< internal pressure variable [Pa]
+    double massfractionnacl_;                        ///< internal variable for composition 
     
     void     CheckState();
-    double64 MoleFractionNaCl();
+    double MoleFractionNaCl();
 
     HaliteLiquidus         liquidus;
     TwophaseLiquid         twophase_l;
@@ -73,9 +73,9 @@ namespace csmp
      @attention The water boiling pressure as constructor argument requires that a Water object is being instantiated before twophase liquid, with the same temperature and fluid pressure as its constructor arguments. Also, before querying TwophaseVapor::MassFractionNaCl(), one has to make sure that ph2o has been updated. See code example. I apologize for this odd design but for performance reasons it made sense when created originally.
 
      @code
-     double64 t(somevalue);          // temperature [C] in user's application
-     double64 p(anothervalue);       // fluid pressure [in Pa] in user's application
-     double64 ph2o(yetanothervalue); // water boling pressure [in Pa] in user's application
+     double t(somevalue);          // temperature [C] in user's application
+     double p(anothervalue);       // fluid pressure [in Pa] in user's application
+     double ph2o(yetanothervalue); // water boling pressure [in Pa] in user's application
      ...
      Water          water(t,p);
      TwophaseVapor  twophase_vapor(t,p,ph2o); 

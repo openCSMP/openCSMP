@@ -56,14 +56,14 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
       }
    
     // establishing input parameters
-    const double64 alpha(degreesToRadians(frictionAngle(props.mu_)));
-    const double64 meanstress(invars.MeanStress());
-    const double64 devstress(invars.DeviatoricStress());
+    const double alpha(degreesToRadians(frictionAngle(props.mu_)));
+    const double meanstress(invars.MeanStress());
+    const double devstress(invars.DeviatoricStress());
    
     // 2. If the stress is essentially isostatic, failure may still occur
     // if the rock is porous and the compressive strength of the rock under isostatic
     // conditions is exceeded by the stress
-    const double64 bar(1e5);
+    const double bar(1e5);
     if ( devstress < bar ) {
          // evaluation of the yield cap (Wong et al. 97, JGR) for isostatic state of stress
          // eqn. 2.29, Fjaer et al. 08', p. 68
@@ -76,7 +76,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // This is done here by calculating friction criterion Fmc
     // - material is described only in terms of its friction angle and cohesion.
     // (yielding occurs when Fmc >= 0)
-    double64 FMC1 = meanstress * sin(alpha);
+    double FMC1 = meanstress * sin(alpha);
     FMC1         -= props.C_ * cos(alpha);
     FMC1         += devstress * invars.SmoothMohrCoulombYieldEnvelope( radiansToDegrees(alpha) );
     if ( FMC1 > 0. ) return SHEAR_FRACTURE;
@@ -87,7 +87,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // - material is described only in terms of its friction angle and cohesion.
     // (yielding occurs when Fmc >= 0)
     // TODO: do this properly using the actual orientation of such a sliding plane
-    double64 FMC2 = meanstress * sin(alpha);
+    double FMC2 = meanstress * sin(alpha);
     FMC2         += devstress * invars.SmoothMohrCoulombYieldEnvelope( radiansToDegrees(alpha) );
     if ( FMC2 > 0. ) return FRICTIONAL_SLIDING;
  
@@ -115,14 +115,14 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
 */
 FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
                                   const csmp::StressInvariants& invars,
-                                  double64 pf )
+                                  double pf )
  {
 
     // 1. if even the maximum compressive stress + fluid pressure is tensile (=positive),
     //    a frictional / shear strength failure analysis does not apply and
     //    opening and tensile failure are considered first.
     if ( invars.MaximumPrincipalStress1() + props.alpha_ * pf > 0. ) {
-          const double64 S3_eff(invars.LeastPrincipalStress3() + props.alpha_ * pf);
+          const double S3_eff(invars.LeastPrincipalStress3() + props.alpha_ * pf);
           // evaluating tensile fracture
           if ( S3_eff >= props.TS_ ) return MODE1_FRACTURE;
           // tensile opening
@@ -130,15 +130,15 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
       }
    
     // 2. establishing input parameters for frictional analysis of failure
-    const double64 alpha(degreesToRadians(frictionAngle(props.mu_)));
+    const double alpha(degreesToRadians(frictionAngle(props.mu_)));
     // fluid pressure is added to meanstress because tension is positive
-    const double64 meanstress(invars.MeanStress() + props.alpha_ * pf);
-    const double64 devstress(invars.DeviatoricStress());
+    const double meanstress(invars.MeanStress() + props.alpha_ * pf);
+    const double devstress(invars.DeviatoricStress());
    
     // 3. If the stress is essentially isostatic, failure may still occur
     // if the rock is porous and the compressive strength of the rock under isostatic
     // conditions is exceeded by the stress
-    const double64 bar(1e5);
+    const double bar(1e5);
     if ( devstress < bar ) {
          // evaluation of the yield cap (Wong et al. 97, JGR) for isostatic state of stress
          // eqn. 2.29, Fjaer et al. 08', p. 68
@@ -151,7 +151,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // This is done here by calculating the friction criterion FMC1
     // only taking into account the friction angle and the cohesion.
     // (yielding occurs when Fmc >= 0)
-    double64 FMC1 = meanstress * sin(alpha);
+    double FMC1 = meanstress * sin(alpha);
     FMC1         -= props.C_ * cos(alpha);
     FMC1         += devstress * invars.SmoothMohrCoulombYieldEnvelope( radiansToDegrees(alpha) );
     if ( FMC1 > 0. ) return SHEAR_FRACTURE;
@@ -159,7 +159,7 @@ FAILURE BrittleFailure::Evaluate( const MechanicalProperties& props,
     // 5. if shear failure does not occur, there is still the possibility of frictional sliding
     // on pre-existing shear planes. This is evaluated here by calculating a frictional sliding criterion FMC2.
     // TODO: do this properly using the actual orientation of such a sliding plane and a specific friction angle.
-    double64 FMC2 = meanstress * sin(alpha);
+    double FMC2 = meanstress * sin(alpha);
     FMC2         += devstress * invars.SmoothMohrCoulombYieldEnvelope( radiansToDegrees(alpha) );
     if ( FMC2 > 0. ) return FRICTIONAL_SLIDING;
  

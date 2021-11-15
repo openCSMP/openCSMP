@@ -29,10 +29,10 @@ class TwoPhaseExplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeT
     virtual ~TwoPhaseExplicitNodeCenteredFVTransport();
     
     /// 2-phase flow, transport of the non-wetting phase
-    virtual double64 TransportPhase( TwoPhaseModel<dim>&, double64 time_interval );
+    virtual double TransportPhase( TwoPhaseModel<dim>&, double time_interval );
                                
     /// two-phase, takes into account element shape in 2D and 3D unless one deals with 1D domain
-    virtual double64 AnisotropicCourantIncrement( TwoPhaseModel<dim>&, double64 max_time_increment );
+    virtual double AnisotropicCourantIncrement( TwoPhaseModel<dim>&, double max_time_increment );
 
     void  DisableCapillarySpreading();
     void  EnableCapillarySpreading();
@@ -46,9 +46,9 @@ private:
     bool IsInteriorStencil( const Element<dim>* const ) const;
 
     /// writes results back to model
-    double64 OutputResults( const csmp::Index& adv_key, bool show_range ) const;
+    double OutputResults( const csmp::Index& adv_key, bool show_range ) const;
 
-    double64 OutputResults( const csmp::Index& adv1_key,
+    double OutputResults( const csmp::Index& adv1_key,
                             const csmp::Index& adv2_key, bool show_range, bool do_range_check ) const;
 
 
@@ -59,37 +59,37 @@ private:
     void MinMaxAdvectedPropertyExceptTheCurrentNode();
 
     /// builds solution taking into account nodal sources and sinks
-    void Compose2PhaseSolution( TwoPhaseModel<dim>&, double64 time_interval, bool divergence_free_correction = false );
+    void Compose2PhaseSolution( TwoPhaseModel<dim>&, double time_interval, bool divergence_free_correction = false );
 
 
     /// compensate inflow & outflow
     bool FractionalFlowThroughBoundaryFiniteVolume( const Node<dim>*,
                                                     TwoPhaseModel<dim>&,
-                                                    double64& inflow,
-                                                    double64& flux_balance ) const;
+                                                    double& inflow,
+                                                    double& flux_balance ) const;
 
     void AssignFractionalFlowBoundaryConditions( TwoPhaseModel<dim>& );
 
     void AssignGenericFlowBoundaryConditions( TwoPhaseModel<dim>& );
 
     /// Makes divirgence free correction
-    void DivergenceFreeCorrection( TwoPhaseModel<dim>&, double64 time_interval );
+    void DivergenceFreeCorrection( TwoPhaseModel<dim>&, double time_interval );
 
 
     /// advects non-wetting phase in 2-phase flow (1st-order accurate)
     void AdvectVariable1stOrder( TwoPhaseModel<dim>&,
-	                               double64 time_increment );
+	                               double time_increment );
 
     /// advects non-wetting phase in 2-phase flow (2nd-order accurate)
     void AdvectVariable2ndOrder( TwoPhaseModel<dim>&,
-	                               double64 time_increment );
+	                               double time_increment );
 
  
   private:
 
     std::set<csmp::Element<dim>*>  halo_stencils_;
     STP<dim>                       stencil_;
-    std::vector<double64>          RESULT;
+    std::vector<double>          RESULT;
 
     bool                           with_capillary_spreading_,
                                    with_gravitational_forces_;
@@ -174,7 +174,7 @@ TwoPhaseExplicitNodeCenteredFVTransport<1U,ExplicitStencilProcessor>( "Model",
  else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
  cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement( reservoir_model ) << endl;
  cout <<"\nEnter advection time: ";
- double64 time_interval;
+ double time_interval;
  cin >> time_interval;
  cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
  clock_t ticks = clock();

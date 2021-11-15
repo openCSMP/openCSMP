@@ -49,17 +49,17 @@ using namespace std;
 namespace csmp {
 
     namespace {
-        const double64 s_internal_flux_rel_err = 1.0e-10;
-        const double64 s_flux_balance_thresh = 1.0e-13;
+        const double s_internal_flux_rel_err = 1.0e-10;
+        const double s_flux_balance_thresh = 1.0e-13;
 
 
-        double64 rel_error(double64 x, double64 y)
+        double rel_error(double x, double y)
         {
             auto mag = std::max(std::abs(x),std::abs(y));
             return std::abs(x - y) / mag;
         }
         
-        double64 max_abs(double64 x, double64 y)
+        double max_abs(double x, double y)
         {
             return std::max(std::abs(x),std::abs(y));
         }
@@ -69,7 +69,7 @@ namespace csmp {
         void
         jacobian_at_point(It& it, const P& p)
         {
-            std::vector<double64> DNR, DNS, DNT;
+            std::vector<double> DNR, DNS, DNT;
             (*it)->FE()->dNr( p[0], p[1], p[2], DNR );
             (*it)->FE()->dNs( p[0], p[1], p[2], DNS );
             (*it)->FE()->dNt( p[0], p[1], p[2], DNT );
@@ -162,7 +162,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      // -----------------------------------------------------------------------
      // 3. hydraulic conductivity computation
      // -----------------------------------------------------------------------
-      const double64  fluid_viscosity(1.0e-03);
+      const double  fluid_viscosity(1.0e-03);
       ConstantFactor<3U,divides>  conductivity( model.Database(),
                                                "conductivity", "permeability",
                                                 fluid_viscosity );
@@ -202,7 +202,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
                        K_key(model.Database().StorageKey("conductivity")),
                        v_key(model.Database().StorageKey("velocity"));
    
-     std::vector<double64> DNR, DNS, DNT;
+     std::vector<double> DNR, DNS, DNT;
      for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
        {
           const size_t nodes((*it)->Nodes());
@@ -214,11 +214,11 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
           (*it)->FE()->dNs( bctr[0], bctr[1], bctr[2], DNS );
           (*it)->FE()->dNt( bctr[0], bctr[1], bctr[2], DNT );
           // pressure gradients / velocities
-          const double64 K((*it)->Read(K_key));
-          double64  dpdr(0.), dpds(0.), dpdt(0.);
+          const double K((*it)->Read(K_key));
+          double  dpdr(0.), dpds(0.), dpdt(0.);
           Point<3U> vD(0.);
           for ( size_t i=0U; i<nodes; ++i ) {
-               const double64 p_node((*it)->N(i)->Read(p_key));
+               const double p_node((*it)->N(i)->Read(p_key));
                dpdr   = DNR[i] * p_node;
                dpds   = DNS[i] * p_node;
                dpdt   = DNT[i] * p_node;
@@ -239,9 +239,9 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
               
                // 2.1 classic way of calculating facet fluxes in physical space
                // ------------------------------------------------------------
-              const double64 projected_velocity_physical = (*it)->ProjectionOnFacetNormal( i, v_key );
+              const double projected_velocity_physical = (*it)->ProjectionOnFacetNormal( i, v_key );
               // Darcy velocity computation
-              const double64 flux_physical = (*it)->FacetArea(i) * projected_velocity_physical;
+              const double flux_physical = (*it)->FacetArea(i) * projected_velocity_physical;
               total_flux_physical += flux_physical;
             
                // 2.2 parametric space computation
@@ -260,15 +260,15 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
               
               jacobian_at_point(it, (*it)->FacetPoint(i,0).Coordinates());
               
-              double64 jinvdet_ip = (*it)->FE()->JacobianInverse();
+              double jinvdet_ip = (*it)->FE()->JacobianInverse();
               const DenseMatrix<DM_MIN>& jinv_ip = (*it)->FE()->JINV;
               
               Point<3u> facet_normal_remapped(jinv_ip * parametric_facet_normal.Coordinates());
               double fnrlen = facet_normal_remapped.Length();
               facet_normal_remapped.NormalizeLengthTo(1.0);
               Point<3u> vDlocal(jinv_ip * vD.Coordinates());
-              double64 projected_velocity_parametric = dotProduct(facet_normal_remapped, vDlocal);
-              double64 flux_parametric = projected_velocity_parametric * (*it)->FacetAreaMapped(i);
+              double projected_velocity_parametric = dotProduct(facet_normal_remapped, vDlocal);
+              double flux_parametric = projected_velocity_parametric * (*it)->FacetAreaMapped(i);
               
               total_flux_parametric += flux_parametric;
               
@@ -282,7 +282,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
               std::cerr << "flux physical   " << flux_physical << '\n';
               std::cerr << "flux parametric " << flux_parametric << '\n';
               
-              double64 relative_error = rel_error(flux_physical, flux_parametric);
+              double relative_error = rel_error(flux_physical, flux_parametric);
               if (relative_error > 1e-10) {
 #if 0
                   std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
@@ -362,7 +362,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
      // -----------------------------------------------------------------------
      // 3. hydraulic conductivity computation
      // -----------------------------------------------------------------------
-      const double64  fluid_viscosity(1.0e-03);
+      const double  fluid_viscosity(1.0e-03);
       ConstantFactor<3U,divides>  conductivity( model.Database(),
                                                "conductivity", "permeability",
                                                 fluid_viscosity );
@@ -398,19 +398,19 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                         K_key(model.Database().StorageKey("conductivity")),
                         v_key(model.Database().StorageKey("velocity"));
    
-      std::vector<double64> DNR, DNS, DNT;
-      std::vector<double64> cross_section(model_domain.Nodes());
-      std::vector<double64> velocity_magnitude(model_domain.Nodes());
+      std::vector<double> DNR, DNS, DNT;
+      std::vector<double> cross_section(model_domain.Nodes());
+      std::vector<double> velocity_magnitude(model_domain.Nodes());
 
      // -----------------------------------------------------------------------
      // 4. stepping over the model comparing facet by facet flux calculations
      // -----------------------------------------------------------------------
      for (auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it) {
-         double64 csa = 0.0;
-         double64 surface_area = 0.0;
+         double csa = 0.0;
+         double surface_area = 0.0;
          VectorVariable<3U> vc(PLAIN,PLAIN,PLAIN,0.,0.,0.);
 
-         double64 vDmax(0.0);
+         double vDmax(0.0);
          Point<3u> vDavg(0.0);
 
          for (size_t j = 0; j < (*it)->Parents(); ++j) {
@@ -430,7 +430,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
              
              for (size_t k = 0; k < e->FV()->FacetsPerSector(child); ++k) {
                  const auto facet = e->FV()->FacetSurroundingSector(child, k);
-                 double64 costheta = std::abs(dotProduct(e->FacetNormal(facet), vDavg));
+                 double costheta = std::abs(dotProduct(e->FacetNormal(facet), vDavg));
                  csa += costheta * e->FacetArea(facet);
                  surface_area += std::abs(e->FacetArea(facet));
              }
@@ -446,8 +446,8 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          velocity_magnitude[(*pit)->Idx()] = 0.;
      }
 
-     std::vector<double64> flux_balance_parametric(model_domain.Nodes());
-     std::vector<double64> flux_balance_physical(model_domain.Nodes());
+     std::vector<double> flux_balance_parametric(model_domain.Nodes());
+     std::vector<double> flux_balance_physical(model_domain.Nodes());
      std::vector<Point<3u>> directed_area_para(model_domain.Nodes());
      std::vector<Point<3u>> directed_area_phys(model_domain.Nodes());
 
@@ -461,7 +461,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          elements.push_back(make_pair(nodes, *it));
      }
      std::sort(elements.begin(), elements.end());
-     double64 maxtheta = 0;
+     double maxtheta = 0;
      
 
      for (auto& element_key : elements)
@@ -483,19 +483,19 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            (*it)->FE()->dNs( bctr[0], bctr[1], bctr[2], DNS );
            (*it)->FE()->dNt( bctr[0], bctr[1], bctr[2], DNT );
            // pressure gradients / velocities
-           const double64 K((*it)->Read(K_key));
+           const double K((*it)->Read(K_key));
            Point<3U> vD(0.);
            for ( size_t i=0U; i<nodes; ++i ) {
-               const double64 p_node((*it)->N(i)->Read(p_key));
+               const double p_node((*it)->N(i)->Read(p_key));
                vD[0] += -K * DNR[i] * p_node;
                vD[1] += -K * DNS[i] * p_node;
                vD[2] += -K * DNT[i] * p_node;
            }
-           double64 vDlength = vD.Length();
+           double vDlength = vD.Length();
            
            jacobian_at_point(it, bctr.Coordinates());
            const DenseMatrix<DM_MIN> jac_bctr((*it)->FE()->JAC);
-           double64 jinvdet_bctr = (*it)->FE()->JacobianInverse();
+           double jinvdet_bctr = (*it)->FE()->JacobianInverse();
            const DenseMatrix<DM_MIN> jinv_bctr((*it)->FE()->JINV);
            
            const Point<3U> vDproj(jinv_bctr * vD.Coordinates());
@@ -514,9 +514,9 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                
                // 2.1 classic way of calculating facet fluxes in physical space
                // ------------------------------------------------------------
-               const double64 projected_velocity_physical = (*it)->ProjectionOnFacetNormal( i, v_key );
+               const double projected_velocity_physical = (*it)->ProjectionOnFacetNormal( i, v_key );
                // Darcy velocity computation
-               const double64 flux_physical = (*it)->FacetArea(i) * projected_velocity_physical;
+               const double flux_physical = (*it)->FacetArea(i) * projected_velocity_physical;
 
                // 2.2 parametric space computation
                // --------------------------------
@@ -541,8 +541,8 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                }
                Point<3u> parametric_normal_remapped(crossProduct(v1,v0));
                parametric_normal_remapped.NormalizeLengthTo(1.0);
-               double64 projected_velocity_parametric = dotProduct(parametric_normal_remapped, vDproj);
-               double64 flux_parametric = projected_velocity_parametric * (*it)->FacetArea(i);
+               double projected_velocity_parametric = dotProduct(parametric_normal_remapped, vDproj);
+               double flux_parametric = projected_velocity_parametric * (*it)->FacetArea(i);
 
                size_t inside_node, outside_node;
                (*it)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
@@ -550,11 +550,11 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                _test( (*it)->N(inside_node)->Idx() < model_domain.Nodes() );
                _test( (*it)->N(outside_node)->Idx() < model_domain.Nodes() );
 
-               const double64 scale = std::max(cross_section[inside_node], cross_section[outside_node])
+               const double scale = std::max(cross_section[inside_node], cross_section[outside_node])
                    * std::max(velocity_magnitude[inside_node], velocity_magnitude[outside_node]);
 
-               const double64 abserr = std::abs(flux_parametric - flux_physical);
-               const double64 relerr = rel_error(flux_parametric, flux_physical);
+               const double abserr = std::abs(flux_parametric - flux_physical);
+               const double relerr = rel_error(flux_parametric, flux_physical);
                std::cerr << "scale = " << scale << "\n";
                std::cerr << "abserr = " << abserr << "\n";
                std::cerr << "relerr = " << relerr << "\n";
@@ -592,20 +592,20 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          directed_area_para[(*pit)->Idx()] = 0.;
      }
      
-     double64 fmin_phys = +std::numeric_limits<double64>::max();
-     double64 fmax_phys = -std::numeric_limits<double64>::max();
-     double64 fmin_para = +std::numeric_limits<double64>::max();
-     double64 fmax_para = -std::numeric_limits<double64>::max();
+     double fmin_phys = +std::numeric_limits<double>::max();
+     double fmax_phys = -std::numeric_limits<double>::max();
+     double fmin_para = +std::numeric_limits<double>::max();
+     double fmax_para = -std::numeric_limits<double>::max();
 
      size_t weird_nodes = 0;
-     double64 maxdelta = 0;
+     double maxdelta = 0;
      for (size_t i = 0; i < flux_balance_physical.size(); ++i) {
          _test(directed_area_para[i].Length() < 1.0e-14);
          _test(directed_area_phys[i].Length() < 1.0e-14);
 
-         double64 scale = cross_section[i] * velocity_magnitude[i];
-         double64 phys = flux_balance_physical[i];
-         double64 para = flux_balance_parametric[i];
+         double scale = cross_section[i] * velocity_magnitude[i];
+         double phys = flux_balance_physical[i];
+         double para = flux_balance_parametric[i];
 
          fmin_phys = std::min(fmin_phys, phys);
          fmax_phys = std::max(fmin_phys, phys);
@@ -655,9 +655,9 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           *
           * -- 1.)AdvectVariable -----------------------------
           */
-          const double64 timeInterval(1.e3);
-          const double64 courantMultiplier(1.e5);
-          double64 courantIncrement;
+          const double timeInterval(1.e3);
+          const double courantMultiplier(1.e5);
+          double courantIncrement;
           cout << "\n\n\n\n\n";
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 1.)AdvectVariable -----------------------------\n";
@@ -738,7 +738,7 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 7.)CFL_Multiplier -----------------------------\n";
 
-          double64 CFLcheck(1.e2);
+          double CFLcheck(1.e2);
           advector3D.CFL_Multiplier(CFLcheck);
           //         ^^^^^^^^^^^^^^
           assert(CFLcheck == advector3D.CFL_Multiplier());
@@ -753,9 +753,9 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 8.)Model Inflow/Outflow -----------------------\n";
 
-          double64 outflow(advector3D.ModelOutflow());
+          double outflow(advector3D.ModelOutflow());
           //                          ^^^^^^^^^^^^
-          double64 inflow(advector3D.ModelInflow());
+          double inflow(advector3D.ModelInflow());
           //                         ^^^^^^^^^^^^
 
           cout << "\nadvector.ModelOutflow(): " << outflow ;
@@ -768,7 +768,7 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 9.)BoundaryFluxes -----------------------------\n";
 
-          double64 boundaryFluxes(advector3D.BoundaryFluxes(inflow, outflow));
+          double boundaryFluxes(advector3D.BoundaryFluxes(inflow, outflow));
           //                                 ^^^^^^^^^^^^^^
           cout << "\nBoundary Fluxes with previous as Input";
           cout << " arguments returns: " << boundaryFluxes ;
@@ -780,7 +780,7 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
           cout << "\n\n/** -- 10.)FluxBalance -------------------------------\n";
 
-          double64 fmin, fmax;
+          double fmin, fmax;
           advector3D.FluxBalance(fmin, fmax);
           //         ^^^^^^^^^^^
           cout << "\nFluxBalance returns " << fmin << " as minimum and ";
@@ -803,7 +803,7 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS------------------------";
           cout << "\n\n/** -- 12.)VolumeIntegrateScalarFiniteVolumeVariable --\n";
 
-          double64 poreVolume(0.);
+          double poreVolume(0.);
           poreVolume =
           advector3D.VolumeIntegrateScalarFiniteElementVariable("porosity", true);
           //         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -841,7 +841,7 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           */
           cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
           cout << "\n\n/** -- 15.)AssignScalarBoundaryValues ------------------\n";
-          double64 customPressure(2.e7);
+          double customPressure(2.e7);
           advector3D.AssignScalarBoundaryValues(LEFT, "fluid pressure", DIRICH, customPressure, true);
           //         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -905,7 +905,7 @@ void testNodeCenteredFiniteVolumeStencils( Model<3U>& sg, VTK_Interface<3U>& vtk
   are reported to the variables "finite volume" and "nodal flux mismatch", respectively.
   do not use when surface elements are also present in model!
 */
-double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg )
+double  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -936,7 +936,7 @@ double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& s
   csmp::Index          fv_key   = sg.Database().StorageKey("finite volume");
   csmp::Index          prop_key = sg.Database().StorageKey("nodal flux mismatch");
   ScalarVariable       sc;
-  double64             emax(0.);
+  double             emax(0.);
   Region<3>&  gref(sg.Region("Model"));
 
   // for all interior nodes we calculate the normalised flux balance
@@ -952,7 +952,7 @@ double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& s
 
   // finding the worst finite volume and analyzing it
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
-    if ( fabs(emax - fabs((*it)->Read( prop_key ))) <= numeric_limits<double64>::epsilon() ) {
+    if ( fabs(emax - fabs((*it)->Read( prop_key ))) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
@@ -992,7 +992,7 @@ void advectVariableExplicit( Model<3U>& sg, bool second_order )
    else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
    cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
    cout <<"\nEnter advection time: ";
-   double64 time_interval;
+   double time_interval;
    cin >> time_interval;
 
    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -1023,7 +1023,7 @@ void advectVariableExplicit( Model<3U>& sg, const char* region, bool second_orde
    else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
    cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
    cout <<"\nEnter advection time: ";
-   double64 time_interval;
+   double time_interval;
    cin >> time_interval;
 
    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -1054,7 +1054,7 @@ void advectVariableFirstOrderImplicit( Model<3U>& sg, VTK_Interface<3U>& vtkOut 
     cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement();
     cout.flush();
     cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-    double64 time_interval, Courant_multiplier;
+    double time_interval, Courant_multiplier;
     cin >> time_interval >> Courant_multiplier;
     cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
     clock_t ticks = clock();
@@ -1085,7 +1085,7 @@ void advectVariableFirstOrderImplicit( Model<3U>& sg, const char* group )
   cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
 
   cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-  double64 time_interval, Courant_multiplier;
+  double time_interval, Courant_multiplier;
   cin >> time_interval >> Courant_multiplier;
 
   cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -1114,7 +1114,7 @@ void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
   else                     cout <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
   cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
   cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-  double64 time_interval, Courant_multiplier;
+  double time_interval, Courant_multiplier;
   cin >> time_interval >> Courant_multiplier;
 
   cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -1142,7 +1142,7 @@ void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
     else                     cout <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
     cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
     cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
-    double64 time_interval, Courant_multiplier;
+    double time_interval, Courant_multiplier;
     cin >> time_interval >> Courant_multiplier;
 
     cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -1186,7 +1186,7 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
   csmp::Index     fv_key   = sg.Database().StorageKey("finite volume");
   csmp::Index     prop_key = sg.Database().StorageKey("nodal flux mismatch");
   ScalarVariable  sc;
-  double64        emax(0.);
+  double        emax(0.);
   Region<3>&  gref(sg.Region("Model"));
 
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) {
@@ -1200,7 +1200,7 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
 
   // finding the worst finite volume and analyzing it
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
-    if ( fabs(emax - (*it)->Read( prop_key )) <= numeric_limits<double64>::epsilon() ) {
+    if ( fabs(emax - (*it)->Read( prop_key )) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
@@ -1268,7 +1268,7 @@ void testSchemeAsComponent()
      // -----------------------------------------------------------------------
      // 3. hydraulic conductivity computation
      // -----------------------------------------------------------------------
-      const double64  fluid_viscosity(1.0e-03);
+      const double  fluid_viscosity(1.0e-03);
       ConstantFactor<3U,divides>  conductivity( model3D.Database(),
                                                "conductivity", "permeability",
                                                 fluid_viscosity );
@@ -1322,8 +1322,8 @@ void testSchemeAsComponent()
      */
      // -----------------------------------------------------------------------
 
-      int32     tmethod(1);
-      double64  max_error(1.0e-5);
+      int32_t     tmethod(1);
+      double  max_error(1.0e-5);
     
       // 5.1 setting up the transport scheme
       /*
@@ -1389,7 +1389,7 @@ void testSchemeAsComponent()
       cout <<" FIRST ORDER SCHEME."<< endl;
       cout <<"\nThe grid Courant number is "<< explicit_advector.TimeIncrement() << endl;
       cout <<"\nEnter advection time: ";
-      double64 time_interval;
+      double time_interval;
       cin >> time_interval;
 
       cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;

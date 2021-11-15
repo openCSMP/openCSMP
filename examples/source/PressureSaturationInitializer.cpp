@@ -14,15 +14,15 @@ PressureSaturationInitializer<dim>::PressureSaturationInitializer( Model<dim>& m
                                                                    const char* oil_saturation,
                                                                    const char* water_pressure,
                                                                    const char* oil_pressure,
-                                                                   double64 water_density,
-                                                                   double64 oil_density,
-                                                                   double64 water_oil_contact,
-                                                                   double64 reference_depth,
-                                                                   double64 reference_pressure,
-                                                                   double64 lambda,
-                                                                   double64 entry_pressure,
-                                                                   double64 swc,
-                                                                   double64 sor)
+                                                                   double water_density,
+                                                                   double oil_density,
+                                                                   double water_oil_contact,
+                                                                   double reference_depth,
+                                                                   double reference_pressure,
+                                                                   double lambda,
+                                                                   double entry_pressure,
+                                                                   double swc,
+                                                                   double sor)
  : Visitor<dim>(MODEL, NODE),
    model_ref_(model),
    prop_ref_(model.Database()),
@@ -88,7 +88,7 @@ PressureSaturationInitializer<dim>::~PressureSaturationInitializer()
 
 
 template<size_t dim>
-double64 PressureSaturationInitializer<dim>::FreeWaterLevel()
+double PressureSaturationInitializer<dim>::FreeWaterLevel()
 {
     return ( water_oil_contact_ - entry_pressure_ /
            ( water_density_ - oil_density_ ) / gravity_acceleration_ );
@@ -99,10 +99,10 @@ double64 PressureSaturationInitializer<dim>::FreeWaterLevel()
 
 
 template<size_t dim>
-double64 PressureSaturationInitializer<dim>::PressureAtFreeWaterLevel()
+double PressureSaturationInitializer<dim>::PressureAtFreeWaterLevel()
 {
 
-    double64 free_water_level = FreeWaterLevel();
+    double free_water_level = FreeWaterLevel();
 
     // if reference depth is higher than the water oil contact then the reference pressure is oil pressure
     // and we use oil gravity to calculate pressure at free water level
@@ -121,8 +121,8 @@ double64 PressureSaturationInitializer<dim>::PressureAtFreeWaterLevel()
 
 
 template<size_t dim>
-double64 PressureSaturationInitializer<dim>::WaterSaturationFromPhasePressures(double64 oil_pressure,
-                                                                               double64 water_pressure)
+double PressureSaturationInitializer<dim>::WaterSaturationFromPhasePressures(double oil_pressure,
+                                                                               double water_pressure)
 {
     if ( ( oil_pressure - water_pressure ) <= entry_pressure_ )
         return 1.;
@@ -137,13 +137,13 @@ template<size_t dim>
 void PressureSaturationInitializer<dim>::Visit(Node<dim>* node)
 {
 
-    double64 node_depth;
+    double node_depth;
     if ( dim == 1U )
         node_depth = node->x();
     else
         node_depth = node->y();
-    double64 free_water_level = FreeWaterLevel();
-    double64 free_water_level_pressure = PressureAtFreeWaterLevel();
+    double free_water_level = FreeWaterLevel();
+    double free_water_level_pressure = PressureAtFreeWaterLevel();
     ScalarVariable oil_pressure( PLAIN, free_water_level_pressure + oil_density_ * gravity_acceleration_ *
                                         ( free_water_level - node_depth ) );
     ScalarVariable water_pressure( PLAIN, free_water_level_pressure + water_density_ * gravity_acceleration_ *

@@ -915,7 +915,7 @@ void  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side, size_t idx )
 
 // GEOMETRY
 
-inline double64 triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
+inline double triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
     cerr <<"\nInterFace<1>::Area() called triangleArea = function stub that is meaningless in 1D.\n";
     return 1.;
  }
@@ -931,14 +931,14 @@ inline Point<1U> normalOfTriangle( const Point<1U>&, const Point<1U>&, const Poi
     Thus, it will give different results for INSIDE and OUTSIDE if the nodes on either side no longer match.
 */
 template<size_t dim>
-double64 InterFace<dim>::Area( INTERFACE_SIDE side ) const
+double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( side == MIDDLE ) {
        if ( middleElement_ != nullptr ) return middleElement_->Volume();
        csmp_error.notice( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
-       return numeric_limits<double64>::signaling_NaN();
+       return numeric_limits<double>::signaling_NaN();
     }
 
   if ( side == INSIDE ) return innerParent_->FaceArea( inner_parent_face_id_ );
@@ -946,7 +946,7 @@ double64 InterFace<dim>::Area( INTERFACE_SIDE side ) const
   if ( side == OUTSIDE ) return outerParent_->FaceArea( outer_parent_face_id_ );
 
   // error
-  return std::numeric_limits<double64>::signaling_NaN();
+  return std::numeric_limits<double>::signaling_NaN();
 }
 
 
@@ -1008,7 +1008,7 @@ bool InterFace<dim>::NodeSpacing( size_t n, VectorVariable<dim>& innerToOuter ) 
   Point<dim> dxyz = node_connector_[n]->Coordinate() - node_connector_[n + Nodes()]->Coordinate();
   innerToOuter = dxyz;
 
-  if ( dxyz.Length() < numeric_limits<double64>::epsilon() ) return false;
+  if ( dxyz.Length() < numeric_limits<double>::epsilon() ) return false;
 
   return true;
 }
@@ -1105,7 +1105,7 @@ Point<dim>  InterFace<dim>::BaryCenter() const
   for ( size_t i = 1U; i<n_nodes; ++i )
     pt += N( i )->Coordinate();
 
-  return pt / static_cast<double64>(Nodes());
+  return pt / static_cast<double>(Nodes());
 }
 
 
@@ -1134,21 +1134,21 @@ when evaluating the quality of a certain mesh.
 
 */
 template<size_t dim>
-double64  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
+double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
 {
-  double64 fMinTemp( static_cast<double64>(DBL_MAX) );
-  double64 fMaxTemp( static_cast<double64>(-DBL_MAX) );
+  double fMinTemp( static_cast<double>(DBL_MAX) );
+  double fMaxTemp( static_cast<double>(-DBL_MAX) );
 
   // this normalisation is necessary because the vector variable
   // being any physical quantity may have any magnitude
-  const double64 fMagnitudeOfDirection( vecDirection.Length() );
+  const double fMagnitudeOfDirection( vecDirection.Length() );
   // avoid division by zero
-  assert( fMagnitudeOfDirection >= numeric_limits<double64>::epsilon() );
+  assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
   const size_t n_nodes( node_connector_.size() );
   for ( size_t i = 0; i<n_nodes; ++i ) {
     // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
-    double64 fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
+    double fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
     fTemp /= fMagnitudeOfDirection;
 
     // update minimum value

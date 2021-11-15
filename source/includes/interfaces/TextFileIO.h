@@ -88,7 +88,7 @@ std::string  withoutSpaces( std::string );
 // Reading property values
 
 /// parses scalars including "nodata" and NaN values
-double64 parseDataValue( const std::string& value );
+double parseDataValue( const std::string& value );
 
 void readPropertyValue( ScalarVariable& sc );
 
@@ -189,7 +189,7 @@ bool doesVariableFileExist( const std::string& filename_prefix );
 
 /// read point data  such as well rates ( a.k.a block7 )
 template<size_t dim>
-bool readPointData( std::map<std::string,std::vector<double64> >& well_data, int ndata,
+bool readPointData( std::map<std::string,std::vector<double> >& well_data, int ndata,
                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// build Regions based on the range of particular property data ( a.k.a block1 )

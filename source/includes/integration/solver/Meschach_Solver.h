@@ -15,25 +15,25 @@ public:
 
 protected:
     virtual void SolveWithMeschach(SparseMatrix& A,
-                                   std::vector<double64>& b,
-                                   std::vector<double64>& x,
-                                   double64 solver_tolerance) = 0;
+                                   std::vector<double>& b,
+                                   std::vector<double>& x,
+                                   double solver_tolerance) = 0;
 
 private:
     virtual void SolveMatrixEquation(SparseMatrix& A,
-                                     std::vector<double64>& b,
-                                     std::vector<double64>& x,
+                                     std::vector<double>& b,
+                                     std::vector<double>& x,
                                      size_t no_unknowns);
 
-    double64 GuessResidual(const SparseMatrix& A,
-                            const std::vector<double64>& b,
-                            std::vector<double64>& x);
+    double GuessResidual(const SparseMatrix& A,
+                            const std::vector<double>& b,
+                            std::vector<double>& x);
     
-    double64 CalculateResidual(const SparseMatrix& A,
-                                const std::vector<double64>& b,
-                                const std::vector<double64>& x);
+    double CalculateResidual(const SparseMatrix& A,
+                                const std::vector<double>& b,
+                                const std::vector<double>& x);
 
-    double64 residual_factor_;
+    double residual_factor_;
 };
 } // end namespace csmp
 

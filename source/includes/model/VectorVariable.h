@@ -84,40 +84,40 @@ class VectorVariable<3U> {
     VectorVariable( const VectorVariable& );      ///< copy constructor
     VectorVariable( VectorVariable&& ) = default; ///< move constructor
     /// sets all elements to fl, val
-    VectorVariable( VARIABLE_FLAG, double64 );
+    VectorVariable( VARIABLE_FLAG, double );
   
     /// constructor for 3D version
     VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3, 
-                    double64 val1, double64 val2, double64 val3 );
+                    double val1, double val2, double val3 );
      
     /// initialize with an STL vector
-    explicit VectorVariable( const std::vector<double64>& );
+    explicit VectorVariable( const std::vector<double>& );
   
     /// initialize with a Point
     explicit VectorVariable( const csmp::Point<3U>& );
 
     // access of vector elements
-    double64&        operator()( size_t );
-    const double64&  operator()( size_t ) const;
-    double64         operator[]( size_t ) const;
-    void             Component( size_t, double64 );
-    double64         Component( size_t ) const;
+    double&        operator()( size_t );
+    const double&  operator()( size_t ) const;
+    double         operator[]( size_t ) const;
+    void             Component( size_t, double );
+    double         Component( size_t ) const;
     
     // assigments
-    VectorVariable&  operator=( double64 );
+    VectorVariable&  operator=( double );
     VectorVariable&  operator=( const Point<3U>& );
     VectorVariable&  operator=( const ScalarVariable& );
     VectorVariable&  operator=( const VectorVariable& );
     VectorVariable&  operator=( VectorVariable&& ) = default;
 
     // standard operators
-    VectorVariable   operator+( double64 ) const;
-    VectorVariable   operator-( double64 ) const;
-    VectorVariable   operator*( double64 ) const;
-    VectorVariable   operator/( double64 ) const;
+    VectorVariable   operator+( double ) const;
+    VectorVariable   operator-( double ) const;
+    VectorVariable   operator*( double ) const;
+    VectorVariable   operator/( double ) const;
   
     /// squares all elements of the vector
-    VectorVariable   operator^( double64 ) const;
+    VectorVariable   operator^( double ) const;
 
     // element-by-element operations
     VectorVariable   operator+(  const VectorVariable& ) const;
@@ -126,10 +126,10 @@ class VectorVariable<3U> {
     VectorVariable   operator/(  const VectorVariable& ) const;
 
     /// vec1 += vec2  enables shorthand for  vec1 = vec1 + vec2
-    VectorVariable&  operator+=( double64 );
-    VectorVariable&  operator-=( double64 );
-    VectorVariable&  operator*=( double64 );
-    VectorVariable&  operator/=( double64 );
+    VectorVariable&  operator+=( double );
+    VectorVariable&  operator-=( double );
+    VectorVariable&  operator*=( double );
+    VectorVariable&  operator/=( double );
     
     VectorVariable&  operator+=( const ScalarVariable& );
     VectorVariable&  operator-=( const ScalarVariable& );
@@ -149,20 +149,20 @@ class VectorVariable<3U> {
     bool             operator<(  const VectorVariable& ) const;
   
     /// dot product = scalar product
-    double64         operator&(  const VectorVariable& ) const;
+    double         operator&(  const VectorVariable& ) const;
   
     /// cross product (vector perpendicular to input vectors
     VectorVariable   operator%(  const VectorVariable& ) const;
     
     /// returns spatial i-th dimension
-    double64        Length() const;
-    double64        AngleTo( const VectorVariable& v ) const;
+    double        Length() const;
+    double        AngleTo( const VectorVariable& v ) const;
   
     /// returns csmp::Point initialised with vector values; @note name avoids GNU clash
     Point<3U>       P() const;
   
     /// checks vector length against the value range supplied as arguments
-    bool            IsWithinRange( double64 vmin, double64 vmax ) const;
+    bool            IsWithinRange( double vmin, double vmax ) const;
     VARIABLE_FLAG   Flag( size_t i=0 ) const;
     VARIABLE_FLAG&  Flag( size_t i=0 );
   
@@ -170,14 +170,14 @@ class VectorVariable<3U> {
     size_t          Size() const;
   
     /// sets all values to newValue; @todo SKM (1) deprecate
-    void            Resize( size_t newSize, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
+    void            Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
   
     // projections
-    double64        DotProduct( const csmp::Point<3U>& ) const;
-    double64        DotProduct( const VectorVariable& ) const;
+    double        DotProduct( const csmp::Point<3U>& ) const;
+    double        DotProduct( const VectorVariable& ) const;
     VectorVariable  CrossProduct( const csmp::Point<3U>& ) const;
     VectorVariable  CrossProduct( const VectorVariable& ) const;
-    VectorVariable  ProjectOnto( const std::vector<double64>& ) const;
+    VectorVariable  ProjectOnto( const std::vector<double>& ) const;
     VectorVariable  ProjectOnto( const VectorVariable& ) const;
 
     // assignment and modification
@@ -201,15 +201,15 @@ class VectorVariable<3U> {
 
   private:
     std::array<VARIABLE_FLAG,3U>  flag;  ///< flags that specify the treatment of the values in computations
-    std::array<double64,3U>       data;  ///< values of the vector components
+    std::array<double,3U>       data;  ///< values of the vector components
 };
 
 
-VectorVariable<1U> makeVector( VARIABLE_FLAG, double64 );
-VectorVariable<2U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, double64, double64 );
-VectorVariable<3U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG, double64, double64, double64 );
-VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG,3U>&, const std::array<double64,3U>& );
-VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>&, const std::vector<double64>& );
+VectorVariable<1U> makeVector( VARIABLE_FLAG, double );
+VectorVariable<2U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, double, double );
+VectorVariable<3U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG, double, double, double );
+VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG,3U>&, const std::array<double,3U>& );
+VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>&, const std::vector<double>& );
 
 
 template<size_t dim>

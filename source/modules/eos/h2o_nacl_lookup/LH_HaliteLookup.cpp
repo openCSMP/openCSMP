@@ -12,8 +12,8 @@ using namespace std;
 
 namespace csmp
 {
-  LH_HaliteLookup::LH_HaliteLookup(const double64& externaltemperature, 
-                                   const double64& externalpressure)
+  LH_HaliteLookup::LH_HaliteLookup(const double& externaltemperature, 
+                                   const double& externalpressure)
     : temperature(externaltemperature), 
       pressure(externalpressure), 
       tcurrent(0.0),
@@ -251,41 +251,41 @@ namespace csmp
 
 
   // The data interpolation routines
-  double64 LH_HaliteLookup::Temperature(){     SetTemperatureAndPressure(); return ValueOf(temperature_index);    }
-  double64 LH_HaliteLookup::Pressure(){        SetTemperatureAndPressure(); return ValueOf(pressure_index);       }
-  double64 LH_HaliteLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
-  double64 LH_HaliteLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
-  double64 LH_HaliteLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
-  double64 LH_HaliteLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
-  double64 LH_HaliteLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
-  double64 LH_HaliteLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
+  double LH_HaliteLookup::Temperature(){     SetTemperatureAndPressure(); return ValueOf(temperature_index);    }
+  double LH_HaliteLookup::Pressure(){        SetTemperatureAndPressure(); return ValueOf(pressure_index);       }
+  double LH_HaliteLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
+  double LH_HaliteLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
+  double LH_HaliteLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
+  double LH_HaliteLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
+  double LH_HaliteLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
+  double LH_HaliteLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
 
-  double64 LH_HaliteLookup::ReportComposition(){ return ValueOf(composition_index); }
-  double64 LH_HaliteLookup::ReportEnthalpy(){    return ValueOf(enthalpy_index); }
+  double LH_HaliteLookup::ReportComposition(){ return ValueOf(composition_index); }
+  double LH_HaliteLookup::ReportEnthalpy(){    return ValueOf(enthalpy_index); }
 
   // *******************************************************************************
   // for the following three ones, the case of being very close to the melting curve 
   // probably needs special attention
   // *******************************************************************************
 
-  double64 LH_HaliteLookup::DCompositionDT()
+  double LH_HaliteLookup::DCompositionDT()
   {
     return 0.0;
   }
 
-  double64 LH_HaliteLookup::DEnthalpyDT()
+  double LH_HaliteLookup::DEnthalpyDT()
   {
     return HeatCapacity();
   }
 
-  double64 LH_HaliteLookup::DSaltMassFractionDT()
+  double LH_HaliteLookup::DSaltMassFractionDT()
   {
     return 0.0;
   }
 
 
 
-  double64 LH_HaliteLookup::ValueOf(const int& property_index)
+  double LH_HaliteLookup::ValueOf(const int& property_index)
   {
     SetTemperatureAndPressure();
 
@@ -383,7 +383,7 @@ namespace csmp
   }
 
 	
-  double64 LH_HaliteLookup::NormalInterpolation( const int& property_index )
+  double LH_HaliteLookup::NormalInterpolation( const int& property_index )
   {
     //d     cout << "Using LH_HaliteLookup::NormalInterpolation( const int& property_index ) ...\n";
 
@@ -409,7 +409,7 @@ namespace csmp
     return value_interpolated;
   }
 
-  double64 LH_HaliteLookup::NearVLHMaxInterpolation(const int& property_index)
+  double LH_HaliteLookup::NearVLHMaxInterpolation(const int& property_index)
   {
     // Feb. 2011
     // The following treatment strongl;y relies on a correct detrmination that we are
@@ -562,7 +562,7 @@ namespace csmp
       }
   }
 
-  double64 LH_HaliteLookup::NearVLHInterpolationLowT( const int& property_index )
+  double LH_HaliteLookup::NearVLHInterpolationLowT( const int& property_index )
   {
     //d 	cout << "Using LH_HaliteLookup::NearVLHInterpolationLowT( const int& property_index ) ...\n";
     tvlh      = vlh_halite.TfromP(pcurrent,300.0e0);
@@ -708,7 +708,7 @@ namespace csmp
 
 
 
-  double64 LH_HaliteLookup::NearVLHInterpolationHighT( const int& property_index )
+  double LH_HaliteLookup::NearVLHInterpolationHighT( const int& property_index )
   {
     //d  cout << "Using LH_HaliteLookup::NearVLHInterpolationHighT( const int& property_index ) ...\n";
     tvlh      = vlh_halite.TfromP(pcurrent,700.0e0);
@@ -845,7 +845,7 @@ namespace csmp
 
 
 
-  double64 LH_HaliteLookup::NearNaClMeltInterpolation( const int& property_index )
+  double LH_HaliteLookup::NearNaClMeltInterpolation( const int& property_index )
   {
     //    cout << "Using LH_HaliteLookup::NearNaClMeltInterpolation( const int& property_index ) ...\n";
 
@@ -991,7 +991,7 @@ namespace csmp
   }
 
 
-  void LH_HaliteLookup::GetTemperatureIndex(const double64& t)
+  void LH_HaliteLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-  0.0)/t_res ); }
@@ -1010,7 +1010,7 @@ namespace csmp
     // t_dim is therefore (1000-550)/10+285 + 1 = 331
   }
     
-  void LH_HaliteLookup::GetPressureIndex(const double64& p)
+  void LH_HaliteLookup::GetPressureIndex(const double& p)
   {
     // new version
     if(     p <=   20.0e5){ p_res =   0.5e5; ip =     static_cast<long>( (p-   0.5e5)/p_res ); }    

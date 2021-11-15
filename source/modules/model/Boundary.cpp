@@ -450,7 +450,7 @@ bool Boundary<dim>::Out( fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) con
 /**
 Outputs specific property data to a FEM_Data container.
 This function is a nested template:
-the outer template provides double64 = data type and dim = dimension,
+the outer template provides double = data type and dim = dimension,
 and Var the data type of the property
 (ScalarVariable, VectorVariable, or TensorVariable).
 
@@ -803,7 +803,7 @@ second value returns the highest spatial dimension contained.
 @author SKM 1/11/2013
 */
 template<size_t dim>
-pair<int32, int32>  Boundary<dim>::FaceSpatialDimensions() const
+pair<int32_t, int32_t>  Boundary<dim>::FaceSpatialDimensions() const
 {
   return this->SpatialDimensions();
 
@@ -1133,20 +1133,20 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
     else the perimeter is not defined.
 */
 template<size_t dim>
-double64  Boundary<dim>::Perimeter() const
+double  Boundary<dim>::Perimeter() const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   if ( dim != 3U )
     csmp_error.notice( ERROR, "Boundary<dim>::Perimeter:",
                       "the perimeter of a Boundary is only defined when the boundary is a surface." );
 
-  double64        perimeter_length( 0. );
+  double        perimeter_length( 0. );
   vector<size_t>  fnids;
   size_t          n( this->InteriorElements() );
   for ( typename vector<Face<dim>*>::const_iterator
         it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ ) {
       if ( (*it)->IsLineElement() ) {
-           return std::numeric_limits<double64>::quiet_NaN();
+           return std::numeric_limits<double>::quiet_NaN();
         }
       for ( size_t i = 0U; i<this->PerimeterFaces( n ); i++ ) {
         (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
@@ -1161,9 +1161,9 @@ double64  Boundary<dim>::Perimeter() const
 
 
 template<size_t dim>
-double64  Boundary<dim>::Area() const
+double  Boundary<dim>::Area() const
 {
-  double64  integrated_area( 0. );
+  double  integrated_area( 0. );
 
   for ( const auto& it  : this->elmt_vec_ )
     integrated_area += it->Area();
@@ -1175,22 +1175,22 @@ double64  Boundary<dim>::Area() const
 
 
 template<size_t dim>
-double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property ) const
+double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property ) const
 {
   csmp::Index prop_key = p.StorageKey( property );
 
   if ( prop_key.place == ELEMENT_INTEGRATION_POINT or prop_key.place == REGION ) {
     throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
                            property, "placed on IntegrationPoint or Region cannot be assigned on boundary" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
   if ( prop_key.type == TENSOR ) {
     throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
                            property, "is a tensor property; this method does not know how to integrate it" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
 
-  double64  property_integral( 0. );
+  double  property_integral( 0. );
 
   // 1. if the property is a scalar
   if ( prop_key.type == SCALAR ) {

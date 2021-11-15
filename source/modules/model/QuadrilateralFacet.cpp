@@ -29,7 +29,7 @@ QuadrilateralFacet::~QuadrilateralFacet()
 }
 
 
-double64 QuadrilateralFacet::Area() const
+double QuadrilateralFacet::Area() const
  {
     return facetArea4( pt0_, pt1_, pt2_, pt3_ );
  }
@@ -55,16 +55,16 @@ Point<3U>  normalAtFacetCenter( const Point<3U>& pt0,
                                 const Point<3U>& pt3 )
 {
   // x - coordinate
-  double64 jac00(0.25 * (-pt0[0] + pt1[0] + pt2[0] - pt3[0])); // dnr
-  double64 jac10(0.25 * (-pt0[0] - pt1[0] + pt2[0] + pt3[0])); // dns
+  double jac00(0.25 * (-pt0[0] + pt1[0] + pt2[0] - pt3[0])); // dnr
+  double jac10(0.25 * (-pt0[0] - pt1[0] + pt2[0] + pt3[0])); // dns
   
   // y - coordinate
-  double64 jac01(0.25 * (-pt0[1] + pt1[1] + pt2[1] - pt3[1]));
-  double64 jac11(0.25 * (-pt0[1] - pt1[1] + pt2[1] + pt3[1]));
+  double jac01(0.25 * (-pt0[1] + pt1[1] + pt2[1] - pt3[1]));
+  double jac11(0.25 * (-pt0[1] - pt1[1] + pt2[1] + pt3[1]));
 
   // z - coordinate
-  double64 jac02(0.25 * (-pt0[2] + pt1[2] + pt2[2] - pt3[2]));
-  double64 jac12(0.25 * (-pt0[2] - pt1[2] + pt2[2] + pt3[2]));
+  double jac02(0.25 * (-pt0[2] + pt1[2] + pt2[2] - pt3[2]));
+  double jac12(0.25 * (-pt0[2] - pt1[2] + pt2[2] + pt3[2]));
    
   Point<3U> vecNormal( jac01*jac12-jac02*jac11,
                        jac02*jac10-jac00*jac12,
@@ -95,26 +95,26 @@ Point<1U>  normalAtFacetCenter( const Point<1U>& pt0,
 }
 
 /// one-point quadrature
-double64  facetArea1( const Point<3U>& pt0, 
+double  facetArea1( const Point<3U>& pt0, 
                       const Point<3U>& pt1,
                       const Point<3U>& pt2,
                       const Point<3U>& pt3 )
 {
   // x - coordinate
-  double64 jac00(0.25 * (-pt0[0] + pt1[0] + pt2[0] - pt3[0])); // dnr
-  double64 jac10(0.25 * (-pt0[0] - pt1[0] + pt2[0] + pt3[0])); // dns
+  double jac00(0.25 * (-pt0[0] + pt1[0] + pt2[0] - pt3[0])); // dnr
+  double jac10(0.25 * (-pt0[0] - pt1[0] + pt2[0] + pt3[0])); // dns
   
   // y - coordinate
-  double64 jac01(0.25 * (-pt0[1] + pt1[1] + pt2[1] - pt3[1]));
-  double64 jac11(0.25 * (-pt0[1] - pt1[1] + pt2[1] + pt3[1]));
+  double jac01(0.25 * (-pt0[1] + pt1[1] + pt2[1] - pt3[1]));
+  double jac11(0.25 * (-pt0[1] - pt1[1] + pt2[1] + pt3[1]));
 
   // z - coordinate
-  double64 jac02(0.25 * (-pt0[2] + pt1[2] + pt2[2] - pt3[2]));
-  double64 jac12(0.25 * (-pt0[2] - pt1[2] + pt2[2] + pt3[2]));
+  double jac02(0.25 * (-pt0[2] + pt1[2] + pt2[2] - pt3[2]));
+  double jac12(0.25 * (-pt0[2] - pt1[2] + pt2[2] + pt3[2]));
    
-  double64 efg0(jac00 * jac00 + jac01 * jac01 + jac02 * jac02);
-  double64 efg1(jac00 * jac10 + jac01 * jac11 + jac02 * jac12);
-  double64 efg2(jac10 * jac10 + jac11 * jac11 + jac12 * jac12);
+  double efg0(jac00 * jac00 + jac01 * jac01 + jac02 * jac02);
+  double efg1(jac00 * jac10 + jac01 * jac11 + jac02 * jac12);
+  double efg2(jac10 * jac10 + jac11 * jac11 + jac12 * jac12);
   
   return 4. * sqrt(efg0 * efg2 - efg1 * efg1);
   
@@ -123,16 +123,16 @@ double64  facetArea1( const Point<3U>& pt0,
 
 
 // area of the 2D quadrilateral
-double64  facetArea1( const Point<2U>& pt0,
+double  facetArea1( const Point<2U>& pt0,
                       const Point<2U>& pt1,
                       const Point<2U>& pt2,
                       const Point<2U>& pt3 )
 {
-   const double64 a(pt0.DistanceTo(pt3)), b(pt0.DistanceTo(pt1)), // left triangle
+   const double a(pt0.DistanceTo(pt3)), b(pt0.DistanceTo(pt1)), // left triangle
                   c(pt2.DistanceTo(pt3)), d(pt2.DistanceTo(pt1)), // righ triangle
                   ab(pt3.DistanceTo(pt1)); // shared edge
-   const double64 theta_ab = 2*atan( sqrt( (ab*ab - (a - b)*(a - b) )/( (b+a)*(b+a) - ab*ab) ) );
-   const double64 theta_bc = 2*atan( sqrt( (ab*ab - (c - d)*(c - d) )/( (c+d)*(c+d) - ab*ab) ) );
+   const double theta_ab = 2*atan( sqrt( (ab*ab - (a - b)*(a - b) )/( (b+a)*(b+a) - ab*ab) ) );
+   const double theta_bc = 2*atan( sqrt( (ab*ab - (c - d)*(c - d) )/( (c+d)*(c+d) - ab*ab) ) );
 
    return /* Area */ 0.5*a*b*sin(theta_ab) + 0.5*b*c*sin(theta_bc);
 }
@@ -175,7 +175,7 @@ IP 4, dnr, dns:
 
 Finite volume computations on volumetric finite elements.  
 */
-double64  facetArea4( const Point<3U>& p0, 
+double  facetArea4( const Point<3U>& p0, 
                       const Point<3U>& p1, 
                       const Point<3U>& p2, 
                       const Point<3U>& p3 )
@@ -183,22 +183,22 @@ double64  facetArea4( const Point<3U>& p0,
   // integration point 1
   // -------------------
   // Jacobian column 1           dnr1 * x1 +               dnr2 * x2 
-  double64 jac00(-0.105662432702594*p0[0] + 0.105662432702594*p1[0] + 0.394337567297406*p2[0] - 0.394337567297406*p3[0]); // dnr
-  double64 jac10(-0.105662432702594*p0[0] - 0.394337567297406*p1[0] + 0.394337567297406*p2[0] + 0.105662432702594*p3[0]); // dns
+  double jac00(-0.105662432702594*p0[0] + 0.105662432702594*p1[0] + 0.394337567297406*p2[0] - 0.394337567297406*p3[0]); // dnr
+  double jac10(-0.105662432702594*p0[0] - 0.394337567297406*p1[0] + 0.394337567297406*p2[0] + 0.105662432702594*p3[0]); // dns
   
   // column 2
-  double64 jac01(-0.105662432702594*p0[1] + 0.105662432702594*p1[1] + 0.394337567297406*p2[1] - 0.394337567297406*p3[1]);
-  double64 jac11(-0.105662432702594*p0[1] - 0.394337567297406*p1[1] + 0.394337567297406*p2[1] + 0.105662432702594*p3[1]);
+  double jac01(-0.105662432702594*p0[1] + 0.105662432702594*p1[1] + 0.394337567297406*p2[1] - 0.394337567297406*p3[1]);
+  double jac11(-0.105662432702594*p0[1] - 0.394337567297406*p1[1] + 0.394337567297406*p2[1] + 0.105662432702594*p3[1]);
 
   // column 3
-  double64 jac02(-0.105662432702594*p0[2] + 0.105662432702594*p1[2] + 0.394337567297406*p2[2] - 0.394337567297406*p3[2]);
-  double64 jac12(-0.105662432702594*p0[2] - 0.394337567297406*p1[2] + 0.394337567297406*p2[2] + 0.105662432702594*p3[2]);
+  double jac02(-0.105662432702594*p0[2] + 0.105662432702594*p1[2] + 0.394337567297406*p2[2] - 0.394337567297406*p3[2]);
+  double jac12(-0.105662432702594*p0[2] - 0.394337567297406*p1[2] + 0.394337567297406*p2[2] + 0.105662432702594*p3[2]);
    
   // compute J' 1 
-  double64 efg0(jac00 * jac00 + jac01 * jac01 + jac02 * jac02);
-  double64 efg1(jac00 * jac10 + jac01 * jac11 + jac02 * jac12);
-  double64 efg2(jac10 * jac10 + jac11 * jac11 + jac12 * jac12);
-  double64 detJ(sqrt(efg0 * efg2 - efg1 * efg1));
+  double efg0(jac00 * jac00 + jac01 * jac01 + jac02 * jac02);
+  double efg1(jac00 * jac10 + jac01 * jac11 + jac02 * jac12);
+  double efg2(jac10 * jac10 + jac11 * jac11 + jac12 * jac12);
+  double detJ(sqrt(efg0 * efg2 - efg1 * efg1));
 
 
   // integration point 2
@@ -275,7 +275,7 @@ double64  facetArea4( const Point<3U>& p0,
 } // end facetArea
 
 
-double64  facetArea4( const Point<2U>& pt0,
+double  facetArea4( const Point<2U>& pt0,
                       const Point<2U>& pt1,
                       const Point<2U>& pt2,
                       const Point<2U>& pt3 )
@@ -283,7 +283,7 @@ double64  facetArea4( const Point<2U>& pt0,
     return 1.;
 }
 
-double64  facetArea4( const Point<1U>& pt0,
+double  facetArea4( const Point<1U>& pt0,
                       const Point<1U>& pt1,
                       const Point<1U>& pt2,
                       const Point<1U>& pt3 )

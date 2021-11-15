@@ -8,13 +8,13 @@ namespace csmp{
 
 class StressRegime {
 public:
-  StressRegime( double64 Sv, double64 SH, double64 Sh, double64 trend );
+  StressRegime( double Sv, double SH, double Sh, double trend );
   ~StressRegime(){};
 
-  double64            VerticalStressMagnitude() const;
-  double64            MaximumHorizontalStressMagnitude() const;
-  double64            MinimumHorizontalStressMagnitude() const;
-  double64            MaximumHorizontalStressTrend() const;
+  double            VerticalStressMagnitude() const;
+  double            MaximumHorizontalStressMagnitude() const;
+  double            MinimumHorizontalStressMagnitude() const;
+  double            MaximumHorizontalStressTrend() const;
   VectorVariable<3U>  VerticalStressUnitVector() const;
   VectorVariable<3U>  MinimumHorizontalStressUnitVector() const;
   VectorVariable<3U>  MaximumHorizontalStressUnitVector() const;
@@ -24,11 +24,11 @@ private:
   void                EstablishPrincipalStressUnitVectors();
   void                EstablishMinimumHorizontalStressVector();
 
-  double64            Sv_;
-  double64            SH_;
-  double64            Sh_;
-  double64            trend_;
-  const double64      PI_;
+  double            Sv_;
+  double            SH_;
+  double            Sh_;
+  double            trend_;
+  const double      PI_;
   VectorVariable<3U>  Svv_;
   VectorVariable<3U>  SHv_;
   VectorVariable<3U>  Shv_;

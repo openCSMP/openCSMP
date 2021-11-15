@@ -2,7 +2,6 @@
 #define CSMP_FV_PARAMETER_TEST_H
 
 #include "Test.h"
-#include "CSMP_number_types.h"
 
 namespace csmp 
 {
@@ -27,7 +26,7 @@ class FV_Parameter_Test : public Test {
     void FV_ParameterFacetNormalProjection();
 
   private:
-    double64 fTolerance;
+    double fTolerance;
   
 }; // end class
 

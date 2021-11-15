@@ -16,7 +16,7 @@ class NumIntegral_PT_op_dV : public MathOperatorRHS<dim> {
     virtual void ComputeContribution( CELL& e );
     virtual NumIntegral_PT_op_dV<dim,CELL>* clone() const { return new NumIntegral_PT_op_dV<dim,CELL> (*this); }
   private:
-    std::vector<double64>  BFORCE;
+    std::vector<double>  BFORCE;
 };
 
 /**
@@ -28,7 +28,7 @@ class NumIntegral_PT_op_dV : public MathOperatorRHS<dim> {
 
 Add contributions to the righthandside of a matrix equation which arise
 due to forces acting on the mass represented by each element. These 
-forces are specified as nodal vector<double64> variables and NumIntegral_PT_op_dV
+forces are specified as nodal vector<double> variables and NumIntegral_PT_op_dV
 distributes them evenly over the element. 
  
  */

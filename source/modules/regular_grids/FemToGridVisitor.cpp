@@ -109,8 +109,8 @@ void FemToGridVisitor<dim>::ChangeOutputProperty( const char* var )
 
 
 template<size_t dim>
-void FemToGridVisitor<dim>::MinMaxCoordinates( double64& min_x, double64& max_x, 
-                                               double64& min_y, double64& max_y )
+void FemToGridVisitor<dim>::MinMaxCoordinates( double& min_x, double& max_x, 
+                                               double& min_y, double& max_y )
  {
     min_x = max_x = XY(0,0);
     min_y = max_y = XY(0,1);
@@ -124,7 +124,7 @@ void FemToGridVisitor<dim>::MinMaxCoordinates( double64& min_x, double64& max_x,
  }
 
 template<size_t dim>
-bool  FemToGridVisitor<dim>::IsInsideTriangle( double64 x, double64 y, bool update )
+bool  FemToGridVisitor<dim>::IsInsideTriangle( double x, double y, bool update )
   {
      mjl::Point p1(XY(0,0),XY(0,1)), 
                p2(XY(1,0),XY(1,1)), 
@@ -144,19 +144,19 @@ bool  FemToGridVisitor<dim>::IsInsideTriangle( double64 x, double64 y, bool upda
           
           // flipping segments if triangles are numbered counter-clockwise
           if ( a[0].Classify(mp) == mjl::RIGHT )
-            for ( int32 r=0; r<3; r++ ) a[r].Flip();
+            for ( int32_t r=0; r<3; r++ ) a[r].Flip();
        }
      // TEST: if the midpoint does not lie to the right of each edge
      // the edges are flipped to change the sense of rotation
      // of the triangle
-     for ( int32 q=0; q<3; q++ )
+     for ( int32_t q=0; q<3; q++ )
        if ( a[q].Classify(p) == mjl::RIGHT ) return false;
 
      return true;
   }
 
 template<size_t dim>
-bool  FemToGridVisitor<dim>::IsInsideQuadrilateral( double64 x, double64 y )
+bool  FemToGridVisitor<dim>::IsInsideQuadrilateral( double x, double y )
   {
      // this method currently works only for regular rectangles
      // test if the quadrilateral is straightsided and regular
@@ -182,8 +182,8 @@ bool  FemToGridVisitor<dim>::IsInsideQuadrilateral( double64 x, double64 y )
 template<size_t dim>
 void FemToGridVisitor<dim>::InitializeElementGrid( size_t idx, CSMP_FEM_TYPE fe_type  )
  {
-    double64  min_x, max_x, min_y, max_y;
-    int32      i, j, i_min, j_min, i_max, j_max;
+    double  min_x, max_x, min_y, max_y;
+    int32_t      i, j, i_min, j_min, i_max, j_max;
 
     MinMaxCoordinates( min_x, max_x, min_y, max_y ); 
     //                                     row    column     
@@ -238,7 +238,7 @@ To output model results to JPEG images or other gridded data.
 template<size_t dim>
 void FemToGridVisitor<dim>::Visit( Element<dim>* n )   
   { 
-     double64 val;
+     double val;
      size_t   e_id, i;
      
      // getting to neighbor elements

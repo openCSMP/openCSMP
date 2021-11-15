@@ -479,14 +479,14 @@ void UpwindControlVisitor<dim>::WithVelocity(bool velo)
 
 /** set maximum size of time step */
 template<size_t dim>
-void UpwindControlVisitor<dim>::SetLargestTimeStep(double64 timestep)
+void UpwindControlVisitor<dim>::SetLargestTimeStep(double timestep)
     {
       largest_time_step = timestep;
     } // end SetLargestTimeStep
  
 /** modify calculation of cfl criterion */
 template<size_t dim>
-void UpwindControlVisitor<dim>::Adjust_CFL_Criterion(double64 scale_factor, bool take_pore_velocity)
+void UpwindControlVisitor<dim>::Adjust_CFL_Criterion(double scale_factor, bool take_pore_velocity)
     {
       cfl_scaling = scale_factor;
       cfl_with_pore_velocity = take_pore_velocity;

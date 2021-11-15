@@ -19,8 +19,8 @@ struct SimulatorSetupParameter : Parameter {
         notation="Undefined";
         unit="Undefined";
         key=csmp::Index();
-        min=std::numeric_limits<double64>::min();
-        max=std::numeric_limits<double64>::max();
+        min=std::numeric_limits<double>::min();
+        max=std::numeric_limits<double>::max();
         usage="Undefined";
         explanation="Undefined";
         type=SCALAR;

@@ -111,7 +111,7 @@ In linear elasticity computations.
 template<size_t dim,class CELL>
 void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
-    double64 detJ;
+    double detJ;
 
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );

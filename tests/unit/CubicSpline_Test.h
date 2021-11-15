@@ -2,7 +2,6 @@
 #define CUBICSPLINE_TEST_H
 
 #include "Test.h"
-#include "CSMP_number_types.h"
 #include "CubicSpline.h"
 
 namespace csmp
@@ -17,16 +16,16 @@ namespace csmp
 
       private:
         void InitializeTest( const char* );
-        void InitializeTest( const std::vector<double64>&,
-                             const std::vector<double64>&,
-                             const double64,
-                             const double64 );
+        void InitializeTest( const std::vector<double>&,
+                             const std::vector<double>&,
+                             const double,
+                             const double );
         void ValueTest();
         void DerivativeTest();
         void MaxDerivativeTest();
         void Range_xTest();
         void Range_fxTest();
-        const double64 tolerance_;
+        const double tolerance_;
         void OutTest();
 
         CubicSpline cspline1;
@@ -34,11 +33,11 @@ namespace csmp
         CubicSpline cspline1_copy;
         CubicSpline* cspline2_copy;
         std::string datafile;
-        std::vector<double64> x;
-        std::vector<double64> fx;
-        std::vector<double64> dfx;
-        double64 df1;
-        double64 dfn;
+        std::vector<double> x;
+        std::vector<double> fx;
+        std::vector<double> dfx;
+        double df1;
+        double dfn;
       
         const bool verbose_;
     };

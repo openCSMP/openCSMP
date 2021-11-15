@@ -20,12 +20,12 @@ namespace csmp {
 @{
 */
 
-void print(  vector<pair<pair<uint32,uint32>,vector<bool> > >&  v )
+void print(  vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >&  v )
  {
        cout <<"\nvector of off-diagonal elements:\n";
-       int32 n(0);
+       int32_t n(0);
        
-         for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator it=v.begin(); it!=v.end(); it++ )
+         for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::iterator it=v.begin(); it!=v.end(); it++ )
             {
                  cout <<"\nBlock "<< n++ <<" range: "<< (*it).first.first <<" - "<< (*it).first.second << endl;
                  cout <<"boolean vector (size="<< (*it).second.size() <<"):\n";
@@ -77,32 +77,32 @@ CompressedRowMatrix&  CompressedRowMatrix::operator=( const CompressedRowMatrix&
  Julian Mindel:  I proceeded to comment out the old code which contained the version of the () operator used before
  I have left it here below in the comment section for legacy purposes.
 
-double64  CompressedRowMatrix::operator()( uint32 i, uint32 j ) const
+double  CompressedRowMatrix::operator()( uint32_t i, uint32_t j ) const
 {
   // if the diagonal element is requested
-  if ( i == j ) return  a[ static_cast<uint32>(ia[i]) ];
+  if ( i == j ) return  a[ static_cast<uint32_t>(ia[i]) ];
 
   // now all row elements are stored to the right of the diagonal (by convention)
-  if (  a.size() - static_cast<uint32>(ia[i]) == ia.size() or  ia[i+1] - ia[i] == static_cast<int32>(ia.size()) )
-    return  a[ static_cast<uint32>(ia[i]) + j - 1U ];
+  if (  a.size() - static_cast<uint32_t>(ia[i]) == ia.size() or  ia[i+1] - ia[i] == static_cast<int32_t>(ia.size()) )
+    return  a[ static_cast<uint32_t>(ia[i]) + j - 1U ];
 
   // i is the diagonal element of the matrix
-  for ( uint32  index=static_cast<uint32>(ia[i]); index <= ia.size(); index++ )
-    if ( ja[index]  ==  static_cast<int32>(j)  ) return a[ index  ];
+  for ( uint32_t  index=static_cast<uint32_t>(ia[i]); index <= ia.size(); index++ )
+    if ( ja[index]  ==  static_cast<int32_t>(j)  ) return a[ index  ];
 
   return 0.;
 }
 */
 
-double64  CompressedRowMatrix::operator()( uint32 i, uint32 j ) const
+double  CompressedRowMatrix::operator()( uint32_t i, uint32_t j ) const
 {
 	assert( i < ia.size()-1U );
 	assert( j < ia.size()-1U );
 
 	//Since the off diagonal elements are stored after each diagonal element in the sparse matrix,
 	//we must perform a small search until we match the requested column for given row i.
-	for ( uint32  index=static_cast<uint32>(ia[i]); index <ia[i+1]; index++ )
-    if ( ja[index-1]  ==  static_cast<int32>(j+1)  ) return a[ index - 1  ];
+	for ( uint32_t  index=static_cast<uint32_t>(ia[i]); index <ia[i+1]; index++ )
+    if ( ja[index-1]  ==  static_cast<int32_t>(j+1)  ) return a[ index - 1  ];
 
 	return 0.;
 }
@@ -149,32 +149,32 @@ Reports if the solution matrix contains zero diagonal entries.
 
 void CompressedRowMatrix::Initialize( const SparseMatrix& A ) 
  {
-      ia.resize( (A.Rows() + 1U) ); vector<int32>( ia ).swap( ia );
+      ia.resize( (A.Rows() + 1U) ); vector<int32_t>( ia ).swap( ia );
       // ja is constructed with zero diagonal entries
-      ja.resize( A.Entries(), 0 );  vector<int32>( ja ).swap( ja );
+      ja.resize( A.Entries(), 0 );  vector<int32_t>( ja ).swap( ja );
       // 'a' stores the non-zero entries of the sparse matrix, row after row
-      a.resize( ja.size() );        vector<double64>( a ).swap( a );
+      a.resize( ja.size() );        vector<double>( a ).swap( a );
 
       // looping over all rows intializing ja and testing for diagonal entries which are zero
       // here n counts from 0 to j=nnu, i.e. all non-zero elements in the matrix
-      uint32 n(0U);
+      uint32_t n(0U);
       ia[0] = 0;
 
       for ( size_t i=0U; i < A.Rows(); i++ )
        {
-          int32  diag(UNSPECIFIED);
+          int32_t  diag(UNSPECIFIED);
           // looping over the non-zero elements row i
-          for ( map<size_t,double64>::const_iterator
+          for ( map<size_t,double>::const_iterator
                 rit=A.RowBegin(i); rit!=A.RowEnd(i); rit++ ) {
                // copying A's entry row(i) into the compressed row storage vector 'a'
                a[n]  = (*rit).second;
                // recording the corresponding column index in 'ja'
                // (NB: rit.first points to matrix column index from 0..rows-1)
-               ja[n] = static_cast<int32>((*rit).first);
+               ja[n] = static_cast<int32_t>((*rit).first);
                // if i=j, i.e., if this is a diagonal elemnt, its position is recorded by 'diag'
                // if the diagonal element is zero, however, it will not have been stored in 'ja'
                // so that this situation is never encountered and diag remains UNSPECIFIED
-               if ( ja[n] == static_cast<int32>(i) ) diag = static_cast<int32>(n);
+               if ( ja[n] == static_cast<int32_t>(i) ) diag = static_cast<int32_t>(n);
                n++;
 	          }
           if ( diag == UNSPECIFIED ) {
@@ -183,7 +183,7 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
                cout.setf(ios::scientific);
                long prec = cout.precision(15U);
                for ( size_t i=0U; i < A.Rows(); i++ )
-                 if ( std::fabs(A(i,i)) < std::numeric_limits<double64>::epsilon() )
+                 if ( std::fabs(A(i,i)) < std::numeric_limits<double>::epsilon() )
                    cout <<"\n\t"<< i <<": "<< A(i,i);
                cout << endl;
                cout.unsetf( ios::scientific );
@@ -193,12 +193,12 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
             }
         
           // setting matrix such that diagonal element is at the beginning of next row 
-          ia[i+1U]       = static_cast<int32>(n); 
+          ia[i+1U]       = static_cast<int32_t>(n); 
           // inserting the diagonal elements at the beginning of each row
-          const uint32 istart = static_cast<uint32>(ia[i]);
-          int32 jatemp   = ja[ istart ];
-          double64 atemp = a[ istart ];
-          int32 dindex   = diag;
+          const uint32_t istart = static_cast<uint32_t>(ia[i]);
+          int32_t jatemp   = ja[ istart ];
+          double atemp = a[ istart ];
+          int32_t dindex   = diag;
           ja[ istart ]   = ja[ dindex ];
           a[ istart]     = a[ dindex ];
           a[ dindex ]    = atemp;
@@ -206,8 +206,8 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
        }
 
      // converting C++ array indices (0..n-1) into Fortran indices (1..n) 
-     for ( vector<int32>::iterator it=ia.begin(); it!=ia.end(); it++ ) (*it)++;
-     for ( vector<int32>::iterator it=ja.begin(); it!=ja.end(); it++ ) (*it)++;
+     for ( vector<int32_t>::iterator it=ia.begin(); it!=ia.end(); it++ ) (*it)++;
+     for ( vector<int32_t>::iterator it=ja.begin(); it!=ja.end(); it++ ) (*it)++;
 
 }  // end Initialize
 
@@ -228,16 +228,16 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
       ja.resize( A.Entries() );
       a.resize( ja.size() );
    
-      map<size_t,double64>::const_iterator rit;
+      map<size_t,double>::const_iterator rit;
       long      i, j, k, row;
-      int32     diag;
+      int32_t     diag;
       bool      zero_diag_element(false);
 	  
-      std::vector<int32>  temp( ja.size() ); // auxilary vector
+      std::vector<int32_t>  temp( ja.size() ); // auxilary vector
 
       const size_t nnu_(A.Rows());
 	    for ( k = 0U; k < nnu_; k++)
-	      temp[k] = static_cast<int32>(k%(nnu_/nsys)*nsys+k/(nnu_/nsys));
+	      temp[k] = static_cast<int32_t>(k%(nnu_/nsys)*nsys+k/(nnu_/nsys));
 	  		
       for ( i=j=0U, ia[0]=0; i < nnu_; i++ )
        {
@@ -247,15 +247,15 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
                a[j]  = (*rit).second;
                ja[j] = temp[(*rit).first];
                // rit.first points to matrix entries indexed from 0..rows-1
-               if ( ja[j] == temp[row] ) diag = static_cast<int32>(j);
+               if ( ja[j] == temp[row] ) diag = static_cast<int32_t>(j);
                j++;
             }
           if ( diag == -1 ) zero_diag_element = true;
           
-          ia[i+1] = static_cast<int32>(j);
+          ia[i+1] = static_cast<int32_t>(j);
 			
 		      // inserting the diagonal elements at the beginning of each row
-          const int32 istart = ia[i];
+          const int32_t istart = ia[i];
           ja[static_cast<size_t>(istart)] = ja[ static_cast<size_t>(diag) ];
           a[static_cast<size_t>(istart)]  = a[ static_cast<size_t>(diag) ];
           a[static_cast<size_t>(diag)]    = a[ static_cast<size_t>(istart) ];
@@ -268,8 +268,8 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
        }
 	   
      // converting C array indices (0..n-1) into Fortran indices (1..n) 
-     for ( vector<int32>::iterator i=ia.begin(); i!=ia.end(); ++i )  (*i)++;
-     for ( vector<int32>::iterator i=ja.begin(); i!=ja.end(); ++i )  (*i)++;
+     for ( vector<int32_t>::iterator i=ia.begin(); i!=ia.end(); ++i )  (*i)++;
+     for ( vector<int32_t>::iterator i=ja.begin(); i!=ja.end(); ++i )  (*i)++;
 
 }  // end InitializePointBased
 
@@ -287,10 +287,10 @@ void CompressedRowMatrix::Out() const
  {
     cout << flush <<"\nCompressedRowMatrix::Out: "<< endl;
     cout <<"\nrow index vector 'ia' with size = "<<ia.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
+    for ( vector<int32_t>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
       cout << *it <<" ";
     cout <<"\ncolumn index vector 'ja' with size = "<<ja.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
+    for ( vector<int32_t>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
       cout << *it <<" ";
     cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
     for ( size_t n=0U; n<ja.size(); n++ ) {
@@ -311,10 +311,10 @@ void CompressedRowMatrix::Out( const string& outfile ) const
     assert( ofs.is_open() );
     ofs << flush <<"\nCompressedRowMatrix::Out: "<< endl;
     ofs <<"\nrow index vector 'ia' with size = "<<ia.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
+    for ( vector<int32_t>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
       ofs << *it <<" ";
     cout <<"\ncolumn index vector 'ja' with size = "<<ja.size()<<"\n";
-    for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
+    for ( vector<int32_t>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
       ofs << *it <<" ";
     cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
     const long precision = ofs.precision();

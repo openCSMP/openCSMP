@@ -20,8 +20,8 @@ LUdcmp_Solver::~LUdcmp_Solver()
 
 /// Solves Ax = b with rhs[1]
 void LUdcmp_Solver::SolveMatrixEquation( SparseMatrix& A,
-                                         vector<double64>& b,
-                                         vector<double64>& x,
+                                         vector<double>& b,
+                                         vector<double>& x,
                                          size_t )
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -41,8 +41,8 @@ void LUdcmp_Solver::SolveMatrixEquation( SparseMatrix& A,
 
 
 void LUdcmp_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
-                                         vector<double64>& b,
-                                         vector<double64>& x,
+                                         vector<double>& b,
+                                         vector<double>& x,
                                          size_t )
   {
       throw csmp::Exception( ERROR, "LUdcmp_Solver::SolveMatrixEquation", "Method not implemented for CompressedRowMatrix yet");
@@ -54,10 +54,10 @@ void LUdcmp_Solver::ludcmp( SparseMatrix& a,
                             long n,
                             std::vector<size_t>& indx)
   {
-      vector<double64> vv( n, 0.);
+      vector<double> vv( n, 0.);
       long i, j, k;
-      double64 d = 1.;
-      double64 big, cache;
+      double d = 1.;
+      double big, cache;
 
       for(i=0; i<n; i++){
           big = 0.;
@@ -110,11 +110,11 @@ void LUdcmp_Solver::ludcmp( SparseMatrix& a,
 void LUdcmp_Solver::lubksb( SparseMatrix& a,
                             long n,
                             std::vector<size_t>& indx,
-                            std::vector<double64>& x,
-                            std::vector<double64>& b )
+                            std::vector<double>& x,
+                            std::vector<double>& b )
   {
       long i, j, ip, ii(0);
-      double64 sum;
+      double sum;
 
       for(i=0; i<n; i++)
           x[i] = b[i];

@@ -131,7 +131,7 @@ void ExplicitTransport_Test::run()
     // -------------------------------------------------------------------------
     TestNoFlowBoundaryFluxBalance();
     _equal( transport.IncomingVolumetricFlow(),
-            transport.OutgoingVolumetricFlow(), numeric_limits<double64>::epsilon() * transport.IncomingVolumetricFlow() );
+            transport.OutgoingVolumetricFlow(), numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() );
  
     // test 3: flow through model with TVD concentration
     // -------------------------------------------------------------------------
@@ -185,7 +185,7 @@ void  ExplicitTransport_Test::AssignFlowProperties()
     and solves for the steady-state fluid pressure distribution in the
     absence of fluid sources and sinks.
 */
-void  ExplicitTransport_Test::DivergenceFreeTotalVelocityField( double64 delta_pf )
+void  ExplicitTransport_Test::DivergenceFreeTotalVelocityField( double delta_pf )
  {
     // 1.  Building the steady-state FE Algorithm "fluid_pressure"
     // -----------------------------------------------------------
@@ -209,7 +209,7 @@ void  ExplicitTransport_Test::DivergenceFreeTotalVelocityField( double64 delta_p
     // 2. Assign boundary conditions
     // -----------------------------
     // pressure range between 1 bar and (1 bar + delta_pf)
-    const double64 bar(100325.);
+    const double bar(100325.);
     model_ptr_->InputBoundaryValue( LEFT, "fluid pressure", makeScalar(DIRICH,bar+delta_pf) );
     model_ptr_->InputBoundaryValue( RIGHT, "fluid pressure", makeScalar(DIRICH,bar) );
 
@@ -249,7 +249,7 @@ void  ExplicitTransport_Test::DivergenceFreeTotalVelocityField( double64 delta_p
     trial version for wider use in finite-element finite-volume computations.
  
 */
-double64 ExplicitTransport_Test::FluxMultiplier( const Element<3U>* const eptr, size_t sector, size_t facet ) const
+double ExplicitTransport_Test::FluxMultiplier( const Element<3U>* const eptr, size_t sector, size_t facet ) const
  {
     // TODO: do this only once inside the finite-volume stencil:
     // for each sector, record whether the facet normal is inward or outward pointing
@@ -293,7 +293,7 @@ for ( size_t i=0U; i<eptr->Facets(); ++i ) {
  
     The flux balance is tested with a prescribed velocity field.
 */
-void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tolerance_relaxation_factor )
+void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double tolerance_relaxation_factor )
  {
     // output variables
     const csmp::Index fv_key  = model_ptr_->Database().StorageKey("finite volume");
@@ -307,9 +307,9 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
     // test 1: is the finite volume equal to the element volume
     // --------------------------------------------------------
     const csmp::Index  vol_key(model_ptr_->Database().StorageKey("finite volume"));
-    double64           total_volume(0.), total_PV(0.);
+    double           total_volume(0.), total_PV(0.);
     Region<3U>         model_domain(model_ptr_->Region("Model"));
-    const double64     model_volume = model_domain.Volume(); // finite element estimate
+    const double     model_volume = model_domain.Volume(); // finite element estimate
 
     for ( vector<Node<3U>*>::iterator nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
          total_volume += (*nit)->Read( vol_key );
@@ -317,9 +317,9 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
       }
     if ( verbose_ ) cout <<"\nrun: model volume vs. finite volume integrated: "<< model_volume <<" vs "<< total_volume << endl;
     // TODO: test fails for skewed hexahedra, fix:
-    _equal( total_volume, model_volume, numeric_limits<double64>::epsilon() * model_volume * tolerance_relaxation_factor );
+    _equal( total_volume, model_volume, numeric_limits<double>::epsilon() * model_volume * tolerance_relaxation_factor );
     // sum of sector volumes
-    double64     sector_volume(0.), sector_PV(0.), FE_PV(0.);
+    double     sector_volume(0.), sector_PV(0.), FE_PV(0.);
     const size_t sector_ip(0U);
     for ( vector<Element<3U>*>::const_iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
         FE_PV += (*it)->Volume() * (*it)->Read( phi_key );
@@ -328,9 +328,9 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
              sector_PV     += (*it)->Read( i, sector_ip, spv_key );
           }
       }
-    _equal( sector_volume, model_volume, numeric_limits<double64>::epsilon() * model_volume * tolerance_relaxation_factor ); // FV vs. FE
-    _equal( sector_PV, FE_PV, numeric_limits<double64>::epsilon() * FE_PV * tolerance_relaxation_factor );       // sector PV vs. FE PV
-    _equal( sector_PV, total_PV, numeric_limits<double64>::epsilon() * total_PV * tolerance_relaxation_factor ); // sector PV, vs. FV PV
+    _equal( sector_volume, model_volume, numeric_limits<double>::epsilon() * model_volume * tolerance_relaxation_factor ); // FV vs. FE
+    _equal( sector_PV, FE_PV, numeric_limits<double>::epsilon() * FE_PV * tolerance_relaxation_factor );       // sector PV vs. FE PV
+    _equal( sector_PV, total_PV, numeric_limits<double>::epsilon() * total_PV * tolerance_relaxation_factor ); // sector PV, vs. FV PV
 
  
     // test 2: is the flux conserved in the interior of the model (prescribed velocity case)
@@ -340,10 +340,10 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
     const csmp::Index  velo_key(model_ptr_->Database().StorageKey("velocity"));
     const csmp::Index  flux_key(model_ptr_->Database().StorageKey("facet flux"));
     model_domain.UpdateMemberIndexes();
-    vector<double64>  flux_balance( model_domain.Nodes(), 0. );
+    vector<double>  flux_balance( model_domain.Nodes(), 0. );
     // NB: establishing the flux balance in an element loop, which must include the perimeter elements,
     //     but avoiding truncated FVs at boundaries
-    // double64 sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key ); // tested: O.K.
+    // double sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key ); // tested: O.K.
     for ( vector<Element<3U>*>::iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
@@ -354,8 +354,8 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
       }
     auto min_value = *min_element(flux_balance.begin(),flux_balance.end());
     auto max_value = *max_element(flux_balance.begin(),flux_balance.end());
-    _equal( fabs(min_value), 0., numeric_limits<double64>::epsilon() * tolerance_relaxation_factor );
-    _equal( fabs(max_value), 0., numeric_limits<double64>::epsilon() * tolerance_relaxation_factor );
+    _equal( fabs(min_value), 0., numeric_limits<double>::epsilon() * tolerance_relaxation_factor );
+    _equal( fabs(max_value), 0., numeric_limits<double>::epsilon() * tolerance_relaxation_factor );
     if ( verbose_ )
       cout <<"\nrun: velocity vs. finite volume flux balances (min/max) for total velocity of 1.: "<< min_value <<" to "<< max_value << endl;
 
@@ -370,7 +370,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
               // finding the orientation of the facet
               // inside sector
               size_t   node = (*it)->FV()->InsideNode(i);
-              double64 sign = FluxMultiplier( (*it), node, i );
+              double sign = FluxMultiplier( (*it), node, i );
               assert( sign != 0. );
               if ( (*it)->N(node)->AtBoundary() == NOT )
                 flux_balance[ (*it)->N(node)->Idx() ]  += sign * (*it)->Read( i, facet_ip, flux_key );
@@ -384,14 +384,14 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
       }
     min_value = *min_element(flux_balance.begin(),flux_balance.end());
     max_value = *max_element(flux_balance.begin(),flux_balance.end());
-    _equal( fabs(min_value), 0., numeric_limits<double64>::epsilon() * tolerance_relaxation_factor );
-    _equal( fabs(max_value), 0., numeric_limits<double64>::epsilon() * tolerance_relaxation_factor );
+    _equal( fabs(min_value), 0., numeric_limits<double>::epsilon() * tolerance_relaxation_factor );
+    _equal( fabs(max_value), 0., numeric_limits<double>::epsilon() * tolerance_relaxation_factor );
 
     // reporting in case of a failure
-    if ( verbose_ && fabs(max_value) >= numeric_limits<double64>::epsilon() ) {
+    if ( verbose_ && fabs(max_value) >= numeric_limits<double>::epsilon() ) {
          cerr <<"\nExplicitTransport_Test::run: error in flux balance for elements:\n";
          for ( size_t i=0U; i<flux_balance.size(); ++i ) {
-             if ( fabs(flux_balance[i]) >= numeric_limits<double64>::epsilon() ) {
+             if ( fabs(flux_balance[i]) >= numeric_limits<double>::epsilon() ) {
                   cerr <<"\n\tflux balance error: "<< flux_balance[i];
                   model_domain.N(i)->Out();
                }
@@ -410,13 +410,13 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double64 tol
  
     TODO: use a non-arbitrary definition of the flux balance
 */
-void ExplicitTransport_Test::TestInteriorFluxBalance( double64 tolerance_relaxation_factor )
+void ExplicitTransport_Test::TestInteriorFluxBalance( double tolerance_relaxation_factor )
  {
     const Region<3U>   model_domain(model_ptr_->Region("Model"));
     const csmp::Index  pf_key(model_ptr_->Database().StorageKey("fluid pressure"));
     const csmp::Index  flux_key(model_ptr_->Database().StorageKey("facet flux"));
     model_domain.UpdateMemberIndexes();
-    vector<double64>  flux_balance( model_domain.Nodes(), 0. );
+    vector<double>  flux_balance( model_domain.Nodes(), 0. );
     // NB: establishing the flux balance in an element loop, including the perimeter elements,
     //     but avoiding truncated FVs at the model boundary
     for ( vector<Element<3U>*>::const_iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
@@ -430,8 +430,8 @@ void ExplicitTransport_Test::TestInteriorFluxBalance( double64 tolerance_relaxat
     auto min_value = *min_element(flux_balance.begin(),flux_balance.end());
     auto max_value = *max_element(flux_balance.begin(),flux_balance.end());
     // the relaxation factor addresses deviations from 1 in the final value
-    _equal( fabs(min_value), 0., numeric_limits<double64>::epsilon() * tolerance_relaxation_factor );
-    _equal( fabs(max_value), 0., numeric_limits<double64>::epsilon() * tolerance_relaxation_factor );
+    _equal( fabs(min_value), 0., numeric_limits<double>::epsilon() * tolerance_relaxation_factor );
+    _equal( fabs(max_value), 0., numeric_limits<double>::epsilon() * tolerance_relaxation_factor );
 //    if ( verbose_ )
     cout <<"\nTestInteriorFluxBalance: velocity vs. finite volume flux balances (min/max): "<< min_value <<" to "<< max_value << endl;
  
@@ -447,18 +447,18 @@ void ExplicitTransport_Test::TestInteriorFluxBalance( double64 tolerance_relaxat
     // TODO: test whether this applies when lower-dimensional elements are present at the boundary
     // TODO: deal with the case of Neumann boundary conditions (they are however manifest in source terms)
 */
-void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double64 tolerance_relaxation_factor )
+void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double tolerance_relaxation_factor )
  {
     const csmp::Index  pf_key(model_ptr_->Database().StorageKey("fluid pressure"));
     const csmp::Index  flux_key(model_ptr_->Database().StorageKey("facet flux"));
     Region<3U>         model_domain(model_ptr_->Region("Model"));
  
-    double64  min_val(1.0e30), max_val(-1.0e30);
+    double  min_val(1.0e30), max_val(-1.0e30);
     for ( vector<Node<3U>*>::const_iterator nit=model_domain.PerimeterNodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
       if ( (*nit)->Status(pf_key) != DIRICH )
         {
            // looping over the parent elements accumulating their flux contributions
-           double64 boundary_flux(0.);
+           double boundary_flux(0.);
            for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
                 const Element<3U>* eptr = (*nit)->Parent(i);
                 const size_t       nid  = (*nit)->ParentNodeNumber(i);
@@ -468,7 +468,7 @@ void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double64 tolerance_r
           min_val = min( min_val, boundary_flux );
           max_val = max( max_val, boundary_flux );
           // since the velocity field is divergence free / there are no fluid sources or sinks, there should not be any flow across the boundary
-          _equal( fabs(boundary_flux), 0., numeric_limits<double64>::epsilon() * tolerance_relaxation_factor );
+          _equal( fabs(boundary_flux), 0., numeric_limits<double>::epsilon() * tolerance_relaxation_factor );
         }
 
 //    if ( verbose_ )
@@ -493,7 +493,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     AssignFlowProperties();
  
     // constant velocity field, left-to-right, velocity = 1m/s
-    double64  velo_magnitude(1.);
+    double  velo_magnitude(1.);
     if ( prescribed_velocity ) {
           VectorVariable<3U>  vc1(ANY,ANY,ANY,1.,0.,0.);
           model_ptr_->InputPropertyValue( "velocity", vc1 ); // NB: transport scheme uses 'velocity'
@@ -501,7 +501,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
       }
     else {
          // left->right pressure gradient and flow (hydrostatic)
-         const double64 delta_pf( 9.8 * 1000. * model_length_ );
+         const double delta_pf( 9.8 * 1000. * model_length_ );
          DivergenceFreeTotalVelocityField( delta_pf );
       }
     velo_magnitude = printRangeOfVariable( *model_ptr_, "velocity" ); 
@@ -511,7 +511,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // - constraints at boundary
     // - initial amount of tracer in the system
     model_ptr_->InputPropertyValue( "concentration", makeScalar(ANY,0.) );
-    const double64 inlet_concentration(3.);
+    const double inlet_concentration(3.);
     model_ptr_->InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,inlet_concentration) );
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 0, true );
@@ -528,17 +528,17 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // assumes flow and model long axis are aligned with the X-axis
     Point<3U> xyz_min, xyz_max;
     model_ptr_->MinMaxCoordinates( xyz_min, xyz_max ); 
-    const double64 model_length(xyz_max[0]-xyz_min[0]), xsect_area((xyz_max[1]-xyz_min[1]) * (xyz_max[2]-xyz_min[2]));
-    const double64 time_interval( (model_length/velo_magnitude) / 100. ); // ~10-m travel distance
-    double64       duration(0.); // calculated from velocity and model length
+    const double model_length(xyz_max[0]-xyz_min[0]), xsect_area((xyz_max[1]-xyz_min[1]) * (xyz_max[2]-xyz_min[2]));
+    const double time_interval( (model_length/velo_magnitude) / 100. ); // ~10-m travel distance
+    double       duration(0.); // calculated from velocity and model length
 
     // 0. testing whether inflow and outflow from the model have the expected values
     // -----------------------------------------------------------------------------
     if ( prescribed_velocity ) {
           cout <<"\nrun: prescribed_velocity 'velocity' magnitude: "<< velo_magnitude << endl;
-          const double64 expected_volume_flux(xsect_area * velo_magnitude);
-          _equal( transport.IncomingVolumetricFlow(), expected_volume_flux, numeric_limits<double64>::epsilon() * expected_volume_flux );
-          _equal( transport.OutgoingVolumetricFlow(), expected_volume_flux, numeric_limits<double64>::epsilon() * expected_volume_flux );
+          const double expected_volume_flux(xsect_area * velo_magnitude);
+          _equal( transport.IncomingVolumetricFlow(), expected_volume_flux, numeric_limits<double>::epsilon() * expected_volume_flux );
+          _equal( transport.OutgoingVolumetricFlow(), expected_volume_flux, numeric_limits<double>::epsilon() * expected_volume_flux );
       }
 
     // 1. tracer tranport and conservation tests
@@ -557,7 +557,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // 1.3 integrating this initial tracer concentration
     Region<3U>  model_domain = model_ptr_->Region("Model");
     const bool  multiply_with_porosity(true);
-    const double64 initial_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
+    const double initial_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
  
     // 1.4 transporting for trice the time
     transport.AdvectVariable( time_interval * 3. );
@@ -565,17 +565,17 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 3, true );
 
     // 1.5 integration final tracer concentration and comparing total amount of tracer
-    const double64 final_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
+    const double final_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
  
     // testing
     // -------
     // first TVD test
     const bool print_maximum(true);
-    const double64 max_concentration = printRangeOfVariable( *model_ptr_, "concentration", print_maximum );
+    const double max_concentration = printRangeOfVariable( *model_ptr_, "concentration", print_maximum );
     _test( max_concentration <= inlet_concentration );
     _test( printRangeOfVariable( *model_ptr_, "concentration", !print_maximum ) >= 0. );
     // tracer conservation test
-    _equal( initial_concentration, final_concentration, numeric_limits<double64>::epsilon() * initial_concentration );
+    _equal( initial_concentration, final_concentration, numeric_limits<double>::epsilon() * initial_concentration );
 
 
     // 2. transporting tracer across outflow boundary, verifying that there is no build up
@@ -591,12 +591,12 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // resetting the model
     model_ptr_->InputPropertyValue( "concentration", makeScalar(ANY,0.) );
     model_ptr_->InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,inlet_concentration) );
-    double64 phi_min, phi_max;
+    double phi_min, phi_max;
     model_ptr_->MinMaxOf( "porosity", phi_min, phi_max );
     assert( phi_min == phi_max );
-    const double64 porosity(phi_max);
-    const double64 expected_arrival_time( model_length / (velo_magnitude/porosity) );
-    const double64 threshold_value(inlet_concentration * 0.1);
+    const double porosity(phi_max);
+    const double expected_arrival_time( model_length / (velo_magnitude/porosity) );
+    const double threshold_value(inlet_concentration * 0.1);
 
     // tracer should not be there yet
     transport.AdvectVariable( expected_arrival_time * 0.9 );
@@ -617,12 +617,12 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
 /**
     Has the front arrived ?
 */
-bool  ExplicitTransport_Test::TestForTracerArrival( const char* boundary, double64 threshold_value ) const
+bool  ExplicitTransport_Test::TestForTracerArrival( const char* boundary, double threshold_value ) const
  {
      assert( model_ptr_->ContainsBoundary( string(boundary) ) );
      const Boundary<3U>& boundary_domain(model_ptr_->Boundary(string(boundary)));
  
-     double64 var_min, var_max;
+     double var_min, var_max;
      boundary_domain.MinMaxOf( "concentration", var_min, var_max );
  
      // if the average of min-max values is above the threshold value, we detect the tracer arrival

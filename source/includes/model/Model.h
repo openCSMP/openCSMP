@@ -265,7 +265,7 @@ public:
   /// inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized
   csmp::Index  CreateProperty( const char* new_prop, const char* unit,
                                VARIABLE_TYPE type = SCALAR, PLACEMENT place = NODE,
-                               size_t vsize = 1, double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
+                               size_t vsize = 1, double vmin = -1.0e+30, double vmax = 1.0e+30,
                                std::string usage = "???" );
 
   /// deletes property from the database and the distributed containers all across the model
@@ -316,13 +316,13 @@ public:
   void ChangePropertyStatus( const char* input_prop, VARIABLE_FLAG new_status );
 
   /// where the values of the target property are within the given range the flag of the target variables are changed to the new status
-  void ChangePropertyStatusWhere( const char* var, double64 min, double64 max, VARIABLE_FLAG new_status );
+  void ChangePropertyStatusWhere( const char* var, double min, double max, VARIABLE_FLAG new_status );
 
   /// returns the opposite corners of the bounding box that encloses the model
   void MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
 
   /// returns the value range of the target property within the entire model
-  void MinMaxOf( const char* prop, double64& min, double64& max ) const;
+  void MinMaxOf( const char* prop, double& min, double& max ) const;
   
   /// checks the value range of a variable against the range specified in its Parameter record in the PropertyDatabse
   bool IsWithinRange( const char* prop, const char* model_subdomain="Model" ) const;
@@ -445,7 +445,7 @@ private:
   Model& operator=( const Model& ) = delete;
 
   /// checks wether elements have their correct neighbors and are in the expected model domains; @return number of major errors encoutered.
-  int32 CheckElementConnectivity();
+  int32_t CheckElementConnectivity();
 
   std::string            model_name_;       ///< name of simulation model
   PropertyDatabase<dim>  database_;         ///< where variable specifications are stored
@@ -459,11 +459,11 @@ private:
 size_t spatialDimensionOfModel( const char* csmp_binary );
 
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
-std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z );
+std::string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z );
 
 /// returns intermediate (true) or maximum (false) model dimensions
 template<size_t  dim>
-double64  printModelDimensions( const Model<dim>&, bool intermed_or_max = false );
+double  printModelDimensions( const Model<dim>&, bool intermed_or_max = false );
 
 /// calculates the center of gravity of the model
 template<size_t  dim>
@@ -471,32 +471,32 @@ Point<dim>  centerOfGravity( const Model<dim>& );
 
 /// prints range to screen; returns either min(arg=false) or maximum variable value (default)
 template<size_t  dim>
-double64  printRangeOfVariable( const Model<dim>&,
+double  printRangeOfVariable( const Model<dim>&,
                                 const char* var, bool print_maximum = true );
 
 /// prints range of target variable in model to screen and logs it to IO handler
 template<size_t  dim>
-double64  printRangeOfVariable( const Model<dim>&,
+double  printRangeOfVariable( const Model<dim>&,
                                 Standard_IO_Handler& io, const char* var,
                                 bool max_instead_of_min = true );
 
 /// prints range of target variable within specific model subdomain
 template<size_t  dim>
-double64  printRangeOfVariable( const Model<dim>&,
+double  printRangeOfVariable( const Model<dim>&,
                                 const char* group, const char* var, bool max_or_min = true );
 
 /// prints range of target variable within specific model subdomain and logs it to IO handler
 template<size_t  dim>
-double64  printRangeOfVariable( const Model<dim>&,
+double  printRangeOfVariable( const Model<dim>&,
                                 Standard_IO_Handler&,
                                 const char* group, const char* var,
                                 bool max_instead_of_min = true );
 
 /// prints min/max values stored in supplied vector
-void printRangeOf( const std::vector<std::pair<double64, double64> >& );
+void printRangeOf( const std::vector<std::pair<double, double> >& );
 
 /// prints min/max values stored in supplied vector of vectors
-void printRangeOfVectorOfVectors( const std::vector<std::vector<double64> >& );
+void printRangeOfVectorOfVectors( const std::vector<std::vector<double> >& );
 
 /// convert the flag(s) of a variable into integer values stored in its number part
 template<size_t dim>
@@ -508,7 +508,7 @@ void flagToNumber( Model<dim>&, const char* flag_variable, const char* number_va
 
 /// using random number generator, adds percentage of Gaussian noise to variable values
 template<size_t dim>
-void randomPerturb( Model<dim>&, const char* prop, double64 by_percent_of_max_value );
+void randomPerturb( Model<dim>&, const char* prop, double by_percent_of_max_value );
 
 /// compares the mesh connectivity in the model with that of the input vset; returns true if both have the same
 template<size_t dim>
@@ -520,11 +520,11 @@ void smoothElementVariable( Model<dim>&, const char*, const char* element_var, c
 
 /// replaces no-data values of target variable with nearest-neighbor values until there are none left, by default NAN's are no-data values
 template<size_t dim>
-void nearestNeighborFill( Model<dim>&, const char* target_region, const char* variable, double64 no_data_value );
+void nearestNeighborFill( Model<dim>&, const char* target_region, const char* variable, double no_data_value );
 
 /// imposes either an upper- or a lower limit on the variable in the region of interest
 template<size_t dim>
-void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double64 limit_value );
+void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double limit_value );
 
 /// mapping node coordinates to a node variable
 template<size_t dim>

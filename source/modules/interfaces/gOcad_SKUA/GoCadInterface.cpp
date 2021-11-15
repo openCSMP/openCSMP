@@ -47,9 +47,9 @@ bool  GoCadInterface<dim>::IsInNextLine( ifstream& ifs, const char* search_strin
 
 
 template<size_t dim>
-BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<double64>& nd1,
-                                                                      const vector<double64>& nd2,
-                                                                      const vector<double64>& nd3 )
+BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<double>& nd1,
+                                                                      const vector<double>& nd2,
+                                                                      const vector<double>& nd3 )
  {
     assert( nd1.size() == 3U );
     assert( nd2.size() == 3U );
@@ -59,7 +59,7 @@ BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<dou
                            (mjl::Point3D( nd2[0],nd2[1],nd2[2] )),
                            (mjl::Point3D( nd3[0],nd3[1],nd3[2] )), 1 );
 
-    int32  facing_direction = face.FacingDirection();
+    int32_t  facing_direction = face.FacingDirection();
 
     if ( facing_direction == MJL3D_BOTTOM ) return BOTTOM;
     if ( facing_direction == MJL3D_FRONT )  return FRONT;
@@ -345,16 +345,16 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
       data_entries += (*propit).ESize();
       
     //   id      attr   node xyz
-    map<size_t,pair<int32,vector<double64> > >                  nodes;
-    typename map<size_t,pair<int32,vector<double64> > >::const_iterator  nit;
-    map<size_t,vector<double64> >                             node_properties;
-    typename map<size_t,vector<double64> >::const_iterator             nprop_it;
-    vector<double64>                                                   props(data_entries);
-    vector<double64>             xyz(3);
+    map<size_t,pair<int32_t,vector<double> > >                  nodes;
+    typename map<size_t,pair<int32_t,vector<double> > >::const_iterator  nit;
+    map<size_t,vector<double> >                             node_properties;
+    typename map<size_t,vector<double> >::const_iterator             nprop_it;
+    vector<double>                                                   props(data_entries);
+    vector<double>             xyz(3);
     size_t                  nodeID;
-    int32                        attr;
+    int32_t                        attr;
     //   attr       value
-    pair<int,vector<double64> >  node;
+    pair<int,vector<double> >  node;
 
     while ( ifs.getline( text_line, 256 ) )
       {
@@ -418,8 +418,8 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Reading triangle elements TRGL
     // ---------------------------------
-    map<size_t,vector<long64> >  triangles;
-    vector<long64>               node_ids(3);
+    map<size_t,vector<int64_t> >  triangles;
+    vector<int64_t>               node_ids(3);
     size_t                       triangleID(1);
 
     do
@@ -457,7 +457,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<long64> >::iterator  plit;
+    typename map<size_t,vector<int64_t> >::iterator  plit;
     size_t n;
     
     if ( !properties.empty() ) assert( node_properties.size() == nodes.size() );
@@ -562,10 +562,10 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
    //    The boundary nodes at corresponding faces are flagged exactly as the 
    //    as the faceverts.
    // --------------------------------------------------------------------------------------
-   deque<vector<long64> > pfverts( triangles.size() );
-   vector<long64>         pfvert(  triangle.Neighbors() );
+   deque<vector<int64_t> > pfverts( triangles.size() );
+   vector<int64_t>         pfvert(  triangle.Neighbors() );
    vector<int8_t>         pbflags( vset.Vertices(), 0 );
-   vector<double64>       nd1(3), nd2(3), nd3(3);
+   vector<double>       nd1(3), nd2(3), nd3(3);
    char                   face_key[30];
 
    cout <<"\nGoCadInterface::ReadTSurface: Identifying the neighbors of each element..." << endl;
@@ -726,14 +726,14 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
             csmp::Index  setting(SCALAR,NODE,0);
             PropertyData  data( setting.place, setting.type, dim );
             data.Reserve( vset.Vertices() );
-            // map<size_t,vector<double64> >::const_iterator
+            // map<size_t,vector<double> >::const_iterator
             for ( auto nprop_it=node_properties.begin(); nprop_it!=node_properties.end(); nprop_it++ )
               pushBack( data, makeScalar( PLAIN, (*nprop_it).second[ data_entry ] ) );
             // adding scalars to the VSet
             vset.AddData( (*propit).Property().c_str(), data );
             data_entry++;
          }
-       // vector<double64> node properties (3 components in 3D)
+       // vector<double> node properties (3 components in 3D)
        if ( (*propit).ESize() == 3 ) {
             csmp::Index  setting(VECTOR,NODE,0);
             PropertyData  data( setting.place, setting.type, dim );
@@ -1090,7 +1090,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 //  The tetrahedra for each TVolume object are stored as groups with unique
 //  id numbers. Statistics of these are printed after the reading process
 //  is finished.
-    map<size_t,size_t >  tvolume_map;
+    map<size_t,size_t>  tvolume_map;
     size_t                  tvolume_key = 1;
 //
 // ------------------------------------------------------------------------- 
@@ -1107,14 +1107,14 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
    // 2. Reading node data VRTX (here nodes are still consecutively numbered)
     // -------------------------
     //   id      attr   node xyz
-    map<size_t,pair<int32,vector<double64> > >                  nodes;
-    typename map<size_t,pair<int32,vector<double64> > >::const_iterator  nit;
-    map<size_t,double64>                                     node_property;
-    typename map<size_t,double64>::const_iterator                     prit;
-    vector<double64>             xyz(3);
+    map<size_t,pair<int32_t,vector<double> > >                  nodes;
+    typename map<size_t,pair<int32_t,vector<double> > >::const_iterator  nit;
+    map<size_t,double>                                     node_property;
+    typename map<size_t,double>::const_iterator                     prit;
+    vector<double>             xyz(3);
     size_t                  nodeID; 
-    int32                        attr;
-    pair<int32,vector<double64> >  node;
+    int32_t                        attr;
+    pair<int32_t,vector<double> >  node;
 
     // reading line by line 
     while ( ifs.getline( text_line, 256 ) )
@@ -1182,8 +1182,8 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
     // 3. Reading tetrahedral elements TETRA
     // -------------------------------------
     //   id      attr   node xyz
-    map<size_t,vector<long64> >  tetrahedra;
-    vector<long64>  node_ids(4);
+    map<size_t,vector<int64_t> >  tetrahedra;
+    vector<int64_t>  node_ids(4);
     size_t          tetraID = 1;
 
     // reading line by line 
@@ -1235,9 +1235,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 //
 // ------------------------------------------------------------------------- 
    // newid oldid
-   map<long64,long64>                  shared_vtrx;
-   typename map<long64,long64>::const_iterator  shit;
-   long64                                 newID;
+   map<int64_t ,int64_t>                  shared_vtrx;
+   typename map<int64_t ,int64_t>::const_iterator  shit;
+   int64_t                                  newID;
    bool                                      cnp_data_read;
 
    // filling node ID's from first TVOLUME into 'shared_vtrx' map
@@ -1263,10 +1263,10 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                {
                   // new vertex id
                   token  = strtok( NULL, delims );
-                  newID  = static_cast<long64>(atol( token ));
+                  newID  = static_cast<int64_t>(atol( token ));
                   // collocated old vertex id
                   token  = strtok( NULL, delims );
-                  nodeID = static_cast<long64>(atol( token ));
+                  nodeID = static_cast<int64_t>(atol( token ));
                   // if there is property information, it is ignored since it
                   // duplicates already existing node data.
                   
@@ -1392,7 +1392,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<long64> >::iterator  plit;
+    typename map<size_t,vector<int64_t> >::iterator  plit;
     size_t n;
     
     if ( verbose )
@@ -1511,10 +1511,10 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
    //    The boundary nodes at corresponding faces are flagged exactly as the 
    //    as the faceverts.
    // --------------------------------------------------------------------------------------
-   deque<vector<long64> > pfverts( tetrahedra.size() );
-   vector<long64>         pfvert(  tetrahedron.Neighbors() );
+   deque<vector<int64_t> > pfverts( tetrahedra.size() );
+   vector<int64_t>         pfvert(  tetrahedron.Neighbors() );
    vector<int8_t>         pbflags( vset.Vertices() );
-   vector<double64>       nd1(3), nd2(3), nd3(3), nd4(3);
+   vector<double>       nd1(3), nd2(3), nd3(3), nd4(3);
    char                   face_key[30];
 
    cout <<"\nGoCadInterface::ReadTSolid:Identifying the neighbors of each element..." << endl;
@@ -1740,7 +1740,7 @@ template<size_t dim>
 void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
  {
     // 1. finding coordinate extrema for the boundary nodes
-    double64 xmin, xmax, ymin, ymax, zmin, zmax, xco, yco, zco;
+    double xmin, xmax, ymin, ymax, zmin, zmax, xco, yco, zco;
     vset.CoordinateRange( 0, xmin, xmax );
     vset.CoordinateRange( 1, ymin, ymax );
     vset.CoordinateRange( 2, zmin, zmax );
@@ -1882,7 +1882,7 @@ const
 
    // 4. writing the file header
    // --------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    char object_name[200];
    strcpy( object_name, "CSP_object" );
    if ( timestep > 0 ) strcat( object_name, step );
@@ -2118,7 +2118,7 @@ const
    // -----------------------
    // 4.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    gref.MinMaxOf( var, pmin, pmax );
    char object_name[200];
    strcpy( object_name, group_name );
@@ -2366,7 +2366,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
    // -----------------------
    // 4.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    char object_name[200];
    strcpy( object_name, "CSP_object" );
    strcat( object_name, step );
@@ -2546,7 +2546,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    // -----------------------
    // 3.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    sg.MinMaxOf( var, pmin, pmax );
    char object_name[200];
    strcpy( object_name, "CSMP_object" );
@@ -2564,7 +2564,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    ScalarVariable                               sc;
    VectorVariable<dim>                           vc;
    TensorVariable<dim>                           ts;
-   vector<double64>                                       xyz;
+   vector<double>                                       xyz;
    size_t                                        i, j;
 
    // 3.3 All properties are output as NODE Properties
@@ -2808,7 +2808,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    // -----------------------
    // 4.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    gref.MinMaxOf( var, pmin, pmax );
    char object_name[200];
    strcpy( object_name, group_name );
@@ -3065,13 +3065,13 @@ Loops through plist making a map of node numbers. If this map has jumps
 in the numbering, these are detected when looping through it again. 
  */
 template<size_t dim>
-bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<long64> >& plist )
+bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<int64_t> >& plist )
  const 
  {
-    map<size_t,vector<long64> >::const_iterator  it;
-    vector<long64>::const_iterator                  nit;
-    set<long64>                                     node_numbers;
-    set<long64>::const_iterator                     sit;
+    map<size_t,vector<int64_t> >::const_iterator  it;
+    vector<int64_t>::const_iterator                  nit;
+    set<int64_t>                                     node_numbers;
+    set<int64_t>::const_iterator                     sit;
     size_t                                          counter(1);
     
     for ( it=plist.begin(); it!=plist.end(); it++ )

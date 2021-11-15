@@ -190,14 +190,14 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
   
     /// returns area of the face; method assumes same role as Volume() for the element
-    double64       Area() const;
+    double       Area() const;
   
     /// not a face-normal vector, but the shortest path between the barycenters of face and element
     void           VectorToInnerElementBaryCenter( VectorVariable<dim>& ) const;
   
     // unit normal computations for Face are handled by its FiniteElementPolicy the options are
     // Point<dim> UnitNormal() const;
-    // void       UnitNormal( std::vector<double64>& nrml ) const;
+    // void       UnitNormal( std::vector<double>& nrml ) const;
     // void       UnitNormal( VectorVariable<dim>& nrml ) const;
 
     /// returns a vector of the property of interest discretized on the node
@@ -211,7 +211,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     Point<dim>  BaryCenter() const;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
-    double64    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    double    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
 
     /// prints state of this object
     void  Out() const;

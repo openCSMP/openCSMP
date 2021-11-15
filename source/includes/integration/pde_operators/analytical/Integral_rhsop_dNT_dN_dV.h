@@ -14,7 +14,7 @@ class Integral_rhsop_dNT_dN_dV : public MathOperatorRHS<dim> {
                               const char* oper,
                               const char* basis,
                               const char* test,
-                              double64 prefactor=1. );
+                              double prefactor=1. );
 
     virtual void GetOperands( SIMPLEX& e );
     
@@ -24,7 +24,7 @@ class Integral_rhsop_dNT_dN_dV : public MathOperatorRHS<dim> {
     DenseMatrix<DM_MIN> DN, DNT;
     Parameter           basic_;
     std::vector<var>    basic_var_;
-    const double64      prefactor_;
+    const double      prefactor_;
 };
 
 

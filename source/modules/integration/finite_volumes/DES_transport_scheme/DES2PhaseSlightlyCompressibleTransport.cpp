@@ -17,9 +17,9 @@ DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::DES2PhaseSlightlyCom
                                                                                                      const char* target_region,
                                                                                                      bool with_gravity_forces,
                                                                                                      bool with_capillary_spreading,
-                                                                                                     double64 cfl_multiplier,
-                                                                                                     double64 PEP_multiplier,
-                                                                                                     double64 relaxing_factor,
+                                                                                                     double cfl_multiplier,
+                                                                                                     double PEP_multiplier,
+                                                                                                     double relaxing_factor,
                                                                                                      bool tensor_k,
                                                                                                      FLOW_FUNCTIONS<dim>& ff )
     : DES2PhaseTransport<dim,FLOW_FUNCTIONS>(m,target_region,with_gravity_forces,with_capillary_spreading,cfl_multiplier,PEP_multiplier,relaxing_factor,tensor_k,ff)
@@ -140,9 +140,9 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradient
             p_gradient = 0.;     
         
             for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
-                const double64 sn = eptr->N(j)->Read(this->key_sCO2);
-                const double64 p = eptr->N(j)->Read(this->key_pf);
-                //const double64 p = eptr->N(j)->Read(this->this->key_rpf);
+                const double sn = eptr->N(j)->Read(this->key_sCO2);
+                const double p = eptr->N(j)->Read(this->key_pf);
+                //const double p = eptr->N(j)->Read(this->this->key_rpf);
                 for ( size_t k=0U; k<dim; k++ ) {
                     if(this->with_capillary_spreading_) snw_gradient(k) += DN(k,j) * sn;
                     p_gradient(k) += -DN(k,j) * p;               
@@ -170,13 +170,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
     this->rate_count_++;//recording
     nd->Store(  this->key_rate, makeScalar( nd->Status( this->key_rate), nd->Read( this->key_rate) + 1 ) );
     
-    double64 accumulation(0.), flux_balance(0.), outflow(0.);
+    double accumulation(0.), flux_balance(0.), outflow(0.);
         
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> vD, facetNrml, gravity;
     const size_t node_parent_elements(nd->Parents());
     
-    double64 cfl_multiplier = this->CFL_multiplier_*this->relaxing_factor_; //default value
+    double cfl_multiplier = this->CFL_multiplier_*this->relaxing_factor_; //default value
     
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
     
@@ -197,10 +197,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
         //compute total velocity (without gravity)
         VectorVariable<dim> gradP;
         eptr->Read(this->key_gradP, gradP); //pressure gradient
-        double64 lambda_t = this->flowfunctions_.TotalMobility(eptr);
-        double64 thickness = eptr->Read(this->key_thi); //thickness
+        double lambda_t = this->flowfunctions_.TotalMobility(eptr);
+        double thickness = eptr->Read(this->key_thi); //thickness
         if(!this->tensor_k_) { //scalar permeability
-            double64 k = eptr->Read( this->key_k ); //permeability
+            double k = eptr->Read( this->key_k ); //permeability
             k *= lambda_t;
             if (!isnan(thickness)) k *= thickness;
             vD(0) = k * gradP(0);
@@ -215,13 +215,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
         }
         /*
         if( this->with_gravity_forces_ ){ //take into account gravity effect
-            double64 delta_rho = rho_w - rho_n;
-            double64 gravity_t = lambda_t * delta_rho * ACC_GRAVITY;
+            double delta_rho = rho_w - rho_n;
+            double gravity_t = lambda_t * delta_rho * ACC_GRAVITY;
             vD(v) += gravity_t;
         }
         */         
         
-        double64 inflow(0.), CO2_inflow (0.);
+        double inflow(0.), CO2_inflow (0.);
         const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
         for ( size_t i=0U; i<sector_facets; i++ )
         {
@@ -230,12 +230,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
             
             eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
-            const double64  vD_n = vD.DotProduct(facetNrml);
-            const double64  facetArea = eptr->Read( iFacet, 0U,  this->key_fA ); 
+            const double  vD_n = vD.DotProduct(facetNrml);
+            const double  facetArea = eptr->Read( iFacet, 0U,  this->key_fA ); 
             
-            const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
+            const double sign = ( pnid == inside_node ) ? 1. : -1.;
             //compute facet fluid flux
-            double64 facet_flux = sign * vD_n * facetArea;
+            double facet_flux = sign * vD_n * facetArea;
             //update flux balance
             flux_balance += facet_flux;
             inflow += facet_flux;
@@ -243,26 +243,26 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             if ( facet_flux > 0. ) outflow += facet_flux;
                          
             //compute inside and outside node mobilities, by using their saturations
-            const double64 sn_inside_node = eptr->N(inside_node)->Read(  this->key_sCO2 );
-            const double64 sw_inside_node = 1.-sn_inside_node;
-            const double64 ln_inside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_inside_node);
-            const double64 lw_inside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_inside_node);
+            const double sn_inside_node = eptr->N(inside_node)->Read(  this->key_sCO2 );
+            const double sw_inside_node = 1.-sn_inside_node;
+            const double ln_inside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_inside_node);
+            const double lw_inside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_inside_node);
         
-            const double64 sn_outside_node = eptr->N(outside_node)->Read(  this->key_sCO2 );
-            const double64 sw_outside_node = 1.-sn_outside_node;
-            const double64 ln_outside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_outside_node);
-            const double64 lw_outside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_outside_node);
+            const double sn_outside_node = eptr->N(outside_node)->Read(  this->key_sCO2 );
+            const double sw_outside_node = 1.-sn_outside_node;
+            const double ln_outside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_outside_node);
+            const double lw_outside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_outside_node);
             
             //compute phase velocities at facet integration point                      
-            double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-            double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+            double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+            double vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
             
             
             if( this->with_gravity_forces_ ){   
                 this->flowfunctions_.GravityMultiplier(eptr, gravity);                    
                 //vn_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 0U) * gravity[v] * facetNrml[v];
                 //vw_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 1U) * gravity[v] * facetNrml[v];
-                double64 gravity_nrml = gravity.DotProduct(facetNrml);
+                double gravity_nrml = gravity.DotProduct(facetNrml);
                 vn_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 0U) * gravity_nrml;
                 vw_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 1U) * gravity_nrml;                
             }         
@@ -270,7 +270,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             if(this->with_capillary_spreading_){  
                 VectorVariable<dim> grad;
                 eptr->Read(this->key_gradSn, grad);
-                double64 dsdn = grad.DotProduct(facetNrml);
+                double dsdn = grad.DotProduct(facetNrml);
             
                 if(!isnan(dsdn)){
                     vn_capillary_component_of_velocity = -dsdn*this->flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,0U);
@@ -278,11 +278,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                 }   
             }  
             
-            double64 vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
-            double64 vw_at_facet_int_point = vD_n + vw_gravity_component_of_velocity + vw_capillary_component_of_velocity; 
+            double vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
+            double vw_at_facet_int_point = vD_n + vw_gravity_component_of_velocity + vw_capillary_component_of_velocity; 
         
             //determine upstream mobilities
-            double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);    
+            double upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);    
               
             if(vn_at_facet_int_point>0.0)
                 upstream_mobility_n=ln_inside_node;
@@ -299,11 +299,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                 upstream_mobility_w=0.5*(lw_inside_node+lw_outside_node);
                             
             total_mobility=upstream_mobility_n+upstream_mobility_w;
-            double64 upstream_fn=(total_mobility!=0.0? upstream_mobility_n/total_mobility : 0.0);
-            double64 upstream_lambda_overbar=(total_mobility!=0.0? (upstream_mobility_n*upstream_mobility_w)/total_mobility : 0.0);        
+            double upstream_fn=(total_mobility!=0.0? upstream_mobility_n/total_mobility : 0.0);
+            double upstream_lambda_overbar=(total_mobility!=0.0? (upstream_mobility_n*upstream_mobility_w)/total_mobility : 0.0);        
 
             //compute each velocity component     
-            double64 viscous_velocity_component(0.0), capillary_velocity_component(0.0), gravity_velocity_component(0.0);  
+            double viscous_velocity_component(0.0), capillary_velocity_component(0.0), gravity_velocity_component(0.0);  
                      
             viscous_velocity_component = vD_n * upstream_fn;
                                        
@@ -316,7 +316,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                 capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
         
             //update non-wetting flux accumulation   
-            double64 fn = sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;                                        
+            double fn = sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;                                        
             accumulation += fn; 
             CO2_inflow += fn;
             
@@ -324,7 +324,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             //determine cfl_multiplier based on non-wetting phase shock saturation
             if (cfl_multiplier != this->CFL_multiplier_){
                 if(vn_at_facet_int_point < 0.0) { //flowing in from outside node (upstream node)
-                    double64 sn_shock = 1.0-eptr->Read(this->key_ssH2O); //sn at shock for outside node
+                    double sn_shock = 1.0-eptr->Read(this->key_ssH2O); //sn at shock for outside node
                     if (sn_outside_node >= sn_shock) { //upstream node passed shock saturation
                         if (sn_inside_node < sn_shock) {//current node not yet reach shock saturation   
                             cfl_multiplier = this->CFL_multiplier_;
@@ -336,7 +336,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             //determine cfl_multiplier based on wetting phase shock saturation
             if (cfl_multiplier != this->CFL_multiplier_){
                 if(vw_at_facet_int_point < 0.0) { //flowing from outside node (upstream node)
-                    double64 sw_shock = eptr->Read(this->key_ssH2O); //sw at shock for outside node
+                    double sw_shock = eptr->Read(this->key_ssH2O); //sw at shock for outside node
                     if (sw_outside_node >= sw_shock) { //upstream node passed shock saturation
                         if (sw_inside_node < sw_shock) {//current node not yet reach shock saturation   
                             cfl_multiplier = this->CFL_multiplier_;
@@ -365,8 +365,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
     nd->Read(this->key_time, array2);
    
     //compute CFL time increment 
-    if (outflow < numeric_limits<double64>::epsilon())
-        array2.Component(2, numeric_limits<double64>::max());
+    if (outflow < numeric_limits<double>::epsilon())
+        array2.Component(2, numeric_limits<double>::max());
     else 
         array2.Component(2, nd->Read(  this->key_fvPV ) / outflow);
     
@@ -377,21 +377,21 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
     
     
     // divergence free correction (only when node is located inside domain and flux balance not equal to zero)
-    if (truncated_node !=1 && fabs(flux_balance) > numeric_limits<double64>::epsilon()) {
+    if (truncated_node !=1 && fabs(flux_balance) > numeric_limits<double>::epsilon()) {
          // compute average fractional flow for the current finite volume
-        double64 fn_avg = 0.;
-        double64 sw = 1. - nd->Read(this->key_sCO2); //saturation aqueous phase at current node
+        double fn_avg = 0.;
+        double sw = 1. - nd->Read(this->key_sCO2); //saturation aqueous phase at current node
         for ( size_t t=0U; t<node_parent_elements; t++ )
         {
             Element<dim>* const eptr(nd->Parent(t));
             fn_avg += this->flowfunctions_.f_at(eptr,1U,sw);
         }
-        fn_avg /= static_cast<double64>(node_parent_elements);
+        fn_avg /= static_cast<double>(node_parent_elements);
         accumulation -= fn_avg*flux_balance;
     }     
     
     //compute and store variation rate    
-    double64 PV = nd->Read(  this->key_fvPV );
+    double PV = nd->Read(  this->key_fvPV );
     nd->Store( key_dsnw, makeScalar( nd->Status( key_dsnw ), accumulation/PV ) );    
   }
     
@@ -401,7 +401,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
 
 //schedule an event associated with a node/FV
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<dim>* event, double64 t_end)
+bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<dim>* event, double t_end)
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );
@@ -413,21 +413,21 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<
     nd->Store( this->key_schedule, makeScalar( nd->Status( this->key_schedule), nd->Read( this->key_schedule) + 1 ) );
     event->valid(true);
     //compute target change
-    double64 dt_CFL = array[2];//CFL time increment
-    double64 ChangeRate = nd->Read( key_dsnw);//rate of change
-    double64 source = nd->Read(key_NQV);
-    double64 dC_CFL = dt_CFL*this->CFL_multiplier_*(-ChangeRate+source);//targe change
+    double dt_CFL = array[2];//CFL time increment
+    double ChangeRate = nd->Read( key_dsnw);//rate of change
+    double source = nd->Read(key_NQV);
+    double dC_CFL = dt_CFL*this->CFL_multiplier_*(-ChangeRate+source);//targe change
 
-    if (fabs(dC_CFL) < numeric_limits<double64>::epsilon()){//idle node/FV
-        array.Component(5, numeric_limits<double64>::epsilon());//target change of solution
-        array.Component(3, numeric_limits<double64>::max());//target time increment          
+    if (fabs(dC_CFL) < numeric_limits<double>::epsilon()){//idle node/FV
+        array.Component(5, numeric_limits<double>::epsilon());//target change of solution
+        array.Component(3, numeric_limits<double>::max());//target time increment          
     } else {
         array.Component(5, dC_CFL);//target change of solution
         array.Component(3, dt_CFL*array[6]);//target time increment  
     };
 
-    double64 t_current = array[0];//current time stamp
-    double64 dt_target = array[3];//target time increment
+    double t_current = array[0];//current time stamp
+    double dt_target = array[3];//target time increment
     if ((dt_target + t_current) >= t_end) {
         nd->Store(this->key_time, array);
         return false;
@@ -445,7 +445,7 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<
 
 //update solution and check it against the specified range (with DES)
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, double64 t_clock)
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, double t_clock)
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );
@@ -456,12 +456,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_DES(Even
     ArrayVariable array;
     nd->Read(this->key_time, array);
 
-    double64 ChangeRate = nd->Read( key_dsnw);//variaition rate   
-    double64 solution = nd->Read( this->key_sCO2);//old solution
+    double ChangeRate = nd->Read( key_dsnw);//variaition rate   
+    double solution = nd->Read( this->key_sCO2);//old solution
     nd->Store(key_sCO2_0, makeScalar( status, solution ));//store old solution
-    double64 t_current = array[0]; //current time stamp
-    double64 new_solution = solution - (t_clock - t_current) * ChangeRate;//compute new solution
-    const double64 source(nd->Read(key_NQV));
+    double t_current = array[0]; //current time stamp
+    double new_solution = solution - (t_clock - t_current) * ChangeRate;//compute new solution
+    const double source(nd->Read(key_NQV));
     new_solution += source * (t_clock - t_current);//add source to new solution
         
     //check new solution value against range and stored it to key_sCO2
@@ -476,7 +476,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_DES(Even
         nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
     }  
     new_solution = nd->Read(this->key_sCO2);//stored new solution
-    double64 dsn_cumulative = array[4];
+    double dsn_cumulative = array[4];
     array.Component(4, dsn_cumulative + (new_solution-solution));//update cumulative change
         
     array.Component(0, t_clock); //current time stamp
@@ -491,7 +491,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_DES(Even
 
 //update solution and check it against the specified range (with TDS)
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>* event, double64 delta_t)
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>* event, double delta_t)
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );   
@@ -500,11 +500,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Even
     this->update_count_++;//recording    
     const VARIABLE_FLAG status(nd->Status( this->key_sCO2 ));
     
-    double64 ChangeRate = nd->Read(key_dsnw);//variation rate  
-    double64 solution = nd->Read(this->key_sCO2);//old solution
+    double ChangeRate = nd->Read(key_dsnw);//variation rate  
+    double solution = nd->Read(this->key_sCO2);//old solution
     nd->Store(key_sCO2_0, makeScalar( status, solution ));//store old solution
-    double64 new_solution = solution - delta_t * ChangeRate;//compute new solution
-    const double64 source(nd->Read( key_NQV));
+    double new_solution = solution - delta_t * ChangeRate;//compute new solution
+    const double source(nd->Read( key_NQV));
     new_solution += source * delta_t;//add source to new solution.
                 
     //check new solution value against range and stored it to key_sCO2
@@ -528,7 +528,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Even
 
 //Synchronize neighbor nodes/FVs
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Event<dim>* event, double64 t_clock, double64& t_remove )
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Event<dim>* event, double t_clock, double& t_remove )
 {
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL ); 
@@ -553,11 +553,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Eve
                     Update_DES(neighbor_event,t_clock);
                     ArrayVariable neighbor_array;
                     neighbor_node->Read(this->key_time, neighbor_array); 
-                    double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
-                    double64 dC_target = neighbor_array[5];//target change of solution
+                    double dC_cumulative = neighbor_array[4];//cumulative change of solution
+                    double dC_target = neighbor_array[5];//target change of solution
                     if (fabs(dC_cumulative) >= fabs(dC_target)) {
                         #if defined(_OPENMP)
-                        double64 t_begin = omp_get_wtime();
+                        double t_begin = omp_get_wtime();
                         #else
                         clock_t t_begin = clock();
                         #endif
@@ -585,7 +585,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Eve
 
 //advect variable with TDS (time driven simulation)
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double64 time_interval, size_t num_threads )
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double time_interval, size_t num_threads )
 {
 #if defined(_OPENMP)
     if (num_threads <= 0) {
@@ -615,7 +615,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
 //advect variable with DES (discrete event simulation)
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 model_time, size_t num_threads )
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double model_time, size_t num_threads )
 {
 #if defined(_OPENMP)
     if (num_threads <= 0) {
@@ -647,12 +647,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
 //advect variable with TDS (time-driven simulation), serial mode
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS_serial( double64 time_interval)
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS_serial( double time_interval)
 {
     cout<<"Start DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS_serial "<<endl;
     
-    double64 begin=clock();
-    double64 time_increment(time_interval); 
+    double begin=clock();
+    double time_increment(time_interval); 
     
     clock_t T_begin= clock();
     const typename vector<Event<dim>*>::iterator stack_end(this->PEPList.end());
@@ -662,18 +662,18 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
         ComputeRateofChange((*it));  
         ArrayVariable array;
         (*it)->getNode()->Read(this->key_time, array);
-        double64 dt_CFL = array[2];//CFL time increment
+        double dt_CFL = array[2];//CFL time increment
         time_increment=min(time_increment, dt_CFL*this->CFL_multiplier_);
     }
     this->T_RateOfChange_ += clock() - T_begin; 
 
-    const double64 one(1.);
+    const double one(1.);
     cout <<"\n\tTime interval         = "<< time_interval;
     cout <<"\n\tScaled time increment = "<< time_increment;
     cout <<"\n\tSolution steps needed = "<< max(floor(time_interval/time_increment),one);
 
     size_t   substep(1);
-    double64 time(0.);
+    double time(0.);
     
     while (time < time_interval)
     {
@@ -693,7 +693,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             ComputeRateofChange((*it));
             ArrayVariable array2;
             (*it)->getNode()->Read(this->key_time, array2);
-            double64 dt_CFL = array2[2];//CFL time increment
+            double dt_CFL = array2[2];//CFL time increment
             time_increment=min(time_increment, dt_CFL*this->CFL_multiplier_);
         };
         this->T_RateOfChange_ += clock() - T_begin; 
@@ -707,13 +707,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
     cout<<"Finish DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS_serial "<<endl;
     cout <<"rate_count_ = "<<this->rate_count_<<endl;
     cout <<"update_count_ = "<<this->update_count_<<endl; 
-    cout <<"T_Schedule_ = "<< this->T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Update_  = "<< this->T_Update_  /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Synchronize_ = "<< this->T_Synchronize_/double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_RateOfChange_ = "<< this->T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_InsertToHeap_ = "<< this->T_InsertToHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_RemoveFromHeap_ = "<< this->T_RemoveFromHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_AdvectVariable_ = "<< this->T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Schedule_ = "<< this->T_Schedule_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Update_  = "<< this->T_Update_  /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Synchronize_ = "<< this->T_Synchronize_/double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_RateOfChange_ = "<< this->T_RateOfChange_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_InsertToHeap_ = "<< this->T_InsertToHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< this->T_RemoveFromHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_AdvectVariable_ = "<< this->T_AdvectVariable_ /double(CLOCKS_PER_SEC) << endl;
 }
 
 
@@ -722,15 +722,15 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 #if defined(_OPENMP)
 //advect variable with TDS (time-driven simulation), parallel mode
 template<size_t dim>
-void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( double64 time_interval, size_t num_threads )
+void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( double time_interval, size_t num_threads )
 {
     cout<<"Start DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel "<<endl;
     cout<<"Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
 
-    double64 begin=omp_get_wtime();
-    double64 time_increment(time_interval); 
+    double begin=omp_get_wtime();
+    double time_increment(time_interval); 
     
-    double64 T_begin;
+    double T_begin;
     T_begin = omp_get_wtime();
     
     size_t PEPList_size = this->PEPList.size();
@@ -757,19 +757,19 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
         Event<dim>* event = *it;     
         ArrayVariable array;
         (*it)->getNode()->Read(this->key_time, array);
-        double64 dt_CFL = array[2];//CFL time increment
+        double dt_CFL = array[2];//CFL time increment
         time_increment=min(time_increment, dt_CFL*this->CFL_multiplier_);
     }
     
     this->T_RateOfChange_ += omp_get_wtime() - T_begin;
 
-    const double64 one(1.);
+    const double one(1.);
     cout <<"\n\tTime interval         = "<< time_interval;
     cout <<"\n\tScaled time increment = "<< time_increment;
     cout <<"\n\tSolution steps needed = "<< max(floor(time_interval/time_increment),one);
 
     size_t   substep(1);
-    double64 time(0.);
+    double time(0.);
     
     while (time < time_interval)
     {
@@ -805,7 +805,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
             auto it = this->PEPList.begin()+i;
             ArrayVariable array2;
             (*it)->getNode()->Read(this->key_time, array2);
-            double64 dt_CFL = array2[2];//CFL time increment
+            double dt_CFL = array2[2];//CFL time increment
             time_increment=min(time_increment, dt_CFL*this->CFL_multiplier_);
         };
 
@@ -835,11 +835,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
 
 //advect variable with DES (discrete event simulation), serial mode
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double64 model_time)
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double model_time)
 {
-    double64 begin=clock();
+    double begin=clock();
     cout<<"Start DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial "<<endl;
-    double64 time(0.);
+    double time(0.);
     bool Finished = false;
     //uncomment for recording events at each time interval
     /*
@@ -869,7 +869,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
                 this->T_Schedule_ += clock() - T_begin;              
                 if (isactive) {
                     T_begin= clock();
-                    double64 scheduled_time = event->t_schedule();
+                    double scheduled_time = event->t_schedule();
                     int index = static_cast<int>(event->getNode()->Read(this->key_EventIndex));
                     Heap_Node* heap_node = new Heap_Node(scheduled_time,index);
                     this->EventHeap.insert(heap_node);
@@ -898,7 +898,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
         this->PEPList.clear();
     
-        double64 dt_PEP=numeric_limits<double64>::max();
+        double dt_PEP=numeric_limits<double>::max();
         size_t count = 0U;
         while (!this->EventHeap.empty())
         {           
@@ -917,9 +917,9 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             count++;            
             ArrayVariable array;
             top_event->getNode()->Read(this->key_time, array);
-            double64 dt_target = array[3];//target time stamp
+            double dt_target = array[3];//target time stamp
             dt_PEP = min(dt_PEP, this->PEP_multiplier_*dt_target);
-            double64 t_schedule = array[1];//scheduled time stamp
+            double t_schedule = array[1];//scheduled time stamp
             if (t_schedule > (time+dt_PEP)) break;            
             if (top_event->inPEPStack() == false) {
                 this->PEPList.push_back(top_event);
@@ -935,7 +935,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             this->T_RemoveFromHeap_ += clock() - T_begin;
             
             T_begin= clock();
-            double64 t_remove(0.);    
+            double t_remove(0.);    
             Synchronize(top_event,time,t_remove);
             this->T_RemoveFromHeap_ += t_remove;
             this->T_Synchronize_ += clock() - T_begin - t_remove;
@@ -962,13 +962,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
     cout<<"Finish DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial "<<endl;
     cout <<"rate_count_ = "<<this->rate_count_<<endl;
     cout <<"update_count_ = "<<this->update_count_<<endl; 
-    cout <<"T_Schedule_ = "<< this->T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Update_  = "<< this->T_Update_  /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_Synchronize_ = "<< this->T_Synchronize_/double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_RateOfChange_ = "<< this->T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_InsertToHeap_ = "<< this->T_InsertToHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_RemoveFromHeap_ = "<< this->T_RemoveFromHeap_ /double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_AdvectVariable_ = "<< this->T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Schedule_ = "<< this->T_Schedule_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Update_  = "<< this->T_Update_  /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Synchronize_ = "<< this->T_Synchronize_/double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_RateOfChange_ = "<< this->T_RateOfChange_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_InsertToHeap_ = "<< this->T_InsertToHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< this->T_RemoveFromHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_AdvectVariable_ = "<< this->T_AdvectVariable_ /double(CLOCKS_PER_SEC) << endl;
 }   
 
 
@@ -976,12 +976,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 #if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), parallel mode
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_parallel( double64 model_time, size_t num_threads)
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_parallel( double model_time, size_t num_threads)
 {
-    double64 begin=omp_get_wtime();
+    double begin=omp_get_wtime();
     cout<<"Start DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_parallel "<<endl;
     cout << "Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
-    double64 time(0.);
+    double time(0.);
     bool Finished = false;
     //uncomment for recording events at each time interval
     /*
@@ -996,7 +996,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
    
     while (!Finished)
     {   
-        double64 T_begin;
+        double T_begin;
         
         T_begin = omp_get_wtime();
                 
@@ -1036,7 +1036,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
         {
             auto it = tempList.begin()+i;
             Event<dim>* event = *it;                 
-            double64 scheduled_time = event->t_schedule();
+            double scheduled_time = event->t_schedule();
             size_t index = event->getNode()->Read(this->key_EventIndex);
             Heap_Node* heap_node = new Heap_Node(scheduled_time,index);                    
             this->EventHeap.insert(heap_node);
@@ -1063,7 +1063,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
         this->PEPList.clear();
     
-        double64 dt_PEP=numeric_limits<double64>::max();
+        double dt_PEP=numeric_limits<double>::max();
         size_t count = 0U;
         while (!this->EventHeap.empty())
         {           
@@ -1082,9 +1082,9 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             count++;            
             ArrayVariable array;
             top_event->getNode()->Read(this->key_time, array);
-            double64 dt_target = array[3];//target time stamp
+            double dt_target = array[3];//target time stamp
             dt_PEP = min(dt_PEP, this->PEP_multiplier_*dt_target);
-            double64 t_schedule = array[1];//scheduled time stamp
+            double t_schedule = array[1];//scheduled time stamp
             if (t_schedule > (time+dt_PEP)) break;            
             if (top_event->inPEPStack() == false) {
                 this->PEPList.push_back(top_event);
@@ -1100,7 +1100,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             this->T_RemoveFromHeap_ += omp_get_wtime() - T_begin;
             
             T_begin= omp_get_wtime();
-            double64 t_remove(0.);    
+            double t_remove(0.);    
             Synchronize(top_event,time,t_remove);
             this->T_RemoveFromHeap_ += t_remove;
             this->T_Synchronize_ += omp_get_wtime() - T_begin - t_remove;

@@ -10,7 +10,7 @@ MatlabInterface::MatlabInterface() {}
 MatlabInterface::~MatlabInterface() {};
 
 
-void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, double64 distance, const char* name, const char* variable, long step )
+void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, double distance, const char* name, const char* variable, long step )
  {
     Index                               key(mdl.Database().StorageKey(variable));
     vector<Node<2U>* >::const_iterator  it;
@@ -20,10 +20,10 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, do
     for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
         if ( (*it)->y() == distance ) size++;
       }
-    vector<pair<double64,double64> >                  vec1(size);
-    vector<pair<double64,pair<double64,double64> > >  vec2(size);
+    vector<pair<double,double> >                  vec1(size);
+    vector<pair<double,pair<double,double> > >  vec2(size);
     if ( key.type == SCALAR ) {
-            double64  val;
+            double  val;
             size_t    i(0);
             for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
                 if ( (*it)->y() == distance ) {
@@ -66,16 +66,16 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, do
     ofs.open( outfile.c_str(), ios::out|ios::trunc );
     
     if ( key.type == SCALAR )
-      for ( vector<pair<double64,double64> >::iterator it2=vec1.begin(); it2!=vec1.end(); it2++ ) ofs << it2->first << "\t" << it2->second << endl;
+      for ( vector<pair<double,double> >::iterator it2=vec1.begin(); it2!=vec1.end(); it2++ ) ofs << it2->first << "\t" << it2->second << endl;
     else
-      for ( vector<pair<double64,pair<double64,double64> > >::iterator it2=vec2.begin(); it2!=vec2.end(); it2++ ) ofs << it2->first << "\t" << it2->second.first <<  "\t" << it2->second.second << endl;
+      for ( vector<pair<double,pair<double,double> > >::iterator it2=vec2.begin(); it2!=vec2.end(); it2++ ) ofs << it2->first << "\t" << it2->second.first <<  "\t" << it2->second.second << endl;
     
 
     
  } 
 
 
-void MatlabInterface::ExtractAndWrite1DVariableProfileAlongY( Model<2U>& mdl, double64 distance, const char* name, const char* variable, long step )
+void MatlabInterface::ExtractAndWrite1DVariableProfileAlongY( Model<2U>& mdl, double distance, const char* name, const char* variable, long step )
  {
     Index                               key(mdl.Database().StorageKey(variable));
     vector<Node<2U>* >::const_iterator  it;
@@ -85,10 +85,10 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongY( Model<2U>& mdl, do
     for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
         if ( (*it)->x() == distance ) size++;
       }
-        vector<pair<double64,double64> >                  vec1(size);
-        vector<pair<double64,pair<double64,double64> > >  vec2(size);
+        vector<pair<double,double> >                  vec1(size);
+        vector<pair<double,pair<double,double> > >  vec2(size);
     if ( key.type == SCALAR ) {
-            double64  val;
+            double  val;
             size_t    i(0);
             for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
                 if ( (*it)->x() == distance ) {
@@ -131,9 +131,9 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongY( Model<2U>& mdl, do
     ofs.open( outfile.c_str(), ios::out|ios::trunc );
     
     if ( key.type == SCALAR )
-      for ( vector<pair<double64,double64> >::iterator it2=vec1.begin(); it2!=vec1.end(); it2++ ) ofs << it2->first << "\t" << it2->second << endl;
+      for ( vector<pair<double,double> >::iterator it2=vec1.begin(); it2!=vec1.end(); it2++ ) ofs << it2->first << "\t" << it2->second << endl;
     else
-      for ( vector<pair<double64,pair<double64,double64> > >::iterator it2=vec2.begin(); it2!=vec2.end(); it2++ ) ofs << it2->first << "\t" << it2->second.first <<  "\t" << it2->second.second << endl;
+      for ( vector<pair<double,pair<double,double> > >::iterator it2=vec2.begin(); it2!=vec2.end(); it2++ ) ofs << it2->first << "\t" << it2->second.first <<  "\t" << it2->second.second << endl;
     
 
     

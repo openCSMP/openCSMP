@@ -15,7 +15,7 @@ Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_lhsop_N_dV( const Prope
                                                                 const char* basic, 
                                                                 const char* test,
                                                                 const char* var,
-                                                                const double64 prefactor )
+                                                                const double prefactor )
   : MathOperatorLHS<dim>(pref,oper,basic,test),
     var_(pref.Parameter(var)),
     prefactor_(prefactor)

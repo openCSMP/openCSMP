@@ -55,7 +55,7 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
     // lumped formulation: only the midside nodes are used in the lumped approach
     if ( MathOperatorRHS<dim>::LumpedFormulation() ) 
       {
-         const double64 volume(e.Volume()); // NT . N
+         const double volume(e.Volume()); // NT . N
          
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ||
               MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE ||
@@ -63,14 +63,14 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
            {
              for ( size_t j=0U; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] = 
-                 (MathOperatorRHS<dim>::MTRL[0](0,0)*volume) / static_cast<double64>(e.Nodes());
+                 (MathOperatorRHS<dim>::MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
            {
              for ( size_t j=0U; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] = 
-                 (MathOperatorRHS<dim>::MTRL[j](0,0)*volume) / static_cast<double64>(e.Nodes());
+                 (MathOperatorRHS<dim>::MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
       }  
 
@@ -83,7 +83,7 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
          for ( size_t i=0U; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
-              const double64 det(e.det_JINV_AtIntegrationPoint( i ));
+              const double det(e.det_JINV_AtIntegrationPoint( i ));
               // forming NT * mtrl
               NT.Resize(e.Nodes(),1U);
               if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT or

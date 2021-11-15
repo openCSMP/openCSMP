@@ -29,7 +29,7 @@ The main idea is to calculate the center of the area of the given quadrilateral.
 template<size_t dim>
 void areaCenterOfMass(const vector<Point<dim> >& vecPoints, Point<dim>& vecCenter)
 {
-	//if vector<double64> of points is empty, return an empty centroid
+	//if vector<double> of points is empty, return an empty centroid
 	#ifdef CSP_GLOBAL_DEBUGGING
 	assert(vecPoints.size() == 4);
 	#endif
@@ -98,7 +98,7 @@ bool intersection(const Point<dim>& c1, const Point<dim>& c2, const Point<dim>& 
 
 
 /// dimensionless cross product
-vector<double64> crossProduct( const vector<double64>& vector1, const vector<double64>& vector2 )
+vector<double> crossProduct( const vector<double>& vector1, const vector<double>& vector2 )
 {
 	const size_t iSize(vector1.size());
 
@@ -107,7 +107,7 @@ vector<double64> crossProduct( const vector<double64>& vector1, const vector<dou
 	assert(iSize == 2 || iSize == 3);
 	#endif
 	
-	vector<double64> vecReturn;
+	vector<double> vecReturn;
 	
 	if(iSize == 2)
 	{
@@ -130,9 +130,9 @@ vector<double64> crossProduct( const vector<double64>& vector1, const vector<dou
 
 
 /// 3x3 cross product
-vector<double64> crossProduct3by3(const double64& f1_0, const double64& f1_1, const double64& f1_2, const double64& f2_0, const double64& f2_1, const double64& f2_2)
+vector<double> crossProduct3by3(const double& f1_0, const double& f1_1, const double& f1_2, const double& f2_0, const double& f2_1, const double& f2_2)
 {
-	vector<double64> vecReturn(3U);
+	vector<double> vecReturn(3U);
 		
 	vecReturn[0] = f1_1*f2_2-f1_2*f2_1;
 	vecReturn[1] = f1_2*f2_0-f1_0*f2_2;
@@ -160,7 +160,7 @@ bool normalOfPolygon(const vector< Point<3U> >& vecPolygon, const Point<3U>& vec
 	else if ( iNrPts == 2 )
 	{
 		//if the polygon has 2 points only -we call it line
-		//we calculate the orthogonal vector<double64> to the line and to the 0,0,1 vector<double64> 
+		//we calculate the orthogonal vector<double> to the line and to the 0,0,1 vector<double> 
 		vecNormal = crossProduct(vecPolygon[1]-vecPolygon[0],Point<3U>(0,0,1));
 		vecNormal.NormalizeLengthTo(1.);
 	}
@@ -213,8 +213,8 @@ void localSurfaceNormal(const vector< Point<dim> >& vecPoints, const Point<dim>&
 			  
 			  //transform(vecPoints[iOffset].begin(), vecPoints[iOffset].end(), vecPoints[iPt].begin(), vecTemp.begin(), minus());
 			  vecTemp = vecPoints[iOffset]-vecPoints[iPt];
-			  //transform(vecTemp.begin(), vecTemp.end(), vecTemp.begin(), bind2nd(multiplies(),static_cast<double64>(i)/static_cast<double64>(iLevelOfRefinement)));
-			  vecTemp *= static_cast<double64>(i)/static_cast<double64>(iLevelOfRefinement);
+			  //transform(vecTemp.begin(), vecTemp.end(), vecTemp.begin(), bind2nd(multiplies(),static_cast<double>(i)/static_cast<double>(iLevelOfRefinement)));
+			  vecTemp *= static_cast<double>(i)/static_cast<double>(iLevelOfRefinement);
 			  //transform(vecTemp.begin(), vecTemp.end(), vecPoints[iPt].begin(), vecTemp.begin(), plus());
 			  vecTemp += vecPoints[iPt];
 			  
@@ -242,7 +242,7 @@ void localSurfaceNormal(const vector< Point<dim> >& vecPoints, const Point<dim>&
 /// Reference: Ronald Goldman, "Area of Planar Polygons and Volume of Polyhedra" in Graphics Gems II (1994)
 
 template<size_t dim>
-bool areaOfPolygon(const vector< Point<dim> >& vecPolygon, const size_t& iNrOfFacetPoints, double64& fArea)
+bool areaOfPolygon(const vector< Point<dim> >& vecPolygon, const size_t& iNrOfFacetPoints, double& fArea)
 {
 	//if the polygon has only one point, we define the area as 1
 	if ( iNrOfFacetPoints < 2 ) {
@@ -289,7 +289,7 @@ bool areaOfPolygon(const vector< Point<dim> >& vecPolygon, const size_t& iNrOfFa
 }
 
 
-template bool areaOfPolygon(const vector< Point<3U> >&, const size_t&, double64& );
+template bool areaOfPolygon(const vector< Point<3U> >&, const size_t&, double& );
 
 
 
@@ -298,18 +298,18 @@ template bool areaOfPolygon(const vector< Point<3U> >&, const size_t&, double64&
 Computes the distance between two points (in any dimension).
 The dimension of the points is given by the size of the input vectors.
 */
-double64 distanceBetweenPoints(const vector<double64>& v1, const vector<double64> & v2)
+double distanceBetweenPoints(const vector<double>& v1, const vector<double> & v2)
 {
-	double64 fDist(0.);
+	double fDist(0.);
 	
 	//just calculate the distance
 	#ifdef CSP_GLOBAL_DEBUGGING
 	assert(v1.size() == v2.size());
 	#endif
 	
-	vector<double64>::const_iterator vIter2(v2.begin());
-	const vector<double64>::const_iterator vIterEnd(v1.end());
-	for(vector<double64>::const_iterator vIter1 = v1.begin(); vIter1 != vIterEnd; vIter1++, vIter2++)
+	vector<double>::const_iterator vIter2(v2.begin());
+	const vector<double>::const_iterator vIterEnd(v1.end());
+	for(vector<double>::const_iterator vIter1 = v1.begin(); vIter1 != vIterEnd; vIter1++, vIter2++)
 	{
 		fDist += square( *vIter1 - *vIter2 );
 	}

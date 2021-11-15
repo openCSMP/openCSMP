@@ -451,7 +451,7 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
         eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ ) {
     for ( size_t i = 0U; i<(*eit)->Neighbors(); i++ )
       if ( (*eit)->Neighbor( i ) != NULL )
-        vset.Pfvert( counter, i, static_cast<int32>((*eit)->Neighbor( i )->Idx()) );
+        vset.Pfvert( counter, i, static_cast<int32_t>((*eit)->Neighbor( i )->Idx()) );
       else {
         vset.Pfvert( counter, i, -1 );
       }
@@ -738,7 +738,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
 /**
 Outputs specific property data to a FEM_Data container.
 This function is a nested template:
-the outer template provides double64 = data type and dim = dimension,
+the outer template provides double = data type and dim = dimension,
 and Var the data type of the property
 (ScalarVariable, VectorVariable, or TensorVariable).
 
@@ -1125,7 +1125,7 @@ second value returns the highest spatial dimension contained.
 @author SKM 1/11/2013
 */
 template<size_t dim>
-pair<int32, int32>  Region<dim>::ElementSpatialDimensions() const
+pair<int32_t, int32_t>  Region<dim>::ElementSpatialDimensions() const
 {
   return this->SpatialDimensions();
 
@@ -1144,7 +1144,7 @@ and their number is returned.
 @attention SKM method is not implemented yet.
 
 template<size_t dim>
-size_t  Region<dim>::IdentifyLowerDimensionalBoundaryElements( const std::pair<int32,int32>&,
+size_t  Region<dim>::IdentifyLowerDimensionalBoundaryElements( const std::pair<int32_t,int32_t>&,
 set<Element<dim>*>& ldim_bdry_elmts ) const
 {
 throw logic_error("Region<dim>::IdentifyLowerDimensionalBoundaryElements: method is not implemented yet.");
@@ -1456,7 +1456,7 @@ nodes must have a value inside of the target range.
 template<size_t dim>
 size_t Region<dim>::AccumulateWithinRange( typename vector<Element<dim>*>::const_iterator start,
                                            typename vector<Element<dim>*>::const_iterator end,
-                                           const char* feature, double64 min, double64 max )
+                                           const char* feature, double min, double max )
 {
   if ( start == end )
     throw Exception( ERROR, "Region<dim>::AccumulateWithinRange",
@@ -1616,7 +1616,7 @@ version, this is tested.
 
 @section messages Messages
 
-Method will detect if the supplied vector<double64> is empty or if a group by
+Method will detect if the supplied vector<double> is empty or if a group by
 that name already exists.
 */
 template<size_t dim>
@@ -1904,7 +1904,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
                                  const FiniteElementManager& finiteElementManager,
                                  const Region<dim>& region1,
                                  const Region<dim>& region2,
-                                 int32 material_id )
+                                 int32_t material_id )
 {
 
   // LVS
@@ -2327,7 +2327,7 @@ nodes of which were displaced, the private boolean variable shape_to_date
 is set to false such that its volume is newly calculated
 once it is requested.
 
-@param vector_variable The name of the nodal vector<double64> variable which holds the node
+@param vector_variable The name of the nodal vector<double> variable which holds the node
 coordinate displacement.
 
 @section implementation Implementation
@@ -2340,14 +2340,14 @@ subsequent computations.
 @section application Application
 
 If a mesh shall be deformed using the diplacements of a deformation
-calculation stored in a vector<double64> variable, ChangeNodeCoordinatesTo() can
+calculation stored in a vector<double> variable, ChangeNodeCoordinatesTo() can
 be used displace the node coordinates by these displacements.
 
 @section messages Messages
 
 Due to the total garbage results that may arise,
 MoveNodeCoordinatesBy() will halt the simulation reporting a fatal
-error, if the target property is node a node or vector<double64> type property.
+error, if the target property is node a node or vector<double> type property.
 */
 template<size_t dim>
 void Region<dim>::MoveNodeCoordinatesBy( const char* vector_variable )
@@ -2357,7 +2357,7 @@ void Region<dim>::MoveNodeCoordinatesBy( const char* vector_variable )
 
   if ( prop_key.type != VECTOR )
     throw csmp::Exception( ERROR, "Model<dim>::MoveNodeCoordinatesBy",
-                           "Only vector<double64> variables can be added to coordinates" );
+                           "Only vector<double> variables can be added to coordinates" );
 
   if ( prop_key.place != NODE )
     throw csmp::Exception( ERROR, "Model<dim>::MoveNodeCoordinatesBy",
@@ -2385,7 +2385,7 @@ void Region<dim>::CorrectLowDimRegionOrientation(  ) const
 
 // pair contains: 1) number of spatial element dimensions in region, 2)  highest contained dimension
 // TODO: improved version should include more information about perimeter elements ( stickin out elements )
-pair<int32,int32>  elmt_dim = this->ElementSpatialDimensions();
+pair<int32_t,int32_t>  elmt_dim = this->ElementSpatialDimensions();
 
 // Correct Orientation of low dim region
 
@@ -2546,15 +2546,15 @@ For instance, if you want to ask your model which rock volume has been
 heated above 400oC at a certain timestep.
 */
 template<size_t dim>
-double64  Region<dim>::Volume( bool multiply_with_porosity ) const
+double  Region<dim>::Volume( bool multiply_with_porosity ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( this->Empty() ) {
     csmp_error.notice( WARNING, "Region<dim>::Volume:", "region is empty; returning NaN." );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
-  double64  volume( 0. ), area( 0. ), length( 0. );
+  double  volume( 0. ), area( 0. ), length( 0. );
 
   // recording contributions of different types of elements making up the group
   if ( multiply_with_porosity ) {
@@ -2590,7 +2590,7 @@ double64  Region<dim>::Volume( bool multiply_with_porosity ) const
 
 
 // STUB FOR 1D CALCULATION
-inline double64 triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
+inline double triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
      return 1.;
   }
 
@@ -2605,19 +2605,19 @@ To compute the surface area, only elements of dim-1 are considered.
 TODO: SKM: implement and use virtual void FiniteElement::AreaOfFace() rather than iffy statement in area calculation
 */
 template<size_t dim>
-double64  Region<dim>::SurfaceArea() const
+double  Region<dim>::SurfaceArea() const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   // in 1D there is no meaningful surface area
   if ( dim == 1U ) {
     csmp_error.notice( WARNING, "Region<1U>::SurfaceArea:",
                        "is not defined in one-dimensional model; returning NaN" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
 
   vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
   vector<size_t>  fnids;
-  double64        area( 0. );
+  double        area( 0. );
 
   if ( dim == 3U ) {
     // for all elements located on the region boundary
@@ -2677,7 +2677,7 @@ i.e. an element property.
 @attention method should only be applied to volumetric regions.
 */
 template<size_t dim>
-double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosity, bool verbose ) const
+double  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosity, bool verbose ) const
 {
   csmp::Index prop_key = this->pref_.StorageKey( prop );
 
@@ -2686,16 +2686,16 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
   if ( prop_key.type == TENSOR ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral:",
                        "No rule to integrate tensor properties. Nothing was done" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
   if ( prop_key.type == VECTOR and prop_key.place != ELEMENT ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral:",
                        "Vector properties can only be integrated if they are placed on the element. Nothing was done" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
   if ( this->elmt_vec_.empty() ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral", "Region is empty; returning NaN." );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
 
   if ( verbose ) {
@@ -2719,10 +2719,10 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
       this->Read( prop_key, vc );
       return vc.Length() * Volume( multiply_with_porosity );
     }
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
 
-  double64  integral( 0. );
+  double  integral( 0. );
 
   // node or integration point properties
   if ( prop_key.place != ELEMENT )
@@ -2745,7 +2745,7 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
     else {
       throw csmp::Exception( ERROR, "Region<dim>::VolumeIntegral",
                              "only node, integration point or element properties can be integrated over the region" );
-      return std::numeric_limits<double64>::quiet_NaN();
+      return std::numeric_limits<double>::quiet_NaN();
     }
   }
 
@@ -2783,7 +2783,7 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
     return integral;
   }
 
-  return std::numeric_limits<double64>::signaling_NaN();
+  return std::numeric_limits<double>::signaling_NaN();
 
 } // end VolumeIntegral
 
@@ -2797,7 +2797,7 @@ the volume integral of the variable multiplied with the local element thickness.
 Element thickness must be equal to one for volumetric elements.
 */
 template<size_t dim>
-double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply_with_porosity ) const
+double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply_with_porosity ) const
 {
   csmp::Index prop_key = this->pref_.StorageKey( prop );
   csmp::Index thic_key = this->pref_.StorageKey( "thickness" );
@@ -2809,16 +2809,16 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
   if ( prop_key.type == TENSOR ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                        "No rule to integrate tensor properties. Nothing was done" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
   if ( prop_key.type == VECTOR and prop_key.place != ELEMENT ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                        "Vector properties can only be integrated if they are placed on the element. Nothing was done" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
   if ( this->elmt_vec_.empty() ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness", "Region is empty" );
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
 
   // region properties (no thickness multiplier is accounted for)
@@ -2831,10 +2831,10 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
       this->Read( prop_key, vc );
       return vc.Length() * Volume( multiply_with_porosity );
     }
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
   }
 
-  double64  integral( 0. );
+  double  integral( 0. );
 
   // node or integration point properties
   if ( prop_key.place != ELEMENT )
@@ -2857,7 +2857,7 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
     else {
       throw csmp::Exception( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                              "only node, integration point or element properties can be integrated over the region" );
-      return std::numeric_limits<double64>::signaling_NaN();
+      return std::numeric_limits<double>::signaling_NaN();
     }
   }
 
@@ -2895,7 +2895,7 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
     return integral;
   }
 
-  return std::numeric_limits<double64>::signaling_NaN();
+  return std::numeric_limits<double>::signaling_NaN();
 
 } // end VolumeIntegral_x_Thickness
 

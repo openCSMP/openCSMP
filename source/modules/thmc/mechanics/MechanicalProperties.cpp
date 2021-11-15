@@ -32,7 +32,7 @@ MechanicalProperties::MechanicalProperties()
 
 
 
-MechanicalProperties::MechanicalProperties( const std::vector<double64>& p )
+MechanicalProperties::MechanicalProperties( const std::vector<double>& p )
  {
    if ( p.size() < 10 )
      throw csmp::Exception( ERROR, "MechanicalProperties::ctor(vector):", "input vector too small to initialise values." );
@@ -51,8 +51,8 @@ MechanicalProperties::MechanicalProperties( const std::vector<double64>& p )
 
 
 
-MechanicalProperties::MechanicalProperties( double64 E, double64 beta, double64 nu,
-                                            double64 tensile_strength, double64 fric_coeff )
+MechanicalProperties::MechanicalProperties( double E, double beta, double nu,
+                                            double tensile_strength, double fric_coeff )
  : E_(E),    // Young's modulus
    B_(beta), // drained bulk modulus (K_dry)
    nu_(nu),  // Poisson's ratio
@@ -78,9 +78,9 @@ MechanicalProperties::MechanicalProperties( double64 E, double64 beta, double64 
     
     theta = arctan(mu)
 */
-double64  frictionAngle( double64 fric_coeff )
+double  frictionAngle( double fric_coeff )
  {
-    const double64 radiansToDeg(180./CSMP_PI);
+    const double radiansToDeg(180./CSMP_PI);
     return atan(fric_coeff) * radiansToDeg;
  }
 
@@ -91,9 +91,9 @@ double64  frictionAngle( double64 fric_coeff )
     the UCS = C0 using a modified Griffith criterian from Brace, 1960.
     Fjaer et al. 08', eqn. 2.27, p. 66
 */
-double64  tensileStrengthFromUCS_Griffith( double64 UCS, double64 fric_coeff )
+double  tensileStrengthFromUCS_Griffith( double UCS, double fric_coeff )
  {
-    const double64 mu(fric_coeff);
+    const double mu(fric_coeff);
     return 0.25 * UCS * sqrt(mu*mu - mu + 1.);
  }
 

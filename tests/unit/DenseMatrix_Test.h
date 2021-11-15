@@ -2,7 +2,6 @@
 #define DenseMatrix_Test_H
 
 #include "Test.h"
-#include "CSMP_number_types.h"
 #include "DenseMatrix.h"
 #include "vector"
 #include "TensorVariable.h"
@@ -45,7 +44,7 @@ namespace csmp
         Point<2> Point2U;
         Point<3> Point3U;
 
-        std::vector<double64> x, y, sol_y, solB, solD;
+        std::vector<double> x, y, sol_y, solB, solD;
       
         const bool verbose_;
     };

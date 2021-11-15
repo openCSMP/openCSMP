@@ -44,7 +44,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
     // --------------------------------------------------
     // initialization and calculation of mass centers...
     // --------------------------------------------------
-    std::pair<VectorVariable<dim>, double64>   init_pair;
+    std::pair<VectorVariable<dim>, double>   init_pair;
     init_pair.first = VectorVariable<dim>( PLAIN, 0.0);
     init_pair.second = 0.0;
 
@@ -182,7 +182,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
     // --------------------------------------------------
     // initialization and calculation of mass centers... 
     // --------------------------------------------------
-    std::pair<VectorVariable<dim>, double64>   init_pair;
+    std::pair<VectorVariable<dim>, double>   init_pair;
     init_pair.first = VectorVariable<dim>( PLAIN, 0.0);
     init_pair.second = 0.0;
    
@@ -297,8 +297,8 @@ template<size_t dim>
 void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
 {
  size_t  glob_n_id;
- double64 volume_;
- std::vector<double64>   current_bc; // stencil barycenter in global coord's
+ double volume_;
+ std::vector<double>   current_bc; // stencil barycenter in global coord's
  std::vector<size_t> ids;
  VectorVariable<dim> temp_;
  Point<dim> tmp_p;
@@ -371,7 +371,7 @@ void GenericNodePropertyGradient<dim>::CalculateDistanceFacetFVBary( vector<vect
 {
  // local node id's:
  size_t inside_node_, outside_node_;
- std::vector<double64>  facet_bc(dim);  // global coordinates of facet barycenter
+ std::vector<double>  facet_bc(dim);  // global coordinates of facet barycenter
  VectorVariable<dim>  mass_center;
 
  // loop over elements
@@ -450,12 +450,12 @@ void GenericNodePropertyGradient<dim>::PushBackAvoidDuplicate( vector<size_t>& o
 
 
 template<size_t dim>
-void GenericNodePropertyGradient<dim>::ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c_point, std::vector<double64>& global_c )
+void GenericNodePropertyGradient<dim>::ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c_point, std::vector<double>& global_c )
 {
 
 
-  std::vector<double64> temp(el.Nodes()); //has the local interp. function values
-  std::vector<double64> local_c(local_c_point.Coordinates());
+  std::vector<double> temp(el.Nodes()); //has the local interp. function values
+  std::vector<double> local_c(local_c_point.Coordinates());
 
   if( el.IsLineElement() ){
       el.FE()->Nr( local_c[0], temp );
@@ -515,18 +515,18 @@ Returns the storage required by the GenericNodePropertyGradient object
 
 */
 template<size_t dim>
-double64 GenericNodePropertyGradient<dim>::SizeOf() const
+double GenericNodePropertyGradient<dim>::SizeOf() const
 {
-  double64 storage;
+  double storage;
 
   storage  = sizeof( *this );
-  storage += static_cast<double64>(sum_xy.size()) * sizeof(double64);
-  storage += static_cast<double64>(sum_x2.size()) * sizeof(double64);
-  storage += static_cast<double64>(sum_y2.size()) * sizeof(double64);
-  storage += static_cast<double64>(det.size())    * sizeof(double64);
+  storage += static_cast<double>(sum_xy.size()) * sizeof(double);
+  storage += static_cast<double>(sum_x2.size()) * sizeof(double);
+  storage += static_cast<double>(sum_y2.size()) * sizeof(double);
+  storage += static_cast<double>(det.size())    * sizeof(double);
 
   for ( size_t i=0; i<distance.size(); i++ )
-      storage += static_cast<double64>(distance[i].size()) * 2.0 * sizeof(double64);
+      storage += static_cast<double>(distance[i].size()) * 2.0 * sizeof(double);
 
   return storage;
 
@@ -641,7 +641,7 @@ void GenericNodePropertyGradient<1U>::CalculateGenericNodalGradient()
            if ( status == PLAIN || status == ANY) {
         
                 // get neighbor ids at every cv and read concentration
-                double64 val1 = (*(*cvit)).Read(u_key );
+                double val1 = (*(*cvit)).Read(u_key );
 
                 // set temporary variables to zero
                 dcxyz = 0.;
@@ -651,8 +651,8 @@ void GenericNodePropertyGradient<1U>::CalculateGenericNodalGradient()
                 // -----------------------------------------------------------------------------
                 for ( auto nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
                     // read at neighbour node!
-                    double64 val2 = gref_.N( (*nit) )->Read (u_key);
-                    double64 dc   = (val2 -val1);
+                    double val2 = gref_.N( (*nit) )->Read (u_key);
+                    double dc   = (val2 -val1);
 
                     // computing temporary variables for least squares calculation; needed for RHS of LGS
                     // NOTE: id's are the same as in CalculateLeastSquares since list is gone thorugh in same order
@@ -795,7 +795,7 @@ void GenericNodePropertyGradient<2U>::CalculateGenericNodalGradient()
            if ( status == PLAIN || status == ANY) {
 
                 // get neighbor ids at every cv and read concentration
-                double64 val1 = (*(*cvit)).Read(u_key );
+                double val1 = (*(*cvit)).Read(u_key );
 
                 // set temporary variables to zero
                 dcxyz = 0.0;
@@ -804,8 +804,8 @@ void GenericNodePropertyGradient<2U>::CalculateGenericNodalGradient()
                 // -----------------------------------------------------------------------------
                 for (auto nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
                     // read at neighbour node!
-                    double64 val2 = gref_.N( (*nit) )->Read (u_key);
-                    double64 dc   = (val2 -val1);
+                    double val2 = gref_.N( (*nit) )->Read (u_key);
+                    double dc   = (val2 -val1);
 
                     // computing temporary variables for least squares calculation; needed for RHS of LGS
                     // NOTE: id's are the same as in CalculateLeastSquares since list is gone thorugh in same order
@@ -1004,7 +1004,7 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
            if ( status == PLAIN || status == ANY ) {
 
                 // get neighbor ids at every cv and read concentration
-                double64 val1 = (*(*cvit)).Read(u_key );
+                double val1 = (*(*cvit)).Read(u_key );
 
                 // set temporary variables to zero
                 dcxyz = 0.0;
@@ -1013,8 +1013,8 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
                 // -----------------------------------------------------------------------------
                 for ( auto nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
                     // read at neighbour node!
-                    double64 val2 = gref_.N(*nit)->Read(u_key);
-                    double64 dc   = (val2 -val1);
+                    double val2 = gref_.N(*nit)->Read(u_key);
+                    double dc   = (val2 -val1);
 
                     // computing temporary variables for least squares calculation; needed for RHS of LGS
                     // NOTE: id's are the same as in CalculateLeastSquares since list is gone thorugh in same order

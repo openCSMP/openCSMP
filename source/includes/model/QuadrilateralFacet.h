@@ -23,29 +23,29 @@ Point<1U> normalAtFacetCenter( const Point<1U>&,
                                const Point<1U>& );
 
 /// 4-point quadrature
-double64 facetArea4( const Point<3U>&, 
+double facetArea4( const Point<3U>&, 
                      const Point<3U>&, 
                      const Point<3U>&, 
                      const Point<3U>& );
 
-double64 facetArea4( const Point<2U>&,
+double facetArea4( const Point<2U>&,
                      const Point<2U>&,
                      const Point<2U>&,
                      const Point<2U>& );
 
-double64 facetArea4( const Point<1U>&,
+double facetArea4( const Point<1U>&,
                      const Point<1U>&,
                      const Point<1U>&,
                      const Point<1U>& );
 
 /// 1-point quadrature
-double64 facetArea1( const Point<3U>&, 
+double facetArea1( const Point<3U>&, 
                      const Point<3U>&, 
                      const Point<3U>&, 
                      const Point<3U>& );
 
 /// analytical calculation of the area of a quadrilateral
-double64 facetArea1( const Point<2U>&,
+double facetArea1( const Point<2U>&,
                      const Point<2U>&,
                      const Point<2U>&,
                      const Point<2U>& );
@@ -73,7 +73,7 @@ class QuadrilateralFacet {
 
     /// returns detJ into its argument
     Point<3U>  NormalAtCenter() const;
-    double64   Area() const;
+    double   Area() const;
   
   private:
     QuadrilateralFacet();

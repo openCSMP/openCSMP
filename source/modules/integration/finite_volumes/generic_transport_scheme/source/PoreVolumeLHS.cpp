@@ -22,7 +22,7 @@ void PoreVolumeLHS<dim>::AccumulateStencil( const Element<dim>& e, SparseMatrix&
     const size_t sector_ipoints(e.Sectors()); 
     
     for ( size_t i=0U; i <sector_ipoints; ++i ) {
-        const double64 sector_pore_volume = e.Read( i, 0U, spv_key_ );
+        const double sector_pore_volume = e.Read( i, 0U, spv_key_ );
         const size_t   idx = e.N(i)->Idx();
         
         A.Add( idx, idx, sector_pore_volume * this->Factor() );
@@ -33,7 +33,7 @@ void PoreVolumeLHS<dim>::AccumulateStencil( const Element<dim>& e, SparseMatrix&
 template<size_t dim>
 void PoreVolumeLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatrix& A ) const 
  {
-    const double64 fpv = fv.Read( fpv_key_ );
+    const double fpv = fv.Read( fpv_key_ );
     const size_t   idx = fv.Idx();
     
     A.Assign( idx, idx, fpv * this->Factor() );

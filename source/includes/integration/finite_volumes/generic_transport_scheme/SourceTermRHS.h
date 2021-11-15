@@ -28,12 +28,12 @@ class SourceTermRHS : public VectorOperator<dim> {
     virtual ~SourceTermRHS() {}
   
     /// accumulates integrated (single) values of source term onto the finite volume centered on the Node
-    virtual void AccumulateFiniteVolume( const Node<dim>&, std::vector<double64>& rhs ) const;
+    virtual void AccumulateFiniteVolume( const Node<dim>&, std::vector<double>& rhs ) const;
   
     /// accumulates distributed values of the source term on the finite volume
-    virtual void AccumulateStencil( const Element<dim>&, std::vector<double64>& rhs ) const;
-    //virtual void AccumulateStencil( const Face<dim>&, std::vector<double64>& rhs ) const;
-    //virtual void AccumulateStencil( const InterFace<dim>&, std::vector<double64>& rhs ) const;
+    virtual void AccumulateStencil( const Element<dim>&, std::vector<double>& rhs ) const;
+    //virtual void AccumulateStencil( const Face<dim>&, std::vector<double>& rhs ) const;
+    //virtual void AccumulateStencil( const InterFace<dim>&, std::vector<double>& rhs ) const;
   
   private:
     const csmp::Index& esrc_key_;   ///<  area/volume source  placed on the element 

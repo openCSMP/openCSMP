@@ -187,10 +187,10 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
     // (different values on each node of the manifold)
     if(index.place==NODE){
         for (size_t i = 0; i < n_branches; ++i) {
-            double64 first = branches_[i].first->Read(index);
+            double first = branches_[i].first->Read(index);
             assert(!isnan(first));
             for (size_t j = i + 1; j < n_branches; ++j) {
-                double64 second = branches_[j].first->Read(index);
+                double second = branches_[j].first->Read(index);
                 assert(!isnan(second));
                 if (first > second) std::swap(branches_[i], branches_[j]);
             }
@@ -198,8 +198,8 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
     // if the variable is associated with the parent elements
     } else if(index.place==ELEMENT) {
         for (size_t i = 0; i < branches_.size(); ++i) {
-            //double64 first = std::numeric_limits<double64>::quiet_NaN();
-            double64 first_value(0.);
+            //double first = std::numeric_limits<double>::quiet_NaN();
+            double first_value(0.);
             size_t first_count(0);
             for(size_t e = 0; e < branches_[i].first->Parents(); e++) {
                 //if( (dim==2 && nodes_[i]->Parent(e)->IsSurfaceElement()) || (dim==3 && nodes_[i]->Parent(e)->IsVolumeElement()) ) {
@@ -216,8 +216,8 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             assert(!isnan(first_value));
 
             for (size_t j = i + 1; j < n_branches; ++j) {
-                //double64 second = std::numeric_limits<double64>::quiet_NaN();
-                double64 second_value(0.);
+                //double second = std::numeric_limits<double>::quiet_NaN();
+                double second_value(0.);
                 size_t second_count(0);                
                 for(size_t e = 0; e < branches_[j].first->Parents(); e++) {
                     //if( (dim==2 && nodes_[j]->Parent(e)->IsSurfaceElement()) || (dim==3 && nodes_[j]->Parent(e)->IsVolumeElement()) ) {

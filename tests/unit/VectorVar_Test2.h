@@ -45,7 +45,7 @@ class VectorVariable_Test2 : public Test
 	void ProjectOnto_Function2();
 
   private:
-  double64 fTolerance;
+  double fTolerance;
   
 }; //end class
 

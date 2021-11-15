@@ -60,7 +60,7 @@ NodeCenteredFiniteVolumeAlgorithm<dim>::~NodeCenteredFiniteVolumeAlgorithm()
 
 
 /** Removes potential leftover entries from previous solution matrix or
-re-initializes the righthand vector<double64> to zero.  
+re-initializes the righthand vector<double> to zero.  
 
 @section arguments Input Arguments 
 
@@ -81,12 +81,12 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::ResetRHS( size_t nodes )
     // if the RHS was used before
     if ( !RHS.empty() ) {
           RHS.resize( nodes );
-          vector<double64>(RHS).swap(RHS);
-          fill( RHS.begin(), RHS.end(), static_cast<double64>(0.) );
+          vector<double>(RHS).swap(RHS);
+          fill( RHS.begin(), RHS.end(), static_cast<double>(0.) );
        }
     // if for some reason there is no RHS vector
     else
-    fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
+    fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
  }
 
 template<size_t dim>
@@ -126,7 +126,7 @@ CSMP_DEFAULT_LINEAR_SOLVER* NodeCenteredFiniteVolumeAlgorithm<dim>::GetSolver()
 The transport velocity values projected onto the facet normals and multiplied
 with the facet areas are multiplied with the upstream values of the 
 transported variable at each facet integration point and accumulated into 
-the solution vector<double64> as the upstream weighted first-order fluxes.  
+the solution vector<double> as the upstream weighted first-order fluxes.  
 
 @section arguments Input Arguments 
 
@@ -217,7 +217,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DNT_op_DN_dV_LHS
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
-         double64 detJ = (*gref_.E(es.eidx_)).dN_AtIntegrationPoint( DN, i, SCALAR );
+         double detJ = (*gref_.E(es.eidx_)).dN_AtIntegrationPoint( DN, i, SCALAR );
          DN.Transposed( DNT );
          DN  *= es.diff_coeff_;
          DNT *= DN;
@@ -244,7 +244,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DN_op_dS_LHS( co
     gref_.E(es.eidx_)->dN_AtBaryCenter(DN);
     DN  *= -es.diff_coeff_;
 
-    double64 flux(0.0);
+    double flux(0.0);
     Point<dim>  n;
     for ( size_t iFacet=0U; iFacet<gref_.E(es.eidx_)->FV()->Facets(); iFacet++ )
     {
@@ -320,9 +320,9 @@ retrieve the variables of interest.
  */
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateLHS( const StencilProcessor<dim>& es,
-                                                                double64 time_multiplier )
+                                                                double time_multiplier )
 {
-  const double64 zero(0.);
+  const double zero(0.);
   
   // putting contributions to pore volume into the matrix diagonal
   for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
@@ -371,8 +371,8 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateLHS( const StencilProcess
 
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
-                                                                                       std::vector<double64>& SAT0,
-                                                                                       double64 time_multiplier)
+                                                                                       std::vector<double>& SAT0,
+                                                                                       double time_multiplier)
  {
     // putting contributions to pore volume into the matrix diagonal
     for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ ){
@@ -412,8 +412,8 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRap
 
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidual_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
-                                                                                        std::vector<double64>& SAT0,
-                                                                                        double64 time_multiplier)
+                                                                                        std::vector<double>& SAT0,
+                                                                                        double time_multiplier)
  {
     Element<dim>* e(gref_.E(es.eidx_));
     size_t NNodes(e->Nodes());
@@ -437,7 +437,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidual_NonlinearNewtonR
 
 
 template<size_t dim>
-void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double64>& SAT0, size_t nid, size_t pnid, double64 time_multiplier,const csmp::Index& adv1_key)
+void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double>& SAT0, size_t nid, size_t pnid, double time_multiplier,const csmp::Index& adv1_key)
  {
 
     if(gref_.N(pnid)->Status( adv1_key ) != DIRICH ){
@@ -479,7 +479,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_Nonlinea
 
 
 template<size_t dim>
-void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidualAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double64>& SAT0, size_t nid, size_t pnid, double64 time_multiplier, const csmp::Index& adv1_key)
+void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidualAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double>& SAT0, size_t nid, size_t pnid, double time_multiplier, const csmp::Index& adv1_key)
  {
     if(gref_.N(pnid)->Status( adv1_key ) != DIRICH ){
 
@@ -500,8 +500,8 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidualAtBoundary_Nonlin
 
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::CompensateInflowOutFlowBoundaries(size_t nid,
-                                                                       const double64& inflow,
-                                                                       const double64& flux_balance)
+                                                                       const double& inflow,
+                                                                       const double& flux_balance)
  {
     if(gref_.IsPerimeterNode(nid))
         // inflow compensation (both in and outflow compensations are necessary in explicit scheme)
@@ -525,14 +525,14 @@ Righthand side for Backward-Euler FD time stepping
 
 The current Element and up-to-date FiniteVolumeProcessor are used to
 retrieve the variables of interest. The saturations from the current
-timelevel are supplied by the vector<double64> SAT0. The time-multiplier
+timelevel are supplied by the vector<double> SAT0. The time-multiplier
 is needed to divide the finite-volume sector volume by.  
 
 */
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcessor<dim>& es,
-                                                            vector<double64>& SAT0,
-                                                            double64 time_multiplier )
+                                                            vector<double>& SAT0,
+                                                            double time_multiplier )
  {
      // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
      for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
@@ -547,7 +547,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcess
 // simpler version for first-order method in time only, O.K.
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcessor<dim>& es,
-                                                            double64 time_multiplier )
+                                                            double time_multiplier )
  {
      // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
      for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
@@ -593,7 +593,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS( const Ste
      // summing flux saturation products over the finite volume cell
      for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
 	        // computing higher order flux
-	        const double64  hflux(es.facet_flux_[i] * es.ipsi1_[i]);
+	        const double  hflux(es.facet_flux_[i] * es.ipsi1_[i]);
           
           // subtracting higher-order solution from righthand side
           // incoming fluxes, first cell (outward pointing normal)
@@ -607,14 +607,14 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS( const Ste
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS( 
                                                       const StencilProcessor<dim>& es,
-                                                      const vector<vector<double64> >& FACETFLUXES0,
-                                                      const vector<vector<double64> >& LTDSATS0 )
+                                                      const vector<vector<double> >& FACETFLUXES0,
+                                                      const vector<vector<double> >& LTDSATS0 )
  {
      // summing flux saturation products over the finite volume cell
      // theta  n +  1/2 term          higher-order flux contribution
      for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
   	      // computing higher order flux
-  	      double64 hflux  = es.theta_[i]     * es.facet_flux_[i]         * es.ipsi1_[i];
+  	      double hflux  = es.theta_[i]     * es.facet_flux_[i]         * es.ipsi1_[i];
   	      hflux += (1. - es.theta_[i]) * FACETFLUXES0[es.eidx_][i] * LTDSATS0[es.eidx_][i]; 
 
   	      // identifying the finite volumes to which the flux will be distributed
@@ -641,8 +641,8 @@ and the fluxes integrated over the facets inside the current element.
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<dim>& es )
  {
-     const double64 zero(0.);
-     double64       uvar; // upstream value of advected variable
+     const double zero(0.);
+     double       uvar; // upstream value of advected variable
  
      for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
        {
@@ -663,10 +663,10 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<di
 
 
 template<size_t dim>
-void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<dim>& es, vector<double64>& SAT0  )
+void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<dim>& es, vector<double>& SAT0  )
  {
-     const double64 zero(0.);
-     double64       uvar; // upstream value of advected variable
+     const double zero(0.);
+     double       uvar; // upstream value of advected variable
 
      for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
        {
@@ -692,30 +692,30 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<di
 /*
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AddDivergenceOfFluxes( 
-                                                   const vector<double64>& SAT0, 
-                                                   const vector<double64>& pore_volume,
-                                                   const vector<double64>& divsrc,
-                                                   double64 dt, 
+                                                   const vector<double>& SAT0, 
+                                                   const vector<double>& pore_volume,
+                                                   const vector<double>& divsrc,
+                                                   double dt, 
                                                    bool righthandside_only )
  {
-     const double64 zero(0.);
+     const double zero(0.);
  
      for ( size_t nidx=0U; nidx<divsrc.size(); nidx++ )
          // any nodal source or sink will lead to a divergence of the fluxes
          if ( divsrc[nidx] != zero ) { 
 	          // limit the source terms according to equation 61, p. 31 (original manuscript),
 	          // but max criterion is not applied
-	          double64 omega_i = omega( dt, pore_volume[nidx], divsrc[nidx] );
+	          double omega_i = omega( dt, pore_volume[nidx], divsrc[nidx] );
 
 		      // balance the contribution between left and righthand sides
 		      if ( !righthandside_only ) {
 		           LHS.Add( nidx, nidx, omega_i * divsrc[nidx] );
-		           RHS[ nidx ] -= (static_cast<double64>(1.) - omega_i) * divsrc[nidx] * SAT0[nidx];
+		           RHS[ nidx ] -= (static_cast<double>(1.) - omega_i) * divsrc[nidx] * SAT0[nidx];
 		        }
 		      else RHS[ nidx ] -= divsrc[nidx] * SAT0[nidx];
 		      
 		      // verify that lefthandside has something in it
-		      if ( static_cast<double64>(0.) >= LHS( nidx, nidx ) ) {
+		      if ( static_cast<double>(0.) >= LHS( nidx, nidx ) ) {
 		           cout <<"\NodeCenteredFiniteVolumeAlgorithm::AddDivergenceOfFluxes: LHS diagonal at i=j=";
 		           cout << nidx + 1 <<" is close to zero: ";
 		           cout << LHS( nidx, nidx ) <<", augmenting value by 1.0e-15."<< endl;
@@ -729,11 +729,11 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddDivergenceOfFluxes(
 // adds contribution to lefthandside no matter what !
 // CURRENTLY USED
 template<size_t dim>
-void NodeCenteredFiniteVolumeAlgorithm<dim>::AddDivergenceOfFluxes( const vector<double64>& divsrc )
+void NodeCenteredFiniteVolumeAlgorithm<dim>::AddDivergenceOfFluxes( const vector<double>& divsrc )
  {
      for ( size_t nidx=0; nidx<divsrc.size(); nidx++ )
        // any nodal source or sink will lead to a divergence of the fluxes
-       if ( divsrc[nidx] != static_cast<double64>(0.) ) LHS.Add( nidx, nidx, divsrc[nidx] );
+       if ( divsrc[nidx] != static_cast<double>(0.) ) LHS.Add( nidx, nidx, divsrc[nidx] );
 
  } // end AddDivergenceOfFluxes (point sources or sinks)
 
@@ -752,12 +752,12 @@ This function compensates this negative balance.
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::SubtractNonConservativeOutFluxesFromRHS( 
                                                                        TwoPhaseModel<dim>&  relperm,  
-                                                                       const vector<double64>& FLUX_BALANCE,
+                                                                       const vector<double>& FLUX_BALANCE,
                                                                        const csmp::Index& ad_key )
  {
      // pair: local parent node number (0...nodes-1), & global element ID (n...elements)
-     double64  flux_balance; 
-     double64  psi;
+     double  flux_balance; 
+     double  psi;
 
      for ( size_t nidx=0; nidx<FLUX_BALANCE.size(); nidx++ ) 
        // at the model boundaries
@@ -822,7 +822,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::SolveMatrixEquation()
 /** 
 
 Where the condition flag is not DIRICH, results are mapped from solution
-vector<double64> back to finite volume cells after performing a range cheque.  
+vector<double> back to finite volume cells after performing a range cheque.  
 
 @section messages Messages 
 
@@ -832,12 +832,12 @@ is returned. If errors occur at more than 2 per cent of the nodes, an
 
 */
 template<size_t dim>
-double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDatabase<dim>& p, 
+double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDatabase<dim>& p, 
                                                                 const csmp::Index& adv_key, 
                                                                 bool show_range ,
                                                                 const size_t var_comp_nr ) const
  {
-    double64  rmin, rmax,
+    double  rmin, rmax,
               amin = RESULT[0],
               amax = RESULT[0],
               difference_to_last_output(0.);
@@ -971,7 +971,7 @@ multiphase version - assumes range to be between 0 and 1
 
 */
 template<size_t dim>
-double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDatabase<dim>& p, 
+double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDatabase<dim>& p, 
                                                                 size_t result_phase,
                                                                 const csmp::Index& adv1_key, 
                                                                 const csmp::Index& adv2_key,
@@ -980,7 +980,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
     assert( result_phase >  0 );
     assert( result_phase <= 2 );
  
-     double64       rmin, rmax,
+     double       rmin, rmax,
                     amin = RESULT[0],
                     amax = RESULT[0],
                     difference_to_last_output(0.);
@@ -1083,17 +1083,17 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
   */
 
  template<size_t dim>
- int32 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
+ int32_t NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
                                                                                     size_t result_phase,
                                                                                     const csmp::Index& adv1_key,
                                                                                     const csmp::Index& adv2_key,
                                                                                     bool show_range,
-                                                                                    std::vector<double64>& DS,
-                                                                                    std::vector<double64>& SN)
+                                                                                    std::vector<double>& DS,
+                                                                                    std::vector<double>& SN)
    {
        assert( result_phase >  0 );
        assert( result_phase <= 2 );
-       double64       rmin, rmax;
+       double       rmin, rmax;
        ScalarVariable  sc;
        if ( result_phase == 1U ) {
            p.RangeOf( p.Name(adv1_key), rmin, rmax );
@@ -1127,11 +1127,11 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
      JM addition
 */
 template<size_t dim>
-double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( const PropertyDatabase<dim>& p,
+double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( const PropertyDatabase<dim>& p,
                                                                              const csmp::Index& adv_key,
                                                                              bool show_range ) const
  {
-    double64             rmin, rmax,
+    double             rmin, rmax,
                          amin = RESULT[0],
                          amax = RESULT[0],
                          difference_to_last_output(0.);
@@ -1195,7 +1195,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( con
     I do my best to not perform any "sloppy" copying.
  */
 template<size_t dim>
-double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
+double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
                                                                  size_t result_phase,
                                                                  const csmp::Index& adv1_key,
                                                                  const csmp::Index& adv2_key,
@@ -1204,9 +1204,9 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRa
       assert( result_phase >  0 );
       assert( result_phase <= 2 );
 
-      double64  rmin, rmax,
-                amin = numeric_limits<double64>::max(),
-                amax = numeric_limits<double64>::min(),
+      double  rmin, rmax,
+                amin = numeric_limits<double>::max(),
+                amax = numeric_limits<double>::min(),
                 difference_to_last_output(0.);
       ScalarVariable  sc;
 
@@ -1269,7 +1269,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRa
           }
       }
       if ( show_range ) {
-          cout <<"\n\nNodeCenteredFiniteVolumeAlgorithm<"<< typeid(double64).name() <<","<< dim;
+          cout <<"\n\nNodeCenteredFiniteVolumeAlgorithm<"<< typeid(double).name() <<","<< dim;
           cout <<">::RefreshResults: Variable range after advection: ";
           cout << scientific << setprecision(5) << amin <<" to "<< amax << endl << endl;
       }

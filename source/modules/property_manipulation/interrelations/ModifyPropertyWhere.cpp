@@ -17,7 +17,7 @@ the goal is to calculate the mass flux.
 template<size_t dim>
 ModifyPropertyWhere<dim>::ModifyPropertyWhere( const PropertyDatabase<dim>& p, 
                                                const char* prop, 
-                                               double64 where, double64 to ) 
+                                               double where, double to ) 
       : Interrelation<dim>(p),
         k( Interrelation<dim>::GlobalProperty(prop) ),
         if_value(where),

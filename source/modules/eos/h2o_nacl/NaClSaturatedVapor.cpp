@@ -11,8 +11,8 @@ namespace csmp
       
 @attention Use only this conctructor. NaClSaturatedVapor computes the NaCl concentration of halite-saturated brine as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, NaClSaturatedVapor is able to decipher their current values when being queried for the NaCl concentration. Only this constructor is allowed to ensure that functionality, default constructor has been made private.
   */
-  NaClSaturatedVapor::NaClSaturatedVapor(const double64& externaltemperature, 
-                                         const double64& externalpressure)
+  NaClSaturatedVapor::NaClSaturatedVapor(const double& externaltemperature, 
+                                         const double& externalpressure)
     : 
     temperature_(externaltemperature), 
     pressure_(externalpressure), 
@@ -66,7 +66,7 @@ namespace csmp
   /** Value of mass fraction of dissolved NaCl in halite-saturated brine
       @attention The value is based on converting the mole fraction computed from equation 9 in Driesner & Heinrich (2007). Conversion is based on ConvertConcentrationUnitsNaCl.h; to stay consistent, use values and functions provide therein if you need other units 
    */
-  double64 NaClSaturatedVapor::MassFractionNaCl()
+  double NaClSaturatedVapor::MassFractionNaCl()
   {
     CheckState();  
     return massfractionnacl_; 
@@ -102,7 +102,7 @@ namespace csmp
 
    /** Equations 9 and 12-17 of Driesner and Heinrich (2007)
    */
- double64 NaClSaturatedVapor::MassFractionNaCl(const double64& t_, const double64& p_)
+ double NaClSaturatedVapor::MassFractionNaCl(const double& t_, const double& p_)
   {
     pdummy_         = pnacl_*1.0e5;
     xsatatpnacl_    = Weight2XNaCl(liquidus.MassFractionNaCl()*100.);

@@ -33,18 +33,18 @@ public:
     void Initialize(const Element<dim>& e);
 
     // relative permeabilities
-    virtual double64 krn_Phase() const;
-    virtual double64 krw_Phase() const;
+    virtual double krn_Phase() const;
+    virtual double krw_Phase() const;
 
     // derivatives of relative permeabilities
-    virtual double64 dkrnds_Phase() const;
-    virtual double64 dkrwds_Phase() const;
+    virtual double dkrnds_Phase() const;
+    virtual double dkrwds_Phase() const;
 
     // capillary pressure
-    virtual double64 pc_Phase( ) const;
+    virtual double pc_Phase( ) const;
 
     // capillary pressure derivatives
-    virtual double64 dpcds_Phase( ) const;
+    virtual double dpcds_Phase( ) const;
 
 private:
     std::vector<csmp::CubicSpline> krn_, krw_, pc_;

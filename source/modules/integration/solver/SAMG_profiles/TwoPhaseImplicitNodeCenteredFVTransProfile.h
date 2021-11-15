@@ -51,10 +51,10 @@ public:
 
 
     /// Solve for transport equation
-    virtual bool Solve( double64 modelTime );
+    virtual bool Solve( double modelTime );
 
     /// Overloaded for transport
-    bool Solve( double64 modelTime, TwoPhaseModel<dim>& saturationFunctions, double64 timeInterval );
+    bool Solve( double modelTime, TwoPhaseModel<dim>& saturationFunctions, double timeInterval );
 
     TwoPhaseImplicitNodeCenteredFVTransport<dim,StencilProcessor>& Solver() { return advector_; }
 

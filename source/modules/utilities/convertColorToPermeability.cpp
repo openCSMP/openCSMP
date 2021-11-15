@@ -5,16 +5,16 @@ using namespace std;
 
 namespace csmp {
 
-const double64 AZURE		   =1.0e-12;		/*  26, range 1-44 RGB 256 */
-const double64  BLUE		   =1.0e-13;		/*  62, range 44-73 */
-const double64  AQUAMARINE =1.0e-14;		/*  85, range 74-124 */
-const double64  GREEN		   =1.0e-15;		/* 164, range 125-181 */
-const double64  YELLOW		 =1.0e-16;		/* 199, range 182-204 */
-const double64  PEACH		   =1.0e-17;		/* 210, range 205-214 */
-const double64  ORANGE		 =1.0e-18;		/* 220, range 215-235 */
-const double64  RED	       =1.0e-19;		/* 252, range 236-254 */
-const double64  WHITE		   =1.0e-20;		/*   0 */
-const double64  BLACK		   =1.0e-21;		/* 255 */
+const double AZURE		   =1.0e-12;		/*  26, range 1-44 RGB 256 */
+const double  BLUE		   =1.0e-13;		/*  62, range 44-73 */
+const double  AQUAMARINE =1.0e-14;		/*  85, range 74-124 */
+const double  GREEN		   =1.0e-15;		/* 164, range 125-181 */
+const double  YELLOW		 =1.0e-16;		/* 199, range 182-204 */
+const double  PEACH		   =1.0e-17;		/* 210, range 205-214 */
+const double  ORANGE		 =1.0e-18;		/* 220, range 215-235 */
+const double  RED	       =1.0e-19;		/* 252, range 236-254 */
+const double  WHITE		   =1.0e-20;		/*   0 */
+const double  BLACK		   =1.0e-21;		/* 255 */
 
 /**
 
@@ -23,7 +23,7 @@ to permeability values ranging from 1nD m2 to 1D.
 'sc' is scaling factor for permeability, if
 sc = 1.0 above scale applies.
 */
-void convertColorToPermeability( double64 sc, Matrix& perm )
+void convertColorToPermeability( double sc, Matrix& perm )
  {
    const size_t m = perm.Rows(), n = perm.Cols();
 
@@ -44,7 +44,7 @@ void convertColorToPermeability( double64 sc, Matrix& perm )
   		  else {
   		        std::cerr <<"\nWARNING, convertColorToPermeability: ";
               std::cerr <<" conversion value not identified." << std::endl;
-              perm( i,j) = std::numeric_limits<double64>::quiet_NaN();
+              perm( i,j) = std::numeric_limits<double>::quiet_NaN();
            }
        }
                                    

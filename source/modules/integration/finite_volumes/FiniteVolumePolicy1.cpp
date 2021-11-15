@@ -96,7 +96,7 @@ void FiniteVolumePolicy<1U,CELL>::Local_dN_At( const Point<1U>& rst ) const
  }
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::dN_At( const Point<1U>& rst,
+double  FiniteVolumePolicy<1U,CELL>::dN_At( const Point<1U>& rst,
                                                  DenseMatrix<DM_MIN>& DN ) const
  {
     const CELL<1U>* e( static_cast<const CELL<1U>*>(this) );
@@ -106,7 +106,7 @@ double64  FiniteVolumePolicy<1U,CELL>::dN_At( const Point<1U>& rst,
     const size_t nodes(e->Nodes());
     DN.Resize(1U,nodes);
     for ( size_t i=0U; i<nodes; i++ ) DN(0U,i) = e->FE()->DNR[i];
-    double64 detJ = e->FE()->JacobianInverse();
+    double detJ = e->FE()->JacobianInverse();
     DN = e->FE()->JINV * DN;
     return detJ;
  }
@@ -121,7 +121,7 @@ double64  FiniteVolumePolicy<1U,CELL>::dN_At( const Point<1U>& rst,
 
 // only for scalars
 template<template<size_t> class CELL>
-double64 FiniteVolumePolicy<1U,CELL>::PropertyValueAtFacetIntegrationPoint(
+double FiniteVolumePolicy<1U,CELL>::PropertyValueAtFacetIntegrationPoint(
                                                  size_t iFacet,
                                                  size_t ip,
                                                  const csmp::Index& prop_key ) const
@@ -137,7 +137,7 @@ double64 FiniteVolumePolicy<1U,CELL>::PropertyValueAtFacetIntegrationPoint(
     N_AtFacetIntegrationPoint( iFacet, ip );
 
     // interppolating property to integration point
-    double64  sum(static_cast<double64>(0.));
+    double  sum(static_cast<double>(0.));
 
     assert( e != nullptr );
     const size_t nodes(e->Nodes());
@@ -150,7 +150,7 @@ double64 FiniteVolumePolicy<1U,CELL>::PropertyValueAtFacetIntegrationPoint(
 
 // only for scalars
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::PropertyValueAtSectorIntegrationPoint(
+double  FiniteVolumePolicy<1U,CELL>::PropertyValueAtSectorIntegrationPoint(
                                                             size_t iSector,
                                                             size_t ip,
                                                             const csmp::Index& prop_key ) const
@@ -165,7 +165,7 @@ double64  FiniteVolumePolicy<1U,CELL>::PropertyValueAtSectorIntegrationPoint(
 
     assert( e != nullptr );
     N_AtSectorIntegrationPoint( iSector, ip );
-    double64  sum(0.);
+    double  sum(0.);
     const size_t nodes(e->Nodes());
     for ( size_t i=0; i < nodes; i++ )
       sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
@@ -244,7 +244,7 @@ void  FiniteVolumePolicy<1U,CELL>::PropertyValueAtSectorIntegrationPoint(
 // FACET AND SECTOR INTEGRALS
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::FacetIntegral( size_t iFacet,
+double  FiniteVolumePolicy<1U,CELL>::FacetIntegral( size_t iFacet,
                                                          const csmp::Index& prop_key ) const
  {
     const CELL<1U>* e( static_cast<const CELL<1U>*>(this) );
@@ -260,7 +260,7 @@ double64  FiniteVolumePolicy<1U,CELL>::FacetIntegral( size_t iFacet,
 
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::SectorIntegral( size_t iSector,
+double  FiniteVolumePolicy<1U,CELL>::SectorIntegral( size_t iSector,
                                                           const csmp::Index& prop_key ) const
  {
     const CELL<1U>* e( static_cast<const CELL<1U>*>(this) );
@@ -270,7 +270,7 @@ double64  FiniteVolumePolicy<1U,CELL>::SectorIntegral( size_t iSector,
 
     assert( e != nullptr );
     e->CoordinateMatrix();
-    double64 fIntegral(static_cast<double64>(0.));
+    double fIntegral(static_cast<double>(0.));
 
     for ( size_t j=0; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
         // 1. take integration point location from FV stencil
@@ -280,7 +280,7 @@ double64  FiniteVolumePolicy<1U,CELL>::SectorIntegral( size_t iSector,
         e->FE()->JacobianAt( e->FE()->NRST );
 
         // 3. Compute the determinant of the jacobian
-        const double64 detJ(e->FE()->JacobianDeterminant());
+        const double detJ(e->FE()->JacobianDeterminant());
 
         // 4. Map your local integral to global space by multiplication with detJ
         fIntegral += PropertyValueAtSectorIntegrationPoint( iSector, j, prop_key ) *
@@ -297,7 +297,7 @@ double64  FiniteVolumePolicy<1U,CELL>::SectorIntegral( size_t iSector,
 // PROJECTION ON FACET NORMAL
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::ProjectionOnFacetNormal( size_t /*iFacet*/,
+double  FiniteVolumePolicy<1U,CELL>::ProjectionOnFacetNormal( size_t /*iFacet*/,
                                                                    const csmp::Index& prop_key ) const
 {
     const CELL<1U>* e( static_cast<const CELL<1U>*>(this) );
@@ -317,7 +317,7 @@ double64  FiniteVolumePolicy<1U,CELL>::ProjectionOnFacetNormal( size_t /*iFacet*
 
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::ProjectionOnFacetNormal( size_t /*iFacet*/,
+double  FiniteVolumePolicy<1U,CELL>::ProjectionOnFacetNormal( size_t /*iFacet*/,
                                                                    const VectorVariable<1U>& vc ) const
  {
     return vc.Length();
@@ -335,20 +335,20 @@ double64  FiniteVolumePolicy<1U,CELL>::ProjectionOnFacetNormal( size_t /*iFacet*
 // SECTOR VOLUME
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::SectorVolume( size_t iSector ) const
+double  FiniteVolumePolicy<1U,CELL>::SectorVolume( size_t iSector ) const
  {
     const CELL<1U>* e( static_cast<const CELL<1U>*>(this) );
     assert( iSector < fvptr_->Sectors());
 
     assert( e != nullptr );
     e->CoordinateMatrix();
-    double64 fVolume(static_cast<double64>(0.));
+    double fVolume(static_cast<double>(0.));
    
     const size_t ipoints(fvptr_->IntegrationPointsPerSector());
     for ( size_t j=0; j<ipoints; j++ ) {
          fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
          e->FE()->JacobianAt(e->FE()->NRST);
-         const double64 detJ(e->FE()->JacobianDeterminant());
+         const double detJ(e->FE()->JacobianDeterminant());
          fVolume += fvptr_->SectorIntegrationWeight(iSector, j)*detJ;
       }
     return fVolume;
@@ -359,7 +359,7 @@ double64  FiniteVolumePolicy<1U,CELL>::SectorVolume( size_t iSector ) const
 // FACET AREA AND NORMAL
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::FacetArea( size_t ) const
+double  FiniteVolumePolicy<1U,CELL>::FacetArea( size_t ) const
 {
     return 1.;
 }
@@ -373,7 +373,7 @@ Point<1U> FiniteVolumePolicy<1U,CELL>::FacetNormal( size_t ) const
 }
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::FacetAreaMapped( size_t ) const
+double  FiniteVolumePolicy<1U,CELL>::FacetAreaMapped( size_t ) const
 {
     return 1.;
 }
@@ -386,7 +386,7 @@ Point<1U> FiniteVolumePolicy<1U,CELL>::FacetNormalMapped( size_t ) const
     return Point<1U>(1.);
 }
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<1U,CELL>::ParametricFacetArea( size_t ) const
+double  FiniteVolumePolicy<1U,CELL>::ParametricFacetArea( size_t ) const
  {
     return 1.;
  }

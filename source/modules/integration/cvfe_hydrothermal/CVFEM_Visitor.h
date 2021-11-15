@@ -33,7 +33,7 @@ class CVFEM_Visitor : public Visitor<dim> {
               CVFEM_MathOperatorRHS<dim>* rhs_op,
               const char* upwind_variable );
     
-    void SetTimeIncrement( double64 time_increment );
+    void SetTimeIncrement( double time_increment );
     
   private:
     struct Operator_LHS{ CVFEM_MathOperatorLHS<dim>* lhs_operator;
@@ -74,9 +74,9 @@ class CVFEM_Visitor : public Visitor<dim> {
     ScalarVariable  element_operand;
     
     DenseMatrix<DM_MIN> LHS;
-    std::vector<double64>        RHS;
+    std::vector<double>        RHS;
     
-    double64 dt;    
+    double dt;    
     bool with_operand;
 
 };

@@ -26,7 +26,7 @@ void UpwindFluxLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix
          const size_t inside_node(fe.FV()->InsideNode(i));
          const size_t outside_node(fe.FV()->OutsideNode(i));
          auto w = fe.FV()->FacetIntegrationWeight(i, 0U);
-         double64 facet_flux = w * fe.Read( i, 0U, ff_key_ );
+         double facet_flux = w * fe.Read( i, 0U, ff_key_ );
 
          if ( facet_flux < 0. ) {
              facet_flux *= this->Factor();
@@ -65,7 +65,7 @@ void UpwindFluxLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatr
           const size_t inside_node(eptr->FV()->InsideNode(iFacet));
           const size_t outside_node(eptr->FV()->OutsideNode(iFacet)); 
           auto w = eptr->FV()->FacetIntegrationWeight(iFacet, 0U);   
-          double64 facet_flux = w * eptr->Read( iFacet, 0U, ff_key_ );
+          double facet_flux = w * eptr->Read( iFacet, 0U, ff_key_ );
           if (pnid != inside_node) facet_flux *= -1.;
           
           if ( facet_flux < 0. ) {

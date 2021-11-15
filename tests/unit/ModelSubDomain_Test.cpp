@@ -266,14 +266,14 @@ void ModelSubDomain_Test::run()
          // checking whether the side boundary interior and boundary flags are identified correctly
          //const csmp::Index  prop_key(model1.Database().StorageKey("box flag"));
          Boundary<3U>&      bref(model1.Boundary("FRONT"));
-         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(FRONT)), INTERIOR );
-         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(REGION_BOUNDARY)), PERIMETER );
+         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(FRONT)), INTERIOR );
+         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
 
          vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 1 );
 
          Boundary<3U>&      brefl(model1.Boundary("LEFT"));
-         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(LEFT)), INTERIOR );
-         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(REGION_BOUNDARY)), PERIMETER );
+         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(LEFT)), INTERIOR );
+         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
 
          vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 2 );
         

@@ -30,7 +30,7 @@ class PoreVolumeVisitor : public Visitor<dim> {
 
     csmp::Index property_key_, phi_key_, vol_key_;               
     ScalarVariable phi, pore_vol, vol;
-    double64 volume;
+    double volume;
 
 };
 

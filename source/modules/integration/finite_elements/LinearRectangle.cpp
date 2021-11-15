@@ -34,7 +34,7 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 
 	void LinearRectangle::IntegralNN(DenseMatrix<DM_MIN>& M)
 	{
-		double64 vol = Volume();
+		double vol = Volume();
 		V_ = { vol / 9.,  -vol / 18.,  vol / 36., -vol / 18.,
 			-vol / 18.,  vol / 9.,  -vol / 18.,  vol / 36.,
 			vol / 36., -vol / 18.,  vol / 9.,  -vol / 18.,
@@ -45,7 +45,7 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 				M(i, j) = V_[k++];
 	}
 
-	void LinearRectangle::N(std::vector<double64>& M, const std::vector<double64>& xyz)
+	void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 	{
 		if (dim == 2) { Nrs(M, XY, xyz); return; }
 		size_t r = 0, s = 1; // Nodes on xy-plane
@@ -65,8 +65,8 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 			else if ((XY(0, 1) == XY(1, 1)) && (XY(1, 1) == XY(2, 1))) { r = 1; s = 2; } // nodes on xz-plane
 		}
 
-		//double64  rc = 0.5*(XY(2, r) + XY(0, r)), sc = 0.5*(XY(2, s) + XY(0, s)), // bary center
-		double64  rc = XY(0, r) + (XY(2, r) - XY(0, r))/sqrt(3.), sc = XY(0, s) + (XY(2, s) - XY(0, s))/sqrt(3.), //
+		//double  rc = 0.5*(XY(2, r) + XY(0, r)), sc = 0.5*(XY(2, s) + XY(0, s)), // bary center
+		double  rc = XY(0, r) + (XY(2, r) - XY(0, r))/sqrt(3.), sc = XY(0, s) + (XY(2, s) - XY(0, s))/sqrt(3.), //
 				area = (XY(1, r) - XY(0, r))*(XY(3, s) - XY(0, s));
 
 		size_t indV = 0;
@@ -147,7 +147,7 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 			else if ((XY(0, 1) == XY(1, 1)) && (XY(1, 1) == XY(2, 1))) { r = 1; s = 2; } // nodes on xz-plane
 		}
 
-		double64 KsLr2 = 0.5*K(s, s)*(XY(1, r) - XY(0, r))*(XY(1, r) - XY(0, r)), 
+		double KsLr2 = 0.5*K(s, s)*(XY(1, r) - XY(0, r))*(XY(1, r) - XY(0, r)), 
 			     KrLs2 = 0.5*K(r, r)*(XY(3, s) - XY(0, s))*(XY(3, s) - XY(0, s)), 
 			       vol = (XY(1, r) - XY(0, r))*(XY(3, s) - XY(0, s)), 
 			         C = (KrLs2 + KsLr2)/vol/1.5;
@@ -165,9 +165,9 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 				M(i, j) = V_[vind++];
 	}
 
-	void LinearRectangle::Nrs(std::vector<double64>& M, DenseMatrix<DM_MIN>& RS, const std::vector<double64>& rs)
+	void LinearRectangle::Nrs(std::vector<double>& M, DenseMatrix<DM_MIN>& RS, const std::vector<double>& rs)
 	{
-		double64 vol = (RS(1, 0) - RS(0, 0))*(RS(3, 1) - RS(0, 1));
+		double vol = (RS(1, 0) - RS(0, 0))*(RS(3, 1) - RS(0, 1));
 		if (vol < 0) { cout << "\n negative vol Rectangle\n"; getchar(); }
 		M.resize(4);
 		M = { +vol*(rs[0] - RS(2, 0))*(rs[1] - RS(2, 1)),
@@ -176,7 +176,7 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 			  -vol*(rs[0] - RS(1, 0))*(rs[1] - RS(1, 1)) };
 	}
 	
-	void LinearRectangle::N_AtBaryCenter(std::vector<double64>& M) 
+	void LinearRectangle::N_AtBaryCenter(std::vector<double>& M) 
 	{
 		if (dim == 3) {
 			N(M, { 0.5*(XY(2,0) + XY(0,0)), 0.5*(XY(2,1) + XY(0,1)), 0.5*(XY(2,2) + XY(0,2)) });
@@ -185,12 +185,12 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 		N(M, { 0.5*(XY(2,0) + XY(0,0)), 0.5*(XY(2,1) + XY(0,1)) });
 	}
 
-	double64 LinearRectangle::Volume() 
+	double LinearRectangle::Volume() 
 	{ 
 		if (dim == 2) return (XY(1, 0) - XY(0, 0)) * (XY(3, 1) - XY(0, 1)); 
 
 		// Vec1 = X1 - X0; Vec2 = X3 - X0 
-		double64  X1 = XY(1, 0) - XY(0, 0), // X
+		double  X1 = XY(1, 0) - XY(0, 0), // X
 			X2 = XY(3, 0) - XY(0, 0),
 			Y1 = XY(1, 1) - XY(0, 1), // Y
 			Y2 = XY(3, 1) - XY(0, 1),
@@ -200,30 +200,30 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 		return std::sqrt((X1*X1 + Y1*Y1 + Z1*Z1)*(X2*X2 + Y2*Y2 + Z2*Z2));
 	}
 
-	void LinearRectangle::EdgeLengths(std::vector<double64>& vec)
+	void LinearRectangle::EdgeLengths(std::vector<double>& vec)
 	{
-		double64 L0 = sqrt((XY(0, 0) - XY(1, 0))*(XY(0, 0) - XY(1, 0)) 
+		double L0 = sqrt((XY(0, 0) - XY(1, 0))*(XY(0, 0) - XY(1, 0)) 
 			             + (XY(0, 1) - XY(1, 1))*(XY(0, 1) - XY(1, 1))
 		                 + (XY(0, 2) - XY(1, 2))*(XY(0, 2) - XY(1, 2)));
 
-		double64 L1 = sqrt((XY(0, 0) - XY(3, 0))*(XY(0, 0) - XY(3, 0))
+		double L1 = sqrt((XY(0, 0) - XY(3, 0))*(XY(0, 0) - XY(3, 0))
 					     + (XY(0, 1) - XY(3, 1))*(XY(0, 1) - XY(3, 1))
 					     + (XY(0, 2) - XY(3, 2))*(XY(0, 2) - XY(3, 2)));
 
 		vec = {L0 , L1, L0, L1};
 	}
 
-	void LinearRectangle::UnitNormal(std::vector<double64>& vc) const
+	void LinearRectangle::UnitNormal(std::vector<double>& vc) const
 	{
 		if (dim == 2) {
 			vc.resize(3); // points perpendicular to plane
-			vc[0] = vc[1] = static_cast<double64>(0.0);
-			vc[2] = static_cast<double64>(1.0);
+			vc[0] = vc[1] = static_cast<double>(0.0);
+			vc[2] = static_cast<double>(1.0);
 			return;
 		}
 		// cross product of two vectors
 		// Vec1 = X1 - X0; Vec2 = X3 - X0 
-		double64  X1 = XY(1, 0) - XY(0, 0), // X
+		double  X1 = XY(1, 0) - XY(0, 0), // X
 			X2 = XY(3, 0) - XY(0, 0),
 			Y1 = XY(1, 1) - XY(0, 1), // Y
 			Y2 = XY(3, 1) - XY(0, 1),
@@ -235,7 +235,7 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 		vc[1] = Z1*X2 - X1*Z2,
 		vc[2] = Y2*X1 - X2*Y1 ;
 		// Third : normalization to unit length
-		double64 length = sqrt(vc[0] * vc[0] + vc[1] * vc[1] + vc[2] * vc[2]);
+		double length = sqrt(vc[0] * vc[0] + vc[1] * vc[1] + vc[2] * vc[2]);
 		vc[0] /= length;
 		vc[1] /= length;
 		vc[2] /= length;

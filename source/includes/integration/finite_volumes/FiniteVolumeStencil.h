@@ -76,19 +76,19 @@ class FiniteVolumeStencil {
     FV_FACET_TYPE FacetType( size_t iFacet ) const;
   
     /// choice of rst-integration point coordinate of the facet integration point
-    double64  FacetIntegrationPoint( size_t iFacet, size_t ip, size_t r_or_s_or_t ) const;
+    double  FacetIntegrationPoint( size_t iFacet, size_t ip, size_t r_or_s_or_t ) const;
   
     /// rst coordinate of facet integration point in parametric space
-    void      FacetIntegrationPoint( size_t iFacet, size_t ip, std::vector<double64>& rst ) const;
+    void      FacetIntegrationPoint( size_t iFacet, size_t ip, std::vector<double>& rst ) const;
   
     /// returns rst coordinate of facet integration point in parametric space
     const Point<dim>&  FacetIntegrationPoint( size_t iFacet, size_t ip ) const;
   
     /// integration weight of given integration point correlated with facet area and number of facet integration points
-    double64  FacetIntegrationWeight( size_t iFacet, size_t ip ) const;
+    double  FacetIntegrationWeight( size_t iFacet, size_t ip ) const;
   
     /// scale factor to match sector integration weights between adjacent finite elements that have a different volume in rst space
-    double64  FacetProjectionWeight( size_t iFacet, size_t ip ) const;
+    double  FacetProjectionWeight( size_t iFacet, size_t ip ) const;
   
     /// nodes that sit on the opposite sides of the facet; outside is direction into which facet normal points
     void      FacetEdgeNodes( size_t iFacet, size_t& inside_node, size_t& outside_node ) const;
@@ -105,10 +105,10 @@ class FiniteVolumeStencil {
     /// of finite element in parametric space
     const Point<dim>& Barycenter() const;
   
-    double64  SectorIntegrationPoint( size_t iSector, size_t ip, size_t r_or_s_or_t ) const;
-    void      SectorIntegrationPoint( size_t iSector, size_t ip, std::vector<double64>& rst ) const;
+    double  SectorIntegrationPoint( size_t iSector, size_t ip, size_t r_or_s_or_t ) const;
+    void      SectorIntegrationPoint( size_t iSector, size_t ip, std::vector<double>& rst ) const;
     const Point<dim>&  SectorIntegrationPoint( size_t iSector, size_t ip ) const;
-    double64  SectorIntegrationWeight( size_t iSector, size_t ip ) const;
+    double  SectorIntegrationWeight( size_t iSector, size_t ip ) const;
     const Point<dim>&  FacetPoint( size_t iFacet, size_t iPoint ) const;
     size_t    FacetPoints( size_t iFacet ) const { return facet_points[iFacet].size(); }
 
@@ -143,9 +143,9 @@ class FiniteVolumeStencil {
     const Point<dim>&  UnitParametricNormalTo( size_t iFacet ) const;
   
     /// returns x,y or z component of unit normal in parametric space
-    double64           UnitParametricNormalComponent( size_t iFacet, size_t x_or_y_or_z ) const;
+    double           UnitParametricNormalComponent( size_t iFacet, size_t x_or_y_or_z ) const;
 
-    std::pair<double64,double64>    FacetNormalTransformationNodeWeights( size_t iFacet, size_t iNode ) const;
+    std::pair<double,double>    FacetNormalTransformationNodeWeights( size_t iFacet, size_t iNode ) const;
   
     /// returns the parent element of the finite volume stencil
     const std::string& ParentElement() const { return parent_element_; }
@@ -162,13 +162,13 @@ class FiniteVolumeStencil {
     std::vector<std::pair<size_t,size_t> >  edges_of_element;             ///< = facets
     std::vector<std::vector<size_t> >       facets_surrounding_node;      ///< [node][facet]
     std::vector<std::vector<Point<dim> > >  facet_integration_points;     ///< [isrf][spts][dim]
-    std::vector<std::vector<double64> >     facet_integration_weights;    ///< [isrf][spts]
-    std::vector<std::vector<double64> >     facet_projection_weights;     ///< [isrf][spts]
-    std::vector<std::vector<double64> >     facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
+    std::vector<std::vector<double> >     facet_integration_weights;    ///< [isrf][spts]
+    std::vector<std::vector<double> >     facet_projection_weights;     ///< [isrf][spts]
+    std::vector<std::vector<double> >     facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
     std::vector<Point<dim> >                facet_parametric_normals;     ///< [isrf][dim] //[node*3][dim] -3d
-    std::vector<std::vector<std::pair<double64,double64>>> facet_normal_xforms; ///< [isrf][node]
+    std::vector<std::vector<std::pair<double,double>>> facet_normal_xforms; ///< [isrf][node]
     std::vector<std::vector<Point<dim> > >  sector_integration_points;    ///< [ivol][vpts][dim]
-    std::vector<std::vector<double64> >     sector_integration_weights;   ///< [ivol][vpts]
+    std::vector<std::vector<double> >     sector_integration_weights;   ///< [ivol][vpts]
     std::vector<Point<dim> >                facet_edge_midpoints;
     Point<dim>					          	        barycenter;
     std::vector<std::vector<Point<dim> > >  facet_points;

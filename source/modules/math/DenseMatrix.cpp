@@ -32,7 +32,7 @@ DenseMatrix<mn_max>::DenseMatrix( const DenseMatrix<mn_max>& mat )
 // constructor (i,j, value)
 // ---------------------------------------
 template<size_t mn_max>
-DenseMatrix<mn_max>::DenseMatrix( size_t m, size_t n, double64 val )
+DenseMatrix<mn_max>::DenseMatrix( size_t m, size_t n, double val )
  : rows(m), cols(n)
  {
     for ( size_t i=0U; i<rows; i++ )
@@ -70,8 +70,8 @@ void DenseMatrix<mn_max>::Identity()
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
-        if ( i == j ) data[i][j] = static_cast<double64>(1.0);
-        else          data[i][j] = static_cast<double64>(0.0);         
+        if ( i == j ) data[i][j] = static_cast<double>(1.0);
+        else          data[i][j] = static_cast<double>(0.0);         
  }
  
  
@@ -86,7 +86,7 @@ DenseMatrix<mn_max>::DenseMatrix( size_t m, size_t n )
 
 /// operator (i,j)
 template<size_t mn_max>
-double64& DenseMatrix<mn_max>::operator()( size_t m, size_t n )
+double& DenseMatrix<mn_max>::operator()( size_t m, size_t n )
  {
     CheckRange( m, n, "DenseMatrix<mn_max>::operator()");
     return data[m][n];
@@ -96,7 +96,7 @@ double64& DenseMatrix<mn_max>::operator()( size_t m, size_t n )
 
 /// operator (i,j) const
 template<size_t mn_max>
-const double64& DenseMatrix<mn_max>::operator()( size_t m, size_t n ) const
+const double& DenseMatrix<mn_max>::operator()( size_t m, size_t n ) const
  {
     CheckRange( m, n, "DenseMatrix<mn_max>::operator()");
     return data[m][n];
@@ -211,7 +211,7 @@ void DenseMatrix<mn_max>::Zero()
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
-        data[i][j] = static_cast<double64>(0.0);
+        data[i][j] = static_cast<double>(0.0);
  }
  
 
@@ -222,7 +222,7 @@ template<size_t mn_max>
 void DenseMatrix<mn_max>::ZeroRow( size_t row )
  {
     if ( row < rows ) for ( size_t j=0; j<cols; j++ ) 
-      data[row][j] = static_cast<double64>(0.0);
+      data[row][j] = static_cast<double>(0.0);
       
     else {
       std::cout <<"\nDenseMatrix<"<< mn_max <<">::ZeroRow: ";
@@ -236,7 +236,7 @@ void DenseMatrix<mn_max>::ZeroRow( size_t row )
 template<size_t mn_max>
 void DenseMatrix<mn_max>::ZeroCol( size_t col )
  {
-    if ( col < cols ) for ( size_t i=0; i<rows; i++ ) data[i][col] = static_cast<double64>(0.0);
+    if ( col < cols ) for ( size_t i=0; i<rows; i++ ) data[i][col] = static_cast<double>(0.0);
     else
     std::cout <<"\nDenseMatrix<"<< mn_max <<">::ZeroCol: Target column does not exist: "<< col << std::endl;
  }
@@ -245,7 +245,7 @@ void DenseMatrix<mn_max>::ZeroCol( size_t col )
 // Fill()
 // ---------------------------------------------
 template<size_t mn_max>
-void DenseMatrix<mn_max>::Fill( double64 val )
+void DenseMatrix<mn_max>::Fill( double val )
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] = val;
@@ -255,7 +255,7 @@ void DenseMatrix<mn_max>::Fill( double64 val )
 // FillRow()
 // ---------------------------------------------
 template<size_t mn_max>
-void DenseMatrix<mn_max>::FillRow( size_t row, double64 val )
+void DenseMatrix<mn_max>::FillRow( size_t row, double val )
  {
     if ( row < rows ) for ( size_t j=0U; j<cols; j++ ) data[row][j] = val;
     else {
@@ -268,7 +268,7 @@ void DenseMatrix<mn_max>::FillRow( size_t row, double64 val )
 // FillCol()
 // ---------------------------------------------
 template<size_t mn_max>
-void DenseMatrix<mn_max>::FillCol( size_t col, double64 val )
+void DenseMatrix<mn_max>::FillCol( size_t col, double val )
  {
     if ( col < cols ) for ( size_t i=0U; i<rows; i++ ) data[i][col] = val;
     else {
@@ -295,9 +295,9 @@ void DenseMatrix<mn_max>::Transposed( DenseMatrix& M ) const
 // RowSum()
 // ---------------------------------------------
 template<size_t mn_max>
-double64   DenseMatrix<mn_max>::RowSum( size_t row ) const
+double   DenseMatrix<mn_max>::RowSum( size_t row ) const
  {
-    double64  sum(0.0);
+    double  sum(0.0);
  
     if ( row < rows ) {
          for ( size_t j=0U; j<cols; j++ ) sum += data[row][j];
@@ -308,7 +308,7 @@ double64   DenseMatrix<mn_max>::RowSum( size_t row ) const
     std::cerr <<"Target rows does not exist: "<< row << std::endl;
     throw std::length_error("DenseMatrix<mn_max>::RowSum");
 
-    return static_cast<double64>(0.0);
+    return static_cast<double>(0.0);
  }
 
 
@@ -316,9 +316,9 @@ double64   DenseMatrix<mn_max>::RowSum( size_t row ) const
 // ColSum()
 // ---------------------------------------------
 template<size_t mn_max>
-double64   DenseMatrix<mn_max>::ColSum( size_t col ) const
+double   DenseMatrix<mn_max>::ColSum( size_t col ) const
  {
-    double64  sum(0.0);
+    double  sum(0.0);
  
     if ( col < cols ) {
          for ( size_t i=0U; i<rows; i++ ) sum += data[i][col];
@@ -329,7 +329,7 @@ double64   DenseMatrix<mn_max>::ColSum( size_t col ) const
     std::cerr <<"Target column does not exist: "<< col << std::endl;
     throw std::length_error("DenseMatrix<mn_max>::ColSum");
 
-    return static_cast<double64>(0.0);
+    return static_cast<double>(0.0);
  }
 
 
@@ -416,8 +416,8 @@ void DenseMatrix<mn_max>::AssignToDiagonal( const Point<2U>& pt )
  {
     Resize( 2U, 2U );
     data[0][0] = pt[0];
-    data[0][1] = static_cast<double64>(0.0);
-    data[1][0] = static_cast<double64>(0.0);
+    data[0][1] = static_cast<double>(0.0);
+    data[1][0] = static_cast<double>(0.0);
     data[1][1] = pt[1];
  }
 
@@ -426,13 +426,13 @@ void DenseMatrix<mn_max>::AssignToDiagonal( const Point<3U>& pt )
  {
     Resize( 3U, 3U );
     data[0][0] = pt[0];
-    data[0][1] = static_cast<double64>(0.0);
-    data[0][2] = static_cast<double64>(0.0);
-    data[1][0] = static_cast<double64>(0.0);
+    data[0][1] = static_cast<double>(0.0);
+    data[0][2] = static_cast<double>(0.0);
+    data[1][0] = static_cast<double>(0.0);
     data[1][1] = pt[1];
-    data[1][2] = static_cast<double64>(0.0);
-    data[2][0] = static_cast<double64>(0.0);
-    data[2][1] = static_cast<double64>(0.0);
+    data[1][2] = static_cast<double>(0.0);
+    data[2][0] = static_cast<double>(0.0);
+    data[2][1] = static_cast<double>(0.0);
     data[2][2] = pt[2];
  }
 
@@ -464,12 +464,12 @@ DenseMatrix<mn_max>&
 DenseMatrix<mn_max>::operator*=( const Point<2U>& pt )
  {
     assert ( cols == 2U );
-    double64 sum;
+    double sum;
 
     // when loop unrolling is not possible
     if ( rows != cols ) {
         for ( size_t i=0; i<rows; i++ ) {
-               sum = static_cast<double64>(0.0);
+               sum = static_cast<double>(0.0);
                for ( size_t j=0; j<cols; j++ )
                  sum +=  data[i][j] * pt[j];
                data[i][0] = sum;
@@ -495,12 +495,12 @@ DenseMatrix<mn_max>&
 DenseMatrix<mn_max>::operator*=( const Point<3U>& pt )
  {
     assert ( cols == 3U );
-    double64 sum;
+    double sum;
 
     // when loop unrolling is not possible
     if ( rows != cols ) {
         for ( size_t i=0; i<rows; i++ ) {
-               sum = static_cast<double64>(0.0);
+               sum = static_cast<double>(0.0);
                for ( size_t j=0; j<cols; j++ )
                  sum +=  data[i][j] * pt[j];
                data[i][0] = sum;
@@ -536,7 +536,7 @@ void DenseMatrix<mn_max>::AssignToDiagonal( size_t diag_elmts,
     Resize( diag_elmts, diag_elmts );
     for ( size_t i=0U; i<diag_elmts; i++ )
       for ( size_t j=0U; j<diag_elmts; j++ )
-        data[i][j] = (i==j) ? sc() : static_cast<double64>(0.);
+        data[i][j] = (i==j) ? sc() : static_cast<double>(0.);
  }
 
 template<size_t mn_max>
@@ -623,8 +623,8 @@ void DenseMatrix<mn_max>::AssignToDiagonal( const VectorVariable<2U>& vc )
  {
     Resize( 2U, 2U );
     data[0][0] = vc[0];
-    data[0][1] = static_cast<double64>(0.0);
-    data[1][0] = static_cast<double64>(0.0);
+    data[0][1] = static_cast<double>(0.0);
+    data[1][0] = static_cast<double>(0.0);
     data[1][1] = vc[1];
  }
 
@@ -633,13 +633,13 @@ void DenseMatrix<mn_max>::AssignToDiagonal( const VectorVariable<3U>& vc )
  {
     Resize( 3U, 3U );
     data[0][0] = vc[0];
-    data[0][1] = static_cast<double64>(0.0);
-    data[0][2] = static_cast<double64>(0.0);
-    data[1][0] = static_cast<double64>(0.0);
+    data[0][1] = static_cast<double>(0.0);
+    data[0][2] = static_cast<double>(0.0);
+    data[1][0] = static_cast<double>(0.0);
     data[1][1] = vc[1];
-    data[1][2] = static_cast<double64>(0.0);
-    data[2][0] = static_cast<double64>(0.0);
-    data[2][1] = static_cast<double64>(0.0);
+    data[1][2] = static_cast<double>(0.0);
+    data[2][0] = static_cast<double>(0.0);
+    data[2][1] = static_cast<double>(0.0);
     data[2][2] = vc[2];
  }
 
@@ -669,12 +669,12 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator*=( const VectorVariable<2U>& vc )
  {
     assert ( cols == 2U );
-    double64 sum;
+    double sum;
 
     // when loop unrolling is not possible
     if ( rows != cols ) {
         for ( size_t i=0; i<rows; i++ ) {
-               sum = static_cast<double64>(0.0);
+               sum = static_cast<double>(0.0);
                for ( size_t j=0; j<cols; j++ )
                  sum +=  data[i][j] * vc[j];
                data[i][0] = sum;
@@ -699,12 +699,12 @@ DenseMatrix<mn_max>&
 DenseMatrix<mn_max>::operator*=( const VectorVariable<3U>& vc )
  {
     assert ( cols == 3U );
-    double64 sum;
+    double sum;
 
     // when loop unrolling is not possible
     if ( rows != cols ) {
         for ( size_t i=0; i<rows; i++ ) {
-               sum = static_cast<double64>(0.0);
+               sum = static_cast<double>(0.0);
                for ( size_t j=0; j<cols; j++ )
                  sum +=  data[i][j] * vc[j];
                data[i][0] = sum;
@@ -761,7 +761,7 @@ void DenseMatrix<mn_max>::AssignToDiagonal( const ArrayVariable& ar )
     Resize( ar.Size(), ar.Size() );
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ )
-        data[i][j] = (i==j) ? ar[i] : static_cast<double64>(0.);
+        data[i][j] = (i==j) ? ar[i] : static_cast<double>(0.);
  }
 
 template<size_t mn_max>
@@ -769,12 +769,12 @@ DenseMatrix<mn_max>&
 DenseMatrix<mn_max>::operator*=( const ArrayVariable& ar )
  {
     if ( cols != ar.Size() ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*=(ArrayVariable): matrix.cols != array.size\n";
+         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(ArrayVariable): matrix.cols != array.size\n";
          throw std::range_error("DenseMatrix<>::operator*=(ArrayVariable): matrix.cols != array.size");
       }
-    double64 sum;
+    double sum;
     for ( size_t i=0; i<rows; i++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t j=0; j<cols; j++ )
              sum +=  data[i][j] * ar[j];
            data[i][0] = sum;
@@ -819,7 +819,7 @@ void DenseMatrix<mn_max>::AssignToDiagonal( const FlaggedArrayVariable& fr )
     Resize( fr.Size(), fr.Size() );
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ )
-        data[i][j] = (i==j) ? fr[i] : static_cast<double64>(0.);
+        data[i][j] = (i==j) ? fr[i] : static_cast<double>(0.);
  }
 
 template<size_t mn_max>
@@ -827,12 +827,12 @@ DenseMatrix<mn_max>&
 DenseMatrix<mn_max>::operator*=( const FlaggedArrayVariable& fr )
  {
     if ( cols != fr.Size() ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*=(FlaggedArrayVariable): matrix.cols != array.size\n";
+         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(FlaggedArrayVariable): matrix.cols != array.size\n";
          throw std::range_error("DenseMatrix<>::operator*=(FlaggedArrayVariable): matrix.cols != array.size");
       }
-    double64 sum;
+    double sum;
     for ( size_t i=0; i<rows; i++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t j=0; j<cols; j++ )
              sum +=  data[i][j] * fr[j];
            data[i][0] = sum;
@@ -928,7 +928,7 @@ template<size_t mn_max>
 void DenseMatrix<mn_max>::ExportTo( TensorVariable<3U>& ts ) const
  {
     if ( rows != 3U || rows != cols ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;
+         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
          std::cerr <<">::ExportTo (tensor 3D): This matrix has wrong size.\n";
          throw std::range_error("DenseMatrix<>::ExportTo(TensorVar.3D): matrix.cols != tensor.dim");
          return;
@@ -952,7 +952,7 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator*=( const TensorVariable<1U>& ts )
  {
     if ( cols != 1U ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*=(TensorVar.1D): matrix.cols != tensor.dim\n";
+         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.1D): matrix.cols != tensor.dim\n";
          throw std::range_error("DenseMatrix<>::operator*=(TensorVar.1D): matrix.cols != tensor.dim");
       }
 
@@ -975,7 +975,7 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator*=( const TensorVariable<2U>& ts )
  {
     if ( cols != 2U ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*=(TensorVar.2D): matrix.cols != tensor.dim\n";
+         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.2D): matrix.cols != tensor.dim\n";
          throw std::range_error("DenseMatrix<>::operator*=(TensorVar.2D): matrix.cols != tensor.dim");
       }
       
@@ -986,7 +986,7 @@ DenseMatrix<mn_max>&
     
          for ( size_t i=0U; i<rows; i++ )
            for ( size_t j=0U; j<2U; j++ ) {
-                 temp.data[i][j] = static_cast<double64>(0.0);
+                 temp.data[i][j] = static_cast<double>(0.0);
                  for ( size_t k=0U; k<2U; k++ ) 
                    temp.data[i][j] += data[i][k] * ts(k,j);
              }
@@ -1009,7 +1009,7 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator*=( const TensorVariable<3U>& ts )
  {
     if ( cols != 3U ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*=(TensorVar.3D): matrix.cols != tensor.dim\n";
+         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.3D): matrix.cols != tensor.dim\n";
          throw(range_error("DenseMatrix<>::operator*=(TensorVar.3D): matrix.cols != tensor.dim"));
       }
 
@@ -1020,7 +1020,7 @@ DenseMatrix<mn_max>&
 
          for ( size_t i=0U; i<rows; i++ )
            for ( size_t j=0U; j<3U; j++ ) {
-                 temp.data[i][j] = static_cast<double64>(0.0);
+                 temp.data[i][j] = static_cast<double>(0.0);
                  for ( size_t k=0U; k<3U; k++ )
                    temp.data[i][j] += data[i][k] * ts(k,j);
              }
@@ -1058,26 +1058,26 @@ DenseMatrix<mn_max>&
 
 
 
-// AssignToDiagonal (double64)
+// AssignToDiagonal (double)
 // ---------------------------------------
 template<size_t mn_max>
 void DenseMatrix<mn_max>::AssignToDiagonal( size_t diag_elmts,
-                                            const double64& sc )
+                                            const double& sc )
  {
     Resize( diag_elmts, diag_elmts );
     for ( size_t i=0U; i<diag_elmts; i++ )
       for ( size_t j=0U; j<diag_elmts; j++ )
-        data[i][j] = (i==j) ? sc : static_cast<double64>(0.);
+        data[i][j] = (i==j) ? sc : static_cast<double>(0.);
  }
 
 // RowCondenseTo
 // ---------------------------------------
 /// vec = Mat * unity vector
 template<size_t mn_max>
-void DenseMatrix<mn_max>::RowCondenseTo( std::vector<double64>& vec ) const
+void DenseMatrix<mn_max>::RowCondenseTo( std::vector<double>& vec ) const
  {
     vec.resize(rows);
-    vector<double64>( vec ).swap( vec );
+    vector<double>( vec ).swap( vec );
     for ( size_t i=0U; i<rows; i++ ) vec[i] = RowSum(i);
  } 
 
@@ -1159,7 +1159,7 @@ DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*(
                                              const DenseMatrix<mn_max>& mat ) const
  {
     if ( cols != mat.rows ) {
-         cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*: Matrices cannot be multiplied "; 
+         cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*: Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B, see matrices below): "<< std::endl;
          Out(3);
          mat.Out(3);
@@ -1171,7 +1171,7 @@ DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*(
     
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<mat.cols; j++ ) {
-           temp.data[i][j] = static_cast<double64>(0.0);
+           temp.data[i][j] = static_cast<double>(0.0);
            for ( size_t k=0U; k<mat.rows; k++ ) 
              temp.data[i][j] += data[i][k]*mat.data[k][j];
         }  
@@ -1184,20 +1184,20 @@ DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*(
 // operator*  matrix with STL vector multiplication
 // ------------------------------------------------
 template<size_t mn_max>
-DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const std::vector<double64>& vecT )
+DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const std::vector<double>& vecT )
  {
     if ( cols != vecT.size() ) {
-         std::cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*=: ";
+         std::cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=: ";
          std::cout <<"Matrix and vector cannot be multiplied "; 
          std::cout <<"because of incompatible sizes (A(cols != vecT(size)): "<< vecT.size() << std::endl;
          throw std::length_error("DenseMatrix<mn_max>::operator*=");
       }
     
     size_t  i, j;
-    double64            sum;
+    double            sum;
     
     for ( i=0; i<rows; i++ ) {
-         for ( sum=static_cast<double64>(0.0), j=0; j<vecT.size(); j++ ) sum += data[i][j] * vecT[j];
+         for ( sum=static_cast<double>(0.0), j=0; j<vecT.size(); j++ ) sum += data[i][j] * vecT[j];
          data[i][0U] = sum;
       }
       
@@ -1212,19 +1212,19 @@ DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const std::vector<double64
 // ---------------------------------------------
 /// Clearly, all hell will break loose if the C-array has not been initialized properly
 template<size_t mn_max>
-DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const double64* vecT ) 
+DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const double* vecT ) 
  {
     if ( vecT == NULL ) {
-         std::cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*=: Matrix and vector cannot be multiplied "; 
+         std::cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=: Matrix and vector cannot be multiplied "; 
          std::cout <<"because vecT C-array is not initialized." << std::endl;
          throw std::length_error("DenseMatrix<mn_max>::operator*=");
       }
 
     size_t  i, j;
-    double64      sum;
+    double      sum;
     
     for ( i=0U; i<rows; i++ ) {
-         for ( sum=static_cast<double64>(0.0), j=0; j<rows; j++ ) sum += data[i][j] * vecT[j];
+         for ( sum=static_cast<double>(0.0), j=0; j<rows; j++ ) sum += data[i][j] * vecT[j];
          data[i][0] = sum;
       }
       
@@ -1239,7 +1239,7 @@ DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const double64* vecT )
 
 
 template<size_t mn_max>
-DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator=( double64 val )
+DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator=( double val )
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] = val; 
@@ -1254,7 +1254,7 @@ DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator=( double64 val )
 
 template<size_t mn_max>
 DenseMatrix<mn_max>& 
-  DenseMatrix<mn_max>::operator*=( double64 val )
+  DenseMatrix<mn_max>::operator*=( double val )
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] *= val;
@@ -1272,7 +1272,7 @@ DenseMatrix<mn_max>&  DenseMatrix<mn_max>::operator*=( const DenseMatrix<mn_max>
  {
 #ifdef CSMP_DENSE_MATRIX_DEBUG
     if ( cols != mat.rows ) {
-         cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;
+         cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
          cout <<">::operator*=: Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B, see matrices below): "<< endl;
          Out();
@@ -1286,7 +1286,7 @@ DenseMatrix<mn_max>&  DenseMatrix<mn_max>::operator*=( const DenseMatrix<mn_max>
     
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<mat.cols; j++ ) {
-           temp.data[i][j] = static_cast<double64>(0.0);
+           temp.data[i][j] = static_cast<double>(0.0);
            for ( size_t k=0U; k<mat.rows; k++ ) 
              temp.data[i][j] += data[i][k] * mat.data[k][j];
         }
@@ -1305,7 +1305,7 @@ void DenseMatrix<mn_max>::MultiplyWithTransposedOf( const DenseMatrix<mn_max>& B
                                                     DenseMatrix<mn_max>& RES ) const
  {
     if ( cols != B.cols ) {
-         cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;
+         cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
          cout <<">::MultiplyWithTransposedOf: ";
          cout <<"Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
@@ -1315,11 +1315,11 @@ void DenseMatrix<mn_max>::MultiplyWithTransposedOf( const DenseMatrix<mn_max>& B
       }
     
     RES.Resize( rows, B.rows );
-    double64  sum;
+    double  sum;
     
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<B.rows; j++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<cols; k++ ) 
              sum += data[i][k] * B.data[j][k];
            RES.data[i][j] = sum;  
@@ -1337,7 +1337,7 @@ DenseMatrix<mn_max>::MultiplyTransposedOfWith( const DenseMatrix<mn_max>& B,
                                                       DenseMatrix<mn_max>& RES ) const
  {
     if ( rows != B.rows ) {
-         cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::MultiplyTransposedOfWith: ";
+         cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::MultiplyTransposedOfWith: ";
          cout <<"Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
          Out();
@@ -1346,11 +1346,11 @@ DenseMatrix<mn_max>::MultiplyTransposedOfWith( const DenseMatrix<mn_max>& B,
       }
     
     RES.Resize( cols, B.cols );
-    double64  sum;
+    double  sum;
     
     for ( size_t i=0U; i<cols; i++ )
       for ( size_t j=0U; j<B.cols; j++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<B.rows; k++ ) 
              sum += data[k][i] * B.data[k][j];
            RES.data[i][j] = sum;
@@ -1367,11 +1367,11 @@ void
 DenseMatrix<mn_max>::TransposedProduct( DenseMatrix<mn_max>& RES ) const
  {
     RES.Resize( cols, cols );
-    double64  sum;
+    double  sum;
     
     for ( size_t i=0U; i<cols; i++ )
       for ( size_t j=0U; j<cols; j++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<rows; k++ ) 
              sum += data[k][i] * data[k][j];
            RES.data[j][i] = sum;  
@@ -1383,17 +1383,17 @@ DenseMatrix<mn_max>::TransposedProduct( DenseMatrix<mn_max>& RES ) const
 
 /// unscaled L_infinity matrix norm ||A||inf = max_i * sum_j |aij|
 template<size_t mn_max>
-double64 DenseMatrix<mn_max>::NormL_Infinity() const
+double DenseMatrix<mn_max>::NormL_Infinity() const
  {
 	if ( rows == 0 || cols == 0 ) {
-         cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::NormL_Infinity: empty matrix!\n";
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::NormL_Infinity: empty matrix!\n";
          return std::numeric_limits<double>::signaling_NaN();
       }
 
-	double64  maxval(static_cast<double64>(0.0)), sum;
+	double  maxval(static_cast<double>(0.0)), sum;
 
 	for ( size_t i=0; i<rows; i++ ) {
-		 sum = static_cast<double64>(0.0);
+		 sum = static_cast<double>(0.0);
 		 for ( size_t j=0; j<cols; j++ )
 		   sum += fabs(data[i][j]);
 		 maxval = max(maxval,sum);
@@ -1435,7 +1435,7 @@ DenseMatrix<mn_max>  operator*( const DenseMatrix<mn_max>& a,
  {
 #ifdef CSMP_DENSE_MATRIX_DEBUG
     if ( a.Cols() != b.Rows() ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;
+         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
          std::cerr <<"> operator*: Matrices cannot be multiplied ";
          std::cerr <<"because of incompatible sizes (A * B, see matrices below): "<< endl;
          a.Out(3L);
@@ -1447,7 +1447,7 @@ DenseMatrix<mn_max>  operator*( const DenseMatrix<mn_max>& a,
     
     for ( size_t i=0U; i<a.Rows(); i++ )
       for ( size_t j=0U; j<b.Cols(); j++ ) {
-           temp(i,j) = static_cast<double64>(0.0);
+           temp(i,j) = static_cast<double>(0.0);
            for ( size_t k=0U; k<b.Rows(); k++ ) 
              temp(i,j) += a(i,k) * b(k,j);
         }
@@ -1460,17 +1460,17 @@ DenseMatrix<mn_max>  operator*( const DenseMatrix<mn_max>& a,
 
 /// computes unscaled L1 matrix norm ||A1|| = max_j * sum_i |aij|
 template<size_t mn_max>
-double64 DenseMatrix<mn_max>::NormL1() const
+double DenseMatrix<mn_max>::NormL1() const
  {
 	if ( rows == 0 || cols == 0 ) {
-         cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::NormL1: empty matrix!\n";
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::NormL1: empty matrix!\n";
          return std::numeric_limits<double>::signaling_NaN();
       }
 
-	double64  maxval(static_cast<double64>(0.0)), sum;
+	double  maxval(static_cast<double>(0.0)), sum;
 
 	for ( size_t j=0; j<cols; j++ ) {
-		 sum = static_cast<double64>(0.0);
+		 sum = static_cast<double>(0.0);
 		 for ( size_t i=0; i<rows; i++ )
 		   sum += std::fabs(data[i][j]);
 		 maxval = std::max(maxval,sum);
@@ -1492,11 +1492,11 @@ double64 DenseMatrix<mn_max>::NormL1() const
 /// vector^T = Matrix * vector^T
 // ---------------------------------------
 template<size_t mn_max>
-std::vector<double64>  operator*( const DenseMatrix<mn_max>& mat, const std::vector<double64>& vec )
+std::vector<double>  operator*( const DenseMatrix<mn_max>& mat, const std::vector<double>& vec )
  {
     assert ( mat.Cols() == vec.size() );
     
-    std::vector<double64> temp(mat.Rows(),static_cast<double64>(0.0));
+    std::vector<double> temp(mat.Rows(),static_cast<double>(0.0));
     
     for ( size_t i=0; i<mat.Rows(); i++ )
       for ( size_t j=0; j<mat.Cols(); j++ ) temp[i] += mat(i,j) * vec[j];
@@ -1510,7 +1510,7 @@ std::vector<double64>  operator*( const DenseMatrix<mn_max>& mat, const std::vec
 /// Matrix = vector^T * Matrix
 // ---------------------------------------
 template<size_t mn_max>
-DenseMatrix<mn_max>  operator*( const std::vector<double64>& vec, const DenseMatrix<mn_max>& mat )
+DenseMatrix<mn_max>  operator*( const std::vector<double>& vec, const DenseMatrix<mn_max>& mat )
  {
     if ( vec.size() != mat.Rows() ) {
          std::cout <<"\noperator*: vector cannot be multiplied with matrix"; 
@@ -1522,7 +1522,7 @@ DenseMatrix<mn_max>  operator*( const std::vector<double64>& vec, const DenseMat
     
     for ( size_t i=0U; i<vec.size(); i++ )
       for ( size_t j=0U; j<mat.Cols(); j++ ) {
-           temp(i,j) = static_cast<double64>(0.0);
+           temp(i,j) = static_cast<double>(0.0);
            for ( size_t k=0U; k<mat.Rows(); k++ ) 
              temp(i,j) += vec[k] * mat(k,j);
         }
@@ -1537,7 +1537,7 @@ DenseMatrix<mn_max>  operator*( const std::vector<double64>& vec, const DenseMat
 template<size_t mn_max>
 void DenseMatrix<mn_max>::In()
  {
-    cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;
+    cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
     cout <<">: Please enter matrix entries as prompted for: "<< endl;
     cout <<"Enter number of rows and columns: ";
     cin >> rows >> cols;
@@ -1564,7 +1564,7 @@ template<size_t mn_max>
 void DenseMatrix<mn_max>::Out( long digits ) const
  {
     long  prec(2);
-    cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">: m=n="<< mn_max << endl;
+    cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">: m=n="<< mn_max << endl;
     if ( digits != 0U ) { 
          cout.setf(ios::scientific);
          prec = cout.precision(digits);
@@ -1601,9 +1601,6 @@ void DenseMatrix<mn_max>::Out( long digits ) const
 // template instantiations
 // ------------------------------------------------------------------------------
 
-#ifdef CSMP_NUMBER_TYPES_H  // if matrix is used with CSMP
-
-
 template class DenseMatrix<DM3>;
 
 template DenseMatrix<DM3>  operator+( 
@@ -1618,8 +1615,8 @@ template DenseMatrix<DM3>  operator*(
                       const DenseMatrix<DM3>& a, 
                       const DenseMatrix<DM3>& b );
 template
-vector<double64>  operator*( const DenseMatrix<DM3>& mat, 
-                             const vector<double64>& vec );
+vector<double>  operator*( const DenseMatrix<DM3>& mat, 
+                           const vector<double>& vec );
 
 
 
@@ -1638,8 +1635,8 @@ template DenseMatrix<DM4>  operator*(
                       const DenseMatrix<DM4>& a, 
                       const DenseMatrix<DM4>& b );
 template
-vector<double64>  operator*( const DenseMatrix<DM4>& mat, 
-                              const vector<double64>& vec );
+vector<double>  operator*( const DenseMatrix<DM4>& mat, 
+                           const vector<double>& vec );
 
 
                       
@@ -1658,8 +1655,8 @@ template DenseMatrix<DM12>  operator*(
                       const DenseMatrix<DM12>& a, 
                       const DenseMatrix<DM12>& b );
 template
-vector<double64>  operator*( const DenseMatrix<DM12>& mat, 
-                              const vector<double64>& vec );
+vector<double>  operator*( const DenseMatrix<DM12>& mat, 
+                           const vector<double>& vec );
 
 
 
@@ -1679,8 +1676,8 @@ template DenseMatrix<DM_MIN>  operator*(
                       const DenseMatrix<DM_MIN>& a, 
                       const DenseMatrix<DM_MIN>& b );
 template
-vector<double64>  operator*( const DenseMatrix<DM_MIN>& mat, 
-                              const vector<double64>& vec );
+vector<double>  operator*( const DenseMatrix<DM_MIN>& mat, 
+                           const vector<double>& vec );
 
 
 
@@ -1700,58 +1697,7 @@ template DenseMatrix<DM_MAX>  operator*(
                       const DenseMatrix<DM_MAX>& a, 
                       const DenseMatrix<DM_MAX>& b );
 template
-vector<double64>  operator*( const DenseMatrix<DM_MAX>& mat, 
-                              const vector<double64>& vec );
-
-
-
-
-
-
-#else // if CSMP is not known
-
-// big enough for TRI_3 (2D, 2DOF)
-template class DenseMatrix<DM_MIN>;
-
-template DenseMatrix<DM_MIN>  operator+( 
-                      const DenseMatrix<DM_MIN>& a, 
-                      const DenseMatrix<DM_MIN>& b );
-
-template DenseMatrix<DM_MIN>  operator-(
-                      const DenseMatrix<DM_MIN>& a, 
-                      const DenseMatrix<DM_MIN>& b );
-
-template DenseMatrix<DM_MIN>  operator*(
-                      const DenseMatrix<DM_MIN>& a, 
-                      const DenseMatrix<DM_MIN>& b );
-
-// big enough for HEXA_27 (3D, 3DOF) -> 52 kbyte
-template class DenseMatrix<DM_MAX>;
-
-template DenseMatrix<DM_MAX>  operator+( 
-                      const DenseMatrix<DM_MAX>& a, 
-                      const DenseMatrix<DM_MAX>& b );
-
-template DenseMatrix<DM_MAX>  operator-(
-                      const DenseMatrix<DM_MAX>& a, 
-                      const DenseMatrix<DM_MAX>& b );
-
-template DenseMatrix<DM_MAX>  operator*(
-                      const DenseMatrix<DM_MAX>& a, 
-                      const DenseMatrix<DM_MAX>& b );
-
-template
-vector<double64>  operator*( const DenseMatrix<DM_MIN>& mat, 
-                           const vector<double64>& vec );
-template
-vector<double64>  operator*( const DenseMatrix<DM_MAX>& mat, 
-                           const vector<double64>& vec );
-#endif
-
-
-// extra operators
-
-template DenseMatrix<DM_MAX>  
-operator*( const vector<double64>& vec, const DenseMatrix<DM_MAX>& mat );
+vector<double>  operator*( const DenseMatrix<DM_MAX>& mat, 
+                           const vector<double>& vec );
 
 } // end namespace csmp

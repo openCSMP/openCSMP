@@ -13,8 +13,8 @@ class BrooksCoreyWithHysteresisCO2 : public TwoPhaseModel<dim> {
   public:
     BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
                                const char* permeability, 
-                               double64 viscosity_nw, double64 viscosity_w,
-                               double64 density_nw, double64 density_w,
+                               double viscosity_nw, double viscosity_w,
+                               double density_nw, double density_w,
                                const char* lamda, const char* pc_entry );
 
     BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
@@ -26,27 +26,27 @@ class BrooksCoreyWithHysteresisCO2 : public TwoPhaseModel<dim> {
     virtual void Initialize( Element<dim>& e );
     
     // relative permeabilities
-    virtual double64 krn_Phase() const;
-    virtual double64 krw_Phase() const;
+    virtual double krn_Phase() const;
+    virtual double krw_Phase() const;
 
     // derivative of fractional flow (advection multipliers)
-    virtual double64 dfds() const;
+    virtual double dfds() const;
     
     // maximum absolute value returned by dfdS                              
-    virtual double64 MaxFractionalFlowDerivative() const;
+    virtual double MaxFractionalFlowDerivative() const;
 
     // derivatives of gravitational flow (advection multipliers)                                      
-    virtual double64 dGds() const;
+    virtual double dGds() const;
     
     // capillary pressure
-    virtual double64 pc_Phase( size_t phase ) const;
+    virtual double pc_Phase( size_t phase ) const;
     
     // capillary pressure derivatives
-    virtual double64 dpcds_Phase( size_t phase ) const;
+    virtual double dpcds_Phase( size_t phase ) const;
       
     // linearized fractional flow derivative
-    virtual double64 ShockSpeed() const;
-    virtual double64 ShockHeight() const;
+    virtual double ShockSpeed() const;
+    virtual double ShockHeight() const;
     
     virtual void Out( size_t phase ) const;
 
@@ -54,13 +54,13 @@ class BrooksCoreyWithHysteresisCO2 : public TwoPhaseModel<dim> {
     BrooksCoreyWithHysteresisCO2();
     csmp::Index          pd_key, lamda_key, sormax_key, 
                          sat_previous_key, sat_inflection_key;
-    const double64       acc_gravity_; 
-    double64             sat_previous, // previous timestep water saturation
+    const double       acc_gravity_; 
+    double             sat_previous, // previous timestep water saturation
                          sat_inflection, // brancing point to scaning curve
                          sormax; //maximum residual oil saturation
     bool                 imbibing, //True when wetting phase increases
                          on_scaning_curve; //True when it is on scaning curve                     
-    double64 CC, CK, Sot, Snorm, kroDswinflection, Sof_1_Snorm, kroI_1_Snorm, pm1, pm2; //temporary values for calculating krn()
+    double CC, CK, Sot, Snorm, kroDswinflection, Sof_1_Snorm, kroI_1_Snorm, pm1, pm2; //temporary values for calculating krn()
 };
 
 } // end namespace csmp

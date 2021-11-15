@@ -32,7 +32,7 @@ Results are written to a set of files with the extensions:
 @attention If the corresponding variables are not present in the model, this function will fail.
  
 */
-void outputToXGraph( const Model<1U>& model, const char* file_name, double64 model_time, bool append_to_files=false );
+void outputToXGraph( const Model<1U>& model, const char* file_name, double model_time, bool append_to_files=false );
 
 /**
   @}

@@ -21,7 +21,7 @@ template<size_t dim> class Model;
 template<size_t dim>
 class MeshDiagnostics {
   public:
-    void ElementVolumeRange( const Model<dim>&, double64& vmin, double64& vmax ) const;
+    void ElementVolumeRange( const Model<dim>&, double& vmin, double& vmax ) const;
   
     /// summary: diagnostics including checks/reports negative element orientations, flat elements, zero volumes etc.
     bool ScrutinizeMesh( Model<3U>& ) const;

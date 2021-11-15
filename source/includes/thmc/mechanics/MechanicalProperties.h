@@ -14,10 +14,10 @@
 namespace csmp {
   
 /// returns arctan(mu) in degrees, @test OK
-double64  frictionAngle( double64 friction_coeff );
+double  frictionAngle( double friction_coeff );
   
 /// modified Griffith criterion from Brace, 1960
-double64  tensileStrengthFromUCS_Griffith( double64 UCS, double64 fric_coeff );
+double  tensileStrengthFromUCS_Griffith( double UCS, double fric_coeff );
 
 
 /**
@@ -39,22 +39,22 @@ struct MechanicalProperties {
    MechanicalProperties();
   
    /// from property values supplied as a vector
-   explicit MechanicalProperties( const std::vector<double64>& properties );
+   explicit MechanicalProperties( const std::vector<double>& properties );
   
    /// partial initialisation
-   MechanicalProperties( double64 E, double64 K, double64 nu,
-                         double64 tensile_strength, double64 fric_coeff );
+   MechanicalProperties( double E, double K, double nu,
+                         double tensile_strength, double fric_coeff );
   
-   double64  E_;          ///< Young's modulus
-   double64  B_;          ///< bulk modulus = compressibility of rock skeleton = K_dry
-   double64  G_;          ///< shear modulus = modulus of rigidity
-   double64  alpha_;      ///< Biot coefficient alpha = 1 - K_dry/K_grain
-   double64  TS_;         ///< tensile strength
-   double64  UCS_;        ///< unconfined compressive strength
-   double64  pstar_;      ///< crushing pressure of the rock, see Fjaer et al. 08', p. 68
-   double64  mu_;         ///< friction coefficient
-   double64  nu_;         ///< Poisson's ratio
-   double64  C_;          ///< cohesive strength = inherent shear strength
+   double  E_;          ///< Young's modulus
+   double  B_;          ///< bulk modulus = compressibility of rock skeleton = K_dry
+   double  G_;          ///< shear modulus = modulus of rigidity
+   double  alpha_;      ///< Biot coefficient alpha = 1 - K_dry/K_grain
+   double  TS_;         ///< tensile strength
+   double  UCS_;        ///< unconfined compressive strength
+   double  pstar_;      ///< crushing pressure of the rock, see Fjaer et al. 08', p. 68
+   double  mu_;         ///< friction coefficient
+   double  nu_;         ///< Poisson's ratio
+   double  C_;          ///< cohesive strength = inherent shear strength
   
    // TODO: here we need the correlations that relate the properties to variations in the parent rock type
    // derived properties for fault rocks: dilatation, compaction etc.

@@ -27,7 +27,7 @@ template<size_t dim>
 void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg, 
                                                 const char* channel_region, 
                                                 const char* channel_width,
-                                                double64 minimum_channel_width )
+                                                double minimum_channel_width )
  {
     if ( sg.Database().Type(channel_width) != SCALAR or 
          sg.Database().Placement(channel_width) != NODE )
@@ -75,7 +75,7 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
 
     // imposing a lower bound on channel permeability according to user-specified minimum channel width
     const bool use_upper_limit(false);
-    const double64 min_channel_k = (minimum_channel_width * minimum_channel_width) / 12.;
+    const double min_channel_k = (minimum_channel_width * minimum_channel_width) / 12.;
     imposeLimitOn( sg, channel_region, "permeability", use_upper_limit, min_channel_k );
 
     printRangeOfVariable( sg, channel_region, "permeability" );
@@ -99,8 +99,8 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
 
  } // end parallelPlatePermeabilityFromChannelWidth
  
-template void parallelPlatePermeabilityFromChannelWidth( Model<2U>&, const char*, const char*, double64 );
-template void parallelPlatePermeabilityFromChannelWidth( Model<3U>&, const char*, const char*, double64 );
+template void parallelPlatePermeabilityFromChannelWidth( Model<2U>&, const char*, const char*, double );
+template void parallelPlatePermeabilityFromChannelWidth( Model<3U>&, const char*, const char*, double );
 
 
 

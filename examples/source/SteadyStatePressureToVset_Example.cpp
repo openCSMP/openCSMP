@@ -143,7 +143,7 @@ void SteadyStatePressureToVset_Example::Run()
     //   (note that this works variably well depending on the number of FE that span across
     //    the fractures)
     // -------------------------------------------------------------------------------------
-    const double64 minimum_channel_width( 1.0e-6 ); // one micrometer
+    const double minimum_channel_width( 1.0e-6 ); // one micrometer
     parallelPlatePermeabilityFromChannelWidth( *model, "fractures", "aperture", minimum_channel_width );
     printRangeOfVariable( *model, "permeability" );
 
@@ -157,7 +157,7 @@ void SteadyStatePressureToVset_Example::Run()
 
     // 6. Calculating hydraulic conductivity from permeability using Interrelation subclass
     // ------------------------------------------------------------------------------------
-    const double64 fluid_viscosity(1.0e-03);
+    const double fluid_viscosity(1.0e-03);
     ConstantFactor<2U,divides>  conductivity( model->Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );
@@ -229,7 +229,7 @@ void SteadyStatePressureToVset_Example::Run()
 
     // 11. Write the entire model to a CSMP binary VSet file
     // ------------------------------------------------------
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     VSet<2U> saved_model, input_model;
     cout << "\nSaving model to VSet... " << endl;
     model->Region("Model").OutputTo( saved_model );

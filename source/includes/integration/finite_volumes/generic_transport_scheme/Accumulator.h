@@ -33,11 +33,11 @@ class Accumulator {
     void SetUp(); 
 
     /// accumuates finite volume / hybride FVM _ FEM transport equation into global system
-    void Accumulate( double64 time_increment=1. );
+    void Accumulate( double time_increment=1. );
      
     /// compensate (+) balance at inflow boundaries, (-) balance at outflow boundaries, and any potential divergence of flow at no-flow boundaries              
-    void BalanceFlowsThroughTruncatedBoundaryFiniteVolumes( SparseMatrix& lhs, std::vector<double64>& rhs,
-                                                            double64 time_increment=1.);
+    void BalanceFlowsThroughTruncatedBoundaryFiniteVolumes( SparseMatrix& lhs, std::vector<double>& rhs,
+                                                            double time_increment=1.);
   private:  
      /// accumulates individual finite element - finite volume stencils for interior and halo elements
     void AccumulateByStencil( typename std::vector<Element<dim>*>::const_iterator begin, 
@@ -49,7 +49,7 @@ class Accumulator {
     void AccumulateByStencil( typename std::vector<Element<dim>*>::const_iterator begin, 
                               typename std::vector<Element<dim>*>::const_iterator end,
                               const VectorOperator<dim>* const, ///< modified to contain operation information
-                              std::vector<double64>& rhs ) const;
+                              std::vector<double>& rhs ) const;
     
     /// accumulates individual finite volumes
     void AccumulateByFiniteVolume( typename std::vector<Node<dim>*>::const_iterator begin,
@@ -60,7 +60,7 @@ class Accumulator {
     void AccumulateByFiniteVolume( typename std::vector<Node<dim>*>::const_iterator begin,
                                    typename std::vector<Node<dim>*>::const_iterator end,
                                    const VectorOperator<dim>* const, ///< modified to contain operation information
-                                   std::vector<double64>& rhs ) const;
+                                   std::vector<double>& rhs ) const;
 
   private:
     /// shorthand for accessing the class that this is a policy of

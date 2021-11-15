@@ -132,14 +132,14 @@ public:
   Element<dim>*	const AddElement( CSMP_FEM_TYPE,
                                   const LocalVariables& element_variables,
                                   const IntegrationPointVariables& element_integration_point_variables,
-                                  const std::vector<Node<dim>*>& nodes, int32 material_id );
+                                  const std::vector<Node<dim>*>& nodes, int32_t material_id );
 
   /// puts lower-dimensional element inside of an InterFace, connecting it to its base pointer; the neighbors are not connected yet
   Element<dim>*	const AddInterveningElement( csmp::InterFace<dim>* const,
                                              const LocalVariables&,
                                              const IntegrationPointVariables&,
                                              const std::vector<Node<dim>*>& nodes,
-                                             int32 material_id );
+                                             int32_t material_id );
 
   /// compatibility checks are performed
   Face<dim>* const ReplaceElementByFace( csmp::Element<dim>* eptr,
@@ -236,7 +236,7 @@ public:
                  typename std::vector<CELL<dim>*>::iterator last );
 
   /// JCK's method to test the connectivity of a mesh after it had been read from binary file
-  int32 CheckElementConnectivity() const;
+  int32_t CheckElementConnectivity() const;
 
   /// prints stored objects and their connectivity to screen
   void Out() const;

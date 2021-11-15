@@ -117,8 +117,8 @@ void SparseMatrix_Test::run()
 
         if ( verbose_ ) cout << "Test vector x =   ";
 
-        vector<double64>::const_iterator it( x.begin() );
-        for ( vector<double64>::const_iterator
+        vector<double>::const_iterator it( x.begin() );
+        for ( vector<double>::const_iterator
              it = x.begin(); it != x.end(); it++ )
         {
             if ( verbose_ ) cout << *it << setw(5);
@@ -127,11 +127,11 @@ void SparseMatrix_Test::run()
         if ( verbose_ ) cout << "\n\ny = A * x";
         A.MultiplyWith( x, y );
 
-        vector<double64>::const_iterator it1(y.begin());
+        vector<double>::const_iterator it1(y.begin());
 
         if ( verbose_ ) cout << "\n\ny = ";
 
-        for (vector<double64>::const_iterator
+        for (vector<double>::const_iterator
              it1 = y.begin(); it1 != y.end(); it1++ )
         {
             if ( verbose_ ) cout << *it1 << setw(5);
@@ -142,9 +142,9 @@ void SparseMatrix_Test::run()
         sol_y.push_back(17.);
         sol_y.push_back(13.5);
 
-        vector<double64>::const_iterator itsol_y(sol_y.begin());
+        vector<double>::const_iterator itsol_y(sol_y.begin());
 
-        for (vector<double64>::const_iterator
+        for (vector<double>::const_iterator
              itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
             {
                 //cout << "\n" << *itsol_y << setw(7) << *it1;

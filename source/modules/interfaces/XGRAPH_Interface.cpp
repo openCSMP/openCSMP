@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
 // use  xgraph -M   to view in X-term window
-void outputToXGraph( const Model<1U>& model, const char* file_name, double64 model_time, bool append_to_files )
+void outputToXGraph( const Model<1U>& model, const char* file_name, double model_time, bool append_to_files )
  {
     string  simulation_name(file_name);
     
@@ -54,8 +54,8 @@ void outputToXGraph( const Model<1U>& model, const char* file_name, double64 mod
     const Region<1>&  sgref(model.Region("Model"));
     
     // organising node output data by x-coordinate
-    map<double64,vector<double64> >  nodeprop_map;
-    vector<double64>                 nodeprops(3U);
+    map<double,vector<double> >  nodeprop_map;
+    vector<double>                 nodeprops(3U);
 
     for ( vector<Node<1U>*>::const_iterator
           it=sgref.NodesBegin(); it!=sgref.NodesEnd(); it++ ) {
@@ -66,7 +66,7 @@ void outputToXGraph( const Model<1U>& model, const char* file_name, double64 mod
       }
        
     // writing nodal variable sets
-    for ( map<double64,vector<double64> >::const_iterator
+    for ( map<double,vector<double> >::const_iterator
           it=nodeprop_map.begin(); it!=nodeprop_map.end(); it++ ) 
       {
          ofs_so << (*it).first <<" "<< (*it).second[0] << endl;
@@ -77,8 +77,8 @@ void outputToXGraph( const Model<1U>& model, const char* file_name, double64 mod
     
       
     // organising element output data by x-coordinate
-    map<double64,vector<double64> >  elmtprop_map;
-    vector<double64>                 elmtprops(2U);
+    map<double,vector<double> >  elmtprop_map;
+    vector<double>                 elmtprops(2U);
 
     for ( vector<Element<1U>*>::const_iterator
           it=sgref.ElementsBegin(); it!=sgref.ElementsEnd(); it++ ) {
@@ -88,7 +88,7 @@ void outputToXGraph( const Model<1U>& model, const char* file_name, double64 mod
           elmtprop_map.insert( make_pair( p[0U], elmtprops ) );
       }
     // writing element variable sets with barycentric property locations
-    for ( map<double64,vector<double64> >::const_iterator
+    for ( map<double,vector<double> >::const_iterator
           it=elmtprop_map.begin(); it!=elmtprop_map.end(); it++ ) 
       {
          ofs_lt << (*it).first <<" "<< (*it).second[0] << endl;

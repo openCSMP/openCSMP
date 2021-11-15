@@ -198,14 +198,14 @@ class PropertyDatabase  {
    const char*    Usage( const char* property_name ) const;
    bool           IsDefined( const char* property_name ) const;
    bool           IsDefined( const csmp::Index& idx ) const;
-   void           RangeOf( const char* property_name, double64& min, double64& max ) const;
-   void           SetRangeOf( const char* property_name, double64 vmin, double64 vmax );
-   double64       LowerLimitOf( const char* property_name ) const;
-   double64       UpperLimitOf( const char* property_name ) const;
+   void           RangeOf( const char* property_name, double& min, double& max ) const;
+   void           SetRangeOf( const char* property_name, double vmin, double vmax );
+   double       LowerLimitOf( const char* property_name ) const;
+   double       UpperLimitOf( const char* property_name ) const;
 
    // range checking
    /// prints details of the range check to screen and terminates program is value is out of range
-   void           CheckRange( const char* property_name, double64& var ) const;
+   void           CheckRange( const char* property_name, double& var ) const;
   
    /// checks value against the range specified in the database; @note not fast; use only for selected values
    bool           CheckRange( const char* property_name, const ScalarVariable& ) const;
@@ -227,7 +227,7 @@ class PropertyDatabase  {
                                                size_t& vectors, size_t& tensors,
                                                size_t& arrayCount, size_t& arrayLength ) const;
    
-   double64       UnitConversionFactor( const char* current_system, 
+   double       UnitConversionFactor( const char* current_system, 
                                         const char* desired_system, 
                                         const char* unit ) const;
 
@@ -236,11 +236,11 @@ class PropertyDatabase  {
 
    csmp::Index    AddProperty( const char* property_name, const char* unit, size_t last_max_index,
                                VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
-                               double64 vmin=-1.0e+30 , double64 vmax=1.0e+30 , std::string usage="???" );
+                               double vmin=-1.0e+30 , double vmax=1.0e+30 , std::string usage="???" );
 
    csmp::Index    AddProperty( const char* property_name, const char* unit,
                                VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
-                               double64 vmin=-1.0e+30 , double64 vmax=1.0e+30, std::string usage="???" );
+                               double vmin=-1.0e+30 , double vmax=1.0e+30, std::string usage="???" );
                                    
    void           DeleteProperty( const char* property_name ); 
    

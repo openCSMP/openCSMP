@@ -217,7 +217,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
 
     ifstream  ifs(file_name);
     string text_line,token;
-    vector<vector<double64> > data;
+    vector<vector<double> > data;
     vector<string> columnheaders;
 
     static bool first_call(true);
@@ -251,7 +251,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
             while (!ifs.eof() && (text_line[0] != '#')){
 
                 vector<string> listoftokens;
-                vector<double64> dataline;
+                vector<double> dataline;
                 stringstream iss(text_line);
                 while (getline(iss,token,'\t'))
                     listoftokens.push_back(token);
@@ -351,9 +351,9 @@ void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector
     the element by element integrals.
 */
 template<size_t dim>
-void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
 {
-    double64  integral;
+    double  integral;
     
     // for all properties which shall be integrated over the groups
     for ( typename list<string>::const_iterator
@@ -442,9 +442,9 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double64>& rowdata)
 } // end ScalarPropertyIntegrals
 
 template<size_t dim>
-void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double>& rowdata)
 {
-    double64  rmin, rmax;
+    double  rmin, rmax;
     // for all properties for which ranges shall be monitored
     for ( typename list<string>::const_iterator
           lit=ranged_property_names_.begin(); lit!=ranged_property_names_.end(); lit++ )
@@ -494,7 +494,7 @@ void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double64>& rowdata)
 /// this method reads values directly from the model
 ///
 template<size_t dim>
-void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double>& rowdata)
 {
     string read_value_key;
     string regionname="Model";
@@ -504,21 +504,21 @@ void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double64>& rowdata)
         vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
         if (ith!=values_column_headers_.end()){
             size_t j = ith - values_column_headers_.begin();
-            double64 value=mref_.Read(mref_.Database().StorageKey((*lit).c_str()));
+            double value=mref_.Read(mref_.Database().StorageKey((*lit).c_str()));
             rowdata[j]=value;
         }
     }
 }
 
 template<size_t dim>
-void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& rowdata){
+void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double>& rowdata){
 
     bool hasVolumeElements( HasVolumeElements( mref_ ) );
 
     for (auto sbdmit = subdomains_to_calculate_dimension_.begin() ; sbdmit != subdomains_to_calculate_dimension_.end();sbdmit++){
 
-        double64 void_dim(0.0);
-        double64 bulk_dim(0.0);
+        double void_dim(0.0);
+        double bulk_dim(0.0);
 
         if (mref_.ContainsRegion(sbdmit->c_str())){
             Region<dim> & rref = mref_.Region(sbdmit->c_str());
@@ -532,7 +532,7 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& r
             bulk_dim = bref.Area(); /// @todo multiplication with porosity is not supported as with regions. To be resolved later on.
         }
 
-        map<string,double64> read_value_keys;
+        map<string,double> read_value_keys;
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_VOID_DIM"),void_dim));
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_BULK_DIM"),bulk_dim));
 
@@ -547,8 +547,8 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& r
 
     for (auto sbdmit = subdomains_to_calculate_perimeter_.begin() ; sbdmit != subdomains_to_calculate_perimeter_.end();sbdmit++){
 
-        double64 void_peri(0.0);
-        double64 bulk_peri(0.0);
+        double void_peri(0.0);
+        double bulk_peri(0.0);
 
         if (mref_.ContainsRegion(sbdmit->c_str())){
             Region<dim> & rref = mref_.Region(sbdmit->c_str());
@@ -562,7 +562,7 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& r
             bulk_peri = ( !hasVolumeElements ) ? bref.Area() : bref.Area();///@todo multiplication with porosity is not supported as with regions. To be resolved later on.
         }
 
-        map<string,double64> read_value_keys;
+        map<string,double> read_value_keys;
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_VOID_PERI"),void_peri));
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_BULK_PERI"),bulk_peri));
 
@@ -600,9 +600,9 @@ void SimulatorMonitor<dim>::Monitor()
 }
 
 template<size_t dim>
-void SimulatorMonitor<dim>::ReadModelTime(vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ReadModelTime(vector<double>& rowdata)
 {
-    double64 time = mref_.Read(mref_.Database().StorageKey("model time"));
+    double time = mref_.Read(mref_.Database().StorageKey("model time"));
 
     current_requested_monitor_time_=time;
     for (size_t i = 0 ; i < model_time_indexes_.size();i++) {

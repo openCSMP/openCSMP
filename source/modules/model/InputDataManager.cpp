@@ -117,7 +117,7 @@ is reported contains the offending characters.
 template<size_t dim>
 bool InputDataManager<dim>::ConfigureFRED_ModelFromFile( Model<dim>& model,
                                                          const char* fname,
-                                                         map<string,vector<double64> >& well_data,
+                                                         map<string,vector<double> >& well_data,
                                                          ComputationalSettings& settings )
 {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
@@ -234,7 +234,7 @@ bool InputDataManager<dim>::Configure_ANSYS_ModelFromFile( Model<dim>& model, co
 
     // 2. Read data in blocks
     std::set<std::string> groups;
-    std::map<std::string,std::vector<double64> > well_data;
+    std::map<std::string,std::vector<double> > well_data;
     ComputationalSettings settings;
     bool region_specifications      ( false );  // regionname from parameter range
     bool default_property_values    ( true  );  // default property values
@@ -320,7 +320,7 @@ bool InputDataManager<dim>::ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& 
 
     // 2. Read data in blocks
     std::set<std::string> groups;
-    std::map<std::string,std::vector<double64> > well_data;
+    std::map<std::string,std::vector<double> > well_data;
     ComputationalSettings settings;
     bool region_specifications      ( false );  // regionname from parameter range
     bool default_property_values    ( true  );  // default property values
@@ -390,7 +390,7 @@ bool InputDataManager<dim>::ConfigureRegionsFromFile( Model<dim>& model, const c
 
     // 2. Read data in blocks
     groups.erase( groups.begin(), groups.end() );
-    std::map<std::string,std::vector<double64> > well_data;
+    std::map<std::string,std::vector<double> > well_data;
     ComputationalSettings settings;
     bool region_specifications      ( true  );  // regionname from parameter range
     bool default_property_values    ( false );  // default property values
@@ -474,7 +474,7 @@ bool InputDataManager<dim>::ConfigureFromFile( Model<dim>& model, const char* fn
 
     // 2. Read data in blocks
     std::set<std::string> groups;
-    std::map<std::string,std::vector<double64> > well_data;
+    std::map<std::string,std::vector<double> > well_data;
     ComputationalSettings settings;
     bool region_specifications      ( true  );  // regionname from parameter range
     bool default_property_values    ( true  );  // default property values
@@ -562,7 +562,7 @@ bool InputDataManager<dim>::ConfigureFromFile(
 
     // 2. Read data in blocks
     std::set<std::string> groups;
-    std::map<std::string,std::vector<double64> > well_data;
+    std::map<std::string,std::vector<double> > well_data;
     ComputationalSettings settings;
     bool well_settings          ( false );  // well names, locations, rates, ratios
     bool computational_settings ( false );  // computational settings
@@ -660,7 +660,7 @@ bool InputDataManager<dim>
 
     // 2. Read data in blocks
     std::set<std::string> groups;
-    std::map<std::string,std::vector<double64> > well_data;
+    std::map<std::string,std::vector<double> > well_data;
     bool well_settings          ( false );  // well names, locations, rates, ratios
     bool computational_settings ( true );   // computational settings
     ReadBlocks( model, ifs,
@@ -709,7 +709,7 @@ bool InputDataManager<dim>
 
   // 2. Read data in blocks
   std::set<std::string> groups;
-  std::map<std::string, std::vector<double64> > well_data;
+  std::map<std::string, std::vector<double> > well_data;
   bool well_settings( false );  // well names, locations, rates, ratios
   bool computational_settings( true );   // computational settings
   ReadBlocks( model, ifs,
@@ -742,7 +742,7 @@ bool InputDataManager<dim>
 ::ReadBlocks( Model<dim>& model,
               std::ifstream& ifs,
               std::set<std::string>& groups,
-              std::map<std::string,std::vector<double64> >& well_data,
+              std::map<std::string,std::vector<double> >& well_data,
               ComputationalSettings& settings,
               bool region_specifications,        ///< groupname from parameter range
               bool default_property_values,      ///< default property values

@@ -154,7 +154,7 @@ public:
   size_t FormRegionFrom( const char* regionname, std::vector<size_t>& elmt_ids, bool is_unique=true );
 
   /// forms a new non-unique region from elements whose property value falls into the user-defined range; returns number of elements
-  size_t FormRegionFrom( const char* regionname, const char* prop, double64 pmin, double64 pmax, bool unique = false );
+  size_t FormRegionFrom( const char* regionname, const char* prop, double pmin, double pmax, bool unique = false );
 
   /// forms region from complex value constraints as provided via a PropertyContraints object that has to be configured before; returns number of elements
   size_t FormRegionFrom( const char* regionname, PropertyConstraints&, bool unique = false );
@@ -228,7 +228,7 @@ public:
 
   // TODO: test
   /// creates a lower-dimensional region along the contact area of 2 higher dimensional ones
-  size_t  RegionBetween( const char* region_a, const char* region_b, const char* region_between, int32 material_id );
+  size_t  RegionBetween( const char* region_a, const char* region_b, const char* region_between, int32_t material_id );
 
   /// finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
   size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,

@@ -28,12 +28,12 @@ template<size_t> class VTU_Interface;
 template<size_t,template<size_t> class SIMPLEX> class ModelSubDomain;
 
 // hack forwards
-double64 zCoordinate( Point<3> const& );
-double64 zCoordinate( Point<2> const& );
-double64 zCoordinate( Point<1> const& );
-double64 yCoordinate( Point<3> const& );
-double64 yCoordinate( Point<2> const& );
-double64 yCoordinate( Point<1> const& );
+double zCoordinate( Point<3> const& );
+double zCoordinate( Point<2> const& );
+double zCoordinate( Point<1> const& );
+double yCoordinate( Point<3> const& );
+double yCoordinate( Point<2> const& );
+double yCoordinate( Point<1> const& );
 
 /// writes model boundaries to a binary file
 void outputBoundariesToVTU( const char* modelBinFIleName );
@@ -275,15 +275,15 @@ class VTU_Interface {
 
     /// output vectors in origin of coordinate system to VTU file
     static bool OutputVectorsToVTU( const std::string& fileName, const std::string& propertyCaption,
-                                    const std::vector<std::vector<double64> >& vectors );
+                                    const std::vector<std::vector<double> >& vectors );
     
     /// output principle axes with given length in origin of coordinate system to VTU file
     static bool OutputPrincipalVectorsToVTU( const std::string& fileName, const std::string& propertyCaption,
-                                             const std::vector<double64>& xyzLengths );
+                                             const std::vector<double>& xyzLengths );
 
     /// output tensor placed in origin of coordinate system to VTU file
     static bool OutputTensorToVTU( const std::string& fileName, const std::string& propertyCaption,
-                                   const std::vector<std::vector<double64> >& tensor );
+                                   const std::vector<std::vector<double> >& tensor );
 
 
     // SETUP PARTICULAR OUTPUT OPTIONS

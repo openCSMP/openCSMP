@@ -403,7 +403,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
    
     // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
     // -------------------------------------------------------------------------------------------------------------
-    vector<double64>  enrml, fnrml;
+    vector<double>  enrml, fnrml;
     e.UnitNormal( enrml );
     typename map<const Element<dim>*,size_t>::const_iterator  nbit(nbor_elmts.begin());
     bool inside_elmt_found(false);
@@ -417,7 +417,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
     assert( (*nbit).first != nullptr );
     faces.first = (*nbit).second;
     (*nbit).first->UnitNormalToFace( faces.first, fnrml );
-    double64 dotproduct(0.);
+    double dotproduct(0.);
     for ( size_t k=0U; k<dim; ++k )
       dotproduct += enrml[k] * fnrml[k];
    
@@ -521,7 +521,7 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, std::vector<Element<dim
   else if ( nbor_elmts.size() == 2U ) {
     // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
     // -------------------------------------------------------------------------------------------------------------
-    vector<double64>  enrml, fnrml;
+    vector<double>  enrml, fnrml;
     e.UnitNormal( enrml );
     typename map<Element<dim>*, size_t>::const_iterator  nbit( nbor_elmts.begin() );
     bool inside_elmt_found( false );
@@ -534,7 +534,7 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, std::vector<Element<dim
     assert( (*nbit).first != nullptr );
     faces.first = (*nbit).second;
     (*nbit).first->UnitNormalToFace( faces.first, fnrml );
-    double64 dotproduct( 0. );
+    double dotproduct( 0. );
     for ( size_t k = 0U; k < dim; ++k )
       dotproduct += enrml[k] * fnrml[k];
 
@@ -614,7 +614,7 @@ template bool  higherDimensionalNeighbors( const Element<3U>&, std::vector<Eleme
 */
 template<size_t dim>
 const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, const csmp::Index& mtrl_key,
-                                                     size_t& local_face_number_of_e, double64& material_ID  )
+                                                     size_t& local_face_number_of_e, double& material_ID  )
  {
      if constexpr ( dim == 3 ) assert( e.IsSurfaceElement() );
      if constexpr ( dim == 2 ) assert( e.IsLineElement() );
@@ -682,7 +682,7 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
     // 2. drawing the results
     // -------------------------------------------------------------------------------------------------------------
     material_ID = ( nbor_elmt != nullptr && mtrl_key.place != UNDEFINED )
-                  ? nbor_elmt->Read(mtrl_key) : std::numeric_limits<double64>::quiet_NaN();
+                  ? nbor_elmt->Read(mtrl_key) : std::numeric_limits<double>::quiet_NaN();
    
     return move(nbor_elmt);
    
@@ -690,15 +690,15 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
 
 // STUB
 template<>
-const Element<1U>* const higherDimensionalNeighbor( const Element<1U>& e, const csmp::Index&, size_t&, double64& )
+const Element<1U>* const higherDimensionalNeighbor( const Element<1U>& e, const csmp::Index&, size_t&, double& )
  {
     throw logic_error("higherDimensionalNeighbor(in BoundaryInterface: there should be no boundaries in 1D model");
     return &e;
  }
 
 
-template const Element<2U>* const higherDimensionalNeighbor( const Element<2U>&, const csmp::Index&, size_t&, double64& );
-template const Element<3U>* const higherDimensionalNeighbor( const Element<3U>&, const csmp::Index&, size_t&, double64& );
+template const Element<2U>* const higherDimensionalNeighbor( const Element<2U>&, const csmp::Index&, size_t&, double& );
+template const Element<3U>* const higherDimensionalNeighbor( const Element<3U>&, const csmp::Index&, size_t&, double& );
 
 // TESTING
 /*
@@ -1263,8 +1263,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
      {
        BinaryFileSectionWrite sect(fp, "BOUNDARY");
 
-       const long64 records(this->Boundaries());
-       fp.write( reinterpret_cast<const char*>(&records), sizeof(long64) );
+       const int64_t  records(this->Boundaries());
+       fp.write( reinterpret_cast<const char*>(&records), sizeof(int64_t ) );
 
        for ( typename std::map<std::string,csmp::Boundary<dim> >::const_iterator
              git=BoundariesBegin(); git!=BoundariesEnd(); ++git )
@@ -1275,8 +1275,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
             (*git).second.WriteDomainIndexesToBinaryFile( fp );
             // 1.2 writing the boundary flags
             auto bflag = (*git).second.AtBoundary();
-            const long64 record(1U);
-            fp.write( reinterpret_cast<const char*>(&record), sizeof( long64 ) );
+            const int64_t  record(1U);
+            fp.write( reinterpret_cast<const char*>(&record), sizeof( int64_t  ) );
             fp.write( reinterpret_cast<const char*>(&bflag), sizeof( int8_t ) );
             // 1.3 writing the stored variables
             domainVariablesOut( fp, (*git).second, boundaryComplex.Database() );
@@ -1333,9 +1333,9 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
        BinaryFileSectionRead sect(fp, "BOUNDARY");
        
        SubDomainInfo  info;
-       long64  records(0);  // region records
+       int64_t   records(0);  // region records
        // getting number of unique region records from file
-       fp.read( reinterpret_cast<char*>(&records), sizeof(long64) );
+       fp.read( reinterpret_cast<char*>(&records), sizeof(int64_t ) );
        if ( records > 0 )
           // reading the regions sequentially
           for ( size_t i=0U; i<records; ++i )
@@ -1346,8 +1346,8 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
                readDomainIndexesFromBinaryFile( dim, fp, info );
               
                // 1.2 reading BOX boundary flag of the boundary
-               long64 record;
-               fp.read( reinterpret_cast<char*>(&record), sizeof(long64) );
+               int64_t  record;
+               fp.read( reinterpret_cast<char*>(&record), sizeof(int64_t ) );
                assert( record == 1 );
                std::int8_t box_boundary_index(IRREGULAR_OUTSIDE);
                fp.read( reinterpret_cast<char*>(&box_boundary_index), sizeof(int8_t) );
@@ -2125,9 +2125,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     
     // 1. Grouping pointers to Face objects of 'Model' boundary according to their facing direction
     // -------------------------------------------------------------------------------------------------
-    vector<double64>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
+    vector<double>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
     Box                   box;
-    double64              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
+    double              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
    
     box.UnitNormalTo( BOTTOM, dim, nrml_bottom );
     box.UnitNormalTo( TOP,    dim, nrml_top );

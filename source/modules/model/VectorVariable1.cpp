@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 VectorVariable<1U>::VectorVariable()
-  : flag( ANY ), data( std::numeric_limits<double64>::quiet_NaN() )
+  : flag( ANY ), data( std::numeric_limits<double>::quiet_NaN() )
 {
 }
 
@@ -37,33 +37,33 @@ VectorVariable<1U>&  VectorVariable<1U>::operator=( const VectorVariable<1U>& v 
 
 
 
-double64& VectorVariable<1U>::operator()( size_t )
+double& VectorVariable<1U>::operator()( size_t )
 {
   return data;
 }
 
 
-const double64& VectorVariable<1U>::operator()( size_t ) const
+const double& VectorVariable<1U>::operator()( size_t ) const
 {
   return data;
 }
 
 
-double64  VectorVariable<1U>::operator[]( size_t ) const
+double  VectorVariable<1U>::operator[]( size_t ) const
 {
   return data;
 }
 
 
 
-void  VectorVariable<1U>::Component( size_t, double64 val )
+void  VectorVariable<1U>::Component( size_t, double val )
 {
   data = val;
 }
 
 
 
-double64  VectorVariable<1U>::Component( size_t ) const
+double  VectorVariable<1U>::Component( size_t ) const
 {
   return data;
 }
@@ -83,13 +83,13 @@ size_t VectorVariable<1U>::Size() const
   return 1U;
 }
 
-void VectorVariable<1U>::Resize( size_t, double64 newValue )
+void VectorVariable<1U>::Resize( size_t, double newValue )
 {
   data = newValue;
 }
 
 
-VectorVariable<1U>::VectorVariable( VARIABLE_FLAG f, double64 val )
+VectorVariable<1U>::VectorVariable( VARIABLE_FLAG f, double val )
   : flag( f ), data( val )
 {
 }
@@ -97,7 +97,7 @@ VectorVariable<1U>::VectorVariable( VARIABLE_FLAG f, double64 val )
 
 
 
-VectorVariable<1U>::VectorVariable( const std::vector<double64>& v )
+VectorVariable<1U>::VectorVariable( const std::vector<double>& v )
   : flag( ANY ), data( v[0] )
 {
 }
@@ -138,28 +138,28 @@ VectorVariable<1U>  VectorVariable<1U>::operator/( const VectorVariable<1U>& v )
 
 
 
-VectorVariable<1U>  VectorVariable<1U>::operator+( double64 val ) const
+VectorVariable<1U>  VectorVariable<1U>::operator+( double val ) const
 {
   return VectorVariable( flag, data + val );
 }
 
 
 
-VectorVariable<1U>  VectorVariable<1U>::operator-( double64 val ) const
+VectorVariable<1U>  VectorVariable<1U>::operator-( double val ) const
 {
   return VectorVariable( flag, data - val );
 }
 
 
 
-VectorVariable<1U>  VectorVariable<1U>::operator*( double64 val ) const
+VectorVariable<1U>  VectorVariable<1U>::operator*( double val ) const
 {
   return VectorVariable( flag, data * val );
 }
 
 
 
-VectorVariable<1U>  VectorVariable<1U>::operator/( double64 val ) const
+VectorVariable<1U>  VectorVariable<1U>::operator/( double val ) const
 {
   return VectorVariable( flag, data / val );
 }
@@ -167,7 +167,7 @@ VectorVariable<1U>  VectorVariable<1U>::operator/( double64 val ) const
 
 
 
-VectorVariable<1U>  VectorVariable<1U>::operator^( double64 val ) const
+VectorVariable<1U>  VectorVariable<1U>::operator^( double val ) const
 {
   return VectorVariable( flag, std::pow( data, val ) );
 }
@@ -175,7 +175,7 @@ VectorVariable<1U>  VectorVariable<1U>::operator^( double64 val ) const
 
 
 
-VectorVariable<1U>&  VectorVariable<1U>::operator+=( double64 val )
+VectorVariable<1U>&  VectorVariable<1U>::operator+=( double val )
 {
   data += val;
 
@@ -185,7 +185,7 @@ VectorVariable<1U>&  VectorVariable<1U>::operator+=( double64 val )
 
 
 
-VectorVariable<1U>&  VectorVariable<1U>::operator-=( double64 val )
+VectorVariable<1U>&  VectorVariable<1U>::operator-=( double val )
 {
   data -= val;
 
@@ -195,7 +195,7 @@ VectorVariable<1U>&  VectorVariable<1U>::operator-=( double64 val )
 
 
 
-VectorVariable<1U>&  VectorVariable<1U>::operator*=( double64 val )
+VectorVariable<1U>&  VectorVariable<1U>::operator*=( double val )
 {
   data *= val;
 
@@ -205,7 +205,7 @@ VectorVariable<1U>&  VectorVariable<1U>::operator*=( double64 val )
 
 
 
-VectorVariable<1U>&  VectorVariable<1U>::operator/=( double64 val )
+VectorVariable<1U>&  VectorVariable<1U>::operator/=( double val )
 {
   data /= val;
 
@@ -298,7 +298,7 @@ VectorVariable<1U>&  VectorVariable<1U>::operator/=( const VectorVariable<1U>& v
 // --------------------
 // ASSIGNMENT OPERATORS
 // --------------------
-VectorVariable<1U>&  VectorVariable<1U>::operator=( double64 val )
+VectorVariable<1U>&  VectorVariable<1U>::operator=( double val )
 {
   data = val;
   return *this;
@@ -355,12 +355,12 @@ bool VectorVariable<1U>::operator<( const VectorVariable<1U>& v ) const
 // -------
 
 
-double64 VectorVariable<1U>::DotProduct( const csmp::Point<1U>& p ) const
+double VectorVariable<1U>::DotProduct( const csmp::Point<1U>& p ) const
 {
   return data * p[0];
 }
 
-double64 VectorVariable<1U>::DotProduct( const VectorVariable& v ) const
+double VectorVariable<1U>::DotProduct( const VectorVariable& v ) const
 {
   return data * v[0];
 }
@@ -379,7 +379,7 @@ VectorVariable<1U> VectorVariable<1U>::CrossProduct( const VectorVariable& ) con
 }
 
 
-VectorVariable<1U>   VectorVariable<1U>::ProjectOnto( const std::vector<double64>& v ) const
+VectorVariable<1U>   VectorVariable<1U>::ProjectOnto( const std::vector<double>& v ) const
 {
   return VectorVariable<1U>( flag, v[0] );
 }
@@ -393,7 +393,7 @@ VectorVariable<1U>   VectorVariable<1U>::ProjectOnto( const VectorVariable& v ) 
 
 
 
-double64  VectorVariable<1U>::Length() const
+double  VectorVariable<1U>::Length() const
 {
   return std::fabs( data );
 }
@@ -414,7 +414,7 @@ Point<1U>  VectorVariable<1U>::P() const
 
 
 
-bool  VectorVariable<1U>::IsWithinRange( double64 vmin, double64 vmax ) const
+bool  VectorVariable<1U>::IsWithinRange( double vmin, double vmax ) const
 {
   if ( data < vmin || data > vmax ) return false;
 
@@ -424,16 +424,16 @@ bool  VectorVariable<1U>::IsWithinRange( double64 vmin, double64 vmax ) const
 
 bool VectorVariable<1U>::Out( std::fstream& fp ) const
 {
-  const int32 flag_0( flag );
-  fp.write( (char*)&flag_0, sizeof( int32 ) ); // VARIABLE_FLAG
-  fp.write( (char*)&data, sizeof( double64 ) );
+  const int32_t flag_0( flag );
+  fp.write( (char*)&flag_0, sizeof( int32_t ) ); // VARIABLE_FLAG
+  fp.write( (char*)&data, sizeof( double ) );
   return true;
 }
 
 bool VectorVariable<1U>::In( std::fstream& fp )
 {
-  fp.read( (char*)&flag, sizeof( int32 ) ); // VARIABLE_FLAG
-  fp.read( (char*)&data, sizeof( double64 ) );
+  fp.read( (char*)&flag, sizeof( int32_t ) ); // VARIABLE_FLAG
+  fp.read( (char*)&data, sizeof( double ) );
   return true;
 }
 

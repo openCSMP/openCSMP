@@ -26,9 +26,9 @@ FiniteDifferenceGrid::FiniteDifferenceGrid()
 
 
 
-FiniteDifferenceGrid::FiniteDifferenceGrid( double64 x_dim,       
-                                            double64 y_dim, 
-                                            double64 xres, double64 yres, int32 frame_width )
+FiniteDifferenceGrid::FiniteDifferenceGrid( double x_dim,       
+                                            double y_dim, 
+                                            double xres, double yres, int32_t frame_width )
   : grid(0)
  {
     Initialize( x_dim, y_dim, xres, yres, frame_width );
@@ -39,9 +39,9 @@ FiniteDifferenceGrid::FiniteDifferenceGrid( double64 x_dim,
 
 
 
-FiniteDifferenceGrid::FiniteDifferenceGrid( double64 x_dmin, double64 x_dmax, 
-                                                double64 y_dmin, double64 y_dmax, 
-                                                double64 xres, double64 yres, int32 frame_width )
+FiniteDifferenceGrid::FiniteDifferenceGrid( double x_dmin, double x_dmax, 
+                                                double y_dmin, double y_dmax, 
+                                                double xres, double yres, int32_t frame_width )
   : grid(0)
  {
     Initialize( x_dmin, x_dmax, y_dmin, y_dmax, xres, yres, frame_width );
@@ -49,12 +49,12 @@ FiniteDifferenceGrid::FiniteDifferenceGrid( double64 x_dmin, double64 x_dmax,
 
 
 
-double64&  FiniteDifferenceGrid::operator()( int32 row, int32 col )
+double&  FiniteDifferenceGrid::operator()( int32_t row, int32_t col )
   {
 #ifndef NDEBUG
       if ( row+yfr < 0 || row > size_y+yfr )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::operator(int32_t,int32): "<< std::endl;
            std::cout <<"Row access violation in row: "<< row;
            std::cout <<" (max row index = "<< size_y+yfr <<")" << std::endl;
            std::cout.flush();
@@ -62,7 +62,7 @@ double64&  FiniteDifferenceGrid::operator()( int32 row, int32 col )
         }
       if ( col+xfr < 0 || col > size_x+xfr )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::operator(int32_t,int32): "<< std::endl;
            std::cout <<"Column access violation in column: "<< col;
            std::cout <<" (max column index = "<< size_x+xfr <<")" << std::endl;
            std::cout.flush();
@@ -75,12 +75,12 @@ double64&  FiniteDifferenceGrid::operator()( int32 row, int32 col )
 
 
 
-double64  FiniteDifferenceGrid::operator()( int32 row, int32 col ) const
+double  FiniteDifferenceGrid::operator()( int32_t row, int32_t col ) const
   {
 #ifndef NDEBUG
       if ( row+yfr < 0 || row > size_y+yfr )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::operator(int32_t,int32): "<< std::endl;
            std::cout <<"Row access violation in row: "<< row;
            std::cout <<" (max row index = "<< size_y+yfr <<")" << std::endl;
            std::cout.flush();
@@ -88,7 +88,7 @@ double64  FiniteDifferenceGrid::operator()( int32 row, int32 col ) const
         }
       if ( col+xfr < 0 || col > size_x+xfr )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::operator(int32_t,int32): "<< std::endl;
            std::cout <<"Column access violation in column: "<< col;
            std::cout <<" (max column index = "<< size_x+xfr <<")" << std::endl;
            std::cout.flush();
@@ -101,12 +101,12 @@ double64  FiniteDifferenceGrid::operator()( int32 row, int32 col ) const
 
 
 
-double64  FiniteDifferenceGrid::Value( int32 row, int32 col ) const
+double  FiniteDifferenceGrid::Value( int32_t row, int32_t col ) const
   {
 #ifndef NDEBUG
       if ( row+yfr < 0 || row > size_y+yfr )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::Value(int32,int32): "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::Value(int32_t,int32): "<< std::endl;
            std::cout <<"Row access violation in row: "<< row;
            std::cout <<" (max row index = "<< size_y+yfr <<")" << std::endl;
            std::cout.flush();
@@ -114,7 +114,7 @@ double64  FiniteDifferenceGrid::Value( int32 row, int32 col ) const
         }
       if ( col+xfr < 0 || col > size_x+xfr )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::Value(int32,int32): "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::Value(int32_t,int32): "<< std::endl;
            std::cout <<"Column access violation in column: "<< col;
            std::cout <<" (max column index = "<< size_x+xfr <<")" << std::endl;
            std::cout.flush();
@@ -126,49 +126,49 @@ double64  FiniteDifferenceGrid::Value( int32 row, int32 col ) const
 
 
 
-double64& FiniteDifferenceGrid::N( int32 row, int32 col )
+double& FiniteDifferenceGrid::N( int32_t row, int32_t col )
   {
       return (*this)(row-1,col);
   }
 
 
 
-double64& FiniteDifferenceGrid::NW( int32 row, int32 col )
+double& FiniteDifferenceGrid::NW( int32_t row, int32_t col )
   {
       return (*this)(row-1,col-1);
   }
 
 
 
-double64& FiniteDifferenceGrid::NE( int32 row, int32 col )
+double& FiniteDifferenceGrid::NE( int32_t row, int32_t col )
   {
       return (*this)(row-1,col+1);
   }
 
 
 
-double64& FiniteDifferenceGrid::S( int32 row, int32 col )
+double& FiniteDifferenceGrid::S( int32_t row, int32_t col )
   {
       return (*this)(row+1,col);
   }
 
 
 
-double64& FiniteDifferenceGrid::SW( int32 row, int32 col )
+double& FiniteDifferenceGrid::SW( int32_t row, int32_t col )
   {
       return (*this)(row+1,col-1);
   }
 
 
 
-double64& FiniteDifferenceGrid::SE( int32 row, int32 col )
+double& FiniteDifferenceGrid::SE( int32_t row, int32_t col )
   {
       return (*this)(row+1,col+1);
   }
 
 
 
-double64& FiniteDifferenceGrid::W( int32 row, int32 col )
+double& FiniteDifferenceGrid::W( int32_t row, int32_t col )
   {
       return (*this)(row,col-1);
   }
@@ -176,7 +176,7 @@ double64& FiniteDifferenceGrid::W( int32 row, int32 col )
 
 
 
-double64& FiniteDifferenceGrid::E( int32 row, int32 col )
+double& FiniteDifferenceGrid::E( int32_t row, int32_t col )
   {
       return (*this)(row,col+1);
   }
@@ -184,13 +184,13 @@ double64& FiniteDifferenceGrid::E( int32 row, int32 col )
 
 
 ///returns x-coordinate for column c-style index 0...n
-double64  FiniteDifferenceGrid::X( int32 i ) const
+double  FiniteDifferenceGrid::X( int32_t i ) const
  {
 #ifndef NDEBUG
     if ( i+xfr<0 || i>size_x+xfr ) {
-         std::cout <<"\nFiniteDifferenceGrid<double64>::X: Index out of range: "<< i;
+         std::cout <<"\nFiniteDifferenceGrid<double>::X: Index out of range: "<< i;
          std::cout <<" versus ("<< -xfr <<"-"<< size_x+xfr <<")."<< std::endl;
-         throw std::out_of_range("FiniteDifferenceGrid<double64>::X");
+         throw std::out_of_range("FiniteDifferenceGrid<double>::X");
       }
 #endif
     return i * xresolution + x_min;
@@ -199,13 +199,13 @@ double64  FiniteDifferenceGrid::X( int32 i ) const
  
  
 ///returns x-coordinate for row c-style index 0...n
-double64  FiniteDifferenceGrid::Y( int32 j ) const
+double  FiniteDifferenceGrid::Y( int32_t j ) const
  {
 #ifndef NDEBUG
     if ( j+yfr<0 || j>size_y+yfr ) {
-         std::cout <<"\nFiniteDifferenceGrid<double64>::Y: Index out of range: "<< j;
+         std::cout <<"\nFiniteDifferenceGrid<double>::Y: Index out of range: "<< j;
          std::cout <<" versus ("<< -yfr <<"-"<< size_y+yfr <<")."<< std::endl;
-         throw std::out_of_range("FiniteDifferenceGrid<double64>::Y");
+         throw std::out_of_range("FiniteDifferenceGrid<double>::Y");
       }
 #endif
      return j * yresolution + y_min;
@@ -223,14 +223,14 @@ NB:  i,j are NOT numbered in the usual matrix sense
      - j refers to y-coordinate direction
 
 */
-void  FiniteDifferenceGrid::ClosestGridPointTo( double64 x, double64 y,
-                                                       int32& row, int32& col )
+void  FiniteDifferenceGrid::ClosestGridPointTo( double x, double y,
+                                                       int32_t& row, int32_t& col )
  const
  {
 #ifndef NDEBUG
       if ( x < x_min || x > x_max )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::ClosestGridPointTo: "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::ClosestGridPointTo: "<< std::endl;
            std::cout <<"x-coordinate lies outside of grid: "<< x;
            std::cout <<" (xmin="<< x_min <<", xmax="<< x_max <<")" << std::endl;
            std::cout.flush();
@@ -238,7 +238,7 @@ void  FiniteDifferenceGrid::ClosestGridPointTo( double64 x, double64 y,
         }
       if ( y < y_min || y > y_max )
         {
-           std::cout <<"\nFiniteDifferenceGrid<double64>::ClosestGridPointTo: "<< std::endl;
+           std::cout <<"\nFiniteDifferenceGrid<double>::ClosestGridPointTo: "<< std::endl;
            std::cout <<"y-coordinate lies outside grid: "<< y;
            std::cout <<" (ymin="<< y_min <<", ymax="<< y_max <<")" << std::endl;
            std::cout.flush();
@@ -259,13 +259,13 @@ bool FiniteDifferenceGrid::In( const char* fname )
     ifstream ifs(fname);
     if ( !ifs )
       {
-         cout <<"\nFiniteDifferenceGrid<double64>::In: input file cannot be opened. ";
+         cout <<"\nFiniteDifferenceGrid<double>::In: input file cannot be opened. ";
          cout <<" Nothing was done..."<< endl;
          return false;
       }
     char intext[255];
-    double64     fxmin, fxmax, fymin, fymax, fdx, fdy;
-    int32  frows, fcols;
+    double     fxmin, fxmax, fymin, fymax, fdx, fdy;
+    int32_t  frows, fcols;
 
     // reading header 
     ifs.getline( intext, 255 );
@@ -286,8 +286,8 @@ bool FiniteDifferenceGrid::In( const char* fname )
     // frame width 
     ifs >> xfr >> yfr;  
     if ( xfr != yfr ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::In:  Cannot handle different X & Y frame sizes."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::In");
+         cout <<"\nFiniteDifferenceGrid<double>::In:  Cannot handle different X & Y frame sizes."<< endl;
+         throw length_error("FiniteDifferenceGrid<double>::In");
       }
     
     // rebuilding grid
@@ -295,11 +295,11 @@ bool FiniteDifferenceGrid::In( const char* fname )
 
     // reading core data of grid from input file (not the frame)
     // extra row and column are used for the last values of the range
-    for ( int32 i=-yfr; i<frows+yfr; i++ )
-      for ( int32 j=-xfr; j<fcols+xfr; j++ ) ifs >> (*this)(i,j);
+    for ( int32_t i=-yfr; i<frows+yfr; i++ )
+      for ( int32_t j=-xfr; j<fcols+xfr; j++ ) ifs >> (*this)(i,j);
     ifs.close();
 
-    cout <<"\nFiniteDifferenceGrid<double64>::In: grid build successfully from text file." << endl;
+    cout <<"\nFiniteDifferenceGrid<double>::In: grid build successfully from text file." << endl;
     cout.flush();
 
     return true;
@@ -328,8 +328,8 @@ FiniteDifferenceGrid::~FiniteDifferenceGrid()
 
 
 
-void FiniteDifferenceGrid::Initialize( double64 x_dim, double64 y_dim,
-				       double64 xres, double64 yres, int32 frame_width )
+void FiniteDifferenceGrid::Initialize( double x_dim, double y_dim,
+				       double xres, double yres, int32_t frame_width )
  {
      Initialize( 0.0, x_dim, 0.0, y_dim, xres, yres, frame_width );
  }
@@ -337,9 +337,9 @@ void FiniteDifferenceGrid::Initialize( double64 x_dim, double64 y_dim,
 
 
 
-void FiniteDifferenceGrid::Initialize( double64 x_dmin, double64 x_dmax, 
-                                           double64 y_dmin, double64 y_dmax, 
-                                           double64 xres, double64 yres, int32 frame_width )
+void FiniteDifferenceGrid::Initialize( double x_dmin, double x_dmax, 
+                                           double y_dmin, double y_dmax, 
+                                           double xres, double yres, int32_t frame_width )
  {
      // 0. removing old grid
      delete[] grid; 
@@ -353,13 +353,13 @@ void FiniteDifferenceGrid::Initialize( double64 x_dmin, double64 x_dmax,
 
      // 0. checks
      z_min = z_max = 0.0;
-     double64 swap;
+     double swap;
      if ( x_min > x_max ) { swap=x_min; x_min=x_max; x_max=swap; }
      if ( y_min > y_max ) { swap=y_min; y_min=y_max; y_max=swap; }
 
      // 1. getting the resolution
-     size_x = static_cast<int32>((x_max-x_min) / xresolution + 1.);
-     size_y = static_cast<int32>((y_max-y_min) / yresolution + 1.);
+     size_x = static_cast<int32_t>((x_max-x_min) / xresolution + 1.);
+     size_y = static_cast<int32_t>((y_max-y_min) / yresolution + 1.);
      size_z = 0;
 
      // 2. extra data member for speed
@@ -367,10 +367,10 @@ void FiniteDifferenceGrid::Initialize( double64 x_dmin, double64 x_dmax,
      
      // 3. setting up the vector-grid
      cout <<"\nFiniteDifferenceGrid: building new grid; allocating ";
-     cout << (((size_x+2*xfr) * (size_y+2*yfr) * sizeof(double64)) / 1.0e+6);
+     cout << (((size_x+2*xfr) * (size_y+2*yfr) * sizeof(double)) / 1.0e+6);
      cout <<" MByte of memory..." << endl;
      
-     grid  = new double64[ (size_x+2*xfr) * (size_y+2*yfr) ];
+     grid  = new double[ (size_x+2*xfr) * (size_y+2*yfr) ];
      
      // 4. give initial value of zero
      *this = 0.0;
@@ -378,37 +378,37 @@ void FiniteDifferenceGrid::Initialize( double64 x_dmin, double64 x_dmax,
 
 
 
-    double64 FiniteDifferenceGrid::ResolutionX() const { return xresolution; }
+    double FiniteDifferenceGrid::ResolutionX() const { return xresolution; }
     
 
-    double64 FiniteDifferenceGrid::ResolutionY() const { return yresolution; }
+    double FiniteDifferenceGrid::ResolutionY() const { return yresolution; }
     
 
-    int32   FiniteDifferenceGrid::Rows()        const { return size_y-1; }
+    int32_t   FiniteDifferenceGrid::Rows()        const { return size_y-1; }
     
 
-    int32   FiniteDifferenceGrid::Columns()     const { return size_x-1; }
+    int32_t   FiniteDifferenceGrid::Columns()     const { return size_x-1; }
     
 
     bool   FiniteDifferenceGrid::HasFrame()    const { return (xfr!=0||yfr!=0||zfr!=0); }
     
 
-    double64 FiniteDifferenceGrid::MinX()        const { return x_min; }
+    double FiniteDifferenceGrid::MinX()        const { return x_min; }
     
 
-    double64 FiniteDifferenceGrid::MinY()        const { return y_min; }
+    double FiniteDifferenceGrid::MinY()        const { return y_min; }
     
 
-    double64 FiniteDifferenceGrid::MinZ()        const { return z_min; }
+    double FiniteDifferenceGrid::MinZ()        const { return z_min; }
     
 
-    double64 FiniteDifferenceGrid::MaxX()        const { return x_max; }
+    double FiniteDifferenceGrid::MaxX()        const { return x_max; }
     
 
-    double64 FiniteDifferenceGrid::MaxY()        const { return y_max; }
+    double FiniteDifferenceGrid::MaxY()        const { return y_max; }
     
 
-    double64 FiniteDifferenceGrid::MaxZ()        const { return z_max; }
+    double FiniteDifferenceGrid::MaxZ()        const { return z_max; }
 
 
 bool   FiniteDifferenceGrid::IsInitialized() const
@@ -438,8 +438,8 @@ FiniteDifferenceGrid& FiniteDifferenceGrid::operator=( const FiniteDifferenceGri
     yfr         = g.yfr;
     zfr         = g.zfr;
     delete[] grid;
-    grid = new double64[ (size_x+2*xfr) * (size_y+2*yfr) ];
-    for ( int32 i=0; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) grid[i] = g.grid[i];
+    grid = new double[ (size_x+2*xfr) * (size_y+2*yfr) ];
+    for ( int32_t i=0; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) grid[i] = g.grid[i];
 
     return *this;    
  }
@@ -447,87 +447,87 @@ FiniteDifferenceGrid& FiniteDifferenceGrid::operator=( const FiniteDifferenceGri
  
 
 
-FiniteDifferenceGrid& FiniteDifferenceGrid::operator=( double64 val )
+FiniteDifferenceGrid& FiniteDifferenceGrid::operator=( double val )
  {
-    for ( int32 i=0; i<((size_x+2*xfr)*(size_y+2*yfr)); i++ ) grid[i] = val;
+    for ( int32_t i=0; i<((size_x+2*xfr)*(size_y+2*yfr)); i++ ) grid[i] = val;
     return *this;    
  }
 
 
-void   FiniteDifferenceGrid::SetRowTo( int32 row, double64 val )
+void   FiniteDifferenceGrid::SetRowTo( int32_t row, double val )
  {
     if ( row+xfr<0 || row>size_x+xfr ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::SetRowTo: Row index out of range: "<< row;
+         cout <<"\nFiniteDifferenceGrid<double>::SetRowTo: Row index out of range: "<< row;
          cout <<" versus ("<< -xfr <<"-"<< size_x+xfr <<")."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::SetRowTo");
+         throw length_error("FiniteDifferenceGrid<double>::SetRowTo");
       }
-    for ( int32 j=-xfr; j<(size_x+xfr); j++ ) (*this)(row,j) = val;
+    for ( int32_t j=-xfr; j<(size_x+xfr); j++ ) (*this)(row,j) = val;
  }
 
 
 
-void   FiniteDifferenceGrid::SetColumnTo( int32 col, double64 val )
+void   FiniteDifferenceGrid::SetColumnTo( int32_t col, double val )
  {
     if ( col+yfr<0 || col>size_y+yfr ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::SetColumnTo: column index out of range: "<< col;
+         cout <<"\nFiniteDifferenceGrid<double>::SetColumnTo: column index out of range: "<< col;
          cout <<" versus ("<< -yfr <<"-"<< size_y+yfr <<")."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::SetColumnTo");
+         throw length_error("FiniteDifferenceGrid<double>::SetColumnTo");
       }
-    for ( int32 i=-yfr; i<(size_y+yfr); i++ ) (*this)(i,col) = val;
+    for ( int32_t i=-yfr; i<(size_y+yfr); i++ ) (*this)(i,col) = val;
  }
 
 
 
 
-void   FiniteDifferenceGrid::SetFirstNRowsTo( int32 n, double64 val )
+void   FiniteDifferenceGrid::SetFirstNRowsTo( int32_t n, double val )
  {
     if ( n<0 || n>size_y ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::SetFirstNRowsTo: row index out of range: "<< n;
+         cout <<"\nFiniteDifferenceGrid<double>::SetFirstNRowsTo: row index out of range: "<< n;
          cout <<" versus ("<< -yfr <<"-"<< size_y+yfr <<")."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::SetFirstNRowsTo");
+         throw length_error("FiniteDifferenceGrid<double>::SetFirstNRowsTo");
       }
-    for ( int32 i=0; i<n; i++ ) SetRowTo( i, val );
+    for ( int32_t i=0; i<n; i++ ) SetRowTo( i, val );
  }
 
 
 
 
-void   FiniteDifferenceGrid::SetLastNRowsTo( int32 n, double64 val )
+void   FiniteDifferenceGrid::SetLastNRowsTo( int32_t n, double val )
  {
     if ( n<0 || n>size_y ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::SetLastNRowsTo: row index out of range: "<< n;
+         cout <<"\nFiniteDifferenceGrid<double>::SetLastNRowsTo: row index out of range: "<< n;
          cout <<" versus ("<< -yfr <<"-"<< size_y+yfr <<")."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::SetLastNRowsTo");
+         throw length_error("FiniteDifferenceGrid<double>::SetLastNRowsTo");
       }
-    for ( int32 i=size_y-1; i>(size_y-1-n); i-- ) SetRowTo( i, val );
+    for ( int32_t i=size_y-1; i>(size_y-1-n); i-- ) SetRowTo( i, val );
  }
 
  
 
-double64 FiniteDifferenceGrid::RowAverage( int32 row ) const
+double FiniteDifferenceGrid::RowAverage( int32_t row ) const
  {
-    double64 avg = 0.0;
+    double avg = 0.0;
     assert( row+yfr >= 0 && row < size_y+yfr );
-    for ( int32 j=-xfr; j<(size_x+xfr); j++ ) avg += Value(row,j);
+    for ( int32_t j=-xfr; j<(size_x+xfr); j++ ) avg += Value(row,j);
     return avg /= size_x+2*xfr;
  }
 
 
 
 
-double64 FiniteDifferenceGrid::ColumnAverage( int32 col ) const
+double FiniteDifferenceGrid::ColumnAverage( int32_t col ) const
  {
-    double64 avg = 0.0;
+    double avg = 0.0;
     assert( col+xfr >= 0 && col < size_x+xfr );
-    for ( int32 i=-yfr; i<(size_y+yfr); i++ ) avg += Value(i,col);
+    for ( int32_t i=-yfr; i<(size_y+yfr); i++ ) avg += Value(i,col);
     return avg /= size_y+2*yfr;
  } 
 
 
 
-void   FiniteDifferenceGrid::SetRegionTo( double64 xmin, double64 xmax, double64 ymin, double64 ymax, double64 val )
+void   FiniteDifferenceGrid::SetRegionTo( double xmin, double xmax, double ymin, double ymax, double val )
  {
-     int32 i, j, imin, imax, jmin, jmax;
+     int32_t i, j, imin, imax, jmin, jmax;
      
      assert( xmin < xmax );
      assert( ymin < ymax );
@@ -546,8 +546,8 @@ void   FiniteDifferenceGrid::SetRegionTo( double64 xmin, double64 xmax, double64
 
 void   FiniteDifferenceGrid::Out() const
  { 
-    int32 i, j;
-    cout <<"\n\nFiniteDifferenceGrid<double64>::Out(): printing grid of size: ";
+    int32_t i, j;
+    cout <<"\n\nFiniteDifferenceGrid<double>::Out(): printing grid of size: ";
     cout << x_max-x_min <<" by "<< y_max-y_min <<" m" << endl;
     cout <<"x-range:    "<< x_min <<"-"<< x_max <<" m" << endl;
     cout <<"y-range:    "<< y_min <<"-"<< y_max <<" m" << endl;
@@ -570,7 +570,7 @@ void   FiniteDifferenceGrid::Out() const
 
 
 
-void   FiniteDifferenceGrid::Out( const char* fname, int32 tstep, bool with_frame ) const
+void   FiniteDifferenceGrid::Out( const char* fname, int32_t tstep, bool with_frame ) const
  {
     char name[200], num[30];
     strcpy( name, fname );
@@ -580,7 +580,7 @@ void   FiniteDifferenceGrid::Out( const char* fname, int32 tstep, bool with_fram
     ofstream ifs( name );    
     assert( ifs.is_open() );
  
-    ifs <<"FiniteDifferenceGrid<double64>::Out: ASCII text file from double64 grid." << endl;
+    ifs <<"FiniteDifferenceGrid<double>::Out: ASCII text file from double grid." << endl;
     // overall dimensions
     ifs << x_max-x_min <<"\t"<< y_max-y_min << endl;    
      // x & y ranges
@@ -595,13 +595,13 @@ void   FiniteDifferenceGrid::Out( const char* fname, int32 tstep, bool with_fram
 
     // central portion of grid to file
     if ( !with_frame )
-      for ( int32 i=0; i<size_y; i++ ) {
-           for ( int32 j=0; j<size_x; j++ ) ifs << (*this)(i,j) <<"\t";
+      for ( int32_t i=0; i<size_y; i++ ) {
+           for ( int32_t j=0; j<size_x; j++ ) ifs << (*this)(i,j) <<"\t";
            ifs << endl;
         }
     else
-      for ( int32 i=-yfr; i<size_y+yfr; i++ ) {
-           for ( int32 j=-xfr; j<size_x+xfr; j++ ) ifs << (*this)(i,j) <<"\t";
+      for ( int32_t i=-yfr; i<size_y+yfr; i++ ) {
+           for ( int32_t j=-xfr; j<size_x+xfr; j++ ) ifs << (*this)(i,j) <<"\t";
            ifs << endl;
         }
 
@@ -611,13 +611,13 @@ void   FiniteDifferenceGrid::Out( const char* fname, int32 tstep, bool with_fram
 
 
 
-bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32 tstep, bool with_frame ) const
+bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32_t tstep, bool with_frame ) const
  {
     char name[200], num[30], heading[200];
     strcpy( name, bin_name );
     sprintf( num, "%d", tstep );
     strcat( name, num );
-    strcpy( heading, "FiniteDifferenceGrid::BinaryOut: double64 grid as binary file");
+    strcpy( heading, "FiniteDifferenceGrid::BinaryOut: double grid as binary file");
  
     fstream fp (name, ios::out | ios::binary);
     if ( !fp.is_open() ) {
@@ -627,11 +627,11 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32 tstep, bool 
     binaryFileWrite( fp, heading );  
 
     // stores dimensions of grid
-    std::vector<double64>    dim_fT(8);
+    std::vector<double>    dim_fT(8);
     // stores rows, columns, and frame
-    std::vector<int32> dim_int(4);
+    std::vector<int32_t> dim_int(4);
     // grid data
-    std::vector<double64>    grid_data((static_cast<size_t>(size_x)+2*static_cast<size_t>(xfr)) * (static_cast<size_t>(size_y)+2*static_cast<size_t>(yfr)));
+    std::vector<double>    grid_data((static_cast<size_t>(size_x)+2*static_cast<size_t>(xfr)) * (static_cast<size_t>(size_y)+2*static_cast<size_t>(yfr)));
     size_t counter(0);
     
     // overall dimensions
@@ -663,15 +663,15 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32 tstep, bool 
     
     // writing grid data to storage vector
     if ( !with_frame )
-      for ( int32 i=0; i<size_y; i++ ) {
-           for ( int32 j=0; j<size_x; j++ ) {
+      for ( int32_t i=0; i<size_y; i++ ) {
+           for ( int32_t j=0; j<size_x; j++ ) {
                grid_data[counter] = (*this)(i,j);
                counter++;
              }
         }
     else
-      for ( int32 i=-yfr; i<size_y+yfr; i++ ) {
-           for ( int32 j=-xfr; j<size_x+xfr; j++ ) {
+      for ( int32_t i=-yfr; i<size_y+yfr; i++ ) {
+           for ( int32_t j=-xfr; j<size_x+xfr; j++ ) {
                grid_data[counter] = (*this)(i,j);
                counter++;
              }
@@ -700,11 +700,11 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
     cout <<"\nFiniteDifferenceGrid::BinaryIn: Reading: "<< heading << endl;
 
     // read dimensions of grid
-    std::vector<double64>  dim_fT;
+    std::vector<double>  dim_fT;
     // read rows, columns, and frame
-    std::vector<int32> dim_int;
+    std::vector<int32_t> dim_int;
     // read data
-    std::vector<double64>  grid_data;
+    std::vector<double>  grid_data;
     size_t counter(0);
 
     // read info about dimension
@@ -721,8 +721,8 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
 
     // read data and transfer to grid
     binaryFileRead( fp, grid_data ); 
-    for ( int32 i=-dim_int[3]; i<dim_int[1]+dim_int[3]; i++ ) {
-        for ( int32 j=-dim_int[2]; j<dim_int[0]+dim_int[2]; j++ ) {
+    for ( int32_t i=-dim_int[3]; i<dim_int[1]+dim_int[3]; i++ ) {
+        for ( int32_t j=-dim_int[2]; j<dim_int[0]+dim_int[2]; j++ ) {
             (*this)(i,j) = grid_data[counter];
             counter++;
           }
@@ -730,7 +730,7 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
 
  	  fp.close();
     
-    cout <<"\nFiniteDifferenceGrid<double64>::BinaryIn: grid build successfully from binary file." << endl;
+    cout <<"\nFiniteDifferenceGrid<double>::BinaryIn: grid build successfully from binary file." << endl;
     cout.flush();
 
     return true;
@@ -738,11 +738,11 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
 
 
 
-void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double64& dmin, double64& dmax,
+void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double& dmin, double& dmax,
 					                                        bool frame_included ) const
  {
-    int32  i, j;
-    double64 val;
+    int32_t  i, j;
+    double val;
     bool first_call(true);
      
     if ( frame_included )
@@ -763,7 +763,7 @@ void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double64& dmin, double64& dmax
     else
       {
 	// getting min and max of the data (excluding frame)
-        dmax=dmin=(*this)( static_cast<int32>(0), static_cast<int32>(0) );
+        dmax=dmin=(*this)( static_cast<int32_t>(0), static_cast<int32_t>(0) );
         for ( i=0; i<size_y; i++ )
           for ( j=0; j<size_x; j++ ) 
            {
@@ -782,11 +782,11 @@ void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double64& dmin, double64& dmax
 
 
 
-void  FiniteDifferenceGrid::DataMinMax( double64& dmin, double64& dmax,
+void  FiniteDifferenceGrid::DataMinMax( double& dmin, double& dmax,
 					                                  bool frame_included ) const
  {
-    int32  i, j;
-    double64 val;
+    int32_t  i, j;
+    double val;
          
     if ( frame_included )
       {
@@ -800,7 +800,7 @@ void  FiniteDifferenceGrid::DataMinMax( double64& dmin, double64& dmax,
     else
       {
 	// getting min and max of the data (excluding frame)
-        dmax=dmin=(*this)( static_cast<int32>(0),static_cast<int32>(0) );
+        dmax=dmin=(*this)( static_cast<int32_t>(0),static_cast<int32_t>(0) );
         for ( i=0; i<size_y; i++ )
           for ( j=0; j<size_x; j++ ) 
            {
@@ -814,14 +814,14 @@ void  FiniteDifferenceGrid::DataMinMax( double64& dmin, double64& dmax,
 
 
 ///scales all grid data to range: dmin to dmax
-void   FiniteDifferenceGrid::ScaleDataToRange( double64 dmin, double64 dmax )
+void   FiniteDifferenceGrid::ScaleDataToRange( double dmin, double dmax )
  {
-    double64  old_min, old_max;
+    double  old_min, old_max;
     DataMinMax( old_min, old_max, false );
-    double64  old_range = old_max - old_min;
-    double64  new_range = dmax - dmin;  
+    double  old_range = old_max - old_min;
+    double  new_range = dmax - dmin;  
 
-    for ( int32 i=0; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) 
+    for ( int32_t i=0; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) 
       grid[i] = dmin + ((grid[i] - old_min)/old_range) * new_range;
 
  } // end ScaleDataToRange
@@ -837,14 +837,14 @@ void   FiniteDifferenceGrid::ScaleDataToRange( double64 dmin, double64 dmax )
 
 
 /// 4 point, third order polynomial extrapolation
-void  FiniteDifferenceGrid::PolynomialInterpolation( double64* xa, double64* ya, 
-                                                     double64  x,  double64& y, 
-                                                     double64& dy ) const
+void  FiniteDifferenceGrid::PolynomialInterpolation( double* xa, double* ya, 
+                                                     double  x,  double& y, 
+                                                     double& dy ) const
 {
-    // constraint point arrays are: xa[], double64 ya[], 
-    double64  c[5], d[5];
-    int32     i, m, ns=1;
-    double64  den, dif, dift, ho, hp, w;
+    // constraint point arrays are: xa[], double ya[], 
+    double  c[5], d[5];
+    int32_t     i, m, ns=1;
+    double  den, dif, dift, ho, hp, w;
 
 	dif=fabs(x-xa[1]);
 	for (i=1;i<=4;i++) {
@@ -863,13 +863,13 @@ void  FiniteDifferenceGrid::PolynomialInterpolation( double64* xa, double64* ya,
 			w=c[i+1]-d[i];
 			if ( (den=ho-hp) == 0.0) 
 			  {
-			     cout <<"\nFiniteDifferenceGrid<double64>::PolynomialInterpolation: ";
+			     cout <<"\nFiniteDifferenceGrid<double>::PolynomialInterpolation: ";
 			     cout <<"Error. No interpolation was accomplished."<< endl;
 			     cout <<"Method input: x=" << x <<", modified y="<< y <<", error="<< dy << endl;
 			     cout <<"Constraint point arrays: "<< endl <<"position data: ";
-			     for ( int32 j=1; j<=4; j++ ) cout << xa[j] <<" ";
+			     for ( int32_t j=1; j<=4; j++ ) cout << xa[j] <<" ";
 			     cout << endl <<"dependent variable data: ";
-			     for ( int32 j=1; j<=4; j++ ) cout << ya[j] <<" ";
+			     for ( int32_t j=1; j<=4; j++ ) cout << ya[j] <<" ";
 			     cout << endl;
 			     // setting output to zero
 			     y  = 0.0; 
@@ -896,12 +896,12 @@ A third order polynomial extrapolation is used which performs well if the grid
 variable varies smoothly and monotonous.
 
 */
-double64  FiniteDifferenceGrid::ExtrapolateTo( double64 x, double64 y ) const
+double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
  {
-    static double64  xa[5], ya[5];
-    int32        i;
-    double64         a;
-    double64         err;
+    static double  xa[5], ya[5];
+    int32_t        i;
+    double         a;
+    double         err;
     
     // 1. outside normal boundaries
     // ----------------------------
@@ -960,7 +960,7 @@ double64  FiniteDifferenceGrid::ExtrapolateTo( double64 x, double64 y ) const
       
     // 2. corner cases 
     // ---------------
-    double64 m, len_fac;
+    double m, len_fac;
     
     // BELOW ORIGIN
     if ( x < x_min && y < y_min ) 
@@ -974,7 +974,7 @@ double64  FiniteDifferenceGrid::ExtrapolateTo( double64 x, double64 y ) const
          
          for ( i=1, a=x_min; a<=x_min+3*xresolution; a+=xresolution, i++ )
            {
-              // scaling x to reflect pathlength aint32 sloping line
+              // scaling x to reflect pathlength aint32_t sloping line
               xa[i] = (i-1)*xresolution*len_fac;
               // interpolating on grid f(x)
               ya[i] = (*this)(a, (m * (a-x_min) + y_min) );
@@ -1045,7 +1045,7 @@ P3       // P3 signifies ascii format
 3  3  5    5  6  7  // R G B for each pixel
 */
 
-void   FiniteDifferenceGrid::SaveToPPM( const char* filename, int32 timestep, bool greyscale ) const
+void   FiniteDifferenceGrid::SaveToPPM( const char* filename, int32_t timestep, bool greyscale ) const
  {
     // rgb color stuff (created only once)
     static ColorPalette  rgb_colorizer;  // default rainbow scale 1-255
@@ -1063,19 +1063,19 @@ void   FiniteDifferenceGrid::SaveToPPM( const char* filename, int32 timestep, bo
     assert( ifs.is_open() );
     
     // obtain data range to scale the data to 0-255 for output
-    double64  old_min, old_max;
+    double  old_min, old_max;
     DataMinMax( old_min, old_max, false );
-    double64  old_range = old_max - old_min;
-    double64  new_range = 255.0; 
-    double64  out_val; 
-    int32    i, j;
+    double  old_range = old_max - old_min;
+    double  new_range = 255.0; 
+    double  out_val; 
+    int32_t    i, j;
 
     // data format tag 
     ifs <<"P3"<< endl;
     // binary output: ifs <<"P6"<< endl;
 
     // creator comment line
-    ifs <<"# CREATOR: CSMP FiniteDifferenceGrid<double64>::SaveToPPM() Matthai & Roberts 1999." << endl;
+    ifs <<"# CREATOR: CSMP FiniteDifferenceGrid<double>::SaveToPPM() Matthai & Roberts 1999." << endl;
     
     // writing the file name, timestep and data range into a comment line
     ifs <<"# Filename: "<< filename <<", timestep: "<< timestep;
@@ -1123,7 +1123,7 @@ writing becomes much faster and the image file will be only one-third
 of the RGB image size. If a property value is NAN, the according color will be black.
 */
 
-void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 timestep, 
+void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t timestep, 
                                                     bool greyscale, bool sqrt_of ) const
  {
     // rgb color stuff (created only once)
@@ -1140,7 +1140,7 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
     name +=".jpg";
 
     // obtain data range to scale the data to 0-255 for output
-    double64  old_min, old_max;
+    double  old_min, old_max;
     DataMinMaxWithoutNAN( old_min, old_max, false );
     cout.setf( ios::scientific );
     cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
@@ -1172,21 +1172,21 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
          old_min = sqrt( old_min );
          old_max = sqrt( old_max );
       }
-    double64  old_range = old_max - old_min;
-    double64  new_range = 255.0; 
-    double64  out_val; 
-    int32    i, j;
+    double  old_range = old_max - old_min;
+    double  new_range = 255.0; 
+    double  out_val; 
+    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
     // ----------------------------------------------------------------------------------
     // creating RGB scanline memory for central grid portion without frame
     JSAMPROW          row_pointer[1];
-    int32             image_components = 3;
+    int32_t             image_components = 3;
     if ( greyscale )  image_components = 1;
-    int32             row_stride = size_x * image_components;
+    int32_t             row_stride = size_x * image_components;
     unsigned char*    image_buffer;
-    uint32            incr;
+    uint32_t            incr;
   
     // allocating image memory buffer and storing RGB values within it  
     image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
@@ -1232,8 +1232,8 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
     jpeg_stdio_dest( &cinfo, outfile );
     
     // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32>(size_x);
-    cinfo.image_height     = static_cast<uint32>(size_y);
+    cinfo.image_width      = static_cast<uint32_t>(size_x);
+    cinfo.image_height     = static_cast<uint32_t>(size_y);
     cinfo.input_components = 3;        // color values per pixel
     cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
     if ( greyscale ) 
@@ -1275,8 +1275,8 @@ As method above but allows to specify a fixed value range, such that the
 color range does not vary from timestep to timestep.  
 */
 
-void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 timestep, 
-                                                    double64 vmin, double64 vmax, 
+void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t timestep, 
+                                                    double vmin, double vmax, 
                                                     bool greyscale, bool sqrt_of ) const
  {
     // rgb color stuff (created only once)
@@ -1293,7 +1293,7 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
     name +=".jpg";
 
     // obtain data range to scale the data to 0-255 for output
-    double64  old_min, old_max;
+    double  old_min, old_max;
     DataMinMaxWithoutNAN( old_min, old_max, false );
     cout.setf( ios::scientific );
     cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
@@ -1338,10 +1338,10 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
          old_min = sqrt( old_min );
          old_max = sqrt( old_max );
       }
-    double64  old_range = old_max - old_min;
-    double64  new_range = 255.0; 
-    double64  out_val; 
-    int32    i, j;
+    double  old_range = old_max - old_min;
+    double  new_range = 255.0; 
+    double  out_val; 
+    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
@@ -1352,7 +1352,7 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
     if ( greyscale )  image_components = 1;
     int               row_stride = size_x * image_components;
     unsigned char*    image_buffer;
-    uint32            incr;
+    uint32_t            incr;
   
     // allocating image memory buffer and storing RGB values within it  
     image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
@@ -1400,8 +1400,8 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
     jpeg_stdio_dest( &cinfo, outfile );
     
     // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32>(size_x);
-    cinfo.image_height     = static_cast<uint32>(size_y);
+    cinfo.image_width      = static_cast<uint32_t>(size_x);
+    cinfo.image_height     = static_cast<uint32_t>(size_y);
     cinfo.input_components = 3;        // color values per pixel
     cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
     if ( greyscale ) 
@@ -1442,7 +1442,7 @@ of the RGB image size.
 'sqrt' (default=false) allows you to store the square root of the value.
 */
 
-void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep, 
+void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep, 
                                       bool greyscale, bool sqrt_of ) const
  {
     // rgb color stuff (created only once)
@@ -1459,7 +1459,7 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
     name +=".jpg";
 
     // obtain data range to scale the data to 0-255 for output
-    double64  old_min, old_max;
+    double  old_min, old_max;
     DataMinMax( old_min, old_max, false );
     cout.setf( ios::scientific );
     cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
@@ -1491,21 +1491,21 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
          old_min = sqrt( old_min );
          old_max = sqrt( old_max );
       }
-    double64  old_range = old_max - old_min;
-    double64  new_range = 255.0; 
-    double64  out_val; 
-    int32    i, j;
+    double  old_range = old_max - old_min;
+    double  new_range = 255.0; 
+    double  out_val; 
+    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
     // ----------------------------------------------------------------------------------
     // creating RGB scanline memory for central grid portion without frame
     JSAMPROW          row_pointer[1];
-    int32             image_components = 3;
+    int32_t             image_components = 3;
     if ( greyscale )  image_components = 1;
-    int32             row_stride = size_x * image_components;
+    int32_t             row_stride = size_x * image_components;
     unsigned char*    image_buffer;
-    uint32            incr;
+    uint32_t            incr;
   
     // allocating image memory buffer and storing RGB values within it  
     image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
@@ -1544,8 +1544,8 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
     jpeg_stdio_dest( &cinfo, outfile );
     
     // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32>(size_x);
-    cinfo.image_height     = static_cast<uint32>(size_y);
+    cinfo.image_width      = static_cast<uint32_t>(size_x);
+    cinfo.image_height     = static_cast<uint32_t>(size_y);
     cinfo.input_components = 3;        // color values per pixel
     cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
     if ( greyscale ) 
@@ -1587,8 +1587,8 @@ As method above but allows to specify a fixed value range, such that the
 color range does not vary from timestep to timestep.  
 */
 
-void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep, 
-                                      double64 vmin, double64 vmax, 
+void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep, 
+                                      double vmin, double vmax, 
                                       bool greyscale, bool sqrt_of ) const
  {
     // rgb color stuff (created only once)
@@ -1605,7 +1605,7 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
     name +=".jpg";
 
     // obtain data range to scale the data to 0-255 for output
-    double64  old_min, old_max;
+    double  old_min, old_max;
     DataMinMax( old_min, old_max, false );
     cout.setf( ios::scientific );
     cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
@@ -1650,10 +1650,10 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
          old_min = sqrt( old_min );
          old_max = sqrt( old_max );
       }
-    double64  old_range = old_max - old_min;
-    double64  new_range = 255.0; 
-    double64  out_val; 
-    int32    i, j;
+    double  old_range = old_max - old_min;
+    double  new_range = 255.0; 
+    double  out_val; 
+    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
@@ -1664,7 +1664,7 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
     if ( greyscale )  image_components = 1;
     int               row_stride = size_x * image_components;
     unsigned char*    image_buffer;
-    uint32            incr;
+    uint32_t            incr;
   
     // allocating image memory buffer and storing RGB values within it  
     image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
@@ -1703,8 +1703,8 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
     jpeg_stdio_dest( &cinfo, outfile );
     
     // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32>(size_x);
-    cinfo.image_height     = static_cast<uint32>(size_y);
+    cinfo.image_width      = static_cast<uint32_t>(size_x);
+    cinfo.image_height     = static_cast<uint32_t>(size_y);
     cinfo.input_components = 3;        // color values per pixel
     cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
     if ( greyscale ) 
@@ -1753,24 +1753,24 @@ target grid is left untouched. Only the area inside the frame is considered.
 void FiniteDifferenceGrid::LinearInterpolateOnTo( FiniteDifferenceGrid& grid2 ) const
  {
     if ( grid2.MinX() > MinX() ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::LinearInterpolateOnTo: target grid min_x too large."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::LinearInterpolateOnTo");
+         cout <<"\nFiniteDifferenceGrid<double>::LinearInterpolateOnTo: target grid min_x too large."<< endl;
+         throw length_error("FiniteDifferenceGrid<double>::LinearInterpolateOnTo");
       }
     if ( grid2.MinY() > MinY() ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::LinearInterpolateOnTo: target grid min_y too large."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::LinearInterpolateOnTo");
+         cout <<"\nFiniteDifferenceGrid<double>::LinearInterpolateOnTo: target grid min_y too large."<< endl;
+         throw length_error("FiniteDifferenceGrid<double>::LinearInterpolateOnTo");
       }
     if ( grid2.MaxX() < MaxX() ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::LinearInterpolateOnTo: target grid max_x too small."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::LinearInterpolateOnTo");
+         cout <<"\nFiniteDifferenceGrid<double>::LinearInterpolateOnTo: target grid max_x too small."<< endl;
+         throw length_error("FiniteDifferenceGrid<double>::LinearInterpolateOnTo");
       }
     if ( grid2.MaxY() < MaxY() ) {
-         cout <<"\nFiniteDifferenceGrid<double64>::LinearInterpolateOnTo: target grid max_y too small."<< endl;
-         throw length_error("FiniteDifferenceGrid<double64>::LinearInterpolateOnTo");
+         cout <<"\nFiniteDifferenceGrid<double>::LinearInterpolateOnTo: target grid max_y too small."<< endl;
+         throw length_error("FiniteDifferenceGrid<double>::LinearInterpolateOnTo");
       }
  
-    for ( int32 i=0; i<grid2.Rows(); i++ )
-      for ( int32 j=0; j<grid2.Columns(); j++ ) {
+    for ( int32_t i=0; i<grid2.Rows(); i++ )
+      for ( int32_t j=0; j<grid2.Columns(); j++ ) {
            ClosestGridPointTo( grid2.X(j), grid2.Y(i), y1, x1 );
            grid2(i,j) = (*this)(x1,y1);
         }
@@ -1788,16 +1788,16 @@ operator(x,y) returns the closest value on the grid. It does
 not give a warning.
 */
 
-double64  FiniteDifferenceGrid::operator()( double64 x,  double64 y, bool rounded ) const
+double  FiniteDifferenceGrid::operator()( double x,  double y, bool rounded ) const
   {
       // 1. finding x and y indices of interpolation points
       if ( rounded ) {
-           x1 = rint((x - static_cast<double64>(x_min)) / xresolution);
-           y1 = rint((y - static_cast<double64>(y_min)) / yresolution);
+           x1 = rint((x - static_cast<double>(x_min)) / xresolution);
+           y1 = rint((y - static_cast<double>(y_min)) / yresolution);
         }
       else {
-           x1 = static_cast<int32>((x-static_cast<double64>(x_min)) / xresolution);
-           y1 = static_cast<int32>((y-static_cast<double64>(y_min)) / yresolution);
+           x1 = static_cast<int32_t>((x-static_cast<double>(x_min)) / xresolution);
+           y1 = static_cast<int32_t>((y-static_cast<double>(y_min)) / yresolution);
         }
       
       // 2. if one of the points lies outside of the central grid
@@ -1816,8 +1816,8 @@ double64  FiniteDifferenceGrid::operator()( double64 x,  double64 y, bool rounde
       if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;      
 
       // 5. computing interpolation functions. Num. Recip. p. 105
-      t = ((x-static_cast<double64>(x_min)) - x1*xresolution) / xresolution;
-      u = ((y-static_cast<double64>(y_min)) - y1*yresolution) / yresolution;
+      t = ((x-static_cast<double>(x_min)) - x1*xresolution) / xresolution;
+      u = ((y-static_cast<double>(y_min)) - y1*yresolution) / yresolution;
          
       // 6. bi-linear interpolation
       return (1.0-t)*(1.0-u)*p1 + t*(1.0-u)*p2 + t*u*p3 + (1.0-t)*u*p4;   
@@ -1826,10 +1826,10 @@ double64  FiniteDifferenceGrid::operator()( double64 x,  double64 y, bool rounde
 
 
 
-double64 FiniteDifferenceGrid::InterpolateOutside( double64 x, double64 y ) const
+double FiniteDifferenceGrid::InterpolateOutside( double x, double y ) const
 {
-    x1 = static_cast<int32>((x-x_min) / xresolution);
-    y1 = static_cast<int32>((y-y_min) / yresolution);
+    x1 = static_cast<int32_t>((x-x_min) / xresolution);
+    y1 = static_cast<int32_t>((y-y_min) / yresolution);
 
   // 1. if smaller than the minimum of the y-range value is interpolated on the
   //    horizontal model boundary.
@@ -1901,7 +1901,7 @@ double64 FiniteDifferenceGrid::InterpolateOutside( double64 x, double64 y ) cons
          return p1 + delta * ((p2-p1)/yresolution);
       }
     std::cerr <<"\nFiniteDifferenceGrid:InterpolateOutside: could not handle point: "<< x <<","<< y << std::endl;
-    return std::numeric_limits<double64>::signaling_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
     
 } // end InterpolateOutside
 
@@ -1914,7 +1914,7 @@ If y is smaller than the minimum of the y-range value is interpolated on the
 horizontal model boundary x is set to the smallest x value. Then the desired value
 is interpolated along the grid boundary between the marginal 2 points.
 */
-double64 FiniteDifferenceGrid::InterpolateWithin( double64& x, double64& y ) const
+double FiniteDifferenceGrid::InterpolateWithin( double& x, double& y ) const
 {
     // 0. special corner cases
     if ( x < x_min && y < y_min ) return (*this)(0,0);
@@ -1922,8 +1922,8 @@ double64 FiniteDifferenceGrid::InterpolateWithin( double64& x, double64& y ) con
     if ( x > x_max && y < y_min ) return (*this)(0,size_x-1);
     if ( x > x_max && y > y_max ) return (*this)(size_y-1,size_x-1);
   
-    x1 = static_cast<int32>((x-x_min) / xresolution);
-    y1 = static_cast<int32>((y-y_min) / yresolution);
+    x1 = static_cast<int32_t>((x-x_min) / xresolution);
+    y1 = static_cast<int32_t>((y-y_min) / yresolution);
 
     if ( y <= y_min )
       {

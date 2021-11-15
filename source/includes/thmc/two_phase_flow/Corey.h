@@ -56,27 +56,27 @@ class Corey : public TwoPhaseModel<dim> {
     virtual void Initialize( const Element<dim>& e );
     
     // relative permeabilities
-    virtual double64 krn_Phase() const;
-    virtual double64 krw_Phase() const;
+    virtual double krn_Phase() const;
+    virtual double krw_Phase() const;
 
     // derivatives of relative permeabilities
-    virtual double64 dkrnds_Phase() const;
-    virtual double64 dkrwds_Phase() const;
+    virtual double dkrnds_Phase() const;
+    virtual double dkrwds_Phase() const;
 
     // capillary pressure
-    virtual double64 pc_Phase( ) const;
+    virtual double pc_Phase( ) const;
 
     // capillary pressure derivatives
-    virtual double64 dpcds_Phase( ) const;
+    virtual double dpcds_Phase( ) const;
 
     // inverse capillary pressure function
-    virtual double64 Sw_Phase( double64 pc_Phase ) const;
+    virtual double Sw_Phase( double pc_Phase ) const;
 
     // inverse capillary pressure derivative
-    virtual double64 dsdpc_Phase( double64 pc_Phase ) const;
+    virtual double dsdpc_Phase( double pc_Phase ) const;
 
     // maximum absolute value returned by dfdS
-    virtual double64 MaxFractionalFlowDerivative() const;
+    virtual double MaxFractionalFlowDerivative() const;
 
     virtual void Out( size_t phase ) const;
 
@@ -84,7 +84,7 @@ class Corey : public TwoPhaseModel<dim> {
 
     Corey();
     Index           pd_key_, pc_max_key_,expw_key_, expn_key_, lambda_key_, krw_key_, krn_key_;
-    double64        krw_, krn_, expw_, expn_, lambda_, entry_pressure_,pc_max_;
+    double        krw_, krn_, expw_, expn_, lambda_, entry_pressure_,pc_max_;
     bool            default_capillary_pressure_max_;
 
 };
