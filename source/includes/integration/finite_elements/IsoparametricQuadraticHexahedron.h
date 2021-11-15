@@ -33,9 +33,8 @@ public:
                                                   std::vector<size_t>& fnids );
     virtual void        NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void        NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
-
-    // TODO: virtual void        UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
-
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+  
     virtual   void      N(std::vector<double>& N, const std::vector<double>& xyz );
     virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double>& N );
     virtual   void      N_AtBaryCenter( std::vector<double>& N );

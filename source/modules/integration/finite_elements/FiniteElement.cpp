@@ -301,6 +301,16 @@ void FiniteElement::NodesOfFace( size_t fid, vector<size_t>& fnids ) const
   }
 
 
+std::vector<size_t> FiniteElement::CornerNodesOfFace( size_t face_id ) const
+ {
+     cout <<"\nFiniteElement::CornerNodesOfFace: Returns the local node ID numbers of ";
+     cout <<"the corner nodes of the element face with the entered ID number. ";
+     cout <<"In triangular and tetrahedral elements the faces lie opposite of ";
+     cout <<"the nodes with the same ID." << endl;
+     cout <<"\ncalled by object: "<< object_id <<" for face "<< face_id << endl;
+     throw invalid_argument("FiniteElement::CornerNodesOfFace");
+     return vector<size_t>{};
+ }
   
     
 void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )

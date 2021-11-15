@@ -280,6 +280,20 @@ IsoparametricLinearQuadrilateral::NodesOfFace( size_t face_id,
 
 
 
+vector<size_t>  IsoparametricLinearQuadrilateral::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,1};
+        case 1: return vector<size_t>{1,2};
+        case 2: return vector<size_t>{2,3};
+        case 3: return vector<size_t>{3,0};
+      }
+    cerr <<"\nIsoparametricLinearQuadrilateral::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
 void
 IsoparametricLinearQuadrilateral::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
  {

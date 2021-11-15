@@ -280,7 +280,8 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		ids[4] = 4; ids[5] = 5; ids[6] = 6; ids[7] = 7;
 	}
 
-	void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
+
+void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
 	{
 		snids.resize(2);
 		switch (segm_id) {
@@ -299,7 +300,9 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 	}
 
-	void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
+
+// TODO: this is different from IsoparamLinHex - check basic conventions
+void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
 	{
 		fnids.resize(4);
 		switch (face_id) {
@@ -312,7 +315,24 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 	}
 
-	void LinearCuboid::UnitNormalToFace(size_t face, std::vector<double>& unrml) const
+
+vector<size_t>  LinearCuboid::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,3,2,1};
+        case 1: return vector<size_t>{0,1,5,4};
+        case 2: return vector<size_t>{1,2,6,5};
+        case 3: return vector<size_t>{2,3,7,6};
+        case 4: return vector<size_t>{0,3,7,3};
+        case 5: return vector<size_t>{4,5,6,7};
+      }
+    cerr <<"\nLinearCuboid::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+void LinearCuboid::UnitNormalToFace(size_t face, std::vector<double>& unrml ) const
 	{
 		unrml.resize(3);
 		switch (face) {
@@ -325,8 +345,9 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 	}
 
-	void LinearCuboid::OutputNodeDataToVTK(const char* file_name, const char* var_name,
-		DenseMatrix<DM_MIN>& DATA) const
+
+void LinearCuboid::OutputNodeDataToVTK( const char* file_name, const char* var_name,
+		                                    DenseMatrix<DM_MIN>& DATA ) const
 	{
 		char  outfile[NAME_STRING], elmt[30];
 		strcpy(outfile, file_name);

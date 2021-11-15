@@ -284,6 +284,21 @@ IsoparametricLinearTriangle::NodesOfFace( size_t face_id,
     std::cerr <<"\nIsoparametricLinearTriangle::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
 
+
+
+vector<size_t>  IsoparametricLinearTriangle::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{1,2};
+        case 1: return vector<size_t>{2,0};
+        case 2: return vector<size_t>{0,1};
+      }
+    cerr <<"\nIsoparametricLinearTriangle::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
 /** Returns local node ids of the nodes which sit on the corner of
 the quadratic triagular element.
 

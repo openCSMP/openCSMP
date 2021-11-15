@@ -134,10 +134,6 @@ double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* cons
 template<size_t dim, template<size_t> class CELL>
 double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
 
-/// returs a set of pointers to the corners of the face of the supplied cell; used for matching faces by nodes, when there is no neighbor connectivity
-template<size_t dim, template<size_t> class CELL>
-std::set<Node<dim>*> cornerNodePointersOfFace( const CELL<dim>* const cell1, size_t face );
-
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
 template<size_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,

@@ -130,37 +130,51 @@ the properties associated with the nodes of that element face.
 */
 void
 IsoparametricQuadraticQuadrilateral::NodesOfFace( size_t face_id,
-                                    std::vector<size_t>& fnids ) const
+                                                  vector<size_t>& fnids ) const
  {
     fnids.resize(3);
 
     if ( face_id == 0 )
       {
          fnids[0] = 0;
-         fnids[1] = 4;
-         fnids[2] = 1;
+         fnids[1] = 1;
+         fnids[2] = 4;
 
       }
     else if ( face_id == 1 )
       {
          fnids[0] = 1;
-         fnids[1] = 5;
-         fnids[2] = 2;
+         fnids[1] = 2;
+         fnids[2] = 5;
       }
     else if ( face_id == 2 )
       {
          fnids[0] = 2;
-         fnids[1] = 6;
-         fnids[2] = 3;
+         fnids[1] = 3;
+         fnids[2] = 6;
       }
     else if ( face_id == 3 )
       {
          fnids[0] = 3;
-         fnids[1] = 7;
-         fnids[2] = 0;
+         fnids[1] = 0;
+         fnids[2] = 7;
       }
     else
     std::cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
+ }
+
+
+
+vector<size_t>  IsoparametricQuadraticQuadrilateral::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,1};
+        case 1: return vector<size_t>{1,2};
+        case 2: return vector<size_t>{2,3};
+        case 3: return vector<size_t>{3,0};
+      }
+    cerr <<"\nIsoparametricQuadraticQuadrilateral::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
  }
 
 

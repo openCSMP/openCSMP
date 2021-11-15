@@ -414,6 +414,22 @@ IsoparametricLinearHexahedron::NodesOfFace( size_t face_id, vector<size_t>& fnid
  }
 
 
+vector<size_t>  IsoparametricLinearHexahedron::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,3,2,1};
+        case 1: return vector<size_t>{0,1,5,4};
+        case 2: return vector<size_t>{1,2,6,5};
+        case 3: return vector<size_t>{2,3,7,6};
+        case 4: return vector<size_t>{0,4,7,3};
+        case 5: return vector<size_t>{4,5,6,7};
+      }
+    cerr <<"\nIsoparametricLinearHexahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
 CSMP_FEM_TYPE  IsoparametricLinearHexahedron::ElementTypeOfFace( size_t )  const
  {
     return ISOPARAMETRIC_LINEAR_QUADRILATERAL;

@@ -168,6 +168,7 @@ class LinearTriangle3D : public FiniteElement {
     virtual void           EdgeLengths( std::vector<double>& vec );
     virtual void           NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void           NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
     virtual void           CounterClockwiseNodes( std::vector<size_t>& ids ) const;
     virtual size_t         CornerNodes() const  { return 3; }
     virtual void           CornerNodes( std::vector<size_t>& ids ) const;
@@ -183,8 +184,8 @@ class LinearTriangle3D : public FiniteElement {
     /// first derivatives of element interpolation functions
     virtual void           dN( DenseMatrix<DM_MIN>& );
     /// note that the derivative is constant so that the point location will not be considerd
-    virtual   double     dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
-    virtual   double     dN_AtBarycenter( DenseMatrix<DM_MIN>& );
+    virtual   double       dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
+    virtual   double       dN_AtBarycenter( DenseMatrix<DM_MIN>& );
 
     /// integral over interpolation functions
     virtual void           IntegralNN( DenseMatrix<DM_MIN>& M );

@@ -16,6 +16,7 @@ class IsoparametricQuadraticTetrahedron : public FiniteElement {
     virtual void        EdgeLengths( std::vector<double>& vec );
     virtual void        NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void        NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
     virtual void        ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes, std::vector<size_t>& fnids );
     virtual void        CornerNodes( std::vector<size_t>& ids ) const;
     virtual void        MidSideNodes( std::vector<size_t>& ids ) const;

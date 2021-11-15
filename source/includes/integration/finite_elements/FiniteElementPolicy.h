@@ -5,8 +5,10 @@
 
 namespace csmp {
 
+template<size_t> class Node;
+
 /// finite element policy for class Element
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 class FiniteElementPolicy {
   public:
     FiniteElementPolicy( FiniteElement* = nullptr );
@@ -16,6 +18,9 @@ class FiniteElementPolicy {
     /// for deferred assignment or changing the element at runtime
     void Assign( FiniteElement* fe_ptr );
     void AssignFiniteElementNullPtr() { fptr_ = nullptr; }
+    
+    /// returns search key to match element faces
+    std::set<Node<dim>*> CornerNodesOfFace( size_t face_id ) const;
 
     /// the type is an enumeration that is used in the generation of finite elements
     CSMP_FEM_TYPE  FE_Type() const;
@@ -35,25 +40,25 @@ class FiniteElementPolicy {
   
     /// returns the location of the integration point in global coordinates
     Point<dim> IntegrationPoint( size_t ip ) const;
-    double   WeightAtIntegrationPoint( size_t i ) const;
+    double     WeightAtIntegrationPoint( size_t i ) const;
 
     /// mapping of local points from local to global coordinates
     Point<dim> RstToXYZ( Point<dim> rst ) const;
 
     /// interpolation function values at local points
-    void       N_At( const Point<dim>& rst ) const;
-    void       N_At( const Point<dim>& rst, std::vector<double>& N )  const;
+    void    N_At( const Point<dim>& rst ) const;
+    void    N_At( const Point<dim>& rst, std::vector<double>& N )  const;
   
      // DEPRECATE - or call XYZtoRST() in here
-    void       N_AtGlobalPoint( std::vector<double>& N, const std::vector<double>& xyz ) const;
+    void    N_AtGlobalPoint( std::vector<double>& N, const std::vector<double>& xyz ) const;
     // N_AtPoint();
-    void       N_AtBaryCenter( std::vector<double>& N ) const;
-    void       N_AtIntegrationPoint( size_t ipoint, std::vector<double>& N ) const;
+    void    N_AtBaryCenter( std::vector<double>& N ) const;
+    void    N_AtIntegrationPoint( size_t ipoint, std::vector<double>& N ) const;
 
     /// first (constant) derivatives of linear interpolation functions of analytically integrated simplex
-    void	     Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const;
+    void	  Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const;
 
-	  void       dN( DenseMatrix<DM_MIN>& ) const;
+	  void    dN( DenseMatrix<DM_MIN>& ) const;
   
     /// first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j)
     double   dN_AtNode( DenseMatrix<DM_MIN>&, size_t nd, size_t dof=1 ) const;
@@ -68,10 +73,10 @@ class FiniteElementPolicy {
     double   det_JINV_AtIntegrationPoint( size_t ipoint ) const;
 
     /// interpolation function products matrix for analytically integrated element
-    void       IntegralNN( DenseMatrix<DM_MIN>& M ) const;
+    void     IntegralNN( DenseMatrix<DM_MIN>& M ) const;
   
     /// initialises the nodes x dim matrix XY stored in the connected finite element class 
-    void       CoordinateMatrix() const;
+    void     CoordinateMatrix() const;
 
     /// integrates a scalar property over the element and returns this value
     double   PropertyIntegral( const csmp::Index& scalar_property ) const;
@@ -122,7 +127,7 @@ class FiniteElementPolicy {
     Point<dim> SegmentMidPoint( size_t segm ) const;
 
     /// returns the length of the nth segment=edge of the finite element
-    double   SegmentLength( size_t segm ) const;
+    double     SegmentLength( size_t segm ) const;
   
     /// returns a vector with the lengths of all finite element segments = edges
     void       SegmentLengths( std::vector<double>& ) const;
@@ -131,7 +136,7 @@ class FiniteElementPolicy {
     Point<dim> FaceBaryCenter( size_t face ) const;
 
     /// returns area of face i (to be scaled with thickness attribute if this is a lower-dimensional element)
-    double   FaceArea( size_t face ) const;
+    double     FaceArea( size_t face ) const;
 
     /// returns unit normal to face of element i
     Point<dim> UnitNormalToFace( size_t face ) const;
@@ -152,8 +157,8 @@ class FiniteElementPolicy {
     void       UnitNormal( VectorVariable<dim>& nrml ) const;
 
   private:
-    FiniteElementPolicy( const SIMPLEX<dim>& );
-    csmp::FiniteElement*  fptr_;
+    FiniteElementPolicy( const CELL<dim>& );
+    csmp::FiniteElement*  fptr_ = nullptr;
 };
 
 } // end csmp

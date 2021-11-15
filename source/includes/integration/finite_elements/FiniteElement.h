@@ -201,13 +201,13 @@ class FiniteElement {
     CSMP_FEM_TYPE      ElementType() const;
   
     /// computes and returns the volume of the element which is an area for a surface- and a length for a line element
-    virtual double   Volume();
+    virtual double     Volume();
   
     /// returns the ratio between the maximum and minimum spatial extent of the element
-    virtual double   AspectRatio();
+    virtual double     AspectRatio();
   
     /// returns the radius of the largest sphere that could be inscribed in the element
-    virtual double   InnerRadius();
+    virtual double     InnerRadius();
   
     /// reports the lengths of all edges (connections between nodes) in the currrent element
     virtual void       EdgeLengths( std::vector<double>& vec );
@@ -222,6 +222,9 @@ class FiniteElement {
   
     /// reports the face nodes (0..nodes-1) of the given face
     virtual void       NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    
+    /// returns the local  numbers of the corner nodes of the face
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
   
     /// reports only the corner nodes (0..nodes-1) of the element
     virtual void       CornerNodes( std::vector<size_t>& ids ) const;

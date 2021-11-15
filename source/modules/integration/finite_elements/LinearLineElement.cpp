@@ -73,6 +73,11 @@ void  LinearLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids
  }
 
 
+vector<size_t>  LinearLineElement::CornerNodesOfFace( size_t face_id ) const
+ {
+    assert( face_id <= 1 );
+    return vector<size_t>{face_id};
+ }
 
 /**
 

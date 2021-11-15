@@ -245,6 +245,14 @@ void  IsoparametricLinearLineElement::NodesOfFace( size_t face_id,
 
 
 
+vector<size_t>  IsoparametricLinearLineElement::CornerNodesOfFace( size_t face_id ) const
+ {
+    assert( face_id <= 1 );
+    return vector<size_t>{face_id};
+ }
+
+
+
 // assuming straight segments between the nodes
 // tested: OK3
 void  IsoparametricLinearLineElement::EdgeLengths( vector<double>& vec )

@@ -17,6 +17,7 @@ class LinearTetrahedron : public FiniteElement {
     virtual void           CornerNodes( std::vector<size_t>& ids ) const;
     virtual void           NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void           NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( size_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( size_t /* segment */ ) const { return LINEAR_BAR; };
   

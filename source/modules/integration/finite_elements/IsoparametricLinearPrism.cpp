@@ -458,6 +458,22 @@ void IsoparametricLinearPrism::NodesOfFace( size_t face_id, std::vector<size_t>&
  }
 
 
+
+vector<size_t>  IsoparametricLinearPrism::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,2,1};
+        case 1: return vector<size_t>{0,1,4,3};
+        case 2: return vector<size_t>{1,2,5,4};
+        case 3: return vector<size_t>{0,3,5,2};
+        case 4: return vector<size_t>{3,4,5};
+      }
+    cerr <<"\nIsoparametricLinearPrism::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
 CSMP_FEM_TYPE  IsoparametricLinearPrism::ElementTypeOfFace( size_t face )  const
  {
     assert( face < fpe );

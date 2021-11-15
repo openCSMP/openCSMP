@@ -18,6 +18,7 @@ public:
     virtual void        EdgeLengths( std::vector<double>& vec );
     virtual void        NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void        NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
     virtual void        CornerNodes( std::vector<size_t>& ids ) const;
     virtual void        MidSideNodes( std::vector<size_t>& ids ) const;
     virtual void        CounterClockwiseNodes( std::vector<size_t>& ids ) const;
@@ -32,14 +33,14 @@ public:
     virtual void        ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes,
                                                     std::vector<size_t>& fnids );
 
-    virtual void        N( std::vector<double>& N, const std::vector<double>& xyz );
-    virtual void        N_AtIntegrationPoint( size_t ip, std::vector<double>& N );
-    virtual void        N_AtBaryCenter( std::vector<double>& N );
-    virtual void        JacobianAtIntegrationPoint( size_t ip );
+    virtual void      N( std::vector<double>& N, const std::vector<double>& xyz );
+    virtual void      N_AtIntegrationPoint( size_t ip, std::vector<double>& N );
+    virtual void      N_AtBaryCenter( std::vector<double>& N );
+    virtual void      JacobianAtIntegrationPoint( size_t ip );
     virtual double    JacobianInverse();
 
     virtual double    dN_At( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
-    virtual void        dN( DenseMatrix<DM_MIN>& M );
+    virtual void      dN( DenseMatrix<DM_MIN>& M );
     virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point );
     virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
     virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );

@@ -221,6 +221,14 @@ void  IsoparametricQuadraticLineElement::NodesOfFace( size_t face_id, std::vecto
  }
 
 
+vector<size_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( size_t face_id ) const
+ {
+    assert( face_id <= 1 );
+    return vector<size_t>{face_id};
+ }
+
+
+
 /// assuming straight segments between the nodes
 void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double>& vec ) 
  {

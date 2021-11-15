@@ -1825,24 +1825,15 @@ void MeshManager<3>::BuildVolumeConnectivity( typename std::vector<CELL<3U>*>::i
            // creating search keys from the corner nodes of the element faces
            // corner-nodes      elements that share face and their face id
            map<set<Node<3>*>,map<Element<3>*,size_t> >  elmt_pairs;
-           vector<size_t> fnids;
-           const auto     elementsEnd{last};
+           const auto                                   elementsEnd{last};
            
            // pairing the elements up in the search map
            while ( first != elementsEnd ) {
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
-                     // making the search key
-                     (*first)->FE()->NodesOfFace( face, fnids );
-                     set<Node<3>*> face_nodes;
-                     size_t n_corner_nodes{ fnids.size() };
-                     for ( size_t node{0}; node < n_corner_nodes; ++node ) {
-                          assert( (*first)->N(fnids[node]) != nullptr );
-                          face_nodes.insert( (*first)->N(fnids[node]) );
-                       }
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -1900,11 +1891,9 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
-                     // making a search key of node pointers
-                     set<Node<3>*> face_nodes = cornerNodePointersOfFace( (*first), face );
-                     // trying to insert cell into the map using the key
+                     // trying to insert cell into the map using a search key of node pointers
                      pair<typename map<set<Node<3>*>,map<CELL<3>*,size_t> >::iterator,bool>
-                       it = elmt_pairs.insert( make_pair( face_nodes, map<CELL<3>*,size_t>{{*first,face}} ) );
+                       it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<3>*,size_t>{{*first,face}} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -1964,24 +1953,15 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
       // for surface elements, faces or interfaces in a 2D model
       if constexpr ( dim == 2 ) {
            map<set<Node<2>*>,map<CELL<2>*,size_t> > elmt_pairs;
-           vector<size_t> fnids;
-           const auto     cellsEnd{last};
+           const auto                               cellsEnd{last};
            
            // pairing the elements up in the search map
            while ( first != cellsEnd ) {
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
-                     // making the search key
-                     (*first)->FE()->NodesOfFace( face, fnids );
-                     set<Node<2>*> face_nodes;
-                     size_t n_corner_nodes{ fnids.size() };
-                     for ( size_t node{0}; node < n_corner_nodes; ++node ) {
-                          assert( (*first)->N(fnids[node]) != nullptr );
-                          face_nodes.insert( (*first)->N(fnids[node]) );
-                       }
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2061,18 +2041,15 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
            // creating search keys from the corner nodes of the element faces
            // corner-nodes      elements that share face and their face id
            map<set<Node<dim>*>,map<CELL<dim>*,size_t> >  elmt_pairs;
-           vector<size_t> fnids;
-           const auto     elementsEnd{last};
+           const auto                                    elementsEnd{last};
            
            // pairing the elements up in the search map
            while ( first != elementsEnd ) {
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
-                     // making the search key (only single nodes 0 or 1)
-                     const set<Node<dim>*> face_nodes{ (*first)->N(face) };
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2130,24 +2107,15 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
       // for line elements, faces or interfaces in a 1D model
       if constexpr ( dim == 1 ) {
            map<set<Node<1>*>,map<CELL<1>*,size_t> >  elmt_pairs;
-           vector<size_t> fnids;
-           const auto     elementsEnd{last};
+           const auto                                elementsEnd{last};
            
            // pairing the elements up in the search map
            while ( first != elementsEnd ) {
                 assert( (*first) != nullptr );
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
-                     // making the search key
-                     (*first)->FE()->NodesOfFace( face, fnids );
-                     set<Node<1>*> face_nodes;
-                     size_t n_corner_nodes{ fnids.size() };
-                     for ( size_t node{0}; node < n_corner_nodes; ++node ) {
-                          assert( (*first)->N(fnids[node]) != nullptr );
-                          face_nodes.insert( (*first)->N(fnids[node]) );
-                       }
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( face_nodes, map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );

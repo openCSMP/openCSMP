@@ -345,6 +345,20 @@ void IsoparametricLinearTetrahedron::NodesOfFace( size_t face_id, std::vector<si
 
 
 
+vector<size_t>  IsoparametricLinearTetrahedron::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,3,2};
+        case 2: return vector<size_t>{0,1,3};
+        case 3: return vector<size_t>{0,2,1};
+      }
+    cerr <<"\nIsoparametricLinearTetrahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
 CSMP_FEM_TYPE  IsoparametricLinearTetrahedron::ElementTypeOfFace( size_t )  const
  {
     return ISOPARAMETRIC_LINEAR_TRIANGLE;

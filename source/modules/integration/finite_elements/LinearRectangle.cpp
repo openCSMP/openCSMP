@@ -45,7 +45,8 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 				M(i, j) = V_[k++];
 	}
 
-	void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
+
+void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 	{
 		if (dim == 2) { Nrs(M, XY, xyz); return; }
 		size_t r = 0, s = 1; // Nodes on xy-plane
@@ -80,10 +81,11 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 				DN(i, j) = V_[indV++];
 	}
 
-	void LinearRectangle::CornerNodes(std::vector<size_t>& ids) const { ids = { 0, 1, 2, 3 }; }
 
-	void LinearRectangle::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
+void LinearRectangle::CornerNodes(std::vector<size_t>& ids) const { ids = { 0, 1, 2, 3 }; }
 
+
+void LinearRectangle::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
 	{
 		snids.resize(2);
 		if (segm_id == 0) {
@@ -103,12 +105,13 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 			snids[1] = 0;
 		}
 		else
-			std::cout << "\nIsoparametricLinearQuadrilateral::NodesOfSegment: Erratic segment id requested: " << segm_id << std::endl;
+			std::cerr << "\nIsoparametricLinearQuadrilateral::NodesOfSegment: Erratic segment id requested: " << segm_id << std::endl;
 
 	} // end NodesOfSegment
 
-	void LinearRectangle::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
 
+
+void LinearRectangle::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
 	{
 		fnids.resize(2);
 		if (face_id == 0)
@@ -136,10 +139,29 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 
 		}
 		else
-			std::cout << "\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: " << face_id << std::endl;
+			std::cerr << "\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: " << face_id << std::endl;
 	}
 
-	void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
+
+
+
+vector<size_t>  LinearRectangle::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,1};
+        case 1: return vector<size_t>{1,2};
+        case 2: return vector<size_t>{2,3};
+        case 3: return vector<size_t>{3,0};
+      }
+    cerr <<"\nLinearRectangle::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+
+
+void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
 	{
 		size_t r = 0, s = 1; // Nodes on xy-plane
 		if (dim == 3) {

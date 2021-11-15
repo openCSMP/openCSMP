@@ -449,6 +449,20 @@ void IsoparametricQuadraticTetrahedron::NodesOfFace( size_t face_id,
 
 
 
+vector<size_t>  IsoparametricQuadraticTetrahedron::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,3,2};
+        case 2: return vector<size_t>{0,1,3};
+        case 3: return vector<size_t>{0,2,1};
+      }
+    cerr <<"\nIsoparametricQuadraticTetrahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
 
 /** Returns local node ids of the 4 nodes located at the corners of
 the quadratic tetrahedral element.

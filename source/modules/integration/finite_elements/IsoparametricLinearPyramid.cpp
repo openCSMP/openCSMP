@@ -456,6 +456,22 @@ void IsoparametricLinearPyramid::NodesOfFace( size_t face_id, std::vector<size_t
 
 
 
+vector<size_t>  IsoparametricLinearPyramid::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,1,4};
+        case 1: return vector<size_t>{1,2,4};
+        case 2: return vector<size_t>{2,3,4};
+        case 3: return vector<size_t>{0,4,3};
+        case 4: return vector<size_t>{0,3,2,1};
+      }
+    cerr <<"\nIsoparametricLinearPyramid::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+
 CSMP_FEM_TYPE
 IsoparametricLinearPyramid::ElementTypeOfFace( size_t face )  const
  {

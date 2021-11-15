@@ -25,6 +25,7 @@ class IsoparametricLinearLineElement : public FiniteElement {
     virtual size_t    CornerNodes() const;
     virtual size_t    MidSideNodes() const;
     virtual void      NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
     virtual void      CounterClockwiseNodes( std::vector<size_t>& ids ) const;
     virtual void      EdgeLengths( std::vector<double>& vec );
     virtual void      ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes,

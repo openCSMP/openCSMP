@@ -29,7 +29,8 @@ class IsoparametricLinearPrism : public FiniteElement {
                                                   std::vector<size_t>& fnids );
     virtual void        NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void        NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
-  
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+    
     virtual void        UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
 
     virtual void        N(std::vector<double>& N, const std::vector<double>& xyz );

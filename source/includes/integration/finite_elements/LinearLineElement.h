@@ -18,12 +18,13 @@ class LinearLineElement : public FiniteElement {
     virtual void     CounterClockwiseNodes( std::vector<size_t>& ids ) const;
     virtual void     NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void     NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
-
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+  
     virtual void     N( std::vector<double>& N, const std::vector<double>& xyz );
     virtual void     dN( DenseMatrix<DM_MIN>& M );
-    virtual double dN_At( DenseMatrix<DM_MIN>& DN2, const std::vector<double>& xyz  );
-    virtual double dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
-    virtual double dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
+    virtual double   dN_At( DenseMatrix<DM_MIN>& DN2, const std::vector<double>& xyz  );
+    virtual double   dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
+    virtual double   dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 	  virtual void     N_AtBaryCenter(std::vector<double>& N);
 
     virtual void     IntegralN( DenseMatrix<DM_MIN>& M );

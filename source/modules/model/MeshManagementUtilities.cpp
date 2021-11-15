@@ -463,6 +463,7 @@ template size_t  findPointersToStandAloneMeshPatches( deque<InterFace<3U>*>::con
  
         @return the number of neighbors that were identified
  */
+ // TODO: simplify by using the corner nodes only for the face matching
 template<size_t dim>
 size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
  {
@@ -566,37 +567,29 @@ void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbo
      csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
     
    // 1. Creating a map of the faces of the outer element
-   vector<size_t> fnids;
    //      face key
    set<set<Node<dim>*> > outer_elmt_faces;
 
    const size_t n_outer_elmt_faces(outer_nbor->Faces());
    for ( size_t i=0U; i<n_outer_elmt_faces; ++i ) {
-        outer_nbor->FE()->NodesOfFace( i, fnids );
         // creating and recording the search key and face number
-        set<Node<dim>*> face_nodes;
-        const size_t n_face_nodes(fnids.size());
-        for ( size_t j=0U; j<n_face_nodes; j++ ) face_nodes.insert( inner_nbor->N( fnids[j] ) );
-        outer_elmt_faces.insert( face_nodes );
+        outer_elmt_faces.insert( outer_nbor->CornerNodesOfFace(i) );
      }
      
    // 2. Searching the faces of the inner element that matches this face
    const size_t n_inner_elmt_faces(inner_nbor->Faces());
    for ( size_t i=0U; i<n_inner_elmt_faces; ++i ) {
-        inner_nbor->FE()->NodesOfFace( i, fnids );
-        // creating and recording the search key
-        set<Node<dim>*> face_nodes;
-        const size_t n_face_nodes(fnids.size());
-        for ( size_t j=0U; j<n_face_nodes; j++ ) face_nodes.insert( inner_nbor->N( fnids[j] ) );
-        // performing the search
-        auto search_it = outer_elmt_faces.find( face_nodes );
+        // creating the search key and performing the search
+        auto search_it = outer_elmt_faces.find( inner_nbor->CornerNodesOfFace(i) );
         // if a matching face is found
         if ( search_it != outer_elmt_faces.end() ) {
              // assigning the nodes which are in the right order in fnids
              // (remember that the nodes of the Face should match the order at the inner face)
+             vector<size_t> fnids;
+             inner_nbor->FE()->NodesOfFace( i, fnids );
              size_t k(0U);
-             for ( size_t j=0U; j<n_face_nodes; j++ )
-               face->Assign( k++, inner_nbor->N( fnids[j] ) );
+             for ( auto j : fnids )
+               face->Assign( k++, inner_nbor->N(j) );
              // ending the search because only one matching neighbor is expected
              break;
           }
@@ -769,6 +762,7 @@ template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<1>* c
      
      @return pair of the local face ID numbers of element one and two.
 
+     @attention if neighbor connectivty exists, use matching neighbor pointers which is much faster!
      @attention if no shared face can be found, function returns UNSPECIFIED.
 */
 template<size_t dim>
@@ -796,12 +790,7 @@ pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, c
     e1_face_keys.reserve(n_faces);
     for ( size_t i{0}; i<n_faces; ++i )
       if ( eptr1->Neighbor(i) != nullptr ) {
-          vector<size_t> fnids;
-          eptr1->FE()->NodesOfFace( i, fnids );
-          set<Node<dim>*> face_key;
-          for ( auto j : fnids )
-           face_key.insert( eptr1->N(j) );
-          e1_face_keys.emplace_back( face_key );
+          e1_face_keys.emplace_back( eptr1->CornerNodesOfFace(i) );
        }
       else e1_face_keys.emplace_back( set<Node<dim>*>{} );
     
@@ -810,13 +799,8 @@ pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, c
     set<size_t>    face_key_n;
     const size_t n_faces2(eptr2->Faces());
     for ( size_t i=0U; i<n_faces2; ++i ) {
-         vector<size_t> fnids;
-         eptr2->FE()->NodesOfFace( i, fnids );
-         set<Node<dim>*> face_key;
-         for ( auto j : fnids )
-           face_key.insert( eptr2->N(j) );
          // is this a matching face
-         auto fit = find( e1_face_keys.begin(), e1_face_keys.end(), face_key );
+         auto fit = find( e1_face_keys.begin(), e1_face_keys.end(), eptr2->CornerNodesOfFace(i) );
          if ( fit != e1_face_keys.end() ) {
               size_t face_elmt1 = distance(e1_face_keys.begin(),fit);
               size_t face_elmt2 = i;
@@ -835,43 +819,6 @@ template pair<size_t,size_t> findAdjacentElementFaces( const Element<1>* const, 
 
 
 
-/// returs a set of pointers to the corners of the face of the supplied cell; used for matching faces by nodes, when there is no neighbor connectivity
-template<size_t dim, template<size_t> class CELL>
-set<Node<dim>*> cornerNodePointersOfFace( const CELL<dim>* const cptr, size_t face )
- {
-    assert( cptr != nullptr );
-    assert( face < cptr->Faces() );
-    
-    vector<size_t> fnids;
-    cptr->FE()->NodesOfFace( face, fnids );
-    
-    // the assumption is made that in the node list of any cell / cell face the corner nodes come first
-    assert( cptr->FE()->Interpolation() <= 2 );
-    const size_t n_corner_nodes = (cptr->FE()->Interpolation()==1) ? fnids.size() : fnids.size()/2;
-    
-    // creating the set of node pointers
-    set<Node<dim>*> face_nodes;
-    for ( size_t node{0}; node < n_corner_nodes; ++node ) {
-         assert( cptr->N(fnids[node]) != nullptr );
-         face_nodes.insert( cptr->N( fnids[node] ) );
-      }
-           
-    return face_nodes;
-         
- } // end cornerNodePointersOfFace
-
-template set<Node<3>*> cornerNodePointersOfFace( const Element<3>* const, size_t );
-template set<Node<2>*> cornerNodePointersOfFace( const Element<2>* const, size_t );
-template set<Node<1>*> cornerNodePointersOfFace( const Element<1>* const, size_t );
-
-template set<Node<3>*> cornerNodePointersOfFace( const Face<3>* const, size_t );
-template set<Node<2>*> cornerNodePointersOfFace( const Face<2>* const, size_t );
-template set<Node<1>*> cornerNodePointersOfFace( const Face<1>* const, size_t );
-
-// TODO: see how this works if there a different nodes on each side
-template set<Node<3>*> cornerNodePointersOfFace( const InterFace<3>* const, size_t );
-template set<Node<2>*> cornerNodePointersOfFace( const InterFace<2>* const, size_t );
-template set<Node<1>*> cornerNodePointersOfFace( const InterFace<1>* const, size_t );
 
 
 

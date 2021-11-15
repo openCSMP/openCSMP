@@ -216,6 +216,20 @@ void LinearTriangle::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) c
 
 
 
+vector<size_t>  LinearTriangle::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{1,2};
+        case 1: return vector<size_t>{2,0};
+        case 2: return vector<size_t>{0,1};
+      }
+    cerr <<"\nLinearTriangle::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+
 /// The linear triangle is numbered counter-clockwise by default.
 void LinearTriangle::CounterClockwiseNodes( std::vector<size_t>& ids ) const
  {

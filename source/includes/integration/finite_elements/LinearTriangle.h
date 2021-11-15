@@ -17,6 +17,7 @@ class LinearTriangle : public FiniteElement {
     virtual void           EdgeLengths( std::vector<double>& vec );
     virtual void           NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void           NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
     virtual void           CounterClockwiseNodes( std::vector<size_t>& ids ) const;
     virtual size_t         CornerNodes() const  { return 3U; }
     virtual void           CornerNodes( std::vector<size_t>& ids ) const;
