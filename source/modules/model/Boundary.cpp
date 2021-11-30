@@ -79,7 +79,7 @@ are numbered consecutivly.
 */
 template<size_t dim>
 Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
-                         const MeshManager<dim>& mesh,
+                         MeshManager<dim>& mesh,
                          const SubDomainInfo& info,
                          BOX_BOUNDARY bflag )
   : ModelSubDomain<dim, Face>( info.name, pref ),
@@ -95,11 +95,11 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior faces
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( mesh.F(i) );
+    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i)) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( mesh.F(i) );
+    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i)) );
 
   // building the node vector
   // ------------------------
@@ -109,11 +109,11 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior faces
   for ( size_t i : info.interior_nodes )
-    this->node_vec_.push_back( mesh.N(i) );
+    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_nodes )
-    this->node_vec_.push_back( mesh.N(i) );
+    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
 
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
@@ -833,10 +833,9 @@ the created face unit normal points outward.
 
 @attention This method will work as well for a split boundary.
 
-@attention This method will not create line elements
 */
 template<size_t dim>
-bool Boundary<dim>::CreateFrom( const Region<dim>& region,
+bool Boundary<dim>::CreateFrom( Region<dim>& region,
                                 MeshManager<dim>& meshManager,
                                 BOX_BOUNDARY boxBoundary )
 {
@@ -863,8 +862,8 @@ bool Boundary<dim>::CreateFrom( const Region<dim>& region,
   string region_name{region.Name()};
   // looping over regions elements, assuring that it's an eligible face type, creating new face with variable storage,
   // establishing connectivity and inserting into boundary element container
-  const typename vector<Element<dim>*>::const_iterator regionElementsEnd( region.ElementsEnd() );
-  for ( typename vector<Element<dim>*>::const_iterator it = region.ElementsBegin(); it != regionElementsEnd; ++it )
+  const auto regionElementsEnd( region.ElementsEnd() );
+  for ( auto it = region.ElementsBegin(); it != regionElementsEnd; ++it )
     {
       // in 3D, there still could be line elements in the region which are not eligible to become faces,
       // unless the Region consist only of line elements
@@ -879,9 +878,9 @@ bool Boundary<dim>::CreateFrom( const Region<dim>& region,
           pair<size_t,size_t> face_ids = findAdjacentElementFaces( inner_outer_elements.first, inner_outer_elements.second );
           // create new internal face
           this->elmt_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
-                                                          inner_outer_elements.first, inner_outer_elements.second,
-                                                          face_ids.first, face_ids.second,
-                                                          lvsFaces, lvsIntegrationPoints ) );
+                                                                        inner_outer_elements.first, inner_outer_elements.second,
+                                                                        face_ids.first, face_ids.second,
+                                                                        lvsFaces, lvsIntegrationPoints ) );
         }
       else { // if this is a Face at the model boundary
           size_t face{0};
@@ -1140,11 +1139,11 @@ double  Boundary<dim>::Perimeter() const
     csmp_error.notice( ERROR, "Boundary<dim>::Perimeter:",
                       "the perimeter of a Boundary is only defined when the boundary is a surface." );
 
-  double        perimeter_length( 0. );
+  double          perimeter_length( 0. );
   vector<size_t>  fnids;
   size_t          n( this->InteriorElements() );
-  for ( typename vector<Face<dim>*>::const_iterator
-        it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ ) {
+  
+  for ( auto it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ ) {
       if ( (*it)->IsLineElement() ) {
            return std::numeric_limits<double>::quiet_NaN();
         }

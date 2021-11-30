@@ -1896,8 +1896,6 @@ const
 
    // 4.2 Writing the vertex=Node data to file
    // ----------------------------------------
-   typename vector<Node<dim>*>::const_iterator     nit =  sg.NodesBegin();
-   typename vector<Element<dim>*>::const_iterator  eit;
    ScalarVariable                       sc;
    VectorVariable<dim>                   vc;
    TensorVariable<dim>                   ts;
@@ -1927,7 +1925,7 @@ const
              ts_elmt_data.reserve( sg.Nodes() );
              for ( i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
+        for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
           {
               switch ( prop_key.type )
                 {
@@ -1951,7 +1949,7 @@ const
    
    // outputting
    // ----------
-   while ( nit != sg.NodesEnd() )
+   for ( auto nit=sg.NodesBegin(); nit != sg.NodesEnd(); ++nit )
      {
         ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
         ofs << (*nit)->x() <<" "<< (*nit)->y() <<" "<< 0.0 <<" ";
@@ -1997,12 +1995,11 @@ const
            }
         if ( (*nit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
         ofs << endl;
-        nit++;
-     } 
+     }
 
     // 4.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    for ( eit = sg.ElementsBegin(); eit != sg.ElementsEnd(); eit++ )
+    for ( auto eit = sg.ElementsBegin(); eit != sg.ElementsEnd(); eit++ )
       {
          ofs <<"TRGL ";
          for ( j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
@@ -2137,8 +2134,7 @@ const
    vector<size_t>  nodes(   gref.Nodes() );
    vector<size_t>  cpoints( gref.IntegrationPoints() );
 
-   for ( typename vector<Node<dim>*>::const_iterator
-         it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) nodes[i++] = (*it)->Idx();
+   for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) nodes[i++] = (*it)->Idx();
 
    // 4.4 making a list of element properties if these are required
    // -------------------------------------------------------------
@@ -2173,8 +2169,7 @@ const
              ts_elmt_data.reserve( gref.Nodes() );
              for ( i=0; i<gref.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( typename vector<Element<dim>*>::const_iterator
-              it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+        for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
           {
               for ( j=0; j<(*it)->Nodes(); j++ ) elmts.insert( (*it)->N(j)->Idx() );
               switch ( prop_key.type )
@@ -2214,8 +2209,7 @@ const
                } 
           break;
         case ELEMENT_INTEGRATION_POINT:
-             for ( typename vector<Element<dim>*>::const_iterator
-                   it= gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+             for ( auto it= gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
                for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                {
                   // getting constraint point coordinates
@@ -2266,8 +2260,7 @@ const
     map<size_t,size_t> new_node_ids;
     for ( i=0; i<nodes.size(); i++ ) new_node_ids[ nodes[i] ] = i+1;
 
-    for ( typename vector<Element<dim>*>::const_iterator 
-          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       {
          ofs <<"TRGL ";
          for ( size_t j=0U; j<(*it)->Nodes(); j++ ) 
@@ -2325,8 +2318,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
    // 1. Property Access in the Model
    // ------------------------------------
-   map<string,Index>            prop_list;
-   typename map<string,Index>::iterator  pit;
+   map<string,Index>  prop_list;
    sgroup.Database().ListProperties( prop_list );
 
    if ( prop_list.empty() )
@@ -2372,7 +2364,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
    strcat( object_name, step );
    GocadHeader  header( "TSurf", object_name, fname );
 
-   for ( pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
+   for ( auto pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
      {
         if ( (*pit).second.place == NODE )
           {
@@ -2390,11 +2382,11 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
    // 4.2 Writing the vertex=Node data to file
    // ----------------------------------------
-   typename vector<Node<dim>*>::const_iterator   nit =  sg.NodesBegin();
    ScalarVariable                                val;
    VectorVariable<dim>                           vc;
    TensorVariable<dim>                           ts;
    size_t                                        i, j;
+   auto nit = sg.NodesBegin();
 
    // All properties are output as NODE Properties
    // --------------------------------------------
@@ -2403,7 +2395,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
         ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
         ofs << (*nit)->x() <<" "<< (*nit)->y() <<" "<< 0.0 <<" ";
                 
-        for ( pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
+        for ( auto pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
           {
              csmp::Index  prop_key((*pit).second);
              if ( prop_key.place == NODE )
@@ -2434,14 +2426,11 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
     // 4.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    typename vector<Element<dim>*>::const_iterator  eit(sg.ElementsBegin());
-
-    while ( eit != sg.ElementsEnd() )
+    for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
       {
          ofs <<"TRGL ";
          for ( j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
          ofs << endl;
-         eit++;
       }
     ofs << "END"<< endl;    
 
@@ -2559,12 +2548,10 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
 
    // 3.2 Writing the vertex=Node data to file
    // ----------------------------------------
-   typename vector<Node<dim>*>::const_iterator    nit =  sg.NodesBegin();
-   typename vector<Element<dim>*>::const_iterator eit;
    ScalarVariable                               sc;
    VectorVariable<dim>                           vc;
    TensorVariable<dim>                           ts;
-   vector<double>                                       xyz;
+   vector<double>                                xyz;
    size_t                                        i, j;
 
    // 3.3 All properties are output as NODE Properties
@@ -2590,7 +2577,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
              ts_elmt_data.reserve( sg.Nodes() );
              for ( i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
+        for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
           {
               switch ( prop_key.type )
                 {
@@ -2617,7 +2604,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    switch( prop_key.place )
      {
         case NODE:
-             while ( nit != sg.NodesEnd() )
+             for ( auto nit=sg.NodesBegin(); nit != sg.NodesEnd(); ++nit )
                {
                   (*nit)->Read(prop_key, sc );
                   ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
@@ -2625,12 +2612,11 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                   ofs << sc();
                   if ( (*nit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
                   ofs << endl;
-                  nit++;
-               } 
+               }
           break;
         case ELEMENT_INTEGRATION_POINT: {
                size_t  counter(0U);
-               while ( eit != sg.ElementsEnd() )
+               for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
                  {
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         // getting constraint point coordinates
@@ -2642,13 +2628,12 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                         if ( atBoundary(*eit) != NOT ) ofs <<" CNXYZ";
                         ofs << endl;
                       }
-                    eit++;
-                 } 
+                 }
              }
            break;
         case ELEMENT:
-             while ( nit != sg.NodesEnd() )
-               {             
+             for ( auto nit=sg.NodesBegin(); nit != sg.NodesEnd(); ++nit )
+               {
                    ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
                    ofs << (*nit)->x() <<" "<< (*nit)->y() <<" "<< (*nit)->z() <<" ";
                    switch( prop_key.type )
@@ -2669,7 +2654,6 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                     }
                   if ( (*nit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
                   ofs << endl;
-                  nit++;
               }
           break;
         default:
@@ -2680,7 +2664,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
 
     // 5.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    for ( eit=sg.ElementsBegin(); eit!= sg.ElementsEnd(); eit++ )
+    for ( auto eit=sg.ElementsBegin(); eit!= sg.ElementsEnd(); eit++ )
       {
          ofs <<"TETRA ";
          for ( size_t j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
@@ -2825,11 +2809,9 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    vector<size_t>    nodes(   gref.Nodes() );
    vector<size_t>    elmts(   gref.Elements() );
 
-   for ( typename vector<Node<dim>*>::const_iterator
-         nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++, i++ ) nodes[i] = (*nit)->Idx();
+   for ( auto nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++, i++ ) nodes[i] = (*nit)->Idx();
      
-   for ( typename vector<Element<dim>*>::const_iterator 
-         it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++, i++ ) elmts[i] = (*it)->Idx();
+   for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++, i++ ) elmts[i] = (*it)->Idx();
 
    // 4.4 making a list of element properties if these are required
    // -------------------------------------------------------------
@@ -2864,8 +2846,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
              ts_elmt_data.reserve(gref.Nodes() );
              for ( i=0; i<gref.Nodes(); i++ ) ts_elmt_data.push_back( ts );
           }
-        for ( typename vector<Element<dim>*>::const_iterator
-              it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+        for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
           {
               for ( j=0; j<(*it)->Nodes(); j++ ) elmt_nds.insert( (*it)->N(j)->Idx() );
               switch ( prop_key.type )
@@ -2920,8 +2901,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                } 
           break;
         case ELEMENT_INTEGRATION_POINT: 
-             for ( typename vector<Element<dim>*>::const_iterator
-                   it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+             for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
                {
                   for ( j=0; j<(*it)->IntegrationPoints(); j++ ) {
                         // getting constraint point coordinates

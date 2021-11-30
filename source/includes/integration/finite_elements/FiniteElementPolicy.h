@@ -13,7 +13,6 @@ class FiniteElementPolicy {
   public:
     FiniteElementPolicy( FiniteElement* = nullptr );
     FiniteElementPolicy( const FiniteElementPolicy& p ) : fptr_(p.fptr_) {}
-    FiniteElementPolicy( FiniteElementPolicy&& p ) : fptr_{p.fptr_} { p.fptr_=nullptr; }
   
     /// for deferred assignment or changing the element at runtime
     void Assign( FiniteElement* fe_ptr );
@@ -157,7 +156,7 @@ class FiniteElementPolicy {
     void       UnitNormal( VectorVariable<dim>& nrml ) const;
 
   private:
-    FiniteElementPolicy( const CELL<dim>& );
+    explicit FiniteElementPolicy( const CELL<dim>& );
     csmp::FiniteElement*  fptr_ = nullptr;
 };
 

@@ -2736,8 +2736,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolum
         assert( phi_key.type  == SCALAR );
         assert( phi_key.place == ELEMENT );
 
-        for ( typename vector<Element<dim>*>::const_iterator
-              eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+        for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
         {
             assert( (*eit)->FV() != NULL );
             interim_result = 0.;
@@ -2747,8 +2746,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolum
         }
     }
     else {
-        for ( typename vector<Element<dim>*>::const_iterator
-              eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+        for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
             assert( (*eit)->FV() != NULL );
             for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
                 result += (*eit)->N(i)->Read( prop_key ) * ( *(*eit) ).SectorVolume(i);
@@ -3474,8 +3472,7 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
     velo.Out();
     vector<double>  rst(3), IPOL;
 
-    for ( typename vector<Element<dim>*>::const_iterator
-          eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+    for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
     {
         cout <<"\nElement: "<< (*eit)->Idx() <<", vol: "<< (evolume=(*eit)->Volume()) <<", type: ";
         cout << parseFiniteElementType( (*eit)->FE_Type() );

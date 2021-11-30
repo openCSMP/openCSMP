@@ -123,7 +123,7 @@ void smoothElementData( Model<dim>& model,
            const csmp::Index log_key = model.CreateProperty( log_prop_name.c_str(), "SI", key.type, key.place, key.dataDepth,
                                                              log10(min_val_database), log10(max_val_database) );
            // taking the decadic logarithm of values
-        for ( typename vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+        for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
                  if ( key.type == SCALAR ) {
                       (*it)->Store( log_key, makeScalar( (*it)->Status(key), log10( (*it)->Read(key)) ) );
                    }
@@ -172,45 +172,45 @@ void smoothElementData( Model<dim>& model,
           for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ )
             {
               size_t elmt(0U);
-            for ( typename vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it,  ++elmt )
-                {
-                  // the new value taken is the volume-weighted mean average of the element neighbors and its own value
-                  // current element
-                  double average(0.), sum_of_weights(0.), min_val(0.), max_val(0.);
-                  double elmt_volume = (*it)->Volume();
-                  double val((*it)->Read(key));
-                  min_val = min( min_val, val );
-                  max_val = max( max_val, val );
-                  average        += val * elmt_volume;
-                  sum_of_weights += elmt_volume;
-                  // sampling the element neighbors as long as they are inside of the target region
-                  // and they sit across a subvertical face
-                  for ( size_t nbor=0U; nbor<(*it)->Neighbors(); ++nbor )
-                    if ( isSubvertical( (*it), nbor ) && domain.Contains((*it)->Neighbor(nbor)) )
-                      {
-                         elmt_volume = (*it)->Neighbor(nbor)->Volume();
-                         val = (*it)->Read(key);
-                         min_val = min( min_val, val );
-                         max_val = max( max_val, val );
-                         average      += (*it)->Neighbor(nbor)->Read(key) * elmt_volume;
-                         sum_of_weights += elmt_volume;
+              for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it,  ++elmt )
+                  {
+                    // the new value taken is the volume-weighted mean average of the element neighbors and its own value
+                    // current element
+                    double average(0.), sum_of_weights(0.), min_val(0.), max_val(0.);
+                    double elmt_volume = (*it)->Volume();
+                    double val((*it)->Read(key));
+                    min_val = min( min_val, val );
+                    max_val = max( max_val, val );
+                    average        += val * elmt_volume;
+                    sum_of_weights += elmt_volume;
+                    // sampling the element neighbors as long as they are inside of the target region
+                    // and they sit across a subvertical face
+                    for ( size_t nbor=0U; nbor<(*it)->Neighbors(); ++nbor )
+                      if ( isSubvertical( (*it), nbor ) && domain.Contains((*it)->Neighbor(nbor)) )
+                        {
+                           elmt_volume = (*it)->Neighbor(nbor)->Volume();
+                           val = (*it)->Read(key);
+                           min_val = min( min_val, val );
+                           max_val = max( max_val, val );
+                           average      += (*it)->Neighbor(nbor)->Read(key) * elmt_volume;
+                           sum_of_weights += elmt_volume;
+                        }
+                    // averaging
+                    average /= sum_of_weights;
+                    // storing interim values
+                    smoothed_vals[elmt] = average;
+                  }
+                
+                // storing the smoothed values at the end of smoothing cycle
+                for ( size_t i=0U; i<domain.InteriorElements(); ++i ) {
+                    if ( smoothed_vals[i] >= min_val_database && smoothed_vals[i] <= max_val_database )
+                       domain.E(i)->Store( key, makeScalar( domain.E(i)->Status(key), smoothed_vals[i] ) );
+                    else {
+                         cerr <<"\n\tElement: "<< domain.E(i)->Idx() <<": smoothing cycle "<< cycle;
+                         cerr <<": computed out-of-range average value for '"<< variable_name <<"': "<< smoothed_vals[i];
+                         interpolation_problem = true;
                       }
-                  // averaging
-                  average /= sum_of_weights;
-                  // storing interim values
-                  smoothed_vals[elmt] = average;
-                }
-              
-              // storing the smoothed values at the end of smoothing cycle
-              for ( size_t i=0U; i<domain.InteriorElements(); ++i ) {
-                  if ( smoothed_vals[i] >= min_val_database && smoothed_vals[i] <= max_val_database )
-                     domain.E(i)->Store( key, makeScalar( domain.E(i)->Status(key), smoothed_vals[i] ) );
-                  else {
-                       cerr <<"\n\tElement: "<< domain.E(i)->Idx() <<": smoothing cycle "<< cycle;
-                       cerr <<": computed out-of-range average value for '"<< variable_name <<"': "<< smoothed_vals[i];
-                       interpolation_problem = true;
-                    }
-                }
+                  }
               
             } // end smoothing cycles
        
@@ -228,7 +228,7 @@ void smoothElementData( Model<dim>& model,
           TensorVariable<dim>  ts;
 
           // taking the decadic logarithm of values
-       for ( typename vector<Element<dim>*>::iterator it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+       for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
                 if ( key.type == SCALAR ) {
                      (*it)->Store( original_key, makeScalar( (*it)->Status(key), pow( 10., (*it)->Read(key)) ) );
                   }

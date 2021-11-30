@@ -44,30 +44,33 @@ void MeshManager_Test::Create_ANSYS2D_Model( bool reconstruct_from_file )
     model2d_name_ = "box2d_fault";
     string varFileName = "CSMP-variables.txt";
     model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
-    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
-    std::deque<Element<2>*> elements;
-    cout << "\nInterconnected Nodes: " << findContiguousMeshPatch( model2d_->Mesh().N(0U), elements ) << "\n";
-    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-    std::map<std::string,std::deque<Element<2U>*> > patch_map;
-    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    MeshManager<2>& mesh(model2d_->Mesh());
+    cout << "\nNodes: " << mesh.Nodes() << "\n";
+    std::vector<Element<2>*> elements;
+    cout << "\nInterconnected Nodes: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements ) << "\n";
+    cout << "\nElements: " << mesh.Elements() << "\n";
+    std::map<std::string,std::vector<Element<2U>*> > patch_map;
+    cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
     cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-    std::map<std::string,std::deque<Face<2U>*> >  face_map;
-    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    std::map<std::string,std::vector<Face<2U>*> >  face_map;
+    cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
     cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-    std::map<std::string,std::deque<InterFace<2U>*> >  iface_map;
-    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
+    cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
+    
     if (reconstruct_from_file) {
         model2d_->OutputToBinaryFile(model2d_name_.c_str());
         delete model2d_;
         model2d_ = new Model<2U>(model2d_name_);
-        cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
-        cout << "\nNode Groups: " << findContiguousMeshPatch( model2d_->Mesh().N(0U), elements ) << "\n";
+        MeshManager<2>& mesh(model2d_->Mesh());
+        cout << "\nNodes: " << mesh.Nodes() << "\n";
+        cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements ) << "\n";
         cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-        cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
         cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-        cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
         cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
       }
       
  } // end Create_ANSYS2D_Model
@@ -84,31 +87,35 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
         string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
         model3d_name_ = "ModelDykeAllLayersSplit";
         model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true, true);
-        cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
-        std::deque<Element<3>*> elements3;
-        cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
-        cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
-        std::map<std::string,std::deque<Element<3U>*> > patch_map3;
-        cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
-        cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
-        std::map<std::string,std::deque<Face<3U>*> >  face_map3;
-        cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
-        cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
-        std::map<std::string,std::deque<InterFace<3U>*> >  iface_map3;
-        cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
+        MeshManager<3>& mesh(model3d_->Mesh());
+        
+        cout << "\nNodes: " << mesh.Nodes() << "\n";
+        std::vector<Element<3>*> elements3;
+        cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+        cout << "\nElements: " << mesh.Elements() << "\n";
+        std::map<std::string,std::vector<Element<3U>*> > patch_map3;
+        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
+        cout << "\nFaces: " << mesh.Faces() << "\n";
+        std::map<std::string,std::vector<Face<3U>*> >  face_map3;
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
+        cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
+        std::map<std::string,std::vector<InterFace<3U>*> >  iface_map3;
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
+        
         //writing ansys model to file deleting it and then recreating a csmp native model from the file
         if ( reconstruct_from_file ) {
             model3d_->OutputToBinaryFile(model3d_name_.c_str());
             delete model3d_;
             model3d_ = new Model<3U>(model3d_name_);
-            cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
-            cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
-            cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
-            cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
-            cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
-            cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
-            cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
-            cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
+            MeshManager<3>& mesh(model3d_->Mesh());
+            cout << "\nNodes: " << mesh.Nodes() << "\n";
+            cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+            cout << "\nElements: " << mesh.Elements() << "\n";
+            cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
+            cout << "\nFaces: " << mesh.Faces() << "\n";
+            cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
+            cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
+            cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
           }
         delete model3d_;
         model3d_ = nullptr;
@@ -122,32 +129,34 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
   string varFileName = "CSMP-variables.txt";
 	model3d_name_ = "prism_test";
 	model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
-  std::deque<Element<3>*> elements3;
-	cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
-	cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
-	cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
-  map<string,deque<Element<3U>*> > patch_map3;
-	cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
-	cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
-  map<string,deque<Face<3U>*> >  face_map3;
-	cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
-	cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
-  map<string,deque<InterFace<3U>*> >  iface_map3;
-	cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
+  vector<Element<3>*> elements3;
+  MeshManager<3>& mesh(model3d_->Mesh());
+	cout << "\nNodes: " << mesh.Nodes() << "\n";
+	cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+	cout << "\nElements: " << mesh.Elements() << "\n";
+  map<string,vector<Element<3U>*> > patch_map3;
+	cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
+	cout << "\nFaces: " << mesh.Faces() << "\n";
+  map<string,vector<Face<3U>*> >  face_map3;
+	cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
+	cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
+  map<string,vector<InterFace<3U>*> >  iface_map3;
+	cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
 
 	//writing ansys model to file deleting it and then recreating a csmp native model from the file
 	if ( reconstruct_from_file ) {
 		model3d_->OutputToBinaryFile(model3d_name_.c_str());
 		delete model3d_;
 		model3d_ = new Model<3U>(model3d_name_);
-		cout << "\nNodes: " << model3d_->Mesh().Nodes() << "\n";
-		cout << "\nNode Groups: " << findContiguousMeshPatch( model3d_->Mesh().N(0U), elements3 ) << "\n";
-		cout << "\nElements: " << model3d_->Mesh().Elements() << "\n";
-		cout << "\nElement Groups: " << findStandAloneMeshPatches( model3d_->Mesh().ElementsBegin(), model3d_->Mesh().ElementsEnd(), patch_map3 ) << "\n";
-		cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
-		cout << "\nFace Groups: " << findStandAloneMeshPatches( model3d_->Mesh().FacesBegin(), model3d_->Mesh().FacesEnd(), face_map3 ) << "\n";
-		cout << "\nInterfaces: " << model3d_->Mesh().InterFaces() << "\n";
-		cout << "\nInterface Groups: " << findStandAloneMeshPatches( model3d_->Mesh().InterFacesBegin(), model3d_->Mesh().InterFacesEnd(), iface_map3 ) << "\n";
+    MeshManager<3>& mesh(model3d_->Mesh());
+		cout << "\nNodes: " << mesh.Nodes() << "\n";
+		cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+		cout << "\nElements: " << mesh.Elements() << "\n";
+		cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
+		cout << "\nFaces: " << mesh.Faces() << "\n";
+		cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
+		cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
+		cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
 	}
   
  } // end Create_ANSYS3D_Model
@@ -256,7 +265,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     test_Create_Prism_Hexa_VSet( vset, false );
     Model<3U>    model( vset, "CSMP-variables.txt", true );
     const size_t ELMT{13}; // 13 in VSet
-    Element<3>*  eptr = model.Mesh().E(ELMT);
+    Element<3>*  eptr = &(*next(model.Mesh().ElementsBegin(),ELMT));
     //eptr->Out();
     assert( eptr->Neighbor(4) == nullptr );
     
@@ -322,7 +331,7 @@ bool MeshManager_Test::Test_BuiltElementConnectivity2D()
     vector<vector<Element<2>*> > nbor_pointers;
     backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
     // rebuilding the connectivity
-    model.Mesh().BuildConnectivity<Element>( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd() );
+    model.Mesh().BuildConnectivity<Element>( model_domain.ElementsBegin(), model_domain.ElementsEnd() );
     // getting the connectivity that was recreated
     vector<vector<Element<2>*> > nbor_pointers2;
     backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
@@ -348,7 +357,7 @@ bool MeshManager_Test::Test_BuiltElementConnectivity3D()
     vector<vector<Element<3>*> > nbor_pointers;
     backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
     // rebuilding the connectivity
-    model.Mesh().BuildConnectivity<Element>( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd() );
+    model.Mesh().BuildConnectivity<Element>( model_domain.ElementsBegin(), model_domain.ElementsEnd() );
     // getting the connectivity that was recreated
     vector<vector<Element<3>*> > nbor_pointers2;
     backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
@@ -380,7 +389,8 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 
 	// renumbering nodes
 	const bool in_a_single_sequence(true);
-	model3d_->Mesh().AssignUniqueNumbers(in_a_single_sequence);
+  MeshManager<3>& mesh(model3d_->Mesh());
+	mesh.AssignUniqueNumbers(in_a_single_sequence);
 	// checking the numbering
 	vector<size_t>  nodes_renumbered;
 	nodes_renumbered.reserve(model3d_->Mesh().Nodes());
@@ -389,8 +399,8 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 	{
 		set<csmp::Node<3U>*>    discovered_nodes;
 		deque<csmp::Node<3U>*>  current_nodes;
-		discovered_nodes.insert(model3d_->Mesh().N(0));
-		current_nodes.push_back(model3d_->Mesh().N(0));
+		discovered_nodes.insert( &(*mesh.NodesBegin()) );
+		current_nodes.push_back( &(*mesh.NodesBegin()) );
 
 		while (!current_nodes.empty()) {
 			const csmp::Node<3U>*  n_ptr(*current_nodes.begin());
@@ -430,9 +440,9 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   const size_t     n_original_elmts(mesh.Elements());
 	// 0. the first element is copy constructed and stored, and then deleted
 
-	csmp::Element<3U> first_element( (*mesh.E(0)) );
+	csmp::Element<3U> first_element(*mesh.ElementsBegin());
 	// 1. delete elements 1 from the model
-	mesh.Delete( mesh.ElementsBegin(), next(mesh.ElementsBegin(),1) );
+	mesh.Erase( mesh.ElementsBegin() );
   
 	_test(mesh.Elements() == n_original_elmts - 1);
 
@@ -443,11 +453,11 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	LocalVariables				     elmt_vars = model3d_->Database().LocalVariablesAt(ELEMENT);
 	IntegrationPointVariables	 intp_vars = model3d_->Database().IntegrationPointVariablesAt(ELEMENT);
   // copy the first node
-  Node<3U>    n1( *mesh.N(0) );
-  const size_t nearby_node(4);
-	Node<3U>*		ptr_n1 = mesh.AddNodeAtUniqueLocation( n1.Coordinate(), nearby_node, node_vars );
+  Node<3U>      n1(*mesh.NodesBegin());
+  const size_t  nearby_node(4);
+	Node<3U>*		  ptr_n1 = mesh.AddNodeAtUniqueLocation( n1.Coordinate(), nearby_node, node_vars );
   // method must return pointer to node 1 pointer
-  _test( ptr_n1 == mesh.N(0) );
+  _test( ptr_n1 == &(*mesh.NodesBegin()) );
 
   // create new nodes and return pointers to them
 	Node<3U>*		ptr_n2 = mesh.AddNodeAt( Point<3U>(26., 27., 0.0), node_vars, NOT );
@@ -460,7 +470,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   // create new PYRAMID element
   int32_t material_id(1); // new element's rock_tye
   vector<Node<3U>*>    nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
-  Element<3U>*         neptr( mesh.E(4) ); // just a neighbor to try
+  Element<3U>*         neptr( &(*next(mesh.ElementsBegin(),4)) ); // just a neighbor to try
 	Element<3U>*	ptr_e1 = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes, material_id );
 
 	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
@@ -486,7 +496,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	_test( mesh.Elements() == n_original_elmts );
 
 	// 2. deleting these nodes again
-	mesh.Delete<Node>( nodes.begin(), nodes.end() );
+	mesh.Delete( nodes.begin(), nodes.end() );
 	_test( mesh.Nodes() == n_original_nodes );
 
 // TODO: test insertion / deletion / connection of Face and InterFace objects
@@ -507,7 +517,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
   const size_t n_original_faces = mesh.Faces();
 
   // element 4
-  Element<3U>* const eptr( mesh.E(4) );
+  Element<3U>* const eptr( &(*next(mesh.ElementsBegin(),4)) );
   Face<3U>*    fptr1(nullptr), *fptr2(nullptr);
   for ( size_t i=0U; i<eptr->Faces(); i++ )
     {
@@ -542,8 +552,10 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
     }
 	
 	// delete the new face(s) again
-	mesh.Delete( next(mesh.FacesBegin(),n_original_faces), mesh.FacesEnd() );
-  mesh.EraseNullPointerCells();
+  vector<Face<3U>*> face_ptrs{ fptr1, fptr2 };
+	mesh.Delete( face_ptrs.begin(), face_ptrs.end() );
+  _test( fptr1 == nullptr );
+  _test( fptr2 == nullptr );
 	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model3d_name_ << "' (after deletion of faces):\n";
 	cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
 
@@ -567,8 +579,10 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
   const size_t n_original_ifaces = mesh.InterFaces();
 
   // puts interfaces between the interior faces of Element # and Element #
-  Element<3U>* const eptr( mesh.E(4) );
+  Element<3U>* const eptr( &(*next(mesh.ElementsBegin(),4)) );
   InterFace<3U>*     ifptr(nullptr);
+  vector<InterFace<3U>*> iface_ptrs;
+  iface_ptrs.reserve( eptr->Faces() );
   for ( size_t i=0U; i<eptr->Faces(); i++ )
     {
        if ( eptr->Neighbor(i) != nullptr && !interface_constructed ) {
@@ -605,6 +619,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
             
             // connecting the InterFace to the middle element
             ifptr->Assign( ieptr );
+            iface_ptrs.push_back( ifptr );
          }
     }
   cout<<"\n\tcreated faces: ";
@@ -613,8 +628,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
 	_test( mesh.Faces() == n_original_ifaces + interface_constructed );
  
 	// delete the new interface(s) again
-	mesh.Delete( next(mesh.InterFacesBegin(),n_original_ifaces), mesh.InterFacesEnd() );
-  mesh.EraseNullPointerCells();
+	mesh.Delete( iface_ptrs.begin(), iface_ptrs.end() );
 	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model3d_name_ << "' (after deletion of interfaces):\n";
 	cout << "\nFaces: " << model3d_->Mesh().InterFaces() << "\n";
 
@@ -638,10 +652,10 @@ bool MeshManager_Test::TestEraseAllPrimitives()
    const size_t     n_original_faces(mesh.Faces());
    const size_t     n_orig_interfaces(mesh.InterFaces());
 	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-   _test( mesh.Delete( mesh.ElementsBegin(),   mesh.ElementsEnd() )   == n_original_elmts );
-   _test( mesh.Delete( mesh.FacesBegin(),      mesh.FacesEnd() )      == n_original_faces );
-   _test( mesh.Delete( mesh.InterFacesBegin(), mesh.InterFacesEnd() ) == n_orig_interfaces );
-   _test( mesh.EraseNullPointerCells() == n_original_elmts );
+   _test( mesh.Erase( mesh.NodesBegin(),   mesh.NodesEnd() )   == n_original_elmts );
+   _test( mesh.Erase( mesh.ElementsBegin(),   mesh.ElementsEnd() )   == n_original_elmts );
+   _test( mesh.Erase( mesh.FacesBegin(),      mesh.FacesEnd() )      == n_original_faces );
+   _test( mesh.Erase( mesh.InterFacesBegin(), mesh.InterFacesEnd() ) == n_orig_interfaces );
 	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
 	 _test( mesh.Elements() + mesh.Faces() + mesh.InterFaces() + mesh.Nodes() == 0);
 

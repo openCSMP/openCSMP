@@ -507,7 +507,7 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
      set<Node<3U>*>    interior_nodes, perimeter_nodes;
      set<Element<3U>*> interior_elements, perimeter_elements;
  
-     const Region<3>&  domain(model.Region(region));
+     Region<3>&  domain(model.Region(region));
      for ( auto nit=domain.NodesBegin(); nit!=domain.PerimeterNodesBegin(); nit++ ) interior_nodes.insert( (*nit) );
      for ( auto nit=domain.PerimeterNodesBegin(); nit!=domain.NodesEnd(); nit++ )   perimeter_nodes.insert( (*nit) );
      for ( auto eit=domain.ElementsBegin(); eit!=domain.PerimeterElementsEnd(); eit++ ) interior_elements.insert( (*eit) );
@@ -531,8 +531,8 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
   
      // 2. retrieving the model and getting the same diagnostics
      // --------------------------------------------------------------------------------
-     Model<3U>  model2(string(model.Name()));
-     const Region<3>&  domain2(model.Region(region));
+     Model<3U>   model2(string(model.Name()));
+     Region<3>&  domain2(model.Region(region));
 
      set<Node<3U>*>    interior_nodes2, perimeter_nodes2;
      set<Element<3U>*> interior_elements2, perimeter_elements2;

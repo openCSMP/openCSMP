@@ -29,7 +29,7 @@ class UnionFind {
 
       /// Extract the components and their sizes.
       template<typename Container>
-      void Components(Container& container) const
+      void Components( Container& container ) const
       {
           for (auto component : components_) {
               auto& rec = records_[component];

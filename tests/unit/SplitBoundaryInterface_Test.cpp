@@ -576,7 +576,7 @@ void SplitBoundaryInterface_Test::VisualiseSplitBoundaries( Model<dim>& model, c
     interfaceValue += 1.0;
 
     // loop over InterFaces
-    for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
+    for ( auto ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
     {
       (*ifit)->Parent( INSIDE )->Read( element_prop_idx, interfaceValueRead );
       interfaceValueWrite = +1;

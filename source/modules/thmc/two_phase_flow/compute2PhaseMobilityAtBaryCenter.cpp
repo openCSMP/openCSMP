@@ -27,10 +27,9 @@ void compute2PhaseMobilityAtBaryCenter( ModelSubDomain<dim,SIMPLEX>& sg,
   }
   */
 
-  const typename vector<SIMPLEX<dim>*>::iterator elementsend=sg.ElementsEnd();
+  const auto elementsend=sg.ElementsEnd();
   // 2. Computing the multiphase flow properties
-  for ( typename vector<SIMPLEX<dim>*>::iterator
-        it=sg.ElementsBegin(); it!=elementsend; ++it )
+  for ( auto it=sg.ElementsBegin(); it!=elementsend; ++it )
   {
     // 0. setting up the relative permeability model
     // ---------------------------------------------

@@ -12,12 +12,11 @@ MatlabInterface::~MatlabInterface() {};
 
 void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, double distance, const char* name, const char* variable, long step )
  {
-    Index                               key(mdl.Database().StorageKey(variable));
-    vector<Node<2U>* >::const_iterator  it;
-    size_t                              size(0);
-    const Region<2>&           mref = mdl.Region("Model");
+    const Index        key(mdl.Database().StorageKey(variable));
+    size_t             size(0);
+    const Region<2>&   mref = mdl.Region("Model");
 
-    for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+    for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
         if ( (*it)->y() == distance ) size++;
       }
     vector<pair<double,double> >                  vec1(size);
@@ -25,7 +24,7 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, do
     if ( key.type == SCALAR ) {
             double  val;
             size_t    i(0);
-            for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+            for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
                 if ( (*it)->y() == distance ) {
                     val = (*it)->Read( key );
                     vec1[i].first  = (*it)->x();
@@ -38,7 +37,7 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, do
     else {
        VectorVariable<2U>  vals;
        size_t              i(0);
-       for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+       for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
             if ( (*it)->y() == distance ) {
                 (*it)->Read( key, vals );
                 vec2[i].first  = (*it)->x();
@@ -66,23 +65,20 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongX( Model<2U>& mdl, do
     ofs.open( outfile.c_str(), ios::out|ios::trunc );
     
     if ( key.type == SCALAR )
-      for ( vector<pair<double,double> >::iterator it2=vec1.begin(); it2!=vec1.end(); it2++ ) ofs << it2->first << "\t" << it2->second << endl;
+      for ( auto it2=vec1.begin(); it2!=vec1.end(); it2++ ) ofs << it2->first << "\t" << it2->second << endl;
     else
-      for ( vector<pair<double,pair<double,double> > >::iterator it2=vec2.begin(); it2!=vec2.end(); it2++ ) ofs << it2->first << "\t" << it2->second.first <<  "\t" << it2->second.second << endl;
-    
-
-    
- } 
+      for ( auto it2=vec2.begin(); it2!=vec2.end(); it2++ )
+        ofs << it2->first << "\t" << it2->second.first <<  "\t" << it2->second.second << endl;
+ }
 
 
 void MatlabInterface::ExtractAndWrite1DVariableProfileAlongY( Model<2U>& mdl, double distance, const char* name, const char* variable, long step )
  {
-    Index                               key(mdl.Database().StorageKey(variable));
-    vector<Node<2U>* >::const_iterator  it;
-    size_t                              size(0);
-    const Region<2>&           mref = mdl.Region("Model");
+    const Index       key(mdl.Database().StorageKey(variable));
+    size_t            size(0);
+    const Region<2>&  mref = mdl.Region("Model");
     
-    for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+    for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
         if ( (*it)->x() == distance ) size++;
       }
         vector<pair<double,double> >                  vec1(size);
@@ -90,7 +86,7 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongY( Model<2U>& mdl, do
     if ( key.type == SCALAR ) {
             double  val;
             size_t    i(0);
-            for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+            for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
                 if ( (*it)->x() == distance ) {
                     val = (*it)->Read( key );
                     vec1[i].first  = (*it)->y();
@@ -103,7 +99,7 @@ void MatlabInterface::ExtractAndWrite1DVariableProfileAlongY( Model<2U>& mdl, do
     else {
         VectorVariable<2U>  vals;
         size_t              i(0);
-        for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+        for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
             if ( (*it)->x() == distance ) {
                 (*it)->Read( key, vals );
                 vec2[i].first  = (*it)->y();
@@ -150,10 +146,9 @@ void MatlabInterface::WriteSavedTimeStepsFile( long step, const char* name )
 
 void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, const char* variable_name, long step, const char* region_name )
  {
-    Index  key(mdl.Database().StorageKey(variable_name));
-    static bool written(false);
-    vector<Node<2U>* >::const_iterator  it;
-    const Region<2>&           mref = mdl.Region(region_name);
+    const Index       key(mdl.Database().StorageKey(variable_name));
+    static bool       written(false);
+    const Region<2>&   mref = mdl.Region(region_name);
     
     // generate name of variable file with/without sub region
     string outputfile(file_name), regionfile(region_name), number;
@@ -174,13 +169,12 @@ void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, 
         elements.open( "elements.txt", ios::out|ios::trunc );
 
         // node coordinates
-        for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+        for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
             nodes << (*it)->x() << "\t" << (*it)->y() << endl;
           }
 
         // get node-element connectivity
-        vector<Element<2U>* >::const_iterator  it2;
-        for ( it2=mref.ElementsBegin(); it2!=mref.ElementsEnd(); it2++ ) {
+        for ( auto it2=mref.ElementsBegin(); it2!=mref.ElementsEnd(); it2++ ) {
             // regular triangles
             if ( (*it2)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE or
                  (*it2)->FE_Type() == LINEAR_TRIANGLE ) {
@@ -223,7 +217,7 @@ void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, 
     ofs.open( outputfile.c_str(), ios::out|ios::trunc );
     VectorVariable<2U> vec;
     TensorVariable<2U> ts;
-    for ( it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
+    for ( auto it=mref.NodesBegin(); it!=mref.NodesEnd(); it++ ) {
         if ( key.type == SCALAR ) {
             ofs << (*it)->Read( key ) << endl;
           }

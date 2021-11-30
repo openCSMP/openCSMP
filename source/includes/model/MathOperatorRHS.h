@@ -140,20 +140,20 @@ class MathOperatorRHS {
                                               size_t ip, DenseMatrix<DM_MIN>& );
 
     /// getting data from the Element, Face, InterFace
-    virtual void  GetOperands        ( Element<dim>& );
-    virtual void  GetOperands        ( Face<dim>& );
-    virtual void  GetOperands        ( InterFace<dim>& );
-
-    /// writing data to the Element, Face, InterFace
-    virtual void  WriteOperands      ( Element<dim>& );
-    virtual void  WriteOperands      ( Face<dim>&  );
-    virtual void  WriteOperands      ( InterFace<dim>& );
+    virtual void  GetOperands( const Element<dim>& );
+    virtual void  GetOperands( const Face<dim>& );
+    virtual void  GetOperands( const InterFace<dim>& );
 
     /// integration performed on Element, Face, InterFace
-    virtual void  ComputeContribution( Element<dim>& );
-    virtual void  ComputeContribution( Face<dim>& );
-    virtual void  ComputeContribution( InterFace<dim>& );
+    virtual void  ComputeContribution( const Element<dim>& );
+    virtual void  ComputeContribution( const Face<dim>& );
+    virtual void  ComputeContribution( const InterFace<dim>& );
   
+    /// writing data to the Element, Face, InterFace
+    virtual void  WriteOperands( Element<dim>& );
+    virtual void  WriteOperands( Face<dim>&  );
+    virtual void  WriteOperands( InterFace<dim>& );
+
     /// if so specified multiply with time increment
     virtual void  MultiplyWithTimeFactor( double dt );
 

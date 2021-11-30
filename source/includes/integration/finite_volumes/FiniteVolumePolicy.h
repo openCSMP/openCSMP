@@ -81,7 +81,6 @@ class FiniteVolumePolicy<3U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
 
     /// connect policy to a finite-volume stencil that must match the parent element
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<3U>* );
@@ -175,7 +174,6 @@ class FiniteVolumePolicy<2U,CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<2U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<2U>* );
     void       AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
     const FiniteVolumeStencil<2U>* const FV() const;
@@ -218,7 +216,6 @@ class FiniteVolumePolicy<1U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<1U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
     void     AssignFiniteVolume( const csmp::FiniteVolumeStencil<1U>* );
     void     AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
     const FiniteVolumeStencil<1U>* const FV() const;

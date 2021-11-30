@@ -393,7 +393,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
       vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
       vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       1 );
 
-      const Region<3>& model_domain(model.Region("Model"));
+      Region<3>& model_domain(model.Region("Model"));
       const csmp::Index p_key(model.Database().StorageKey("fluid pressure")),
                         K_key(model.Database().StorageKey("conductivity")),
                         v_key(model.Database().StorageKey("velocity"));

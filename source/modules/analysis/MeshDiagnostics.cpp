@@ -22,8 +22,7 @@ void MeshDiagnostics<dim>::ElementVolumeRange( const Model<dim>& sg,
     
     const Region<dim>& sgref(sg.Region("Model"));
     
-    for ( typename vector<Element<dim>*>::const_iterator
-          eit=sgref.ElementsBegin(); 
+    for ( auto eit=sgref.ElementsBegin();
           eit!=sgref.ElementsEnd(); eit++ ) 
       {
          if ( first_element ) {
@@ -57,11 +56,9 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
     
     cout <<"\nMeshDiagnostics::FixFiniteElementNeighborOrientationOfSurfaceMeshes: Checking for any clockwise ordered element neighbor IDs..." << endl;
     
-    const Region<dim>& sgref(sg.Region("Model"));
+    Region<dim>& sgref(sg.Region("Model"));
 
-    for ( typename vector<Element<dim>*>::const_iterator
-          eit=sgref.ElementsBegin(); 
-          eit!=sgref.ElementsEnd(); eit++ )
+    for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ )
       { 
         if ( bc_vec.size() != (*eit)->Neighbors() ) bc_vec.resize((*eit)->Neighbors());
         sign = 0.;
@@ -90,7 +87,7 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
               }
             for ( size_t i=0; i<id_vec.size(); i++ ) {
                 if ( id_vec[i] > 0 ) (*eit)->Assign( i, sgref.E(id_vec[i]-1) );
-                else                 (*eit)->Assign( i, static_cast<Element<dim>*>(NULL) );
+                else                 (*eit)->Assign( i, static_cast<Element<dim>*>(nullptr) );
               }
           }
     
@@ -474,8 +471,7 @@ bool detectDuplicateElements( const Model<dim>& m )
     
     const Region<dim>&  gref(m.Region("Model"));
     
-    for ( typename vector<Element<dim>*>::const_iterator
-          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ ) {
+    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ ) {
           csmp::Point<dim> bc = (*it)->BaryCenter();
           pair<typename set<csmp::Point<dim> >::iterator,bool>
           bc_it = element_barycenters.insert( bc );

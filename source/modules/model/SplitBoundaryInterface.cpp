@@ -23,37 +23,6 @@ using namespace std;
 
 namespace csmp {
 
-/**
-Creates a name like SPLITBOUNDARY_region1_region2 adding a number if this is necessary to make the
-name unique.
-
-@attention the facing relationships of the boundary are preserved so that region1 is the first in the
-argument pair.
-
-@author SKM
-@date January 2018
-*/
-/*
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-std::string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryName( const std::pair<std::string, std::string>& juxtaposed_regions ) const
-{
-  string split_boundary_name( "SPLITBOUNDARY_" + juxtaposed_regions.first + '_' + juxtaposed_regions.second );
-
-  // if the substring set is empty
-  if ( ContainsSplitBoundary( split_boundary_name.c_str() ) ) {
-    ErrorHandler::Instance().notice( WARNING, "SplitBoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateSplitBoundaryName:",
-                                     split_boundary_name.c_str(), "already exists, try other name.'\0'." );
-    return std::string( "\0" );
-  }
-
-  return split_boundary_name;
-
-} // end CreateSplitBoundaryName
-*/
-
-
-
-
 
 /**
 returns reference to SplitBoundary
@@ -162,7 +131,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
     splitBoundaryIterator  spit = splitBoundaryMap_.find( splitboundary );
     if ( spit != splitBoundaryMap_.end() ) {
          // getting the MeshManager to delete the interfaces
-         splitboundaryComplex->Mesh().template Delete<InterFace>( (*spit).second.ElementsBegin(), (*spit).second.ElementsEnd() );
+         splitboundaryComplex->Mesh().Delete( (*spit).second.ElementsBegin(), (*spit).second.ElementsEnd() );
          // deleting the split boundary
          splitBoundaryMap_.erase( (*spit).first );
          return;
@@ -199,7 +168,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
     // if the addresses are the same
     if ( spit !=  splitBoundaryMap_.end() ) {
          // getting the MeshManager to delete the interfaces
-         splitboundaryComplex->Mesh().template Delete<InterFace>( splitboundary.ElementsBegin(), splitboundary.ElementsEnd() );
+         splitboundaryComplex->Mesh().Delete( splitboundary.ElementsBegin(), splitboundary.ElementsEnd() );
          // if the split boundary is contained in the map, it is erased
          splitBoundaryMap_.erase( (*spit).first );
          return;
@@ -257,8 +226,8 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
   {
      BinaryFileSectionWrite sect(fp, "SPLITBDRY");
   
-     const int64_t  records( this->SplitBoundaries() );
-     fp.write( reinterpret_cast<const char*>(&records), sizeof( int64_t  ) );
+     const uint64_t  records( this->SplitBoundaries() );
+     fp.write( reinterpret_cast<const char*>(&records), sizeof(uint64_t) );
 
      for ( auto bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
        {
@@ -316,16 +285,16 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
   cout <<"\n\timporting the split boundaries: ";
 
   // 1. reading the spli boundaries
-  const PropertyDatabase<dim>& database( static_cast<const SPLITBOUNDARY_COMPLEX<dim>& >(*this).Database() );
-  const MeshManager<dim>& mesh( static_cast<SPLITBOUNDARY_COMPLEX<dim>& >(*this).Mesh() );
+  SPLITBOUNDARY_COMPLEX<dim>& splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>& >(*this) );
+  const PropertyDatabase<dim>& database( splitBoundaryComplex.Database() );
+  MeshManager<dim>& mesh( splitBoundaryComplex.Mesh() );
 
   {
     BinaryFileSectionRead sect(fp, "SPLITBDRY");
    
-    SubDomainInfo  info;
-    int64_t          records(0);  // region records
+    uint64_t  records(0);  // region records
     // getting number of unique region records from file
-    fp.read( reinterpret_cast<char*>(&records), sizeof(int64_t ) );
+    fp.read( reinterpret_cast<char*>(&records), sizeof(uint64_t ) );
     if ( records > 0 )
       // reading the regions sequentially
       for ( size_t i=0U; i<records; ++i )
@@ -333,11 +302,12 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
            BinaryFileSectionRead hdr(fp, "ONE_BDRY");
 
            // 1.1 reading name and face indices for each boundaries
+           SubDomainInfo  info;
            readDomainIndexesFromBinaryFile( dim, fp, info );
           
            // 1.3 reading the split boundary objects
            pair<typename map<string,csmp::SplitBoundary<dim> >::iterator,bool>
-             it=splitBoundaryMap_.insert( make_pair( info.name.c_str(), csmp::SplitBoundary<dim>( database, mesh, info ) ) );
+             it=splitBoundaryMap_.insert( make_pair( info.name, csmp::SplitBoundary<dim>( database, mesh, info ) ) );
           
            if ( !it.second )
              throw csmp::Exception( FATAL_ERROR, "BoundaryInterface::InputBoundariesFromBinary:",

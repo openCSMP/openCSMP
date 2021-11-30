@@ -175,8 +175,8 @@ void minMaxXYZ( Point<3U>& min, Point<3U>& max, const Model<3U>& model, const ch
   double xMin( 0. ), xMax( 0. ), yMin( 0. ), yMax( 0. ), zMin( 0. ), zMax( 0. );
   const Region<3>& region( model.Region( regionName ) );
 
-  const std::vector<csmp::Node<3U>*>::const_iterator regionNodesEnd( region.NodesEnd() );
-  for( std::vector<csmp::Node<3U>*>::const_iterator it = region.NodesBegin(); it != regionNodesEnd; ++it )
+  const auto regionNodesEnd( region.NodesEnd() );
+  for( auto it = region.NodesBegin(); it != regionNodesEnd; ++it )
   {
     xMax = (*it)->x() > xMax ? (*it)->x() : xMax;
     yMax = (*it)->y() > yMax ? (*it)->y() : yMax;

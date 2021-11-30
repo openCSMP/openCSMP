@@ -67,8 +67,7 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
     // have verified that the ensuing flow matches the parallel plate approximation k = d^2 / 12
     csmp::Index  k_key = sg.Database().StorageKey("permeability");
     ScalarVariable  sc;
-    for ( typename vector<Element<dim>*>::iterator
-          eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+    for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
          (*eit)->PropertyValueAtBaryCenter( lap.Key(), sc );
          (*eit)->Store( k_key, sc );
       }

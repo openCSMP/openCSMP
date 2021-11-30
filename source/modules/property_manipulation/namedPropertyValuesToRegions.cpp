@@ -141,8 +141,7 @@ size_t replaceElement_NAN_ValuesWith( Model<dim>& model, const std::string& elem
     Region<dim>& model_domain(model.Region("Model"));
     
     size_t NANs_detected(0U);
-    for ( typename vector<Element<dim>*>::iterator 
-          it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
         if ( isnan( (*it)->Read(key) ) ) {
              (*it)->Store( key, makeScalar(ANY,replacement_val) );
           }

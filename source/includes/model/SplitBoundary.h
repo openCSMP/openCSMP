@@ -100,9 +100,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     SplitBoundary( const SplitBoundary& );
     SplitBoundary( SplitBoundary&& );
     
-    /// RECONSTRUCTOR  of split boundaries from csmp native file format
+    /// RECONSTRUCTOR  of split boundaries from csmp native file format (call only prior to deleting anythin from colonies)
     SplitBoundary( const PropertyDatabase<dim>&,
-                   const MeshManager<dim>&,
+                   MeshManager<dim>&,
                    const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
     
     virtual ~SplitBoundary();

@@ -260,8 +260,10 @@ void BoundaryConnector<dim>::OuterAndInnerParent( Element<dim>* element, std::pa
 
 
 template<size_t dim>
-void elementUnitNormalVector( VectorVariable<dim>& nv, Element<dim>& element) 
+void elementUnitNormalVector( VectorVariable<dim>& nv, const Element<dim>& element )
   {
+    if constexpr ( dim == 3 ) assert( element.IsSurfaceElement() );
+    if constexpr ( dim == 2 ) assert( element.IsLineElement() );
     vector<double> N( dim, 0. );
     element.CoordinateMatrix();
     element.FE()->UnitNormal( N );
@@ -288,8 +290,8 @@ void BoundaryConnector<dim>::GlobalOrientation( const Region<dim>& region, std::
     elementUnitNormalOrientation.clear();
     VectorVariable<dim> RNV( PLAIN, 0. ), NV( PLAIN, 0. );
     // first element UN orientation is arbitrary reference orientation
-    const typename vector<Element<dim>*>::const_iterator elementsEnd( region.ElementsEnd() );
-    typename vector<Element<dim>*>::const_iterator element( region.ElementsBegin() );
+    const auto elementsEnd( region.ElementsEnd() );
+    auto       element( region.ElementsBegin() );
     elementUnitNormalOrientation.insert( make_pair( (*element)->Idx(), OUTER ) );
     elementUnitNormalVector( RNV, *(*element) );
     // establish UN orientation of region elements wrt RNV

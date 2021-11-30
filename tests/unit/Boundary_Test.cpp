@@ -85,10 +85,8 @@ void Boundary_Test::ElementNodes( const Region<dim>& region )
 template<size_t dim>
 void Boundary_Test::NoSurfaceElementsAsNodeParents( const Region<dim>& region )
 {
-	//JC: check it later!!!
-	return;
-  const typename std::vector<Node<dim>*>::const_iterator domainNodesEnd( region.NodesEnd() );
-  for( typename std::vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != domainNodesEnd; ++it )
+  const auto domainNodesEnd( region.NodesEnd() );
+  for( auto it = region.NodesBegin(); it != domainNodesEnd; ++it )
     for( size_t i(0); i < (*it)->Parents(); ++i )
       _test( !(*it)->Parent(i)->IsSurfaceElement() );
 }
@@ -154,8 +152,8 @@ template <size_t dim>
 void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
   {
 
-  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd( boundary.ElementsEnd() );
-  for( typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
+  const auto domainElementsEnd( boundary.ElementsEnd() );
+  for( auto it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
     {
       size_t notNullNeighbors(0);
       const size_t neighbors( (*it)->Neighbors() );
@@ -179,8 +177,8 @@ void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundar
 
     VectorVariable<dim> unFace( PLAIN, 9999999. ), faceToInner( PLAIN, 9999999. );
     size_t              inward_pointing_normals(0U);
-    const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd( boundary.ElementsEnd() );
-    for( typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
+    const auto domainElementsEnd( boundary.ElementsEnd() );
+    for( auto it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
       {
         // IMPORTANT - this is the method that is tested (CoordinateMatrix() is called inside)
         (*it)->UnitNormal( unFace );
@@ -208,20 +206,17 @@ void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundar
 template <size_t dim>
 void Boundary_Test::CheckNodeFlags( const Boundary<dim>& boundary, BOX_BOUNDARY flag, bool interiorOnly )
   {
-	  //JC: check it later since the ANSYS constructor doesn't create the box boundary flags.
-	  return;
-
-  const typename std::vector<Node<dim>*>::const_iterator domainNodesEnd( boundary.NodesEnd() );
-  const typename std::vector<Node<dim>*>::const_iterator interiorDomainNodesEnd( boundary.PerimeterNodesBegin() );
-  for( typename std::vector<Node<dim>*>::const_iterator it = boundary.NodesBegin(); it != interiorDomainNodesEnd; ++it )
-    {
-      if( interiorOnly && it < interiorDomainNodesEnd )
-        _test( (*it)->AtBoundary() == flag );
-      else if( interiorOnly && it >= interiorDomainNodesEnd )
-        _test( (*it)->AtBoundary() != NOT );
-      else
-        _test( (*it)->AtBoundary() == IRREGULAR );
-    }
+    const auto domainNodesEnd( boundary.NodesEnd() );
+    const auto interiorDomainNodesEnd( boundary.PerimeterNodesBegin() );
+    for( auto it = boundary.NodesBegin(); it != interiorDomainNodesEnd; ++it )
+      {
+        if( interiorOnly && it < interiorDomainNodesEnd )
+          _test( (*it)->AtBoundary() == flag );
+        else if( interiorOnly && it >= interiorDomainNodesEnd )
+          _test( (*it)->AtBoundary() != NOT );
+        else
+          _test( (*it)->AtBoundary() == IRREGULAR );
+      }
   }
 
 
@@ -229,8 +224,8 @@ void Boundary_Test::CheckNodeFlags( const Boundary<dim>& boundary, BOX_BOUNDARY 
 template <size_t dim>
 void Boundary_Test::CheckNodeParents( const Boundary<dim>& boundary )
   {
-  const typename std::vector<Node<dim>*>::const_iterator domainNodesEnd( boundary.NodesEnd() );
-  for( typename std::vector<Node<dim>*>::const_iterator it = boundary.NodesBegin(); it != domainNodesEnd; ++it )
+      const auto domainNodesEnd( boundary.NodesEnd() );
+      for( auto it = boundary.NodesBegin(); it != domainNodesEnd; ++it )
       _test( (*it)->Parents() > 1 );
   }
 

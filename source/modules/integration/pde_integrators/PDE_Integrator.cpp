@@ -1006,7 +1006,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
          {
             prop_key = (*it).first.key;
             offset   = (*it).second;
-            typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+            auto  niter(gref.NodesBegin());
 
             if ( prop_key.place != NODE ) {
                  throw csmp::Exception( WARNING, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
@@ -1179,7 +1179,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
      for ( operandsConstIterator
            it=test_operands_.begin(); it!=test_operands_.end(); it++ )
        {
-         typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+         auto  niter(gref.NodesBegin());
          csmp::Index prop_key = (*it).first.key;
          size_t      offset   = (*it).second;
 
@@ -1323,8 +1323,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
      for ( typename map<string,MathOperatorLHS<dim>*>::iterator
            it_lhs=lhs_operators_.begin(); it_lhs!=lhs_operators_.end(); it_lhs++ )
        if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() )
-         for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-               git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
            {
              (*it_lhs).second->GetOperands( *(*git) );
              (*it_lhs).second->ComputeContribution( *(*git) );
@@ -1340,8 +1339,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-               git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1478,8 +1476,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-               git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1528,7 +1525,7 @@ do not define PostProcess(), you will get the info message:
 "no post-processing operations for REGION were defined in derived PDE_Integrator"
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::PostProcess( const COMPUTATION_DOMAIN<dim>& gref )
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATION_DOMAIN<dim>& gref )
  {
     if ( postpro_operators_.empty() ) return;
 
@@ -1542,8 +1539,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::PostProcess( const COMPUTATION_DOM
               if (verbose_) cout <<"\nPDE_Integrator<"<<  dim;
 //              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<" in region'"<< gref.Name() <<"'\n";
               if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<"\n";
-              for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-                    git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+              for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
                 {
                    (*it).second->GetOperands( *(*git) );
                    (*it).second->ComputeContribution( *(*git) );
@@ -1583,7 +1579,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
     for ( operandsIterator
           it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
      {
-        typename vector<Node<dim>*>::iterator  gfirst(gref.NodesBegin());
+        auto  gfirst(gref.NodesBegin());
         prop_key = (*it).first.key;
         offset   = (*it).second;
 

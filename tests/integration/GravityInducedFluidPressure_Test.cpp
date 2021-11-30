@@ -469,7 +469,7 @@ bool GravityInducedFluidPressure_Test::TestResultsByComparison( const Model<dim>
 
     const Region<dim>& model_domain = model->Region("Model");
     bool values_within_tolerance(true);
-    for ( typename vector<Node<dim>*>::const_iterator nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ ) {
+    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
          double difference = fabs( (*nit)->Read(refv_key) - (*nit)->Read(test_key) );
          _test( difference <= tolerance );
          if ( difference > tolerance )

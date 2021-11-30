@@ -141,7 +141,7 @@ void SplitBoundary_Example::Run()
 void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const Region<2>& domain )
  {
      const csmp::Index key(pbase.StorageKey("element number"));
-     map<long,Element<2>*>  ordered_elmts;
+     map<long,const Element<2>* const>  ordered_elmts;
      
      for ( auto it=domain.PerimeterElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
            ordered_elmts.insert( make_pair( (*it)->Read(key), (*it) ) );

@@ -29,7 +29,7 @@ namespace csmp
 
       size_t nullNeighborsOut(0);
       const Region<3U> model_domain1(modelOutput1.Region("Model"));
-      for ( vector<Element<3>*>::const_iterator it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it )
+      for ( auto it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it )
         for ( size_t n(0); n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighborsOut;
@@ -87,7 +87,7 @@ namespace csmp
       
       if ( verbose ) cout <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
-      for ( vector<Element<3>*>::const_iterator it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
+      for ( auto it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
         for ( size_t n(0); n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighbors;

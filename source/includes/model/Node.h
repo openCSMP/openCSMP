@@ -59,9 +59,16 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// Local variable storage interface
     PLACEMENT Placement() const { return NODE; }
 
+    // maintaining node to parent element connectivity
+    /// assign new parent element where there is a  NOT_INITIALISED  slot in the parent element storage
     void             Assign( size_t parent_elmt_node_number, Element<dim>* parent_elmt );
+    /// if found, sets matching parent element pointer to nullptr and the corresponding node number to NOT_INITIALIZED
     bool             Unassign( Element<dim>* parent_elmt );
+    /// changes parent element related containers to new size
     void             ResizeParentStorage( size_t parent_elements );
+    /// removing parent elements that were previously assigned a nullptr
+    void             EraseNullPointerParents();
+    /// remove all current parent elements
     void             EraseParents();
 
     /// connects the node to other topologically collocated nodes if any

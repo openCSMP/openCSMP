@@ -118,8 +118,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     // recording connectivity from SKUA in an element neighbor vector
     vector<vector<Element<3U>*> > pfverts;
     pfverts.reserve( domain.Elements() );
-    for ( vector<Element<3U>*>::const_iterator
-          it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
+    for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
          vector<Element<3U>*> nbors( (*it)->Neighbors(), nullptr );
          for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr )
@@ -136,8 +135,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     // comparing SKUA with CSMP connectivity
     size_t failed_comparisons(0U);
     vector<vector<Element<3U>*> >::const_iterator pfit(pfverts.begin());
-    for ( vector<Element<3U>*>::const_iterator
-          it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it, ++pfit ) {
+    for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it, ++pfit ) {
          for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != (*pfit)[i] ) {
                 if ( verbose ) {
@@ -165,9 +163,9 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNodePropertyAssignment( const Mod
          const csmp::Index nu_key = model.Database().StorageKey("number");
          // creating a mapping between current elements in region 'Model' and the VSet from the element number
          const Region<3U>& domain = model.Region("Model");
-         vector<Node<3U>*> ordered_nodes(domain.Nodes());
+         vector<const Node<3U>*> ordered_nodes(domain.Nodes());
 
-         for ( vector<Node<3U>*>::const_iterator nit=domain.NodesBegin(); nit!=domain.NodesEnd(); ++nit ) {
+         for ( auto nit=domain.NodesBegin(); nit!=domain.NodesEnd(); ++nit ) {
               if ( fabs((*nit)->Read(nn_key) - (*nit)->Read(nu_key)) > numeric_limits<double>::epsilon() ) { 
                    cerr <<"\n\tnode number vs. number: "<< (*nit)->Read(nn_key) <<" vs. "<< (*nit)->Read(nu_key);
                    _equal( (*nit)->Read(nn_key), (*nit)->Read(nu_key), numeric_limits<double>::epsilon() );
@@ -201,12 +199,12 @@ void SKUA_FiniteElementMeshInterface_Test::PrintOriginalNeighborIDs( const Model
          const csmp::Index eid_key = model.Database().StorageKey("element number");
          // creating a mapping between current elements in region 'Model' and the VSet from the element number
          const Region<3U>& domain = model.Region("Model");
-         vector<Element<3U>*> ordered_elmts(domain.Elements());
-         for ( vector<Element<3U>*>::const_iterator it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
+         vector<const Element<3U>*> ordered_elmts(domain.Elements());
+         for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
            ordered_elmts[ static_cast<size_t>((*it)->Read(eid_key)) ] = (*it);
            
          // reading the VSet material record
-         for ( vector<Element<3U>*>::const_iterator it=ordered_elmts.begin(); it!=ordered_elmts.end(); ++it ) {
+         for ( auto it=ordered_elmts.begin(); it!=ordered_elmts.end(); ++it ) {
               cerr <<"\nelmt "<< (*it)->Read( eid_key ) <<": ";
               // printing the neighbors of this element
               for ( size_t i=0U; i<(*it)->Neighbors(); ++i )

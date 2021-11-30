@@ -344,7 +344,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // NB: establishing the flux balance in an element loop, which must include the perimeter elements,
     //     but avoiding truncated FVs at boundaries
     // double sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key ); // tested: O.K.
-    for ( vector<Element<3U>*>::iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
                    size_t node = (*it)->N(i)->Idx();
@@ -362,7 +362,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // second version, loop over the element facets
     // --------------------------------------------
     fill( flux_balance.begin(), flux_balance.end(), 0. );
-    for ( vector<Element<3U>*>::iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          // Attention: inside/outside is with reference to facet, and NOT to finite-element sector
          //            when outside-inside>1 the opposite sign needs to be applied because facet is between first and last node !
          for ( size_t i=0U; i<(*it)->Facets(); ++i ) {
@@ -419,7 +419,7 @@ void ExplicitTransport_Test::TestInteriorFluxBalance( double tolerance_relaxatio
     vector<double>  flux_balance( model_domain.Nodes(), 0. );
     // NB: establishing the flux balance in an element loop, including the perimeter elements,
     //     but avoiding truncated FVs at the model boundary
-    for ( vector<Element<3U>*>::const_iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
                    size_t node = (*it)->N(i)->Idx();
@@ -454,7 +454,7 @@ void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double tolerance_rel
     Region<3U>         model_domain(model_ptr_->Region("Model"));
  
     double  min_val(1.0e30), max_val(-1.0e30);
-    for ( vector<Node<3U>*>::const_iterator nit=model_domain.PerimeterNodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
+    for ( auto nit=model_domain.PerimeterNodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
       if ( (*nit)->Status(pf_key) != DIRICH )
         {
            // looping over the parent elements accumulating their flux contributions

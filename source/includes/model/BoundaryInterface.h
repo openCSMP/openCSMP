@@ -63,8 +63,8 @@ class BoundaryInterface {
     const csmp::Boundary<dim>&  Boundary( const std::string& bName ) const;
     bool                        ContainsBoundary( const std::string& bName ) const;
       
-    typedef typename std::map<std::string,csmp::Boundary<dim> >::iterator         boundaryIterator;
-    typedef typename std::map<std::string,csmp::Boundary<dim> >::const_iterator   boundaryConstIterator;
+    typedef typename std::map<std::string,csmp::Boundary<dim> >::iterator  boundaryIterator;
+    typedef typename std::map<std::string,csmp::Boundary<dim> >::const_iterator  boundaryConstIterator;
 
     boundaryIterator       BoundariesBegin();
     boundaryIterator       BoundariesEnd();
@@ -106,7 +106,7 @@ class BoundaryInterface {
 
     /// insert lower-dimensional Region between two equidimensional unique regions, and then converts it into Boundary; returns boundary name
     std::pair<std::string,bool>  CreateBoundaryBetween( const char* region1, const char* region2 );
-
+    
     /// Removes boundary with  deletion of its faces in the MeshManager
     void RemoveBoundary( const char* boundary );
     
@@ -145,6 +145,9 @@ class BoundaryInterface {
     /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
     bool EstablishBoxBoundariesFromOrientation();
     
+    /// creates BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing
+    void EstablishBoxBoundariesFromNodeFlags( bool recreate_box_boundary_flags_before );
+
     // EDGES
     
     /// creates edge Boundary objects for box-shaped model from side boundaries

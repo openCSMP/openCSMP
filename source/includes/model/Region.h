@@ -98,9 +98,9 @@ class Region : public ModelSubDomain<dim, Element>,
     // reconstruction of regions that existed before
     // ---------------------------------------------
 
-    /// RECONSTRUCTOR for regions via the MeshManager
+    /// RECONSTRUCTOR for regions via the MeshManager (call only prior to deleting anythin from colonies)
     Region( const PropertyDatabase<dim>&,
-            const MeshManager<dim>&,
+            MeshManager<dim>&,
             const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
 
     /// RECONSTRUCTOR for regions via the nodes and elements which are explored by the MeshManager
@@ -156,48 +156,37 @@ class Region : public ModelSubDomain<dim, Element>,
     // region building & modification
     // --------------------------------------------
 
-    /// accumulates all elements in the mesh directly from MeshManager; returns the number of elements of the new region
-    size_t AccumulateAll( const MeshManager<dim>& );
+    /// creates pointers to non const elements in the mesh directly from MeshManager; returns the number of elements of the new region
+    size_t AccumulateAll( MeshManager<dim>& );
 
-    /// accumulates assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
-    size_t AccumulateByNumber( const MeshManager<dim>&, std::vector<size_t>& element_ids );
-
-    /// accumulate a range of elements into a region defined by iterators over an STL deque container
-    size_t Accumulate( typename std::deque<csmp::Element<dim>*>::iterator start,
-                       typename std::deque<csmp::Element<dim>*>::iterator end );
-
-    /// accumulate a range of elements into a region defined by constant iterators (accessors only) over an STL vector container; returns # of accumulated elements
-    size_t Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                       typename std::vector<csmp::Element<dim>*>::const_iterator end );
-
-    /// accumulate a range of elements into a region defined by iterators over the STL set (associative) container
-    size_t Accumulate( typename std::set<csmp::Element<dim>*>::const_iterator start,
-                       typename std::set<csmp::Element<dim>*>::const_iterator end );
+    /// creates element pointers assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
+    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& element_ids );
 
     // Accumulate based on pointers to elements
 
-    /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids'; uses binary_search
-    size_t AccumulateByNumber( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                               typename std::vector<csmp::Element<dim>*>::const_iterator end,
+    /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids' using binary_search; @attention use after mesh modification
+    size_t AccumulateByNumber( typename std::vector<csmp::Element<dim>* const>::const_iterator start,
+                               typename std::vector<csmp::Element<dim>* const>::const_iterator end,
                                std::vector<size_t>& element_ids );
+
+    /// accumulates range of elements into a region identified by constant pointers created by AccumulateAll; returns # of accumulated elements
+    size_t Accumulate( typename std::vector<csmp::Element<dim>* const>::const_iterator start,
+                       typename std::vector<csmp::Element<dim>* const>::const_iterator end );
+
+    /// accumulate a range of elements into a region identified by constant pointers created by AccumulateAll; returns # of accumulated elements
+    size_t Accumulate( typename std::set<csmp::Element<dim>* const>::const_iterator start,
+                       typename std::set<csmp::Element<dim>* const>::const_iterator end );
 
     // Accumulate based on property values
 
     /// accumulates region whose elements have properties in the ranges defined inside of the PropertyConstraints object; returns number of elements found
-    size_t AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                                  typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                                  const PropertyConstraints& );
+    size_t AccumulateWithinRange( MeshManager<dim>&, const PropertyConstraints& );
 
     /// accumulates elements where (at least one node) has 'property' values in the range defined by 'min/max', returns number of elements found
-    size_t AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                                  typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                                  const char* property,
-                                  double min, double max );
+    size_t AccumulateWithinRange( MeshManager<dim>&, const char* property, double min, double max );
 
     /// accumulates region of elements whose barycenter lies within the defined bounding box
-    size_t AccumulateRectangularRegion( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                                        typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                                        const Point<dim>& xyz_min, const Point<dim>& xyz_max );
+    size_t AccumulateRectangularRegion( MeshManager<dim>&, const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
     /// merges supplied region with the current one
     void  Add( const Region& );
@@ -205,9 +194,9 @@ class Region : public ModelSubDomain<dim, Element>,
     /// removes those elements in the region whose id matches one of the numbers contained in vector 'element_ids'
     size_t RemoveByNumber( std::vector<size_t>& element_ids, std::vector<csmp::Element<dim>*>& ptrs_to_removed_elements );
 
-    /// removes those elements in the region whose pointer matches the ones in the range supplied
-    size_t RemoveRange( typename std::vector<csmp::Element<dim>*>::iterator begin,
-                        typename std::vector<csmp::Element<dim>*>::iterator end );
+    /// removes those elements from the target region whose pointers matches the ones in the range supplied and subsequently rebuilds the region
+    size_t RemoveRange( typename std::vector<csmp::Element<dim>* const>::iterator begin,
+                        typename std::vector<csmp::Element<dim>* const>::iterator end );
 
     /// creates surface / perimeter line of Elements between regions (the first is on the inside); TODO: @todo check whether this works
     bool CreateBetween( MeshManager<dim>&,

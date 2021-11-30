@@ -428,8 +428,9 @@ double ComputationalSettings::TimeIncrementFromVelocityChange( const Model<dim>&
     }
 
     // loop over elements and compare volume fluxes
-    typename std::vector<Element<dim>*>::const_iterator firs = sg.Region("Model").ElementsBegin();
-    typename std::vector<Element<dim>*>::const_iterator last = sg.Region("Model").ElementsEnd();
+    auto       firs = sg.Region("Model").ElementsBegin();
+    const auto last = sg.Region("Model").ElementsEnd();
+    
     while ( firs != last ) {
         // get current and previous volume flux
         vfc = (*firs)->Read( vfc_key );

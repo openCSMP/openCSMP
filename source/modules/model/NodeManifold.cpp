@@ -65,13 +65,13 @@ NodeManifold<dim>::NodeManifold( const manifold& nodes, ManifoldType geometry )
       @todo use std::initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
 */
 template<size_t dim>
-ManifoldType  consistencyCheck( const NodeManifold<dim>* const nmf  )
+ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
  {
     // diagnostics: go over all possible cases excluding the ones that are not possible
-    const Node<dim>* const mnd_ptr = nmf->MIDDLE_Node();
+    const Node<dim>* const mnd_ptr = nmf.MIDDLE_Node();
     const bool   with_middle_node = (mnd_ptr == nullptr) ? false : true;
-    const size_t collocated_nodes = nmf->Branches();
-    const ManifoldType te = nmf->GeometricClassifier();
+    const size_t collocated_nodes = nmf.Branches();
+    const ManifoldType te = nmf.GeometricClassifier();
 
     // extended diagnostics: checking the parent elements for their types
     const size_t connected_elmts(mnd_ptr->Parents());
@@ -329,7 +329,7 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side, ManifoldType ge
     nd->Assign(this);
     
     // reviewing topology of node after insertion to see whether change is necessary
-    parent_geometry_ = consistencyCheck( this );
+    parent_geometry_ = consistencyCheck( *this );
 
     return true;
 

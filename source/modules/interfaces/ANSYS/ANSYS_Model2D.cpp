@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Exception.h"
 #include "ModelTopology.h"
+#include "NodeManifold.h"
 
 using namespace std;
 

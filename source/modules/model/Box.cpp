@@ -614,8 +614,7 @@ void printBoxBoundaryFlags( const Model<dim>& model )
     cout <<"\n\nprintBoxBoundaryFlags: Current flags and numbers assigned to node and element objects:\n";
     size_t equal_entries(0);
     multiset<BOX_BOUNDARY> node_flags;
-    for ( typename vector<Node<dim>*>::const_iterator 
-          nit=modeldomain.NodesBegin(); nit!=modeldomain.NodesEnd(); ++nit ) 
+    for ( auto nit=modeldomain.NodesBegin(); nit!=modeldomain.NodesEnd(); ++nit )
       node_flags.insert( (*nit)->AtBoundary() );
     multiset<BOX_BOUNDARY>::const_iterator it=node_flags.begin();
     while( it!=node_flags.end() ) {
@@ -626,8 +625,7 @@ void printBoxBoundaryFlags( const Model<dim>& model )
     cout << endl;  
       
     multiset<BOX_BOUNDARY> elmt_flags;
-    for ( typename vector<Element<dim>*>::const_iterator 
-          eit=modeldomain.ElementsBegin(); eit!=modeldomain.ElementsEnd(); ++eit )
+    for ( auto eit=modeldomain.ElementsBegin(); eit!=modeldomain.ElementsEnd(); ++eit )
       for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags.insert( (*eit)->AtBoundary(i) );
       
@@ -2021,26 +2019,25 @@ void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
   const csmp::Region<dim>& sgref = sg.Region( "Model" );
 
   // measuring the property ranges
-  for ( typename vector<Node<dim>*>::const_iterator
-        nit = sgref.PerimeterNodesBegin(); nit != sgref.NodesEnd(); nit++ )
+  for ( auto nit = sgref.PerimeterNodesBegin(); nit != sgref.NodesEnd(); nit++ )
     if ( (*nit)->AtBoundary() == boundary )
-    {
-      if ( first_value ) {
-        bmin = bmax = (*nit)->Read( prop_key );
-        first_value = false;
+      {
+        if ( first_value ) {
+          bmin = bmax = (*nit)->Read( prop_key );
+          first_value = false;
+        }
+        else {
+          bmin = std::min( bmin, (*nit)->Read( prop_key ) );
+          bmax = std::max( bmax, (*nit)->Read( prop_key ) );
+        }
+        if ( verbose )
+          cout << "\nboundary node " << (*nit)->Idx() << ": " << (*nit)->x() << " " << (*nit)->y() << " " << (*nit)->z();
       }
-      else {
-        bmin = std::min( bmin, (*nit)->Read( prop_key ) );
-        bmax = std::max( bmax, (*nit)->Read( prop_key ) );
-      }
-      if ( verbose )
-        cout << "\nboundary node " << (*nit)->Idx() << ": " << (*nit)->x() << " " << (*nit)->y() << " " << (*nit)->z();
-    }
 
   if ( verbose ) {
-    cout << "\nFiniteVolumeTransport::BoundaryPropertyRanges: of physical variable '" << node_property << "':";
-    cout << "\nrange of '" << node_property << "' at boundary:  " << bmin << " to " << bmax << endl;
-  }
+      cout << "\nFiniteVolumeTransport::BoundaryPropertyRanges: of physical variable '" << node_property << "':";
+      cout << "\nrange of '" << node_property << "' at boundary:  " << bmin << " to " << bmax << endl;
+    }
 
 } // end BoundaryPropertyRanges
 

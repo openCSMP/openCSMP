@@ -2,11 +2,13 @@
 #define CSMP_MESH_MANAGER_H
 
 #include "Node.h"
+#include "NodeManifold.h"
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
+#include "plf_colony.h"
 
 namespace csmp {
 
@@ -16,7 +18,6 @@ template<size_t> struct IndexToPointerMapping;
 template<size_t> class PropertyDatabase;
 template<size_t> class VSet;
 template<size_t> class NodeManifoldManager;
-enum class ManifoldType : int8_t;
 
 /**
 @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
@@ -71,42 +72,43 @@ public:
   /// returns number of InterFaces=lower-dimensional elements in current mesh
   size_t InterFaces() const;
   
-  typename std::deque<Node<dim>*>::iterator      NodesBegin();
-  typename std::deque<Node<dim>*>::iterator      NodesEnd();
+  typename plf::colony<Node<dim> >::iterator      NodesBegin();
+  typename plf::colony<Node<dim> >::iterator      NodesEnd();
 
-  typename std::deque<Element<dim>*>::iterator   ElementsBegin();
-  typename std::deque<Element<dim>*>::iterator   ElementsEnd();
+  typename plf::colony<Element<dim> >::iterator   ElementsBegin();
+  typename plf::colony<Element<dim> >::iterator   ElementsEnd();
 
-  typename std::deque<Face<dim>*>::iterator      FacesBegin();
-  typename std::deque<Face<dim>*>::iterator      FacesEnd();
+  typename plf::colony<Face<dim> >::iterator      FacesBegin();
+  typename plf::colony<Face<dim> >::iterator      FacesEnd();
 
-  typename std::deque<InterFace<dim>*>::iterator InterFacesBegin();
-  typename std::deque<InterFace<dim>*>::iterator InterFacesEnd();
+  typename plf::colony<InterFace<dim> >::iterator InterFacesBegin();
+  typename plf::colony<InterFace<dim> >::iterator InterFacesEnd();
 
-  typename std::deque<NodeManifold<dim>*>::iterator NodeManifoldsBegin();
-  typename std::deque<NodeManifold<dim>*>::iterator NodeManifoldsEnd();
+  typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldsBegin();
+  typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldsEnd();
 
   // const versions
-  typename std::deque<Node<dim>*>::const_iterator      NodesBegin() const;
-  typename std::deque<Node<dim>*>::const_iterator      NodesEnd() const;
+  typename plf::colony<Node<dim> >::const_iterator      NodesBegin() const;
+  typename plf::colony<Node<dim> >::const_iterator      NodesEnd() const;
 
-  typename std::deque<Element<dim>*>::const_iterator   ElementsBegin() const;
-  typename std::deque<Element<dim>*>::const_iterator   ElementsEnd() const;
+  typename plf::colony<Element<dim> >::const_iterator   ElementsBegin() const;
+  typename plf::colony<Element<dim> >::const_iterator   ElementsEnd() const;
 
-  typename std::deque<Face<dim>*>::const_iterator      FacesBegin() const;
-  typename std::deque<Face<dim>*>::const_iterator      FacesEnd() const;
+  typename plf::colony<Face<dim> >::const_iterator      FacesBegin() const;
+  typename plf::colony<Face<dim> >::const_iterator      FacesEnd() const;
 
-  typename std::deque<InterFace<dim>*>::const_iterator InterFacesBegin() const;
-  typename std::deque<InterFace<dim>*>::const_iterator InterFacesEnd() const;
+  typename plf::colony<InterFace<dim> >::const_iterator InterFacesBegin() const;
+  typename plf::colony<InterFace<dim> >::const_iterator InterFacesEnd() const;
   
-  typename std::deque<NodeManifold<dim>*>::const_iterator NodeManifoldsBegin() const;
-  typename std::deque<NodeManifold<dim>*>::const_iterator NodeManifoldsEnd() const;
+  typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsBegin() const;
+  typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsEnd() const;
 
+/* not for colony
   Node<dim>* const      N( size_t ) const;
   Element<dim>* const   E( size_t ) const;
   Face<dim>* const      F( size_t ) const;
   InterFace<dim>* const I( size_t ) const;
-  
+*/
   /// direct access for backward compatibility
   const FiniteElementManager& FiniteElements() const { return fem_manager_; }
 
@@ -185,10 +187,6 @@ public:
                                    INTERFACE_SIDE new_node_side,
                                    ManifoldType geometry );
 
-  /// Starting with an existing node-to-parent element relationships, these are validated, removing excess connections, for example after a region was removed
-  void UpdateNodeParentElementRelationships( typename std::vector<Node<dim>*>::iterator begin,
-                                             typename std::vector<Node<dim>*>::iterator end );
-
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
   void UpdateConnectivity();
   // TODO: create version of method that permits selective update of cells
@@ -196,8 +194,8 @@ public:
   /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
   /// @todo disambiguate connectivity between Face and InterFace object at manifolds
   template<template<size_t> class CELL>
-  void BuildConnectivity( typename std::deque<CELL<dim>*>::iterator first,
-                          typename std::deque<CELL<dim>*>::iterator last );
+  void BuildConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                          typename std::vector<CELL<dim>*>::iterator last );
 
   template<template<size_t> class CELL>
   void BuildVolumeConnectivity( typename std::vector<CELL<dim>*>::iterator first,
@@ -211,29 +209,27 @@ public:
   void BuildLineConnectivity( typename std::vector<CELL<dim>*>::iterator first,
                               typename std::vector<CELL<dim>*>::iterator last );
 
+  /// Starting with an existing node-to-parent element relationships, these are validated, removing excess connections, for example after a region was removed
+  void RebuildNodeParentElementRelationships();
+
 
   // DELETIONS & MAINTANANCE OF MESH CONNECTIVITY
   // --------------------------------------------
   // NB: elements are responsible for the nodes, nodes for their manifolds
 
   /// after disconnecting the nodes from potential manifolds, the supplied range of nodes is deleted
-  size_t Delete( typename std::deque<Node<dim>*>::iterator first,
-                 typename std::deque<Node<dim>*>::iterator last );
+  size_t Delete( typename std::vector<Node<dim>*>::iterator first,
+                 typename std::vector<Node<dim>*>::iterator last );
 
-  /// deletes the supplied range of elements, and singly owned nodes if any; pointers are nulled 
-  size_t Delete( typename std::deque<Element<dim>*>::iterator first,
-                 typename std::deque<Element<dim>*>::iterator last );
+  /// deletes the supplied range of elements, and orphaned nodes if any; the parent element storage of the nodes is rebuild; @note all input pointers are nulled
+  size_t Delete( typename std::vector<Element<dim>*>::iterator first,
+                 typename std::vector<Element<dim>*>::iterator last );
 
-  size_t Delete( typename std::deque<InterFace<dim>*>::iterator first,
-                 typename std::deque<InterFace<dim>*>::iterator last );
+  size_t Delete( typename std::vector<InterFace<dim>*>::iterator first,
+                 typename std::vector<InterFace<dim>*>::iterator last );
 
-  size_t Delete( typename std::deque<Face<dim>*>::iterator first,
-                 typename std::deque<Face<dim>*>::iterator last );
-                
-  /// for any type of cells using a vector iterator
-  template<template<size_t> class CELL>
-  size_t Delete( typename std::vector<CELL<dim>*>::iterator first,
-                 typename std::vector<CELL<dim>*>::iterator last );
+  size_t Delete( typename std::vector<Face<dim>*>::iterator first,
+                 typename std::vector<Face<dim>*>::iterator last );
 
   /// JCK's method to test the connectivity of a mesh after it had been read from binary file
   int32_t CheckElementConnectivity() const;
@@ -244,8 +240,22 @@ public:
   
 private:
 
-  /// compacts deques, first filling in deleted cells with cells from the back; then erasing cells at the back
-  size_t EraseNullPointerCells();
+  void Erase( typename plf::colony<Node<dim>>::const_iterator nit ) { nodes_.erase(nit); }
+  void Erase( typename plf::colony<Element<dim>>::const_iterator it ) { elements_.erase(it); }
+  void Erase( typename plf::colony<Face<dim>>::const_iterator it ) { faces_.erase(it); }
+  void Erase( typename plf::colony<InterFace<dim>>::const_iterator it ) { interfaces_.erase(it); }
+
+  size_t Erase( typename plf::colony<Node<dim>>::const_iterator first,
+                typename plf::colony<Node<dim>>::const_iterator last ) { nodes_.erase(first,last); return nodes_.size(); }
+              
+  size_t Erase( typename plf::colony<Element<dim>>::const_iterator first,
+                typename plf::colony<Element<dim>>::const_iterator last ) { elements_.erase(first,last); return elements_.size(); }
+              
+  size_t Erase( typename plf::colony<Face<dim>>::const_iterator first,
+                typename plf::colony<Face<dim>>::const_iterator last ) { faces_.erase(first,last); return faces_.size(); }
+              
+  size_t Erase( typename plf::colony<InterFace<dim>>::const_iterator first,
+                typename plf::colony<InterFace<dim>>::const_iterator last ) { interfaces_.erase(first,last); return interfaces_.size(); }
 
   /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
   void AssignUniqueNumbers( bool in_a_single_sequence=false );
@@ -253,7 +263,7 @@ private:
   /// puts nodes, elements, faces, and interfaces into the order given by Idx() variables; removes nullptr cells first
   void ReorderObjectsByIndexes();
 
-  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+  /// returns numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
   void OutputMeshTo( VSet<dim>&, bool get_indices_from_stored_variables=false );
 
   /// adds distributed variables to the VSet
@@ -261,9 +271,6 @@ private:
   
   /// reads distributed variables from VSet
   void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
-  
-  /// detecting and counting potentially empty cells or nodes in storage for prompting an update
-  std::pair<std::array<size_t,4>,bool>  NullPointersInStorage() const;
 
 private:
 
@@ -274,10 +281,10 @@ private:
   bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types
 
   // root pointers to contiguous mesh patches; mutable to allow for behind scene updates
-  std::deque<Node<dim>*>      nodes_;          ///<  nodes
-  std::deque<Element<dim>*>   elements_;       ///<  pointers elements
-  std::deque<Face<dim>*>      faces_;          ///<  pointers faces making up the boundaries
-  std::deque<InterFace<dim>*> interfaces_;     ///<  pointers to interfaces making up the split boundaries
+  plf::colony<Node<dim>>      nodes_;          ///<  nodes
+  plf::colony<Element<dim>>   elements_;       ///<  pointers elements
+  plf::colony<Face<dim>>      faces_;          ///<  pointers faces making up the boundaries
+  plf::colony<InterFace<dim>> interfaces_;     ///<  pointers to interfaces making up the split boundaries
   // only used in models that contain node SplitBoundaries / IterFace objects
   NodeManifoldManager<dim>*   node_manifold_manager_ = nullptr; ///<  node manifolds of SplitBoundaries
 

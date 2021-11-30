@@ -230,7 +230,7 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
 void DES2PhaseSlightlyCompressibleFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFunctionsModule1<3U>& flowfunctions )
  {
      
-    static const Region<3U>& mref = mdl.Region("Model"); 
+    Region<3U>& mref = mdl.Region("Model"); 
     // keys to properties
     static Index  mobt_key(mdl.Database().StorageKey("total mobility permeability product"));
     static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
@@ -241,8 +241,7 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::computeTotalMobility( Model<3U
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
-    vector<Node<3U>* >::const_iterator nit;
-    for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
     {
         double sw = 1. - (*nit)->Read(snw_key);
         (*nit)->Store( sw_key, makeScalar((*nit)->Status(snw_key),sw));
@@ -251,8 +250,7 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::computeTotalMobility( Model<3U
     
     // 2. Computing the multiphase flow properties
     //    loop over finite elements
-    vector<Element<3U>* >::const_iterator eit;
-    for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
+    for ( auto eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
         //flowfunctions.InitialiseBrooksCoreyParameters(*eit);
         //total mobility

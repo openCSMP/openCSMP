@@ -34,10 +34,10 @@ template class MaximumDifference<3U>;
 
 template<size_t dim>
 double maximumDifference( const Model<dim>& sg,
-                            const char* new_property, const char* old_property, bool normalise )
+                          const char* new_property, const char* old_property, bool normalise )
  {
    const bool      absolute(!normalise);
-   double        residual(0.), temp;
+   double          residual(0.), temp;
    ScalarVariable  new_prop, old_prop;
    
    const csmp::Region<dim>&  sgref(sg.Region("Model"));
@@ -50,8 +50,7 @@ double maximumDifference( const Model<dim>& sg,
      }
 
    if ( new_key.place == NODE ) {
-       for ( typename std::vector<Node<dim>*>::const_iterator
-             nit = sgref.NodesBegin(); nit != sgref.NodesEnd(); nit++ ) {
+       for ( auto nit = sgref.NodesBegin(); nit != sgref.NodesEnd(); nit++ ) {
            (*nit)->Read( new_key, new_prop );
            (*nit)->Read( old_key, old_prop );
            if ( !absolute ) temp = std::fabs( ( new_prop() - old_prop() ) / new_prop() );
@@ -61,8 +60,7 @@ double maximumDifference( const Model<dim>& sg,
      }
 
    else if ( new_key.place == ELEMENT ) {
-       for ( typename std::vector<Element<dim>*>::const_iterator
-             eit = sgref.ElementsBegin(); eit != sgref.ElementsEnd(); eit++ ) {
+       for ( auto eit = sgref.ElementsBegin(); eit != sgref.ElementsEnd(); eit++ ) {
            (*eit)->Read( new_key, new_prop );
            (*eit)->Read( old_key, old_prop );
            if ( !absolute ) temp = std::fabs( ( new_prop() - old_prop() ) / new_prop() );
@@ -72,8 +70,7 @@ double maximumDifference( const Model<dim>& sg,
      }
 
    else if ( new_key.place == ELEMENT_INTEGRATION_POINT ) {
-       for ( typename std::vector<Element<dim>*>::const_iterator
-             eit = sgref.ElementsBegin(); eit != sgref.ElementsEnd(); eit++ )
+       for ( auto eit = sgref.ElementsBegin(); eit != sgref.ElementsEnd(); eit++ )
          for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
            {
              (*eit)->Read( i, new_key, new_prop );

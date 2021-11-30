@@ -25,7 +25,7 @@ template<size_t> class Face;
 template<size_t> class InterFace;
 template<size_t> class Node;
 template<size_t> class VTU_Interface;
-template<size_t,template<size_t> class SIMPLEX> class ModelSubDomain;
+template<size_t,template<size_t> class CELL> class ModelSubDomain;
 
 // hack forwards
 double zCoordinate( Point<3> const& );
@@ -243,31 +243,31 @@ class VTU_Interface {
                           T timestep = static_cast<T>(0) );
 
     /// output a single property to VTU for given model sub domain (Region, Boundary or SplitBoundary)
-    template<template <size_t> class SIMPLEX,class T>
+    template<template <size_t> class CELL,class T>
     bool OutputDataToVTU( const std::string& fileName,
                           const std::string& propertyName,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                          const ModelSubDomain<dim,CELL>& subDomain,
                           T timestep = static_cast<T>(0) );
 
     /// output a list of properties to VTU for given model sub domain (Region, Boundary or SplitBoundary)
-    template<template <size_t> class SIMPLEX,class T>
+    template<template <size_t> class CELL,class T>
     bool OutputDataToVTU( const std::string& fileName,
                           const std::list<std::string>& propertyNames,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                          const ModelSubDomain<dim,CELL>& subDomain,
                           T timestep = static_cast<T>(0) );
     
     /// output a vector of properties to VTU for given model sub domain (Region, Boundary or SplitBoundary)
-    template<template <size_t> class SIMPLEX,class T>
+    template<template <size_t> class CELL,class T>
     bool OutputDataToVTU( const std::string& fileName,
                           const std::vector<std::string>& propertyNames,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                          const ModelSubDomain<dim,CELL>& subDomain,
                           T timestep = static_cast<T>(0) );
     
     /// output a set of properties to VTU for given model sub domain (Region, Boundary or SplitBoundary)
-    template<template <size_t> class SIMPLEX,class T>
+    template<template <size_t> class CELL,class T>
     bool OutputDataToVTU( const std::string& fileName,
                           const std::set<std::string>& propertyNames,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                          const ModelSubDomain<dim,CELL>& subDomain,
                           T timestep = static_cast<T>(0) );
 
     // SINGLE VERTEX OUTPUT
@@ -325,50 +325,50 @@ class VTU_Interface {
     template<class T>
     std::string FullOutputFileName( const std::string& fileName, T timestep );
 
-    template<template <size_t> class SIMPLEX>
+    template<template <size_t> class CELL>
     void OutputMultiBlockVTU( const std::string& fileName,
                           const std::vector<std::string>& fileNames,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain );
-    template<template <size_t> class SIMPLEX>
+                          const ModelSubDomain<dim,CELL>& subDomain );
+    template<template <size_t> class CELL>
     bool OutputFieldNodesAndElementDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& fieldDataIndices,
                           const std::list<csmp::Index>& nodeIndices,
                           const std::list<csmp::Index>& elementIndices,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain );
-    template<template <size_t> class SIMPLEX>
+                          const ModelSubDomain<dim,CELL>& subDomain );
+    template<template <size_t> class CELL>
     bool OutputElementBarycentricDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& elementMatrixIndices,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain );
-    template<template <size_t> class SIMPLEX>
+                          const ModelSubDomain<dim,CELL>& subDomain );
+    template<template <size_t> class CELL>
     bool OutputRegionDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& regionIndices,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain );
-    template<template <size_t> class SIMPLEX>
+                          const ModelSubDomain<dim,CELL>& subDomain );
+    template<template <size_t> class CELL>
     bool OutputFiniteElementIntegrationPointsDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& feipIndices,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain );
-    template<template <size_t> class SIMPLEX>
+                          const ModelSubDomain<dim,CELL>& subDomain );
+    template<template <size_t> class CELL>
     bool OutputFiniteVolumeSectorIntegrationPointsDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& fvsipIndices,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain );
-    template<template <size_t> class SIMPLEX>
+                          const ModelSubDomain<dim,CELL>& subDomain );
+    template<template <size_t> class CELL>
     bool OutputFiniteVolumeFacetIntegrationPointsDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& fvfipIndices,
-                          const ModelSubDomain<dim,SIMPLEX>& subDomain );
+                          const ModelSubDomain<dim,CELL>& subDomain );
 
-    template<template <size_t> class SIMPLEX>
+    template<template <size_t> class CELL>
     void OutputFieldDataToVTU( XML_Document& outputFile,
-                               const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                               const ModelSubDomain<dim,CELL>& subDomain,
                                const std::list<Index>& indices );
 
-    template<template <size_t> class SIMPLEX>
+    template<template <size_t> class CELL>
     void OutputPointDataToVTU( XML_Document& outputFile,
-                               const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                               const ModelSubDomain<dim,CELL>& subDomain,
                                const std::list<Index>& indices );
 
-    template<template <size_t> class SIMPLEX>
+    template<template <size_t> class CELL>
     void OutputCellDataToVTU( XML_Document& outputFile,
-                              const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                              const ModelSubDomain<dim,CELL>& subDomain,
                               const std::list<Index>& indices );
     /// write variables
     void WriteScalar( XML_Document& vtu,const size_t& MAX_ENTRIES_PER_LINE,
@@ -383,28 +383,28 @@ class VTU_Interface {
     void WriteFieldDataArray( const Index& key, XML_Document& vtu) const;
 
     /// write point data
-    template<template <size_t> class SIMPLEX>
-    void WritePointDataArrayScalar( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WritePointDataArrayVector( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WritePointDataArrayTensor( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WritePointDataArrayScalarArray( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WritePointDataArrayScalarFlaggedArray( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WritePointDataArrayScalar( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WritePointDataArrayVector( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WritePointDataArrayTensor( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WritePointDataArrayScalarArray( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WritePointDataArrayScalarFlaggedArray( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// write element data
-    template<template <size_t> class SIMPLEX>
-    void WriteElementDataArrayScalar( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WriteElementDataArrayVector( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WriteElementDataArrayTensor( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WriteElementDataArrayScalarArray( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
-    template<template <size_t> class SIMPLEX>
-    void WriteElementDataArrayScalarFlaggedArray( const Index&, XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WriteElementDataArrayScalar( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WriteElementDataArrayVector( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WriteElementDataArrayTensor( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WriteElementDataArrayScalarArray( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void WriteElementDataArrayScalarFlaggedArray( const Index&, XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// Connnectivity File's @todo how about some typedefs?
     std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& GetConnectivityMap( const ModelSubDomain<dim,Element>& subDomain );
@@ -429,50 +429,50 @@ class VTU_Interface {
     std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& GetConnectivityMapFVFIPS( const ModelSubDomain<dim,InterFace>& subDomain );
     std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& GetConnectivityMapMultiBlock( const ModelSubDomain<dim,InterFace>& subDomain );
 
-    template<template <size_t> class SIMPLEX>
-    XML_Document* findConnectivityFile( std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,SIMPLEX>& subDomain );
+    template<template <size_t> class CELL>
+    XML_Document* findConnectivityFile( std::map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,CELL>& subDomain );
 
-    template<template <size_t> class SIMPLEX>
-    bool insertConnectivityFile( std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap, XML_Document* newConnectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain );
+    template<template <size_t> class CELL>
+    bool insertConnectivityFile( std::map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap, XML_Document* newConnectivityFile, const ModelSubDomain<dim,CELL>& subDomain );
 
-    template<template <size_t> class SIMPLEX>
-    XML_Document* ConnectivityFile( std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,SIMPLEX>& subDomain );
+    template<template <size_t> class CELL>
+    XML_Document* ConnectivityFile( std::map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,CELL>& subDomain );
 
     bool CloseFile( const std::string& fileName, const std::string& extension, XML_Document& );
     void EstablishConnectivityFileHeader( XML_Document& ) const;
 
     /// Elements and Nodes
-    template<template <size_t> class SIMPLEX>
-    void EstablishConnectivityFile( XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void EstablishConnectivityFile( XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// Cell centers
-    template<template <size_t> class SIMPLEX>
-    void EstablishConnectivityFileBCPC( XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void EstablishConnectivityFileBCPC( XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// Region's Point Clouds
-    template<template <size_t> class SIMPLEX>
-    void EstablishConnectivityFileRPC( XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void EstablishConnectivityFileRPC( XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// Finite Element Integration Points
-    template<template <size_t> class SIMPLEX>
-    void EstablishConnectivityFileFEIP( XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void EstablishConnectivityFileFEIP( XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// Finite Volume Sector Integration Points
-    template<template <size_t> class SIMPLEX>
-    void EstablishConnectivityFileFVSIP( XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void EstablishConnectivityFileFVSIP( XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// Finite Volume Facet Integration Points
-    template<template <size_t> class SIMPLEX>
-    void EstablishConnectivityFileFVFIP( XML_Document&, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const;
+    template<template <size_t> class CELL>
+    void EstablishConnectivityFileFVFIP( XML_Document&, const ModelSubDomain<dim,CELL>& subDomain ) const;
 
     /// Quadratic Elements connectivity
-    template<template <size_t> class SIMPLEX>
-    void QuadraticWedgeConnectivity( SIMPLEX<dim>*, std::vector<long>& data ) const;
-    template<template <size_t> class SIMPLEX>
-    void QuadraticHexahedronConnectivity( SIMPLEX<dim>*, std::vector<long>& data ) const;
+    template<template <size_t> class CELL>
+    void QuadraticWedgeConnectivity( const CELL<dim>* const, std::vector<long>& data ) const;
+    template<template <size_t> class CELL>
+    void QuadraticHexahedronConnectivity( const CELL<dim>* const, std::vector<long>& data ) const;
 
-    template<template <size_t> class SIMPLEX>
-    VTK_TYPE ElementType( SIMPLEX<dim>* elmt ) const;
+    template<template <size_t> class CELL>
+    VTK_TYPE ElementType( const CELL<dim>* const elmt ) const;
 
     std::string   DomainName( const ModelSubDomain<dim,Element>& subDomain ) const;
     std::string   DomainName( const ModelSubDomain<dim,Face>& subDomain ) const;

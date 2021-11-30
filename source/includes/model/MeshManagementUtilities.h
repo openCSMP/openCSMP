@@ -11,6 +11,7 @@
 
 #include "CSMP_definitions.h"
 #include "MeshPatchAttributes.h"
+#include "plf_colony.h"
 
 namespace csmp {
 
@@ -30,7 +31,7 @@ template<size_t> class SplitBoundary;
 
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<size_t dim>
-void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );
+void floodFill( Element<dim>* const eptr, std::set<Element<dim>* const>& output_contiguous_subset );
 
 /// retrieves and returns the element ids of the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<size_t dim>
@@ -54,24 +55,24 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<dim>& );
 
 /// finds the connected (contiguous) mesh patches in the supplied range of cells storing them in map with names that reflect their dimensionality and cell numbers
 template<size_t dim, template<size_t> class CELL>
-size_t  findStandAloneMeshPatches( typename std::deque<CELL<dim>*>::const_iterator begin,
-                                   typename std::deque<CELL<dim>*>::const_iterator end,
-                                   std::map<std::string,std::deque<CELL<dim>*> >& );
+size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::const_iterator begin,
+                                   typename plf::colony<CELL<dim>>::const_iterator end,
+                                   std::map<std::string,std::vector<CELL<dim>*> >& );
 
 /// finds pointers to all contiguous regions in a mesh (collection of mesh patches) returning pointers to them so that they can be explored; returns patches found
 template<size_t dim, template<size_t> class CELL>
-size_t  findPointersToStandAloneMeshPatches( typename std::deque<CELL<dim>*>::const_iterator begin,
-                                             typename std::deque<CELL<dim>*>::const_iterator end,
+size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::const_iterator begin,
+                                             typename std::vector<CELL<dim>*>::const_iterator end,
                                              std::map<Element<dim>*,MeshPatchAttributes>& );
 
 /// using a breadth-first mesh traversal, finds all the Element, Face, or InterFace objects that belong to this contiguous mesh patch
 // TODO: this method might also find mesh patches with different dimensional elements; test this and change if necessary
 template<size_t dim,template<size_t> class CELL>          // //
-void findContiguousMeshPatch( CELL<dim>* const cell_pointer, std::set<CELL<dim>*>& contiguous_subset_of_cells );
+void findContiguousMeshPatch( const CELL<dim>& entry_cell, std::set<CELL<dim>*>& contiguous_subset_of_cells );
 
 /// breadth-first mesh traversal starting at a Node; returns number of discovered nodes
 template<size_t dim>
-size_t findContiguousMeshPatch( csmp::Node<dim>* const node_pointer, std::deque<Element<dim>*>& elements );
+size_t findContiguousMeshPatch( const csmp::Node<dim>& entry_node, std::vector<Element<dim>*>& elements );
 
 /// relying on the parent element information from its nodes, method finds higher-dim neighbors of each element face and connects itself with them and vice versa; returns # found
 template<size_t dim>
@@ -167,8 +168,8 @@ void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterato
 
 /// tests whether all the expected cell functionality is there and operational
 template<size_t dim, template<size_t> class CELL>
-bool integrityCheck( typename std::deque<CELL<dim>*>::const_iterator first,
-                     typename std::deque<CELL<dim>*>::const_iterator last );
+bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
+                     typename plf::colony<CELL<dim>>::const_iterator last );
 
 /// finds the min max corners of the bounding box for the supplied range of nodes
 template<size_t dim>

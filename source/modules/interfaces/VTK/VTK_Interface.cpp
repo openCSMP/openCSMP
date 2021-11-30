@@ -1248,8 +1248,8 @@ clist contains the coordinates of the constraint points
 */
 template<size_t dim>
 void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
-                                              const csmp::Index&  prop_key,
-                                              map<size_t,vector<double> >& pxyz_data )
+                                                   const csmp::Index&  prop_key,
+                                                   map<size_t,vector<double> >& pxyz_data )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -1265,9 +1265,8 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     // results are put into the first three elements of 'pxz_data'
     // --------------------------------------------------------------------------
     vector<double>  dentry;
-    size_t            cpoints(0U);
-    for ( typename vector<Element<dim>*>::const_iterator
-          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    size_t          cpoints(0U);
+    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       {
          // getting the coordinates of the constraint point
          for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++, cpoints++ ) 

@@ -20,6 +20,7 @@
 #include "VTK_Interface.h"
 #include"ScalarVariable.h"
 #include "PropertyHandle.h"
+#include "NodeManifold.h"
 
 
 using namespace std;

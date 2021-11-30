@@ -39,10 +39,10 @@ class ImplicitTransport : public GoverningEquation<dim>,
                        bool second_order_in_space );
  
     // TODO: review whether this functio should be replaced by: VolumetricFlowAndTransportVariableFluxBalances()
-    double TimeIncrementAndFluxBalance( double max_time_increment ) const; 
+    double TimeIncrementAndFluxBalance( double max_time_increment ); 
     
     /// computes the time constraint
-    double TimeIncrement() const;
+    double TimeIncrement();
     
     /// initialises transport class for current pressure/velocity/transport variable field
     void UpdateFluxesAndFluxBalances();

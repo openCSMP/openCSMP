@@ -383,6 +383,16 @@ void VData::AddBFlag( size_t node_id, std::int8_t bflag )
  }
  
  
+ 
+     /// returns the boundary flag of the node
+int8_t VData::BFlag( size_t node_id ) const
+ {
+    assert( node_id < bflags.size() );
+    return bflags[node_id];
+ }
+
+ 
+ 
 /**
       Finds boundary identifier if any.
 */
@@ -1358,7 +1368,7 @@ void VData::Out() const
                if ( (*ft)[j] >= 0 )
                  cout << (*ft)[j] <<"\t ";
                else {
-                    BOX_BOUNDARY bflag = intToBOX_BOUNDARY( static_cast<int8_t>((*ft)[j]) );
+                    BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>((*ft)[j]);
                     cout << parseBoundary( bflag ) <<"\t ";
                  }
             }
@@ -1370,7 +1380,7 @@ void VData::Out() const
      if ( !bflags.empty() ) cout <<"\nBoundary flags 'bflags':"<< endl;
      size_t n_node(0U);
      for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
-       cout << n_node++ <<": \t"<< parseBoundary( intToBOX_BOUNDARY(*bf) ) << endl;
+       cout << n_node++ <<": \t"<< parseBoundary( static_cast<BOX_BOUNDARY>(*bf) ) << endl;
 
   } // end Out()
 
@@ -2312,7 +2322,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                  processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
 
            // if the line element has no first neighbor it must be at the beginning of a chain and correctly oriented
-           BOX_BOUNDARY bflag = intToBOX_BOUNDARY( static_cast<int8_t>( pfverts[elmt_idx][0] ) );
+           BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>( pfverts[elmt_idx][0] );
            // its neighbor-free side must be at an internal or external boundary
            if ( bflag >= 0 ) {
                 cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
@@ -3139,7 +3149,8 @@ void VData::EstablishElementConnectivity3D()
                   assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
                   const size_t n0 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 0 ) ];
                   const size_t n1 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 1 ) ];
-                  pfverts[elmt_idx][face] = whichBoundary( intToBOX_BOUNDARY( bflags[n0] ), intToBOX_BOUNDARY( bflags[n1] ) );
+                  pfverts[elmt_idx][face] = whichBoundary( static_cast<BOX_BOUNDARY>( bflags[n0] ),
+                                                           static_cast<BOX_BOUNDARY>( bflags[n1] ) );
                 }
              // 2.2.2 if there is only one matching neighbor it gets recorded
              // ------------------------------------------------------------------------

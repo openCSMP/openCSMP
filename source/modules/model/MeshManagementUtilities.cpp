@@ -38,14 +38,14 @@ size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>& mmgr, set<s
 
   // traversal of the existing mesh nodes to find all its elements
   size_t boundary_only_elements( 0U );
-  for ( typename deque<Element<dim>*>::const_iterator
+  for ( typename plf::colony<Element<dim>>::const_iterator
         it=mmgr.ElementsBegin(); it!=mmgr.ElementsEnd(); ++it ) {
-      const size_t nodes((*it)->Nodes());
+      const size_t nodes((*it).Nodes());
       size_t       counter(0U);
       for ( size_t i=0U; i<nodes; ++i )
-        if ( (*it)->N(i)->AtBoundary() != NOT ) counter++;
+        if ( (*it).N(i)->AtBoundary() != NOT ) counter++;
       if ( counter == nodes ) {
-            belmts.insert( (*it)->Idx() );
+            belmts.insert( (*it).Idx() );
             boundary_only_elements++;
         }
     }
@@ -63,7 +63,7 @@ Breadth first traversal of mesh that can contain elements of any dimension.
 Visit all elements without relying on how they are stored. However, connectivity must be established.
 The Idx numbering of elements and nodes is not altered by this method.
 
-@return number of nodes that were discovered.
+@return number of nodes that were discovered and pointers to the elements discovered during graph traversal.
 
 @attention this method assumes that all  nodes have parent element connectivity.
 
@@ -74,14 +74,11 @@ The Idx numbering of elements and nodes is not altered by this method.
 @author SKM 9/20/2008, CSMP Castasegna workshop, Switzerland.
 */
 template<size_t dim>
-size_t findContiguousMeshPatch( csmp::Node<dim>* const root_node, std::deque<Element<dim>*>& elements )
+size_t findContiguousMeshPatch( const csmp::Node<dim>& entry_node, vector<Element<dim>*>& elements )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( root_node == nullptr )
-    csmp_error.notice( FATAL_ERROR, "findContiguousMeshPatch(node)", "Root node pointer is dangling!" );
-
-  if ( root_node->Parent( 0 ) == nullptr )
+  if ( entry_node.Parent( 0 ) == nullptr )
     csmp_error.notice( FATAL_ERROR, "findContiguousMeshPatch(node)",
                        "Root node must have been assigned parent elements; else this method cannot operate." );
 
@@ -92,12 +89,12 @@ size_t findContiguousMeshPatch( csmp::Node<dim>* const root_node, std::deque<Ele
     }
 
   // 1. traversal of the existing mesh nodes to find all its elements
-  set<csmp::Element<dim>*> explored_elements;
-  set<csmp::Node<dim>*>    discovered_nodes;
-  deque<csmp::Node<dim>*>  current_nodes;
+  set<csmp::Element<dim>*>       explored_elements;
+  set<const csmp::Node<dim>*>    discovered_nodes;
+  deque<const csmp::Node<dim>*>  current_nodes;
   // starting at the root element
-  discovered_nodes.insert( root_node );
-  current_nodes.push_back( root_node );
+  discovered_nodes.insert( &entry_node );
+  current_nodes.push_back( &entry_node );
 
   // MESH TRAVERSAL - via parent elements, breadth first
   while ( !current_nodes.empty() ) {
@@ -130,9 +127,9 @@ size_t findContiguousMeshPatch( csmp::Node<dim>* const root_node, std::deque<Ele
 
 } // end findContiguousMeshPatch (node)
 
-template size_t findContiguousMeshPatch( csmp::Node<1U>* const, std::deque<Element<1U>*>& );
-template size_t findContiguousMeshPatch( csmp::Node<2U>* const, std::deque<Element<2U>*>& );
-template size_t findContiguousMeshPatch( csmp::Node<3U>* const, std::deque<Element<3U>*>& );
+template size_t findContiguousMeshPatch( const csmp::Node<1>&, vector<Element<1U>*>& );
+template size_t findContiguousMeshPatch( const csmp::Node<2>&, vector<Element<2U>*>& );
+template size_t findContiguousMeshPatch( const csmp::Node<3>&, vector<Element<3U>*>& );
 
 
 
@@ -165,27 +162,21 @@ To break regions into contiguous subdomains.
 
 */
 template<size_t dim,template<size_t> class CELL>
-void findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_contiguous_subset )
+void findContiguousMeshPatch( const CELL<dim>& entry_cell, set<CELL<dim>*>& cells_contiguous_subset )
  {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( eptr == nullptr ) {
-         csmp_error.notice( ERROR, "findContiguousMeshPatch (set)",
-                           "supplied element pointer is a null pointer; nothing was done.");
-         return;
-      }
     // identifying the neighbors of the first element to be looked at
     deque<CELL<dim>*>  neighbor_cells;
-    const size_t  neighbors(eptr->Neighbors());
+    const size_t  neighbors(entry_cell.Neighbors());
     for ( size_t i=0U; i<neighbors; i++ )
-      if ( eptr->Neighbor(i) != nullptr )
-        neighbor_cells.push_back( eptr->Neighbor(i) );
+      if ( entry_cell.Neighbor(i) != nullptr )
+        neighbor_cells.push_back( entry_cell.Neighbor(i) );
  
     // performing the floodfill, starting with an empty set
     if ( !cells_contiguous_subset.empty() )
       cells_contiguous_subset.clear();
    
     // insert the first element into the new subset
-    cells_contiguous_subset.insert( static_cast<CELL<dim>*>(eptr) );
+    cells_contiguous_subset.insert( const_cast<CELL<dim>*>(&entry_cell) );
       
     // element set for subsequent passes
     deque<CELL<dim>*>  new_neighbor_cells;
@@ -216,17 +207,17 @@ void findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_cont
  } // end findContiguousMeshPatch
 
 
-template void findContiguousMeshPatch( Element<1U>* const, set<Element<1U>*>& );
-template void findContiguousMeshPatch( Element<2U>* const, set<Element<2U>*>& );
-template void findContiguousMeshPatch( Element<3U>* const, set<Element<3U>*>& );
+template void findContiguousMeshPatch( const Element<1U>&, set<Element<1U>*>& );
+template void findContiguousMeshPatch( const Element<2U>&, set<Element<2U>*>& );
+template void findContiguousMeshPatch( const Element<3U>&, set<Element<3U>*>& );
 
-template void findContiguousMeshPatch( Face<1U>* const, set<Face<1U>*>& );
-template void findContiguousMeshPatch( Face<2U>* const, set<Face<2U>*>& );
-template void findContiguousMeshPatch( Face<3U>* const, set<Face<3U>*>& );
+template void findContiguousMeshPatch( const Face<1U>&, set<Face<1U>*>& );
+template void findContiguousMeshPatch( const Face<2U>&, set<Face<2U>*>& );
+template void findContiguousMeshPatch( const Face<3U>&, set<Face<3U>*>& );
 
-template void findContiguousMeshPatch( InterFace<1U>* const, set<InterFace<1U>*>& );
-template void findContiguousMeshPatch( InterFace<2U>* const, set<InterFace<2U>*>& );
-template void findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>*>& );
+template void findContiguousMeshPatch( const InterFace<1U>&, set<InterFace<1U>*>& );
+template void findContiguousMeshPatch( const InterFace<2U>&, set<InterFace<2U>*>& );
+template void findContiguousMeshPatch( const InterFace<3U>&, set<InterFace<3U>*>& );
 
 
 
@@ -242,9 +233,9 @@ template void findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>*>
              @author SKM 14/8/21
 */
 template<size_t dim, template<size_t> class CELL>
-size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator begin,
-                                   typename deque<CELL<dim>*>::const_iterator end,
-                                   map<string,deque<CELL<dim>*> >& mesh_patches )
+size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::const_iterator begin,
+                                   typename plf::colony<CELL<dim>>::const_iterator end,
+                                   map<string,vector<CELL<dim>*> >& mesh_patches )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( begin == end ) {
@@ -254,12 +245,17 @@ size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator be
         }
      
       // getting a copy of the element pointers of the mesh
-      deque<CELL<dim>*>  cells( begin, end );
+      vector<CELL<dim>*>   cells;
+      cells.reserve( distance(begin,end) );
+      while ( begin != end ) {
+          cells.push_back( const_cast<CELL<dim>*>(&(*begin)) );
+          ++begin;
+        }
       sort( cells.begin(), cells.end() );
 
       // detecting via a flood-fill whether the group can be partitioned, else nothing is done
       set<CELL<dim>*>  cells_contiguous_subset;
-      findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+      findContiguousMeshPatch( *(*cells.begin()), cells_contiguous_subset );
 
       // if no contiguous cells could be found
       if ( cells_contiguous_subset.empty() ) {
@@ -298,10 +294,10 @@ size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator be
                 cout <<"\t\t\t'"<< patch_name <<"'";
                 cout <<" ("<< cells_contiguous_subset.size() <<" elmts)"<< std::endl;
 
-                pair<typename map<string,deque<CELL<dim>*> >::iterator,bool>
+                pair<typename map<string,vector<CELL<dim>*> >::iterator,bool>
                   insertion = mesh_patches.insert( make_pair( patch_name,
-                                                   move( deque<CELL<dim>*>( cells_contiguous_subset.begin(),
-                                                                            cells_contiguous_subset.end() ) ) ) );
+                                                   move( vector<CELL<dim>*>( cells_contiguous_subset.begin(),
+                                                                             cells_contiguous_subset.end() ) ) ) );
                 if ( insertion.second == false ) {
                      csmp_error.notice( ERROR, "findStandAloneMeshPatches:", patch_name,
                                                "could not be inserted into patch map" );
@@ -318,7 +314,7 @@ size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator be
 
            // if there are no more cells to process the job is done, else the next patch is searched
            if ( !cells.empty() )
-             findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+             findContiguousMeshPatch( *(*cells.begin()), cells_contiguous_subset );
          }
 
       return n_patches;
@@ -326,30 +322,30 @@ size_t  findStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator be
    } // end findStandAloneMeshPatches
 
 // 3D version
-template size_t  findStandAloneMeshPatches( deque<Element<3U>*>::const_iterator,
-                                            deque<Element<3U>*>::const_iterator,
-                                            map<string,deque<Element<3U>*> >& );
+template size_t  findStandAloneMeshPatches( plf::colony<Element<3U>>::const_iterator,
+                                            plf::colony<Element<3U>>::const_iterator,
+                                            map<string,vector<Element<3U>*> >& );
 
-template size_t  findStandAloneMeshPatches( deque<Face<3U>*>::const_iterator,
-                                            deque<Face<3U>*>::const_iterator,
-                                            map<string,deque<Face<3U>*> >& );
+template size_t  findStandAloneMeshPatches( plf::colony<Face<3U>>::const_iterator,
+                                            plf::colony<Face<3U>>::const_iterator,
+                                            map<string,vector<Face<3U>*> >& );
 
-template size_t  findStandAloneMeshPatches( deque<InterFace<3U>*>::const_iterator,
-                                            deque<InterFace<3U>*>::const_iterator,
-                                            map<string,deque<InterFace<3U>*> >& );
+template size_t  findStandAloneMeshPatches( plf::colony<InterFace<3U>>::const_iterator,
+                                            plf::colony<InterFace<3U>>::const_iterator,
+                                            map<string,vector<InterFace<3U>*> >& );
 
 // 2D version
-template size_t  findStandAloneMeshPatches( deque<Element<2U>*>::const_iterator,
-                                            deque<Element<2U>*>::const_iterator,
-                                            map<string,deque<Element<2U>*> >& );
+template size_t  findStandAloneMeshPatches( plf::colony<Element<2U>>::const_iterator,
+                                            plf::colony<Element<2U>>::const_iterator,
+                                            map<string,vector<Element<2U>*> >& );
 
-template size_t  findStandAloneMeshPatches( deque<Face<2U>*>::const_iterator,
-                                            deque<Face<2U>*>::const_iterator,
-                                            map<string,deque<Face<2U>*> >& );
+template size_t  findStandAloneMeshPatches( plf::colony<Face<2U>>::const_iterator,
+                                            plf::colony<Face<2U>>::const_iterator,
+                                            map<string,vector<Face<2U>*> >& );
 
-template size_t  findStandAloneMeshPatches( deque<InterFace<2U>*>::const_iterator,
-                                            deque<InterFace<2U>*>::const_iterator,
-                                            map<string,deque<InterFace<2U>*> >& );
+template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::const_iterator,
+                                            plf::colony<InterFace<2U>>::const_iterator,
+                                            map<string,vector<InterFace<2U>*> >& );
 
 
 
@@ -370,8 +366,8 @@ template size_t  findStandAloneMeshPatches( deque<InterFace<2U>*>::const_iterato
       
 */
 template<size_t dim, template<size_t> class CELL>
-size_t  findPointersToStandAloneMeshPatches( typename deque<CELL<dim>*>::const_iterator begin,
-                                             typename deque<CELL<dim>*>::const_iterator end,
+size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_iterator begin,
+                                             typename vector<CELL<dim>*>::const_iterator end,
                                              map<CELL<dim>*,MeshPatchAttributes>& root_pointers )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -387,7 +383,7 @@ size_t  findPointersToStandAloneMeshPatches( typename deque<CELL<dim>*>::const_i
 
       // detecting via a flood-fill whether the group can be partitioned, else nothing is done
       set<CELL<dim>*>  cells_contiguous_subset;
-      findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+      findContiguousMeshPatch( *(*cells.begin()), cells_contiguous_subset );
       
       // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
       if ( cells.size() <= cells_contiguous_subset.size() ) {
@@ -433,7 +429,7 @@ size_t  findPointersToStandAloneMeshPatches( typename deque<CELL<dim>*>::const_i
                      csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
                                                  "mesh patch could not be inserted into root cell map. Does it already exist?" );
                   }
-                findContiguousMeshPatch( (*cells.begin()), cells_contiguous_subset );
+                findContiguousMeshPatch( *(*cells.begin()), cells_contiguous_subset );
              }
            n_subgroups++;
         }
@@ -443,16 +439,16 @@ size_t  findPointersToStandAloneMeshPatches( typename deque<CELL<dim>*>::const_i
    } // end findPointersToStandAloneMeshPatches
 
 // 3D version
-template size_t  findPointersToStandAloneMeshPatches( deque<Element<3U>*>::const_iterator,
-                                                      deque<Element<3U>*>::const_iterator,
+template size_t  findPointersToStandAloneMeshPatches( vector<Element<3U>*>::const_iterator,
+                                                      vector<Element<3U>*>::const_iterator,
                                                       map<Element<3U>*,MeshPatchAttributes>& );
 
-template size_t  findPointersToStandAloneMeshPatches( deque<Face<3U>*>::const_iterator,
-                                                      deque<Face<3U>*>::const_iterator,
+template size_t  findPointersToStandAloneMeshPatches( vector<Face<3U>*>::const_iterator,
+                                                      vector<Face<3U>*>::const_iterator,
                                                       map<Face<3U>*,MeshPatchAttributes>& );
 
-template size_t  findPointersToStandAloneMeshPatches( deque<InterFace<3U>*>::const_iterator,
-                                                      deque<InterFace<3U>*>::const_iterator,
+template size_t  findPointersToStandAloneMeshPatches( vector<InterFace<3U>*>::const_iterator,
+                                                      vector<InterFace<3U>*>::const_iterator,
                                                       map<InterFace<3U>*,MeshPatchAttributes>& );
 
 
@@ -871,9 +867,13 @@ To break regions into contiguous subdomains.
 
 */
 template<size_t dim>
-void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguous_subset )
+void floodFill( Element<dim>* const eptr, set<Element<dim>* const>& elements_contiguous_subset )
  {
-    assert( eptr != nullptr );
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    if ( eptr == nullptr ) {
+         csmp_error.notice( ERROR, "floodFill", "root element pointer is a nullptr; nothing was done.");
+         return;
+      }
     // identifying the neighbors of the first element to be looked at
     deque<Element<dim>*>  neighbor_elements;
     const size_t  neighbors(eptr->Neighbors());
@@ -881,45 +881,41 @@ void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguou
       if ( eptr->Neighbor(i) != nullptr )
         neighbor_elements.push_back( eptr->Neighbor(i) );
  
-    // performing the floodfill, starting with an empty set
+    // starting with an empty set
     if ( !elements_contiguous_subset.empty() )
       elements_contiguous_subset.clear();
    
     // insert the first element into the new subset
-    elements_contiguous_subset.insert( static_cast<Element<dim>*>(eptr) );
+    elements_contiguous_subset.insert( eptr );
       
-    // element set for subsequent passes
-    deque<Element<dim>*>  new_neighbor_elements;
-   
      while( !neighbor_elements.empty() )
        {
+          // 0. element set for subsequent passes
+          deque<Element<dim>*>  new_neighbor_elements;
+   
           // 1. loop over those neighbors that are not already part of the deque
-          for ( typename deque<Element<dim>*>::const_iterator
-                nit=neighbor_elements.begin(); nit!=neighbor_elements.end(); ++nit )
+          for ( const auto& nit : neighbor_elements )
             // if the element has not already been dealt with
-            if ( elements_contiguous_subset.find( (*nit) ) == elements_contiguous_subset.end() ) {
-                const size_t  neighbors((*nit)->Neighbors());
+            if ( elements_contiguous_subset.find( nit ) == elements_contiguous_subset.end() ) {
+                const size_t  neighbors(nit->Neighbors());
                 // adding its neighbor ids to the element list to be processed next, if they haven't been dealt with already
                 for ( size_t j=0U; j<neighbors; ++j )
                   // if there is a neighbor whose neighbors have not been traversed, it is input in the list
-                  if ( (*nit)->Neighbor(j) != nullptr )
-                    new_neighbor_elements.push_back( (*nit)->Neighbor(j) );
-                elements_contiguous_subset.insert( (*nit) );
+                  if ( nit->Neighbor(j) != nullptr )
+                    new_neighbor_elements.push_back( nit->Neighbor(j) );
+                elements_contiguous_subset.insert( nit );
              }
  
           // 2. obtain a new set of neighbors that has to be visited in the next iteration
           neighbor_elements = new_neighbor_elements;
-            
-          // 3. emptying neighbor set for the next loop
-          new_neighbor_elements.clear();
       }
      
  } // end floodFill
 
 
-template void floodFill( Element<1U>* const, set<Element<1U>*>& );
-template void floodFill( Element<2U>* const, set<Element<2U>*>& );
-template void floodFill( Element<3U>* const, set<Element<3U>*>& );
+template void floodFill( Element<1U>* const, set<Element<1U>* const>& );
+template void floodFill( Element<2U>* const, set<Element<2U>* const>& );
+template void floodFill( Element<3U>* const, set<Element<3U>* const>& );
 
 
 
@@ -1590,8 +1586,7 @@ template bool findSplitInterfaceElements( const Region<1U>&, set<pair<pair<Eleme
 template<size_t dim>
 bool containsElementsOfType( const Region<dim>& gref, ELEMENT_DIMENSION dimension )
  {
-    for ( typename vector<Element<dim>*>::const_iterator
-          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       if ( parseFiniteElementDimension( (*it)->FE_Type() ) == dimension )
         return true;
       
@@ -1807,8 +1802,8 @@ template void backupNeighborConnectivity( typename vector<Face<2>*>::const_itera
    Checks validity of FE policy, nodes, neighbors, node parents, node neighbors.
 */
 template<size_t dim, template<size_t> class CELL>
-bool integrityCheck( typename deque<CELL<dim>*>::const_iterator first,
-                     typename deque<CELL<dim>*>::const_iterator last )
+bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
+                     typename plf::colony<CELL<dim>>::const_iterator last )
  {
     if ( first == last ) return false;
     
@@ -1818,25 +1813,25 @@ bool integrityCheck( typename deque<CELL<dim>*>::const_iterator first,
        
     while ( first != last ) {
          // FE policy
-         if ( (*first)->FE() == nullptr ) {
-              cerr <<"\nCell "<< (*first)->Idx() <<": FE pointer corrupt.";
+         if ( (*first).FE() == nullptr ) {
+              cerr <<"\nCell "<< (*first).Idx() <<": FE pointer corrupt.";
               issues++;
            }
          else {
              // connected nodes
-             for ( size_t i{0}; i<(*first)->Nodes(); ++i )
-               if ( (*first)->N(i) == nullptr ) {
-                    cerr <<"\nCell "<< (*first)->Idx() <<": node: "<< i <<": node pointer corrupt.";
+             for ( size_t i{0}; i<(*first).Nodes(); ++i )
+               if ( (*first).N(i) == nullptr ) {
+                    cerr <<"\nCell "<< (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
                     issues++;
                  }
-               else shared_nodes.push_back( (*first)->N(i) );
+               else shared_nodes.push_back( (*first).N(i) );
              // there should be at least one neighbor
              size_t n_valid_nbors{0};
-             for ( size_t i{0}; i<(*first)->Neighbors(); ++i )
-               if ( (*first)->Neighbor(i) != nullptr )
+             for ( size_t i{0}; i<(*first).Neighbors(); ++i )
+               if ( (*first).Neighbor(i) != nullptr )
                  n_valid_nbors++;
              if ( n_valid_nbors == 0 ) {
-                  cerr <<"\nCell "<< (*first)->Idx() <<": has no neighbors.";
+                  cerr <<"\nCell "<< (*first).Idx() <<": has no neighbors.";
                   issues++;
                }
            }
@@ -1845,7 +1840,7 @@ bool integrityCheck( typename deque<CELL<dim>*>::const_iterator first,
       
    // checking node parent connectivity after removing duplicate nodes
    shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
-   for ( auto nit : shared_nodes ) {
+   for ( const auto& nit : shared_nodes ) {
         for ( size_t i{0}; i<nit->Parents(); ++i )
           if ( nit->Parent(i) == nullptr ||
                nit->Parent(i)->FE() == nullptr ) {
@@ -1854,7 +1849,7 @@ bool integrityCheck( typename deque<CELL<dim>*>::const_iterator first,
             }
      }
    // node to node connectivity is tested as well
-   for ( auto nit : shared_nodes ) {
+   for ( const auto& nit : shared_nodes ) {
         for ( size_t i{0}; i<nit->Neighbors(); ++i )
           if ( nit->Neighbor(i) == nullptr ) {
                cerr <<"\nNeighbor "<< i <<" of node "<< nit->Idx() <<": is corrupt.";
@@ -1867,17 +1862,17 @@ bool integrityCheck( typename deque<CELL<dim>*>::const_iterator first,
  
  } // end integrityCheck
  
-template bool integrityCheck<3,Element>( typename deque<Element<3>*>::const_iterator, typename deque<Element<3>*>::const_iterator );
-template bool integrityCheck<2,Element>( typename deque<Element<2>*>::const_iterator, typename deque<Element<2>*>::const_iterator );
-template bool integrityCheck<1,Element>( typename deque<Element<1>*>::const_iterator, typename deque<Element<1>*>::const_iterator );
+template bool integrityCheck<3,Element>( typename plf::colony<Element<3>>::const_iterator, typename plf::colony<Element<3>>::const_iterator );
+template bool integrityCheck<2,Element>( typename plf::colony<Element<2>>::const_iterator, typename plf::colony<Element<2>>::const_iterator );
+template bool integrityCheck<1,Element>( typename plf::colony<Element<1>>::const_iterator, typename plf::colony<Element<1>>::const_iterator );
 
-template bool integrityCheck<3,Face>( typename deque<Face<3>*>::const_iterator, typename deque<Face<3>*>::const_iterator );
-template bool integrityCheck<2,Face>( typename deque<Face<2>*>::const_iterator, typename deque<Face<2>*>::const_iterator );
-template bool integrityCheck<1,Face>( typename deque<Face<1>*>::const_iterator, typename deque<Face<1>*>::const_iterator );
+template bool integrityCheck<3,Face>( typename plf::colony<Face<3>>::const_iterator, typename plf::colony<Face<3>>::const_iterator );
+template bool integrityCheck<2,Face>( typename plf::colony<Face<2>>::const_iterator, typename plf::colony<Face<2>>::const_iterator );
+template bool integrityCheck<1,Face>( typename plf::colony<Face<1>>::const_iterator, typename plf::colony<Face<1>>::const_iterator );
 
-template bool integrityCheck<3,InterFace>( typename deque<InterFace<3>*>::const_iterator, typename deque<InterFace<3>*>::const_iterator );
-template bool integrityCheck<2,InterFace>( typename deque<InterFace<2>*>::const_iterator, typename deque<InterFace<2>*>::const_iterator );
-template bool integrityCheck<1,InterFace>( typename deque<InterFace<1>*>::const_iterator, typename deque<InterFace<1>*>::const_iterator );
+template bool integrityCheck<3,InterFace>( typename plf::colony<InterFace<3>>::const_iterator, typename plf::colony<InterFace<3>>::const_iterator );
+template bool integrityCheck<2,InterFace>( typename plf::colony<InterFace<2>>::const_iterator, typename plf::colony<InterFace<2>>::const_iterator );
+template bool integrityCheck<1,InterFace>( typename plf::colony<InterFace<1>>::const_iterator, typename plf::colony<InterFace<1>>::const_iterator );
                                           
                                           
                                           

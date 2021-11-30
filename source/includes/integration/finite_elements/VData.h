@@ -141,9 +141,9 @@ class VData {
     void   EstablishZeroBasedNumbering();
   
     /// x-coordinate of node i
-    void      Px( size_t i, double );
-    void      Py( size_t i, double );
-    void      Pz( size_t i, double );
+    void    Px( size_t i, double );
+    void    Py( size_t i, double );
+    void    Pz( size_t i, double );
     double  Px( size_t i ) const;
     double  Py( size_t i ) const;
     double  Pz( size_t i ) const;
@@ -192,7 +192,10 @@ class VData {
 
     /// adds id (0..n-1) of boundary node and its BOX_BOUNDARY flag (negative integer)
     void AddBFlag( size_t node_id, std::int8_t bflag );
-  
+
+    /// returns the boundary flag BOX_BOUNDARY  of the node
+    std::int8_t BFlag( size_t node_id ) const;
+
     /// returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT
     std::int8_t BoundaryFlag( size_t vertex ) const;
   

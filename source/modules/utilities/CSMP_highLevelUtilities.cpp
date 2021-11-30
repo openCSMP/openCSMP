@@ -121,11 +121,7 @@ size_t  findNode( const Model<3U>& sg, double nx, double ny, double nz,
  {
     const Region<3>&  sgroup(sg.Region("Model"));
  
-    for ( vector<csmp::Node<3U>*>::const_iterator 
-          it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
-//         if ( approximatelyEqual( nx, (*it)->x(), tolerance ) &&
-//              approximatelyEqual( ny, (*it)->y(), tolerance ) &&
-//              approximatelyEqual( nz, (*it)->z(), tolerance ) )
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
          if ( fabs(nx-(*it)->x()) <= tolerance and
               fabs(ny-(*it)->y()) <= tolerance and
               fabs(nz-(*it)->z()) <= tolerance )
@@ -148,10 +144,7 @@ size_t  findNode( const Model<2U>& sg, double nx, double ny,
  {
     const Region<2>&  sgroup(sg.Region("Model"));
  
-    for ( vector<Node<2U>*>::const_iterator 
-          it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
-//         if ( approximatelyEqual( nx, (*it)->x(), tolerance ) &&
-//              approximatelyEqual( ny, (*it)->y(), tolerance ) )
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
            if ( fabs(nx-(*it)->x()) <= tolerance and
                 fabs(ny-(*it)->y()) <= tolerance )
              return (*it)->Idx();
@@ -172,12 +165,9 @@ size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
  {
     const Region<1>&  sgroup(sg.Region("Model"));
  
-    for ( vector<Node<1U>*>::const_iterator 
-          it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
-//         if ( approximatelyEqual( nx, (*it)->x(), tolerance ) )
-         if ( fabs(nx-(*it)->x()) <= tolerance ) return (*it)->Idx();
-      }
- 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
+      if ( fabs(nx-(*it)->x()) <= tolerance ) return (*it)->Idx();
+         
     stringstream  out("The targeted node with the coordinate (x): ");
     out << nx <<" could not be found; ";
     out <<" returning node index="<< UINT_MAX << endl;
@@ -206,8 +196,7 @@ long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, 
  {
     const Region<dim>&  sgroup(sg.Region("Model"));
  
-    for ( typename vector<Node<dim>*>::const_iterator
-          it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
       if ( pxyz.CoincidesWithWithinTolerance( (*it)->Coordinate(), tolerance ) )
         return (*it)->Idx();
 
@@ -1217,7 +1206,7 @@ char * strptime(const char *s, const char *format, struct tm *tm)
 
  @return  the element which contains the point, or NULL if no element does
  */
-Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& query )
+Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query )
     {
       std::vector<size_t> fnids;
       fnids.reserve(4);

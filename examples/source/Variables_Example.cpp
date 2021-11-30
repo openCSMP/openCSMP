@@ -148,8 +148,8 @@ void Variables_Example::Run()
     model.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 1. ) );
     fracture.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 2. ) );
 
-    for( Model<D>::boundaryConstIterator bit( model.BoundariesBegin() ); bit != model.BoundariesEnd(); ++bit )
-      for( vector<Face<D>*>::const_iterator fit( bit->second.ElementsBegin() ); fit != bit->second.ElementsEnd(); ++fit )
+    for( auto bit( model.BoundariesBegin() ); bit != model.BoundariesEnd(); ++bit )
+      for( auto fit( bit->second.ElementsBegin() ); fit != bit->second.ElementsEnd(); ++fit )
         (*fit)->Store( faceScalarKey, makeScalar( PLAIN, (*fit)->Volume() ) );
 
 

@@ -2402,7 +2402,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VS
      std::set<BOX_BOUNDARY> corners;
      for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); ++bit )
        if ( (*bit) == CNR1 || (*bit) == CNR2 || (*bit) == CNR3 || (*bit) == CNR4 )
-         corners.insert( intToBOX_BOUNDARY((*bit)) );
+         corners.insert( static_cast<BOX_BOUNDARY>(*bit) );
       
      // reporting potential errors 
      if ( corners.size() != 4U ) {

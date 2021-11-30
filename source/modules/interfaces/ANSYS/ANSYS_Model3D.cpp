@@ -1,6 +1,7 @@
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Interface.h"
 #include "Element.h"
+#include "NodeManifold.h"
 #include "Region.h"
 #include "Box.h"
 #include "Exception.h"
@@ -403,17 +404,17 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
 
   // traversal of the existing mesh nodes to find all its elements	
   for ( auto nit=Mesh().NodesBegin();  nit!=Mesh().NodesEnd(); ++nit ) {
-    auto onit( original_node_numbers.find( (*nit)->Coordinate() ) );
+    auto onit( original_node_numbers.find( (*nit).Coordinate() ) );
     if ( onit != onodesEnd ) {
-      if ( (*nit)->Idx() != (*onit).second ) {
+      if ( (*nit).Idx() != (*onit).second ) {
         if ( first_call ) {
           if ( verbose ) cout << "\nANSYS_Model3D::RestoreOriginalNodeNumbering: changed indices of following nodes:";
           first_call = false;
           made_changes = true;
         }
-        if ( verbose ) cout << "\n\t" << (*nit)->Idx() << " -> " << (*onit).second;
+        if ( verbose ) cout << "\n\t" << (*nit).Idx() << " -> " << (*onit).second;
       }
-      (*nit)->Idx( (*onit).second );
+      (*nit).Idx( (*onit).second );
     }
     else
       throw csmp::Exception( ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",

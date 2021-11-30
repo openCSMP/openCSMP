@@ -178,16 +178,14 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
   double   v1, v2, v3, t1, t2, t3, t4;
   
   // resize the storage vector for the random permeability field
-  const Region<dim>& mref = mdl.Region(region);
+  Region<dim>& mref = mdl.Region(region);
   k_.resize(mdl.Region("Model").Elements());
 
   cout << "\nRandomFieldGenerator<dim>::RandomElementField2D: Generating random field for '" << variable << "' in region " << region;
   cout << "\nUsing mean: " << mean << ", standard deviation: " << sigma << ", correlation length x: " << xlength << ", correlation length y: " << ylength << endl;
     
   // loop over elements
-  typename vector<Element<dim>* >::const_iterator  it;
-
-  for ( it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
 
       sc = (1.0/sqrtLxLy*R(0,0));
       bc = (*it)->BaryCenter(); // xy coordinates of bary centre
@@ -315,16 +313,14 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
   double   v1, v2, v3, t1, t2, t3, t4;
 
   // resize the storage vector for the random permeability field
-  const Region<dim>& mref = mdl.Region(region);
+  Region<dim>& mref = mdl.Region(region);
   k_.resize( mdl.Region("Model").Nodes());
 
   cout << "\nRandomFieldGenerator<dim>::RandomNodeField2D: Generating random field for '" << variable << "' in region " << region;
   cout << "\nUsing mean: " << mean << ", standard deviation: " << sigma << ", correlation length x: " << xlength << ", correlation length y: " << ylength << endl;
     
   // loop over nodes
-  typename vector<Node<dim>* >::const_iterator  it;
-
-  for ( it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
+  for ( auto it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
 
       sc = (1.0/sqrtLxLy*R(0,0)); 
       bc[0] = (*it)->x();
@@ -386,11 +382,8 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
   std::ofstream ofs;
   ofs.open( fname.c_str(), ios::out|ios::trunc );  
   
-  typename vector<Element<dim>* >::const_iterator  it;
-
-  for ( it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
-      ofs << k_[(*it)->Idx()] << endl;
-    }
+  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ )
+    ofs << k_[(*it)->Idx()] << endl;
 
   ofs.close();
   
@@ -418,11 +411,8 @@ void RandomFieldGenerator<dim>::OutputRandomNodeField( Model<dim>& mdl )
   std::ofstream ofs;
   ofs.open( fname.c_str(), ios::out|ios::trunc );  
 
-  typename vector<Node<dim>* >::const_iterator  it;
-
-  for ( it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
-      ofs << k_[(*it)->Idx()] << endl;
-    }                                                     
+  for ( auto it = mref.NodesBegin(); it != mref.NodesEnd(); it++ )
+    ofs << k_[(*it)->Idx()] << endl;
 
   ofs.close();
   
@@ -451,7 +441,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
    
   ifs.close();
 
-  const Region<dim>& mref = mdl.Region("Model");
+  Region<dim>& mref = mdl.Region("Model");
   if ( k_temp.size() != mref.Elements() ) {
       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
@@ -461,9 +451,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
 
-  typename vector<Element<dim>* >::const_iterator  it;
-
-  for ( it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
       sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }
@@ -492,7 +480,7 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
    
   ifs.close();
 
-  const Region<dim>& mref = mdl.Region("Model");
+  Region<dim>& mref = mdl.Region("Model");
   if ( k_temp.size() != mref.Nodes() ) {
       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomNodeField2D",
                       "Size of the random field does not correspond to number of nodes in Model");
@@ -502,9 +490,7 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
   const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
   
-  typename vector<Node<dim>* >::const_iterator  it;
-
-  for ( it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
+  for ( auto it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
       sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }

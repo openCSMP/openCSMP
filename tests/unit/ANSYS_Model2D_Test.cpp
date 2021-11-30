@@ -5,6 +5,7 @@
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
 #include "DenseMatrix.h"
+#include "plf_colony.h"
 
 using namespace std;
 

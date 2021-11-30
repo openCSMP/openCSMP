@@ -55,10 +55,9 @@ void outputToXGraph( const Model<1U>& model, const char* file_name, double model
     
     // organising node output data by x-coordinate
     map<double,vector<double> >  nodeprop_map;
-    vector<double>                 nodeprops(3U);
+    vector<double>               nodeprops(3U);
 
-    for ( vector<Node<1U>*>::const_iterator
-          it=sgref.NodesBegin(); it!=sgref.NodesEnd(); it++ ) {
+    for ( auto it=sgref.NodesBegin(); it!=sgref.NodesEnd(); it++ ) {
           nodeprops[0] = (*it)->Read( sato_key );
           nodeprops[1] = (*it)->Read( flup_key );
           nodeprops[2] = (*it)->Read( absp_key );
@@ -78,18 +77,16 @@ void outputToXGraph( const Model<1U>& model, const char* file_name, double model
       
     // organising element output data by x-coordinate
     map<double,vector<double> >  elmtprop_map;
-    vector<double>                 elmtprops(2U);
+    vector<double>               elmtprops(2U);
 
-    for ( vector<Element<1U>*>::const_iterator
-          it=sgref.ElementsBegin(); it!=sgref.ElementsEnd(); it++ ) {
+    for ( auto it=sgref.ElementsBegin(); it!=sgref.ElementsEnd(); it++ ) {
           elmtprops[0] = (*it)->Read( mobt_key );
           elmtprops[1] = (*it)->Read( flux_key );
           Point<1U> p  = (*it)->BaryCenter();
           elmtprop_map.insert( make_pair( p[0U], elmtprops ) );
       }
     // writing element variable sets with barycentric property locations
-    for ( map<double,vector<double> >::const_iterator
-          it=elmtprop_map.begin(); it!=elmtprop_map.end(); it++ ) 
+    for ( auto it=elmtprop_map.begin(); it!=elmtprop_map.end(); it++ )
       {
          ofs_lt << (*it).first <<" "<< (*it).second[0] << endl;
          ofs_fx << (*it).first <<" "<< (*it).second[1] << endl;

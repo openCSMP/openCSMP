@@ -292,10 +292,7 @@ void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
 template<size_t dim>
 void InterFace<dim>::Assign( size_t i, InterFace<dim>* const ifc_ptr ) // neighbor interface
 {
-  assert( this->FE() != nullptr );
-  assert( interface_connector_.size() == this->FE()->Neighbors() );
-  assert( i < this->Neighbors() );
-  
+  assert( i < interface_connector_.size() );
   interface_connector_[i] = ifc_ptr;
   
 } // end InterFace<dim>::Assign(neighbor)
@@ -434,16 +431,14 @@ void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE sid
     unassigns the neighbor face, setting the pointer in the 'face_connector' vector to null
 */
 template<size_t dim>
-void InterFace<dim>::Unassign( const InterFace<dim>* e_ptr ) 
+void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
   {
-    for ( size_t i = 0U; i < interface_connector_.size(); i++ ) {
-        if ( e_ptr == nullptr || interface_connector_[i] == nullptr )
-          continue;
-        if ( e_ptr == interface_connector_[i] ) {
-            interface_connector_[i] = nullptr;
-            break;
-          }
-      }
+    if ( e_ptr == nullptr ) return;
+    for ( size_t i = 0U; i < interface_connector_.size(); i++ )
+      if ( e_ptr == interface_connector_[i] ) {
+          interface_connector_[i] = nullptr;
+          break;
+        }
   }
 
 
@@ -456,10 +451,10 @@ void InterFace<dim>::Unassign( const InterFace<dim>* e_ptr )
 template<size_t dim>
 size_t  InterFace<dim>::ConnectedNeighbors() const
 {
-  size_t nulls( 0 );
+  size_t connections( interface_connector_.size() );
   for ( auto f : interface_connector_ )
-    if ( f == nullptr ) nulls++;
-  return interface_connector_.size() - nulls;
+    if ( f == nullptr ) connections--;
+  return connections;
 }
 
 

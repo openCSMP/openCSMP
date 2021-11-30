@@ -84,9 +84,9 @@ class Boundary : public ModelSubDomain<dim, Face>,
     // reconstruction of boundaries that existed before
     // ------------------------------------------------
 
-    /// RECONSTRUCTOR of boundary from index data stored in SubDomainInfo
+    /// RECONSTRUCTOR of boundary from index data stored in SubDomainInfo (call only prior to deleting anythin from colonies)
     Boundary( const PropertyDatabase<dim>&,
-              const MeshManager<dim>&,       
+              MeshManager<dim>&,
               const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
               BOX_BOUNDARY = IRREGULAR );
 
@@ -122,8 +122,8 @@ class Boundary : public ModelSubDomain<dim, Face>,
     bool CreateFrom( const typename std::vector<Face<dim>*>::const_iterator facesBegin,
                      const typename std::vector<Face<dim>*>::const_iterator facesEnd );
 
-    /// create faces from lower dimensional region
-    bool CreateFrom( const Region<dim>& lower_dimensional_region,
+    /// create faces from lower dimensional region, deleting these and assigning nullptr values
+    bool CreateFrom( Region<dim>& lower_dimensional_region,
                      MeshManager<dim>& meshManager,
                      BOX_BOUNDARY boxBoundary );
     

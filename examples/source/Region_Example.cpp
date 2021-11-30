@@ -385,7 +385,7 @@ void Region_Example::Run()
    cout <<"\n\tinterior elements: "<< gref.InteriorElements(); // test: O.K.
    cout <<"\n\tIs empty?          "<< gref.Empty() << endl; // test: O.K.
 
-   const Element<DIM>*  e1(*(model.Mesh().ElementsBegin()));
+   const Element<DIM>*  e1 = &(*(model.Mesh().ElementsBegin()));
    cout <<"\nmain: Does the model contain a certain element? "<< model.Region("Model").Contains( e1 ) << endl; // test: O.K.
    //                                                                                  ^^^^^^^^
    cout <<"\nmain: At its boundary? "<< model.Region("Model").IsPerimeterElement( e1 ) << endl; // test: O.K.

@@ -181,10 +181,10 @@ class Element : public FiniteElementPolicy<dim, Element>,
     Element& operator=( Element&& );
 
      // TODO: deprecate or make stand-alone binary operator? - cheapest comparison at the moment
-    bool operator==( const Element<dim>& );
+    bool operator==( const Element<dim>& ) const;
 
-    /// lessa than for storage in STL containers uses barycentre
-    bool operator<( const Element<dim>& );
+    /// less than operator for comparing barycentre locations using operator of the corresponding point object
+    bool operator<( const Element<dim>& ) const;
  
     /// Local variable storage interface
     PLACEMENT Placement() const { return ELEMENT; }
@@ -197,11 +197,13 @@ class Element : public FiniteElementPolicy<dim, Element>,
 
     /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
     void Assign( size_t nbor, Element<dim>* const );
-    void Unassign( const Element<dim>* );
+    /// sets pointer to given neighbor element to zero
+    void Unassign( const Element<dim>* const );
 
     /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
     void Assign( size_t node, Node<dim>* const );
-    void Unassign( csmp::Node<dim>* const );
+    /// sets pointer to given node to zero
+    void Unassign( const csmp::Node<dim>* const );
 
     // ------------------------------------------------------------------------
     // Member access
@@ -280,7 +282,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
 
   private:
     mutable size_t                 idx_;
-    int32_t                          material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
+    int32_t                        material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
     std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
     std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
 };

@@ -41,9 +41,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg,
     ofs << dataset <<" := [ ";
 
     if ( prop_key.place == NODE ) {
-        const vector<Node<1U>*>::const_iterator  nit_last(--super_group.NodesEnd()); 
-	      for ( vector<Node<1U>*>::const_iterator
-	            nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
+        const auto  nit_last(--super_group.NodesEnd());
+	      for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
 	           ofs <<"["<< (*nit)->x();
 	           ofs <<","<< (*nit)->Read( prop_key );
 	           if ( nit != nit_last ) ofs <<"],";
@@ -54,9 +53,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg,
       }
       
     else if ( prop_key.place == ELEMENT ) {
-        const vector<Element<1U>*>::const_iterator  eit_last(--super_group.ElementsEnd()); 
-	      for ( vector<Element<1U>*>::const_iterator
-	            eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
+        const auto  eit_last(--super_group.ElementsEnd());
+	      for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
 	           Point<1U>  x((*eit)->BaryCenter());
 	           ofs <<"["<< x[0];
 	           ofs <<","<< (*eit)->Read( prop_key );
@@ -257,9 +255,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg, const char* group,
     ofs << dataset <<" := [ ";
     
     if ( prop_key.place == NODE ) {
-          vector<Node<1U>*>::const_iterator end_it=gref.NodesEnd(); end_it--;
-          for ( vector<Node<1U>*>::const_iterator 
-                nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ ) {
+          auto end_it=gref.NodesEnd(); end_it--;
+          for ( auto nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ ) {
 	           ofs <<"["<< (*nit)->x();
 	           ofs <<","<< (*nit)->Read( prop_key );
 	           if ( nit != end_it ) ofs <<"],";
@@ -271,10 +268,9 @@ void writeVariableToMapleTextFile( const Model<1U>& sg, const char* group,
       
     else if ( prop_key.place == ELEMENT ) {
         vector<double>  x;
-        vector<Element<1U>*>::const_iterator end_it=gref.ElementsEnd(); 
+        auto end_it=gref.ElementsEnd();
         end_it--;
-	      for ( vector<Element<1U>*>::const_iterator 
-	            eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+	      for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
 	           x = (*eit)->BaryCenter().Coordinates();
 	           ofs <<"["<< x[0];
 	           ofs <<","<< (*eit)->Read( prop_key );
@@ -287,7 +283,7 @@ void writeVariableToMapleTextFile( const Model<1U>& sg, const char* group,
       
     // writing the plot function (looks like this for a single variable)
     double var_min, var_max, xmin, xmax; 
-    vector<Node<1U>*>::const_iterator nit=gref.NodesBegin();
+    auto nit=gref.NodesBegin();
     xmin = xmax = (*nit)->x();
     while (  nit!=gref.NodesEnd() ) {
          xmin = std::min ( xmin, (*nit)->x() ); 

@@ -332,7 +332,7 @@ class PDE_Integrator {
 
     virtual void  Solve();
 
-    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  PostProcess( COMPUTATION_DOMAIN<dim>& );
 
     virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
 

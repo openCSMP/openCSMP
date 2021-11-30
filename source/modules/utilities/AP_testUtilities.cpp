@@ -5,6 +5,7 @@
 #include "Element.h"
 #include "Region.h"
 #include "Model.h"
+#include "NodeManifold.h"
 #include "FiniteElementPolicy.h"
 
 using namespace std;
@@ -20,8 +21,7 @@ void rhinoOutput( const Model<3U>& sgroup )
     const Region<3U>  sg(sgroup.Region("Model")); 
   
     // reading elements
-    for ( vector<Element<3U>*>::const_iterator
-          eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ ) 
+    for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
     {
       const CSMP_FEM_TYPE elType((*eit)->FE_Type());
       
@@ -245,8 +245,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
    
    const Region<3U>&  sgref(sg.Region("Model"));
    
-   for ( vector<Element<3U>*>::const_iterator
-          eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ ) 
+   for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ ) 
      for ( size_t iFacet=0U; iFacet<(*eit)->FV()->Facets(); iFacet++ )
   	  if((*eit)->FE()->IsVolumeElement()) // there are four facet points
         {    	    

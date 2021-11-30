@@ -427,7 +427,7 @@ void ImplicitTransport_Test::TestInteriorFluxBalance( double tolerance_relaxatio
     vector<double>  flux_balance( model_domain.Nodes(), 0. );
     // NB: establishing the flux balance in an element loop, including the perimeter elements,
     //     but avoiding truncated FVs at the model boundary
-    for ( vector<Element<3U>*>::const_iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
                    size_t node = (*it)->N(i)->Idx();

@@ -1,5 +1,6 @@
 #include "CapillaryNumberVisitor.h"
 #include "Model.h"
+#include "NodeManifold.h"
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
 

@@ -363,8 +363,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   vector<vector<double> >               dummy;
   pair<typename map<size_t,vector<vector<double> > >::iterator,bool>  mit;
 
-  for ( typename vector<Element<dim>*>::const_iterator
-        eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+  for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
     if ( atBoundary(*eit) != NOT )
       {
          // collecting nodal fluid pressures and elemental hydraulic conductivities from
@@ -416,10 +415,8 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   cout <<"\nintegrateDomainBoundaryFlux: Computing fluxes across faces..."<< endl;
   clock_t ticks = clock();
 
-  for ( typename std::map<std::string,csmp::Boundary<dim> >::const_iterator
-        bit=sg.BoundariesBegin(); bit!=sg.BoundariesEnd(); bit++ )
-    for ( typename vector<Face<dim>*>::const_iterator
-          fit=(*bit).second.ElementsBegin(); fit!=(*bit).second.ElementsEnd(); fit++ )
+  for ( auto bit=sg.BoundariesBegin(); bit!=sg.BoundariesEnd(); bit++ )
+    for ( auto fit=(*bit).second.ElementsBegin(); fit!=(*bit).second.ElementsEnd(); fit++ )
       /// Roman, 2014 ( Face&InterFace ): Should Face contain AtBoundary flag?
       //if ( (*fit)->AtBoundary() != NOT )
         {

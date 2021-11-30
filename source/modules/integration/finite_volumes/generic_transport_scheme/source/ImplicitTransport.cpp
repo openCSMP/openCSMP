@@ -45,13 +45,13 @@ void ImplicitTransport<dim>::UpdateFluxesAndFluxBalances()
     Computation of time increment, flux balance, and temporary new concentration.
 */
 template<size_t dim>
-double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_increment ) const
+double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_increment )
  {
      double dt_min(max_time_increment);
  
      // 1. processing interior and FVs for which all facet fluxes have been initialised
-     const typename vector<Node<dim>*>::const_iterator interior_nodes_end(subdomain_.PerimeterNodesBegin());
-     for ( typename vector<Node<dim>*>::const_iterator nit=subdomain_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
+     const auto interior_nodes_end(subdomain_.PerimeterNodesBegin());
+     for ( auto nit=subdomain_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
           const double out_flow = this->FluxBalanceAndOutFlow( (*nit) );
@@ -61,9 +61,8 @@ double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_incr
        }
 
      // 2. collecting time-stepping constraints from FVs on region perimeter
-     const typename vector<Node<dim>*>::const_iterator nodes_end(ComputationDomain().PerimeterNodesEnd());
-     for ( typename vector<Node<dim>*>::const_iterator
-           nit=subdomain_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
+     const auto nodes_end(ComputationDomain().PerimeterNodesEnd());
+     for ( auto nit=subdomain_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
           const double out_flow = this->FluxBalanceAndOutFlow( (*nit) );
           // boundary fluxes must be part of the time-increment calculation
@@ -81,7 +80,7 @@ double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_incr
     Computation of time increment (default limited to 1 year).
 */
 template<size_t dim>
-double ImplicitTransport<dim>::TimeIncrement() const
+double ImplicitTransport<dim>::TimeIncrement()
  {
     return TimeIncrementAndFluxBalance( 356. * 86400. );
  }

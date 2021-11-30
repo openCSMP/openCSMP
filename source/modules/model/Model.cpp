@@ -21,6 +21,7 @@
 #include "ModelTime.h"
 #include "FiniteVolumeStencilManager.h"
 #include "UnionFind.h"
+#include "plf_colony.h"
 
 using namespace std;
 
@@ -406,7 +407,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
   if ( elmts == 0U )
     csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
   
-  cout << "\nModel<dim>::Initialize: modek mesh has been built successfully..." << endl;
+  cout << "\nModel<dim>::Initialize: mesh has been built successfully..." << endl;
 
   // 4. assigning properties to mesh
   InputVariablesFrom( vset );
@@ -912,12 +913,13 @@ void Model<dim>::IndexByPropertyValues()
     if ( Database().IsDefined( "node number" ) ) {
          const csmp::Index key = this->Database().StorageKey("node number");
          const size_t n_nodes{mesh.Nodes()};
-         for ( size_t i{0}; i<n_nodes; ++i ) {
-              const size_t node_number = static_cast<size_t>(mesh.N(i)->Read(key));
+         const typename plf::colony<csmp::Node<dim>>::iterator nodes_end(mesh.NodesEnd());
+         for ( auto nit=mesh.NodesBegin(); nit!=nodes_end; ++nit ) {
+              const size_t node_number = static_cast<size_t>((*nit).Read(key));
               if ( node_number >= n_nodes )
                 csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
-                                  "'node number' exceeds range of available nodes:", to_string(node_number) );
-              mesh.N(i)->Idx( node_number );
+                                            "'node number' exceeds range of available nodes:", to_string(node_number) );
+              (*nit).Idx( node_number );
            }
       }
     else {
@@ -930,12 +932,13 @@ void Model<dim>::IndexByPropertyValues()
     if ( Database().IsDefined( "element number" ) ) {
          const csmp::Index key = this->Database().StorageKey("element number");
          const size_t n_elmts{mesh.Elements()};
-         for ( size_t i{0}; i<n_elmts; ++i ) {
-              const size_t elmt_number = static_cast<size_t>(mesh.E(i)->Read(key));
+         const typename plf::colony<csmp::Element<dim>>::iterator elmts_end(mesh.ElementsEnd());
+         for ( auto it=mesh.ElementsBegin(); it!=elmts_end; ++it ) {
+              const size_t elmt_number = static_cast<size_t>((*it).Read(key));
               if ( elmt_number >= n_elmts )
                 csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
                                   "'element number' exceeds range of available elements:", to_string(elmt_number) );
-              mesh.E(i)->Idx( elmt_number );
+              (*it).Idx( elmt_number );
            }
       }
     else {
@@ -950,13 +953,14 @@ void Model<dim>::IndexByPropertyValues()
         if ( Database().IsDefined( "face number" ) ) {
              const csmp::Index key = this->Database().StorageKey("face number");
              const size_t n_faces{mesh.Faces()};
-             for ( size_t i{0}; i<n_faces; ++i ) {
-                  const size_t face_number = static_cast<size_t>(mesh.F(i)->Read(key));
+             const typename plf::colony<csmp::Face<dim>>::iterator faces_end(mesh.FacesEnd());
+             for ( auto it=mesh.FacesBegin(); it!=faces_end; ++it ) {
+                  const size_t face_number = static_cast<size_t>((*it).Read(key));
                   if ( face_number >= n_faces + mesh.Elements() )
                     csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
                                       "'face number' exceeds range of available faces:",
-                                       to_string(face_number) );
-                  mesh.F(i)->Idx( face_number );
+                                             to_string(face_number) );
+                  (*it).Idx( face_number );
                }
           }
         else {
@@ -973,13 +977,14 @@ void Model<dim>::IndexByPropertyValues()
              const csmp::Index key = this->Database().StorageKey("interface number");
              const size_t n_ifaces{mesh.InterFaces()};
              const size_t n_all_cells{ n_ifaces + mesh.Faces() + mesh.Elements() };
-             for ( size_t i{0}; i<n_ifaces; ++i ) {
-                  const size_t iface_number = static_cast<size_t>(mesh.I(i)->Read(key));
+             const typename plf::colony<csmp::InterFace<dim>>::iterator ifaces_end(mesh.InterFacesEnd());
+             for ( auto it=mesh.InterFacesBegin(); it!=ifaces_end; ++it ) {
+                  const size_t iface_number = static_cast<size_t>((*it).Read(key));
                   if ( iface_number >= n_all_cells )
                     csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
                                       "'interface number' exceeds range of available faces:",
-                                       to_string(iface_number) );
-                  mesh.I(i)->Idx( iface_number );
+                                            to_string(iface_number) );
+                  (*it).Idx( iface_number );
                }
           }
         else {
@@ -3372,7 +3377,7 @@ template<size_t  dim>
 Point<dim>  centerOfGravity( const Model<dim>& model )
  {
     const Region<dim>& mref(model.Region("Model"));
-    typename vector<Element<dim>*>::const_iterator it(mref.ElementsBegin());
+    auto it(mref.ElementsBegin());
     Point<dim>  center((*it)->BaryCenter());
     double    counter(0.);
     it++;

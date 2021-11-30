@@ -9,6 +9,7 @@
 
 #include "BoundaryStressVisitor.h"
 #include "Model.h"
+#include "NodeManifold.h"
 #include "Exception.h"
 #include "Boundary.h"
 #include "VectorVariable.h"

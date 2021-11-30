@@ -85,8 +85,7 @@ const
        {  
           double total_volume = 0.; 
           uint32_t  n(0);
-           for ( typename vector<Element<dim>*>::const_iterator  
-                 it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+           for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
              {
                 total_volume += volume = (*it)->Volume();
                 if ( prop_key.type == SCALAR ) {
@@ -189,8 +188,7 @@ const
           switch ( prop_key.place )
             {
                 case NODE:
-                     for ( typename vector<Node<dim>*>::const_iterator
-                           it=(*grit).second.NodesBegin(); it!=(*grit).second.NodesEnd(); it++ )
+                     for ( auto it=(*grit).second.NodesBegin(); it!=(*grit).second.NodesEnd(); it++ )
                        {
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
                           // ------------------------------------------------------------------------------------
@@ -228,8 +226,7 @@ const
                      n = (*grit).second.Nodes();
                    break;
                 case ELEMENT_INTEGRATION_POINT:
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        for ( size_t j=0U; j<(*it)->IntegrationPoints(); j++ )
                          {
                             if ( prop_key.type == SCALAR ) {
@@ -265,8 +262,7 @@ const
                    break;
                 case ELEMENT: 
 
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
 
                           if ( prop_key.type == SCALAR ) {
@@ -370,8 +366,7 @@ const
             {
                 case NODE:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -413,8 +408,7 @@ const
 
                 case ELEMENT_INTEGRATION_POINT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -468,8 +462,7 @@ const
 
                 case ELEMENT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -569,8 +562,7 @@ const
         // -------------------------------------------
         const Region<dim>& subdomain(sref.Region(flow_domain));
         //    cout<<"velocity"<<endl;
-        for ( typename vector<Element<dim>*>::const_iterator
-             it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); it++ )
+        for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); it++ )
         {
             // will work for BCC but not for tubes
             //total_volume += fabs( volume = (*it)->Volume() );
@@ -685,8 +677,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
             {
                 case NODE:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -804,8 +795,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                 case ELEMENT_INTEGRATION_POINT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -936,8 +926,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                 case ELEMENT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;

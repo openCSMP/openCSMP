@@ -573,11 +573,7 @@ Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
 template<size_t dim>
 void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
  {
-    assert( nd_ptr != nullptr );
-    assert( this->FE() != nullptr );
-    assert( i < Nodes()*2U );
-    assert( !node_connector_.empty() );
-
+    assert( i < node_connector_.size() );
     node_connector_[i] = nd_ptr;
  }
 
@@ -586,21 +582,17 @@ void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 template<size_t dim>
 void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  {
-    assert( this->FE() != nullptr );
-    assert( i < Neighbors() );
-    assert( face_connector_.size() == this->FE()->Neighbors() );
-
+    assert( i < face_connector_.size() );
     face_connector_[i] = f_ptr;
  }
 
 
+
 template<size_t dim>
-bool Face<dim>::Unassign( Face<dim>* f_ptr )
+bool Face<dim>::Unassign( const Face<dim>* const f_ptr )
 {
-	assert( f_ptr != nullptr );
-  assert( this->FE() != nullptr );
-	assert(face_connector_.size() == this->FE()->Neighbors());
-	for (size_t i(0); i < face_connector_.size(); ++i)
+  if ( f_ptr == nullptr ) return false;
+	for ( size_t i{0}; i < face_connector_.size(); ++i )
 		if ( f_ptr == face_connector_[i] )
       {
          face_connector_[i] = nullptr;
@@ -617,6 +609,8 @@ size_t  Face<dim>::Nodes() const
 {
 	return node_connector_.size();
 }
+
+
 
 template<size_t dim>
 size_t  Face<dim>::Neighbors() const
@@ -778,16 +772,14 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
 
 template<size_t dim>
-void Face<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
+void Face<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
   {
-    for ( size_t i = 0U; i < node_connector_.size(); i++ ) {
-        if ( nd_ptr == nullptr || node_connector_[i] == nullptr )
-          continue;
-        if ( (*nd_ptr) == (*node_connector_[i]) ) {
+    if ( nd_ptr == nullptr ) return;
+    for ( size_t i = 0U; i < node_connector_.size(); i++ )
+        if ( nd_ptr == node_connector_[i] ) {
             node_connector_[i] = nullptr;
             break;
           }
-      }
   }
 
 

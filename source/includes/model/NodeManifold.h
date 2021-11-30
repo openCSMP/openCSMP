@@ -104,11 +104,11 @@ class NodeManifold {
 // TODO: needs rigorous testing; most certainly incomplete
 /// check whether through modification of the manifold, the original topology identifier is no longer valid
 template<size_t dim>
-ManifoldType consistencyCheck( const NodeManifold<dim>* const );
+ManifoldType consistencyCheck( const NodeManifold<dim>& );
   
 /// determines the type of manifold on the basis of its node members and their BOX_BOUNDARY flags
 //template<size_t dim>
-//ManifoldType manifoldType( const NodeManifold<dim>* const );
+//ManifoldType manifoldType( const NodeManifold<dim>& );
 
 
 } // end csmp

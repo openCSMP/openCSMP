@@ -101,7 +101,7 @@ void pointPropertyMapping( const std::string& model_name )
       if ( stdio.YesNo("pointPropertyMapping: Were the 'permeability' data entered in [mD]? - CSMP needs [m2]; convert to m2") ) {
            csmp::Index k_key(model.Database().StorageKey("permeability"));
            Region<3U>&  mref(model.Region("Model"));
-           for ( vector<Element<3U>*>::iterator it=mref.ElementsBegin(); it!=mref.ElementsEnd(); it++ )
+           for ( auto it=mref.ElementsBegin(); it!=mref.ElementsEnd(); it++ )
               //                                                                 md -> m2
               (*it)->Store( k_key, makeScalar( (*it)->Status(k_key), (*it)->Read(k_key) * 1.0e-15 ) );
          }

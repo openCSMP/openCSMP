@@ -76,7 +76,7 @@ SplitBoundary<dim>& SplitBoundary<dim>::operator=( const SplitBoundary<dim>& ed 
 */
 template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
-                                   const MeshManager<dim>& mesh,
+                                   MeshManager<dim>& mesh,
                                    const SubDomainInfo& info )
   : ModelSubDomain<dim, InterFace>( info.name, pref )
 {
@@ -87,16 +87,16 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
                           "InterFace numbering is expected to start at the number of elements + faces");
 
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-  for ( auto i : info.interior_elmts ) this->elmt_vec_.push_back( mesh.I(i) );
-  for ( auto i : info.perimeter_elmts ) this->elmt_vec_.push_back( mesh.I(i) );
+  for ( auto i : info.interior_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i)) );
+  for ( auto i : info.perimeter_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i)) );
 
   // building the node vector
   // ------------------------
   // assigning pointers to the interior and perimeter nodes
   this->first_bd_node_ = info.interior_nodes.size();
   this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
-  for ( auto i : info.interior_nodes ) this->node_vec_.push_back( mesh.N(i) );
-  for ( auto i : info.perimeter_nodes ) this->node_vec_.push_back( mesh.N(i) );
+  for ( auto i : info.interior_nodes ) this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
+  for ( auto i : info.perimeter_nodes ) this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
 
   // sorting of the pointers is necessary because the memory addresses of the new pointers will be different than in the last model
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
@@ -253,13 +253,13 @@ template<size_t dim>
 INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
 {
   assert( !this->elmt_vec_.empty() );
-  const typename vector<Element<dim>*>::const_iterator regionElementsEnd( region.ElementsEnd() );
-  const typename vector<InterFace<dim>*>::const_iterator sbElementsEnd( this->ElementsEnd() );
-  for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != sbElementsEnd; ++ifit )
+  const auto regionElementsEnd( region.ElementsEnd() );
+  const auto sbElementsEnd( this->ElementsEnd() );
+  for ( auto ifit( this->ElementsBegin() ); ifit != sbElementsEnd; ++ifit )
     {
       const Element<dim>* const innerParent( (*ifit)->Parent( INSIDE ) );
       const Element<dim>* const outerParent( (*ifit)->Parent( OUTSIDE ) );
-      for ( typename vector<Element<dim>*>::const_iterator eit( region.ElementsBegin() ); eit != regionElementsEnd; ++eit )
+      for ( auto eit( region.ElementsBegin() ); eit != regionElementsEnd; ++eit )
         {
           if ( (*eit) == innerParent ) return INSIDE;
           if ( (*eit) == outerParent ) return OUTSIDE;
@@ -487,8 +487,7 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
   vector<size_t>  fnids;
   size_t          n( 0U );
 
-  for ( typename vector<InterFace<dim>*>::const_iterator
-        it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ )
+  for ( auto it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ )
     for ( size_t i = 0U; i<this->PerimeterFaces( n ); i++ ) {
       (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
       perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
@@ -510,20 +509,23 @@ double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
   double  integrated_area( 0. );
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( dim == 3U ) {
-    for ( typename vector<InterFace<dim>*>::const_iterator
-          it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-      if ( (*it)->FE()->IsSurfaceElement() )
-        integrated_area += (*it)->Area();
-  }
-  else if ( dim == 2U ) {
-    for ( typename vector<InterFace<dim>*>::const_iterator
-          it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-      if ( (*it)->FE()->IsLineElement() )
-        integrated_area += (*it)->Area();
-  }
-  else
-    csmp_error.notice( ERROR, "SplitBoundary<dim>::Area", "not defined in 1D" );
+  if constexpr ( dim == 3U ) {
+      for ( auto it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
+        if ( (*it)->FE()->IsSurfaceElement() )
+          integrated_area += (*it)->Area();
+    }
+  
+  if constexpr ( dim == 2U ) {
+      for ( typename vector<InterFace<dim>*>::const_iterator
+            it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
+        if ( (*it)->FE()->IsLineElement() )
+          integrated_area += (*it)->Area();
+    }
+  
+  if constexpr ( dim == 1U ) {
+       // TODO: should be a static assert
+       csmp_error.notice( ERROR, "SplitBoundary<dim>::Area", "not defined in 1D" );
+    }
 
   return integrated_area;
 }

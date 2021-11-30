@@ -580,8 +580,8 @@ bool  RegionMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 
     const Region<dim>&  rref( mref.Region("Model") );
 
-    typename vector<Element<dim>*>::const_iterator  elementsEnd = rref.ElementsEnd();
-    for ( typename vector<Element<dim>*>::const_iterator eit=rref.ElementsBegin(); eit!=elementsEnd; ++eit )
+    const auto  elementsEnd = rref.ElementsEnd();
+    for ( auto eit=rref.ElementsBegin(); eit!=elementsEnd; ++eit )
         if ( (*eit)->IsVolumeElement() )
           return true;
 

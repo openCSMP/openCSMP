@@ -590,8 +590,8 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
     gref.InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );
    
     // For the interior elements of the region compute relevant variable values
-    const typename vector<Element<dim>*>::iterator it_end(gref.ElementsEnd());
-    for ( typename vector<Element<dim>*>::iterator it=gref.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref.ElementsEnd());
+    for ( auto it=gref.ElementsBegin(); it!=it_end; ++it )
       {
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
@@ -769,8 +769,8 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
     gref.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
  
     // For the interior elements of the region compute relevant variable values
-    const typename vector<Element<dim>*>::iterator it_end(gref.ElementsEnd());
-    for ( typename vector<Element<dim>*>::iterator it=gref.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref.ElementsEnd());
+    for ( auto it=gref.ElementsBegin(); it!=it_end; ++it )
       {
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());

@@ -1930,8 +1930,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   if( key.place == NODE )
   {
       // looping over regions nodes
-      const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
-      for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+      const auto domainNodesEnd( subDomain.NodesEnd() );
+      for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
       {
           // inserting scalar data
           (*it)->Read( key, scalarVariable );
@@ -1954,10 +1954,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
   {
       size_t ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
-           it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
       {
           ips = (*it)->IntegrationPoints();
           for( size_t ip = 0; ip < ips; ++ip )
@@ -1971,10 +1969,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
   {
       size_t sectors,ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
-           it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
       {
           sectors = (*it)->Sectors();
           for( size_t sid = 0; sid < sectors; ++sid )
@@ -1992,10 +1988,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
   {
       size_t facets,ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
-           it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
       {
           facets = (*it)->Facets();
           for( size_t fid = 0; fid < facets; ++fid )
@@ -2046,8 +2040,8 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   if( key.place == NODE )
   {
       // looping over regions nodes
-      const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
-      for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+      const auto domainNodesEnd( subDomain.NodesEnd() );
+      for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
       {
         // acquiring std::vector data
         (*it)->Read( key, vectorVariable );
@@ -2070,9 +2064,8 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
   {
       size_t ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin();
            it != domainElementsEnd; ++it )
       {
           ips = (*it)->IntegrationPoints();
@@ -2087,9 +2080,8 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
   {
       size_t sectors,ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin();
            it != domainElementsEnd; ++it )
       {
           sectors = (*it)->Sectors();
@@ -2108,9 +2100,8 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
   {
       size_t facets,ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin();
            it != domainElementsEnd; ++it )
       {
           facets = (*it)->Facets();
@@ -2165,8 +2156,8 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   if( key.place == NODE )
   {
       // looping over regions nodes
-      const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
-      for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+      const auto domainNodesEnd( subDomain.NodesEnd() );
+      for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
       {
         // acquiring vector data
         (*it)->Read( key, tensorVariable );
@@ -2189,9 +2180,8 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
   {
       size_t ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin();
            it != domainElementsEnd; ++it )
       {
           ips = (*it)->IntegrationPoints();
@@ -2206,9 +2196,8 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
   {
       size_t sectors,ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin();
            it != domainElementsEnd; ++it )
       {
           sectors = (*it)->Sectors();
@@ -2227,9 +2216,8 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
   {
       size_t facets,ips;
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-           it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin();
            it != domainElementsEnd; ++it )
       {
           facets = (*it)->Facets();
@@ -2296,8 +2284,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       if( key.place == NODE )
       {
           // looping over regions nodes
-          const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
-          for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+          const auto domainNodesEnd( subDomain.NodesEnd() );
+          for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
           {
               // inserting scalar array data
               (*it)->Read( key, arrayVariable );
@@ -2320,9 +2308,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
       {
           size_t ips;
-          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-               it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.ElementsEnd() );
+          for( auto it = subDomain.ElementsBegin();
                it != domainElementsEnd; ++it )
           {
               ips = (*it)->IntegrationPoints();
@@ -2337,9 +2324,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
       {
           size_t sectors,ips;
-          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-               it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.ElementsEnd() );
+          for( auto it = subDomain.ElementsBegin();
                it != domainElementsEnd; ++it )
           {
               sectors = (*it)->Sectors();
@@ -2358,9 +2344,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
       {
           size_t facets,ips;
-          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-               it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.ElementsEnd() );
+          for( auto it = subDomain.ElementsBegin();
                it != domainElementsEnd; ++it )
           {
               facets = (*it)->Facets();
@@ -2427,8 +2412,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       if( key.place == NODE )
       {
           // looping over regions nodes
-          const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
-          for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+          const auto domainNodesEnd( subDomain.NodesEnd() );
+          for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
           {
             // inserting scalar flagged array data
             (*it)->Read( key, flaggedArrayVariable );
@@ -2451,9 +2436,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
       {
           size_t ips;
-          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-               it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.ElementsEnd() );
+          for( auto it = subDomain.ElementsBegin();
                it != domainElementsEnd; ++it )
           {
               ips = (*it)->IntegrationPoints();
@@ -2468,9 +2452,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
       {
           size_t sectors,ips;
-          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-               it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.ElementsEnd() );
+          for( auto it = subDomain.ElementsBegin();
                it != domainElementsEnd; ++it )
           {
               sectors = (*it)->Sectors();
@@ -2489,9 +2472,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
       {
           size_t facets,ips;
-          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-               it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.ElementsEnd() );
+          for( auto it = subDomain.ElementsBegin();
                it != domainElementsEnd; ++it )
           {
               facets = (*it)->Facets();
@@ -2546,13 +2528,13 @@ void VTU_Interface<dim>::WriteElementDataArrayScalar( const Index& key, XML_Docu
   ScalarVariable scalarVariable;
   bool newLine( false );
   // looping over domains elements
-  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
-  {
-    // inserting scalar data
-    (*it)->Read( key, scalarVariable );
-    WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
-  }
+  const auto domainElementsEnd( subDomain.ElementsEnd() );
+  for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+    {
+      // inserting scalar data
+      (*it)->Read( key, scalarVariable );
+      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+    }
   if( !newLine )
     vtu.LineBreak();
   vtu.CloseNode( "DataArray" );
@@ -2585,13 +2567,13 @@ void VTU_Interface<dim>::WriteElementDataArrayVector( const Index& key, XML_Docu
   bool newLine( false );
   VectorVariable<dim> vectorVariable;
   // looping over regions elements
-  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
-  {
-    // acquiring vector data
-    (*it)->Read( key, vectorVariable );
-    WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
-  }
+  const auto domainElementsEnd( subDomain.ElementsEnd() );
+  for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+    {
+      // acquiring vector data
+      (*it)->Read( key, vectorVariable );
+      WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+    }
   if( !newLine )
     vtu.LineBreak();
   vtu.CloseNode( "DataArray" );
@@ -2628,13 +2610,13 @@ void VTU_Interface<dim>::WriteElementDataArrayTensor( const Index& key, XML_Docu
   bool newLine( false );
   TensorVariable<dim> tensorVariable;
   // looping over regions nodes
-  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
-  {
-    // acquiring vector data
-    (*it)->Read( key, tensorVariable );
-    WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
-  }
+  const auto domainElementsEnd( subDomain.ElementsEnd() );
+  for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+    {
+      // acquiring vector data
+      (*it)->Read( key, tensorVariable );
+      WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+    }
   if( !newLine )
     vtu.LineBreak();
   vtu.CloseNode( "DataArray" );
@@ -2682,13 +2664,13 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarArray( const Index& key, XML
       vtu.BringToLevel();
       bool newLine( false );
       // looping over domains elements
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
-      {
-          // inserting scalar array data
-          (*it)->Read( key, arrayVariable );
-          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
-      }
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+        {
+            // inserting scalar array data
+            (*it)->Read( key, arrayVariable );
+            WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+        }
       if( !newLine )
           vtu.LineBreak();
       vtu.CloseNode( "DataArray" );
@@ -2736,8 +2718,8 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarFlaggedArray( const Index& k
       vtu.BringToLevel();
       bool newLine( false );
       // looping over domains elements
-      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
-      for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.ElementsEnd() );
+      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
       {
         // inserting scalar flagged array data
         (*it)->Read( key, flaggedArrayVariable );
@@ -2909,9 +2891,8 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   bool newLine( false );
   connectivityFile.BringToLevel();
   // looping over all the region's nodes
-  const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainVerticesEnd( subDomain.NodesEnd() );
-  for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator
-       it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
+  const auto domainVerticesEnd( subDomain.NodesEnd() );
+  for( auto it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
   {
     // writing x,y and z coordinates(tab seperated)
     stringNumber = number_to_string( (*it)->x() );
@@ -2953,9 +2934,8 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   std::vector<long> vtkNodeNumbering;
   // looping region's elements
   const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
-  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
-  for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-       it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+  const auto domainSimplicesEnd( subDomain.ElementsEnd() );
+  for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
   {
     // storing elements VTK type
     elementTypeVTK = ElementType( *it );
@@ -3045,8 +3025,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   connectivityFile.BringToLevel();
   // looping region's elements
   size_t offset( 0 ); entriesOfLine = 2;
-  for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-       it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine )
+  for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine )
   {
     // imcrementing offset by node count and writing to data
     offset += (*it)->Nodes();
@@ -3076,7 +3055,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   connectivityFile.BringToLevel();
   // looping region's elements
   entriesOfLine = 2; size_t elementCount( 0 );
-  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine, ++elementCount )
+  for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine, ++elementCount )
   {
     // imcrementing offset by node count and writing to data
     stringNumber = number_to_string( elementTypesVTK[elementCount] );
@@ -3120,6 +3099,9 @@ template void VTU_Interface<2U>::EstablishConnectivityFile(XML_Document&,const M
 template void VTU_Interface<3U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
 
 
+
+
+
 /// establishes the connectivity file for given region using a finite element barycenter point cloud
 template<size_t dim>
 template<template <size_t> class SIMPLEX>
@@ -3151,9 +3133,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
   bool newLine( false );
   connectivityFile.BringToLevel();
   // looping over all the region's nodes
-  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimpicesEnd( subDomain.ElementsEnd() );
-  for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-       it = subDomain.ElementsBegin(); it != domainSimpicesEnd; ++it, ++entriesOfLine )
+  const auto domainSimpicesEnd( subDomain.ElementsEnd() );
+  for( auto it = subDomain.ElementsBegin(); it != domainSimpicesEnd; ++it, ++entriesOfLine )
     {
     // writing x,y and z coordinates(tab seperated)
     stringNumber = number_to_string( (*it)->BaryCenter()[0] );
@@ -3250,6 +3231,8 @@ template void VTU_Interface<2U>::EstablishConnectivityFileBCPC(XML_Document&,con
 template void VTU_Interface<3U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
 
 
+
+
 /// establishes the connectivity file for given region using a region barycenter point cloud
 template<size_t dim>
 template<template <size_t> class SIMPLEX>
@@ -3287,9 +3270,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
     double dist_bc;
     subDomain.MinMaxCoordinates(pt_min,pt_max);
     // looping over all the region's nodes
-    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-       it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( auto it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
     {
         pbc = (*it)->BaryCenter();
         dist_to_min = pbc - pt_min;
@@ -3410,9 +3392,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
     size_t ip,ips;
     Point<dim> pt;
     // looping over all element integration points
-    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-         it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( auto it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
     {
         ips = (*it)->FE()->IntegrationPoints();
         for( ip = 0; ip < ips; ++ip, ++entriesOfLine )
@@ -3547,9 +3528,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
     size_t sid, sectors;
     Point<dim> pt;
     // looping over all the region's nodes
-    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-         it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
     {
         sectors = (*it)->Sectors();
         for( sid = 0; sid < sectors; ++sid )
@@ -3690,9 +3670,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
     size_t fid, facets;
     Point<dim> pt;
     // looping over all the region's nodes
-    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
-         it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
     {
         facets = (*it)->Facets();
         for( fid = 0; fid < facets; ++fid )
@@ -3802,7 +3781,7 @@ template void VTU_Interface<3U>::EstablishConnectivityFileFVFIP(XML_Document&,co
 /// converts csmp to vtk node numbering
 template<size_t dim>
 template<template <size_t> class SIMPLEX>
-void VTU_Interface<dim>::QuadraticHexahedronConnectivity( SIMPLEX<dim>* element, std::vector<long>& data ) const
+void VTU_Interface<dim>::QuadraticHexahedronConnectivity( const SIMPLEX<dim>* const element, std::vector<long>& data ) const
 {
   // first 12 nodes are the same
   for( size_t i = 0; i < 12; ++i )
@@ -3818,22 +3797,22 @@ void VTU_Interface<dim>::QuadraticHexahedronConnectivity( SIMPLEX<dim>* element,
   data.push_back( element->N( static_cast<size_t>(15) )->Idx() );
 }
 
-template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(Element<1U>*,std::vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(Element<2U>*,std::vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(Element<3U>*,std::vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const Element<1U>* const,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const Element<2U>* const,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const Element<3U>* const,std::vector<long>&) const;
 
-template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(Face<1U>*,std::vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(Face<2U>*,std::vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(Face<3U>*,std::vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const Face<1U>* const,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const Face<2U>* const,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const Face<3U>* const,std::vector<long>&) const;
 
-template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(InterFace<1U>*,std::vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(InterFace<2U>*,std::vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(InterFace<3U>*,std::vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const InterFace<1U>* const,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const InterFace<2U>* const,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const InterFace<3U>* const,std::vector<long>&) const;
 
 /// converts csmp to vtk node numbering
 template<size_t dim>
 template<template <size_t> class SIMPLEX>
-void VTU_Interface<dim>::QuadraticWedgeConnectivity( SIMPLEX<dim>* element, std::vector<long>& data ) const
+void VTU_Interface<dim>::QuadraticWedgeConnectivity( const SIMPLEX<dim>* const element, std::vector<long>& data ) const
 {
   // first 8 nodes are the same
   for( size_t i = 0; i < 9; ++i )
@@ -3847,23 +3826,23 @@ void VTU_Interface<dim>::QuadraticWedgeConnectivity( SIMPLEX<dim>* element, std:
   data.push_back( element->N( static_cast<size_t>(11) )->Idx() );
 }
 
-template void VTU_Interface<1U>::QuadraticWedgeConnectivity(Element<1U>*,std::vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticWedgeConnectivity(Element<2U>*,std::vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticWedgeConnectivity(Element<3U>*,std::vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const Element<1U>* const,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const Element<2U>* const,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const Element<3U>* const,std::vector<long>&) const;
 
-template void VTU_Interface<1U>::QuadraticWedgeConnectivity(Face<1U>*,std::vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticWedgeConnectivity(Face<2U>*,std::vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticWedgeConnectivity(Face<3U>*,std::vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const Face<1U>* const,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const Face<2U>* const,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const Face<3U>* const,std::vector<long>&) const;
 
-template void VTU_Interface<1U>::QuadraticWedgeConnectivity(InterFace<1U>*,std::vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticWedgeConnectivity(InterFace<2U>*,std::vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticWedgeConnectivity(InterFace<3U>*,std::vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const InterFace<1U>* const,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const InterFace<2U>* const,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const InterFace<3U>* const,std::vector<long>&) const;
 
 
 /// finds the corresponding VTK Element type for given csmp::Element
 template<size_t dim>
 template<template <size_t> class SIMPLEX>
-VTK_TYPE VTU_Interface<dim>::ElementType( SIMPLEX<dim>* elmt ) const
+VTK_TYPE VTU_Interface<dim>::ElementType( const SIMPLEX<dim>* const elmt ) const
 {
   CSMP_FEM_TYPE csmpType( elmt->FE_Type() );
 
@@ -3921,17 +3900,17 @@ VTK_TYPE VTU_Interface<dim>::ElementType( SIMPLEX<dim>* elmt ) const
   }
 }
 
-template VTK_TYPE VTU_Interface<1U>::ElementType(Element<1U>*) const;
-template VTK_TYPE VTU_Interface<2U>::ElementType(Element<2U>*) const;
-template VTK_TYPE VTU_Interface<3U>::ElementType(Element<3U>*) const;
+template VTK_TYPE VTU_Interface<1U>::ElementType(const Element<1U>* const) const;
+template VTK_TYPE VTU_Interface<2U>::ElementType(const Element<2U>* const) const;
+template VTK_TYPE VTU_Interface<3U>::ElementType(const Element<3U>* const) const;
 
-template VTK_TYPE VTU_Interface<1U>::ElementType(Face<1U>*) const;
-template VTK_TYPE VTU_Interface<2U>::ElementType(Face<2U>*) const;
-template VTK_TYPE VTU_Interface<3U>::ElementType(Face<3U>*) const;
+template VTK_TYPE VTU_Interface<1U>::ElementType(const Face<1U>* const) const;
+template VTK_TYPE VTU_Interface<2U>::ElementType(const Face<2U>* const) const;
+template VTK_TYPE VTU_Interface<3U>::ElementType(const Face<3U>* const) const;
 
-template VTK_TYPE VTU_Interface<1U>::ElementType(InterFace<1U>*) const;
-template VTK_TYPE VTU_Interface<2U>::ElementType(InterFace<2U>*) const;
-template VTK_TYPE VTU_Interface<3U>::ElementType(InterFace<3U>*) const;
+template VTK_TYPE VTU_Interface<1U>::ElementType(const InterFace<1U>* const) const;
+template VTK_TYPE VTU_Interface<2U>::ElementType(const InterFace<2U>* const) const;
+template VTK_TYPE VTU_Interface<3U>::ElementType(const InterFace<3U>* const) const;
 
 // domain name
 template<size_t dim>

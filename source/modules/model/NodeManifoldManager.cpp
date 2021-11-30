@@ -11,26 +11,28 @@ namespace csmp {
 /**
     Preferred constructor of  node manifolds, including the case where these are read back from a CSMP native binary fileset
     
+    @attention do not use this constructor after nodes were deleted from the MeshManager.
+    
     @todo make sure that the map:key nodes are ideed contained in the manifolds.
 */
 template<size_t dim>
 NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indices,
-                                               deque<Node<dim>*>& nptrs )
+                                               plf::colony<Node<dim>>& mesh_nodes )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( indices.empty() ) {
         csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
-                          "no manifold information contained in vertexManifoldIndicxes map; no manifolds were constructed" );
+                          "no manifold information contained in vertexManifoldIndices map; no manifolds were constructed" );
         return;
       }
-    if ( nptrs.empty() ) {
+    if ( mesh_nodes.empty() ) {
         csmp_error.notice( ERROR, "NodeManifoldManager::constructor:",
                           "no nodes available to create manifolds from" );
         return;
       }
     // checking that the deque does indeed have ther required node entries
-    if ( indices.size() > nptrs.size() )
+    if ( indices.size() > mesh_nodes.size() )
       csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
                         "it appears that more manifold indices are supplied than nodes" );
 
@@ -56,12 +58,14 @@ for ( auto nit : indices ) {
         nodes.reserve( n_nodes );
         iface_sides.reserve( n_nodes );
         for ( auto mf_nodes : nit.second ) {
-             nodes.push_back( nptrs[mf_nodes.first] );
+             nodes.push_back( &(*next(mesh_nodes.begin(),mf_nodes.first)) );
+             assert( nodes.back()->Idx() == mf_nodes.first );
              iface_sides.push_back( static_cast<INTERFACE_SIDE>(mf_nodes.second) );
           }
         // geometric qualifier is determined through a consistency check once the manifold is in place
-        node_manifolds_.push_back( new NodeManifold<dim>( nodes, iface_sides, ManifoldType::INTERFACE ) );
-        node_manifolds_.back()->GeometricClassifier( consistencyCheck( node_manifolds_.back() ) );
+        typename plf::colony<NodeManifold<dim>>::iterator mit =
+          node_manifolds_.emplace( NodeManifold<dim>( nodes, iface_sides, ManifoldType::INTERFACE ) );
+        (*mit).GeometricClassifier( consistencyCheck( (*mit) ) );
         // cleaning up (note that clear keeps the allocated memory!)
         nodes.clear();
         iface_sides.clear();
@@ -81,11 +85,6 @@ for ( auto nit : indices ) {
 template<size_t dim>
 NodeManifoldManager<dim>::~NodeManifoldManager<dim>()
  {
-    // detaching the nodes from the manifolds
-    for ( auto& nit : node_manifolds_ ) {
-         delete nit;
-         nit = nullptr;
-      }
  }
 
 template<size_t dim>
@@ -124,9 +123,10 @@ NodeManifold<dim>* const NodeManifoldManager<dim>::NewManifold( Node<dim>* const
                                                                 Node<dim>* const outside,
                                                                 ManifoldType geom )
  {
-    node_manifolds_.push_back( new NodeManifold<dim>( vector<Node<dim>*>({inside,outside}),
-                                                      vector<INTERFACE_SIDE>({INSIDE,OUTSIDE}), geom ) );
-    return node_manifolds_.back();
+    typename plf::colony<NodeManifold<dim>>::iterator nit =
+      node_manifolds_.emplace( NodeManifold<dim>( vector<Node<dim>*>({inside,outside}),
+                                                  vector<INTERFACE_SIDE>({INSIDE,OUTSIDE}), geom ) );
+    return &(*nit);
  }
 
 
@@ -139,7 +139,7 @@ template<size_t dim>
 void NodeManifoldManager<dim>::SortManifoldsByVariableValue( std::string var_name, const csmp::Index& var_index )
  {
     for ( auto& nmf : node_manifolds_ ) {
-         nmf->SortByVariableValue( var_index );
+         nmf.SortByVariableValue( var_index );
       }
     current_sort_variable_ = var_name;
    
@@ -181,7 +181,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeMani
        
      NodeManifold<dim> merged_manifold( nodes, sides, ManifoldType::INTERFACE );
      // making sure it is appropriately classified in terms of the manifold geometry
-     ManifoldType mtype = consistencyCheck( &merged_manifold );
+     ManifoldType mtype = consistencyCheck( merged_manifold );
      merged_manifold.GeometricClassifier( mtype );
      
      // 3. replacing the first manifold with the new one
@@ -198,18 +198,9 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeMani
 
 
 template<size_t dim>
-bool NodeManifoldManager<dim>::Delete( NodeManifold<dim>* md )
+void NodeManifoldManager<dim>::Delete( NodeManifold<dim>* const md )
 {
-    sort( node_manifolds_.begin(), node_manifolds_.end() );
-    if ( find(node_manifolds_.begin(), node_manifolds_.end(), md) != node_manifolds_.end() ) {
-          remove(node_manifolds_.begin(),node_manifolds_.end(),md);
-          return true;
-      } else {
-          ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-          csmp_error.notice( INFO, "NodeManifoldManager<dim>::Delete:",
-                                   "NodeManifold does not exist. Nothing was done.");
-      }
-    return false;
+   node_manifolds_.erase( node_manifolds_.get_iterator(md) );
 }
 
 
@@ -221,19 +212,14 @@ template<size_t dim>
 size_t NodeManifoldManager<dim>::DeleteSingleNodeManifolds()
   {
      size_t n_single_node_manifolds(0U);
-     for ( auto& nit : node_manifolds_ )
-       if ( nit->Branches() < 2 ) {
+     for ( auto nit=node_manifolds_.begin(); nit!=node_manifolds_.end(); ++nit )
+       if ( (*nit).Branches() < 2 ) {
             // disconnecting the remaining node
-            nit->Remove( nit->N(0) );
+            (*nit).Remove( (*nit).N(0) );
             // deleting the manifold
-            delete nit;
-            nit = nullptr;
+            nit = node_manifolds_.erase( nit );
             n_single_node_manifolds++;
          }
-     
-      // compacting the manifold container
-      sort( node_manifolds_.begin(), node_manifolds_.end() );
-      node_manifolds_.erase( unique(node_manifolds_.begin(), node_manifolds_.end()), node_manifolds_.end() );
      
       return n_single_node_manifolds;
   }
@@ -297,7 +283,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         vector<int8_t>  topo_classifiers;
         topo_classifiers.reserve( records );
         for ( auto& nmf : node_manifolds_ )
-          topo_classifiers.push_back( static_cast<int8_t>(nmf->GeometricClassifier()) );
+          topo_classifiers.push_back( static_cast<int8_t>(nmf.GeometricClassifier()) );
         binaryFileWrite( fp, topo_classifiers );
       }
 
@@ -307,8 +293,8 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         vector<int8_t>  nodes_per_manifold;
         nodes_per_manifold.reserve( records );
         for ( auto& nmf : node_manifolds_ ) {
-             nodes_per_manifold.push_back( static_cast<int8_t>(nmf->Branches()) );
-             n_manifold_node_entries += nmf->Branches();
+             nodes_per_manifold.push_back( static_cast<int8_t>(nmf.Branches()) );
+             n_manifold_node_entries += nmf.Branches();
           }
         binaryFileWrite( fp, nodes_per_manifold );
       }
@@ -322,10 +308,10 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         // sorted nodes
         vector<size_t>  manifold_node_list;
         manifold_node_list.reserve( n_manifold_node_entries );
-        for ( auto& nmf : node_manifolds_ ) {
-             const size_t entries(nmf->Branches());
+        for ( auto nmf : node_manifolds_ ) {
+             const size_t entries(nmf.Branches());
              for ( size_t i=0U; i<entries; ++i )
-               manifold_node_list.push_back( nmf->N(i)->Idx() );
+               manifold_node_list.push_back( nmf.N(i)->Idx() );
           }
         binaryFileWrite( fp, manifold_node_list );
       }
@@ -334,9 +320,9 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         vector<int8_t>  manifold_node_topo_list;
         manifold_node_topo_list.reserve( n_manifold_node_entries );
         for ( auto& nmf : node_manifolds_ ) {
-             const size_t entries(nmf->Branches());
+             const size_t entries(nmf.Branches());
              for ( size_t i=0U; i<entries; ++i )
-               manifold_node_topo_list.push_back( nmf->InterFaceSide(i) );
+               manifold_node_topo_list.push_back( nmf.InterFaceSide(i) );
           }
         binaryFileWrite( fp, manifold_node_topo_list );
       }
@@ -352,7 +338,8 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
 /** Reads manifolds from binary file, using indices to create pointer connections
  */
 template<size_t dim>
-string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( std::deque<Node<dim>*>& mesh_nodes, const char* file_name )
+string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<dim>>& mesh_nodes,
+                                                               const char* file_name )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -419,14 +406,14 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( std::deque<Node<d
          sides.reserve( n_branches );
          for ( size_t j=0U; j<n_branches; ++j ) {
               assert( nodes_of_manifolds[counter] < mesh_nodes.size() );
-              nodes.push_back( mesh_nodes[ nodes_of_manifolds[counter] ] );
+              nodes.push_back( &(*next(mesh_nodes.begin(),nodes_of_manifolds[counter])) );
               assert( topo_of_nodes[counter] <= OUTSIDE );
               sides.push_back( static_cast<INTERFACE_SIDE>(topo_of_nodes[counter]) );
               counter++;
            }
          assert( manifold_topology[i] < static_cast<int8_t>(ManifoldType::NOT_CLASSIFIED) );
          const ManifoldType topology = static_cast<ManifoldType>(manifold_topology[i]) ;
-         node_manifolds_.push_back( new NodeManifold<dim>( nodes, sides, topology ) );
+         node_manifolds_.emplace( NodeManifold<dim>( nodes, sides, topology ) );
       }
     
     return current_sort_variable_;
@@ -441,7 +428,7 @@ void NodeManifoldManager<dim>::Out() const
     else {
          cout <<"\n\nNodeManifoldManager<"<< dim <<">::Out: "<< node_manifolds_.size() <<" manifolds in store.\n";
          for ( const auto& nit : node_manifolds_ ) {
-              nit->Out();
+              nit.Out();
            }
       }
  } // end Out

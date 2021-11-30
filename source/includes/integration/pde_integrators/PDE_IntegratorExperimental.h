@@ -386,7 +386,7 @@ class PDE_IntegratorExperimental {
     virtual void  Solve();
 
     /// allows to apply pde operators to post-process the newly computed solution
-    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  PostProcess( COMPUTATION_DOMAIN<dim>& );
 
     /// transfers the results stored in solution vector onto the nodes of the computational domain; uses node numbering
     virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );

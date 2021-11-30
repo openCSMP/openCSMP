@@ -103,7 +103,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void Assign( size_t nbor, InterFace<dim>* const );
     
     /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
-    void Unassign( const InterFace<dim>* ); 
+    void Unassign( const InterFace<dim>* const );
   
     /// connect interface to a lower dimensional element that shall act as intervening element in triple-layer boundary representations
     void Assign( Element<dim>* const intervening_elmt );

@@ -264,8 +264,7 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
 
   // loop over all finite elements and identify elements that lie at the same model boundary of interest (here LEFT)
   const Region<2U>&   mref = mdl.Region("Model");
-  vector<Element<2U>* >::const_iterator eit;
-  for ( eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
+  for ( auto eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
       if ( isLEFT( atBoundary(*eit) ) ) {
           j = 0;
           // first loop to calculate length of the FE edge that lies at the boundary
@@ -322,9 +321,8 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
                 vy_key(mdl.Database().StorageKey("nodal velocity y")),
                 v_key (mdl.Database().StorageKey("nodal velocity"));
 
-    const Region<2U>& mref = mdl.Region("Model");
-    vector<Node<2U>* >::const_iterator nit;
-    for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    Region<2U>& mref = mdl.Region("Model");
+    for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
       {
         v(0) = (*nit)->Read( vx_key );
         v(1) = (*nit)->Read( vy_key );
@@ -336,17 +334,14 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   /// scale the size of the CSMP model (NB divides by the provided factor!)
   void Tutorial4_Example::scaleRegion( Model<2U>& mdl, double scale_factor )
   {
-    double       x_, y_;
-    const double factor(scale_factor);
+    Region<2U>&  mref = mdl.Region("Model");
 
-    static const Region<2U>& mref = mdl.Region("Model");
-    vector<Node<2U>* >::const_iterator nit;
-    for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
       {
-        x_ = (*nit)->x();
-        (*nit)->x(x_/factor);
-        y_ = (*nit)->y();
-        (*nit)->y(y_/factor);
+        double x = (*nit)->x();
+        (*nit)->x( x / scale_factor);
+        double y = (*nit)->y();
+        (*nit)->y( y / scale_factor);
       }
   }
   

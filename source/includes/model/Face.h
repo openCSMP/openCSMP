@@ -115,7 +115,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     void Assign( size_t node, Node<dim>* const );
     
     /// disconnecting the Node without deleting it; its pointer is set to nullptr
-    void Unassign( csmp::Node<dim>* const );
+    void Unassign( const csmp::Node<dim>* const );
 
     /// assign higher-dimensional neighbor elements to either side of face (outside is optional); needs nodes to be assigned first
     void Assign( Element<dim>* const innerElement, Element<dim>* const outerElement );
@@ -123,8 +123,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// tell face about its face neighbors
     void Assign( size_t nbor, Face<dim>* const );
       
-    /// unassign its face neighbors
-	  bool Unassign( Face<dim>* );
+    /// sets the pointer to given neighbor face to zero
+	  bool Unassign( const Face<dim>* const );
 
     /// @attention because of the pointers, this assignment makes sense only in the rarest cases
     Face& operator=( const Face<dim>& );

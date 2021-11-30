@@ -16,7 +16,6 @@ namespace csmp {
   void variablePlacementSet( set<PLACEMENT>& plSet )
   {
     plSet.insert(NODE);
-    plSet.insert(SPLIT_NODE);
     plSet.insert(FACE);
     plSet.insert(FACE_INTEGRATION_POINT);
     plSet.insert(FACE_SECTOR_INTEGRATION_POINT);
@@ -221,8 +220,6 @@ PLACEMENT  parsePlacement( const char* placement )
     if ( splace == "FACE"                                   )   return FACE;
     if ( splace == "INTER_FACE"                             )   return INTER_FACE;
     if ( splace == "INTERFACE"                              )   return INTER_FACE;
-    if ( splace == "SPLIT_NODE"                             )   return SPLIT_NODE;
-    if ( splace == "SPLITNODE"                              )   return SPLIT_NODE;
     if ( splace == "ELEMENT"                                )   return ELEMENT;
     if ( splace == "REGION"                                 )   return REGION;
     if ( splace == "BOUNDARY"                               )   return BOUNDARY;
@@ -261,7 +258,6 @@ PLACEMENT  parsePlacement( const char* placement )
     if ( splace == "inter_face_facet_integration_point"     )   return INTER_FACE_FACET_INTEGRATION_POINT;
     if ( splace == "face"                                   )   return FACE;
     if ( splace == "interface"                              )   return INTER_FACE;
-    if ( splace == "splitnode"                              )   return SPLIT_NODE;
     if ( splace == "inter face"                             )   return INTER_FACE;
     if ( splace == "inter_face"                             )   return INTER_FACE;
     if ( splace == "iface"                                  )   return INTER_FACE;
@@ -285,7 +281,6 @@ PLACEMENT  parsePlacement( const char* placement )
     if ( splace == "InterFaceSectorIntegrationPoint"        )   return INTER_FACE_SECTOR_INTEGRATION_POINT;
     if ( splace == "Face"                                   )   return FACE;
     if ( splace == "InterFace"                              )   return INTER_FACE;
-    if ( splace == "SplitNode"                              )   return SPLIT_NODE;
     if ( splace == "Element"                                )   return ELEMENT;
     if ( splace == "Region"                                 )   return REGION;
     if ( splace == "Boundary"                               )   return BOUNDARY;
@@ -311,7 +306,6 @@ std::string  parsePlacement( PLACEMENT splace )
     if ( splace == INTER_FACE_SECTOR_INTEGRATION_POINT) return string("INTER_FACE_SECTOR_INTEGRATION_POINT");
     if ( splace == FACE                               ) return string("FACE");
     if ( splace == INTER_FACE                         ) return string("INTER_FACE");
-    if ( splace == SPLIT_NODE                         ) return string("SPLIT_NODE");
     if ( splace == ELEMENT                            ) return string("ELEMENT");
     if ( splace == REGION                             ) return string("REGION");
     if ( splace == BOUNDARY                           ) return string("BOUNDARY");
@@ -365,7 +359,6 @@ PLACEMENT intToPLACEMENT( int i )
     if ( i == 15 )  return INTER_FACE_INTEGRATION_POINT;
     if ( i == 16 )  return INTER_FACE_SECTOR_INTEGRATION_POINT;
     if ( i == 17 )  return INTER_FACE_FACET_INTEGRATION_POINT;
-    if ( i == 18 )  return SPLIT_NODE;
 
     cout <<"\nintToPlacement(int): unable to parse integer: "<< i << endl;
     return MODEL;

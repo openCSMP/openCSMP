@@ -334,8 +334,7 @@ void SKUA_Interface::VariableToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( vector<Element<3U>*>::const_iterator
-               it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
            {
               ofs << (*rt) <<"\t";
               Point<3U> xyz((*it)->BaryCenter());
@@ -416,8 +415,7 @@ void SKUA_Interface::VariablesToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( vector<Element<3U>*>::const_iterator
-               it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
            {
               ofs << (*rt) <<"\t";
               Point<3U> xyz((*it)->BaryCenter());
@@ -481,8 +479,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( vector<Element<3U>*>::const_iterator
-               it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
            {
               // each array variable entry is output as a singe line 
               assert( (*it)->FE()->IsSurfaceElement() );
@@ -669,7 +666,7 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   if ( model.IsUnique(target_region) ) {
        // finding the target elements
        vector<Element<3U>*> elmt_ptrs;
-       model.Mesh().template Delete<Element>( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       model.Mesh().Delete( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
        return;
     }
 

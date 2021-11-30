@@ -4,6 +4,7 @@
 #include "STL_utilities.h"
 #include "Pillar.h"
 #include "CellGenerator.h"
+#include "Box.h"
 
 #include "ErrorHandler.h"
 #include "EclipseInterface.h"

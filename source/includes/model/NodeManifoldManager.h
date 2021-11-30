@@ -2,6 +2,7 @@
 #define CSMP_NODE_MANIFOLD_MANAGER_H
 
 #include "NodeManifold.h"
+#include "plf_colony.h"
 
 namespace csmp {
 
@@ -22,7 +23,7 @@ class NodeManifoldManager {
     
     /// Re-constructor when node manifolds are read back from a CSMP native binary fileset
     NodeManifoldManager( const vertexManifoldIndices&,
-                         std::deque<Node<dim>*>& node_pointer_storage );
+                         plf::colony<Node<dim>>& node_pointer_storage );
 
     NodeManifoldManager()                                        = default;
     NodeManifoldManager( const NodeManifoldManager& )            = delete;
@@ -32,8 +33,8 @@ class NodeManifoldManager {
     ~NodeManifoldManager();
     
     /// for sorting the manifolds by their pointers
-    typedef typename std::deque< NodeManifold<dim>* >::iterator manifoldIterator;
-    typedef typename std::deque< NodeManifold<dim>* >::const_iterator manifoldConstIterator;
+    typedef typename plf::colony< NodeManifold<dim>>::iterator manifoldIterator;
+    typedef typename plf::colony< NodeManifold<dim>>::const_iterator manifoldConstIterator;
 
     manifoldIterator       ManifoldsBegin();
     manifoldIterator       ManifoldsEnd();
@@ -54,7 +55,7 @@ class NodeManifoldManager {
     bool MergeManifolds( NodeManifold<dim>*, NodeManifold<dim>* );
 
     /// deletes = erases manifold from storage container, reordering / compacting as necessary
-    bool   Delete( NodeManifold<dim>* );
+    void   Delete( NodeManifold<dim>* const );
     
     /// scans for manifolds with a single Node only and deletes them
     size_t DeleteSingleNodeManifolds();
@@ -67,11 +68,11 @@ class NodeManifoldManager {
                                       const char* node_sorting_variable ) const;
 
     /// Reads manifolds from binary file, using indices to create pointer connections; the name of the sorting variable for the manifolds is returned
-    std::string InputNodeManifoldsFromBinary( std::deque<Node<dim>*>& nodes, const char* file_name );
+    std::string InputNodeManifoldsFromBinary( plf::colony<Node<dim>>& nodes, const char* file_name );
     
   protected:
-     std::deque< NodeManifold<dim>* >  node_manifolds_;                 ///<  sorted deque of pointers to manifolds created with new and delete
-     std::string                       current_sort_variable_ = "none"; ///< TODO: update the sort order if some modifications are made
+     plf::colony< NodeManifold<dim>>  node_manifolds_;                 ///<  sorted deque of pointers to manifolds created with new and delete
+     std::string                      current_sort_variable_ = "none"; ///< TODO: update the sort order if some modifications are made
 }; 
 
 } // csmp

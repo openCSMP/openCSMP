@@ -755,7 +755,7 @@ namespace csmp {
 	  first vector entry MTRL[0].
 	  */
 	template<size_t dim>
-	void MathOperatorLHS<dim>::GetOperands(Element<dim>& e_ref)
+	void MathOperatorLHS<dim>::GetOperands( const Element<dim>& e_ref )
 	{
 		// if operand property is an element property
 		if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
@@ -835,7 +835,7 @@ namespace csmp {
 	} // end GetOperands(Element)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::GetOperands(Face<dim>&  e_ref)
+	void MathOperatorLHS<dim>::GetOperands( const Face<dim>&  e_ref )
 	{
 		// if operand property is an element property
 		if (MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == BOUNDARY)
@@ -915,7 +915,7 @@ namespace csmp {
 	} // end GetOperands(Face)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::GetOperands(InterFace<dim>& f)
+	void MathOperatorLHS<dim>::GetOperands( const InterFace<dim>& f)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::GetOperands: ";
 		std::cerr << " Overload to get LHS operands from interface: " << f.Idx() << std::endl;
@@ -949,7 +949,7 @@ namespace csmp {
 	} // end WriteOperands(InterFace)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::ComputeContribution(Element<dim>& e)
+	void MathOperatorLHS<dim>::ComputeContribution( const Element<dim>& e)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
 		std::cerr << " Overload to calculate LHS contribution from Element: " << e.Idx() << std::endl;
@@ -957,7 +957,7 @@ namespace csmp {
 	}// end ComputeContribution(Element)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::ComputeContribution(Face<dim>& f)
+	void MathOperatorLHS<dim>::ComputeContribution( const Face<dim>& f)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
 		std::cerr << " Overload to calculate LHS constribution from face: " << f.Idx() << std::endl;
@@ -965,7 +965,7 @@ namespace csmp {
 	}// end ComputeContribution(Face)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::ComputeContribution(InterFace<dim>& f)
+	void MathOperatorLHS<dim>::ComputeContribution( const InterFace<dim>& f)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
 		std::cerr << " Overload to calculate LHS constribution from interface: " << f.Idx() << std::endl;

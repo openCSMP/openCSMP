@@ -140,8 +140,8 @@ void ModelComparator<dim>::ReadRegionElementScalarVariable( const Region<dim>& r
                                                             std::deque<ScalarVariable>& scalarDeque ) const
 {
     ScalarVariable scalarValue( PLAIN, 0. );
-    const typename std::vector<Element<dim>*>::const_iterator elementsEnd( region.ElementsEnd() );
-    for( typename std::vector<Element<dim>*>::const_iterator it = region.ElementsBegin(); it != elementsEnd; ++it )
+    const auto elementsEnd( region.ElementsEnd() );
+    for( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
     {
         (*it)->Read( propKey, scalarValue );
         scalarDeque.push_back( scalarValue );
@@ -157,8 +157,8 @@ void ModelComparator<dim>::ReadRegionNodalScalarVariable( const Region<dim>& reg
                                                           std::deque<ScalarVariable>& scalarDeque ) const
 {
     ScalarVariable scalarValue( PLAIN, 0. );
-    const typename std::vector<Node<dim>* >::const_iterator nodesEnd( region.NodesEnd() );
-    for( typename std::vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != nodesEnd; ++it )
+    const auto nodesEnd( region.NodesEnd() );
+    for( auto it = region.NodesBegin(); it != nodesEnd; ++it )
     {
         (*it)->Read( propKey, scalarValue );
         scalarDeque.push_back( scalarValue );
@@ -305,15 +305,14 @@ void ModelComparator<dim>::ReadRegionNodalScalarVariableAndNodeCoordinates(const
                                                           map<Point<dim>, ScalarVariable >& points_and_values)
 {
     ScalarVariable scalarValue( PLAIN, 0. );
-    const typename std::vector<Node<dim>* >::const_iterator nodesEnd( region.NodesEnd() );
+    const auto nodesEnd( region.NodesEnd() );
+    for( auto it = region.NodesBegin(); it != nodesEnd; ++it )
+      {
+          (*it)->Read( propKey, scalarValue );
 
-    for( typename std::vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != nodesEnd; ++it )
-    {
-        (*it)->Read( propKey, scalarValue );
+          points_and_values[(*it)->Coordinate()] = scalarValue ;
 
-        points_and_values[(*it)->Coordinate()] = scalarValue ;
-
-    } // nodes of region
+      } // nodes of region
 
 }
 
@@ -445,18 +444,18 @@ double ModelComparator<dim>::CompareRegionScalarVariableAtPoints( Model<dim>& mo
 
 
 template<size_t dim>
-void ModelComparator<dim>::ReadRegionNodalScalarVariableAndNodeCoordinates(const Region<dim>& region,
-                                                          const Index propKey,
-                                                          std::vector<ScalarVariable> & values,
-                                                          map<size_t, std::vector<double> >& points)
+void ModelComparator<dim>::ReadRegionNodalScalarVariableAndNodeCoordinates( const Region<dim>& region,
+                                                                            const Index propKey,
+                                                                            std::vector<ScalarVariable> & values,
+                                                                            map<size_t, std::vector<double> >& points)
 {
     size_t index(0U);
     ScalarVariable scalarValue( PLAIN, 0. );
-    const typename std::vector<Node<dim>* >::const_iterator nodesEnd( region.NodesEnd() );
+    const auto nodesEnd( region.NodesEnd() );
 
     values.clear();
     values.resize(region.Nodes());
-    for( typename std::vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != nodesEnd; ++it )
+    for( auto it = region.NodesBegin(); it != nodesEnd; ++it )
     {
         (*it)->Read( propKey, scalarValue );
         for(size_t i=0U;i<dim;i++)

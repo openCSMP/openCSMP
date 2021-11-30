@@ -38,9 +38,9 @@ template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     idx_( UINT_MAX ),
+    material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
-    node_connector_( f->Nodes(), nullptr ),
-    material_id_(UNSPECIFIED)
+    node_connector_( f->Nodes(), nullptr )
 {
   assert( f != nullptr );
   elmt_connector_.resize( f->Neighbors(), nullptr );
@@ -55,9 +55,9 @@ Element<dim>::Element( csmp::FiniteElement* f,
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
     idx_( UINT_MAX ),
+    material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
-    node_connector_( f->Nodes(), nullptr ),
-    material_id_(UNSPECIFIED)
+    node_connector_( f->Nodes(), nullptr )
 {
   assert( f   != nullptr );
   assert( fvs != nullptr );
@@ -74,9 +74,9 @@ Element<dim>::Element( csmp::FiniteElement* f,
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
     idx_( UINT_MAX ),
+    material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
-    node_connector_( f->Nodes(), nullptr ),
-    material_id_(UNSPECIFIED)
+    node_connector_( f->Nodes(), nullptr )
 {
   assert( f   != nullptr );
   assert( fvs != nullptr );
@@ -103,9 +103,9 @@ Element<dim>::Element( size_t idx,
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( s ),
     idx_( idx ),
+    material_id_(material),
     elmt_connector_( f->Neighbors(), nullptr ),
-    node_connector_( f->Nodes(), nullptr ),
-    material_id_(material)
+    node_connector_( f->Nodes(), nullptr )
 {
   assert( f != nullptr );
   assert( s != nullptr );
@@ -123,9 +123,9 @@ Element<dim>::Element( const Element<dim>& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
     idx_( el.idx_ ),
+    material_id_(el.material_id_),
     elmt_connector_( el.elmt_connector_ ), // the pointers point to the same elements as for the original element
-    node_connector_( el.node_connector_ ),  
-    material_id_(el.material_id_)
+    node_connector_( el.node_connector_ )
 {
   assert( !node_connector_.empty() /* detected unitialized element*/ );
   assert( !elmt_connector_.empty() /* detected unitialized element*/ );
@@ -138,37 +138,62 @@ Element<dim>::Element( const Element<dim>& el )
 /// move constructor
 template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
-  : FiniteElementPolicy<dim, csmp::Element>( move( el.FE() ) ),
-    FiniteVolumePolicy<dim, csmp::Element>( move( el.FV() ) ),
-    idx_( move( el.idx_ ) ),
-    elmt_connector_( move( el.elmt_connector_ ) ),
-    node_connector_( move( el.node_connector_ ) ),
-    material_id_(el.material_id_)
+  : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
+    FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
+// does not work. Why?    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),
+    idx_(el.idx_),
+    material_id_(el.material_id_),
+    // calling move() is important, else elmt destructor has to do more work!
+    elmt_connector_( move(el.elmt_connector_) ),
+    node_connector_( move(el.node_connector_) )
 {
-  this->LVS( move( el.LVS() ) );
+  this->LVS( el.LVS() );
   el.AssignFiniteElementNullPtr();
   el.AssignFiniteVolumeNullPtr();
+    
+//  cerr <<"\nElement(ctor): moved element: "<< Idx();
 }
 
 
 
 
+/**
+     Note that the loops are not executed after move construction,
+     so that very little overhead arises due to the disconnection of peripheral elements.
+*/
 template<size_t dim>
 Element<dim>::~Element()
  {
     // disconnecting the neighbor elements that are connected to this element
-    for ( auto it : elmt_connector_ )
-      if ( it != nullptr )
-        // looping over the neighbors of the neighbor
-        for ( auto nit : it->elmt_connector_ )
-          if ( nit == this ) {
-               nit = nullptr;
-               break;
-            }
-    // disconnecting the element from its nodes and neighbors
-    for ( auto& it : elmt_connector_ ) it = nullptr;
-    for ( auto& it : node_connector_ ) it = nullptr;
- }
+    // (neighbor pointer to this element is nulled)
+    if ( !elmt_connector_.empty() )
+      for ( auto& it : elmt_connector_ )
+        if ( it != nullptr ) {
+          // looping over the neighbors of the neighbor
+          const size_t n_nbors{ it->elmt_connector_.size() };
+          for ( size_t i{0}; i<n_nbors; ++i )
+            if ( it->Neighbor(i) == this ) {
+                 it->Assign( i, static_cast<Element<dim>*>(nullptr) );
+                 break;
+              }
+          }
+              
+    // disconnecting the node that this element might be a parent of
+    // (parent pointer to this element is nulled)
+    if ( !node_connector_.empty() )
+      for ( auto& nit : node_connector_ )
+        if ( nit != nullptr ) {
+             const size_t n_parents{ nit->Parents() };
+             for ( size_t j{0}; j<n_parents; ++j )
+               if ( nit->Parent(j) == this ) {
+                    nit->Unassign( this );
+                    break;
+                 }
+          }
+    
+//    cerr <<"\nElement(dtor): destructed element: "<< Idx();
+          
+ } // end destructor
 
 
 
@@ -221,7 +246,7 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 /// That must be FE_Type and attached Nodes
 ///   SKM revised 2021
 template<size_t dim>
-bool  Element<dim>::operator==( const Element<dim>& el )
+bool  Element<dim>::operator==( const Element<dim>& el ) const
 {
   if ( &el != this )
     {
@@ -243,11 +268,14 @@ bool  Element<dim>::operator==( const Element<dim>& el )
 
 /**
   less_than<> predicate for storage of Elements in STL container objects, including equal comparisons.
+  
+  @note Uses comparitor on barycentre point object to order the elements.
+  
     @author SKM
     @date 6/9/2021
 */
 template<size_t dim>
-bool  Element<dim>::operator<( const Element<dim>& el )
+bool  Element<dim>::operator<( const Element<dim>& el ) const
 {
   if ( &el != this )
     {
@@ -409,31 +437,30 @@ typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd(
 // CONSTRUCTION PROCESS
 
 
+/**
+     Assign equidimensional neighbor elements to element.
+*/
 template<size_t dim>
-void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor elements
+void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr )
 {
-  assert( this->FE() != nullptr );
-  assert( elmt_connector_.size() == this->Neighbors() );
-  assert( i < this->Neighbors() );
-
+  assert( i < elmt_connector_.size() );
   elmt_connector_[i] = e_ptr;
 }
+
 
 
 /**
     unassigns the neighbor element, setting the pointer in the 'elmt_connector' vector to null
 */
 template<size_t dim>
-void Element<dim>::Unassign( const Element<dim>* e_ptr ) 
+void Element<dim>::Unassign( const Element<dim>* const e_ptr )
   {
-    for ( size_t i = 0U; i < elmt_connector_.size(); ++i ) {
-        if ( e_ptr == nullptr || elmt_connector_[i] == nullptr )
-          continue;
-        if ( e_ptr == elmt_connector_[i] ) {
-            elmt_connector_[i] = nullptr;
-            break;
-          }
-      }
+    if ( e_ptr == nullptr ) return;
+    for ( size_t i = 0U; i < elmt_connector_.size(); ++i )
+      if ( e_ptr == elmt_connector_[i] ) {
+          elmt_connector_[i] = nullptr;
+          break;
+        }
   }
 
 
@@ -442,26 +469,22 @@ void Element<dim>::Unassign( const Element<dim>* e_ptr )
 template<size_t dim>
 void Element<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 {
-  assert( this->FE() != nullptr );
-  assert( node_connector_.size() == this->Nodes() );
-  assert( i < this->Nodes() );
-  assert( nd_ptr != nullptr );
-
+  assert( i < node_connector_.size() );
   node_connector_[i] = nd_ptr;
 }
 
 
+
+
 template<size_t dim>
-void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
+void Element<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
   {
-    for ( size_t i = 0U; i < node_connector_.size(); i++ ) {
-        if ( nd_ptr == nullptr || node_connector_[i] == nullptr )
-          continue;
-        if ( (*nd_ptr) == (*node_connector_[i]) ) {
-            node_connector_[i] = nullptr;
-            break;
-          }
-      }
+    if ( nd_ptr == nullptr ) return;
+    for ( size_t i = 0U; i < node_connector_.size(); i++ )
+      if ( nd_ptr == node_connector_[i] ) {
+          node_connector_[i] = nullptr;
+          break;
+        }
   }
 
 
@@ -554,9 +577,7 @@ double x = (*element.N(2))->x();
 template<size_t dim>
 csmp::Node<dim>*  Element<dim>::N( size_t n ) const
 {
-  assert( this->FE() != nullptr );
-  assert( node_connector_.size() == this->Nodes() );
-  assert( n < this->Nodes() );
+  assert( n < node_connector_.size() );
   return node_connector_[n];
 }
 
@@ -572,8 +593,7 @@ before you are trying to use it.
 template<size_t dim>
 csmp::Element<dim>*  Element<dim>::Neighbor( size_t n ) const
 {
-  assert( elmt_connector_.size() == this->Neighbors() );
-  assert( n < this->Neighbors() );
+  assert( n < elmt_connector_.size() );
   return elmt_connector_[n];
 }
 

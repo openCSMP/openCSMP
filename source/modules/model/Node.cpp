@@ -186,7 +186,10 @@ void Node<dim>::operator delete( void* p )
 /**
  
 Assigns parent element pointer and remembers which node (local idx)
-of the parent element this node is.  
+of the parent element this node is.
+
+@param pnode is the node number in the parent element of the assigned node.
+@param element is pointer to the parent element that gets assigned.
 
 @section arguments Input Arguments
 
@@ -197,39 +200,78 @@ A pointer to the parent Element which shall be added.
 template<size_t dim>
 void Node<dim>::Assign( size_t pnode, Element<dim>* element )
  {
-    assert( element != nullptr );
     assert( parent_node_indexes_.size() == parent_element_pointers_.size() );
     assert( pnode <= FIFTY );
     
-    for ( size_t parent=0U; parent<parent_node_indexes_.size(); parent++ )
+    for ( size_t parent{0}; parent<parent_node_indexes_.size(); parent++ )
       if ( parent_node_indexes_[parent] == NOT_INITIALIZED ) {
-           parent_node_indexes_[parent]     = static_cast<ONE_BYTE_NUMBER>(pnode);
-           parent_element_pointers_[parent] = element;
-           return;
-        }
+             parent_node_indexes_[parent]     = static_cast<ONE_BYTE_NUMBER>(pnode);
+             parent_element_pointers_[parent] = element;
+             return;
+          }
 
  } // end Assign
 
 
 
 
-/// Removes the provided element as parent and returns true, false if not found
+/**
+    Sets the pointer to the target element to zero, and the corresponding node number to NOT_INITIALIZED.
+*/
 template<size_t dim>
 bool Node<dim>::Unassign( Element<dim>* element )
  {
     assert( parent_node_indexes_.size() ==  parent_element_pointers_.size() );
-    for( size_t parent(0); parent < Parents(); ++parent )
-      if( element == Parent(parent) )
+    for ( size_t parent(0); parent < Parents(); ++parent )
+      if ( Parent(parent) == element )
         {
-          parent_node_indexes_.erase( parent_node_indexes_.begin()+parent );
-          parent_element_pointers_.erase( parent_element_pointers_.begin()+parent );
-          // free memory
-          parent_node_indexes_.swap( parent_node_indexes_ );
-          parent_element_pointers_.swap( parent_element_pointers_ );
+          parent_node_indexes_[parent]     = NOT_INITIALIZED;
+          parent_element_pointers_[parent] = nullptr;
           return true;
         }
     return false;
+    
  } // end Unassign
+
+
+
+
+/**
+    Removes parent elements pointers that were set to nullptr.
+*/
+template<size_t dim>
+void Node<dim>::EraseNullPointerParents()
+ {
+    assert( parent_node_indexes_.size() ==  parent_element_pointers_.size() );
+    const size_t  n_parents{Parents()};
+    size_t        n_new_parents{0};
+
+    for ( size_t parent{0}; parent < n_parents; ++parent ) {
+         if ( parent_element_pointers_[parent] == nullptr )
+           parent_node_indexes_[parent] = NOT_INITIALIZED;
+         else n_new_parents++;
+      }
+
+    // if nullptr parents were detected, the parent storage needs to be rebuild
+    if ( n_new_parents < n_parents ) {
+        vector<ONE_BYTE_NUMBER>  parent_node_indexes;
+        parent_node_indexes.reserve( n_new_parents );
+        vector<Element<dim>*>    parent_element_pointers;
+        parent_element_pointers.reserve( n_new_parents );
+        
+        for ( size_t parent{0}; parent < n_parents; ++parent )
+          if ( parent_element_pointers_[parent] == nullptr ) {
+               parent_node_indexes.push_back( parent_node_indexes_[parent] );
+               parent_element_pointers.push_back( parent_element_pointers_[parent] );
+            }
+        
+        parent_node_indexes_     = parent_node_indexes;
+        parent_element_pointers_ = parent_element_pointers;
+      }
+    
+ } // end EraseNullPointerParents
+
+
 
 
 template<size_t dim>

@@ -319,9 +319,8 @@ void Tutorial4_Example_Revisited::constructVelocityVector( Model<2U>& mdl )
     vy_key( mdl.Database().StorageKey( "nodal velocity y" ) ),
     v_key( mdl.Database().StorageKey( "nodal velocity" ) );
 
-  const Region<2U>& mref = mdl.Region( "Model" );
-  vector<Node<2U>* >::const_iterator nit;
-  for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+  Region<2U>& mref = mdl.Region( "Model" );
+  for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
   {
     v( 0 ) = (*nit)->Read( vx_key );
     v( 1 ) = (*nit)->Read( vy_key );
@@ -336,9 +335,8 @@ void Tutorial4_Example_Revisited::scaleRegion( Model<2U>& mdl, double scale_fact
   double       x_, y_;
   const double factor( scale_factor );
 
-  static const Region<2U>& mref = mdl.Region( "Model" );
-  vector<Node<2U>* >::const_iterator nit;
-  for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+  Region<2U>& mref = mdl.Region( "Model" );
+  for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
   {
     x_ = (*nit)->x();
     (*nit)->x( x_ / factor );

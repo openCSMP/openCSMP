@@ -131,8 +131,8 @@ class NimbleRegion {
         {throw csmp::Exception( ERROR, "NimbleRegion<dim>::UpdateMemberIndexes","Method not implemented");};    
     bool IsPerimeterElement( const size_t eidx ) const
         {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterElement","Method not implemented");};  
-    size_t SharedPerimeterNodes(typename std::vector<csmp::Node<dim>*>::const_iterator start, 
-                                typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
+    size_t SharedPerimeterNodes(typename std::vector<const csmp::Node<dim>* const>::const_iterator start,
+                                typename std::vector<const csmp::Node<dim>* const>::const_iterator end ) const
         {throw csmp::Exception( ERROR, "NimbleRegion<dim>::SharedPerimeterNodes","Method not implemented");};  
     
 
