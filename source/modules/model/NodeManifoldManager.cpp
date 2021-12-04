@@ -38,7 +38,7 @@ NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indi
 
 #ifdef DEBUG
 // checking that the key nodes in vertexManifoldIndices map are also contained in the corresponding sets
-for ( auto nit : indices ) {
+for ( auto& nit : indices ) {
     set<size_t> mnodes;
     for ( auto mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
     // if the key node is not contained this is reported
@@ -174,7 +174,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeMani
      // 2. creating a new temp manifold that gets assigned to mnf1
      vector<Node<dim>*>     nodes; nodes.reserve( combined_manifolds.size() );
      vector<INTERFACE_SIDE> sides; sides.reserve( combined_manifolds.size() );
-     for ( auto it : combined_manifolds ) {
+     for ( auto& it : combined_manifolds ) {
           nodes.push_back( it.first );
           sides.push_back( it.second );
        }
@@ -308,7 +308,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         // sorted nodes
         vector<size_t>  manifold_node_list;
         manifold_node_list.reserve( n_manifold_node_entries );
-        for ( auto nmf : node_manifolds_ ) {
+        for ( auto& nmf : node_manifolds_ ) {
              const size_t entries(nmf.Branches());
              for ( size_t i=0U; i<entries; ++i )
                manifold_node_list.push_back( nmf.N(i)->Idx() );

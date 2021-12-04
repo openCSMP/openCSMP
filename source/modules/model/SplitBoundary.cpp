@@ -164,7 +164,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // 3. building the interface node vector
   // ---------------------------------------------------------------------------------------------------
   this->node_vec_.reserve( this->elmt_vec_.size() );
-  for ( auto it : this->elmt_vec_ )
+  for ( auto& it : this->elmt_vec_ )
     for ( size_t i = 0U; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
   // sorting node vector and making it unique
   sort( this->node_vec_.begin(), this->node_vec_.end() );
@@ -582,7 +582,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
       double property_integral( 0. ), prop_value;
-      for ( auto ife : this->elmt_vec_ ) {
+      for ( auto& ife : this->elmt_vec_ ) {
         double face_area = ife->Parent( side )->FaceArea( ife->ParentFaceID( side ) );
         if ( side != MIDDLE ) prop_value = ife->Parent( side )->Read( prop_key );
         else {
@@ -600,7 +600,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
       double property_integral( 0. );
-      for ( auto ife : this->elmt_vec_ )
+      for ( auto& ife : this->elmt_vec_ )
         property_integral += ife->Area() * ife->Read( prop_key );
 
       return property_integral;
@@ -611,7 +611,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // using their integration weights
       double        property_integral( 0. );
       ScalarVariable  sc;
-      for ( auto ife : this->elmt_vec_ ) {
+      for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
         for ( size_t i = 0U; i<ife->IntegrationPoints(); ++i ) {
           ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
@@ -624,7 +624,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
       // the property value is integrated using corresponding integration weights
       double property_integral( 0. );
-      for ( auto ife : this->elmt_vec_ ) {
+      for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
         for ( size_t i = 0U; i<ife->IntegrationPoints(); ++i )
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
@@ -640,7 +640,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     // the values projected onto the normal are integrated over the interface.
     if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
       VectorVariable<dim>  unrml, vc;
-      for ( auto it : this->elmt_vec_ ) {
+      for ( auto& it : this->elmt_vec_ ) {
         it->UnitNormal( unrml );
         it->Read( prop_key, vc );
         property_integral += dotProduct( unrml, vc ) * it->Area( side );
@@ -649,7 +649,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     // nodal properties are interpolated to the barycentre because this is where the normal is placed
     else if ( prop_key.place == NODE ) { // for nodes on first side of interface
       VectorVariable<dim>  unrml, vc;
-      for ( auto it : this->elmt_vec_ ) {
+      for ( auto& it : this->elmt_vec_ ) {
         it->UnitNormal( unrml );
         it->PropertyValueAtBaryCenter( prop_key, vc );
         property_integral += dotProduct( unrml, vc ) * it->Area( side );

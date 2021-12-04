@@ -201,7 +201,7 @@ void PropertyDatabase_Test::SubsetVariablesTest()
   pdb.ListProperties( props );
 
   size_t subset_size = 0;
-  for ( auto prop : props ) {
+  for ( auto& prop : props ) {
     if ( subset_size == 10 ) break;
     subset_variables.insert( prop.first );
     subset_size++;

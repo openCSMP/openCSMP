@@ -621,7 +621,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
       switch ( key.type ) {
         case SCALAR: {
           ScalarVariable sc;
-          for ( const auto it : this->elmt_vec_ ) {
+          for ( const auto& it : this->elmt_vec_ ) {
             (*it).Read( key, sc );
             pushBack( data, sc );
           }
@@ -629,7 +629,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case VECTOR: {
           VectorVariable<dim> vc;
-          for ( const auto it : this->elmt_vec_ ) {
+          for ( const auto& it : this->elmt_vec_ ) {
             (*it).Read( key, vc );
             pushBack( data, vc );
           }
@@ -637,7 +637,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case TENSOR: {
           TensorVariable<dim> ts;
-          for ( const auto it : this->elmt_vec_ ) {
+          for ( const auto& it : this->elmt_vec_ ) {
             (*it).Read( key, ts );
             pushBack( data, ts );
           }
@@ -645,7 +645,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case ARRAY: {
           ArrayVariable av;
-          for ( const auto it : this->elmt_vec_ ) {
+          for ( const auto& it : this->elmt_vec_ ) {
             (*it).Read( key, av );
             pushBack( data, av );
           }
@@ -653,7 +653,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                     break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable fa;
-          for ( const auto it : this->elmt_vec_ ) {
+          for ( const auto& it : this->elmt_vec_ ) {
             (*it).Read( key, fa );
             pushBack( data, fa );
           }
@@ -669,7 +669,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
       switch ( key.type ) {
         case SCALAR: {
           ScalarVariable sc;
-          for ( const auto it : this->node_vec_ ) {
+          for ( const auto& it : this->node_vec_ ) {
             (*it).Read( key, sc );
             pushBack( data, sc );
           }
@@ -677,7 +677,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case VECTOR: {
           VectorVariable<dim> vc;
-          for ( const auto it : this->node_vec_ ) {
+          for ( const auto& it : this->node_vec_ ) {
             (*it).Read( key, vc );
             pushBack( data, vc );
           }
@@ -685,7 +685,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case TENSOR: {
           TensorVariable<dim> ts;
-          for ( const auto it : this->node_vec_ ) {
+          for ( const auto& it : this->node_vec_ ) {
             (*it).Read( key, ts );
             pushBack( data, ts );
           }
@@ -693,7 +693,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case ARRAY: {
           ArrayVariable av;
-          for ( const auto it : this->node_vec_ ) {
+          for ( const auto& it : this->node_vec_ ) {
             (*it).Read( key, av );
             pushBack( data, av );
           }
@@ -701,7 +701,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                     break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable fa;
-          for ( const auto it : this->node_vec_ ) {
+          for ( const auto& it : this->node_vec_ ) {
             (*it).Read( key, fa );
             pushBack( data, fa );
           }
@@ -1649,7 +1649,7 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
   // creating the element vector for the region
   this->elmt_vec_.reserve( element_ids.size() );
-  for ( auto idx : element_ids ) {
+  for ( auto& idx : element_ids ) {
        Element<dim>* eptr = &(*next(mesh.ElementsBegin(),idx));
        assert( eptr != nullptr );
        assert( eptr->Idx() == idx );
@@ -1660,7 +1660,7 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   if ( this->node_vec_.empty() ) this->node_vec_.clear();
   this->node_vec_.reserve( element_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
   // filling the vector
-  for ( auto it : this->elmt_vec_ ) {
+  for ( auto& it : this->elmt_vec_ ) {
        const size_t n_nodes{it->Nodes()};
        for ( size_t i=0U; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );

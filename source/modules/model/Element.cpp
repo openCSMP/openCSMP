@@ -367,7 +367,7 @@ template<size_t dim>
 size_t  Element<dim>::ConnectedNeighbors() const
 {
   size_t nulls( 0 );
-  for ( auto f : elmt_connector_ )
+  for ( auto& f : elmt_connector_ )
     if ( !f ) nulls++;
   return (elmt_connector_.size() - nulls);
 }

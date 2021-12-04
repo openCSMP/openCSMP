@@ -808,7 +808,7 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
       if ( oldprop.Placement() == ELEMENT ) {
           PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
           new_data.Reserve(n_o_elmt_ids.size());
-          for (auto id : n_o_elmt_ids)
+          for (auto& id : n_o_elmt_ids)
             new_data.PushBackFrom(oldprop, id);
           // reassigning reduced set
           property.second = std::move(new_data);
@@ -816,7 +816,7 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
       else if ( oldprop.Placement() == NODE ) {
           PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
           new_data.Reserve(n_o_node_ids.size());
-          for (auto id : n_o_node_ids)
+          for (auto& id : n_o_node_ids)
             new_data.PushBackFrom(oldprop, id);
           // reassigning reduced set
           property.second = std::move(new_data);

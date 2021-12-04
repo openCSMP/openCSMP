@@ -489,15 +489,16 @@ Face<dim>::~Face()
  {
     // disconnecting the neighbor faces that are connected to this element
     if ( !face_connector_.empty() )
-      for ( auto& it : face_connector_ ) {
-          // looping over the neighbors of the neighbor
-          const size_t n_nbors{ it->face_connector_.size() };
-          for ( size_t i{0}; i<n_nbors; ++i )
-            if ( it->Neighbor(i) == this ) {
-                 it->Assign( i, static_cast<Face<dim>*>(nullptr) );
-                 break;
-              }
-        }
+      for ( auto& it : face_connector_ )
+        if ( it != nullptr ) {
+            // looping over the neighbors of the neighbor
+            const size_t n_nbors{ it->face_connector_.size() };
+            for ( size_t i{0}; i<n_nbors; ++i )
+              if ( it->Neighbor(i) == this ) {
+                   it->Assign( i, static_cast<Face<dim>*>(nullptr) );
+                   break;
+                }
+          }
  }
 
 
@@ -519,11 +520,12 @@ Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
         face_connector_       = fc.face_connector_;
         node_connector_       = fc.node_connector_;
         innerParent_          = fc.innerParent_; // problematic pointer assignment
-        outerParent_          = fc.outerParent_; // problematic
+        outerParent_          = fc.outerParent_;
         inner_parent_face_id_ = fc.inner_parent_face_id_;
         outer_parent_face_id_ = fc.outer_parent_face_id_;
         this->LVS( fc.LVS() );
       }
+cerr <<"\nFace::operator= called.";
     return *this;
  }
 
@@ -615,7 +617,7 @@ template<size_t dim>
 size_t  Face<dim>::ConnectedNeighbors() const
 {
 	size_t nulls(0);
-	for (auto f : face_connector_)
+	for (auto& f : face_connector_)
 		if ( f == nullptr ) nulls++;
 	return (face_connector_.size() - nulls);
 }

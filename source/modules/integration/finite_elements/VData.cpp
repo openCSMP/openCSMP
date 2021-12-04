@@ -2767,7 +2767,7 @@ void  VData::EstablishElementConnectivity2D()
                    vector<pair<double,size_t> > inter_element_angles;
                    inter_element_angles.reserve( combinations.size() );
                    size_t n_combi{0};
-                   for ( auto cit : combinations ) {
+                   for ( auto& cit : combinations ) {
                         const double angle = AngleBetweenLineElements2D( cit[0], cit[1] );
                         // ignoring edge direction
                         const double acute_angle = ( angle > 90. ) ? 180. - angle : angle;
@@ -2779,7 +2779,7 @@ void  VData::EstablishElementConnectivity2D()
                          [](auto& a, auto& b) -> bool { return a.first < b.first; } );
                     // for any 2 edges unique connections are made until there are no more elements to connect
                     set<size_t> assigned_elements;
-                    for ( auto aet : inter_element_angles ) {
+                    for ( auto& aet : inter_element_angles ) {
                          // connecting the pair of line elements
                          // ------------------------------------
                          const size_t elmt1 = combinations[aet.second][0];
@@ -2804,7 +2804,7 @@ void  VData::EstablishElementConnectivity2D()
                          assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
                          // finding the yet-to-be-assigned element
                          size_t unassigned_elmt{UINT_MAX};
-                         for ( auto eit : joint_line_elmts )
+                         for ( auto& eit : joint_line_elmts )
                            if ( assigned_elements.find(eit) == assigned_elements.end() ) {
                                 unassigned_elmt = eit;
                                 break;
@@ -3088,7 +3088,7 @@ void VData::EstablishElementConnectivity3D()
                          [](auto& a, auto& b) -> bool { return a.first < b.first; } );
                     // for any 2 edges unique connections are made until there are no more elements to connect
                     set<size_t> assigned_elements;
-                    for ( auto aet : inter_element_angles ) {
+                    for ( auto& aet : inter_element_angles ) {
                          // connecting the pair of line elements
                          // ------------------------------------
                          const size_t elmt1 = combinations[aet.second][0];
@@ -3113,7 +3113,7 @@ void VData::EstablishElementConnectivity3D()
                          assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
                          // finding the yet-to-be-assigned element
                          size_t unassigned_elmt{UINT_MAX};
-                         for ( auto eit : joint_line_elmts )
+                         for ( auto& eit : joint_line_elmts )
                            if ( assigned_elements.find(eit) == assigned_elements.end() ) {
                                 unassigned_elmt = eit;
                                 break;
@@ -3181,7 +3181,7 @@ void VData::EstablishElementConnectivity3D()
                    vector<pair<double,size_t> > inter_element_normal_angles;
                    inter_element_normal_angles.reserve( combinations.size() );
                    size_t n_combi{0};
-                   for ( auto cit : combinations ) {
+                   for ( auto& cit : combinations ) {
                         const double angle = AngleBetweenSurfaceElements3D( cit[0], cit[1] );
                         // ignoring edge direction
                         const double acute_angle = ( angle > 90. ) ? 180. - angle : angle;
@@ -3218,7 +3218,7 @@ void VData::EstablishElementConnectivity3D()
                          assert( joint_surf_elmts.size() - 1 == assigned_elements.size() );
                          // finding the yet-to-be-assigned element
                          int64_t  unassigned_elmt{-1};
-                         for ( auto i : joint_surf_elmts )
+                         for ( auto& i : joint_surf_elmts )
                            if ( assigned_elements.find(i) == assigned_elements.end() ) {
                                 unassigned_elmt = i;
                                 break;

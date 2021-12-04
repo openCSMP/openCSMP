@@ -13,7 +13,7 @@ FV_Parameter::FV_Parameter( size_t sectors, size_t facets, size_t dim, bool with
     
     facet_unit_normal_.resize( facets );
     vector<vector<double> >(facet_unit_normal_).swap(facet_unit_normal_);
-    for ( auto it : facet_unit_normal_ ) {
+    for ( auto& it : facet_unit_normal_ ) {
          it.resize(dim); // n-dimensional
          vector<double>( it ).swap( it );
       }
@@ -33,7 +33,7 @@ void FV_Parameter::Resize( size_t sectors, size_t facets, size_t dim, bool with_
     if ( with_normals ) {
           facet_unit_normal_.resize( facets );
           vector<vector<double> >(facet_unit_normal_).swap(facet_unit_normal_);
-          for ( auto it : facet_unit_normal_ ) {
+          for ( auto& it : facet_unit_normal_ ) {
                it.resize(dim); // n-dimensional
                vector<double>( it ).swap( it );
             }
@@ -54,7 +54,7 @@ size_t  FV_Parameter::Bytes() const
 
 /// dot product fn . vc
 double FV_Parameter::FacetNormalProjection( size_t facet, 
-                                               const std::vector<double>& cxyz ) const
+                                            const std::vector<double>& cxyz ) const
  {
     if ( facet_unit_normal_.empty() or 
          facet_unit_normal_[facet].empty() or 

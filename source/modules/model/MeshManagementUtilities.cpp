@@ -506,13 +506,13 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
      
      // searching the subset of elements
      set<Node<dim>*> nbor_face_key;
-     for ( auto it : potential_nbors )
+     for ( auto& it : potential_nbors )
        {
           // loop over faces until matching face is found; else report
           const size_t n_faces(it->Neighbors());
           for ( size_t i=0U; i<n_faces; ++i ) {
               it->FE()->NodesOfFace( i, fnids );
-              for ( auto j : fnids ) nbor_face_key.insert( it->N(j) );
+              for ( auto& j : fnids ) nbor_face_key.insert( it->N(j) );
               // searching & assigning neighbors found
               auto nbor_it(face_keys.find(nbor_face_key));
               if ( nbor_it != face_keys.end() ) {
@@ -584,7 +584,7 @@ void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbo
              vector<size_t> fnids;
              inner_nbor->FE()->NodesOfFace( i, fnids );
              size_t k(0U);
-             for ( auto j : fnids )
+             for ( auto& j : fnids )
                face->Assign( k++, inner_nbor->N(j) );
              // ending the search because only one matching neighbor is expected
              break;
@@ -643,7 +643,7 @@ void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbo
    
    // 3. creating face_node ID search keys for the inner and outer elements
    set<size_t> inner_nodes, outer_nodes;
-   for ( auto it : outer_elmt_nodes )
+   for ( auto& it : outer_elmt_nodes )
      if ( it.second.first != UINT_MAX ) {
           inner_nodes.insert( it.second.first );
           outer_nodes.insert( it.second.second );
@@ -1542,8 +1542,8 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            // 2. finding the shared faces
            bool found( false );
            int64_t  inner_face_id(-1), outer_face_id(-1);
-           for ( auto inner_face : inner_elmt_faces ) {
-             for ( auto outer_face : outer_elmt_faces ) {
+           for ( auto& inner_face : inner_elmt_faces ) {
+             for ( auto& outer_face : outer_elmt_faces ) {
                if ( inner_face.first == outer_face.first ) {
                  inner_face_id = inner_face.second.second;
                  outer_face_id = outer_face.second.second;
@@ -2051,8 +2051,8 @@ template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator,
         // 2. finding the shared faces
         bool found( false );
         int64_t  inner_face_id( -1 ), outer_face_id( -1 );
-        for ( auto inner_face : inner_elmt_faces ) {
-          for ( auto outer_face : outer_elmt_faces ) {
+        for ( auto& inner_face : inner_elmt_faces ) {
+          for ( auto& outer_face : outer_elmt_faces ) {
             if ( inner_face.first == outer_face.first ) {
               inner_face_id = inner_face.second.second;
               outer_face_id = outer_face.second.second;

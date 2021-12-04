@@ -468,7 +468,7 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
   const csmp::Index reg_key( splitboundaryComplex->Database().StorageKey( "region number" ) );
 
   // for all the SplitBoundary objects supplied as sets of pairs of Element pointers and interface idx values
-  for ( auto iit : interface_elmt_pairs ) {
+  for ( auto& iit : interface_elmt_pairs ) {
       // extracting region names from the name-integer vector
       pair<string, string> key = make_pair( region_names[static_cast<long>(iit.first.first->Read( reg_key ))],
                                             region_names[static_cast<long>(iit.second.first->Read( reg_key ))] );
@@ -481,7 +481,7 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
   // echoing the map to the screen
 #ifdef SPLIT_BOUNDARY_DEBUG
   cerr << "\nSplitBoundaryInterface::DetectAndCreateSplitBoundaries: interface region pairs found:\n";
-  for ( auto i : split_boundary_map )
+  for ( auto& i : split_boundary_map )
     cerr << i.first.first << "," << i.first.second << "\n";
   cerr << endl;
 #endif
@@ -490,7 +490,7 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
   // --------------------------------------------------------------------------------
   pair<set<string>,bool>  splitBoundaryNames; 
   splitBoundaryNames.second = true;
-  for ( auto it : split_boundary_map ) {
+  for ( auto& it : split_boundary_map ) {
       // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
       string bname = CreateSplitBoundaryName( it.first );
       splitBoundaryNames.first.insert( bname );
@@ -825,7 +825,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
 
   map<const Node<dim>* const,Node<dim>*>  node_pairs;
 
-  for ( auto ifnode : ifnodes )
+  for ( auto& ifnode : ifnodes )
     {
       // TODO: check interface to determine whether the nodes are indeed collocated
       Node<dim>* const new_node = mesh.Duplicate( ifnode );
@@ -843,7 +843,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
   vector<size_t>  element_numbers;
   element_numbers.reserve( ifelmts.size() );
 
-  for ( auto ifelmt : ifelmts )
+  for ( auto& ifelmt : ifelmts )
     {
       CSMP_FEM_TYPE csmp_elmt = ifelmt->FE_Type();
       Element<dim>* const new_elmt = mesh.AddElement( fem_mgr.E(csmp_elmt),
@@ -862,7 +862,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
   vector<Element<dim>*>  elmt_vec_to_establish_nbor_connectivity;
   elmt_vec_to_establish_nbor_connectivity.reserve( ifelmts.size() );
   
-  for ( auto ifelmt : ifelmts )
+  for ( auto& ifelmt : ifelmts )
     {
       Element<dim>* const new_elmt = ifelmt->InterveningElement();
 

@@ -77,7 +77,7 @@ void NimbleRegion<dim>::Update( typename std::vector<Node<dim>*>::iterator first
     set<Node<dim>*> perimeter_nodes;
     vector<size_t>  fnids;
    
-    for ( auto it : elements_ ) {
+    for ( auto& it : elements_ ) {
          const size_t neighbors(it->Neighbors());
          for ( size_t i=0U; i<neighbors; ++i )
             if ( it->Neighbor(i) == nullptr ||
@@ -287,7 +287,7 @@ void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::iterator firs
 
     // finding addtional boundary nodes, as those nodes that are on element faces that have no or only an outside-region neighbor
     vector<size_t>  fnids;
-    for ( auto it : elements_ ) {
+    for ( auto& it : elements_ ) {
          const size_t neighbors(it->Neighbors());
          //cout<<"    neighbors = "<<neighbors<<endl;
          for ( size_t i=0U; i<neighbors; ++i )

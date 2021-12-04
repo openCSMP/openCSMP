@@ -225,7 +225,7 @@ void printNodes( const CELL<dim>& c )
     set<size_t> nodes;
     for ( size_t i=0U; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
     cout <<" "<< c.Idx() <<": ";
-    for ( auto it : nodes ) cout << it <<",";
+    for ( auto& it : nodes ) cout << it <<",";
     cout <<" ";
  }
 
@@ -1390,7 +1390,7 @@ static void test_createUniqueCombinations()
    
    // printing the results
    cout <<"\nmain: combinations: "<< n_combinations <<"\n";
-   for ( auto i : combinations ) {
+   for ( auto& i : combinations ) {
         cout <<"\n\t";
         for ( auto j : i )
           cout <<" "<< j;

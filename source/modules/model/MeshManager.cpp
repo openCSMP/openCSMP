@@ -1391,8 +1391,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
         ++it;
       }
 
-// NOT YET vector<typename plf::colony<csmp::Element<dim>>::const_iterator>  elmt_iterators;
-// NOT YET elmt_iterators.reserve( distance(first,last) );
+    vector<typename plf::colony<Element<dim>>::const_iterator>  elmt_iterators;
+    elmt_iterators.reserve( distance(first,last) );
     
     // 1. converting Elements into Faces
     while( first != last )
@@ -1406,7 +1406,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          for ( auto n=(*first)->NeighborsBegin(); n!=(*first)->NeighborsEnd(); ++n )
            connectivity.push_back( (*n)->Idx() );
      
-// NOT YET         elmt_iterators.emplace_back( elements_.get_iterator(*first) );
+         elmt_iterators.emplace_back( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
          
          bool boundary_face{true};
          for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit ) {
@@ -1436,14 +1436,15 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
            }
        
          // erase element and null the current element pointer
-//cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting element "<< (*first)->Idx();
-//         elements_.erase( elements_.get_iterator( (*first) ) );
+cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting element "<< (*first)->Idx();
+         elements_.erase( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
          (*first) = nullptr;
          first++;
       }
       
      // 2. remove the elements
-// NOT YET     elements_.erase( elmt_iterators.begin(), elmt_iterators.end() );
+// FAIL     sort( elmt_iterators.begin(), elmt_iterators.end() );
+// FAIL     elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
       
      // 3. connecting Faces among each other
      size_t n{0};
@@ -1778,7 +1779,7 @@ void MeshManager<3>::BuildVolumeConnectivity( typename std::vector<CELL<3U>*>::i
              }
              
            // processing the results, connecting the elements to one another
-           for ( auto it : elmt_pairs ) {
+           for ( auto& it : elmt_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 if ( n_face_nbors == 2 ) {
                      Element<3>* const eptr1 = (*it.second.begin()).first;
@@ -1793,7 +1794,7 @@ void MeshManager<3>::BuildVolumeConnectivity( typename std::vector<CELL<3U>*>::i
              }
         }
    
-   } // end BuildVolumdElementConnectivity
+   } // end BuildVolumeElementConnectivity
 
 template void MeshManager<3>::BuildVolumeConnectivity<Element>( typename vector<Element<3>*>::iterator,
                                                                 typename vector<Element<3>*>::iterator );
@@ -1838,7 +1839,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
              }
              
            // processing the results, connecting the cells to one another
-           for ( auto it : elmt_pairs ) {
+           for ( auto& it : elmt_pairs ) {
                 const size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2 ) {
@@ -1906,7 +1907,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
              }
              
            // processing the results, connecting the elements to one another
-           for ( auto it : elmt_pairs ) {
+           for ( auto& it : elmt_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2 ) {
@@ -1994,7 +1995,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
              }
              
            // processing the results, connecting the cells to one another
-           for ( auto it : elmt_pairs ) {
+           for ( auto& it : elmt_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2 ) {
@@ -2060,7 +2061,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
              }
              
            // processing the results, connecting the elements to one another
-           for ( auto it : elmt_pairs ) {
+           for ( auto& it : elmt_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2 ) {
@@ -2119,13 +2120,13 @@ void MeshManager<dim>::UpdateConnectivity()
     if ( !faces_.empty() ) {
          vector<Face<dim>*> face_ptrs;
          face_ptrs.reserve( faces_.size() );
-         for ( auto it : faces_ ) face_ptrs.push_back( &it );
+         for ( auto& it : faces_ ) face_ptrs.push_back( &it );
          BuildConnectivity<csmp::Face>( face_ptrs.begin(), face_ptrs.end() );
       }
     if ( !interfaces_.empty() ) {
          vector<InterFace<dim>*> iface_ptrs;
          iface_ptrs.reserve( faces_.size() );
-         for ( auto it : interfaces_ ) iface_ptrs.push_back( &it );
+         for ( auto& it : interfaces_ ) iface_ptrs.push_back( &it );
          BuildConnectivity<csmp::InterFace>( iface_ptrs.begin(), iface_ptrs.end() );
       }
     
@@ -4717,7 +4718,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       case TENSOR: {
         TensorVariable<dim> value;
         size_t entry( 0U );
-        for ( auto e : interfaces_ ) {
+        for ( auto& e : interfaces_ ) {
           const size_t sectors( e.Sectors() );
           for ( size_t i = 0U; i<sectors; ++i ) {
             const size_t ips_per_sector( e.IntegrationPointsPerSector() );

@@ -111,7 +111,7 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
       region_identifiers_without_name.insert( region_identifier );
   }
   if ( !region_identifiers_without_name.empty() ) {
-       for ( auto p : region_identifiers_without_name ) cerr << p << " ";
+       for ( auto& p : region_identifiers_without_name ) cerr << p << " ";
        csmp_error.notice( WARNING, "namedPropertyValuesToRegions:",
                          "there were elements with unrecognized property identifiers; they were ignored." );
     }

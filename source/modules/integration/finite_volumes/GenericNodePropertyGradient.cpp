@@ -281,7 +281,7 @@ void GenericNodePropertyGradient<dim>::SetPropertyKey( csmp::Index& key )
 template<size_t dim>
 GenericNodePropertyGradient<dim>::~GenericNodePropertyGradient()
 {     // getting rid of the property handles
-     for ( auto it : gradient ) delete it;
+     for ( auto& it : gradient ) delete it;
 }
   
   

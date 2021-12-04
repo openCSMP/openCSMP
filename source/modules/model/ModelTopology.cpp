@@ -2199,7 +2199,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
      // -----------------------------------------------------------
      //  region name  etypes-of-region  elmt-ids for region
      //   map<string, pair<set<string>,vector<size_t> > >  model_regions;
-     for ( auto it : model_regions ) {
+     for ( auto& it : model_regions ) {
           const string region_name{ it.first };
           if ( region_name.find("BOUNDARY") != std::string::npos ||
                region_name.find("IRREGULAR") != std::string::npos ) {
@@ -2234,7 +2234,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const
        for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
          nodes_left.push_back( (*nit) );
  
-      for ( auto it : boundary_regions )
+      for ( auto& it : boundary_regions )
        for ( bit=ElementsOfRegionBegin(it.c_str());
              bit!=ElementsOfRegionEnd(it.c_str()); bit++ )
          for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
@@ -2434,7 +2434,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const
      // -----------------------------------------------------------
      //  region name  etypes-of-region  elmt-ids for region
      //   map<string, pair<set<string>,vector<size_t> > >  model_regions;
-     for ( auto it : model_regions ) {
+     for ( auto& it : model_regions ) {
           const string region_name{ it.first };
           if ( region_name.find("BOUNDARY") != std::string::npos ||
                region_name.find("IRREGULAR") != std::string::npos ) {
@@ -2485,7 +2485,7 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              back.push_back( (*vit) );
        }
-     for ( auto it : boundary_regions )
+     for ( auto& it : boundary_regions )
        for ( auto bit=ElementsOfRegionBegin(it.c_str());
              bit!=ElementsOfRegionEnd(it.c_str()); bit++ )
          for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
@@ -2569,26 +2569,26 @@ bool ModelTopology::FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const
      // zapping all previous box boundary flags
      for ( auto bit=vset.BFlagsBegin(); bit!= vset.BFlagsEnd(); ++bit ) (*bit) = NOT;
      // assigning "IRREGULAR","BOTTOM","LEFT","RIGHT","TOP","FRONT","BACK"
-     for ( auto it : irregular ) vset.AddBFlag( it, IRREGULAR_OUTSIDE );
-     for ( auto it : bottom ) vset.AddBFlag( it, BOTTOM_OUTSIDE );
-     for ( auto it : left ) vset.AddBFlag( it, LEFT_OUTSIDE );
-     for ( auto it : right ) vset.AddBFlag( it, RIGHT_OUTSIDE );
-     for ( auto it : top ) vset.AddBFlag( it, TOP_OUTSIDE );
-     for ( auto it : front ) vset.AddBFlag( it, FRONT_OUTSIDE );
-     for ( auto it : back ) vset.AddBFlag( it, BACK_OUTSIDE );
+     for ( auto& it : irregular ) vset.AddBFlag( it, IRREGULAR_OUTSIDE );
+     for ( auto& it : bottom ) vset.AddBFlag( it, BOTTOM_OUTSIDE );
+     for ( auto& it : left ) vset.AddBFlag( it, LEFT_OUTSIDE );
+     for ( auto& it : right ) vset.AddBFlag( it, RIGHT_OUTSIDE );
+     for ( auto& it : top ) vset.AddBFlag( it, TOP_OUTSIDE );
+     for ( auto& it : front ) vset.AddBFlag( it, FRONT_OUTSIDE );
+     for ( auto& it : back ) vset.AddBFlag( it, BACK_OUTSIDE );
      // edges
-     for ( auto it : back_bottom ) vset.AddBFlag( it, BACK_BOTTOM );
-     for ( auto it : back_right ) vset.AddBFlag( it, BACK_RIGHT );
-     for ( auto it : back_top ) vset.AddBFlag( it, BACK_TOP );
-     for ( auto it : back_left ) vset.AddBFlag( it, BACK_LEFT );
-     for ( auto it : bottom_left ) vset.AddBFlag( it, BOTTOM_LEFT );
-     for ( auto it : bottom_right ) vset.AddBFlag( it, BOTTOM_RIGHT );
-     for ( auto it : top_right ) vset.AddBFlag( it, TOP_RIGHT );
-     for ( auto it : top_left ) vset.AddBFlag( it, TOP_LEFT );
-     for ( auto it : front_bottom ) vset.AddBFlag( it, FRONT_BOTTOM );
-     for ( auto it : front_right ) vset.AddBFlag( it, FRONT_RIGHT );
-     for ( auto it : front_top ) vset.AddBFlag( it, FRONT_TOP );
-     for ( auto it : front_left ) vset.AddBFlag( it, FRONT_LEFT );
+     for ( auto& it : back_bottom ) vset.AddBFlag( it, BACK_BOTTOM );
+     for ( auto& it : back_right ) vset.AddBFlag( it, BACK_RIGHT );
+     for ( auto& it : back_top ) vset.AddBFlag( it, BACK_TOP );
+     for ( auto& it : back_left ) vset.AddBFlag( it, BACK_LEFT );
+     for ( auto& it : bottom_left ) vset.AddBFlag( it, BOTTOM_LEFT );
+     for ( auto& it : bottom_right ) vset.AddBFlag( it, BOTTOM_RIGHT );
+     for ( auto& it : top_right ) vset.AddBFlag( it, TOP_RIGHT );
+     for ( auto& it : top_left ) vset.AddBFlag( it, TOP_LEFT );
+     for ( auto& it : front_bottom ) vset.AddBFlag( it, FRONT_BOTTOM );
+     for ( auto& it : front_right ) vset.AddBFlag( it, FRONT_RIGHT );
+     for ( auto& it : front_top ) vset.AddBFlag( it, FRONT_TOP );
+     for ( auto& it : front_left ) vset.AddBFlag( it, FRONT_LEFT );
 
      // Flagging the corner nodes
 

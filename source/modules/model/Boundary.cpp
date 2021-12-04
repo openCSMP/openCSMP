@@ -1291,7 +1291,7 @@ void Boundary<dim>::Out() const
 
   // member faces
   cout << "\n\tFace objects, their area, nodes (,), and lower-(:) and higher-dimensional neighbor elements:\n";
-  for ( const auto it : this->elmt_vec_ ) {
+  for ( const auto& it : this->elmt_vec_ ) {
     if ( it == NULL ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "member element pointer not initialized." );
     cout << "\t\t" << it->Idx() << ": " << it->Area() << ", ";
     // Nodes

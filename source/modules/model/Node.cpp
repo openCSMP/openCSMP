@@ -442,7 +442,7 @@ void  Node<dim>::UpdateParents() {
     // extra vector needed for tempory
     vector<ONE_BYTE_NUMBER> temp{ parent_node_indexes_.size() };
     int n{0};
-    for ( auto i : indices ) temp[n++] = parent_node_indexes_[i];
+    for ( auto& i : indices ) temp[n++] = parent_node_indexes_[i];
     parent_node_indexes_ = temp;
 
   } // end UpdateParents

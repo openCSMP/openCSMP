@@ -206,7 +206,6 @@ void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundar
 template <size_t dim>
 void Boundary_Test::CheckNodeFlags( const Boundary<dim>& boundary, BOX_BOUNDARY flag, bool interiorOnly )
   {
-    const auto domainNodesEnd( boundary.NodesEnd() );
     const auto interiorDomainNodesEnd( boundary.PerimeterNodesBegin() );
     for( auto it = boundary.NodesBegin(); it != interiorDomainNodesEnd; ++it )
       {

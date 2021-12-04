@@ -485,7 +485,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
   model->MergeRegions( interface_sets, "interfaces" );
 
-  for ( auto name : interface_sets )
+  for ( auto& name : interface_sets )
     model->RemoveRegion( name.c_str(), false );
 
   interfaces.clear();

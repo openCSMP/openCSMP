@@ -152,15 +152,16 @@ InterFace<dim>::~InterFace()
  {
     // disconnecting the neighbor interfaces that are connected to this element
     if ( !interface_connector_.empty() )
-      for ( auto& it : interface_connector_ ) {
-          // looping over the neighbors of the neighbor
-          const size_t n_nbors{ it->interface_connector_.size() };
-          for ( size_t i{0}; i<n_nbors; ++i )
-            if ( it->Neighbor(i) == this ) {
-                 it->Assign( i, static_cast<InterFace<dim>*>(nullptr) );
-                 break;
-              }
-        }
+      for ( auto& it : interface_connector_ )
+        if ( it != nullptr ) {
+            // looping over the neighbors of the neighbor
+            const size_t n_nbors{ it->interface_connector_.size() };
+            for ( size_t i{0}; i<n_nbors; ++i )
+              if ( it->Neighbor(i) == this ) {
+                   it->Assign( i, static_cast<InterFace<dim>*>(nullptr) );
+                   break;
+                }
+          }
  }
 
 
@@ -436,7 +437,7 @@ template<size_t dim>
 size_t  InterFace<dim>::ConnectedNeighbors() const
 {
   size_t connections( interface_connector_.size() );
-  for ( auto f : interface_connector_ )
+  for ( auto& f : interface_connector_ )
     if ( f == nullptr ) connections--;
   return connections;
 }
@@ -521,8 +522,8 @@ std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
   // 2. finding the shared faces
   bool found( false );
   size_t inner_face_id, outer_face_id;
-  for ( auto inner_face : inner_elmt_faces ) {
-    for ( auto outer_face : outer_elmt_faces ) {
+  for ( auto& inner_face : inner_elmt_faces ) {
+    for ( auto& outer_face : outer_elmt_faces ) {
       // compares the sets of the point coordinates of potentially opposing faces
       if ( inner_face.first == outer_face.first ) {
         inner_face_id = inner_face.second.second;

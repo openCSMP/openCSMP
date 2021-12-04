@@ -129,6 +129,7 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
   string varFileName = "CSMP-variables.txt";
 	model3d_name_ = "prism_test";
 	model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
+ 
   vector<Element<3>*> elements3;
   MeshManager<3>& mesh(model3d_->Mesh());
 	cout << "\nNodes: " << mesh.Nodes() << "\n";
@@ -381,7 +382,7 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 	vector<size_t>  node_numbers_Model;
 	node_numbers_Model.reserve(model_domain.Nodes());
 	cout << "\nMeshManager_Test::TestEntityNumberingFunction: model '" << model3d_name_ << "': 'Model' numbered nodes:\n";
-	for (auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); ++nit) {
+	for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); ++nit) {
 		node_numbers_Model.push_back((*nit)->Idx());
 		if ((*nit)->Idx() % 100 == 0) cout << (*nit)->Idx() << "...";
 	}
@@ -417,12 +418,12 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 			current_nodes.pop_front();
 		}
 
-		for (auto nit : discovered_nodes)
+		for (auto& nit : discovered_nodes )
 			nodes_renumbered.push_back(nit->Idx());
 
 		std::sort(nodes_renumbered.begin(), nodes_renumbered.end(), [](auto& lhs, auto& rhs) {return lhs < rhs; });
 
-		for (auto nit : nodes_renumbered)
+		for ( auto& nit : nodes_renumbered )
 			if (nit % 100 == 0) cout << nit << "...";			
 		cout << "\n";
 

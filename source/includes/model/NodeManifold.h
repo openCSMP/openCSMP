@@ -71,7 +71,7 @@ class NodeManifold {
       size_t Branches() const;
 
       /// access to node
-      Node<dim>* const N( size_t branch );
+      Node<dim>* const N( size_t branch ) const;
       
       /// where the node resides
       INTERFACE_SIDE InterFaceSide( size_t branch ) const;

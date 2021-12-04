@@ -31,7 +31,7 @@
 
 #include "CSMP_highLevelUtilities.h"
 
-#define MODEL_SUBDOMAIN_DEBUG
+//#define MODEL_SUBDOMAIN_DEBUG
 
 using namespace std;
 
@@ -1991,27 +1991,27 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( auto it : elmt_vec_ ) it->Store( prop_key, var );
+                for ( auto& it : elmt_vec_ ) it->Store( prop_key, var );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( auto it : elmt_vec_ )
+                for ( auto& it : elmt_vec_ )
                   for ( size_t i=0U; i<it->IntegrationPoints(); i++ )
                     it->Store( i, prop_key, var );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( auto it : elmt_vec_ )
+             for ( auto& it : elmt_vec_ )
                for ( size_t i=0U; i<it->Facets(); i++ )
                  for ( size_t j=0U; j<it->IntegrationPointsPerFacet(); j++ )
                    it->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( auto it : elmt_vec_ )
+             for ( auto& it : elmt_vec_ )
                for ( size_t i=0U; i<it->Sectors(); i++ )
                  for ( size_t j=0U; j<it->IntegrationPointsPerSector(); j++ )
                    it->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
-                for ( auto nit : node_vec_ )
+                for ( auto& nit : node_vec_ )
                   nit->Store( prop_key, var );
              }
            else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",

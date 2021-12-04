@@ -258,7 +258,7 @@ size_t NodeManifold<dim>::Branches() const
 
 
 template<size_t dim>
-Node<dim>* const NodeManifold<dim>::N( size_t index )
+Node<dim>* const NodeManifold<dim>::N( size_t index ) const
 {
   return branches_[index].first;
 }

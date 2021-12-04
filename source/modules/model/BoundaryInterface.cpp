@@ -2135,11 +2135,11 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
 
 	  // removing the original regions from which the boundaries were created from model and into the non-unique regions map
     if ( remove_original_lower_dimensional_regions ) {
-         for ( auto it : eligibleRegions )
+         for ( auto& it : eligibleRegions )
            boundaryComplex->RemoveRegion( it.c_str() );
       }
     else { // moving them out of the unique regions map into the non-unique regions
-        for ( auto it : eligibleRegions ) {
+        for ( auto& it : eligibleRegions ) {
             cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromRegions: Removing region '";
             cout << it << "' from 'Model' since it was transformed into Boundary...";
             boundaryComplex->RemoveFromRegion("Model", it.c_str());
@@ -2306,7 +2306,7 @@ void createBoundaryFaces( MeshManager<dim>& mesh, const PropertyDatabase<dim>& d
     const LocalVariables             lvars( dbase.LocalVariablesAt(FACE) );
     const IntegrationPointVariables  ivars(dbase.IntegrationPointVariablesAt(FACE) );
 
-    for ( auto it : face_set ) {
+    for ( auto& it : face_set ) {
          // building the face info structure
          boundary_faces.push_back( mesh.AddBoundaryFace( it.first, it.second, lvars, ivars ) );
       }
