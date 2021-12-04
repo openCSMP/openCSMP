@@ -1384,8 +1384,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
 
     // the established range of lower-dimensional input elements is now indexed consecutively
     // and their connectivity pattern is remembered for later assignment of faces to their neighbors
-    deque<size_t>                    connectivity; // like a 'pfverts'
-    auto                             it( first );  // copy
+    deque<long>                      connectivity; // like a 'pfverts'
+    auto                             it( first ), erase_it( first );  // iterator copies
     while ( it != last ) {
         (*it)->Idx();
         ++it;
@@ -1404,7 +1404,9 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          
          // 1.2 making a 'pfverts' list
          for ( auto n=(*first)->NeighborsBegin(); n!=(*first)->NeighborsEnd(); ++n )
-           connectivity.push_back( (*n)->Idx() );
+           // there may be no neighbor
+           if ( (*n) != nullptr ) connectivity.push_back( (*n)->Idx() );
+           else connectivity.push_back( IRREGULAR );
      
          elmt_iterators.emplace_back( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
          
@@ -1435,23 +1437,36 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
               face_ptrs.back()->Idx( (*first)->Idx() );
            }
        
-         // erase element and null the current element pointer
-cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting element "<< (*first)->Idx();
-         elements_.erase( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
-         (*first) = nullptr;
+         // NOTE: no erasure here because this would add nullptrs to the nodes parents, corrupting their functionality
          first++;
       }
       
      // 2. remove the elements
-// FAIL     sort( elmt_iterators.begin(), elmt_iterators.end() );
-// FAIL     elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+     // FAIL    elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) ); // DOES NOT WORK YET
+//cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting elements...\n";
+     while ( erase_it != last ) {
+          // erase element and null the current element pointer
+          //  cerr <<" "<< (*erase_it)->Idx();
+          elements_.erase( elements_.get_iterator( (*erase_it) ) ); // const_cast<Element<dim>* const>(*first)) does not help either
+          (*erase_it) = nullptr;
+          erase_it++;
+       }
+//cerr <<"\n\tremaining elements: "<< elements_.size() << endl;
+ 
+     
+     // 3. cleaning up the node to parent connectivity
+     for ( auto& nit : nodes_ ) nit.EraseNullPointerParents();
       
-     // 3. connecting Faces among each other
+      
+     // 4. connecting Faces among each other
      size_t n{0};
      for ( auto& it : face_ptrs ) {
           const size_t n_neighbors{ it->Neighbors() };
           for ( size_t face{0}; face < n_neighbors; ++face )
-          it->Assign( face, face_ptrs[ connectivity[n++] ] );
+            if ( connectivity[n] >= 0 )
+              it->Assign( face, face_ptrs[ connectivity[n++] ] );
+            // else
+            // the face pointer is already initialized with nullptr
        }
      
      // NOT NECESSARY because connectivity pattern of the replaced elements can be used

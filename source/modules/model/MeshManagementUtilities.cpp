@@ -1960,20 +1960,24 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
    // checking node parent connectivity after removing duplicate nodes
    shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
    for ( const auto& nit : shared_nodes ) {
-        for ( size_t i{0}; i<nit->Parents(); ++i )
-          if ( nit->Parent(i) == nullptr ||
-               nit->Parent(i)->FE() == nullptr ) {
-               cerr <<"\nNode parent cell "<< nit->Parent(i)->Idx() <<": is corrupt.";
-               issues++;
-            }
+       if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
+       else
+         for ( size_t i{0}; i<nit->Parents(); ++i )
+            if ( nit->Parent(i) == nullptr ||
+                 nit->Parent(i)->FE() == nullptr ) {
+                 cerr <<"\nnode parents vector contains nullptr.";
+                 issues++;
+              }
      }
    // node to node connectivity is tested as well
    for ( const auto& nit : shared_nodes ) {
-        for ( size_t i{0}; i<nit->Neighbors(); ++i )
-          if ( nit->Neighbor(i) == nullptr ) {
-               cerr <<"\nNeighbor "<< i <<" of node "<< nit->Idx() <<": is corrupt.";
-               issues++;
-            }
+       if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
+       else
+         for ( size_t i{0}; i<nit->Neighbors(); ++i )
+            if ( nit->Neighbor(i) == nullptr ) {
+                 cerr <<"\nneighbor "<< i <<" of node "<< nit->Idx() <<": is corrupt.";
+                 issues++;
+              }
      }
       
    if ( issues > 0 ) return false;

@@ -289,20 +289,20 @@ void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 template<size_t dim>
 size_t  Node<dim>::Neighbors() const
  {
-    size_t  node_neighbors(parent_node_indexes_.size());
+    size_t  node_neighbors(parent_element_pointers_.size());
     
     // subtracting number of lower dimensional parent elements as these node sharing
     // but otherwise inconsequential elements would lead to a wrong node count
     if constexpr ( dim == 3U ) {
          for ( typename vector<Element<dim>*>::const_iterator
                it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); ++it )
-           if ( (*it)->IsSurfaceElement() || (*it)->IsLineElement() ) node_neighbors--;
+           if ( (*it) == nullptr || (*it)->IsSurfaceElement() || (*it)->IsLineElement() ) node_neighbors--;
          return node_neighbors;
       }
     if constexpr ( dim == 2U ) {
          for ( typename vector<Element<dim>*>::const_iterator
                it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); it++ )
-           if ( (*it)->IsLineElement() ) node_neighbors--;
+           if ( (*it) == nullptr || (*it)->IsLineElement() ) node_neighbors--;
          return node_neighbors;
       }
       
@@ -323,7 +323,11 @@ template<size_t dim>
 Node<dim>*  Node<dim>::Neighbor( size_t neighbor_node ) const
  {
     assert( neighbor_node < Neighbors() );
-    assert( Parent( neighbor_node ) != nullptr );
+    if ( Parent( neighbor_node ) == nullptr ) {
+         cerr <<"\nNode("<< Idx() <<")::Neighbor("<< neighbor_node <<") requires parent that is a nullptr.";
+         cerr <<" return NULL";
+         return nullptr;
+      }
    
     size_t next_node(ParentNodeNumber(neighbor_node) + 1U);
     if ( next_node == Parent( neighbor_node )->Nodes() ) next_node = 0U;
@@ -689,13 +693,14 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     assert( (*nit)->Parents() > 0 );
     const size_t n_parents{(*nit)->Parents()};
     set<Element<dim>*> shared_parents;
-    for ( size_t i{0}; i<n_parents; ++i ) {
-         assert( (*nit)->Parent(i) != nullptr );
-         if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
-         if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
-         if ( (*first)->IsParent( (*nit)->Parent(i) ) )
-           shared_parents.insert( (*nit)->Parent(i) );
-      }
+    for ( size_t i{0}; i<n_parents; ++i )
+      if ( (*nit)->Parent(i) != nullptr ) {
+           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
+           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+           // TODO: IsParent does not work anymore as soon as there is a nullptr in the sequence
+           if ( (*first)->IsParent( (*nit)->Parent(i) ) )
+             shared_parents.insert( (*nit)->Parent(i) );
+        }
       
     // advancing the node pointer
     nit++;
@@ -711,7 +716,13 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
       }
       
     // verifying that the results are as expected
-    assert( !shared_parents.empty() );
+    if (  shared_parents.empty() ) {
+          for ( ; first!=last; ++first )
+            printParents( (*first) );
+          ErrorHandler::Instance().notice( ERROR, "parentElement", "no suitable parent element was found" );
+
+          return make_pair( (*shared_parents.begin()), UINT_MAX );
+       }
     if (  shared_parents.size() > 1 ) {
          ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
                                          "this may be the case for a lower-dimensional element inside the model; use other function");
@@ -784,7 +795,7 @@ void printParents( const Node<dim>* const nptr )
     
     cout <<"\nNode "<< nptr->Idx();
     for ( size_t i{0}; i<n_parents; ++i ) {
-         if ( nptr->Parent(i) == nullptr ) cout <<" null";
+         if ( nptr->Parent(i) == nullptr ) cout <<" NULL";
          else {
               cout <<" "<< parseAbbreviated_FE_Type( nptr->Parent(i)->FE_Type() );
               cout <<":"<< nptr->Parent(i)->Idx() <<"(n"<< nptr->ParentNodeNumber(i) <<")";
