@@ -97,6 +97,9 @@ class ModelSubDomain {
     
     /// assuming that a partitioned (and sorted) element vector is in place, constructs the bd_face_vec_ by checking whether neighbor elements belong to the domain or not
     void BuildPerimeterFaceVector( size_t interior_elements );
+    
+    /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
+    size_t RemoveNullPointerCells();
 
     // ----------------------------------------
     // Indexes
@@ -202,6 +205,9 @@ class ModelSubDomain {
 
     /// characteristics like 'length', 'area', 'volume' , 'aspect ratio', 'inner radius' are assigned to user-defined variable
     void AssignElementCharacteristicsTo( const char* characteristic, const char* var );
+    
+    /// writes a CSV (comma delimited ascii text) file with point coordinates, node-idx, BOX_BOUNDARY flags, and interior vs perimeter information
+    void NodeAttributesToCSV();
 
     // ----------------------------------------
     // manipulation of properties

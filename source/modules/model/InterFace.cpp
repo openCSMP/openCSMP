@@ -126,28 +126,22 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
 /// move constructor
 template<size_t dim>
 InterFace<dim>::InterFace( InterFace<dim>&& ifc )
-  : FiniteElementPolicy<dim, ::csmp::InterFace>( move( ifc.FE() ) ),
-    FiniteVolumePolicy<dim, csmp::InterFace>( move( ifc.FV() ) ),
-    idx_( move( ifc.idx_ ) ),
+  : FiniteElementPolicy<dim, ::csmp::InterFace>( ifc.FE() ),
+    FiniteVolumePolicy<dim, csmp::InterFace>( ifc.FV() ),
+    idx_( ifc.idx_ ),
+    inner_parent_face_id_( ifc.inner_parent_face_id_ ),
+    outer_parent_face_id_( ifc.outer_parent_face_id_ ),
+    innerParent_( ifc.innerParent_ ),
+    outerParent_( ifc.outerParent_ ),
+    middleElement_( ifc.middleElement_ ),
     node_connector_( move( ifc.node_connector_ ) ),
     interface_connector_( move( ifc.interface_connector_ ) ),
-    middleElement_( move( ifc.middleElement_ ) ),
-    current_side_( move( ifc.current_side_ ) ),
-    innerParent_( move( ifc.innerParent_ ) ),
-    outerParent_( move( ifc.outerParent_ ) ),
-    inner_parent_face_id_( move( ifc.inner_parent_face_id_ ) ),
-    outer_parent_face_id_( move( ifc.outer_parent_face_id_ ) ),
-    collocated_nodes_( move(ifc.collocated_nodes_ ) )
+    current_side_( ifc.current_side_ ),
+    collocated_nodes_( ifc.collocated_nodes_ )
 {
   assert( !interface_connector_.empty() ); // detected unitialized element
                                            // variable storage: call of initialization function
   this->LVS( move( ifc.LVS() ) );
-
-  ifc.innerParent_ = nullptr;
-  ifc.outerParent_ = nullptr;
-
-  ifc.AssignFiniteElementNullPtr();
-  ifc.AssignFiniteVolumeNullPtr();
 }
 
 
@@ -156,20 +150,17 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
 template<size_t dim>
 InterFace<dim>::~InterFace()
  {
-    // disconnecting the neighbor interfaces that are connected to this interface
-    for ( auto it : interface_connector_ )
-      if ( it != nullptr )
-        for ( auto nit : it->interface_connector_ )
-          if ( nit == this ) {
-               nit = nullptr;
-               break;
-            }
-    // disconnecting the interface from its nodes and neighbors
-    for ( auto& it : interface_connector_ ) it = nullptr;
-    for ( auto& it : node_connector_ ) it = nullptr;
-    innerParent_   = nullptr;
-    outerParent_   = nullptr;
-    middleElement_ = nullptr;
+    // disconnecting the neighbor interfaces that are connected to this element
+    if ( !interface_connector_.empty() )
+      for ( auto& it : interface_connector_ ) {
+          // looping over the neighbors of the neighbor
+          const size_t n_nbors{ it->interface_connector_.size() };
+          for ( size_t i{0}; i<n_nbors; ++i )
+            if ( it->Neighbor(i) == this ) {
+                 it->Assign( i, static_cast<InterFace<dim>*>(nullptr) );
+                 break;
+              }
+        }
  }
 
 
@@ -207,27 +198,21 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
 {
   assert( &ifc != this );
 
-  if ( ifc.FE() ) FiniteElementPolicy<dim, csmp::InterFace>::Assign( move( ifc.FE() ) );
-  if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( move( ifc.FV() ) );
+  if ( ifc.FE() ) FiniteElementPolicy<dim, csmp::InterFace>::Assign( ifc.FE() );
+  if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( ifc.FV() );
 
   idx_ = ifc.idx_;
-  collocated_nodes_    = ifc.collocated_nodes_;
-  interface_connector_ = ifc.interface_connector_;
-  middleElement_         = ifc.middleElement_;
-  node_connector_      = ifc.node_connector_;
-  current_side_ = ifc.current_side_;
-  innerParent_ = ifc.innerParent_;
-  outerParent_ = ifc.outerParent_;
   inner_parent_face_id_ = ifc.inner_parent_face_id_;
   outer_parent_face_id_ = ifc.outer_parent_face_id_;
+  innerParent_          = ifc.innerParent_;
+  outerParent_          = ifc.outerParent_;
+  middleElement_        = ifc.middleElement_;
+  interface_connector_  = move( ifc.interface_connector_ );
+  node_connector_       = move( ifc.node_connector_ );
+  current_side_         = ifc.current_side_;
+  collocated_nodes_     = ifc.collocated_nodes_;
 
   this->LVS( move( ifc.LVS() ) );
-
-  ifc.AssignFiniteElementNullPtr();
-  ifc.AssignFiniteVolumeNullPtr();
-
-  ifc.innerParent_ = nullptr;
-  ifc.outerParent_ = nullptr;
 
   return *this;
 }
@@ -243,7 +228,6 @@ bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
   if ( &ifc != this )
     if ( innerParent_ != ifc.innerParent_ ||
          outerParent_ != ifc.outerParent_ ||
-         middleElement_ != ifc.middleElement_ ||
          inner_parent_face_id_ != ifc.inner_parent_face_id_ ||
          outer_parent_face_id_ != ifc.outer_parent_face_id_ )
       return false;

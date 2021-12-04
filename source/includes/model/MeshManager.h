@@ -121,6 +121,11 @@ public:
   // MESH MODIFICATION
   //
   // ==============================================================
+  
+  /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
+  std::vector<Face<dim>*>  ReplaceElementsByFaces( const PropertyDatabase<dim>&,
+                                                   typename std::vector<Element<dim>*>::iterator first,
+                                                   typename std::vector<Element<dim>*>::iterator last );
 
   /// by location only, no parent element  gets connected
   Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
@@ -143,7 +148,7 @@ public:
                                              const std::vector<Node<dim>*>& nodes,
                                              int32_t material_id );
 
-  /// compatibility checks are performed
+  /// creates a Face matching the current lower-dimensional element and deletes the element subsequently
   Face<dim>* const ReplaceElementByFace( csmp::Element<dim>* eptr,
                                          csmp::Element<dim>* inner_eptr,
                                          csmp::Element<dim>* outer_eptr,
@@ -151,7 +156,16 @@ public:
                                          size_t adjacent_face_of_outer_element,
                                          const LocalVariables& face_variables,
                                          const IntegrationPointVariables& face_integration_point_variables );
-     
+
+  /// creates Face matching the supplied lower-dimensional element but without deleting the underlying element 
+  Face<dim>* const ConstructFaceFromElement( csmp::Element<dim>* eptr,
+                                             csmp::Element<dim>* inner_eptr,
+                                             csmp::Element<dim>* outer_eptr,
+                                             size_t adjacent_face_of_inner_element,
+                                             size_t adjacent_face_of_outer_element,
+                                             const LocalVariables& face_variables,
+                                             const IntegrationPointVariables& face_integration_point_variables );
+
   /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in; deduces element type
   Face<dim>* const AddFace( Element<dim>* const inner_parent, size_t inner_parent_face_id,
                             Element<dim>* const outer_parent, size_t outer_parent_face_id,

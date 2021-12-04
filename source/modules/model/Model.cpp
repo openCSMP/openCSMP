@@ -329,7 +329,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
           const bool remove_original_lower_dimensional_regions(true);
           // if the model is box-shaped (albeit perhaps with irregular top surface)
           if ( !fully_irregular_mesh ) {
-              this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */);
+              this->EstablishBoxBoundaries();
               // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
               cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
             }
@@ -417,6 +417,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 
   // 5. Forming Boundaries
   if ( create_boundaries ) {
+      const bool remove_lower_dim_original_regions{true};
       if ( !non_box_shaped_model && this->BoxShaped() ) {
            this->EstablishBoxBoundaries();
            if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
@@ -428,7 +429,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
                                "model appears to contain domains that are not connected to one another and there are no SplitBoundaries!" );
 
           if ( contiguous_model )
-            this->EstablishBoundariesFromRegions( true );
+            this->EstablishBoundariesFromRegions( remove_lower_dim_original_regions );
           else
             // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
             // but we do want to create them on the outside of the model where the names of the input regions contain
@@ -546,12 +547,21 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     if ( fully_irregular_mesh )
       ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
                                        "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
+
+// Testing the Regions that will become boundaries OK
+//this->Region("BACK").NodeAttributesToCSV();
+//this->Region("RIGHT").NodeAttributesToCSV();
+//this->Region("TOP").NodeAttributesToCSV();
+//this->Region("LEFT").NodeAttributesToCSV();
+//this->Region("BOTTOM").NodeAttributesToCSV();
+//this->Region("FRONT").NodeAttributesToCSV();
+
   // 6. forming Boundaries
   if ( create_boundaries ) {
-    const bool remove_original_lower_dimensional_regions( true );
+    const bool remove_original_lower_dimensional_regions( false );
     // if the model is box-shaped (albeit perhaps with irregular top surface)
     if ( !fully_irregular_mesh ) {
-        this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
+        this->EstablishBoxBoundaries();
       }
     // irregularly shaped models
     else {

@@ -311,6 +311,8 @@ Removes named Region object and its elements and nodes.
 
 @note If the region which shall be removed does not exist, the method reports a warning.
 
+@attention to delete underlying elements, the MeshManager had to be called upon.
+
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName )
@@ -327,18 +329,6 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName 
     iterRegion( groupMap_.find( string( regionName ) ) ),
     iterUniqueRegion( uniqueGroupMap_.find( string( regionName ) ) );
 
-  // alerting user that other regions may be accidentally damaged by deleting non-unique regions
-  if ( iterRegion != groupMap_.end() )
-     ErrorHandler::Instance().notice( WARNING, "RegionsInterface<dim,Model>::RemoveRegion:", regionName,
-                                     "is a non-unique region. Elements shared with an underlying unique region will also be deleted" );
-  else {
-      MeshManager<dim>&   meshMgr   = static_cast<REGION_COMPLEX<dim>* >(this)->Mesh();
-      csmp::Region<dim>&  subdomain = (iterUniqueRegion != uniqueGroupMap_.end()) ? iterUniqueRegion->second : iterRegion->second;
-
-      // disconnect neighbors from elements, update node-parent relationships, and remove potential orphan nodes
-      meshMgr.Delete( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
-   }
-
   // if the region was found in the respective map, it is erased
   if ( iterRegion != groupMap_.end() )
     groupMap_.erase( std::string( regionName ) );
@@ -348,6 +338,21 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName 
 } // end RemoveRegion
 
 
+// DEBUG - check element vector for duplicates (OK)
+//set<const csmp::Element<dim>*> elmts( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+//assert( elmts.size() == subdomain.Elements() );
+// DEBUG - check element vector for dead elements (OK - no corrupt elements)
+//cerr <<"\nRegionInterface<dim, REGION_COMPLEX>::RemoveRegion: "<< regionName <<"\n";
+//for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
+//  cerr <<" "<< parseFiniteElementType( (*it)->FE_Type() ) <<":"<< (*it)->Idx();
+//cerr << endl;
+// DEBUG - check MeshManager vector for dead elements (OK - no corrupt elements)
+//cerr <<"\nRegionInterface<dim, REGION_COMPLEX>::RemoveRegion: "<< regionName <<"\n";
+//for ( auto it=meshMgr.ElementsBegin(); it!=meshMgr.ElementsEnd(); ++it )
+//  cerr <<" "<< parseFiniteElementType( (*it).FE_Type() ) <<":"<< (*it).Idx();
+//cerr << endl;
+
+ 
 
 
 

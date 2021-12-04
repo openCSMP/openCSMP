@@ -272,7 +272,7 @@ class VData {
     void   EstablishElementConnectivity2D();
     
     /// rebuilds 'pfverts' from scratch
-    void   EstablishElementConnectivity3D();
+    void   EstablishElementConnectivity3D(); // retested: OK 3/12/21 by SKM
 
     
     // PERSISTANCE (storing mesh in binary file)

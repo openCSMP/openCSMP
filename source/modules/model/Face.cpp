@@ -461,15 +461,15 @@ Face<dim>::Face( const Face<dim>& fc )
 /// move constructor
 template<size_t dim>
 Face<dim>::Face( Face<dim>&& fc )
-  : FiniteElementPolicy<dim,csmp::Face>(move(fc.FE())),
-    FiniteVolumePolicy<dim,csmp::Face>(move(fc.FV())),
-    idx_(move(fc.idx_)),
+  : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
+    FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
+    idx_(fc.idx_),
+    inner_parent_face_id_(fc.inner_parent_face_id_),
+    outer_parent_face_id_(fc.outer_parent_face_id_),
+    innerParent_(fc.innerParent_),
+    outerParent_(fc.outerParent_),
     node_connector_(move(fc.node_connector_)),
-    face_connector_(move(fc.face_connector_)),
-    innerParent_(move(fc.innerParent_)),
-    outerParent_(move(fc.outerParent_)),
-    inner_parent_face_id_(move(fc.inner_parent_face_id_)),
-    outer_parent_face_id_(move(fc.outer_parent_face_id_))
+    face_connector_(move(fc.face_connector_))
  {
     this->LVS( move(fc.LVS()) );
 
@@ -481,25 +481,23 @@ Face<dim>::Face( Face<dim>&& fc )
  }
 
 
-// TODO: implement move constructor and assignment operator
+
 
 
 template<size_t dim>
 Face<dim>::~Face()
  {
-    // disconnecting the neighbor elements that are connected to this element
-    for ( auto it : face_connector_ )
-      if ( it != nullptr )
-        for ( auto nit : it->face_connector_ )
-          if ( nit == this ) {
-               nit = nullptr;
-               break;
-            }
-    // disconnecting the face from its nodes and neighbors
-    for ( auto& it : face_connector_ ) it = nullptr;
-    for ( auto& it : node_connector_ ) it = nullptr;
-    innerParent_ = nullptr;
-    outerParent_ = nullptr;
+    // disconnecting the neighbor faces that are connected to this element
+    if ( !face_connector_.empty() )
+      for ( auto& it : face_connector_ ) {
+          // looping over the neighbors of the neighbor
+          const size_t n_nbors{ it->face_connector_.size() };
+          for ( size_t i{0}; i<n_nbors; ++i )
+            if ( it->Neighbor(i) == this ) {
+                 it->Assign( i, static_cast<Face<dim>*>(nullptr) );
+                 break;
+              }
+        }
  }
 
 
@@ -540,24 +538,18 @@ Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
  {
     assert( &fc != this );
 
-    if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(move(fc.FE()));
-    if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(move(fc.FV()));
+    if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+    if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
    
-    idx_             = move(fc.idx_ );
-    face_connector_  = move(fc.face_connector_);
-    node_connector_  = move(fc.node_connector_);
-    innerParent_     = move(fc.innerParent_);
-    outerParent_     = move(fc.outerParent_);
-    inner_parent_face_id_ = move(fc.inner_parent_face_id_);
-    outer_parent_face_id_ = move(fc.outer_parent_face_id_);
+    idx_                  = fc.idx_;
+    inner_parent_face_id_ = fc.inner_parent_face_id_;
+    outer_parent_face_id_ = fc.outer_parent_face_id_;
+    innerParent_          = fc.innerParent_;
+    outerParent_          = fc.outerParent_;
+    face_connector_       = move(fc.face_connector_);
+    node_connector_       = move(fc.node_connector_);
 
     this->LVS( move(fc.LVS()) );
-
-    fc.AssignFiniteElementNullPtr();
-    fc.AssignFiniteVolumeNullPtr();
-
-    fc.innerParent_ = nullptr;
-    fc.outerParent_ = nullptr;
 
     return *this;
  }

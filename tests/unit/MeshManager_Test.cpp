@@ -171,6 +171,7 @@ THE MASTER TEST FUNCTION
 void MeshManager_Test::run()
 {
   // basics
+  /*
    {
       cout << "\n----------------------------";
       cout << "\nMeshManager_Test::TestBasics";
@@ -189,7 +190,7 @@ void MeshManager_Test::run()
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
   _test(Test_parentElementsSharedByFace()); // OK
-  
+*/
 
 	cout << "\n------------------------------------------------";
 	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
@@ -285,7 +286,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
        }
     
     // calling the function that is being tested
-    pair<Element<3>*,Element<3>*> parents = parentElementsSharedByFace( face_nodes );
+    pair<Element<3>*,Element<3>*> parents = parentElementsSharedByFace<3>( face_nodes.begin(), face_nodes.end() );
     
     // test that the correct neighbor elements were found (inner one should be first
     _test( parents.first  != nullptr );
@@ -303,7 +304,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     outer_eptr = nullptr;
 
     // calling the function that is being tested
-    parents = parentElementsSharedByFace( face_nodes );
+    parents = parentElementsSharedByFace<3>( face_nodes.begin(), face_nodes.end() );
     
     // test that the correct neighbor elements were found (inner one should be first
     _test( parents.first  != nullptr );
@@ -370,7 +371,6 @@ bool MeshManager_Test::Test_BuiltElementConnectivity3D()
 
 
 
-// TODO: needs to operate on model with faces and interfaces
 bool MeshManager_Test::TestEntityNumberingFunction()
 {
   const bool contiguous{true}, reconstruct_from_CSMP_binary_file{false};

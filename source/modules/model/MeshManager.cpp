@@ -621,7 +621,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   // ------------------------------------------------------------------------------
   // 6. Assigning parent elements (these are the elements that share the node) and
   //    their respective internal node-id numbers to the nodes
-  // -------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------
+  // tested: OK
   if ( csmp_error.Verbose() )
     cout << "\nMeshManager<" << dim << ">::Initialize: assigning parent element information to nodes..." << endl;
   vector<size_t>  parent_elmts_per_node( vset.Vertices(), 0U );
@@ -643,10 +644,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    for ( auto& e : elements_ )
      for ( size_t j = 0U; j<e.Nodes(); ++j )
        e.N( j )->Assign( j, &e );
+       
+   // sorting the parent element pointers stored by the nodes for searching
+   for ( auto& n : nodes_ )
+    n.UpdateParents();
 
    if ( csmp_error.Verbose() )
      cout << "\nMeshManager<" << dim << ">::Initialize: forming regions for contiguous subdomains..." << endl;
-     
+ 
      
   // ------------------------------------------------------------------------------
   // 7. reconstructing NodeManifolds if any
@@ -972,9 +977,15 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    // pointers
    if ( eptr == nullptr )
      csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "element pointer not initialised");
-   // the element indeed lower dimensional?
-   if ( (dim == 3 && !eptr->IsSurfaceElement()) || (dim == 2 && !eptr->IsLineElement()) )
-     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "element to be replaced is not lower-dimensional");
+
+   // is the element indeed lower dimensional?
+   if constexpr ( dim == 3 )
+     if ( !eptr->IsSurfaceElement() )
+     csmp_error.notice( ERROR, "MeshManager<3>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional surface element");
+   if constexpr ( dim == 2 )
+     if ( !eptr->IsLineElement() )
+     csmp_error.notice( ERROR, "MeshManager<2>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional line element");
+
    if ( eptr->FV() == nullptr )
      csmp_error.notice( INFO, "MeshManager<dim>::ReplaceElementByFace", "finite volume stencil pointer not initialised");
    if ( inner_eptr == nullptr )
@@ -985,6 +996,9 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
         return nullptr;
      }
        
+   assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
+   if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
+
    // constructing new face
    const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
    typename plf::colony<Face<dim>>::iterator
@@ -1001,7 +1015,58 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    
  } // end ReplaceElementByFace
        
+
+
+/**
+   Like ReplaceElementByFace, but without deletion of the original element.
+*/
+template<size_t dim>
+Face<dim>* const MeshManager<dim>::ConstructFaceFromElement( csmp::Element<dim>* eptr,
+                                                             csmp::Element<dim>* inner_eptr,
+                                                             csmp::Element<dim>* outer_eptr,
+                                                             size_t adjacent_face_of_inner_element,
+                                                             size_t adjacent_face_of_outer_element,
+                                                             const LocalVariables& lvars,
+                                                             const IntegrationPointVariables& ivars )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( eptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "element pointer not initialised");
+     
+   // is the element indeed lower dimensional?
+   if constexpr ( dim == 3 )
+     if ( !eptr->IsSurfaceElement() )
+     csmp_error.notice( ERROR, "MeshManager<3>::ConstructFaceFromElement", "element to be replaced is not a lower-dimensional surface element");
+   if constexpr ( dim == 2 )
+     if ( !eptr->IsLineElement() )
+     csmp_error.notice( ERROR, "MeshManager<2>::ConstructFaceFromElement", "element to be replaced is not a lower-dimensional line element");
+
+   if ( inner_eptr == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "pointer to higher dimensional element on inside not initialised");
+   if ( inner_eptr == outer_eptr ) {
+        csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "cannot create Face"
+                                  "pointer to higher dimensional elements are the same");
+        return nullptr;
+     }
+     
+   assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
+   if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
        
+   // constructing new face
+   const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
+   typename plf::colony<Face<dim>>::iterator
+     fit = faces_.emplace( Face<dim>( *eptr, inner_eptr, outer_eptr,
+                                       adjacent_face_of_inner_element, adjacent_face_of_outer_element,
+                                       lvars, ivars ) );
+   (*fit).Idx( face_id );
+
+   return &(*fit);
+   
+ } // end ConstructFaceFromElement
+
        
        
        
@@ -1293,49 +1358,108 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
 
 
 
-// replace lower-dimensional element with Face object, deleting the Elements and establishing the neighbor connectivity of the new Faces
-/*
+/**
+   replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
+   
+      the Node flags of the Element are used to determine whether this is a boundary face
+*/
 template<size_t dim>
-size_t MeshManager<dim>::ReplaceElementsByFaces( const PropertyDatabase<dim>& pref,
-                                                 typename vector<Element<dim>*>::iterator first,
-                                                 typename vector<Element<dim>*>::iterator last )
+vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyDatabase<dim>& pref,
+                                                              typename vector<Element<dim>*>::iterator first,
+                                                              typename vector<Element<dim>*>::iterator last )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    vector<Face<dim>*> face_ptrs;
 
     if ( distance(first,last) == 0U ) {
          csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceElementsByFaces", "supplied iterator range is empty; nothing was done.");
-         return 0U;
+         return face_ptrs;
       }
     
-    size_t                           replaced_elements(0U);
     const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
     const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
     vector<Face<dim>*>               faces; faces.reserve( distance(first,last) );
     vector<Face<dim>*>               nbor_faces; // empty for now, will be assigned in second pass
+
+    // the established range of lower-dimensional input elements is now indexed consecutively
+    // and their connectivity pattern is remembered for later assignment of faces to their neighbors
+    deque<size_t>                    connectivity; // like a 'pfverts'
+    auto                             it( first );  // copy
+    while ( it != last ) {
+        (*it)->Idx();
+        ++it;
+      }
+
+// NOT YET vector<typename plf::colony<csmp::Element<dim>>::const_iterator>  elmt_iterators;
+// NOT YET elmt_iterators.reserve( distance(first,last) );
     
     // 1. converting Elements into Faces
     while( first != last )
       {
-         // finding higher dimensional element on the inside of surface element
-         Element<dim>* const inner_parent;
-         Element<dim>* const outer_parent;
+         // 1.1 initial checks and labeling
+         assert( (*first) != nullptr );
+         if constexpr ( dim == 3 ) assert( (*first)->IsSurfaceElement() );
+         if constexpr ( dim == 2 ) assert( (*first)->IsLineElement() );
          
-         // creating face
-         faces.push_back( FaceFromElement( (*first), lvars, ivars, inner_parent, outer_parent, nbor_faces ) );
-         // delete current element
-         delete (*first);
+         // 1.2 making a 'pfverts' list
+         for ( auto n=(*first)->NeighborsBegin(); n!=(*first)->NeighborsEnd(); ++n )
+           connectivity.push_back( (*n)->Idx() );
+     
+// NOT YET         elmt_iterators.emplace_back( elements_.get_iterator(*first) );
+         
+         bool boundary_face{true};
+         for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit ) {
+              if ( (*nit)->AtBoundary() == NOT ) boundary_face = false;
+              break;
+           }
+         
+         // 1.3 much simplified construction of Face at model boundary
+         if ( boundary_face ) {
+              pair<Element<dim>* const,size_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+              face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
+              // recovering the subdomain identifier
+              face_ptrs.back()->Idx( (*first)->Idx() );
+           }
+           
+         // 1.4 more complicated construction of interior face
+         else {
+              pair<Element<dim>*,Element<dim>*>  pelmts = parentElementsSharedByFace<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+              assert( pelmts.first  != nullptr );
+              assert( pelmts.second != nullptr );
+              pair<size_t,size_t> face_ids = findAdjacentElementFaces( pelmts.first, pelmts.second );
+              
+              face_ptrs.push_back( ConstructFaceFromElement( (*first), pelmts.first, pelmts.second,
+                                                             face_ids.first, face_ids.second, lvars, ivars ) );
+              // recovering the subdomain identifier
+              face_ptrs.back()->Idx( (*first)->Idx() );
+           }
+       
+         // erase element and null the current element pointer
+//cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting element "<< (*first)->Idx();
+//         elements_.erase( elements_.get_iterator( (*first) ) );
          (*first) = nullptr;
-         replaced_elements++;
          first++;
       }
       
-     // 2. connecting Faces among each other
-     RebuildConnectivity( faces.begin(), faces.end() );
+     // 2. remove the elements
+// NOT YET     elements_.erase( elmt_iterators.begin(), elmt_iterators.end() );
+      
+     // 3. connecting Faces among each other
+     size_t n{0};
+     for ( auto& it : face_ptrs ) {
+          const size_t n_neighbors{ it->Neighbors() };
+          for ( size_t face{0}; face < n_neighbors; ++face )
+          it->Assign( face, face_ptrs[ connectivity[n++] ] );
+       }
+     
+     // NOT NECESSARY because connectivity pattern of the replaced elements can be used
+     //if constexpr( dim == 3 ) BuildSurfaceConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
+     //if constexpr( dim == 2 ) BuildLineConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
     
-     return replaced_elements;
+     return face_ptrs;
      
  } // end ReplaceElementsByFaces
-*/
 
 
 
@@ -1431,10 +1555,13 @@ size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
             }
           else {
                // remembering the nodes of the element
-               for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit )
+               const auto nodesEnd{ (*first)->NodesEnd() };
+               for ( auto nit=(*first)->NodesBegin(); nit!=nodesEnd; ++nit )
                  node_ptrs.push_back( (*nit) );
                // deleting the element, setting the pointer in the input iterator to zero
-               elements_.erase( elements_.get_iterator(*first) );
+               auto colony_it{ elements_.get_iterator( const_cast<Element<dim>*>(*first) ) };
+               assert( colony_it!= elements_.end() );
+               elements_.erase( colony_it );
                (*first) = nullptr;
                first++;
             }

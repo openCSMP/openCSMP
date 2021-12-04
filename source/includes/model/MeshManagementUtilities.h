@@ -106,7 +106,7 @@ void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Ele
 /// by comparison of node locations, finds overlapping cells and reports them
 bool findCollocatedCells(); // TODO: not implemented yet
 
-// ELEMENT DIAGNOSTICS
+// DIAGNOSTICS
 
 /// determines whether mesh in model is built from finite elements with a local coordinate system
 template<size_t dim>
@@ -157,6 +157,12 @@ template<size_t dim>
 bool findSplitInterfaceElements( const Region<dim>&,
                                  std::set<std::pair<std::pair<Element<dim>*, size_t>,
                                  std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
+
+/// for supplied edge nodes, find their volumetric parent elements; if find segment ids is on, their local numbers are assigned to Idx of the parent elements
+size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  edge_nodes,
+                                               std::map<Element<3>*,std::vector<Node<3>*> >& segm_parents,
+                                               bool find_segment_ids );
+
 
 // UTILITIES FOR TESTING ETC
 

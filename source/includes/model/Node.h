@@ -66,6 +66,8 @@ class Node : public LocalVariableStorage<dim,Node> {
     bool             Unassign( Element<dim>* parent_elmt );
     /// changes parent element related containers to new size
     void             ResizeParentStorage( size_t parent_elements );
+    /// sorts parent vector for searching and eliminates potential nullpointers
+    void             UpdateParents();
     /// removing parent elements that were previously assigned a nullptr
     void             EraseNullPointerParents();
     /// remove all current parent elements
@@ -89,6 +91,9 @@ class Node : public LocalVariableStorage<dim,Node> {
     Element<dim>*    Parent( size_t ) const;
     /// the local number of this node within the node-numbering scheme of parent element (and equal to sector number)
     size_t           ParentNodeNumber( size_t parent_element ) const;
+    /// checks whether Element is a parent of the node
+    bool             IsParent( const Element<dim>* const ) const;
+    
     /// the number of nodes that this node is connected with
     size_t           Neighbors() const;
     /// access to any of these nodes
@@ -126,12 +131,12 @@ class Node : public LocalVariableStorage<dim,Node> {
     void  operator delete( void* );
   
   private:
-    mutable size_t                 idx_;                      ///< 0..n-1
-    BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     Point<dim>                     xyz_;                      ///< coordinate array
-    std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
+    mutable size_t                 idx_;                      ///< 0..n-1
     std::vector<Element<dim>*>     parent_element_pointers_;  ///< parent element pointers
     NodeManifold<dim>*             manifold_ = nullptr;       ///< node manifold pointer
+    std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
+    BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     
     friend class FiniteElement_TestData; // for testing 
 };
@@ -139,9 +144,20 @@ class Node : public LocalVariableStorage<dim,Node> {
 
 // FUNCTIONS INVOLVING NODES
 
-/// returns parent elements shared by face, inner side is reported first; outer next else application: give nodes of lower-dimensional face to find element on either side
+/// returns  elements that share face, inner side is reported first; outer next; face-nodes must be in correct order. Application: from nodes of lower-dimensional face find elements on in- and outside
 template<size_t dim>
-std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( const std::vector<Node<dim>*>& face_nodes_in_correct_order );
+std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename std::vector<Node<dim>*>::const_iterator first,
+                                                                    typename std::vector<Node<dim>*>::const_iterator last );
+
+/// if there is only one parent element expected, then use this method instead of 'parentElementsSharedByFace'
+template<size_t dim>
+std::pair<Element<dim>*,size_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
+                                                typename std::vector<Node<dim>*>::const_iterator last );
+
+/// prints current parent information and checks for duplicate parents
+template<size_t dim>
+void printParents( const Node<dim>* const );
+
 
 } // csmp
 

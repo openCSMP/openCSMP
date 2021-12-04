@@ -1758,6 +1758,122 @@ template double angleBetweenLineCells<2,InterFace>( const InterFace<2>* const, c
 
 
 
+
+
+/**
+      Using, neighbor and node to parent relationships, finds edges of volumetric parent elements which share the node.
+      Returns the node pointers into the output vector, using the same order in which they appear in the parent element.
+      
+      @param edge_nodes sorted vector of edge nodes.
+      @param segm_parents map of the parents found with the nodes that they match along their segments.
+      @param find_segment_ids if this is requested the segment number that the edge corresponds to is reported via the elements IDX.
+      @return the number of the parent elements that could be associated with the nodes.
+      
+      @attention if something went wrong, the Idx() of the involved nodes and volumetric elements will carry the values UINT_MAX.
+      
+      @attention if one of the nodes cannot be associated with a parent, this is reported.
+      
+      Uses node-to-parent connectivity.
+      
+      @attention does not identify which segment of the parent element matches the nodes.
+      
+      @todo check wether this method breaks for quadratic and cubic elements?
+*/
+size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_nodes,
+                                               map<Element<3>*,vector<Node<3>*> >& segm_parents,
+                                               bool find_segment_ids  )
+ {
+     // debugging output for Paraview
+     cerr <<"\nx,y,z,node_id,boundary_flag,";
+     for ( const auto& nit : edge_nodes ) {
+          cerr <<"\n"<< nit->x() <<","<< nit->y() <<","<< nit->z() <<","<< nit->Idx() <<","<< parseBoundary(nit->AtBoundary()) <<",";
+       }
+     cerr << endl;
+     
+     // setting edge node Idx to UINT_MAX so that processed edge nodes can be detected
+     // without the use of another container
+     for ( const auto& nit : edge_nodes ) nit->Idx( UINT_MAX );
+     
+     // loop over the parent elements of the nodes
+     size_t temp_idx{0};
+     for ( const auto& nit : edge_nodes ) {
+          node_processing:
+          const size_t n_parents{ nit->Parents() };
+          for ( size_t i{0}; i<n_parents; ++i )
+            if ( nit->Parent(i)->IsVolumeElement() )
+              {
+                 // checking which of the neighbor nodes of the parent element
+                 // are also contained in the shared nodes vector
+                 const size_t n_node_nbors{ nit->Neighbors() };
+                 for( size_t j{0}; j<n_node_nbors; ++j ) {
+                   assert( nit->Neighbor(j) != nullptr );
+                   if (  nit->Neighbor(j)->Idx() == UINT_MAX && // if the node has not been encountered before
+                         binary_search( edge_nodes.begin(), edge_nodes.end(), nit->Neighbor(j) ) )
+                     {
+                        // we have found a volumetric element whose edge contains 2 of the edge_nodes
+                        segm_parents.insert( make_pair( nit->Parent(i), vector<Node<3>*>{ nit, nit->Neighbor(j) } ) );
+                        // there can only be one shared edge per volume element
+                        nit->Idx( temp_idx++ );
+                        nit->Neighbor(j)->Idx( temp_idx++ );
+                        goto node_processing;
+                     }
+                 }
+              }
+       }
+       
+     // if not all nodes could be associated with volumetric elements
+     if ( temp_idx < edge_nodes.size() ) {
+          cerr <<"\nparentElementsSharingMultipleEdgeNodes: only "<< temp_idx;
+          cerr <<" of the "<< edge_nodes.size() <<" could be matched with segment nodes of volumetric elements.\n";
+       }
+       
+     // finding the segments of the parent elements that the node-pairs match with
+     // the segment Idx values are assigned to the elements
+     if ( find_segment_ids ) {
+         for ( auto& it : segm_parents ) {
+              it.first->Idx( UINT_MAX );
+              const size_t n_segments{ it.first->Segments() };
+              for ( size_t segm{0}; segm < n_segments; ++segm ) {
+                   vector<size_t> snids;
+                   it.first->FE()->NodesOfSegment( segm, snids );
+                   // making set of segment node pointers to search for
+                   set<Node<3>*> segm_nodes;
+                   const size_t n_segm_nodes{ snids.size() };
+                   for ( size_t j{0}; j<n_segm_nodes; ++j )
+                     segm_nodes.insert( it.first->N( snids[j] ) );
+                   // searching segm_nodes for the nodes previously associated with the element
+                   bool all_nodes_found{true};
+                   const size_t n_edge_nodes{ it.second.size() };
+                   for ( size_t j{0}; j<n_edge_nodes; ++j )
+                     if ( segm_nodes.find( it.second[j] ) == segm_nodes.end() ) {
+                          all_nodes_found = false;
+                          break;
+                       }
+                   if ( all_nodes_found ) {
+                        // assigning the segment number i to IDX
+                        it.first->Idx( segm );
+                        // onto the next element
+                        break;
+                     }
+                }
+              // element loop gets here only if edge cannot be matched with segment
+              cerr <<"\nparentElementsSharingMultipleEdgeNodes: Segment ID could not be found for Element: ";
+              cerr << parseFiniteElementType( it.first->FE_Type() ) <<" with the nodes:\n\t";
+              for ( size_t j{0}; j<it.first->Nodes(); ++j ) cerr <<" "<< it.first->N(j)->Idx();
+              cerr <<"\n\tEdge nodes: "<< it.second[0]->Idx() <<" "<< it.second[1]->Idx();
+           }
+       }
+       
+     return segm_parents.size();
+     
+ } // end parentElementsSharingMultipleEdgeNodes
+
+
+
+
+
+
+
 template<size_t dim, template<size_t> class CELL>
 void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
                                  typename std::vector<CELL<dim>*>::const_iterator last,
@@ -1810,18 +1926,21 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
     vector<Node<dim>*>  shared_nodes;
     size_t              issues{0};
     shared_nodes.reserve( distance(first,last) * dim );
+    string              celltype("Element");
+    if constexpr ( is_same< CELL<dim>,Face<dim> >::value ) celltype = "Face";
+    if constexpr ( is_same< CELL<dim>,InterFace<dim> >::value ) celltype = "InterFace";
        
     while ( first != last ) {
          // FE policy
          if ( (*first).FE() == nullptr ) {
-              cerr <<"\nCell "<< (*first).Idx() <<": FE pointer corrupt.";
+              cerr <<"\n"<< celltype << (*first).Idx() <<": FE pointer corrupt.";
               issues++;
            }
          else {
              // connected nodes
              for ( size_t i{0}; i<(*first).Nodes(); ++i )
                if ( (*first).N(i) == nullptr ) {
-                    cerr <<"\nCell "<< (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
+                    cerr <<"\n"<< celltype << (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
                     issues++;
                  }
                else shared_nodes.push_back( (*first).N(i) );
@@ -1831,7 +1950,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                if ( (*first).Neighbor(i) != nullptr )
                  n_valid_nbors++;
              if ( n_valid_nbors == 0 ) {
-                  cerr <<"\nCell "<< (*first).Idx() <<": has no neighbors.";
+                  cerr <<"\n"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
                   issues++;
                }
            }

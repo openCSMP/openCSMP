@@ -136,7 +136,7 @@ class BoundaryInterface {
                       typename std::vector<Face<dim>*>::iterator facesEnd,
                       BOX_BOUNDARY );
 
-    /// inserts csmp::Boundary for box boundaries
+    /// creates csmp::Boundary objects replacing lower-dimensional BOX_BOUNDARY named regions with boundaries with the same names
     bool EstablishBoxBoundaries();
   
     /// inserts  box boundary or irregular csmp::Boundary objects for all eligible regions in the model

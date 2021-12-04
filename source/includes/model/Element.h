@@ -282,9 +282,9 @@ class Element : public FiniteElementPolicy<dim, Element>,
 
   private:
     mutable size_t                 idx_;
-    int32_t                        material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
     std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
     std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
+    int32_t                        material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
 };
 
 

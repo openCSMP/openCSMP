@@ -1109,6 +1109,7 @@ template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const char* dim_m1_region, BOX_BOUNDARY boxBoundary )
   {
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     // if the region appears to be valid a reference to it is created
@@ -1118,10 +1119,10 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const 
       }
       
     // verifying that this is a lower-dimensional region
-    csmp::Region<dim>&  rref( boundaryComplex->Region(dim_m1_region) );
-    if ( !hasLowerDimensionalRepresentation(rref) ) {
-         ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateExternalBoundaryFrom:", dim_m1_region,
-                                         "region is not lower dimensional. Therefore it cannot be converted into Boundary" );
+    csmp::Region<dim>&  dim_m1_domain( boundaryComplex->Region(dim_m1_region) );
+    if ( !hasLowerDimensionalRepresentation(dim_m1_domain) ) {
+         csmp_error.notice( ERROR, "BoundaryInterface::CreateExternalBoundaryFrom:", dim_m1_region,
+                                   "region is not lower dimensional. Therefore it cannot be converted into Boundary" );
          return false;
       }
     
@@ -1141,9 +1142,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const 
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
+        // creates connectivity among Faces
+        bool succeeded( (*it.first).second.CreateFrom( dim_m1_domain, boundaryComplex->Mesh(), boxBoundary ) );
         cout << "\nBoundaryInterface<"<< dim <<">::CreateExternalBoundaryFrom: done: " << regionName << endl;
-        bool succeeded( (*it.first).second.CreateFrom( rref, boundaryComplex->Mesh(), boxBoundary ) );
-        // cout << "\nBoundaryInterface<"<< dim <<">::CreateExternalBoundaryFrom: created boundary " <<  parseBoundary( boxBoundary ) << endl;
         return succeeded;
       }
     else csmp_error.notice( INFO, "BoundaryInterface::CreateExternalBoundaryFrom:",
@@ -1554,8 +1555,8 @@ static void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::
 
 
 /**
-    Connects the line faces representing the edge with their neighbors    
-    logic: where the line elements share a node they are connected
+    Connects the line faces representing the edge with their neighbors.
+    logic: where the line elements share a node they are connected.
     
     @note makes sense only in 3D.
     
@@ -1568,7 +1569,7 @@ static void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::
     @attention this method assumes that the first 2 nodes of the line-element
     Face are the end-point nodes
 */
-static void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
+static void createLineFaceConnectivity( vector<Face<3U>*>& line_faces )
  {
     if ( line_faces.empty() ) return;
    
@@ -1642,10 +1643,6 @@ static void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
      }
    
  } // create line element neighbor connectivity
-
-  static bool createBoundaryFromSharedEdge( Model<1U>&, const Boundary<1U>&, const Boundary<1U>&, std::vector<Face<1U>*>& ) { throw logic_error("createBoundaryFromSharedEdge(1D)"); }
-  static bool createBoundaryFromSharedEdge( Model<2U>&, const Boundary<2U>&, const Boundary<2U>&, std::vector<Face<2U>*>& ) { throw logic_error("createBoundaryFromSharedEdge(2D)"); }
-
 
 
 
@@ -1737,6 +1734,7 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
    
     // assigning the equidimensional neighbors to the newly created faces
     createLineFaceConnectivity( shared_faces );
+    // model.Mesh().BuildLineConnectivity<Face>( shared_faces.begin(), shared_faces.end() );
 		
     // false if no shared faces could be detected
     return ( !shared_faces.empty() );
@@ -1748,6 +1746,9 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
 
 
   // High Level Functions to create Boundaries from provided Region names
+
+
+
 
 
 /** creates edge Boundary objects (of dim-2 Face objects) for box-shaped model from side boundaries
@@ -1762,213 +1763,286 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel()
  {
-    ErrorHandler& csmp_error(ErrorHandler::Instance());
+    if constexpr ( dim != 3 )
+      throw csmp::Exception( ERROR, "BoundaryInterface<::EstablishEdgeBoundariesOfBoxShapedModel: ","edges required only in 3D; nothing was done" );
+     
+    if constexpr ( dim == 3 ) {
+      // getting references to all necessary side boundaries of the box-shaped model
+      BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+      csmp::Boundary<dim>&  bottom(boundaryComplex->Boundary("BOTTOM"));
+      csmp::Boundary<dim>&  right(boundaryComplex->Boundary("RIGHT"));
+      csmp::Boundary<dim>&  top(boundaryComplex->Boundary("TOP"));
+      csmp::Boundary<dim>&  left(boundaryComplex->Boundary("LEFT"));
+      csmp::Boundary<dim>&  back(boundaryComplex->Boundary("BACK"));
+      csmp::Boundary<dim>&  front(boundaryComplex->Boundary("FRONT"));
 
-    if constexpr ( dim != 3 ) {
-         cerr <<"\nBoundaryInterface<"<< dim <<">::EstablishEdgeBoundariesOfBoxShapedModel: edges only are required in 3D; nothing was done.\n";
-         return false;
+      // edge Faces that were created and are needed to create edge boundary
+      vector<Face<dim>*>  shared_faces;
+      bool                return_value(true);
+     
+      ErrorHandler& csmp_error(ErrorHandler::Instance());
+
+      // EDGE1 = BACK_BOTTOM
+      // -------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, bottom, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE1 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE1", shared_faces.begin(), shared_faces.end(), EDGE1 );
+      if ( shared_faces.empty() ) return_value=false;
+   
+      // EDGE2 = BACK_RIGHT
+      // ------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, right, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE2 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE2", shared_faces.begin(), shared_faces.end(), EDGE2 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE3 = BACK_TOP
+      // ----------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, top, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE3 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE3", shared_faces.begin(), shared_faces.end(), EDGE3 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE4 = BACK_LEFT
+      // -----------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, left, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE4 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE4", shared_faces.begin(), shared_faces.end(), EDGE4 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE5 = BOTTOM_LEFT
+      // -------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, bottom, left, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE5 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE5", shared_faces.begin(), shared_faces.end(), EDGE5 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE6 = BOTTOM_RIGHT
+      // --------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, bottom, right, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE6 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE6", shared_faces.begin(), shared_faces.end(), EDGE6 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE7 = TOP_RIGHT
+      // -----------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, top, right, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE7 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE7", shared_faces.begin(), shared_faces.end(), EDGE7 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE8 = TOP_LEFT
+      // ----------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, top, left, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE8 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE8", shared_faces.begin(), shared_faces.end(), EDGE8 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE9 = FRONT_BOTTOM
+      // --------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, bottom, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE9 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE9", shared_faces.begin(), shared_faces.end(), EDGE9 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE10 = FRONT_RIGHT
+      // --------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, right, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE10 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE10", shared_faces.begin(), shared_faces.end(), EDGE10 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE11 = FRONT_TOP
+      // ------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, top, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE11 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE11", shared_faces.begin(), shared_faces.end(), EDGE11 );
+      if ( shared_faces.empty() ) return_value=false;
+
+      // EDGE12 = FRONT_LEFT
+      // -------------------
+      if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, left, shared_faces ) )
+        csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
+                          "Boundary EDGE12 could not be created because no shared edge was found." );
+
+      else AddBoundary( "EDGE12", shared_faces.begin(), shared_faces.end(), EDGE12 );
+      if ( shared_faces.empty() ) return_value=false;
+    
+      return return_value; // whether all edges could be established
+   }
+   
+ return false; // whether all edges could be established
+   
+} // end EstablishEdgeBoundariesOfBoxShapedModel
+
+
+
+
+// helper function for method below
+// returns index of first and last element of the checked region
+template<size_t dim>
+static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& model, const char* region_name,
+                                                                 vector<Element<dim>*>& elements )
+ {
+    ErrorHandler& csmp_error(ErrorHandler::Instance());
+    
+    const size_t first_index{ elements.size() };
+    size_t       last_index{ first_index };
+    
+    if ( !model.ContainsRegion( region_name ) ) {
+         csmp_error.notice( WARNING, "collectLowerDimensionalElementsFrom", region_name,
+                           "does not exist and could therefore not be added vector");
+                           
+         return make_pair(first_index,first_index);
       }
      
-    // getting references to all necessary side boundaries of the box-shaped model
-    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-    csmp::Boundary<dim>&  bottom(boundaryComplex->Boundary("BOTTOM"));
-    csmp::Boundary<dim>&  right(boundaryComplex->Boundary("RIGHT"));
-    csmp::Boundary<dim>&  top(boundaryComplex->Boundary("TOP"));
-    csmp::Boundary<dim>&  left(boundaryComplex->Boundary("LEFT"));
-    csmp::Boundary<dim>&  back(boundaryComplex->Boundary("BACK"));
-    csmp::Boundary<dim>&  front(boundaryComplex->Boundary("FRONT"));
-
-    // edge Faces that were created and are needed to create edge boundary
-    vector<Face<dim>*>  shared_faces;
-    bool                return_value(true);
+    Region<dim>& domain(model.Region(region_name));
+    if ( elements.empty() ) elements.reserve( domain.Elements() );
    
-    // EDGE1 = BACK_BOTTOM
-    // -------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, bottom, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE1 could not be created because no shared edge was found." );
+    // indexing and storing the cells for later identification
+    for ( auto& it : domain.CellVector() ) {
+        // checking that we are indeed dealing with a lower-dimensional element
+        if ( (dim == 3 && !it->IsSurfaceElement()) || (dim == 2 && !it->IsLineElement()) ) {
+            cerr <<"\n\t"<< parseFiniteElementType( it->FE_Type() ) <<": idx: "<< it->Idx();
+            csmp_error.notice( ERROR, "collectLowerDimensionalElementsFrom", "element is not lower dimensional");
+          }
+        else {
+             elements.push_back( it );
+             last_index++;
+          }
+     }
 
-    else AddBoundary( "EDGE1", shared_faces.begin(), shared_faces.end(), EDGE1 );
-    if ( shared_faces.empty() ) return_value=false;
- 
-    // EDGE2 = BACK_RIGHT
-    // ------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, right, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE2 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE2", shared_faces.begin(), shared_faces.end(), EDGE2 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE3 = BACK_TOP
-    // ----------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, top, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE3 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE3", shared_faces.begin(), shared_faces.end(), EDGE3 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE4 = BACK_LEFT
-    // -----------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, back, left, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE4 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE4", shared_faces.begin(), shared_faces.end(), EDGE4 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE5 = BOTTOM_LEFT
-    // -------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, bottom, left, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE5 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE5", shared_faces.begin(), shared_faces.end(), EDGE5 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE6 = BOTTOM_RIGHT
-    // --------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, bottom, right, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE6 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE6", shared_faces.begin(), shared_faces.end(), EDGE6 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE7 = TOP_RIGHT
-    // -----------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, top, right, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE7 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE7", shared_faces.begin(), shared_faces.end(), EDGE7 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE8 = TOP_LEFT
-    // ----------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, top, left, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE8 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE8", shared_faces.begin(), shared_faces.end(), EDGE8 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE9 = FRONT_BOTTOM
-    // --------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, bottom, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE9 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE9", shared_faces.begin(), shared_faces.end(), EDGE9 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE10 = FRONT_RIGHT
-    // --------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, right, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE10 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE10", shared_faces.begin(), shared_faces.end(), EDGE10 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE11 = FRONT_TOP
-    // ------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, top, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE11 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE11", shared_faces.begin(), shared_faces.end(), EDGE11 );
-    if ( shared_faces.empty() ) return_value=false;
-
-    // EDGE12 = FRONT_LEFT
-    // -------------------
-    if ( !createBoundaryFromSharedEdge( *boundaryComplex, front, left, shared_faces ) )
-      csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel:",
-                        "Boundary EDGE12 could not be created because no shared edge was found." );
-
-    else AddBoundary( "EDGE12", shared_faces.begin(), shared_faces.end(), EDGE12 );
-    if ( shared_faces.empty() ) return_value=false;
+   return make_pair( first_index, last_index );
    
-    return return_value; // whether all edges could be established
-   
- } // end EstablishEdgeBoundariesOfBoxShapedModel
-
-
-
-
-
+ } // end collectLowerDimensionalElements
 
 
 
 
 /**
      Forms boundaries of CSMP box-shaped model if corresponding regions are present.
-     For 3D models, method also creates edge regions where the side boundaries intersect.
-     These regions are given the standard names and are flagged correspondingly.  
+     These regions are given the standard names and are flagged correspondingly.
      
-     @note The boundary creation itself does not deal with the generation of BOX_BOUNDARY flags for the model
+     @note if the TOP region is missing, but a IRREGULAR region is there in stead, this is converted into the corresponding boundary.
+     In this case, the model is still regarded as BOX_SHAPED.
+     
+     @note Boundary creation itself does not deal with the generation of BOX_BOUNDARY flags for the model
      corners. This is accomplished subsequently (in this method) by calling recreateBoxBoundaryFlags().
      
      @author refactored by SKM 2016
      @author refactored by SKM 2018
 */
-  template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-  bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
+template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
    {
-      BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );	  
-      std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Establishing Box-object boundaries for " << dim << " dimensional box shaped model...";
+      ErrorHandler& csmp_error(ErrorHandler::Instance());
 
-	    // TOP may be missing, if there is an IRREGULAR boundary instead
-	    if ( boundaryComplex->ContainsRegion("TOP") )
-        boundaryComplex->CreateExternalBoundaryFrom("TOP",TOP);
-      // potential irregular model outside boundaries, like for instance in a box with topography on top
-	    if ( boundaryComplex->ContainsRegion("IRREGULAR") )
-        boundaryComplex->CreateExternalBoundaryFrom("IRREGULAR",IRREGULAR);
-      boundaryComplex->CreateExternalBoundaryFrom( "BOTTOM", BOTTOM );
-      boundaryComplex->CreateExternalBoundaryFrom( "RIGHT", RIGHT );
-      boundaryComplex->CreateExternalBoundaryFrom( "LEFT", LEFT );
-      if constexpr ( dim == 3 ) {
-           boundaryComplex->CreateExternalBoundaryFrom( "FRONT", FRONT );
-           boundaryComplex->CreateExternalBoundaryFrom( "BACK", BACK );
+      BOUNDARY_COMPLEX<dim>* model( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+      
+      cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Establishing Box-object boundaries for ";
+      cout << dim << " dimensional box shaped model...";
+
+      // Requirements
+      /*
+         - input regions must be lower-dimensional (surfaces in 3D and lines in 1D)
+         - input regions must be unique (space exclusive)
+         - connectivity of Face objects must match / preserve that of previous Element objects
+         - method must not rely on mutable idx variables
+         - something is needed to tag the faces that are created so that one can detect which region they were created from (idx?)
+      */
+      
+      // 1. do diagnostics, creating vector of iterators for the elements that shall be replaced by Faces
+      // ------------------------------------------------------------------------------------------------
+      vector<Element<dim>*> elmts_to_become_faces;
+      elmts_to_become_faces.reserve( model->Mesh().Elements() );
+
+      // 2. adding the input regions
+      // ---------------------------
+	    // TOP may be missing, but if so, there must be an IRREGULAR boundary instead
+	    if ( !model->ContainsRegion("TOP") && model->ContainsRegion("IRREGULAR") ) {
+           csmp_error.notice( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries",
+                             "model is not box-shaped, nothing was done");
+           return false;
         }
-      // potential internal boundaries
-      if ( boundaryComplex->ContainsRegion("INTERNAL") )
-        boundaryComplex->CreateExternalBoundaryFrom( "INTERNAL", INTERNAL );
-     
-      // creating the edges needed in a three-dimensional model
-      if constexpr ( dim == 3 ) EstablishEdgeBoundariesOfBoxShapedModel();
+      pair<size_t,size_t> top{0,0}, irregular{0,0}, front{0,0}, back{0,0};
+      
+      if ( model->ContainsRegion("TOP") )
+        top = collectLowerDimensionalElementsFrom( *model, "TOP", elmts_to_become_faces );
 
-      std::set<std::string> regionsToRemove;
-      for ( typename std::map<std::string,csmp::Region<dim> >::iterator
-            it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it )
-        if ( isSide( parseBoundary((*it).first) ) || isEdge( parseBoundary((*it).first) ) )
-          regionsToRemove.insert( (*it).first );
-
-     // removing all box boundary regions in one go
-      set<csmp::Element<dim>* const>  elmts_to_remove;
-      if ( !regionsToRemove.empty() )
-        std::cout << "\n\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: the following regions will be removed since they were transformed into Boundaries:\n\t";
-      for ( auto rit=regionsToRemove.begin(); rit!=regionsToRemove.end(); ++rit )
-        if ( (*rit) != "Model" ) {
-             cout << (*rit) << " ";
-             Region<dim>& subdomain(boundaryComplex->Region(*rit));
-             for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
-               elmts_to_remove.insert(*eit);
-          }
-      std::cout << std::endl;
-     
-      // pointers to the elements that were converted into boundaries are removed from the region 'Model'	  
-      boundaryComplex->RemoveFromRegion( "Model", elmts_to_remove );
-
-      // now the transformed regions and their elements in as much as they are not shared with other regions are removed
-      for (auto rit = regionsToRemove.begin(); rit != regionsToRemove.end(); ++rit)
-        {
-          boundaryComplex->RemoveRegion( (*rit).c_str() );
-          std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoxBoundaries: Removing the region " << (*rit).c_str();
+      if ( model->ContainsRegion("IRREGULAR") )
+        irregular = collectLowerDimensionalElementsFrom( *model, "IRREGULAR", elmts_to_become_faces );
+        
+      auto bottom = collectLowerDimensionalElementsFrom( *model, "BOTTOM", elmts_to_become_faces );
+      auto right  = collectLowerDimensionalElementsFrom( *model, "RIGHT", elmts_to_become_faces );
+      auto left   = collectLowerDimensionalElementsFrom( *model, "LEFT", elmts_to_become_faces );
+      
+      if constexpr( dim == 3 ) {
+           front = collectLowerDimensionalElementsFrom( *model, "FRONT", elmts_to_become_faces );
+           back  = collectLowerDimensionalElementsFrom( *model, "BACK", elmts_to_become_faces );
         }
-	        
-      std::cout << "\n\n EstablishBoxBoundaries: done!\n";
+       
+      // 3. getting mesh manager to create necessary faces
+      // -------------------------------------------------
+      vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
+                                                                       elmts_to_become_faces.begin(),
+                                                                       elmts_to_become_faces.end() );
+      typename vector<Face<dim>*>::iterator fit{ faces.begin() };
+
+
+      // 4. creating the Boundaries from the faces
+      // -------------------------------------------------
+      AddBoundary( "BOTTOM", next(fit,bottom.first), next(fit,bottom.second), BOTTOM );
+      AddBoundary( "RIGHT",  next(fit,right.first),  next(fit,right.second), RIGHT );
+      AddBoundary( "LEFT",   next(fit,left.first),   next(fit,left.second), LEFT );
+      if ( top.first != top.second )
+        AddBoundary( "TOP", next(fit,top.first), next(fit,top.second), TOP );
+      if ( irregular.first != irregular.second )
+        AddBoundary( "IRREGULAR", next(fit,irregular.first), next(fit,irregular.second), IRREGULAR );
+      if constexpr( dim == 3 ) {
+          AddBoundary( "BACK",  next(fit,back.first),  next(fit,back.second), BACK );
+          AddBoundary( "FRONT", next(fit,front.first), next(fit,front.second), FRONT );
+       }
+      
+      // 4. removing the input regions from Model (the only non-unique region at this point!)
+      // ------------------------------------------------------------------------------------
+      // (this works because when the MeshManager deletes elements, it sets any pointers to them to zero)
+      model->Region("Model").RemoveNullPointerCells();
+      
+      // 5. removing the input regions
+      // -------------------------------------------------
+      if ( top.first != top.second ) model->RemoveRegion( "TOP" );
+      if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR" );
+      model->RemoveRegion( "BOTTOM" );
+      model->RemoveRegion( "RIGHT" );
+      model->RemoveRegion( "LEFT" );
+      if constexpr( dim == 3 ) {
+           model->RemoveRegion( "BACK" );
+           model->RemoveRegion( "FRONT" );
+        }
+        
+      cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
   }
 

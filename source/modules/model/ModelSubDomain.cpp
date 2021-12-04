@@ -31,7 +31,7 @@
 
 #include "CSMP_highLevelUtilities.h"
 
-//#define MODEL_SUBDOMAIN_DEBUG
+#define MODEL_SUBDOMAIN_DEBUG
 
 using namespace std;
 
@@ -510,8 +510,10 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
 
 
 /**
-       Distinguishes 'interior' from 'perimeter' elements of the model subdomain by checking for each element face whether
-       this face is located at a model boundary or has a neighbor that does not belong to the current region (=element range of ModelSubdomain).
+   Distinguishes 'interior' from 'perimeter' elements of the model subdomain by checking for each element face whether
+   this face is located at a model boundary or has a neighbor that does not belong to the current region (=element range of ModelSubdomain).
+   
+   Method also creates the bd_face_vector   enlisting all faces of elements that are located on the region boundary.
 
   Remarks on binary search:
 
@@ -524,6 +526,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
 
     @attention any lower-dimensional elements and their nodes that stick outside of a higher
     dimensional region will be flagged as boundary.
+    
+    @todo due to the searching, this method is a speed bottleneck; can it be improved.
 */
 template<size_t dim, template<size_t> class CELL>
 size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
@@ -552,39 +556,40 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
-	if (elmt_dim.first == 1)
-	{
-		for (typename vector<CELL<dim>*>::const_iterator
-			eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++)
-		{
-			// identifying the boundary faces and their nodes
-			// (each face potentially has a neighbor element)			 
-			long  nbors_that_belong_to_group((*eit)->Neighbors());
-			for (size_t i = 0U; i<(*eit)->Faces(); i++)
-				// if the face is at a model boundary or has a neighbor that does not belong to the region
-				if ( (*eit)->Neighbor(i) == nullptr or !binary_search(this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i)) )
+    if ( elmt_dim.first == 1 )
+      {
+        for ( const auto& eit : this->elmt_vec_ )
           {
-            // boundary faces
-            boundary_faces.insert( make_pair((*eit),i) );
-            // boundary nodes
-            assert( (*eit)->FE() != nullptr );
-            (*eit)->FE()->NodesOfFace(i, fnids);
-            for (size_t j = 0U; j<fnids.size(); ++j)
-              boundary_nodes.insert((*eit)->N(fnids[j]));
-            // counting neighbors
-            nbors_that_belong_to_group--;
-          }
+            // identifying the boundary faces and their nodes
+            // (each face potentially has a neighbor element)
+            long  nbors_that_belong_to_group(eit->Neighbors());
+            for (size_t i = 0U; i<eit->Faces(); i++)
+              // if the face is at a model boundary or has a neighbor that does not belong to the region
+              if ( eit->Neighbor(i) == nullptr ||
+                  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), eit->Neighbor(i)) )
+                {
+                  // boundary faces
+                  boundary_faces.insert( make_pair( eit, i ) );
+                  // boundary nodes
+                  assert( eit->FE() != nullptr );
+                  eit->FE()->NodesOfFace(i, fnids);
+                  for (size_t j = 0U; j<fnids.size(); ++j)
+                    boundary_nodes.insert( eit->N(fnids[j]) );
+                  // counting neighbors
+                  nbors_that_belong_to_group--;
+                }
 
-			// storing the distinguished elements in the respective vectors
-			// ------------------------------------------------------------
-			// interior elements
-				if ( nbors_that_belong_to_group == (*eit)->Neighbors() )
-					interior_elmts.insert((*eit));
-				// elements with at least one face on the region boundary
-				else
-					boundary_elmts.insert((*eit));
-		}
-	}
+            // storing the distinguished elements in the respective vectors
+            // ------------------------------------------------------------
+            // interior elements
+              if ( nbors_that_belong_to_group == eit->Neighbors() )
+                interior_elmts.insert( eit );
+              // elements with at least one face on the region boundary
+              else
+                boundary_elmts.insert( eit );
+          }
+     }
+    
     // 1.2 If there are elements with different spatial dimensions
     // -----------------------------------------------------------
     //     the ones with highest dimensions are used to define perimeter
@@ -815,7 +820,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // rebuilding and sorting the node vector (set nodes are already sorted)
     vector<csmp::Node<dim>*>  temp;
     temp.reserve(this->node_vec_.size());
-    // first, the interior elements are inserted
+    // first, the interior nodes are inserted
     for ( typename vector<csmp::Node<dim>*>::const_iterator
           nit=this->node_vec_.begin(); nit!=this->node_vec_.end(); nit++ )
       if ( boundary_nodes.find(*nit) == boundary_nodes.end() )
@@ -830,14 +835,14 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     this->node_vec_ = temp;
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
-cout <<"\nModelSubDomain<dim,CELL>::EstablishNeighborConnectivity: '"<< this->Name() <<"': of the ";
-cout << this->elmt_vec_.size() <<" elements, "<< boundary_elmts.size() <<" lie at the model boundary."<< endl;
+cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVector: '"<< this->Name() <<"': of the ";
+cout << this->elmt_vec_.size() <<" elements, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
 cout.flush();
 #endif
 
     return this->elmt_vec_.size() - boundary_elmts.size();
 
- } // end PartitionElementVector
+ } // end PartitionCellVector
 
 
 
@@ -1091,7 +1096,7 @@ size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
  {
     size_t  counter(0U);
 
-    for ( const auto it : node_vec_ ) it->Idx( counter++ );
+    for ( auto& it : node_vec_ ) it->Idx( counter++ );
 
     return counter;
  }
@@ -1103,7 +1108,7 @@ size_t ModelSubDomain<dim,CELL>::RenumberElements() const
  {
     size_t counter(0U);
 
-    for( const auto it : elmt_vec_ ) it->Idx(counter++);
+    for( auto& it : elmt_vec_ ) it->Idx(counter++);
 
     return counter;
  } // end RenumberElements
@@ -5048,6 +5053,63 @@ void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& in
 
 
 
+/**
+       Writes Node information to a text file for reading with Paraview (TableToPointData) or spreadsheet tools.
+       The interior nodes are distinguished from the perimeter nodes by the keywords "INTERIOR" and "PERIMETER."
+*/
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::NodeAttributesToCSV()
+  {
+     ofstream ofs( this->Name() + "_node_attribute.csv" );
+
+     //ofs <<"\n"<< this->Name();
+     ofs <<"\nx,y,z,node_id,bflag,rflag";
+     for ( auto n=NodesBegin(); n!=PerimeterNodesBegin(); ++n ) {
+          ofs <<"\n"<< (*n)->x() <<","<< (*n)->y() <<","<< (*n)->z() <<","<< (*n)->Idx() <<",";
+          ofs << parseBoundary((*n)->AtBoundary()) <<","<<"INTERIOR";
+       }
+     for ( auto n=PerimeterNodesBegin(); n!=NodesEnd(); ++n ) {
+          ofs <<"\n"<< (*n)->x() <<","<< (*n)->y() <<","<< (*n)->z() <<","<< (*n)->Idx() <<",";
+          ofs << parseBoundary((*n)->AtBoundary()) <<","<<"PERIMETER";
+       }
+     ofs << endl;
+
+ } // end NodeAttributesToCSV
+
+
+
+/**
+       Removes elements and nodes and rebuilds bd_face_vec_  if necessary.
+*/
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    const size_t n_cells{ elmt_vec_.size() };
+    long         nodes_removed = node_vec_.size();
+    
+    elmt_vec_.erase( remove( elmt_vec_.begin(), PerimeterElementsBegin(), nullptr ), elmt_vec_.end() );
+    long cells_removed = n_cells - elmt_vec_.size();
+    size_t interior_elements = InteriorElements() - cells_removed; // critical info
+    
+    elmt_vec_.erase( remove( PerimeterElementsBegin(), elmt_vec_.end(), nullptr ), elmt_vec_.end() );
+    cells_removed = n_cells - elmt_vec_.size();
+    
+    if ( cells_removed > 0 ) BuildPerimeterFaceVector( interior_elements );
+    
+    node_vec_.erase( remove( node_vec_.begin(), node_vec_.end(), nullptr ), node_vec_.end() );
+    nodes_removed -= node_vec_.size();
+    
+    if ( cells_removed == 0 && nodes_removed > 0 )
+      csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
+                        "removed nodes but not cells? - subdomain may be corrupt now.");
+    
+    return cells_removed;
+ }
+
+
+
 
 /**
     @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
@@ -5155,7 +5217,6 @@ size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSub
     return shared_nodes;
 
  } // end sharedPerimeterNodes
-
 
 
 

@@ -199,7 +199,7 @@ public:
   void    MergeRegions( const std::set<std::string>& input_regions, const char* ensemble_region );
   size_t  MergeRegions( const char* region_name_tag, const char* ensemble_region );
 
-  /// removes region and associated variable storage; erases  the underlying elements and nodes, if they are not shared  etc.
+  /// removes region and associated variable storage; DOES NOT!  erase  the underlying elements and nodes, this is the task of the MeshManager
   void    RemoveRegion( const char* regionname );
 
   /// excludes the intersection of elements of the 2 regions from the non-unique region

@@ -170,9 +170,6 @@ class Boundary : public ModelSubDomain<dim, Face>,
     /// establishes connectivity between Faces if not already there, assigns boundary flag and finds perimeter
     void Initialize( BOX_BOUNDARY boxBoundary );
 
-    /// reestablish nodes based on element container
-    void CreateNodePointerVector();
-  
     /// returns local variables stored at face integration points
     IntegrationPointVariables FaceIntegrationPointVariables() const;
 

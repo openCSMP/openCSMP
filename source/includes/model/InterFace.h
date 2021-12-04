@@ -256,19 +256,18 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // Data members
     // ------------------------------------------------------------------------
 
-    mutable size_t                idx_;                 ///< unique identifier for indexing operations
+    mutable size_t idx_;                                ///< unique identifier for indexing operations
+    size_t         inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
+    size_t         outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
+    Element<dim>*  innerParent_;                 ///< higher-dimensional parent element on side opposite to normal direction
+    Element<dim>*  outerParent_;                 ///< higher-dimensional neighbor element in direction of interface normal
+    Element<dim>*  middleElement_ = nullptr;     ///< pointer to lower-dimensional element that may have been inserted between the sides of InterFace.
     std::vector<Node<dim>*>       node_connector_;      ///< pointers to the nodes on inside followed by those on the outside
     std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces; inside ones first, outside ones next, order determined by interface normal
-    bool                          collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
-  
     // used for compatibility with Element and Face methods (Neighbor etc.)
-    INTERFACE_SIDE  current_side_;  ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
+    INTERFACE_SIDE  current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
+    bool            collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
 
-    Element<dim>* innerParent_;                 ///< higher-dimensional parent element on side opposite to normal direction
-    Element<dim>* outerParent_;                 ///< higher-dimensional neighbor element in direction of interface normal
-    Element<dim>* middleElement_ = nullptr;     ///< pointer to lower-dimensional element that may have been inserted between the sides of InterFace.
-    size_t inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
-    size_t outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
 };
 
 

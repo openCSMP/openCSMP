@@ -225,21 +225,18 @@ class Face : public FiniteElementPolicy<dim,Face>,
   
     // TODO: SKM: deprecate this inefficient method
     void AssignFaceID( const std::vector<Node<dim>*>& faceNodes );
-
-    // TODO: move this method to unit test: void CheckNodeOrderingAccordingToUnitNormalOrientation();
   
     // ------------------------------------------------------------------------
     // Data members
     // ------------------------------------------------------------------------
 
     mutable size_t           idx_;
-    std::vector<Node<dim>*>  node_connector_;     ///< pointers to the nodes of the face
-    std::vector<Face<dim>*>  face_connector_;     ///< the (equidimensional) neighbors of the face
-    // not references or constant pointers because these may need to change during remeshing
-    Element<dim>*            innerParent_;        ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
-    Element<dim>*            outerParent_;        ///< higher-dimensional neighbor element in direction of interface normal
     size_t inner_parent_face_id_ = UNSPECIFIED;   ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
     size_t outer_parent_face_id_ = UNSPECIFIED;   ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
+    Element<dim>*            innerParent_;        ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
+    Element<dim>*            outerParent_;        ///< higher-dimensional neighbor element in direction of interface normal
+    std::vector<Node<dim>*>  node_connector_;     ///< pointers to the nodes of the face
+    std::vector<Face<dim>*>  face_connector_;     ///< the (equidimensional) neighbors of the face
 };
 
 } // csmp

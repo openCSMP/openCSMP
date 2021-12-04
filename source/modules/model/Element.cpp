@@ -223,13 +223,14 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   // should never happen because a temporary variable cannot be an lvalue
   assert( &el != this );
 
-  if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( move( el.FE() ) );
-  if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( move( el.FV() ) );
+  if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
+  if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
 
   idx_ = move( el.idx_ );
   elmt_connector_ = move( el.elmt_connector_ );
   node_connector_ = move( el.node_connector_ );
-  material_id_    = move(el.material_id_ );
+  material_id_    = el.material_id_;
+  
   this->LVS( move( el.LVS() ) );
 
   el.AssignFiniteElementNullPtr();

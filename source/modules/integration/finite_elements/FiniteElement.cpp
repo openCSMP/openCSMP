@@ -1163,12 +1163,17 @@ CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
  } // end parseFiniteElementType
 
 
+
+
+
+
+
  /// converts enum names into text
 CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
   {
      if ( etype == "UNKNOWN" ) return UNKNOWN;
-	 if ( etype == "LINEAR_RECTANGLE") return LINEAR_RECTANGLE;
-	 if ( etype == "LINEAR_CUBOID") return LINEAR_CUBOID;
+	   if ( etype == "LINEAR_RECTANGLE") return LINEAR_RECTANGLE;
+	   if ( etype == "LINEAR_CUBOID") return LINEAR_CUBOID;
      if ( etype == "LINEAR_BAR" ) return LINEAR_BAR;
      if ( etype == "QUADRATIC_BAR" ) return QUADRATIC_BAR;
      if ( etype == "CUBIC_BAR" ) return CUBIC_BAR;
@@ -1279,6 +1284,64 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      return "UNKNOWN";
  
  } // end parseFiniteElementType
+
+
+ /// converts enum names into text
+ const char* parseAbbreviated_FE_Type( int8_t etype )
+  {
+     if ( etype == UNKNOWN ) return "?";
+	   if ( etype == LINEAR_RECTANGLE) return "RECT";
+	   if ( etype == LINEAR_CUBOID) return "CUBOID";
+     if ( etype == LINEAR_BAR ) return "BAR";    										                                    // BAR_2     =2,
+     if ( etype == QUADRATIC_BAR ) return "BAR^2";
+     if ( etype == CUBIC_BAR ) return "BAR^3";										                                            // BAR_4
+     if ( etype == LINEAR_TRIANGLE ) return "TRIA";
+     if ( etype == LINEAR_TRIANGLE3D ) return "TRIA3D"; 									                                // TRI_3     =8,
+     if ( etype == BARYCENTRIC_LINEAR_TRIANGLE ) return "BTRIA"; 			    		                        // TRI_3_X   =9,
+     if ( etype == QUADRATIC_TRIANGLE ) return "TRI^2"; 								                                //  2D & 3D TRI_6    =10,
+     if ( etype == BARYCENTRIC_QUADRATIC_TRIANGLE ) return "BTRI^2"; 					                    // TRI_6_X  =11,
+     if ( etype == CUBIC_TRIANGLE ) return "TRI^3";
+     if ( etype == LINEAR_TETRAHEDRON ) return "TET"; 								                                // TETRA_4   =4,
+     if ( etype == QUADRATIC_TETRAHEDRON ) return "TET^2"; 								                            // TETRA_10  =5,
+     if ( etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return "BTET^2";                                  // PYRA_5   =18,
+     if ( etype == CUBIC_TETRAHEDRON ) return "TET^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return "IBAR";    						                        // BAR_2     =2,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return "IBAR^2"; 						                        // BAR_3     =3,
+     if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return "IBAR^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return "ITRIA";  					                    // TRI_3     =8,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return "IBTRIA"; 	         	// TRI_3_X   =9,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return "ITRIA^2"; 					                //  2D & 3D TRI_6    =10,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ) return "IBTRIA^2"; 		    // TRI_6_X  =11,
+     if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE ) return "ITRIA^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return "ITET"; 					                // TETRA_4   =4,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return "ITET^2"; 			                    // TETRA_10  =5,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return "IBTET^2";      // TETRA_11
+     if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON ) return "ITET^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) return "IPYR";						                    // PYRA_5   =18,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) return "IPYR13"; 					                // PYRA_13  =24,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ) return "IPYR14";     				                // PYRA_14  =22,
+     if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID ) return "IPYR^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) return "IPRISM";  						                        // PENTA_6  =12,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) return "IPRISM15";         			                    // PENTA_15 =13,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ) return "IPRISM18";           			                // PENTA_18 =21,
+     if ( etype == ISOPARAMETRIC_CUBIC_PRISM ) return "IPRISM^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return "IQUAD";                                // QUAD_4   =14,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return "IBQUAD";        // QUAD_4_X =15,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return "IQUAD^2";                          // QUAD_8   =16,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ) return "IBQUAD^2";  // QUAD_8_X =17,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return "IQUAD9^2";  			            // QUAD_9   =19,
+     if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ) return "IQUAD^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return "IHEX";              		                // HEXA_8    =6,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return "IHEX20";       		                // HEXA_20   =7,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return "IHEX27"; 				            // HEXA_27   =5,
+     if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "IHEX^3";
+     if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL";
+
+     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     return "?";
+ 
+ } // end parseAbbreviated_FE_Type
+
 
 
  FV_FACET_TYPE parseFacetType( const std::string& ftype )
