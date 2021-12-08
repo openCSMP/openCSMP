@@ -785,6 +785,27 @@ std::set<Node<dim>*>  FiniteElementPolicy<dim,CELL>::CornerNodesOfFace( size_t f
 
 
 
+/** returns search key to match element faces; pointers in order so that they can be searched
+ */
+template<size_t dim, template<size_t> class CELL>
+std::set<Node<dim>*> FiniteElementPolicy<dim,CELL>::CornerNodesConnectedTo( size_t node_id ) const
+ {
+    assert( fptr_ != nullptr );
+    assert( node_id < fptr_->CornerNodes() );
+ 
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
+
+    std::set<Node<dim>*>  temp;
+    for ( auto nit : fptr_->NodesConnectedTo(node_id) ) {
+         assert( eptr->N(nit) != nullptr );
+         temp.insert( eptr->N(nit) );
+      }
+      
+    return temp;
+ }
+
+
+
 // ELEMENT GEOMETRY
 template<size_t dim, template<size_t> class CELL>
 double FiniteElementPolicy<dim,CELL>::AspectRatio() const

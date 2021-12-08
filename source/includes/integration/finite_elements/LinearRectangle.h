@@ -18,6 +18,7 @@ class LinearRectangle : public FiniteElement {
 		virtual void NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const;
 		virtual void NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const;
     virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
 		virtual void Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
 		virtual void N(std::vector<double>& N, const std::vector<double>& xyz);
 		virtual void dN(DenseMatrix<DM_MIN>& DN);
@@ -25,6 +26,7 @@ class LinearRectangle : public FiniteElement {
 		virtual void UnitNormal(std::vector<double>& vc) const;
 		virtual CSMP_FEM_TYPE  ElementTypeOfSegment(size_t) const { return LINEAR_BAR; };
 		virtual CSMP_FEM_TYPE  ElementTypeOfFace(size_t) const { return LINEAR_BAR; };
+
 	private:
 		void Nrs( std::vector<double>& N, DenseMatrix<DM_MIN>& RS, const std::vector<double>& rs );
 		DenseMatrix<DM_MIN>   M1_;

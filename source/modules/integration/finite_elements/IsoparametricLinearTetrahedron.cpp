@@ -359,6 +359,25 @@ vector<size_t>  IsoparametricLinearTetrahedron::CornerNodesOfFace( size_t face_i
 
 
 
+
+vector<size_t>  IsoparametricLinearTetrahedron::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,2,3};
+        case 2: return vector<size_t>{0,1,3};
+        case 3: return vector<size_t>{0,1,2};
+        default:
+          cerr <<"\nIsoparametricLinearTetrahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
+
+
 CSMP_FEM_TYPE  IsoparametricLinearTetrahedron::ElementTypeOfFace( size_t )  const
  {
     return ISOPARAMETRIC_LINEAR_TRIANGLE;

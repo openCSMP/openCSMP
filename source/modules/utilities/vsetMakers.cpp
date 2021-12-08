@@ -6,6 +6,7 @@
 #include "IsoparametricLinearPyramid.h"
 #include "IsoparametricLinearPrism.h"
 #include "IsoparametricLinearTriangle.h"
+#include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricLinearQuadrilateral.h"
 
 
@@ -2485,6 +2486,93 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
+/**
+       Decomposition of a hexahedron into 6 tetrahedra.
+*/
+void testCreateTetra_VSet( VSet<3U>& vset )
+ {
+    const size_t iNrOfElements{6}, nodes{8};
+  	IsoparametricLinearTetrahedron  iso_tet;
+
+    vset.Resize( iso_tet.Nodes(),
+                 iso_tet.Neighbors(),
+                 iso_tet.ElementType(),
+                 nodes, iNrOfElements );
+
+  	//-----------------------NODES
+  	//define nodes
+    const size_t n_nodes{8};
+  	std::deque<double> px(n_nodes);
+  	std::deque<double> py(n_nodes);
+  	std::deque<double> pz(n_nodes);
+
+    // node coordinates
+    px[0] =-1.0;
+    px[1] = 1.0;
+    px[2] = 1.0;
+    px[3] =-1.0;
+    px[4] =-1.0;
+    px[5] = 1.0;
+    px[6] = 1.0;
+    px[7] =-1.0;
+    // nodal y-coordinates
+    py[0] =-1.0;
+    py[1] =-1.0;
+    py[2] = 1.0;
+    py[3] = 1.0;
+    py[4] =-1.0;
+    py[5] =-1.0;
+    py[6] = 1.0;
+    py[7] = 1.0;
+    // nodal z-coordinates
+    pz[0] = -1.0;
+    pz[1] = -1.0;
+    pz[2] = -1.0;
+    pz[3] = -1.0;
+    pz[4] =  1.0;
+    pz[5] =  1.0;
+    pz[6] =  1.0;
+    pz[7] =  1.0;
+
+   	//load nodes
+  	vset.AddXYZ( px, py, pz );
+    vset.ResizeBFlags();
+    
+    vset.AddBFlag(0,CNR5);
+    vset.AddBFlag(1,CNR6);
+    vset.AddBFlag(2,CNR2);
+    vset.AddBFlag(3,CNR1);
+    vset.AddBFlag(4,CNR8);
+    vset.AddBFlag(5,CNR7);
+    vset.AddBFlag(6,CNR3);
+    vset.AddBFlag(7,CNR4);
+
+
+    // -------------------------PELMT
+    vector<int8_t> vecElementTypes(1,ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+   
+
+    //--------------------------ELEMENTS ('plist')
+    //define tetrahedral elements (1..6), assign nodes per element (see hexa decomposition)
+    deque<vector<int64_t> >  deqElements{ {0,1,3,4}, {4,1,3,5}, {4,5,3,7}, {1,2,3,6}, {3,1,6,5}, {5,6,3,7} };
+
+  	vset.AddPlist( deqElements.begin(),deqElements.end());
+
+
+    //--------------------------ELEMENT NEIGHBORS          0                   1              2
+    deque<vector<int64_t> >  deqElementNeighbors{ {1,LEFT,FRONT,BOTTOM}, {2,FRONT,4,0}, {TOP,5,LEFT,1},
+                                                 //        3                   4              5
+                                                  {BACK,4,RIGHT,BOTTOM}, {5,RIGHT,3,1}, {TOP,BACK,2,4} };
+
+    vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
+
+    vector<int32_t> pmtrl( vset.Elements(), 1 );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    
+    vset.Out();
+
+ } // end testCreateTetra_VSet
 
 
 

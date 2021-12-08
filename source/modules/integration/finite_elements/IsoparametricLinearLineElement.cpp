@@ -253,6 +253,19 @@ vector<size_t>  IsoparametricLinearLineElement::CornerNodesOfFace( size_t face_i
 
 
 
+vector<size_t>  IsoparametricLinearLineElement::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1};
+        case 1: return vector<size_t>{0};
+        default:
+          cerr <<"\nIsoparametricLinearLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
 // assuming straight segments between the nodes
 // tested: OK3
 void  IsoparametricLinearLineElement::EdgeLengths( vector<double>& vec )

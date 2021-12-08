@@ -169,6 +169,7 @@ class LinearTriangle3D : public FiniteElement {
     virtual void           NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void           NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
     virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
     virtual void           CounterClockwiseNodes( std::vector<size_t>& ids ) const;
     virtual size_t         CornerNodes() const  { return 3; }
     virtual void           CornerNodes( std::vector<size_t>& ids ) const;

@@ -46,8 +46,8 @@ void MeshManager_Test::Create_ANSYS2D_Model( bool reconstruct_from_file )
     model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
     MeshManager<2>& mesh(model2d_->Mesh());
     cout << "\nNodes: " << mesh.Nodes() << "\n";
-    std::vector<Element<2>*> elements;
-    cout << "\nInterconnected Nodes: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements ) << "\n";
+    set<Element<2>*> elements;
+    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
     cout << "\nElements: " << mesh.Elements() << "\n";
     std::map<std::string,std::vector<Element<2U>*> > patch_map;
     cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
@@ -64,7 +64,7 @@ void MeshManager_Test::Create_ANSYS2D_Model( bool reconstruct_from_file )
         model2d_ = new Model<2U>(model2d_name_);
         MeshManager<2>& mesh(model2d_->Mesh());
         cout << "\nNodes: " << mesh.Nodes() << "\n";
-        cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements ) << "\n";
+        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
         cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
         cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
         cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
@@ -87,11 +87,11 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
         string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
         model3d_name_ = "ModelDykeAllLayersSplit";
         model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true, true);
+ 
         MeshManager<3>& mesh(model3d_->Mesh());
-        
         cout << "\nNodes: " << mesh.Nodes() << "\n";
-        std::vector<Element<3>*> elements3;
-        cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+        set<Element<3>*> elements3;
+        cout << "\nNode Groups: " << findContiguousMeshPatch<3,Element>( &(*mesh.ElementsBegin()), elements3 ) << "\n";
         cout << "\nElements: " << mesh.Elements() << "\n";
         std::map<std::string,std::vector<Element<3U>*> > patch_map3;
         cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
@@ -109,7 +109,7 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
             model3d_ = new Model<3U>(model3d_name_);
             MeshManager<3>& mesh(model3d_->Mesh());
             cout << "\nNodes: " << mesh.Nodes() << "\n";
-            cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+            cout << "\nNode Groups: " << findContiguousMeshPatch<3,Element>( &(*mesh.ElementsBegin()), elements3 ) << "\n";
             cout << "\nElements: " << mesh.Elements() << "\n";
             cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
             cout << "\nFaces: " << mesh.Faces() << "\n";
@@ -129,11 +129,19 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
   string varFileName = "CSMP-variables.txt";
 	model3d_name_ = "prism_test";
 	model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
- 
-  vector<Element<3>*> elements3;
+
+  Region<3U>&  model_domain = model3d_->Region("Model");
+  vector<set<size_t>> node_neighbors;
+  nodeNeighbors( model_domain, node_neighbors );
+  // determining typical number of node neighbors in mesh
+  size_t n_neighbors{0};
+  for ( auto nit : node_neighbors ) n_neighbors += nit.size();
+  cout <<"\n\taverage number of neighbors per node: "<< n_neighbors / node_neighbors.size();
+
+  set<Element<3>*> elements3;
   MeshManager<3>& mesh(model3d_->Mesh());
 	cout << "\nNodes: " << mesh.Nodes() << "\n";
-	cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+	cout << "\nNode Groups: " << findContiguousMeshPatch<3,Element>( &(*mesh.ElementsBegin()), elements3 ) << "\n";
 	cout << "\nElements: " << mesh.Elements() << "\n";
   map<string,vector<Element<3U>*> > patch_map3;
 	cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
@@ -151,7 +159,7 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
 		model3d_ = new Model<3U>(model3d_name_);
     MeshManager<3>& mesh(model3d_->Mesh());
 		cout << "\nNodes: " << mesh.Nodes() << "\n";
-		cout << "\nNode Groups: " << findContiguousMeshPatch( (*mesh.NodesBegin()), elements3 ) << "\n";
+		cout << "\nNode Groups: " << findContiguousMeshPatch<3,Element>( &(*mesh.ElementsBegin()), elements3 ) << "\n";
 		cout << "\nElements: " << mesh.Elements() << "\n";
 		cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
 		cout << "\nFaces: " << mesh.Faces() << "\n";
@@ -192,6 +200,9 @@ void MeshManager_Test::run()
   _test(Test_BuiltElementConnectivity3D()); // OK
   _test(Test_parentElementsSharedByFace()); // OK
 */
+
+  _test( Test_MeshTraversal3D() );
+
 
 	cout << "\n------------------------------------------------";
 	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
@@ -372,12 +383,76 @@ bool MeshManager_Test::Test_BuiltElementConnectivity3D()
 
 
 
+
+
+// using VSetMakers to create and compare input data
+bool MeshManager_Test::Test_MeshTraversal3D()
+ {
+    // 2D functionality
+    VSet<3U> vset;
+    test_Create_Pyramid_Hexa_VSet( vset, false );
+//    test_Create_Hexahedra_VSet( vset, false );
+//    testCreateTetra_VSet( vset );
+    Model<3>         model( vset, "CSMP-variables.txt" );
+    const Region<3>& model_domain = model.Region("Model");
+    model_domain.UpdateMemberIndexes();
+    
+    // testing the different traversal algorithms
+    
+    // are all elements of the contiguous model region discovered
+    set<Element<3U>* const>  discovered_elements;
+    
+    floodFill( model_domain.E(0), discovered_elements ); // OK
+    _test( discovered_elements.size() == model_domain.Elements() );
+    
+    set<Element<3>*> elements;
+    _test( findContiguousMeshPatch<3>( &(*model_domain.E(0)), elements ) == model_domain.Elements() ); // OK
+    _test( elements.size() == model_domain.Elements() );
+    
+    map<string,vector<Element<3>*> > elmt_patches;
+    size_t patches = findStandAloneMeshPatches( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd(),
+                                                elmt_patches );
+    _test( patches == 1 );
+    _test( (*elmt_patches.begin()).second.size() == model_domain.Elements() );
+    for ( auto i : elmt_patches ) cout <<" "<< i.first;
+    
+    
+    // traversal via node-to-node connectivity
+    // ---------------------------------------
+    // creating a node connectivity list to check the Node::Neighbor method
+    vector<set<size_t>>  node_neighbors;
+    nodeNeighbors( model_domain, node_neighbors );
+    
+//    NodesOfSegment( size_t segm_id, std::vector<size_t>& snids )
+    
+//    cout <<"\nTest_MeshTraversal3D: storage requirements for the nodes (bytes):";  OK - around 250 bytes per node
+//    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
+//      cout <<"\nNode "<< (*nit)->Idx() <<": "<< sizeOf( (*nit) );
+//    cout << endl;
+
+    // checking the node connectivity (BROKEN! - for prism-hexa mesh)
+    cout <<"\nTest_MeshTraversal3D: node to parent connectivity:";
+    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
+      printNeighbors( (*nit) );
+    
+    set<Node<3>*> set_of_interconnected_nodes;
+    _test( findInterconnectedNodeCluster( &(*model_domain.N(0)), set_of_interconnected_nodes ) == model_domain.Nodes() );
+    _test( set_of_interconnected_nodes.size() == model_domain.Nodes() );
+
+    return true;
+    
+ } // end Test_MeshTraversal3D
+
+
+
+
 bool MeshManager_Test::TestEntityNumberingFunction()
 {
   const bool contiguous{true}, reconstruct_from_CSMP_binary_file{false};
   Create_ANSYS3D_Model( contiguous, reconstruct_from_CSMP_binary_file );
 	// nodes numbered via Model region
 	Region<3U>& model_domain(model3d_->Region("Model"));
+ 
 	model_domain.UpdateMemberIndexes();
 	vector<size_t>  node_numbers_Model;
 	node_numbers_Model.reserve(model_domain.Nodes());
@@ -470,8 +545,8 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 
   // create new PYRAMID element
   int32_t material_id(1); // new element's rock_tye
-  vector<Node<3U>*>    nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
-  Element<3U>*         neptr( &(*next(mesh.ElementsBegin(),4)) ); // just a neighbor to try
+  vector<Node<3U>*>  nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
+  Element<3U>*       neptr( &(*next(mesh.ElementsBegin(),4)) ); // just a neighbor to try
 	Element<3U>*	ptr_e1 = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes, material_id );
 
 	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
@@ -662,5 +737,58 @@ bool MeshManager_Test::TestEraseAllPrimitives()
 
 	return true;
 }
+
+
+
+/**
+      finding the neighbors nodes of each node.
+      
+      This method is equivalent to creating a sparsity pattern for an accumulation.
+      
+      @test OK SKM 8/12/21
+*/
+template<size_t dim>
+void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neighbors )
+ {
+    if ( !node_neighbors.empty() ) node_neighbors.clear();
+    node_neighbors.resize( subdomain.Nodes() );
+    
+    // 1. get continuous indices to access the sets contained in the node_neighbor vectors
+    subdomain.RenumberNodes();
+ 
+    vector<size_t> segm_nodes;
+
+    const auto elmtsEnd{ subdomain.ElementsEnd() };
+    for ( auto it=subdomain.ElementsBegin(); it!=elmtsEnd; ++it ) {
+         const size_t n_segments{ (*it)->Segments() };
+         for ( size_t segm_id{0}; segm_id < n_segments; ++segm_id ) {
+              (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );
+              // replacing local with global node ids
+              for ( auto& sit : segm_nodes ) sit = (*it)->N(sit)->Idx();
+              // storing the node-to-node connections avoiding duplicates
+              assert( segm_nodes.size() == 2 ); // only linear segments are considered by this function
+              size_t segm_node1{ subdomain.N(*segm_nodes.begin())->Idx() };
+              size_t segm_node2{ subdomain.N(*segm_nodes.rbegin())->Idx() };
+              node_neighbors[ segm_node1 ].insert( segm_node2 );
+              node_neighbors[ segm_node2 ].insert( segm_node1 );
+           }
+      }
+      
+    // printing the node-neighbor vector for testing
+    cout <<"\n\nnodeNeighbors: connectivity created for "<< node_neighbors.size() <<" nodes:";
+    size_t node{0};
+    for ( auto nit : node_neighbors ) {
+         cout <<"\n\t" << node <<": ";
+         for (  auto i : nit )
+           cout << subdomain.N(i)->Idx() <<" ";
+         cout <<" ("<< parseBoundary( subdomain.N(node)->AtBoundary() ) <<")";
+         node++;
+      }
+      
+ } // end nodeNeighbors
+
+template void nodeNeighbors( const Region<3>&, vector<set<size_t>>& );
+template void nodeNeighbors( const Region<2>&, vector<set<size_t>>& );
+
 
 } // end csmp

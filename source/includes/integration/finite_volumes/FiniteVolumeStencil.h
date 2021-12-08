@@ -162,13 +162,13 @@ class FiniteVolumeStencil {
     std::vector<std::pair<size_t,size_t> >  edges_of_element;             ///< = facets
     std::vector<std::vector<size_t> >       facets_surrounding_node;      ///< [node][facet]
     std::vector<std::vector<Point<dim> > >  facet_integration_points;     ///< [isrf][spts][dim]
-    std::vector<std::vector<double> >     facet_integration_weights;    ///< [isrf][spts]
-    std::vector<std::vector<double> >     facet_projection_weights;     ///< [isrf][spts]
-    std::vector<std::vector<double> >     facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
+    std::vector<std::vector<double> >       facet_integration_weights;    ///< [isrf][spts]
+    std::vector<std::vector<double> >       facet_projection_weights;     ///< [isrf][spts]
+    std::vector<std::vector<double> >       facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
     std::vector<Point<dim> >                facet_parametric_normals;     ///< [isrf][dim] //[node*3][dim] -3d
     std::vector<std::vector<std::pair<double,double>>> facet_normal_xforms; ///< [isrf][node]
     std::vector<std::vector<Point<dim> > >  sector_integration_points;    ///< [ivol][vpts][dim]
-    std::vector<std::vector<double> >     sector_integration_weights;   ///< [ivol][vpts]
+    std::vector<std::vector<double> >       sector_integration_weights;   ///< [ivol][vpts]
     std::vector<Point<dim> >                facet_edge_midpoints;
     Point<dim>					          	        barycenter;
     std::vector<std::vector<Point<dim> > >  facet_points;

@@ -299,6 +299,20 @@ vector<size_t>  IsoparametricLinearTriangle::CornerNodesOfFace( size_t face_id )
 
 
 
+/// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+std::vector<size_t>  IsoparametricLinearTriangle::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        case 0: return vector<size_t>{1,2};
+        case 1: return vector<size_t>{2,0};
+        case 2: return vector<size_t>{0,1};
+      }
+    cerr <<"\nIsoparametricLinearTriangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
+    return vector<size_t>{};
+  }
+
+
+
 /** Returns local node ids of the nodes which sit on the corner of
 the quadratic triagular element.
 

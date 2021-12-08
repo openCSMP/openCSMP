@@ -869,13 +869,14 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( size_t iFacet ) const
 
 
 
-    // XXX DELETEME
-    template<template<size_t> class CELL>
-    Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetPoint( size_t iFacet, size_t iPoint ) const
-    {
-        const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
-        return e->RstToXYZ(fvptr_->FacetPoint(iFacet,iPoint));
-    }
+
+template<template<size_t> class CELL>
+  Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetPoint( size_t iFacet, size_t iPoint ) const
+  {
+      const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
+      return e->RstToXYZ(fvptr_->FacetPoint(iFacet,iPoint));
+  }
+
 
 template<template<size_t> class CELL>
 double  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const

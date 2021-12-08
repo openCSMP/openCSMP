@@ -79,6 +79,22 @@ vector<size_t>  LinearLineElement::CornerNodesOfFace( size_t face_id ) const
     return vector<size_t>{face_id};
  }
 
+
+vector<size_t>  LinearLineElement::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1};
+        case 1: return vector<size_t>{0};
+        default:
+          cerr <<"\nLinearLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
+
 /**
 
 Compute derivatives of interpolation functions at corresponding nodes with

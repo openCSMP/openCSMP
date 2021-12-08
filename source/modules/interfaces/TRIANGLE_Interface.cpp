@@ -62,12 +62,12 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     bool    verbose(false);
     
     // temporary mesh storage
-    deque<double>              x, y, z; 
-    vector<double>             evalues;
+    deque<double>                 x, y, z;
+    vector<double>                evalues;
     map<size_t,vector<int64_t> >  plist;
     map<size_t,vector<int64_t> >  pfverts;
-    vector<std::int8_t>          bflags;
-    map<size_t,double>         bvalues;
+    vector<std::int8_t>           bflags;
+    map<size_t,double>            bvalues;
 
     // 1. Read input files 
     // ---------------------------------------------------------------
@@ -375,11 +375,13 @@ void TRIANGLE_Interface::ReadNodeDataFile( const char* file,
            throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadNodeDataFile", 
                      "encountered erratic node ID's (nodes should be numbered 1...n)" );
 
-         // boundary values and flags are stored only if a node is at the model
          // boundary
+         bflags.resize( x.size() );
+//         bvalues.resize( x.size() );
+         
          if ( pbflag == 1 )
            {
-              bvalues[ id ] = pbval;
+//              bvalues[ id ] = pbval;
               bflags[ id ]  = pbflag;
            }
       }

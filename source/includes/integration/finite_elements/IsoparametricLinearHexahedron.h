@@ -35,6 +35,8 @@ public:
 
     virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
   
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
+
     virtual void        UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
 
     virtual void        N(std::vector<double>& N, const std::vector<double>& xyz );

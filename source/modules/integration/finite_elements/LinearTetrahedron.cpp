@@ -306,6 +306,23 @@ vector<size_t>  LinearTetrahedron::CornerNodesOfFace( size_t face_id ) const
 
 
 
+
+vector<size_t>  LinearTetrahedron::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,2,3};
+        case 2: return vector<size_t>{0,1,3};
+        case 3: return vector<size_t>{0,1,2};
+        default:
+          cerr <<"\nLinearTetrahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
 CSMP_FEM_TYPE LinearTetrahedron::ElementTypeOfFace( size_t ) const
  {
     return LINEAR_TRIANGLE3D;

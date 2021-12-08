@@ -42,8 +42,9 @@ Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BO
 template<size_t dim>
 Node<dim>::Node( const Node<dim>& nd )
   : xyz_(nd.xyz_), idx_(nd.idx_),
-    parent_node_indexes_(nd.parent_node_indexes_),
     parent_element_pointers_(nd.parent_element_pointers_),
+    neighbor_node_pointers_(nd.neighbor_node_pointers_),
+    parent_node_indexes_(nd.parent_node_indexes_),
     at_boundary_(nd.at_boundary_)
   {
     this->LVS( nd.LVS() );
@@ -58,8 +59,9 @@ template<size_t dim>
 Node<dim>::Node( Node<dim>&& nd )
   : xyz_{ move(nd.xyz_) },
     idx_{nd.idx_},
-    parent_node_indexes_{ move(nd.parent_node_indexes_) },
     parent_element_pointers_{ move(nd.parent_element_pointers_) },
+    neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
+    parent_node_indexes_{ move(nd.parent_node_indexes_) },
     at_boundary_{nd.at_boundary_}
   {
     this->LVS( move(nd.LVS()) );
@@ -85,11 +87,12 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
  {
     if ( &nd != this ) 
       {
+         xyz_                     = nd.xyz_;
          idx_                     = nd.idx_;
          at_boundary_             = nd.at_boundary_;
+         parent_element_pointers_ = nd.parent_element_pointers_;
+         neighbor_node_pointers_  = nd.neighbor_node_pointers_;
          parent_node_indexes_     = nd.parent_node_indexes_;
-         parent_element_pointers_ = nd.parent_element_pointers_; 
-         xyz_                     = nd.xyz_; 
          this->LVS( move( nd.LVS() ) );
       }
     return *this;
@@ -110,8 +113,9 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
     xyz_                     = nd.xyz_;
     idx_                     = nd.idx_;
     at_boundary_             = nd.at_boundary_;
-    parent_node_indexes_     = move( nd.parent_node_indexes_ );
     parent_element_pointers_ = move( nd.parent_element_pointers_ );
+    neighbor_node_pointers_  = move( nd.neighbor_node_pointers_ );
+    parent_node_indexes_     = move( nd.parent_node_indexes_ );
     this->LVS( nd.LVS() );
  
     return *this;
@@ -273,8 +277,80 @@ void Node<dim>::EraseNullPointerParents()
 template<size_t dim>
 void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 {
+// TODO: implement dispatching of visitor to neighbor nodes
     v.Visit(this);
 }
+
+
+// node neighbor functionality
+
+/// initialises the corner-node to neighbor corner node pointer vector
+template<size_t dim>
+void  Node<dim>::Assign( std::set<Node<dim>*>& neighbor_nodes )
+ {
+    neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
+ }
+ 
+ 
+ 
+template<size_t dim>
+void  Node<dim>::Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors )
+ {
+    neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
+    if ( sort_neighbors )
+      sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
+ }
+
+
+
+
+/**
+   Remove duplicates, nullptrs, and sort the vector again.
+*/
+template<size_t dim>
+void  Node<dim>::UpdateNeighbors()
+ {
+    sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
+    
+    unique( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
+
+    neighbor_node_pointers_.erase( remove( neighbor_node_pointers_.begin(),
+                                           neighbor_node_pointers_.end(), nullptr ),
+                                   neighbor_node_pointers_.end() );
+                                   
+    neighbor_node_pointers_.shrink_to_fit();
+ }
+
+
+ 
+template<size_t dim>
+bool  Node<dim>::IsNeighbor( const Node<dim>* const nptr ) const
+ {
+    return binary_search( neighbor_node_pointers_.begin(),
+                          neighbor_node_pointers_.end(), nptr );
+ }
+ 
+
+/// just moves the unwanted element to the end of the vector, use UpdateNeighbors to shrink vector to new size
+template<size_t dim>
+void  Node<dim>::Remove( const Node<dim>* const neighbor_node )
+ {
+    remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
+ }
+ 
+ 
+template<size_t dim>
+void  Node<dim>::Add( Node<dim>* neighbor_node )
+ {
+    // grow the vector in small increments only
+    if ( neighbor_node_pointers_.size() == neighbor_node_pointers_.capacity() )
+      neighbor_node_pointers_.reserve( neighbor_node_pointers_.size() + 2 );
+      
+    neighbor_node_pointers_.push_back( neighbor_node );
+    sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
+ }
+
+
 
 
 /**
@@ -289,50 +365,20 @@ void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 template<size_t dim>
 size_t  Node<dim>::Neighbors() const
  {
-    size_t  node_neighbors(parent_element_pointers_.size());
-    
-    // subtracting number of lower dimensional parent elements as these node sharing
-    // but otherwise inconsequential elements would lead to a wrong node count
-    if constexpr ( dim == 3U ) {
-         for ( typename vector<Element<dim>*>::const_iterator
-               it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); ++it )
-           if ( (*it) == nullptr || (*it)->IsSurfaceElement() || (*it)->IsLineElement() ) node_neighbors--;
-         return node_neighbors;
-      }
-    if constexpr ( dim == 2U ) {
-         for ( typename vector<Element<dim>*>::const_iterator
-               it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); it++ )
-           if ( (*it) == nullptr || (*it)->IsLineElement() ) node_neighbors--;
-         return node_neighbors;
-      }
-      
-    // 1D version
-    return node_neighbors;
+   return neighbor_node_pointers_.size();
  }
 
 
 /**
     Implements node connectivity graph.
- 
-    Counter-clockwise node-numbering convention of the parent 
-    elements is used.
     
-    @test OK - unit test, see NodeNeighborConnectivity_Test
+    Nodes are enlisted in the order of their pointers (the new vector is maintained searchable).
 */
 template<size_t dim>
 Node<dim>*  Node<dim>::Neighbor( size_t neighbor_node ) const
  {
     assert( neighbor_node < Neighbors() );
-    if ( Parent( neighbor_node ) == nullptr ) {
-         cerr <<"\nNode("<< Idx() <<")::Neighbor("<< neighbor_node <<") requires parent that is a nullptr.";
-         cerr <<" return NULL";
-         return nullptr;
-      }
-   
-    size_t next_node(ParentNodeNumber(neighbor_node) + 1U);
-    if ( next_node == Parent( neighbor_node )->Nodes() ) next_node = 0U;
-    
-    return parent_element_pointers_[ neighbor_node ]->N( next_node );
+    return neighbor_node_pointers_[ neighbor_node ];
  }
 
 
@@ -786,6 +832,32 @@ template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::cons
 
 
 template<size_t dim>
+void printNeighbors( const Node<dim>* const nptr )
+ {
+    assert( nptr != nullptr );
+    const size_t n_nbors{nptr->Neighbors()};
+    assert( nptr->Parents() > 0 );
+    
+    cout <<"\nNode "<< nptr->Idx();
+    for ( size_t i{0}; i<n_nbors; ++i ) {
+         const Node<dim>* const nd_nbor = nptr->Neighbor(i);
+         if ( nd_nbor == nullptr ) cout <<" NULL";
+         else cout <<" "<< nd_nbor->Idx() <<":"<< parseBoundary( nd_nbor->AtBoundary() );
+      }
+      
+    cout << endl;
+      
+ } // end printParents
+
+template void printNeighbors( const Node<3>* const );
+template void printNeighbors( const Node<2>* const );
+template void printNeighbors( const Node<1>* const );
+
+
+
+
+
+template<size_t dim>
 void printParents( const Node<dim>* const nptr )
  {
     assert( nptr != nullptr );
@@ -810,10 +882,33 @@ void printParents( const Node<dim>* const nptr )
     cout << endl;
       
  } // end printParents
-
+ 
+ 
 template void printParents( const Node<3>* const );
 template void printParents( const Node<2>* const );
 template void printParents( const Node<1>* const );
+
+
+
+// calculates the size of the Node excluding the stored variables
+template<size_t dim>
+size_t sizeOf( const Node<dim>* const nptr )
+  {
+    size_t total_size = sizeof( *nptr ); // padded static store of object
+    // dynamic allocation
+    total_size += nptr->Parents() * sizeof( Element<dim>* );
+    total_size += nptr->Parents() * sizeof( ONE_BYTE_NUMBER );
+    // + local variable storage
+    
+    return total_size;
+
+  } // end sizeOf
+
+template size_t sizeOf( const Node<3>* const );
+template size_t sizeOf( const Node<2>* const );
+template size_t sizeOf( const Node<1>* const );
+
+
 
 } // end namespace csmp
 

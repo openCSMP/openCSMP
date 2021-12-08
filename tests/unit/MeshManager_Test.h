@@ -43,6 +43,10 @@ class MeshManager_Test : public Test {
     // using VSetMakers to create and compare input data
     bool Test_BuiltElementConnectivity2D();
     bool Test_BuiltElementConnectivity3D();
+    
+    // floodfill etc.
+    bool Test_MeshTraversal3D();
+
 
   private:
     std::string model2d_name_;
@@ -52,6 +56,8 @@ class MeshManager_Test : public Test {
     Model<3U>*  model3d_ = nullptr;
 };
 
+// build sparsity pattern for testing the connectivity among nodes
+template<size_t dim> void nodeNeighbors( const Region<dim>&, std::vector<std::set<size_t>>& node_neighbors );
 
 } // end csmp
 

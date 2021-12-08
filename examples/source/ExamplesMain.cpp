@@ -50,7 +50,7 @@ int main()
             examplesSuite.RegisterExample( new RegionProperties_Example() );
             examplesSuite.RegisterExample( new StreamFunction_Example() );
             examplesSuite.RegisterExample( new TimeSteppingApproaches_Example() );
-            examplesSuite.RegisterExample( new ReadingBinaries_Example() );
+//            examplesSuite.RegisterExample( new ReadingBinaries_Example() );
             examplesSuite.RegisterExample( new ErrorMetric_Example() );
             examplesSuite.RegisterExample( new StokesDiscrepancyMeasure_Example() );
             examplesSuite.RegisterExample( new StokesDiscrepancyMeasureQuadratic_Example() );

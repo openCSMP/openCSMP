@@ -436,6 +436,24 @@ vector<size_t>  IsoparametricQuadraticHexahedron::CornerNodesOfFace( size_t face
  }
 
 
+/// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+std::vector<size_t>  IsoparametricQuadraticHexahedron::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,3,4};
+        case 1: return vector<size_t>{0,2,5};
+        case 2: return vector<size_t>{1,3,6};
+        case 3: return vector<size_t>{0,2,7};
+        case 4: return vector<size_t>{0,5,7};
+        case 5: return vector<size_t>{1,4,6};
+        case 6: return vector<size_t>{2,5,7};
+        case 7: return vector<size_t>{3,4,6};
+        default:
+          cerr <<"\nIsoparametricQuadraticHexahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
 
 
 

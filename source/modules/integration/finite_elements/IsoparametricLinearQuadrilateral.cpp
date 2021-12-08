@@ -294,6 +294,23 @@ vector<size_t>  IsoparametricLinearQuadrilateral::CornerNodesOfFace( size_t face
 
 
 
+
+vector<size_t>  IsoparametricLinearQuadrilateral::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,3};
+        case 1: return vector<size_t>{0,2};
+        case 2: return vector<size_t>{1,3};
+        case 3: return vector<size_t>{0,2};
+        default:
+          cerr <<"\nIsoparametricLinearQuadrilateral::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
 void
 IsoparametricLinearQuadrilateral::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
  {

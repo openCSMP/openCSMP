@@ -257,54 +257,6 @@ void
 IsoparametricLinearHexahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
  {
     snids.resize(2);
-    /*if ( segm_id == 0 ) {
-         snids[0] = 1;
-         snids[1] = 0;
-      }
-    else if ( segm_id == 1 ) {
-         snids[0] = 2;
-         snids[1] = 1;
-      }
-    else if ( segm_id == 2 ) {
-         snids[0] = 3;
-         snids[1] = 2;
-      }
-    else if ( segm_id == 3 ) {
-         snids[0] = 0;
-         snids[1] = 3;
-      }
-    else if ( segm_id == 4 ) {
-         snids[0] = 5;
-         snids[1] = 4;
-      }
-    else if ( segm_id == 5 ) {
-         snids[0] = 6;
-         snids[1] = 5;
-      }
-    else if ( segm_id == 6 ) {
-         snids[0] = 7;
-         snids[1] = 6;
-      }
-    else if ( segm_id == 7 ) {
-         snids[0] = 4;
-         snids[1] = 7;
-      }
-    else if ( segm_id == 8 ) {
-         snids[0] = 4;
-         snids[1] = 0;
-      }
-    else if ( segm_id == 9 ) {
-         snids[0] = 5;
-         snids[1] = 1;
-      }
-    else if ( segm_id == 10 ) {
-         snids[0] = 6;
-         snids[1] = 2;
-      }
-    else if ( segm_id == 11 ) {
-         snids[0] = 7;
-         snids[1] = 3;
-      }*/
     if ( segm_id == 0 ) {
          snids[0] = 0;
          snids[1] = 1;
@@ -429,6 +381,27 @@ vector<size_t>  IsoparametricLinearHexahedron::CornerNodesOfFace( size_t face_id
  }
 
 
+/// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+std::vector<size_t>  IsoparametricLinearHexahedron::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,3,4};
+        case 1: return vector<size_t>{0,2,5};
+        case 2: return vector<size_t>{1,3,6};
+        case 3: return vector<size_t>{0,2,7};
+        case 4: return vector<size_t>{0,5,7};
+        case 5: return vector<size_t>{1,4,6};
+        case 6: return vector<size_t>{2,5,7};
+        case 7: return vector<size_t>{3,4,6};
+        default:
+          cerr <<"\nIsoparametricLinearHexahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
 
 CSMP_FEM_TYPE  IsoparametricLinearHexahedron::ElementTypeOfFace( size_t )  const
  {
@@ -448,11 +421,10 @@ double IsoparametricLinearHexahedron::WeightAtIntegrationPoint( size_t i ) const
 Function gives analytic volume of Hex, based on summ of six consistuting elements of the Tets
 Indexing of ANSYS is correct?
 */
-double
-IsoparametricLinearHexahedron::VolumeOfHexa()
+double IsoparametricLinearHexahedron::VolumeOfHexa()
 {
       double volume= VolumeOfTetra(0,1,3,4)+VolumeOfTetra(4,1,3,5)+VolumeOfTetra(4,5,3,7)+
-                        VolumeOfTetra(1,2,3,6)+VolumeOfTetra(3,1,6,5)+VolumeOfTetra(5,6,3,7);
+                     VolumeOfTetra(1,2,3,6)+VolumeOfTetra(3,1,6,5)+VolumeOfTetra(5,6,3,7);
 
     cout<<" Vertices:"<<endl;
 

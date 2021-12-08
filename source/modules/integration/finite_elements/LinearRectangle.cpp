@@ -159,6 +159,20 @@ vector<size_t>  LinearRectangle::CornerNodesOfFace( size_t face_id ) const
 
 
 
+vector<size_t>  LinearRectangle::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,3};
+        case 1: return vector<size_t>{0,2};
+        case 2: return vector<size_t>{1,3};
+        case 3: return vector<size_t>{0,2};
+        default:
+          cerr <<"\nLinearRectangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
 
 
 void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)

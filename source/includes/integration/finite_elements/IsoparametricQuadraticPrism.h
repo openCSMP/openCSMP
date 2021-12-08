@@ -16,11 +16,11 @@ public:
 
     virtual double    AspectRatio();
     virtual double    InnerRadius();
-    virtual void        EdgeLengths( std::vector<double>& vec );
-    virtual void        CornerNodes( std::vector<size_t>& ids ) const;
-    virtual size_t      CornerNodes() const  { return 8; }
-    virtual void        MidSideNodes( std::vector<size_t>& ids ) const;
-    virtual size_t      MidSideNodes() const { return 12; }
+    virtual void      EdgeLengths( std::vector<double>& vec );
+    virtual void      CornerNodes( std::vector<size_t>& ids ) const;
+    virtual size_t    CornerNodes() const  { return 8; }
+    virtual void      MidSideNodes( std::vector<size_t>& ids ) const;
+    virtual size_t    MidSideNodes() const { return 12; }
     virtual void      CounterClockwiseNodes( std::vector<size_t>& ids ) const;
 
     virtual void      ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
@@ -30,11 +30,12 @@ public:
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( size_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( size_t /* segment */ ) const { return ISOPARAMETRIC_QUADRATIC_BAR; };
 
-    virtual void        ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes,
+    virtual void           ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes,
                                                   std::vector<size_t>& fnids );
-    virtual void        NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
-    virtual void        NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual void           NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
+    virtual void           NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
     virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
   
     // TODO: virtual void        UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
 
@@ -44,7 +45,7 @@ public:
     virtual   void      JacobianAtIntegrationPoint( size_t ip );
 
     virtual double    dN_At( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
-    virtual void 	      dN( DenseMatrix<DM_MIN>& DN8 );
+    virtual void 	    dN( DenseMatrix<DM_MIN>& DN8 );
     virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
     virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point );
     virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );

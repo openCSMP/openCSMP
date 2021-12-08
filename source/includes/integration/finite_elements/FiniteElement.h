@@ -226,6 +226,9 @@ class FiniteElement {
     
     /// returns the local  numbers of the corner nodes of the face
     virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+    
+    /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node ) const;
   
     /// reports only the corner nodes (0..nodes-1) of the element
     virtual void       CornerNodes( std::vector<size_t>& ids ) const;

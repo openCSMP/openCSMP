@@ -814,6 +814,8 @@ bool Boundary<dim>::CreateFrom( Region<dim>& region,
                                 MeshManager<dim>& meshManager,
                                 BOX_BOUNDARY boxBoundary )
 {
+throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before using this method" );
+
   // assert lower dimensional representation
   if ( !hasLowerDimensionalRepresentation( region ) )
     throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "Region is not of lower dimensional representation." );

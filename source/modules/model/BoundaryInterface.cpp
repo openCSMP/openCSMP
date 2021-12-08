@@ -2093,6 +2093,8 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
   template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
   pair<set<string>,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions )
   {
+throw csmp::Exception( ERROR, "BoundaryInterface::EstablishBoundariesFromRegions", "likely BROKEN: fix before using this method" );
+
 	  BOUNDARY_COMPLEX<dim>* boundaryComplex(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
 	  cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
 

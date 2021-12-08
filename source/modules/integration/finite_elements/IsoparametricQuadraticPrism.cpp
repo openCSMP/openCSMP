@@ -294,6 +294,23 @@ vector<size_t>  IsoparametricQuadraticPrism::CornerNodesOfFace( size_t face_id )
 
 
 
+vector<size_t>  IsoparametricQuadraticPrism::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,2,4};
+        case 2: return vector<size_t>{0,1,5};
+        case 3: return vector<size_t>{0,4,5};
+        case 4: return vector<size_t>{1,3,5};
+        case 5: return vector<size_t>{2,3,4};
+        default:
+          cerr <<"\nIsoparametricQuadraticPrism::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
 
 CSMP_FEM_TYPE
 IsoparametricQuadraticPrism::ElementTypeOfFace( size_t )  const

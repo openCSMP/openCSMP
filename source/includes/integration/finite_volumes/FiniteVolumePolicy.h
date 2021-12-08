@@ -158,8 +158,8 @@ class FiniteVolumePolicy<3U, CELL> {
     /// returns the normal to the facet in parametric space
     Point<3U>  ParametricFacetNormal( size_t iFacet ) const;
     
-    // XXX Delete me
-    Point<3U>  FacetPoint(size_t iFacet, size_t iPoint) const;
+    /// returns facet corner point in physical coordinates using RST_to_XYX
+    Point<3U>  FacetPoint( size_t iFacet, size_t iPoint ) const;
 
     // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:

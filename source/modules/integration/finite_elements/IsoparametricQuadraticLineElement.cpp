@@ -228,6 +228,18 @@ vector<size_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( size_t fac
  }
 
 
+vector<size_t>  IsoparametricQuadraticLineElement::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1};
+        case 1: return vector<size_t>{0};
+        default:
+          cerr <<"\nIsoparametricQuadraticLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
 
 /// assuming straight segments between the nodes
 void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double>& vec ) 

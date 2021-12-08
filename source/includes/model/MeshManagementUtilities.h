@@ -33,11 +33,6 @@ template<size_t> class SplitBoundary;
 template<size_t dim>
 void floodFill( Element<dim>* const eptr, std::set<Element<dim>* const>& output_contiguous_subset );
 
-/// retrieves and returns the element ids of the first contiguous element patch that can be reached by mesh traversal from the starting element
-template<size_t dim>
-void floodFillViaIndexes( const Region<dim>&, size_t starting_idx,
-                          std::set<size_t>& output_contiguous_subset );
-
 /// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
 template<size_t dim>
 void  establishNeighborConnectivity( std::vector<Element<dim>*>&,
@@ -51,7 +46,9 @@ void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&,
 template<size_t dim>
 bool checkNeighborNormalsForConsistentOrientation( const Region<dim>& );
 
-
+/// using a breadth-first mesh traversal, finds all the Element, Face, or InterFace objects that belong to this contiguous mesh patch
+template<size_t dim,template<size_t> class CELL>
+size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, std::set<CELL<dim>*>& contiguous_subset_of_cells );
 
 /// finds the connected (contiguous) mesh patches in the supplied range of cells storing them in map with names that reflect their dimensionality and cell numbers
 template<size_t dim, template<size_t> class CELL>
@@ -65,14 +62,9 @@ size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::c
                                              typename std::vector<CELL<dim>*>::const_iterator end,
                                              std::map<Element<dim>*,MeshPatchAttributes>& );
 
-/// using a breadth-first mesh traversal, finds all the Element, Face, or InterFace objects that belong to this contiguous mesh patch
-// TODO: this method might also find mesh patches with different dimensional elements; test this and change if necessary
-template<size_t dim,template<size_t> class CELL>          // //
-void findContiguousMeshPatch( const CELL<dim>& entry_cell, std::set<CELL<dim>*>& contiguous_subset_of_cells );
-
-/// breadth-first mesh traversal starting at a Node; returns number of discovered nodes
+/// traverses mesh via node neighbors and collects nodes into argument set; @return number of discovered nodes; requires node to parent connectivity
 template<size_t dim>
-size_t findContiguousMeshPatch( const csmp::Node<dim>& entry_node, std::vector<Element<dim>*>& elements );
+size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
 
 /// relying on the parent element information from its nodes, method finds higher-dim neighbors of each element face and connects itself with them and vice versa; returns # found
 template<size_t dim>

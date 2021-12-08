@@ -180,9 +180,6 @@ public:
   // Andrew Bromage implementation using UnionFind
   size_t  PartitionRegionIntoContiguousSubRegions_Bromage( const char* region );
 
-  /// like partitionR.. but using element ids instead of pointers
-  size_t  PartitionRegionIntoContiguousSubRegionsByIdx( const char* region );
-
   /// removes all regions with the given name followed by an arbitrary number; returns number of removed regions=partitions
   size_t  RemoveRegionPartitionsFor( const char* name );
 

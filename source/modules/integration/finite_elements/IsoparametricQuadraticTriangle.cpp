@@ -516,6 +516,20 @@ void IsoparametricQuadraticTriangle::NodesOfFace( size_t face_id,
 
 
 
+/// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+std::vector<size_t>  IsoparametricQuadraticTriangle::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        case 0: return vector<size_t>{1,2};
+        case 1: return vector<size_t>{2,0};
+        case 2: return vector<size_t>{0,1};
+      }
+    cerr <<"\nIsoparametricQuadraticTriangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
+    return vector<size_t>{};
+  }
+
+
+
 vector<size_t>  IsoparametricQuadraticTriangle::CornerNodesOfFace( size_t face_id ) const
  {
 		switch (face_id) {
@@ -1214,7 +1228,7 @@ element.
 */
 void IsoparametricQuadraticTriangle::N( vector<double>& N, const vector<double>& xyz )
  {
-    vector<double> rs(parametricDimehsions);
+    vector<double> rs(parametricDimensions);
 
     PhysicalToParametric(rs, xyz);
 
