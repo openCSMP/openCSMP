@@ -838,14 +838,14 @@ void printNeighbors( const Node<dim>* const nptr )
     const size_t n_nbors{nptr->Neighbors()};
     assert( nptr->Parents() > 0 );
     
-    cout <<"\nNode "<< nptr->Idx();
+    cout <<"\nnode "<< nptr->Idx() <<":";
     for ( size_t i{0}; i<n_nbors; ++i ) {
          const Node<dim>* const nd_nbor = nptr->Neighbor(i);
          if ( nd_nbor == nullptr ) cout <<" NULL";
-         else cout <<" "<< nd_nbor->Idx() <<":"<< parseBoundary( nd_nbor->AtBoundary() );
+         else cout <<" "<< nd_nbor->Idx(); // <<":"<< parseBoundary( nd_nbor->AtBoundary() );
       }
       
-    cout << endl;
+    cout <<" ("<< parseBoundary( nptr->AtBoundary() ) <<")";
       
  } // end printParents
 

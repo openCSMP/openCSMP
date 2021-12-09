@@ -273,6 +273,9 @@ class VData {
     
     /// rebuilds 'pfverts' from scratch
     void   EstablishElementConnectivity3D(); // retested: OK 3/12/21 by SKM
+    
+    /// creates an extra array 'pnode' equivalent to a sparsity pattern recording to which nodes each node pnode[i] is connected to
+    void   EstablishNodeNeighborConnectivity( std::vector<std::set<size_t>>& pnode ) const;
 
     
     // PERSISTANCE (storing mesh in binary file)
@@ -326,15 +329,15 @@ class VData {
   private:
 
     bool                              hybrid_mesh_;      ///< mesh that consists of different element types
-    std::vector<double>             px, py, pz;        ///< node coordinates
+    std::vector<double>               px, py, pz;        ///< node coordinates
     std::vector<int8_t>               pelmt;             ///< CSMP element type info, needed to read plist & pfverts
     // although there's little point to having 64-bit pointers but not 64-bit sizes, after all.
     std::deque<std::vector<int64_t> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<int64_t> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
     // all enums / flags must fit into 8-bit integers
-    std::vector<std::int8_t>          bflags;            ///< flags for those nodes that lie on model boundary
-    int64_t                             first_face_;       ///< faces come after elements; if none this is equal to elements
-    int64_t                             first_interface_;  ///< interfaces come after faces; if none this is equal to elements
+    std::vector<std::int8_t>           bflags;            ///< flags for those nodes that lie on model boundary
+    int64_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
+    int64_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements
 
     friend class VData_Test;
 };

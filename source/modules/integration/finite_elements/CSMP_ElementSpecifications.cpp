@@ -661,6 +661,71 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int8_t etype )
 
 
 
+/** Returns the  number of segments of the input CSMP finite element type
+    as specified in CSMP_FEM_conventions.pdf   file in CSMP's documentation directory.
+*/
+size_t CSMP_ElementSpecifications::SegmentsPerElementOfType( int8_t etype )
+ {
+    // bar
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR ||
+         etype == ISOPARAMETRIC_QUADRATIC_BAR || etype == QUADRATIC_BAR ||
+         etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
+        return 2U;
+
+    // tetrahedron
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype == LINEAR_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON || etype == QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON || etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON || etype == CUBIC_TETRAHEDRON )
+        return 6U;
+
+    // hexahedron
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ||
+		 etype == LINEAR_CUBOID)
+        return 12U;
+
+    // quadrilateral
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
+         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ||
+		 etype == LINEAR_RECTANGLE)
+        return 4U;
+
+    // triangle
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE3D ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE || etype == BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE || etype == QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE || etype == BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_CUBIC_TRIANGLE || etype == CUBIC_TRIANGLE )
+        return 3U;
+
+    // prism
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
+         etype == ISOPARAMETRIC_CUBIC_PRISM )
+        return 9U;
+
+    // pyramid
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID )
+        return 8U;
+
+    std::cerr <<"\nCSMP_ElementSpecifications::SegmentsPerElementOfType: ";
+    std::cerr <<"unable to parse element type, returning 0"<< std::endl;
+    return ULONG_MAX; // unknown element type
+ } // end
+
+
+
 size_t CSMP_ElementSpecifications::FacesPerElementOfType( int8_t CSMP_finite_element_type )
  {
     // since these are equivalent numbers
@@ -728,8 +793,8 @@ size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
          etype == ISOPARAMETRIC_CUBIC_PYRAMID )
         return 5U;
 
-    std::cout <<"\nCSMP_ElementSpecifications::NeighborsPerElementOfType: ";
-    std::cout <<"unable to parse element type, returning 0"<< std::endl;
+    std::cerr <<"\nCSMP_ElementSpecifications::NeighborsPerElementOfType: ";
+    std::cerr <<"unable to parse element type, returning 0"<< std::endl;
     return ULONG_MAX; // unknown element type
  } // end
 
@@ -879,6 +944,151 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
     return ULONG_MAX; // unknown number of faces
 
  } // end NodesPerFaceForElementOfType
+
+
+
+
+
+
+
+std::pair<size_t,size_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( int8_t CSMP_FE_type,
+                                                                                             size_t segm_id )
+ {
+    switch( CSMP_FE_type )
+      {
+         // tetrahedra
+         case ISOPARAMETRIC_LINEAR_TETRAHEDRON:
+         case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON:
+         case ISOPARAMETRIC_CUBIC_TETRAHEDRON:
+         case LINEAR_TETRAHEDRON:
+         case QUADRATIC_TETRAHEDRON:
+         case BARYCENTRIC_QUADRATIC_TETRAHEDRON:
+         case CUBIC_TETRAHEDRON :
+           switch( segm_id ) {
+               case 0: return std::make_pair( 0, 1 );
+               case 1: return std::make_pair( 1, 2 );
+               case 2: return std::make_pair( 2, 0 );
+               case 3: return std::make_pair( 0, 3 );
+               case 4: return std::make_pair( 1, 3 );
+               case 5: return std::make_pair( 2, 3 );
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+            }
+         // hexahedra
+         case ISOPARAMETRIC_LINEAR_HEXAHEDRON:
+         case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20:
+         case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27:
+         case ISOPARAMETRIC_CUBIC_HEXAHEDRON:
+         case LINEAR_CUBOID :
+           switch( segm_id ) {
+               case 0: return std::make_pair( 0, 1 );
+               case 1: return std::make_pair( 1, 2 );
+               case 2: return std::make_pair( 2, 3 );
+               case 3: return std::make_pair( 3, 0 );
+               case 4: return std::make_pair( 0, 4 );
+               case 5: return std::make_pair( 1, 5 );
+               case 6: return std::make_pair( 2, 6 );
+               case 7: return std::make_pair( 3, 7 );
+               case 8: return std::make_pair( 4, 5 );
+               case 9: return std::make_pair( 5, 6 );
+               case 10: return std::make_pair( 6, 7 );
+               case 11: return std::make_pair( 7, 4 );
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+            }
+         // prisms
+         case ISOPARAMETRIC_LINEAR_PRISM:
+         case ISOPARAMETRIC_QUADRATIC_PRISM15:
+         case ISOPARAMETRIC_QUADRATIC_PRISM18:
+         case ISOPARAMETRIC_CUBIC_PRISM :
+           switch( segm_id ) {
+               case 0: return std::make_pair( 0, 1 );
+               case 1: return std::make_pair( 1, 2 );
+               case 2: return std::make_pair( 2, 0 );
+               case 3: return std::make_pair( 0, 3 );
+               case 4: return std::make_pair( 1, 4 );
+               case 5: return std::make_pair( 2, 5 );
+               case 6: return std::make_pair( 3, 4 );
+               case 7: return std::make_pair( 4, 5 );
+               case 8: return std::make_pair( 5, 3 );
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+            }
+         // pyramids
+         case ISOPARAMETRIC_LINEAR_PYRAMID:
+         case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
+         case ISOPARAMETRIC_QUADRATIC_PYRAMID14:
+         case ISOPARAMETRIC_CUBIC_PYRAMID :
+           switch( segm_id ) {
+               case 0: return std::make_pair( 0, 1 );
+               case 1: return std::make_pair( 1, 2 );
+               case 2: return std::make_pair( 2, 3 );
+               case 3: return std::make_pair( 3, 0 );
+               case 4: return std::make_pair( 0, 4 );
+               case 5: return std::make_pair( 1, 4 );
+               case 6: return std::make_pair( 2, 4 );
+               case 7: return std::make_pair( 3, 4 );
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+            }
+         // triangles
+         case ISOPARAMETRIC_LINEAR_TRIANGLE:
+         case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+         case ISOPARAMETRIC_CUBIC_TRIANGLE:
+         case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE:
+         case LINEAR_TRIANGLE:
+         case LINEAR_TRIANGLE3D:
+         case BARYCENTRIC_LINEAR_TRIANGLE :
+           switch( segm_id ) {
+               case 0: return std::make_pair( 1, 2 );
+               case 1: return std::make_pair( 2, 0 );
+               case 2: return std::make_pair( 0, 1 );
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+            }
+         // quadrilaterals
+         case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+         case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+         case ISOPARAMETRIC_CUBIC_QUADRILATERAL:
+         case LINEAR_RECTANGLE:
+         case LINEAR_QUADRILATERAL :
+           switch( segm_id ) {
+               case 0: return std::make_pair( 0, 1 );
+               case 1: return std::make_pair( 1, 2 );
+               case 2: return std::make_pair( 2, 3 );
+               case 3: return std::make_pair( 3, 4 );
+               default:
+                 std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
+                 std::cerr <<"segment id="<< segm_id <<" out of range.\n";
+                 return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+             }
+         // line elements
+         case ISOPARAMETRIC_LINEAR_BAR:
+         case ISOPARAMETRIC_QUADRATIC_BAR:
+         case ISOPARAMETRIC_CUBIC_BAR:
+         case LINEAR_BAR:
+         case QUADRATIC_BAR:
+         case CUBIC_BAR :
+           return std::make_pair( 0, 1 );
+         default:
+           std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
+           std::cerr <<"element type could not be identified.\n";
+      }
+      
+    return std::pair<size_t,size_t>{ UINT_MAX, UINT_MAX };
+    
+ } // end CornerNodesPerSegmentForElementOfType
+
 
 
 

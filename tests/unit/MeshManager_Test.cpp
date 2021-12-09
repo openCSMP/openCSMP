@@ -395,7 +395,17 @@ bool MeshManager_Test::Test_MeshTraversal3D()
 //    testCreateTetra_VSet( vset );
     Model<3>         model( vset, "CSMP-variables.txt" );
     const Region<3>& model_domain = model.Region("Model");
-    model_domain.UpdateMemberIndexes();
+    
+    /* tested: OK
+    cout <<"\nNodes with their original indices:\n";
+    for ( auto nit=model.Mesh().NodesBegin(); nit!=model.Mesh().NodesEnd(); ++nit )
+      cout <<" "<< (*nit).Idx();
+    cout << endl;
+    cout <<"and in the order in the model subdomain\n";
+    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
+      cout <<" "<< (*nit)->Idx() <<":"<< parseBoundary( (*nit)->AtBoundary() );
+    cout << endl;
+    */
     
     // testing the different traversal algorithms
     
@@ -416,6 +426,22 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     _test( (*elmt_patches.begin()).second.size() == model_domain.Elements() );
     for ( auto i : elmt_patches ) cout <<" "<< i.first;
     
+    // checking that NodesOfSegment() and  CornerNodesPerSegmentForElementOfType() give the same answer
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+         for ( size_t i{0}; i < (*it)->FE()->Segments(); ++i ) {
+              vector<size_t> node_vec;
+              (*it)->FE()->NodesOfSegment( i, node_vec );
+              sort( node_vec.begin(), node_vec.end() );
+              pair<size_t,size_t> node_pair =
+                CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( (*it)->FE_Type(), i );
+              if ( node_pair.first > node_pair.second ) swap( node_pair.first, node_pair.second );
+              _test( node_vec[0] == node_pair.first );
+              _test( node_vec[1] == node_pair.second );
+              if ( node_vec[0] != node_pair.first || node_vec[1] != node_pair.second )
+                cerr <<"\n"<< parseElementType( (*it)->FE_Type() ) <<": segm "<< i;
+           }
+      }
+    
     
     // traversal via node-to-node connectivity
     // ---------------------------------------
@@ -423,17 +449,15 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     vector<set<size_t>>  node_neighbors;
     nodeNeighbors( model_domain, node_neighbors );
     
-//    NodesOfSegment( size_t segm_id, std::vector<size_t>& snids )
-    
-//    cout <<"\nTest_MeshTraversal3D: storage requirements for the nodes (bytes):";  OK - around 250 bytes per node
+//    cout <<"\nTest_MeshTraversal3D: storage requirements for the nodes (bytes):";  // OK - around 250 bytes per node
 //    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
 //      cout <<"\nNode "<< (*nit)->Idx() <<": "<< sizeOf( (*nit) );
 //    cout << endl;
 
     // checking the node connectivity (BROKEN! - for prism-hexa mesh)
     cout <<"\nTest_MeshTraversal3D: node to parent connectivity:";
-    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
-      printNeighbors( (*nit) );
+//    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
+//      printNeighbors( (*nit) );
     
     set<Node<3>*> set_of_interconnected_nodes;
     _test( findInterconnectedNodeCluster( &(*model_domain.N(0)), set_of_interconnected_nodes ) == model_domain.Nodes() );
@@ -775,6 +799,7 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
       }
       
     // printing the node-neighbor vector for testing
+    /*
     cout <<"\n\nnodeNeighbors: connectivity created for "<< node_neighbors.size() <<" nodes:";
     size_t node{0};
     for ( auto nit : node_neighbors ) {
@@ -784,6 +809,7 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
          cout <<" ("<< parseBoundary( subdomain.N(node)->AtBoundary() ) <<")";
          node++;
       }
+    */
       
  } // end nodeNeighbors
 

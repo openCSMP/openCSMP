@@ -305,7 +305,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
           nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, NOT ) );
         }
     }
-     
+
   // storage for elements
    {
       const LocalVariables evars( phys_vars.LocalVariablesAt( ELEMENT ) );
@@ -652,15 +652,36 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    if ( csmp_error.Verbose() )
      cout << "\nMeshManager<" << dim << ">::Initialize: forming regions for contiguous subdomains..." << endl;
  
+
+ 
+  // ------------------------------------------------------------------------------
+  // 7. Connecting the nodes with one another through the neighbor pointers
+  // ------------------------------------------------------------------------------
+   // OK - consecutively numbered:  for ( auto nit : nodes_ ) cout <<" "<< nit.Idx();
+   vector<set<size_t> > pnode;
+   vset.EstablishNodeNeighborConnectivity( pnode );
+   
+   size_t node{0};
+   for ( auto& n : nodes_ ) {
+        // creating sorted vector of node points
+        vector<Node<dim>*>  nptrs;
+        nptrs.reserve( pnode[node].size() );
+        for ( auto s : pnode[node] )
+          nptrs.push_back( &(*next(nodes_.begin(),s)) );
+        // assigning the neighbor pointers to the node
+        n.Assign( nptrs, true );
+        node++;
+     }
+
      
   // ------------------------------------------------------------------------------
-  // 7. reconstructing NodeManifolds if any
+  // 8. reconstructing NodeManifolds if any
   // -------------------------------------------------------------------------------
-  if ( !interfaces_.empty() ) {
+   if ( !interfaces_.empty() ) {
        VData::vertexManifoldIndices  indexes;
        vset.ExtractNodeManifolds( indexes );
        node_manifold_manager_ = new NodeManifoldManager( indexes, nodes_ );
-    }
+     }
 
    return true;
   

@@ -17,6 +17,7 @@ declared in file "FiniteElment.h"
 @author R. Mansipov
 @date 2003,2015
 @note SKM 9/2/17 made static singleton class
+@note SKM 9/12/21 extras for more independent VData construction
 
 Used to deduce element characteristics prior to the construction of CSMP Element classes.
 
@@ -55,9 +56,11 @@ class CSMP_ElementSpecifications {
     static void          VolumeElements( std::list<std::string>& vol_elements );
 
     static size_t        NodesPerElementOfType( int8_t CSMP_finite_element_type );
+    static size_t        SegmentsPerElementOfType( int8_t CSMP_finite_element_type );
     static size_t        FacesPerElementOfType( int8_t CSMP_finite_element_type );
     static size_t        NeighborsPerElementOfType( int8_t CSMP_finite_element_type );
     static size_t        NodesPerFaceForElementOfType( int8_t CSMP_finite_element_type, size_t face );
+    static std::pair<size_t,size_t>  CornerNodesPerSegmentForElementOfType( int8_t CSMP_finite_element_type, size_t segm );
     static size_t        FaceNodeForElementOfType( int8_t CSMP_finite_element_type, size_t face, size_t face_node );
 };
 

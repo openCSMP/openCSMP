@@ -311,7 +311,7 @@ size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*
 
     vector<Node<dim>*>  node_neighbors{ nptr };
     contiguous_set_of_nodes.insert( nptr );
-cerr <<"\n\nfindInterconnectedNodeCluster: traversing nodes, starting at: "<< nptr->Idx() <<": ";
+    // cerr <<"\n\nfindInterconnectedNodeCluster: traversing nodes, starting at: "<< nptr->Idx() <<": ";
 
     while ( !node_neighbors.empty() )
       {
@@ -321,12 +321,12 @@ cerr <<"\n\nfindInterconnectedNodeCluster: traversing nodes, starting at: "<< np
              const size_t n_node_nbors{ nit->Neighbors() };
              new_node_nbors.reserve( n_node_nbors );
              for ( size_t i{0}; i < n_node_nbors; ++i ) {
-                 Node<dim>* nbor_ptr = nptr->Neighbor(i);
+                 Node<dim>* nbor_ptr = nit->Neighbor(i);
                  assert( nbor_ptr != nullptr );
                  if ( contiguous_set_of_nodes.find( nbor_ptr ) == contiguous_set_of_nodes.end() ) {
                       new_node_nbors.push_back( nbor_ptr );
                       contiguous_set_of_nodes.insert( nbor_ptr );
-cerr <<" "<< nbor_ptr->Idx();
+                      // cerr <<" "<< nbor_ptr->Idx();
                    }
                }
            }

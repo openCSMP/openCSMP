@@ -3308,6 +3308,119 @@ void VData::EstablishElementConnectivity3D()
 
 
 
+/**
+      Finds the neighbors of each node and returns them into the argument vector..
+      
+      This method is equivalent to creating a sparsity pattern for matrix accumulation.
+      
+      @test OK SKM 8/12/21
+*/
+void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode ) const
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( plist.empty() ) {
+         csmp_error.notice( WARNING, "VData::EstablishNodeNeighborConnectivity:", "plist is empty; nothing was done." );
+         return;
+      }
+
+    if ( !pnode.empty() ) pnode.clear();
+    pnode.resize( px.size() );
+    
+    bool higher_order_elements{false};
+ 
+    const size_t n_elements{ plist.size() };
+    // looping over the elements to get the corner nodes of their segments
+    for ( size_t elmt{0}; elmt < n_elements; ++elmt ) {
+         // getting the element type
+         const auto CSMP_FE_type{ pelmt[elmt] };
+         if ( !higher_order_elements && CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 1 ) {
+              csmp_error.notice( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes not tested yet; check!" );
+              higher_order_elements = true;
+           }
+         // for each segment
+         const size_t n_segments{ CSMP_ElementSpecifications::SegmentsPerElementOfType( CSMP_FE_type ) };
+         for ( size_t segm_id{0}; segm_id < n_segments; ++segm_id ) {
+              pair<size_t,size_t>
+                segm_nodes = CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( CSMP_FE_type, segm_id );
+              // replacing local with global node ids
+              segm_nodes.first  = plist[ elmt ][ segm_nodes.first ];
+              segm_nodes.second = plist[ elmt ][ segm_nodes.second ];
+              // storing the node-to-node connections avoiding duplicates
+              pnode[ segm_nodes.first ].insert( segm_nodes.second );
+              pnode[ segm_nodes.second ].insert( segm_nodes.first );
+           }
+         // if this is an interface with nodes on the inside and outside
+         if ( elmt > first_interface_ ) {
+             // do the whole thing again, for the second lot of node entries in the plist
+             const size_t n_nodes = CSMP_ElementSpecifications::NodesPerElementOfType(CSMP_FE_type);
+             for ( size_t segm_id{0}; segm_id < n_segments; ++segm_id ) {
+                  pair<size_t,size_t>
+                    segm_nodes = CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( CSMP_FE_type, segm_id );
+                  // replacing local with global node ids
+                  segm_nodes.first  = plist[ elmt ][ segm_nodes.first  + n_nodes ];
+                  segm_nodes.second = plist[ elmt ][ segm_nodes.second + n_nodes ];
+                  // storing the node-to-node connections avoiding duplicates
+                  pnode[ segm_nodes.first ].insert( segm_nodes.second );
+                  pnode[ segm_nodes.second ].insert( segm_nodes.first );
+               }
+           }
+      }
+      
+    // finite elements with midside nodes and bubble functions
+    if ( higher_order_elements ) {
+      for ( size_t elmt{0}; elmt < n_elements; ++elmt )
+        if ( pnode[elmt].empty() )
+          {
+             // getting the element type
+             const auto CSMP_FE_type{ pelmt[elmt] };
+             if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) == 2 ) {
+                 // dealing with quadratic elements that have midside nodes
+                 // relying on the numbering convention that midside nodes follow the corner nodes in the same order
+                 // and that there is one midside node per segment
+                 const size_t n_nodes = CSMP_ElementSpecifications::NodesPerElementOfType(CSMP_FE_type);
+                 // for each segment
+                 const size_t n_segments{ CSMP_ElementSpecifications::SegmentsPerElementOfType( CSMP_FE_type ) };
+                 const size_t first_midside_node = n_nodes - n_segments;
+                 // assigning the segment corner nodes as neighbors of the midside node
+                 for ( size_t segm_id{0}; segm_id < n_segments; ++segm_id ) {
+                      pair<size_t,size_t>
+                        segm_nodes = CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( CSMP_FE_type, segm_id );
+                      // replacing local with global node ids
+                      const size_t midside_node = plist[ elmt ][ first_midside_node + segm_id ];
+                      segm_nodes.first          = plist[ elmt ][ segm_nodes.first ];
+                      segm_nodes.second         = plist[ elmt ][ segm_nodes.second ];
+                      // storing the node-to-node connections avoiding duplicates
+                      pnode[ midside_node ].insert( segm_nodes.first );
+                      pnode[ midside_node ].insert( segm_nodes.second );
+                   }
+               }
+             else {
+                  csmp_error.notice( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes for O>2 meshes not done yet" );
+                  break;
+               }
+           }
+           
+      } // end higher-order elements
+
+#ifdef MESH_MANAGER_DEBUG
+    // printing the node-neighbor vector for testing
+    cout <<"\n\nVData::EstablishNodeNeighborConnectivity: connectivity created for "<< pnode.size() <<" nodes:";
+    size_t node{0};
+    for ( auto nit : pnode ) {
+         cout <<"\n\t" << node <<": ";
+         for ( auto i : nit ) cout << i <<" ";
+         cout <<" ("<< parseBoundary( intToBOX_BOUNDARY( bflags[node] ) ) <<")";
+         node++;
+      }
+#endif
+
+ } // end EstablishNodeNeighborConnectivity
+
+
+
+
+
 
 /**
     vertex manifolds: pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
