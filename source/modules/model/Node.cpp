@@ -328,15 +328,18 @@ size_t  Node<dim>::ReassignNeighbors()
 
 
 /**
-   Remove duplicates, nullptrs, and sort the vector again.
+   Sorts vector and removes duplicates and nullptrs.
+   The vector is trimmed so that size matches capacity.
 */
 template<size_t dim>
 size_t  Node<dim>::UpdateNeighbors()
  {
     sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
     
-    unique( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
-
+    neighbor_node_pointers_.erase( unique( neighbor_node_pointers_.begin(),
+                                           neighbor_node_pointers_.end() ),
+                                   neighbor_node_pointers_.end() );
+                                   
     neighbor_node_pointers_.erase( remove( neighbor_node_pointers_.begin(),
                                            neighbor_node_pointers_.end(), nullptr ),
                                    neighbor_node_pointers_.end() );
@@ -494,10 +497,12 @@ bool  Node<dim>::IsParent( const Element<dim>* const eptr ) const
 
 
 /**
-     sorts parent vector for searching and eliminates potential nullpointers
+     sorts parent vector for searching.
+     
+     @attention parent vector must not contain any nullptrs.
 */
 template<size_t dim>
-void  Node<dim>::UpdateParents() {
+void  Node<dim>::SortParents() {
      assert( parent_element_pointers_.size() == parent_node_indexes_.size() );
 
      // sorting

@@ -489,7 +489,7 @@ bool MeshManager_Test::Test_MeshTraversal3D()
 
 bool MeshManager_Test::TestEntityNumberingFunction()
 {
-  const bool contiguous{true}, reconstruct_from_CSMP_binary_file{false};
+  const bool contiguous{true}, reconstruct_from_CSMP_binary_file{true};
   Create_ANSYS3D_Model( contiguous, reconstruct_from_CSMP_binary_file );
 	// nodes numbered via Model region
 	Region<3U>& model_domain(model3d_->Region("Model"));

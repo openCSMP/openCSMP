@@ -68,8 +68,8 @@ class Node : public LocalVariableStorage<dim,Node> {
     bool Unassign( Element<dim>* parent_elmt );
     /// changes parent element related containers to new size
     void ResizeParentStorage( size_t parent_elements );
-    /// sorts parent vector for searching and eliminates potential nullpointers
-    void UpdateParents();
+    /// sorts parent vectors for searching
+    void SortParents();
     /// removing parent elements that were previously assigned a nullptr
     void EraseNullPointerParents();
     /// remove all current parent elements

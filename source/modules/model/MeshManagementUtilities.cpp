@@ -96,21 +96,12 @@ size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, set<CELL<dim>*>& ce
          return 0;
       }
 
-    // identifying the neighbors of the first element to be looked at
-    //cerr <<"\n\nfindContiguousMeshPatch: adding cells: "<< entry_cell->Idx();
-    vector<CELL<dim>*>  neighbor_cells;
-    const size_t        n_neighbors(entry_cell->Neighbors());
-    neighbor_cells.reserve( n_neighbors );
-    for ( size_t i=0U; i<n_neighbors; i++ )
-      if ( entry_cell->Neighbor(i) != nullptr )
-        neighbor_cells.push_back( entry_cell->Neighbor(i) );
- 
-    // performing the floodfill, starting with an empty set
-    if ( !cells_contiguous_subset.empty() )
-      cells_contiguous_subset.clear();
-   
+    // clean the set if it is not empty
+    if ( !cells_contiguous_subset.empty() ) cells_contiguous_subset.clear();
     // insert the first element into the new subset
     cells_contiguous_subset.insert( entry_cell );
+    
+    vector<CELL<dim>*>  neighbor_cells{ entry_cell };
       
     while( !neighbor_cells.empty() )
       {
@@ -119,17 +110,19 @@ size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, set<CELL<dim>*>& ce
    
           // 1. loop over those neighbors that are not already part of the deque
           for ( const auto& nit : neighbor_cells )
-            // if the cell has not been encountered before
-            if ( nit != nullptr && cells_contiguous_subset.find( nit ) == cells_contiguous_subset.end() ) {
-                const size_t  n_neighbors(nit->Neighbors());
-                new_neighbor_cells.reserve( n_neighbors );
-                for ( size_t j=0U; j<n_neighbors; ++j )
-                  if ( nit->Neighbor(j) != nullptr ) {
-                       //cerr <<" "<< nit->Neighbor(j)->Idx();
-                       // set guarantees that no duplicate cells
-                       new_neighbor_cells.push_back( nit->Neighbor(j) );
-                    }
-                cells_contiguous_subset.insert( nit );
+            {
+               assert( nit != nullptr );
+               assert( nit->FE() != nullptr );
+               const size_t  n_neighbors{ nit->Neighbors() };
+               new_neighbor_cells.reserve( n_neighbors );
+               for ( size_t j=0U; j<n_neighbors; ++j ) {
+                   CELL<dim>* cell_ptr = nit->Neighbor(j);
+                   // if the cell has not been encountered before
+                   if ( cell_ptr && cells_contiguous_subset.find( cell_ptr ) == cells_contiguous_subset.end() ) {
+                        new_neighbor_cells.push_back( cell_ptr );
+                        cells_contiguous_subset.insert( cell_ptr );
+                     }
+                 }
              }
  
           // 2. obtain a new set of neighbors that has to be visited in the next iteration

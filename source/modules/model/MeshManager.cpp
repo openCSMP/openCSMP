@@ -647,7 +647,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        
    // sorting the parent element pointers stored by the nodes for searching
    for ( auto& n : nodes_ )
-    n.UpdateParents();
+    n.SortParents();
 
    if ( csmp_error.Verbose() )
      cout << "\nMeshManager<" << dim << ">::Initialize: forming regions for contiguous subdomains..." << endl;
@@ -682,6 +682,17 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        vset.ExtractNodeManifolds( indexes );
        node_manifold_manager_ = new NodeManifoldManager( indexes, nodes_ );
      }
+
+
+#ifdef DEBUG
+integrityCheck<dim,Element>( ElementsBegin(), ElementsEnd() );
+if ( Faces() > 0 )
+  integrityCheck<dim,Face>( FacesBegin(), FacesEnd() );
+if ( InterFaces() > 0 ) {
+      integrityCheck<dim,InterFace>( InterFacesBegin(), InterFacesEnd() );
+     // add test for node manifolds
+  }
+#endif
 
    return true;
   
@@ -4917,7 +4928,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
 
 
 /**
-    uses a floodfill on the highest-dimensional elements in the mesh to identify whether the model consists  of disconnected mesh patches
+    Performs a node-to-node, breadth-first traversal to identify whether the model consists  of disconnected mesh patches.
  */
 template<size_t dim>
 bool  MeshManager<dim>::IsContiguous() const
@@ -4925,6 +4936,18 @@ bool  MeshManager<dim>::IsContiguous() const
     if ( elements_.empty() )
       throw csmp::Exception( ERROR, "MeshManager<dim>::IsContiguous", "'elements_' container is empty." );
  
+   set<Node<dim>*> node_pointers;
+   findInterconnectedNodeCluster<dim>( const_cast<Node<dim>*>(&(*nodes_.begin())), node_pointers );
+   
+   if ( node_pointers.size() < nodes_.size() ) return false;
+   return true;
+
+ } // end IsContiguous
+
+
+
+/* ORIGINAL METHOD
+     
     // finding the highest dimensional elements in the mesh
     const Element<dim>* eptr(nullptr);
     
@@ -4950,12 +4973,7 @@ bool  MeshManager<dim>::IsContiguous() const
     floodFill( const_cast<Element<dim>* const>(eptr), contiguous_subset );
 
     // performing a floodfill on them
-    if ( contiguous_subset.size() < elmt_count ) return false;
-    return true;
-
- } // end IsContiguous
-
-
+*/
 
 
 template<size_t dim>
