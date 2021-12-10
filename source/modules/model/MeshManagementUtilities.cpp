@@ -296,6 +296,7 @@ template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::const_it
 
 
 /**
+      tested:OK
 */
 template<size_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*>& contiguous_set_of_nodes )

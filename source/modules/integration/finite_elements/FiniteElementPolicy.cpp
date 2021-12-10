@@ -41,6 +41,18 @@ FiniteElement* FiniteElementPolicy<dim,CELL>::FE() const
 
 
 template<size_t dim, template<size_t> class CELL>
+bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const
+ {
+    if constexpr ( dim == 3 ) return IsVolumeElement();
+    if constexpr ( dim == 2 ) return IsSurfaceElement();
+    if constexpr ( dim == 1 ) return IsLineElement();
+    return false;
+ }
+
+
+
+
+template<size_t dim, template<size_t> class CELL>
 bool FiniteElementPolicy<dim,CELL>::IsLineElement() const
   {
     assert( fptr_ != nullptr );

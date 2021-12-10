@@ -302,13 +302,36 @@ void  Node<dim>::Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neig
  }
 
 
+/**
+   Remove duplicates, nullptrs, and sort the vector again.
+*/
+template<size_t dim>
+size_t  Node<dim>::ReassignNeighbors()
+ {
+    set<Node<dim>*>  current_nbors;
+    const size_t     n_parents{ Parents() };
+    
+    for ( size_t i{0}; i < n_parents; ++i )
+      if ( Parent(i) != nullptr &&
+           Parent(i)->IsEquidimensional() ) {
+           for ( auto& i :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
+             current_nbors.insert( i );
+        }
+    
+    neighbor_node_pointers_.assign( current_nbors.begin(), current_nbors.end() );
+    neighbor_node_pointers_.shrink_to_fit();
+    
+    return neighbor_node_pointers_.size();
+ }
+
+
 
 
 /**
    Remove duplicates, nullptrs, and sort the vector again.
 */
 template<size_t dim>
-void  Node<dim>::UpdateNeighbors()
+size_t  Node<dim>::UpdateNeighbors()
  {
     sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
     
@@ -319,6 +342,8 @@ void  Node<dim>::UpdateNeighbors()
                                    neighbor_node_pointers_.end() );
                                    
     neighbor_node_pointers_.shrink_to_fit();
+    
+    return neighbor_node_pointers_.size();
  }
 
 
@@ -329,18 +354,10 @@ bool  Node<dim>::IsNeighbor( const Node<dim>* const nptr ) const
     return binary_search( neighbor_node_pointers_.begin(),
                           neighbor_node_pointers_.end(), nptr );
  }
- 
 
-/// just moves the unwanted element to the end of the vector, use UpdateNeighbors to shrink vector to new size
+
 template<size_t dim>
-void  Node<dim>::Remove( const Node<dim>* const neighbor_node )
- {
-    remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
- }
- 
- 
-template<size_t dim>
-void  Node<dim>::Add( Node<dim>* neighbor_node )
+void  Node<dim>::AddNeighbor( Node<dim>* neighbor_node )
  {
     // grow the vector in small increments only
     if ( neighbor_node_pointers_.size() == neighbor_node_pointers_.capacity() )
@@ -349,6 +366,16 @@ void  Node<dim>::Add( Node<dim>* neighbor_node )
     neighbor_node_pointers_.push_back( neighbor_node );
     sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
  }
+
+
+/// just moves the unwanted element to the end of the vector, use UpdateNeighbors to shrink vector to new size
+template<size_t dim>
+void  Node<dim>::RemoveNeighbor( const Node<dim>* const neighbor_node )
+ {
+    remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
+ }
+ 
+ 
 
 
 
@@ -377,7 +404,7 @@ size_t  Node<dim>::Neighbors() const
 template<size_t dim>
 Node<dim>*  Node<dim>::Neighbor( size_t neighbor_node ) const
  {
-    assert( neighbor_node < Neighbors() );
+    assert( neighbor_node < neighbor_node_pointers_.size() );
     return neighbor_node_pointers_[ neighbor_node ];
  }
 

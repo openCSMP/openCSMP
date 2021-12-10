@@ -102,12 +102,19 @@ class Node : public LocalVariableStorage<dim,Node> {
     
     /// initialises the corner-node to neighbor corner node pointer vector
     void Assign( std::set<Node<dim>*>& neighbor_nodes );
+
     /// expects a sorted vector without duplicates
     void Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors=false );
-    void UpdateNeighbors();
+
+    /// rebuilds the neighbor connectivity working through higher-dimensional parent element edges that the node is part of; returns new number of neighbors
+    size_t ReassignNeighbors();
+
+    /// removes null pointers and potential duplicates returning the resulting number of neighbors
+    size_t UpdateNeighbors();
+    
     bool IsNeighbor( const Node<dim>* const ) const;
-    void Remove( const Node<dim>* const neighbor_node );
-    void Add( Node<dim>* neighbor_node );
+    void AddNeighbor( Node<dim>* neighbor_node );
+    void RemoveNeighbor( const Node<dim>* const neighbor_node );
     
     /// the number of corner nodes that this node is directly connected with via segments
     size_t Neighbors() const;

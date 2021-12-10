@@ -21,7 +21,7 @@ class FiniteElementPolicy {
     /// returns search key to match element faces; pointers in order so that they can be searched
     std::set<Node<dim>*> CornerNodesOfFace( size_t face_id ) const;
 
-    /// returns search key to match element faces; pointers in order so that they can be searched
+    /// returns set of nodes that are neighbors of the target node in this element
     std::set<Node<dim>*> CornerNodesConnectedTo( size_t node_id ) const;
 
     /// the type is an enumeration that is used in the generation of finite elements
@@ -29,6 +29,9 @@ class FiniteElementPolicy {
   
     /// you are allowed to switch the element at runtime and modifies the volatile data it stores
     FiniteElement* FE() const;
+    
+    /// true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element
+    bool       IsEquidimensional() const;
     
     bool       IsLineElement() const;
     bool       IsSurfaceElement() const;
@@ -51,9 +54,9 @@ class FiniteElementPolicy {
     void    N_At( const Point<dim>& rst ) const;
     void    N_At( const Point<dim>& rst, std::vector<double>& N )  const;
   
-     // DEPRECATE - or call XYZtoRST() in here
+    /// for elements with local coordinates, this method uses an iterative approach to find the correspoding location in parametric space
     void    N_AtGlobalPoint( std::vector<double>& N, const std::vector<double>& xyz ) const;
-    // N_AtPoint();
+    
     void    N_AtBaryCenter( std::vector<double>& N ) const;
     void    N_AtIntegrationPoint( size_t ipoint, std::vector<double>& N ) const;
 

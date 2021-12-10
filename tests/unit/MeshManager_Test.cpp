@@ -201,7 +201,7 @@ void MeshManager_Test::run()
   _test(Test_parentElementsSharedByFace()); // OK
 */
 
-  _test( Test_MeshTraversal3D() );
+//  _test( Test_MeshTraversal3D() );
 
 
 	cout << "\n------------------------------------------------";
@@ -388,13 +388,13 @@ bool MeshManager_Test::Test_BuiltElementConnectivity3D()
 // using VSetMakers to create and compare input data
 bool MeshManager_Test::Test_MeshTraversal3D()
  {
-    // 2D functionality
+    // building the test model
     VSet<3U> vset;
     test_Create_Pyramid_Hexa_VSet( vset, false );
 //    test_Create_Hexahedra_VSet( vset, false );
 //    testCreateTetra_VSet( vset );
-    Model<3>         model( vset, "CSMP-variables.txt" );
-    const Region<3>& model_domain = model.Region("Model");
+    Model<3>   model( vset, "CSMP-variables.txt" );
+    Region<3>& model_domain = model.Region("Model");
     
     /* tested: OK
     cout <<"\nNodes with their original indices:\n";
@@ -407,7 +407,8 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     cout << endl;
     */
     
-    // testing the different traversal algorithms
+    // testing the different mesh traversal algorithms
+    // -----------------------------------------------
     
     // are all elements of the contiguous model region discovered
     set<Element<3U>* const>  discovered_elements;
@@ -443,8 +444,9 @@ bool MeshManager_Test::Test_MeshTraversal3D()
       }
     
     
-    // traversal via node-to-node connectivity
-    // ---------------------------------------
+    // traversal of mesh via node-to-node connectivity
+    // -----------------------------------------------
+    
     // creating a node connectivity list to check the Node::Neighbor method
     vector<set<size_t>>  node_neighbors;
     nodeNeighbors( model_domain, node_neighbors );
@@ -454,14 +456,29 @@ bool MeshManager_Test::Test_MeshTraversal3D()
 //      cout <<"\nNode "<< (*nit)->Idx() <<": "<< sizeOf( (*nit) );
 //    cout << endl;
 
-    // checking the node connectivity (BROKEN! - for prism-hexa mesh)
-    cout <<"\nTest_MeshTraversal3D: node to parent connectivity:";
+    // visually checking the node connectivity
+//    cout <<"\nTest_MeshTraversal3D: node to parent connectivity:";
 //    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
 //      printNeighbors( (*nit) );
     
+    // node-to-node, breadth first mesh traversal
     set<Node<3>*> set_of_interconnected_nodes;
     _test( findInterconnectedNodeCluster( &(*model_domain.N(0)), set_of_interconnected_nodes ) == model_domain.Nodes() );
     _test( set_of_interconnected_nodes.size() == model_domain.Nodes() );
+    
+    // rebuilding the node to node connectivity verifying that the same results are obtained
+    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
+         // recording the current connectivity
+         vector<Node<3>*>  node_neighbors;
+         node_neighbors.reserve( (*nit)->Neighbors() );
+         for ( size_t i{0}; i < (*nit)->Neighbors(); ++i )
+           node_neighbors.push_back( (*nit)->Neighbor(i) );
+         // rebuilding the connectivity
+         _test( (*nit)->ReassignNeighbors() == node_neighbors.size() );
+         // comparing the sorted node pointers with one another
+         for ( size_t i{0}; i < (*nit)->Neighbors(); ++i )
+           _test( (*nit)->Neighbor(i) == node_neighbors[i] );
+      }    
 
     return true;
     
@@ -482,9 +499,9 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 	node_numbers_Model.reserve(model_domain.Nodes());
 	cout << "\nMeshManager_Test::TestEntityNumberingFunction: model '" << model3d_name_ << "': 'Model' numbered nodes:\n";
 	for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); ++nit) {
-		node_numbers_Model.push_back((*nit)->Idx());
-		if ((*nit)->Idx() % 100 == 0) cout << (*nit)->Idx() << "...";
-	}
+      node_numbers_Model.push_back((*nit)->Idx());
+      if ((*nit)->Idx() % 100 == 0) cout << (*nit)->Idx() << "...";
+    }
 	cout << "\n";
 
 	// renumbering nodes
