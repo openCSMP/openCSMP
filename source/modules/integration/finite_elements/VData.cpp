@@ -914,7 +914,7 @@ void VData::ResizeElementNeighbors( size_t eid, size_t nperelmt )
 void VData::ResizePfverts( const deque<size_t>& mixed_ele_pfverts )
  {
     vector<int64_t>  empty_vec;
-    const int64_t     flag_other(0);
+    const int64_t    flag_other(0);
 
     // pfverts: vector<vector<size_t> >
     if ( !pfverts.empty() ) {

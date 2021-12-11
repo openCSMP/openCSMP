@@ -251,11 +251,9 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
 
   // define variables needed to compute the length of the FE edges that lie at the boundary
   // and read the temporary flux and store the final flux
-  csmp::Index       tf_key(mdl.Database().StorageKey(temp_flux.c_str())),
-                    f_key(mdl.Database().StorageKey(flux));
-  ScalarVariable    tf, f;
-  double          y[2], area, length(0.0);
-  size_t            j;
+  const csmp::Index  tf_key(mdl.Database().StorageKey(temp_flux.c_str())),
+                     f_key(mdl.Database().StorageKey(flux));
+  double length{0.};
 
   cout << "\nassignFluxToPointSource: Translating '" << flux << "' into a nodal point source" << endl;
 
@@ -263,47 +261,24 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   mdl.InputPropertyValue( flux, makeScalar(PLAIN,0.0) ); // set to zero initially
 
   // loop over all finite elements and identify elements that lie at the same model boundary of interest (here LEFT)
-  const Region<2U>&   mref = mdl.Region("Model");
-  for ( auto eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
-      if ( isLEFT( atBoundary(*eit) ) ) {
-          j = 0;
-          // first loop to calculate length of the FE edge that lies at the boundary
-          for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
-              if ( isLEFT( (*eit)->N(i)->AtBoundary() ) ) {
-                  y[j]  = (*eit)->N(i)->y();
-                  j++;
-                }
-            }
-          // provide a warning if the edge has less than 2 nodes (as it is a 2D models, 2D elements should have 2 nodes
-          // at the model boundary)
-          if ( j != 2 ) {
-              cerr << "\nassignFluxToPointSource: ERROR: Counted less than two boundary nodes for element " << endl;
-              (*eit)->Out();
-              area = 0.0;
-            }
-          // calculate length (area)
-          else {
-                  area = y[0] - y[1];
-                  if ( area < 0.0 ) area *= -1.0;
-                  length += area;
-                  area /= static_cast<double>(j); // 2 nodes per triangle or quadrilateral
-                }
-          // second loop to calculate and scale nodal flux
-          for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
-                  if ( (*eit)->N(i)->AtBoundary() == LEFT or
-                   (*eit)->N(i)->AtBoundary() == CNR1   or
-                   (*eit)->N(i)->AtBoundary() == CNR4 ) {
-                      // read existing flux at node i
-                      tf  = (*eit)->N( i )->Read( tf_key );
-                      // read existing source at node i
-                      f  = (*eit)->N( i )->Read( f_key );
-                      // add current heat flux to this value
-                      f += tf() * area;
-                      // store it back to node
-                      (*eit)->N( i )->Store( f_key, f );
-                    }
-                }
-        }
+  const Boundary<2U>&   mref = mdl.Boundary("LEFT");
+  for ( auto eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ )
+    {
+        double area = (*eit)->Area();
+        length += area;
+        area /= static_cast<double>(2); // 2 nodes per triangle or quadrilateral
+
+        // second loop to calculate and scale nodal flux
+        for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
+              // read existing flux at node i
+              double tf  = (*eit)->N( i )->Read( tf_key );
+              // read existing source at node i
+              double f  = (*eit)->N( i )->Read( f_key );
+              // add current heat flux to this value
+              f += tf * area;
+              // store it back to node
+              (*eit)->N( i )->Store( f_key, makeScalar(NEUMANN,f) );
+          }
     }
 
   printRangeOfVariable( mdl, flux );

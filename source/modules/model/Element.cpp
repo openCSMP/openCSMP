@@ -524,7 +524,7 @@ size_t   Element<dim>::Idx() const
 template<size_t dim>
 BOX_BOUNDARY  Element<dim>::AtBoundary( size_t boundary_face ) const
 {
-  return atBoundary( this, boundary_face );
+   return atBoundary( this, boundary_face );
 }
 
 template<size_t dim>

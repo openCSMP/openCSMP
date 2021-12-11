@@ -830,7 +830,7 @@ Element<dim>*  InterFace<dim>::InterveningElement() const
 template<size_t dim>
 size_t  InterFace<dim>::InnerParentFaceID() const
 {
-  assert( innerParent_ != nullptr );
+  if ( innerParent_ == nullptr ) return NULL_IDX;
   return inner_parent_face_id_;
 }
 
@@ -839,7 +839,7 @@ size_t  InterFace<dim>::InnerParentFaceID() const
 template<size_t dim>
 size_t  InterFace<dim>::OuterParentFaceID() const
 {
-  assert( outerParent_ != nullptr );
+  if ( outerParent_ == nullptr ) return NULL_IDX;
   return outer_parent_face_id_;
 }
 

@@ -1525,7 +1525,37 @@ if ( eptr->FE()->IsLineElement() ) {
 
 
 
+/// returns whether the cell is at the model boundary; this is so if all nodes of a line or surface element are flagged boundary or one face of a volume element
+template<size_t dim, template<size_t> class CELL>
+bool atBoundary( const CELL<dim>* const cptr )
+ {
+     // for surface and line elements all nodes must be at the boundary
+     if ( !cptr->IsEquidimensional() ) {
+          const size_t n_nodes{ cptr->Nodes() };
+          for( size_t i{0}; i<n_nodes; ++i )
+            if ( cptr->N(i)->AtBoundary() == NOT )
+              return false;
+       }
+     else { // equidimensional elements
+          const size_t n_nbors{ cptr->Neighbors() };
+          for ( size_t i{0}; i<n_nbors; ++i )
+            if ( cptr->Neighbor(i) == nullptr )
+              return true;
+          return false;
+       }
+       
+    return true;
+       
+ } // end atBoundary(bool)
 
+template bool atBoundary( const Element<1U>* const );
+template bool atBoundary( const Element<2U>* const );
+template bool atBoundary( const Element<3U>* const );
+
+
+
+
+/* FAILS AT TIMES
 
 template<size_t dim, template<size_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
@@ -1633,8 +1663,8 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     // -------------------------------
     if constexpr ( dim == 3U )
       {
-         // only line elements may be at boundary if there is only one boc boundary flag
-         if ( eflags.size() == 1U && eptr->FE()->IsLineElement() )
+         // only line and surface elements may be at boundary if there is only one boundary flag
+         if ( eflags.size() == 1U && !eptr->IsVolumeElement() )
            return (*eflags.begin());
          
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
@@ -1793,7 +1823,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
 template BOX_BOUNDARY atBoundary( const Element<1U>* const );
 template BOX_BOUNDARY atBoundary( const Element<2U>* const );
 template BOX_BOUNDARY atBoundary( const Element<3U>* const );
-
+*/
 
 
 

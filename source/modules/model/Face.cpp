@@ -133,8 +133,8 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
   : idx_(NULL_IDX),
     innerParent_(inner_parent),
     outerParent_(outer_parent),
-    inner_parent_face_id_(UNSPECIFIED),
-    outer_parent_face_id_(UNSPECIFIED)
+    inner_parent_face_id_(NULL_IDX),
+    outer_parent_face_id_(NULL_IDX)
  {
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
@@ -891,7 +891,7 @@ Element<dim>*  Face<dim>::OuterParent() const
 template<size_t dim>
 size_t  Face<dim>::InnerParentFaceID() const
 {
-  assert( innerParent_ != nullptr );
+  if ( innerParent_ == nullptr ) return NULL_IDX;
   return inner_parent_face_id_;
 }
 
@@ -902,7 +902,7 @@ size_t  Face<dim>::InnerParentFaceID() const
 template<size_t dim>
 size_t  Face<dim>::OuterParentFaceID() const
 {
-  assert( outerParent_ != nullptr );
+  if ( outerParent_ == nullptr ) return NULL_IDX;
   return outer_parent_face_id_;
 }
 

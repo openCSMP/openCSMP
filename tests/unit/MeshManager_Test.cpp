@@ -146,27 +146,38 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
   map<string,vector<Element<3U>*> > patch_map3;
 	cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
 	cout << "\nFaces: " << mesh.Faces() << "\n";
-  map<string,vector<Face<3U>*> >  face_map3;
-	cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
+  if ( mesh.Faces() > 0 ) {
+      map<string,vector<Face<3U>*> >  face_map3;
+      cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
+    }
 	cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
-  map<string,vector<InterFace<3U>*> >  iface_map3;
-	cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
-
-	//writing ansys model to file deleting it and then recreating a csmp native model from the file
+  if ( mesh.InterFaces() > 0 ) {
+      map<string,vector<InterFace<3U>*> >  iface_map3;
+      cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
+    }
+    
 	if ( reconstruct_from_file ) {
-		model3d_->OutputToBinaryFile(model3d_name_.c_str());
-		delete model3d_;
-		model3d_ = new Model<3U>(model3d_name_);
-    MeshManager<3>& mesh(model3d_->Mesh());
-		cout << "\nNodes: " << mesh.Nodes() << "\n";
-		cout << "\nNode Groups: " << findContiguousMeshPatch<3,Element>( &(*mesh.ElementsBegin()), elements3 ) << "\n";
-		cout << "\nElements: " << mesh.Elements() << "\n";
-		cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
-		cout << "\nFaces: " << mesh.Faces() << "\n";
-		cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
-		cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
-		cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
-	}
+      // writing ansys model to file deleting it and then recreating a csmp native model from the file
+      model3d_->OutputToBinaryFile(model3d_name_.c_str());
+      delete model3d_;
+      model3d_ = new Model<3U>(model3d_name_);
+      MeshManager<3>& mesh(model3d_->Mesh());
+      Region<3U>&  model_domain2 = model3d_->Region("Model");
+      cout << "\nNodes: " << mesh.Nodes() << "\n";
+      cout << "\nNode Groups: " << findContiguousMeshPatch<3,Element>( (*model_domain2.ElementsBegin()), elements3 ) << "\n";
+      cout << "\nElements: " << mesh.Elements() << "\n";
+      cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map3 ) << "\n";
+      cout << "\nFaces: " << mesh.Faces() << "\n";
+      if ( mesh.Faces() > 0 ) {
+          map<string,vector<Face<3U>*> >  face_map3;
+          cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) << "\n";
+        }
+      cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
+      if ( mesh.InterFaces() > 0 ) {
+          map<string,vector<InterFace<3U>*> >  iface_map3;
+          cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) << "\n";
+        }
+    }
   
  } // end Create_ANSYS3D_Model
 
@@ -201,7 +212,7 @@ void MeshManager_Test::run()
   _test(Test_parentElementsSharedByFace()); // OK
 */
 
-//  _test( Test_MeshTraversal3D() );
+  _test( Test_MeshTraversal3D() );
 
 
 	cout << "\n------------------------------------------------";

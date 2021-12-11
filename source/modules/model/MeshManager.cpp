@@ -318,12 +318,18 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
           const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( 0U ));
           while ( first != last )
             {
+              // create the element
               typename plf::colony<Element<dim>>::iterator
                 eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
+              // assign the nodes
               const size_t nodes( fem_manager_.E( csmpElementType )->Nodes() );
               for ( size_t j = 0U; j < nodes; ++j )
                 (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
+                
+              // assign the material
+              (*eit).Material_ID( vset.Pmtrl( elmt_idx ) );
+                
               elmt_idx++;
               first++;
             }
@@ -337,8 +343,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                 eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               const size_t nodes( fem_manager_.E( csmpElementType )->Nodes() );
-              for ( size_t j = 0U; j < nodes; j++ )
-                (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
+              for ( size_t j = 0U; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
+              (*eit).Material_ID( vset.Pmtrl( elmt_idx ) );
               elmt_idx++;
               first++;
             }
@@ -468,11 +474,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                       cerr <<"\n\tFace "<< e.Idx() <<": "<< index2 <<" vs. "<< n_elmts <<" elements.\n";
                       csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of second higher-dimensional element of Face out of range.");
                    }
-                 // assignments
+                 // assignment of higher-dimensional neighbors
                  Element<dim>* const innerElement = (index1 < 0) ? nullptr : &(*next(elements_.begin(),index1));
                  Element<dim>* const outerElement = (index2 < 0) ? nullptr : &(*next(elements_.begin(),index2));
                  // assigning inner and outer higher-dimensional neighbors
                  e.Assign( innerElement, outerElement );
+                 // and the corresponding face numbers
+                 e.ParentFaceID( INSIDE,  vset.Pfvert( e.Idx(), neighbors + 2U ) );
+                 e.ParentFaceID( OUTSIDE, vset.Pfvert( e.Idx(), neighbors + 3U ) );
                  
                } // end face loop
               
@@ -2400,10 +2409,10 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
 
   // 1. resizing the VSet
   // --------------------
-
   if ( HybridElementMesh() || faces_.size() > 0 || interfaces_.size() > 0 )
     {
       const size_t higherDimParents( 2U );
+      const size_t higherDimParentsFaceNum( 2U );
       const size_t interfaceMultiplier( 2U );
       const size_t interfaceExtras( 3U ); // 2 face IDs and 1 entry for potential high dim element
 
@@ -2422,7 +2431,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       if ( !faces_.empty() )
         for ( const auto& f : faces_ ) {
             nodes_per_element.push_back( f.Nodes() );
-            neighbors_per_element.push_back( f.Neighbors() + higherDimParents );
+            neighbors_per_element.push_back( f.Neighbors() + higherDimParents + higherDimParentsFaceNum );
             csmp_fem_types.push_back( f.FE_Type() );
           }
 
@@ -2482,32 +2491,34 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   
   // 'pelmt' was already set above
   
-  // 3. adding 'plist' connectivity list
-  // -----------------------------------
-  size_t eidx = 0;
+  // 3. adding 'plist' connectivity list and 'pmtrl'
+  // -----------------------------------------------
+  vector<int32_t>  pmtrl( elements_.size(), 0 );
+  size_t           eidx = 0;
   // elements
   for ( const auto& e : elements_ ) {
-    const size_t n_nodes{e.Nodes()};
-    for ( size_t j = 0U; j<n_nodes; ++j )
-      vset.Plist( eidx, j, (e.N( j )->Idx()) );
-    ++eidx;
-  }
+      const size_t n_nodes{e.Nodes()};
+      for ( size_t j = 0U; j<n_nodes; ++j )
+        vset.Plist( eidx, j, (e.N( j )->Idx()) );
+      pmtrl[eidx] = e.Material_ID();
+      ++eidx;
+    }
 
   // faces
   for ( const auto& f : faces_ ) {
-    const size_t n_nodes{f.Nodes()};
-    for ( size_t j = 0U; j<n_nodes; ++j )
-      vset.Plist( eidx, j, (f.N( j )->Idx()) );
-    ++eidx;
-  }
+      const size_t n_nodes{f.Nodes()};
+      for ( size_t j = 0U; j<n_nodes; ++j )
+        vset.Plist( eidx, j, (f.N( j )->Idx()) );
+      ++eidx;
+    }
 
   // interfaces
   for ( const auto& f : interfaces_ ) {
-    const size_t n_nodes{f.Nodes()};
-    for ( size_t j = 0U; j<n_nodes; ++j )
-      vset.Plist( eidx, j, (f.N( j )->Idx()) );
-    ++eidx;
-  }
+      const size_t n_nodes{f.Nodes()};
+      for ( size_t j = 0U; j<n_nodes; ++j )
+        vset.Plist( eidx, j, (f.N( j )->Idx()) );
+      ++eidx;
+    }
 
 
   // 4. adding 'pfverts' neighbors per element list
@@ -2536,41 +2547,37 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     // equidimensional neighbors first
     const size_t neighbors( f.Neighbors() );
     for ( size_t j = 0U; j<neighbors; ++j ) {
-      Face<dim>* const ptr( f.Neighbor( j ) );
-      // if the neighbor exists (which it must on the inside of the Face)
-      if ( ptr != nullptr )
-        vset.Pfvert( eidx, j, ptr->Idx() );
-      else
-        vset.Pfvert( eidx, j, f.InnerParent()->AtBoundary(j) );
-    }
+        Face<dim>* const ptr( f.Neighbor( j ) );
+        // if the neighbor exists (which it must on the inside of the Face)
+        if ( ptr != nullptr )
+          vset.Pfvert( eidx, j, ptr->Idx() );
+        else
+          vset.Pfvert( eidx, j, f.InnerParent()->AtBoundary(j) );
+      }
     // higher-dimensional neighbors second
     // inner neighbor
-    if constexpr ( dim == 3U ) assert( f.InnerParent()->IsVolumeElement() );
-    else if constexpr ( dim == 2U ) assert( f.InnerParent()->IsSurfaceElement() );
+    assert( f.InnerParent()->IsEquidimensional() );
     assert( f.InnerParent()->Idx() < Elements() );
     vset.Pfvert( eidx, neighbors, f.InnerParent()->Idx() );
     // outer neighbor
-    if ( f.OuterParent() != nullptr && dim == 3U ) assert( f.OuterParent()->IsVolumeElement() );
-    else if ( f.OuterParent() != nullptr && dim == 2U ) assert( f.OuterParent()->IsSurfaceElement() );
     if ( f.OuterParent() != nullptr ) {
+        assert( f.OuterParent()->IsEquidimensional() );
         assert( f.OuterParent()->Idx() < Elements() );
         vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
       }
     else {
-      // if there is no neighbor, the inner element parent should be at the model boundary
-      if ( f.InnerParent()->AtBoundary(neighbors + 1U) == NOT ) {
-          csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
-                            "inner dim+1 neighbor element of Face should be flagged as model boundary because Face has no outer element; flagging element as irregular" );
-          cerr <<"\nDiagnostics:";
-          f.InnerParent()->Out();
-        }
-      vset.Pfvert( eidx, neighbors + 1U, f.InnerParent()->AtBoundary(neighbors + 1U) );
-    }
+        // getting the boundary placement of the inner element
+        vset.Pfvert( eidx, neighbors + 1U, atBoundary( f.InnerParent(), f.InnerParentFaceID() ) );
+      }
+    // adding the local numbers of the faces that the Face is collocated with if any
+    vset.Pfvert( eidx, neighbors + 2U, f.InnerParentFaceID() );
+    // if there is no outer element, the face idx will initialised with NULL_IDX
+    vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
     ++eidx;
   }
 
-  // 'pfverts' interfaces
-  // --------------------
+  // 'pfverts' interfaces (which must always have two higher-dimensional neighbors)
+  // ------------------------------------------------------------------------------
   for ( const auto& f : interfaces_ ) {
     // 1. equidimensional neighbors (=other interfaces) first
     //    they are written in the order in which they are stored in the interface
@@ -2591,13 +2598,13 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     vset.Pfvert( eidx, neighbors,      f.InnerParent()->Idx() );
     vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
       
-    // 3. local number of face of the inner element that the InterFace is connected to (2 entries)
+    // 3. storing local number of face of the inner and outer elements that the InterFace is connected to (2 entries)
     assert( f.InnerParentFaceID() < f.InnerParent()->Faces() );
     assert( f.OuterParentFaceID() < f.OuterParent()->Faces() );
     vset.Pfvert( eidx, neighbors + 2U, f.InnerParentFaceID() );
     vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
     
-    // 4. number of intervening element or nullptr identifier (one entry)
+    // 4. storing number of intervening element or nullptr identifier (one entry)
     if ( f.HasInterveningElement() ) {
          assert( f.InterveningElement()->Idx() < elements_.size() );
          vset.Pfvert( eidx, neighbors + 4U, f.InterveningElement()->Idx() );
@@ -2607,8 +2614,12 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       
     ++eidx;
   }
-
-  // 5. adding boundary flags
+  
+  // 5. adding the material identifiers
+  // ----------------------------------
+  vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+  
+  // 6. adding boundary flags
   // ------------------------
   for ( const auto& n : nodes_ ) vset.AddBFlag( n.Idx(), n.AtBoundary() );
 
@@ -5164,7 +5175,12 @@ void MeshManager<dim>::Out() const
   size_t n_elmt{0};
   cout << "\nELEMENTS: " << endl;
   for ( const auto& e : elements_ ) {
-         string bound = parseBoundary( atBoundary(&e) );
+         string bound("NOT");
+         for ( size_t i{0}; i<e.Neighbors(); ++i )
+           if ( e.Neighbor(i) == nullptr ) {
+                bound = parseBoundary( atBoundary(&e,i) );
+                break;
+             }
          cout << "\nElement ID: " << e.Idx() <<" ("<< parseFiniteElementType(e.FE_Type());
          cout <<"), Boundary flag: " << bound << endl;
          cout << "Member Nodes: " << endl;
