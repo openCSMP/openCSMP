@@ -12,11 +12,11 @@
 // #include "MeshIterator.h"
 #include "CSMP_highLevelUtilities.h"
 
+#define MESH_MANAGER_DEBUG
+
 using namespace std;
 
 namespace csmp {
-
-
 
 template<size_t dim>
 MeshManager<dim>::MeshManager()
@@ -693,7 +693,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
      }
 
 
-#ifdef DEBUG
+#ifdef MESH_MANAGER_DEBUG
 integrityCheck<dim,Element>( ElementsBegin(), ElementsEnd() );
 if ( Faces() > 0 )
   integrityCheck<dim,Face>( FacesBegin(), FacesEnd() );
@@ -1412,8 +1412,9 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     vector<Face<dim>*> face_ptrs;
+    const long         n_faces_to_build{ distance(first,last) };
 
-    if ( distance(first,last) == 0U ) {
+    if ( n_faces_to_build == 0U ) {
          csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
@@ -1425,17 +1426,14 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
 
     // the established range of lower-dimensional input elements is now indexed consecutively
     // and their connectivity pattern is remembered for later assignment of faces to their neighbors
-    deque<long>                      connectivity; // like a 'pfverts'
-    auto                             it( first ), erase_it( first );  // iterator copies
-    while ( it != last ) {
-        (*it)->Idx();
-        ++it;
-      }
+    auto                             erase_it( first );  // iterator copies
 
     vector<typename plf::colony<Element<dim>>::const_iterator>  elmt_iterators;
     elmt_iterators.reserve( distance(first,last) );
     
     // 1. converting Elements into Faces
+    size_t face_idx{0};
+    
     while( first != last )
       {
          // 1.1 initial checks and labeling
@@ -1443,12 +1441,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          if constexpr ( dim == 3 ) assert( (*first)->IsSurfaceElement() );
          if constexpr ( dim == 2 ) assert( (*first)->IsLineElement() );
          
-         // 1.2 making a 'pfverts' list
-         for ( auto n=(*first)->NeighborsBegin(); n!=(*first)->NeighborsEnd(); ++n )
-           // there may be no neighbor
-           if ( (*n) != nullptr ) connectivity.push_back( (*n)->Idx() );
-           else connectivity.push_back( IRREGULAR );
-     
+         // 1.2 collecting pointers to the elements that will be deleted
          elmt_iterators.emplace_back( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
          
          bool boundary_face{true};
@@ -1462,7 +1455,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
               pair<Element<dim>* const,size_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
               face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
               // recovering the subdomain identifier
-              face_ptrs.back()->Idx( (*first)->Idx() );
+              face_ptrs.back()->Idx( face_idx++ );
            }
            
          // 1.4 more complicated construction of interior face
@@ -1475,7 +1468,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
               face_ptrs.push_back( ConstructFaceFromElement( (*first), pelmts.first, pelmts.second,
                                                              face_ids.first, face_ids.second, lvars, ivars ) );
               // recovering the subdomain identifier
-              face_ptrs.back()->Idx( (*first)->Idx() );
+              face_ptrs.back()->Idx( face_idx++ );
            }
        
          // NOTE: no erasure here because this would add nullptrs to the nodes parents, corrupting their functionality
@@ -1496,24 +1489,25 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
  
      
      // 3. cleaning up the node to parent connectivity
-     for ( auto& nit : nodes_ ) nit.EraseNullPointerParents();
-      
-      
-     // 4. connecting Faces among each other
-     size_t n{0};
-     for ( auto& it : face_ptrs ) {
-          const size_t n_neighbors{ it->Neighbors() };
-          for ( size_t face{0}; face < n_neighbors; ++face )
-            if ( connectivity[n] >= 0 )
-              it->Assign( face, face_ptrs[ connectivity[n++] ] );
-            // else
-            // the face pointer is already initialized with nullptr
+     for ( auto& nit : nodes_ ) {
+          nit.EraseNullPointerParents(); // element parents
+          nit.UpdateNeighbors();         // node neighbors
        }
+
+     // 4. connecting Faces among each other
+     if constexpr( dim == 3 ) BuildSurfaceConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
+     if constexpr( dim == 2 ) BuildLineConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
      
-     // NOT NECESSARY because connectivity pattern of the replaced elements can be used
-     //if constexpr( dim == 3 ) BuildSurfaceConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
-     //if constexpr( dim == 2 ) BuildLineConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
-    
+#ifdef MESH_MANAGER_DEBUG
+integrityCheck<dim,Element>( ElementsBegin(), ElementsEnd() );
+if ( Faces() > 0 )
+  integrityCheck<dim,Face>( FacesBegin(), FacesEnd() );
+if ( InterFaces() > 0 ) {
+      integrityCheck<dim,InterFace>( InterFacesBegin(), InterFacesEnd() );
+     // add test for node manifolds
+  }
+#endif
+   
      return face_ptrs;
      
  } // end ReplaceElementsByFaces

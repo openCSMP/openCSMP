@@ -110,20 +110,20 @@ size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, set<CELL<dim>*>& ce
    
           // 1. loop over those neighbors that are not already part of the deque
           for ( const auto& nit : neighbor_cells )
-            {
-               assert( nit != nullptr );
-               assert( nit->FE() != nullptr );
-               const size_t  n_neighbors{ nit->Neighbors() };
-               new_neighbor_cells.reserve( n_neighbors );
-               for ( size_t j=0U; j<n_neighbors; ++j ) {
-                   CELL<dim>* cell_ptr = nit->Neighbor(j);
-                   // if the cell has not been encountered before
-                   if ( cell_ptr && cells_contiguous_subset.find( cell_ptr ) == cells_contiguous_subset.end() ) {
-                        new_neighbor_cells.push_back( cell_ptr );
-                        cells_contiguous_subset.insert( cell_ptr );
-                     }
-                 }
-             }
+            if ( nit != nullptr )
+              {
+                 assert( nit->FE() != nullptr );
+                 const size_t  n_neighbors{ nit->Neighbors() };
+                 new_neighbor_cells.reserve( n_neighbors );
+                 for ( size_t j=0U; j<n_neighbors; ++j ) {
+                     CELL<dim>* cell_ptr = nit->Neighbor(j);
+                     // if the cell has not been encountered before
+                     if ( cell_ptr && cells_contiguous_subset.find( cell_ptr ) == cells_contiguous_subset.end() ) {
+                          new_neighbor_cells.push_back( cell_ptr );
+                          cells_contiguous_subset.insert( cell_ptr );
+                       }
+                   }
+               }
  
           // 2. obtain a new set of neighbors that has to be visited in the next iteration
           neighbor_cells = new_neighbor_cells;
@@ -160,8 +160,8 @@ template size_t findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>
              @author SKM 14/8/21
 */
 template<size_t dim, template<size_t> class CELL>
-size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::const_iterator begin,
-                                   typename plf::colony<CELL<dim>>::const_iterator end,
+size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
+                                   typename plf::colony<CELL<dim>>::iterator end,
                                    map<string,vector<CELL<dim>*> >& mesh_patches )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -175,10 +175,9 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::const_iterat
       vector<CELL<dim>*>   cells;
       cells.reserve( distance(begin,end) );
       while ( begin != end ) {
-          cells.push_back( const_cast<CELL<dim>*>( &(*begin) ) );
+          cells.push_back( &(*begin) );
           ++begin;
         }
-      sort( cells.begin(), cells.end() );
 
       // detecting via a flood-fill whether the group can be partitioned, else nothing is done
       set<CELL<dim>*>  cells_contiguous_subset;
@@ -260,29 +259,29 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::const_iterat
    } // end findStandAloneMeshPatches
 
 // 3D version
-template size_t  findStandAloneMeshPatches( plf::colony<Element<3U>>::const_iterator,
-                                            plf::colony<Element<3U>>::const_iterator,
+template size_t  findStandAloneMeshPatches( plf::colony<Element<3U>>::iterator,
+                                            plf::colony<Element<3U>>::iterator,
                                             map<string,vector<Element<3U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<Face<3U>>::const_iterator,
-                                            plf::colony<Face<3U>>::const_iterator,
+template size_t  findStandAloneMeshPatches( plf::colony<Face<3U>>::iterator,
+                                            plf::colony<Face<3U>>::iterator,
                                             map<string,vector<Face<3U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<InterFace<3U>>::const_iterator,
-                                            plf::colony<InterFace<3U>>::const_iterator,
+template size_t  findStandAloneMeshPatches( plf::colony<InterFace<3U>>::iterator,
+                                            plf::colony<InterFace<3U>>::iterator,
                                             map<string,vector<InterFace<3U>*> >& );
 
 // 2D version
-template size_t  findStandAloneMeshPatches( plf::colony<Element<2U>>::const_iterator,
-                                            plf::colony<Element<2U>>::const_iterator,
+template size_t  findStandAloneMeshPatches( plf::colony<Element<2U>>::iterator,
+                                            plf::colony<Element<2U>>::iterator,
                                             map<string,vector<Element<2U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<Face<2U>>::const_iterator,
-                                            plf::colony<Face<2U>>::const_iterator,
+template size_t  findStandAloneMeshPatches( plf::colony<Face<2U>>::iterator,
+                                            plf::colony<Face<2U>>::iterator,
                                             map<string,vector<Face<2U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::const_iterator,
-                                            plf::colony<InterFace<2U>>::const_iterator,
+template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::iterator,
+                                            plf::colony<InterFace<2U>>::iterator,
                                             map<string,vector<InterFace<2U>*> >& );
 
 

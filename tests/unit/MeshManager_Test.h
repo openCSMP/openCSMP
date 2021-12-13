@@ -29,6 +29,8 @@ class MeshManager_Test : public Test {
     // create test models that are subsequently used for the testing
     void Create_ANSYS2D_Model( bool reconstruct_from_CSMP_binary_file );
     void Create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_CSMP_binary_file );
+    // checks whether all nodes, elements etc can be reached 
+    void CheckModel3D();
     
     void TestBasics();
     bool TestEntityNumberingFunction();

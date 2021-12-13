@@ -52,8 +52,8 @@ size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, std::set<CELL<dim>*
 
 /// finds the connected (contiguous) mesh patches in the supplied range of cells storing them in map with names that reflect their dimensionality and cell numbers
 template<size_t dim, template<size_t> class CELL>
-size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::const_iterator begin,
-                                   typename plf::colony<CELL<dim>>::const_iterator end,
+size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
+                                   typename plf::colony<CELL<dim>>::iterator end,
                                    std::map<std::string,std::vector<CELL<dim>*> >& );
 
 /// finds pointers to all contiguous regions in a mesh (collection of mesh patches) returning pointers to them so that they can be explored; returns patches found

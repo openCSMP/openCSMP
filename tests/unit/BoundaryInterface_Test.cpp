@@ -669,9 +669,9 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     size_t boundary_elements(0);
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
       {
-         // TODO: improve these diagnostics
-         if ( atBoundary(*eit) != NOT ) {
-              cerr << parseBoundary( atBoundary(*eit) ) <<" ";
+         if ( atBoundary(*eit) ) {
+              cerr <<"\nElement is a boundary element:";
+              (*eit)->Out();
               boundary_elements++;
            }
       }
