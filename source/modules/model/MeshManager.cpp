@@ -353,28 +353,25 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    }
  
   // 2.3 Assign neighbor elements to elements
-  if ( csmp_error.Verbose() )
-    cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
-
   const int64_t  n_elmts(elements_.size());
   if ( vset.WithNeighbourConnectivity() ) {
+       if ( csmp_error.Verbose() )
+          cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
+
        for ( auto& e : elements_ ) {
             const int8_t csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e.Idx() );
-            const size_t neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
+            const size_t n_neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
 
-            for ( size_t j = 0U, nidx = 0U; j < neighbors; ++j ) {
-                  // if there is a neighbor (as is the case if the stored index is greater than zero)
-                  if ( j < vset.PfvertsSize( e.Idx() ) ) {
-                      const int64_t  index(vset.Pfvert( e.Idx(), j ));
-                      if ( index >= n_elmts ) {
-                           cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
-                           csmp_error.notice( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
-                        }
-                      else if ( index >= 0 )
-                        e.Assign( nidx++, &(*next(elements_.begin(),index)) );
-                      else // negative numbers indicate boundaries
-                        e.Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
-                   }
+            for ( size_t j = 0U; j < n_neighbors; ++j ) {
+                  const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
+                  if ( index >= n_elmts ) {
+                       cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
+                       csmp_error.notice( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
+                    }
+                  else if ( index >= 0 )
+                    e.Assign( j, &(*next(elements_.begin(),index)) );
+                  // negative numbers indicate boundaries where nothing needs to be done since neighbors are initialised to null pointers anyway
+                  //  e.Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
               }
          }
     }
@@ -424,12 +421,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        // connecting the faces to their equi- and higher-dimensional neighbors
        // --------------------------------------------------------------------
        // necessary info is stored in 'pfverts' record for Face
-       if ( csmp_error.Verbose() )
-         cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their higher-dimensional neighbors..." << endl;
        if ( !vset.WithNeighbourConnectivity() )
          csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for Face objects; nothing was done." );
        else
          {
+            if ( csmp_error.Verbose() )
+              cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their higher-dimensional neighbors..." << endl;
             const int64_t  n_faces(faces_.size());
             for ( auto& e : faces_ )
               {
@@ -546,72 +543,76 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        // connecting the interfaces to their equi- and higher-dimensional neighbors
        // -------------------------------------------------------------------------
        // necessary info is stored in 'pfverts' record for InterFace: inner nbors first, then outer, then higher-dimensional ones
-       if ( csmp_error.Verbose() )
-         cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
-       const int64_t  n_faces(faces_.size()), n_interfaces(interfaces_.size());
-       const int64_t  cells(n_elmts+n_faces+n_interfaces);
-       // connecting interfaces to their higher-dimensional neighbors
-       for ( auto& e : interfaces_ )
-         {
-            // assigning equidimensional InterFace-type neighbors first
-            // --------------------------------------------------------
-            const size_t neighbors( e.Neighbors() );
-            for ( size_t j = 0U; j<neighbors; ++j )
-              {
-                 // if there is a neighbor (as is the case if the stored index is greater than zero)
-                 const int64_t  index( vset.Pfvert( e.Idx(), j ) );
-                 if ( index >= cells ) {
-                      cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< cells << endl;
-                      csmp_error.notice( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
-                   }
-                 assert( index >= vset.Elements() + vset.Faces() );
-                 assert( index < vset.Elements() + vset.Faces() + vset.InterFaces() ); // (-) elements because face container is numbered from 0..n-1
-                
-                 // the number of the interface in the container is the number from the VSet - elements and faces
-                 // because the interface container is counts from 0..n-1
-                 e.Assign( j, &(*next(interfaces_.begin(),index - n_elmts - n_faces)) );
-              }
+       if ( !vset.WithNeighbourConnectivity() )
+         csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for InterFace objects; nothing was done." );
+       else {
+         if ( csmp_error.Verbose() )
+           cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
+         const int64_t  n_faces(faces_.size()), n_interfaces(interfaces_.size());
+         const int64_t  cells(n_elmts+n_faces+n_interfaces);
+         // connecting interfaces to their higher-dimensional neighbors
+         for ( auto& e : interfaces_ )
+           {
+              // assigning equidimensional InterFace-type neighbors first
+              // --------------------------------------------------------
+              const size_t neighbors( e.Neighbors() );
+              for ( size_t j = 0U; j<neighbors; ++j )
+                {
+                   // if there is a neighbor (as is the case if the stored index is greater than zero)
+                   const int64_t  index( vset.Pfvert( e.Idx(), j ) );
+                   if ( index >= cells ) {
+                        cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< cells << endl;
+                        csmp_error.notice( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
+                     }
+                   assert( index >= vset.Elements() + vset.Faces() );
+                   assert( index < vset.Elements() + vset.Faces() + vset.InterFaces() ); // (-) elements because face container is numbered from 0..n-1
+                  
+                   // the number of the interface in the container is the number from the VSet - elements and faces
+                   // because the interface container is counts from 0..n-1
+                   e.Assign( j, &(*next(interfaces_.begin(),index - n_elmts - n_faces)) );
+                }
 
-           // higher-dimensional Element-type neighbors
-           // -----------------------------------------
-           // (higher-dimensional neighbors are always present on both sides of the InterFace because interfaces exist only inside of a model)
-           if ( vset.Pfvert( e.Idx(), neighbors ) < 0 || vset.Pfvert( e.Idx(), neighbors + 1U) < 0 )
-             {
-                cerr <<"\n\tInterFace "<< e.Idx() <<": inner neighbor "<< vset.Pfvert( e.Idx(), neighbors );
-                cerr <<" and outer "<< vset.Pfvert( e.Idx(), neighbors+1U ) <<"\n";
-                csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
-             }
-           if ( vset.Pfvert( e.Idx(), neighbors ) >= cells || vset.Pfvert( e.Idx(), neighbors + 1U ) >= cells )
-             {
-                cerr <<"\n\tInterFace "<< e.Idx() <<": inner neighbor "<< vset.Pfvert( e.Idx(), neighbors );
-                cerr <<" and outer "<< vset.Pfvert( e.Idx(), neighbors+1U ) <<"\n";
-                csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace out of range.");
-             }
-           // assignment: inner and outer Element objects
-           const int64_t  index1 = vset.Pfvert( e.Idx(), neighbors );
-           const int64_t  index2 = vset.Pfvert( e.Idx(), neighbors+1U );
-           assert( index1 < cells );
-           assert( index2 < cells );
-           assert( index1 > MULTIPLE );
-           assert( index2 > MULTIPLE );
-           Element<dim>* const innerElement = (index1 < 0) ? nullptr : &(*next(elements_.begin(),index1));
-           Element<dim>* const outerElement = (index2 < 0) ? nullptr : &(*next(elements_.begin(),index2));
-           e.Assign( innerElement, outerElement );
-           // assignment: Element face numbers adjacent to InterFace
-           const size_t inner_face_id = vset.Pfvert( e.Idx(), neighbors+2U );
-           const size_t outer_face_id = vset.Pfvert( e.Idx(), neighbors+3U );
-           assert( inner_face_id < e.Faces() );
-           assert( outer_face_id < e.Faces() );
-           e.ParentFaceID( INSIDE,  inner_face_id );
-           e.ParentFaceID( OUTSIDE, outer_face_id );
-           // assignment: intervening Element or neighbor boundary flag
-           const int64_t  index3 = vset.Pfvert( e.Idx(), neighbors+4U );
-           assert( index3 < elements_.size() );
-           assert( index3 > MULTIPLE );
-           Element<dim>* const middleElement = (index3 < 0) ? nullptr : &(*next(elements_.begin(),index3));
-           e.Assign( middleElement );
-        }
-        
+             // higher-dimensional Element-type neighbors
+             // -----------------------------------------
+             // (higher-dimensional neighbors are always present on both sides of the InterFace because interfaces exist only inside of a model)
+             if ( vset.Pfvert( e.Idx(), neighbors ) < 0 || vset.Pfvert( e.Idx(), neighbors + 1U) < 0 )
+               {
+                  cerr <<"\n\tInterFace "<< e.Idx() <<": inner neighbor "<< vset.Pfvert( e.Idx(), neighbors );
+                  cerr <<" and outer "<< vset.Pfvert( e.Idx(), neighbors+1U ) <<"\n";
+                  csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
+               }
+             if ( vset.Pfvert( e.Idx(), neighbors ) >= cells || vset.Pfvert( e.Idx(), neighbors + 1U ) >= cells )
+               {
+                  cerr <<"\n\tInterFace "<< e.Idx() <<": inner neighbor "<< vset.Pfvert( e.Idx(), neighbors );
+                  cerr <<" and outer "<< vset.Pfvert( e.Idx(), neighbors+1U ) <<"\n";
+                  csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace out of range.");
+               }
+             // assignment: inner and outer Element objects
+             const int64_t  index1 = vset.Pfvert( e.Idx(), neighbors );
+             const int64_t  index2 = vset.Pfvert( e.Idx(), neighbors+1U );
+             assert( index1 < cells );
+             assert( index2 < cells );
+             assert( index1 > MULTIPLE );
+             assert( index2 > MULTIPLE );
+             Element<dim>* const innerElement = (index1 < 0) ? nullptr : &(*next(elements_.begin(),index1));
+             Element<dim>* const outerElement = (index2 < 0) ? nullptr : &(*next(elements_.begin(),index2));
+             e.Assign( innerElement, outerElement );
+             // assignment: Element face numbers adjacent to InterFace
+             const size_t inner_face_id = vset.Pfvert( e.Idx(), neighbors+2U );
+             const size_t outer_face_id = vset.Pfvert( e.Idx(), neighbors+3U );
+             assert( inner_face_id < e.Faces() );
+             assert( outer_face_id < e.Faces() );
+             e.ParentFaceID( INSIDE,  inner_face_id );
+             e.ParentFaceID( OUTSIDE, outer_face_id );
+             // assignment: intervening Element or neighbor boundary flag
+             const int64_t  index3 = vset.Pfvert( e.Idx(), neighbors+4U );
+             assert( index3 < elements_.size() );
+             assert( index3 > MULTIPLE );
+             Element<dim>* const middleElement = (index3 < 0) ? nullptr : &(*next(elements_.begin(),index3));
+             e.Assign( middleElement );
+          }
+      }
+      
     } // end construction of Interface objects
 
 
@@ -2524,8 +2525,10 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     const size_t n_nbors{e.Neighbors()};
     for ( size_t j = 0U; j<n_nbors; ++j ) {
       Element<dim>* const ptr( e.Neighbor(j) );
-      if ( ptr != nullptr )
-        vset.Pfvert( eidx, j, ptr->Idx() );
+      if ( ptr != nullptr ) {
+          assert( ptr->Idx() < elements_.size() );
+          vset.Pfvert( eidx, j, ptr->Idx() );
+        }
       else
         vset.Pfvert( eidx, j, e.AtBoundary(j) );
         

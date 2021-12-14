@@ -407,25 +407,25 @@ typename std::vector<Element<dim>*>::iterator  Element<dim>::NeighborsEnd()
 }
 
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
 {
   return node_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const
 {
   return node_connector_.end();
 }
 
 template<size_t dim>
-typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
+typename std::vector<const Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
 {
   return elmt_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const
+typename std::vector<const Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const
 {
   return elmt_connector_.end();
 }

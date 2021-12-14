@@ -226,10 +226,10 @@ class Element : public FiniteElementPolicy<dim, Element>,
     typename std::vector<csmp::Element<dim>*>::iterator         NeighborsBegin();
     typename std::vector<csmp::Element<dim>*>::iterator         NeighborsEnd();
 
-    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd()       const;
-    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
-    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator      NodesEnd()       const;
+    typename std::vector<const csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
+    typename std::vector<const csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
 
     typename  std::vector<csmp::Node<dim>*>&                    NodeVector();
     typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();

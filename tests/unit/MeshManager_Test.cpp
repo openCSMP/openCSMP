@@ -86,6 +86,8 @@ void MeshManager_Test::CheckModel3D()
     set<Node<3>*> contiguous_set_of_nodes;
     cout << "\nInterconnected nodes: " << findInterconnectedNodeCluster( &(*mesh.NodesBegin()), contiguous_set_of_nodes ) << "\n";
     cout << "\nElements: " << mesh.Elements() << "\n";
+    // checking the neighbor connectivity
+    integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
     // checking whether the model is contiguous
     set<Element<3>*> contiguous_subset_of_cells;
     findContiguousMeshPatch( &(*mesh.ElementsBegin()), contiguous_subset_of_cells );
@@ -153,6 +155,8 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
     model3d_name_ = "prism_test";
     model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
 
+    CheckModel3D();
+
     Region<3U>&  model_domain = model3d_->Region("Model");
     vector<set<size_t>> node_neighbors;
     nodeNeighbors( model_domain, node_neighbors );
@@ -160,8 +164,6 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
     size_t n_neighbors{0};
     for ( auto nit : node_neighbors ) n_neighbors += nit.size();
     cout <<"\n\taverage number of neighbors per node: "<< n_neighbors / node_neighbors.size();
-
-    CheckModel3D();
       
     if ( reconstruct_from_file ) {
         // writing ansys model to file deleting it and then recreating a csmp native model from the file

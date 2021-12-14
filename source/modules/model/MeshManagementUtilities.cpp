@@ -88,10 +88,10 @@ To break regions into contiguous subdomains.
 
 */
 template<size_t dim,template<size_t> class CELL>
-size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, set<CELL<dim>*>& cells_contiguous_subset )
+size_t findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( entry_cell == nullptr ) {
+    if ( eptr == nullptr ) {
          csmp_error.notice( ERROR, "findContiguousMeshPatch", "entry cell pointer is a nullptr; nothing was done.");
          return 0;
       }
@@ -99,34 +99,30 @@ size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, set<CELL<dim>*>& ce
     // clean the set if it is not empty
     if ( !cells_contiguous_subset.empty() ) cells_contiguous_subset.clear();
     // insert the first element into the new subset
-    cells_contiguous_subset.insert( entry_cell );
+    cells_contiguous_subset.insert( eptr );
     
-    vector<CELL<dim>*>  neighbor_cells{ entry_cell };
+    vector<CELL<dim>*>  neighbor_cells( eptr->NeighborsBegin(), eptr->NeighborsEnd() ), new_neighbor_cells;
+    const size_t        max_cell_nbors{6};
       
     while( !neighbor_cells.empty() )
       {
-          // 0. element set for subsequent passes
-          vector<CELL<dim>*>  new_neighbor_cells;
-   
           // 1. loop over those neighbors that are not already part of the deque
-          for ( const auto& nit : neighbor_cells )
-            if ( nit != nullptr )
-              {
-                 assert( nit->FE() != nullptr );
+          for ( auto& nit : neighbor_cells )
+             // if the cell has not been encountered before
+             if ( nit != nullptr && cells_contiguous_subset.find(nit) == cells_contiguous_subset.end() ) {
                  const size_t  n_neighbors{ nit->Neighbors() };
+                 assert( n_neighbors <= max_cell_nbors );
                  new_neighbor_cells.reserve( n_neighbors );
-                 for ( size_t j=0U; j<n_neighbors; ++j ) {
-                     CELL<dim>* cell_ptr = nit->Neighbor(j);
-                     // if the cell has not been encountered before
-                     if ( cell_ptr && cells_contiguous_subset.find( cell_ptr ) == cells_contiguous_subset.end() ) {
-                          new_neighbor_cells.push_back( cell_ptr );
-                          cells_contiguous_subset.insert( cell_ptr );
-                       }
-                   }
-               }
+                 for ( size_t j=0U; j<n_neighbors; ++j )
+                   if ( nit->Neighbor(j) != nullptr )
+                     new_neighbor_cells.push_back( nit->Neighbor(j) );
+                 // marking the neighbor cell as discovered
+                 cells_contiguous_subset.insert( nit );
+              }
  
           // 2. obtain a new set of neighbors that has to be visited in the next iteration
           neighbor_cells = new_neighbor_cells;
+          new_neighbor_cells.clear();
        }
   
     return cells_contiguous_subset.size();
@@ -302,13 +298,12 @@ size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*
     
     if ( !contiguous_set_of_nodes.empty() ) contiguous_set_of_nodes.clear();
 
-    vector<Node<dim>*>  node_neighbors{ nptr };
+    vector<Node<dim>*>  node_neighbors{ nptr }, new_node_nbors;
     contiguous_set_of_nodes.insert( nptr );
     // cerr <<"\n\nfindInterconnectedNodeCluster: traversing nodes, starting at: "<< nptr->Idx() <<": ";
 
     while ( !node_neighbors.empty() )
       {
-        vector<Node<dim>*>  new_node_nbors;
         for ( const auto& nit : node_neighbors )
           {
              const size_t n_node_nbors{ nit->Neighbors() };
@@ -324,6 +319,7 @@ size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*
                }
            }
         node_neighbors = new_node_nbors;
+        new_node_nbors.clear();
      }
     
   return contiguous_set_of_nodes.size();
