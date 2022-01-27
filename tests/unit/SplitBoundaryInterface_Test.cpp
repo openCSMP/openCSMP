@@ -571,7 +571,7 @@ void SplitBoundaryInterface_Test::VisualiseSplitBoundaries( Model<dim>& model, c
   Index element_prop_idx( model.Database().StorageKey( "element variable" ) );
 
   // loop over SplitBoundaries
-  for ( typename Model<dim>::splitBoundaryConstIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
+  for ( typename Model<dim>::splitBoundaryIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
   {
     interfaceValue += 1.0;
 

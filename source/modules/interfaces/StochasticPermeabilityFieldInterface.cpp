@@ -65,16 +65,16 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     typename std::map<mjl::Point, size_t>::iterator mit;
     typename std::vector<Node<dim>*>::iterator      it;
     typename std::vector<Element<dim>*>::iterator   eit;
-    mjl::Point xy;                                    
-    double64 xval, yval, perm;   
-    char    file[200];
+    mjl::Point  xy;
+    double      xval, yval, perm;
+    char        file[200];
     std::string text_line;
     typename std::vector<std::string>  tokens;
     strcpy( file, fname );
     strcat( file, ".perm");
     ifstream ifs( file );
     ScalarVariable k, log_k;
-    double64 vol;
+    double vol;
 
     Region<dim>&  super_group(sg.Region("Model"));
     
@@ -202,9 +202,9 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     
     typename std::vector<Node<dim>*>::iterator     it;
     typename std::vector<Element<dim>*>::iterator  eit;
-    typename std::vector<double64>                          xvec, yvec, kvec;
+    typename std::vector<double>  xvec, yvec, kvec;
     mjl::Point xy;                                    
-    double64 dx, dy, x, y, k, xmax(0.), ymax(0.);   
+    double dx, dy, x, y, k, xmax(0.), ymax(0.);
     size_t index(0);
     char    file[200];
     std::string   text_line;
@@ -259,7 +259,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
         index++; 
       }
     
-    double64 min, max;
+    double min, max;
     sg.MinMaxOf( "inner radius", min, max );
     if ( isnan(min) || isnan(max) ) {
         sg.AssignElementCharacteristicsTo( "inner radius", "inner radius" ); 
@@ -271,7 +271,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       }
       
     // compare dimensions of k-field with Model dimensions and scale x-y resolution if necessary
-    double64 xres, yres;
+    double xres, yres;
     Point<dim>  xyz_min, xyz_max;
     sg.MinMaxCoordinates( xyz_min, xyz_max );
     if ( xmax != xyz_max[0] || ymax != xyz_max[1] ) {
@@ -303,7 +303,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     
     // find the min and max k and count the elements that have no new k assigned and are nan
     csmp::Index perm_key(sg.Database().StorageKey("permeability"));  
-    double64 mink(1.0e+20), maxk(0.0);
+    double mink(1.0e+20), maxk(0.0);
     size_t nan_count(0);
     for ( eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) { 
         (*eit)->Read( perm_key, perm );
@@ -327,7 +327,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     // check if any elements were too small such that no FD grid points are assigned and their k's are nan
     // if k is nan, average the k's of the neighbor elements. If no neighbor elements are given or k's are all nan
     // as well, assign random k
-    double64 k_avg, counter;
+    double k_avg, counter;
     for ( eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) {
         (*eit)->Read( perm_key, perm );
         if ( isnan( perm() ) ) {

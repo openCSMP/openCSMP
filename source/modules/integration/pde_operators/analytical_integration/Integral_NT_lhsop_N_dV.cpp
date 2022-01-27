@@ -40,7 +40,7 @@ Integral_NT_lhsop_N_dV<dim,SIMPLEX>::Integral_NT_lhsop_N_dV( const PropertyDatab
 /** Reads the Operand values from the elements.
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -53,7 +53,7 @@ void Integral_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 multiplied with the Operand.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
     // consistent formulation
     if ( !MathOperatorLHS<dim>::LumpedFormulation() )

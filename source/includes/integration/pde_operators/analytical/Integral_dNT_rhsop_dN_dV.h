@@ -13,8 +13,8 @@ class Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
     Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref, 
                                const char* oper, const char* test, const char* grad_var );
 
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& e );
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, VAR; 

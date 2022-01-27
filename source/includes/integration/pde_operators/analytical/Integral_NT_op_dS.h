@@ -16,9 +16,9 @@ class Integral_NT_op_dS : public MathOperatorRHS<dim> {
   public:
     Integral_NT_op_dS( const PropertyDatabase<dim>& p, const char* oper, const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& );
   
   private:
     ScalarVariable          sc;

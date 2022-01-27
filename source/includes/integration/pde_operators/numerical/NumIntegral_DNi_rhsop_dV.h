@@ -29,9 +29,9 @@ class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim> {
     virtual ~NumIntegral_DNi_rhsop_dV();
   
     /// reads the operand values from the nodes and stores them in a vector
-    virtual void GetOperands( CELL& );
+    virtual void GetOperands( const CELL& );
   
-    virtual void ComputeContribution( CELL& );
+    virtual void ComputeContribution( const CELL& );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );

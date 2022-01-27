@@ -11,9 +11,10 @@ class NumIntegral_PT_op_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref, const char* oper, const char* test );
     
-    virtual void GetOperands( CELL& e );
+    virtual void GetOperands( const CELL& );
  
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
+    
     virtual NumIntegral_PT_op_dV<dim,CELL>* clone() const { return new NumIntegral_PT_op_dV<dim,CELL> (*this); }
   private:
     std::vector<double>  BFORCE;

@@ -24,8 +24,8 @@ class NT_op : public MathOperatorRHS<dim> {
   public:
 
     NT_op( const PropertyDatabase<dim>& p, const char* oper, const char* test );
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& e );
 
   private:
 

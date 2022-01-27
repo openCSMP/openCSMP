@@ -9,8 +9,8 @@ namespace csmp {
 
 template<size_t dim,class CELL>
 NumIntegral_BT_op_dV<dim,CELL>::NumIntegral_BT_op_dV( const PropertyDatabase<dim>& pref,
-                                                         const char*  oper, // pore pressure
-                                                         const char*  test )
+                                                      const char*  oper, // pore pressure
+                                                      const char*  test )
   : MathOperatorRHS<dim>(pref,oper,test), 
     B(2,6),  
     BT(6,2),
@@ -58,7 +58,7 @@ member Vec {V}.
 In linear elasticity computations.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -136,15 +136,15 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
 
 
 
-template class NumIntegral_BT_op_dV<1U,Element<1U> >;
-template class NumIntegral_BT_op_dV<2U,Element<2U> >;
-template class NumIntegral_BT_op_dV<3U,Element<3U> >;
+template class NumIntegral_BT_op_dV<1U,Element<1> >;
+template class NumIntegral_BT_op_dV<2U,Element<2> >;
+template class NumIntegral_BT_op_dV<3U,Element<3> >;
 
-template class NumIntegral_BT_op_dV<1U,Face<1U> >;
-template class NumIntegral_BT_op_dV<2U,Face<2U> >;
-template class NumIntegral_BT_op_dV<3U,Face<3U> >;
+template class NumIntegral_BT_op_dV<1U,Face<1> >;
+template class NumIntegral_BT_op_dV<2U,Face<2> >;
+template class NumIntegral_BT_op_dV<3U,Face<3> >;
 
-} // end namespace csp
+} // end namespace csmp
 
 
 

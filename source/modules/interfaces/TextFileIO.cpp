@@ -3364,5 +3364,101 @@ bool readUnknownOrInvalidBlock( const std::string& keyword,
 }
 
 
+
+
+/**
+    Reads comma delimited point-data from ASCII file (ext. .csv),  returning them into the supplied vector,
+    where the first  three column represent the point coordinates x,y,z, and then the data follow.
+    
+    The first line is a headline with column header names, the number of which determines the number of columns in the file.
+    
+    @todo this wants to be a CSV_Reader module, not just a function.
+*/
+size_t  read_CSV_File( string filename, vector<string>& col_titles, vector<vector<double>>& rows_of_columns )
+ {
+    ifstream  ifs( filename + ".csv" );
+
+    if ( !ifs.is_open() )
+      throw csmp::Exception( ERROR, "read_CSV_File:", "input file could not be opened:", filename );
+      
+    const long LMAX(1024);
+    const char* const delims =",";
+    char              text_line[LMAX];
+    char*             token(0);
+
+    // reading and parsing the file header: region name, coordinates (double x dim), scalar-variable names
+    // ---------------------------------------------------------------------------------------------------
+    ifs.getline( text_line, LMAX );
+    cout <<"\nread_CSV_File: file '"<< filename;
+    cout <<"' header:\n\n"<< text_line << endl;
+    
+    // extracting information
+    string  data_name(strtok(text_line,delims));
+    string  data_X(strtok(NULL,delims));
+    string  data_Y(strtok(NULL,delims));
+    string  data_Z(strtok(NULL,delims));
+
+    // parsing the column header / variable names
+    if ( !col_titles.empty() ) col_titles.clear();
+    else col_titles.reserve( 5 ); // three coordinates, a value and a region identifier
+    while( (token = strtok(NULL,delims)) != NULL  )
+      col_titles.push_back(token);
+    
+    cout <<"\nread_CSV_File: file contains the variables:\n";
+    for ( auto lt : col_titles )
+      cout <<"\t"<< lt << endl;
+   
+    const size_t n_properties(col_titles.size() - 3 ); // the coordinate values
+   
+   
+    // reading the data records storing them in the respective regions
+    // ---------------------------------------------------------------
+    double xmin(1.0e30), ymin(1.0e30), zmin(1.0e30), xmax(-1.0e30), ymax(-1.0e30), zmax(-1.0e30);
+    if ( !rows_of_columns.empty() ) rows_of_columns.clear();
+    size_t row_count{0};
+
+    while ( !ifs.eof() )
+      {
+         // if the end of file or another errror is encountered, the reading proces is interrupted
+         if ( !ifs.getline( text_line, LMAX ) ) break;
+
+         // line is read, and a new dataset is started if necessary
+         // reading the point coordinates
+         double x = atof(strtok(NULL,delims));
+         double y = atof(strtok(NULL,delims));
+         double z = atof(strtok(NULL,delims));
+         xmin = std::min(xmin,x);
+         xmax = std::max(xmax,x);
+         ymin = std::min(ymin,y);
+         ymax = std::max(ymax,y);
+         zmin = std::min(zmin,z);
+         zmax = std::max(zmax,z);
+         // assigning these
+         rows_of_columns.emplace_back( vector<double>{ x, y, z } );
+
+         // reading the property values
+         for ( size_t i=0U; i<n_properties; i++ ) {
+              double data_value = atof(strtok(NULL,delims));
+              // TODO: perhaps add a value check against property database here
+              rows_of_columns[row_count].push_back( data_value );
+           }
+           
+         row_count++;
+        
+      } // end while !eof
+   
+    ifs.close(); // data text file
+   
+    cout <<"\n\nread_CSV_File: successfully finished reading '"<< filename <<"' file.\n";
+    cout <<"\n\tpoint data fall into the bounding box:\n";
+    cout <<"\t\tx: "<< xmin <<" - "<< xmax <<" m.\n";
+    cout <<"\t\ty: "<< ymin <<" - "<< ymax <<" m.\n";
+    cout <<"\t\tz: "<< zmin <<" - "<< zmax <<" m.\n";
+    
+    return row_count;
+ 
+ } // end read_CSV_File
+
+
 } // end csmp
 

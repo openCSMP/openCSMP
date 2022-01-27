@@ -37,8 +37,8 @@ template<size_t dim,class SIMPLEX=Element<dim> >
 class PointSource_rhsop : public MathOperatorRHS<dim> {
   public:
     PointSource_rhsop( const PropertyDatabase<dim>&, const char* nodal_src, const char* test );
-    virtual void GetOperands( SIMPLEX& );
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void GetOperands( const SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
     virtual PointSource_rhsop<dim,SIMPLEX>* clone() const { return new PointSource_rhsop<dim,SIMPLEX> (*this); }
   private:
     std::vector<ScalarVariable>  SRC_;

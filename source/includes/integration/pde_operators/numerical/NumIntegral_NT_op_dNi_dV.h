@@ -32,11 +32,12 @@ class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
                               const char* test,    // e.g., fluid pressure
                               double acc_gravity=9.8601 );
     
-    virtual void GetOperands( CELL& );
+    virtual void GetOperands( const CELL& );
 
-    virtual void ComputeContribution( CELL& );
+    virtual void ComputeContribution( const CELL& );
     
     void SpatialDerivative( size_t xyz );
+    
     virtual NumIntegral_NT_op_dNi_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_dNi_dV<dim,CELL> (*this); }
   
   private:

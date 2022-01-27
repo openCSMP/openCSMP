@@ -48,7 +48,7 @@ integral is naturally 1 as well.
 
 */
 template<size_t dim, template<size_t> class CELL>
-void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( CELL<dim>& e )
+void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

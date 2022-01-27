@@ -755,6 +755,84 @@ void VSet<dim>::Out( bool print_data_as_well ) const
 } // end Out
 
 
+
+
+
+
+
+    /// writes C++17  code that reproduces a hardwired version of the current VSet
+template<size_t dim>
+void VSet<dim>::OutCPP17( const char* cpp_file ) const
+ {
+    ofstream  ofs( string(cpp_file) +".cpp" );
+    
+    //----------------------------FILE HEADER
+    ofs <<"// '"<< cpp_file <<"' - cplusplus source code file for the generatioon of a VSet.\n";
+    
+    ofs <<"\n\nVSet<dim>  vset;";
+    
+    //----------------------------WRITING THE VDATA
+    VData::OutCPP17( ofs );
+    
+    //----------------------------MATERIAL IDENFIFIERS FOR EACH ELEMENT
+    // vector<int32_t> pmtrl(45,1); // matrix
+    ofs <<"\nconst int32_t  material_identifier{1};";
+    ofs <<"\nvector<int32_t> pmtrl( "<< Elements() <<", material_identifier );";
+    //fill( next(pmtrl.begin(),25), next(pmtrl.begin(),31), 2 ); // fine because wrong values will be overwritten next
+    ofs <<"\n\nvset.AddPmtrl( pmtrl.begin(), pmtrl.end() );";
+    
+    //----------------------------NODE & ELEMENT NUMBERS AS PROPERTIES
+    // adding node and element numbers for comparisons
+    ofs <<"\n\nPropertyData elmt_nums( ELEMENT, SCALAR, 2U );";
+    ofs <<"\nelmt_nums.Reserve( vset.Elements() );";
+    ofs <<"\n\nfor ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );";
+    ofs <<"\nvset.AddData( \"element number\" , elmt_nums );";
+    // node numbers
+    ofs <<"\n\nPropertyData node_nums( NODE, SCALAR, 2U );";
+    ofs <<"\nnode_nums.Reserve( vset.Vertices() );";
+    ofs <<"\n\nfor ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );";
+    ofs <<"\nvset.AddData( \"node number\", node_nums );";
+ 
+ } // end OutCPP17
+
+
+
+
+
+
+/**
+   updates pmtrl and property storage to size changes in VData
+*/
+template<size_t dim>
+void VSet<dim>::UpdatePropertyStorage()
+ {
+    const int32_t  pmtrl_default_value{1};
+     if ( pmtrl_.size() != Elements() )
+       pmtrl_.resize( Elements(), pmtrl_default_value );
+       
+    // storage of discretised variables
+    if ( !property_map_.empty() ) {
+        for ( auto& it : property_map_ ) {
+             switch ( it.second.Placement() ) {
+               case NODE:
+                   if ( Vertices() != it.second.Size() )
+                     it.second.Resize( Vertices() );
+                 break;
+               case ELEMENT:
+                   if ( Elements() != it.second.Size() )
+                     it.second.Resize( Elements() );
+                 break;
+               default:
+                 cerr <<"\nplacement of '"<< it.first <<"', not handled yet; no resizing done.\n";
+             }
+          }
+    }
+    
+ } // end UpdatePropertyStorage
+
+
+
+
 /**
 
 Reduces the number of elements in the 'vset' to those identified by their

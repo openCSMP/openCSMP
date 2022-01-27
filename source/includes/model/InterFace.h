@@ -166,17 +166,20 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     typename std::vector<const csmp::InterFace<dim>*>::const_iterator   NeighborsEnd()   const;
 
     /// access to all nodes connected to the InterFace (inside nodes first)
-    csmp::Node<dim>* N( size_t n_local ) const;
+    csmp::Node<dim>* N( size_t n_local );
+    const csmp::Node<dim>* N( size_t n_local ) const;
     
     /// access the nodes that are connected to either, the inside or the outside of the Face
-    csmp::Node<dim>* N( size_t n_local, INTERFACE_SIDE side ) const;
+    csmp::Node<dim>* N( size_t n_local, INTERFACE_SIDE side );
+    const csmp::Node<dim>* N( size_t n_local, INTERFACE_SIDE side ) const;
 
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
     INTERFACE_SIDE  CurrentSide() const;
 
     /// returns neighbor InterFace of interface
-    csmp::InterFace<dim>*  Neighbor( size_t ) const;
+    csmp::InterFace<dim>*  Neighbor( size_t );
+    const csmp::InterFace<dim>*  Neighbor( size_t ) const;
     
     /// on-the-fly 0..n-1 numbering stored in mutable local variable and used for computations in interfaces (displacement gradients etc.)
     void           Idx( size_t ) const;

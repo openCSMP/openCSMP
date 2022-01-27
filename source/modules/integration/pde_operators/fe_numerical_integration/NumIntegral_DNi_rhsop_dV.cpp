@@ -57,7 +57,7 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE n
  
  
 template<size_t dim,class CELL>
-void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( const CELL& e )
 {
    e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), op_vec_ );
 
@@ -67,7 +67,7 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( CELL& e )
  
 //element contribution
 template<size_t dim,class CELL>
-void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // initialize output matrix
     MathOperatorRHS<dim>::RHS.resize( e.Nodes() );

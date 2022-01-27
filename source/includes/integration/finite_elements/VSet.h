@@ -25,12 +25,14 @@ class VSet : public VData {
     VSet();
     VSet( const VSet& );
     VSet( VSet&& ) = default;
+    
+    /// single element type constructor
     VSet( size_t nodes_per_element, 
           size_t nbors_per_element,
           int8_t  csmp_etype, 
           size_t nodes, size_t elmts );
 
-    // setting sizes without transfer of data
+    /// multiple element type constructor
     VSet( const std::deque<size_t>& npes,
           const std::deque<size_t>& epes,
           size_t nodes );
@@ -119,6 +121,9 @@ class VSet : public VData {
 
     /// select elements specific elements from the VSet that shall be retained while all others are deleted (including nodes)
     void  ReduceTo( const std::map<size_t,size_t>& old_and_new_consecutive_element_ids );
+    
+    /// updates pmtrl and property storage to size changes in VData
+    void UpdatePropertyStorage();
   
     /// deletes all content of the VSet
     void  Erase();
@@ -128,11 +133,15 @@ class VSet : public VData {
   
     /// prints the VSet to the console
     void  Out( bool data_as_well=true ) const;
+    
+    /// writes C++17  code that reproduces a hardwired version of the current VSet
+    void OutCPP17( const char* cpp_file ) const;
+ 
 
   protected:
 
     std::map<std::string,PropertyData>  property_map_;  ///< container for variables distributed on the mesh
-    std::vector<int32_t>                  pmtrl_;         ///<  rocktype identifiers; one per element; for transfer to 'material_id_'
+    std::vector<int32_t>                pmtrl_;         ///<  rocktype identifiers; one per element; for transfer to 'material_id_'
 
     friend class VSet_Test;
 };

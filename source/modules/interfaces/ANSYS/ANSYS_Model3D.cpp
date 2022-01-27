@@ -292,7 +292,10 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
     vset.RemovePfverts();
-    vset.EstablishElementConnectivity3D();
+    vset.EstablishElementConnectivity3D(); // tested: OK
+    size_t new_elmts_created = vset.RemeshCornerSpanningTetrahedra();
+    if ( new_elmts_created > 0 )
+      cout <<"\nANSYS_Model3D::Initialize: created "<< new_elmts_created <<" new elements, to remove corner-spanning tets.\n";
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {

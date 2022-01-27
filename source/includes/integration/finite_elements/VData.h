@@ -222,8 +222,8 @@ class VData {
     std::vector<std::int8_t>::const_iterator      BFlagsEnd() const;
 
     // const iterators
-    std::vector<int8_t>::const_iterator                PelmtBegin() const;
-    std::vector<int8_t>::const_iterator                PelmtEnd() const;
+    std::vector<int8_t>::const_iterator                 PelmtBegin() const;
+    std::vector<int8_t>::const_iterator                 PelmtEnd() const;
     std::deque<std::vector<int64_t> >::const_iterator   PlistBegin() const;
     std::deque<std::vector<int64_t> >::const_iterator   PlistEnd() const;
     std::deque<std::vector<int64_t> >::const_iterator   PfvertsBegin() const;
@@ -274,6 +274,9 @@ class VData {
     /// rebuilds 'pfverts' from scratch
     void   EstablishElementConnectivity3D(); // retested: OK 3/12/21 by SKM
     
+    /// eliminates corner tetrahedra with all nodes on the model boundary; extra element degrees of freedom are introduced for boundary condition assignment
+    size_t RemeshCornerSpanningTetrahedra();
+    
     /// creates an extra array 'pnode' equivalent to a sparsity pattern recording to which nodes each node pnode[i] is connected to
     void   EstablishNodeNeighborConnectivity( std::vector<std::set<size_t>>& pnode ) const;
 
@@ -300,6 +303,9 @@ class VData {
   
     /// wrtie connectivity structure to ASCII text file
     void OutASCII( const char* file ) const;
+    
+    /// writes initialiser lists for the current VData in C++17 format
+    void OutCPP17( std::ofstream& ) const;
   
     /// initialise VData=mesh connectivity structures from binary file
     void InText( std::ifstream& );
@@ -328,9 +334,9 @@ class VData {
 
   private:
 
-    bool                              hybrid_mesh_;      ///< mesh that consists of different element types
-    std::vector<double>               px, py, pz;        ///< node coordinates
-    std::vector<int8_t>               pelmt;             ///< CSMP element type info, needed to read plist & pfverts
+    bool                               hybrid_mesh_;      ///< mesh that consists of different element types
+    std::vector<double>                px, py, pz;        ///< node coordinates
+    std::vector<int8_t>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
     // although there's little point to having 64-bit pointers but not 64-bit sizes, after all.
     std::deque<std::vector<int64_t> >  plist;             ///< nodes of each element, face and interface in that order
     std::deque<std::vector<int64_t> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible

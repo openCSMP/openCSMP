@@ -139,8 +139,8 @@ class BoundaryInterface {
     /// creates csmp::Boundary objects replacing lower-dimensional BOX_BOUNDARY named regions with boundaries with the same names
     bool EstablishBoxBoundaries();
   
-    /// inserts  box boundary or irregular csmp::Boundary objects for all eligible regions in the model
-    std::pair<std::set<std::string>,bool>  EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
+    /// inserts  box boundary or irregular csmp::Boundary objects for all eligible regions in the model; returns the names of the created boudaries
+    std::set<std::string>  EstablishBoundariesFromRegions();
 
     /// tries to create Box Boundary objects surrounding 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
     bool EstablishBoxBoundariesFromOrientation();

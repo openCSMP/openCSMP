@@ -54,7 +54,7 @@ NumIntegral_PT_lhsop_P_dV<dim,CELL>::NumIntegral_PT_lhsop_P_dV( const PropertyDa
 
 
 template<size_t dim,class CELL>
-void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -104,7 +104,7 @@ times the Operand. If the Operand is 1 over the element, then the volume
 integral is naturally 1 as well.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorLHS<dim>::LHS.Resize(e.Nodes()*dim,e.Nodes()*dim);
     MathOperatorLHS<dim>::LHS.Zero();

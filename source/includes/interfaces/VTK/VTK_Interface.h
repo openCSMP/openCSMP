@@ -1,12 +1,14 @@
 #ifndef CSMP_VTK_INTERFACE_H
 #define CSMP_VTK_INTERFACE_H
 
-#include "Model.h"
+#include "FiniteElement.h"
 #include "VTK_Type.h"
 
 namespace csmp {
 
 template<size_t> class Model;
+template<size_t> class Region;
+template<size_t> class Element;
 template<size_t> class VTK_Interface;
 
 /// for the given CSMP element type, finds the matching VTK geometric primitive
@@ -67,8 +69,8 @@ class VTK_Interface {
 
   public:
 
-    VTK_Interface( const std::string& problemTitle = "CSMP_Simulation", bool use_propblem_title_as_output_folder_name = false );
-    VTK_Interface( const std::string& problemTitle, const std::string& subFolderTitle, bool use_propblem_title_as_output_folder_name = false );
+    VTK_Interface( const std::string& problemTitle = "CSMP_Simulation", bool use_problem_title_as_output_folder_name = false );
+    VTK_Interface( const std::string& problemTitle, const std::string& subFolderTitle, bool use_problem_title_as_output_folder_name = false );
 
     ~VTK_Interface();
 

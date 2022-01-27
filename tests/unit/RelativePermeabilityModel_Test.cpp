@@ -452,6 +452,8 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          ofs << endl;
       }
       
+    _test( is_nan_test_failed == false );
+      
     ofs.close();
 
     // restoring the original saturation values

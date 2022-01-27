@@ -24,9 +24,9 @@ class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
                                    const char* mtrl2,         // e.g., conductivity
                                    const char* test );        // e.g., fluid pressure
     
-    virtual void GetOperands( CELL& e );
+    virtual void GetOperands( const CELL& );
 
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
     
     virtual void MultiplyWithTimeFactor( double dt );
   

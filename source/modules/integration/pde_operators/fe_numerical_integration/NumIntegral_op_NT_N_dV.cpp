@@ -39,7 +39,7 @@ NumIntegral_op_NT_N_dV<dim,CELL>::NumIntegral_op_NT_N_dV( const PropertyDatabase
 
 /// in the special case, the integral of the testfunction products must be used
 template<size_t dim,class CELL>
-void NumIntegral_op_NT_N_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_op_NT_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

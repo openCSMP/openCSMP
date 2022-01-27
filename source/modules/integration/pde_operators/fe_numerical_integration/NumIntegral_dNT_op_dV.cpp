@@ -33,7 +33,7 @@ NumIntegral_dNT_op_dV<dim,CELL>::NumIntegral_dNT_op_dV( const PropertyDatabase<d
 
 
 template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

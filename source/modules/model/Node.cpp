@@ -3,6 +3,7 @@
 #include "Visitor.h"
 #include "NodeManifold.h"
 #include "ErrorHandler.h"
+#include "MeshManagementUtilities.h"
 
 using namespace std;
 
@@ -211,10 +212,10 @@ void Node<dim>::Assign( size_t pnode, Element<dim>* element )
     
     for ( size_t parent{0}; parent<parent_node_indexes_.size(); parent++ )
       if ( parent_node_indexes_[parent] == NOT_INITIALIZED ) {
-             parent_node_indexes_[parent]     = static_cast<ONE_BYTE_NUMBER>(pnode);
-             parent_element_pointers_[parent] = element;
-             return;
-          }
+           parent_node_indexes_[parent]     = static_cast<ONE_BYTE_NUMBER>(pnode);
+           parent_element_pointers_[parent] = element;
+           return;
+        }
 
  } // end Assign
 
@@ -751,6 +752,8 @@ template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( typename vec
        Returns pointer to element with the supplied face nodes.
        For use in the case where only one parent is expected, for instance, when the Face is at a model boundary.
        
+       @param first and last are iterators to the nodes of the Face.
+       
        @return pair of Element and the face or segment of the element that has the same nodes.
 */
 template<size_t dim>
@@ -760,11 +763,133 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     // ascertain that there are multiple nodes
     assert( first != last );
     
-    // 1. create set of parent elements that share all face nodes
-    // ----------------------------------------------------------
+    // 1. create set of higher-dimensional parent elements that share all face nodes
+    // -----------------------------------------------------------------------------
+    const typename vector<Node<dim>*>::const_iterator nodesEnd{last};
+    typename vector<Node<dim>*>::const_iterator       nit{first};
+
+    // for all equidimensional parents elements of first node, select the ones that also are parents of the other nodes
+    assert( nit != nodesEnd );
+    assert( (*nit)->Parents() > 0 );
+    const size_t       n_parents{(*nit)->Parents()};
+    set<Element<dim>*> shared_parents;
+
+    // creating set of parent elements shared by first and second node
+    for ( size_t i{0}; i<n_parents; ++i )
+      if ( (*nit)->Parent(i) ) {
+           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
+           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+           // is this parent also one of the first node
+           bool parent_to_all{true};
+           for ( auto nit2=first; nit2!=nodesEnd; ++nit2 )
+             if ( !(*nit2)->IsParent( (*nit)->Parent(i) ) ) {
+                  parent_to_all = false;
+                  break;
+               }
+           if ( parent_to_all )
+             shared_parents.insert( (*nit)->Parent(i) );
+        }
+      
+    // verifying that the results are as expected
+    if (  shared_parents.empty() ) {
+          for ( ; first!=last; ++first )
+            printParents( (*first) );
+          ErrorHandler::Instance().notice( ERROR, "parentElement", "no suitable parent element was found" );
+
+          return make_pair( (*shared_parents.begin()), UINT_MAX );
+       }
+    if (  shared_parents.size() > 1 ) {
+    
+// DEBUGGING - visualising the discovered higher dimensional elements
+Element<dim>* elmt1 = (*shared_parents.begin());
+elmt1->Idx( 1 );
+elmt1->CoordinateMatrix();
+DenseMatrix<DM_MIN>  DATA1( 1, elmt1->Nodes() );
+for ( int i{0}; i<elmt1->Nodes(); ++i ) DATA1(0,i) = static_cast<double>(elmt1->N(i)->AtBoundary());
+elmt1->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA1 );
+Element<dim>* elmt2 = (*shared_parents.rbegin());
+elmt2->Idx( 2 );
+elmt2->CoordinateMatrix();
+DenseMatrix<DM_MIN>  DATA2( 1, elmt2->Nodes() );
+for ( int i{0}; i<elmt2->Nodes(); ++i ) DATA2(0,i) = static_cast<double>(elmt2->N(i)->AtBoundary());
+elmt2->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA2 );
+// if there are two elements, are they overlapping?
+if ( interPenetrating<dim>( elmt1, elmt2 ) )
+  ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
+                                         "and they are interpenetrating (=partially or fully overlapping)");
+
+         ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
+                                         "this may be the case for a lower-dimensional element inside the model; use other function");
+
+         return make_pair( (*shared_parents.begin()), UINT_MAX );
+      }
+    
+    
+    // 2. find the element's face that matches the nodes
+    // -------------------------------------------------
+    Element<dim>*  eptr{ (*shared_parents.begin()) };
+    vector <Node<dim>*> face_nodes( first, last );
+    sort( face_nodes.begin(), face_nodes.end() );
+    
+    // are the corner nodes of the faces contained in the input node pointer range?
+    const size_t n_faces{ eptr->Faces() };
+    for ( size_t face{0}; face < n_faces; ++face ) {
+         vector<size_t> fnids = eptr->FE()->CornerNodesOfFace(face);
+         const size_t n_cnr_nodes{ fnids.size() };
+         bool all_nodes_are_contained{true};
+         for ( size_t j{0}; j<n_cnr_nodes; ++j )
+           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( fnids[j] ) ) ) {
+                all_nodes_are_contained = false;
+                break;
+             }
+         // when the face has been found the result is returned
+         if ( all_nodes_are_contained )
+           return make_pair( eptr, face );
+             
+      }
+    
+     // 3. if none of the faces contains all nodes, perhaps a segment will
+    // -------------------------------------------------------------------
+    const size_t n_segments{ eptr->Segments() };
+    for ( size_t segm{0}; segm < n_segments; ++segm ) {
+         vector<size_t> snids;
+         eptr->FE()->NodesOfSegment( segm, snids );
+         const size_t n_segm_nodes{ snids.size() };
+         bool all_nodes_are_contained{true};
+         for ( size_t j{0}; j<n_segm_nodes; ++j )
+           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( snids[j] ) ) ) {
+                all_nodes_are_contained = false;
+                break;
+             }
+         // when the face has been found the result is returned
+         if ( all_nodes_are_contained )
+           return make_pair( eptr, segm );
+      }
+   
+    return make_pair( nullptr, UINT_MAX );
+    
+ } // end parentElement
+
+template pair<Element<3>*,size_t> parentElement( typename vector<Node<3>*>::const_iterator,
+                                                 typename vector<Node<3>*>::const_iterator );
+template pair<Element<2>*,size_t> parentElement( typename vector<Node<2>*>::const_iterator,
+                                                 typename vector<Node<2>*>::const_iterator );
+template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::const_iterator,
+                                                 typename vector<Node<1>*>::const_iterator );
+
+/*
+template<size_t dim>
+pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_iterator first,
+                                           typename vector<Node<dim>*>::const_iterator last )
+ {
+    // ascertain that there are multiple nodes
+    assert( first != last );
+    
+    // 1. create set of higher-dimensional parent elements that share all face nodes
+    // -----------------------------------------------------------------------------
     const typename vector<Node<dim>*>::const_iterator nodesEnd{last};
     typename vector<Node<dim>*>::const_iterator nit{first};
-    nit++;
+    nit++; // advance to second node
 
     // creating set of parent elements shared by first and second node
     assert( nit != nodesEnd );
@@ -772,18 +897,18 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     const size_t n_parents{(*nit)->Parents()};
     set<Element<dim>*> shared_parents;
     for ( size_t i{0}; i<n_parents; ++i )
-      if ( (*nit)->Parent(i) != nullptr ) {
+      if ( (*nit)->Parent(i) ) {
            if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
            if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
-           // TODO: IsParent does not work anymore as soon as there is a nullptr in the sequence
+           // is this parent also one of the first node
            if ( (*first)->IsParent( (*nit)->Parent(i) ) )
              shared_parents.insert( (*nit)->Parent(i) );
         }
       
-    // advancing the node pointer
+    // advancing the node pointer to third node
     nit++;
 
-    // deleting elements that aren't parents of the remaining nodes
+    // deleting elements that aren't parents of remaining node(s)
     while ( nit != nodesEnd ) {
          for ( auto it=shared_parents.begin(); it!=shared_parents.end(); ) {
               if ( !(*nit)->IsParent(*it) )
@@ -860,7 +985,7 @@ template pair<Element<2>*,size_t> parentElement( typename vector<Node<2>*>::cons
                                                  typename vector<Node<2>*>::const_iterator );
 template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::const_iterator,
                                                  typename vector<Node<1>*>::const_iterator );
-
+*/
 
 
 template<size_t dim>

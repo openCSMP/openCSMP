@@ -20,17 +20,17 @@ template<size_t dim, class CELL=Element<dim> >
 class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>&,
-                              /* no operand in this pde operator */
-                              const char* basic,
-                              const char* test );
+                           /* no operand in this pde operator */
+                           const char* basic,
+                           const char* test );
     
     virtual ~NumIntegral_NT_dNi_dV();
   
     /// does nothing since there are no operands to read
-    virtual void GetOperands( CELL& ) {}
+    virtual void GetOperands( const CELL& ) {}
   
     /// calculates the required finite element integral
-    virtual void ComputeContribution( CELL& );
+    virtual void ComputeContribution( const CELL& );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );

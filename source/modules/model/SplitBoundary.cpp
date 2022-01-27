@@ -1,7 +1,6 @@
 #include "SplitBoundary.h"
 #include "Region.h"
 #include "Boundary.h"
-#include "BoundaryConnector.h"
 
 #include "writeVariableIf.h"
 #include "Node.h"

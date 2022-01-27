@@ -638,10 +638,10 @@ to be included into the supplied deques.
     pelmt.assign( etypes.begin(), etypes.end() );
     
     for ( size_t i=0U; i<nrCells; i++ )
-      plist.push_back( vector<int64_t>(npes[i]) );
+      plist.emplace_back( vector<int64_t>(npes[i],UINT_MAX) );
     
     for ( size_t i=0U; i<nrCells; i++ )
-      pfverts.push_back( vector<int64_t>(epes[i]) );
+      pfverts.emplace_back( vector<int64_t>(epes[i],IRREGULAR) );
     
     if ( etypes.size() > 1U ) hybrid_mesh_ = true;
     else hybrid_mesh_ = false;
@@ -1266,7 +1266,7 @@ void VData::OutASCII( const char* file ) const
      size_t i(0U);
      for ( vector<int8_t>::const_iterator
            eit=pelmt.begin(); eit!=pelmt.end(); eit++, i++ )
-       ofs <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
+       ofs <<"\n"<< i <<" = "<< static_cast<int>(*eit) <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
      ofs << endl;
 
      // plist
@@ -1298,11 +1298,120 @@ void VData::OutASCII( const char* file ) const
      if ( !bflags.empty() ) ofs <<"\nBoundary flags 'bflags':"<< endl;
      size_t n_node(0U);
      for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
-       ofs << n_node++ <<": \t"<< (*bf) << endl;
+       ofs << n_node++ <<": \t"<< static_cast<int>(*bf) << endl;
        
      cout <<"\nVData::OutASCII: ascii file '"<< file_name <<"' written successfully."<< endl;
 
   } // end Out
+
+
+
+
+
+
+
+
+    /// writes initialiser lists for the current VData in C++17 format
+void VData::OutCPP17( std::ofstream& ofs ) const
+ {
+    //--------------------------ELEMENT TYPES
+    // vector<int8_t> pelmt;
+    const size_t n_elmts{pelmt.size()};
+    ofs <<"\ndeque<int8_t>  etypes{";
+    for ( size_t i{0}; i<n_elmts; ++i ) {
+         ofs << static_cast<int>(pelmt[i]);
+         if ( i < n_elmts-1 ) ofs <<",";
+      }
+    ofs <<"};\n";
+ 
+    //--------------------------NUMBERS OF NODES & NEIGHBORS
+    string delim = "";
+    ofs <<"\ndeque<size_t> npes{";
+    for ( auto e : plist ) {
+        ofs << delim << e.size();
+        delim =",";
+      }
+    ofs <<"};\n";
+    delim = "";
+    ofs <<"\ndeque<size_t> epes{";
+    for ( auto e : pfverts ) {
+        ofs << delim << e.size();
+        delim =",";
+      }
+    ofs <<"};\n";
+    
+    ofs <<"\nvset.Resize( etypes, npes, epes, ";
+    ofs << Vertices() <<", "<< Faces() <<", "<< InterFaces() <<" );\n";
+ 
+  	//--------------------------NODE COORDINATES
+    // px, py, pz
+    size_t counter{0};
+    const size_t n_nodes{Vertices()};
+    ofs <<"\ndeque<double> px{";
+    for ( auto i : px ) {
+         ofs << i;
+         if ( counter < n_nodes-1 ) ofs <<",";
+         counter++;
+      }
+    ofs <<"};\n";
+    counter = 0;
+    ofs <<"\ndeque<double> py{";
+    for ( auto i : py ) {
+         ofs << i;
+         if ( counter < n_nodes-1 ) ofs <<",";
+         counter++;
+      }
+    ofs <<"};\n";
+    counter = 0;
+    ofs <<"\ndeque<double> pz{";
+    for ( auto i : pz ) {
+         ofs << i;
+         if ( counter < n_nodes-1 ) ofs <<",";
+         counter++;
+      }
+    ofs <<"};\n";
+  	ofs <<"\n\nvset.AddXYZ( px, py, pz );";
+
+    //------------------------------BOUNDARY FLAGS
+    ofs <<"\n\nvector<int8_t>  bflags{";
+    for ( size_t i{0}; i<Vertices(); ++i ) {
+         ofs << static_cast<int>(BFlag(i));
+         if ( i <Vertices()-1 ) ofs <<",";
+      }
+    ofs <<"};\n";
+    ofs <<"\n\nvset.AddBFlags( bflags.begin(), bflags.end());\n";
+      
+    //------------------------------PLIST
+    ofs <<"\n//'plist' nodes that make up the elements";
+    ofs <<"\ndeque<vector<int64_t>> plist( "<< pelmt.size() <<" );";
+    // Plist( size_t eidx, size_t node, size_t val );
+    for ( size_t eidx{0}; eidx<plist.size(); ++eidx ) {
+        ofs <<"\n\tplist["<< eidx <<"] = { ";
+        for ( size_t node{0}; node<plist[eidx].size(); ++node ) {
+             ofs << plist[eidx][node];
+             if ( node < plist[eidx].size()-1 ) ofs <<", ";
+          }
+        ofs <<" };";
+      }
+    ofs <<"\n\nvset.AddPlist( plist.begin(), plist.end());\n";
+
+    //------------------------------PFVERTS (neighbor information)
+    ofs <<"\n//'pfverts' neighbors of the faces of each element";
+    ofs <<"\ndeque<vector<int64_t>> pfverts( "<< pelmt.size() <<" );";
+    // Pfverts( size_t eidx, size_t neighbor, size_t val );
+    for ( size_t eidx{0}; eidx<pfverts.size(); ++eidx ) {
+        ofs <<"\n\tpfverts["<< eidx <<"] = { ";
+        for ( size_t nbor{0}; nbor<pfverts[eidx].size(); ++nbor ) {
+             ofs << pfverts[eidx][nbor];
+             if ( nbor < pfverts[eidx].size()-1 ) ofs <<", ";
+          }
+        ofs <<" };";
+      }
+    ofs <<"\n\nvset.AddPfverts( pfverts.begin(), pfverts.end());";
+
+ } // end OutCPP17
+
+
 
 
 
@@ -3246,45 +3355,64 @@ void VData::EstablishElementConnectivity3D()
                   pfverts[elmt][boundary_face] = IRREGULAR;
                 }
           }
-          
-         // 2.3.3 Remeshing tetrahedra that span a corner of the model
-         // ----------------------------------------------------------
-         // replacing the corner and inner elements with 3 new tetrahedra
-         const size_t n_elements{pelmt.size()};
-         // if this a tetrahedral only mesh no checks have to be performed
-         if ( !HybridElementTypeMesh() && isTetrahedral( parseFiniteElementTypeEnum(ElementType(0)) ) )
-           {
-              for ( size_t i{0}; i<n_elements; ++i ) {
-                   long n_neighbors{0}, neighbor(UNSPECIFIED);
-                   for ( size_t j{0}; j<PfvertsSize(i); ++j )
-                     if ( Pfvert(i,j) >= 0 ) {
-                          neighbor=Pfvert(i,j);
-                          n_neighbors++;
-                       }
-                   // if the tetrahedron has only one neighbor, it and its nbor need to be replaced
-                   if ( n_neighbors == 1 )
-                     splitCornerTetrahedron( *this, i, neighbor );
-                }
-           }
-         else { // for hybrid element type meshes the element type needs to be checked
-              for ( size_t i{0}; i<n_elements; ++i ) {
-                   long n_neighbors{0}, neighbor(UNSPECIFIED);
-                   for ( size_t j{0}; j<PfvertsSize(i); ++j )
-                     if ( Pfvert(i,j) >= 0 ) {
-                          neighbor=Pfvert(i,j);
-                          n_neighbors++;
-                       }
-                   // if the element has only one neighbor and is a tetrahedron, it and its nbor need to be replaced
-                   if ( n_neighbors == 1 &&
-                        isTetrahedral( parseFiniteElementTypeEnum(ElementType(i)) ) ) {
-                        splitCornerTetrahedron( *this, i, neighbor );
-                     }
-                }
-           }
-          
+
       } // volume elements
  
  } // end EstablishElementConnectivity3D
+
+
+
+
+
+/**
+   Replaces corner-spanning tetrahedra (all nodes at the model boundary) and their interior neighbors
+   with  3 tedrahedra each to establish the necessary degrees of freedom to assign boundary conditions.
+   
+   @return the number of new tetrahedra created.
+   
+   @attention method requires an intact neighbor connectivity. Run EstablishElementConnectivity3D before.
+*/
+size_t VData::RemeshCornerSpanningTetrahedra()
+ {
+     // Remeshing tetrahedra that span a corner of the model
+     // ----------------------------------------------------------
+     // replacing the corner and inner elements with 3 new tetrahedra
+     const size_t n_elements{pelmt.size()};
+     
+     // if this a tetrahedral only mesh no checks have to be performed
+     if ( !HybridElementTypeMesh() && isTetrahedral( parseFiniteElementTypeEnum(ElementType(0)) ) )
+       {
+          for ( size_t i{0}; i<n_elements; ++i ) {
+               long n_neighbors{0}, neighbor(UNSPECIFIED);
+               for ( size_t j{0}; j<PfvertsSize(i); ++j )
+                 if ( Pfvert(i,j) >= 0 ) {
+                      neighbor=Pfvert(i,j);
+                      n_neighbors++;
+                   }
+               // if the tetrahedron has only one neighbor, it and its nbor need to be replaced
+               if ( n_neighbors == 1 )
+                 splitCornerTetrahedron( *this, i, neighbor );
+            }
+       }
+     else { // for hybrid element type meshes the element type needs to be checked
+          for ( size_t i{0}; i<n_elements; ++i ) {
+               long n_neighbors{0}, neighbor(UNSPECIFIED);
+               for ( size_t j{0}; j<PfvertsSize(i); ++j )
+                 if ( Pfvert(i,j) >= 0 ) {
+                      neighbor=Pfvert(i,j);
+                      n_neighbors++;
+                   }
+               // if the element has only one neighbor and is a tetrahedron, it and its nbor need to be replaced
+               if ( n_neighbors == 1 &&
+                    isTetrahedral( parseFiniteElementTypeEnum(ElementType(i)) ) ) {
+                    splitCornerTetrahedron( *this, i, neighbor );
+                 }
+            }
+       }
+       
+    return Elements() - n_elements;
+
+ } // end RemeshCornerSpanningTetrahedra
 
 
 
@@ -3481,8 +3609,181 @@ bool VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
 
 
 
+
+
+/**
+       Node numbers, faces etc.
+       
+       @attention only works for tetrahedra so far
+*/
+static void elementToVTK( const VData& vdata, size_t eidx, const char* outfile )
+ {
+     // 0. opening data output file in ascii format
+     string file_name(outfile);
+     file_name += to_string(eidx);
+     file_name += ".vtk";
+
+     ofstream ofs( file_name, ios::out|ios::trunc );
+     if ( !ofs ) {
+           cerr <<"\nelementToVTK(tetrahedron): '"<< outfile <<"'";
+           cerr <<"output file could not be opened."<< endl;
+           return;
+       }
+
+     // 1. writing the file header
+     // -------------------------
+     const string var_name("node_number");
+     ofs <<"# vtk DataFile Version 2.0"<< endl;
+     ofs <<"Finite-element dataset (CSMP): variable: "<< var_name << endl;
+     ofs <<"ASCII"<< endl << endl;
+
+     // 2. writing node coordinates
+     // ---------------------------
+     ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
+     const size_t npe = distance(vdata.PlistBegin(eidx),vdata.PlistEnd(eidx));
+     assert( npe == 4 );
+     ofs <<"POINTS " << npe <<" double"<< endl;
+     for ( size_t i=0; i<npe; i++ )
+       ofs << vdata.Px(vdata.Plist(eidx,i)) <<" "<< vdata.Py(vdata.Plist(eidx,i)) <<" "<< vdata.Pz(vdata.Plist(eidx,i)) << endl;
+     ofs << endl;
+
+     // 3. writing CELLS (cell-size and member nodes (point))
+     // -----------------------------------------------------
+     ofs <<"CELLS "<< 1 <<" "<< 5 << endl;
+
+     ofs << 4 <<" 0 1 2 3" << endl;
+     ofs << endl;
+
+     // 4. writing CELL_TYPES - for the
+     // ---------------------
+     ofs <<"CELL_TYPES "<< 1 << endl;
+     ofs << 10 << endl; // VTK_TETRA
+     ofs << endl;
+
+     // 5. writing scalar POINT_DATA (node numbers)
+     // ---------------------------------------------------
+     ofs <<"POINT_DATA "<< npe << endl;
+     // ofs.setf( ios::scientific );
+     ofs <<"SCALARS "<< var_name <<" double"<< endl;
+     ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
+     for ( size_t i=0; i<npe; i++ ) ofs << vdata.Plist(eidx,i) <<" ";
+     ofs << endl;
+     ofs.close();
+     cout <<"\nelementToVTK: file '"<< file_name <<"' written successfully."<< endl;
+
+ } // end elementToVTK
+
+
+
+
+
+
 /**
 Assuming the following numbering:
+
+First tetra
+0 1 2 3 - ony one neighbor = nbr
+
+Second tetra
+0 4 1 2 -  4 neigbors (inside of model)
+
+The new elements are formed
+1)  0 1 4 3 -   neighbors:  2  3  old-tet1-nbor 1   old-tet1-nbor 4
+2)  1 2 4 3 -   neighbors:  3  1  old-tet1-nbor 0   old-tet2-nbor 0
+3)  0 4 2 3 -   neighbors:  2  old-tet1-nbor 1   1   old-tet2-nbor 3
+
+The corresponding neighbor elements are.
+
+The operations will increase the number of elements by 1 for each corner processed
+because 2 elements are replaced by 3.
+
+@revision 2, SKM 27/1/2022
+
+*/
+void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
+ {
+    assert( cnr < vdata.Elements() );
+    assert( nbr < vdata.Elements() );
+    
+// debugging
+elementToVTK( vdata, cnr, "corner_tetrahedron" );
+elementToVTK( vdata, nbr, "interior_tetrahedron" );
+    
+    // 1. creation of space for one new element
+    // ----------------------------------------
+    // (and assuming that there are no Faces or InterFaces,
+    //  or lower-dimensional elements covering the sides of the tetrahedra)
+    assert( vdata.Faces() == 0 );
+    assert( vdata.InterFaces() == 0 );
+    const size_t n_elements_new{ vdata.Elements() + 1 };
+    if ( vdata.HybridElementTypeMesh() ) {
+         assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(cnr)) ) );
+         assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(nbr)) ) );
+         vdata.ResizeElementTypes( n_elements_new );
+         vdata.ElementType( n_elements_new-1U, vdata.ElementType( cnr ) );
+      }
+    else assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(0)) ) );
+    
+    vdata.ResizePlist( n_elements_new, 4 ); // nodes of tetrahedron
+    vdata.ResizePfverts( n_elements_new, 4 ); // nbors of tetrahedron
+    
+    // 2. assignment of nodes
+    // ----------------------
+    // 4 nodes involved
+    //                                                                                                         corner of model
+    const long n0{vdata.Plist(cnr,0)}, n1{vdata.Plist(cnr,1)}, n2{vdata.Plist(cnr,2)}, n3{vdata.Plist(cnr,3)}, n4{vdata.Plist(nbr,2)};
+    // new element first
+    vdata.Plist( n_elements_new-1U, 0, n0 ); // 0
+    vdata.Plist( n_elements_new-1U, 1, n1 ); // 1
+    vdata.Plist( n_elements_new-1U, 2, n4 ); // 4 (belongs to inside nbor tetra)
+    vdata.Plist( n_elements_new-1U, 3, n3 ); // 3
+    // new second element (using storage of former corner element)
+    vdata.Plist( cnr, 0, n1 );
+    vdata.Plist( cnr, 1, n2 );
+    vdata.Plist( cnr, 2, n3 );
+    vdata.Plist( cnr, 3, n4 );
+    // new third element (using storage of former inside element)
+    vdata.Plist( nbr, 0, n0 );
+    vdata.Plist( nbr, 1, n4 );
+    vdata.Plist( nbr, 2, n2 );
+    vdata.Plist( nbr, 3, n3 );
+
+    // 3. assignment of neigbors
+    // -------------------------
+    const long new1(n_elements_new-1U), new2(cnr), new3(nbr),
+               old1n0(vdata.Pfvert(cnr,0)), old1n1(vdata.Pfvert(cnr,1)),
+               old2n0(vdata.Pfvert(nbr,0)), old2n1(vdata.Pfvert(nbr,1)), old2n3(vdata.Pfvert(nbr,3));
+               
+    // new element first
+    vdata.Pfvert( new1, 0, new2 );
+    vdata.Pfvert( new1, 1, new3 );
+    vdata.Pfvert( new1, 2, old1n1 );
+    vdata.Pfvert( new1, 3, old2n3 );
+
+    // second element neighbors
+    vdata.Pfvert( cnr, 0, new3 );
+    vdata.Pfvert( cnr, 1, new1 );
+    vdata.Pfvert( cnr, 2, old1n0 );
+    vdata.Pfvert( cnr, 3, old2n0 );
+
+    // third element neighbors
+    vdata.Pfvert( nbr, 0, new2 );
+    vdata.Pfvert( nbr, 1, old1n1 );
+    vdata.Pfvert( nbr, 2, new1 );
+    vdata.Pfvert( nbr, 3, old2n1 );
+    
+    cout <<"\nsplitCornerTetrahedron: replaced corner "<< cnr;
+    cout <<" and its neighbor "<< nbr <<", adding the new tetrahedron "<< new1;
+
+ } // end splitCornerTetrahedron
+
+
+
+
+
+
+
+/* ORIGINAL
 
 First tetra
 0 1 2 3 - ony one neighbor = nbr
@@ -3497,7 +3798,10 @@ The new elements are formed
 
 The corresponding neighbor elements are.
 
-*/
+The operations will increase the number of elements by 1 for each corner processed
+because 2 elements are replaced by 3.
+
+
 void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
  {
     assert( cnr < vdata.Elements() );
@@ -3570,6 +3874,9 @@ void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
     cout <<" and its neighbor "<< nbr <<", adding the new tetrahedron "<< n_elements_new;
 
  } // end splitCornerTetrahedron
+
+*/
+
 
  
 } // end namespace csmp

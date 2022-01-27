@@ -18,7 +18,7 @@ class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim> {
     
     virtual ~NumIntegral_NT_dNi_dV_sc();
     
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );

@@ -16,8 +16,8 @@ class Integral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
     Integral_NT_op_dNi_dV( const PropertyDatabase<dim>& p, 
                            const char* oper, const char* mtrl, const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
     
     /// the space dimension of the partial derivative which shall be considered
     void SpatialDerivative( size_t xyz=2 );

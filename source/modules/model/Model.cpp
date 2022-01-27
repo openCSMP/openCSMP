@@ -22,6 +22,7 @@
 #include "FiniteVolumeStencilManager.h"
 #include "UnionFind.h"
 #include "plf_colony.h"
+#include "VTK_Interface.h"
 
 using namespace std;
 
@@ -326,7 +327,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                           "ModelTopology indicates Box-shaped model; ignoring this characteristic.");
 
     if ( create_boundaries ) {
-          const bool remove_original_lower_dimensional_regions(true);
           // if the model is box-shaped (albeit perhaps with irregular top surface)
           if ( !fully_irregular_mesh ) {
               this->EstablishBoxBoundaries();
@@ -335,8 +335,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
             }
           // irregularly shaped models
           else {
-              if( contiguous_model )
-                this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
+              if( contiguous_model ) this->EstablishBoundariesFromRegions();
               else
                 // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
                 // but we do want to create them on the outside of the model where the names of the input regions contain
@@ -417,7 +416,6 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 
   // 5. Forming Boundaries
   if ( create_boundaries ) {
-      const bool remove_lower_dim_original_regions{true};
       if ( !non_box_shaped_model && this->BoxShaped() ) {
            this->EstablishBoxBoundaries();
            if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
@@ -428,8 +426,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
             csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
                                "model appears to contain domains that are not connected to one another and there are no SplitBoundaries!" );
 
-          if ( contiguous_model )
-            this->EstablishBoundariesFromRegions( remove_lower_dim_original_regions );
+          if ( contiguous_model ) this->EstablishBoundariesFromRegions();
           else
             // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
             // but we do want to create them on the outside of the model where the names of the input regions contain
@@ -539,7 +536,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
   // 5. Model and subregions (model subdomains)
   const bool place_into_unique_regions( (mesh_topology.ModelRegions() == 0) );
-  const size_t elmts = this->FormModelRegion( place_into_unique_regions );
+  size_t elmts = this->FormModelRegion( place_into_unique_regions );
   if ( elmts == 0U ) csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
   this->FormRegionsFrom( mesh_topology );
 
@@ -548,43 +545,38 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
                                        "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
 
-// Testing the Regions that will become boundaries OK
-//this->Region("BACK").NodeAttributesToCSV();
-//this->Region("RIGHT").NodeAttributesToCSV();
-//this->Region("TOP").NodeAttributesToCSV();
-//this->Region("LEFT").NodeAttributesToCSV();
-//this->Region("BOTTOM").NodeAttributesToCSV();
-//this->Region("FRONT").NodeAttributesToCSV();
+// DEBUGGING
+// -----------------------------------------------------------------------------------------
+VTK_Interface<dim>  vtk_output;
+if ( this->Database().IsDefined("permeability") )
+  vtk_output.OutputDataToVTK( *this, this->Name(), string("permeability"), 1, true );
+else
+  vtk_output.OutputDataToVTK( *this, this->Name(), string("element variable 1"), 1, true );
+// -----------------------------------------------------------------------------------------
 
   // 6. forming Boundaries
-  if ( create_boundaries ) {
-    const bool remove_original_lower_dimensional_regions( false );
-    // if the model is box-shaped (albeit perhaps with irregular top surface)
-    if ( !fully_irregular_mesh ) {
-        this->EstablishBoxBoundaries();
-      }
-    // irregularly shaped models
-    else {
-        const bool contiguous_model( mesh_manager_.IsContiguous() );
-        if ( !contiguous_model )
-          csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                             "model appears to contain domains that are not connected to one another!" );
+  if ( create_boundaries )
+    {
+      // box-shaped models (albeit perhaps with irregular top surface)
+      if ( !fully_irregular_mesh ) this->EstablishBoxBoundaries();
+    
+      // irregularly shaped models, albeit still allowing for potential box boundary parts
+      else this->EstablishBoundariesFromRegions();
 
-        if ( contiguous_model )
-          this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
-        else
-          // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
-          // but we do want to create them on the outside of the model where the names of the input regions contain
-          // the string "BOUNDARY"
-          if ( this->ContainsBoundary("Model_Boundary") )
-          this->RemoveBoundary( this->Boundary("Model_Boundary") );
-      }
-
-    // split boundaries
-    if ( create_splitboundaries ) {
-        this->DetectAndCreateSplitBoundaries();
-        this->SplitBoundariesOut();
-      }
+      // split boundaries
+      if ( create_splitboundaries ) {
+          this->DetectAndCreateSplitBoundaries();
+          this->SplitBoundariesOut();
+        }
+        
+       // rebuilding the model region
+       this->RemoveRegion("Model");
+       elmts = this->FormModelRegion( place_into_unique_regions );
+       
+       // making sure no other regions are affected
+       if ( distance( this->RegionsBegin(), this->RegionsEnd() ) > 1 )
+         csmp_error.notice( ERROR, "Model::Initialize: for box boundaries",
+                           "this method assumes that Model is the only non-unique region at this point ");
    }
   else cout << "\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
@@ -607,6 +599,14 @@ if ( mesh_manager_.InterFaces() > 0 )
 
 } // end Initialize (VSet / ModelTopology)
 
+
+// Testing the Regions that will become boundaries OK
+//this->Region("BACK").NodeAttributesToCSV();
+//this->Region("RIGHT").NodeAttributesToCSV();
+//this->Region("TOP").NodeAttributesToCSV();
+//this->Region("LEFT").NodeAttributesToCSV();
+//this->Region("BOTTOM").NodeAttributesToCSV();
+//this->Region("FRONT").NodeAttributesToCSV();
 
 
 

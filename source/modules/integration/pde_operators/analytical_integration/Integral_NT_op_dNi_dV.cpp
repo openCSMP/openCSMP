@@ -65,7 +65,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::MaterialPropertyTimeMultiplier( double 
 /** Reads the Operand values from the elements.
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_op_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_NT_op_dNi_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
    // reading fluid density or something like that
    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT or MathOperatorRHS<dim>::MaterialOperandPlacement() == REGION ) 
@@ -101,7 +101,7 @@ gravity is negative since it acts in the opposite direction of the
 coordinate axis.
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );

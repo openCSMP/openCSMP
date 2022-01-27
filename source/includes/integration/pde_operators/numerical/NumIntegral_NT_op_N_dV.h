@@ -24,8 +24,10 @@ class NumIntegral_NT_op_N_dV : public MathOperatorRHS<dim> {
     NumIntegral_NT_op_N_dV( const PropertyDatabase<dim>& p, 
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
+    
     virtual NumIntegral_NT_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_N_dV<dim,CELL> (*this); }
+    
   private:
     size_t  nodal_degrees_of_freedom;
 

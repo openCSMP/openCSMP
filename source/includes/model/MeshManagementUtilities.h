@@ -80,14 +80,14 @@ Element<dim>* const findInnerHigherDimensionalNeighborFromNodes( Element<dim>* c
 
 /// Connects nodes to Face, finding them by matching the faces of the supplied higher dimensional elements
 template<size_t dim>
-void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
-                                             const Element<dim>* const outer_neighbor,
+void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
+                                             Element<dim>* const outer_neighbor,
                                              Face<dim>* const );
 
 /// Connects nodes to InterFace, finding them by matching the faces of the supplied higher dimensional elements; face IDs are set as well
 template<size_t dim>
-void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
-                                             const Element<dim>* const outer_neighbor,
+void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
+                                             Element<dim>* const outer_neighbor,
                                              InterFace<dim>* const );
 
 
@@ -135,11 +135,11 @@ void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes
 
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
 template<size_t dim>
-std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<dim>* const eptr1, const Element<dim>* const eptr2 );
+std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (slower)
 template<size_t dim>
-std::pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, const Element<dim>* const eptr2 );
+std::pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
 /// container of element pointers and local face ids of elements contacting each other across a split boundary
 typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_t> > OppositeElements;
@@ -157,6 +157,10 @@ size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  ed
 
 
 // UTILITIES FOR TESTING ETC
+
+/// returns true if the elements contain each others barycentre
+template<size_t dim>
+bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
 
 ///  captures a snapshot of the current cell connectivity for the range of cells; developed for testing
 template<size_t dim, template<size_t> class CELL>

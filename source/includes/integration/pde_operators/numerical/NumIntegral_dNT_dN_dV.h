@@ -16,11 +16,12 @@ class NumIntegral_dNT_dN_dV : public MathOperatorLHS<dim> {
                            const char* test );
   
     /// no operands need to be fetched from computational domain
-    virtual void GetOperands( CELL& ) {}
+    virtual void GetOperands( const CELL& ) {}
   
-    virtual void ComputeContribution( CELL& );
+    virtual void ComputeContribution( const CELL& );
   
     virtual NumIntegral_dNT_dN_dV<dim,CELL >* clone() const { return new NumIntegral_dNT_dN_dV<dim,CELL >(*this); }
+    
   private:
     DenseMatrix<DM_MIN>  B, BT; 
 };

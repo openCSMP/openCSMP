@@ -71,7 +71,7 @@ Operand is.
 When the property is an element property, it will be put into the
 first vector entry MTRL[0]. */
 template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -91,7 +91,7 @@ void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 
 template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix

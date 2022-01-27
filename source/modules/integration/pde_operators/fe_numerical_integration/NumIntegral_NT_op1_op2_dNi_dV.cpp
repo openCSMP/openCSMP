@@ -68,7 +68,7 @@ property from the element, and its multipliers from the nodes for later
 interpolation to the integration points.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -108,7 +108,7 @@ A reference to the finite-element from which the contribution is
 computed.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );

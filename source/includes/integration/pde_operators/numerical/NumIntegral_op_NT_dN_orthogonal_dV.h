@@ -15,8 +15,9 @@ class NumIntegral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim> {
                                         const char* basic,            // e.g., fluid pressure
                                         const char* test );           // streamfunction
     
-    virtual void GetOperands( CELL& e );
-    virtual void ComputeContribution( CELL& e );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
+    
     virtual NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>* clone() const { return new NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL> (*this); }
 
   private:

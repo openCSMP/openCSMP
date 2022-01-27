@@ -52,7 +52,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     /// constructs model-interior face as an exact copy of the supplied lower-dimensional element; no neighbor faces yet
-    Face( const Element<dim>& dim_minus1_element, ///< supplies finite element policy & finite volume stencil information
+    Face( Element<dim>& dim_minus1_element, ///< supplies finite element policy & finite volume stencil information
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
           size_t inner_parent_face_id,
@@ -153,14 +153,26 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// sides of Face object by analogy with Element
     size_t  Faces() const;
 
+    typename std::vector<csmp::Node<dim>*>::iterator         NodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator         NodesEnd();
+    typename std::vector<csmp::Face<dim>*>::iterator         NeighborsBegin();
+    typename std::vector<csmp::Face<dim>*>::iterator         NeighborsEnd();
+
+    typename std::vector<const csmp::Node<dim>*>::const_iterator   NodesBegin()     const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator   NodesEnd()       const;
+    typename std::vector<const csmp::Face<dim>*>::const_iterator   NeighborsBegin() const;
+    typename std::vector<const csmp::Face<dim>*>::const_iterator   NeighborsEnd()   const;
+
     /// to apply visitors whose application level is Boundary and target is Face
     void Accept( csmp::Visitor<dim>& );
 
     /// access the nodes that are connected to the Face
-    csmp::Node<dim>*  N( size_t n_local ) const;
+    csmp::Node<dim>*  N( size_t n_local );
+    const csmp::Node<dim>*  N( size_t n_local ) const;
   
     /// access the neighbor faces of this face
-    csmp::Face<dim>*  Neighbor( size_t ) const;
+    csmp::Face<dim>*  Neighbor( size_t );
+    const csmp::Face<dim>*  Neighbor( size_t ) const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void           Idx( size_t ) const;

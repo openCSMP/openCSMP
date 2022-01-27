@@ -21,12 +21,13 @@ class Integral_var_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
                                const char* var,
                                const double prefactor = 1.0);
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& );
+    
     virtual Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>* clone() const { return new Integral_var_NT_lhsop_N_dV<dim,SIMPLEX> (*this); }
   private:
-    void ComputeIntegral( SIMPLEX& e );
+    void ComputeIntegral( const SIMPLEX& );
     
     ScalarVariable                op_;
     Parameter                     var_;

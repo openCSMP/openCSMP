@@ -17,9 +17,9 @@ class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim> {
                                    const char* trigger,
                                    const double prefactor = 1. );
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
     /// integration etc.
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& );
     
     void SpatialDerivative( size_t xyz=2 );
   

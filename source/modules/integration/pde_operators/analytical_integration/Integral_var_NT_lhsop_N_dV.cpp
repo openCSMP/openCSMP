@@ -45,7 +45,7 @@ Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_lhsop_N_dV( const Prope
 /** Reads the Operand values from the elements.
 */
 template<size_t dim,class SIMPLEX>
-void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -60,7 +60,7 @@ void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 multiplied with the Operand.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
   if ( !MathOperatorLHS<dim>::LumpedFormulation() ) { // consistent formulation
     if (e.FE_Type() != LINEAR_TRIANGLE)
@@ -91,7 +91,7 @@ void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 
 
 template<size_t dim,class SIMPLEX>
-void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeIntegral( SIMPLEX& e ) {
+void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeIntegral( const SIMPLEX& e ) {
   assert(e.Nodes() == 3);
   assert(vvar_.size() == 3);
 

@@ -821,8 +821,7 @@ Element<3U>*  FindPointIn3DSurfaceTetraMesh( const csmp::Point<3U>& point,
                                              csmp::Region<3U>& surface,
                                              Element<3U>* elmt)
 {
-  
-  bool debug = false;
+  const bool debug = false;
   //surface.InputPropertyValue(iter_prop,ScalarVariable(PLAIN,0.0),COMPLETE);
   Element<3U>* nullElmt(NULL);
   std::vector<Element<3U>* > path;

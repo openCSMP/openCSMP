@@ -5087,26 +5087,29 @@ size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t n_cells{ elmt_vec_.size() };
-    long         nodes_removed = node_vec_.size();
     
-    elmt_vec_.erase( remove( elmt_vec_.begin(), PerimeterElementsBegin(), nullptr ), elmt_vec_.end() );
-    long cells_removed = n_cells - elmt_vec_.size();
-    size_t interior_elements = InteriorElements() - cells_removed; // critical info
+    // determining how the new number of interior cells
+    const size_t n_interior_cells_new = InteriorElements() - count( elmt_vec_.begin(), PerimeterElementsBegin(), nullptr );
     
-    elmt_vec_.erase( remove( PerimeterElementsBegin(), elmt_vec_.end(), nullptr ), elmt_vec_.end() );
-    cells_removed = n_cells - elmt_vec_.size();
+    // erasing cell vector without changing the relative number of its elements
+    elmt_vec_.erase( remove( elmt_vec_.begin(), elmt_vec_.end(), nullptr ), elmt_vec_.end() );
+    const size_t n_cells_new = elmt_vec_.size();
     
-    if ( cells_removed > 0 ) BuildPerimeterFaceVector( interior_elements );
+    if ( n_cells_new < n_cells ) BuildPerimeterFaceVector( n_interior_cells_new );
     
+    // removing node pointers if any
+    size_t nodes_removed = node_vec_.size();
     node_vec_.erase( remove( node_vec_.begin(), node_vec_.end(), nullptr ), node_vec_.end() );
     nodes_removed -= node_vec_.size();
     
-    if ( cells_removed == 0 && nodes_removed > 0 )
+    if ( n_cells_new < n_cells == 0 && nodes_removed > 0 )
       csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
                         "removed nodes but not cells? - subdomain may be corrupt now.");
     
-    return cells_removed;
+    return n_cells - n_cells_new;
  }
+
+
 
 
 

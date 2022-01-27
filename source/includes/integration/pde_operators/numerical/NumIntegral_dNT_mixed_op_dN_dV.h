@@ -17,8 +17,8 @@ class NumIntegral_dNT_mixed_op_dN_dV : public MathOperatorLHS<dim> {
                         const char* basic, 
                         const char* test );
     
-    virtual void GetOperands( CELL& e );
-    virtual void ComputeContribution( CELL& e );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
 
   private:
     DenseMatrix<DM_MIN>     B, BT, NVAL;

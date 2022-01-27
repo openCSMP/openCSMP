@@ -19,8 +19,8 @@ class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
                            		  const char* trigger,
                            		  const double prefactor = 1. );
     
-    void ComputeContribution( SIMPLEX& e );
-    void GetOperands( SIMPLEX& e );
+    void ComputeContribution( const SIMPLEX& );
+    void GetOperands( const SIMPLEX& );
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT;

@@ -235,10 +235,12 @@ class Element : public FiniteElementPolicy<dim, Element>,
     typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();
 
     /// accessor of the nodes of the current finite element
-    csmp::Node<dim>*     N( size_t n_local ) const;
+    csmp::Node<dim>*       N( size_t n_local );
+    const csmp::Node<dim>* N( size_t n_local ) const;
 
     /// accessor of the equidimensional neighbor elements of the current element (volume->volume, surface->surfaces element etc.)
-    csmp::Element<dim>*  Neighbor( size_t )  const;
+    csmp::Element<dim>*        Neighbor( size_t );
+    const csmp::Element<dim>*  Neighbor( size_t ) const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void         Idx( size_t ) const;

@@ -92,7 +92,7 @@ property from the element, and its multipliers from the nodes for later
 interpolation to the integration points.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_op_dNi_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
    // 1. reading Operand (fluid density or something like that)
    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
@@ -130,7 +130,7 @@ A reference to the finite-element from which the contribution is
 computed.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

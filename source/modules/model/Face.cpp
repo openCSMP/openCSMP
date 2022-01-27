@@ -42,7 +42,7 @@ namespace csmp {
     
 */
 template<size_t dim>
-Face<dim>::Face( const Element<dim>& elmt,
+Face<dim>::Face( Element<dim>& elmt,
                  Element<dim>* const inner_parent,
                  Element<dim>* const outer_parent,
                  size_t inner_parent_face_id,
@@ -68,8 +68,8 @@ Face<dim>::Face( const Element<dim>& elmt,
     // 0. verification that the lower-dimensional element and the element that will be transformed
     //    into a face have indeed matching nodes
 #ifdef DEBUG
-    const size_t     nodes_to_match(elmt.Nodes());
-    set<Node<dim>*>  elmt_nodes;
+    const size_t           nodes_to_match(elmt.Nodes());
+    set<const Node<dim>*>  elmt_nodes;
     for ( size_t j=0U; j<nodes_to_match; ++j )
       elmt_nodes.insert( elmt.N(j) );
     // checking inner parent
@@ -490,15 +490,8 @@ Face<dim>::~Face()
     // disconnecting the neighbor faces that are connected to this element
     if ( !face_connector_.empty() )
       for ( auto& it : face_connector_ )
-        if ( it != nullptr ) {
-            // looping over the neighbors of the neighbor
-            const size_t n_nbors{ it->face_connector_.size() };
-            for ( size_t i{0}; i<n_nbors; ++i )
-              if ( it->Neighbor(i) == this ) {
-                   it->Assign( i, static_cast<Face<dim>*>(nullptr) );
-                   break;
-                }
-          }
+        if ( it != nullptr  && !it->face_connector_.empty() )
+          it->Unassign( this );
  }
 
 
@@ -882,18 +875,33 @@ typename std::vector<csmp::Face<dim>*>&  Face<dim>::NeighborElementVector()
 
 
 template<size_t dim>
-csmp::Node<dim>*  Face<dim>::N( size_t n ) const
+csmp::Node<dim>*  Face<dim>::N( size_t n )
+  {
+     assert( n < Nodes() );
+     return node_connector_[n];
+  }
+
+template<size_t dim>
+const csmp::Node<dim>*  Face<dim>::N( size_t n ) const
   {
      assert( n < Nodes() );
      return node_connector_[n];
   }
 
 
+
 /**
     watch out if there is no neighbor this returns a NULL pointer
 */
 template<size_t dim>
-csmp::Face<dim>*  Face<dim>::Neighbor( size_t n ) const
+csmp::Face<dim>*  Face<dim>::Neighbor( size_t n )
+ {
+    assert( n < Neighbors() );
+    return face_connector_[n];
+ }
+
+template<size_t dim>
+const csmp::Face<dim>*  Face<dim>::Neighbor( size_t n ) const
  {
     assert( n < Neighbors() );
     return face_connector_[n];

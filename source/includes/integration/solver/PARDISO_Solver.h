@@ -27,11 +27,11 @@ class PARDISO_Solver : public Solver {
       virtual ~PARDISO_Solver();
   
   protected:
-      // TODO: define this method
+      // TODO: this does not override the base class!
       virtual void SolveMatrixEquation( csmp::SparseMatrix& A,
-                                        std::vector<double64>& b,
-                                        std::vector<double64>& x,
-                                        double64 solver_tolerance );
+                                        std::vector<double>& b,
+                                        std::vector<double>& x,
+                                        double solver_tolerance );
 
   private:
       PARDISO_SolverSettings& settings_;

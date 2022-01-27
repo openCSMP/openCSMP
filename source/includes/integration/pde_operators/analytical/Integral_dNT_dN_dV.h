@@ -25,7 +25,7 @@ class Integral_dNT_dN_dV : public MathOperatorRHS<dim> {
                         
     virtual ~Integral_dNT_dN_dV() {}
 
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
   
     virtual Integral_dNT_dN_dV<dim,SIMPLEX>* clone() const { return new Integral_dNT_dN_dV<dim,SIMPLEX> (*this); }
 

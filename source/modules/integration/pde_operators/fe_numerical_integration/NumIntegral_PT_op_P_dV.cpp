@@ -54,7 +54,7 @@ in the special case, the integral of the testfunction products must be used
 Use this operator to compute capacitance, storage capacity etc. matrices.
  */
 template<size_t dim,class CELL>
-void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

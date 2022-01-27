@@ -43,8 +43,6 @@ Element<dim>::Element( csmp::FiniteElement* f )
     node_connector_( f->Nodes(), nullptr )
 {
   assert( f != nullptr );
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
 }
 
 
@@ -147,9 +145,7 @@ Element<dim>::Element( Element<dim>&& el )
     elmt_connector_( move(el.elmt_connector_) ),
     node_connector_( move(el.node_connector_) )
 {
-  this->LVS( el.LVS() );
-  el.AssignFiniteElementNullPtr();
-  el.AssignFiniteVolumeNullPtr();
+  this->LVS( move(el.LVS()) );
     
 //  cerr <<"\nElement(ctor): moved element: "<< Idx();
 }
@@ -158,8 +154,13 @@ Element<dim>::Element( Element<dim>&& el )
 
 
 /**
-     Note that the loops are not executed after move construction,
-     so that very little overhead arises due to the disconnection of peripheral elements.
+     Since the element does not manage any memory,
+     the only thing that is necessary is that all pointers to this element are set to NULL before its destruction.
+     This allows the objects (Node, Element, Face, InterFace, Region etc.)
+     that survive the element to update themselves  as necessary.
+     
+     @test SKM 15/12/21.
+     
 */
 template<size_t dim>
 Element<dim>::~Element()
@@ -168,29 +169,18 @@ Element<dim>::~Element()
     // (neighbor pointer to this element is nulled)
     if ( !elmt_connector_.empty() )
       for ( auto& it : elmt_connector_ )
-        if ( it != nullptr ) {
-          // looping over the neighbors of the neighbor
-          const size_t n_nbors{ it->elmt_connector_.size() };
-          for ( size_t i{0}; i<n_nbors; ++i )
-            if ( it->Neighbor(i) == this ) {
-                 it->Assign( i, static_cast<Element<dim>*>(nullptr) );
-                 break;
-              }
-          }
-              
+        if ( it != nullptr && !it->elmt_connector_.empty() )
+          it->Unassign( this );
+    
     // disconnecting the node that this element might be a parent of
     // (parent pointer to this element is nulled)
     if ( !node_connector_.empty() )
       for ( auto& nit : node_connector_ )
-        if ( nit != nullptr ) {
-             const size_t n_parents{ nit->Parents() };
-             for ( size_t j{0}; j<n_parents; ++j )
-               if ( nit->Parent(j) == this ) {
-                    nit->Unassign( this );
-                    break;
-                 }
-          }
-    
+        if ( nit != nullptr )
+          nit->Unassign( this );
+          
+     // TODO: Face and InterFace objects that may have pointers to the element need to be updated too!
+
 //    cerr <<"\nElement(dtor): destructed element: "<< Idx();
           
  } // end destructor
@@ -232,9 +222,6 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   material_id_    = el.material_id_;
   
   this->LVS( move( el.LVS() ) );
-
-  el.AssignFiniteElementNullPtr();
-  el.AssignFiniteVolumeNullPtr();
 
   return *this;
 }
@@ -576,7 +563,14 @@ double x = (*element.N(2))->x();
 @return return A pointer to the Target object, e.g. a Node.
 */
 template<size_t dim>
-csmp::Node<dim>*  Element<dim>::N( size_t n ) const
+const csmp::Node<dim>*  Element<dim>::N( size_t n ) const
+{
+  assert( n < node_connector_.size() );
+  return node_connector_[n];
+}
+
+template<size_t dim>
+csmp::Node<dim>*  Element<dim>::N( size_t n )
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
@@ -592,11 +586,19 @@ numbering scheme).
 before you are trying to use it.
 */
 template<size_t dim>
-csmp::Element<dim>*  Element<dim>::Neighbor( size_t n ) const
+const csmp::Element<dim>*  Element<dim>::Neighbor( size_t n ) const
 {
   assert( n < elmt_connector_.size() );
   return elmt_connector_[n];
 }
+
+template<size_t dim>
+csmp::Element<dim>*  Element<dim>::Neighbor( size_t n )
+{
+  assert( n < elmt_connector_.size() );
+  return elmt_connector_[n];
+}
+
 
 
 /**
@@ -610,7 +612,7 @@ also vary from element to element.
 resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
-@return Element The node coordinates are returned into the supplied matrix.
+@note Element The node coordinates are returned into the supplied matrix.
 
 @section application Application
 

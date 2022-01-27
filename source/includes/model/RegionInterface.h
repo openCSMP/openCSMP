@@ -111,11 +111,13 @@ public:
   typedef typename std::map<std::string, csmp::Region<dim> >::iterator        regionIterator;
   typedef typename std::map<std::string, csmp::Region<dim> >::const_iterator  regionConstIterator;
 
+  // non-unique (potentially overlapping) regions
   regionIterator            RegionsBegin();
   regionIterator            RegionsEnd();
   regionConstIterator       RegionsBegin() const;
   regionConstIterator       RegionsEnd() const;
 
+  // unique (spatially exclusive) regions
   regionIterator            UniqueRegionsBegin();
   regionIterator            UniqueRegionsEnd();
   regionConstIterator       UniqueRegionsBegin() const;

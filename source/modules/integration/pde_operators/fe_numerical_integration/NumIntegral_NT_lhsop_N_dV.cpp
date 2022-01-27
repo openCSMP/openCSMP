@@ -51,7 +51,7 @@ C[n x n] = w(i) * { N[n x 1] * S[1 x 1] * N[1 x n] * |J[dim x dim]| }
 see, for instance, J.Istock p. 132.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

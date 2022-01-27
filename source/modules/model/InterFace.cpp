@@ -153,15 +153,8 @@ InterFace<dim>::~InterFace()
     // disconnecting the neighbor interfaces that are connected to this element
     if ( !interface_connector_.empty() )
       for ( auto& it : interface_connector_ )
-        if ( it != nullptr ) {
-            // looping over the neighbors of the neighbor
-            const size_t n_nbors{ it->interface_connector_.size() };
-            for ( size_t i{0}; i<n_nbors; ++i )
-              if ( it->Neighbor(i) == this ) {
-                   it->Assign( i, static_cast<InterFace<dim>*>(nullptr) );
-                   break;
-                }
-          }
+        if ( it != nullptr  && !it->interface_connector_.empty() )
+          it->Unassign( this );
  }
 
 
@@ -765,7 +758,39 @@ typename std::vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVec
     @return A pointer to the Target node.
 */
 template<size_t dim>
-csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
+const csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
+{
+  assert( n < this->FE()->Nodes() );
+  
+  // the number of nodes on a single side of the interface
+  const size_t if_FE_nodes( this->FE()->Nodes() );
+
+  if ( side == INSIDE )
+    return node_connector_[n];
+
+  if ( side == OUTSIDE ) {
+    size_t outside_idx = n + if_FE_nodes;
+    if ( n < if_FE_nodes )
+      return node_connector_[outside_idx];
+    else {
+      outside_idx %= node_connector_.size();
+      return node_connector_[outside_idx];
+    }
+  }
+
+  assert( side == MIDDLE );
+  if ( middleElement_ != nullptr )
+    return middleElement_->N( n );
+
+  throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side ) const", "Base Element does not exist!" );
+
+  return nullptr;
+}
+
+
+
+template<size_t dim>
+csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side )
 {
   assert( n < this->FE()->Nodes() );
   
@@ -799,18 +824,34 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
     Access to all nodes of the interface.
 */
 template<size_t dim>
-csmp::Node<dim>*  InterFace<dim>::N( size_t n ) const
+csmp::Node<dim>*  InterFace<dim>::N( size_t n )
+{
+  assert( n < node_connector_.size() );
+  return node_connector_[n];
+}
+
+template<size_t dim>
+const csmp::Node<dim>*  InterFace<dim>::N( size_t n ) const
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
 }
 
 
+
 /**
     Returns the equal dimensional neighbor of the InterFace which also is an interface element.
 */
 template<size_t dim>
-csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n ) const
+csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n )
+{
+  assert( interface_connector_.size() == this->Neighbors() );
+  assert( n < this->Neighbors() );
+  return interface_connector_[n];
+}
+
+template<size_t dim>
+const csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n ) const
 {
   assert( interface_connector_.size() == this->Neighbors() );
   assert( n < this->Neighbors() );

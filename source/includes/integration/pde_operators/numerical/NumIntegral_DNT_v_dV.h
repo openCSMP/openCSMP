@@ -20,9 +20,9 @@ class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim> {
                           const char* dens,                  // e.g., fluid density
                           const char* test );                // e.g., streaming potential
     
-    virtual void GetOperands( CELL& e );
+    virtual void GetOperands( const CELL& );
 
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
   
   private:
     std::vector<double>         IPOL;

@@ -83,7 +83,7 @@ A reference to element, the contribution of which is to be aquired and
 the time-increment over which the deformation shall occur. 
 */
 template<size_t dim,class CELL>
-void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -162,7 +162,7 @@ member vector {V}.
 In linear elasticity computations.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // compute the material property matrix
     // compute the material property matrix based on element properties

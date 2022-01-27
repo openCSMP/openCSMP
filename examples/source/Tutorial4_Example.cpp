@@ -261,7 +261,7 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   mdl.InputPropertyValue( flux, makeScalar(PLAIN,0.0) ); // set to zero initially
 
   // loop over all finite elements and identify elements that lie at the same model boundary of interest (here LEFT)
-  const Boundary<2U>&   mref = mdl.Boundary("LEFT");
+  Boundary<2U>&   mref = mdl.Boundary("LEFT");
   for ( auto eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ )
     {
         double area = (*eit)->Area();

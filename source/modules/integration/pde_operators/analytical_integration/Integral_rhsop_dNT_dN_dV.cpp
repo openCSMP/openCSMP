@@ -44,7 +44,7 @@ Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::Integral_rhsop_dNT_dN_dV( const Prope
 /** Reads the Operand values from the elements.
 */
 template<size_t dim,class SIMPLEX,typename var>
-void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::GetOperands( SIMPLEX& e )
+void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::GetOperands( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -57,7 +57,7 @@ void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::GetOperands( SIMPLEX& e )
 
 
 template<size_t dim,class SIMPLEX,typename var>
-void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::ComputeContribution( SIMPLEX& e )
+void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::ComputeContribution( const SIMPLEX& e )
  {
     e.dN( DN );
     

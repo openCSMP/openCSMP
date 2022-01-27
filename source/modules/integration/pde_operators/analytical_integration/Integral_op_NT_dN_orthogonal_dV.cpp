@@ -47,7 +47,7 @@ nodal and element variables, respectively.
 The operand is read
 */
 template<size_t dim,class SIMPLEX>
-void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -71,7 +71,7 @@ void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 In linear elasticity computations.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     // resizing and initializing RHS vector to zero
     MathOperatorRHS<dim>::RHS.resize( e.Nodes() );

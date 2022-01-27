@@ -20,9 +20,9 @@ class LHS_Integral_dNT_dN_dV : public MathOperatorLHS<dim> {
                             const char* basic,
                             const char* test );
   
-    virtual void GetOperands( SIMPLEX& e ) { /* noting to do here since there is no material operand */ }
+    virtual void GetOperands( const SIMPLEX& e ) { /* noting to do here since there is no material operand */ }
     
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
   
     virtual LHS_Integral_dNT_dN_dV<dim,SIMPLEX>* clone() const { return new LHS_Integral_dNT_dN_dV<dim,SIMPLEX> (*this); }
   

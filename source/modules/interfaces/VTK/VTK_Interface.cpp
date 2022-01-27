@@ -1,5 +1,6 @@
-#include <sstream>
+//#include <sstream>
 #include "VTK_Interface.h"
+#include "Model.h"
 #include "Element.h"
 #include "Region.h"
 #include "Exception.h"
@@ -44,7 +45,6 @@ VTK_Interface<dim>::VTK_Interface( const std::string& problemTitle,
 template<size_t dim>
 VTK_Interface<dim>::~VTK_Interface()
  {
-
  }
 
 template<size_t dim>
@@ -2308,6 +2308,7 @@ void outputNodeDataToVTK( const Element<dim>& e,
   } 
 
 
+template class VTK_Interface<1U>;
 
 template class VTK_Interface<2U>;
 template class VTK_Interface<3U>;

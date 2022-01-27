@@ -6,8 +6,8 @@
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#include "CSMP_definitions.h"
 #include "QuadraturePointOutputToVTK.h"
+#include "Model.h"
 #include "Region.h"
 
 using namespace std;

@@ -101,15 +101,17 @@ size_t findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_co
     // insert the first element into the new subset
     cells_contiguous_subset.insert( eptr );
     
-    vector<CELL<dim>*>  neighbor_cells( eptr->NeighborsBegin(), eptr->NeighborsEnd() ), new_neighbor_cells;
+    vector<CELL<dim>*>  neighbor_cells( eptr->NeighborsBegin(), eptr->NeighborsEnd() );
+    assert( neighbor_cells.size() >= 1 );
     const size_t        max_cell_nbors{6};
       
     while( !neighbor_cells.empty() )
       {
+          vector<CELL<dim>*>  new_neighbor_cells;
           // 1. loop over those neighbors that are not already part of the deque
           for ( auto& nit : neighbor_cells )
              // if the cell has not been encountered before
-             if ( nit != nullptr && cells_contiguous_subset.find(nit) == cells_contiguous_subset.end() ) {
+             if ( nit && cells_contiguous_subset.find(nit) == cells_contiguous_subset.end() ) {
                  const size_t  n_neighbors{ nit->Neighbors() };
                  assert( n_neighbors <= max_cell_nbors );
                  new_neighbor_cells.reserve( n_neighbors );
@@ -524,8 +526,8 @@ template size_t connectNeighborsUsingNodeParents( Element<3U>* );
     The nodes of the face are assigned directly
  */
 template<size_t dim>
-void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
-                                             const Element<dim>* const outer_nbor,
+void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
+                                             Element<dim>* const outer_nbor,
                                              Face<dim>* const face )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -570,9 +572,9 @@ void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbo
 
  } // end findNodesViaHigherDimensionalNeighbors
 
-template void findNodesViaHigherDimensionalNeighbors( const Element<1>* const, const Element<1>* const, Face<1>* const );
-template void findNodesViaHigherDimensionalNeighbors( const Element<2>* const, const Element<2>* const, Face<2>* const );
-template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, const Element<3>* const, Face<3>* const );
+template void findNodesViaHigherDimensionalNeighbors( Element<1>* const, Element<1>* const, Face<1>* const );
+template void findNodesViaHigherDimensionalNeighbors( Element<2>* const, Element<2>* const, Face<2>* const );
+template void findNodesViaHigherDimensionalNeighbors( Element<3>* const, Element<3>* const, Face<3>* const );
 
 
 
@@ -586,8 +588,8 @@ template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, c
     The nodes of the face are assigned directly
  */
 template<size_t dim>
-void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbor,
-                                             const Element<dim>* const outer_nbor,
+void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
+                                             Element<dim>* const outer_nbor,
                                              InterFace<dim>* const interface )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -672,9 +674,9 @@ void findNodesViaHigherDimensionalNeighbors( const Element<dim>* const inner_nbo
 
  } // end findNodesViaHigherDimensionalNeighbors
 
-template void findNodesViaHigherDimensionalNeighbors( const Element<1>* const, const Element<1>* const, InterFace<1>* const );
-template void findNodesViaHigherDimensionalNeighbors( const Element<2>* const, const Element<2>* const, InterFace<2>* const );
-template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, const Element<3>* const, InterFace<3>* const );
+template void findNodesViaHigherDimensionalNeighbors( Element<1>* const, Element<1>* const, InterFace<1>* const );
+template void findNodesViaHigherDimensionalNeighbors( Element<2>* const, Element<2>* const, InterFace<2>* const );
+template void findNodesViaHigherDimensionalNeighbors( Element<3>* const, Element<3>* const, InterFace<3>* const );
 
 
 
@@ -683,7 +685,7 @@ template void findNodesViaHigherDimensionalNeighbors( const Element<3>* const, c
     Finds the face between 2 elements (if any) via the neighbor connectivity.
 */
 template<size_t dim>
-pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<dim>* const eptr1, const Element<dim>* const eptr2 )
+pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -722,9 +724,9 @@ pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<dim>* const ep
     
  } // end findAdjacentElementFaces
  
-template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<3>* const, const Element<3>* const );
-template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<2>* const, const Element<2>* const );
-template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<1>* const, const Element<1>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<3>* const, Element<3>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<2>* const, Element<2>* const );
+template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<1>* const, Element<1>* const );
  
 
 
@@ -739,7 +741,7 @@ template pair<size_t,size_t> findAdjacentFacesFromNeighbors( const Element<1>* c
      @attention if no shared face can be found, function returns UNSPECIFIED.
 */
 template<size_t dim>
-pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, const Element<dim>* const eptr2 )
+pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -785,9 +787,9 @@ pair<size_t,size_t> findAdjacentElementFaces( const Element<dim>* const eptr1, c
     
  } // end findAdjacentElementFaces
  
-template pair<size_t,size_t> findAdjacentElementFaces( const Element<3>* const, const Element<3>* const );
-template pair<size_t,size_t> findAdjacentElementFaces( const Element<2>* const, const Element<2>* const );
-template pair<size_t,size_t> findAdjacentElementFaces( const Element<1>* const, const Element<1>* const );
+template pair<size_t,size_t> findAdjacentElementFaces( Element<3>* const, Element<3>* const );
+template pair<size_t,size_t> findAdjacentElementFaces( Element<2>* const, Element<2>* const );
+template pair<size_t,size_t> findAdjacentElementFaces( Element<1>* const, Element<1>* const );
  
 
 
@@ -1840,8 +1842,8 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
  {
     if ( first == last ) return false;
     
-    vector<Node<dim>*>  shared_nodes;
-    size_t              issues{0};
+    vector<const Node<dim>*>  shared_nodes;
+    size_t                    issues{0};
     shared_nodes.reserve( distance(first,last) * dim );
     string              celltype("Element");
     if constexpr ( is_same< CELL<dim>,Face<dim> >::value ) celltype = "Face";
@@ -1870,6 +1872,14 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                   cerr <<"\n"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
                   issues++;
                }
+             // the valid neighbors should not be corrupt
+             const long one_billion{1000000000};
+             for ( size_t i{0}; i<(*first).Neighbors(); ++i )
+               if ( (*first).Neighbor(i) != nullptr ) {
+                    if ( !(*first).FE() ) cerr <<"\nelement "<< (*first).Idx() <<" has corrupt FE pointer.";
+                    if ( (*first).Neighbor(i)->Idx() > one_billion )
+                      cerr <<"\nis element "<< (*first).Idx() <<" neighbor idx="<< (*first).Neighbor(i)->Idx() <<" really this large?";
+                 }
            }
          first++;
       }
@@ -1993,6 +2003,62 @@ template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator,
 */ // FACE NUMBERING
 
 
+
+
+
+/**
+   returns true if the elements contain each others barycentre,
+      only considers equidimensional elements.
+*/
+template<size_t dim>
+bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* const elmt2 )
+ {
+    if constexpr ( dim == 3 )
+      if ( !elmt1->IsVolumeElement() || !elmt2->IsVolumeElement() ) {
+           cerr <<"\ninterPenetrating<3>: only works for equidimensional (volumetric) elements.\n";
+           return false;
+        }
+
+    if constexpr ( dim == 2 )
+      if ( !elmt1->IsSurfaceElement() || !elmt2->IsSurfaceElement() ) {
+           cerr <<"\ninterPenetrating<2>: only works for equidimensional (surface) elements.\n";
+        }
+
+    if constexpr ( dim == 1 ) {
+         Point<dim> bctr = elmt1->BaryCenter();
+         if ( bctr > elmt2->N(0)->Coordinate() &&
+              bctr < elmt2->N(1)->Coordinate() ) return true;
+      }
+
+    // is the barycentre of element 1 contained in element 2 (all intpol functions positive?)
+    Point<dim> bctr = elmt1->BaryCenter();
+    elmt2->N_AtGlobalPoint( elmt2->FE()->NRST, bctr.Coordinates() );
+    bool is_contained{true};
+    for ( const auto& ni : elmt2->FE()->NRST )
+      if ( ni < 0. ) {
+          is_contained = false;
+          break;
+        }
+    if ( is_contained ) return true;
+    
+    // is the barycentre of element 2 contained in element 1 (all intpol functions positive?)
+    bctr = elmt2->BaryCenter();
+    elmt1->N_AtGlobalPoint( elmt1->FE()->NRST, bctr.Coordinates() );
+    is_contained = true;
+    for ( const auto& ni : elmt2->FE()->NRST )
+      if ( ni < 0. ) {
+          is_contained = false;
+          break;
+        }
+    if ( is_contained ) return true;
+
+    return false;
+
+ } // end interPenetrating
+
+template bool interPenetrating( const Element<3>* const, const Element<3>* const );
+template bool interPenetrating( const Element<2>* const, const Element<2>* const );
+template bool interPenetrating( const Element<1>* const, const Element<1>* const );
 
 
 } // end csmp

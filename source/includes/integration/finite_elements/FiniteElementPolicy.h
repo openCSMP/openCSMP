@@ -19,10 +19,10 @@ class FiniteElementPolicy {
     void AssignFiniteElementNullPtr() { fptr_ = nullptr; }
     
     /// returns search key to match element faces; pointers in order so that they can be searched
-    std::set<Node<dim>*> CornerNodesOfFace( size_t face_id ) const;
+    std::set<Node<dim>*> CornerNodesOfFace( size_t face_id );
 
     /// returns set of nodes that are neighbors of the target node in this element
-    std::set<Node<dim>*> CornerNodesConnectedTo( size_t node_id ) const;
+    std::set<Node<dim>*> CornerNodesConnectedTo( size_t node_id );
 
     /// the type is an enumeration that is used in the generation of finite elements
     CSMP_FEM_TYPE  FE_Type() const;

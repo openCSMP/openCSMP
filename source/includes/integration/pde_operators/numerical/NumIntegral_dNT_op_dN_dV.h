@@ -12,11 +12,11 @@ template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
-                        const char* oper, 
-                        const char* basic, 
-                        const char* test );
+                              const char* oper,
+                              const char* basic,
+                              const char* test );
     
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
   
     virtual NumIntegral_dNT_op_dN_dV<dim,CELL >* clone() const { return new NumIntegral_dNT_op_dN_dV<dim,CELL >(*this); }
     

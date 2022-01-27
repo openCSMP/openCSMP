@@ -61,9 +61,9 @@ PARDISO_Solver::~PARDISO_Solver()
     - solver uses LaPack / libmkl_lapack.dylib
 */
 void PARDISO_Solver::SolveMatrixEquation( SparseMatrix& A,
-                                          vector<double64>& b,
-                                          vector<double64>& x,
-                                          double64 tolerance )
+                                          vector<double>& b,
+                                          vector<double>& x,
+                                          double tolerance )
 {
     if (Verbose()) {
         cout <<"\nPARDISO_Solver::SolveMatrixEquation: Allocating memory..." << endl;

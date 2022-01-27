@@ -36,7 +36,7 @@ PointSource_rhsop<dim,SIMPLEX>::PointSource_rhsop( const PropertyDatabase<dim>& 
 
 /// reads the values of basic operand from element nodes
 template<size_t dim,class SIMPLEX>
-void PointSource_rhsop<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void PointSource_rhsop<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
    { 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), SRC_ );
        
@@ -60,7 +60,7 @@ of of them. This is already done in the GetOperands() method.
 @param e The current element from which the value is accumulated.
 */
 template<size_t dim,class SIMPLEX>
-void PointSource_rhsop<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void PointSource_rhsop<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
    for ( size_t i=0U; i<e.Nodes(); i++ )

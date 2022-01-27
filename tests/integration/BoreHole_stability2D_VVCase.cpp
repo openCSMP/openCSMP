@@ -96,11 +96,11 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
       PDE_Integrator<2U,Region> deformation( new CSMP_DEFAULT_LINEAR_SOLVER() );
       #endif
       PT_op<2U,Element<2U> > bforces( model.Database(), "force", "displacement" );
-      NumIntegral_BT_D_B_dV<2U,Element<2U> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+      NumIntegral_BT_D_B_dV<2U> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
 
-      NumIntegral_PT_op_dV<2U,Element<2U> >     AppliedStress( model.Database(), "Neumann stress", "displacement");
+      NumIntegral_PT_op_dV<2U>  AppliedStress( model.Database(), "Neumann stress", "displacement");
 
-      NumIntegral_BT_op_dV<2U,Element<2U> >     WellBorePressure( model.Database(),"fluid pressure", "displacement");
+      NumIntegral_BT_op_dV<2U>  WellBorePressure( model.Database(),"fluid pressure", "displacement");
 
       deformation.Add( &stiffness );
       deformation.Add( &bforces );
@@ -279,9 +279,9 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
        cout << " valmeanstress " << valmeanstress <<endl;
 
        // checking the element that contains this point
+       Region<2U>& model_domain(model.Region("Model"));
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       for ( vector<Element<2U>*>::iterator it( model_domain.ElementsBegin() ); it != model_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;

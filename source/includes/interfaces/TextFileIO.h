@@ -83,6 +83,9 @@ std::vector<std::string> tokenise( std::string, const std::string regular_expres
 
 /// removes whitespace from string, returning the remaining character sequence
 std::string  withoutSpaces( std::string );
+ 
+/// reads comma delimited point-data from ASCII file (ext. .csv),  returning them into the supplied vector where the first three columns represent x,y,z, and there is an optional headline with column header names
+size_t read_CSV_File( std::string filename, std::vector<std::string>& col_headers, std::vector<std::vector<double>>& rows_of_columns );
 
 
 // Reading property values

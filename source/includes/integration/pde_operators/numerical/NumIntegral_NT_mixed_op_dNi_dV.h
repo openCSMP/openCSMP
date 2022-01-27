@@ -20,8 +20,8 @@ class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim> {
                               const char* mtrl,                  // e.g., permeability
                               const char* test );                // e.g., fluid pressure
     
-    virtual void GetOperands( CELL& e );
-    virtual void ComputeContribution( CELL& e );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
     
     void SpatialDerivative( size_t xyz=2 );
     

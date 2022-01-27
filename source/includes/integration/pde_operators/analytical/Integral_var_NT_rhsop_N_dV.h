@@ -16,12 +16,13 @@ class Integral_var_NT_rhsop_N_dV : public MathOperatorRHS<dim> {
                                 const char* var,
                                 const double prefactor = 1.);
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
+    
     virtual Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>* clone() const { return new Integral_var_NT_rhsop_N_dV<dim,SIMPLEX> (*this); }
   private:
 
-    void ComputeIntegral(SIMPLEX& e);
+    void ComputeIntegral( const SIMPLEX& );
     
     ScalarVariable op_;
     

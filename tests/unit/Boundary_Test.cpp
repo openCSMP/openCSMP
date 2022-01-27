@@ -549,8 +549,7 @@ void Boundary_Test::runLegacy()
 
       
       // one big irregular boundary
-      bool remove_original_lower_dimensional_regions{true};
-      m02.EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
+      m02.EstablishBoundariesFromRegions();
       _test( m02.Boundaries() >= 1 );
       Boundary<3U>& b0102 = m02.Boundary("IRREGULAR");
 

@@ -361,6 +361,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        for ( auto& e : elements_ ) {
             const int8_t csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e.Idx() );
             const size_t n_neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
+//assert( n_neighbors == distance(vset.PfvertsBegin(e.Idx()),vset.PfvertsEnd(e.Idx())) );
 
             for ( size_t j = 0U; j < n_neighbors; ++j ) {
                   const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
@@ -652,8 +653,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
    // assigning the parent element information to the nodes
    for ( auto& e : elements_ )
-     for ( size_t j = 0U; j<e.Nodes(); ++j )
-       e.N( j )->Assign( j, &e );
+       for ( size_t j = 0U; j<e.Nodes(); ++j )
+         e.N( j )->Assign( j, &e );
        
    // sorting the parent element pointers stored by the nodes for searching
    for ( auto& n : nodes_ )
@@ -1215,7 +1216,7 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    if ( local_face_id >= eptr->Faces() )
      csmp_error.notice( ERROR, "MeshManager<dim>::AddBoundaryFace", "face ID does not exist in element");
    if ( eptr->Neighbor(local_face_id) != nullptr )
-     csmp_error.notice( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it located at model boundary");
+     csmp_error.notice( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it really located at model boundary?");
 
    // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
    const size_t face_number{faces_.size()};
@@ -1438,6 +1439,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
     while( first != last )
       {
          // 1.1 initial checks and labeling
+         // (input range must not contain any nullptrs)
          assert( (*first) != nullptr );
          if constexpr ( dim == 3 ) assert( (*first)->IsSurfaceElement() );
          if constexpr ( dim == 2 ) assert( (*first)->IsLineElement() );
@@ -1896,6 +1898,8 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                 if ( n_face_nbors == 2 ) {
                      CELL<3>* const ptr1  = (*it.second.begin()).first;
                      CELL<3>* const ptr2  = (*it.second.rbegin()).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
                      const size_t face_e1 = (*it.second.begin()).second;
                      const size_t face_e2 = (*it.second.rbegin()).second;
                      ptr1->Assign( face_e1, ptr2 );
@@ -1914,6 +1918,8 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                      for ( size_t i{0}; i < n_combinations; ++i ) {
                           CELL<3>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<3>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          assert( ptr1 != nullptr );
+                          assert( ptr2 != nullptr );
                           const double angle = ( ptr1->IsSurfaceElement() && ptr2->IsSurfaceElement() ) ?
                                                    angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
                           // using smallest angle
@@ -1925,6 +1931,8 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                      const size_t combi   = (*ordered_combinations.begin()).second;
                      CELL<3>* const ptr1  = (*next(it.second.begin(),combinations[combi][0])).first;
                      CELL<3>* const ptr2  = (*next(it.second.begin(),combinations[combi][1])).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
                      const size_t face_e1 = (*next(it.second.begin(),combinations[combi][0])).second;
                      const size_t face_e2 = (*next(it.second.begin(),combinations[combi][1])).second;
                      // uff! - finally.
@@ -1964,6 +1972,8 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                 if ( n_face_nbors == 2 ) {
                      CELL<2>* const ptr1  = (*it.second.begin()).first;
                      CELL<2>* const ptr2  = (*it.second.rbegin()).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
                      const size_t face_e1 = (*it.second.begin()).second;
                      const size_t face_e2 = (*it.second.rbegin()).second;
                      ptr1->Assign( face_e1, ptr2 );
@@ -2489,7 +2499,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // 3. adding 'plist' connectivity list and 'pmtrl'
   // -----------------------------------------------
   vector<int32_t>  pmtrl( elements_.size(), 0 );
-  size_t           eidx = 0;
+  size_t           eidx{0};
   // elements
   for ( const auto& e : elements_ ) {
       const size_t n_nodes{e.Nodes()};
@@ -2518,23 +2528,22 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
 
   // 4. adding 'pfverts' neighbors per element list
   // ----------------------------------------------
-  eidx = 0;
-
+   
   // 'pfverts' elements
+  eidx = 0;
   for ( const auto& e : elements_ ) {
-    const size_t n_nbors{e.Neighbors()};
-    for ( size_t j = 0U; j<n_nbors; ++j ) {
-      Element<dim>* const ptr( e.Neighbor(j) );
-      if ( ptr != nullptr ) {
-          assert( ptr->Idx() < elements_.size() );
-          vset.Pfvert( eidx, j, ptr->Idx() );
-        }
-      else
-        vset.Pfvert( eidx, j, e.AtBoundary(j) );
-        
+      const size_t neighbors{e.Neighbors()};
+      assert( neighbors <= 6 );
+      for ( size_t j{0}; j<neighbors; ++j ) {
+            const Element<dim>* const ptr = e.Neighbor(j);
+            if ( ptr ) {
+                assert( ptr->Idx() < elements_.size() );
+                vset.Pfvert( eidx, j, ptr->Idx() );
+              }
+            else vset.Pfvert( eidx, j, e.AtBoundary(j) );
+         }
+      ++eidx;
     }
-    ++eidx;
-  }
 
   // 'pfverts' faces
   // ---------------
@@ -2542,9 +2551,9 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // add the end of the pfverts entries
   for ( const auto& f : faces_ ) {
     // equidimensional neighbors first
-    const size_t neighbors( f.Neighbors() );
+    const size_t neighbors{ f.Neighbors() };
     for ( size_t j = 0U; j<neighbors; ++j ) {
-        Face<dim>* const ptr( f.Neighbor( j ) );
+        const Face<dim>* const ptr = f.Neighbor(j);
         // if the neighbor exists (which it must on the inside of the Face)
         if ( ptr != nullptr )
           vset.Pfvert( eidx, j, ptr->Idx() );
@@ -2579,7 +2588,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     // 1. equidimensional neighbors (=other interfaces) first
     //    they are written in the order in which they are stored in the interface
     //    To simplify things there is always an entry for the intervening element even if there is none.
-    const size_t neighbors( f.Neighbors() );
+    const size_t neighbors{ f.Neighbors() };
     for ( size_t j = 0U; j<neighbors; ++j ) {
          if ( f.Neighbor(i) != nullptr )
            vset.Pfvert( eidx, j, f.Idx() );
@@ -5037,8 +5046,8 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
   // -----------------------------------------------------------------
   size_t interior_elmts( 0 );
   size_t boundary_elmts( 0 );
-  set<Node<dim>*> boundary_nodes;
-  vector<size_t>  fnids;
+  set<const Node<dim>*> boundary_nodes;
+  vector<size_t>        fnids;
 
   // 4.1 If all elements have the same spatial dimension
   // ---------------------------------------------------
@@ -5077,8 +5086,8 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
   else {
     // a. identify the boundary elements among the highest dimensional elements,
     //    also collecting all their node pointers into a set.
-    set<Element<dim>*> lesser_dim_elmts;
-    set<Node<dim>*>    highest_dim_elmt_nodes;
+    set<const Element<dim>*> lesser_dim_elmts;
+    set<const Node<dim>*>    highest_dim_elmt_nodes;
 
     for ( const auto& eit : elements_ ) {
       // elements of the highest spatial dimension are used to define the boundary
@@ -5108,7 +5117,7 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
     if ( Elements() != interior_elmts + boundary_elmts + lesser_dim_elmts.size() )
       errors++;
 
-    set<Element<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
+    set<const Element<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
 
     for ( const auto& e : lesser_dim_elmts )
       {

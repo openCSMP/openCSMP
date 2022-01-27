@@ -114,7 +114,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
  {
     const csmp::Index eidx = model.Database().StorageKey("element number");
     const csmp::Index nidx = model.Database().StorageKey("node number");
-    const Region<3U>& domain(model.Region("Model"));
+    Region<3U>& domain(model.Region("Model"));
     // recording connectivity from SKUA in an element neighbor vector
     vector<vector<Element<3U>*> > pfverts;
     pfverts.reserve( domain.Elements() );

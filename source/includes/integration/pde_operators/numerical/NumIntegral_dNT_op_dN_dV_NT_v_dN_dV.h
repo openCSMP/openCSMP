@@ -28,14 +28,13 @@ class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
                                           const char* basic,            // e.g., fluid pressure
                                           const char* test );           // e.g., fluid pressure
     
-    virtual void GetOperands( CELL& e );
-    virtual void ComputeContribution( CELL& e );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
     
     void SpatialDerivative( size_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 
   private:
-    void ReadElementMultiplier( CELL& e, 
-                                DenseMatrix<DM_MIN>& MULT );
+    void ReadElementMultiplier( const CELL&, DenseMatrix<DM_MIN>& MULT );
     
     DenseMatrix<DM_MIN>  DN, DNT, // derivatives of basis functions
                                 VIP,     // 'v' (velocity) vector<double> variable
