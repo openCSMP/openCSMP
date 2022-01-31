@@ -1,5 +1,16 @@
 README.txt - Welcome to Open Source version of the Complex Systems Modelling Platform (CSMP++)
 
+Organisation of this repository:
+- source/include        header files from the API library
+- source/modules        source files
+- tests/unit            unit tests illutrating the functionality of classes and functions
+- tests/integration     tests demonstrating the functionality of classes working together
+- examples              START HERE - then use ExperimentalExamnple.cpp to write your own first code therein
+- doc                   documentation : CSMP User Guide, FEM_conventions etc.
+
+Remarks:
+- In most cases there is a compilation unit (*.h and *.cpp files) for each class 
+
 Please start with the source code of the examples which required data from the respective /data
 directory.
 
