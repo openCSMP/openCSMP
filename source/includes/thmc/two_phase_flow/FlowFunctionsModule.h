@@ -15,6 +15,7 @@
 #include "ExperimentalSaturationFunctions.h"
 #include "TwoPhaseFlowFunctions.h"
 #include "H2O_CO2_NaCl_FlowFunctions.h"
+#include "HeterogeneityAndRateAwareSaturationFunctions.h"
 #include "Fluid.h"
 
 namespace csmp {
@@ -53,8 +54,8 @@ class FlowFunctionsModule1 : public variables::VariableSet_CO2GeoSequestration, 
                              public Fluid<dim,FlowFunctionsModule1> {                         ///< fluids module / EOS interface
       
    public:
-     FlowFunctionsModule1( const PropertyDatabase<dim>&, double64 acc_gravity );
-     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
+     FlowFunctionsModule1( const PropertyDatabase<dim>&, double acc_gravity );
+     double acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
 // USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
@@ -68,8 +69,8 @@ class FlowFunctionsModule2 : public variables::VariableSet_CO2GeoSequestration, 
                              public Fluid<dim,FlowFunctionsModule2> {                                       ///< fluids module / EOS interface
       
    public:
-     FlowFunctionsModule2( PropertyDatabase<dim>&, double64 acc_gravity );
-     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
+     FlowFunctionsModule2( PropertyDatabase<dim>&, double acc_gravity );
+     double acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
 typedef FlowFunctionsModule2<3U>  ACGSS_Hysteretic_SlightlyCompressible2PhaseFlowFunctions;
@@ -84,8 +85,8 @@ class FlowFunctionsModule3 : public variables::VariableSet_CO2GeoSequestration,
       
    public:
      /// initialises saturation functions from file and set range of rocktype values accordingly in property database
-     FlowFunctionsModule3( PropertyDatabase<dim>&, double64 acc_gravity, const char* model_name="ACGSS_simulator" );
-     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
+     FlowFunctionsModule3( PropertyDatabase<dim>&, double acc_gravity, const char* model_name="ACGSS_simulator" );
+     double acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
 typedef FlowFunctionsModule3<3U>  ACGSS_Experimental_SlightlyCompressible2PhaseFlowFunctions;
@@ -100,8 +101,8 @@ class FlowFunctionsModule4 : public variables::VariableSet_CO2GeoSequestration, 
     public Fluid<dim,FlowFunctionsModule4> {                          ///< fluids module / EOS interface
       
    public:
-     FlowFunctionsModule4( const PropertyDatabase<dim>&, double64 acc_gravity );
-     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
+     FlowFunctionsModule4( const PropertyDatabase<dim>&, double acc_gravity );
+     double acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
 typedef FlowFunctionsModule4<3U>  ACGSS_Compositional_H2O_CO2_NaCl_FlowFunctions;
@@ -114,8 +115,8 @@ class FlowFunctionsModule5 : public variables::VariableSet_CO2GeoSequestration, 
     public Fluid<dim,FlowFunctionsModule5> {                                        ///< fluids module / EOS interface
       
    public:
-     FlowFunctionsModule5( PropertyDatabase<dim>&, double64 acc_gravity );
-     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)};
+     FlowFunctionsModule5( PropertyDatabase<dim>&, double acc_gravity );
+     double acceleration_of_gravity_; ///< this must be read and input from the model (key_g)};
 };
 
 typedef FlowFunctionsModule5<3U>  ACGSS_Hysteretic_Compositional_H2O_CO2_NaCl_FlowFunctions;
@@ -130,11 +131,26 @@ class FlowFunctionsModule6 : public variables::VariableSet_CO2GeoSequestration,
       
    public:
      /// initialises saturation functions from file and set range of rocktype values accordingly in property database
-     FlowFunctionsModule6( PropertyDatabase<dim>&, double64 acc_gravity, const char* model_name="ACGSS_simulator" );
-     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)};
+     FlowFunctionsModule6( PropertyDatabase<dim>&, double acc_gravity, const char* model_name="ACGSS_simulator" );
+     double acceleration_of_gravity_; ///< this must be read and input from the model (key_g)};
 };
 
 typedef FlowFunctionsModule6<3U>  ACGSS_Experimental_Compositional_H2O_CO2_NaCl_FlowFunctions;
+
+
+
+template<size_t dim>
+class FlowFunctionsModule7 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+    public HeterogeneityAndRateAwareSaturationFunctions<dim,FlowFunctionsModule7>,  ///< saturation function model
+    public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule7>,      ///< mobilities etc.
+    public Fluid<dim,FlowFunctionsModule7> {                          ///< fluids module / EOS interface
+      
+   public:
+     FlowFunctionsModule7( const PropertyDatabase<dim>&, double acc_gravity );
+     double acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
+};
+
+typedef FlowFunctionsModule7<3U>  ACGSS_HeterogeneityAndRateAware_Compositional_H2O_CO2_NaCl_FlowFunctions;
 
 } // end csmp
 

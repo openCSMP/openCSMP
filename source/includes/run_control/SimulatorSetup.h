@@ -120,7 +120,7 @@ public:
     //std::list<std::string>& GetRangeProps(){return range_properties_;}
     std::list<SimulatorSetupParameter>& GetParameterList(){return parameter_list_;}
     SimulatorMonitor<dim>* GetSimulatorMonitor(){return simulator_monitor_;}
-    void InsertNewMonitorDataValues(double64 time);
+    void InsertNewMonitorDataValues(double time);
 
     //-----------------------------------------------------------------
     // Integrator + solver setup management
@@ -215,7 +215,7 @@ private:
 
     // Not used yet.
     PropertyAtPointVisitor<dim>* property_at_point_;
-    std::map<std::string,std::map<size_t,std::vector<double64> > > points_to_monitor_;
+    std::map<std::string,std::map<size_t,std::vector<double> > > points_to_monitor_;
     std::map<size_t,Element<dim>*> point_in_element_in_region_;
 
 };

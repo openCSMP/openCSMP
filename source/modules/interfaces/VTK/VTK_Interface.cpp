@@ -1,5 +1,6 @@
-#include <sstream>
+//#include <sstream>
 #include "VTK_Interface.h"
+#include "Model.h"
 #include "Element.h"
 #include "Region.h"
 #include "Exception.h"
@@ -44,7 +45,6 @@ VTK_Interface<dim>::VTK_Interface( const std::string& problemTitle,
 template<size_t dim>
 VTK_Interface<dim>::~VTK_Interface()
  {
-
  }
 
 template<size_t dim>
@@ -1248,8 +1248,8 @@ clist contains the coordinates of the constraint points
 */
 template<size_t dim>
 void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
-                                              const csmp::Index&  prop_key,
-                                              map<size_t,vector<double> >& pxyz_data )
+                                                   const csmp::Index&  prop_key,
+                                                   map<size_t,vector<double> >& pxyz_data )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -1265,9 +1265,8 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     // results are put into the first three elements of 'pxz_data'
     // --------------------------------------------------------------------------
     vector<double>  dentry;
-    size_t            cpoints(0U);
-    for ( typename vector<Element<dim>*>::const_iterator
-          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    size_t          cpoints(0U);
+    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       {
          // getting the coordinates of the constraint point
          for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++, cpoints++ ) 
@@ -1507,7 +1506,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
     //    results are put into the first three elements of 'pxz_data'
     // --------------------------------------------------------------------------
     vector<double>  empty_vec;
-    for ( typename map<size_t,size_t >::const_iterator
+    for ( typename map<size_t,size_t>::const_iterator
           nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
@@ -1979,434 +1978,7 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
 
 
 
-/** OLD STUFF (CONVERSION OF QUADRATIC ELEMENTS TO MULTIPLE LINEAR ELEMENTS
 
-              case QUADRATIC_TRIANGLE: // quadratic triangle -> 4 triangles
-                   // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[3]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                   // triangle 2
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[4];
-                   tdeque.push_back( pentry );
-                   // triangle 3
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[5]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[2];
-                   tdeque.push_back( pentry );
-                   // triangle 4
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                break;
-
-              case ISOPARAMETRIC_QUADRATIC_TRIANGLE: // quadratic triangle -> 4 triangles
-                   // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[3]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                   // triangle 2
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[4];
-                   tdeque.push_back( pentry );
-                   // triangle 3
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[5]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[2];
-                   tdeque.push_back( pentry );
-                   // triangle 4
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                break;
-
-              case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE: // quadratic barycentric triangle -> 6 triangles
-                   // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[3]; pentry[2] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // triangle 2
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // triangle 3
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[6]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[4];
-                   tdeque.push_back( pentry );
-                   // triangle 4
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[6]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[2];
-                   tdeque.push_back( pentry );
-                   // triangle 5
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[5]; pentry[1] = (*it).second[6]; pentry[2] = (*it).second[2];
-                   tdeque.push_back( pentry );
-                   // triangle 6
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[6]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                break;
-
-              case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON: // quadratic tetrahedron -> 13 tetrahedra
-                   // 4 corner tetrahedra
-                   // tetrahedron 1
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[1]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[4]; tentry[3]=(*it).second[8];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 2
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[2]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[5]; tentry[3]=(*it).second[9];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 3
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[0]; tentry[1]=(*it).second[4]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[7];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 4
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[7]; tentry[1]=(*it).second[8]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[3];
-                   tdeque.push_back( tentry );
-                   // 4 tetrahedra which make up central octahedron
-                   // tetrahedron 5
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[8];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 6
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[9];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 7
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[7]; tentry[3]=(*it).second[9];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 8
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[9]; tentry[2]=(*it).second[7]; tentry[3]=(*it).second[8];
-                   tdeque.push_back( tentry );
-                break;
-                
-              case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON: // barycentric quadratic tetrahedron -> 13 tetrahedra
-                   // basal 3 outer tetrahedra
-                   // tetrahedron 1
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[0]; tentry[1]=(*it).second[4]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[7];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 2
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[1]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[4]; tentry[3]=(*it).second[8];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 3
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[2]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[5]; tentry[3]=(*it).second[9];
-                   tdeque.push_back( tentry );
-                   // top 3 tetrahedra
-                   // tetrahedron 4
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[7]; tentry[1]=(*it).second[8]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[3];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 5
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[8]; tentry[1]=(*it).second[9]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[3];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 6
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[7]; tentry[1]=(*it).second[10]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[3];
-                   tdeque.push_back( tentry );
-                   // intermediate 3 side tetrahedra
-                   // tetrahedron 7
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[7]; tentry[2]=(*it).second[8]; tentry[3]=(*it).second[10];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 8
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[5]; tentry[1]=(*it).second[8]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[10];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 9
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[6]; tentry[1]=(*it).second[7]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[9];
-                   tdeque.push_back( tentry );
-                   // oblique 3 tetrahedra in the lower part of the parent tetrahedron
-                   // tetrahedron 10
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[7]; tentry[3]=(*it).second[10];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 11
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[8];
-                   tdeque.push_back( tentry );
-                   // tetrahedron 12
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[6]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[10];
-                   tdeque.push_back( tentry );
-                   // lower plane basal tetrahedron
-                   // tetrahedron 13
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
-                   tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[10];
-                   tdeque.push_back( tentry );
-                break;
-
-              case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27: // quadratic hexahedron 
-                   //Linear hex 1 => 0,8,20,11,   12,22,26,24
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[0]; hentry[1] = (*it).second[8]; hentry[2] = (*it).second[20];
-                   hentry[3] = (*it).second[11]; hentry[4] = (*it).second[12]; hentry[5] = (*it).second[21];
-                   hentry[6] = (*it).second[26]; hentry[7] = (*it).second[24];
-                   tdeque.push_back( hentry );
-                   
-                    //Linear hex 2 => 8,1,9,20,   21,13,22,26
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[8]; hentry[1] = (*it).second[1]; hentry[2] = (*it).second[9];
-                   hentry[3] = (*it).second[20]; hentry[4] = (*it).second[21]; hentry[5] = (*it).second[13];
-                   hentry[6] = (*it).second[22]; hentry[7] = (*it).second[26];
-                   tdeque.push_back( hentry );
-                
-                   //Linear hex 3 =>  20,9,2,10  26,22,14,23 
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[20]; hentry[1] = (*it).second[9]; hentry[2] = (*it).second[2];
-                   hentry[3] = (*it).second[10]; hentry[4] = (*it).second[26]; hentry[5] = (*it).second[22];
-                   hentry[6] = (*it).second[14]; hentry[7] = (*it).second[23];
-                   tdeque.push_back( hentry );
-                
-                   //Linear hex 4 =>  11,20,10,3  24,26,23,15
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[11]; hentry[1] = (*it).second[20]; hentry[2] = (*it).second[10];
-                   hentry[3] = (*it).second[3]; hentry[4] = (*it).second[24]; hentry[5] = (*it).second[26];
-                   hentry[6] = (*it).second[23]; hentry[7] = (*it).second[15];
-                   tdeque.push_back( hentry );
-                   
-                   // Second layer of hexes
-                   //Linear hex 5 =>  12,21,26,24  4,16,25,19
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[12]; hentry[1] = (*it).second[21]; hentry[2] = (*it).second[26];
-                   hentry[3] = (*it).second[24]; hentry[4] = (*it).second[4]; hentry[5] = (*it).second[16];
-                   hentry[6] = (*it).second[25]; hentry[7] = (*it).second[19];
-                   tdeque.push_back( hentry );
-                   
-                   //Linear hex 6 => 21,13,22,26,  16,5,17,25,
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[21]; hentry[1] = (*it).second[13]; hentry[2] = (*it).second[22];
-                   hentry[3] = (*it).second[26]; hentry[4] = (*it).second[16]; hentry[5] = (*it).second[5];
-                   hentry[6] = (*it).second[17]; hentry[7] = (*it).second[25];
-                   tdeque.push_back( hentry );
-                   
-                   //Linear hex 7 => 26,22,14,23,  25,17,6,18
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[26]; hentry[1] = (*it).second[22]; hentry[2] = (*it).second[14];
-                   hentry[3] = (*it).second[23]; hentry[4] = (*it).second[25]; hentry[5] = (*it).second[17];
-                   hentry[6] = (*it).second[6]; hentry[7] = (*it).second[18];
-                   tdeque.push_back( hentry );
-                   
-                   //Linear hex 8 => 24,26,23,15  19,25,18,7
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-                   hentry[0] = (*it).second[24]; hentry[1] = (*it).second[26]; hentry[2] = (*it).second[23];
-                   hentry[3] = (*it).second[15]; hentry[4] = (*it).second[19]; hentry[5] = (*it).second[25];
-                   hentry[6] = (*it).second[18]; hentry[7] = (*it).second[7];
-                   tdeque.push_back( hentry );
-                break;
-
-              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: // quadratic quadrilateral is split into 4 linear quads
-           		// quad 1
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[0]; qentry[1] = (*it).second[4]; qentry[2] = (*it).second[8]; qentry[3] = (*it).second[7];
-                   tdeque.push_back( qentry );
-                   // quad 2
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[4]; qentry[1] = (*it).second[1]; qentry[2] = (*it).second[5]; qentry[3] = (*it).second[8];
-                   tdeque.push_back( qentry );
-                   // quad 3
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[8]; qentry[1] = (*it).second[5]; qentry[2] = (*it).second[2]; qentry[3] = (*it).second[6];
-                   tdeque.push_back( qentry );
-                   // quad 4
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[7]; qentry[1] = (*it).second[8]; qentry[2] = (*it).second[6]; qentry[3] = (*it).second[3];
-                   tdeque.push_back( qentry );
-                break;
-                
-              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9: // quadratic quadrilateral -> into 6 quadrilaterals
-                   // quadrilateral 1
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[0]; qentry[1] = (*it).second[4]; qentry[2] = (*it).second[8]; qentry[3] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // quadrilateral 2
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[4]; qentry[1] = (*it).second[1]; qentry[2] = (*it).second[5]; qentry[3] = (*it).second[8];
-                   tdeque.push_back( pentry );
-                   // quadrilateral 3
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   pentry[0] = (*it).second[8]; qentry[1] = (*it).second[5]; qentry[2] = (*it).second[2]; qentry[3] = (*it).second[7];
-                   tdeque.push_back( pentry );
-                   // quadrilateral 4
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[6]; qentry[1] = (*it).second[8]; qentry[2] = (*it).second[7]; qentry[3] = (*it).second[3];
-                   tdeque.push_back( pentry );
-                break;
- 
- END OLD STUFF*/
-
-
-
-
-
-/*
-template<size_t dim>
-void VTK_Interface<dim>::TransformFacePlist( const Model<dim>&                 sg,
-                                                const map<size_t,vector<size_t> >&  plist,
-                                                deque<vector<size_t> >&        tdeque )
-
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
- 
-    typename map<size_t,vector<size_t> >::const_iterator  it;
-    vector<size_t>  pentry(3), lentry(2), qentry(4);
-    bool               first_call(true);
- 
-    tdeque.erase( tdeque.begin(), tdeque.end() );
-    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
-
-    for ( it=plist.begin(); it!=plist.end(); it++ )
-      {
-         switch ( sg.Mesh().F( (*it).first-1 )->FE_Type() )
-           {
-              case LINEAR_BAR: // segment (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_LINE);
-                   tdeque.push_back( (*it).second );
-                break;
-                
-              case ISOPARAMETRIC_LINEAR_BAR: // segment (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_LINE);
-                   tdeque.push_back( (*it).second );
-                break;
-                
-              case ISOPARAMETRIC_QUADRATIC_BAR: // double segment
-                   geometric_primitives_VTK.push_back(VTK_LINE);
-                   lentry[0] = (*it).second[0]; lentry[1] = (*it).second[2];  
-                   tdeque.push_back( lentry );
-                   geometric_primitives_VTK.push_back(VTK_LINE);
-                   lentry[0] = (*it).second[2]; lentry[1] = (*it).second[1];  
-                   tdeque.push_back( lentry );
-                break;
-                
-              case ISOPARAMETRIC_LINEAR_TRIANGLE: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   tdeque.push_back( (*it).second );
-                break;
-                
-              case LINEAR_TRIANGLE: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   tdeque.push_back( (*it).second );
-                break;
-                
-              case LINEAR_TRIANGLE3D: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   tdeque.push_back( (*it).second );
-                break;
-                
-              case ISOPARAMETRIC_LINEAR_QUADRILATERAL: // quadrilateral
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   tdeque.push_back( (*it).second );
-                break;
-              
-              case ISOPARAMETRIC_QUADRATIC_TRIANGLE: // quadratic triangle -> 4 triangles
-                   // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[3]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                   // triangle 2
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[4];
-                   tdeque.push_back( pentry );
-                   // triangle 3
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[5]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[2];
-                   tdeque.push_back( pentry );
-                   // triangle 4
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                break;
-
-              case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE: // quadratic barycentric triangle -> 6 triangles
-                   // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[3]; pentry[2] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // triangle 2
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[3]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // triangle 3
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[6]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[4];
-                   tdeque.push_back( pentry );
-                   // triangle 4
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[6]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[2];
-                   tdeque.push_back( pentry );
-                   // triangle 5
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[5]; pentry[1] = (*it).second[6]; pentry[2] = (*it).second[2];
-                   tdeque.push_back( pentry );
-                   // triangle 6
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[6]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                break;
-                
-              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: // quadratic quadrilateral -> broken into 6 triangles
-                   // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[0]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[7];
-                   tdeque.push_back( pentry );
-                   // triangle 2
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[4]; pentry[1] = (*it).second[1]; pentry[2] = (*it).second[5];
-                   tdeque.push_back( pentry );
-                   // triangle 3
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[5]; pentry[1] = (*it).second[2]; pentry[2] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // triangle 4
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[7]; pentry[1] = (*it).second[6]; pentry[2] = (*it).second[3];
-                   tdeque.push_back( pentry );
-                   // triangle 5
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[7]; pentry[1] = (*it).second[4]; pentry[2] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // triangle 6
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
-                   pentry[0] = (*it).second[4]; pentry[1] = (*it).second[5]; pentry[2] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                break;
-              
-              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9: // quadratic quadrilateral -> into 6 quadrilaterals
-                   // quadrilateral 1
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[0]; qentry[1] = (*it).second[4]; qentry[2] = (*it).second[8]; qentry[3] = (*it).second[6];
-                   tdeque.push_back( pentry );
-                   // quadrilateral 2
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[4]; qentry[1] = (*it).second[1]; qentry[2] = (*it).second[5]; qentry[3] = (*it).second[8];
-                   tdeque.push_back( pentry );
-                   // quadrilateral 3
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   pentry[0] = (*it).second[8]; qentry[1] = (*it).second[5]; qentry[2] = (*it).second[2]; qentry[3] = (*it).second[7];
-                   tdeque.push_back( pentry );
-                   // quadrilateral 4
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
-                   qentry[0] = (*it).second[6]; qentry[1] = (*it).second[8]; qentry[2] = (*it).second[7]; qentry[3] = (*it).second[3];
-                   tdeque.push_back( pentry );
-                break;
-
-              default:
-                   cout <<"\nFace ID: "<< sg.Mesh().F( (*it).first-1 )->ID();
-                   cout <<" with "<< sgref.E( (*it).first-1 )->Nodes() <<" nodes."<< endl;
-                   throw csmp::Exception( FATAL_ERROR, "VTK_Interface<dim>::TransformFacePlist", 
-                                  "Unable to interpret how this face shall be broken in subelements");
-           }
-      }
- 
- } // end TransformFacePlist
-*/
 
 
 
@@ -2736,6 +2308,7 @@ void outputNodeDataToVTK( const Element<dim>& e,
   } 
 
 
+template class VTK_Interface<1U>;
 
 template class VTK_Interface<2U>;
 template class VTK_Interface<3U>;
@@ -2756,7 +2329,7 @@ template class VTK_Interface<3U>;
 template<size_t dim>
 void outputFaceNormalsToVTK( const Element<dim>& e, const char* file )
  {
-    vector<double64>    nrml;
+    vector<double>    nrml;
     size_t              counter(0);
     map<size_t,pair<Point<dim>,Point<dim> > >  normals;
 
@@ -2853,9 +2426,9 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
  {
      // 0. generating values, first integration point=0, second=1...
      // ------------------------------------------------------------
-    vector<pair<Point<dim>,double64> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
+    vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
-    double64 display_value(0.);
+    double display_value(0.);
     for ( size_t i=0U; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
@@ -2881,7 +2454,7 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
      // --------------------------------------
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << ipoint_data.size() <<" float"<< endl;
-     for ( typename vector<pair<Point<dim>,double64> >::const_iterator
+     for ( typename vector<pair<Point<dim>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           assert( dim != 1 );
           if ( dim == 2 ) ofs << (*it).first[0] <<" "<< (*it).first[1] <<" "<< 0. << endl;
@@ -2910,7 +2483,7 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
      ofs <<"POINT_DATA "<< ipoint_data.size() << endl;
      ofs <<"SCALARS "<< "point_number" <<" double"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl;
-     for ( typename vector<pair<Point<dim>,double64> >::const_iterator
+     for ( typename vector<pair<Point<dim>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           ofs << (*it).second <<" "<< endl;
        }
@@ -2940,9 +2513,9 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
   
      // 0. generating values, first integration point=0, second=1...
      // ------------------------------------------------------------
-    vector<pair<Point<dim>,double64> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
+    vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
-    double64 display_value(0.);
+    double display_value(0.);
     for ( size_t i=0U; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
@@ -2968,7 +2541,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
      // --------------------------------------
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << ipoint_data.size() <<" float"<< endl;
-     for ( typename vector<pair<Point<dim>,double64> >::const_iterator
+     for ( typename vector<pair<Point<dim>,double> >::const_iterator
            it=ipoint_data.begin(); it!=ipoint_data.end(); it++ ) {
           assert( dim != 1 );
           if ( dim == 2 ) ofs << (*it).first[0] <<" "<< (*it).first[1] <<" "<< 0. << endl;
@@ -3297,7 +2870,8 @@ void csmpBinaryToVTK( const char* modelBinFIleName )
   cout << "\n\ncsmpBinaryToVTK: Enter name of region for which to output '" << propertyName << "': " << flush;
   getline( cin, regionName );
 
-  Model<3> model( modelBinFIleName );
+  const std::string bin_file_set(modelBinFIleName);
+  Model<3> model( bin_file_set );
 
   if ( !model.Database().IsDefined( propertyName.c_str() ) ) {
     cerr << "\csmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";

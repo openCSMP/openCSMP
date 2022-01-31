@@ -3,7 +3,9 @@
 #include "ANSYS_Model3D.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "VTU_Interface.h"
+#include "Region.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 
 using namespace std;
 
@@ -17,35 +19,45 @@ void Variables_Example::Specifications()
     AddAuthor( "P. Lang" );
     AddDescription( "source in: Variables_Example.cpp" );
     AddDescription( "basic operations with csmp variables" );
+    AddRequirement( "input model: 'FracBox'");
+    AddRequirement( "VariablesTutorial.txt");
   }
 
 
 void Variables_Example::Run()
   {
-    // OUTLINE
-    // 1. ArrayVariable 
-    // 2. Element and FiniteVolume integration point variables
-    // 3. Model/Region/Boundary/splitboundary variables    
-
-    // creating the model and split boundary
+    // creating a model from an ANSYS mesh and inserting a  split boundary
     const size_t D(3);
-    ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true );    
-    model.InsertSplitBoundary( "FRACTURE" );
+    ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true ); 
+    
+    const bool remove_dim_minus1_region(true);
+    pair<set<string>,bool> boundary_patches = model.CreateInternalBoundaryFrom( "FRACTURE", remove_dim_minus1_region );  
+    assert( boundary_patches.second == true );
+    assert( boundary_patches.first.size() == 1 );
+    const string boundary_name = (*boundary_patches.first.begin());
+    Boundary<D>& fractureBoundary = model.Boundary( boundary_name.c_str() ); 
+    pair<string,bool> split_boundary = model.CreateSplitBoundaryFrom( fractureBoundary );
+    assert( split_boundary.second == true );
+    
+    // having a look at which regions and boundaries we have at the moment
+    model.RegionsOut();
+    model.BoundariesOut();
+    model.SplitBoundariesOut();
 
 
-    // getting keys from database
-    Index elementScalarKey = model.Database().StorageKey("element scalar");
-    Index elementIpVectorKey = model.Database().StorageKey("element ip vector");
-    Index elementFaipScalarKey = model.Database().StorageKey("element faip scalar");
-    Index elementSeipArrayKey = model.Database().StorageKey("element seip array");
-    Index faceScalarKey = model.Database().StorageKey("face scalar");
-    Index interfaceScalarKey = model.Database().StorageKey("interface scalar");
-    Index nodalTensorKey = model.Database().StorageKey("nodal tensor");
-    Index nodalArrayKey = model.Database().StorageKey("nodal array");
-    Index regionScalarKey = model.Database().StorageKey("region scalar");
-    Index boundaryVectorKey = model.Database().StorageKey("boundary vector");
-    Index splitBoundaryVectorKey = model.Database().StorageKey( "split boundary vector" );
-    Index modelArrayKey = model.Database().StorageKey("model array");
+    // getting keys to variables from property database (inside of model)
+    const csmp::Index elementScalarKey = model.Database().StorageKey("element scalar");
+    const csmp::Index elementIpVectorKey = model.Database().StorageKey("element ip vector");
+    const csmp::Index elementFaipScalarKey = model.Database().StorageKey("element faip scalar");
+    const csmp::Index elementSeipArrayKey = model.Database().StorageKey("element seip array");
+    const csmp::Index faceScalarKey = model.Database().StorageKey("face scalar");
+    const csmp::Index interfaceScalarKey = model.Database().StorageKey("interface scalar");
+    const csmp::Index nodalTensorKey = model.Database().StorageKey("nodal tensor");
+    const csmp::Index nodalArrayKey = model.Database().StorageKey("nodal array");
+    const csmp::Index regionScalarKey = model.Database().StorageKey("region scalar");
+    const csmp::Index boundaryVectorKey = model.Database().StorageKey("boundary vector");
+    const csmp::Index splitBoundaryVectorKey = model.Database().StorageKey( "split boundary vector" );
+    const csmp::Index modelArrayKey = model.Database().StorageKey("model array");
 
 
     // working variables
@@ -61,7 +73,7 @@ void Variables_Example::Run()
     ArrayVariable modelArrayVariable( "model array", model.Database() );
 
 
-    // model array variable
+    // a single array variable stored on model
     model.Store( modelArrayKey, modelArrayVariable );
     arrayVariablePlain.Resize( modelArrayVariable.Size() );
     model.Read( modelArrayKey, arrayVariablePlain );
@@ -72,7 +84,7 @@ void Variables_Example::Run()
     model.Store( modelArrayKey, arrayVariablePlain );
 
 
-    // subdomains (regions, boundaries, splitboundaries...)
+    // model subdomains (regions, boundaries, splitboundaries...)
     Region<D>& fracture = model.Region("FRACTURE");
     fracture.Store( regionScalarKey, scalarVariable );
     fracture.Read( regionScalarKey, scalarVariablePlain );
@@ -83,21 +95,20 @@ void Variables_Example::Run()
     boundary.Read( boundaryVectorKey, vectorVariablePlain );
     cout << "\nBoundary vector: " << vectorVariablePlain << endl;
 
-    SplitBoundary<D>& splitboundary = model.SplitBoundary( "SPLITBOUNDARY_FRACTURE" );
+    SplitBoundary<D>& splitboundary = model.SplitBoundary( split_boundary.first.c_str() );
     splitboundary.Store( splitBoundaryVectorKey, vectorVariable );
     splitboundary.Read( splitBoundaryVectorKey, vectorVariablePlain );
     cout << "\nSplitBoundary scalar: " << vectorVariablePlain << endl;
 
-    // nodal ops
+    // nodal operation
     const vector<Node<D>*>::const_iterator modelNodesEnd( model.Region("Model").NodesEnd() );
     for( vector<Node<D>*>::const_iterator it( model.Region("Model").NodesBegin() ); it != modelNodesEnd; ++it )
       (*it)->Store( nodalTensorKey, tensorVariable );
 
-    // equivalent to
+    // is equivalent to
     model.InputPropertyValue( "nodal tensor", tensorVariable );
 
-
-    // simplex integration points
+    // finite-element integration (Gauss quadrature) points
     const vector<Element<D>*>::const_iterator modelElementsEnd( model.Region("Model").ElementsEnd() );
     for( vector<Element<D>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != modelElementsEnd; ++it )
       {
@@ -107,7 +118,7 @@ void Variables_Example::Run()
           (*it)->Store( ip, elementIpVectorKey, vectorVariable );
       }
 
-    // instatiate a fv scheme to establish fv ip variables
+    // instatiate a finite volume scheme to establish fv ip variables
     NodeCenteredFiniteVolumeTransport<3> fvModule( "Model", model, "element scalar", "nodal scalar", "element vector", "nodal scalar", false, false );
 
     // finite volume integration points
@@ -132,17 +143,17 @@ void Variables_Example::Run()
           (*it)->Store( se, seip, elementSeipArrayKey, seipArray );
       }
 
-    // adding a property
+    // adding a property at runtime
     model.CreateProperty( "new element scalar", "X", SCALAR, ELEMENT );
     model.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 1. ) );
     fracture.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 2. ) );
 
-    for( Model<D>::boundaryConstIterator bit( model.BoundariesBegin() ); bit != model.BoundariesEnd(); ++bit )
-      for( vector<Face<D>*>::const_iterator fit( bit->second.ElementsBegin() ); fit != bit->second.ElementsEnd(); ++fit )
+    for( auto bit( model.BoundariesBegin() ); bit != model.BoundariesEnd(); ++bit )
+      for( auto fit( bit->second.ElementsBegin() ); fit != bit->second.ElementsEnd(); ++fit )
         (*fit)->Store( faceScalarKey, makeScalar( PLAIN, (*fit)->Volume() ) );
 
 
-    // visual output
+    // XML (ASCII) output for the Visualisation Toolkit (VTK) / Paraview
     VTU_Interface<D> vtu(model);
     list<string> outputProps;
     outputProps.push_back("element scalar");

@@ -13,18 +13,18 @@ class ConcentrationFluidVolumeSource : public Interrelation<dim> {
     Operand<dim>&  Q;    
     Operand<dim>&  PHI;    
     ScalarVariable concn, concp, phi;
-    double64 dt, rho_increment, rho_zero;
+    double dt, rho_increment, rho_zero;
     
   public:
-    ConcentrationFluidVolumeSource( const PropertyDatabase<dim>& p, double64 rho_max );
+    ConcentrationFluidVolumeSource( const PropertyDatabase<dim>& p, double rho_max );
     ~ConcentrationFluidVolumeSource() {};
     void Calculate();
-    void TimeIncrement( double64 time_increment );
+    void TimeIncrement( double time_increment );
     
 };
 
 template<size_t dim>
-inline void ConcentrationFluidVolumeSource<dim>::TimeIncrement( double64 time_increment ) 
+inline void ConcentrationFluidVolumeSource<dim>::TimeIncrement( double time_increment ) 
 { dt = time_increment; }
 
 }

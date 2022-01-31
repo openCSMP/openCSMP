@@ -12,7 +12,7 @@ public:
   virtual void Run();
   virtual void Specifications();
 private:
-  void SteadyStatePressure( Model<2U>& sg );
+  void SteadyStatePressure( Model<2U>& );
 };
 
 } // csmp

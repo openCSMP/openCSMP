@@ -17,7 +17,7 @@ class IAPWS_H2O_HeatTransferVelocity : public Interrelation<dim> {
     Operand<dim>&  RR;  
     ScalarVariable      cpf, rf, phi,  rr, cpr;
     VectorVariable<dim> vel;
-    double64 factor;
+    double factor;
 
   public: // 					                               
     IAPWS_H2O_HeatTransferVelocity( const PropertyDatabase<dim>& p );

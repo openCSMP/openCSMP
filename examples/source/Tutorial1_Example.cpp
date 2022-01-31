@@ -73,7 +73,7 @@ void Tutorial1_Example::Specifications()
 
 void Tutorial1_Example::Run()
 {
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     model_time =  0.; // time
 
     // -----------------------------------------------------------------------
@@ -200,9 +200,9 @@ void Tutorial1_Example::Run()
     matlab.Write2DMatlabFile(   model, "fluid_pressure", "fluid pressure", 0 );
 
     // define some constant variables
-    const double64     hour(3600.0);
-    const double64     max_time(240.0*hour); // run for 10 days
-    double64           time_increment(2.0*hour); // timestep 2 hours
+    const double     hour(3600.0);
+    const double     max_time(240.0*hour); // run for 10 days
+    double           time_increment(2.0*hour); // timestep 2 hours
     const long         save_frequency(6); // write results to file every 12 hours
     size_t	           save_counter(1), time;
 

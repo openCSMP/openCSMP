@@ -11,8 +11,8 @@ namespace csmp
       
 @attention Use only this conctructor. HaliteLiquidus computes the NaCl concentration of halite-saturated brine as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, HaliteLiquidus is able to decipher their current values when being queried for the NaCl concentration. Only this constructor is allowed to ensure that functionality, default constructor has been made private.
   */
-  HaliteLiquidus::HaliteLiquidus( const double64& externaltemperature, 
-                                  const double64& externalpressure )
+  HaliteLiquidus::HaliteLiquidus( const double& externaltemperature, 
+                                  const double& externalpressure )
     :	temperature_(externaltemperature),
       pressure_(externalpressure),
       tcurrent_( temperature_-1.0 ),
@@ -41,7 +41,7 @@ namespace csmp
   /** Value of mass fraction of dissolved NaCl in halite-saturated brine
       @attention The value is based on converting the mole fraction computed from equation 8 in Driesner & Heinrich (2007). Conversion is based on ConvertConcentrationUnitsNaCl.h; to stay consistent, use values and functions provide therein for further computations 
    */
-  double64 HaliteLiquidus::MassFractionNaCl()
+  double HaliteLiquidus::MassFractionNaCl()
   { 
     CheckState(); 
     return XNaCl2Massfraction( molefraction_nacl_ );
@@ -72,13 +72,13 @@ namespace csmp
 
   /** Equation 8 of Driesner and Heinrich (2007)
    */
-  double64 HaliteLiquidus::MolefractionNaCl( const double64& myt_ )
+  double HaliteLiquidus::MolefractionNaCl( const double& myt_ )
   {
     return e0_+myt_ * ( e1_+myt_ * ( e2_+myt_ * ( e3_+myt_ * ( e4_+e5_*myt_ ) ) ) );
   }
 
 
-  /** Update parameters for MoleFractionNaCl( const double64& myt_ )
+  /** Update parameters for MoleFractionNaCl( const double& myt_ )
    */
   void HaliteLiquidus::UpdateParameters()
   {

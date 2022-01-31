@@ -24,8 +24,8 @@ Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Jacobian_Upwind_Integral_dNT
                                                             				const char* upwind,
                                                             				const char* d_upwind,
                                                             				const char* trigger,
-                                                            				const double64 delta,
-                                                            				const double64 prefactor)
+                                                            				const double delta,
+                                                            				const double prefactor)
  
   : MathOperatorLHS<dim>(pref,oper,basic,test),
     DN(2,3),
@@ -82,7 +82,7 @@ When the property is an element property, it will be put into the
 first vector entry MTRL[0]. Else, 
 */
 template<size_t dim,class SIMPLEX>
-void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -105,7 +105,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e
 
 /// @todo compute Jacobian
 template<size_t dim,class SIMPLEX>
-void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -118,7 +118,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SI
     
     // generate delta vector
     // * can be replaced by STL algorithm
-    vector<double64>  delta_up(e.Nodes());
+    vector<double>  delta_up(e.Nodes());
     for (size_t i = 0; i < e.Nodes(); ++i) {
       delta_up[i] = el_d_upwind[i]() - el_upwind[i]();
     }
@@ -138,7 +138,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SI
     for (size_t i = 0; i < e.Nodes(); ++i) {
       for (size_t k = 0; k < e.Nodes(); ++k) {
         if (i != k) {
-          const double64 decision = DNT(i, k)*(el_trigger[k]() - el_trigger[i]());
+          const double decision = DNT(i, k)*(el_trigger[k]() - el_trigger[i]());
           if (decision > 0) { // take j = i
             MathOperatorLHS<dim>::LHS(i, i) += delta_up[i]*DN(i, k);
           } else if (decision < 0) { // take j = k
@@ -156,7 +156,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SI
     MathOperatorLHS<dim>::LHS *= e.Volume() * prefactor_/delta_;
     
     /*
-    double64 fac_upwind;
+    double fac_upwind;
     
     // loop over j to get an column in the element tangent stiffness matrix
     for (size_t j = 0; j < e.Nodes(); ++j) {
@@ -164,7 +164,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SI
         for (size_t k = 0; k < e.Nodes(); ++k) {
           if (i != k) {
             fac_upwind = 0.0;
-            const double64 decision = DNT(i, k)*(el_trigger[k]() - el_trigger[i]());
+            const double decision = DNT(i, k)*(el_trigger[k]() - el_trigger[i]());
             if (decision > 0) {
               if (i == j) fac_upwind = el_d_upwind[i]() - el_upwind[i]();
             }

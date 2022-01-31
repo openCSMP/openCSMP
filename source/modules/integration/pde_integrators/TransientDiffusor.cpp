@@ -1,7 +1,7 @@
 #include "TransientDiffusor.h"
 #include "Model.h"
 #include "Exception.h"
-#include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "ModelTime.h"
 
 using namespace std;
@@ -258,7 +258,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                               const char* storage_variable,
                                                               const char* spatial_source_variable,
                                                               const char* gradient_variable,
-                                                              double64 gradient_multiplier )
+                                                              double gradient_multiplier )
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
@@ -343,7 +343,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* storage_variable,
                                                                             const char* spatial_source_variable,
                                                                             const char* gradient_variable, 
-                                                                            double64 gradient_multiplier )
+                                                                            double gradient_multiplier )
                                      
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
@@ -436,7 +436,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* spatial_source_variable,
                                                                             const char* point_source_variable,
                                                                             const char* gradient_variable, 
-                                                                            double64 gradient_multiplier )
+                                                                            double gradient_multiplier )
                                      
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
@@ -541,10 +541,10 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::~TransientDiffusor()
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void TransientDiffusor<dim,COMPUTATION_DOMAIN>::ComputeTransientStateFullyImplicit(
                                                                           Model<dim>& model,
-                                                                          double64 time_increment,
+                                                                          double time_increment,
                                                                           bool verbose )
  {
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
 
     cout <<"\n\n\n\nTransientDiffusor<"<< dim;
     cout <<">: ComputeTransientStateFullyImplicit: ";

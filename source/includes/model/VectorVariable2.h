@@ -15,28 +15,28 @@ class VectorVariable<2U> {
     VectorVariable();
     VectorVariable( const VectorVariable& );
     VectorVariable( VectorVariable&& ) = default;
-    VectorVariable( VARIABLE_FLAG f, double64 val );
-    VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, double64 val1, double64 val2 );
-    explicit VectorVariable( const std::vector<double64>& );
+    VectorVariable( VARIABLE_FLAG f, double val );
+    VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, double val1, double val2 );
+    explicit VectorVariable( const std::vector<double>& );
     explicit VectorVariable( const csmp::Point<2U>& );
     ~VectorVariable();
     
-    double64&        operator()( size_t i );
-    const double64&  operator()( size_t i ) const;
-    double64         operator[]( size_t i ) const;
-    void             Component( size_t, double64 );
-    double64         Component( size_t i ) const;
+    double&        operator()( size_t i );
+    const double&  operator()( size_t i ) const;
+    double         operator[]( size_t i ) const;
+    void             Component( size_t, double );
+    double         Component( size_t i ) const;
 
-    VectorVariable   operator+( double64 val ) const; 
-    VectorVariable   operator-( double64 val ) const;
-    VectorVariable   operator*( double64 val ) const; 
-    VectorVariable   operator/( double64 val ) const;
-    VectorVariable   operator^( double64 val ) const;
+    VectorVariable   operator+( double val ) const; 
+    VectorVariable   operator-( double val ) const;
+    VectorVariable   operator*( double val ) const; 
+    VectorVariable   operator/( double val ) const;
+    VectorVariable   operator^( double val ) const;
 
-    VectorVariable&  operator+=( double64 val );
-    VectorVariable&  operator-=( double64 val );
-    VectorVariable&  operator*=( double64 val );
-    VectorVariable&  operator/=( double64 val );
+    VectorVariable&  operator+=( double val );
+    VectorVariable&  operator-=( double val );
+    VectorVariable&  operator*=( double val );
+    VectorVariable&  operator/=( double val );
     
     VectorVariable&  operator+=( const ScalarVariable& );
     VectorVariable&  operator-=( const ScalarVariable& );
@@ -53,7 +53,7 @@ class VectorVariable<2U> {
     VectorVariable&  operator*=( const VectorVariable& );
     VectorVariable&  operator/=( const VectorVariable& );
     
-    VectorVariable&  operator=( double64 );
+    VectorVariable&  operator=( double );
     VectorVariable&  operator=( const Point<2U>& );
     VectorVariable&  operator=( const ScalarVariable& );
     VectorVariable&  operator=( const VectorVariable& );
@@ -69,19 +69,19 @@ class VectorVariable<2U> {
     VARIABLE_FLAG&   Flag( const size_t& i=0 );
     VARIABLE_FLAG    Flag( const size_t& i=0 ) const;
     size_t           Size() const;
-    void             Resize( size_t newSize, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
-    double64         Length() const;
-    double64         AngleTo( const VectorVariable& v ) const;
+    void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
+    double         Length() const;
+    double         AngleTo( const VectorVariable& v ) const;
     Point<2U>        P() const;
-    bool             IsWithinRange( double64 vmin, double64 vmax ) const;
+    bool             IsWithinRange( double vmin, double vmax ) const;
     VectorVariable   Flip();
-    VectorVariable   ProjectOnto( const std::vector<double64>& v ) const;
+    VectorVariable   ProjectOnto( const std::vector<double>& v ) const;
     VectorVariable   ProjectOnto( const VectorVariable& v ) const;
     void             Invert();
   
     void			       EuclideanNormalize();
-    double64         DotProduct( const csmp::Point<2U>& p ) const;
-    double64         DotProduct( const VectorVariable& v ) const;
+    double         DotProduct( const csmp::Point<2U>& p ) const;
+    double         DotProduct( const VectorVariable& v ) const;
     VectorVariable   CrossProduct( const csmp::Point<2U>& p ) const;
     VectorVariable   CrossProduct( const VectorVariable& v ) const;
 
@@ -94,7 +94,7 @@ class VectorVariable<2U> {
 
   private:
     std::array<VARIABLE_FLAG,2U> flag;
-    std::array<double64,2U>      data;
+    std::array<double,2U>      data;
 };
 
 

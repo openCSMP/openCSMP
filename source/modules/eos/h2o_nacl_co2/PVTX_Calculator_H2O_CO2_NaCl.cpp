@@ -59,8 +59,8 @@ namespace csmp {
 template<size_t dim>
 PVTX_Calculator_H2O_CO2_NaCl<dim>::PVTX_Calculator_H2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& props )
   : props_(props),
-    Xbulk_(4,numeric_limits<double64>::quiet_NaN(),ANY), aq_ph_composition_(3), carb_ph_composition_(2),
-    Pf_(numeric_limits<double64>::quiet_NaN()), ToC_(numeric_limits<double64>::quiet_NaN()),
+    Xbulk_(4,numeric_limits<double>::quiet_NaN(),ANY), aq_ph_composition_(3), carb_ph_composition_(2),
+    Pf_(numeric_limits<double>::quiet_NaN()), ToC_(numeric_limits<double>::quiet_NaN()),
     flash_( ToC_, Pf_, Xbulk_(TMASS), Xbulk_(XAQ), Xbulk_(XCARB), Xbulk_(XSALT) )
   {
      cout <<"\nPVTX_Calculator_H2O_CO2_NaCl(custom constructor): Make sure to build only once because this is costly!\n";
@@ -78,7 +78,7 @@ PVTX_Calculator_H2O_CO2_NaCl<dim>::PVTX_Calculator_H2O_CO2_NaCl( const variables
     will be reduced correspondingly.
 */
 template<size_t dim>
-double64 PVTX_Calculator_H2O_CO2_NaCl<dim>::WaterSaturation() const
+double PVTX_Calculator_H2O_CO2_NaCl<dim>::WaterSaturation() const
 {
   return (flash_.massAqueousPhase() / flash_.rho_aq()) /
          (flash_.massAqueousPhase() / flash_.rho_aq() + flash_.massCarbonicPhase() / flash_.rho_carb() + flash_.massHalite() / rhoNaCl_);
@@ -90,7 +90,7 @@ double64 PVTX_Calculator_H2O_CO2_NaCl<dim>::WaterSaturation() const
     Calculate the halite saturation.
 */
 template<size_t dim>
-double64 PVTX_Calculator_H2O_CO2_NaCl<dim>::HaliteVolumeFraction() const
+double PVTX_Calculator_H2O_CO2_NaCl<dim>::HaliteVolumeFraction() const
  {
   return (flash_.massHalite() / rhoNaCl_) /
          (flash_.massAqueousPhase() / flash_.rho_aq() + flash_.massCarbonicPhase() / flash_.rho_carb() + flash_.massHalite() / rhoNaCl_);
@@ -166,14 +166,14 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
         if ( n->Status(props_.key_cH2O) != DIRICH ) n->Store( props_.key_cH2O, makeScalar(n->Status(props_.key_cH2O),flash_.beta_aq()) );
         // dissolved CO2 (kg/m3)
         if ( n->Status(props_.key_CO2aq) != DIRICH ) {
-          //const double64 dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
-          const double64 dissolved_CO2 = aq_ph_composition_(XCO2);
+          //const double dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
+          const double dissolved_CO2 = aq_ph_composition_(XCO2);
           n->Store( props_.key_CO2aq, makeScalar(n->Status(props_.key_CO2aq),dissolved_CO2) );
         }
         // salinity (kg/m3)
         if ( n->Status(props_.key_NaClaq) != DIRICH ) {
-          //double64 salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
-          double64 salinity = aq_ph_composition_(XNACl_aq);
+          //double salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
+          double salinity = aq_ph_composition_(XNACl_aq);
           n->Store( props_.key_NaClaq, makeScalar(n->Status(props_.key_NaClaq),salinity) );
         }
         // evaporated water (kg/m3)
@@ -204,8 +204,8 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
         }
         // evaporated water (kg/m3)
         if ( n->Status(props_.key_H2Og) != DIRICH ) {
-          //double64 evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
-          double64 evaporated_water = carb_ph_composition_(YH2O);
+          //double evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
+          double evaporated_water = carb_ph_composition_(YH2O);
           n->Store( props_.key_H2Og, makeScalar(n->Status(props_.key_H2Og),evaporated_water) );
         }              
       break;
@@ -235,7 +235,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
         aq_ph_composition_(XNACl_aq) = flash_.X_nacl();
         assert( !isnan(flash_.beta_aq()) );
         // saturations
-        const double64 sw = (flash_.massAqueousPhase() / flash_.rho_aq()) /
+        const double sw = (flash_.massAqueousPhase() / flash_.rho_aq()) /
                             (flash_.massAqueousPhase() / flash_.rho_aq() + flash_.massHalite() / rhoNaCl_);
       
         if ( n->Status( props_.key_sH2O ) != DIRICH ) n->Store( props_.key_sH2O, makeScalar(n->Status(props_.key_sH2O), sw) );
@@ -248,14 +248,14 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
         if ( n->Status(props_.key_cH2O) != DIRICH ) n->Store( props_.key_cH2O, makeScalar(n->Status(props_.key_cH2O),flash_.beta_aq()) );
         // dissolved CO2 (kg/m3)
         if ( n->Status(props_.key_CO2aq) != DIRICH ) {
-          //const double64 dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
-          const double64 dissolved_CO2 = aq_ph_composition_(XCO2);
+          //const double dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
+          const double dissolved_CO2 = aq_ph_composition_(XCO2);
           n->Store( props_.key_CO2aq, makeScalar(n->Status(props_.key_CO2aq),dissolved_CO2) );
         }
         // salinity (kg/m3)
         if ( n->Status(props_.key_NaClaq) != DIRICH ) {
-          //double64 salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
-          double64 salinity = aq_ph_composition_(XNACl_aq);
+          //double salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
+          double salinity = aq_ph_composition_(XNACl_aq);
           n->Store( props_.key_NaClaq, makeScalar(n->Status(props_.key_NaClaq),salinity) );
         }
         // evaporated water (kg/m3)
@@ -273,7 +273,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
           carb_ph_composition_(YCO2) = flash_.Y_co2();
           carb_ph_composition_(YH2O) = flash_.Y_h2o();
           // saturations
-          const double64 sw = (flash_.massAqueousPhase() / flash_.rho_aq()) /
+          const double sw = (flash_.massAqueousPhase() / flash_.rho_aq()) /
                               (flash_.massAqueousPhase() / flash_.rho_aq() + flash_.massCarbonicPhase() / flash_.rho_carb());
 
           if ( n->Status( props_.key_sH2O ) != DIRICH ) n->Store( props_.key_sH2O, makeScalar(n->Status(props_.key_sH2O),sw) );
@@ -290,20 +290,20 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
           if ( n->Status(props_.key_cCO2) != DIRICH ) n->Store( props_.key_cCO2, makeScalar(n->Status(props_.key_cCO2),flash_.beta_carb()) );
           // dissolved CO2 (kg/m3)
           if ( n->Status(props_.key_CO2aq) != DIRICH ) {
-            //const double64 dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
-            const double64 dissolved_CO2 = aq_ph_composition_(XCO2);
+            //const double dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
+            const double dissolved_CO2 = aq_ph_composition_(XCO2);
             n->Store( props_.key_CO2aq, makeScalar(n->Status(props_.key_CO2aq),dissolved_CO2) );
           }
           // salinity (kg/m3)
           if ( n->Status(props_.key_NaClaq) != DIRICH ) {
-            //double64 salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
-            double64 salinity = aq_ph_composition_(XNACl_aq);
+            //double salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
+            double salinity = aq_ph_composition_(XNACl_aq);
             n->Store( props_.key_NaClaq, makeScalar(n->Status(props_.key_NaClaq),salinity) );
           }
           // evaporated water (kg/m3)
           if ( n->Status(props_.key_H2Og) != DIRICH ) {
-            //double64 evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
-            double64 evaporated_water = carb_ph_composition_(YH2O);
+            //double evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
+            double evaporated_water = carb_ph_composition_(YH2O);
             n->Store( props_.key_H2Og, makeScalar(n->Status(props_.key_H2Og),evaporated_water) );
           }
         }
@@ -313,7 +313,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
         carb_ph_composition_(YCO2) = flash_.Y_co2();
         carb_ph_composition_(YH2O) = flash_.Y_h2o();
         // saturations
-        const double64 halite_saturation = (flash_.massHalite() / rhoNaCl_) /
+        const double halite_saturation = (flash_.massHalite() / rhoNaCl_) /
                                            (flash_.massCarbonicPhase() / flash_.rho_carb() + flash_.massHalite() / rhoNaCl_);
       
         if ( n->Status( props_.key_sH2O ) != DIRICH ) n->Store( props_.key_sH2O, makeScalar(n->Status(props_.key_sH2O),0.) );
@@ -334,8 +334,8 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
         }
         // evaporated water (kg/m3)
         if ( n->Status(props_.key_H2Og) != DIRICH ) {
-          //double64 evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
-          double64 evaporated_water = carb_ph_composition_(YH2O);
+          //double evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
+          double evaporated_water = carb_ph_composition_(YH2O);
           n->Store( props_.key_H2Og, makeScalar(n->Status(props_.key_H2Og),evaporated_water) );
         }
         }
@@ -349,8 +349,8 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
           carb_ph_composition_(YCO2)   = flash_.Y_co2();
           carb_ph_composition_(YH2O)   = flash_.Y_h2o();
           // saturations
-          const double64 sw                = WaterSaturation();
-          const double64 halite_saturation = HaliteVolumeFraction();
+          const double sw                = WaterSaturation();
+          const double halite_saturation = HaliteVolumeFraction();
           if ( n->Status( props_.key_sH2O ) != DIRICH ) n->Store( props_.key_sH2O, makeScalar(n->Status(props_.key_sH2O),sw) );
           if ( n->Status( props_.key_sCO2 ) != DIRICH ) n->Store( props_.key_sCO2, makeScalar(n->Status(props_.key_sCO2),1.-sw-halite_saturation) );
           if ( n->Status( props_.key_NaCl ) != DIRICH ) n->Store( props_.key_NaCl, makeScalar(n->Status(props_.key_NaCl),halite_saturation) );
@@ -365,20 +365,20 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
           if ( n->Status(props_.key_cCO2) != DIRICH ) n->Store( props_.key_cCO2, makeScalar(n->Status(props_.key_cCO2),flash_.beta_carb()) );
           // dissolved CO2 (kg/m3)
           if ( n->Status(props_.key_CO2aq) != DIRICH ) {
-            //const double64 dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
-            const double64 dissolved_CO2 = aq_ph_composition_(XCO2);
+            //const double dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
+            const double dissolved_CO2 = aq_ph_composition_(XCO2);
             n->Store( props_.key_CO2aq, makeScalar(n->Status(props_.key_CO2aq),dissolved_CO2) );
           }
           // salinity (kg/m3)
           if ( n->Status(props_.key_NaClaq) != DIRICH ) {
-            //double64 salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
-            double64 salinity = aq_ph_composition_(XNACl_aq);
+            //double salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
+            double salinity = aq_ph_composition_(XNACl_aq);
             n->Store( props_.key_NaClaq, makeScalar(n->Status(props_.key_NaClaq),salinity) );
           }
           // evaporated water (kg/m3)
           if ( n->Status(props_.key_H2Og) != DIRICH ) {
-            //double64 evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
-            double64 evaporated_water = carb_ph_composition_(YH2O);
+            //double evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
+            double evaporated_water = carb_ph_composition_(YH2O);
             n->Store( props_.key_H2Og, makeScalar(n->Status(props_.key_H2Og),evaporated_water) );
           }
         }
@@ -392,8 +392,8 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
           carb_ph_composition_(YCO2)   = flash_.Y_co2();
           carb_ph_composition_(YH2O)   = flash_.Y_h2o();
           // saturations
-          const double64 sw = WaterSaturation();
-          const double64 halite_saturation = HaliteVolumeFraction();
+          const double sw = WaterSaturation();
+          const double halite_saturation = HaliteVolumeFraction();
           if ( n->Status( props_.key_sH2O ) != DIRICH ) n->Store( props_.key_sH2O, makeScalar(n->Status(props_.key_sH2O),sw) );
           if ( n->Status( props_.key_sCO2 ) != DIRICH ) n->Store( props_.key_sCO2, makeScalar(n->Status(props_.key_sCO2),1.-sw-halite_saturation) );
           if ( n->Status( props_.key_NaCl ) != DIRICH ) n->Store( props_.key_NaCl, makeScalar(n->Status(props_.key_NaCl),halite_saturation) );
@@ -409,27 +409,27 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
           if ( n->Status(props_.key_NaCl) != DIRICH ) n->Store( props_.key_NaCl, makeScalar(n->Status(props_.key_NaCl),flash_.massHalite()/rhoNaCl_) );
           // dissolved CO2 (kg/m3)
           if ( n->Status(props_.key_CO2aq) != DIRICH ) {
-            //const double64 dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
-            const double64 dissolved_CO2 = aq_ph_composition_(XCO2);
+            //const double dissolved_CO2 = aq_ph_composition_(XCO2) * flash_.rho_aq();
+            const double dissolved_CO2 = aq_ph_composition_(XCO2);
             n->Store( props_.key_CO2aq, makeScalar(n->Status(props_.key_CO2aq),dissolved_CO2) );
           }
           // salinity (kg/m3)
           if ( n->Status(props_.key_NaClaq) != DIRICH ) {
-            //double64 salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
-            double64 salinity = aq_ph_composition_(XNACl_aq);
+            //double salinity = aq_ph_composition_(XNACl_aq) * flash_.rho_aq();
+            double salinity = aq_ph_composition_(XNACl_aq);
             n->Store( props_.key_NaClaq, makeScalar(n->Status(props_.key_NaClaq),salinity) );
           }
           // evaporated water (kg/m3)
           if ( n->Status(props_.key_H2Og) != DIRICH ) {
-            //double64 evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
-            double64 evaporated_water = carb_ph_composition_(YH2O);
+            //double evaporated_water = carb_ph_composition_(YH2O) * flash_.rho_carb();
+            double evaporated_water = carb_ph_composition_(YH2O);
             n->Store( props_.key_H2Og, makeScalar(n->Status(props_.key_H2Og),evaporated_water) );
           }
         }
       break;
       
     default:   
-        cerr << "ERROR: PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n, double64 delta_t ):\n";  
+        cerr << "ERROR: PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n, double delta_t ):\n";  
         cerr << "wrong state, state provided was " << parseState(phase_state) << endl;
     }  
  
@@ -437,7 +437,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
     // ------------------------------------------
     static bool first_warning(true);
     if ( flash_.massAqueousPhase() > 0. && Xbulk_(XCARB) > 0. ) {
-        const double64 diff_co2_aq = flash_.D_Co2();
+        const double diff_co2_aq = flash_.D_Co2();
         if ( first_warning && (diff_co2_aq < 2.0e-10 || diff_co2_aq > 12.5e-9) ) {
              cerr <<"\n\t"<< diff_co2_aq <<" m2/s.";
              csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate:",
@@ -538,14 +538,14 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Element<dim>* e )
               carb_ph_composition_(YH2O)   = flash_.Y_h2o();
             break;
           default:
-              cerr << "ERROR: PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n, double64 delta_t ):\n";
+              cerr << "ERROR: PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n, double delta_t ):\n";
               cerr << "wrong state, state provided was " << parseState(phase_state) << endl;
     }
 
     // 5. diffusivity of CO2 in the aqueous phase, if there is CO2 around
     // ------------------------------------------------------------------
-    const double64 diff_CO2_min(2.0e-10), diff_CO2_max(12.5e-9); // bounds by Cardogan et al. 2014
-    double64  diff_co2_aq(0.);
+    const double diff_CO2_min(2.0e-10), diff_CO2_max(12.5e-9); // bounds by Cardogan et al. 2014
+    double  diff_co2_aq(0.);
     if ( flash_.massAqueousPhase() > 0. && Xbulk_(XCARB) > 0. ) {
         diff_co2_aq = flash_.D_Co2();
         if ( diff_co2_aq < diff_CO2_min || diff_co2_aq > diff_CO2_max ) {
@@ -581,30 +581,30 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InitialisePVTX_FromFieldData( const Node
     ToC_ = n->Read( props_.key_T ); // temperature in centrigrade
     assert( Pf_ >= 100325. );
     assert( ToC_ <= 100. );
-    const double64 entry_pressure( MaxEntryPressureOfParentElements( n ) );
+    const double entry_pressure( MaxEntryPressureOfParentElements( n ) );
     Pf_ += entry_pressure;
 
     // 1. Reading fluid composition after transport and computing mass balances
     // ------------------------------------------------------------------------
     // saturation
-    const double64 min_sat(numeric_limits<double64>::epsilon() * 2.);
-    const double64 sw     = n->Read( props_.key_sH2O );
-    const double64 sCO2   = n->Read( props_.key_sCO2 );
-    const double64 halite = n->Read( props_.key_NaCl ); // volume fraction of salt in pore space
+    const double min_sat(numeric_limits<double>::epsilon() * 2.);
+    const double sw     = n->Read( props_.key_sH2O );
+    const double sCO2   = n->Read( props_.key_sCO2 );
+    const double halite = n->Read( props_.key_NaCl ); // volume fraction of salt in pore space
     assert( !isnan(halite) );
     assert( halite >= 0. and halite <= 1. );
     assert( sw >= 0. and sw <= 1. );
     assert( sCO2 >= 0. and sCO2 <= 1. );
     assert( fabs(sw+sCO2+halite) <= 1. + min_sat );
-    const double64 rhoH2O = (sw > 0.) ? n->Read( props_.key_rhoH2O ) : 0.;
-    const double64 rhoCO2 = (sCO2 > 0.) ? n->Read( props_.key_rhoCO2 ) : 0.;
+    const double rhoH2O = (sw > 0.) ? n->Read( props_.key_rhoH2O ) : 0.;
+    const double rhoCO2 = (sCO2 > 0.) ? n->Read( props_.key_rhoCO2 ) : 0.;
 
     // mass totals used below for the computation of the new phase saturations and compositions - OK rsvp with Thomas
-    double64 mass_H2O, mass_CO2, mass_NaCl_aq;
+    double mass_H2O, mass_CO2, mass_NaCl_aq;
     // H2O
     if ( sw >= min_sat ) {
          n->Read( props_.key_H2O_comp, aq_ph_composition_ );
-         if ( fabs(aq_ph_composition_(XH2O)+aq_ph_composition_(XCO2)+aq_ph_composition_(XNACl_aq)-1.) > numeric_limits<double64>::epsilon() )
+         if ( fabs(aq_ph_composition_(XH2O)+aq_ph_composition_(XCO2)+aq_ph_composition_(XNACl_aq)-1.) > numeric_limits<double>::epsilon() )
            throw csmp::Exception( ERROR, "PVTX_Calculator_H2O_CO2_NaCl<dim>::EstablishMassBalanceAnd_PT_Conditions:",
                                          "mass fractions of aqueous phase do not add up to 1.");
          mass_H2O     = aq_ph_composition_(XH2O) * rhoH2O * sw;
@@ -619,7 +619,7 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InitialisePVTX_FromFieldData( const Node
     // CO2
     if ( sCO2 >= min_sat ) {
          n->Read( props_.key_CO2_comp, carb_ph_composition_ );
-         if ( fabs(carb_ph_composition_(YH2O)+carb_ph_composition_(YCO2)-1.) > numeric_limits<double64>::epsilon() )
+         if ( fabs(carb_ph_composition_(YH2O)+carb_ph_composition_(YCO2)-1.) > numeric_limits<double>::epsilon() )
            throw csmp::Exception( ERROR, "PVTX_Calculator_H2O_CO2_NaCl<dim>::EstablishMassBalanceAnd_PT_Conditions:",
                                          "mass fractions of carbonic phase do not add up to 1.");
          mass_CO2 = carb_ph_composition_(YCO2) * rhoCO2 * sCO2;
@@ -629,7 +629,7 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InitialisePVTX_FromFieldData( const Node
     else mass_CO2 = 0.;
 
     // NaCl - solid salt volume converted into mass, assuming a unit pore volume
-    const double64 mass_NaCl_cr = halite * rhoNaCl_;
+    const double mass_NaCl_cr = halite * rhoNaCl_;
 
     // derived quantities
     Xbulk_(TMASS) = mass_H2O + mass_CO2 + mass_NaCl_aq + mass_NaCl_cr;
@@ -666,13 +666,13 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
     const size_t nodes(e->Nodes()), sector_ip(0U);
     IPOL_.resize(nodes);
     e->N_AtBaryCenter( IPOL_ );
-    const double64 PV = e->Volume() * e->Read(props_.key_thi) * e->Read(props_.key_phi);
+    const double PV = e->Volume() * e->Read(props_.key_thi) * e->Read(props_.key_phi);
     ArrayVariable  temp(4,0.,ANY);
-    double64       ePV_from_sectors(0.);
+    double       ePV_from_sectors(0.);
 
     // properties
     Xbulk_ = Pf_ = ToC_ = 0.;
-    double64 NaCl(0.);
+    double NaCl(0.);
     // interpolation
     for ( size_t i=0; i<nodes; ++i ) {
          // pressure and temperature
@@ -681,8 +681,8 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
          // salt as a mineral
          NaCl += IPOL_[i] * e->N(i)->Read( props_.key_NaCl );
          // mass fractions and total mass using the sector pore volumes as weights
-         //const double64 sector_pv = e->Read( i, sector_ip, props_.key_sPV );
-         const double64 sector_pv = e->SectorVolume(i) * e->Read(props_.key_thi) * e->Read(props_.key_phi);
+         //const double sector_pv = e->Read( i, sector_ip, props_.key_sPV );
+         const double sector_pv = e->SectorVolume(i) * e->Read(props_.key_thi) * e->Read(props_.key_phi);
          assert( !isnan(sector_pv) );
          ePV_from_sectors += sector_pv;
          e->N(i)->Read( props_.key_Xbulk, temp );
@@ -692,10 +692,10 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
          Xbulk_(XCARB) += IPOL_[i] * temp(XCARB);
          Xbulk_(XSALT) += IPOL_[i] * temp(XSALT);
       }
-    assert( fabs(PV - ePV_from_sectors)  <= numeric_limits<double64>::epsilon()*PV );
+    assert( fabs(PV - ePV_from_sectors)  <= numeric_limits<double>::epsilon()*PV );
    
     // checks and taking into account capillary pressure
-    const double64 entry_pressure = e->Read( props_.key_pd );
+    const double entry_pressure = e->Read( props_.key_pd );
     assert( !isnan(entry_pressure) );
     Pf_ += entry_pressure;
     assert( Pf_ >= 100325. );
@@ -703,7 +703,7 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
 
     // 1. Checking the fluid composition after the interpolation
     // ------------------------------------------------------------------------
-    if ( fabs(Xbulk_(XAQ)+Xbulk_(XCARB)+Xbulk_(XSALT)-1.) > 1.0e-8 ) //numeric_limits<double64>::epsilon() is too strict
+    if ( fabs(Xbulk_(XAQ)+Xbulk_(XCARB)+Xbulk_(XSALT)-1.) > 1.0e-8 ) //numeric_limits<double>::epsilon() is too strict
       throw csmp::Exception( ERROR, "PVTX_Calculator_H2O_CO2_NaCl<dim>::EstablishMassBalanceAnd_PT_Conditions:",
                                     "mass fractions of system do not add up to 1.");
  
@@ -730,10 +730,10 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
      @return returns the maximum pd detected.
 */
 template<size_t dim>
-double64 PVTX_Calculator_H2O_CO2_NaCl<dim>::MaxEntryPressureOfParentElements( const Node<dim>* n ) const
+double PVTX_Calculator_H2O_CO2_NaCl<dim>::MaxEntryPressureOfParentElements( const Node<dim>* n ) const
  {
     assert( n != nullptr );
-    double64 pd(0.);
+    double pd(0.);
    
     for ( size_t i=0U; i<n->Parents(); ++i ) {
          const Element<dim>* eptr(n->Parent(i));

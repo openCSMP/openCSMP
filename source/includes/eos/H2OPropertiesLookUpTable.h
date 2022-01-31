@@ -72,7 +72,7 @@ private:
                              tmin_c, tmax_c, pmin_c, pmax_c, tc_rows, pc_cols, tsat_atm;
     fT                       pmax, tmax, d, pcurrent, tcurrent;
     fT                       ak[4], bij[6][5], xy[2], prop[4];
-    int32                    cols, rows, c_cols, c_rows, ij[4][2], it[2], ip[2];
+    int32_t                    cols, rows, c_cols, c_rows, ij[4][2], it[2], ip[2];
     
     LookUpStorage <fT>       density, enthalpy, heat_capacity, viscosity, 
                              expansivity, compressibility, dp_dd_CT, dp_dT_Cd, t_sat, p_sat,
@@ -102,8 +102,8 @@ private:
     void GetLookupTableEntriesTwoPhaseCurveForP( fT p ); 
     fT   DistancePTwoPhaseCurve( fT p );
     fT   DistanceTTwoPhaseCurve( fT t ); 
-    fT   InterpolateForP( fT p, int32 i );
-    fT   InterpolateForT( fT t, int32 i ); 
+    fT   InterpolateForP( fT p, int32_t i );
+    fT   InterpolateForT( fT t, int32_t i ); 
     fT   NumericalPressureDensityDerivative( fT r1, fT t, fT p, fT dpress );
     fT   NumericalCompressibility( fT r1, fT t, fT p, fT dpress );
     fT   NumericalHeatCapacity( fT h1, fT t, fT p, fT dtemp );                        
@@ -137,7 +137,7 @@ inline void H2OPropertiesLookUpTable<fT>::GetLookupTableEntriesTwoPhaseCurveForT
        it[0] = it[1] = 0; // get 2-phase properties at tatm
      }
    else {
-       it[0] = static_cast<int32>((t-tatm)/dT_fine);
+       it[0] = static_cast<int32_t>((t-tatm)/dT_fine);
        it[1] = it[0]+1;
      }
  }
@@ -156,7 +156,7 @@ inline void H2OPropertiesLookUpTable<fT>::GetLookupTableEntriesTwoPhaseCurveForP
        ip[1] = 1; // get 2-phase properties between patm (101325.0) and p_sat_min + dP_fine (105,000 Pa)
      }
    else {
-       ip[0] = static_cast<int32>((p-press)/dP_fine)+1; // offset by 1 since entry 0 is patm, entry 1 os p_sat_min + dP_fine 
+       ip[0] = static_cast<int32_t>((p-press)/dP_fine)+1; // offset by 1 since entry 0 is patm, entry 1 os p_sat_min + dP_fine 
        ip[1] = ip[0]+1;
      }
  }
@@ -184,7 +184,7 @@ inline fT H2OPropertiesLookUpTable<fT>::DistanceTTwoPhaseCurve( fT t )
  }
 
 template<typename fT>
-inline fT H2OPropertiesLookUpTable<fT>::InterpolateForT( fT t, int32 i ) 
+inline fT H2OPropertiesLookUpTable<fT>::InterpolateForT( fT t, int32_t i ) 
  {
    fT u;
    // obvious entries
@@ -199,7 +199,7 @@ inline fT H2OPropertiesLookUpTable<fT>::InterpolateForT( fT t, int32 i )
 
 
 template<typename fT>
-inline fT H2OPropertiesLookUpTable<fT>::InterpolateForP( fT p, int32 i ) 
+inline fT H2OPropertiesLookUpTable<fT>::InterpolateForP( fT p, int32_t i ) 
  {
    fT u;
    // obvious entries

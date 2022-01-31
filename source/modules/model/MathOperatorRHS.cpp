@@ -418,7 +418,7 @@ namespace csmp {
   }
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::MultiplyBy(double64 integral_mult_factor)
+  void MathOperatorRHS<dim>::MultiplyBy(double integral_mult_factor)
   {
     factor_ = integral_mult_factor;
   }
@@ -484,7 +484,7 @@ namespace csmp {
   }
 
   template<size_t dim>
-  double64   MathOperatorRHS<dim>::MultiplyBy() const
+  double   MathOperatorRHS<dim>::MultiplyBy() const
   {
     return factor_;
   }
@@ -737,7 +737,7 @@ namespace csmp {
  When the property is an element property, it will be put into the
  first vector entry MTRL[0].*/
   template<size_t dim>
-  void MathOperatorRHS<dim>::GetOperands(Element<dim>& e_ref)
+  void MathOperatorRHS<dim>::GetOperands( const Element<dim>& e_ref)
   {
     // if operand property is an element property
     if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
@@ -817,7 +817,7 @@ namespace csmp {
   } // end GetOperands(Element)
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::GetOperands(Face<dim>&  e_ref)
+  void MathOperatorRHS<dim>::GetOperands( const Face<dim>&  e_ref)
   {
     // if operand property is an element property
     if (MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == BOUNDARY)
@@ -897,7 +897,7 @@ namespace csmp {
   } // end GetOperands(Face)
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::GetOperands(InterFace<dim>& f)
+  void MathOperatorRHS<dim>::GetOperands(const InterFace<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::GetOperands(InterFace): ";
     std::cerr << " Overload to get LHS operands from interface: " << f.Idx() << std::endl;
@@ -931,7 +931,7 @@ namespace csmp {
   } // end WriteOperands(InterFace)
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::ComputeContribution(Element<dim>& e)
+  void MathOperatorRHS<dim>::ComputeContribution( const Element<dim>& e)
   {
     std::cerr << "\nMathOperatorRHS<dim>::ComputeContribution(Element): ";
     std::cerr << " Overload to calculate LHS contribution from Element: " << e.Idx() << std::endl;
@@ -939,7 +939,7 @@ namespace csmp {
   }// end ComputeContribution(Element)
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::ComputeContribution(Face<dim>& f)
+  void MathOperatorRHS<dim>::ComputeContribution( const Face<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::ComputeContribution(Face): ";
     std::cerr << " Overload to calculate LHS constribution from face: " << f.Idx() << std::endl;
@@ -947,7 +947,7 @@ namespace csmp {
   }// end ComputeContribution(Face)
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::ComputeContribution(InterFace<dim>& f)
+  void MathOperatorRHS<dim>::ComputeContribution( const InterFace<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::ComputeContribution(InterFace): ";
     std::cerr << " Overload to calculate LHS constribution from interface: " << f.Idx() << std::endl;
@@ -957,7 +957,7 @@ namespace csmp {
 
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::MultiplyWithTimeFactor(double64 dt)
+  void MathOperatorRHS<dim>::MultiplyWithTimeFactor(double dt)
   {
     for (size_t i = 0; i < RHS.size(); i++)
       RHS[i] *= dt;
@@ -967,7 +967,7 @@ namespace csmp {
   /// AssignToGlobal matrix functions
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, vector<double64>& rhs)
+  void MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, vector<double>& rhs)
   {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
@@ -1002,7 +1002,7 @@ namespace csmp {
   }
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, vector<double64>& rhs)
+  void MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, vector<double>& rhs)
   {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
@@ -1039,7 +1039,7 @@ namespace csmp {
   }
 
   template<size_t dim>
-  void MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, vector<double64>& rhs)
+  void MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, vector<double>& rhs)
   {
     std::cerr << "\nMathOperatorRHS<dim>::AssignToGlobal(InterFace): ";
     std::cerr << " Overload to assign RHS  local entries to global matrix: " << f.Idx() << std::endl;
@@ -1053,7 +1053,7 @@ namespace csmp {
 
 
   template<size_t dim>
-  void  MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, std::vector<double64>& rhs, const std::vector<size_t>& DOF_indexes) {
+  void  MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes) {
     // map local to global indexes for test and basic operands
     const size_t nodes(e.Nodes());
     IDT.resize(nodes);
@@ -1097,7 +1097,7 @@ namespace csmp {
   }
 
   template<size_t dim>
-  void  MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, std::vector<double64>& rhs, const std::vector<size_t>& DOF_indexes) {
+  void  MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes) {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
 
@@ -1148,7 +1148,7 @@ namespace csmp {
   }
 
   template<size_t dim>
-  void  MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, std::vector<double64>& rhs, const std::vector<size_t>& DOF_indexes) {
+  void  MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes) {
     std::cerr << "\nMathOperatorRHS<dim>::AssignToGlobal(InterFace): ";
     std::cerr << " Overload to assign RHS  local entries to global matrix: " << f.Idx() << std::endl;
     throw invalid_argument("MathOperatorRHS<dim>::AssignToGlobal(InterFace)");
@@ -1190,13 +1190,13 @@ namespace csmp {
     assert(idx.type != SCALAR);
 
     // creating a running index for decrementation
-    const int32  oldNsize_m1(static_cast<int32>(N.size()) - 1);
+    const int32_t  oldNsize_m1(static_cast<int32_t>(N.size()) - 1);
 
     // VECTOR variables
     if (idx.type == VECTOR) {
       // new elements are set to zero
       N.resize(N.size() * dim, 0U); // new size of N vector
-      for (int32 i = oldNsize_m1, k = static_cast<int32>(N.size()) - 1; i >= 0; i--)
+      for (int32_t i = oldNsize_m1, k = static_cast<int32_t>(N.size()) - 1; i >= 0; i--)
         for (size_t j = 0U; j < dim; j++)
           N[static_cast<size_t>(k--)] = ((N[static_cast<size_t>(i)] + 1) * dim - j) - 1;
       return;
@@ -1206,17 +1206,17 @@ namespace csmp {
     if (idx.type == TENSOR) {
       const size_t  dim2(dim*dim);
       N.resize(N.size() * dim2, 0U);
-      for (int32 i = oldNsize_m1, k = static_cast<int32>(N.size()) - 1; i >= 0; i--)
+      for (int32_t i = oldNsize_m1, k = static_cast<int32_t>(N.size()) - 1; i >= 0; i--)
         for (size_t j = 0; j < dim2; j++)
           N[static_cast<size_t>(k--)] = ((N[static_cast<size_t>(i)] + 1) * dim2 - j) - 1;
     }
 
     // ARRAY or FLAGGEDARRAY variables
     if (idx.type == ARRAY || idx.type == FLAGGEDARRAY) {
-      const long64 length(idx.dataDepth);
+      const int64_t  length(idx.dataDepth);
       // new elements are set to zero
       N.resize(N.size() * length, 0U); // new size of N vector ( length of array * number of nodes )
-      for (long64 i = oldNsize_m1, k = static_cast<long64>(N.size()) - 1; i >= 0; i--)
+      for (int64_t  i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i--)
         // cycle for one node through all the array variable components
         for (size_t j = 0U; j < length; j++)
           N[static_cast<size_t>(k--)] = ((N[static_cast<size_t>(i)] + 1) * length - j) - 1;

@@ -48,14 +48,14 @@ class IterativeIntegrator : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
     
     void MaximalIterationNumber(size_t max_iter);
     size_t MaximalIterationNumber() const;
-    void TargetResidual(double64 target_residual);
+    void TargetResidual(double target_residual);
     void Verbose(bool yesno);
     
     void AddPostProcess( Interrelation<dim>* );
     void AddPostProcess( Visitor<dim>* );
     
     virtual void SetupEquations( COMPUTATION_DOMAIN<dim>& );
-    virtual double64  Residual();
+    virtual double  Residual();
     virtual void SolveEquations( COMPUTATION_DOMAIN<dim>& );
     void ApplyPostProcesses( COMPUTATION_DOMAIN<dim>& );
 
@@ -66,8 +66,8 @@ class IterativeIntegrator : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
 #endif
     
   protected:
-    /// Solution vector<double64> of last iteration * not yet used
-    std::vector<double64> x_old_; 
+    /// Solution vector<double> of last iteration * not yet used
+    std::vector<double> x_old_; 
     bool verbose_;
     
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -80,7 +80,7 @@ class IterativeIntegrator : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
   private:
     std::list<std::pair<Interrelation<dim>*, Visitor<dim>*> > processes_;
     size_t max_iter_;
-    double64 target_residual_;
+    double target_residual_;
     
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings* GetSAMG_Settings();

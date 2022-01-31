@@ -33,14 +33,14 @@ class RegionBoundaryFluxVisitor : public Visitor<dim> {
     virtual void Visit( Node<dim>* );
   
     /// returns the flux through the region boundary 
-    double64 InFlux() const;
+    double InFlux() const;
     void ResetFlux();
-    void TimeIncrement( double64 );
+    void TimeIncrement( double );
  
   protected:
     ModelSubDomain<dim,Element>*  domain_ptr_; // either of:
     csmp::Index                   flux_key_;   // for the user-defined flux variable
-    double64                      FVinflux_,   // flux summation variable
+    double                      FVinflux_,   // flux summation variable
                                   delta_t_;    // time increment used in the flux integration
     VectorVariable<dim>           vt_;
 };

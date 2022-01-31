@@ -38,7 +38,7 @@ by the face unit normal and assumed to act inward if positive.
 */
 
 template<size_t dim>
-void NumIntegral_PT_op_dS<dim>::GetOperands( Face<dim>& f )
+void NumIntegral_PT_op_dS<dim>::GetOperands( const Face<dim>& f )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( f.FE()->Isoparametric() == true );
@@ -74,7 +74,7 @@ The result is returned into the MathOperatorRHS vector.
 Within the PDE_Integrator framework to assign stress boundary conditions to a model.  
 */
 template<size_t dim>
-void NumIntegral_PT_op_dS<dim>::ComputeContribution( Face<dim>& f )
+void NumIntegral_PT_op_dS<dim>::ComputeContribution( const Face<dim>& f )
 {
    MathOperatorRHS<dim>::RHS.resize( f.Nodes() * dim );
    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
@@ -84,8 +84,8 @@ void NumIntegral_PT_op_dS<dim>::ComputeContribution( Face<dim>& f )
    {
      N.clear();
      f.N_AtIntegrationPoint( i, N );
-     double64 const detJ = f.det_JINV_AtIntegrationPoint(i);
-     double64 const weight = f.WeightAtIntegrationPoint(i);
+     double const detJ = f.det_JINV_AtIntegrationPoint(i);
+     double const weight = f.WeightAtIntegrationPoint(i);
      for( size_t j(0); j < f.Nodes(); ++j )
        for( int df(0); df < dim; ++df )
          MathOperatorRHS<dim>::RHS[j*dim+df] += N[j] * weight * detJ * oper_(df) ;

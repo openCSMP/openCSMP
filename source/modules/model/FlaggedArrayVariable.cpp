@@ -14,7 +14,7 @@ FlaggedArrayVariable::FlaggedArrayVariable()
 
 /// As PropertyDatabase constructor, but using index right away
 FlaggedArrayVariable::FlaggedArrayVariable( const Index& arrayKey,
-                                            double64 defaultValue,
+                                            double defaultValue,
                                             VARIABLE_FLAG flag )
   : data_ ( arrayKey.dataDepth, defaultValue ),
     flags_( arrayKey.dataDepth,  flag)
@@ -22,7 +22,7 @@ FlaggedArrayVariable::FlaggedArrayVariable( const Index& arrayKey,
   }
 
 FlaggedArrayVariable::FlaggedArrayVariable( size_t arraySize,
-                                            double64 defaultValue,
+                                            double defaultValue,
                                             VARIABLE_FLAG flag )
   : data_ ( arraySize, defaultValue ),
     flags_( arraySize, flag)
@@ -52,7 +52,7 @@ void FlaggedArrayVariable::CopyValuesOnly( ArrayVariable& av )
             data_[i]         = av(i);
 }
 
-FlaggedArrayVariable& FlaggedArrayVariable::operator=( double64 val )
+FlaggedArrayVariable& FlaggedArrayVariable::operator=( double val )
   {
     for( size_t i(0); i < Size(); ++i )
       data_[i] = val;
@@ -72,7 +72,7 @@ size_t FlaggedArrayVariable::Size() const
     return data_.size();
   }
 
-void FlaggedArrayVariable::Resize( size_t newSize, double64 newValue )
+void FlaggedArrayVariable::Resize( size_t newSize, double newValue )
   {
     data_.resize ( newSize, newValue );
     flags_.resize( newSize, ANY );
@@ -94,25 +94,25 @@ void FlaggedArrayVariable::Flag( const size_t& i, VARIABLE_FLAG flag )
     flags_[i] = flag;
   }
 
-double64 FlaggedArrayVariable::operator[]( size_t i ) const
+double FlaggedArrayVariable::operator[]( size_t i ) const
   {
     assert( i < Size() );
     return data_[i];
   }
 
-double64& FlaggedArrayVariable::operator()( size_t i )
+double& FlaggedArrayVariable::operator()( size_t i )
   {
     assert( i < Size() );
     return data_[i];
   }
 
-void  FlaggedArrayVariable::Component( size_t i, double64 val )
+void  FlaggedArrayVariable::Component( size_t i, double val )
  {
     assert( i < Size() );
     data_[i] = val;
  }
 
-double64  FlaggedArrayVariable::Component( size_t i ) const
+double  FlaggedArrayVariable::Component( size_t i ) const
  {
     assert( i < Size() );
     return data_[i];
@@ -174,7 +174,7 @@ bool FlaggedArrayVariable::operator>=( const FlaggedArrayVariable& av ) const
 
 /// Standard Operations with temporary object
 
-FlaggedArrayVariable FlaggedArrayVariable::operator+( double64 val ) const
+FlaggedArrayVariable FlaggedArrayVariable::operator+( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
     for( size_t i(0); i < Size(); ++i )
@@ -182,7 +182,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator+( double64 val ) const
     return temp_arr;
 }
 
-FlaggedArrayVariable FlaggedArrayVariable::operator-( double64 val ) const
+FlaggedArrayVariable FlaggedArrayVariable::operator-( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
     for( size_t i(0); i < Size(); ++i )
@@ -191,7 +191,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator-( double64 val ) const
     return temp_arr;
   }
 
-FlaggedArrayVariable FlaggedArrayVariable::operator*( double64 val ) const
+FlaggedArrayVariable FlaggedArrayVariable::operator*( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
     for( size_t i(0); i < Size(); ++i )
@@ -199,7 +199,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator*( double64 val ) const
     return temp_arr;
   }
 
-FlaggedArrayVariable FlaggedArrayVariable::operator/( double64 val ) const
+FlaggedArrayVariable FlaggedArrayVariable::operator/( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
     for( size_t i(0); i < Size(); ++i )
@@ -207,7 +207,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator/( double64 val ) const
     return temp_arr;
   }
 
-FlaggedArrayVariable FlaggedArrayVariable::operator^( double64 val ) const
+FlaggedArrayVariable FlaggedArrayVariable::operator^( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
     for( size_t i(0); i < Size(); ++i )
@@ -220,28 +220,28 @@ FlaggedArrayVariable FlaggedArrayVariable::operator^( double64 val ) const
 
 /// Standard Operations with current object
 
-FlaggedArrayVariable& FlaggedArrayVariable::operator+=( double64 val )
+FlaggedArrayVariable& FlaggedArrayVariable::operator+=( double val )
   {
     for( size_t i(0); i < Size(); ++i )
         data_[i] += val;
     return *this;
   }
 
-FlaggedArrayVariable& FlaggedArrayVariable::operator-=( double64 val )
+FlaggedArrayVariable& FlaggedArrayVariable::operator-=( double val )
   {
     for( size_t i(0); i < Size(); ++i )
         data_[i] -= val;
     return *this;
   }
 
-FlaggedArrayVariable& FlaggedArrayVariable::operator*=( double64 val )
+FlaggedArrayVariable& FlaggedArrayVariable::operator*=( double val )
   {
     for( size_t i(0); i < Size(); ++i )
         data_[i] *= val;
     return *this;
   }
 
-FlaggedArrayVariable& FlaggedArrayVariable::operator/=( double64 val )
+FlaggedArrayVariable& FlaggedArrayVariable::operator/=( double val )
   {
     for( size_t i(0); i < Size(); ++i )
         data_[i] /= val;
@@ -353,7 +353,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator/( const FlaggedArrayVariable
     return returnArray;
   }
 
-bool FlaggedArrayVariable::IsWithinRange( double64 min, double64 max ) const
+bool FlaggedArrayVariable::IsWithinRange( double min, double max ) const
   {
     assert( min < max );
 
@@ -365,7 +365,7 @@ bool FlaggedArrayVariable::IsWithinRange( double64 min, double64 max ) const
 
 
 /// returns the minimum and maximum of the values stored in the array variable 
-void  FlaggedArrayVariable::MinMax( double64& min, double64& max ) const
+void  FlaggedArrayVariable::MinMax( double& min, double& max ) const
   {
      min = (*min_element( data_.begin(), data_.end() ));
      max = (*max_element( data_.begin(), data_.end() ));
@@ -470,7 +470,7 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
   {
     if (!fp)
       {
-        std::cout <<"\nFlaggedArrayVariable::Out(): invalid file pointer."<< std::endl;
+        std::cerr <<"\nFlaggedArrayVariable::Out(): invalid file pointer."<< std::endl;
         return false;
       }    
 
@@ -479,13 +479,13 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
     fp.write( (char*) &depth, sizeof(size_t));
 
     // flags
-    const size_t flag_size(sizeof(int32));  // VARIABLE_FLAG
+    const size_t flag_size(sizeof(int32_t));  // VARIABLE_FLAG
     vector<VARIABLE_FLAG>::const_iterator flagsEnd( flags_.end() );
     for ( vector<VARIABLE_FLAG>::const_iterator it( flags_.begin() ); it != flagsEnd; ++it )
       fp.write( (char*) &(*it), flag_size);
 
     // data
-    const size_t bytes(sizeof(double64));
+    const size_t bytes(sizeof(double));
     vector<double>::const_iterator dataEnd( data_.end() );
     for ( vector<double>::const_iterator it( data_.begin() ); it != dataEnd; ++it )
       fp.write( (char*) &(*it), bytes);
@@ -516,34 +516,37 @@ bool FlaggedArrayVariable::In( std::fstream& fp )
     // depth
     size_t depth(0);
     if ( !fp.read( (char*) &depth, sizeof(size_t)) ) {
-      std::cout <<"\nFlaggedArrayVariable::In(): could not read binary record depth"<< std::endl;
+      std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary record depth"<< std::endl;
       return false;
       }
     Resize(depth);
 
     // flags
-    const size_t  flags_size( sizeof( int32 ) );  // VARIABLE_FLAG
+    const size_t  flags_size( sizeof( int32_t ) );  // VARIABLE_FLAG
     for ( size_t i(0); i < depth; ++i )
       {
         if( !fp.read( (char*) &flags_[i], flags_size) )
           {
-          std::cout <<"\nFlaggedArrayVariable::In(): could not read binary flags record"<< std::endl;
+          std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary flags record"<< std::endl;
           return false;
           }
       }
 
     // data
-    const size_t  bytes( sizeof(double64) );
+    const size_t  bytes( sizeof(double) );
     for ( size_t i(0); i < depth; ++i )
       {
         if( !fp.read( (char*) &data_[i], bytes) )
           {
-          std::cout <<"\nFlaggedArrayVariable::In(): could not read binary data record"<< std::endl;
+          std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary data record"<< std::endl;
           return false;
           }
       }
     return true;
   }
+
+
+
 
 namespace{
   FlaggedArrayVariable::FlaggedArrayContainer sortedArray( FlaggedArrayVariable::FlaggedArrayContainer::const_iterator plainDataBegin,
@@ -556,14 +559,14 @@ namespace{
 } // locally restricted
 
 
-double FlaggedArrayVariable::NextLargestEntry( double64 fromValue ) const
+double FlaggedArrayVariable::NextLargestEntry( double fromValue ) const
 {
   FlaggedArrayContainer sorted( sortedArray( data_.begin(), data_.end() ) );
   return *upper_bound( sorted.begin(), sorted.end(), fromValue );
 }
 
 
-bool FlaggedArrayVariable::HasLargerEntry( double64 fromValue ) const
+bool FlaggedArrayVariable::HasLargerEntry( double fromValue ) const
 {
   FlaggedArrayContainer sorted( sortedArray( data_.begin(), data_.end() ) );
   return upper_bound( sorted.begin(), sorted.end(), fromValue ) != sorted.end();

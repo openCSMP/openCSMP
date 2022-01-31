@@ -33,9 +33,9 @@ class FemFromGridVisitor : public Visitor<dim> {
     ScalarVariable               val;
     csmp::Index                      key;
 
-    bool IsInsideTriangle( double64 x, double64 y, bool update=true );
-    bool IsInsideQuadrilateral( double64 x, double64 y );
-    void MinMaxCoordinates( double64& min_x, double64& max_x, double64& min_y, double64& max_y );
+    bool IsInsideTriangle( double x, double y, bool update=true );
+    bool IsInsideQuadrilateral( double x, double y );
+    void MinMaxCoordinates( double& min_x, double& max_x, double& min_y, double& max_y );
     void InitializeElementGrid( size_t id, CSMP_FEM_TYPE fe_type );
 };
 

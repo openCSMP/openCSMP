@@ -57,7 +57,7 @@ class TextInterface {
     void OutputRegionsToTextFiles( const Model<dim>& sg, const char* property ) const;
     
     // text output from models   
-    void AppendDataToText( const char* fname, double64 time, long idx, double64 value );
+    void AppendDataToText( const char* fname, double time, long idx, double value );
     void WriteStringToTextFile( const char* fname, const std::string& str, bool overwrite );
     void WriteStringToTextFile( const char* fname, const char* s, bool overwrite );
     void WriteMatrixToTextfile( const char* fname, DenseMatrix<DM_MIN>& mtrx );

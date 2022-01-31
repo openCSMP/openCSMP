@@ -20,19 +20,19 @@ namespace csmp
     //***TD*** cross-check the actual porosity meaning such that any implicit scaling with volume or so is clearly spelled out in documentation
 
   public: 
-    H2ONaClThermalEquilibrator(const double64& external_mass_rock,  // [kg]
-                               const double64& external_cp_rock,    // [J/kg/K]
-                               const double64& external_rho_rock,   // [kg/m^3]
-                               const double64& external_porosity,   // [ ]
-                               const double64& external_mass_fluid, // [kg]
-                               const double64& external_wt_current, // [wt% NaCl]
-                               const double64& external_t_previous, // [C]
-                               const double64& external_p_current,  // [bar]
-                               const double64& external_H_current,  // [J] NOT [J/kg]
-                               const double64& external_H_previous, // [J]
+    H2ONaClThermalEquilibrator(const double& external_mass_rock,  // [kg]
+                               const double& external_cp_rock,    // [J/kg/K]
+                               const double& external_rho_rock,   // [kg/m^3]
+                               const double& external_porosity,   // [ ]
+                               const double& external_mass_fluid, // [kg]
+                               const double& external_wt_current, // [wt% NaCl]
+                               const double& external_t_previous, // [C]
+                               const double& external_p_current,  // [bar]
+                               const double& external_H_current,  // [J] NOT [J/kg]
+                               const double& external_H_previous, // [J]
                                const bool&     fixed_external_t,
-                               const double64& t_fix,
-                               const double64& external_t_diff, 
+                               const double& t_fix,
+                               const double& external_t_diff, 
                                const bool& verbose);
     ~H2ONaClThermalEquilibrator();
     
@@ -46,83 +46,83 @@ namespace csmp
                                                     Fluidproperties& vapor_external,
                                                     Fluidproperties& salt_external);
 
-    Fluidproperties            ReportLiquidProperties(const double64& t, 
-                                                      const double64& p, 
-                                                      const double64& x, 
-                                                      const double64& h);
-    Fluidproperties            ReportVaporProperties( const double64& t, 
-                                                      const double64& p, 
-                                                      const double64& x, 
-                                                      const double64& h);
-    Fluidproperties            ReportBulkProperties(  const double64& t, 
-                                                      const double64& p, 
-                                                      const double64& x, 
-                                                      const double64& h);
-    Fluidproperties            ReportSaltProperties(  const double64& t, 
-                                                      const double64& p, 
-                                                      const double64& x, 
-                                                      const double64& h);
+    Fluidproperties            ReportLiquidProperties(const double& t, 
+                                                      const double& p, 
+                                                      const double& x, 
+                                                      const double& h);
+    Fluidproperties            ReportVaporProperties( const double& t, 
+                                                      const double& p, 
+                                                      const double& x, 
+                                                      const double& h);
+    Fluidproperties            ReportBulkProperties(  const double& t, 
+                                                      const double& p, 
+                                                      const double& x, 
+                                                      const double& h);
+    Fluidproperties            ReportSaltProperties(  const double& t, 
+                                                      const double& p, 
+                                                      const double& x, 
+                                                      const double& h);
 
-    double64                   Resid();
+    double                   Resid();
     int                        n_iterations();
     bool                       Equilibrated();
     bool                       Fatal();
     
   private:
 
-    const double64&            mass_rock;
-    const double64&            cp_rock;
-    const double64&            rho_rock;
-    const double64&            phi;
-    const double64&            mass_fluid;
-    const double64&            wt_current;
-    const double64&            t_previous;
-    const double64&            p_current;
-    const double64&            H_current;
-    const double64&            H_previous;
-    const double64&            t_fix;
-    const double64&            t_diff;
+    const double&            mass_rock;
+    const double&            cp_rock;
+    const double&            rho_rock;
+    const double&            phi;
+    const double&            mass_fluid;
+    const double&            wt_current;
+    const double&            t_previous;
+    const double&            p_current;
+    const double&            H_current;
+    const double&            H_previous;
+    const double&            t_fix;
+    const double&            t_diff;
     const bool&                fixed_t;
     const bool&                verbose;
     //    const bool& lognode;
     bool                       equilibrated;
     bool                       fatal;
 
-    const double64             convergence_criterion; // fraction of fluid enthalpy
-    const double64             minimum_dt;
+    const double             convergence_criterion; // fraction of fluid enthalpy
+    const double             minimum_dt;
 
-    double64                   t_eq;
-    double64                   x_current_eq;
-    double64                   h_fluid_eq;
-    double64                   h_fluid_test;
-    double64                   tmin;
-    double64                   tmax;
-    double64                   resid;
-    double64                   Hmax; 
-    double64                   Hmin;
-    double64                   mass_rock_eq;
-    double64                   cp_rock_eq;
-    double64                   mass_fluid_eq;
-    double64                   wt_current_eq;
-    double64                   t_previous_eq;
-    double64                   p_current_eq;
-    double64                   H_current_eq;
-    double64                   H_previous_eq;
-    double64                   H_test;
-    double64                   tdummy;
-    double64                   hdummy;
-    double64                   t_previous_ini;
+    double                   t_eq;
+    double                   x_current_eq;
+    double                   h_fluid_eq;
+    double                   h_fluid_test;
+    double                   tmin;
+    double                   tmax;
+    double                   resid;
+    double                   Hmax; 
+    double                   Hmin;
+    double                   mass_rock_eq;
+    double                   cp_rock_eq;
+    double                   mass_fluid_eq;
+    double                   wt_current_eq;
+    double                   t_previous_eq;
+    double                   p_current_eq;
+    double                   H_current_eq;
+    double                   H_previous_eq;
+    double                   H_test;
+    double                   tdummy;
+    double                   hdummy;
+    double                   t_previous_ini;
     // new debug stuff
-    double64                   mass_rock_ini;
-    double64                   cp_rock_ini;
-    double64                   rho_rock_ini;
-    double64                   porosity_ini;
-    double64                   mass_fluid_ini;
-    double64                   wt_current_ini;
-    double64                   x_current_ini;
-    double64                   p_current_ini;
-    double64                   H_current_ini;
-    double64                   H_previous_ini;
+    double                   mass_rock_ini;
+    double                   cp_rock_ini;
+    double                   rho_rock_ini;
+    double                   porosity_ini;
+    double                   mass_fluid_ini;
+    double                   wt_current_ini;
+    double                   x_current_ini;
+    double                   p_current_ini;
+    double                   H_current_ini;
+    double                   H_previous_ini;
     // end new debug stuff
 				 
     int                        icrit;
@@ -135,7 +135,7 @@ namespace csmp
     H2ONaClFluidProperties     fluid;
     H2OThermalEquilibrator     water_equilibrator;
 
-    double64                   ComputeTotalEnthalpyAtTemperature( const double64& t );
+    double                   ComputeTotalEnthalpyAtTemperature( const double& t );
     void                       ErrorCheckHmin(const int& i);
     void                       ErrorCheckHmax(const int& i);
     void                       FluidPropertiesErrorCheck(); 
@@ -172,19 +172,19 @@ namespace csmp
 
      @section usage Usage
      Construct an instance of H2ONaClThermalEquilibrator with references to the following properties (units are given in square brackets) as constructor arguments:
-     - const double64& external_mass_rock  [kg]    : the mass of rock that shall be equilibrated with the fluid
-     - const double64& external_cp_rock    [J/kg/K]: the rock's isobaric heat capacity (assumed to be independent of temperature)
-     - const double64& external_rho_rock   [kg/m^3]: the rock's mass density
-     - const double64& external_porosity   [ ]     : (currently not used) the rock's porosity (this is allowed to be different from the actual fluid volume); 
-     - const double64& external_mass_fluid [kg]    : the mass of "fluid" - this is kg H2O + kg NaCl (solid+dissolved); including the solid is essential here as salt may be dissolved during equilibration
-     - const double64& external_wt_current [ ]     : 100 * [kg NaCl (solid+dissolved)] / [kg NaCl (solid+dissolved) + kg H2O]
-     - const double64& external_t_previous [C]     : temperature at thermal equilibrium from the previous time step
-     - const double64& external_p_current  [bar]   : preesure ar which thermal equilibration will be performed
-     - const double64& external_H_current  [J]     : total enthalpy in system (total enthalpy of rock + total enthalpy of fluid); this is the result of a transport step, including advection and thermal diffusion
-     - const double64& external_H_previous [J]     : the above at  the previous time step
+     - const double& external_mass_rock  [kg]    : the mass of rock that shall be equilibrated with the fluid
+     - const double& external_cp_rock    [J/kg/K]: the rock's isobaric heat capacity (assumed to be independent of temperature)
+     - const double& external_rho_rock   [kg/m^3]: the rock's mass density
+     - const double& external_porosity   [ ]     : (currently not used) the rock's porosity (this is allowed to be different from the actual fluid volume); 
+     - const double& external_mass_fluid [kg]    : the mass of "fluid" - this is kg H2O + kg NaCl (solid+dissolved); including the solid is essential here as salt may be dissolved during equilibration
+     - const double& external_wt_current [ ]     : 100 * [kg NaCl (solid+dissolved)] / [kg NaCl (solid+dissolved) + kg H2O]
+     - const double& external_t_previous [C]     : temperature at thermal equilibrium from the previous time step
+     - const double& external_p_current  [bar]   : preesure ar which thermal equilibration will be performed
+     - const double& external_H_current  [J]     : total enthalpy in system (total enthalpy of rock + total enthalpy of fluid); this is the result of a transport step, including advection and thermal diffusion
+     - const double& external_H_previous [J]     : the above at  the previous time step
      - const bool&      fixed_external_t    [ ]     : a bool, mostly for use at fixed temperature boundary condition; if true, no thermal equilibration will be performed, the fluid properties and volume at p_current and t_fix (see next entry) will be calculated
-     - const double64& t_fix               [C]     : the fixed temperature to be used if fixed_external_t == true
-     - const double64& external_t_diff     [C]     : rock temperature after the thermal diffusion step and prior to equilibration. By default, if thermal equilibration fails, this will be assumed to be the best proxy to an equilibration result
+     - const double& t_fix               [C]     : the fixed temperature to be used if fixed_external_t == true
+     - const double& external_t_diff     [C]     : rock temperature after the thermal diffusion step and prior to equilibration. By default, if thermal equilibration fails, this will be assumed to be the best proxy to an equilibration result
 
      H2ONaClThermalEquilibrator is typically used by NaClH2OPropertiesVisitor.
 

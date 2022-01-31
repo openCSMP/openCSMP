@@ -1,6 +1,7 @@
 #include "Box_Test.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "VTU_Interface.h"
 #include "vsetMakers.h"
@@ -310,7 +311,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
 
     // 1. testing the unit normals of the (volumetric elements)
     // --------------------------------------------------------
-    vector<double64> leftNormal, rightNormal, topNormal, bottomNormal, frontNormal, backNormal, eUnitNormal;
+    vector<double> leftNormal, rightNormal, topNormal, bottomNormal, frontNormal, backNormal, eUnitNormal;
     Box().UnitNormalTo( LEFT,   3, leftNormal );
     Box().UnitNormalTo( RIGHT,  3, rightNormal );
     Box().UnitNormalTo( TOP,    3, topNormal );
@@ -319,43 +320,43 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     Box().UnitNormalTo( BACK,   3, backNormal );
 
     for ( size_t i=model_domain.InteriorElements(); i<model_domain.Elements(); ++i ) {
-         const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary();
-         assert( flag != NOT );
          for ( size_t j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
+                const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary(j);
+                assert( flag != NOT );
                 // verifying alignment of the element's unit normal with that of the model boundary
                 model_domain.E(i)->UnitNormalToFace( model_domain.PerimeterFace(i,j), eUnitNormal );
                 // checking whether the normals are aligned and of of same unit magnitude
                 if ( flag == LEFT )  {
-                     const double64 dotProduct(vector_product<3U,double64>(leftNormal,eUnitNormal));
+                     const double dotProduct(vector_product<3U,double>(leftNormal,eUnitNormal));
                      // testing for alignment
                      _test( dotProduct > 0. );
                      // testing for unit length
-                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                     _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == RIGHT )  {
-                     const double64 dotProduct(vector_product<3U,double64>(rightNormal,eUnitNormal));
+                     const double dotProduct(vector_product<3U,double>(rightNormal,eUnitNormal));
                      _test( dotProduct > 0. );
-                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                     _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == BOTTOM )  {
-                     const double64 dotProduct(vector_product<3U,double64>(bottomNormal,eUnitNormal));
+                     const double dotProduct(vector_product<3U,double>(bottomNormal,eUnitNormal));
                      _test( dotProduct > 0. );
-                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                     _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == TOP )  {
-                     const double64 dotProduct(vector_product<3U,double64>(topNormal,eUnitNormal));
+                     const double dotProduct(vector_product<3U,double>(topNormal,eUnitNormal));
                      _test( dotProduct > 0. );
-                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                     _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == BACK )  {
-                     const double64 dotProduct(vector_product<3U,double64>(backNormal,eUnitNormal));
+                     const double dotProduct(vector_product<3U,double>(backNormal,eUnitNormal));
                      _test( dotProduct > 0. );
-                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                     _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == FRONT )  {
-                     const double64 dotProduct(vector_product<3U,double64>(frontNormal,eUnitNormal));
+                     const double dotProduct(vector_product<3U,double>(frontNormal,eUnitNormal));
                      _test( dotProduct > 0. );
-                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                     _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
             }
       }
@@ -368,11 +369,11 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     for ( auto it=left.ElementsBegin(); it!=left.ElementsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
-             const double64 dotProduct(vector_product<3U,double64>(leftNormal,eUnitNormal));
+             const double dotProduct(vector_product<3U,double>(leftNormal,eUnitNormal));
              // testing for alignment
              _test( dotProduct > 0. );
              // testing for unit length
-             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+             _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
           }
       }
    
@@ -380,11 +381,11 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     for ( auto it=right.ElementsBegin(); it!=right.ElementsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
-             const double64 dotProduct(vector_product<3U,double64>(rightNormal,eUnitNormal));
+             const double dotProduct(vector_product<3U,double>(rightNormal,eUnitNormal));
              // testing for alignment
              _test( dotProduct > 0. );
              // testing for unit length
-             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+             _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
           }
       }
    
@@ -392,11 +393,11 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     for ( auto it=bottom.ElementsBegin(); it!=bottom.ElementsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
-             const double64 dotProduct(vector_product<3U,double64>(bottomNormal,eUnitNormal));
+             const double dotProduct(vector_product<3U,double>(bottomNormal,eUnitNormal));
              // testing for alignment
              _test( dotProduct > 0. );
              // testing for unit length
-             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+             _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
           }
       }
    
@@ -404,11 +405,11 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     for ( auto it=top.ElementsBegin(); it!=top.ElementsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
-             const double64 dotProduct(vector_product<3U,double64>(topNormal,eUnitNormal));
+             const double dotProduct(vector_product<3U,double>(topNormal,eUnitNormal));
              // testing for alignment
              _test( dotProduct > 0. );
              // testing for unit length
-             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+             _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
           }
       }
    
@@ -416,11 +417,11 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     for ( auto it=back.ElementsBegin(); it!=back.ElementsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
-             const double64 dotProduct(vector_product<3U,double64>(backNormal,eUnitNormal));
+             const double dotProduct(vector_product<3U,double>(backNormal,eUnitNormal));
              // testing for alignment
              _test( dotProduct > 0. );
              // testing for unit length
-             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+             _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
           }
       }
    
@@ -428,11 +429,11 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     for ( auto it=front.ElementsBegin(); it!=front.ElementsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
-             const double64 dotProduct(vector_product<3U,double64>(frontNormal,eUnitNormal));
+             const double dotProduct(vector_product<3U,double>(frontNormal,eUnitNormal));
              // testing for alignment
              _test( dotProduct > 0. );
              // testing for unit length
-             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+             _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
           }
       }
    
@@ -468,7 +469,7 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
   
 
 /**
-   tests method which recreates boundary flags using Adriana's vset_makers
+   tests method which recreates boundary flags
 */
 bool Box_Test::TestBoundaryFlagRecreation()
  {
@@ -507,14 +508,15 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_before.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
     const string output_model("box_test_temporary");
     model.OutputToBinaryFile( output_model.c_str() );
    
-    // Recovering the model from file
-    Model<3U>* mptr = new Model<3>( output_model.c_str() );
+    // Recovering the model from file (all variables are read as subset is empty)
+    Model<3U>* mptr = new Model<3>( output_model, set<string>({}) );
 
     // recovering the flags again for comparison
     list<BOX_BOUNDARY>  node_flags_after;
@@ -522,7 +524,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_after.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;
    
@@ -552,15 +555,16 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_before.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
     const string output_model("box_test_temporary");
     // NEW model.OutputToDisk( output_model.c_str() );
     model.OutputToBinaryFile("box_test_temporary");
    
-    // Recovering the model from file
-    Model<3U>* mptr = new Model<3>( output_model.c_str() );
+    // Recovering the model from file (read all variables)
+    Model<3U>* mptr = new Model<3>( output_model, set<string>({}) );
 
     // recovering the flags again for comparison
     list<BOX_BOUNDARY>  node_flags_after;
@@ -568,7 +572,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      elmt_flags_after.push_back( (*eit)->AtBoundary() );
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;
    

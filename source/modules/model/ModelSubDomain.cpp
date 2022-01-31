@@ -6,6 +6,7 @@
  *
  */
 #include <type_traits>
+#include "writeVariableIf.h"
 #include "ModelSubDomain.h"
 #include "Region.h"
 #include "Boundary.h"
@@ -56,7 +57,6 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
    subdomain_name_(ed.subdomain_name_),
    verbose_(true)
  {
-   this->LVS( ed.LVS() );
  }
 
 
@@ -71,8 +71,6 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
    subdomain_name_{ed.subdomain_name_},
    verbose_{true}
  {
-   this->LVS( move(ed.LVS()) );
-   cout <<"\nModelSubDomain<dim,CELL>::ModelSubDomain: called MOVE constructor.\n";
  }
 
 
@@ -95,7 +93,6 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
           bd_face_vec_    = ed.bd_face_vec_;
           verbose_        = ed.verbose_;
           subdomain_name_ = ed.subdomain_name_;
-          this->LVS( ed.LVS() );
        }
      return *this;
  }
@@ -125,221 +122,6 @@ bool ModelSubDomain<dim,CELL>::Verbose()
 {
     return this->verbose_;
 }
-
-
-/**
-    Helper functions that checks complex boundary flags of a variable that shall be assigned.
-    They functions only transfer values to it if the variable has not got the specified flag.
-    
-    Generic version for variables that are placed on the Node, Element, Face etc.
-    
-    @TODO: make this part of new PDE_Intetgrator class
-    
-    @author SKM 10/9/2014
-*/
-template<size_t dim, template<size_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, const csmp::Index&, const Var&, VARIABLE_FLAG )
- {
- } // end generic specification
-
-
-/// write guard for scalar variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             const csmp::Index& idx,
-                             const ScalarVariable& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    if ( ptr->Status(idx) != dont_overwrite )
-      ptr->Store( idx, var );
- } // end version for scalars
- 
-
-/// write guard for vector variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             const csmp::Index& idx,
-                             const VectorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    VectorVariable<dim> vc;
-    ptr->Read( idx, vc );
-    for ( size_t i=0U; i<dim; i++ )
-      // the component gets overwritten
-      if ( ptr->Status(idx,i) != dont_overwrite ) {
-           vc.Flag(i) = var.Flag(i);
-           vc(i)      = var[i];
-        }
-    ptr->Store( idx, vc );
- } // end version for vector variables
-
-
-/**
-     Write guard for tensor variables
-    (where only the diagonal values have flags
-     so that only those rows get written where the 
-     flag permits this)
-*/
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             const csmp::Index& idx,
-                             const TensorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    TensorVariable<dim> ts;
-    ptr->Read( idx, ts );
-    for ( size_t i=0U; i<dim; i++ )
-      if ( ptr->Status(idx,i) != dont_overwrite ) {
-           ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
-             ts(i,j) = var(i,j);
-        }
-    ptr->Store( idx, ts );
- } // end version for tensors
-
-
-
-/**
-    Helper functions that checks a complex varboundary flags of a variable that shall be assigned
-    and only transfers values to it if the variable has not got the specified flag.
-    
-    Generic version for variables that are placed on Element/Face/Interface integration points.
-*/
-template<size_t dim, template<size_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
- {
- } // end generic specification
-
-/// write guard for scalar variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const ScalarVariable& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    if ( ptr->Status(ip,idx) != dont_overwrite )
-      ptr->Store( ip, idx, var );
- } // end version for scalars
- 
-
-/// write guard for vector variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const VectorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    VectorVariable<dim> vc;
-    ptr->Read( ip, idx, vc );
-    for ( size_t i=0U; i<dim; i++ )
-      // the component gets overwritten
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           vc.Flag(i) = var.Flag(i);
-           vc(i)      = var[i];
-        }
-    ptr->Store( ip, idx, vc );
- } // end version for vector variables
-
-
-/**
-     Write guard for tensor variables
-    (where only the diagonal values have flags
-     so that only those rows get written where the 
-     flag permits this)
-*/
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const TensorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    TensorVariable<dim> ts;
-    ptr->Read( ip, idx, ts );
-    for ( size_t i=0U; i<dim; i++ )
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
-             ts(i,j) = var(i,j);
-        }
-    ptr->Store( ip, idx, ts );
- } // end version for tensors
-
-
-
-/**
-    Helper functions that checks a complex varboundary flags of a variable that shall be assigned
-    and only transfers values to it if the variable has not got the specified flag.
-    
-    Generic version for finite volume-related integration points.
-*/
-template<size_t dim, template<size_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, size_t sector_or_facet,
-                      size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
- {
- } // end generic specification
-
-/// write guard for scalar variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t sector_or_facet,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const ScalarVariable& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    if ( ptr->Status(ip,idx) != dont_overwrite )
-      ptr->Store( ip, idx, var );
- } // end version for scalars
- 
-
-/// write guard for vector variables
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t sector_or_facet,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const VectorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    VectorVariable<dim> vc;
-    ptr->Read( sector_or_facet, ip, idx, vc );
-    for ( size_t i=0U; i<dim; i++ )
-      // the component gets overwritten
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           vc.Flag(i) = var.Flag(i);
-           vc(i)      = var[i];
-        }
-    ptr->Store( sector_or_facet, ip, idx, vc );
- } // end version for vector variables
-
-
-/**
-     Write guard for tensor variables
-    (where only the diagonal values have flags
-     so that only those rows get written where the 
-     flag permits this)
-*/
-template<size_t dim, template<size_t> class CELL>
-void writeVariableIf( CELL<dim>* ptr,
-                             size_t sector_or_facet,
-                             size_t ip,
-                             const csmp::Index& idx,
-                             const TensorVariable<dim>& var,
-                             VARIABLE_FLAG dont_overwrite )
- {
-    TensorVariable<dim> ts;
-    ptr->Read( sector_or_facet, ip, idx, ts );
-    for ( size_t i=0U; i<dim; i++ )
-      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
-           ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
-             ts(i,j) = var(i,j);
-        }
-    ptr->Store( sector_or_facet, ip, idx, ts );
- } // end version for tensors
 
 
 
@@ -431,75 +213,67 @@ CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::SimplexVector()
+const typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() const
  { return elmt_vec_; }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::ElementVector()
+typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector()
  { return elmt_vec_; }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::FaceVector()
- { return elmt_vec_; }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::InterFaceVector()
- { return elmt_vec_; }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector()
+const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() const
   { return node_vec_; }
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
+typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
  { return node_vec_.begin(); }
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
+typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin() const
+typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin() const
  { return node_vec_.begin(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd() const
+typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
+typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd() const
+typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd() const
  { return node_vec_.end(); }
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
+typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
  { return elmt_vec_.begin(); }
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
+typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
  { return elmt_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsBegin() const
+typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsBegin() const
   { return elmt_vec_.begin(); }
    
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsEnd() const
+typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsEnd() const
   { return std::next( elmt_vec_.begin(), InteriorElements() ); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
+typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
   { return std::next( elmt_vec_.begin(), InteriorElements() ); }
    
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsEnd() const
+typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsEnd() const
   { return elmt_vec_.end(); }
 
 
@@ -512,6 +286,13 @@ template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::NodesEnd()
  { return node_vec_.end(); }
 
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin()
+ { return node_vec_.begin(); }
+
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd()
+ { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin()
@@ -521,6 +302,8 @@ typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::Peri
 template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd()
  { return node_vec_.end(); }
+ 
+// const forms
 
 template<size_t dim, template<size_t> class CELL>
 typename std::vector<CELL<dim>*>::iterator  ModelSubDomain<dim,CELL>::ElementsBegin()
@@ -546,7 +329,7 @@ typename std::vector<CELL<dim>*>::iterator  ModelSubDomain<dim,CELL>::ElementsEn
 
 */
 template<size_t dim, template<size_t> class CELL>
-pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
+pair<int32_t,int32_t>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
  {
     bool with_volume_elements(false);
     bool with_surface_elements(false);
@@ -559,11 +342,11 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
          else if ( (*it)->IsVolumeElement() )  with_volume_elements = true;
       }
 
-    int32 counter(0);
+    int32_t counter(0);
     if ( with_volume_elements )  counter++;
     if ( with_surface_elements ) counter++;
     if ( with_line_elements )    counter++;
-    int32 highest_spatial_dim(LINE);
+    int32_t highest_spatial_dim(LINE);
     if      ( with_volume_elements )  highest_spatial_dim = VOLUME;
     else if ( with_surface_elements ) highest_spatial_dim = SURFACE;
 
@@ -578,209 +361,8 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
 
 
 
-/**
-    Connects the simplices with their equidimensional neighbors
-*/
-template<size_t dim, template<size_t> class CELL>
-void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity( bool verbose )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( elmt_vec_.empty() ) {
-         csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
-         return;
-      }
-    if (verbose)
-      cout << "\nModelSubDomain<"<< dim <<",CELL>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
- 
-    // 1. making separate search vectors of face keys for surface and line elements
-    // ----------------------------------------------------------------------------
-    if (verbose)
-      cout << "  Building a list of the faces of the cells...\n";
-    //       key             face number,neighbor
-    multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
-                                                           surface_neighbor_keys, 
-                                                           line_neighbor_keys;
-    vector<size_t>                 fnids;
-    typename std::set<Node<dim>*>  key; // region, boundary and split boundary all use nodes
-
-    for ( typename vector<CELL<dim>*>::const_iterator it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it ) {
-          const size_t faces((*it)->Faces());
-          for ( size_t face=0U; face<faces; ++face )
-            {
-               if ( (*it) == nullptr ) {
-                    csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:",
-                                      "supplied element contains NULL pointer to elements; nothing was done." );
-                    return;
-                 }
-               // creating face key of node pointers from indices of face nodes
-               (*it)->FE()->NodesOfFace( face, fnids );
-               const size_t nodes(fnids.size());
-               for ( size_t j=0U; j<nodes; ++j )
-                 key.insert( (*it)->N( fnids[j] ) );
-                 
-               // inserting newly generated keys into multimap
-               // TODO: use move constructor here
-               if ( (*it)->IsVolumeElement() )
-                 volume_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-               else if ( (*it)->IsSurfaceElement() )
-                 surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-               else // for all line elements
-                 line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-               key.clear();
-            }
-        }
-
-    // 2. (re)building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    if (verbose)
-      cout << "  (Re)building neighbor connectivity...";
-
-    // 2.1 line elements
-    // -----------------
-    if ( !line_neighbor_keys.empty() )
-      {
-        CELL<dim>* e1Ptr(nullptr);
-        CELL<dim>* e2Ptr(nullptr);
-
-        if (verbose)
-          cout << "\n\t\tline elements...";
-        //                key                  n-face, neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                                 it2(line_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != line_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning the two cells face neighbors to one another
-                   //                        face pointer  nbor face idx   neighbor pointer
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // line elements
-    
-    // 2.2 surface elements
-    // --------------------
-    if ( dim >= 2U and !surface_neighbor_keys.empty() )
-      {
-        if (verbose)
-          cout << "\n\t\tsurface elements...";
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
-                                                                                 it2(surface_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != surface_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                    assert( (*it1).second.second != nullptr );
-                    assert( (*it2).second.second != nullptr );
-                    CELL<dim>* e1Ptr((*it1).second.second);
-                    CELL<dim>* e2Ptr((*it2).second.second);
-                    if ( e1Ptr != e2Ptr ) {
-                         ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                         ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                      }
-                    else csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:",
-                                            "discovered potentially duplicate surface simplex.");
-                    ++it1;
-                    ++it2;
-                }
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // surface elements
-      
-    // 2.3 volume elements
-    // -------------------
-    if ( dim == 3U and !volume_neighbor_keys.empty() ) {
-
-        CELL<dim>* e1Ptr(nullptr);
-        CELL<dim>* e2Ptr(nullptr);
-
-        if (verbose)
-          cout << "\n\t\tvolume elements...\n";
-        //                key             n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
-                                                                                 it2(volume_neighbor_keys.begin());
-        it2++;
-
-        while ( it2 != volume_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-//              if ( (*it1).first == (*it2).first and ( (*it1).second.second != nullptr and (*it2).second.second != nullptr ) )
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr );
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == volume_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // dim=3
-    
- } // end EstablishNeighborConnectivity
 
 
-
-/* TESTING - EstablishNeighborConnectivity
-
-/ printing the multimap
-RenumberElements();
-cerr <<"\nline element face key map:\n";
-cerr <<"\n\tnode-id, face-id, nbor elmt id, neighbor 1 and 2";
-for ( auto it=line_neighbor_keys.begin(); it!=line_neighbor_keys.end(); ++it ) {
-      cerr <<"\n\t"<< (*(*it).first.begin())->Idx() <<", "<< (*it).second.first <<", ";
-      if ( (*it).second.second != nullptr ) {
-           cerr << (*it).second.second->Idx() <<", ";
-           if ( (*it).second.second->Neighbor(0) != nullptr )
-             cerr << (*it).second.second->Neighbor(0)->Idx() <<", ";
-           else cerr <<"nullptr" <<", ";
-           if ( (*it).second.second->Neighbor(1) != nullptr )
-             cerr << (*it).second.second->Neighbor(1)->Idx() <<", ";
-           else cerr <<"nullptr" <<", ";
-        }
-      else cerr <<"nullptr.";
-   }
-cerr << endl;
-cerr <<"\nprinting the elements:";
-for ( auto it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it )
-  (*it)->Out();
-cerr << endl;
-      
-*/
 
 
 
@@ -867,23 +449,23 @@ void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elements )
   {
-     assert( interior_elements > 0 );
-     
+     ErrorHandler&  csmp_error(ErrorHandler::Instance());
+
      // verification of suitable model state
      if ( elmt_vec_.empty() )
-       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
-                              Name(), "model subdomain: CELL vector not initialised yet.");
+       csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+                          Name(), "model subdomain: CELL vector not initialised yet.");
                               
      if ( interior_elements > elmt_vec_.size() ) {
            cerr <<"\ninterior cells: "<< interior_elements;
-           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
-                                  Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
+           csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+                              Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
        }
 
      if ( !is_sorted( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_elements)) ) {
           cerr <<"\ninterior cells: "<< interior_elements;
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
-                                 Name(), "model subdomain: supplied CELL vector not sorted.");
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+                             Name(), "model subdomain: supplied CELL vector not sorted.");
        }
        
      // (re)setting the CELL face vector; note: size must already be correct else Contains(eptr) function used below will fail
@@ -894,23 +476,30 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
      vector<ONE_BYTE_NUMBER>  boundary_faces;
      size_t                   counter(0U);
 
-     for ( typename vector<CELL<dim>*>::const_iterator it = perimeterElementsBegin; it != elementsEnd; ++it ) {
-         assert( (*it)->Faces() == (*it)->Neighbors() );
-         // for all faces of the CELLs that are located on the domain boundary
-         const size_t faces( (*it)->Faces() );
-         boundary_faces.reserve( faces );
-         for ( size_t face(0U); face<faces; ++face )
-           // TODO: see whether this costly search (=Contains()) can be avoided
-           if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
-             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
-         // storing the boundary face vector for the current element
-         if ( boundary_faces.size() == faces ) {
-              cerr <<"\n\tBuildPerimeterFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
-           }
-         this->bd_face_vec_[counter] = boundary_faces;
-         boundary_faces.clear();
-         counter++;
-      }
+     // for all faces of CELLs that are located on the subdomain boundary
+     for ( typename vector<CELL<dim>*>::const_iterator
+           it = perimeterElementsBegin; it != elementsEnd; ++it )
+       {
+          assert( (*it)->Faces() == (*it)->Neighbors() );
+          const size_t faces( (*it)->Faces() );
+          boundary_faces.reserve( faces );
+          for ( size_t face(0U); face<faces; ++face )
+            //   located on model boundary          or  neighbor is not contained in this subdomain
+            if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
+              boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+          // storing the boundary face vector for the current element
+          if ( boundary_faces.size() == faces ) {
+               if ( (dim == 2 && (*it)->FE()->IsSurfaceElement()) ||
+                    (dim == 3 && (*it)->FE()->IsVolumeElement()) ) {
+                    cout <<"\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"<< Name();
+                    cout <<"', cell: "<< (*it)->Idx() <<"("<< parseFiniteElementType((*it)->FE_Type()) <<")";
+                    cout <<" is a stand-alone element in this subdomain.";
+                 }
+            }
+          this->bd_face_vec_[counter] = boundary_faces;
+          boundary_faces.clear();
+          counter++;
+       }
       
   } // end BuildPerimeterFaceVector
 
@@ -921,6 +510,10 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
 
 
 /**
+   Distinguishes 'interior' from 'perimeter' elements of the model subdomain by checking for each element face whether
+   this face is located at a model boundary or has a neighbor that does not belong to the current region (=element range of ModelSubdomain).
+   
+   Method also creates the bd_face_vector   enlisting all faces of elements that are located on the region boundary.
 
   Remarks on binary search:
 
@@ -933,6 +526,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
 
     @attention any lower-dimensional elements and their nodes that stick outside of a higher
     dimensional region will be flagged as boundary.
+    
+    @todo due to the searching, this method is a speed bottleneck; can it be improved.
 */
 template<size_t dim, template<size_t> class CELL>
 size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
@@ -948,7 +543,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     // 0. detecting whether this region contains lower-dimensional elements
     // --------------------------------------------------------------------
     // pair contains: 1) number of spatial element dimensions in region, 2)  highest contained dimension
-    const pair<int32,int32>  elmt_dim = SpatialDimensions();
+    const pair<int32_t,int32_t>  elmt_dim = SpatialDimensions();
 
     // -----------------------------------------------------------------
     // 1. distinguishing boundary from interior elements, same for nodes
@@ -961,39 +556,40 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
-	if (elmt_dim.first == 1)
-	{
-		for (typename vector<CELL<dim>*>::const_iterator
-			eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++)
-		{
-			// identifying the boundary faces and their nodes
-			// (each face potentially has a neighbor element)			 
-			long  nbors_that_belong_to_group((*eit)->Neighbors());
-			for (size_t i = 0U; i<(*eit)->Faces(); i++)
-				// if the face is at a model boundary or has a neighbor that does not belong to the region
-				if ( (*eit)->Neighbor(i) == nullptr or !binary_search(this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i)) )
+    if ( elmt_dim.first == 1 )
+      {
+        for ( const auto& eit : this->elmt_vec_ )
           {
-            // boundary faces
-            boundary_faces.insert( make_pair((*eit),i) );
-            // boundary nodes
-            assert( (*eit)->FE() != nullptr );
-            (*eit)->FE()->NodesOfFace(i, fnids);
-            for (size_t j = 0U; j<fnids.size(); ++j)
-              boundary_nodes.insert((*eit)->N(fnids[j]));
-            // counting neighbors
-            nbors_that_belong_to_group--;
-          }
+            // identifying the boundary faces and their nodes
+            // (each face potentially has a neighbor element)
+            long  nbors_that_belong_to_group(eit->Neighbors());
+            for (size_t i = 0U; i<eit->Faces(); i++)
+              // if the face is at a model boundary or has a neighbor that does not belong to the region
+              if ( eit->Neighbor(i) == nullptr ||
+                  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), eit->Neighbor(i)) )
+                {
+                  // boundary faces
+                  boundary_faces.insert( make_pair( eit, i ) );
+                  // boundary nodes
+                  assert( eit->FE() != nullptr );
+                  eit->FE()->NodesOfFace(i, fnids);
+                  for (size_t j = 0U; j<fnids.size(); ++j)
+                    boundary_nodes.insert( eit->N(fnids[j]) );
+                  // counting neighbors
+                  nbors_that_belong_to_group--;
+                }
 
-			// storing the distinguished elements in the respective vectors
-			// ------------------------------------------------------------
-			// interior elements
-				if ( nbors_that_belong_to_group == (*eit)->Neighbors() )
-					interior_elmts.insert((*eit));
-				// elements with at least one face on the region boundary
-				else
-					boundary_elmts.insert((*eit));
-		}
-	}
+            // storing the distinguished elements in the respective vectors
+            // ------------------------------------------------------------
+            // interior elements
+              if ( nbors_that_belong_to_group == eit->Neighbors() )
+                interior_elmts.insert( eit );
+              // elements with at least one face on the region boundary
+              else
+                boundary_elmts.insert( eit );
+          }
+     }
+    
     // 1.2 If there are elements with different spatial dimensions
     // -----------------------------------------------------------
     //     the ones with highest dimensions are used to define perimeter
@@ -1014,7 +610,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                 {
                    // creating a subset with their nodes
                    for ( size_t i=0U; i<(*eit)->Nodes(); ++i ) {
-                        assert( (*eit)->N(i) != NULL );
+                        assert( (*eit)->N(i) != nullptr );
                         highest_dim_elmt_nodes.insert( (*eit)->N(i) );
                      }
                    // if the element has faces that lie on the region boundary
@@ -1022,7 +618,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                    long  nbors_that_belong_to_group((*eit)->Neighbors());
                    for ( size_t i=0U; i<(*eit)->Faces(); ++i )
                      // 1) the element is on model boundary  or  2) one of its neighbors does not belong to its parent region
-                     if ( (*eit)->Neighbor(i) == NULL        or  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i) ) )
+                     if ( (*eit)->Neighbor(i) == nullptr        or  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i) ) )
                        {
                           // the element pointer and the face number are used to create a unique key for the discovered boundary face
                           boundary_faces.insert( make_pair( (*eit), i ) );
@@ -1151,7 +747,7 @@ cout.flush();
     // 2. rebuilding the element vector
     // --------------------------------------------------
 //    assert( interior_elmts.size() + boundary_elmts.size() == this->elmt_vec_.size() );
-    // appending the boundary element vector<double64> to the interior element vector
+    // appending the boundary element vector<double> to the interior element vector
     this->elmt_vec_.clear();
     this->elmt_vec_.assign( interior_elmts.begin(), interior_elmts.end() );
     back_insert_iterator<vector<CELL<dim>*> >  back_it(this->elmt_vec_);
@@ -1224,7 +820,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // rebuilding and sorting the node vector (set nodes are already sorted)
     vector<csmp::Node<dim>*>  temp;
     temp.reserve(this->node_vec_.size());
-    // first, the interior elements are inserted
+    // first, the interior nodes are inserted
     for ( typename vector<csmp::Node<dim>*>::const_iterator
           nit=this->node_vec_.begin(); nit!=this->node_vec_.end(); nit++ )
       if ( boundary_nodes.find(*nit) == boundary_nodes.end() )
@@ -1239,53 +835,118 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     this->node_vec_ = temp;
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
-cout <<"\nModelSubDomain<dim,CELL>::EstablishNeighborConnectivity: '"<< this->Name() <<"': of the ";
-cout << this->elmt_vec_.size() <<" elements, "<< boundary_elmts.size() <<" lie at the model boundary."<< endl;
+cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVector: '"<< this->Name() <<"': of the ";
+cout << this->elmt_vec_.size() <<" elements, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
 cout.flush();
 #endif
 
     return this->elmt_vec_.size() - boundary_elmts.size();
 
- } // end PartitionElementVector
+ } // end PartitionCellVector
+
+
+
+/**
+    Uses set to create unique node vector.
+*/
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector1()
+{
+  assert( !this->elmt_vec_.empty() );
+
+  if ( !this->node_vec_.empty() )
+    this->node_vec_.clear();
+
+  // creating the node index vector
+  set<csmp::Node<dim>*>  nodes_set;
+  for ( auto it : this->elmt_vec_ ) {
+       const size_t nodes{ it->Nodes() };
+       for ( size_t i = 0U; i<nodes; i++ ) {
+            assert( it->N( i ) != nullptr );
+            nodes_set.insert( it->N( i ) );
+         }
+    }
+
+  this->node_vec_.assign( nodes_set.begin(), nodes_set.end() );
+}
+
+
+
+/**
+    Uses vector to create unique node vector.
+*/
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
+{
+  assert( !this->elmt_vec_.empty() );
+
+  if ( !this->node_vec_.empty() )
+    this->node_vec_.clear();
+
+  // creating the node index vector
+  this->node_vec_.reserve( elmt_vec_.size() );
+  for ( auto it : this->elmt_vec_ ) {
+       const size_t nodes={ it->Nodes() };
+       for ( size_t i = 0U; i<nodes; i++ ) {
+            assert( it->N( i ) != nullptr );
+            this->node_vec_.push_back( it->N( i ) );
+         }
+    }
+
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+}
 
 
 
 
-
-
-
+/**
+      SKM - September 2019.
+      Jan 2020, updated for the case where there are no interior nodes or elements
+ */
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interior_nodes )
   {
-    assert( interior_cells > 0 );
-    assert( interior_nodes > 0 );
-
-    // verification of suitable model state
-    if ( elmt_vec_.empty() )
-      throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                             Name(), "model subdomain: CELL vector not initialised yet.");
-                             
-    if ( interior_cells > elmt_vec_.size() ) {
-          cerr <<"\ninterior cells: "<< interior_cells;
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                                 Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
-      }
-   if ( node_vec_.empty() )
-     throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                            Name(), "model subdomain: node vector not initialised yet.");
-                            
-   if ( interior_nodes > node_vec_.size() ) {
-         cerr <<"\ninterior cells: "<< interior_nodes;
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                                Name(), "model subdomain: less nodes in node vector than interior nodes specified.");
-     }
-   
-   // sorting
-   sort( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_cells) );
-   sort( next(elmt_vec_.begin(),interior_cells), elmt_vec_.end() );
-
-   sort( node_vec_.begin(), next(node_vec_.begin(),interior_nodes) );
-   sort( next(node_vec_.begin(),interior_nodes), node_vec_.end() );
+      // verification of suitable model state
+      if ( elmt_vec_.empty() )
+        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                               Name(), "model subdomain: CELL vector not initialised yet.");
+                               
+      if ( interior_cells > elmt_vec_.size() ) {
+            cerr <<"\ninterior cells: "<< interior_cells;
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                   Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
+        }
+     if ( node_vec_.empty() )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                              Name(), "model subdomain: node vector not initialised yet.");
+                              
+     if ( interior_nodes > node_vec_.size() ) {
+           cerr <<"\ninterior cells: "<< interior_nodes;
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                  Name(), "model subdomain: less nodes in node vector than interior nodes specified.");
+       }
+       
+     // sorting
+     // -------
+     // dealing with the case where all elements and nodes are located on the regions perimeter,
+     // i.e. there are no interior nodes or elements so that there is only a single sorted range
+     if ( interior_nodes == 0 ) {
+          sort( node_vec_.begin(), node_vec_.end() );
+       }
+     else {
+         sort( node_vec_.begin(), next(node_vec_.begin(),interior_nodes) );
+         sort( next(node_vec_.begin(),interior_nodes), node_vec_.end() );
+       }
+     
+     if ( interior_cells == 0 ) {
+          sort( elmt_vec_.begin(), elmt_vec_.end() );
+       }
+     else {
+         sort( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_cells) );
+         sort( next(elmt_vec_.begin(),interior_cells), elmt_vec_.end() );
+       }
 
   } // end SortVectors
 
@@ -1317,6 +978,24 @@ std::string parseSubdomainPart( SUBDOMAIN_PART ssubdomain )
     return std::string("COMPLETE");
 }
 
+
+/*
+template<size_t dim, template<size_t> class CELL>
+PLACEMENT ModelSubDomain<dim,CELL>::Placement() const 
+ { 
+    throw csmp::Exception( ERROR, "ModelSubdomain<>::Placement:", "erratic call"); 
+    return UNDEFINED; 
+ }
+*/
+
+template<size_t dim, template<size_t> class CELL>
+bool ModelSubDomain<dim,CELL>::ValidVariable( const char* variableName ) const
+  {
+    const PLACEMENT p( this->pref_.Placement( variableName ) );
+    if ( p == NODE || p == ELEMENT )
+      return true;
+    return false;
+  }
 
 
 // INTERRELATIONS INTERFACE
@@ -1396,7 +1075,7 @@ size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
 
 /**
 
-Returns a vector<double64> with the ID numbers of the Elements which belong
+Returns a vector<double> with the ID numbers of the Elements which belong
 to the Region.
 */
 template<size_t dim, template<size_t> class CELL>
@@ -1417,7 +1096,7 @@ size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
  {
     size_t  counter(0U);
 
-    for ( const auto it : node_vec_ ) it->Idx( counter++ );
+    for ( auto& it : node_vec_ ) it->Idx( counter++ );
 
     return counter;
  }
@@ -1429,7 +1108,7 @@ size_t ModelSubDomain<dim,CELL>::RenumberElements() const
  {
     size_t counter(0U);
 
-    for( const auto it : elmt_vec_ ) it->Idx(counter++);
+    for( auto& it : elmt_vec_ ) it->Idx(counter++);
 
     return counter;
  } // end RenumberElements
@@ -1458,12 +1137,15 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
     returns true or false.
 */
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* eptr ) const
+bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* const eptr ) const
  {
-    if ( binary_search( elmt_vec_.begin(), next(elmt_vec_.begin(),InteriorElements()), eptr ) )
+    assert( eptr != nullptr );
+
+    // search perimeter first
+    if ( binary_search( next(elmt_vec_.begin(),InteriorElements()), elmt_vec_.end(), eptr ) )
        return true;
 
-    if ( binary_search( next(elmt_vec_.begin(),InteriorElements()), elmt_vec_.end(), eptr ) )
+    if ( binary_search( elmt_vec_.begin(), next(elmt_vec_.begin(),InteriorElements()), eptr ) )
        return true;
 
     return false;
@@ -1476,14 +1158,14 @@ bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* eptr ) const
     returns true or false.
 */
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
+bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) const
  {
-    assert( nptr != NULL );
-
-    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), InteriorNodes()), nptr ) )
-       return true;
+    assert( nptr != nullptr );
 
     if ( binary_search( next(node_vec_.begin(), InteriorNodes()), node_vec_.end(), nptr ) )
+       return true;
+
+    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), InteriorNodes()), nptr ) )
        return true;
 
     return false;
@@ -1491,17 +1173,17 @@ bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
  } // end
 
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* nd_ptr ) const
+bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* const nd_ptr ) const
  {
-    assert( nd_ptr != NULL );
+    assert( nd_ptr != nullptr );
     return std::binary_search( PerimeterNodesBegin(), NodesEnd(), nd_ptr );
  }
 
 
 template<size_t dim, template<size_t> class CELL>
-bool  ModelSubDomain<dim,CELL>::IsPerimeterElement( const CELL<dim>* e_ptr ) const
+bool  ModelSubDomain<dim,CELL>::IsPerimeterElement( const CELL<dim>* const e_ptr ) const
  {
-    assert( e_ptr != NULL );
+    assert( e_ptr != nullptr );
     return std::binary_search( PerimeterElementsBegin(), ElementsEnd(), e_ptr );
  }
 
@@ -1536,8 +1218,7 @@ void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim
     xyz_min = xyz_max = (*node_vec_.begin())->Coordinate();
 
     // only nodes at the group boundary have to be checked
-    for ( typename vector<csmp::Node<dim>*>::const_iterator
-          bit=PerimeterNodesBegin(); bit!=PerimeterNodesEnd(); bit++ )
+    for ( auto bit=PerimeterNodesBegin(); bit!=PerimeterNodesEnd(); bit++ )
       {
          csmp::Point<dim> p = (*bit)->Coordinate();
          xyz_min[0] = std::min( p[0], xyz_min[0] );
@@ -1625,8 +1306,7 @@ void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* chara
        }
 
      if ( !strcmp( characteristic, "length" ) )
-       for ( typename vector<CELL<dim>*>::iterator
-             eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+       for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
          {
              if ( (*eit)->FE()->IsLineElement() ) {
                   sc = fabs( (*eit)->Volume() );
@@ -1634,8 +1314,7 @@ void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* chara
                }
          }
      else if ( !strcmp( characteristic, "area" ) )
-       for ( typename vector<CELL<dim>*>::iterator
-             eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+       for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
          {
              if ( (*eit)->FE()->IsSurfaceElement() ) {
                   sc = fabs( (*eit)->Volume() );
@@ -1643,8 +1322,7 @@ void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* chara
                }
          }
      else if ( !strcmp( characteristic, "volume" ) )
-       for ( typename vector<CELL<dim>*>::iterator
-             eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+       for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
          {
              if ( (*eit)->FE()->IsVolumeElement() ) {
                   sc = fabs( (*eit)->Volume() );
@@ -1653,8 +1331,7 @@ void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* chara
          }
      else if ( !strcmp( characteristic, "aspect ratio" ) )
        {
-          for ( typename vector<CELL<dim>*>::iterator
-                eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+          for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
             {
                sc = (*eit)->AspectRatio();
                (*eit)->Store( prop_key, sc );
@@ -1662,8 +1339,7 @@ void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* chara
       }
      else if ( !strcmp( characteristic, "inner radius" ) )
        {
-          for ( typename vector<CELL<dim>*>::iterator
-                eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+          for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
             {
                sc = (*eit)->InnerRadius();
                (*eit)->Store( prop_key, sc );
@@ -1690,7 +1366,7 @@ void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* chara
 /**
 
 Assigns node coordinates to the supplied node variable which may be either
-of scalar or vector<double64> type. If either the X, Y, or Z coordinate are to be
+of scalar or vector<double> type. If either the X, Y, or Z coordinate are to be
 assigned to a scalar variable an index from 0...dim-1 must be supplied
 to indicate which coordinate axis shall be mapped.
 
@@ -1725,7 +1401,7 @@ void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo(  const char* vector_vari
 
       if ( prop_key.type != VECTOR )
        throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
-                                    "Node coordinates can only be assigned to a vector<double64> variable");
+                                    "Node coordinates can only be assigned to a vector<double> variable");
 
      if ( prop_key.place != NODE )
        throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
@@ -1795,7 +1471,7 @@ void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo( const char* scalar_varia
 /** Returns min/max of property values inside a region into its arguments.
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double64& gmin, double64& gmax ) const
+void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double& gmin, double& gmax ) const
  {
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
@@ -1817,11 +1493,11 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double64& gmin, d
     @todo SKM this wants to be a lambda function in the next method.
 */
 template<size_t dim>
-void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64& tmax )
+void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tmax )
  {
     VectorVariable<dim>  evals;
     ts.EigenValues( evals );
-    std::set<double64> min_max;
+    std::set<double> min_max;
     for ( size_t i=0U; i<dim; i++ ) min_max.insert( evals[i] );
     tmin = (*min_max.begin());
     tmax = (*min_max.rbegin());
@@ -1837,9 +1513,14 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64&
     @attention for tensor variables the maximum Eigenvalue is recovered.
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& vmin, double64& vmax ) const
+void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vmin, double& vmax ) const
  {
+     if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf",
+                             "Model/Region/SplitBoundary/Boundary properties have constant values within individual model subdomains; read directly!");
+
     // properties / variables placed on the model
+    /*
     if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY ) {
           if ( prop_key.type == SCALAR ) vmin = vmax = this->Read( prop_key );
           else if ( prop_key.type == VECTOR ) {
@@ -1864,12 +1545,12 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             }
           return;
       }
-
+   */
 
    // node properties of any kind
    if ( prop_key.place == NODE ) {
        typename vector<csmp::Node<dim>*>::const_iterator  nit(node_vec_.begin());
-       assert( (*nit) != NULL );
+       assert( (*nit) != nullptr );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*nit)->Read(prop_key); nit++;
             while ( nit!=node_vec_.end() ) {
@@ -1885,7 +1566,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             vmin = vmax = vc.Length();
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, vc );
-                 const double64  vlength(vc.Length());
+                 const double  vlength(vc.Length());
                  vmin = std::min( vmin, vlength );
                  vmax = std::max( vmax, vlength );
                  nit++;
@@ -1896,7 +1577,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*nit)->Read(prop_key,ts); nit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, ts );
                  minMaxEigenValues( ts, tmin, tmax );
@@ -1910,7 +1591,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*nit)->Read(prop_key,a); nit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -1924,7 +1605,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*nit)->Read(prop_key,a); nit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( nit!=node_vec_.end() ) {
                  (*nit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -1940,7 +1621,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
    // element-based properties of any kind
    if ( prop_key.place == ELEMENT || prop_key.place == FACE || prop_key.place == INTER_FACE ) {
        typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
-       assert( (*eit) != NULL );
+       assert( (*eit) != nullptr );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(prop_key); eit++;
             while ( eit!=elmt_vec_.end() ) {
@@ -1956,7 +1637,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             vmin = vmax = vc.Length();
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, vc );
-                 const double64  vlength(vc.Length());
+                 const double  vlength(vc.Length());
                  vmin = std::min( vmin, vlength );
                  vmax = std::max( vmax, vlength );
                  eit++;
@@ -1967,7 +1648,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, ts );
                  minMaxEigenValues( ts, tmin, tmax );
@@ -1981,7 +1662,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -1995,7 +1676,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                  (*eit)->Read( prop_key, a );
                  a.MinMax( amin, amax );
@@ -2011,7 +1692,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
    // element-based integration-point properties of any kind
    if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
        typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
-       assert( (*eit) != NULL );
+       assert( (*eit) != nullptr );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,prop_key); eit++;
             while ( eit!=elmt_vec_.end() ) {
@@ -2030,7 +1711,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, vc );
-                     const double64  vlength(vc.Length());
+                     const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
                      vmax = std::max( vmax, vlength );
                   }
@@ -2042,7 +1723,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(0U,prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, ts );
@@ -2058,7 +1739,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, a );
@@ -2074,7 +1755,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=1U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, a );
@@ -2095,7 +1776,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
         prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT )
      {
        typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
-       assert( (*eit) != NULL );
+       assert( (*eit) != nullptr );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,0U,prop_key); eit++;
             while ( eit!=elmt_vec_.end() ) {
@@ -2116,7 +1797,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
                      (*eit)->Read( i, j, prop_key, vc );
-                     const double64  vlength(vc.Length());
+                     const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
                      vmax = std::max( vmax, vlength );
                   }
@@ -2128,7 +1809,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(0U,0U,prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
@@ -2145,7 +1826,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
@@ -2162,7 +1843,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Facets(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ ) {
@@ -2184,7 +1865,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
         prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT  )
      {
        typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
-       assert( (*eit) != NULL );
+       assert( (*eit) != nullptr );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,0U,prop_key); eit++;
             while ( eit!=elmt_vec_.end() ) {
@@ -2205,7 +1886,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
                      (*eit)->Read( i, j, prop_key, vc );
-                     const double64  vlength(vc.Length());
+                     const double  vlength(vc.Length());
                      vmin = std::min( vmin, vlength );
                      vmax = std::max( vmax, vlength );
                   }
@@ -2217,7 +1898,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             TensorVariable<dim>  ts;
             (*eit)->Read(0U,0U,prop_key,ts); eit++;
             minMaxEigenValues( ts, vmin, vmax );
-            double64 tmin, tmax;
+            double tmin, tmax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
@@ -2234,7 +1915,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             ArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
@@ -2251,7 +1932,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
             FlaggedArrayVariable a(prop_key.dataDepth);
             (*eit)->Read(0U,0U,prop_key,a); eit++;
             a.MinMax( vmin, vmax );
-            double64  amin, amax;
+            double  amin, amax;
             while ( eit!=elmt_vec_.end() ) {
                 for ( size_t i=0U; i<(*eit)->Sectors(); i++ )
                   for ( size_t j=0U; j<(*eit)->IntegrationPointsPerSector(); j++ ) {
@@ -2266,7 +1947,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
          }
      } // end sector integration points for any element, face or interface
 
-    vmin = vmax = std::numeric_limits<double64>::quiet_NaN();
+    vmin = vmax = std::numeric_limits<double>::signaling_NaN();
 
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
     csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
@@ -2295,86 +1976,71 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& 
 template<size_t dim, template<size_t> class CELL>
 template<typename Var>
 void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
-                                                      const Var& var,
-                                                      SUBDOMAIN_PART sdp )
+                                                   const Var& var,
+                                                   SUBDOMAIN_PART sdp )
  {
-     csmp::Index prop_key = pref_.StorageKey(input_prop);
+     const csmp::Index prop_key = pref_.StorageKey(input_prop);
 
-     if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
+     if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                             input_prop, "placed on Region cannot be assigned just on perimeter");
-          return;
-       }
 
      if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
-       {
-        this->Store( prop_key, var );
-        return;
-       }
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
+                            input_prop, "use Store() to assign Region/SplitBoundary/Boundary values");
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
-                  (*it)->Store( prop_key, var );
+                for ( auto& it : elmt_vec_ ) it->Store( prop_key, var );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
-                  for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
-                    (*it)->Store( i, prop_key, var );
+                for ( auto& it : elmt_vec_ )
+                  for ( size_t i=0U; i<it->IntegrationPoints(); i++ )
+                    it->Store( i, prop_key, var );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
-               for ( size_t i=0U; i<(*it)->Facets(); i++ )
-                 for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
-                  (*it)->Store( i, j, prop_key, var );
+             for ( auto& it : elmt_vec_ )
+               for ( size_t i=0U; i<it->Facets(); i++ )
+                 for ( size_t j=0U; j<it->IntegrationPointsPerFacet(); j++ )
+                   it->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
-               for ( size_t i=0U; i<(*it)->Sectors(); i++ )
-                 for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
-                   (*it)->Store( i, j, prop_key, var );
+             for ( auto& it : elmt_vec_ )
+               for ( size_t i=0U; i<it->Sectors(); i++ )
+                 for ( size_t j=0U; j<it->IntegrationPointsPerSector(); j++ )
+                   it->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
-                for ( typename vector<csmp::Node<dim>*>::iterator
-                      nit=node_vec_.begin(); nit!=node_vec_.end(); nit++ )
-                  (*nit)->Store( prop_key, var );
+                for ( auto& nit : node_vec_ )
+                  nit->Store( prop_key, var );
              }
            else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                 "Property placement not recognized");
        }
      else if ( sdp == PERIMETER ) { // property is assigned only to perimeter of boundary
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+                for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   (*it)->Store( prop_key, var );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+                for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     (*it)->Store( i, prop_key, var );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+             for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
                    (*it)->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+             for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
                    (*it)->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
-                for ( typename vector<csmp::Node<dim>*>::iterator
-                      nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
+                for ( auto nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
            else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
@@ -2382,33 +2048,28 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
        }
      else { // property is assigned only to interior of subdomain
            if ( prop_key.place == ELEMENT ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+                for ( auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                      (*it)->Store( prop_key, var );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+                for ( auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     (*it)->Store( i, prop_key, var );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+             for ( auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
                    (*it)->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+             for (  auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
                    (*it)->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
-                for ( typename vector<csmp::Node<dim>*>::iterator
-                      nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
+                for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
            else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
@@ -2498,11 +2159,11 @@ template void ModelSubDomain<3U,InterFace>::InputPropertyValue( const char*, con
 template<size_t dim, template<size_t> class CELL>
 template<typename Var>
 void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
-                                                      const Var& var,
-                                                      VARIABLE_FLAG do_not_overwrite,
-                                                      SUBDOMAIN_PART sdp )
+                                                   const Var& var,
+                                                   VARIABLE_FLAG do_not_overwrite,
+                                                   SUBDOMAIN_PART sdp )
  {
-     csmp::Index prop_key = pref_.StorageKey(input_prop);
+     const csmp::Index prop_key = pref_.StorageKey(input_prop);
 
      if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
@@ -2511,10 +2172,8 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
        }
 
      if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
-       {
-        this->Store( prop_key, var );
-        return;
-       }
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
+                            input_prop, "use Store() to assign Region/SplitBoundary/Boundary valuese");
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
@@ -2555,36 +2214,31 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
        }
      else if ( sdp == PERIMETER ) { // property is assigned only to perimeter of boundary
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+                for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   writeVariableIf( (*it), prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+                for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     writeVariableIf( (*it), i, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+             for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
+             for ( auto it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
-                for ( typename vector<csmp::Node<dim>*>::iterator
-                      nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
+                for ( auto nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, do_not_overwrite );
              }
            else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
@@ -2592,36 +2246,31 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
        }
      else { // property is assigned only to interior of subdomain
            if ( prop_key.place == ELEMENT ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+                for ( auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                   writeVariableIf( (*it), prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<CELL<dim>*>::iterator
-                      it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+                for ( auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     writeVariableIf( (*it), i, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+             for ( auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<CELL<dim>*>::iterator
-               it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
+             for ( auto it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
                     writeVariableIf( (*it), i, j, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
-                for ( typename vector<csmp::Node<dim>*>::iterator
-                      nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
+                for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, do_not_overwrite );
              }
            else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
@@ -2707,13 +2356,16 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
         csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::PropertyStatus", property, "is undefined; nothing could be done" );
         return ANY;
     }
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
     string cache(to_string(dim));
     src += cache;
     src += ",";
     src += typeid(CELL<dim>).name();
     src +=">::PropertyStatus";
+
+    if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION/BOUNDARY/SPLIT_BUNDARY variables.");
 
     if ( prop_key.place == FACET_INTEGRATION_POINT ||
          prop_key.place == SECTOR_INTEGRATION_POINT ||
@@ -2736,89 +2388,71 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
     {
         // if all the flags in the region shall be changed
         if ( group_flag == COMPLETE ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                return this->Status( prop_key );
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     if ( status0 != (*eit)->Status(prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         if ( status0 != (*eit)->Status(i,prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == NODE ) {
                 VARIABLE_FLAG  status0(N(0)->Status(prop_key));
-                for ( typename vector<csmp::Node<dim>*>::const_iterator
-                      nit=NodesBegin(); nit!=NodesEnd(); nit++ )
+                for ( auto nit=NodesBegin(); nit!=NodesEnd(); nit++ )
                     if ( status0 != (*nit)->Status(prop_key) ) return ANY;
                 return status0;
             }
         }
         // if the property shall only be changed on the Subdomain boundary
         else if ( group_flag == PERIMETER ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                return this->Status( prop_key );
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(prop_key));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     if ( status0 != (*eit)->Status(prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(0,prop_key));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         if ( status0 != (*eit)->Status(i,prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == NODE ) {
                 VARIABLE_FLAG  status0(N(InteriorNodes())->Status(prop_key));
-                for ( typename vector<csmp::Node<dim>*>::const_iterator
-                      nit=PerimeterNodesBegin(); nit!=NodesEnd(); nit++ )
+                for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); nit++ )
                     if ( status0 != (*nit)->Status(prop_key) ) return ANY;
                 return status0;
             }
         }
         else if ( group_flag == INTERIOR ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                return this->Status( prop_key );
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     if ( status0 != (*eit)->Status(prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         if ( status0 != (*eit)->Status(i,prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == NODE ) {
                 VARIABLE_FLAG  status0(N(0)->Status(prop_key));
-                for ( typename vector<csmp::Node<dim>*>::const_iterator
-                      nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
+                for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                     if ( status0 != (*nit)->Status(prop_key) ) return ANY;
                 return status0;
             }
@@ -2833,26 +2467,18 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
 
         // if all the flags in the region shall be changed
         if ( group_flag == COMPLETE ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                VARIABLE_FLAG  status0(this->Status(prop_key,component));
-                for ( size_t n=1U; n<length; n++ )
-                    if ( status0 != this->Status(prop_key,n) ) return ANY;
-                return status0;
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key,component));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*eit)->Status(prop_key,n) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key,component));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<length; n++ )
                             if ( status0 != (*eit)->Status(i,prop_key,n) ) return ANY;
@@ -2860,8 +2486,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
             }
             if ( prop_key.place == NODE ) {
                 VARIABLE_FLAG  status0(N(0)->Status(prop_key,component));
-                for ( typename vector<csmp::Node<dim>*>::const_iterator
-                      nit=NodesBegin(); nit!=NodesEnd(); nit++ )
+                for ( auto nit=NodesBegin(); nit!=NodesEnd(); nit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*nit)->Status(prop_key,n) ) return ANY;
                 return status0;
@@ -2869,26 +2494,18 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
         }
         // if the property shall only be changed on the Subdomain boundary
         else if ( group_flag == PERIMETER ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                VARIABLE_FLAG  status0(this->Status(prop_key,component));
-                for ( size_t n=1U; n<length; n++ )
-                    if ( status0 != this->Status(prop_key,n) ) return ANY;
-                return status0;
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(prop_key,component));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*eit)->Status(prop_key,n) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(0,prop_key,component));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
+                for ( auto eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<length; n++ )
                             if ( status0 != (*eit)->Status(i,prop_key,n) ) return ANY;
@@ -2896,34 +2513,25 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
             }
             if ( prop_key.place == NODE ) {
                 VARIABLE_FLAG  status0(N(InteriorNodes())->Status(prop_key,component));
-                for ( typename vector<csmp::Node<dim>*>::const_iterator
-                      nit=PerimeterNodesBegin(); nit!=NodesEnd(); nit++ )
+                for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); nit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*nit)->Status(prop_key,n) ) return ANY;
                 return status0;
             }
         }
         else if ( group_flag == INTERIOR ) {
-            if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                VARIABLE_FLAG  status0(this->Status(prop_key,component));
-                for ( size_t n=1U; n<length; n++ )
-                    if ( status0 != this->Status(prop_key,n) ) return ANY;
-                return status0;
-            }
             if ( prop_key.place == ELEMENT or
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key,component));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*eit)->Status(prop_key,n) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key,component));
-                for ( typename vector<CELL<dim>*>::const_iterator
-                      eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<length; n++ )
                             if ( status0 != (*eit)->Status(i,prop_key,n) ) return ANY;
@@ -2931,8 +2539,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
             }
             if ( prop_key.place == NODE ) {
                 VARIABLE_FLAG  status0(N(0)->Status(prop_key,component));
-                for ( typename vector<csmp::Node<dim>*>::const_iterator
-                      nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
+                for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*nit)->Status(prop_key,n) ) return ANY;
                 return status0;
@@ -2962,8 +2569,8 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              VARIABLE_FLAG new_status_of_scalar,
-                                                             double64 min_value_to_change,
-                                                             double64 max_value_to_change )
+                                                             double min_value_to_change,
+                                                             double max_value_to_change )
  {
     vector<VARIABLE_FLAG>  status(1U,new_status_of_scalar);
     ChangePropertyStatusWhere( property, status, min_value_to_change, max_value_to_change );
@@ -2974,16 +2581,18 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
 /// changes the variable flag to status for those group members which carry the group_flag.
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
-                                                        const std::vector<VARIABLE_FLAG>& status,
-                                                        SUBDOMAIN_PART group_flag )
+                                                     const std::vector<VARIABLE_FLAG>& status,
+                                                     SUBDOMAIN_PART group_flag )
  {
-    /// @todo (2-P) Rm rtti
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
     src += to_string(dim);
     src += ",";
     src += "Element/Face/Interface";
     src +=">::ChangePropertyStatus:";
+
+    if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION/BOUNDARY/SPLIT_BUNDARY variables.");
 
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
@@ -3002,28 +2611,21 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    this->Status( prop_key, status[0U] );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
+                    for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
+                    for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
-                    for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=NodesBegin(); nit!=NodesEnd(); ++nit )
+                    for ( auto nit=NodesBegin(); nit!=NodesEnd(); ++nit )
                       (*nit)->Status( prop_key, status[0U] );
                     return;
                  }
@@ -3036,21 +2638,18 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
+                    for ( auto eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
+                    for ( auto eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
-                    for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
+                    for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
                       (*nit)->Status( prop_key, status[0U] );
                     return;
                  }
@@ -3063,21 +2662,18 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
+                    for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
+                    for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
-                    for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
+                    for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
                       (*nit)->Status( prop_key, status[0U] );
                     return;
                  }
@@ -3089,31 +2685,23 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    for ( size_t n=0U; n<status.size(); n++ )
-                        this->Status( prop_key, n, status[n] );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                    for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*eit)->Status( prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                    for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<status.size(); n++ )
                           (*eit)->Status( i, prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
-                    for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=NodesBegin(); nit!=NodesEnd(); nit++ )
+                    for ( auto nit=NodesBegin(); nit!=NodesEnd(); nit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*nit)->Status( prop_key, n, status[n] );
                     return;
@@ -3134,16 +2722,14 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
+                    for ( auto eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<status.size(); n++ )
                           (*eit)->Status( i, prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
-                    for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=PerimeterNodesBegin(); nit!=NodesEnd(); nit++ )
+                    for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); nit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*nit)->Status( prop_key, n, status[n] );
                     return;
@@ -3156,23 +2742,20 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                    for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*eit)->Status( prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<CELL<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                    for ( auto eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<status.size(); n++ )
                           (*eit)->Status( i, prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
-                    for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
+                    for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*nit)->Status( prop_key, n, status[n] );
                     return;
@@ -3198,14 +2781,16 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                                                         VARIABLE_FLAG status,
                                                         SUBDOMAIN_PART group_flag )
  {
-    /// @todo (2-P) Rm rtti
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
     string cache(to_string(dim));
     src += cache;
     src += ",";
     src += typeid(CELL<dim>).name();
     src +=">::ChangePropertyStatus";
+
+    if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION/BOUNDARY/SPLIT_BUNDARY variables.");
 
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
@@ -3221,10 +2806,6 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    this->Status( prop_key, status );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
@@ -3307,10 +2888,6 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
       {
           // if all the flags in the region shall be changed
           if ( group_flag == COMPLETE ) {
-               if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
-                    this->Status( prop_key, position, status );
-                    return;
-                 }
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
@@ -3399,7 +2976,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              const std::vector<VARIABLE_FLAG>& status,
-                                                             double64 pmin, double64 pmax )
+                                                             double pmin, double pmax )
  {
     csmp::Index  prop_key = pref_.StorageKey(property);
 
@@ -3600,7 +3177,7 @@ template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              size_t position,
                                                              VARIABLE_FLAG status,
-                                                             double64 pmin, double64 pmax )
+                                                             double pmin, double pmax )
  {
     csmp::Index  prop_key = pref_.StorageKey(property);
 
@@ -3917,7 +3494,7 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty( const
           return;
        }
 
-     vector<double64>  IPOL;
+     vector<double>  IPOL;
 
      switch( c_key.type )
        {
@@ -4276,24 +3853,24 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
      // 2. The element property values are weighted by the area of the element and then
      //    added for each node to a property array vector, the number of additions to each
      //    node is counted
-     vector<double64>  sum( Nodes(), 0. );
+     vector<double>  sum( Nodes(), 0. );
 
      RenumberNodes();
 
      // SCALAR VARIABLES
      // ----------------
      if ( e_key.type == SCALAR ) {
-          vector<double64>  sc_data( Nodes(), 0. );
+          vector<double>  sc_data( Nodes(), 0. );
           if ( !by_distance )
             {
                for ( typename vector<CELL<dim>*>::const_iterator
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     // getting the properties
-                    double64 sc = (*eit)->Read( e_key );
+                    double sc = (*eit)->Read( e_key );
 
                     // weighting property value by element volume
-                    double64 volume = (*eit)->Volume();
+                    double volume = (*eit)->Volume();
                     sc *= volume;
 
                     for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
@@ -4308,13 +3885,13 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   {
                      // reading element property
-                     double64 sc = (*eit)->Read( e_key );
+                     double sc = (*eit)->Read( e_key );
                      // measuring distances from element to nodes to
                      // weight property values
                      Point<dim>  ctr((*eit)->BaryCenter());
 
                      for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
-                          double64 dist((ctr - (*eit)->N(i)->Coordinate()).Length());
+                          double dist((ctr - (*eit)->N(i)->Coordinate()).Length());
                           // memorizing distances and weighted values
                           sc_data[ (*eit)->N(i)->Idx() ] += sc / dist;
                           sum[ (*eit)->N(i)->Idx() ]     += 1. / dist;
@@ -4344,7 +3921,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     (*eit)->Read( e_key, vc );
-                    double64  volume = (*eit)->Volume();
+                    double  volume = (*eit)->Volume();
                     vc *= volume;
 
                     for ( size_t i=0; i<(*eit)->Nodes(); i++ )
@@ -4366,7 +3943,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      Point<dim>  ctr((*eit)->BaryCenter());
 
                      for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
-                          double64 dist((ctr - (*eit)->N(i)->Coordinate()).Length());
+                          double dist((ctr - (*eit)->N(i)->Coordinate()).Length());
                           // memorizing distances and weighted values
                           vc_data[ (*eit)->N(i)->Idx() ] += vc / dist;
                           sum[ (*eit)->N(i)->Idx() ]     += 1. / dist;
@@ -4394,7 +3971,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     (*eit)->Read( e_key, ts );
-                    double64 volume = (*eit)->Volume();
+                    double volume = (*eit)->Volume();
                     ts *= volume;
 
                     for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
@@ -4416,7 +3993,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                      Point<dim>  ctr((*eit)->BaryCenter());
 
                      for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
-                          double64 dist((ctr - (*eit)->N(i)->Coordinate()).Length());
+                          double dist((ctr - (*eit)->N(i)->Coordinate()).Length());
                           // memorizing distances and weighted values
                           ts_data[ (*eit)->N(i)->Idx() ] += ts / dist;
                           sum[ (*eit)->N(i)->Idx() ]     += 1. / dist;
@@ -4499,11 +4076,11 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
     RenumberNodes();
 
     // required vectors
-    vector<double64>  cp_var, n_var;
+    vector<double>  cp_var, n_var;
 
     // SCALAR PROPERTIES
     if ( n_key.type == SCALAR ) {
-         vector<double64> temp( Nodes(), 0. ), sum( Nodes(), 0. );
+         vector<double> temp( Nodes(), 0. ), sum( Nodes(), 0. );
          const size_t  variable_components(1U);
          for ( typename vector<CELL<dim>*>::const_iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
@@ -4513,12 +4090,12 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               // extrapolating it to nodes
               n_var.resize( (*it)->Nodes() );                 // components = 1
               (*it)->ExtrapolateIntegrationPointVariableToNodes( variable_components, cp_var, n_var );
-              // weighting and accumulating it into vector<double64> for later averaging
+              // weighting and accumulating it into vector<double> for later averaging
               const Point<dim>  barycenter((*it)->BaryCenter());
               for ( size_t i=0U; i<(*it)->Nodes(); i++ )
                 {
                    // finding the distance of the node from the barycentre
-                   const double64 distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
+                   const double distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
                    temp[ (*it)->N(i)->Idx() ] += n_var[i] / distance;
                    sum[  (*it)->N(i)->Idx() ] += 1. / distance;
                 }
@@ -4530,7 +4107,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
 
     // VECTOR PROPERTIES
     else if ( n_key.type == VECTOR ) {
-         // creating a zero-initialized temporary vector<double64>
+         // creating a zero-initialized temporary vector<double>
          VectorVariable<dim>  zero_vec; zero_vec=0.;
          vector<VectorVariable<dim> > cpvec, temp( Nodes(), zero_vec ), sum( Nodes(), zero_vec );
          const size_t  vcomponents(dim);
@@ -4540,7 +4117,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               cpvec.resize( (*it)->IntegrationPoints() );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 (*it)->Read( i, c_key, cpvec[i] );
-              // rolling the vector<double64> variables out into linear vector<double64> cp_var
+              // rolling the vector<double> variables out into linear vector<double> cp_var
               cp_var.resize( (*it)->IntegrationPoints() * vcomponents );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 for ( size_t j=0U; j<vcomponents; j++ ) cp_var[ i * vcomponents + j ] = cpvec[i][j];
@@ -4548,13 +4125,13 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               n_var.resize( (*it)->Nodes() * vcomponents ); // components = 1
               (*it)->ExtrapolateIntegrationPointVariableToNodes( vcomponents, cp_var, n_var );
 
-              // weighting and accumulating it into vector<double64> for later averaging
+              // weighting and accumulating it into vector<double> for later averaging
               const Point<dim>  barycenter((*it)->BaryCenter());
-              // accumulating result into vector<double64> for later averaging
+              // accumulating result into vector<double> for later averaging
               for ( size_t i=0U; i<(*it)->Nodes(); i++ )
                 {
                    // finding the distance of the node from the barycentre
-                   const double64 distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
+                   const double distance = barycenter.DistanceTo((*it)->N(i)->Coordinate());
                    for ( size_t j=0U; j<vcomponents; j++ ) {
                          temp[ (*it)->N(i)->Idx() ](j) += n_var[ i * vcomponents + j ] / distance;
                          sum[  (*it)->N(i)->Idx() ](j) += 1. / distance;
@@ -4564,7 +4141,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
           // distance weighting and averaging the extrapolated node values
          for ( typename vector<csmp::Node<dim>*>::iterator it=NodesBegin(); it!=NodesEnd(); it++ )
            {
-              // averaging the vector<double64> variable
+              // averaging the vector<double> variable
               for ( size_t j=0U; j<vcomponents; j++ ) {
                    temp[ (*it)->Idx() ](j) /= sum[ (*it)->Idx() ](j);
                    temp[ (*it)->Idx() ].Flag(j) = (*it)->Status( n_key, j );
@@ -4578,7 +4155,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
     if ( n_key.type == TENSOR ) {
           csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                             "distance weighting is not applied; tensor values are simply averaged at the nodes.");
-         // creating a zero-initialized temporary vector<double64>
+         // creating a zero-initialized temporary vector<double>
          TensorVariable<dim>  zero_ts; zero_ts=0.;
          vector<TensorVariable<dim> > cpts, temp( Nodes(), zero_ts );
          const size_t  tcomponents(dim * dim);
@@ -4588,7 +4165,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               cpts.resize( (*it)->IntegrationPoints() );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 (*it)->Read( i, c_key, cpts[i] );
-              // rolling the tensor variable rows out sequentially into the linear vector<double64> cp_var
+              // rolling the tensor variable rows out sequentially into the linear vector<double> cp_var
               cp_var.resize( (*it)->IntegrationPoints() * tcomponents );
               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                 for ( size_t j=0U; j<dim; j++ )
@@ -4596,7 +4173,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               // extrapolating constraint point property to nodes
               n_var.resize( (*it)->Nodes() * tcomponents ); // components = 1
               (*it)->ExtrapolateIntegrationPointVariableToNodes( tcomponents, cp_var, n_var );
-              // accumulating result into tensor variable vector<double64> for later averaging
+              // accumulating result into tensor variable vector<double> for later averaging
               for ( size_t i=0U; i<(*it)->Nodes(); i++ )
                 for ( size_t j=0U; j<dim; j++ )
                   for ( size_t k=0U; k<dim; k++ )
@@ -4608,7 +4185,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
               // averaging the tensor variable
               for ( size_t j=0U; j<dim; j++ )
                 for ( size_t k=0U; k<dim; k++ )
-                  temp[ (*it)->Idx() ](j,k) /= static_cast<double64>( (*it)->Parents() );
+                  temp[ (*it)->Idx() ](j,k) /= static_cast<double>( (*it)->Parents() );
               // storing it
               (*it)->Store( n_key, temp[ (*it)->Idx() ] );
            }
@@ -4634,74 +4211,57 @@ or elements that belong to the region, depending on where the target property is
 @param prop The name of the property which shall be averaged.
 */
 template<size_t dim, template<size_t> class CELL>
-double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
+double  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
  {
-    csmp::Index  idx = pref_.StorageKey(prop);
-    size_t       counter(0U);
+    const csmp::Index  idx = pref_.StorageKey(prop);
+    size_t             counter(0U);
 
      if ( (elmt_vec_.empty()) ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RegionPropertyAverage",
                                         "Region is empty");
        }
 
+    if ( idx.place == REGION or idx.place == BOUNDARY or idx.place == SPLIT_BOUNDARY )
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::Average", "REGION/BOUNDARY/SPLIT_BOUNDARY variables have only a single value in a model subdomain.");
+
     switch( idx.place )
       {
-        case REGION:
-        case BOUNDARY:
-        case SPLIT_BOUNDARY:
-            if ( idx.type == SCALAR ) {
-                 return this->Read( idx );
-              }
-            if ( idx.type == VECTOR ) {
-                 VectorVariable<dim>  vc;
-                 this->Read( idx, vc );
-                 return vc.Length();
-              }
-            if ( idx.type == TENSOR ) {
-                 VectorVariable<dim>  evals;
-                 TensorVariable<dim>  ts;
-                 this->Read( idx, ts );
-                 ts.EigenValues( evals );
-                 double64  avg(0.);
-                 for ( size_t j=0U; j<dim; j++ ) avg += evals[j];
-                 return avg / static_cast<double64>(dim);
-              }
-            break;
-
         case ELEMENT:
+        case FACE:
+        case INTER_FACE:
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, sc );
                       avg += sc();
                    }
-                 return avg / static_cast<double64>(elmt_vec_.size());
+                 return avg / static_cast<double>(elmt_vec_.size());
               }
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, vc );
                       avg += vc.Length();
                    }
-                 return avg /= static_cast<double64>(elmt_vec_.size());
+                 return avg /= static_cast<double>(elmt_vec_.size());
               }
             if ( idx.type == TENSOR ) {
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, ts );
                       ts.EigenValues( evals );
-                      double64 ts_avg(0.);
+                      double ts_avg(0.);
                       for ( size_t j=0U; j<dim; j++ ) ts_avg += evals[j];
-                      avg += ts_avg / static_cast<double64>(dim);
+                      avg += ts_avg / static_cast<double>(dim);
                    }
-                 return avg / static_cast<double64>(elmt_vec_.size());
+                 return avg / static_cast<double>(elmt_vec_.size());
               }
           break;
         case ELEMENT_INTEGRATION_POINT:
@@ -4709,7 +4269,7 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
             counter = 0U;
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
@@ -4717,11 +4277,11 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
                         counter++;
                         avg += sc();
                      }
-                 return avg / static_cast<double64>(elmt_vec_.size());
+                 return avg / static_cast<double>(elmt_vec_.size());
               }
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
@@ -4729,66 +4289,66 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
                         counter++;
                         avg += vc.Length();
                      }
-                 return avg /= static_cast<double64>(counter);
+                 return avg /= static_cast<double>(counter);
               }
             if ( idx.type == TENSOR ) {
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         (*eit)->Read( i, idx, ts );
                         counter++;
                         ts.EigenValues( evals );
-                        double64 ts_avg(0.);
+                        double ts_avg(0.);
                         for ( size_t j=0U; j<dim; j++ ) ts_avg += evals[j];
-                        avg += ts_avg / static_cast<double64>(dim);
+                        avg += ts_avg / static_cast<double>(dim);
                      }
-                 return avg / static_cast<double64>(counter);
+                 return avg / static_cast<double>(counter);
               }
           break;
         case NODE:
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<csmp::Node<dim>*>::const_iterator
                        it=node_vec_.begin(); it!=node_vec_.end(); it++ ) {
                       (*it)->Read( idx, sc );
                       avg += sc();
                    }
-                 return avg / static_cast<double64>(node_vec_.size());
+                 return avg / static_cast<double>(node_vec_.size());
               }
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<csmp::Node<dim>*>::const_iterator
                        it=node_vec_.begin(); it!=node_vec_.end(); it++ ) {
                       (*it)->Read( idx, vc );
                       avg += vc.Length();
                    }
-                 return avg /= static_cast<double64>(node_vec_.size());
+                 return avg /= static_cast<double>(node_vec_.size());
               }
             if ( idx.type == TENSOR ) {
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
-                 double64  avg(0.);
+                 double  avg(0.);
                  for ( typename vector<csmp::Node<dim>*>::const_iterator
                        it=node_vec_.begin(); it!=node_vec_.end(); it++ ) {
                       (*it)->Read( idx, ts );
                       ts.EigenValues( evals );
-                      double64 ts_avg(0.);
+                      double ts_avg(0.);
                       for ( size_t j=0U; j<dim; j++ ) ts_avg += evals[j];
-                      avg += ts_avg / static_cast<double64>(dim);
+                      avg += ts_avg / static_cast<double>(dim);
                    }
-                 return avg / static_cast<double64>(node_vec_.size());
+                 return avg / static_cast<double>(node_vec_.size());
               }
          break;
          default:
             throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RegionAverage:", "property placement not handled yet.");
        }
 
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
 
  } // end Average
 
@@ -4798,7 +4358,7 @@ double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
 /**
 
 Provided that property 'a' is a scalar node variable and property 'b' is a
-vector<double64> variable placed on the element, CopyGradientOfProperty_A_To_B() will
+vector<double> variable placed on the element, CopyGradientOfProperty_A_To_B() will
 calculate the gradient of property 'a' for each element and assign the
 result to the element variable 'b'.
 
@@ -4806,7 +4366,7 @@ result to the element variable 'b'.
 
 The method takes two name strings as arguments. The first string specifies
 the scalar node variable of which the gradient will be calculated and the
-second string identifies the vector<double64> variable placed on the element which
+second string identifies the vector<double> variable placed on the element which
 will store the calculated gradient of property 'a'.
 
 @section application Application
@@ -4951,7 +4511,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                       for ( size_t j=0U; j<dim; j++ )
                         ts(i,j) += DN(i,n) * VC[n][j];
 
-                  // saving the resulting vector<double64>
+                  // saving the resulting vector<double>
                   (*eit)->Store( b_key, ts );
                }
              return true;
@@ -4974,7 +4534,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                           for ( size_t j=0U; j<dim; j++ )
                             ts(i,j) += DN(i,n) * VC[n][j];
 
-                      // saving the resulting vector<double64>
+                      // saving the resulting vector<double>
                       (*eit)->Store( i, b_key, ts );
                     }
                }
@@ -5058,7 +4618,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                for ( size_t j=0U; j<dim; j++ )
                  vc(j) += DN(j,i) * SC[i]();
 
-             // saving the resulting vector<double64>
+             // saving the resulting vector<double>
              (*eit)->Store( b_key, vc );
           }
       }
@@ -5087,7 +4647,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                  for ( size_t j=0U; j<dim; j++ )
                    ts(i,j) += DN(i,n) * VC[n][j];
 
-             // saving the resulting vector<double64>
+             // saving the resulting vector<double>
              (*eit)->Store( b_key, ts );
           }
       }
@@ -5179,10 +4739,11 @@ by the variable flags and values.
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
  {
-     csmp::Index          prop_key = pref_.StorageKey(prop);
-     ScalarVariable       sc;
-     VectorVariable<dim>  vc;
-     TensorVariable<dim>  ts;
+     const csmp::Index  prop_key = pref_.StorageKey(prop);
+
+     if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen",
+                             "Use direct variable access to display Region/Boundary/SplitBoundary properties.");
 
      string place_name = parsePlacement(prop_key.place);
 
@@ -5204,20 +4765,21 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
            return;
       }
      cout << prop <<"' placed on the: "<< place_name << endl;
+     
+     VectorVariable<dim> vc;
+     TensorVariable<dim> ts;
 
      switch( prop_key.place )
        {
           case NODE:
-              for ( typename vector<csmp::Node<dim>*>::const_iterator
-                    nit=NodesBegin(); nit!=NodesEnd(); nit++ )
+              for ( auto nit=NodesBegin(); nit!=NodesEnd(); nit++ )
                 {
                   cout <<"\nIdx: " << (*nit)->Idx() <<"\t\t";
                   cout << string(parseBoundary((*nit)->AtBoundary())) <<" ";
                   switch (prop_key.type)
                     {
                        case SCALAR:
-                           (*nit)->Read( prop_key, sc );
-                           cout << sc;
+                           cout << (*nit)->Read( prop_key );
                          break;
                        case VECTOR:
                            (*nit)->Read( prop_key, vc );
@@ -5246,15 +4808,14 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
                 }
               break;
           case ELEMENT_INTEGRATION_POINT:
-              for ( typename vector<CELL<dim>*>::const_iterator
-                    eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+              for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
                   cout <<"\nParent element Idx: " << (*eit)->Idx() <<"\t\t";
                   for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                     switch (prop_key.type)
                       {
                          case SCALAR:
-                             (*eit)->Read( i, prop_key, sc ); cout << i <<":"<< sc;
+                             cout << i <<": "<< (*eit)->Read( i, prop_key );
                            break;
                          case VECTOR:
                              (*eit)->Read( i, prop_key, vc ); cout << i <<":"<< vc;
@@ -5281,15 +4842,14 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
                 }
               break;
            case ELEMENT:
-              for ( typename vector<CELL<dim>*>::const_iterator
-                    eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+              for ( auto eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
                   cout <<"\nIdx: " << (*eit)->Idx() <<"\t\t";
                   /// Roman, 2014 (Face&InterFace): Should Face contain AtBoundary flag?
                   //cout << string(parseBoundary((*eit)->AtBoundary())) <<" ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: (*eit)->Read( prop_key, sc ); cout << sc;
+                       case SCALAR: cout << (*eit)->Read( prop_key );
                          break;
                        case VECTOR: (*eit)->Read( prop_key, vc ); cout << vc;
                          break;
@@ -5313,94 +4873,9 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
                     }
                 }
               break;
-           case SPLIT_BOUNDARY:
-                  cout <<"\nSplitBoundary: ";
-                  switch (prop_key.type)
-                    {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
-                         break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
-                         break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
-                         break;
-                       case ARRAY: {
-                            ArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                          }
-                         break;
-                       case FLAGGEDARRAY: {
-                            FlaggedArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                         }
-                         break;
-                       default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
-                                               "type of split boundary variable not recognized." );
-                    }
-                  break;
-           case BOUNDARY:
-                {
-                  cout <<"\nRegion: ";
-                  switch (prop_key.type)
-                    {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
-                         break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
-                         break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
-                         break;
-                       case ARRAY: {
-                            ArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                          }
-                         break;
-                       case FLAGGEDARRAY: {
-                            FlaggedArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                         }
-                         break;
-                       default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
-                                               "type of boundary variable not recognized." );
-                    }
-                }
-              break;
-           case REGION:
-                {
-                  cout <<"\nRegion: ";
-                  switch (prop_key.type)
-                    {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
-                         break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
-                         break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
-                         break;
-                       case ARRAY: {
-                            ArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                          }
-                         break;
-                       case FLAGGEDARRAY: {
-                            FlaggedArrayVariable ary;
-                            this->Read( prop_key, ary );
-                            ary.Out();
-                         }
-                         break;
-                       default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
-                                               "type of region variable not recognized." );
-                    }
-                }
-              break;
           default:
-               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: The property ";
-               cerr << prop <<"  "<< place_name <<" could not be retrieved from the Region";
+               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: Property ";
+               cerr << prop <<"  "<< place_name <<" cannot be retrieved from Region/Boundary/SplitBoundary objects; use Read().";
                break;
        }
     cout << endl;
@@ -5445,7 +4920,7 @@ void ModelSubDomain<dim,CELL>::Out() const
 
     for ( typename vector<CELL<dim>*>::const_iterator
           it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) {
-         if ( (*it) == NULL )
+         if ( (*it) == nullptr )
            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::Out",
                                  "member element pointer not initialised");
 //         else (*it)->Out();
@@ -5461,7 +4936,7 @@ void ModelSubDomain<dim,CELL>::Out() const
 
     cout <<"\n\n perimeter nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=first_bd_node_; i<node_vec_.size(); i++ ) {
-         if ( node_vec_[i] == NULL )
+         if ( node_vec_[i] == nullptr )
            throw csmp::Exception( ERROR, "ModelSubDomain<dim>::Out", "member node pointer not initialised.");
          else cout << node_vec_[i]->Idx() <<" ";
       }
@@ -5476,28 +4951,29 @@ void ModelSubDomain<dim,CELL>::Out() const
 /**
     Writes data block containing all information that is needed to reconstruct a ModelSubDomain
     
-    @note template template parameters for functions are not allowed
+    @note this is not a function because template template parameters are not allowed for for functions.
 */
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
  {
     // 1. writing name of the region
-    skm_C_fwrite( fp, Name().c_str() );
+    binaryFileWrite( fp, Name().c_str() );
    
     // 2. writing the interior element records of the region
     std::vector<size_t> IDs( distance(InteriorElementsBegin(), InteriorElementsEnd() ) );
     transform( InteriorElementsBegin(), InteriorElementsEnd(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
 
     // 3. writing the perimeter element records of the region
     IDs.resize( distance(PerimeterElementsBegin(), PerimeterElementsEnd()) );
     transform( PerimeterElementsBegin(), PerimeterElementsEnd(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
    
-    // 4. writing the boundary faces (not done because pointer locations will change in reconstruction)
-    // -----------------------------
+    // 4. writing the boundary faces
+    // (this not stored because pointer locations will change in reconstruction eliminating storage benefit)
+    // -----------------------------------------------------------------------------------------------------
     /* 
         since this is vector of vectors predominated by single value entries,
         it is collapsed into a flat vector in which all entries that refer to 
@@ -5512,13 +4988,15 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
     IDs.resize( InteriorNodes() );
     transform( NodesBegin(), PerimeterNodesBegin(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
    
     // 6. writing the perimeter nodes
     IDs.resize( PerimeterNodes() );
     transform( PerimeterNodesBegin(), NodesEnd(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
-    skm_C_fwrite( fp, IDs );
+    binaryFileWrite( fp, IDs );
+    
+    // NB: the connectivity between the elements is not stored because it is handled by MeshManager
    
  } // end WriteDomainIndexesToBinaryFile
 
@@ -5546,31 +5024,91 @@ void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& in
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
-    // 1. reading name of the region
+    // 1. reading name of the subdomain
     char name[INFO_STRING];
-    skm_C_fread( fp, name );
+    binaryFileRead( fp, name );
     info.name = name;
     assert( !info.name.empty() );
    
     // 2. reading the interior element records of the region
-    skm_C_fread( fp, info.interior_elmts );
+    binaryFileRead( fp, info.interior_elmts );
     if (dim > 2 && info.interior_elmts.empty() ) {
         csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior elements: ", name );
     }
 
     // 3. reading the perimeter element records of the region
-    skm_C_fread( fp, info.perimeter_elmts );
-//    assert( !info.perimeter_elmts.empty() );
+    binaryFileRead( fp, info.perimeter_elmts );
+    assert( !info.perimeter_elmts.empty() );
    
     // 4. reading the interior nodes
-    skm_C_fread( fp, info.interior_nodes );
+    binaryFileRead( fp, info.interior_nodes );
   
     // 5. reading the perimeter nodes
-    skm_C_fread( fp, info.perimeter_nodes );
+    binaryFileRead( fp, info.perimeter_nodes );
     assert( !info.perimeter_nodes.empty() );
    
  } // end readRegionIndexesFromBinaryFile
+
+
+
+
+/**
+       Writes Node information to a text file for reading with Paraview (TableToPointData) or spreadsheet tools.
+       The interior nodes are distinguished from the perimeter nodes by the keywords "INTERIOR" and "PERIMETER."
+*/
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::NodeAttributesToCSV()
+  {
+     ofstream ofs( this->Name() + "_node_attribute.csv" );
+
+     //ofs <<"\n"<< this->Name();
+     ofs <<"\nx,y,z,node_id,bflag,rflag";
+     for ( auto n=NodesBegin(); n!=PerimeterNodesBegin(); ++n ) {
+          ofs <<"\n"<< (*n)->x() <<","<< (*n)->y() <<","<< (*n)->z() <<","<< (*n)->Idx() <<",";
+          ofs << parseBoundary((*n)->AtBoundary()) <<","<<"INTERIOR";
+       }
+     for ( auto n=PerimeterNodesBegin(); n!=NodesEnd(); ++n ) {
+          ofs <<"\n"<< (*n)->x() <<","<< (*n)->y() <<","<< (*n)->z() <<","<< (*n)->Idx() <<",";
+          ofs << parseBoundary((*n)->AtBoundary()) <<","<<"PERIMETER";
+       }
+     ofs << endl;
+
+ } // end NodeAttributesToCSV
+
+
+
+/**
+       Removes elements and nodes and rebuilds bd_face_vec_  if necessary.
+*/
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    const size_t n_cells{ elmt_vec_.size() };
+    
+    // determining how the new number of interior cells
+    const size_t n_interior_cells_new = InteriorElements() - count( elmt_vec_.begin(), PerimeterElementsBegin(), nullptr );
+    
+    // erasing cell vector without changing the relative number of its elements
+    elmt_vec_.erase( remove( elmt_vec_.begin(), elmt_vec_.end(), nullptr ), elmt_vec_.end() );
+    const size_t n_cells_new = elmt_vec_.size();
+    
+    if ( n_cells_new < n_cells ) BuildPerimeterFaceVector( n_interior_cells_new );
+    
+    // removing node pointers if any
+    size_t nodes_removed = node_vec_.size();
+    node_vec_.erase( remove( node_vec_.begin(), node_vec_.end(), nullptr ), node_vec_.end() );
+    nodes_removed -= node_vec_.size();
+    
+    if ( n_cells_new < n_cells == 0 && nodes_removed > 0 )
+      csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
+                        "removed nodes but not cells? - subdomain may be corrupt now.");
+    
+    return n_cells - n_cells_new;
+ }
+
 
 
 
@@ -5580,12 +5118,12 @@ void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& in
     @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
 */
 template<size_t dim, template<size_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
-                                                       typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
+size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<const csmp::Node<dim>* const>::const_iterator start,
+                                                       typename vector<const csmp::Node<dim>* const>::const_iterator end ) const
  {
     if ( start == end ) return 0U;
  
-    typename vector<Node<dim>*>::const_iterator  first1(this->PerimeterNodesBegin());
+    auto   first1(this->PerimeterNodesBegin());
     size_t shared_nodes(0U);
 
     // comparing the boundary nodes
@@ -5616,8 +5154,8 @@ size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename std::vector<csmp
 template<size_t dim, template<size_t> class CELL>
 size_t  sharedNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSubDomain<dim,CELL>& g2 )
  {
-    typename vector<Node<dim>*>::const_iterator  first1(g1.NodesBegin());
-    typename vector<Node<dim>*>::const_iterator  first2(g2.NodesBegin());
+    auto   first1(g1.NodesBegin());
+    auto   first2(g2.NodesBegin());
     size_t shared_nodes(0U);
 
     // comparing the interior nodes
@@ -5682,7 +5220,6 @@ size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSub
     return shared_nodes;
 
  } // end sharedPerimeterNodes
-
 
 
 

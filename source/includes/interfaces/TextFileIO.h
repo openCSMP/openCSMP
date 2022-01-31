@@ -1,13 +1,9 @@
-#ifndef TEXT_FILE_IO_H
-#define TEXT_FILE_IO_H
+#ifndef CSMP_TEXT_FILE_IO_H
+#define CSMP_TEXT_FILE_IO_H
 
 #include "Exception.h"
 #include "ErrorHandler.h"
-
-#include "Node.h"
-#include "Element.h"
-#include "Face.h"
-#include "InterFace.h"
+#include "ComputationalSettings.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -15,11 +11,9 @@
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
 
-#include "Model.h"
-
-#include "ComputationalSettings.h"
-
 namespace csmp {
+
+template<size_t> class Model;
 
 /**
 
@@ -83,12 +77,15 @@ std::vector<std::string> tokenise( std::string, const std::string regular_expres
 
 /// removes whitespace from string, returning the remaining character sequence
 std::string  withoutSpaces( std::string );
+ 
+/// reads comma delimited point-data from ASCII file (ext. .csv),  returning them into the supplied vector where the first three columns represent x,y,z, and there is an optional headline with column header names
+size_t read_CSV_File( std::string filename, std::vector<std::string>& col_headers, std::vector<std::vector<double>>& rows_of_columns );
 
 
 // Reading property values
 
 /// parses scalars including "nodata" and NaN values
-double64 parseDataValue( const std::string& value );
+double parseDataValue( const std::string& value );
 
 void readPropertyValue( ScalarVariable& sc );
 
@@ -189,7 +186,7 @@ bool doesVariableFileExist( const std::string& filename_prefix );
 
 /// read point data  such as well rates ( a.k.a block7 )
 template<size_t dim>
-bool readPointData( std::map<std::string,std::vector<double64> >& well_data, int ndata,
+bool readPointData( std::map<std::string,std::vector<double> >& well_data, int ndata,
                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// build Regions based on the range of particular property data ( a.k.a block1 )

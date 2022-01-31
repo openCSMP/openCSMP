@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "Region.h"
 #include "Boundary.h"
-#include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "PL_Utilities.h"
 
 using namespace std;
@@ -195,7 +195,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
                                                                                 const char* gradient_variable, 
-                                                                                double64 gradient_multiplier )
+                                                                                double gradient_multiplier )
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
@@ -251,7 +251,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
                                                                                 const char* diffusing_variable,
                                                                                 const char* spatial_source_variable,                    
                                                                                 const char* gradient_variable, 
-                                                                                double64 gradient_multiplier )
+                                                                                double gradient_multiplier )
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
@@ -322,7 +322,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
                                                                                 const char* diffusing_variable,
                                                                                 const char* spatial_source_variable,                    
                                                                                 const char* gradient_variable, 
-                                                                                double64 gradient_multiplier )
+                                                                                double gradient_multiplier )
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),

@@ -16,8 +16,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     string mesh_name("pde_integrator_test");
   
     const bool binary_file( true );
-    const bool irregular_mesh( false );
-    mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
     if ( verbose_ ) {
         cout <<"Finished reading mesh..."<<endl;
         cout <<"Building Model..."<<endl;
@@ -60,7 +59,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
                                                      "total mobility");
 
     // Set values
-    vector<double64> mobility;
+    vector<double> mobility;
     mobility.push_back(1.0);
     mobility.push_back(2.0);
     mobility.push_back(3.0);
@@ -68,7 +67,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     mobility.push_back(5.0);
     setNodeVariable(mobility, "total mobility");
 
-    vector<double64> conductivity;
+    vector<double> conductivity;
     conductivity.push_back(1.0);
     conductivity.push_back(2.0);
     conductivity.push_back(3.0);
@@ -140,7 +139,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     simple.LumpedFormulation(lumped);
 
     // Set values
-    vector<double64> mobility;
+    vector<double> mobility;
     mobility.push_back(1.0);
     mobility.push_back(1.0);
     mobility.push_back(1.0);
@@ -148,7 +147,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     mobility.push_back(1.0);
     setNodeVariable(mobility, "total mobility");
     
-    vector<double64> conductivity;
+    vector<double> conductivity;
     conductivity.push_back(1.0);
     conductivity.push_back(2.0);
     conductivity.push_back(3.0);
@@ -177,7 +176,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     const size_t dof = sg_->Region("Model").Nodes();
 
     // Set values
-    vector<double64> mobility;
+    vector<double> mobility;
     mobility.push_back(1.0);
     mobility.push_back(1.0);
     mobility.push_back(2.0);
@@ -185,7 +184,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     mobility.push_back(5.0);
     setNodeVariable(mobility, "total mobility");
     
-    vector<double64> conductivity;
+    vector<double> conductivity;
     conductivity.push_back(1.0);
     conductivity.push_back(2.0);
     conductivity.push_back(3.0);
@@ -235,7 +234,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     calculateGlobalMatrix(sm_lumped, lumped);
     calculateGlobalMatrix(sm_consistent, consistent);
 
-    std::vector<double64> vec(dof);
+    std::vector<double> vec(dof);
     std::fill(vec.begin(), vec.end(), 0.0);
     for (size_t i = 0; i < dof; ++i) {
       for (size_t j = 0; j < dof; ++j) {
@@ -273,24 +272,24 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     }
   }
 
-  void Integral_var_NT_lhsop_N_dV_Test::setNodeVariable(vector<double64>& var, const char* var_name) {
+  void Integral_var_NT_lhsop_N_dV_Test::setNodeVariable(vector<double>& var, const char* var_name) {
     //std::deque<Node<2U> >::iterator it;
     csmp::Index key(sg_->Database().StorageKey(var_name));
 
     unsigned int i = 0;
     for (vector<Node<2U>*>::const_iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
-      (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double64>(var[i])));
+      (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
       ++i;
     }
   }
 
-  void Integral_var_NT_lhsop_N_dV_Test::setElementVariable(vector<double64>& var, const char* var_name) {
+  void Integral_var_NT_lhsop_N_dV_Test::setElementVariable(vector<double>& var, const char* var_name) {
     //std::deque<Element<2U> >::iterator it;
     csmp::Index key(sg_->Database().StorageKey(var_name));
 
     unsigned int i = 0;
     for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
-     (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double64>(var[i])));
+     (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
       ++i;
     }
   }

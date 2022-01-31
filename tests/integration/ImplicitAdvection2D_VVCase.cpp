@@ -46,8 +46,7 @@ int test_implicit_advection_2D()
     // Building Region object from ANSYS data files
     cerr <<"Reading mesh..."<<endl;
     const bool binary_file( true );
-    const bool irregular_mesh( false );
-    mesh_interface.Read_ANSYS_Mesh( "square", mesh_container, mesh_topology, binary_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( "square", mesh_container, mesh_topology, binary_file, true );
     cerr <<"Finished reading mesh..."<<endl;
     cerr <<"Building Model..."<<endl;
     Model<2U>  model2D( mesh_topology, mesh_container, "square.txt" );
@@ -61,7 +60,7 @@ int test_implicit_advection_2D()
     Standard_IO_Handler  stdio;
     printModelDimensions( model2D, true );
     MeshDiagnostics<2U>  mesh_check;
-    double64             vol_min, vol_max;
+    double             vol_min, vol_max;
     mesh_check.ElementVolumeRange( model2D, vol_min, vol_max );
 
     // Configuring the built model (adding boundary condition info, etc, from input files:
@@ -94,7 +93,7 @@ int test_implicit_advection_2D()
     cout <<"\nConfiguring TRANSPORT simulation... Prescribed velocity"<< endl;
     cout <<"\nThe grid Courant number is "<< advector .AnisotropicCourantIncrement() << endl;
     cout <<"\nEnter advection time and Courant multiplier: ";
-    double64 Courant_multiplier, time_interval;
+    double Courant_multiplier, time_interval;
     cin >> time_interval >> Courant_multiplier;
     //for(int i=0; i<5; ++i)
     //{

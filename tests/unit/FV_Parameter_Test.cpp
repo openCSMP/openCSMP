@@ -56,20 +56,20 @@ void FV_Parameter_Test::FV_ParameterCopyCtor()
     size_t sectors(2U);
     size_t facets(4U);
     size_t dim(2U);
-    double64 sec_vol0(10.5);
-    double64 sec_vol1(2.7);
-    double64 fct_area0(0.8);
-    double64 fct_area1(2.8);
-    double64 fct_area2(5.8);
-    double64 fct_area3(7.7);
-    double64 fct_nvel0(-1.2);
-    double64 fct_nvel1(3.2);
-    double64 fct_nvel2(4.);
-    double64 fct_nvel3(-7.);
-    std::vector<double64> fct_normal0(dim);
-    std::vector<double64> fct_normal1(dim);
-    std::vector<double64> fct_normal2(dim);
-    std::vector<double64> fct_normal3(dim);
+    double sec_vol0(10.5);
+    double sec_vol1(2.7);
+    double fct_area0(0.8);
+    double fct_area1(2.8);
+    double fct_area2(5.8);
+    double fct_area3(7.7);
+    double fct_nvel0(-1.2);
+    double fct_nvel1(3.2);
+    double fct_nvel2(4.);
+    double fct_nvel3(-7.);
+    std::vector<double> fct_normal0(dim);
+    std::vector<double> fct_normal1(dim);
+    std::vector<double> fct_normal2(dim);
+    std::vector<double> fct_normal3(dim);
     
     fct_normal0[0] = -1.;
     fct_normal0[1] = 2.;
@@ -129,20 +129,20 @@ void FV_Parameter_Test::FV_ParameterEqual()
     size_t sectors(2U);
     size_t facets(4U);
     size_t dim(2U);
-    double64 sec_vol0(10.5);
-    double64 sec_vol1(2.7);
-    double64 fct_area0(0.8);
-    double64 fct_area1(2.8);
-    double64 fct_area2(5.8);
-    double64 fct_area3(7.7);
-    double64 fct_nvel0(-1.2);
-    double64 fct_nvel1(3.2);
-    double64 fct_nvel2(4.);
-    double64 fct_nvel3(-7.);
-    std::vector<double64> fct_normal0(dim);
-    std::vector<double64> fct_normal1(dim);
-    std::vector<double64> fct_normal2(dim);
-    std::vector<double64> fct_normal3(dim);
+    double sec_vol0(10.5);
+    double sec_vol1(2.7);
+    double fct_area0(0.8);
+    double fct_area1(2.8);
+    double fct_area2(5.8);
+    double fct_area3(7.7);
+    double fct_nvel0(-1.2);
+    double fct_nvel1(3.2);
+    double fct_nvel2(4.);
+    double fct_nvel3(-7.);
+    std::vector<double> fct_normal0(dim);
+    std::vector<double> fct_normal1(dim);
+    std::vector<double> fct_normal2(dim);
+    std::vector<double> fct_normal3(dim);
     
     fct_normal0[0] = -1.;
     fct_normal0[1] = 2.;
@@ -203,14 +203,14 @@ void FV_Parameter_Test::FV_ParameterInitialize()
     size_t sectors(2U);
     size_t facets(4U);
     size_t dim(2U);
-    double64 fct_area0(0.8);
-    double64 fct_area1(2.8);
-    double64 fct_area2(5.8);
-    double64 fct_area3(7.7);
-    double64 fct_nvel0(-1.2);
-    double64 fct_nvel1(3.2);
-    double64 fct_nvel2(4.);
-    double64 fct_nvel3(-7.);
+    double fct_area0(0.8);
+    double fct_area1(2.8);
+    double fct_area2(5.8);
+    double fct_area3(7.7);
+    double fct_nvel0(-1.2);
+    double fct_nvel1(3.2);
+    double fct_nvel2(4.);
+    double fct_nvel3(-7.);
 
     FV_Parameter fv_parameter1( sectors, facets, dim );
     
@@ -259,8 +259,8 @@ void FV_Parameter_Test::FV_ParameterSectorVolume()
     size_t sectors(2U);
     size_t facets(4U);
     size_t dim(2U);
-    double64 sec_vol0(10.5);
-    double64 sec_vol1(2.7);
+    double sec_vol0(10.5);
+    double sec_vol1(2.7);
 
     FV_Parameter fv_parameter1( sectors, facets, dim, true );
     
@@ -278,10 +278,10 @@ void FV_Parameter_Test::FV_ParameterFacetArea()
     size_t sectors(2U);
     size_t facets(4U);
     size_t dim(2U);
-    double64 fct_area0(0.8);
-    double64 fct_area1(2.8);
-    double64 fct_area2(5.8);
-    double64 fct_area3(7.7);
+    double fct_area0(0.8);
+    double fct_area1(2.8);
+    double fct_area2(5.8);
+    double fct_area3(7.7);
 
     FV_Parameter fv_parameter1( sectors, facets, dim, true );
     
@@ -304,10 +304,10 @@ void FV_Parameter_Test::FV_ParameterFacetNormal()
     size_t facets(4U);
     size_t dim(2U);
 
-    std::vector<double64> fct_normal0(dim);
-    std::vector<double64> fct_normal1(dim);
-    std::vector<double64> fct_normal2(dim);
-    std::vector<double64> fct_normal3(dim);
+    std::vector<double> fct_normal0(dim);
+    std::vector<double> fct_normal1(dim);
+    std::vector<double> fct_normal2(dim);
+    std::vector<double> fct_normal3(dim);
     
     fct_normal0[0] = -1.;
     fct_normal0[1] = 2.;
@@ -342,10 +342,10 @@ void FV_Parameter_Test::FV_ParameterFacetNormalVelocity()
     size_t sectors(2U);
     size_t facets(4U);
     size_t dim(2U);
-    double64 fct_nvel0(-1.2);
-    double64 fct_nvel1(3.2);
-    double64 fct_nvel2(4.);
-    double64 fct_nvel3(-7.);
+    double fct_nvel0(-1.2);
+    double fct_nvel1(3.2);
+    double fct_nvel2(4.);
+    double fct_nvel3(-7.);
 
     FV_Parameter fv_parameter1( sectors, facets, dim, true );
 
@@ -368,9 +368,9 @@ void FV_Parameter_Test::FV_ParameterFacetNormalProjection()
     VectorVariable<2U> v2(PLAIN, PLAIN, 3., 2.);
     VectorVariable<3U> v3(PLAIN, PLAIN, PLAIN, 2., 5., -1.);
     
-    std::vector<double64> vec1(1U);
-    std::vector<double64> vec2(2U);
-    std::vector<double64> vec3(3U);
+    std::vector<double> vec1(1U);
+    std::vector<double> vec2(2U);
+    std::vector<double> vec3(3U);
 
     vec1[0] = 3.;
     vec2[0] = 3.;
@@ -382,9 +382,9 @@ void FV_Parameter_Test::FV_ParameterFacetNormalProjection()
     size_t sectors(1U);
     size_t facets(1U);
 
-    std::vector<double64> fct_normal1(1U);
-    std::vector<double64> fct_normal2(2U);
-    std::vector<double64> fct_normal3(3U);
+    std::vector<double> fct_normal1(1U);
+    std::vector<double> fct_normal2(2U);
+    std::vector<double> fct_normal3(3U);
 
     fct_normal1[0] = 3.;
     fct_normal2[0] = -1.;

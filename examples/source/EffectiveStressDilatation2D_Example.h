@@ -26,8 +26,8 @@ class  EffectiveStressDilatation2D_Example : public Example {
     virtual void Specifications();
   
   private:
-    void ComputeTransientFluidPressure( Model<2U>&, double64 time_increment );
-    void ComputeTransientFluidPressure( Model<2U>&, const char* split_boundary_name, double64 time_increment );
+    void ComputeTransientFluidPressure( Model<2U>&, double time_increment );
+    void ComputeTransientFluidPressure( Model<2U>&, const char* split_boundary_name, double time_increment );
 
     PDE_Integrator<2U,Region>*  fluid_pressure_;
     bool  verbose_;

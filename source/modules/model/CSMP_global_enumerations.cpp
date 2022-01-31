@@ -16,7 +16,6 @@ namespace csmp {
   void variablePlacementSet( set<PLACEMENT>& plSet )
   {
     plSet.insert(NODE);
-    plSet.insert(SPLIT_NODE);
     plSet.insert(FACE);
     plSet.insert(FACE_INTEGRATION_POINT);
     plSet.insert(FACE_SECTOR_INTEGRATION_POINT);
@@ -58,6 +57,19 @@ namespace csmp {
 
 // VARIABLE TYPE
 
+VARIABLE_TYPE  parseType( int type )
+ {
+    if ( type == SCALAR )        return SCALAR;
+    if ( type == VECTOR )        return VECTOR;
+    if ( type == TENSOR )        return TENSOR;
+    if ( type == ARRAY )         return ARRAY;
+    if ( type == FLAGGEDARRAY )  return FLAGGEDARRAY;
+
+    cout <<"\nparseType(int): unable to parse: '";
+    cout << type <<"' returning -1"<< endl;
+    return static_cast<VARIABLE_TYPE>(-1);
+ }
+
 VARIABLE_TYPE  parseType( const char* type )
  {
     string  stype(type);
@@ -66,6 +78,12 @@ VARIABLE_TYPE  parseType( const char* type )
     if ( stype == "TENSOR" )        return TENSOR;
     if ( stype == "ARRAY" )         return ARRAY;
     if ( stype == "FLAGGEDARRAY" )  return FLAGGEDARRAY;
+
+    if ( stype == "scalar" )        return SCALAR;
+    if ( stype == "vector" )        return VECTOR;
+    if ( stype == "tensor" )        return TENSOR;
+    if ( stype == "array" )         return ARRAY;
+    if ( stype == "flaggedarray" )  return FLAGGEDARRAY;
 
     cout <<"\nparseType(const char*): unable to parse: '";
     cout << type <<"' returning -1"<< endl;
@@ -147,7 +165,7 @@ VARIABLE_TYPE variableType<csmp::FlaggedArrayVariable>()
 // VARIABLE PLACEMENT
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class PLACE>
 PLACEMENT parsePlacement() {
     return UNDEFINED;
  }
@@ -180,6 +198,9 @@ template<>  PLACEMENT parsePlacement<1U,SplitBoundary>() { return SPLIT_BOUNDARY
 template<>  PLACEMENT parsePlacement<2U,SplitBoundary>() { return SPLIT_BOUNDARY; }
 template<>  PLACEMENT parsePlacement<3U,SplitBoundary>() { return SPLIT_BOUNDARY; }
 
+template<>  PLACEMENT parsePlacement<1U,Model>() { return MODEL; }
+template<>  PLACEMENT parsePlacement<2U,Model>() { return MODEL; }
+template<>  PLACEMENT parsePlacement<3U,Model>() { return MODEL; }
 
 PLACEMENT  parsePlacement( const char* placement )
  {
@@ -199,8 +220,6 @@ PLACEMENT  parsePlacement( const char* placement )
     if ( splace == "FACE"                                   )   return FACE;
     if ( splace == "INTER_FACE"                             )   return INTER_FACE;
     if ( splace == "INTERFACE"                              )   return INTER_FACE;
-    if ( splace == "SPLIT_NODE"                             )   return SPLIT_NODE;
-    if ( splace == "SPLITNODE"                              )   return SPLIT_NODE;
     if ( splace == "ELEMENT"                                )   return ELEMENT;
     if ( splace == "REGION"                                 )   return REGION;
     if ( splace == "BOUNDARY"                               )   return BOUNDARY;
@@ -239,7 +258,6 @@ PLACEMENT  parsePlacement( const char* placement )
     if ( splace == "inter_face_facet_integration_point"     )   return INTER_FACE_FACET_INTEGRATION_POINT;
     if ( splace == "face"                                   )   return FACE;
     if ( splace == "interface"                              )   return INTER_FACE;
-    if ( splace == "splitnode"                              )   return SPLIT_NODE;
     if ( splace == "inter face"                             )   return INTER_FACE;
     if ( splace == "inter_face"                             )   return INTER_FACE;
     if ( splace == "iface"                                  )   return INTER_FACE;
@@ -263,7 +281,6 @@ PLACEMENT  parsePlacement( const char* placement )
     if ( splace == "InterFaceSectorIntegrationPoint"        )   return INTER_FACE_SECTOR_INTEGRATION_POINT;
     if ( splace == "Face"                                   )   return FACE;
     if ( splace == "InterFace"                              )   return INTER_FACE;
-    if ( splace == "SplitNode"                              )   return SPLIT_NODE;
     if ( splace == "Element"                                )   return ELEMENT;
     if ( splace == "Region"                                 )   return REGION;
     if ( splace == "Boundary"                               )   return BOUNDARY;
@@ -289,7 +306,6 @@ std::string  parsePlacement( PLACEMENT splace )
     if ( splace == INTER_FACE_SECTOR_INTEGRATION_POINT) return string("INTER_FACE_SECTOR_INTEGRATION_POINT");
     if ( splace == FACE                               ) return string("FACE");
     if ( splace == INTER_FACE                         ) return string("INTER_FACE");
-    if ( splace == SPLIT_NODE                         ) return string("SPLIT_NODE");
     if ( splace == ELEMENT                            ) return string("ELEMENT");
     if ( splace == REGION                             ) return string("REGION");
     if ( splace == BOUNDARY                           ) return string("BOUNDARY");
@@ -343,7 +359,6 @@ PLACEMENT intToPLACEMENT( int i )
     if ( i == 15 )  return INTER_FACE_INTEGRATION_POINT;
     if ( i == 16 )  return INTER_FACE_SECTOR_INTEGRATION_POINT;
     if ( i == 17 )  return INTER_FACE_FACET_INTEGRATION_POINT;
-    if ( i == 18 )  return SPLIT_NODE;
 
     cout <<"\nintToPlacement(int): unable to parse integer: "<< i << endl;
     return MODEL;
@@ -371,17 +386,22 @@ bool isPlacedOnIntegrationPoint( PLACEMENT p )
 
 // VARIABLE FLAG
 
+/**
+    Options numbered in this sequence, starting with zero are:
+    PLAIN,   ANY, INIT_GUESS,  INIT_COND,  FIELD_DATA,  PERIODIC,   DIRICH,   NEUMANN,   ROBIN,  CONSTANT_FLUX
+*/
 VARIABLE_FLAG intToVARIABLE_FLAG( int i )
   {
     if      ( i == 0 ) return PLAIN;
-    else if ( i == 1 ) return INIT_GUESS;
-    else if ( i == 2 ) return INIT_COND;
-    else if ( i == 3 ) return DIRICH;
-    else if ( i == 4 ) return NEUMANN;
-    else if ( i == 5 ) return ROBIN;
-    else if ( i == 6 ) return PERIODIC;
-    else if ( i == 7 ) return FIELD_DATA;
-    else if ( i == 8 ) return ANY;
+    else if ( i == 1 ) return ANY;
+    else if ( i == 2 ) return INIT_GUESS;
+    else if ( i == 3 ) return INIT_COND;
+    else if ( i == 4 ) return FIELD_DATA;
+    else if ( i == 5 ) return PERIODIC;
+    else if ( i == 6 ) return DIRICH;
+    else if ( i == 7 ) return NEUMANN;
+    else if ( i == 8 ) return ROBIN;
+    else if ( i == 9 ) return CONSTANT_FLUX;
     else
     std::cerr <<"\nintToVARIABLE_FLAG(int): unable to parse integer: "<< i << std::endl;
     return ANY;

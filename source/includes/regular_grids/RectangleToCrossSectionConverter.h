@@ -46,8 +46,8 @@ class RectangularGrid {
 
   private:
     const size_t   n_cells_x_, n_cells_y_;                     ///< target dimensions of grid
-    const double64 dx_, dy_;                                   ///< local grid spacing resulting from cell number for fixed local dimensions
-//    std::vector<pair<double64,double64> > local_coordinates_;  ///< implicit indexing, x,y coordinates ranging from -1 to 1
+    const double dx_, dy_;                                   ///< local grid spacing resulting from cell number for fixed local dimensions
+//    std::vector<pair<double,double> > local_coordinates_;  ///< implicit indexing, x,y coordinates ranging from -1 to 1
 };
 
 } // end csmp

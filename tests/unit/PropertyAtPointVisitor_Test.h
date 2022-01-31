@@ -21,11 +21,11 @@ class PropertyAtPointVisitor_Test: public Test
       void run3D_MeshTests();
 
       // 1D mesh test
-      void IsoparametricLinear1DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
+      void IsoparametricLinear1DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double tolerance );
       // 2D mesh test
-      void IsoparametricLinear2DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
+      void IsoparametricLinear2DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double tolerance );
       // 3D mesh test
-      void IsoparametricLinear3DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
+      void IsoparametricLinear3DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double tolerance );
 
       void OutputElapsedTime( clock_t start, clock_t end );
      

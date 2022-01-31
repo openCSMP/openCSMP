@@ -38,7 +38,7 @@ Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Integral_dNT_rhsop_dN_dV( const PropertyD
 
 
 template<size_t dim,class SIMPLEX>
-void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -79,7 +79,7 @@ void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 
 template<size_t dim,class SIMPLEX>
-void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -92,7 +92,7 @@ void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     DNT *= VAR;
     
     // assigning element contribution & integrating the matrix
-    double64 volume = e.Volume();
+    double volume = e.Volume();
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     for ( size_t i=0; i<e.Nodes(); i++ )

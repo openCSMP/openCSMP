@@ -24,7 +24,7 @@ class PropertyConstraints {
   public:
     PropertyConstraints();
     PropertyConstraints( const PropertyConstraints& cr );
-    PropertyConstraints( const char* prop_name, double64 pmin, double64 pmax );
+    PropertyConstraints( const char* prop_name, double pmin, double pmax );
     PropertyConstraints& operator=( const PropertyConstraints& cr );
     ~PropertyConstraints();
     bool    WithIndexes() const;
@@ -35,8 +35,8 @@ class PropertyConstraints {
     void SatisfyConstraintsForAtLeastOneNode( bool satisfy );
     void SatisfyConstraintsForNodalAverage( bool satisfy );
 
-    bool AddConstraint( const char* prop_name, double64 pmin, double64 pmax );
-    void ChangeConstraint( const char* prop_name, double64 pmin, double64 pmax );
+    bool AddConstraint( const char* prop_name, double pmin, double pmax );
+    void ChangeConstraint( const char* prop_name, double pmin, double pmax );
 
     template<size_t dim>
     bool InitializePropertyIndices( const PropertyDatabase<dim>& pref ); 
@@ -54,8 +54,8 @@ class PropertyConstraints {
     void Out() const;
   
   private:
-    std::map<std::string,std::pair<double64,double64> >  criteria;
-    std::map<Index,std::pair<double64,double64> >        check_list;
+    std::map<std::string,std::pair<double,double> >  criteria;
+    std::map<Index,std::pair<double,double> >        check_list;
     bool                                                   vector_length_check;
     bool                                                   one_node_only;
     bool                                                   nodal_average;
@@ -68,7 +68,7 @@ class PropertyConstraints {
     
     template<size_t dim>
     bool VectorLengthCheck( const Element<dim>& e, 
-                            const csmp::Index& idx, double64 vmin, double64 vmax ) const;
+                            const csmp::Index& idx, double vmin, double vmax ) const;
 };
 
 } // csmp

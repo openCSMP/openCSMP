@@ -36,7 +36,7 @@ template<size_t dim>
 class OverburdenPressureVisitor : public Visitor<dim> {
   public:
     /// for the computation of nodal 'gravity force'
-    OverburdenPressureVisitor( Model<dim>&, double64 acc_gravity ); ///< local constant for reservoir
+    OverburdenPressureVisitor( Model<dim>&, double acc_gravity ); ///< local constant for reservoir
 
     virtual ~OverburdenPressureVisitor();
   
@@ -47,21 +47,21 @@ class OverburdenPressureVisitor : public Visitor<dim> {
     virtual void Visit( Model<dim>* ) {}
 
   private:
-    double64 dryDensityFromBulkDensity( double64 rho_bulk, double64 rho_fluid, double64 porosity );
+    double dryDensityFromBulkDensity( double rho_bulk, double rho_fluid, double porosity );
 
   private:
     const csmp::Index    rhof_key_, rhor_key_,     ///< (nodal) fluid  and dry rock densities (scalars)
                          rhob_key_, phi_key_,      ///< bulk- (fluid+rock) density and porosity
                          k_key_, mu_key_, K_key_,  ///< (element) permeability, (nodal) 'fluid viscosity' and hydraulic 'conductivity' (scalar)
                          gf_key_, gt_key_;         ///< (nodal) gravity force and (elemental) 'gravity term' (vector)
-    const double64       acc_gravity_;
+    const double       acc_gravity_;
     VectorVariable<dim>  gravity_;
 };
 
 
 /// calculation ignoring the weight of air.
 template<size_t dim>
-inline double64 OverburdenPressureVisitor<dim>::dryDensityFromBulkDensity( double64 rho_bulk, double64 rho_fluid, double64 porosity )
+inline double OverburdenPressureVisitor<dim>::dryDensityFromBulkDensity( double rho_bulk, double rho_fluid, double porosity )
  {
     return rho_bulk - porosity * rho_fluid;
  }

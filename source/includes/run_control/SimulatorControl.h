@@ -45,53 +45,53 @@ public:
     Index& GetWellRadiusKey(){return wellRadius_;}
     virtual void LoadKeysAndNames()=0;
 
-    double64 MaxDifferenceScalarNodalProperty(Index &snp1Key, Index& snp2Key );
+    double MaxDifferenceScalarNodalProperty(Index &snp1Key, Index& snp2Key );
 
 
     // flags and value control on places
     void SetBoundaryFlag(const char* prop_name, std::string boundary, VARIABLE_FLAG flag);
-    void SetBoundaryValue(const char* prop_name,std::string boundary,double64 value,VARIABLE_FLAG flag);
+    void SetBoundaryValue(const char* prop_name,std::string boundary,double value,VARIABLE_FLAG flag);
     void SetRegionFlag(const char* prop_name,std::string region,VARIABLE_FLAG flag);
-    void SetRegionValue(std::string prop_name,std::string region,double64 value,VARIABLE_FLAG flag);
-    void SetFlagNearestToPoint(Index key,double64 x, double64 y, double64 z, VARIABLE_FLAG flag);
-    void SetValueNearestToPoint(Index key,double64 x, double64 y, double64 z, double64 value,VARIABLE_FLAG flag,SUBDOMAIN_PART sub=COMPLETE);
+    void SetRegionValue(std::string prop_name,std::string region,double value,VARIABLE_FLAG flag);
+    void SetFlagNearestToPoint(Index key,double x, double y, double z, VARIABLE_FLAG flag);
+    void SetValueNearestToPoint(Index key,double x, double y, double z, double value,VARIABLE_FLAG flag,SUBDOMAIN_PART sub=COMPLETE);
     void SetPropertyFlagToTopBoundaries(const char* property_name, VARIABLE_FLAG flag);
 
     // time control
-    double64 GetSimulationEndTime(){return simulationEndTime_;}
-    double64 GetSimulationStartTime(){return simulationStartTime_;}
-    std::vector<std::pair<double64,std::string> >& GetIntervals(){return interval_start_times_;}
-    double64 GetIntervalEndTime(){return intervalEndTime_;}
-    double64 GetIntervalStartTime(){return intervalStartTime_;}
+    double GetSimulationEndTime(){return simulationEndTime_;}
+    double GetSimulationStartTime(){return simulationStartTime_;}
+    std::vector<std::pair<double,std::string> >& GetIntervals(){return interval_start_times_;}
+    double GetIntervalEndTime(){return intervalEndTime_;}
+    double GetIntervalStartTime(){return intervalStartTime_;}
 
-    size_t GetIntervalNumber(double64 current_time);
-    std::string GetIntervalName(double64 current_time);
-    void InsertNewTimeInterval(std::string interval_name,double64 starttime);
-    double64 GetSimulationTime(){return simulationTime_;}
-    //double64 GetGlobalTimestep(){return time_increment_;}
+    size_t GetIntervalNumber(double current_time);
+    std::string GetIntervalName(double current_time);
+    void InsertNewTimeInterval(std::string interval_name,double starttime);
+    double GetSimulationTime(){return simulationTime_;}
+    //double GetGlobalTimestep(){return time_increment_;}
 
     void SetThicknessFactorFromWellRadii();
 
-    void SetSimulationEndTime(double64 t){simulationEndTime_=t;}
-    void SetSimulationStartTime(double64 t){simulationStartTime_=t;}
-    void SetIntervalEndTime(double64 t){intervalEndTime_=t;}
-    void SetIntervalStartTime(double64 t){intervalStartTime_=t;}
-    void SetSimulationTime(double64 t);
-    void SetGlobalTimestep(double64 t){time_increment_=t;}
-    double64 GetCurrentIntervalEndTime(double64 current_simulation_time);
-    double64 GetCurrentIntervalStartTime(double64 current_simulation_time);
-    double64 CalculateCurrentRunTime();
-    void SetOutputTimes(size_t n, double64 starttime=0.0);
-    void SetMonitorTimes(size_t n, double64 starttime=0.0);
+    void SetSimulationEndTime(double t){simulationEndTime_=t;}
+    void SetSimulationStartTime(double t){simulationStartTime_=t;}
+    void SetIntervalEndTime(double t){intervalEndTime_=t;}
+    void SetIntervalStartTime(double t){intervalStartTime_=t;}
+    void SetSimulationTime(double t);
+    void SetGlobalTimestep(double t){time_increment_=t;}
+    double GetCurrentIntervalEndTime(double current_simulation_time);
+    double GetCurrentIntervalStartTime(double current_simulation_time);
+    double CalculateCurrentRunTime();
+    void SetOutputTimes(size_t n, double starttime=0.0);
+    void SetMonitorTimes(size_t n, double starttime=0.0);
     void LoadMonitoringTimesFromRestartedModel();
     virtual void ComputeTimeIncrement()=0;
     void TrimTimeIncrementWithMonitorTime();
     void TrimTimeIncrementWithOutputTime();
     void TrimTimeIncrementWithEndOfInterval();
-    double64 TimeIncrement(){return time_increment_;}
-    void TimeIncrement(double64 time_increment){this->time_increment_=time_increment;}
-    double64 GetInitialSimulatorStartTimeFromIntervals();
-    void OutputSimulationTimeToScreen(double64 time);
+    double TimeIncrement(){return time_increment_;}
+    void TimeIncrement(double time_increment){this->time_increment_=time_increment;}
+    double GetInitialSimulatorStartTimeFromIntervals();
+    void OutputSimulationTimeToScreen(double time);
 
     void SyncOutputAntMonitoringTimesToModel();
     bool MonitorAllTimesteps() {return this->monitor_all_timesteps_;}
@@ -107,14 +107,14 @@ public:
     bool YesOrNo();
     bool CheckTimeIntervals();
     void InteractivelyManageEssentialConditions();
-    double64 GetRealInput(bool success=true);
-    int32 GetIntegerInput();
+    double GetRealInput(bool success=true);
+    int32_t GetIntegerInput();
     std::string GetStringInput();
     std::string ParseTrueOrFalse(bool trueorfalse);
     std::string ParseWellMode(WELL_MODE mode);
-    WELL_MODE ParseIntegerToWellMode(int32 i);
+    WELL_MODE ParseIntegerToWellMode(int32_t i);
     std::multimap<std::string,std::pair<std::string ,WELL_MODE> >& GetWellModesPerInterval(){return wellmodes_per_interval_;}
-    std::multimap <std::string,std::pair<std::vector<double64>,double64> >& GetReferencePointsAndValues(){return this->refpoints_;}
+    std::multimap <std::string,std::pair<std::vector<double>,double> >& GetReferencePointsAndValues(){return this->refpoints_;}
 
     // output
     VTU_Interface<dim>* GetVTU_Interface(){return vtu_;}
@@ -137,7 +137,7 @@ protected:
     clock_t runTimeStart_;
     PropertyDatabase<dim>& pdb_;
     ErrorHandler& error_handler_;
-    double64 initial_omp_wtime_;
+    double initial_omp_wtime_;
 
 private:
     bool stop_;
@@ -148,15 +148,15 @@ private:
 
     static size_t outputVTU_counter_;
     // for simulated time
-    double64 simulationStartTime_,simulationEndTime_;
-    double64 simulationTime_,time_increment_;
-    double64 intervalStartTime_,intervalEndTime_;
-    std::vector<std::pair<double64,std::string> > interval_start_times_;
+    double simulationStartTime_,simulationEndTime_;
+    double simulationTime_,time_increment_;
+    double intervalStartTime_,intervalEndTime_;
+    std::vector<std::pair<double,std::string> > interval_start_times_;
 
     // for actual cpu run time.
-    double64 restartFileOuputRunTimeInterval_;
+    double restartFileOuputRunTimeInterval_;
     clock_t startClockTicks_;
-    double64 runtimeOnLastRestart_;
+    double runtimeOnLastRestart_;
 
     // keys and output
     bool verbose_;
@@ -169,7 +169,7 @@ private:
     SimulationSignalHandler sig_;
 
     std::multimap<std::string,std::pair<std::string ,WELL_MODE> > wellmodes_per_interval_;
-    std::multimap <std::string,std::pair<std::vector<double64>,double64> > refpoints_;
+    std::multimap <std::string,std::pair<std::vector<double>,double> > refpoints_;
     bool triggerSAMGsetup_;
 };
 }

@@ -8,20 +8,27 @@
 
 #include "DiffusionLHS.h"
 #include "Element.h"
-#include "Model.h"
+#include "Exception.h"
 
 using namespace std;
 
 namespace csmp {
 
 template<size_t dim>
-DiffusionLHS<dim>::DiffusionLHS( const Model<dim>& model, const char* diffusivity )
-  : MatrixOperator<dim>(0),
-    diff_key_(model.Database().StorageKey(diffusivity)),
-    dof_(model.Database().Components(diffusivity))
+DiffusionLHS<dim>::DiffusionLHS( const INDEX<SCALAR,ELEMENT>& diffusivity_key, 
+                                 const INDEX<SCALAR,NODE>& transported_variable_key  )
+  : diff_key_(diffusivity_key),
+    adv_key_(transported_variable_key),
+    dof_(1U) // components of the diffusivity
  {
  }
 
+// NOT AVAILABLE
+template<size_t dim>
+void DiffusionLHS<dim>::AccumulateFiniteVolume( const Node<dim>&, SparseMatrix& ) const
+ {
+     throw csmp::Exception( ERROR, "DiffusionLHS<dim>::AccumulateStencil", "Use FEM diffusion operator instead!" );
+ }
 
 
 /**
@@ -29,13 +36,13 @@ DiffusionLHS<dim>::DiffusionLHS( const Model<dim>& model, const char* diffusivit
      accumulate it into the solution matrix A of Ax=b.
 */
 template<size_t dim>
-void DiffusionLHS<dim>::AccumulateStencil( Element<dim>& fe, SparseMatrix& A ) const
+void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix& A ) const
  {
     // assuming a scalar diffusivity
-    double64  diffusion_coeff = fe.Read( diff_key_ );
+    const double  diffusion_coeff = fe.Read( diff_key_ );
    
     // if there is only a single Jacobian needed because the element is a simplex
-    double64 detJ(0U);
+    double detJ(0U);
     if ( fe.FE()->IsSimplex() ) {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
@@ -66,7 +73,7 @@ void DiffusionLHS<dim>::AccumulateStencil( Element<dim>& fe, SparseMatrix& A ) c
              A.Add( fe.N(j)->Idx(), fe.N(k)->Idx(), RESULT_(j,k) );
       }
 
- }
+ } // end AccumulateStencil
  
 
 template class DiffusionLHS<1U>;

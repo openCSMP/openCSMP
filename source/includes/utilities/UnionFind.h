@@ -1,5 +1,5 @@
-#ifndef CSMP_UNIONFIND_H
-#define CSMP_UNIONFIND_H
+#ifndef CSMP_UNION_FIND_H
+#define CSMP_UNION_FIND_H
 
 #include "CSMP_definitions.h"
 
@@ -18,40 +18,40 @@ namespace csmp {
  */
 template<typename Item>
 class UnionFind {
-public:
-    // This code assumes that passing around and storing an Item is very cheap.
-    // Violating this could cause performance issues.
-    static_assert(sizeof(Item) <= 2 * sizeof(size_t),
-            "Item may be too large");
+  public:
+      // This code assumes that passing around and storing an Item is very cheap.
+      // Violating this could cause performance issues.
+      static_assert(sizeof(Item) <= 2 * sizeof(size_t),
+              "Item may be too large");
 
-    /// Say that two items are in the same subset.
-    void SameComponent(Item x, Item y);
+      /// Say that two items are in the same subset.
+      void SameComponent(Item x, Item y);
 
-    /// Extract the components and their sizes.
-    template<typename Container>
-    void Components(Container& container) const
-    {
-        for (auto component : components_) {
-            auto& rec = records_[component];
-            container.push_back(std::make_pair(rec.size_, rec.item_));
-        }
-    }
+      /// Extract the components and their sizes.
+      template<typename Container>
+      void Components( Container& container ) const
+      {
+          for (auto component : components_) {
+              auto& rec = records_[component];
+              container.push_back(std::make_pair(rec.size_, rec.item_));
+          }
+      }
 
-    /// Resolve an item to its representative
-    Item resolve(Item item) {
-        return records_[find_root(ensure(item))].item_;
-    }
+      /// Resolve an item to its representative
+      Item resolve(Item item) {
+          return records_[find_root(ensure(item))].item_;
+      }
 
-private:
-  struct Record {
-    Item item_;
-    size_t parent_;
-    size_t size_;
+  private:
+    struct Record {
+      Item item_;
+      size_t parent_;
+      size_t size_;
 
-    Record(Item item, size_t n)
-      : item_(item), parent_(n), size_(1)
-    {
-    }
+      Record(Item item, size_t n)
+        : item_(item), parent_(n), size_(1)
+      {
+      }
   };
 
   std::map<Item,size_t> item_map_;

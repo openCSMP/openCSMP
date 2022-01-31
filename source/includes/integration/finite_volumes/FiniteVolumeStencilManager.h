@@ -17,7 +17,7 @@ class FiniteVolumeStencilManager {
     void Initialize( const FiniteElementManager& fem_manager );
     
     /// returns pointer to corresponding FV stencil type
-    const FiniteVolumeStencil<dim>* Stencil( CSMP_FEM_TYPE etype ) const;
+    const FiniteVolumeStencil<dim>* const Stencil( CSMP_FEM_TYPE etype ) const;
   
   private:
     // there is a fixed number of stencils as there is a fixed number of element types

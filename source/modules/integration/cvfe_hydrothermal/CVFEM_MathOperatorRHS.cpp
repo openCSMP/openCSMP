@@ -43,7 +43,7 @@ void CVFEM_MathOperatorRHS<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index 
 
 /** access function for CVFEM_Visitor to the vector entries*/
 template<size_t dim>
-std::vector<double64> CVFEM_MathOperatorRHS<dim>::GetContribution( )
+std::vector<double> CVFEM_MathOperatorRHS<dim>::GetContribution( )
  {
    return MathOperatorRHS<dim>::RHS;
  }

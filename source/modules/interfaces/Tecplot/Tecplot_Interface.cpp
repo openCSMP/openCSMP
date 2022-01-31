@@ -163,7 +163,7 @@ void Tecplot_Interface<dim>
      
      // 3. writing node coordinates and values
      // --------------------------------------
-     typename map<size_t,vector<double64> >::const_iterator  nit;
+     typename map<size_t,vector<double> >::const_iterator  nit;
      size_t counter(1);
      for ( nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
        {
@@ -278,8 +278,8 @@ void Tecplot_Interface<dim>
     
     // 3. writing node coordinates
     // --------------------------------------
-    typename map<size_t,vector<double64> >::const_iterator  nit;
-    typename map<size_t,vector<double64> >::const_iterator  nitEnd = pxyz_data.end();
+    typename map<size_t,vector<double> >::const_iterator  nit;
+    typename map<size_t,vector<double> >::const_iterator  nitEnd = pxyz_data.end();
     for ( nit=pxyz_data.begin(); nit != nitEnd; nit++ )
     {
         for ( size_t i=0; i < 3U; i++ ){
@@ -338,7 +338,7 @@ template<size_t dim>
 void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
                                                 const vector<size_t>& elmt_ids,
                                                 map<size_t,vector<size_t> >& plist,
-                                                map<size_t,size_t >& node_nums )
+                                                map<size_t,size_t>& node_nums )
  {
     vector<size_t>  ids(3);
     vector<size_t>  pentry(3);
@@ -765,11 +765,11 @@ void Tecplot_Interface<dim>::TransformPlist( const Model<dim>&  sg,
 template<size_t dim>
 void Tecplot_Interface<dim>::XyzData( const Model<dim>& sg,
                                      const map<size_t,size_t>& node_nums,
-                                     map<size_t,vector<double64> >& pxyz_data )
+                                     map<size_t,vector<double> >& pxyz_data )
 {
     const Region<dim>&  super_group(sg.Region("Model"));
 
-    pair<typename map<size_t,vector<double64> >::iterator,bool>  dit;
+    pair<typename map<size_t,vector<double> >::iterator,bool>  dit;
     typename map<size_t,size_t>::const_iterator                  nit;
 
     pxyz_data.erase( pxyz_data.begin(), pxyz_data.end() );
@@ -780,7 +780,7 @@ void Tecplot_Interface<dim>::XyzData( const Model<dim>& sg,
     for ( nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
     {
         // inserting new element into the cordinate map node id
-        dit = pxyz_data.insert( make_pair( (*nit).second, vector<double64>() ) );
+        dit = pxyz_data.insert( make_pair( (*nit).second, vector<double>() ) );
         assert( dit.second == true );
         
         // node coordinates (reserves storage for three coordinates )
@@ -798,7 +798,7 @@ template<size_t dim>
 void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
                                       const csmp::Index& prop_key,
                                       const map<size_t,size_t>& node_nums,
-                                      map<size_t,vector<double64> >& pxyz_data )
+                                      map<size_t,vector<double> >& pxyz_data )
 {
     const Region<dim>&  super_group(sg.Region("Model"));
 
@@ -806,7 +806,7 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
         throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::NodeData",
                               "Method only applies to node properties" );
 
-    pair<typename map<size_t,vector<double64> >::iterator,bool>  dit;
+    pair<typename map<size_t,vector<double> >::iterator,bool>  dit;
     typename map<size_t,size_t>::const_iterator                nit;
     ScalarVariable      sc;
     VectorVariable<dim>  vc;
@@ -820,7 +820,7 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
     for ( nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
         {
             // inserting new element into the cordinate map using new node coordinate number
-        dit = pxyz_data.insert( make_pair((*nit).second, vector<double64>() ) );
+        dit = pxyz_data.insert( make_pair((*nit).second, vector<double>() ) );
         assert( dit.second == true );
         
             // node coordinates (reserves storage for three coordinates and a scalar data value)
@@ -876,7 +876,7 @@ template<size_t dim>
 void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
                                                const csmp::Index&     prop_key,
                                                const map<size_t,size_t>& node_nums,
-                                               map<size_t,vector<double64> >& pxyz_data )
+                                               map<size_t,vector<double> >& pxyz_data )
  {
     const Region<dim>&  super_group(sg.Region("Model"));
     
@@ -884,7 +884,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
       throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::ElementPointData", 
                                    "Method only applies to element properties" );
     
-    pair<typename map<size_t,vector<double64> >::iterator,bool>  dit;
+    pair<typename map<size_t,vector<double> >::iterator,bool>  dit;
     typename map<size_t,size_t>::const_iterator               nit;
     ScalarVariable      sc;
     VectorVariable<dim>  vc;
@@ -899,7 +899,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
     for ( nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
-         dit = pxyz_data.insert( make_pair( (*nit).first, vector<double64>() ) );
+         dit = pxyz_data.insert( make_pair( (*nit).first, vector<double>() ) );
          assert( dit.second == true );
          
          // node coordinates (reserves storage for three coordinates and a scalar data value)
@@ -916,7 +916,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
     // -----------------------------------------------------------------------------------------
     typename map<size_t,vector<size_t> >::const_iterator  it;
     typename vector<size_t>::const_iterator                  pit;
-    typename map<size_t,vector<double64> >::iterator        dit2;
+    typename map<size_t,vector<double> >::iterator        dit2;
 
     for ( it=plist.begin(); it!=plist.end(); it++ )
       {

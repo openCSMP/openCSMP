@@ -61,7 +61,7 @@ The diffusion (op) and advection (adv) coefficients are read from the storage in
 
 */
 template<size_t dim,class CELL>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -71,7 +71,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( CELL& e )
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
       {
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-              double64 sc = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
+              double sc = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
               for ( size_t i=0; i<dim; i++ ) 
                 MathOperatorLHS<dim>::MTRL[0](i,i) = sc;
            }
@@ -114,7 +114,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( CELL& e )
 In linear elasticity computations.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
@@ -132,7 +132,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( CELL& e )
         // -----------------------------------------
         // getting global intpol. function derivative matrix and determinant of
         // byproduct Jacobian matrix (DN is already in global coordinates)
-        double64 detJ = e.dN_AtIntegrationPoint( DN, i, SCALAR );
+        double detJ = e.dN_AtIntegrationPoint( DN, i, SCALAR );
 
         // transposing DN -> DNT and saving it in DIFF (diffusion matrix)
         DN.Transposed( DNT );

@@ -1,4 +1,5 @@
 #include "ExplicitFiniteVolumeTransportPHX.h"
+#include "Region.h"
 //#include "ElementFiniteVolumeTraits.h"
 //#include "CSP_ErrorHandler.h"
 //#include "CSP_STL_utilities.h"
@@ -61,16 +62,16 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
 	    pr_key[i] =  model.Database().StorageKey( rhs_property[i].c_str() );
 	    
 	    if ( pl_key[i].type != SCALAR || pl_key[i].place != NODE )
-           throw csmp::Exception( ERROR, "ExplicitFiniteVolumeTransportPHX.<double64, dim>::ExplicitFiniteVolumeTransportPHX\n", 
+           throw csmp::Exception( ERROR, "ExplicitFiniteVolumeTransportPHX.<double, dim>::ExplicitFiniteVolumeTransportPHX\n", 
                              lhs_property[i].c_str(), " must be a nodal scalar property." );
 
 	    if ( pr_key[i].type != SCALAR || (pr_key[i].place != NODE && pr_key[i].place != ELEMENT) )
-           throw csmp::Exception( ERROR, "ExplicitFiniteVolumeTransportPHX.<double64, dim>::ExplicitFiniteVolumeTransportPHX\n", 
+           throw csmp::Exception( ERROR, "ExplicitFiniteVolumeTransportPHX.<double, dim>::ExplicitFiniteVolumeTransportPHX\n", 
                              rhs_property[i].c_str(), " must be a nodal or element scalar property." );
 
    }     
 
-    cout <<"\n\ExplicitFiniteVolumeTransportPHX<"<< typeid(double64).name() <<","<< dim;
+    cout <<"\n\ExplicitFiniteVolumeTransportPHX<"<< typeid(double).name() <<","<< dim;
     cout <<">: Constructed successfully."<< endl;
     
  } // end constructor 
@@ -103,7 +104,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::ComposeAdvection( )
 template<size_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::WriteResults( )// const
  {
-    double64                   pmin(0), pmax(0), value(0);
+    double                   pmin(0), pmax(0), value(0);
     ScalarVariable   sc;
     
     for ( size_t i=0; i<property_vectors.size(); i++ )
@@ -142,52 +143,52 @@ void ExplicitFiniteVolumeTransportPHX<dim>::WriteResults( )// const
 
 /** change size of maximum time step */
 template<size_t dim>
-void ExplicitFiniteVolumeTransportPHX<dim>::SetMaximumTimeStep( const double64& new_max_time_step )
+void ExplicitFiniteVolumeTransportPHX<dim>::SetMaximumTimeStep( const double& new_max_time_step )
    {
      max_time_step = new_max_time_step;
    }
 
 /** access to flux out of control volume - main property */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(unsigned int index)
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(unsigned int index)
    {
     return flux_out_vectors[0][index];
    }
    
 /** access to flux into control volume - main property */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(unsigned int index)
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(unsigned int index)
    {
     return flux_in_vectors[0][index];
    }
 
 /** access to flux out of control volume - specified property */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(unsigned int index, unsigned int property_idx)
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(unsigned int index, unsigned int property_idx)
    {
     return flux_out_vectors[property_idx][index];
    }
 
 /** access to flux into control volume - specified property */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(unsigned int index, unsigned int property_idx)
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(unsigned int index, unsigned int property_idx)
    {
     return flux_in_vectors[property_idx][index];
    }
 
 /** get value of main property at specified control volume */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetPropertyValue(unsigned int index)
+double ExplicitFiniteVolumeTransportPHX<dim>::GetPropertyValue(unsigned int index)
    {
     return region_ref.N(index)->Read( pl_key[0] );
    }
 
 /** get facte flux of specified propoerty at indicated facet */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFacetFlux( Element<dim>& e, unsigned int facet_idx, unsigned int property_idx )
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetFlux( Element<dim>& e, unsigned int facet_idx, unsigned int property_idx )
    {
     size_t eidx_,inside_node_,outside_node_;
-    double64 flux_;
+    double flux_;
     eidx_ = e.Idx();
     e.FV()->FacetEdgeNodes( facet_idx, inside_node_, outside_node_ );
     flux_ = facet_flux_vectors[property_idx][eidx_][facet_idx];
@@ -200,14 +201,14 @@ double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFacetFlux( Element<dim>& e, u
 
 /** get facte flux of specified propoerty at indicated facet */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetMainPropertyLHS(unsigned int index)
+double ExplicitFiniteVolumeTransportPHX<dim>::GetMainPropertyLHS(unsigned int index)
    {
     return property_vectors[0][index];
    }
 
 /** calculate and store facet fluxes with suggested time step */
 template<size_t dim>
-void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFlux( const double64& time_increment, std::vector<DenseMatrix<DM_MIN> >& upwind_visitor )
+void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFlux( const double& time_increment, std::vector<DenseMatrix<DM_MIN> >& upwind_visitor )
   {
   
     internal_time_step = time_increment;
@@ -217,12 +218,12 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFlux( const double64
 
     for ( size_t i=0; i<flux_in_vectors.size(); i++ )
       {
-       fill(    flux_in_vectors[i].begin(),    flux_in_vectors[i].end(), static_cast<double64>(0.) );
-       fill(   flux_out_vectors[i].begin(),   flux_out_vectors[i].end(), static_cast<double64>(0.) );
-       fill(   property_vectors[i].begin(),   property_vectors[i].end(), static_cast<double64>(0.) );
-       fill(mass_balance_vectors[i].begin(),mass_balance_vectors[i].end(), static_cast<double64>(1.) );
+       fill(    flux_in_vectors[i].begin(),    flux_in_vectors[i].end(), static_cast<double>(0.) );
+       fill(   flux_out_vectors[i].begin(),   flux_out_vectors[i].end(), static_cast<double>(0.) );
+       fill(   property_vectors[i].begin(),   property_vectors[i].end(), static_cast<double>(0.) );
+       fill(mass_balance_vectors[i].begin(),mass_balance_vectors[i].end(), static_cast<double>(1.) );
        for ( size_t j=0; j<facet_flux_vectors[i].size(); j++ )
-           fill( facet_flux_vectors[i][j].begin(), facet_flux_vectors[i][j].end(), static_cast<double64>(0.) );       
+           fill( facet_flux_vectors[i][j].begin(), facet_flux_vectors[i][j].end(), static_cast<double>(0.) );       
       }
     
     for ( size_t i=0; i<flux_out_vectors.size(); i++ )
@@ -251,7 +252,7 @@ template<size_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::CalculateOutflowPerPoreVolume()
    {
 
-    double64 pore_vol;
+    double pore_vol;
 
     for ( typename vector<Node<dim>*>::const_iterator 
           fvit=region_ref.NodesBegin();
@@ -270,7 +271,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateOutflowPerPoreVolume()
 
 /** adjust fluxes, perform advection calculations and store results*/
 template<size_t dim>
-void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustAndPerformFacetFlux( const double64& time_factor ){
+void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustAndPerformFacetFlux( const double& time_factor ){
    	
    	internal_time_step *= time_factor;
    	
@@ -288,10 +289,10 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustAndPerformFacetFlux( const d
 
 /** adjust fluxes */
 template<size_t dim>
-void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustFluxOut( const double64& time_factor ){
+void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustFluxOut( const double& time_factor ){
    	
    	
-   	double64 mass_balance_factor(1.0);
+   	double mass_balance_factor(1.0);
    	
     for ( typename vector<Node<dim>*>::const_iterator 
           fvit=region_ref.NodesBegin(); 
@@ -338,7 +339,7 @@ template<size_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::CalculateInflowPerPoreVolume()
    {
 
-    double64 pore_vol;
+    double pore_vol;
 
     for ( typename vector<Node<dim>*>::const_iterator 
           fvit=region_ref.NodesBegin(); 
@@ -357,7 +358,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateInflowPerPoreVolume()
 
 /** get projected velocity for specified facet */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetProjectedVelocities( Element<dim>& e, size_t i)
+double ExplicitFiniteVolumeTransportPHX<dim>::GetProjectedVelocities( Element<dim>& e, size_t i)
    {
      return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[e.Idx()].FacetNormalVelocity(i)*NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[e.Idx()].FacetArea(i);
    }
@@ -397,21 +398,21 @@ void ExplicitFiniteVolumeTransportPHX<dim>::UpdateProjection(  )
 
 /** update projection of velocity onto the facet */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalVelocity( size_t element, size_t facet )
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalVelocity( size_t element, size_t facet )
 {
    return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[element].FacetNormalVelocity(facet);
 } // GetFacetNormalVelocity
 
 /** get normal component of indicated facet and direction */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalComponent( size_t element, size_t facet, size_t x_or_y_or_z )
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalComponent( size_t element, size_t facet, size_t x_or_y_or_z )
 {
    return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[element].FacetNormalComponent(facet, x_or_y_or_z);
 } // GetFacetNormalComponent
 
 /** get area of indicated facet */
 template<size_t dim>
-double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFacetArea( size_t element, size_t facet )
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetArea( size_t element, size_t facet )
 {
    return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[element].FacetArea(facet);
 } // GetFacetArea
@@ -446,7 +447,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AddAdvectionVariable( const char* 
 
 /** single-phase version of mass balanced finite volume calculations */
 template<size_t dim>
-double64  ExplicitFiniteVolumeTransportPHX<dim>::AdvectMassConservedSinglePhase( const double64& time_increment )
+double  ExplicitFiniteVolumeTransportPHX<dim>::AdvectMassConservedSinglePhase( const double& time_increment )
  {
 
    internal_time_step = time_increment;
@@ -481,7 +482,7 @@ void  ExplicitFiniteVolumeTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimes
     single_phase_time_step_factor = 1.0;
 
     unsigned int idx;
-    double64 LHS, Outflow, temp_factor;
+    double LHS, Outflow, temp_factor;
 
     // time step is only cut if the primary variable (liquid + vapor mass) is running dry
     for ( typename vector<Node<dim>*>::const_iterator fvit = region_ref.NodesBegin();
@@ -512,12 +513,12 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFluxSinglePhase( )
 
     for ( size_t i=0; i<flux_in_vectors.size(); i++ )
       {
-       fill(    flux_in_vectors[i].begin(),    flux_in_vectors[i].end(), static_cast<double64>(0.) );
-       fill(   flux_out_vectors[i].begin(),   flux_out_vectors[i].end(), static_cast<double64>(0.) );
-       fill(   property_vectors[i].begin(),   property_vectors[i].end(), static_cast<double64>(0.) );
-       fill(mass_balance_vectors[i].begin(),mass_balance_vectors[i].end(), static_cast<double64>(1.) );
+       fill(    flux_in_vectors[i].begin(),    flux_in_vectors[i].end(), static_cast<double>(0.) );
+       fill(   flux_out_vectors[i].begin(),   flux_out_vectors[i].end(), static_cast<double>(0.) );
+       fill(   property_vectors[i].begin(),   property_vectors[i].end(), static_cast<double>(0.) );
+       fill(mass_balance_vectors[i].begin(),mass_balance_vectors[i].end(), static_cast<double>(1.) );
        for ( size_t j=0; j<facet_flux_vectors[i].size(); j++ )
-           fill( facet_flux_vectors[i][j].begin(), facet_flux_vectors[i][j].end(), static_cast<double64>(0.) );
+           fill( facet_flux_vectors[i][j].begin(), facet_flux_vectors[i][j].end(), static_cast<double>(0.) );
       }
 
     for ( size_t i=0; i<flux_out_vectors.size(); i++ )

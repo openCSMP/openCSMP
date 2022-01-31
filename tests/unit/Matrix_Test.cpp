@@ -261,8 +261,8 @@ void Matrix_Test::run()
 
     if ( verbose_ ) cout << "Test vector x =   ";
 
-    vector<double64>::const_iterator it( x.begin() );
-    for ( vector<double64>::const_iterator
+    vector<double>::const_iterator it( x.begin() );
+    for ( vector<double>::const_iterator
          it = x.begin(); it != x.end(); it++ )
     {
         if ( verbose_ ) cout << *it << setw(5);
@@ -271,11 +271,11 @@ void Matrix_Test::run()
     if ( verbose_ ) cout << "\n\ny = A * x";
     y = A * x;
 
-    vector<double64>::const_iterator it1(y.begin());
+    vector<double>::const_iterator it1(y.begin());
 
     cout << "\n\ny = ";
 
-    for (vector<double64>::const_iterator
+    for (vector<double>::const_iterator
          it1 = y.begin(); it1 != y.end(); it1++ )
     {
         if ( verbose_ ) cout << *it1 << setw(5);
@@ -286,9 +286,9 @@ void Matrix_Test::run()
     sol_y.push_back(7.);
     sol_y.push_back(9.5);
 
-    vector<double64>::const_iterator itsol_y(sol_y.begin());
+    vector<double>::const_iterator itsol_y(sol_y.begin());
 
-    for (vector<double64>::const_iterator
+    for (vector<double>::const_iterator
          itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
         {
             //cout << "\n" << *itsol_y << setw(7) << *it1;
@@ -315,11 +315,11 @@ void Matrix_Test::run()
         solB.push_back(B(i,0));
     }
 
-    vector<double64>::const_iterator itB( solB.begin() );
+    vector<double>::const_iterator itB( solB.begin() );
 
     //cout << endl << "\nA  " << setw(5) << "y";
 
-    for (vector<double64>::const_iterator
+    for (vector<double>::const_iterator
          itB = solB.begin(); itB != solB.end(); itB++, itsol_y++ )
     {
         //cout << "\n" << *itB << setw(7) << *it1;
@@ -341,7 +341,7 @@ void Matrix_Test::run()
         D.Out();
       }
 
-    double64 Ca[4] = { 1., 2., 0., 1.5 };
+    double Ca[4] = { 1., 2., 0., 1.5 };
 
     if ( verbose_ ) cout << "Test array Ca";
 
@@ -361,11 +361,11 @@ void Matrix_Test::run()
         solD.push_back(D(i,0));
     }
 
-    vector<double64>::const_iterator itD( solD.begin() );
+    vector<double>::const_iterator itD( solD.begin() );
 
     //cout << endl << "\nA  " << setw(5) << "y";
 
-    for (vector<double64>::const_iterator
+    for (vector<double>::const_iterator
          itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, itD++ )
         {
             //cout << "\n" << *itsol_y << setw(7) << *itD;
@@ -517,8 +517,8 @@ void Matrix_Test::run()
         cout << "\nB.ColSum(2) = " << B.ColSum(2) << endl;
       }
   
-    double64 ColSumB2 = B.ColSum(2);
-    double64 CheckColSumB2 = 0.;
+    double ColSumB2 = B.ColSum(2);
+    double CheckColSumB2 = 0.;
 
     for ( int i = 0; i < 4; i++ )
     {
@@ -536,8 +536,8 @@ void Matrix_Test::run()
 
         cout << "\nB.RowSum(2) = " << B.RowSum(2) << endl;
       }
-    double64 RowSumB2 = B.RowSum(2);
-    double64 CheckRowSumB2 = 0.;
+    double RowSumB2 = B.RowSum(2);
+    double CheckRowSumB2 = 0.;
 
     for ( int j = 0; j < 4; j++ )
     {
@@ -798,7 +798,7 @@ void Matrix_Test::run()
         Matrix2x2.Out();
       }
   
-        double64 val = 16.;
+        double val = 16.;
 
         if ( verbose_ ) cout << "\nMatrix2x2 = val";
         Matrix2x2 = val;
@@ -877,8 +877,8 @@ void Matrix_Test::run()
             cout << "\nTesting operator*= ( TensorVariable )" << endl;
             cout << "====================================" << endl;
 
-            //Operator *= ( double64 )
-            cout << "\nOperator *= ( double64 )" << endl;
+            //Operator *= ( double )
+            cout << "\nOperator *= ( double )" << endl;
             cout << "-------------------------------" << endl;
 
             cout << "\n3U test matrix Matrix3x3";
@@ -1007,12 +1007,12 @@ void Matrix_Test::run()
             }
 
 
-        //RowCondenseTo( vector<double64> )
+        //RowCondenseTo( vector<double> )
         if ( verbose_ ) {
-            cout << "\nTesting RowCondenseTo( vector<double64> )" << endl;
+            cout << "\nTesting RowCondenseTo( vector<double> )" << endl;
             cout << "===========================================" << endl;
-            //RowCondenseTo ( vector<double64> )
-            cout << "\nRowCondenseTo ( vector<double64> )" << endl;
+            //RowCondenseTo ( vector<double> )
+            cout << "\nRowCondenseTo ( vector<double> )" << endl;
             cout << "-------------------------------" << endl;
 
             cout << "\n3U test matrix Matrix3x3";
@@ -1021,11 +1021,11 @@ void Matrix_Test::run()
             Matrix3x3.Fill(9.);
             if ( verbose_ ) Matrix3x3.Out();
 
-            vector<double64>::const_iterator itx(x.begin());
+            vector<double>::const_iterator itx(x.begin());
 
             if ( verbose_ ) cout << "Test vector x";
 
-            for (vector<double64>::const_iterator
+            for (vector<double>::const_iterator
                  itx = x.begin(); itx != x.end(); itx++)
             {
                 if ( verbose_ ) cout << "\n" << *itx;
@@ -1034,7 +1034,7 @@ void Matrix_Test::run()
             if ( verbose_ ) cout << "\n\nMatrix3x3.RowCondenseTo( x )";
             Matrix3x3.RowCondenseTo( x );
 
-            for (vector<double64>::const_iterator
+            for (vector<double>::const_iterator
                  itx = x.begin(); itx != x.end(); itx++)
             {
                 if ( verbose_ ) cout << "\n" << *itx ;
@@ -1107,7 +1107,7 @@ void Matrix_Test::run()
                     A(2,2) = -99.;
                     A(2,1) = -199.;
                     if ( verbose_ ) A.Out();
-                    double64 normL1 = A.NormL1();
+                    double normL1 = A.NormL1();
 
                     if ( verbose_ ) cout << "\nThe maximum absolute column sum norm of test matrix A is " << normL1 << endl;
                     _equal( normL1, 201., 1E-6 );
@@ -1123,7 +1123,7 @@ void Matrix_Test::run()
                     A(2,2) = -99.;
                     A(2,1) = -199.;
                     if ( verbose_ ) A.Out();
-                    double64 normInf = A.NormL_Infinity();
+                    double normInf = A.NormL_Infinity();
 
                     if ( verbose_ ) cout << "\nThe maximum absolute row sum norm of test matrix A is " << normInf << endl;
                     _equal( normInf, 303., 1E-6 );

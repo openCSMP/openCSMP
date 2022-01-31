@@ -32,17 +32,17 @@ namespace csmp
   class H2ONaClFluidProperties
   {
   public:
-    H2ONaClFluidProperties(const   double64& externaltemperature_in_C,
-                           const   double64& externalpressure_in_Pa,
-                           const   double64& externalcomposition_in_mole_fraction,
-                           const   double64& external_fluid_enthalpy,
-                           const   double64& external_cp_rock,
-                           const   double64& external_rho_rock,
-                           const   double64& external_phi, 
+    H2ONaClFluidProperties(const   double& externaltemperature_in_C,
+                           const   double& externalpressure_in_Pa,
+                           const   double& externalcomposition_in_mole_fraction,
+                           const   double& external_fluid_enthalpy,
+                           const   double& external_cp_rock,
+                           const   double& external_rho_rock,
+                           const   double& external_phi, 
                            const   bool&     verbose);
     ~H2ONaClFluidProperties();
     
-    double64                       BulkEnthalpy();
+    double                       BulkEnthalpy();
 
     Fluidproperties                LiquidProperties();
     Fluidproperties                VaporProperties();
@@ -67,44 +67,44 @@ namespace csmp
 
   private:
 
-    const double64&                temperature;
-    const double64&                pressure;
-    const double64&                composition;
-    const double64&                enthalpy;
-    const double64&                cpr;
-    const double64&                rr;
-    const double64&                phi;
+    const double&                temperature;
+    const double&                pressure;
+    const double&                composition;
+    const double&                enthalpy;
+    const double&                cpr;
+    const double&                rr;
+    const double&                phi;
 
-    const double64                 safety_limit; 
+    const double                 safety_limit; 
 
-    double64                       tcurrent; 
-    double64                       pcurrent; 
-    double64                       xcurrent; 
-    double64                       hcurrent;
-    double64                       dliqmfdp;
-    double64                       dliqmfdt;
-    double64                       dsaltmfdt;
-    double64                       rl; 
-    double64                       rv; 
-    double64                       cpl; 
-    double64                       cpv; 
-    double64                       hl; 
-    double64                       hv; 
-    double64                       sl; 
-    double64                       sv; 
-    double64                       product; 
-    double64                       b;
-    double64                       liq_dsmfdt; 
-    double64                       vap_dsmfdt;
-    double64                       t_vlh_low; 
-    double64                       t_vlh_high;
-    double64                       h_vh; 
-    double64                       h_lh; 
-    double64                       h_vl; 
-    double64                       liq_mf; 
-    double64                       salt_mf; 
-    double64                       vap_mf; 
-    double64                       tsat;
+    double                       tcurrent; 
+    double                       pcurrent; 
+    double                       xcurrent; 
+    double                       hcurrent;
+    double                       dliqmfdp;
+    double                       dliqmfdt;
+    double                       dsaltmfdt;
+    double                       rl; 
+    double                       rv; 
+    double                       cpl; 
+    double                       cpv; 
+    double                       hl; 
+    double                       hv; 
+    double                       sl; 
+    double                       sv; 
+    double                       product; 
+    double                       b;
+    double                       liq_dsmfdt; 
+    double                       vap_dsmfdt;
+    double                       t_vlh_low; 
+    double                       t_vlh_high;
+    double                       h_vh; 
+    double                       h_lh; 
+    double                       h_vl; 
+    double                       liq_mf; 
+    double                       salt_mf; 
+    double                       vap_mf; 
+    double                       tsat;
 
     // debug only
     //    int                            eqtype;
@@ -142,8 +142,8 @@ namespace csmp
     VH_HaliteLookup                vh_halite;
     LH_HaliteLookup                lh_halite;
 
-    double64                       TwophaseCompressibility();
-    double64                       NewTwophaseCompressibility();
+    double                       TwophaseCompressibility();
+    double                       NewTwophaseCompressibility();
 
     void                           UpdateProperties();
     void                           UpdatePropertiesL();
@@ -152,10 +152,10 @@ namespace csmp
     void                           UpdatePropertiesVH();
     void                           UpdatePropertiesLH();
     void                           UpdatePropertiesVL();
-    void                           UpdatePropertiesAtVLH_For_P(double64 enthalpy);
+    void                           UpdatePropertiesAtVLH_For_P(double enthalpy);
     void                           UpdatePropertiesNaClMelt();
     void                           UpdatePropertiesHalite();
-    void                           UpdatePropertiesNaClMeltingCurve_ForP(double64 enthalpy);
+    void                           UpdatePropertiesNaClMeltingCurve_ForP(double enthalpy);
 
     void                           UpdateEnthalpyL();
     void                           UpdateEnthalpyF();
@@ -163,10 +163,10 @@ namespace csmp
     void                           UpdateEnthalpyVH();
     void                           UpdateEnthalpyLH();
     void                           UpdateEnthalpyVL();
-    void                           UpdateEnthalpyAtVLH_For_P(double64 enthalpy);
+    void                           UpdateEnthalpyAtVLH_For_P(double enthalpy);
     void                           UpdateEnthalpyNaClMelt();
     void                           UpdateEnthalpyHalite();
-    void                           UpdateEnthalpyNaClMeltingCurve_ForP(double64 enthalpy);
+    void                           UpdateEnthalpyNaClMeltingCurve_ForP(double enthalpy);
 
     void                           PrintTwophaseCompressibilityParameters();
     void                           DumpStatus();
@@ -215,7 +215,7 @@ namespace csmp
 
      The most important interfaces return objects of type Fluidproperties. These are:
 
-     (1) LiquidProperties(), VaporProperties(), SaltProperties(), and BulkProperties(). These determine the fluid state and properties primarily at the given temperature, pressure, and composition. Specific fluid enthalpy comes into play if the three-phase (vapor-liquid-halite) case or the pure H2O two-phase (vapor-liquid) or pure NaCl twophase (Halite+melt) case is encountered. Very low pressure cases along the respective sublimation curves are outside the range of validity as is the low-temperature cases involving ice or hydrohalite. Those conditions where enthalpy is required become active when temperature is identical to the temperature at the phase boundary within 5 x the available numerical precision of double64 on the given platform. 
+     (1) LiquidProperties(), VaporProperties(), SaltProperties(), and BulkProperties(). These determine the fluid state and properties primarily at the given temperature, pressure, and composition. Specific fluid enthalpy comes into play if the three-phase (vapor-liquid-halite) case or the pure H2O two-phase (vapor-liquid) or pure NaCl twophase (Halite+melt) case is encountered. Very low pressure cases along the respective sublimation curves are outside the range of validity as is the low-temperature cases involving ice or hydrohalite. Those conditions where enthalpy is required become active when temperature is identical to the temperature at the phase boundary within 5 x the available numerical precision of double on the given platform. 
 
      If one of these member functions is invoked, all properties are computed. To avoid re-computation(*), properties of the other two may the also be extracted via the respective Report... functions described below. This has changed from previous versions: the functions used to have an internal check that avoided re-computation in case that t,p,h,x,cp_rock,rho_rock and phi didn't change. This has currently been disabled and may be re-activated after intense testing of this new version has been done.
 

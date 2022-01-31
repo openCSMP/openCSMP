@@ -13,7 +13,7 @@ template<size_t> class Model;
 
 /**
  
-@brief Post-processes flow "velocity" & "volume flux" that are output as vector<double64> and scalar variables, respectively
+@brief Post-processes flow "velocity" & "volume flux" that are output as vector<double> and scalar variables, respectively
 upon request these properties are extrapolated to the nodes and averaged between adjacent elements.
 
 @author S.K. Matthai
@@ -139,18 +139,18 @@ class VelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     csmp::Index  velo_key_, ivelo_key_, nvelo_key_, nivelo_key_,
                  flux_key_, nflux_key_, rhor_key_, mult_key_;
                
-    std::pair<double64,double64>  minmaxV_, minmaxF_;
+    std::pair<double,double>  minmaxV_, minmaxF_;
     DenseMatrix<DM_MIN>           DERIV_, RESULT_;
-    std::vector<double64>         VELOFLUX_, IVELOFLUX_;
-    std::vector<double64>         IPVF_, NVF_, veloflux_;
-    std::vector<double64>         IPOL_;
+    std::vector<double>         VELOFLUX_, IVELOFLUX_;
+    std::vector<double>         IPVF_, NVF_, veloflux_;
+    std::vector<double>         IPOL_;
     std::vector<ScalarVariable > PF_, mult_vec_, rho_vec_;
     VectorVariable<dim>           velo_, ivelo_;
     ScalarVariable               phi_, flux_, rhor_;
     bool                         verbose_, nodal_averaging_, with_gravity_, with_multiplier_;
-    double64                     sum_, ac_gravity_, rho_fac_, mult_fac_;
+    double                     sum_, ac_gravity_, rho_fac_, mult_fac_;
     std::vector<bool>            node_output_;
-    std::vector<std::list<std::vector<double64> > >  temp_veloflux_;
+    std::vector<std::list<std::vector<double> > >  temp_veloflux_;
     const size_t                  VERTICAL_AXIS_;
 };
  

@@ -460,7 +460,7 @@ the number of meaningful assignments for CSP basic variables: Scalars can
 be assigned to vectors and tensors but not the other way around. Vectors
 cannot be assigned to tensors and vice versa.
 
-@param  val Constant references to double64, ScalarVariable, VectorVariable, and
+@param  val Constant references to double, ScalarVariable, VectorVariable, and
 TensorVariable.
 
 @section implementation Implementation
@@ -475,7 +475,7 @@ including the name of the Operand to which the assignment was
 attempted.
 */
 template<size_t dim>
-Operand<dim>&  Operand<dim>::operator=( double64 val )
+Operand<dim>&  Operand<dim>::operator=( double val )
 {
     switch ( prop_key_.type )
     {
@@ -510,7 +510,7 @@ left of the operator in the mathematical expression. The basic CSP
 variable of the temporary Operands will have been transformed using the
 operator an the right-side argument of it. 
 
-@param val A double64 value typically typedef'ed as a fT. The value will appear
+@param val A double value typically typedef'ed as a fT. The value will appear
 on the right of the operator in the mathematical expression involving
 the Operand. 
 
@@ -534,7 +534,7 @@ Op1 += Op2 * 322.4;
 @endcode
  */
 template<size_t dim>
-Operand<dim>  Operand<dim>::operator+( double64 val ) const
+Operand<dim>  Operand<dim>::operator+( double val ) const
  {
     if ( prop_key_.type == SCALAR )
       return Operand<dim>( prop_key_, (scalar_storage_ + val) );
@@ -552,7 +552,7 @@ Operand<dim>  Operand<dim>::operator+( double64 val ) const
  
 
 template<size_t dim>
-Operand<dim>  Operand<dim>::operator-( double64 val ) const
+Operand<dim>  Operand<dim>::operator-( double val ) const
  {
     if ( prop_key_.type == SCALAR )
       return Operand<dim>( prop_key_, (scalar_storage_ - val) );
@@ -570,7 +570,7 @@ Operand<dim>  Operand<dim>::operator-( double64 val ) const
  
  
 template<size_t dim>
-Operand<dim>  Operand<dim>::operator*( double64 val ) const
+Operand<dim>  Operand<dim>::operator*( double val ) const
  {
     if ( prop_key_.type == SCALAR )
       return Operand<dim>( prop_key_, (scalar_storage_ * val) );
@@ -588,7 +588,7 @@ Operand<dim>  Operand<dim>::operator*( double64 val ) const
  
  
 template<size_t dim>
-Operand<dim>  Operand<dim>::operator/( double64 val ) const
+Operand<dim>  Operand<dim>::operator/( double val ) const
  {
     if ( prop_key_.type == SCALAR )
       return Operand<dim>( prop_key_, (scalar_storage_ / val) );
@@ -725,10 +725,10 @@ Operand<dim>  Operand<dim>::operator/( const Operand<dim>& op ) const
 /**
  
 Transforms the basic variable associated with the lefthand Operand by the 
-right-side double64 using the arithmetic operators +, -, *, or / . The C++
+right-side double using the arithmetic operators +, -, *, or / . The C++
 short form for writing a = a + b; as a += b; is used in such expressions. 
 
-@param val A double64 value typically typedef'ed as a fT. The value will appear
+@param val A double value typically typedef'ed as a fT. The value will appear
 on the right of the operator in the mathematical expression involving
 the Operand. 
 
@@ -750,7 +750,7 @@ a scalar variable. Mathematically meaningful operations, like multiplying
 a right-side vector with a left-side tensor, are enabled. 
  */
 template<size_t dim>
-Operand<dim>&  Operand<dim>::operator+=( double64 val )
+Operand<dim>&  Operand<dim>::operator+=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ += val;
     else if ( prop_key_.type == VECTOR ) vector_storage_ += val;
@@ -763,7 +763,7 @@ Operand<dim>&  Operand<dim>::operator+=( double64 val )
 
 
 template<size_t dim>
-Operand<dim>&  Operand<dim>::operator-=( double64 val )
+Operand<dim>&  Operand<dim>::operator-=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ -= val;
     else if ( prop_key_.type == VECTOR ) vector_storage_ -= val;
@@ -776,7 +776,7 @@ Operand<dim>&  Operand<dim>::operator-=( double64 val )
 
 
 template<size_t dim>
-Operand<dim>&  Operand<dim>::operator*=( double64 val )
+Operand<dim>&  Operand<dim>::operator*=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ *= val;
     else if ( prop_key_.type == VECTOR ) vector_storage_ *= val;
@@ -789,7 +789,7 @@ Operand<dim>&  Operand<dim>::operator*=( double64 val )
 
 
 template<size_t dim>
-Operand<dim>&  Operand<dim>::operator/=( double64 val )
+Operand<dim>&  Operand<dim>::operator/=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ /= val;
     else if ( prop_key_.type == VECTOR ) vector_storage_ /= val;
@@ -1512,12 +1512,12 @@ Operand<dim>&  Operand<dim>::operator/=( const Operand<dim>& op )
 
 /**
  
-Operands can be compared with other Operands, double64 values, and CSP
+Operands can be compared with other Operands, double values, and CSP
 basic variables. Whether this comparison is meaningful, depends on the 
 variable types on the left and right-side of the comparitors,
 and errors will be reported for obviously nonsensical comparisons.
 Comparisons of variables of the same type are straightforward and the 
-comparison of a ScalarVariable with a double64 is as well. 
+comparison of a ScalarVariable with a double is as well. 
 
 If a vector variable is compared with a scalar, this implementation of 
 comparitors will compare the length of the vector with the scalar,
@@ -1530,7 +1530,7 @@ not be compared with tensors.
 
 Only Operands with the same type of associated variables can be compared. 
 
-@param val A constant reference to any of the types, double64, Operand, ScalarVariable,
+@param val A constant reference to any of the types, double, Operand, ScalarVariable,
 VectorVariable, or TensorVariable.  
 
 @return A boolean variable which evaluates to true or false.
@@ -1563,7 +1563,7 @@ the Operand involved in the comparison will be reported as well.
 Remember, however, that temporary Operands have no distinct names. 
 */
 template<size_t dim>
-bool  Operand<dim>::operator>( double64 val ) const
+bool  Operand<dim>::operator>( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() > val);
 
@@ -1574,7 +1574,7 @@ bool  Operand<dim>::operator>( double64 val ) const
  
  
 template<size_t dim>
-bool  Operand<dim>::operator<( double64 val ) const
+bool  Operand<dim>::operator<( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() < val);
 
@@ -1585,7 +1585,7 @@ bool  Operand<dim>::operator<( double64 val ) const
  
  
 template<size_t dim>
-bool  Operand<dim>::operator>=( double64 val ) const
+bool  Operand<dim>::operator>=( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() >= val);
 
@@ -1596,7 +1596,7 @@ bool  Operand<dim>::operator>=( double64 val ) const
  
  
 template<size_t dim>
-bool  Operand<dim>::operator<=( double64 val ) const
+bool  Operand<dim>::operator<=( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() <= val);
 
@@ -1607,7 +1607,7 @@ bool  Operand<dim>::operator<=( double64 val ) const
 
 
 template<size_t dim>
-bool  Operand<dim>::operator==( double64 val ) const
+bool  Operand<dim>::operator==( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return approximatelyEqual( scalar_storage_(), val );
 
@@ -1618,7 +1618,7 @@ bool  Operand<dim>::operator==( double64 val ) const
 
 
 template<size_t dim>
-bool  Operand<dim>::operator!=( double64 val ) const
+bool  Operand<dim>::operator!=( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return !approximatelyEqual( scalar_storage_(), val );
 
@@ -1931,7 +1931,7 @@ was constructed.
 
 The value which shall be tested is supplied as first argument to the
 overloaded method IsWithinRange(). The supported argument types are
-double64, and the basic CSP variables ScalarVariable, VectorVariable, and
+double, and the basic CSP variables ScalarVariable, VectorVariable, and
 TensorVariable.
 
 @return The method returns the boolean variable 'true' if the argument value
@@ -1973,14 +1973,14 @@ bool Operand<dim>::IsWithinRange( const cspT& val ) const
 
 
 template<size_t dim>
-double64 Operand<dim>::MinValue() const
+double Operand<dim>::MinValue() const
 {
     return omin;
 
 } // end MinValue
 
 template<size_t dim>
-double64 Operand<dim>::MaxValue() const
+double Operand<dim>::MaxValue() const
 {
     return omax;
 

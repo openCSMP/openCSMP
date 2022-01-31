@@ -33,8 +33,8 @@ class NodeCenteredFiniteVolumeMonitor {
     std::string  output_variable;
     bool         group_by_group;
     
-    std::list<std::pair<double64,double64> >              integrals;
-    std::list<std::pair<double64,std::list<double64> > >  group_integrals;
+    std::list<std::pair<double,double> >              integrals;
+    std::list<std::pair<double,std::list<double> > >  group_integrals;
 };
 
 } // end namespace csmp

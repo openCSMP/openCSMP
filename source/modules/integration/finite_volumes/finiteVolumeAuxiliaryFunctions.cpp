@@ -22,11 +22,11 @@ U_c.
 
 In the method which calculates the isotropic limiter values.
 */
-double64 NVD_Function( double64 xi, double64 U_f, double64 U_c )
+double NVD_Function( double xi, double U_f, double U_c )
  {
-    constexpr double64 one(1.), zero(0.);
+    constexpr double one(1.), zero(0.);
     if ( U_c > one || U_c < zero ) return U_c;
-    double64  U_tilde_f = fmax( zero, U_f );
+    double  U_tilde_f = fmax( zero, U_f );
     return fmin( fmin(xi * U_c, U_tilde_f), one );
  }
 
@@ -55,23 +55,23 @@ Input are values of the advected property psi at
 property.
 
 */
-double64 thetaLimiter( double64 hf_t0, double64 hf_t1,
-                        double64 vol_upstr, double64 vol_dwstr,
-                        double64 psi_hat_c_t1_minus_psi_hat_c_t0,
-                        double64 psi_hat_d_t1_minus_psi_hat_d_t0,
-                        double64 dt )
+double thetaLimiter( double hf_t0, double hf_t1,
+                        double vol_upstr, double vol_dwstr,
+                        double psi_hat_c_t1_minus_psi_hat_c_t0,
+                        double psi_hat_d_t1_minus_psi_hat_d_t0,
+                        double dt )
  {
     // gf(t+1/2) * dt (Pain et al., eqn 48)
-    double64 gf = hf_t0 - hf_t1;
+    double gf = hf_t0 - hf_t1;
     gf = dt * ( gf < 0.0 ? -1.0 : 1.0) * std::max( std::fabs(gf), 1.0e-30 );
 
     // for the current CV (Pain et al., 1/eqn 47)
-    double64 ufc = (psi_hat_c_t1_minus_psi_hat_c_t0 * vol_upstr) / gf;
+    double ufc = (psi_hat_c_t1_minus_psi_hat_c_t0 * vol_upstr) / gf;
 
     // for the downwind CV (Pain et al., 1/eqn 47)
-    double64 ufd = (psi_hat_d_t1_minus_psi_hat_d_t0 * vol_dwstr) / gf;
+    double ufd = (psi_hat_d_t1_minus_psi_hat_d_t0 * vol_dwstr) / gf;
 
-    const double64 omega(0.5);
+    const double omega(0.5);
     // limiter formula (Pain et al., eqn 46) omega=0.5=Crank-Nicholson, O.K.
     return std::max( 0.5, 1. - omega * std::min(std::fabs(ufc),std::fabs(ufd)) );
 
@@ -104,10 +104,10 @@ To avoid oscillations that may arise if diffusive fluxes are not limited
 in the higher-order transport scheme.
 
 */
-double64 diffusionLimiter( double64 grad_psi_O1, double64 grad_psi_O2 )
+double diffusionLimiter( double grad_psi_O1, double grad_psi_O2 )
  {
-    const double64 gamma1(2.), gamma2(0.5);
-    const double64 sf((grad_psi_O1 < 0.) ? -1. : 1.);
+    const double gamma1(2.), gamma2(0.5);
+    const double sf((grad_psi_O1 < 0.) ? -1. : 1.);
 
     return sf * std::max( gamma2 * sf * grad_psi_O1, std::min( sf * grad_psi_O2, gamma1 * sf * grad_psi_O1 ) );
 
@@ -131,30 +131,30 @@ neighborhood of the upstream node, including its own value.
 In the second-order transport methods of the ExplicitStencilProcessor classes
 
 */
-double64  limitProperty( double64 psi_hat_c, double64 psi_hat_d,
-                         double64 psi_facet,
-                         const std::pair<double64,double64>& SMINMAX_upstr,
-                         double64 xi )
+double  limitProperty( double psi_hat_c, double psi_hat_d,
+                         double psi_facet,
+                         const std::pair<double,double>& SMINMAX_upstr,
+                         double xi )
  {
     // isotropic multi-dimensional limiting of facet saturations        min                   max
-    const double64 psi_hat_u = (psi_hat_d > psi_hat_c) ? SMINMAX_upstr.first : SMINMAX_upstr.second;
+    const double psi_hat_u = (psi_hat_d > psi_hat_c) ? SMINMAX_upstr.first : SMINMAX_upstr.second;
 
     // finding min, max values of advected property in neighborhood of upstream node
-    double64 psi_diff = psi_hat_d - psi_hat_u;
+    double psi_diff = psi_hat_d - psi_hat_u;
     // avoiding division by zero
 
-    if ( std::fabs(psi_diff) < std::numeric_limits<double64>::epsilon() ) psi_diff = 1.0e-20 * ( psi_diff < 0.0 ? -1.0 : 1.0);
+    if ( std::fabs(psi_diff) < std::numeric_limits<double>::epsilon() ) psi_diff = 1.0e-20 * ( psi_diff < 0.0 ? -1.0 : 1.0);
 
     // computing U_f, U_c factors for slope limiting (Pain et al. paper)
     // 'psi_dash_f' = fsn (advected property values extrapolated to facet integration point)
-    const double64 U_f = (psi_facet  - psi_hat_u) / psi_diff;
-    const double64 U_c = (psi_hat_c  - psi_hat_u) / psi_diff;
+    const double U_f = (psi_facet  - psi_hat_u) / psi_diff;
+    const double U_c = (psi_hat_c  - psi_hat_u) / psi_diff;
 
     // computing normalized (always positive) slope-limiter value at face (eqn 38, Pain et al. 2001)
-    const double64 U_tilde_f = NVD_Function( xi, U_f, U_c );
+    const double U_tilde_f = NVD_Function( xi, U_f, U_c );
 
     // finding the slope limited value of the advected property at the segment according to eqn. 36
-    const double64 psi_hat = lerp(U_tilde_f, psi_hat_u, psi_hat_d);
+    const double psi_hat = lerp(U_tilde_f, psi_hat_u, psi_hat_d);
 
     return psi_hat;
  }
@@ -167,10 +167,10 @@ double64  limitProperty( double64 psi_hat_c, double64 psi_hat_d,
     
     @author propably Roman Manasipov?
 */
-double64  limitProperty( double64 psi_hat_c, double64 psi_hat_u,
-                         double64 min, double64 max )
+double  limitProperty( double psi_hat_c, double psi_hat_u,
+                         double min, double max )
  {
-    double64 r(1.);
+    double r(1.);
    
     if ( psi_hat_c > psi_hat_u ) {
         r  = max;
@@ -195,8 +195,8 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
                             const csmp::Index& grad_sn_key,
                             const csmp::Index& grad_sn_limiter_key,
                             size_t inside_node, size_t outside_node, size_t iFacet,
-                            const double64 sn_inside_node, const double64 sn_outside_node,
-                            double64& limited_sn_inside_node, double64& limited_sn_outside_node )
+                            const double sn_inside_node, const double sn_outside_node,
+                            double& limited_sn_inside_node, double& limited_sn_outside_node )
  {
 
     ScalarVariable limiter_sn_inside_node, limiter_sn_outside_node;
@@ -206,8 +206,8 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
 
     // Calculate the coordinates of the Facet Integration Point
     const Point<dim> local_c_point(e.FV()->FacetIntegrationPoint( iFacet, 0U ));
-    std::vector<double64> temp(e.Nodes()); //has the local interp. function values
-    std::vector<double64> global_c(dim),local_c(local_c_point.Coordinates());
+    std::vector<double> temp(e.Nodes()); //has the local interp. function values
+    std::vector<double> global_c(dim),local_c(local_c_point.Coordinates());
 
     if( e.IsLineElement() ){
         e.FE()->Nr( local_c[0], temp );
@@ -235,7 +235,7 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     for(size_t l=0U;l<dim;l++)
         distance_inside_node.Component(l,global_c[l]-mass_center_inside_node[l]);
 
-    double64 sn_linear_increment_inside_node=0.0;
+    double sn_linear_increment_inside_node=0.0;
     for(size_t l=0U;l<dim;l++)
         sn_linear_increment_inside_node+=grad_sn_inside_node[l]*distance_inside_node[l];
 
@@ -249,7 +249,7 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     for(size_t l=0U;l<dim;l++)
         distance_outside_node.Component(l,global_c[l]-mass_center_outside_node[l]);
 
-    double64 sn_linear_increment_outside_node=0.0;
+    double sn_linear_increment_outside_node=0.0;
     for(size_t l=0U;l<dim;l++)
         sn_linear_increment_outside_node+=grad_sn_outside_node[l]*distance_outside_node[l];
 
@@ -266,12 +266,12 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     @author propably Roman Manasipov?
 */
 template <size_t dim>
-double64 limitProperty_LSMGRAD( const Element<dim>& e,
+double limitProperty_LSMGRAD( const Element<dim>& e,
                                 const csmp::Index& mass_center_key,
                                 const csmp::Index& grad_sn_key,
                                 const csmp::Index& grad_sn_limiter_key,
                                 size_t upstream_node, size_t iFacet,
-                                const double64 sn_upstream_node)
+                                const double sn_upstream_node)
  {
 
     ScalarVariable limiter_sn_upstream_node;
@@ -281,8 +281,8 @@ double64 limitProperty_LSMGRAD( const Element<dim>& e,
 
     // Calculate the coordinates of the Facet Integration Point
     const Point<dim> local_c_point(e.FV()->FacetIntegrationPoint( iFacet, 0U ));
-    std::vector<double64> temp(e.Nodes()); //has the local interp. function values
-    std::vector<double64> global_c(dim),local_c(local_c_point.Coordinates());
+    std::vector<double> temp(e.Nodes()); //has the local interp. function values
+    std::vector<double> global_c(dim),local_c(local_c_point.Coordinates());
 
     if( e.IsLineElement() ){
         e.FE()->Nr( local_c[0], temp );
@@ -310,7 +310,7 @@ double64 limitProperty_LSMGRAD( const Element<dim>& e,
     for(size_t l=0U;l<dim;l++)
         distance_upstream_node.Component(l,global_c[l]-mass_center_upstream_node[l]);
 
-    double64 sn_linear_increment_upstream_node=0.0;
+    double sn_linear_increment_upstream_node=0.0;
     for(size_t l=0U;l<dim;l++)
         sn_linear_increment_upstream_node+=grad_sn_upstream_node[l]*distance_upstream_node[l];
 
@@ -329,12 +329,12 @@ get the distance between control volume centres which share this face
 get the edge length to calculate the saturation gradient
 
 */
-double64  diffusionVelocity( const Region<1>& sg,
+double  diffusionVelocity( const Region<1>& sg,
                               const Node<1U>* const nd,
                               const set<size_t>& ngraph_entry,
                               const csmp::Index& advected_var_key )
  {
-    double64 diff_flux, max_diff_flux(0.);
+    double diff_flux, max_diff_flux(0.);
     
     for ( set<size_t>::const_iterator it=ngraph_entry.begin(); it!=ngraph_entry.end(); it++ ) 
       {
@@ -350,12 +350,12 @@ double64  diffusionVelocity( const Region<1>& sg,
 
 
 
-double64  diffusionVelocity( const Region<2>& sg,
+double  diffusionVelocity( const Region<2>& sg,
                               const Node<2U>* const nd,
                               const set<size_t>& ngraph_entry,
                               const csmp::Index& advected_var_key )
  {
-    double64 edge[2], diff_flux, max_diff_flux(0.);
+    double edge[2], diff_flux, max_diff_flux(0.);
     
     for ( set<size_t>::const_iterator  it=ngraph_entry.begin(); it!=ngraph_entry.end(); it++ ) 
       {
@@ -377,12 +377,12 @@ double64  diffusionVelocity( const Region<2>& sg,
 
 
 
-double64  diffusionVelocity( const Region<3>& sg,
+double  diffusionVelocity( const Region<3>& sg,
                               const Node<3U>* const nd,
                               const set<size_t>& ngraph_entry,
                               const csmp::Index& advected_var_key )
  {
-    double64 edge[3], diff_flux, max_diff_flux(0.);
+    double edge[3], diff_flux, max_diff_flux(0.);
     
     for ( set<size_t>::const_iterator  it=ngraph_entry.begin(); it!=ngraph_entry.end(); it++ ) 
       {
@@ -406,15 +406,15 @@ double64  diffusionVelocity( const Region<3>& sg,
 
 
 template<size_t dim>
-double64 fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey )
+double fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey )
 {
-  double64 totalFlux(0.);
+  double totalFlux(0.);
   VectorVariable<dim>  vel;
 
   // for all those sectors of the FE_FV-stencils which contribute to finite volume
   for ( size_t t(0); t < node.Parents(); ++t ) {
     const size_t nid(node.ParentNodeNumber(t));
-    double64  flux(0.);
+    double  flux(0.);
     // for all facets surrounding the finite volume at the boundary
     for ( size_t i(0); i < node.Parent(t)->FV()->FacetsPerSector(nid); ++i )
     {
@@ -435,9 +435,9 @@ double64 fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKe
 
 
 template<size_t dim, typename ForwardIt>
-double64 fluxThroughFiniteVolumes( ForwardIt nodesBegin, ForwardIt nodesEnd, Index const& velocityKey )
+double fluxThroughFiniteVolumes( ForwardIt nodesBegin, ForwardIt nodesEnd, Index const& velocityKey )
 {
-  double64 totalFlux(0.);
+  double totalFlux(0.);
 
   while( nodesBegin != nodesEnd )
     totalFlux += fluxThroughFiniteVolume( *(*nodesBegin++), velocityKey );
@@ -467,7 +467,7 @@ The method needs the volume of the current FV cell as input.
 @return The method returns the diameter of the hypothetically spherical
 FV cell.
  */
-double64 delta_X_FromFV_Volume( double64 FV_volume, size_t dim )
+double delta_X_FromFV_Volume( double FV_volume, size_t dim )
  {
     // cross-section length from volume of a sphere
     if ( dim == 3U ) return 2. * std::pow( (3. * FV_volume) / (4. * PI), 1./3. );
@@ -492,18 +492,18 @@ goes to zero.
 Third argument is the source term that shall be distributed between
 left and right.
  */
-double64 omega( double64 dt, double64 pore_vol, double64 src )
+double omega( double dt, double pore_vol, double src )
  {
     // limit the source terms according to equation 61, p. 31 (original manuscript),
     // but max criterion is not applied
-    double64 product     = dt * (src / pore_vol);
-    double64 e_prod      = std::exp( -product );
-    double64 denominator = product * (static_cast<double64>(1.) - e_prod);
+    double product     = dt * (src / pore_vol);
+    double e_prod      = std::exp( -product );
+    double denominator = product * (static_cast<double>(1.) - e_prod);
 
     // very important to avoid division by zero
-    if ( denominator == static_cast<double64>(0.) ) return static_cast<double64>(1.);
+    if ( denominator == static_cast<double>(0.) ) return static_cast<double>(1.);
 
-    return (product - static_cast<double64>(1.) + e_prod) / denominator;
+    return (product - static_cast<double>(1.) + e_prod) / denominator;
 
  } // end omega
 
@@ -513,41 +513,41 @@ double64 omega( double64 dt, double64 pore_vol, double64 src )
 
 
 
-template double64 fluxThroughFiniteVolume( Node<3> const&, Index const& );
-template double64 fluxThroughFiniteVolume( Node<2> const&, Index const& );
-template double64 fluxThroughFiniteVolume( Node<1> const&, Index const& );
+template double fluxThroughFiniteVolume( Node<3> const&, Index const& );
+template double fluxThroughFiniteVolume( Node<2> const&, Index const& );
+template double fluxThroughFiniteVolume( Node<1> const&, Index const& );
 
 
 
 template void limitProperty_LSMGRAD( const Element<1U>&,
                                      const csmp::Index&, const csmp::Index&, const csmp::Index&,
                                      size_t,size_t, size_t,
-                                     const double64, const double64,
-                                     double64&, double64&);
+                                     const double, const double,
+                                     double&, double&);
 
 template void limitProperty_LSMGRAD( const Element<2U>&,
                                      const csmp::Index&, const csmp::Index&, const csmp::Index&,
                                      size_t,size_t, size_t,
-                                     const double64, const double64,
-                                     double64&, double64&);
+                                     const double, const double,
+                                     double&, double&);
 
 template void limitProperty_LSMGRAD( const Element<3U>&,
                                      const csmp::Index&, const csmp::Index&, const csmp::Index&,
                                      size_t,size_t, size_t,
-                                     const double64, const double64,
-                                     double64&, double64&);
+                                     const double, const double,
+                                     double&, double&);
 
-template double64 limitProperty_LSMGRAD( const Element<1U>&,
+template double limitProperty_LSMGRAD( const Element<1U>&,
                                 const csmp::Index&, const csmp::Index&, const csmp::Index&,
-                                size_t, size_t, const double64);
+                                size_t, size_t, const double);
 
-template double64 limitProperty_LSMGRAD( const Element<2U>&,
+template double limitProperty_LSMGRAD( const Element<2U>&,
                                 const csmp::Index&, const csmp::Index&, const csmp::Index&,
-                                size_t, size_t, const double64);
+                                size_t, size_t, const double);
 
-template double64 limitProperty_LSMGRAD( const Element<3U>&,
+template double limitProperty_LSMGRAD( const Element<3U>&,
                                 const csmp::Index&, const csmp::Index&, const csmp::Index&,
-                                size_t, size_t, const double64);
+                                size_t, size_t, const double);
 
 
 
@@ -567,18 +567,18 @@ template<size_t dim>
 void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, bool initialize_flux )
  {
     // input variables
-    const csmp::Index phi_key = model.Database().StorageKey("porosity");
-    const csmp::Index thi_key = model.Database().StorageKey("thickness");
-    const csmp::Index vt_key  = model.Database().StorageKey("total velocity");
+    const csmp::INDEX<SCALAR,ELEMENT> phi_key(model.Database().StorageKey("porosity"));
+    const csmp::INDEX<SCALAR,ELEMENT> thi_key(model.Database().StorageKey("thickness"));
+    const csmp::INDEX<VECTOR,ELEMENT> vt_key(model.Database().StorageKey("total velocity"));
     // output variables
-    const csmp::Index fv_key  = model.Database().StorageKey("finite volume");
-    const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
-    const csmp::Index sv_key  = model.Database().StorageKey("sector volume");
-    const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
-    const csmp::Index fa_key  = model.Database().StorageKey("facet area");
-    const csmp::Index ff_key  = model.Database().StorageKey("facet flux");
-    const csmp::Index fn_key  = model.Database().StorageKey("facet normal");
-    const csmp::Index fb_key  = model.Database().StorageKey("flux balance");
+    const csmp::INDEX<SCALAR,NODE> fv_key(model.Database().StorageKey("finite volume"));
+    const csmp::INDEX<SCALAR,NODE> pv_key(model.Database().StorageKey("FV pore volume"));
+    const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT> sv_key(model.Database().StorageKey("sector volume"));
+    const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT> spv_key(model.Database().StorageKey("sector pore volume"));
+    const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT> fa_key(model.Database().StorageKey("facet area"));
+    const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT> ff_key(model.Database().StorageKey("facet flux"));
+    const csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT> fn_key(model.Database().StorageKey("facet normal"));
+    const csmp::INDEX<SCALAR,NODE> fb_key(model.Database().StorageKey("flux balance"));
    
     Point<dim>           nrml;
     VectorVariable<dim>  fnrml, vt;
@@ -590,8 +590,8 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
     gref.InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );
    
     // For the interior elements of the region compute relevant variable values
-    const typename vector<Element<dim>*>::iterator it_end(gref.ElementsEnd());
-    for ( typename vector<Element<dim>*>::iterator it=gref.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref.ElementsEnd());
+    for ( auto it=gref.ElementsBegin(); it!=it_end; ++it )
       {
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
@@ -602,15 +602,15 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
          // 1. computing sector pore volumes
          // --------------------------------
          // (scaled by the cell thickness attribute=1 for volumetric elements)
-         const double64 phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
+         const double phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
          for ( size_t i=0U; i<sectors; ++i ) {
               // sector pore volume
-              const double64 sector_volume = (*it)->SectorVolume(i);
+              const double sector_volume = (*it)->SectorVolume(i);
               (*it)->Store( i, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
               (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
               // sector volume is added to  pore volume of FV's containing this sector
-              double64 finite_volume = (*it)->N(i)->Read( fv_key );
-              double64 pore_volume   = (*it)->N(i)->Read( pv_key );
+              double finite_volume = (*it)->N(i)->Read( fv_key );
+              double pore_volume   = (*it)->N(i)->Read( pv_key );
               // sector volume from FV traits
               finite_volume += sector_volume;
               pore_volume   += phi * sector_volume;
@@ -622,7 +622,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
          // ------------------------------------
          for ( size_t j=0U; j<facets; ++j ) {
               // computing facet areas
-              const double64 facet_area = (*it)->FacetArea(j);
+              const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
               // computing facet normals
               nrml = (*it)->FacetNormal(j);
@@ -634,7 +634,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
               // 3. computing total facet fluxes and flux balance
               // ------------------------------------------------
               if ( initialize_flux ) {
-                   double64 facet_flux(nrml[0] * vt[0]);
+                   double facet_flux(nrml[0] * vt[0]);
                    if ( dim != 1U ) facet_flux += nrml[1] * vt[1];
                    if ( dim == 3U ) facet_flux += nrml[2] * vt[2];
                    facet_flux *= facet_area;
@@ -658,7 +658,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
                   // computing facet areas
-                  const double64 facet_area = eptr->FacetArea(j);
+                  const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
                   // computing facet normals
                   nrml = eptr->FacetNormal(j);
@@ -670,10 +670,10 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
              // ---------------------------------------
              // computing sector volumes & pore volumes
              // ---------------------------------------
-             const double64 porosity = eptr->Read( phi_key ) * eptr->Read( thi_key );
+             const double porosity = eptr->Read( phi_key ) * eptr->Read( thi_key );
              const size_t sectors(eptr->Sectors());
              for ( size_t j=0U; j<sectors; ++j ) {
-                  const double64 sector_volume = eptr->SectorVolume(j);
+                  const double sector_volume = eptr->SectorVolume(j);
                   eptr->Store( j, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
                   eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
                }
@@ -685,20 +685,20 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
    if ( initialize_flux ) {
         // loop over FV stencils, computing the relevant variable values
         const typename vector<Node<dim>*>::iterator nit_end(gref.NodesEnd());
-        double64 bmin(1e30), bmax(-1e30);
+        double bmin(1e30), bmax(-1e30);
      
         for ( typename vector<Node<dim>*>::iterator nit=gref.NodesBegin(); nit!=nit_end; ++nit )
           if ( (*nit)->AtBoundary() == NOT )
             {
                const size_t parent_elements((*nit)->Parents());
-               double64 flux_balance(0.);
+               double flux_balance(0.);
                for ( size_t i=0U; i<parent_elements; ++i ) {
                     const Element<dim>* const eptr = (*nit)->Parent(i);
                     const size_t sector_node = (*nit)->ParentNodeNumber(i);
                     for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                          const size_t facet  = eptr->FV()->FacetSurroundingSector( sector_node, j );
-                         const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
-                         const double64 facet_flux = sign * eptr->Read( facet, 0U, ff_key );
+                         const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
+                         const double facet_flux = sign * eptr->Read( facet, 0U, ff_key );
                          flux_balance += facet_flux;
                       }
                  }
@@ -729,21 +729,21 @@ template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>&, bool );
     @return accumulated influx into the FV sector (added), outflux subtracted.
 */
 template<size_t dim>
-double64 sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key )
+double sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key )
  {
-   double64 sector_flux(0.);
+   double sector_flux(0.);
    for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector); ++j ) {
          const size_t facet  = eptr->FV()->FacetSurroundingSector( sector, j );
-         const double64 sign = (sector==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
-         const double64 facet_flux = sign * eptr->Read( facet, 0U, flux_key );
+         const double sign = (sector==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
+         const double facet_flux = sign * eptr->Read( facet, 0U, flux_key );
          sector_flux += facet_flux;
       }
    return sector_flux;
  
  } // end
 
-template double64 sectorFlux( const Element<2U>* const, size_t, const csmp::Index& );
-template double64 sectorFlux( const Element<3U>* const, size_t, const csmp::Index& );
+template double sectorFlux( const Element<2U>* const, size_t, const csmp::Index& );
+template double sectorFlux( const Element<3U>* const, size_t, const csmp::Index& );
 
 
 
@@ -769,8 +769,8 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
     gref.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
  
     // For the interior elements of the region compute relevant variable values
-    const typename vector<Element<dim>*>::iterator it_end(gref.ElementsEnd());
-    for ( typename vector<Element<dim>*>::iterator it=gref.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref.ElementsEnd());
+    for ( auto it=gref.ElementsBegin(); it!=it_end; ++it )
       {
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
@@ -778,13 +778,13 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
          // 1. computing sector pore volumes and sector rock compressibilities
          // ------------------------------------------------------------------
          // (scaled by the cell thickness attribute=1 for volumetric elements)
-         const double64 phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
+         const double phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
          for ( size_t i=0U; i<sectors; ++i ) {
               // sector pore volume
-              const double64 sector_volume = (*it)->SectorVolume(i);
+              const double sector_volume = (*it)->SectorVolume(i);
               (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
               // sector volume is added to  pore volume of FV's containing this sector
-              double64 pore_volume  = (*it)->N(i)->Read( pv_key );
+              double pore_volume  = (*it)->N(i)->Read( pv_key );
               // sector volume from FV traits
               pore_volume   += phi * sector_volume;
               (*it)->N(i)->Store( pv_key, makeScalar(PLAIN,pore_volume) );
@@ -795,7 +795,7 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
          // ------------------------------------
          for ( size_t j=0U; j<facets; ++j ) {
               // computing facet areas
-              const double64 facet_area = (*it)->FacetArea(j);
+              const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
               // computing facet normals
               nrml = (*it)->FacetNormal(j);
@@ -821,7 +821,7 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
                   // computing facet areas
-                  const double64 facet_area = eptr->FacetArea(j);
+                  const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
                   // computing facet normals
                   nrml = eptr->FacetNormal(j);
@@ -833,10 +833,10 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
              // ---------------------------------------
              // computing sector volumes & pore volumes
              // ---------------------------------------
-             const double64 porosity = eptr->Read( phi_key );
+             const double porosity = eptr->Read( phi_key );
              const size_t sectors(eptr->Sectors());
              for ( size_t j=0U; j<sectors; ++j ) {
-                  const double64 sector_volume = eptr->SectorVolume(j);
+                  const double sector_volume = eptr->SectorVolume(j);
                   eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
                }
           }

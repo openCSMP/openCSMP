@@ -30,8 +30,8 @@ class Solver;
     void AssignEssentialConditionsTest(INTEGRATION_DOMAIN<dim>&);
 
     SparseMatrix const*           GetG() const;
-    std::vector<double64> const*  GetRH() const;
-    std::vector<double64>*        GetX();
+    std::vector<double> const*  GetRH() const;
+    std::vector<double>*        GetX();
     const std::vector<size_t>&    GetDOFIndex() const;
     
     friend class Transient_Test;

@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Exception.h"
 #include "ModelTopology.h"
+#include "NodeManifold.h"
 
 using namespace std;
 
@@ -24,17 +25,21 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
   // -------------------------------------------------
   try {
 
-    VSet<2U>         vset;
-    bool isoparametric_elements( isoparametric );
+    VSet<2U> vset;
+    bool     isoparametric_elements( isoparametric );
 
     ModelTopology    mesh_topology( isoparametric_elements );
     ANSYS_Interface  mesh_interface( isoparametric_elements );
 
-    // 0. reading the mesh from ANSYS CSMP-input files
-    //    and eliminating the unwanted line/surface element regions
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
+    // 0. reading mesh from ANSYS CSMP-input .asc and .dat files,
+    //    eliminating unwanted line/surface element regions
+    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
+ 
+    // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the line element orientations right
+    vset.RemovePfverts();
+    vset.EstablishElementConnectivity2D();
 
-    // 1. writing element and node numbers to property data and storing them in the VSet
+    // 2. writing original element and node numbers to property data and storing them in VSet
     if ( Database().IsDefined( "element number" ) ) {
       // element numbers
       PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
@@ -47,12 +52,11 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
       for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", node_nums );
+      vset.AddData( "node number", node_nums );
     }
 
-    // 2. construct model based on obtained model topology and vset
-    //    ansys neighbor info will be overwritten later since it includes neighbor information
-    //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbor)
+    // 3. constructing model from the polygonal data in the VSet and the region information in model topology
+    // 3.1 using only the selected regions from the -regions.txt file
     if ( use_regions_file )
       Model<2U>::Initialize( regions_file_prefix,
                              mesh_topology,
@@ -61,6 +65,7 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
                              create_splitboundaries,
                              irregular_mesh );
     else
+      // 3.2 using all regions from the ANSYS model
       Model<2U>::Initialize( mesh_topology,
                              vset,
                              create_boundaries,
@@ -133,7 +138,7 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
   // -------------------------------------------------
   try {
 
-    VSet<2U>         vset;
+    VSet<2U> vset;
     bool isoparametric_elements( true );
 
     ModelTopology    mesh_topology( isoparametric_elements );
@@ -141,8 +146,12 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
 
     // 0. reading the mesh from ANSYS CSMP-input files
     //    and eliminating the unwanted line/surface element regions
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
-
+    const bool recreate_node_boundary_flags{true}; // does this using the lower-dimensional boundary regions 
+    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
+    // create 'pfverts' information because the one ANSYS does not get the line element orientations right
+    vset.RemovePfverts();
+    vset.EstablishElementConnectivity2D();
+    
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
       // element numbers
@@ -156,7 +165,7 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
       for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", node_nums );
+      vset.AddData( "node number", node_nums );
     }
 
     // 2. construct model based on obtained model topology and vset
@@ -241,7 +250,7 @@ ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<2U>( variable_file, false )
+  : Model<2U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,
@@ -268,7 +277,7 @@ ANSYS_Model2D::ANSYS_Model2D( bool isoparametric,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<2U>( variable_file, false )
+  : Model<2U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( isoparametric,
@@ -288,7 +297,7 @@ ANSYS_Model2D::ANSYS_Model2D( const char* icem_file_set,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<2U>( variable_file, false )
+  : Model<2U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,

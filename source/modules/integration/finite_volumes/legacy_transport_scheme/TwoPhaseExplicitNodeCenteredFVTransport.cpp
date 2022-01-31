@@ -163,7 +163,7 @@ Computes the Courant time increment (CFL citerion) taking into account
 viscous, gravitational and capillary fluid displacements using the
 contraints from the provided relative permeability model. The CFL
 criterion is calculated using the element diameter in the direction
-of the flow but not account for the deviation from this vector<double64> of
+of the flow but not account for the deviation from this vector<double> of
 the flow of the considered phase.
 
 For the viscous flow the shock speed is used as a multiplier for the
@@ -198,19 +198,19 @@ in the domain. Equally, the user is informed if the CFL increment is
 less than a millisecond (usually a prohibitively small increment).
 */
 template<size_t dim, template<size_t> class STP>
-double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncrement( TwoPhaseModel<dim>& relperm,
-                                                                                        double64 max_time_increment )
+double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncrement( TwoPhaseModel<dim>& relperm,
+                                                                                        double max_time_increment )
  {
     //assert( dim != 1U );
     assert( max_time_increment > 0. );
     this->UpdateProjectedVelocitiesAndFluxBalances();
 
     static DenseMatrix<DM_MIN>  DN;
-    vector<double64>            gradPc(dim);
+    vector<double>            gradPc(dim);
     VectorVariable<dim>         vc;
-    double64                    velocity,
+    double                    velocity,
                                 courant_increment(max_time_increment);
-    const double64              millisecond(1.0e-3);
+    const double              millisecond(1.0e-3);
     const bool                  multiply_with_cell_thickess = (this->thi_key_ == csmp::Index()) ? false : true;
     const bool                  unless_has_equal_dimension(dim!=1U);
 
@@ -234,7 +234,7 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantInc
            // for implicit scheme is better:
            //velocity *= relperm.dfds();
 
-           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( this->phi_key_ );
+           double cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( this->phi_key_ );
            if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( this->thi_key_ );
 
            // 2. additional buoyancy-related flow
@@ -246,21 +246,21 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantInc
            // ---------------------------------------------
            if(with_capillary_spreading_){
 
-               const double64 k_lambda_overbar(relperm.Permeability() * relperm.G());
+               const double k_lambda_overbar(relperm.Permeability() * relperm.G());
                // computing the capillary pressure gradient
-               if ( k_lambda_overbar > numeric_limits<double64>::epsilon() )
+               if ( k_lambda_overbar > numeric_limits<double>::epsilon() )
                {
                    fill( gradPc.begin(), gradPc.end(), 0. );
                    (*(*eit)).dN_AtBaryCenter( DN );
                    for ( size_t j=0U; j<(*eit)->Nodes(); j++ ) {
-                       double64 sn = (*eit)->N(j)->Read( this->adv1_key_ );
+                       double sn = (*eit)->N(j)->Read( this->adv1_key_ );
                        relperm.SaturationWettingPhase( 1. - sn );
                        relperm.EffectiveSaturation();
-                       double64 pc = relperm.pc_Phase( );
+                       double pc = relperm.pc_Phase( );
                        for ( size_t k=0U; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
                    }
                    // getting the maximum capillary flux (G= lambda overbar)
-                   double64  magnitude_grad_pc(gradPc[0]); // 1D
+                   double  magnitude_grad_pc(gradPc[0]); // 1D
                    if      ( dim == 3U ) magnitude_grad_pc = sqrt(gradPc[0]*gradPc[0]+gradPc[1]*gradPc[1]+gradPc[2]*gradPc[2]);
                    else if ( dim == 2U ) magnitude_grad_pc = hypot(gradPc[0],gradPc[1]);
 
@@ -272,7 +272,7 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantInc
            // 4. calculating the CFL criterion from the cell diameter
            // -------------------------------------------------------
            // guarding against degenerate cases
-           if ( velocity > numeric_limits<double64>::epsilon() and cell_diameter > numeric_limits<double64>::epsilon() ) {
+           if ( velocity > numeric_limits<double>::epsilon() and cell_diameter > numeric_limits<double>::epsilon() ) {
                 courant_increment = std::min( courant_increment, cell_diameter / velocity );
              }
         }
@@ -312,8 +312,8 @@ onset of the advection.
 @attention After every sub-CFL transport step, the method prints a dot on the screen. 
   */
 template<size_t dim, template<size_t> class STP>
-double64  TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoPhaseModel<dim>& relperm, 
-                                                                            double64 time_interval )
+double  TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoPhaseModel<dim>& relperm, 
+                                                                            double time_interval )
  {
     this->gref_.RenumberNodes();
 
@@ -323,12 +323,12 @@ double64  TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoP
     // 1. compute the CFL condition to identify value for overstepping
     // ---------------------------------------------------------------
 
-    const double64 MAX_TIME(86400. * 365.);
-    const double64 courant_increment = this->AnisotropicCourantIncrement( relperm, MAX_TIME );
+    const double MAX_TIME(86400. * 365.);
+    const double courant_increment = this->AnisotropicCourantIncrement( relperm, MAX_TIME );
                                  
     this->cfl_multiplier_ = (with_capillary_spreading_==true) ? 0.1 : 0.4;
 
-    double64  time(0.), time_increment = std::min( this->cfl_multiplier_ * courant_increment, time_interval );
+    double  time(0.), time_increment = std::min( this->cfl_multiplier_ * courant_increment, time_interval );
 
     cout<<"\n Time interval="<<time_interval<<endl;
     cout<<" Courant increment="<<courant_increment<<endl;
@@ -361,10 +361,10 @@ double64  TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoP
 
 /// Copies the result vector to model performing range checks against the PropertyDatabase.
 template<size_t dim, template<size_t> class STP>
-double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const csmp::Index& adv_key,
+double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const csmp::Index& adv_key,
                                                                           bool show_range ) const
  {
-    double64         rmin, rmax,
+    double         rmin, rmax,
                      amin = RESULT[0],
                      amax = RESULT[0],
                      difference_to_last_output(0.);
@@ -416,12 +416,12 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const 
 
 /// Copies the result vector and the saturation of the other phase to model performing range checks against the PropertyDatabase.
 template<size_t dim, template<size_t> class STP>
-double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const csmp::Index& adv1_key,
+double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const csmp::Index& adv1_key,
                                                                           const csmp::Index& adv2_key,
                                                                           bool show_range,
                                                                           bool do_range_check) const
  {
-    double64        rmin, rmax,
+    double        rmin, rmax,
                     amin = RESULT[0],
                     amax = RESULT[0],
                     difference_to_last_output(0.);
@@ -484,14 +484,14 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const 
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
 {
-   typename vector<pair<double64,double64> >::iterator  sit(this->SMINMAX.begin());
+   typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
 
    for ( typename vector<Node<dim>*>::const_iterator
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
          // 1. the advected property value at the current node is assigned to min-max pair
         (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
         for ( size_t i=0U; i<(*nit)->Neighbors(); i++ ) {
-             const double64 adv_var((*nit)->Neighbor(i)->Read( this->adv1_key_ ));
+             const double adv_var((*nit)->Neighbor(i)->Read( this->adv1_key_ ));
              // if element value is smaller the current minimum is assigned etc.
              (*sit).first  = std::min( (*sit).first,  adv_var );
              (*sit).second = std::max( (*sit).second, adv_var );
@@ -504,26 +504,25 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExceptTheCurrentNode()
 {
-   typename vector<pair<double64,double64> >::iterator  sit(this->SMINMAX.begin());
-   Element<dim>     current_el;
+   typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
    size_t  current_n_id,global_neighb_el_id;
    for ( typename vector<Node<dim>*>::const_iterator
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
 
          current_n_id= (*(*nit)).Idx();
          // 1. the advected property value at the current node is assigned to min-max pair
-         (*sit).first =std::numeric_limits<double64>::max();
-         (*sit).second = std::numeric_limits<double64>::min();
+         (*sit).first =std::numeric_limits<double>::max();
+         (*sit).second = std::numeric_limits<double>::min();
 
          for(  size_t p = 0; p< (*nit)->Parents() ; p++ ){
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
-               current_el = *this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el.Nodes();i++){
+               Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
+               for(size_t i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
-                   if(current_n_id!=current_el.N(i)->Idx()){
-                       const double64 adv_var(current_el.N(i)->Read( this->adv1_key_ ));
+                   if(current_n_id!=current_el->N(i)->Idx()){
+                       const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
                        (*sit).first  = std::min( (*sit).first,  adv_var );
                        (*sit).second = std::max( (*sit).second, adv_var );
                    }
@@ -538,8 +537,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyIncludingTheCurrentNode()
 {
-   typename vector<pair<double64,double64> >::iterator  sit(this->SMINMAX.begin());
-   Element<dim>     current_el;
+   typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
    size_t  current_n_id,global_neighb_el_id;
    for ( typename vector<Node<dim>*>::const_iterator
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
@@ -552,11 +550,11 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
-               current_el = *this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el.Nodes();i++){
+               Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
+               for(size_t i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
-                   if(current_n_id!=current_el.N(i)->Idx()){
-                       const double64 adv_var(current_el.N(i)->Read( this->adv1_key_ ));
+                   if(current_n_id!=current_el->N(i)->Idx()){
+                       const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
                        (*sit).first  = std::min( (*sit).first,  adv_var );
                        (*sit).second = std::max( (*sit).second, adv_var );
                    }
@@ -596,7 +594,7 @@ This method is used by the higher order-in space accurate transport scheme.
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::Compose2PhaseSolution(
                                                                TwoPhaseModel<dim>& relperm,
-                                                               double64 time_interval,
+                                                               double time_interval,
                                                                bool with_divergence_free_correction)
  {
      for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ ) 
@@ -605,10 +603,10 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::Compose2PhaseSolution(
 
           // 1. A FLUX_BALANCE computation is performed but only if the node is not at the model boundary
           if ( this->gref_.IsPerimeterNode(nidx) and 
-               fabs(this->FLUX_BALANCE[nidx]) > numeric_limits<double64>::epsilon() )
+               fabs(this->FLUX_BALANCE[nidx]) > numeric_limits<double>::epsilon() )
             {
               // computing the average fractional flow for the current finite volume
-              double64 fn_avg = static_cast<double64>(0.);
+              double fn_avg = static_cast<double>(0.);
               // for each finite volume, f is evaluated on a sector by sector basis
               for ( size_t t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
                    const size_t nid(this->gref_.N(nidx)->ParentNodeNumber(t));
@@ -619,7 +617,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::Compose2PhaseSolution(
                    // weighted for each specific FV sector
                    fn_avg += relperm.f_Phase(2U);
                 }
-               fn_avg /= static_cast<double64>(this->gref_.N(nidx)->Parents());
+               fn_avg /= static_cast<double>(this->gref_.N(nidx)->Parents());
                
                // to compensate for any non-physical or physical divergence, the flux balance must be substracted
                // (note that is opposite to implicit scheme where this enters the LHS) 
@@ -675,15 +673,15 @@ template<size_t dim, template<size_t> class STP>
 bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoundaryFiniteVolume(
                                                            const Node<dim>* nd_ptr,
                                                            TwoPhaseModel<dim>& relperm,
-                                                           double64& inflow, double64& flux_balance ) const
+                                                           double& inflow, double& flux_balance ) const
  {
-    inflow = flux_balance = static_cast<double64>(0.);
+    inflow = flux_balance = static_cast<double>(0.);
 
     // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
     for ( size_t t=0U; t<nd_ptr->Parents(); t++ ) {
          Element<dim>* const eptr(nd_ptr->Parent(t));
          const size_t nid(nd_ptr->ParentNodeNumber(t));
-         double64  flux(0.);
+         double  flux(0.);
 
          // k, swr, snr initialisation precedes all other steps
          relperm.Initialize( *eptr );
@@ -697,7 +695,7 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
               size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
               size_t inside_node = eptr->FV()->InsideNode( iFacet );
               // get velocity across FV facet
-              double64 velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *
+              double velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *
                               this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
               // using upstream weighted first-order fluxes (gravity is not considered)
               if ( nid == inside_node )
@@ -729,8 +727,8 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignFractionalFlowBoundaryConditions( TwoPhaseModel<dim>& relperm )
  {
-    double64        inflow, flux_balance;
-    const double64  zero(0.);
+    double        inflow, flux_balance;
+    const double  zero(0.);
 
     // loop over the boundary finite volumes and adjust fluxes
     for ( size_t i=this->gref_.InteriorNodes(); i<this->gref_.Nodes(); i++ )
@@ -763,13 +761,13 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignFractionalFlowBound
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundaryConditions(TwoPhaseModel<dim>& relperm )
  {
-    double64        flux_balance,inflow;
+    double        flux_balance,inflow;
     Point<dim>      dsdn;
     DenseMatrix<DM_MIN>    DN;
 
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> velo;
-    double64 facetArea;
+    double facetArea;
 
     // loop over the boundary finite volumes and adjust fluxes
     for ( size_t i=this->gref_.InteriorNodes(); i<this->gref_.Nodes(); i++ )
@@ -778,13 +776,13 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 
          if((nd_ptr->Status(no_flow_bc_key_) == DIRICH)&&(nd_ptr->Status(this->adv1_key_)!=DIRICH)){
              // if the flux balance cannot be evaluated because the node sits at a model boundary
-             flux_balance = static_cast<double64>(0.);
-             inflow = static_cast<double64>(0.);
+             flux_balance = static_cast<double>(0.);
+             inflow = static_cast<double>(0.);
 
              // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
              for ( size_t t=0U; t<nd_ptr->Parents(); t++ )
                  {
-                      double64  flux(0.);
+                      double  flux(0.);
                       Element<dim>* e(nd_ptr->Parent(t));
                       const size_t pnid(nd_ptr->ParentNodeNumber(t));
                       // k, swr, snr initialisation precedes all other steps
@@ -797,7 +795,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
                           e->dN_AtBaryCenter( DN );
                           dsdn = 0.;
                           for ( size_t j=0U; j<e->Nodes(); j++ ) {
-                               const double64 sn = e->N(j)->Read( this->adv1_key_);
+                               const double sn = e->N(j)->Read( this->adv1_key_);
                                for ( size_t k=0U; k<dim; k++ ) dsdn[k] += DN(k,j) * sn;
                           }
 
@@ -812,21 +810,21 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
                            e->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 
                            // get velocity across FV facet
-                           //double64 viscous_vel_component = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
-                           //double64 grav_vel_component = this->STENCIL_DATA[eptr->Idx()].FacetNormalComponent(iFacet,v) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
+                           //double viscous_vel_component = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
+                           //double grav_vel_component = this->STENCIL_DATA[eptr->Idx()].FacetNormalComponent(iFacet,v) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
                            Point<dim>  n =e->FacetNormal(iFacet);
                            e->Read( this->vel_key_, velo );
                            facetArea = e->FacetArea(iFacet);
 
-                           double64 viscous_vel_component = velo.DotProduct(n);
+                           double viscous_vel_component = velo.DotProduct(n);
 
                            if( this->with_gravitational_forces_){
 
-                               double64 gravity_vel_component = n[v];
+                               double gravity_vel_component = n[v];
 
                                if( this->with_capillary_spreading_ ){
 
-                                   const double64 capillary_vel_component( -dotProduct( dsdn, n) *relperm.dpcds_Phase( ));
+                                   const double capillary_vel_component( -dotProduct( dsdn, n) *relperm.dpcds_Phase( ));
 
                                    if ( pnid == inside_node )
                                        flux += (relperm.f_Phase(2U) * viscous_vel_component  - relperm.GravityMultiplier_G()*gravity_vel_component - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
@@ -847,7 +845,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 
                                if( this->with_capillary_spreading_ ){
 
-                                   const double64 capillary_vel_component( -dotProduct( dsdn, n)*relperm.dpcds_Phase( ));
+                                   const double capillary_vel_component( -dotProduct( dsdn, n)*relperm.dpcds_Phase( ));
 
                                    if ( pnid == inside_node )
                                        flux += (relperm.f_Phase(2U) * viscous_vel_component  - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
@@ -911,7 +909,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
                                                                TwoPhaseModel<dim>& relperm,
-                                                               double64 time_interval )
+                                                               double time_interval )
  {
     for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ ){
 
@@ -919,7 +917,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
           // 1. A FLUX_BALANCE computation is performed but only if the node is not at the model boundary
           if ( !this->gref_.IsPerimeterNode(nidx) )
           {
-              double64 div(0.0);
+              double div(0.0);
               // for each finite volume, f is evaluated on a sector by sector basis
               for ( size_t t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
                    Element<dim>* const eptr(nd_ptr->Parent(t));
@@ -935,7 +933,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
                         size_t inside_node,outside_node;
                         eptr->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 
-                        double64 velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
+                        double velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
                         // using upstream weighted first-order fluxes (gravity is not considered)
                         if ( nid == inside_node )
                           div+=velo;
@@ -970,9 +968,9 @@ are also considered.
  */
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable1stOrder( TwoPhaseModel<dim>& relperm,
-                                                                               double64 time_increment )
+                                                                               double time_increment )
  {
-    fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
+    fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
 
     vector<FV_Parameter>::const_iterator  fvt = this->STENCIL_DATA.begin();
 
@@ -1045,9 +1043,9 @@ using the implicit scheme.
 */
 template<size_t dim, template<size_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable2ndOrder( TwoPhaseModel<dim>& relperm,
-                                                                               double64 time_increment )
+                                                                               double time_increment )
  {
-    fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
+    fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
 
     // 1. finding smin/smax of previous solution in the neighborhood of each FV
     this->MinMaxAdvectedProperty();

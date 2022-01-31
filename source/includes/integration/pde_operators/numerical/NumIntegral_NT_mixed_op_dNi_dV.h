@@ -20,23 +20,23 @@ class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim> {
                               const char* mtrl,                  // e.g., permeability
                               const char* test );                // e.g., fluid pressure
     
-    virtual void GetOperands( CELL& e );
-    virtual void ComputeContribution( CELL& e );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
     
     void SpatialDerivative( size_t xyz=2 );
     
     /// do not use MultiplyWithTimeIncrement() here since this would multiply
     /// the whole contribution
-    void MaterialPropertyTimeMultiplier( double64 time_increment );
+    void MaterialPropertyTimeMultiplier( double time_increment );
   
   private:
-    std::vector<double64>         IPOL, DNI;
+    std::vector<double>         IPOL, DNI;
     DenseMatrix<DM_MIN>           DN;
     Index                         mtrl_key, nmult_key;
     ScalarVariable                oper_eprop, eprop;
-    const double64                gravity;   // acceleration of gravity
+    const double                gravity;   // acceleration of gravity
     size_t                        xyz; // 1=x, 2=y, 3=z
-    double64                      mtrl_time_multiplier;
+    double                      mtrl_time_multiplier;
     std::vector<ScalarVariable >  oper_nprop, mtrl_nprop;
 };
 

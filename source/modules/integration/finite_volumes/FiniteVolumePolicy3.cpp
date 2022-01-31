@@ -203,7 +203,7 @@ void FiniteVolumePolicy<3U,CELL>::Local_dN_At( const Point<3U>& rst ) const
      @attention SKM: Caution! - not clear what FEM matrices have to do with FV traits
 */
 template<template<size_t> class CELL>
-double64 FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
+double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
                                                 DenseMatrix<DM_MIN>& DN ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -224,7 +224,7 @@ double64 FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
               DN(1U,i) = e->FE()->DNS[i];
               DN(2U,i) = e->FE()->DNT[i];
            }
-         double64 detJ(e->FE()->JacobianInverse());
+         double detJ(e->FE()->JacobianInverse());
          DN = e->FE()->JINV * DN;
          return detJ;
       }
@@ -245,14 +245,14 @@ double64 FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          // compute Jacobi J' := "determinant" of the 3x2 Jacobian
          // using equation J' = ( E * g - F^2 )^0.5 see CELL-development-in-CSP.doc equation (15)
          // compute E, F, and g
-         double64  efg0(0.), efg1(0.), efg2(0.);
+         double  efg0(0.), efg1(0.), efg2(0.);
          for ( size_t i=0; i<3U; i++ ) {
               efg0 += e->FE()->JAC(0U,i) * e->FE()->JAC(0U,i);
               efg1 += e->FE()->JAC(0U,i) * e->FE()->JAC(1U,i);
               efg2 += e->FE()->JAC(1U,i) * e->FE()->JAC(1U,i);
            }
-         double64  detJ(sqrt(efg0 * efg2 - efg1 * efg1));
-         double64  det_inverse(1. / (detJ * detJ));
+         double  detJ(sqrt(efg0 * efg2 - efg1 * efg1));
+         double  det_inverse(1. / (detJ * detJ));
 
          for ( size_t i=0; i<nodes; i++ ) {
               DN(0U,i)  = det_inverse * e->FE()->JAC(0U,0U) *
@@ -298,7 +298,7 @@ double64 FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
 
 
 // only for scalars
-/** Returns double64 value of property at given internal facet integration point.
+/** Returns double value of property at given internal facet integration point.
 
 @param iFacet index (No) of the internal facet isnside the FE
 @param ip index (No) of the integration point on the facet
@@ -310,7 +310,7 @@ For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 facet integration point only.
 */
 template<template<size_t> class CELL>
-double64 FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint(
+double FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint(
                                                  size_t iFacet,
                                                  size_t ip,
                                                  const csmp::Index& prop_key ) const
@@ -329,7 +329,7 @@ double64 FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint(
     N_AtFacetIntegrationPoint( iFacet, ip );
 
     // interpolating property to integration point
-    double64  sum(static_cast<double64>(0.));
+    double  sum(static_cast<double>(0.));
 
     assert( e != nullptr );
     const size_t nodes(e->Nodes());
@@ -345,7 +345,7 @@ double64 FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint(
 
 /**
 
-Returns double64 value of property at given volume integration point, inside the
+Returns double value of property at given volume integration point, inside the
 volumetric sector of FE, composing FV.
 
 @param ip index (No) of the integration point on the facet;
@@ -357,7 +357,7 @@ For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 volume sector integration point only.
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( size_t iSector,
+double  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( size_t iSector,
                                                                                  size_t ip,
                                                                                  const csmp::Index& prop_key ) const
 {
@@ -375,7 +375,7 @@ double64  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( si
 
     assert( e != nullptr );
     // interpolating property to integration point
-    double64  sum(0.);
+    double  sum(0.);
     const size_t nodes(e->Nodes());
     for ( size_t i=0; i<nodes; i++ )
       sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
@@ -521,7 +521,7 @@ As the method calculates the value of the surface integral for given property an
 facet, the value is returned by the method.
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::FacetIntegral( size_t iSector,
+double  FiniteVolumePolicy<3U,CELL>::FacetIntegral( size_t iSector,
                                                          const csmp::Index& prop_key ) const
 {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -533,7 +533,7 @@ double64  FiniteVolumePolicy<3U,CELL>::FacetIntegral( size_t iSector,
     assert( e != nullptr );
     e->CoordinateMatrix();
 
-    double64  integral(static_cast<double64>(0.));
+    double  integral(static_cast<double>(0.));
     for ( size_t iFacet=0U; iFacet<fvptr_->FacetsPerSector(iSector); iFacet++ )
       for ( size_t j=0U; j<fvptr_->IntegrationPointsPerFacet(); j++ ) {
              // 1. take integration point location from FV stencil
@@ -568,7 +568,7 @@ As the method calculates the value of the volume integral for the given property
 volume sector, the value is returned by the method.
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::SectorIntegral( size_t iSector,
+double  FiniteVolumePolicy<3U,CELL>::SectorIntegral( size_t iSector,
                                                           const csmp::Index& prop_key ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -580,7 +580,7 @@ double64  FiniteVolumePolicy<3U,CELL>::SectorIntegral( size_t iSector,
     assert( e != nullptr );
     e->CoordinateMatrix();
 
-    double64 fIntegral(0.);
+    double fIntegral(0.);
     for ( size_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
         fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
         e->FE()->JacobianAt(e->FE()->NRST );
@@ -629,7 +629,7 @@ FVPEM method is working with 1 facet integration point only.
 
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal(
+double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal(
                                                  size_t iFacet,
                                                  const VectorVariable<3U>& vc
                                                  ) const
@@ -669,7 +669,7 @@ For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 facet integration point only.
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( size_t iFacet,
+double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( size_t iFacet,
                                                                const csmp::Index& prop_key
                                                              ) const
 {
@@ -694,9 +694,9 @@ double64  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( size_t iFacet,
     assert( e != nullptr );
     e->N_At( Point<3U>(e->FE()->NRST) );
 
-    double64 sum0(static_cast<double64>(0.));
-    double64 sum1(static_cast<double64>(0.));
-    double64 sum2(static_cast<double64>(0.));
+    double sum0(static_cast<double>(0.));
+    double sum1(static_cast<double>(0.));
+    double sum2(static_cast<double>(0.));
 
     const size_t nodes(e->Nodes());
     for ( size_t i=0; i<nodes; i++ ) {
@@ -732,7 +732,7 @@ Method automatically takes into account composite nature of the sector at the ap
 the pyramid.
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::SectorVolume( size_t iSector ) const
+double  FiniteVolumePolicy<3U,CELL>::SectorVolume( size_t iSector ) const
  {
    const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
 
@@ -741,7 +741,7 @@ double64  FiniteVolumePolicy<3U,CELL>::SectorVolume( size_t iSector ) const
    assert( e != nullptr );
    e->CoordinateMatrix();
 
-   double64 fVolume(0.);
+   double fVolume(0.);
    for ( size_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
         fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
         e->FE()->JacobianAt(e->FE()->NRST);
@@ -767,7 +767,7 @@ therefore, only the distance between these two points will be calculated.
 
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::FacetArea( size_t iFacet ) const
+double  FiniteVolumePolicy<3U,CELL>::FacetArea( size_t iFacet ) const
 {
    const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
    assert( iFacet < fvptr_->Facets());
@@ -860,7 +860,7 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( size_t iFacet ) const
     }
 
   // line element: unit normal is parallel to element and point from node i to i+1
-  const double64 elength(e->Volume());
+  const double elength(e->Volume());
   return Point<3U>( (e->N(1U)->x()-e->N(0U)->x()) / elength,
                     (e->N(1U)->y()-e->N(0U)->y()) / elength,
                     (e->N(1U)->z()-e->N(0U)->z()) / elength );
@@ -869,16 +869,17 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( size_t iFacet ) const
 
 
 
-    // XXX DELETEME
-    template<template<size_t> class CELL>
-    Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetPoint( size_t iFacet, size_t iPoint ) const
-    {
-        const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
-        return e->RstToXYZ(fvptr_->FacetPoint(iFacet,iPoint));
-    }
 
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
+  Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetPoint( size_t iFacet, size_t iPoint ) const
+  {
+      const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
+      return e->RstToXYZ(fvptr_->FacetPoint(iFacet,iPoint));
+  }
+
+
+template<template<size_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
 {
   const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
   if(e->IsLineElement()) return 1.;
@@ -889,7 +890,7 @@ double64  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
     const Point<3U> fp0( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
     const Point<3U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
 
-    const double64 detJ ( sqrt( pow(fp0[0]-fp1[0],2) + pow(fp0[1]-fp1[1],2) + pow(fp0[2]-fp1[2],2) ));
+    const double detJ ( sqrt( pow(fp0[0]-fp1[0],2) + pow(fp0[1]-fp1[1],2) + pow(fp0[2]-fp1[2],2) ));
     return detJ;
   }
 
@@ -901,7 +902,7 @@ double64  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
     const Point<3U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
     const Point<3U> fp2( e->RstToXYZ(fvptr_->FacetPoint(iFacet,2U)) );
 
-    const double64 j1( -fp0[0]+fp1[0] ),
+    const double j1( -fp0[0]+fp1[0] ),
                    j2( -fp0[1]+fp1[1] ),
                    j3( -fp0[2]+fp1[2] ),
                    j4( -fp0[0]+fp2[0] ),
@@ -909,9 +910,9 @@ double64  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
                    j6( -fp0[2]+fp2[2] );
 
     // 0.5 is the area of the triangle in local space
-    const double64 det( sqrt((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-pow((j1*j4+j2*j5+j3*j6),2)) );
+    const double det( sqrt((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-pow((j1*j4+j2*j5+j3*j6),2)) );
 
-    const double64 area = 0.5 * det;
+    const double area = 0.5 * det;
 
     return area;
   }
@@ -922,7 +923,7 @@ double64  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
   const Point<3U> fp2( e->RstToXYZ(fvptr_->FacetPoint(iFacet,2U)) );
   const Point<3U> fp3( e->RstToXYZ(fvptr_->FacetPoint(iFacet,3U)) );
 
-  const double64 j1( -0.25* (fp0[0]-fp1[0]-fp2[0]+fp3[0] ) ),
+  const double j1( -0.25* (fp0[0]-fp1[0]-fp2[0]+fp3[0] ) ),
                  j2( -0.25* (fp0[1]-fp1[1]-fp2[1]+fp3[1] ) ),
                  j3( -0.25* (fp0[2]-fp1[2]-fp2[2]+fp3[2] ) ),
                  j4( -0.25* (fp0[0]+fp1[0]-fp2[0]-fp3[0] ) ),
@@ -930,9 +931,9 @@ double64  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
                  j6( -0.25* (fp0[2]+fp1[2]-fp2[2]-fp3[2] ) );
 
   // 4 is the area of the quadrilateral in local space
-  const double64 det( sqrt((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-pow((j1*j4+j2*j5+j3*j6),2)) );
+  const double det( sqrt((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-pow((j1*j4+j2*j5+j3*j6),2)) );
 
-  const double64 area = 4. * det;
+  const double area = 4. * det;
 
   return area;
 
@@ -957,11 +958,11 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormalMapped( size_t iFacet ) const
       // not needed by RST to XYZ but by UnitNormal
       e->CoordinateMatrix();
       e->FE()->UnitNormal( e->FE()->NRST );
-      const double64 x(e->FE()->NRST[0]), y(e->FE()->NRST[1]), z(e->FE()->NRST[2]);
+      const double x(e->FE()->NRST[0]), y(e->FE()->NRST[1]), z(e->FE()->NRST[2]);
 
-      const double64 j1(-0.5*(fp0[0]-fp1[0]));
-      const double64 j2(-0.5*(fp0[1]-fp1[1]));
-      const double64 j3(-0.5*(fp0[2]-fp1[2]));
+      const double j1(-0.5*(fp0[0]-fp1[0]));
+      const double j2(-0.5*(fp0[1]-fp1[1]));
+      const double j3(-0.5*(fp0[2]-fp1[2]));
 
       Point<3U>  normal(  x*x*j1    + (x*y+z)*j2 + (x*z-y)*j3,
                          (x*y-z)*j1 +  y*y*j2    + (y*z+x)*j3,
@@ -973,7 +974,7 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormalMapped( size_t iFacet ) const
     }
 
   //e->IsVolumeElement
-    double64 j1,j2,j3,j4,j5,j6;
+    double j1,j2,j3,j4,j5,j6;
     switch (fvptr_->FacetPoints(iFacet))
     {
         case 3:
@@ -1012,9 +1013,9 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormalMapped( size_t iFacet ) const
         }
     }
 
-  const double64 det( fabs((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-square(j1*j4+j2*j5+j3*j6) ));
+  const double det( fabs((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-square(j1*j4+j2*j5+j3*j6) ));
 
-  const double64 jj1 ((j1*j1+j2*j2+j3*j3)/det),
+  const double jj1 ((j1*j1+j2*j2+j3*j3)/det),
                   jj2 (-(j1*j4+j2*j5+j3*j6)/det),
                   jj3 (jj2),
                   jj4 ((j4*j4+j5*j5+j6*j6)/det);
@@ -1046,11 +1047,11 @@ The method is applicable to the algorithm of the parametric calculation of fluxe
 It should be used  together with the method  ParametricProjectionOnFacetNormal().
 */
 template<template<size_t> class CELL>
-double64  FiniteVolumePolicy<3U,CELL>::ParametricFacetArea( size_t iFacet ) const
+double  FiniteVolumePolicy<3U,CELL>::ParametricFacetArea( size_t iFacet ) const
 {
   assert(iFacet<fvptr_->Facets());
 
-  double64  area(static_cast<double64>(0.));
+  double  area(static_cast<double>(0.));
   
   // loop that loops only if there are indeed multiple integration points
   for ( size_t j=0; j<fvptr_->IntegrationPointsPerFacet(); j++ )

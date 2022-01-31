@@ -26,63 +26,63 @@ class NodeCenteredFiniteVolumeAlgorithm {
     void ResetRow( size_t nid);
     void ZeroRHS( size_t nid );
 
-    void AddToLHS( size_t i, size_t j, double64 addition );
-    void AddToRHS( size_t i, double64 addition );
-    void AddToRESULT( size_t i, double64 addition );
-    void AssignRESULT( size_t i, double64 result );
-    double64   Result( size_t i ) const;
-    std::vector<double64>&  ResultVector();
-    std::vector<double64>&  RHSVector();
+    void AddToLHS( size_t i, size_t j, double addition );
+    void AddToRHS( size_t i, double addition );
+    void AddToRESULT( size_t i, double addition );
+    void AssignRESULT( size_t i, double result );
+    double   Result( size_t i ) const;
+    std::vector<double>&  ResultVector();
+    std::vector<double>&  RHSVector();
 
-    double64  LHS_Value( size_t i,  size_t j ) const;
+    double  LHS_Value( size_t i,  size_t j ) const;
 
 
-    typename std::vector<double64>::iterator  ResultsBegin();
-    typename std::vector<double64>::iterator  ResultsEnd();
+    typename std::vector<double>::iterator  ResultsBegin();
+    typename std::vector<double>::iterator  ResultsEnd();
 
     /// FV volume terms in diagonal & first-order terms=inter-FV fluxes in off-diagonal
-    void AccumulateLHS( const StencilProcessor<dim>& es, double64 time_multiplier );
+    void AccumulateLHS( const StencilProcessor<dim>& es, double time_multiplier );
 
     /// Accumulation Process for Nonlinear Systems
 
     void AccumulateMatrix_NonlinearNewtonRaphson( const StencilProcessor<dim>&,
-                                                  std::vector<double64>& SAT0, double64 time_multiplier );
+                                                  std::vector<double>& SAT0, double time_multiplier );
 
-    void AccumulateResidual_NonlinearNewtonRaphson( const StencilProcessor<dim>&, std::vector<double64>& SAT0,
-                                                    double64 time_multiplier );
+    void AccumulateResidual_NonlinearNewtonRaphson( const StencilProcessor<dim>&, std::vector<double>& SAT0,
+                                                    double time_multiplier );
 
     void AccumulateMatrixAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>&,
-                                                            std::vector<double64>& SAT0, size_t nid,size_t pnid,
-                                                            double64 time_multiplier, const csmp::Index& adv1_key );
+                                                            std::vector<double>& SAT0, size_t nid,size_t pnid,
+                                                            double time_multiplier, const csmp::Index& adv1_key );
 
     void AccumulateResidualAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>&,
-                                                              std::vector<double64>& SAT0, size_t nid,size_t pnid,
-                                                              double64 time_multiplier, const csmp::Index& adv1_key );
+                                                              std::vector<double>& SAT0, size_t nid,size_t pnid,
+                                                              double time_multiplier, const csmp::Index& adv1_key );
 
     void CompensateInflowOutFlowBoundaries( size_t nid,
-                                            const double64& inflow,
-                                            const double64& flux_balance);
+                                            const double& inflow,
+                                            const double& flux_balance);
 
     /// Backward-Euler righthandside (psi at t0 * pore-volume) / dt for non-iterative computations
-    void AccumulateRHS( const StencilProcessor<dim>& es, double64 time_multiplier );
+    void AccumulateRHS( const StencilProcessor<dim>& es, double time_multiplier );
 
     /// for iterative computations
-    void AccumulateRHS( const StencilProcessor<dim>& es, std::vector<double64>& SAT0, double64 time_multiplier );
+    void AccumulateRHS( const StencilProcessor<dim>& es, std::vector<double>& SAT0, double time_multiplier );
 
     /// higher-order solution is added from RHS (first order in time)
     void AccumulateHigherOrderRHS( const StencilProcessor<dim>& );
 
     /// higher-order solution is subtracted from RHS (second order in time)
     void AccumulateHigherOrderRHS( const StencilProcessor<dim>&,
-                                   const std::vector<std::vector<double64> >& FACETFLUXES0,
-                                   const std::vector<std::vector<double64> >& LTDSATS0 );
+                                   const std::vector<std::vector<double> >& FACETFLUXES0,
+                                   const std::vector<std::vector<double> >& LTDSATS0 );
 
       /// first-order Backward Euler solution is added to RHS
     void AddToRHS( const StencilProcessor<dim>& );
-    void AddToRHS( const StencilProcessor<dim>&, std::vector<double64>& SAT0);
+    void AddToRHS( const StencilProcessor<dim>&, std::vector<double>& SAT0);
 
     void SubtractNonConservativeOutFluxesFromRHS( TwoPhaseModel<dim>&,
-                                                  const std::vector<double64>& FLUX_BALANCE,
+                                                  const std::vector<double>& FLUX_BALANCE,
                                                   const csmp::Index& ad_key );
 
     /// diffusion and other divergent fluxes
@@ -101,13 +101,13 @@ class NodeCenteredFiniteVolumeAlgorithm {
     void SolveMatrixEquation();
 
     /// results are stored back in the Region where condition flag is PLAIN
-    double64 OutputResults(const PropertyDatabase<dim>&,
+    double OutputResults(const PropertyDatabase<dim>&,
                            const csmp::Index& adv_key,
                            bool show_range ,
                            const size_t var_comp_nr=0) const;
 
     /// multiphase version for range 0..1 (adv1=wetting phase=1)
-    double64 OutputResults( const PropertyDatabase<dim>&,
+    double OutputResults( const PropertyDatabase<dim>&,
                             size_t result_phase, // enter either 1(w) or 2(nw) here
                             const csmp::Index& adv1_key,
                             const csmp::Index& adv2_key,
@@ -115,23 +115,23 @@ class NodeCenteredFiniteVolumeAlgorithm {
 
 
     /// testing only: results are stored back in the Region where condition flag is PLAIN
-    double64 OutputResultsWithL2NormRes( const PropertyDatabase<dim>&, const csmp::Index& adv_key, bool show_range ) const;
+    double OutputResultsWithL2NormRes( const PropertyDatabase<dim>&, const csmp::Index& adv_key, bool show_range ) const;
 
     /// multiphase version for range 0..1 (adv1=wetting phase=1)
-    double64 OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>&,
+    double OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>&,
                               size_t result_phase, // enter either 1(w) or 2(nw) here
                               const csmp::Index& adv1_key,
                               const csmp::Index& adv2_key,
                               bool show_range );
 
     /// multiphase version for range 0..1 (adv1=wetting phase=1)
-    int32 OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>&,
+    int32_t OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>&,
                               size_t result_phase, // enter either 1(w) or 2(nw) here
                               const csmp::Index& adv1_key,
                               const csmp::Index& adv2_key,
                               bool show_range,
-                              std::vector<double64>&,
-                              std::vector<double64>&);
+                              std::vector<double>&,
+                              std::vector<double>&);
 
     /// interface to solver settings and instance
     CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS&  GetSolverSettings();
@@ -145,53 +145,53 @@ class NodeCenteredFiniteVolumeAlgorithm {
   private:
     Region<dim>&           gref_;
     SparseMatrix           LHS;
-    std::vector<double64>  RHS, RESULT;
+    std::vector<double>  RHS, RESULT;
     DenseMatrix<DM_MIN>    DN, DNT;
     Solver*                solver_;
-    const uint32           MAX_NODES_GAUSS_SOLVER;
+    const uint32_t           MAX_NODES_GAUSS_SOLVER;
     bool                   firstCall_;
     bool                   verbose_;
 };
 
 
 template<size_t dim>
-inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToLHS( size_t i, size_t j, double64 addition )
+inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToLHS( size_t i, size_t j, double addition )
  { LHS.Add( i, j, addition ); }
 
 template<size_t dim>
-inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( size_t i, double64 addition )
+inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( size_t i, double addition )
  { RHS[i] += addition; }
 
 template<size_t dim>
-inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRESULT( size_t i, double64 addition )
+inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRESULT( size_t i, double addition )
  { RESULT[i] += addition; }
 
 template<size_t dim>
-inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AssignRESULT( size_t i, double64 fvresult )
+inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AssignRESULT( size_t i, double fvresult )
  { RESULT[i] = fvresult; }
 
 template<size_t dim>
-inline double64 NodeCenteredFiniteVolumeAlgorithm<dim>::Result( size_t i ) const
+inline double NodeCenteredFiniteVolumeAlgorithm<dim>::Result( size_t i ) const
  { return RESULT[i]; }
 
 template<size_t dim>
-inline std::vector<double64>&  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultVector()
+inline std::vector<double>&  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultVector()
  { return RESULT; }
 
 template<size_t dim>
-inline std::vector<double64>&  NodeCenteredFiniteVolumeAlgorithm<dim>::RHSVector()
+inline std::vector<double>&  NodeCenteredFiniteVolumeAlgorithm<dim>::RHSVector()
  { return RHS; }
 
 template<size_t dim>
-inline typename std::vector<double64>::iterator  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultsBegin()
+inline typename std::vector<double>::iterator  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultsBegin()
  { return RESULT.begin(); }
 
 template<size_t dim>
-inline typename std::vector<double64>::iterator  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultsEnd()
+inline typename std::vector<double>::iterator  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultsEnd()
  { return RESULT.end(); }
 
 template<size_t dim>
-inline double64 NodeCenteredFiniteVolumeAlgorithm<dim>::LHS_Value( size_t i,  size_t j ) const
+inline double NodeCenteredFiniteVolumeAlgorithm<dim>::LHS_Value( size_t i,  size_t j ) const
  { return LHS(i,j); }
 
 

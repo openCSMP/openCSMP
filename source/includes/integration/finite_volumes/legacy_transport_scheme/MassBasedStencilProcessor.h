@@ -19,7 +19,7 @@ public:
   
   csmp::Index adv_rhs_key_;
 
-  std::vector<double64> psi2_;  // rhs advection variable
+  std::vector<double> psi2_;  // rhs advection variable
 };
 
 

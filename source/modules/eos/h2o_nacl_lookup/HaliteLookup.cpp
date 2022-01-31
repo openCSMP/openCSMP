@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp
 {
-  HaliteLookup::HaliteLookup(const double64& externaltemperature, const double64& externalpressure)
+  HaliteLookup::HaliteLookup(const double& externaltemperature, const double& externalpressure)
     : 
     temperature_(externaltemperature), 
     pressure_(externalpressure), 
@@ -146,8 +146,8 @@ namespace csmp
         else
           {
             cout << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile1, storage_vector );
-			outfile1.close();
+            binaryFileWrite( outfile1, storage_vector );
+			      outfile1.close();
             cout << "done!\n";
           }
 	    
@@ -162,7 +162,7 @@ namespace csmp
         else
           {
             cout << "writing file " << statefilename << " ... ";
-            skm_C_fwrite( outfile2, state_vector );
+            binaryFileWrite( outfile2, state_vector );
             outfile2.close();
             cout << "done!\n";
           }
@@ -172,13 +172,13 @@ namespace csmp
     else
       {
         cout << "reading file " << filename << " ... ";
-        skm_C_fread( infile1, storage_vector );
+        binaryFileRead( infile1, storage_vector );
         infile1.close();
         cout << "done!\n";
 
         cout << "reading file " << statefilename << " ... ";
-        skm_C_fread( infile2, state_vector );
-		infile2.close();
+        binaryFileRead( infile2, state_vector );
+        infile2.close();
         cout << "done!\n";
 	    
       }
@@ -191,12 +191,12 @@ namespace csmp
   }
 
   // The data interpolation routines
-  double64 HaliteLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
-  double64 HaliteLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
-  double64 HaliteLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
-  double64 HaliteLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
-  double64 HaliteLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
-  double64 HaliteLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
+  double HaliteLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
+  double HaliteLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
+  double HaliteLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
+  double HaliteLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
+  double HaliteLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
+  double HaliteLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
 
 
 
@@ -222,7 +222,7 @@ namespace csmp
     return;
   }
     
-  double64 HaliteLookup::ValueOf(const int& property_index)
+  double HaliteLookup::ValueOf(const int& property_index)
   {
     GetIndex_iA(property_index);
     //   cout << "it = " << it << ", ip_ = " << ip_ << endl;
@@ -281,7 +281,7 @@ namespace csmp
   }
     
     
-  double64 HaliteLookup::NormalInterpolation( const int& property_index )
+  double HaliteLookup::NormalInterpolation( const int& property_index )
   {
     //    cout << "Using HaliteLookup::NormalInterpolation( const int& property_index ) ...\n";
 	
@@ -308,7 +308,7 @@ namespace csmp
     
     
     
-  double64 HaliteLookup::NearNaClMeltInterpolation( const int& property_index )
+  double HaliteLookup::NearNaClMeltInterpolation( const int& property_index )
   {
     //    cout << "Using HaliteLookup::NearNaClMeltInterpolation( const int& property_index ) ...\n";
     pdummy_ = pcurrent_;
@@ -451,7 +451,7 @@ namespace csmp
     return v_interpolated_;
   }
     
-  void HaliteLookup::GetTemperatureIndex(const double64& t)
+  void HaliteLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <    0.0e0){  t_res_ =  5.0; it_ = 0; }
@@ -471,7 +471,7 @@ namespace csmp
     // t_dim_ is therefore (1000-550)/10+285 + 1 = 331
   }
     
-  void HaliteLookup::GetPressureIndex(const double64& p)
+  void HaliteLookup::GetPressureIndex(const double& p)
   {
     // new version
     if(     p <=   20.0e5){ p_res_ =   0.5e5; ip_ =     static_cast<long>( (p-   0.5e5)/p_res_ ); }    

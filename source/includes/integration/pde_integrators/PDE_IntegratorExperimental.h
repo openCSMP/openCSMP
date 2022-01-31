@@ -301,7 +301,7 @@ class PDE_IntegratorExperimental {
     void          AddPostProcess( MathOperatorLHS<dim>* );
 
     /// sets the time-increment for- and triggers a transient calculation (use 1/t if problem has been set up that way)
-    void          TimeIncrement( double64 dt );
+    void          TimeIncrement( double dt );
   
     /// returns whether a finite-difference time increment has been set
     bool          Transient() const;
@@ -322,10 +322,10 @@ class PDE_IntegratorExperimental {
     virtual void  Reset( bool delete_math_operators=true );
 
     /// outputs solution vector; @attention this produces meaningful results only after application of the PDE integrator
-    void          SolutionVector( std::vector<double64>& ) const;
+    void          SolutionVector( std::vector<double>& ) const;
   
     /// optional input of a solution vector with an initial guess of the result; for SAMG set ifirst=0 so that this vector is used
-    void          FirstGuess( const std::vector<double64>& );
+    void          FirstGuess( const std::vector<double>& );
   
     /// if an evolutionary problem where only the right-hand side changes, the matrix needs to be assembled only once
     void          RetainGlobalSolutionMatrix( bool yes_or_no );
@@ -386,7 +386,7 @@ class PDE_IntegratorExperimental {
     virtual void  Solve();
 
     /// allows to apply pde operators to post-process the newly computed solution
-    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  PostProcess( COMPUTATION_DOMAIN<dim>& );
 
     /// transfers the results stored in solution vector onto the nodes of the computational domain; uses node numbering
     virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
@@ -401,17 +401,17 @@ class PDE_IntegratorExperimental {
     std::map<Parameter,size_t>                   test_operands_;           ///< dependent variables in the solved system of equations
 
     SparseMatrix            G_;                        ///< solution matrix
-    std::vector<double64>   rh_;                       ///< righthand vector
-    std::vector<double64>   x_;                        ///< solution vector
+    std::vector<double>   rh_;                       ///< righthand vector
+    std::vector<double>   x_;                        ///< solution vector
     std::vector<size_t>     DOF_indexes_;              ///< for indexing DOFs (only non-Dirichlet dofs, enumerated 0 -> maximum DOF
-    std::vector<double64>   pivotVector_;              ///< terms recovered from eliminated rows
+    std::vector<double>   pivotVector_;              ///< terms recovered from eliminated rows
 
     Solver*                 solver_;
 
     size_t                  dof_per_node_;
     bool                    setup_established_, retain_matrix_, trim_vectors_; ///< false, false, false to start with
     bool                    newed_Solver_object_;
-    double64                time_increment_;
+    double                time_increment_;
 
     struct SIZES {
         size_t nodes;

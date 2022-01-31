@@ -59,7 +59,7 @@ class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
                               const char* diffusing_variable,
                               const char* storage_variable,
                               const char* spatial_source_variable,
-                              const char* gradient_variable, double64 gradient_multiplier );
+                              const char* gradient_variable, double gradient_multiplier );
 
     TransientDiffusor( Model<dim>&, 
                               const char* lhs_diffusivity,
@@ -67,7 +67,7 @@ class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
                               const char* diffusing_variable,
                               const char* storage_variable,
                               const char* spatial_source_variable,
-                              const char* gradient_variable, double64 gradient_multiplier );
+                              const char* gradient_variable, double gradient_multiplier );
                               
     TransientDiffusor( Model<dim>&, 
                               const char* lhs_diffusivity,
@@ -76,12 +76,12 @@ class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
                               const char* storage_variable,
                               const char* spatial_source_variable,
                               const char* point_source_variable,
-                              const char* gradient_variable, double64 gradient_multiplier );                              
+                              const char* gradient_variable, double gradient_multiplier );                              
 
     virtual ~TransientDiffusor();
   
     /// [C/dt + K]{p}_t+dt = [C/dt]{p}_t + q + g [d(var)/dy]
-    void ComputeTransientStateFullyImplicit( Model<dim>& sg, double64 time_increment, bool verbose=false ); 
+    void ComputeTransientStateFullyImplicit( Model<dim>& sg, double time_increment, bool verbose=false ); 
 
     virtual void AdjustSolverSettings();
 
@@ -106,7 +106,7 @@ class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
     /// add extra functionality for alternative solver if needed
 #endif
 
-    const double64                  grad_multiplier_;
+    const double                  grad_multiplier_;
     std::string                     dep_var_name_;
     
   private:

@@ -9,8 +9,7 @@ namespace csmp {
   A small set of trivial types, represented as a sorted vector.
  */
 
-  template<typename T, unsigned N = 32>
-  class SmallSet {
+template<typename T, unsigned N = 32> class SmallSet {
   public:
     static_assert(std::is_trivial<T>::value, "Type must be trivial");
     static_assert(N <= 32, "The optimised size of this set is probably too large");

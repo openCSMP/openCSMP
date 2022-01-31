@@ -25,15 +25,17 @@ class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim> {
                            const char* basic, const char* test,
                            bool plane_strain=true );
     
-    virtual void GetOperands( CELL& e );
+    virtual void GetOperands( const CELL& );
     
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
     
     void PlaneStress( bool yes_no=true ); ///< default is plane strain
+  ///
     virtual NumIntegral_BT_D_B_dV<dim,CELL>* clone() const { return new NumIntegral_BT_D_B_dV<dim,CELL> (*this); }
+    
   private:
     csmp::Index            nu_key_;   ///< Poisson's ratio
-    std::vector<double64>  E_, nu_;   ///< variable in which Poisson's ratio will be stored
+    std::vector<double>  E_, nu_;   ///< variable in which Poisson's ratio will be stored
     DenseMatrix<DM_MIN>    D, B, BT;  ///< material property matrix
     bool                   plane_strain_;
 };

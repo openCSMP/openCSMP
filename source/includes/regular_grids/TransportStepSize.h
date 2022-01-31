@@ -14,7 +14,7 @@ class TransportStepSize : public Interrelation<dim> {
                        
     ~TransportStepSize();
     
-    double64 AdvectionTimeIncrement() const;
+    double AdvectionTimeIncrement() const;
     
     void Calculate();
   
@@ -24,7 +24,7 @@ class TransportStepSize : public Interrelation<dim> {
     Operand<dim>&        IR; /// < inner radius
     ScalarVariable       ir;
     VectorVariable<dim>  nv, ev;
-    double64             advection_increment,
+    double             advection_increment,
                          e_increment,
                          n_velo, e_velo, 
                          scalar_velocity;

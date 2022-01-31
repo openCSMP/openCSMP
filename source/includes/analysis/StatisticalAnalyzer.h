@@ -8,7 +8,7 @@ namespace csmp {
 template<size_t> class PropertyDatabase;
 template<size_t> class Model;
 
-typedef std::vector<std::pair<double64,double64> > HistogramBins;
+typedef std::vector<std::pair<double,double> > HistogramBins;
 
 /** 
      @brief Class for the generation of volume-weighted and other histograms from CSMP models and their unique regions.
@@ -21,18 +21,18 @@ typedef std::vector<std::pair<double64,double64> > HistogramBins;
 template<size_t dim>
 class StatisticalAnalyzer {
   public:
-    StatisticalAnalyzer( const Model<dim>& sg );
+    StatisticalAnalyzer( const Model<dim>& );
     ~StatisticalAnalyzer();
     
     /// specify via ascii input file, the x-axis range of the histogram columns, i.e. the bin size
     void DefineBins( const char* bin_ascii_file, HistogramBins& ) const;
 
     /// specify the binsize using bin ranges specified by a sequence of double values of user-defined length
-    void DefineBins( HistogramBins& bins, double64 first_val, ... ) const;
+    void DefineBins( HistogramBins& bins, double first_val, ... ) const;
 
     /// creats histogram bins by providing the data range and number of devisions
-    void DefineBins( const double64 minimum, 
-                     const double64 maximum, 
+    void DefineBins( const double minimum, 
+                     const double maximum, 
                      const size_t number_of_bins,
                      HistogramBins& data ) const;
                      
@@ -94,7 +94,7 @@ class StatisticalAnalyzer {
     /// like previous method, but name can include filename etc. 
     void OutputRegionPropertyAbundancePolygonsMaple( const char* prop, 
                                                      const char* file_name_prefix,
-                                                     const std::vector<std::pair<double64,double64> >& bins,
+                                                     const std::vector<std::pair<double,double> >& bins,
                                                      // bin ranges from < to <=
                                                      const std::map<std::string,std::pair<HistogramBins,size_t> >&  results,
                                                      bool log10_of_bin_values ) const;

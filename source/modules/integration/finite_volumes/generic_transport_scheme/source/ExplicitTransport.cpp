@@ -24,16 +24,13 @@ namespace csmp {
     Facet fluxes and flux balances are initialised if the 'velocity' is initialised.
 */
 template<size_t dim>
-ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region )
+ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const std::string& target_region )
   : VariableSet_TracerTransfer(m.Database()),
-    subdomain_(m.Region(target_region)),
-    key_acc_(m.CreateProperty("accumulation","node")),
-    key_out_(m.CreateProperty("outflow","node"))
+    Notation(*this),
+    subdomain_(m.Region(target_region))
   {
-    m.InstantiateFiniteVolumes();
-  
     // 0. diagnostics: has velocity been initialised, if so, it is used in initialisation.
-    double64 vmin, vmax;
+    double vmin, vmax;
     subdomain_.MinMaxOf( "velocity", vmin, vmax );
     const bool initialise_flux = ( !isnan(vmin) && !isnan(vmax) ) ? true : false;
     
@@ -50,7 +47,10 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_reg
     CollectHaloStencils();
   
     // 4. initialising facet fluxes and flux balances, but only if transport has reasonable values
-    if ( initialise_flux ) TransportVariableFluxBalances();
+    if ( initialise_flux ) {
+         TransportVariableFluxBalances();
+         UpdateFluxesAndFluxBalances();
+      }
  }
   
   
@@ -126,7 +126,7 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
            (*nit)->Store( key_out_, makeScalar(ANY,0.) );
        }
      // including the halo elements
-     if ( HasHaloElements() )
+     if ( HasHaloStencils() )
        for ( typename vector<Element<dim>*>::iterator it=halo_elmts_.begin(); it!=halo_elmts_.end(); ++it ) {
             const size_t nodes((*it)->Nodes());
             for ( size_t i=0U; i<nodes; ++i ) {
@@ -149,7 +149,7 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
        }
  
      // 3. processing potential halo stencils
-     if ( HasHaloElements() ) {
+     if ( HasHaloStencils() ) {
          const typename vector<Element<dim>*>::iterator elements_end(halo_elmts_.end());
          for ( typename vector<Element<dim>*>::iterator
                eit=halo_elmts_.begin(); eit!=elements_end; ++eit )
@@ -174,7 +174,6 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
           this->FluxBalancesAtBoundary( (*nit) );
        }
 
-
  } // end VolumetricFlowAndTransportVariableFluxBalances
 
  
@@ -183,7 +182,7 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
 // TESTING: checking the flux balances
 //for ( typename vector<Node<dim>*>::const_iterator
 //      nit=subdomain_.NodesBegin(); nit!=subdomain_.PerimeterNodesBegin(); ++nit )
-//  if ( fabs((*nit)->Read(key_FB)) > numeric_limits<double64>::epsilon()*3. )
+//  if ( fabs((*nit)->Read(key_FB)) > numeric_limits<double>::epsilon()*3. )
 //    cerr << ios::scientific << (*nit)->Read(key_FB) <<" ";
 
 
@@ -193,7 +192,7 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
  
 
 /**
-    Computes FV balances of products of the transported variable with the facet fluxes.
+    Computes the distributed FV balances of products of the transported variable with the facet fluxes.
     The volumetric flux balance is not updated, aussuming that the volumetric facet flows
     did not change.
 */
@@ -209,7 +208,7 @@ void ExplicitTransport<dim>::TransportVariableFluxBalances()
        }
 
      // including the halo elements
-     if ( HasHaloElements() )
+     if ( HasHaloStencils() )
        for ( typename vector<Element<dim>*>::iterator it=halo_elmts_.begin(); it!=halo_elmts_.end(); ++it ) {
             const size_t nodes((*it)->Nodes());
             for ( size_t i=0U; i<nodes; ++i ) {
@@ -227,7 +226,7 @@ void ExplicitTransport<dim>::TransportVariableFluxBalances()
        }
  
      // 3. same process applied to the halo stencils
-     if ( HasHaloElements() ) {
+     if ( HasHaloStencils() ) {
          const typename vector<Element<dim>*>::iterator elements_end(halo_elmts_.end());
          for ( typename vector<Element<dim>*>::iterator
                eit=halo_elmts_.begin(); eit!=elements_end; ++eit )
@@ -261,9 +260,9 @@ void ExplicitTransport<dim>::TransportVariableFluxBalances()
     @attention default is the most stringent time increment: outflux < PV.
 */
 template<size_t dim>
-double64 ExplicitTransport<dim>::TimeIncrement_CFL_Outflow( double64 max_time_increment )
+double ExplicitTransport<dim>::TimeIncrement_CFL_Outflow( double max_time_increment ) const
  {
-     double64 dt_min(max_time_increment);
+     double dt_min(max_time_increment);
  
      // processing interior and perimeter FVs for which facet fluxes have been initialised
      const typename vector<Node<dim>*>::const_iterator nodes_end(subdomain_.NodesEnd());
@@ -271,10 +270,10 @@ double64 ExplicitTransport<dim>::TimeIncrement_CFL_Outflow( double64 max_time_in
            nit=subdomain_.NodesBegin(); nit!=nodes_end; ++nit )
        {
           // using pre-computed facet fluxes
-          const double64 out_flow = (*nit)->Read( key_out_ ); // this->OutFlow( (*nit) ); - computing outflow which is much slower
+          const double out_flow = (*nit)->Read( key_out_ ); // this->OutFlow( (*nit) ); - computing outflow which is much slower
 
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( (*nit), out_flow );
+          const double time_increment = this->OutFlowLessThanContentIncrement( (*nit), out_flow );
           dt_min = std::min( dt_min, time_increment );
        }
  
@@ -292,9 +291,9 @@ double64 ExplicitTransport<dim>::TimeIncrement_CFL_Outflow( double64 max_time_in
     @attention Assumes that the facet flows and tracer fluxes are initialised.
 */
 template<size_t dim>
-double64 ExplicitTransport<dim>::TimeIncrement()
+double ExplicitTransport<dim>::TimeIncrement() const
  {
-    const double64 default_max_time_increment( 356. * 86400. ); // 1 year
+    const double default_max_time_increment( 356. * 86400. ); // 1 year
     return TimeIncrement_CFL_Outflow( default_max_time_increment );
  }
 
@@ -322,7 +321,7 @@ double64 ExplicitTransport<dim>::TimeIncrement()
          // TODO: make this more accurate use fractional step method where source is accounted for at 2 time levels using dt/2 and C0 and C1
 */
 template<size_t dim>
-void ExplicitTransport<dim>::Assemble1stOrderSolution( double64 delta_t,
+void ExplicitTransport<dim>::Assemble1stOrderSolution( double delta_t,
                                                        bool enforce_divergence_free_vt_field )
  {
     const typename vector<Node<dim>*>::const_iterator  nodes_end(subdomain_.NodesEnd());
@@ -331,14 +330,14 @@ void ExplicitTransport<dim>::Assemble1stOrderSolution( double64 delta_t,
          // 1. reading the fluxes accumulated in 'accumulation'
          //    - flux upwind CO products
          //    - boundary conditions applied to perimeter volumes and truncated model boundary volumes
-         double64 accumulation((*nit)->Read(this->key_acc_));
+         double accumulation((*nit)->Read(this->key_acc_));
       
          // 2. correcting for div vD non-zero 'flux balance' term except at Dirichlet boundaries
          //    or where nodal sources were present
          if ( enforce_divergence_free_vt_field ) {
               // taking care of 'nodal fluid volume source' or sink terms
-              const double64 source((*nit)->Read(this->key_NQV));
-              if ( fabs(source) < numeric_limits<double64>::epsilon() &&
+              const double source((*nit)->Read(this->key_NQV));
+              if ( fabs(source) < numeric_limits<double>::epsilon() &&
                    (*nit)->Status( key_PF ) != DIRICH &&
                    (*nit)->AtBoundary() != NOT )
                 // multiply because the error relates to the volumetric flow part of  C0 * volumetric flow products
@@ -346,11 +345,11 @@ void ExplicitTransport<dim>::Assemble1stOrderSolution( double64 delta_t,
            }
 
          // compute time-increment - pore volume product
-         const double64 dt_divided_by_PV  = (delta_t/(*nit)->Read(this->key_FVPV));
+         const double dt_divided_by_PV  = (delta_t/(*nit)->Read(this->key_FVPV));
 
          // 3. starting with the sum of facet flux-concentration products temporarily stored in 'accumulation'
           //   solution is assembled by subtracting flux time-interval products from value at previous time level
-         double64 solution = (*nit)->Read(this->key_C0) - dt_divided_by_PV * accumulation;
+         double solution = (*nit)->Read(this->key_C0) - dt_divided_by_PV * accumulation;
       
          // 4. TODO: element 'fluid volume source' terms have to be distributed over the nodes of the finite element
 
@@ -371,7 +370,7 @@ void ExplicitTransport<dim>::Assemble1stOrderSolution( double64 delta_t,
            (*nit)->Read(key_FB) < 0. )
         {
            // 1. computing the compensation
-           double64 corrected_accumulation = (*nit)->Read( key_C0 ) - (*nit)->Read( key_acc_ );
+           double corrected_accumulation = (*nit)->Read( key_C0 ) - (*nit)->Read( key_acc_ );
            // 2. storing the new concentration
            (*nit)->Store( this->key_C0, makeScalar( (*nit)->Status(this->key_C0), corrected_accumulation ) );
         }
@@ -387,12 +386,12 @@ void ExplicitTransport<dim>::Assemble1stOrderSolution( double64 delta_t,
     This flux balance is added to the node variable 'new saturation oil'
 */
 template<size_t dim>
-void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( double64 time_interval )
+void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( double time_interval )
  {
     const typename vector<Node<dim>*>::iterator  nodes_end(subdomain_.NodesEnd());
     for ( typename vector<Node<dim>*>::iterator nit=subdomain_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
       {
-          double64 div(0.);
+          double div(0.);
           // for each finite volume, f is evaluated on a sector by sector basis
           const size_t parents((*nit)->Parents());
           for ( size_t t=0U; t<parents; t++ ) {
@@ -402,7 +401,7 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
                // for all FACETS per SECTOR surrounding the finite volume at the boundary
                for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
                     size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
-                    double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
+                    double velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
                     if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;
                     else div -= velo;
                 }
@@ -426,12 +425,12 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
     of saturation are stored.
 */
 template<size_t dim>
-double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool do_range_check ) const
+double ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool do_range_check ) const
   {
     const typename vector<Node<dim>*>::iterator  nodes_end(subdomain_.NodesEnd());
     typename vector<Node<dim>*>::iterator nit = subdomain_.NodesBegin();
 
-    double64        Cmin(upper_limit_),
+    double        Cmin(upper_limit_),
                     Cmax(0.),
                     difference_to_last_output(0.);
     size_t          error_counter(0);
@@ -440,7 +439,7 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
     while ( nit != nodes_end )
        {
            // reading the newly computed saturation values
-           double64 result = (*nit)->Read( this->key_C0 );
+           double result = (*nit)->Read( this->key_C0 );
            Cmin = std::min( Cmin, result );
            Cmax = std::max( Cmax, result );
 
@@ -496,7 +495,7 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
        next assembly.
 */
 template<size_t dim>
-void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
+void ExplicitTransport<dim>::AdvectVariable( double time_interval )
  {
     // 1. element-by-element computation of volumetric and transport variable fluxes on FV facets
     //    within the computational domain and the facets of halo elements
@@ -507,7 +506,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
     VolumetricFlowAndTransportVariableFluxBalances();
 
     // 2. node-by-node evaluation of time increment (no new variable values are stored)
-    double64 time_increment = TimeIncrement_CFL_Outflow( this->MaxTimeIncrement() );
+    double time_increment = TimeIncrement_CFL_Outflow( this->MaxTimeIncrement() );
 
     cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
     cout <<"\n\tTime interval         = "<< time_interval;
@@ -516,7 +515,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
 
     cout <<"\n\n\nExplicitTransport::EvolveSolution: Finite volume transport simulation initiated...\n";
     size_t   substep(1);
-    double64 time(0.);
+    double time(0.);
 
     // time incrementation loop
     while ( time < time_interval ) {
@@ -547,7 +546,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
 
     cout <<"\nExplicitTransport::AdvectVariable: 'transport completed.\n";
 // TESTING
-double64 so1_min, so1_max;
+double so1_min, so1_max;
 subdomain_.MinMaxOf( "concentration", so1_min, so1_max );
 cerr <<"\n\ttime interval computed: "<< time <<": range of assembled solution: "<< so1_min <<" to "<< so1_max << endl;
 
@@ -556,13 +555,13 @@ cerr <<"\n\ttime interval computed: "<< time <<": range of assembled solution: "
 
 // TESTING
 /*
-double64 gmin, gmax;
+double gmin, gmax;
 subdomain_.MinMaxOf( "facet flux", gmin, gmax );
 cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable: range of 'facet flux': ";
 cout << scientific << setprecision(5) << gmin <<" to "<< gmax;
 
 {
-  double64 vmin, vmax;
+  double vmin, vmax;
   subdomain_.MinMaxOf( "accumulation", vmin, vmax );
   cout <<"\n\t range of accumulation: "<< vmin <<" to "<< vmax << endl;
   subdomain_.MinMaxOf( "flux balance", vmin, vmax );
@@ -571,35 +570,46 @@ cout << scientific << setprecision(5) << gmin <<" to "<< gmax;
 
 */
 
+
+
 /**
     Reports the volumetric flow into the computational region.
 */
 template<size_t dim>
-double64 ExplicitTransport<dim>::IncomingVolumetricFlow() const
+double ExplicitTransport<dim>::IncomingVolumetricFlow() const
  {
-     double64 influx(0.);
+     // accumulating into a vector that will be sorted to avoid round-off
+     vector<double>  inflows;
+     inflows.reserve( subdomain_.Nodes() );
  
      const typename vector<Node<dim>*>::const_iterator nodes_end(subdomain_.NodesEnd());
      for ( typename vector<Node<dim>*>::const_iterator
            nit=subdomain_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
-           if ( HasHaloElements() ) {
+           if ( HasHaloStencils() ) {
                 // away from model boundaries, the inflow is computed correctly and can be used
-                if ( (*nit)->AtBoundary() == NOT ) influx += this->InFlow( (*nit) );
-                // for a FV truncated by the inflow boundary outflow is recorded
-                else influx += this->OutFlow( (*nit) );
+                if ( (*nit)->AtBoundary() == NOT ) inflows.push_back( this->InFlow( (*nit) ) );
              }
-           // at the model boundaries, only the inside part of the FV exists, registering inflows as outflows
-           else {
-                assert( (*nit)->AtBoundary() != NOT );
-                influx += this->OutFlow( (*nit) );
+           // at model boundaries, FV's are truncated and only the their inside part exist; inflows are outflows (+) for these
+           if ( (*nit)->AtBoundary() != NOT ) {
+               // to get accurate predictions and without wasting computational cost, no-flow boundaries are excluded
+               const VARIABLE_FLAG pf_flag = (*nit)->Status( Notation.key_PF );
+               if ( pf_flag == DIRICH || pf_flag == NEUMANN ) {
+                    const double flow = this->VolumetricFlowBalance( (*nit) );
+                    if ( flow > 0. )
+                      inflows.push_back( flow );
+                 }
              }
        }
  
+    // sorting values in ascending order
+    sort( inflows.begin(), inflows.end() );
+    
     // incoming flux should be positive
-    return influx;
+    return accumulate( inflows.begin(), inflows.end(), decltype(inflows)::value_type(0.) );
 
  } // end IncomingVolumetricFlow
+  
   
   
 /**
@@ -608,34 +618,42 @@ double64 ExplicitTransport<dim>::IncomingVolumetricFlow() const
     @todo SKM check whether the variable 'outflow' can be used for this, saving some computations.
 */
 template<size_t dim>
-double64 ExplicitTransport<dim>::OutgoingVolumetricFlow() const
+double ExplicitTransport<dim>::OutgoingVolumetricFlow() const
  {
-     double64 outflux(0.);
+     vector<double>  outflows;
+     outflows.reserve( subdomain_.Nodes() );
  
      const typename vector<Node<dim>*>::const_iterator nodes_end(subdomain_.NodesEnd());
      for ( typename vector<Node<dim>*>::const_iterator
            nit=subdomain_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
-           if ( HasHaloElements() ) {
+           if ( HasHaloStencils() ) {
                 // away from model boundaries, the inflow is computed correctly and can be used
-                if ( (*nit)->AtBoundary() == NOT ) outflux += this->OutFlow( (*nit) );
-                // for a FV truncated by the inflow boundary outflow is recorded
-                else outflux += this->InFlow( (*nit) );
+                if ( (*nit)->AtBoundary() == NOT ) outflows.push_back( this->OutFlow( (*nit) ) );
              }
-           // at the model boundaries, only the inside part of the FV exists, registering inflows as outflows
-           else {
-                assert( (*nit)->AtBoundary() != NOT );
-                outflux += this->InFlow( (*nit) );
+           // at model boundaries, FV's are truncated and only the their inside part exist; inflows are outflows (+) for these
+           if ( (*nit)->AtBoundary() != NOT ) {
+               // to get accurate predictions and without wasting computational cost, no-flow boundaries are excluded
+               const VARIABLE_FLAG pf_flag = (*nit)->Status( Notation.key_PF );
+               if ( pf_flag == DIRICH || pf_flag == NEUMANN ) {
+                    const double flow = this->VolumetricFlowBalance( (*nit) );
+                    if ( flow < 0. )
+                      outflows.push_back( flow );
+                 }
              }
        }
  
-    return outflux;
+    // sorting values in ascending order
+    sort( outflows.begin(), outflows.end() );
+
+    // since the accumulated outflow is negative, it needs to be inverted
+    return -accumulate( outflows.begin(), outflows.end(), decltype(outflows)::value_type(0.) );
  
  } // end OutgoingVolumetricFlow
 
 
 
-
+template class ExplicitTransport<2U>;
 template class ExplicitTransport<3U>;
 
 } // end csmp

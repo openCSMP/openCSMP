@@ -4,14 +4,14 @@ using namespace std;
 
 namespace csmp
 {
-  long GetTemperatureIndex(const double64& t)
+  long GetTemperatureIndex(const double& t)
   {
     // new version
-    double64 t_res;
+    double t_res;
     long      it;
     if(     t <    0.0e0)
       {
-	cerr << "H2OLookup::GetTemperatureIndex(const double64& t) : t < 0 (t = " << t << "), better terminate ...\n";
+	cerr << "H2OLookup::GetTemperatureIndex(const double& t) : t < 0 (t = " << t << "), better terminate ...\n";
 	cerr << "or to continue, enter any key : ";
 	char yesno;
 	cin >> yesno;
@@ -34,9 +34,9 @@ namespace csmp
     return it;
   }
     
-  long GetPressureIndex(const double64& p)
+  long GetPressureIndex(const double& p)
   {
-    double64 p_res;
+    double p_res;
     long      ip;
     /*!
       New version, August 24, 2009, Thomas Driesner
@@ -66,10 +66,10 @@ namespace csmp
   }
 
 
-  double64 GetTemperatureResolution(const double64& t)
+  double GetTemperatureResolution(const double& t)
   {
     // new version
-    double64 t_res;
+    double t_res;
     if(     t <= 250.0e0){  t_res =  5.0; }
     else if(t <= 350.0e0){  t_res =  2.0; }
     else if(t <= 360.0e0){  t_res =  1.0; }
@@ -87,10 +87,10 @@ namespace csmp
     return t_res;
   }
     
-  double64 GetPressureResolution(const double64& p)
+  double GetPressureResolution(const double& p)
   {
     // new version
-    double64 p_res;
+    double p_res;
     if(     p <=   20.0e0){ p_res =   0.5; }    
     else if(p <=  210.0e0){ p_res =   1.0; }
     else if(p <=  215.0e0){ p_res =   0.5; }

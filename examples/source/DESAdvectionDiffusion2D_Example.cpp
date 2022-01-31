@@ -64,7 +64,7 @@ void DESAdvectionDiffusion2D_Example::Run()
     Quadrilaterator    quadrilaterator; // simple FE mesher
     VSet<2U>           mesh_container;  // container to store the input mesh
     string             file_name;
-    double64           x, y;
+    double           x, y;
     cerr << "\nmain: Enter the pixel-based input geometry for the quadrilaterator: " << endl;
     cin >> file_name;
     cerr << "\nmain: The x- and y-dimensions of your model (in m): " << endl;
@@ -203,7 +203,7 @@ void DESAdvectionDiffusion2D_Example::Run()
     // 8.0 Construct the finite volume grid and transport algorithms
     // -------------------------------------------------------------
     Standard_IO_Handler  stdio;
-    double64 cfl_multiplier; // for explicit transport, CFL should be mulitplied by 0.5
+    double cfl_multiplier; // for explicit transport, CFL should be mulitplied by 0.5
     cerr <<"\nEnter CFL multiplier: (suggested value 0.3 ~ 0.7)";
     cin  >> cfl_multiplier;    
 
@@ -211,15 +211,15 @@ void DESAdvectionDiffusion2D_Example::Run()
     // 9.0 Time Loop Variables
     // -----------------------
     // define some constant variables
-    const double64    hour(3600.0);
-    double64	hours = 720.0;
-    double64	max_time=hours*hour;    
-    double64	time_increment(2.0*hour); // timestep 2 hours
+    const double    hour(3600.0);
+    double	hours = 720.0;
+    double	max_time=hours*hour;    
+    double	time_increment(2.0*hour); // timestep 2 hours
     const long	save_frequency(hours/40);  // write results to file
     
-    double64	model_time(0.);	// global time for simulated runtime
+    double	model_time(0.);	// global time for simulated runtime
     size_t	save_counter(1), time;     
-    double64	PEP_factor=1.0;
+    double	PEP_factor=1.0;
     size_t	n_threads=1;    
 
     bool  DES = stdio.YesNo("Do you want to solve the advection equation with DES (y=DES, n=TDS)");
@@ -259,7 +259,7 @@ void DESAdvectionDiffusion2D_Example::Run()
          // runtime info
          cout <<"\n\nmain: RUNTIME (HRS): "<< model_time/hour << endl << endl;
     }
-    cerr <<"\nmain: Finished DES simulation, using time (sec): "<< (clock() - T_begin)/double64(CLOCKS_PER_SEC) << endl;
+    cerr <<"\nmain: Finished DES simulation, using time (sec): "<< (clock() - T_begin)/double(CLOCKS_PER_SEC) << endl;
     }
 
     else
@@ -292,7 +292,7 @@ void DESAdvectionDiffusion2D_Example::Run()
          // runtime info
          cout <<"\n\nmain: RUNTIME (HRS): "<< model_time/hour << endl << endl;
     }
-    cerr <<"\nmain: Finished TDS simulation, using time (sec): "<< (clock() - T_begin)/double64(CLOCKS_PER_SEC) << endl;
+    cerr <<"\nmain: Finished TDS simulation, using time (sec): "<< (clock() - T_begin)/double(CLOCKS_PER_SEC) << endl;
     }
     
     // terminate

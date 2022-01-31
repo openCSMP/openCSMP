@@ -11,6 +11,7 @@
 
 #include "InputDataManager.h"
 #include "Model.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "VSet.h"
 #include "ANSYS_Model3D.h"
@@ -90,7 +91,8 @@ void InputDataManager_Test::run()
       const csmp::Index hfu_key=model.Database().StorageKey("heat flux");
       const csmp::Index bhfu_key=model.Database().StorageKey("boundary heat flux");
       const csmp::Index trac_key=model.Database().StorageKey("traction");
-      const Boundary<3U>  bottom(model.Boundary("BOTTOM")), back(model.Boundary("BACK"));
+      const Boundary<3U>  bottom(model.Boundary("BOTTOM")), 
+                          back(model.Boundary("BACK"));
       // testing
       _equal( back.E(0)->Read( hfu_key ), 2., tolerance );
       _equal( back.Read( bhfu_key ), 2., tolerance );

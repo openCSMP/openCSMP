@@ -29,7 +29,7 @@ TransportStepSize<dim>::~TransportStepSize() {}
   
     
 template<size_t dim>
-double64 TransportStepSize<dim>::AdvectionTimeIncrement() const
+double TransportStepSize<dim>::AdvectionTimeIncrement() const
  {
     if ( advection_increment == 0.0 )
       {

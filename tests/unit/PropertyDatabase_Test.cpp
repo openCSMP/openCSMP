@@ -201,13 +201,13 @@ void PropertyDatabase_Test::SubsetVariablesTest()
   pdb.ListProperties( props );
 
   size_t subset_size = 0;
-  for ( auto prop : props ) {
+  for ( auto& prop : props ) {
     if ( subset_size == 10 ) break;
     subset_variables.insert( prop.first );
     subset_size++;
   }
 
-  PropertyDatabase<3> pdb_subset( "CSMP-variables-vsTestLocked.dat", true, &subset_variables );  
+  PropertyDatabase<3> pdb_subset( "CSMP-variables-vsTestLocked.dat", subset_variables );  
   _test( pdb_subset.VariableCount() == subset_variables.size() );
 }
 

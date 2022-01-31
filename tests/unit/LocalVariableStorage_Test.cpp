@@ -2,6 +2,8 @@
 
 #include "LocalVariableStorage.h"
 #include "Element.h"
+#include "LinearTriangle.h"
+#include "LinearTetrahedron.h"
 
 using namespace std;
 
@@ -20,7 +22,8 @@ namespace csmp{
   void LocalVariableStorage_Test::runTest()
     {      
       // initialize storage with 3 of each (scalars, vectors, tensors)
-      Element<dim> e;
+      LinearTriangle triangle;
+      Element<dim>   e(&triangle);
 
       // LOCAL VARIABLES ONLY
       
@@ -325,8 +328,9 @@ namespace csmp{
   void LocalVariableStorage_Test::run3D()
     {
       // initialize storage with 3 of each (scalars, vectors, tensors)
-      const size_t dim(3);
-      Element<3> e;
+      const size_t      dim(3);
+      LinearTetrahedron tetrahedron;
+      Element<3>        e(&tetrahedron);
 
       // LOCAL VARIABLES ONLY
 

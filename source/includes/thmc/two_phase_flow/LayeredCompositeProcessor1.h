@@ -42,10 +42,10 @@ namespace csmp {
     @endcode
  
     // saturations
-    double64 Sw_VL_, Sw_CL_;          ///< cell saturations at viscous and capillary limit
-    double64 Sw_low_CL_, Sw_high_CL_; ///< average saturations at CL in the different layers a
-    double64 Sw_at_Nc_;               ///< saturation at the capillary number of interest
-    double64 Sfactor_;                ///< scaling factor
+    double Sw_VL_, Sw_CL_;          ///< cell saturations at viscous and capillary limit
+    double Sw_low_CL_, Sw_high_CL_; ///< average saturations at CL in the different layers a
+    double Sw_at_Nc_;               ///< saturation at the capillary number of interest
+    double Sfactor_;                ///< scaling factor
 */
 class LayeredCompositeProcessor1 {
   public:
@@ -54,16 +54,16 @@ class LayeredCompositeProcessor1 {
   
     // KEY METHODS FOR THE USER - non-constant as they modify the RRT table
   
-    double64 krw( double64 sw, double64 Nc, int rocktype );
-    double64 krn( double64 sw, double64 Nc, int rocktype );
+    double krw( double sw, double Nc, int rocktype );
+    double krn( double sw, double Nc, int rocktype );
   
     /// computes wetting- and non-wetting phase relative permeabilities in one operation
-    std::pair<double64,double64> RelativePermeability( double64 sw, double64 Nc, int rocktype );
+    std::pair<double,double> RelativePermeability( double sw, double Nc, int rocktype );
   
-    double64 pc( double64 sw, int rocktype ) const;
+    double pc( double sw, int rocktype ) const;
   
     /// writes textfile with sw, krw(sw,Nc), krn(sw,Nc) values computed for rocktype in 0.05 saturation increments
-    void WriteRelativePermeabilityTable( const char* filename, int rocktype, double64 Nc );
+    void WriteRelativePermeabilityTable( const char* filename, int rocktype, double Nc );
   
     /// reports the stored rocktype table(s) etc.
     void Out() const;
@@ -72,48 +72,48 @@ class LayeredCompositeProcessor1 {
   
     // permeability averages
     /// vertical thickness weighted (harmonic) mean of the vertical layer permeabilities
-    double64 k_AverageY() const;
+    double k_AverageY() const;
     /// horizontal thickness weighted average of the horizontal layer permeabilities
-    double64 k_AverageX() const;
+    double k_AverageX() const;
     /// water saturation in cell at given capillary number; calculated from entries in table
-    double64 SwAtNc( double64 Nc, double64 Sw_VL, double64 Sw_CL, double64 Sfactor ) const;
+    double SwAtNc( double Nc, double Sw_VL, double Sw_CL, double Sfactor ) const;
     /// corresponding sw in low-k laminations
-    double64 SwAtNc_Low_k_Layer( double64 Nc, double64 Sw_VL, double64 Sw_low_CL, double64 Sfactor ) const;
+    double SwAtNc_Low_k_Layer( double Nc, double Sw_VL, double Sw_low_CL, double Sfactor ) const;
     /// corresponding sw in high-k laminations
-    double64 SwAtNc_High_k_Layer( double64 Nc, double64 Sw_VL, double64 Sw_high_CL, double64 Sfactor ) const;
+    double SwAtNc_High_k_Layer( double Nc, double Sw_VL, double Sw_high_CL, double Sfactor ) const;
     /// effective sw in low-k laminations
-    double64 SwStarLow( double64 Sw_low_at_Nc ) const;
+    double SwStarLow( double Sw_low_at_Nc ) const;
     /// effective sw in low-k laminations
-    double64 SwStarHigh( double64 Sw_high_at_Nc ) const;
+    double SwStarHigh( double Sw_high_at_Nc ) const;
   
     /// krw relperm of low-k layer at given saturation and capillary number
-    double64 KrwLow( double64 SwStar_low ) const;
+    double KrwLow( double SwStar_low ) const;
     /// krw relperm of high-k layer at given saturation and capillary number
-    double64 KrwHigh( double64 SwStar_high ) const;
+    double KrwHigh( double SwStar_high ) const;
 
     /// krn relperm of low-k layer at given saturation and capillary number
-    double64 KrnLow( double64 SwStar_low ) const;
+    double KrnLow( double SwStar_low ) const;
     /// krn relperm of high-k layer at given saturation and capillary number
-    double64 KrnHigh( double64 SwStar_high ) const;
+    double KrnHigh( double SwStar_high ) const;
   
     /// relative permeability at the given water saturation and capillary number
-    double64 KrwComposite( double64 swAtNc_Low_k_Layer, double64 swAtNc_High_k_Layer ) const;
-    double64 KrnComposite( double64 swAtNc_Low_k_Layer, double64 swAtNc_High_k_Layer ) const;
+    double KrwComposite( double swAtNc_Low_k_Layer, double swAtNc_High_k_Layer ) const;
+    double KrnComposite( double swAtNc_Low_k_Layer, double swAtNc_High_k_Layer ) const;
   
   private: // parameters & data
   
     enum { f, Sw_VL, Sw_CL, Sw_CL_low_k, Sw_CL_high_k, Sfactor };
 
     // material properties - should be part of rocktype
-    double64 k_low_, k_high_;         ///< layer permeabilities
-    double64 phi_low_, phi_high_;     ///< porosities of low and high k layers
-    double64 LY_low_, LY_high_;       ///< cumulative layer thickness in the vertical direction (Y), normalized summing to 1
-    double64 Swi_low_, Swi_high_;     ///< irreducible saturations of the 2 different layers
-    double64 m_low_, m_high_;         ///< van Genuchten exponents for the 2 different layers
-    double64 pd_low_, pd_high_;       ///< capillary (drainage) entry pressure of low and high k layers
-    double64 bcp_low_, bcp_high_;     ///< Brooks-Corey 64' exponents for low and high k layers
+    double k_low_, k_high_;         ///< layer permeabilities
+    double phi_low_, phi_high_;     ///< porosities of low and high k layers
+    double LY_low_, LY_high_;       ///< cumulative layer thickness in the vertical direction (Y), normalized summing to 1
+    double Swi_low_, Swi_high_;     ///< irreducible saturations of the 2 different layers
+    double m_low_, m_high_;         ///< van Genuchten exponents for the 2 different layers
+    double pd_low_, pd_high_;       ///< capillary (drainage) entry pressure of low and high k layers
+    double bcp_low_, bcp_high_;     ///< Brooks-Corey 64' exponents for low and high k layers
   
-    std::vector<std::vector<std::vector<double64> > > RRT_;  ///< data table for n-rocktypes with extra 3 columns for sw, krw, krn
+    std::vector<std::vector<std::vector<double> > > RRT_;  ///< data table for n-rocktypes with extra 3 columns for sw, krw, krn
 };
 
 } // end csmp

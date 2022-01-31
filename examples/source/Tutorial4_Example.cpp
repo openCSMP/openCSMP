@@ -86,7 +86,7 @@ void Tutorial4_Example::Run()
     // ------------------------------------
 
     // input material and fluid properties
-    const double64 viscosity(0.001); // in Pa sec
+    const double viscosity(0.001); // in Pa sec
     model.InputPropertyValue( "viscosity",   makeScalar(PLAIN,viscosity) );
     model.InputPropertyValue( "porosity",    makeScalar(PLAIN,1.0) );
     model.InputPropertyValue( "zero",        makeScalar(PLAIN,0.0) ); // dummy variable needed to close coupled FE algorithm
@@ -225,7 +225,7 @@ void Tutorial4_Example::Run()
 
     // record timing of the simulation
     clock_t end(clock());
-    cerr << "\n\nmain: CPU time was " << static_cast<double64>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl << endl;
+    cerr << "\n\nmain: CPU time was " << static_cast<double>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl << endl;
 
     // terminate
     cerr <<"\n\nmain: That's it, run completed successfully..."<< endl;
@@ -251,11 +251,9 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
 
   // define variables needed to compute the length of the FE edges that lie at the boundary
   // and read the temporary flux and store the final flux
-  csmp::Index       tf_key(mdl.Database().StorageKey(temp_flux.c_str())),
-                    f_key(mdl.Database().StorageKey(flux));
-  ScalarVariable    tf, f;
-  double64          y[2], area, length(0.0);
-  size_t            j;
+  const csmp::Index  tf_key(mdl.Database().StorageKey(temp_flux.c_str())),
+                     f_key(mdl.Database().StorageKey(flux));
+  double length{0.};
 
   cout << "\nassignFluxToPointSource: Translating '" << flux << "' into a nodal point source" << endl;
 
@@ -263,52 +261,24 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   mdl.InputPropertyValue( flux, makeScalar(PLAIN,0.0) ); // set to zero initially
 
   // loop over all finite elements and identify elements that lie at the same model boundary of interest (here LEFT)
-  const Region<2U>&   mref = mdl.Region("Model");
-  vector<Element<2U>* >::const_iterator eit;
-  for ( eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
-      if ( (*eit)->AtBoundary() == LEFT or
-           (*eit)->AtBoundary() == CNR1 or
-           (*eit)->AtBoundary() == CNR4 ) {
-          j = 0;
-          // first loop to calculate length of the FE edge that lies at the boundary
-          for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
-              if ( (*eit)->N(i)->AtBoundary() == LEFT or
-                   (*eit)->N(i)->AtBoundary() == CNR1   or
-                   (*eit)->N(i)->AtBoundary() == CNR4 ) {
-                  y[j]  = (*eit)->N(i)->y();
-                  j++;
-                }
-            }
-          // provide a warning if the edge has less than 2 nodes (as it is a 2D models, 2D elements should have 2 nodes
-          // at the model boundary)
-          if ( j != 2 ) {
-              cerr << "\nassignFluxToPointSource: ERROR: Counted less than two boundary nodes for element " << endl;
-              (*eit)->Out();
-              area = 0.0;
-            }
-          // calculate length (area)
-          else {
-                  area = y[0] - y[1];
-                  if ( area < 0.0 ) area *= -1.0;
-                  length += area;
-                  area /= static_cast<double64>(j); // 2 nodes per triangle or quadrilateral
-                }
-          // second loop to calculate and scale nodal flux
-          for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
-                  if ( (*eit)->N(i)->AtBoundary() == LEFT or
-                   (*eit)->N(i)->AtBoundary() == CNR1   or
-                   (*eit)->N(i)->AtBoundary() == CNR4 ) {
-                      // read existing flux at node i
-                      tf  = (*eit)->N( i )->Read( tf_key );
-                      // read existing source at node i
-                      f  = (*eit)->N( i )->Read( f_key );
-                      // add current heat flux to this value
-                      f += tf() * area;
-                      // store it back to node
-                      (*eit)->N( i )->Store( f_key, f );
-                    }
-                }
-        }
+  Boundary<2U>&   mref = mdl.Boundary("LEFT");
+  for ( auto eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ )
+    {
+        double area = (*eit)->Area();
+        length += area;
+        area /= static_cast<double>(2); // 2 nodes per triangle or quadrilateral
+
+        // second loop to calculate and scale nodal flux
+        for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
+              // read existing flux at node i
+              double tf  = (*eit)->N( i )->Read( tf_key );
+              // read existing source at node i
+              double f  = (*eit)->N( i )->Read( f_key );
+              // add current heat flux to this value
+              f += tf * area;
+              // store it back to node
+              (*eit)->N( i )->Store( f_key, makeScalar(NEUMANN,f) );
+          }
     }
 
   printRangeOfVariable( mdl, flux );
@@ -326,9 +296,8 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
                 vy_key(mdl.Database().StorageKey("nodal velocity y")),
                 v_key (mdl.Database().StorageKey("nodal velocity"));
 
-    const Region<2U>& mref = mdl.Region("Model");
-    vector<Node<2U>* >::const_iterator nit;
-    for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    Region<2U>& mref = mdl.Region("Model");
+    for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
       {
         v(0) = (*nit)->Read( vx_key );
         v(1) = (*nit)->Read( vy_key );
@@ -338,19 +307,16 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
 
 
   /// scale the size of the CSMP model (NB divides by the provided factor!)
-  void Tutorial4_Example::scaleRegion( Model<2U>& mdl, double64 scale_factor )
+  void Tutorial4_Example::scaleRegion( Model<2U>& mdl, double scale_factor )
   {
-    double64       x_, y_;
-    const double64 factor(scale_factor);
+    Region<2U>&  mref = mdl.Region("Model");
 
-    static const Region<2U>& mref = mdl.Region("Model");
-    vector<Node<2U>* >::const_iterator nit;
-    for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
       {
-        x_ = (*nit)->x();
-        (*nit)->x(x_/factor);
-        y_ = (*nit)->y();
-        (*nit)->y(y_/factor);
+        double x = (*nit)->x();
+        (*nit)->x( x / scale_factor);
+        double y = (*nit)->y();
+        (*nit)->y( y / scale_factor);
       }
   }
   

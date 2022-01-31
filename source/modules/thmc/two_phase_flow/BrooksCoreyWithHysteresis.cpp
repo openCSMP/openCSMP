@@ -23,8 +23,8 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis()
 template<size_t dim>
 BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
                                                            const char* permeability,
-                                                           double64 viscosity_nw, double64 viscosity_w,
-                                                           double64 density_nw, double64 density_w, 
+                                                           double viscosity_nw, double viscosity_w,
+                                                           double density_nw, double density_w, 
                                                            const char* lamda, const char* pc_entry )
  : pd_key(database.StorageKey(pc_entry)),
    lamda_key(database.StorageKey(lamda)),
@@ -34,9 +34,9 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
    acc_gravity_(9.8066),
    on_scaning_curve(false),
    imbibing(false),
-   sat_previous(std::numeric_limits<double64>::quiet_NaN()),
-   sat_inflection(std::numeric_limits<double64>::quiet_NaN()),
-   sormax(std::numeric_limits<double64>::quiet_NaN()),
+   sat_previous(std::numeric_limits<double>::quiet_NaN()),
+   sat_inflection(std::numeric_limits<double>::quiet_NaN()),
+   sormax(std::numeric_limits<double>::quiet_NaN()),
    TwoPhaseModel<dim>(database, viscosity_nw, viscosity_w, density_nw, density_w,
                          permeability, "saturation water", 
                         "residual saturation non-wetting phase",
@@ -71,9 +71,9 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
    acc_gravity_(9.8066),
    on_scaning_curve(false),
    imbibing(false),
-   sat_previous(std::numeric_limits<double64>::quiet_NaN()),
-   sat_inflection(std::numeric_limits<double64>::quiet_NaN()),
-   sormax(std::numeric_limits<double64>::quiet_NaN()),
+   sat_previous(std::numeric_limits<double>::quiet_NaN()),
+   sat_inflection(std::numeric_limits<double>::quiet_NaN()),
+   sormax(std::numeric_limits<double>::quiet_NaN()),
    TwoPhaseModel<dim>(database, "permeability",  
                         "viscosity oil", "viscosity water",
                         "density oil", "density water", "saturation water",
@@ -159,10 +159,10 @@ void BrooksCoreyWithHysteresis<dim>::InitializeAndStore( Element<dim>& e )
 
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::krw_Phase() const
+double BrooksCoreyWithHysteresis<dim>::krw_Phase() const
  { 
-    if ( TwoPhaseModel<dim>::seff_ <= 0. ) return static_cast<double64>(0.);
-    if ( TwoPhaseModel<dim>::seff_ >= 1. ) return static_cast<double64>(1.);
+    if ( TwoPhaseModel<dim>::seff_ <= 0. ) return static_cast<double>(0.);
+    if ( TwoPhaseModel<dim>::seff_ >= 1. ) return static_cast<double>(1.);
 
     // pm2 = lambda, the Brooks-Corey parameter
     return std::pow( TwoPhaseModel<dim>::seff_,
@@ -171,20 +171,20 @@ double64 BrooksCoreyWithHysteresis<dim>::krw_Phase() const
 
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::krn_Phase() const
+double BrooksCoreyWithHysteresis<dim>::krn_Phase() const
  { 
     if ( imbibing )
     {
        if ( !on_scaning_curve )
        {
-          if ( this->sat_ >= ( 1. - Sot ) ) return static_cast<double64>(0.);
-          if ( this->sat_ < this->swr_ ) return static_cast<double64>(1.);
+          if ( this->sat_ >= ( 1. - Sot ) ) return static_cast<double>(0.);
+          if ( this->sat_ < this->swr_ ) return static_cast<double>(1.);
           return kroI_1_Snorm * kroDswinflection;
        }
        else
        { 
-          if ( this->sat_ >= ( 1. - Sot ) ) return static_cast<double64>(0.);
-          if ( this->sat_ < this->swr_ ) return static_cast<double64>(1.);
+          if ( this->sat_ >= ( 1. - Sot ) ) return static_cast<double>(0.);
+          if ( this->sat_ < this->swr_ ) return static_cast<double>(1.);
           return kroI_1_Snorm * kroDswinflection;
        }
     }
@@ -192,19 +192,19 @@ double64 BrooksCoreyWithHysteresis<dim>::krn_Phase() const
     {
        if ( !on_scaning_curve )
        {
-          if ( this->sat_ <= this->swr_ ) return static_cast<double64>(1.);
-          if ( this->sat_ >= ( 1 - this->snr_ ) ) return static_cast<double64>(0.);
+          if ( this->sat_ <= this->swr_ ) return static_cast<double>(1.);
+          if ( this->sat_ >= ( 1 - this->snr_ ) ) return static_cast<double>(0.);
           return std::pow( 1. - ( this->sat_ - this->swr_ ) / ( 1. - this->swr_ - this->snr_ ), 2.) *
                  ( 1. - std::pow( ( this->sat_ - this->swr_ ) / ( 1. - this->swr_ - this->snr_ ),
                  ( ( 2. + this->pm2 ) / this->pm2 ) ) );
        }
        else
        {
-          if ( this->sat_ <= this->swr_ ) return static_cast<double64>(1.);
-          if ( this->sat_ >= ( 1. - Sot ) ) return static_cast<double64>(0.);
+          if ( this->sat_ <= this->swr_ ) return static_cast<double>(1.);
+          if ( this->sat_ >= ( 1. - Sot ) ) return static_cast<double>(0.);
           if ( this->sat_ < sat_inflection )
           {
-             if ( this->sat_ >= ( 1. - this->snr_ ) ) return static_cast<double64>(0.);
+             if ( this->sat_ >= ( 1. - this->snr_ ) ) return static_cast<double>(0.);
              return std::pow( 1. - ( this->sat_ - this->swr_ ) / ( 1. - this->swr_ - this->snr_ ), 2.) *
                     ( 1. - std::pow( ( this->sat_ - this->swr_ ) / ( 1. - this->swr_ - this->snr_ ),
                     ( ( 2. + this->pm2 ) / this->pm2 ) ) );
@@ -219,16 +219,16 @@ double64 BrooksCoreyWithHysteresis<dim>::krn_Phase() const
 
 // for the wetting phase
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::MaxFractionalFlowDerivative() const
+double BrooksCoreyWithHysteresis<dim>::MaxFractionalFlowDerivative() const
  {
-    return static_cast<double64>(5.6); // as computed with dfds method
+    return static_cast<double>(5.6); // as computed with dfds method
  } 
   
 
 // pc covers the full saturation range, pc is capped if sw<swr     
 // tested: O.K.     
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
+double BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
 {
    // compute sw_eff for which pc = 40MPa, seff_min = (pc/pd)^-lamda
    // applying the limit on capillary pressure 
@@ -243,13 +243,13 @@ double64 BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
 // dpcdS covers the full saturation range, dpcdS is capped if sw<swr
 // tested: O.K.    
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
+double BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
 {
    // the wetting phase has no capilllary pressure
-   if ( phase == 1U ) return static_cast<double64>(0.);
+   if ( phase == 1U ) return static_cast<double>(0.);
 
    // compute Se for which pc = 40MPa, seff_min = (pc/pd)^-lamda
-   const double64 Se_min = std::pow( TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ / pm1, -pm2 );
+   const double Se_min = std::pow( TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ / pm1, -pm2 );
    // applying the limit on capillary pressure and its derivative
    if ( TwoPhaseModel<dim>::seff_ <= Se_min )
      return pm1 * std::pow( Se_min, -1. / pm2 ) / (Se_min * pm2);
@@ -264,20 +264,20 @@ double64 BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
  
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::dfds() const 
+double BrooksCoreyWithHysteresis<dim>::dfds() const 
 {
-   const double64 seff = TwoPhaseModel<dim>::seff_;
+   const double seff = TwoPhaseModel<dim>::seff_;
 
-   if ( seff <= TwoPhaseModel<dim>::swr_ or seff >= (1. - TwoPhaseModel<dim>::snr_) ) return static_cast<double64>(0.);
+   if ( seff <= TwoPhaseModel<dim>::swr_ or seff >= (1. - TwoPhaseModel<dim>::snr_) ) return static_cast<double>(0.);
 
    // the linear model case
-   if ( pm2 == static_cast<double64>(0.) )
+   if ( pm2 == static_cast<double>(0.) )
      return 1. / (1. - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_);
    
-	const double64 a1 = std::pow ( seff , ( 2. + pm2 ) / pm2 );
-	const double64 a2 = std::pow ( seff , ( 2. + 2. * pm2 ) / pm2 );
-	const double64 a3 = std::pow ( seff , ( 2. + 3. * pm2 ) / pm2 );
-    const double64 a4 = ( ((1.-seff) * (1.-seff)) * (1. - a1 ) + TwoPhaseModel<dim>::mun_ / TwoPhaseModel<dim>::muw_ * a3);
+	const double a1 = std::pow ( seff , ( 2. + pm2 ) / pm2 );
+	const double a2 = std::pow ( seff , ( 2. + 2. * pm2 ) / pm2 );
+	const double a3 = std::pow ( seff , ( 2. + 3. * pm2 ) / pm2 );
+    const double a4 = ( ((1.-seff) * (1.-seff)) * (1. - a1 ) + TwoPhaseModel<dim>::mun_ / TwoPhaseModel<dim>::muw_ * a3);
 	
     return -TwoPhaseModel<dim>::mun_ / TwoPhaseModel<dim>::muw_ * 1. / pm2 * 1. /
            (1. -  TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_) *
@@ -290,32 +290,32 @@ double64 BrooksCoreyWithHysteresis<dim>::dfds() const
 
 // tested: O.K.
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::dGds() const 
+double BrooksCoreyWithHysteresis<dim>::dGds() const 
 {
    // 2. compute dGdS for the Brooks-Corey model
-   double64 seffw(TwoPhaseModel<dim>::sat_ / (1.-TwoPhaseModel<dim>::swr_-TwoPhaseModel<dim>::snr_));
+   double seffw(TwoPhaseModel<dim>::sat_ / (1.-TwoPhaseModel<dim>::swr_-TwoPhaseModel<dim>::snr_));
    if ( TwoPhaseModel<dim>::sat_ > 1.-TwoPhaseModel<dim>::snr_ ) seffw = 1.;
    if ( TwoPhaseModel<dim>::sat_ < TwoPhaseModel<dim>::swr_ )    return 0.; // phase is immobile, no flow
 
    // see Maple worksheet 'BrooksCorey_G&dGdS.mw'
-   const double64 t1 = 1. - seffw;
-   const double64 t3 = 1. /  pm2; // pm2 = Brooks-Corey lambda
-   const double64 t5 = std::pow( TwoPhaseModel<dim>::sat_,  ((2. + pm2) * t3) ); // sat = sw
-   const double64 t6 = 0.1e1 - t5;
-   const double64 t8 = 0.1e1 / TwoPhaseModel<dim>::mun_;
-   const double64 t9 =  t1 * t6 * t8;
-   const double64 t11 = 2. + 3. * pm2;
-   const double64 t12 = t11 * t3;
-   const double64 t13 = std::pow( seffw,  t12);
-   const double64 t14 = 1. /  TwoPhaseModel<dim>::muw_;
-   const double64 t15 = t13 * t14;
-   const double64 t16 = t1 * t1;
-   const double64 t17 = t16 * t6;
-   const double64 t18 = t17 * t8;
-   const double64 t19 = t18 +  t15;
-   const double64 t20 = 0.1e1 / t19;
-   const double64 t26 = 1. / seffw;
-   const double64 t31 = t19 * t19;
+   const double t1 = 1. - seffw;
+   const double t3 = 1. /  pm2; // pm2 = Brooks-Corey lambda
+   const double t5 = std::pow( TwoPhaseModel<dim>::sat_,  ((2. + pm2) * t3) ); // sat = sw
+   const double t6 = 0.1e1 - t5;
+   const double t8 = 0.1e1 / TwoPhaseModel<dim>::mun_;
+   const double t9 =  t1 * t6 * t8;
+   const double t11 = 2. + 3. * pm2;
+   const double t12 = t11 * t3;
+   const double t13 = std::pow( seffw,  t12);
+   const double t14 = 1. /  TwoPhaseModel<dim>::muw_;
+   const double t15 = t13 * t14;
+   const double t16 = t1 * t1;
+   const double t17 = t16 * t6;
+   const double t18 = t17 * t8;
+   const double t19 = t18 +  t15;
+   const double t20 = 0.1e1 / t19;
+   const double t26 = 1. / seffw;
+   const double t31 = t19 * t19;
 
    return -0.2e1 * t9 * t15 * t20 + t17 * t8 * t13 * t12 * t26 * t14 * t20 - t18 *  t15 / 
            t31 * (-0.2e1 * t9 + (t13 * t11 * t3 * t26 * t14));
@@ -328,7 +328,7 @@ double64 BrooksCoreyWithHysteresis<dim>::dGds() const
 
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::ShockSpeed() const
+double BrooksCoreyWithHysteresis<dim>::ShockSpeed() const
  {
     return BrooksCoreyFrontVelocity().ShockVelocityMultiplier( pm2, 
                                                  TwoPhaseModel<dim>::mun_/TwoPhaseModel<dim>::muw_ );
@@ -337,7 +337,7 @@ double64 BrooksCoreyWithHysteresis<dim>::ShockSpeed() const
 
 // look this one up in the book by Randy LeVeque
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::ShockHeight() const
+double BrooksCoreyWithHysteresis<dim>::ShockHeight() const
  {
     cerr <<"\nBrooksCorey<dim>::ShockHeight: not implemented yet."<< endl;
     return -1.; 

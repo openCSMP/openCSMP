@@ -226,7 +226,7 @@ CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravit
   // calculate and store volume and pore volume
   model.Accept( pore_visitor );
 
-    cout <<"\n\nCVFEM_PHX_Scheme<"<< typeid(double64).name() <<","<< dim;
+    cout <<"\n\nCVFEM_PHX_Scheme<"<< typeid(double).name() <<","<< dim;
     cout <<">: Constructed successfully."<< endl;
 
   } // end constructor 
@@ -241,7 +241,7 @@ CVFEM_PHX_Scheme<dim>::~CVFEM_PHX_Scheme()
 
 /** modifying maximum size of time step */
 template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double64 timestep)
+void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double timestep)
     {
 
       largest_timestep = dt = cfl_dt = current_dt = control_dt = old_dt = timestep;
@@ -252,7 +252,7 @@ void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double64 timestep)
 
 /** adjusting timestep */
 template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::ChangeTimeStepTo(double64 timestep)
+void CVFEM_PHX_Scheme<dim>::ChangeTimeStepTo(double timestep)
     {
 
       dt = cfl_dt = current_dt = control_dt = old_dt = timestep;
@@ -265,7 +265,7 @@ void CVFEM_PHX_Scheme<dim>::InitialFluidPropertiesFromPTX()
     {
 
        model.Accept( pore_visitor );
-       equilibrator_properties.InitialPropertiesFromPTX();
+       equilibrator_properties.InitialPropertiesFromPTX( model );
        model.CopyReplace(names.diff_mass_variables[2].c_str(),names.diff_mass_variables[1].c_str());
        model.CopyReplace(names.diff_enthalpy_variables[2].c_str(),names.diff_enthalpy_variables[1].c_str());
 
@@ -286,11 +286,11 @@ void CVFEM_PHX_Scheme<dim>::PrepareTransientCalculations()
 
 /** main function to apply CVFEM scheme in transeint calculations, returns time step used for calculations */
 template<size_t dim>
-double64 CVFEM_PHX_Scheme<dim>::Apply()
+double CVFEM_PHX_Scheme<dim>::Apply()
     {
 
       timestep++;
-      double64 reset_dt;
+      double reset_dt;
 
       AdvanceTransientVariables();
 
@@ -410,7 +410,7 @@ void CVFEM_PHX_Scheme<dim>::AdvectionDiffusionLoops()
         
 		if ( control_dt > current_dt )
          {
-          cout << "\ncontrol_dt > current_dt adouble64er advection step" << endl;
+          cout << "\ncontrol_dt > current_dt adoubleer advection step" << endl;
           cin >> temp;
          }
         else if ( current_dt > control_dt )
@@ -493,7 +493,7 @@ void CVFEM_PHX_Scheme<dim>::ApplyCVFEM_Visitors()
     
      model.InputUniformScalarValue(names.conduction_visitor_variables[1].c_str(),0.0);
      model.AssignBoundaryFlags(TOP,names.conduction_visitor_variables[1].c_str(), DIRICH );
-//     model.AssignBoundaryFlags(LEdouble64,names.conduction_visitor_variables[1].c_str(), DIRICH );
+//     model.AssignBoundaryFlags(LEdouble,names.conduction_visitor_variables[1].c_str(), DIRICH );
 //     model.AssignBoundaryFlags(RIGHT,names.conduction_visitor_variables[1].c_str(), DIRICH );
 
       //********
@@ -567,8 +567,8 @@ void CVFEM_PHX_Scheme<dim>::CheckForConsistency()
 
 /** modify calculations of temperature-dependent heat capacity of the rock */
 template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::TemperatureDependentHeatCapacityRock( double64 cpr_min_ext, double64 t_min_ext,
-                                               double64 cpr_max_ext, double64 t_max_ext )
+void CVFEM_PHX_Scheme<dim>::TemperatureDependentHeatCapacityRock( double cpr_min_ext, double t_min_ext,
+                                               double cpr_max_ext, double t_max_ext )
   {
 
     equilibrator_properties.TemperatureDependentHeatCapacityRock(cpr_min_ext,t_min_ext,cpr_max_ext,t_max_ext);
@@ -577,7 +577,7 @@ void CVFEM_PHX_Scheme<dim>::TemperatureDependentHeatCapacityRock( double64 cpr_m
 
 /** switch on open top, specifying temperature, pressure and salinity of inflowing fluid */
 template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double64 T_gradC, double64 p_Pa, double64 wt )
+void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double T_gradC, double p_Pa, double wt )
   {
 
     open_top = true;
@@ -588,7 +588,7 @@ void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double64 T_gradC, double64 p_Pa, dou
 
 /** switch on open top, specifying salinity of inflowing fluid */
 template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double64 wt )
+void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double wt )
   {
 
     open_top = true;
@@ -624,7 +624,7 @@ void CVFEM_PHX_Scheme<dim>::AddAdvectionVariable( const char* balanced_variable,
 
 /** modifying cfl criterion */
 template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::Adjust_CFL_Criterion(double64 scale_factor, bool take_pore_velocity)
+void CVFEM_PHX_Scheme<dim>::Adjust_CFL_Criterion(double scale_factor, bool take_pore_velocity)
     {
       upwind_control.Adjust_CFL_Criterion(scale_factor,take_pore_velocity);
     } // end Adjust_CFL_Criterion
@@ -633,7 +633,7 @@ void CVFEM_PHX_Scheme<dim>::Adjust_CFL_Criterion(double64 scale_factor, bool tak
 /** access function to transient fluxes */
 template<size_t dim>
 void CVFEM_PHX_Scheme<dim>::GetFacetFluxFromInsideNodeToOutsideNode( Element<dim>& e, unsigned int facet_idx,
-                                                                     double64& flux_liquid, double64& flux_vapor )
+                                                                     double& flux_liquid, double& flux_vapor )
    {
     flux_liquid = fv_transport_liquid.GetFacetFlux(e,facet_idx,0U);
     flux_vapor = fv_transport_vapor.GetFacetFlux(e,facet_idx,0U);

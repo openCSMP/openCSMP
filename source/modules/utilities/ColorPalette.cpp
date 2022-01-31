@@ -18,8 +18,8 @@ ColorPalette::ColorPalette()
   blend(1.0F),
   saturation(1.0F),
   lightness(255.0F),
-  rgbColors( 256, vector<float32>(3) ), //  Don't use rgbColors( 256, 3 ), 3=float is not defined !
-  hsvColors( 256, vector<float32>(3) )  
+  rgbColors( 256, vector<float>(3) ), //  Don't use rgbColors( 256, 3 ), 3=float is not defined !
+  hsvColors( 256, vector<float>(3) )  
 {
   // Make a default color palette
   cout <<"\nColorPalette::ColorPalette: building palettes"<< endl;
@@ -29,9 +29,9 @@ ColorPalette::ColorPalette()
 }
 
 
-// ColorPalette( float32 low, float32 high )
+// ColorPalette( float low, float high )
 // ---------------------------------------------------------------t---
-ColorPalette::ColorPalette( float32 low, float32 high )
+ColorPalette::ColorPalette( float low, float high )
 : inputPaletteFile(NULL),
   outputPaletteFile(NULL),
   autoScalingLow( low ),
@@ -43,12 +43,12 @@ ColorPalette::ColorPalette( float32 low, float32 high )
   blend(1.0F),
   saturation(1.0F),
   lightness(255.0F),
-  rgbColors( 256, vector<float32>(3) ), 
-  hsvColors( 256, vector<float32>(3) ) 
+  rgbColors( 256, vector<float>(3) ), 
+  hsvColors( 256, vector<float>(3) ) 
 {
   // Make a default color palette
   paletteSize = 256;
-  cout <<"\nColorPalette::ColorPalette(float32 low, float32 high): building palettes"<< endl;
+  cout <<"\nColorPalette::ColorPalette(float low, float high): building palettes"<< endl;
   cout.flush();
   MakeRainbowPalette();
   //MakeGreyPalette();
@@ -111,8 +111,8 @@ void ColorPalette::AdjustPaletteSize()
       // Enlarge vector
       hsvColors.reserve( newSize );
       rgbColors.reserve( newSize );
-      while( newSize > hsvColors.size() ) hsvColors.push_back( vector<float32>(3) );
-      while( newSize > rgbColors.size() ) rgbColors.push_back( vector<float32>(3) );
+      while( newSize > hsvColors.size() ) hsvColors.push_back( vector<float>(3) );
+      while( newSize > rgbColors.size() ) rgbColors.push_back( vector<float>(3) );
       assert( newSize == hsvColors.size() );
       assert( newSize == rgbColors.size() );
     }
@@ -132,7 +132,7 @@ void ColorPalette::AdjustPaletteSize()
 // --------------------------------------------------------------t----
 void ColorPalette::MakeRainbowPalette()
 {
-  vector<vector<float32> >::iterator  hsvIt;
+  vector<vector<float> >::iterator  hsvIt;
   // Rainbow is easier to make in HSV
   size_t i;
 
@@ -142,9 +142,9 @@ void ColorPalette::MakeRainbowPalette()
   //upperPaletteBound = 359.8;
   //lowerPaletteBound = 0.0;
 
-  float32 paletteRangeInDegree = upperPaletteBound - lowerPaletteBound;
+  float paletteRangeInDegree = upperPaletteBound - lowerPaletteBound;
   assert( paletteSize != 0 ); // to prevent division by zero
-  float32   step = paletteRangeInDegree / paletteSize;
+  float   step = paletteRangeInDegree / paletteSize;
 
   // maybe a check for the range would be handy...
 
@@ -170,12 +170,12 @@ void ColorPalette::MakeRainbowPalette()
 // --------------------------------------------------------------t----
 void ColorPalette::MakeGreyPalette()
 {
-  vector<vector<float32> >::iterator  rgbIt;
+  vector<vector<float> >::iterator  rgbIt;
   // Grey scaling is easier to make in RGB
   size_t i,j;
   
   assert( paletteSize != 0 );
-  float32   step = 254.8F / paletteSize;
+  float   step = 254.8F / paletteSize;
   for( rgbIt  = rgbColors.begin(), i=0;
        rgbIt != rgbColors.end(); rgbIt++, i++ )
     {
@@ -201,7 +201,7 @@ bool ColorPalette::ReadColorPaletteFile( const char* file, const string& what )
   // Read either an RGB or HSV file
   // Format: Comment lines are any with something additional to 0-9 and "."
   //         Empty lines
-  //         Lines with 3 numbers of type size_t or float32
+  //         Lines with 3 numbers of type size_t or float
   //         The number of lines with values will be the size of the
   //             color palette
   // Parameters: char* file = "filename", String what = "rgb" OR "hsv"
@@ -211,10 +211,10 @@ bool ColorPalette::ReadColorPaletteFile( const char* file, const string& what )
   const size_t    maxIntext = 1024;   // length of line accepted
   size_t          maxLines = 16384;   // = max palette size
   size_t          minLines = 256;     // = min palette size
-  float32            minAllowed = 0.0F;  // for rgb
-  float32            maxAllowed = 255.0F; // for hsv
+  float            minAllowed = 0.0F;  // for rgb
+  float            maxAllowed = 255.0F; // for hsv
   ifstream           ifs;                // palette file stream
-  vector<float32> color(3); 
+  vector<float> color(3); 
   size_t          i = 0;              // i = i :-)
   char*        p;
   char         intext[maxIntext];  // for input line
@@ -224,7 +224,7 @@ bool ColorPalette::ReadColorPaletteFile( const char* file, const string& what )
   size_t    colorCounter = 0;   // number of colors in file
   size_t    lineCounter = 0;    // physical lines
 
-  vector<vector<float32> >  allColors;   // tmp vector for all colors
+  vector<vector<float> >  allColors;   // tmp vector for all colors
   allColors.reserve( minLines );
   for( i=0; i<3; i++ ) color[i] = 0.0F;
 
@@ -332,8 +332,8 @@ bool ColorPalette::ReadColorPaletteFile( const char* file, const string& what )
       // Now transform String to T
       for( i=0; i<3; i++ )
         {
-          // Make a float32 out of String
-          color[i] = static_cast<float32>(atof( field[i].c_str() ));
+          // Make a float out of String
+          color[i] = static_cast<float>(atof( field[i].c_str() ));
           // Check for value in range
           if( what == "rgb" )
             {
@@ -389,7 +389,7 @@ bool ColorPalette::ReadColorPaletteFile( const char* file, const string& what )
 // ---------------------------------------------------------------t---
 bool ColorPalette::WriteColorPaletteFile( const char* file, const string& what )
 {
-  vector<vector<float32> >::iterator  rgbIt, hsvIt;
+  vector<vector<float> >::iterator  rgbIt, hsvIt;
   // Check parameter 
   if( what != "rgb" && what != "hsv" )
     {
@@ -448,7 +448,7 @@ bool ColorPalette::WriteColorPaletteFile( const char* file, const string& what )
 // ---------------------------------------------------------------t---
 void  ColorPalette::WriteRgbColorPaletteToStdout()
 {
-  vector<vector<float32> >::iterator  rgbIt;
+  vector<vector<float> >::iterator  rgbIt;
   
   for( rgbIt  = rgbColors.begin();
        rgbIt != rgbColors.end(); rgbIt++ )
@@ -464,7 +464,7 @@ void  ColorPalette::WriteRgbColorPaletteToStdout()
 // ---------------------------------------------------------------t---
 void  ColorPalette::WriteRgbColorPaletteToStdoutWithLineNumbers()
 {
-   vector<vector<float32> >::iterator  rgbIt;
+   vector<vector<float> >::iterator  rgbIt;
   size_t lineCounter = 1;
   for( rgbIt  = rgbColors.begin();
        rgbIt != rgbColors.end(); rgbIt++ )
@@ -481,7 +481,7 @@ void  ColorPalette::WriteRgbColorPaletteToStdoutWithLineNumbers()
 // ---------------------------------------------------------------t---
 void  ColorPalette::WriteHsvColorPaletteToStdout()
 {
-  vector<vector<float32> >::iterator  hsvIt;
+  vector<vector<float> >::iterator  hsvIt;
   
   for( hsvIt  = hsvColors.begin();
        hsvIt != hsvColors.end(); hsvIt++ )
@@ -498,7 +498,7 @@ void  ColorPalette::WriteHsvColorPaletteToStdout()
 // ---------------------------------------------------------------t---
 void ColorPalette::WriteHsvColorPaletteToStdoutWithLineNumbers()
 {
-  vector<vector<float32> >::iterator  hsvIt;
+  vector<vector<float> >::iterator  hsvIt;
   size_t lineCounter = 1;
   
   for( hsvIt  = hsvColors.begin();
@@ -515,12 +515,12 @@ void ColorPalette::WriteHsvColorPaletteToStdoutWithLineNumbers()
 // ScaleColorRangeTo( const T& new_min, const T& new_max )
 // ------------------------------------------------------------------
 // tested: SKM 13/8/98
-void ColorPalette::ScaleColorRangeTo( float32 new_min, float32 new_max )
+void ColorPalette::ScaleColorRangeTo( float new_min, float new_max )
  {
     // find min and max value
-    float32                             old_min, old_max;
-    vector<vector<float32> >::iterator  it;
-    vector<float32>::iterator           jt;
+    float                             old_min, old_max;
+    vector<vector<float> >::iterator  it;
+    vector<float>::iterator           jt;
     
     // the min, max values may be different among the r,g, b
     // columns. We are however interested in the absolute 
@@ -545,8 +545,8 @@ void ColorPalette::ScaleColorRangeTo( float32 new_min, float32 new_max )
 
     // scaling the color range to the new values
     // -----------------------------------------
-    float32  old_range = old_max - old_min;
-    float32  new_range = new_max - new_min;
+    float  old_range = old_max - old_min;
+    float  new_range = new_max - new_min;
     
     for ( it=rgbColors.begin(); it!=rgbColors.end(); it++ )
       for ( jt=(*it).begin(); jt!=(*it).end(); jt++ )
@@ -564,8 +564,8 @@ void ColorPalette::ScaleColorRangeTo( float32 new_min, float32 new_max )
 // S.K. Matthai 13/8/98
 void ColorPalette::ColorRangeRGB() const
  {
-    float32  minR, maxR, minG, maxG, minB, maxB;
-    vector<vector<float32> >::const_iterator it;
+    float  minR, maxR, minG, maxG, minB, maxB;
+    vector<vector<float> >::const_iterator it;
 
     minR = maxR = (*rgbColors.begin())[0];
     minG = maxG = (*rgbColors.begin())[1];
@@ -597,7 +597,7 @@ void ColorPalette::ColorRangeRGB() const
 
 
 // --------------------------------------------------------------t----
-void  ColorPalette::Saturation( float32 sat )
+void  ColorPalette::Saturation( float sat )
 {
   saturation = sat;
 }
@@ -605,7 +605,7 @@ void  ColorPalette::Saturation( float32 sat )
 
 
 // ---------------------------------------------------------------t---
-float32     ColorPalette::Saturation() const
+float     ColorPalette::Saturation() const
 {
   return saturation;
 }
@@ -613,7 +613,7 @@ float32     ColorPalette::Saturation() const
 
 
 // ---------------------------------------------------------------t---
-void  ColorPalette::Lightness( float32 light )
+void  ColorPalette::Lightness( float light )
 {
   lightness = light;
 }
@@ -621,7 +621,7 @@ void  ColorPalette::Lightness( float32 light )
 
 
 // ---------------------------------------------------------------t---
-float32     ColorPalette::Lightness()  const
+float     ColorPalette::Lightness()  const
 {
   return lightness;
 }
@@ -630,7 +630,7 @@ float32     ColorPalette::Lightness()  const
 
 // ---------------------------------------------------------------t---
 
-void  ColorPalette::Blend( float32 alpha )
+void  ColorPalette::Blend( float alpha )
 {
   blend = alpha;
 }
@@ -639,7 +639,7 @@ void  ColorPalette::Blend( float32 alpha )
 
 // ---------------------------------------------------------------t---
 
-float32     ColorPalette::Blend()  const
+float     ColorPalette::Blend()  const
 {
   return blend;
 }
@@ -743,8 +743,8 @@ bool ColorPalette::WriteHsvColorPaletteFile( const char* file )
 
 
 // ---------------------------------------------------------------t---
-void ColorPalette::RgbToHsv( const std::vector<float32>& rgb, 
-                                    std::vector<float32>&       hsv )
+void ColorPalette::RgbToHsv( const std::vector<float>& rgb, 
+                                    std::vector<float>&       hsv )
 {
    RGB_To_HSV( rgb[0], rgb[1], rgb[2], 
                hsv[0], hsv[1], hsv[2] );
@@ -754,8 +754,8 @@ void ColorPalette::RgbToHsv( const std::vector<float32>& rgb,
 
 
 // --------------------------------------------------------------t----
-void ColorPalette::HsvToRgb( const std::vector<float32>& hsv, 
-                                    std::vector<float32>&       rgb )
+void ColorPalette::HsvToRgb( const std::vector<float>& hsv, 
+                                    std::vector<float>&       rgb )
 {
    HSV_To_RGB( rgb[0], rgb[1], rgb[2], 
                hsv[0], hsv[1], hsv[2] );
@@ -767,8 +767,8 @@ void ColorPalette::HsvToRgb( const std::vector<float32>& hsv,
 
 void ColorPalette::RgbToHsv()
 {
-   std::vector<std::vector<float32> >::const_iterator rgb; 
-   std::vector<std::vector<float32> >::iterator       hsv; 
+   std::vector<std::vector<float> >::const_iterator rgb; 
+   std::vector<std::vector<float> >::iterator       hsv; 
 
    for( rgb=rgbColors.begin(), hsv=hsvColors.begin(); 
         rgb!=rgbColors.end();  rgb++, hsv++ )
@@ -781,8 +781,8 @@ void ColorPalette::RgbToHsv()
 
 void ColorPalette::HsvToRgb()
 {
-   std::vector<std::vector<float32> >::const_iterator hsv; 
-   std::vector<std::vector<float32> >::iterator       rgb; 
+   std::vector<std::vector<float> >::const_iterator hsv; 
+   std::vector<std::vector<float> >::iterator       rgb; 
 
    for( hsv=hsvColors.begin(), rgb=rgbColors.begin(); 
         hsv!=hsvColors.end(); rgb++, hsv++ )
@@ -793,18 +793,18 @@ void ColorPalette::HsvToRgb()
 
 // --------------------------------------------------------------t----
 
-void ColorPalette::RGB_To_HSV( float32 r, float32 g, float32 b, 
-                                      float32& h, float32& s, float32& v )
+void ColorPalette::RGB_To_HSV( float r, float g, float b, 
+                                      float& h, float& s, float& v )
 {
   // Computer Graphics p. 592 ( rgb each in 0..1 )
-  float32 max(1.0e30f), min(-1.0e30f);
+  float max(1.0e30f), min(-1.0e30f);
   if(      r >= g && r >= b ) max = r;
   else if( g >= r && g >= b ) max = g;
   else if( b >= r && b >= g ) max = b;
   if(      r <= g && r <= b ) min = r;
   else if( g <= r && g <= b ) min = g;
   else if( b <= r && b <= g ) min = b;
-  float32 delta = max - min;
+  float delta = max - min;
   v = max;
   s = ( max != 0.0 ) ? ( delta / max ) : 0.0F;
   if( s == 0.0 ) h = 0.0F;
@@ -823,11 +823,11 @@ void ColorPalette::RGB_To_HSV( float32 r, float32 g, float32 b,
 // HSV_To_RGB()
 // ---------------------------------------------------------------t---
 
-void ColorPalette::HSV_To_RGB( float32& r, float32& g, float32& b, 
-                                      float32 h, float32 s, float32 v )
+void ColorPalette::HSV_To_RGB( float& r, float& g, float& b, 
+                                      float h, float s, float v )
 {
   // Computer Graphics p. 593 ( h in 0..360, s and v in 0..1 )
-  float32 f,p,q,t;
+  float f,p,q,t;
   size_t i;
   if( s == 0.0 )
     {
@@ -868,9 +868,9 @@ void ColorPalette::HSV_To_RGB( float32& r, float32& g, float32& b,
 
 
 
-// GiveRgb( float32 val, float32* vessel )
+// GiveRgb( float val, float* vessel )
 // ------------------------------------------------------------------
-void ColorPalette::GiveRgb( float32 val, float32* vessel )
+void ColorPalette::GiveRgb( float val, float* vessel )
 {
   // For OpenGL one needs an array with four values with R,G,B,alpha
   // Provide the array as pointer in the second parameter
@@ -897,9 +897,9 @@ void ColorPalette::GiveRgb( float32 val, float32* vessel )
 
 
 
-// GiveHsv( float32 val, float32* vessel )
+// GiveHsv( float val, float* vessel )
 // ------------------------------------------------------------------
-void ColorPalette::GiveHsv( float32 val, float32* vessel )
+void ColorPalette::GiveHsv( float val, float* vessel )
 {
    size_t which = static_cast<size_t>(val);
 

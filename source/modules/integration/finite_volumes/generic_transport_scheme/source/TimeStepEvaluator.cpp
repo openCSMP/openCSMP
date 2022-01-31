@@ -20,13 +20,13 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim, template<size_t> class USER>
-TimeStepEvaluator<dim,USER>::TimeStepEvaluator( double64 timestep_reduction_factor, double64 max_time_increment )
+TimeStepEvaluator<dim,USER>::TimeStepEvaluator( double timestep_reduction_factor, double max_time_increment )
  : max_time_increment_(max_time_increment),
    step_size_reduction_factor_(timestep_reduction_factor)
  {
     assert( timestep_reduction_factor > 0. );
     assert( max_time_increment > 0. );
-    const double64 one_million_years(1e6 * 365. * 86400.);
+    const double one_million_years(1e6 * 365. * 86400.);
     assert( max_time_increment < one_million_years );
  }
 
@@ -37,7 +37,7 @@ TimeStepEvaluator<dim,USER>::TimeStepEvaluator( double64 timestep_reduction_fact
 
 /// adjust setting for the solve (default=0.5)
 template<size_t dim, template<size_t> class USER>
-void TimeStepEvaluator<dim,USER>::StepSizeReductionFactor( double64 factor )
+void TimeStepEvaluator<dim,USER>::StepSizeReductionFactor( double factor )
  {
     step_size_reduction_factor_ = factor;
  }
@@ -45,7 +45,7 @@ void TimeStepEvaluator<dim,USER>::StepSizeReductionFactor( double64 factor )
 
 
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::StepSizeReductionFactor() const
+double TimeStepEvaluator<dim,USER>::StepSizeReductionFactor() const
  {
     return step_size_reduction_factor_;
  }
@@ -53,7 +53,7 @@ double64 TimeStepEvaluator<dim,USER>::StepSizeReductionFactor() const
 
 
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
+double TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
  {
     return max_time_increment_;
  }
@@ -69,10 +69,10 @@ double64 TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
     This is robust criterion in the presence of fluid sources and sinks.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>* const nptr, double64 outflow ) const
+double TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>* const nptr, double outflow ) const
  {
      // 1. (phi * V) / q_out = dt
-     double64 time_increment = nptr->Read( User()->key_FVPV ) / outflow;
+     double time_increment = nptr->Read( User()->Notation.key_FVPV ) / outflow;
      assert( time_increment > 0. );
 
      return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
@@ -94,20 +94,20 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
          is necessary, else there is a saturation buildup at out-flow boundaries.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr, double64 outflow ) const
+double TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr, double outflow ) const
   {
      assert( nptr != NULL );
  
      // 0. COMPUTING THE FLUX BALANCE
-     const double64 pore_volume  = nptr->Read( User()->key_FVPV );
-     double64       flux_balance = nptr->Read( User()->key_FB );
+     const double pore_volume  = nptr->Read( User()->Notation.key_FVPV );
+     double       flux_balance = nptr->Read( User()->Notation.key_FB );
 
     // 1. FINITE VOLUMES TRUNCATED BY MODEL BOUNDARY
     //    if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance.
     //    however, if we are at a no-flow boundary of the model, there should be no inflow or outflow through the missing facets
     //    and any flux balance will therefore be correctly computed.
     if ( nptr->AtBoundary() != NOT ) {
-         if ( nptr->Status( User()->key_PF ) == DIRICH ) {
+         if ( nptr->Status( User()->Notation.key_PF ) == DIRICH ) {
                // if we are at an outflow boundary, no outflow was recorded as all FV facet normals point into the model domaim
                // in this the flux-balance is equivalent to the outflow
                if ( flux_balance < 0. ) outflow = fabs(flux_balance);
@@ -172,28 +172,28 @@ less than a millisecond (usually a prohibitively small increment).
 
 */
 template<size_t dim, template<size_t> class USER>
-double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const eit ) const
+double  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const eit ) const
  {
-    vector<double64>            gradPc(dim);
+    vector<double>            gradPc(dim);
     VectorVariable<dim>         vc;
-    double64                    velocity, courant_increment(max_time_increment_);
-    const double64              millisecond(1.0e-3);
-    const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
+    double                    velocity, courant_increment(max_time_increment_);
+    const double              millisecond(1.0e-3);
+    const bool                  multiply_with_cell_thickess = (User()->Notation.key_THI == csmp::Index()) ? false : true;
 
    // 1. limit imposed by advection
    // -----------------------------
-   eit->Read( User()->key_V, vc );
+   eit->Read( User()->Notation.key_V, vc );
    velocity = vc.Length();
 
 
-   double64 cell_diameter = eit->LengthInDirection(vc) * eit->Read( User()->key_PHI );
-   if ( multiply_with_cell_thickess ) cell_diameter *= eit->Read( User()->key_THI );
+   double cell_diameter = eit->LengthInDirection(vc) * eit->Read( User()->Notation.key_PHI );
+   if ( multiply_with_cell_thickess ) cell_diameter *= eit->Read( User()->Notation.key_THI );
 
 
    // 4. calculating the CFL criterion from the cell diameter
    // -------------------------------------------------------
    // guarding against degenerate cases
-   if ( velocity > numeric_limits<double64>::epsilon() and cell_diameter > numeric_limits<double64>::epsilon() ) {
+   if ( velocity > numeric_limits<double>::epsilon() and cell_diameter > numeric_limits<double>::epsilon() ) {
         courant_increment = std::min( courant_increment, cell_diameter / velocity );
      }
 
@@ -226,15 +226,15 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const 
 */
 /* TODO: port this to new relperm framework
 template<size_t dim, template<size_t> class USER>
-double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64 max_time_increment ) const
+double  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double max_time_increment ) const
  {
     assert( max_time_increment > 0. );
     static DenseMatrix<DM_MIN>  DN;
-    vector<double64>            gradPc(dim);
+    vector<double>            gradPc(dim);
     VectorVariable<dim>         vc;
-    double64                    velocity,
+    double                    velocity,
                                 courant_increment(max_time_increment);
-    const double64              millisecond(1.0e-3);
+    const double              millisecond(1.0e-3);
     const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
     const bool                  unless_has_equal_dimension(dim!=1U);
 
@@ -258,7 +258,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
            // thus for implicit scheme is better:
            velocity *= relperm.dfds();
 
-           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->phi_key );
+           double cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->phi_key );
            if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->thi_key );
 
            // 2. additional buoyancy-related flow
@@ -269,21 +269,21 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
            // 3. limit due to potential capillary spreading
            // ---------------------------------------------
            if ( with_capillary_spreading_ ) {
-               const double64 k_lambda_overbar(relperm.Permeability() * relperm.G());
+               const double k_lambda_overbar(relperm.Permeability() * relperm.G());
                // computing the capillary pressure gradient
-               if ( k_lambda_overbar > numeric_limits<double64>::epsilon() )
+               if ( k_lambda_overbar > numeric_limits<double>::epsilon() )
                  {
                      fill( gradPc.begin(), gradPc.end(), 0. );
                      (*(*eit)).dN_AtBaryCenter( DN );
                      for ( size_t j=0U; j<(*eit)->Nodes(); j++ ) {
-                         const double64 sn = (*eit)->N(j)->Read( User()->C0_key );
+                         const double sn = (*eit)->N(j)->Read( User()->C0_key );
                          relperm.SaturationWettingPhase( 1. - sn );
                          relperm.EffectiveSaturation();
-                         const double64 pc = relperm.pc_Phase();
+                         const double pc = relperm.pc_Phase();
                          for ( size_t k=0U; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
                      }
                      // getting the maximum capillary flux (G= lambda overbar)
-                     double64  magnitude_grad_pc(gradPc[0]); // 1D
+                     double  magnitude_grad_pc(gradPc[0]); // 1D
                      if      ( dim == 3U ) magnitude_grad_pc = sqrt(gradPc[0]*gradPc[0]+gradPc[1]*gradPc[1]+gradPc[2]*gradPc[2]);
                      else if ( dim == 2U ) magnitude_grad_pc = sqrt(gradPc[0]*gradPc[0]+gradPc[1]*gradPc[1]);
 
@@ -295,7 +295,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
            // 4. calculating the CFL criterion from the cell diameter
            // -------------------------------------------------------
            // guarding against degenerate cases
-           if ( velocity > numeric_limits<double64>::epsilon() and cell_diameter > numeric_limits<double64>::epsilon() ) {
+           if ( velocity > numeric_limits<double>::epsilon() and cell_diameter > numeric_limits<double>::epsilon() ) {
                 courant_increment = std::min( courant_increment, cell_diameter / velocity );
              }
         }
@@ -320,6 +320,8 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
  } // end StreamlineCFL (multiphase case)
 */
 
+template class TimeStepEvaluator<2U,ExplicitTransport>;
+template class TimeStepEvaluator<2U,ImplicitTransport>;
 
 template class TimeStepEvaluator<3U,ExplicitTransport>;
 template class TimeStepEvaluator<3U,ImplicitTransport>;

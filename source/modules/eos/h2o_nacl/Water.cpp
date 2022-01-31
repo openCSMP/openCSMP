@@ -10,8 +10,8 @@ namespace csmp
       
       @todo read up on smart pointers in order to be able to do safe installation of PROST newProp calls into initializer list. Di, the initialization of the ak and bij arrays is still in the constructor body.
   */
-  Water::Water(const double64& externaltemperature, 
-               const double64& externalpressure)
+  Water::Water(const double& externaltemperature, 
+               const double& externalpressure)
     : temperature(externaltemperature),
       pressure(externalpressure),
       kelvin(273.15e0),
@@ -197,10 +197,10 @@ namespace csmp
 
       @todo This is an outdated formulation (probably 1985 IAPS), accurate enough for all simulations but update to most recent IAPWS release would be good
   */
-  double64 Water::Viscosity(const double64& T, const double64& rho)
+  double Water::Viscosity(const double& T, const double& rho)
   {
-    const double64 tstar(647.27e0), rhostar(317.763e0);
-    double64 trat,trat1,rhorat,rhorat1,n0,n;
+    const double tstar(647.27e0), rhostar(317.763e0);
+    double trat,trat1,rhorat,rhorat1,n0,n;
     int i,j,k;
     
     trat    = T/tstar;

@@ -1,4 +1,5 @@
 #include "GenericNodePropertyGradient.h"
+#include "Region.h"
 
 using namespace std;
 
@@ -9,49 +10,47 @@ namespace csmp {
     (a throughgoing node numbering is assumed.
 */
 template<size_t dim>
-GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg,
-                                                               const FiniteVolumeStencilManager<dim>& fv_connectivity,
-                                                               const char* prop )
-  : sg_(sg),
-  fcv( fv_connectivity ),
-  gradient( 1U, NULL ),
-  sum_x2( sg.Region("Model").Nodes(), 0.0 ),
-  sum_y2( sg.Region("Model").Nodes(), 0.0 ),
-  sum_z2( sg.Region("Model").Nodes(), 0.0 ),
-  sum_xy( sg.Region("Model").Nodes(), 0.0 ),
-  sum_xz( sg.Region("Model").Nodes(), 0.0 ),
-  sum_yz( sg.Region("Model").Nodes(), 0.0 ),
-  det( sg.Region("Model").Nodes() ),
-  zero_grad_index_( sg.Region("Model").Nodes(), 6U ),
-  distance( sg.Region("Model").Nodes() ),
-  center_of_mass_( sg.Region("Model").Nodes() ),
-  tolerance(1.0e-12),
-  inner_(1U, VectorVariable<dim>(PLAIN,0.0) ),
-  middle_( 1U, inner_ ),
-  distance_facet_FVBarycenter_( sg.Region("Model").Elements() ),
-  neighbors_( sg.Region("Model").Nodes() ),
-  mass_center( sg, "mass center", VECTOR, NODE ) //PropertyHandle for mass center
+GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, const char* region, const char* prop )
+  :  gref_(sg.Region(region)),
+     gradient( 1U, NULL ),
+     sum_x2( gref_.Nodes(), 0.0 ),
+     sum_y2( gref_.Nodes(), 0.0 ),
+     sum_z2( gref_.Nodes(), 0.0 ),
+     sum_xy( gref_.Nodes(), 0.0 ),
+     sum_xz( gref_.Nodes(), 0.0 ),
+     sum_yz( gref_.Nodes(), 0.0 ),
+     det( gref_.Nodes() ),
+     zero_grad_index_( gref_.Nodes(), 6U ),
+     distance( gref_.Nodes() ),
+     center_of_mass_( gref_.Nodes() ),
+     tolerance(1.0e-12),
+     inner_(1U, VectorVariable<dim>(PLAIN,0.0) ),
+     middle_( 1U, inner_ ),
+     distance_facet_FVBarycenter_( gref_.Elements() ),
+     neighbors_( gref_.Nodes() ),
+     mass_center( sg, region, "mass center", VECTOR, NODE ), //PropertyHandle for mass center
+     u_key(sg.Database().StorageKey( prop )),
+     grad_key(sg.Database().StorageKey( (string(prop) + " gradient").c_str() )),
+     mctr_key(sg.Database().StorageKey("mass center"))
   {
-
     // initialize gradient PropHandle and set prop key:
     // ------------------------------------------------  
     string   gradient_name;
     gradient_name  =  prop;
     gradient_name += " gradient";
-    gradient[0] = new PropertyHandle<dim>( sg_, gradient_name.c_str(), VECTOR, NODE );
+    gradient[0] = new PropertyHandle<dim>( sg, gradient_name.c_str(), VECTOR, NODE );
                
-    u_key = sg_.Database().StorageKey( prop );
      
     // --------------------------------------------------
     // initialization and calculation of mass centers...
     // --------------------------------------------------
-    std::pair<VectorVariable<dim>, double64>   init_pair;
+    std::pair<VectorVariable<dim>, double>   init_pair;
     init_pair.first = VectorVariable<dim>( PLAIN, 0.0);
     init_pair.second = 0.0;
 
     fill(  center_of_mass_.begin(), center_of_mass_.end(), init_pair );
 
-    CalculateCenterOfMass( fcv );
+    CalculateCenterOfMass();
 
     // ---------------------------------------------------------------------------
     // initialization and calculation of distances facet centers-barycenters
@@ -59,32 +58,25 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg,
 
     // init of vector
     // ====================================================
-
-    Element<dim>  e;
-
-    distance_facet_FVBarycenter_.resize( sg_.Region("Model").Elements() ); // resize outer vector
-    size_t length_;
-    length_ =  distance_facet_FVBarycenter_.size();
+    distance_facet_FVBarycenter_.resize( gref_.Elements() ); // resize outer vector
+    size_t length = distance_facet_FVBarycenter_.size();
 
     for ( typename vector<Element<dim>*>::const_iterator
-          eit=sg_.Region("Model").ElementsBegin();
-          eit!=sg_.Region("Model").ElementsEnd(); eit++ ){
-
-          e = *(*eit);
-
+          eit=gref_.ElementsBegin();
+          eit!=gref_.ElementsEnd(); eit++ ){
           //resize middle vector
-          distance_facet_FVBarycenter_[ e.Idx() ].resize( e.FV()->Facets() );
+          distance_facet_FVBarycenter_[ (*eit)->Idx() ].resize( (*eit)->FV()->Facets() );
 
           // loop over facets
           // -------------------
-          for( size_t fi=0U; fi < e.FV()->Facets(); fi++ ){
+          for( size_t fi=0U; fi < (*eit)->FV()->Facets(); fi++ ){
 
                  // resize inner vector
-                distance_facet_FVBarycenter_[ e.Idx() ][ fi ].resize( e.Nodes() );
-                length_ = distance_facet_FVBarycenter_[ e.Idx()][ fi ].size();
+                distance_facet_FVBarycenter_[ (*eit)->Idx() ][ fi ].resize( (*eit)->Nodes() );
+                length = distance_facet_FVBarycenter_[ (*eit)->Idx()][ fi ].size();
 
-                fill( distance_facet_FVBarycenter_[ e.Idx() ][ fi ].begin(),
-                      distance_facet_FVBarycenter_[ e.Idx() ][ fi ].end(),
+                fill( distance_facet_FVBarycenter_[ (*eit)->Idx() ][ fi ].begin(),
+                      distance_facet_FVBarycenter_[ (*eit)->Idx() ][ fi ].end(),
                       VectorVariable<dim>( PLAIN, 0.0)       );
           }
     }
@@ -92,7 +84,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg,
     // ====================================================
 
     // ... and distances:
-    CalculateDistanceFacetFVBary( fcv, distance_facet_FVBarycenter_ );
+    CalculateDistanceFacetFVBary( distance_facet_FVBarycenter_ );
 
     // -----------------------------
     // neighbours and least squares
@@ -101,29 +93,29 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg,
 
     // initialize vector with global node id's of neighbors:
     // =====================================================
-    Element<dim>     current_el;
     size_t           global_neighb_el_id, current_n_id;
     std::vector<size_t> ids;
 
     // loop over all nodes/fv's
     // --------------------------
     for( typename std::vector<Node<dim>*>::const_iterator
-         cvit=sg_.Region("Model").NodesBegin();
-         cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+         cvit=gref_.NodesBegin();
+         cvit!=gref_.NodesEnd(); cvit++){
 
-         current_n_id = (*(*cvit)).Idx();
+         current_n_id = (*cvit)->Idx();
          // loop over parents
          for(  size_t p = 0; p< (*cvit)->Parents() ; p++ ){
              // get the global parent id:
              global_neighb_el_id = (*cvit)->Parent( p)->Idx();
 
-             if(global_neighb_el_id<sg_.Region("Model").Elements()){
+             if(global_neighb_el_id<gref_.Elements()){
                  // get the corresponding element:
-                 current_el = (*sg_.Region("Model").E( global_neighb_el_id ));
+                 const Element<dim>* current_el = gref_.E( global_neighb_el_id );
                  // ...and the global node_i's of that element
                  ids.clear();
-                 for(size_t i=0;i<current_el.Nodes();i++)
-                     if(current_n_id!=current_el.N(i)->Idx()) ids.push_back(current_el.N(i)->Idx());
+                 for(size_t i=0; i<current_el->Nodes(); i++)
+                   if(current_n_id!=current_el->N(i)->Idx())
+                     ids.push_back(current_el->N(i)->Idx());
 
                  // insert into vector without duplicates:
                  PushBackAvoidDuplicate( neighbors_[ current_n_id ], ids );
@@ -147,29 +139,30 @@ vector<char* > properties.
 
 */
 template<size_t dim>
-GenericNodePropertyGradient<dim>::GenericNodePropertyGradient(  Model<dim>& sg,
-                                                                const FiniteVolumeStencilManager<dim>& fv_connectivity,
-                                                                std::vector<char* > properties )
-: sg_(sg),
-  fcv(fv_connectivity), 
-  gradient( 1U, NULL ),
-  sum_x2( sg.Region("Model").Nodes(), 0.0 ),
-  sum_y2( sg.Region("Model").Nodes(), 0.0 ),
-  sum_z2( sg.Region("Model").Nodes(), 0.0 ),
-  sum_xy( sg.Region("Model").Nodes(), 0.0 ),
-  sum_xz( sg.Region("Model").Nodes(), 0.0 ),
-  sum_yz( sg.Region("Model").Nodes(), 0.0 ),
-  det( sg.Region("Model").Nodes() ),
-  zero_grad_index_( sg.Region("Model").Nodes(), 6U ),
-  distance( sg.Region("Model").Nodes() ),
-  center_of_mass_( sg.Region("Model").Nodes() ),
-  tolerance(1.0e-15),
-  inner_(1U, VectorVariable<dim>() ),
-  middle_( 1U, inner_ ),
-  distance_facet_FVBarycenter_( sg.Region("Model").Elements() ),
-  neighbors_( sg.Region("Model").Nodes() ),
-  mass_center( sg, "mass center", VECTOR, NODE ) //PropertyHandle for mass center
-  { 
+GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, const char* region, vector<char*> properties )
+  : gref_(sg.Region(region)),
+    gradient( 1U, NULL ),
+    sum_x2( gref_.Nodes(), 0.0 ),
+    sum_y2( gref_.Nodes(), 0.0 ),
+    sum_z2( gref_.Nodes(), 0.0 ),
+    sum_xy( gref_.Nodes(), 0.0 ),
+    sum_xz( gref_.Nodes(), 0.0 ),
+    sum_yz( gref_.Nodes(), 0.0 ),
+    det( gref_.Nodes() ),
+    zero_grad_index_( gref_.Nodes(), 6U ),
+    distance( gref_.Nodes() ),
+    center_of_mass_( gref_.Nodes() ),
+    tolerance(1.0e-15),
+    inner_(1U, VectorVariable<dim>() ),
+    middle_( 1U, inner_ ),
+    distance_facet_FVBarycenter_( gref_.Elements() ),
+    neighbors_( gref_.Nodes() ),
+    mass_center( sg, region, "mass center", VECTOR, NODE ), //PropertyHandle for mass center
+     u_key(sg.Database().StorageKey( properties[0] )),
+     grad_key(sg.Database().StorageKey( (string( properties[0] ) + " gradient").c_str() )),
+     mctr_key(sg.Database().StorageKey("mass center"))
+
+  {
     // --------------------------------------------------
     // initialization of gradients 
     // --------------------------------------------------
@@ -183,19 +176,19 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient(  Model<dim>& sg,
           gradient_strings[i] = gradient_strings[i] + str2;
 
           // property handle
-          gradient[i] = new PropertyHandle<dim>( sg_, gradient_strings[i].c_str() , VECTOR, NODE );
+          gradient[i] = new PropertyHandle<dim>( sg, gradient_strings[i].c_str() , VECTOR, NODE );
     }
      
     // --------------------------------------------------
     // initialization and calculation of mass centers... 
     // --------------------------------------------------
-    std::pair<VectorVariable<dim>, double64>   init_pair;
+    std::pair<VectorVariable<dim>, double>   init_pair;
     init_pair.first = VectorVariable<dim>( PLAIN, 0.0);
     init_pair.second = 0.0;
    
     fill(  center_of_mass_.begin(), center_of_mass_.end(), init_pair );
        
-    CalculateCenterOfMass( fcv );  
+    CalculateCenterOfMass();
     
     // ---------------------------------------------------------------------------
     // initialization and calculation of distances facet centers-barycenters
@@ -204,32 +197,29 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient(  Model<dim>& sg,
     // init of vector 
     // ====================================================
     
-    Element<dim>  e;
-    
-    distance_facet_FVBarycenter_.resize( sg_.Region("Model").Elements() ); // resize outer vector
+    distance_facet_FVBarycenter_.resize( gref_.Elements() ); // resize outer vector
     size_t length_;
     length_ =  distance_facet_FVBarycenter_.size();
      
     for ( typename vector<Element<dim>*>::const_iterator
-          eit=sg_.Region("Model").ElementsBegin();
-          eit!=sg_.Region("Model").ElementsEnd(); eit++ ){
+          eit=gref_.ElementsBegin();
+          eit!=gref_.ElementsEnd(); eit++ ){
           
-          e = *(*eit);
-          cout<< e.Idx() <<endl;
+          cout<< (*eit)->Idx() <<endl;
 
           //resize middle vector
-          distance_facet_FVBarycenter_[ e.Idx() ].resize( e.FV()->Facets() );
+          distance_facet_FVBarycenter_[ (*eit)->Idx() ].resize( (*eit)->FV()->Facets() );
 
           // loop over facets
           // -------------------
-          for( size_t fi=0U; fi < e.FV()->Facets(); fi++ ){
+          for( size_t fi=0U; fi < (*eit)->FV()->Facets(); fi++ ){
 
                  // resize inner vector
-                distance_facet_FVBarycenter_[ e.Idx() ][ fi ].resize( e.Nodes() );
-                length_ = distance_facet_FVBarycenter_[ e.Idx()][ fi ].size();
+                distance_facet_FVBarycenter_[ (*eit)->Idx() ][ fi ].resize( (*eit)->Nodes() );
+                length_ = distance_facet_FVBarycenter_[ (*eit)->Idx()][ fi ].size();
 
-                fill( distance_facet_FVBarycenter_[ e.Idx() ][ fi ].begin(),
-                      distance_facet_FVBarycenter_[ e.Idx() ][ fi ].end(),
+                fill( distance_facet_FVBarycenter_[ (*eit)->Idx() ][ fi ].begin(),
+                      distance_facet_FVBarycenter_[ (*eit)->Idx() ][ fi ].end(),
                       VectorVariable<dim>( PLAIN, 0.)       );
           }
     }
@@ -237,7 +227,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient(  Model<dim>& sg,
     // ====================================================   
    
     // ... and distances:
-    CalculateDistanceFacetFVBary( fcv, distance_facet_FVBarycenter_ ); 
+    CalculateDistanceFacetFVBary( distance_facet_FVBarycenter_ );
     
     // -----------------------------
     // neighbours and least squares
@@ -246,28 +236,27 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient(  Model<dim>& sg,
     
     // initialize vector with global node id's of neighbors:
     // =====================================================
-    Element<dim>     current_el;
     size_t           global_neighb_el_id, current_n_id;
     std::vector<size_t> ids;
     
     // loop over all nodes/fv's
     // --------------------------
     for( typename std::vector<Node<dim>*>::const_iterator
-         cvit=sg_.Region("Model").NodesBegin();
-         cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+         cvit=gref_.NodesBegin();
+         cvit!=gref_.NodesEnd(); cvit++){
          
          current_n_id = (*(*cvit)).Idx();
          // loop over parents
          for(  size_t p = 0; p< (*cvit)->Parents() ; p++ ){
              // get the global parent id:
              global_neighb_el_id = (*cvit)->Parent( p)->Idx();
-             if(global_neighb_el_id<sg_.Region("Model").Elements()){
+             if(global_neighb_el_id<gref_.Elements()){
                  // get the corresponding element:
-                 current_el = (*sg_.Region("Model").E( global_neighb_el_id ));
+                 const Element<dim>* current_el = gref_.E( global_neighb_el_id );
                  // ...and the global node_i's of that element
                  ids.clear();
-                 for(size_t i=0;i<current_el.Nodes();i++)
-                     if(current_n_id!=current_el.N(i)->Idx()) ids.push_back(current_el.N(i)->Idx());
+                 for(size_t i=0;i<current_el->Nodes();i++)
+                     if(current_n_id!=current_el->N(i)->Idx()) ids.push_back(current_el->N(i)->Idx());
 
                  // insert into vector without duplicates:
                  PushBackAvoidDuplicate( neighbors_[ current_n_id ], ids );
@@ -276,18 +265,24 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient(  Model<dim>& sg,
     }
     // =====================================================
      
-    CalculateGenericLeastSquareSums(); 
+    CalculateGenericLeastSquareSums();
 }
 
 
 
 template<size_t dim>
-void GenericNodePropertyGradient<dim>::SetPropertyKey( csmp::Index& key )  { u_key = key; }
+void GenericNodePropertyGradient<dim>::SetPropertyKey( csmp::Index& key )
+  {
+    u_key = key;
+  
+  }
 
   
 template<size_t dim>
 GenericNodePropertyGradient<dim>::~GenericNodePropertyGradient()
-{}
+{     // getting rid of the property handles
+     for ( auto& it : gradient ) delete it;
+}
   
   
   
@@ -299,39 +294,37 @@ Calculates the center of mass of generic finite volumes in 2d.
 
 */
 template<size_t dim>
-void GenericNodePropertyGradient<dim>::CalculateCenterOfMass( const FiniteVolumeStencilManager<dim>& fcv )
+void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
 {
-
- Element<dim>  e;
  size_t  glob_n_id;
- double64 volume_;
- std::vector<double64>   current_bc; // stencil barycenter in global coord's
+ double volume_;
+ std::vector<double>   current_bc; // stencil barycenter in global coord's
  std::vector<size_t> ids;
  VectorVariable<dim> temp_;
  Point<dim> tmp_p;
+
  // loop over stencils
  // ------------------
- for ( typename vector<Element<dim>*>::const_iterator
-       eit=sg_.Region("Model").ElementsBegin();
-       eit!=sg_.Region("Model").ElementsEnd(); eit++ ){
+ for ( typename vector<Element<dim>*>::iterator
+       eit=gref_.ElementsBegin();
+       eit!=gref_.ElementsEnd(); eit++ ){
 
-        e = *(*eit);
-        ids.resize( e.Nodes() );
+        ids.resize( (*eit)->Nodes() );
         // get vector of global id's
-        for(size_t i=0;i<e.Nodes();i++)
-            ids[i]=e.N(i)->Idx();
+        for(size_t i=0;i<(*eit)->Nodes();i++)
+            ids[i]=(*eit)->N(i)->Idx();
 
 
         // loop over sectors
         // -------------------
-        for( size_t i=0U; i < e.FV()->Sectors(); i++ ){
+        for( size_t i=0U; i < (*eit)->FV()->Sectors(); i++ ){
 
               //get the global node id for the current segment
               glob_n_id = ids[ i ];
 
-              if( sg_.Region("Model").N( glob_n_id)->AtBoundary() ){
+              if( gref_.N( glob_n_id)->AtBoundary() ){
 
-                  tmp_p = sg_.Region("Model").N( glob_n_id)->Coordinate();
+                  tmp_p = gref_.N( glob_n_id)->Coordinate();
                   temp_ = VectorVariable<dim>( PLAIN,  0.0);
                   for(size_t k=0;k<dim;k++)
                       temp_.Component(k,tmp_p.Coordinates()[k]);
@@ -341,10 +334,10 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass( const FiniteVolume
               }else{
 
                   //get the barycenter of current segment
-                  ConvertToGlobalCoordinates( e, e.FV()->SectorIntegrationPoint( i, 0U), current_bc );
+                  ConvertToGlobalCoordinates( *(*eit), (*eit)->FV()->SectorIntegrationPoint( i, 0U), current_bc );
 
                   //get volume of current sector
-                  volume_ = e.SectorVolume( i );
+                  volume_ = (*eit)->SectorVolume( i );
 
                   temp_ = VectorVariable<dim>( PLAIN,  0.0);
                   for(size_t k=0;k<dim;k++)
@@ -357,68 +350,65 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass( const FiniteVolume
         }
      }
 
-     for( size_t i = 0U;  i< sg_.Region("Model").Nodes(); i++ )
+     for( size_t i = 0U;  i< gref_.Nodes(); i++ )
      {
         //  center_of_mass_[ i ].first.Out();
         //  calculate center: sum_i(x_i * A_i) / sum_i(A_i)
         center_of_mass_[ i ].first *=  1. / center_of_mass_[ i ].second;
 
         // write back to node:
-        sg_.Region("Model").N( i )->Store( sg_.Database().StorageKey("mass center"), center_of_mass_[ i ].first );
+        gref_.N( i )->Store( mctr_key, center_of_mass_[ i ].first );
      }
 
 }
 
 
+
+
+
 template<size_t dim>
-void GenericNodePropertyGradient<dim>::CalculateDistanceFacetFVBary(  const FiniteVolumeStencilManager<dim>& fcv,
-                                     std::vector<std::vector<std::vector<VectorVariable<dim> > > >& d_facet_FVBarycenter  )
+void GenericNodePropertyGradient<dim>::CalculateDistanceFacetFVBary( vector<vector<vector<VectorVariable<dim> > > >& d_facet_FVBarycenter )
 {
- Element<dim>  e;
  // local node id's:
  size_t inside_node_, outside_node_;
- std::vector<double64>  facet_bc(dim);  // global coordinates of facet barycenter
+ std::vector<double>  facet_bc(dim);  // global coordinates of facet barycenter
  VectorVariable<dim>  mass_center;
-
 
  // loop over elements
  // ------------------
- for ( typename vector<Element<dim>*>::const_iterator
-       eit=sg_.Region("Model").ElementsBegin();
-       eit!=sg_.Region("Model").ElementsEnd(); eit++ ){
-
-        e = *(*eit);
-
+ for ( typename vector<Element<dim>*>::iterator
+       eit=gref_.ElementsBegin();
+       eit!=gref_.ElementsEnd(); eit++ ){
         // loop over facets
         // -------------------
-        for( size_t fi=0U; fi < e.FV()->Facets(); fi++ ){
+        for( size_t fi=0U; fi < (*eit)->FV()->Facets(); fi++ ){
 
               // get facet barycenter in global coordinates:
-              ConvertToGlobalCoordinates( e, e.FV()->FacetIntegrationPoint( fi, 0U ),  facet_bc);
+              ConvertToGlobalCoordinates( *(*eit), (*eit)->FV()->FacetIntegrationPoint( fi, 0U ),  facet_bc);
 
               // get local node id's
-              e.FV()->FacetEdgeNodes( fi, inside_node_, outside_node_ );
+              (*eit)->FV()->FacetEdgeNodes( fi, inside_node_, outside_node_ );
 
 
               // get mass center for FV of inside_node_:
-              GenericCenterOfMass(  e.N(inside_node_)->Idx(), mass_center );
+              GenericCenterOfMass(  (*eit)->N(inside_node_)->Idx(), mass_center );
 
               VectorVariable<dim> face_dist_inside_node( PLAIN,  0.0);
               for(size_t k=0;k<dim;k++)
                   face_dist_inside_node.Component(k,facet_bc[k] - mass_center[k]);
 
-              d_facet_FVBarycenter[ e.Idx() ][ fi ][ inside_node_ ] =face_dist_inside_node;
+              d_facet_FVBarycenter[ (*eit)->Idx() ][ fi ][ inside_node_ ] =face_dist_inside_node;
 
 
               // get mass center for FV of outside_node_:
-              GenericCenterOfMass(  e.N(outside_node_)->Idx(), mass_center );
+              GenericCenterOfMass(  (*eit)->N(outside_node_)->Idx(), mass_center );
 
               // calculate distance vector:
               VectorVariable<dim> face_dist_outside_node( PLAIN,  0.0);
               for(size_t k=0;k<dim;k++)
                   face_dist_outside_node.Component(k,facet_bc[k] - mass_center[k]);
 
-              d_facet_FVBarycenter[ e.Idx() ][ fi ][ outside_node_ ] = face_dist_outside_node;
+              d_facet_FVBarycenter[ (*eit)->Idx() ][ fi ][ outside_node_ ] = face_dist_outside_node;
 
         }
  }
@@ -437,8 +427,8 @@ are not there already.
 
 */
 template<size_t dim>
-void GenericNodePropertyGradient<dim>::PushBackAvoidDuplicate( std::vector<size_t>& old_vector,
-                                                                 std::vector<size_t>& new_vector )
+void GenericNodePropertyGradient<dim>::PushBackAvoidDuplicate( vector<size_t>& old_vector,
+                                                               vector<size_t>& new_vector )
 {
     bool already_exists(false);
 
@@ -460,12 +450,12 @@ void GenericNodePropertyGradient<dim>::PushBackAvoidDuplicate( std::vector<size_
 
 
 template<size_t dim>
-void GenericNodePropertyGradient<dim>::ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c_point, std::vector<double64>& global_c )
+void GenericNodePropertyGradient<dim>::ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c_point, std::vector<double>& global_c )
 {
 
 
-  std::vector<double64> temp(el.Nodes()); //has the local interp. function values
-  std::vector<double64> local_c(local_c_point.Coordinates());
+  std::vector<double> temp(el.Nodes()); //has the local interp. function values
+  std::vector<double> local_c(local_c_point.Coordinates());
 
   if( el.IsLineElement() ){
       el.FE()->Nr( local_c[0], temp );
@@ -525,18 +515,18 @@ Returns the storage required by the GenericNodePropertyGradient object
 
 */
 template<size_t dim>
-double64 GenericNodePropertyGradient<dim>::SizeOf() const
+double GenericNodePropertyGradient<dim>::SizeOf() const
 {
-  double64 storage;
+  double storage;
 
   storage  = sizeof( *this );
-  storage += static_cast<double64>(sum_xy.size()) * sizeof(double64);
-  storage += static_cast<double64>(sum_x2.size()) * sizeof(double64);
-  storage += static_cast<double64>(sum_y2.size()) * sizeof(double64);
-  storage += static_cast<double64>(det.size())    * sizeof(double64);
+  storage += static_cast<double>(sum_xy.size()) * sizeof(double);
+  storage += static_cast<double>(sum_x2.size()) * sizeof(double);
+  storage += static_cast<double>(sum_y2.size()) * sizeof(double);
+  storage += static_cast<double>(det.size())    * sizeof(double);
 
   for ( size_t i=0; i<distance.size(); i++ )
-      storage += static_cast<double64>(distance[i].size()) * 2.0 * sizeof(double64);
+      storage += static_cast<double>(distance[i].size()) * 2.0 * sizeof(double);
 
   return storage;
 
@@ -568,12 +558,12 @@ void GenericNodePropertyGradient<1U>::CalculateGenericLeastSquareSums()
     std::vector<Node<DIM>*>::const_iterator  cvit;
     std::vector<size_t>::iterator            nit;
     VectorVariable<DIM>                      xyz1(PLAIN,0.0), xyz2(PLAIN,0.0), dxyz(PLAIN,0.0);
-    size_t                                   id, node_id;
+    size_t                                   id;
 
-    for( cvit=sg_.Region("Model").NodesBegin();
-         cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+    for( cvit=gref_.NodesBegin();
+         cvit!=gref_.NodesEnd(); cvit++){
 
-        node_id = (*(*cvit)).Idx() ;
+        const size_t node_id = (*(*cvit)).Idx() ;
 
         // get neighbor ids at every segment and fv barycenter
         GenericCenterOfMass( node_id, xyz1 );
@@ -636,66 +626,53 @@ through the interfaces GradientComponentX() and GradientComponentY()
 template<>
 void GenericNodePropertyGradient<1U>::CalculateGenericNodalGradient()
 {
-  
     enum{DIM=1U};
-    std::vector<Node<DIM>*>::const_iterator     cvit;
-    std::vector<size_t>::iterator               nit;
-    double64                                    val1, val2, dc;
-    VectorVariable<DIM>                         grad(PLAIN,0.0);
-    VectorVariable<DIM>                         dcxyz(PLAIN,0.0);
-    size_t                                      id, node_id;
-    VARIABLE_FLAG                               status;
-    string                                      grad_name;
-    
-    for( std::vector<Node<DIM>*>::const_iterator
-           cvit=sg_.Region("Model").NodesBegin();
-           cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+    VectorVariable<DIM>  grad(PLAIN,0.0);
+    VectorVariable<DIM>  dcxyz(PLAIN,0.0);
 
-           status = (*(*cvit)).Status( u_key );
-           node_id =  (*(*cvit)).Idx();
+    for( std::vector<Node<DIM>*>::const_iterator
+           cvit=gref_.NodesBegin();
+           cvit!=gref_.NodesEnd(); cvit++){
+
+           VARIABLE_FLAG status  = (*(*cvit)).Status( u_key );
+           size_t        node_id = (*cvit)->Idx();
 
            // gradient is zero if nodes are flagged DIRICH or NEUMANN
            if ( status == PLAIN || status == ANY) {
         
                 // get neighbor ids at every cv and read concentration
-                val1 = (*(*cvit)).Read(u_key );
+                double val1 = (*(*cvit)).Read(u_key );
 
                 // set temporary variables to zero
-                dcxyz = 0.0;
-                id  = 0;
+                dcxyz = 0.;
+                size_t id{0};
+                
                 // loop over all neighbor ids, get coordinate values and concentrations, sum up
                 // -----------------------------------------------------------------------------
-                for ( nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
+                for ( auto nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
                     // read at neighbour node!
-                    val2 = (sg_.Region("Model").N( (*nit) ))->Read (u_key);
-
-                    dc   = (val2 -val1);
+                    double val2 = gref_.N( (*nit) )->Read (u_key);
+                    double dc   = (val2 -val1);
 
                     // computing temporary variables for least squares calculation; needed for RHS of LGS
                     // NOTE: id's are the same as in CalculateLeastSquares since list is gone thorugh in same order
-                    dcxyz.Component(0, dcxyz[0]+dc*distance[ node_id ][id][0]);
-
+                    dcxyz.Component( 0, dcxyz[0]+dc*distance[ node_id ][id][0]);
                 }
 
                 if(det[ node_id]!=0.0){
-
                     grad(0)  = dcxyz[0]/det[ node_id ];
-
                     if ( fabs( grad(0) ) < tolerance ) grad(0) = 0.0;
-
                 }else grad=0.0;
 
         }
         // gradient is zero if nodes are flagged DIRICH or NEUMANN
-        else grad = 0.0;
+        else grad = 0.;
         
         // store the gradient
         // ------------------
-
-        grad_name = sg_.Database().Name( u_key );
-        grad_name = grad_name + " gradient";
-        (*(*cvit)).Store( sg_.Database().StorageKey( grad_name.c_str() ), grad );
+        (*cvit)->Store( grad_key, grad );
     }
+    
 } // end CalculateNodalGradient
   
   
@@ -722,15 +699,12 @@ template<>
 void GenericNodePropertyGradient<2U>::CalculateGenericLeastSquareSums()
   {
     enum{DIM=2U};
-    std::vector<Node<DIM>*>::const_iterator  cvit;
-    std::vector<size_t>::iterator            nit;
-    VectorVariable<DIM>                      xyz1(PLAIN,0.0), xyz2(PLAIN,0.0), dxyz(PLAIN,0.0);
-    size_t                                   id, node_id;
+    VectorVariable<DIM>  xyz1(PLAIN,0.0), xyz2(PLAIN,0.0), dxyz(PLAIN,0.0);
 
-    for( cvit=sg_.Region("Model").NodesBegin();
-         cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+    for( vector<Node<DIM>*>::const_iterator cvit=gref_.NodesBegin();
+         cvit!=gref_.NodesEnd(); cvit++){
 
-        node_id = (*(*cvit)).Idx() ;
+        size_t node_id = (*cvit)->Idx();
 
         // get neighbor ids at every segment and fv barycenter
         GenericCenterOfMass( node_id, xyz1 );
@@ -739,15 +713,15 @@ void GenericNodePropertyGradient<2U>::CalculateGenericLeastSquareSums()
         // for the RHS
 
         distance[ node_id ].resize( neighbors_[ node_id ].size() );
-        id = 0;
+
         // loop over all neighbor ids, get coordinate values, sum up
         // -----------------------------------------------------------
-        for ( nit = neighbors_[ node_id].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ) {
+        size_t id{0};
+        for ( auto nit = neighbors_[ node_id].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ) {
 
             GenericCenterOfMass( (*nit), xyz2 );
 
             // subtract x,y,z-coordinate_neighbour_center - x,y,z-coordinate_current_fv
-
             dxyz.Component(0, xyz2[0U]-xyz1[0]);
             dxyz.Component(1, xyz2[1U]-xyz1[1]);
 
@@ -807,38 +781,31 @@ template<>
 void GenericNodePropertyGradient<2U>::CalculateGenericNodalGradient()
 {
     enum{DIM=2U};
-    std::vector<Node<DIM>*>::const_iterator     cvit;
-    std::vector<size_t>::iterator               nit;
-    double64                                    val1, val2, dc;
-    VectorVariable<DIM>                         grad(PLAIN,0.0);
-    VectorVariable<DIM>                         dcxyz(PLAIN,0.0);
-    size_t                                      id, node_id;
-    VARIABLE_FLAG                               status;
-    string                                      grad_name;
+    VectorVariable<DIM>  grad(PLAIN,0.0);
+    VectorVariable<DIM>  dcxyz(PLAIN,0.0);
 
     for( std::vector<Node<DIM>*>::const_iterator
-           cvit=sg_.Region("Model").NodesBegin();
-           cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+           cvit=gref_.NodesBegin();
+           cvit!=gref_.NodesEnd(); cvit++){
 
-           status = (*(*cvit)).Status( u_key );
-           node_id =  (*(*cvit)).Idx();
+           VARIABLE_FLAG status  = (*(*cvit)).Status( u_key );
+           size_t        node_id = (*(*cvit)).Idx();
 
            // gradient is zero if nodes are flagged DIRICH or NEUMANN
            if ( status == PLAIN || status == ANY) {
 
                 // get neighbor ids at every cv and read concentration
-                val1 = (*(*cvit)).Read(u_key );
+                double val1 = (*(*cvit)).Read(u_key );
 
                 // set temporary variables to zero
                 dcxyz = 0.0;
-                id  = 0;
+                size_t id{0};
                 // loop over all neighbor ids, get coordinate values and concentrations, sum up
                 // -----------------------------------------------------------------------------
-                for ( nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
+                for (auto nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
                     // read at neighbour node!
-                    val2 = (sg_.Region("Model").N( (*nit) ))->Read (u_key);
-
-                    dc   = (val2 -val1);
+                    double val2 = gref_.N( (*nit) )->Read (u_key);
+                    double dc   = (val2 -val1);
 
                     // computing temporary variables for least squares calculation; needed for RHS of LGS
                     // NOTE: id's are the same as in CalculateLeastSquares since list is gone thorugh in same order
@@ -878,9 +845,7 @@ void GenericNodePropertyGradient<2U>::CalculateGenericNodalGradient()
         // store the gradient
         // ------------------
 
-        grad_name = sg_.Database().Name( u_key );
-        grad_name = grad_name + " gradient";
-        (*(*cvit)).Store( sg_.Database().StorageKey( grad_name.c_str() ), grad );
+        (*(*cvit)).Store( grad_key, grad );
     }
 } // end CalculateNodalGradient
 
@@ -913,15 +878,12 @@ template<>
 void GenericNodePropertyGradient<3U>::CalculateGenericLeastSquareSums()
   {
     enum{DIM=3U};
-    std::vector<Node<DIM>*>::const_iterator  cvit;
-    std::vector<size_t>::iterator            nit;
-    VectorVariable<DIM>                      xyz1(PLAIN,0.0), xyz2(PLAIN,0.0), dxyz(PLAIN,0.0);
-    size_t                                   id, node_id;
+    VectorVariable<DIM>  xyz1(PLAIN,0.0), xyz2(PLAIN,0.0), dxyz(PLAIN,0.0);
 
-    for( cvit=sg_.Region("Model").NodesBegin();
-         cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+    for( vector<Node<DIM>*>::const_iterator cvit=gref_.NodesBegin();
+         cvit!=gref_.NodesEnd(); cvit++){
 
-        node_id = (*(*cvit)).Idx() ;
+        const size_t node_id = (*cvit)->Idx();
 
         // get neighbor ids at every segment and fv barycenter
         GenericCenterOfMass( node_id, xyz1 );
@@ -930,10 +892,11 @@ void GenericNodePropertyGradient<3U>::CalculateGenericLeastSquareSums()
         // for the RHS
 
         distance[ node_id ].resize( neighbors_[ node_id ].size() );
-        id = 0;
+        
         // loop over all neighbor ids, get coordinate values, sum up
         // -----------------------------------------------------------
-        for ( nit = neighbors_[ node_id].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ) {
+        size_t id = 0;
+        for ( auto nit = neighbors_[ node_id].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ) {
 
             GenericCenterOfMass( (*nit), xyz2 );
 
@@ -1027,38 +990,31 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
 {
 
     enum{DIM=3U};
-    std::vector<Node<DIM>*>::const_iterator     cvit;
-    std::vector<size_t>::iterator               nit;
-    double64                                    val1, val2, dc;
-    VectorVariable<DIM>                         grad(PLAIN,0.0);
-    VectorVariable<DIM>                         dcxyz(PLAIN,0.0);
-    size_t                                      id, node_id;
-    VARIABLE_FLAG                               status;
-    string                                      grad_name;
+    VectorVariable<DIM>  grad(PLAIN,0.0);
+    VectorVariable<DIM>  dcxyz(PLAIN,0.0);
 
-    for( std::vector<Node<DIM>*>::const_iterator
-           cvit=sg_.Region("Model").NodesBegin();
-           cvit!=sg_.Region("Model").NodesEnd(); cvit++){
+    for( vector<Node<DIM>*>::const_iterator
+         cvit=gref_.NodesBegin();
+         cvit!=gref_.NodesEnd(); cvit++){
 
-           status = (*(*cvit)).Status( u_key );
-           node_id =  (*(*cvit)).Idx();
+           VARIABLE_FLAG status = (*(*cvit)).Status( u_key );
+           const size_t node_id = (*(*cvit)).Idx();
 
            // gradient is zero if nodes are flagged DIRICH or NEUMANN
            if ( status == PLAIN || status == ANY ) {
 
                 // get neighbor ids at every cv and read concentration
-                val1 = (*(*cvit)).Read(u_key );
+                double val1 = (*(*cvit)).Read(u_key );
 
                 // set temporary variables to zero
                 dcxyz = 0.0;
-                id  = 0;
+                size_t id  = 0;
                 // loop over all neighbor ids, get coordinate values and concentrations, sum up
                 // -----------------------------------------------------------------------------
-                for ( nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
+                for ( auto nit = neighbors_[ node_id ].begin(); nit != neighbors_[ node_id ].end(); nit++,id++ ){
                     // read at neighbour node!
-                    val2 = (sg_.Region("Model").N( (*nit) ))->Read (u_key);
-
-                    dc   = (val2 -val1);
+                    double val2 = gref_.N(*nit)->Read(u_key);
+                    double dc   = (val2 -val1);
 
                     // computing temporary variables for least squares calculation; needed for RHS of LGS
                     // NOTE: id's are the same as in CalculateLeastSquares since list is gone thorugh in same order
@@ -1132,9 +1088,7 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
                 }else if(zero_grad_index_[ node_id ] == 3U){
 
                     grad(0)   = 0.0;
-
                     grad(1)   = 0.0;
-
                     grad(2)   = dcxyz[2]/sum_z2[ node_id ];
 
                     if ( fabs( grad(2) ) < tolerance ) grad(2) = 0.0;
@@ -1142,9 +1096,7 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
                 }else if(zero_grad_index_[ node_id ] == 4U){
 
                     grad(0)   = 0.0;
-
                     grad(1)   = dcxyz[1]/sum_y2[ node_id ];
-
                     grad(2)   = 0.0;
 
                     if ( fabs( grad(1) ) < tolerance ) grad(1) = 0.0;
@@ -1152,9 +1104,7 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
                 }else if(zero_grad_index_[ node_id ] == 5U){
 
                     grad(0)   = dcxyz[0]/sum_x2[ node_id ];
-
                     grad(1)   = 0.0;
-
                     grad(2)   = 0.0;
 
                     if ( fabs( grad(0) ) < tolerance ) grad(0) = 0.0;
@@ -1167,10 +1117,7 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
 
         // store the gradient
         // ------------------
-
-        grad_name = sg_.Database().Name( u_key );
-        grad_name = grad_name + " gradient";
-        (*(*cvit)).Store( sg_.Database().StorageKey( grad_name.c_str() ), grad );
+        (*cvit)->Store( grad_key, grad );
     }
 } // end CalculateNodalGradient
 

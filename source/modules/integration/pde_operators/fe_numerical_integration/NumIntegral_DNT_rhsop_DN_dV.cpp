@@ -75,7 +75,7 @@ NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::NumIntegral_DNT_rhsop_DN_dV( const Proper
 
 
 template<size_t dim,class CELL>
-void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -103,12 +103,12 @@ A reference to the finite-element from which the contribution is
 computed.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
     
-    double64 detJ;
+    double detJ;
     
     if ( ignore_operand ) {
         OPMAT.Resize( e.Nodes(), 1 );

@@ -69,21 +69,21 @@ class ScalarVariable;
     public:
       static constexpr VARIABLE_TYPE VariableType = ARRAY;
 
-      typedef std::vector<double64> ArrayContainer;
+      typedef std::vector<double> ArrayContainer;
 
       ArrayVariable();
       template<size_t dim>
       ArrayVariable( const char* arrayPropertyName,
                      const PropertyDatabase<dim>&,
-                     double64 defaultValue=std::numeric_limits<double64>::quiet_NaN(),
+                     double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                      VARIABLE_FLAG flag = ANY );
       
       explicit ArrayVariable( size_t arraySize,
-                              double64 defaultValue = 0.,
+                              double defaultValue = 0.,
                               VARIABLE_FLAG flag = ANY );
       
       explicit ArrayVariable( const Index& arrayKey,
-                              double64 defaultValue = 0.,
+                              double defaultValue = 0.,
                               VARIABLE_FLAG flag = ANY );
       
       ArrayVariable( const ArrayVariable& );
@@ -91,20 +91,20 @@ class ScalarVariable;
       /// assigments
       ArrayVariable& operator=( const ArrayVariable& );
       void CopyValuesOnly( FlaggedArrayVariable& );
-      ArrayVariable& operator=( double64 );
+      ArrayVariable& operator=( double );
       ArrayVariable& operator=( const ScalarVariable& );
 
       /// standard operations
-      ArrayVariable operator+( double64 ) const;
-      ArrayVariable operator-( double64 ) const;
-      ArrayVariable operator*( double64 ) const;
-      ArrayVariable operator/( double64 ) const;
-      ArrayVariable operator^( double64 ) const;
+      ArrayVariable operator+( double ) const;
+      ArrayVariable operator-( double ) const;
+      ArrayVariable operator*( double ) const;
+      ArrayVariable operator/( double ) const;
+      ArrayVariable operator^( double ) const;
 
-      ArrayVariable& operator+=( double64 );
-      ArrayVariable& operator-=( double64 );
-      ArrayVariable& operator*=( double64 );
-      ArrayVariable& operator/=( double64 );
+      ArrayVariable& operator+=( double );
+      ArrayVariable& operator-=( double );
+      ArrayVariable& operator*=( double );
+      ArrayVariable& operator/=( double );
 
       ArrayVariable& operator+=( const ScalarVariable& );
       ArrayVariable& operator-=( const ScalarVariable& );
@@ -131,13 +131,13 @@ class ScalarVariable;
       bool           operator<( const ArrayVariable& ) const;
 
       /// accessors to the data
-      double64&      operator()( size_t );
-      double64       operator[]( size_t ) const;
-      void           Component( size_t, double64 );
-      double64       Component( size_t ) const;
+      double&      operator()( size_t );
+      double       operator[]( size_t ) const;
+      void           Component( size_t, double );
+      double       Component( size_t ) const;
 
       size_t         Size() const;
-      void           Resize( size_t newSize, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
+      void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
       VARIABLE_FLAG  Flag(  ) const;
       VARIABLE_FLAG& Flag(  );
       void           Flag( VARIABLE_FLAG flag );
@@ -145,15 +145,15 @@ class ScalarVariable;
       void           Ln();
       void           Log10();
       void           Sqrt();
-      bool           IsWithinRange( double64 min, double64 max ) const;
-      void           MinMax( double64& min, double64& max ) const;
+      bool           IsWithinRange( double min, double max ) const;
+      void           MinMax( double& min, double& max ) const;
       void           Sort();
 
       /// printing array values to screen
       void           Out( long digits=3 ) const;
       bool           Out( const char* filename, size_t precision = 9 ) const;
       
-      /// printing values to filestream
+      /// filestream I/O used for domain variables (not recommended because padding creates large storage overhead; use PropertyData instead)
       bool           Out( std::fstream& ) const;
       bool           In( std::fstream& );
 
@@ -161,10 +161,10 @@ class ScalarVariable;
       ArrayContainer::const_iterator End()   const;
 
       /// Julian 17-07-2014 - This is to allow passing of array variables to GEMS.
-      double64& Front(){ return data_.front(); }
+      double& Front(){ return data_.front(); }
 
-      double64 NextLargestEntry(double64) const;
-      bool     HasLargerEntry(double64) const;
+      double NextLargestEntry(double) const;
+      bool     HasLargerEntry(double) const;
 
     private:
       VARIABLE_FLAG  flag_;

@@ -13,35 +13,35 @@ namespace csmp
   {
 
   public:
-    H2ONaClLookup(const double64& externaltemperature, 
-                  const double64& externalpressure, 
-                  const double64& externalcomposition);
+    H2ONaClLookup(const double& externaltemperature, 
+                  const double& externalpressure, 
+                  const double& externalcomposition);
     ~H2ONaClLookup();
 
-    double64   Temperature();
-    double64   Pressure();
-    double64   MassFractionNaCl();
-    double64   Density();
-    double64   Enthalpy();
-    double64   HeatCapacity();
-    double64   Compressibility();
-    double64   Viscosity();
-    //    double64   DEnthalpyDX();
+    double   Temperature();
+    double   Pressure();
+    double   MassFractionNaCl();
+    double   Density();
+    double   Enthalpy();
+    double   HeatCapacity();
+    double   Compressibility();
+    double   Viscosity();
+    //    double   DEnthalpyDX();
     void        PrintAll();
 
-    double64 SubcriticalVaporDensity();
-    double64 SubcriticalVaporEnthalpy();
-    double64 SubcriticalVaporHeatCapacity();
-    double64 SubcriticalVaporCompressibility();
-    double64 SubcriticalVaporViscosity();
+    double SubcriticalVaporDensity();
+    double SubcriticalVaporEnthalpy();
+    double SubcriticalVaporHeatCapacity();
+    double SubcriticalVaporCompressibility();
+    double SubcriticalVaporViscosity();
 
-    double64 SubcriticalLiquidDensity();
-    double64 SubcriticalLiquidEnthalpy();
-    double64 SubcriticalLiquidHeatCapacity();
-    double64 SubcriticalLiquidCompressibility();
-    double64 SubcriticalLiquidViscosity();
+    double SubcriticalLiquidDensity();
+    double SubcriticalLiquidEnthalpy();
+    double SubcriticalLiquidHeatCapacity();
+    double SubcriticalLiquidCompressibility();
+    double SubcriticalLiquidViscosity();
    
-    long GetTableID(const double64& t);
+    long GetTableID(const double& t);
 
   private:
     long t_dim;
@@ -70,19 +70,19 @@ namespace csmp
     bool  BinaryIn( const char* fname, long dimension, long table_id ); 
     bool file_found;
 
-    const double64& temperature;
-    const double64& pressure;
-    const double64& composition;
+    const double& temperature;
+    const double& pressure;
+    const double& composition;
 
-    double64    tcurrent,pcurrent,xcurrent,xdummy,pdummy,tdummy,t_res,p_res,x_res;
-    double64    t_iA, t_iB, p_iA, p_iD, x_iA, x_iE;
-    double64    tnorm,pnorm,xnorm;
-    double64    v_bottom,v_top,v_right,v_left,v_point;
-    double64    dh;
-    double64    DP_extrapol,DP_lowp,DDensityDP,DEnthalpyDP,DHeatCapacityDP,DCompressibilityDP,DViscosityDP,DP_highp;
-    double64    p_boil;
-    std::vector<double64>   table0,table1,table2,table3,table4,table5;
-    std::vector<double64>   t_min_table, t_max_table;
+    double    tcurrent,pcurrent,xcurrent,xdummy,pdummy,tdummy,t_res,p_res,x_res;
+    double    t_iA, t_iB, p_iA, p_iD, x_iA, x_iE;
+    double    tnorm,pnorm,xnorm;
+    double    v_bottom,v_top,v_right,v_left,v_point;
+    double    dh;
+    double    DP_extrapol,DP_lowp,DDensityDP,DEnthalpyDP,DHeatCapacityDP,DCompressibilityDP,DViscosityDP,DP_highp;
+    double    p_boil;
+    std::vector<double>   table0,table1,table2,table3,table4,table5;
+    std::vector<double>   t_min_table, t_max_table;
     std::vector<long>        ip_vl,it_max_table;
     std::vector<long>        it_offset,x_dim_block,t_dim_table,x_dim_table,tablesize;
 
@@ -91,21 +91,21 @@ namespace csmp
     void BuildTable1();
     void BuildTable2();
     void BuildSimpleTable( const long& i, 
-                           std::vector<double64>& table );
+                           std::vector<double>& table );
 
-    void GetTemperatureIndex(const double64& t);
-    void GetPressureIndex(const double64& p);    
-    void GetCompositionIndex(const double64& p);    
+    void GetTemperatureIndex(const double& t);
+    void GetPressureIndex(const double& p);    
+    void GetCompositionIndex(const double& p);    
 
-    long ComputeTemperatureIndex(const double64& t);    
-    long ComputePressureIndex(const double64& p);    
-    long ComputeCompositionIndex(const double64& p);    
-    double64 Interpolate( const double64& t,  
+    long ComputeTemperatureIndex(const double& t);    
+    long ComputePressureIndex(const double& p);    
+    long ComputeCompositionIndex(const double& p);    
+    double Interpolate( const double& t,  
                           const int& property_index );
-    double64 TrilinearInterpolation( const long& table_id, 
-                                     const std::vector<double64>& storage_vector, 
+    double TrilinearInterpolation( const long& table_id, 
+                                     const std::vector<double>& storage_vector, 
                                      const int& property_index );
-    double64 PropertyAtPointH( const int& property_index );
+    double PropertyAtPointH( const int& property_index );
 
 
   };

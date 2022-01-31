@@ -102,7 +102,7 @@ bool isTriangularElement( CSMP_FEM_TYPE etype )
 bool isQuadrilateralElement( CSMP_FEM_TYPE etype )
  {
     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return true;
-	if ( etype == LINEAR_RECTANGLE) return true;
+	  if ( etype == LINEAR_RECTANGLE ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return true;
     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return true;
@@ -119,6 +119,69 @@ bool isLineElement( CSMP_FEM_TYPE etype )
     if ( etype == CUBIC_BAR ) return true;
     return false;
  }
+
+
+
+bool isTriangular( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ||
+         etype == LINEAR_TRIANGLE || 
+         etype == LINEAR_TRIANGLE3D || 
+         etype == BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == QUADRATIC_TRIANGLE ||
+         etype == BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == CUBIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_CUBIC_TRIANGLE  )
+      return true;
+
+    return false;
+ }
+
+
+bool isQuadrilateral( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL || 
+         etype == LINEAR_QUADRILATERAL || 
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
+         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
+      return true;
+
+    return false;
+ }
+
+
+bool isTetrahedral( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ||
+         etype == LINEAR_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON )
+      return true;
+
+    return false;
+ }
+
+
+
+bool isHexahedral( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || 
+         etype == LINEAR_QUADRILATERAL || 
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ||
+         etype == LINEAR_CUBOID )
+      return true;
+
+    return false;
+ } 
 
 
 void    FiniteElement::CurrentID( size_t id ) { object_id = id; }
@@ -155,7 +218,7 @@ bool FiniteElement::IsSimplex() const
 
 void  FiniteElement::ElementType( CSMP_FEM_TYPE etype ) { csp_fem_type = etype; }
 
-CSMP_FEM_TYPE  FiniteElement::ElementType() const       { return csp_fem_type; }
+CSMP_FEM_TYPE  FiniteElement::ElementType() const { return csp_fem_type; }
 
  size_t  FiniteElement::OrderOfShapeFunctions() const { return order_of_shape_functions; }
 
@@ -169,8 +232,8 @@ CSMP_FEM_TYPE  FiniteElement::ElementType() const       { return csp_fem_type; }
  size_t  FiniteElement::IntegrationPointNeighbors() const { return cne; }
  size_t  FiniteElement::IntegrationPoints() const { return gpe; }
 
- double64  FiniteElement::XYZ( size_t i, size_t j ) const { return XY(i,j); }
- void    FiniteElement::XYZ( size_t i, size_t j, double64 val ) { XY(i,j) = val; }
+ double  FiniteElement::XYZ( size_t i, size_t j ) const { return XY(i,j); }
+ void    FiniteElement::XYZ( size_t i, size_t j, double val ) { XY(i,j) = val; }
 
 
 
@@ -193,23 +256,23 @@ void FiniteElement::SurfaceElement()  { element_category = SURFACE; }
 void FiniteElement::VolumeElement()   { element_category = VOLUME; }
 
 
-double64 FiniteElement::AspectRatio()
+double FiniteElement::AspectRatio()
   {
      InstructUser("FiniteElement::AspectRatio()");
      cout <<"\ncalled by object: "<< object_id << endl;
      return 0.0;
   }
   
-double64 FiniteElement::InnerRadius()
+double FiniteElement::InnerRadius()
   {
      InstructUser("FiniteElement::InnerRadius()");
      cout <<"\ncalled by object: "<< object_id << endl;
      return 0.0;
   }
   
-void FiniteElement::EdgeLengths( vector<double64>& vec )
+void FiniteElement::EdgeLengths( vector<double>& vec )
   {
-     InstructUser("FiniteElement::EdgeLengths(vector<double64>)");
+     InstructUser("FiniteElement::EdgeLengths(vector<double>)");
      out(vec);
      cout <<"\ncalled by object: "<< object_id << endl;
   }
@@ -238,7 +301,29 @@ void FiniteElement::NodesOfFace( size_t fid, vector<size_t>& fnids ) const
   }
 
 
-  
+std::vector<size_t> FiniteElement::CornerNodesOfFace( size_t face_id ) const
+ {
+     cout <<"\nFiniteElement::CornerNodesOfFace: Returns the local node ID numbers of ";
+     cout <<"the corner nodes of the element face with the entered ID number. ";
+     cout <<"In triangular and tetrahedral elements the faces lie opposite of ";
+     cout <<"the nodes with the same ID." << endl;
+     cout <<"\ncalled by object: "<< object_id <<" for face "<< face_id << endl;
+     throw invalid_argument("FiniteElement::CornerNodesOfFace");
+     return vector<size_t>{};
+ }
+
+
+vector<size_t>  FiniteElement::NodesConnectedTo( size_t node_id ) const
+  {
+     cout <<"\nFiniteElement::NodesConnectedTo: Returns the local node ID numbers of ";
+     cout <<"the corner nodes of the element face with the entered ID number. ";
+     cout <<"In triangular and tetrahedral elements the faces lie opposite of ";
+     cout <<"the nodes with the same ID." << endl;
+     cout <<"\ncalled by object: "<< object_id <<" for node "<< node_id << endl;
+     throw invalid_argument("FiniteElement::NodesConnectedTo");
+     return vector<size_t>{};
+  }
+
     
 void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )
   {
@@ -334,7 +419,7 @@ CSMP_FEM_TYPE FiniteElement::ElementTypeOfSegment( size_t ) const
 
 
 
-void  FiniteElement::UnitNormal( vector<double64>& ) const
+void  FiniteElement::UnitNormal( vector<double>& ) const
   {
      InstructUser("FiniteElement::UnitNormal");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
@@ -350,7 +435,7 @@ void  FiniteElement::UnitNormal( vector<double64>& ) const
     
     method expects that the XY matrix is initialised with node coordinates
 */
-void  FiniteElement::UnitNormalToFace( size_t, std::vector<double64>& ) const
+void  FiniteElement::UnitNormalToFace( size_t, std::vector<double>& ) const
  {
      InstructUser("FiniteElement::UnitNormalToFace");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
@@ -368,7 +453,7 @@ void  FiniteElement::UnitNormalToFace( size_t, std::vector<double64>& ) const
      @note this method cannot be constant because it modifies matrices that are data members
      of the FiniteElement class.
 */
-void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double64>& )
+void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double>& )
  {
      InstructUser("FiniteElement::UnitNormalAtFaceBarycenter");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
@@ -378,7 +463,7 @@ void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double64>& 
 
 
 
-double64 FiniteElement::WeightAtIntegrationPoint( size_t ) const
+double FiniteElement::WeightAtIntegrationPoint( size_t ) const
   {
      throw invalid_argument("FiniteElement::WeightAtIntegrationPoint");
      return 0.5 * (1. / gpe); 
@@ -386,7 +471,7 @@ double64 FiniteElement::WeightAtIntegrationPoint( size_t ) const
 
 
 
-void  FiniteElement::IntegrationPoint( size_t i, std::vector<double64>& xyz ) const
+void  FiniteElement::IntegrationPoint( size_t i, std::vector<double>& xyz ) const
  { 
     cout <<"\nFiniteElement::IntegrationPoint: called for integration point "<< i;
     cout <<" and output data vector 'xyz' of size "<< xyz.size() << endl;
@@ -415,8 +500,8 @@ Expects input vector to be of size nvars * gauss points and in format
 
   */
 void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars, 
-                                                                 const vector<double64>&, 
-                                                                 vector<double64>& ) const
+                                                                 const vector<double>&, 
+                                                                 vector<double>& ) const
  {
      InstructUser("FiniteElement::ExtrapolateIntegrationPointVariableToNodes");
      cout <<"\nThis method must be defined for the FE element which you are using"<< endl;
@@ -427,7 +512,7 @@ void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
 
 
 
-double64 FiniteElement::Volume()
+double FiniteElement::Volume()
  {
     InstructUser("FiniteElement::Volume");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -436,11 +521,11 @@ double64 FiniteElement::Volume()
  } 
 
 
-void   FiniteElement::N( vector<double64>& N, const vector<double64>& xyz )
+void   FiniteElement::N( vector<double>& N, const vector<double>& xyz )
  {
     InstructUser("FiniteElement::N");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (N vector<double64>, xyz vector<double64>):"<< endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (N vector<double>, xyz vector<double>):"<< endl;
     out( N );
     for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
@@ -448,21 +533,21 @@ void   FiniteElement::N( vector<double64>& N, const vector<double64>& xyz )
  } 
 
 
-void   FiniteElement::N_AtIntegrationPoint( size_t ip, vector<double64>& N )
+void   FiniteElement::N_AtIntegrationPoint( size_t ip, vector<double>& N )
  {
     InstructUser("FiniteElement::N_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double64>):"<< ip << endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double>):"<< ip << endl;
     out( N );
     throw invalid_argument("FiniteElement::N_AtIntegrationPoint");
  } 
 
 
-void   FiniteElement::N_AtBaryCenter( vector<double64>& N )
+void   FiniteElement::N_AtBaryCenter( vector<double>& N )
  {
     InstructUser("FiniteElement::N_AtBaryCenter");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double64>):"<< endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double>):"<< endl;
     out( N );
     throw invalid_argument("FiniteElement::N_AtBaryCenter");
  }
@@ -487,11 +572,11 @@ void   FiniteElement::dN( DenseMatrix<DM_MIN>& M ) // coefficients
  } 
     
     
-double64 FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double64>& xyz  ) // derivatives at 'xy'
+double FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double>& xyz  ) // derivatives at 'xy'
  {
     InstructUser("FiniteElement::dN_At");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
-    cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double64> xyz):"<< endl;
+    cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double> xyz):"<< endl;
     M.Out();
     for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
@@ -500,7 +585,7 @@ double64 FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double64>& x
  } 
 
 
-double64 FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point ) 
+double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point ) 
  {
     InstructUser("FiniteElement::dN_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -512,7 +597,7 @@ double64 FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t ga
  } 
 
 
-double64 FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node ) 
+double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node ) 
  {
     InstructUser("FiniteElement::dN_AtNode");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -524,7 +609,7 @@ double64 FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node )
  } 
 
 
-double64 FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& M ) 
+double FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& M ) 
  {
     InstructUser("FiniteElement::dN_AtBarycenter");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -573,7 +658,7 @@ void   FiniteElement::JacobianAtIntegrationPoint( size_t ip )
 
 
     // 1D
-void   FiniteElement::Nr( double64 r, vector<double64>& NR ) const
+void   FiniteElement::Nr( double r, vector<double>& NR ) const
  {
     InstructUser("FiniteElement::Nr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -589,7 +674,7 @@ void   FiniteElement::Nr( double64 r, vector<double64>& NR ) const
 
 
     // 1D
-void   FiniteElement::Nr( double64 r, double64* NR ) const
+void   FiniteElement::Nr( double r, double* NR ) const
  {
     InstructUser("FiniteElement::Nr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -602,7 +687,7 @@ void   FiniteElement::Nr( double64 r, double64* NR ) const
  }
 
 
-void   FiniteElement::dNr( double64 r, vector<double64>& DNR ) const
+void   FiniteElement::dNr( double r, vector<double>& DNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -617,7 +702,7 @@ void   FiniteElement::dNr( double64 r, vector<double64>& DNR ) const
 
 
     // 2D
-void   FiniteElement::Nrs( double64 r, double64 s, vector<double64>& NRS ) const
+void   FiniteElement::Nrs( double r, double s, vector<double>& NRS ) const
  {
     InstructUser("FiniteElement::Nrs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -631,7 +716,7 @@ void   FiniteElement::Nrs( double64 r, double64 s, vector<double64>& NRS ) const
  }
 
     // 2D
-void   FiniteElement::Nrs( double64 r, double64 s, double64* NRS ) const
+void   FiniteElement::Nrs( double r, double s, double* NRS ) const
  {
     InstructUser("FiniteElement::Nrs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -644,7 +729,7 @@ void   FiniteElement::Nrs( double64 r, double64 s, double64* NRS ) const
  }
 
 
-void   FiniteElement::dNr( double64 r, double64 s, vector<double64>& DNR ) const
+void   FiniteElement::dNr( double r, double s, vector<double>& DNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -658,7 +743,7 @@ void   FiniteElement::dNr( double64 r, double64 s, vector<double64>& DNR ) const
  }
 
 
-void   FiniteElement::dNs( double64 r, double64 s, vector<double64>& DNS ) const
+void   FiniteElement::dNs( double r, double s, vector<double>& DNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -673,7 +758,7 @@ void   FiniteElement::dNs( double64 r, double64 s, vector<double64>& DNS ) const
 
 
     // 3D
-void   FiniteElement::Nrst( double64 r, double64 s, double64 t, vector<double64>& NRST ) const
+void   FiniteElement::Nrst( double r, double s, double t, vector<double>& NRST ) const
  {
     InstructUser("FiniteElement::Nrst");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -688,7 +773,7 @@ void   FiniteElement::Nrst( double64 r, double64 s, double64 t, vector<double64>
 
 
     // 3D
-void   FiniteElement::Nrst( double64 r, double64 s, double64 t, double64* NRST ) const
+void   FiniteElement::Nrst( double r, double s, double t, double* NRST ) const
  {
     InstructUser("FiniteElement::Nrst");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -701,7 +786,7 @@ void   FiniteElement::Nrst( double64 r, double64 s, double64 t, double64* NRST )
  }
 
 
-void   FiniteElement::dNr( double64 r,  double64 s, double64 t, vector<double64>& DNR ) const
+void   FiniteElement::dNr( double r,  double s, double t, vector<double>& DNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -715,7 +800,7 @@ void   FiniteElement::dNr( double64 r,  double64 s, double64 t, vector<double64>
  }
 
 
-void   FiniteElement::dNs( double64 r,  double64 s, double64 t, vector<double64>& DNS ) const
+void   FiniteElement::dNs( double r,  double s, double t, vector<double>& DNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -729,7 +814,7 @@ void   FiniteElement::dNs( double64 r,  double64 s, double64 t, vector<double64>
  }
 
 
-void   FiniteElement::dNt( double64 r,  double64 s, double64 t, vector<double64>& DNT ) const
+void   FiniteElement::dNt( double r,  double s, double t, vector<double>& DNT ) const
  {
     InstructUser("FiniteElement::dNt");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -743,7 +828,7 @@ void   FiniteElement::dNt( double64 r,  double64 s, double64 t, vector<double64>
  }
 
 
-void FiniteElement::JacobianAt( const std::vector<double64>& rst )
+void FiniteElement::JacobianAt( const std::vector<double>& rst )
 {
     InstructUser("FiniteElement::JacobianAt");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -781,16 +866,16 @@ Compute the Jacobian matrix for the local coordinate point 'rst' in the
 finite element. 
 
 @param dnr The local shape function derivatives at the point of interest. These
-are provided as pointers to inbuilt arrays of type 'double64'. 
+are provided as pointers to inbuilt arrays of type 'double'. 
 Whether a third argument is supplied or not determines whether a 2D
 or a 3D Jacobian is output.  
 
 @return The Jacobian matrix is returned into the protected matrix JAC.
 */
-void  FiniteElement::Jacobian( const vector<double64>& dnr ) // 1D
+void  FiniteElement::Jacobian( const vector<double>& dnr ) // 1D
  {
     JAC.Resize(dim,dim);
-    JAC(0,0) = static_cast<double64>(0.0);
+    JAC(0,0) = static_cast<double>(0.0);
     for ( size_t j=0; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
       
  } // end Jacobian (1D)
@@ -798,12 +883,12 @@ void  FiniteElement::Jacobian( const vector<double64>& dnr ) // 1D
 
 
 
-void  FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double64>& dns ) // 2D
+void  FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& dns ) // 2D
  {
     JAC.Resize(dim,dim);
 
     for ( size_t i=0; i<dim; i++ ) {
-        JAC(0,i) = JAC(1,i) = static_cast<double64>(0.0);
+        JAC(0,i) = JAC(1,i) = static_cast<double>(0.0);
         for ( size_t j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
@@ -814,12 +899,12 @@ void  FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double6
  } // end Jacobian (2D)
 
 
-void FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double64>& dns, const vector<double64>& dnt )
+void FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& dns, const vector<double>& dnt )
  {
     JAC.Resize(dim,dim);
 
     for ( size_t i=0; i<dim; i++ ) {
-        JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double64>(0.);
+        JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double>(0.);
         for ( size_t j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
@@ -831,7 +916,7 @@ void FiniteElement::Jacobian( const vector<double64>& dnr, const vector<double64
  } // end Jacobian (3D)
 
 
-double64 FiniteElement::JacobianDeterminant()
+double FiniteElement::JacobianDeterminant()
 {
     if ( dim == 3U ) 
 		 return JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
@@ -854,20 +939,22 @@ double64 FiniteElement::JacobianDeterminant()
     are printed to screen.
  
 */
-double64  FiniteElement::JacobianInverse()
+double  FiniteElement::JacobianInverse()
  {
-    if ( dim == 1U ) return JAC(0,0);
+    JINV.Resize(dim,dim);
+    if ( dim == 1U ) {
+         JINV(0,0) = JAC(0,0);
+         return JAC(0,0);
+      }
     
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    double64 detJ;
-    
     if ( dim == 2U ) {
          // compute determinant  
-         detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
+         double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
     
          // inversion of J
-         double64 dum = JAC(0,0) / detJ;
+         const double dum = JAC(0,0) / detJ;
          JINV(0,0)  =  JAC(1,1) / detJ;
          JINV(0,1)  = -JAC(0,1) / detJ;
          JINV(1,0)  = -JAC(1,0) / detJ;
@@ -894,9 +981,9 @@ double64  FiniteElement::JacobianInverse()
       }
       
      // 3D case
-     detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
-            JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
-            JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
+     const double detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
+                           JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
+                           JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
 
      if ( detJ <= 0. ) {
           std::cerr <<"\n\nFiniteElement::JacobianInverse(3D): element "<< CurrentID() <<": erroneous determinant of 3D Jacobian matrix: ";
@@ -915,7 +1002,7 @@ double64  FiniteElement::JacobianInverse()
 //          detJ = fabs(detJ);
        }
 
-     double64 det1(1.0 / detJ);
+     double det1(1.0 / detJ);
      
      JINV(0,0) = ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) *  det1;
      JINV(1,0) = ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) * -det1;
@@ -971,37 +1058,39 @@ void  FiniteElement::Out() const
  
  
  
- 
+/**
+      Ordered in sequence of most common queries to speed up
+*/
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
   {
+     if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return SURFACE;
+     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return SURFACE;
      if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return LINE;
-     if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return LINE; 						
-     if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return LINE; 
-     if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return SURFACE;  					
-     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return SURFACE;
-     if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return SURFACE; 					 
+     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) return VOLUME;
+     if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return LINE;
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return SURFACE;
+     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;
      if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ) return SURFACE; 		
+     if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return LINE;
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return SURFACE;
      if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE ) return SURFACE;
-     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return VOLUME; 					
-     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return VOLUME; 			    
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return VOLUME;
      if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return VOLUME;   
      if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON ) return VOLUME;
-     if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) return VOLUME;						 
-     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) return VOLUME; 					
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) return VOLUME;
      if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ) return VOLUME;     				
      if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID ) return VOLUME;
-     if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) return VOLUME;  						
-     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) return VOLUME;         			
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) return VOLUME;
      if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ) return VOLUME;           			
      if ( etype == ISOPARAMETRIC_CUBIC_PRISM ) return VOLUME;
-     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return SURFACE;                  
-     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return SURFACE;    
-     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;            
-     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;  
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return SURFACE;
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ) return SURFACE;
      if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return SURFACE;  		
      if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ) return SURFACE;
-     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return VOLUME;              		
-     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return VOLUME;       		
+     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return VOLUME;
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return VOLUME; 				
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return VOLUME;
      if ( etype == LINEAR_CUBOID) return VOLUME;
@@ -1030,7 +1119,7 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
  
  
 /// converts enum names
-CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int32 etype )
+CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
   {
      if ( etype == UNKNOWN ) return UNKNOWN;
 	 if (etype == LINEAR_RECTANGLE) return LINEAR_RECTANGLE;
@@ -1086,12 +1175,17 @@ CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int32 etype )
  } // end parseFiniteElementType
 
 
+
+
+
+
+
  /// converts enum names into text
 CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
   {
      if ( etype == "UNKNOWN" ) return UNKNOWN;
-	 if ( etype == "LINEAR_RECTANGLE") return LINEAR_RECTANGLE;
-	 if ( etype == "LINEAR_CUBOID") return LINEAR_CUBOID;
+	   if ( etype == "LINEAR_RECTANGLE") return LINEAR_RECTANGLE;
+	   if ( etype == "LINEAR_CUBOID") return LINEAR_CUBOID;
      if ( etype == "LINEAR_BAR" ) return LINEAR_BAR;
      if ( etype == "QUADRATIC_BAR" ) return QUADRATIC_BAR;
      if ( etype == "CUBIC_BAR" ) return CUBIC_BAR;
@@ -1148,7 +1242,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  
  
  /// converts enum names into text
- const char* parseFiniteElementType( int32 etype )
+ const char* parseFiniteElementType( int8_t etype )
   {
      if ( etype == UNKNOWN ) return "UNKNOWN";
 	   if ( etype == LINEAR_RECTANGLE) return "LINEAR_RECTANGLE";
@@ -1204,6 +1298,64 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  } // end parseFiniteElementType
 
 
+ /// converts enum names into text
+ const char* parseAbbreviated_FE_Type( int8_t etype )
+  {
+     if ( etype == UNKNOWN ) return "?";
+	   if ( etype == LINEAR_RECTANGLE) return "RECT";
+	   if ( etype == LINEAR_CUBOID) return "CUBOID";
+     if ( etype == LINEAR_BAR ) return "BAR";    										                                    // BAR_2     =2,
+     if ( etype == QUADRATIC_BAR ) return "BAR^2";
+     if ( etype == CUBIC_BAR ) return "BAR^3";										                                            // BAR_4
+     if ( etype == LINEAR_TRIANGLE ) return "TRIA";
+     if ( etype == LINEAR_TRIANGLE3D ) return "TRIA3D"; 									                                // TRI_3     =8,
+     if ( etype == BARYCENTRIC_LINEAR_TRIANGLE ) return "BTRIA"; 			    		                        // TRI_3_X   =9,
+     if ( etype == QUADRATIC_TRIANGLE ) return "TRI^2"; 								                                //  2D & 3D TRI_6    =10,
+     if ( etype == BARYCENTRIC_QUADRATIC_TRIANGLE ) return "BTRI^2"; 					                    // TRI_6_X  =11,
+     if ( etype == CUBIC_TRIANGLE ) return "TRI^3";
+     if ( etype == LINEAR_TETRAHEDRON ) return "TET"; 								                                // TETRA_4   =4,
+     if ( etype == QUADRATIC_TETRAHEDRON ) return "TET^2"; 								                            // TETRA_10  =5,
+     if ( etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return "BTET^2";                                  // PYRA_5   =18,
+     if ( etype == CUBIC_TETRAHEDRON ) return "TET^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return "IBAR";    						                        // BAR_2     =2,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return "IBAR^2"; 						                        // BAR_3     =3,
+     if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return "IBAR^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return "ITRIA";  					                    // TRI_3     =8,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ) return "IBTRIA"; 	         	// TRI_3_X   =9,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return "ITRIA^2"; 					                //  2D & 3D TRI_6    =10,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ) return "IBTRIA^2"; 		    // TRI_6_X  =11,
+     if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE ) return "ITRIA^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return "ITET"; 					                // TETRA_4   =4,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ) return "ITET^2"; 			                    // TETRA_10  =5,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return "IBTET^2";      // TETRA_11
+     if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON ) return "ITET^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) return "IPYR";						                    // PYRA_5   =18,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) return "IPYR13"; 					                // PYRA_13  =24,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ) return "IPYR14";     				                // PYRA_14  =22,
+     if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID ) return "IPYR^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) return "IPRISM";  						                        // PENTA_6  =12,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) return "IPRISM15";         			                    // PENTA_15 =13,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ) return "IPRISM18";           			                // PENTA_18 =21,
+     if ( etype == ISOPARAMETRIC_CUBIC_PRISM ) return "IPRISM^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return "IQUAD";                                // QUAD_4   =14,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return "IBQUAD";        // QUAD_4_X =15,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return "IQUAD^2";                          // QUAD_8   =16,
+     if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ) return "IBQUAD^2";  // QUAD_8_X =17,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return "IQUAD9^2";  			            // QUAD_9   =19,
+     if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ) return "IQUAD^3";
+     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return "IHEX";              		                // HEXA_8    =6,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return "IHEX20";       		                // HEXA_20   =7,
+     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return "IHEX27"; 				            // HEXA_27   =5,
+     if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "IHEX^3";
+     if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL";
+
+     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     return "?";
+ 
+ } // end parseAbbreviated_FE_Type
+
+
+
  FV_FACET_TYPE parseFacetType( const std::string& ftype )
  {
      if (ftype == "POINT_FACET") return POINT_FACET;
@@ -1214,7 +1366,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      return static_cast<FV_FACET_TYPE>(0);
  }
 
- const char* parseFacetType( int32 ftype )
+ const char* parseFacetType( int8_t ftype )
  {
      switch (ftype)
      {
@@ -1229,8 +1381,59 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  } // end parseFacetType
 
 
+/*
+bool isTriangularElement( CSMP_FEM_TYPE );
+bool isQuadrilateralElement( CSMP_FEM_TYPE );
+bool isLineElement( CSMP_FEM_TYPE );
+bool isTriangular( CSMP_FEM_TYPE );
+bool isQuadrilateral( CSMP_FEM_TYPE );
+bool isHexahedral( CSMP_FEM_TYPE );
+*/
+
+CSMP_FEM_TYPE  finiteElementTypeOfSharedFace( CSMP_FEM_TYPE etype1, CSMP_FEM_TYPE etype2, bool isoparametric )
+  {
+     // in the order of likelihood
+     if ( isoparametric ) {
+          // since this is used mainly to create Face or InterFace objects
+          if ( etype1 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_TETRAHEDRON )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          if ( etype1 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          if ( isTriangular(etype1) ||  isTriangular(etype2) || isQuadrilateral(etype1) || isQuadrilateral(etype2) )
+            return ISOPARAMETRIC_LINEAR_BAR;
+          // mixed element type cases
+          if ( etype1 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          //
+          if ( etype1 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_TRIANGLE;
+          //
+          if ( etype1 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PRISM )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          //
+          if ( etype1 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype2 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          if ( etype2 == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype1 == ISOPARAMETRIC_LINEAR_PYRAMID )
+            return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
+          // cases involving pyramid or prism elements can not be resolved
+       }
+     else cerr <<"\nfiniteElementTypeOfSharedFace: only isoparametric elements are handled so far.";
+  
+     if ( isLineElement(etype1) || isLineElement(etype2) ) return ZERO_DIMENSIONAL_FACE;
+     
+     return UNKNOWN;
+  }
+
+
+
  
- } // end namespace csp
+ } // end namespace csmp
  
  
  

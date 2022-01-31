@@ -16,10 +16,10 @@ PicardIntegrator<dim,COMPUTATION_DOMAIN>::PicardIntegrator()
   
   
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-double64 PicardIntegrator<dim,COMPUTATION_DOMAIN>::Residual() 
+double PicardIntegrator<dim,COMPUTATION_DOMAIN>::Residual() 
 {
   resid_.resize(this->G_.Rows());
-  std::vector<double64>(resid_).swap(resid_);
+  std::vector<double>(resid_).swap(resid_);
   
   // Calculate residual vector
   this->G_.MultiplyWith(this->x_, resid_);
@@ -27,7 +27,7 @@ double64 PicardIntegrator<dim,COMPUTATION_DOMAIN>::Residual()
                  resid_.end(), 
                  this->rh_.begin(),
                  resid_.begin(),
-                 std::minus<double64>() );
+                 std::minus<double>() );
   
   // Calculate euclidian vector norm
   return std::sqrt(std::inner_product(resid_.begin(), resid_.end(), resid_.begin(), 0.) );

@@ -100,10 +100,10 @@ class TwoPhaseImplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeT
     virtual ~TwoPhaseImplicitNodeCenteredFVTransport();
     
     /// transport of a non-wetting phase in 2-phase flow
-    virtual double64 TransportPhase( TwoPhaseModel<dim>&, double64 time_interval );
+    virtual double TransportPhase( TwoPhaseModel<dim>&, double time_interval );
                                
     /// two-phase, takes into account element shape in 2D and 3D unless one deals with 1D domain
-    virtual double64 AnisotropicCourantIncrement( TwoPhaseModel<dim>&, double64 max_time_increment ); 
+    virtual double AnisotropicCourantIncrement( TwoPhaseModel<dim>&, double max_time_increment ); 
 
     virtual void AdjustSolverSettings();
 
@@ -125,7 +125,7 @@ class TwoPhaseImplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeT
 
     void  MaxNewtonRahsonIterations(size_t max_newton_raphson_iterations);
     void  MaxLineSearchIterations(size_t max_line_search_iterations);
-    void  TargetNewtonRaphsonResidual(double64 target_newton_raphson_residual);
+    void  TargetNewtonRaphsonResidual(double target_newton_raphson_residual);
 
   private:
 
@@ -147,22 +147,23 @@ class TwoPhaseImplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeT
 
     /// advects non-wetting phase in 2-phase flow (1st-order accurate)
     void SolveTransportEquation1stOrder( TwoPhaseModel<dim>&,
-                                         double64 time_increment,
+                                         double time_increment,
                                          bool account_for_nodal_sources = true );
 
     /// advects non-wetting phase in 2-phase flow without gravity (1st-order accurate)
     void SolveTransportEquation1stOrder_NonlinearNewtonRaphson( TwoPhaseModel<dim>& relperm,
-                                                       double64 time_increment);
+                                                                double time_increment);
 
     /// advects non-wetting phase in 2-phase flow without gravity (2nd-order accurate)
-    void SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( TwoPhaseModel<dim>& relperm,
-                                                       double64 time_increment);
-
+    void SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( Model<dim>&, TwoPhaseModel<dim>& relperm,
+                                                                       double time_increment);
+ 
   private:
-    mutable std::vector<double64>  LHSSRC, RHSSRC, /// < source terms for limiting
+  
+    mutable std::vector<double>  LHSSRC, RHSSRC, /// < source terms for limiting
                                    OMEGA;          /// < balancing parameter for LHS and RHS
 
-    double64 target_newton_raphson_residual_;
+    double target_newton_raphson_residual_;
     size_t max_newton_raphson_iterations_, max_line_search_iterations_;
 
     const csmp::Index  rhn_key,
@@ -179,7 +180,7 @@ class TwoPhaseImplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeT
     bool nonlinear_scheme_;
 
     // vectors used in line-search algorithm
-    std::vector<double64>  SN_, DS_;
+    std::vector<double>  SN_, DS_;
 
     NodeCenteredFiniteVolumeAlgorithm<dim>  advector_;
     std::set<csmp::Element<dim>*>  halo_stencils_;

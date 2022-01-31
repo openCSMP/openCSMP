@@ -55,14 +55,14 @@ int flux_mismatch( bool bPrescribedVelocity )
    sg.InputPropertyValue ( "concentration", makeScalar(PLAIN,0.) );
    
    //Pressure boundary conditions
-   const double64 pressure (10*101325.);
+   const double pressure (10*101325.);
    sg.InputBoundaryValue( LEFT,  "fluid pressure",   makeScalar(DIRICH, 0.) ); 
    sg.InputBoundaryValue( RIGHT, "fluid pressure",   makeScalar(DIRICH,pressure) ); // 1 bar
 
     // -----------------------------------------------------------------------
    // 1. hydraulic conductivity and other interrelations
    // -----------------------------------------------------------------------
-    const double64 fluid_viscosity(1.0e-03);
+    const double fluid_viscosity(1.0e-03);
     ConstantFactor<3U,divides>  conductivity( sg.Database(), 
                                              "conductivity", "permeability", 
                                               fluid_viscosity );
@@ -117,7 +117,7 @@ int flux_mismatch( bool bPrescribedVelocity )
     csmp::Index  fv_key   = sg.Database().StorageKey("finite volume");
     csmp::Index  prop_key = sg.Database().StorageKey("nodal flux mismatch");
     ScalarVariable  sc;
-    double64  emax(0.);
+    double  emax(0.);
     Region<3>&  sgref(sg.Region("Model"));
     for ( vector<Node<3U>*>::iterator it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ ) {
          sc = fabs( (*it)->Read( prop_key ));// / cross_section_fv[it->ID()-1U] );

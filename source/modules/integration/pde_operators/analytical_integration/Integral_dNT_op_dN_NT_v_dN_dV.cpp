@@ -48,7 +48,7 @@ Reads a scalar property describing the diffusion part and a vector
 variable describing the advection part of the operator.  
  */
 template<size_t dim,class SIMPLEX>
-void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -97,7 +97,7 @@ member matrix [C].
 In linear elasticity computations.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     // 1. Calculating the diffusion component
     // --------------------------------------

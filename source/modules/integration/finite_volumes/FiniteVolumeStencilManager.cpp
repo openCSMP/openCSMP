@@ -57,7 +57,7 @@ void FiniteVolumeStencilManager<dim>::Initialize( const FiniteElementManager& fe
     returns pointer to corresponding FV stencil type
 */
 template<size_t dim>
-const FiniteVolumeStencil<dim>* FiniteVolumeStencilManager<dim>::Stencil( CSMP_FEM_TYPE etype ) const
+const FiniteVolumeStencil<dim>* const FiniteVolumeStencilManager<dim>::Stencil( CSMP_FEM_TYPE etype ) const
  {
     std::map<CSMP_FEM_TYPE,size_t>::const_iterator  it = type_mapping.find(etype);
     if ( it == type_mapping.end() ) {

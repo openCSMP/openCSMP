@@ -116,13 +116,13 @@ void InflowOutflowCalculation_VVCase<dim>::run()
 
     //Assuming incompressible flow, a constant concentration value everywhere (including LEFT boundary)
     //The total flux of concentration is estimated to be:
-    const double64 q = concentration()*modelBoundary.Area()*permeability() * pressureLeft() / viscosityWater();
-    //const double64 qNum( model->Region("Model").Average("volume flux") );
+    const double q = concentration()*modelBoundary.Area()*permeability() * pressureLeft() / viscosityWater();
+    //const double qNum( model->Region("Model").Average("volume flux") );
 
     /// @attention Due to comments in NCFVT code, I have changed this test to use Stephan's functionality.
     /// ComputeBoundaryFlux no longer exists. (Julian 12-10-2014)
-    double64 inflow(0.);
-    double64 outflow(0.);
+    double inflow(0.);
+    double outflow(0.);
     advector.BoundaryFluxes(inflow,             // inflow  ( magnitude )
                             outflow,            // outflow ( magnitude )
                             false,              // non-box shaped model

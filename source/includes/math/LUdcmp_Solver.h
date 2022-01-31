@@ -27,13 +27,13 @@ with csmp::SparseMatrix, STL and according functionality
 
     protected:
       virtual void SolveMatrixEquation( SparseMatrix& A,
-                                        std::vector<double64>& b,
-                                        std::vector<double64>& x,
+                                        std::vector<double>& b,
+                                        std::vector<double>& x,
                                         size_t no_unknowns );
                                         
       virtual void SolveMatrixEquation( CompressedRowMatrix& A,
-                                        std::vector<double64>& b,
-                                        std::vector<double64>& x,
+                                        std::vector<double>& b,
+                                        std::vector<double>& x,
                                         size_t no_unknowns );
     private:
       void ludcmp( SparseMatrix& a,
@@ -43,11 +43,11 @@ with csmp::SparseMatrix, STL and according functionality
       void lubksb( SparseMatrix& a,
                    long n,
                    std::vector<size_t>& indx,
-                   std::vector<double64>& x,
-                   std::vector<double64>& b );
+                   std::vector<double>& x,
+                   std::vector<double>& b );
       void luout();
 
-      double64             tiny_; /**< represents chosen numerical limit */
+      double             tiny_; /**< represents chosen numerical limit */
       long                 n_;
       std::vector<size_t>  index_; /**< cache vector for indices */
 };

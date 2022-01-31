@@ -42,11 +42,11 @@ void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model
                                                                      bool normalize_by_initial_integral,
                                                                      bool write_output )
  {
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     
     // 0. integrating the property
     const Region<dim>&  domain(sg.Region("Model"));
-    double64 integratedPropertyValue = domain.VolumeIntegral_x_Thickness( output_variable.c_str(), consider_porosity );
+    double integratedPropertyValue = domain.VolumeIntegral_x_Thickness( output_variable.c_str(), consider_porosity );
     assert( !isnan( integratedPropertyValue) );
     integrals.push_back( make_pair( model_time, integratedPropertyValue ) );
 
@@ -85,10 +85,10 @@ void NodeCenteredFiniteVolumeMonitor<dim>::SaveToFile( const Model<dim>& sg,
      ofs <<"' recorded up to time, t = "<< (*integrals.rbegin()).first <<" seconds.";
      
      if ( !group_by_group ) {
-          double64  initial(1.); 
+          double  initial(1.); 
           if ( normalize_by_initial_integral ) initial = (*integrals.begin()).second;
           ofs <<"\ntime (s)\t"<< output_variable << endl;
-          for ( typename list<pair<double64,double64> >::const_iterator 
+          for ( typename list<pair<double,double> >::const_iterator 
                 it=integrals.begin(); it!=integrals.end(); it++ )
             ofs << (*it).first <<"\t"<< (*it).second / initial << endl;
           cout <<"\nNodeCenteredFiniteVolumeMonitor<"<<  dim;
@@ -108,15 +108,15 @@ void NodeCenteredFiniteVolumeMonitor<dim>::SaveToFile( const Model<dim>& sg,
      ofs << endl;
      
      // writing out the regional integrals for each monitored timestep
-     for ( typename list<pair<double64,list<double64> > >::const_iterator 
+     for ( typename list<pair<double,list<double> > >::const_iterator 
            it=group_integrals.begin(); it!=group_integrals.end(); it++ ) {
           // writing the time
           ofs << (*it).first;
           // tracking the initial values if necessary
-          typename list<double64>::const_iterator  iit=(*group_integrals.begin()).second.begin();
+          typename list<double>::const_iterator  iit=(*group_integrals.begin()).second.begin();
           // writing the integrals over each group
-          ofs << scientific << setprecision(numeric_limits<double64>::digits10);
-          for ( typename list<double64>::const_iterator 
+          ofs << scientific << setprecision(numeric_limits<double>::digits10);
+          for ( typename list<double>::const_iterator 
                 lit=(*it).second.begin(); lit!=(*it).second.end(); lit++, iit++ )
             // normalizing the integral value if so requested
             if ( normalize_by_initial_integral ) ofs <<"\t"<< (*lit) / (*iit);

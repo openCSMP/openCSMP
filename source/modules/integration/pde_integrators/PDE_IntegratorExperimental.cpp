@@ -135,7 +135,7 @@ PDE_IntegratorExperimental.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 bool  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Transient() const
- { return !(time_increment_ < numeric_limits<double64>::epsilon()); }
+ { return !(time_increment_ < numeric_limits<double>::epsilon()); }
 
 
 
@@ -151,7 +151,7 @@ Set the time-increment of an PDE_IntegratorExperimental before you Apply() it to
 Model or target Region objects.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void   PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TimeIncrement( double64 dt )
+void   PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TimeIncrement( double dt )
  {
     time_increment_ = dt;
  }
@@ -171,7 +171,7 @@ To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32 precision )
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
    G_.Out( precision );
@@ -334,9 +334,9 @@ instance to use it as initial guess in another time step. (Use method
 FirstGuess)
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double64>& sol ) const {
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double>& sol ) const {
   sol.resize(x_.size());
-  vector<double64>( sol ).swap( sol );
+  vector<double>( sol ).swap( sol );
   copy(x_.begin(), x_.end(), sol.begin());
 }
 
@@ -357,7 +357,7 @@ NOTE: Make sure that you actually use an algebraic multigrid solver object and t
 parameter ifirst in its SAMG_Settings object is set to 0.
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double64>& guess ) {
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double>& guess ) {
   assert(guess.size() == x_.size());
   copy(guess.begin(), guess.end(), x_.begin());
 }
@@ -754,10 +754,10 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
    // ----------------------------------------------------------------------
    G_.Resize( offset );
    rh_.resize( offset );
-   if ( trim_vectors_ ) vector<double64>( rh_ ).swap( rh_ );
+   if ( trim_vectors_ ) vector<double>( rh_ ).swap( rh_ );
    fill( rh_.begin(), rh_.end(), 0. );
    x_.resize( offset );
-   if ( trim_vectors_ ) vector<double64>( x_ ).swap( x_ );
+   if ( trim_vectors_ ) vector<double>( x_ ).swap( x_ );
    setup_established_ = true;
 
  } // end EstablishMatrixSetup
@@ -835,7 +835,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
             throw csmp::Exception( WARNING, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
                                             "So far no conditions are assigned to elements, faces, segments");
           size_t offset = (*it).second;
-          typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+          auto   niter(gref.NodesBegin());
 
           switch (prop_key.type)
             {
@@ -980,8 +980,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPU
      for ( typename map<string,MathOperatorLHS<dim>*>::iterator
            it_lhs=lhs_operators_.begin(); it_lhs!=lhs_operators_.end(); it_lhs++ )
        if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() )
-         for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-               git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
            {
              (*it_lhs).second->GetOperands( *(*git) );
              (*it_lhs).second->ComputeContribution( *(*git) );
@@ -996,8 +995,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPU
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-               git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1052,8 +1050,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryInte
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( typename vector<Face<dim>*>::const_iterator
-               git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
            // if the material operand is flagged Neumann, an accumulation will be performed
            // @attention it is assumed that the material operand has the same status at all integration points
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
@@ -1064,7 +1061,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryInte
                (*it_rhs).second->ComputeContribution( *(*git) );
                if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                  (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
              }
    
  } // AccumulateBoundaryIntegrals
@@ -1085,8 +1082,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundar
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_split_boundary_operators_.begin(); it_rhs!=rhs_split_boundary_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( typename vector<InterFace<dim>*>::const_iterator
-               git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
            // if the material operand is flagged Robin, the accumulation will be performed
            // @attention it is assumed that the material operand has the same status at all integration points
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
@@ -1099,7 +1095,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundar
                (*it_rhs).second->ComputeContribution( *(*git) );
                if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                  (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
              }
    
  } // AccumulateSplitBoundaryIntegrals
@@ -1145,8 +1141,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulate( const 
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-               git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1178,8 +1173,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundary
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( typename vector<Face<dim>*>::const_iterator
-               git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
                 ( (*it_rhs).second->MaterialOperandPlacement() == FACE && 
@@ -1207,8 +1201,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateSplitBou
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( typename vector<InterFace<dim>*>::const_iterator
-               git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
                 ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
@@ -1259,7 +1252,7 @@ do not define PostProcess(), you will get the info message:
 "no post-processing operations for REGION were defined in derived PDE_IntegratorExperimental"
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PostProcess( const COMPUTATION_DOMAIN<dim>& gref )
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATION_DOMAIN<dim>& gref )
  {
     if ( postpro_operators_.empty() ) return;
 
@@ -1329,7 +1322,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
                   position = (*gfirst)->Idx() + offset;
                   position = DOF_indexes_[position];
                   if (position != NULL_IDX) {
-                    const double64 sc = this->x_[position];
+                    const double sc = this->x_[position];
                     (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
                   }
                   gfirst++;
@@ -1609,20 +1602,19 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
     shared_boundaries.clear();
 
     // 1. enlist any internal or free-form boundaries
-    for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
-          it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
+    for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
       if ( (*it).first.find(subdomain.Name()) != string::npos )
         shared_boundaries.push_back( (*it).first );
    
     // 2. box-shaped model and computational domain = "Model"
     if ( subdomain.Name() == "Model" ) {
          shared_boundaries.push_back( "BOTTOM" );
-         if ( dim != 1U ) {
+         if constexpr ( dim != 1U ) {
               shared_boundaries.push_back( "LEFT" );
               shared_boundaries.push_back( "RIGHT" );
               shared_boundaries.push_back( "TOP" );
            }
-         if ( dim == 3U ) {
+         if constexpr ( dim == 3U ) {
               shared_boundaries.push_back( "FRONT" );
               shared_boundaries.push_back( "BACK" );
            }
@@ -1631,8 +1623,7 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
       
     // 3. if the computational domain is any other subregion of the model
     else {
-        for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
-              it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
+        for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
           if ( subdomain.SharedPerimeterNodes( (*it).second.NodesBegin(), (*it).second.NodesEnd() ) > 0 )
             shared_boundaries.push_back( (*it).first );    
       }
@@ -1642,8 +1633,7 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
    
     for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
           it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
-      for ( typename vector<Face<dim>*>::const_iterator
-            fit=(*it).second.ElementsBegin(); fit!=(*it).second.ElementsEnd(); fit++ )
+      for ( auto fit=(*it).second.ElementsBegin(); fit!=(*it).second.ElementsEnd(); fit++ )
         if ( subdomain.IsPerimeterElement( (*fit)->InnerParent()->Idx() ) ) {
              shared_boundaries.push_back( (*it).first );
              break;
@@ -1694,7 +1684,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
     for ( typename PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::operandsConstIterator
           it = this->test_operands_.begin(); it != this->test_operands_.end(); it++)
         {
-          typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+          auto        niter(gref.NodesBegin());
           csmp::Index prop_key = (*it).first.key;
           size_t      offset = (*it).second;
 
@@ -1794,14 +1784,14 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
 
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
-    if ( trim_vectors_ ) vector<double64>(this->rh_).swap(this->rh_);
+    if ( trim_vectors_ ) vector<double>(this->rh_).swap(this->rh_);
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
-    if ( trim_vectors_ ) vector<double64>(this->x_).swap(this->x_);
+    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
 
     pivotVector_.resize(DOF);
     fill(pivotVector_.begin(), pivotVector_.end(), 0.);
-    if ( trim_vectors_ ) vector<double64>(this->x_).swap(this->x_);
+    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
 
  } // end ReduceSystemSizeEliminatingEssentialConditions
 
@@ -1856,15 +1846,15 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMap
     std::map<Parameter,size_t>                   test_operands_;
 
     SparseMatrix            G_;
-    std::vector<double64>   rh_;
-    std::vector<double64>   x_;
+    std::vector<double>   rh_;
+    std::vector<double>   x_;
     Solver*                 solver_;
 
     const size_t            dim2_;
     size_t                  dof_per_node_;
     bool                    setup_established_, retain_matrix_;
     const bool              newed_Solver_object;
-    double64                time_increment_;
+    double                time_increment_;
 
     struct SIZES {
         size_t nodes;
@@ -1873,7 +1863,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMap
 
   private:
 
-    double64                scale_factor_; ///< for essential conditions
+    double                scale_factor_; ///< for essential conditions
     bool                    verbose_;
 
 */

@@ -101,7 +101,7 @@ void VanGenuchten<dim>::Initialize( const Element<dim>& e )
 
     if( TwoPhaseModel<dim>::tensor_permeability_){
         e.Read( TwoPhaseModel<dim>::perm_key_, TwoPhaseModel<dim>::K_);
-        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double64>(dim);
+        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double>(dim);
     }else{
         TwoPhaseModel<dim>::k_ = e.Read( TwoPhaseModel<dim>::perm_key_ );
         TwoPhaseModel<dim>::K_.operator=( VectorVariable<dim>(PLAIN, TwoPhaseModel<dim>::k_ ) );
@@ -132,7 +132,7 @@ void VanGenuchten<dim>::InitializeVirtualMatrix( const Element<dim>& e )
 
     if( matrix_tensor_permeability_){
         e.Read( matrixPermeabilityKey_, TwoPhaseModel<dim>::K_);
-        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double64>(dim);
+        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double>(dim);
     }else{
         TwoPhaseModel<dim>::k_ = e.Read( matrixPermeabilityKey_ );
         TwoPhaseModel<dim>::K_.operator=( VectorVariable<dim>(PLAIN, TwoPhaseModel<dim>::k_ ) );
@@ -149,7 +149,7 @@ void VanGenuchten<dim>::InitializeVirtualMatrix( const Element<dim>& e )
 
 /// calculates van Genuchten parameter m = 1 - 1/n
 template<size_t dim>
-double64 VanGenuchten<dim>::m_from_n( double64 n ) const
+double VanGenuchten<dim>::m_from_n( double n ) const
  {
     return 1. - 1. / n;
  }
@@ -158,25 +158,25 @@ double64 VanGenuchten<dim>::m_from_n( double64 n ) const
 
 /// Helmig 97', p. 75 eqn. 2.58
 template<size_t dim>
-double64 VanGenuchten<dim>::krw_Phase() const
+double VanGenuchten<dim>::krw_Phase() const
  {
-    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double64>(0.);
-    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double64>(1.);
+    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(0.);
+    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double>(1.);
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // regularization
     if ( TwoPhaseModel<dim>::seff_ > KRW_HIGH_SW_LIMIT_ ){
 
-        const double64 y = TwoPhaseModel<dim>::krw_at( KRW_HIGH_SW_LIMIT_ );
-        const double64 k = TwoPhaseModel<dim>::dkrwds_at( KRW_HIGH_SW_LIMIT_)/seff_mult;
+        const double y = TwoPhaseModel<dim>::krw_at( KRW_HIGH_SW_LIMIT_ );
+        const double k = TwoPhaseModel<dim>::dkrwds_at( KRW_HIGH_SW_LIMIT_)/seff_mult;
 
         return TwoPhaseModel<dim>::spline_value( TwoPhaseModel<dim>::seff_, KRW_HIGH_SW_LIMIT_, 1.0 , y, 1.0, k, 0.0);
     }
 
     //        krw = [ 1 - (1 - Se^1/m)^m ]^2 * Se^eps
-    double64 m = m_from_n(n_);
-    double64 term = 1. - std::pow( 1. - std::pow( TwoPhaseModel<dim>::seff_, 1./m ), m );
+    double m = m_from_n(n_);
+    double term = 1. - std::pow( 1. - std::pow( TwoPhaseModel<dim>::seff_, 1./m ), m );
 
     return std::pow( TwoPhaseModel<dim>::seff_, 0.5 ) * (term * term);
  }
@@ -186,121 +186,121 @@ double64 VanGenuchten<dim>::krw_Phase() const
 
 /// Helmig 97', p. 75 eqn. 2.59
 template<size_t dim>
-double64 VanGenuchten<dim>::krn_Phase() const
+double VanGenuchten<dim>::krn_Phase() const
  {
-    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double64>(1.);
-    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double64>(0.);
+    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(1.);
+    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double>(0.);
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // regularization
     if ( TwoPhaseModel<dim>::seff_ < KRN_LOW_SW_LIMIT_ ){
 
-        const double64 y = TwoPhaseModel<dim>::krn_at( KRN_LOW_SW_LIMIT_ );
-        const double64 k = TwoPhaseModel<dim>::dkrnds_at( KRN_LOW_SW_LIMIT_)/seff_mult;
+        const double y = TwoPhaseModel<dim>::krn_at( KRN_LOW_SW_LIMIT_ );
+        const double k = TwoPhaseModel<dim>::dkrnds_at( KRN_LOW_SW_LIMIT_)/seff_mult;
 
         return TwoPhaseModel<dim>::spline_value( TwoPhaseModel<dim>::seff_, 0.0, KRN_LOW_SW_LIMIT_, 1.0, y, 0.0, k);
     }
 
     //        krn = [ 1 - Se^1/m]^2m * (1 - Se)^gamma
-    double64 m = m_from_n(n_);
-    double64 term = std::pow( 1. - std::pow( TwoPhaseModel<dim>::seff_, 1./m ), 2. * m );
+    double m = m_from_n(n_);
+    double term = std::pow( 1. - std::pow( TwoPhaseModel<dim>::seff_, 1./m ), 2. * m );
 
     return std::pow( 1. - TwoPhaseModel<dim>::seff_, 1./3. ) * term;
  }
 
 template<size_t dim>
-double64 VanGenuchten<dim>::dkrwds_Phase() const
+double VanGenuchten<dim>::dkrwds_Phase() const
  {
 
-    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double64>(0.);
-    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double64>(0.);
+    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(0.);
+    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double>(0.);
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // regularization
     if ( TwoPhaseModel<dim>::seff_ > KRW_HIGH_SW_LIMIT_ ){
 
-        const double64 y = TwoPhaseModel<dim>::krw_at( KRW_HIGH_SW_LIMIT_ );
-        const double64 k = TwoPhaseModel<dim>::dkrwds_at( KRW_HIGH_SW_LIMIT_)/seff_mult;
+        const double y = TwoPhaseModel<dim>::krw_at( KRW_HIGH_SW_LIMIT_ );
+        const double k = TwoPhaseModel<dim>::dkrwds_at( KRW_HIGH_SW_LIMIT_)/seff_mult;
 
         return TwoPhaseModel<dim>::spline_derivative( TwoPhaseModel<dim>::seff_, KRW_HIGH_SW_LIMIT_, 1.0 , y, 1.0, k, 0.0)*seff_mult;
     }
 
-    const double64 m = m_from_n(n_);
-    const double64 term  = 1. - std::pow( TwoPhaseModel<dim>::seff_, 1./m );
-    const double64 termM = pow( term , m);
+    const double m = m_from_n(n_);
+    const double term  = 1. - std::pow( TwoPhaseModel<dim>::seff_, 1./m );
+    const double termM = pow( term , m);
 
     return (1.0-termM)*( (1.0 - termM)/2. + 2.0*termM*(1.0-term)/term )/sqrt(TwoPhaseModel<dim>::seff_)*seff_mult;
  }
 
 
 template<size_t dim>
-double64 VanGenuchten<dim>::dkrnds_Phase() const
+double VanGenuchten<dim>::dkrnds_Phase() const
  {
 
-    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double64>(0.);
-    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double64>(0.);
+    if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(0.);
+    if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double>(0.);
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // regularization
     if ( TwoPhaseModel<dim>::seff_ < KRN_LOW_SW_LIMIT_ ){
 
-        const double64 y = TwoPhaseModel<dim>::krn_at( KRN_LOW_SW_LIMIT_ );
-        const double64 k = TwoPhaseModel<dim>::dkrnds_at( KRN_LOW_SW_LIMIT_)/seff_mult;
+        const double y = TwoPhaseModel<dim>::krn_at( KRN_LOW_SW_LIMIT_ );
+        const double k = TwoPhaseModel<dim>::dkrnds_at( KRN_LOW_SW_LIMIT_)/seff_mult;
 
         return TwoPhaseModel<dim>::spline_derivative( TwoPhaseModel<dim>::seff_, 0.0, KRN_LOW_SW_LIMIT_, 1.0, y, 0.0, k)*seff_mult;
     }
 
-    const double64 m = m_from_n(n_);
-    const double64 term  = std::pow( TwoPhaseModel<dim>::seff_, 1./m );
-    const double64 ratio1  = (1.0 - TwoPhaseModel<dim>::seff_)/(1.0 - term);
-    const double64 ratio2  = term/TwoPhaseModel<dim>::seff_;
+    const double m = m_from_n(n_);
+    const double term  = std::pow( TwoPhaseModel<dim>::seff_, 1./m );
+    const double ratio1  = (1.0 - TwoPhaseModel<dim>::seff_)/(1.0 - term);
+    const double ratio2  = term/TwoPhaseModel<dim>::seff_;
 
     return -pow(1.0-term, 2.0*m )*pow(1.0 - TwoPhaseModel<dim>::seff_, -2.0/3.0)*( 1./3. + 2.0*ratio1*ratio2)*seff_mult;
 
  }
 
 template<size_t dim>
-double64 VanGenuchten<dim>::pc_Phase( ) const
+double VanGenuchten<dim>::pc_Phase( ) const
 {
     /// Not consistent way of regularization
     /// Roman, 2013
     // only for the min saturation of water precautions are needed
     // the actual saturation is used instead of the effective saturation
     // if ( TwoPhaseModel<dim>::seff_ == 0. ) return TwoPhaseModel<dim>::pc_max_;
-    // if ( TwoPhaseModel<dim>::seff_ == 1. ) return static_cast<double64>(0.);
+    // if ( TwoPhaseModel<dim>::seff_ == 1. ) return static_cast<double>(0.);
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     /// New way of regularization
     // linear regularization for lower part of sw range
     if ( TwoPhaseModel<dim>::seff_ < PC_LOW_SW_LIMIT_ ){
 
-        const double64 pc_lim = TwoPhaseModel<dim>::pc_at( PC_LOW_SW_LIMIT_ );
-        const double64 dpcds_lim = TwoPhaseModel<dim>::dpcds_at( PC_LOW_SW_LIMIT_ )/seff_mult;
+        const double pc_lim = TwoPhaseModel<dim>::pc_at( PC_LOW_SW_LIMIT_ );
+        const double dpcds_lim = TwoPhaseModel<dim>::dpcds_at( PC_LOW_SW_LIMIT_ )/seff_mult;
         return pc_lim + dpcds_lim*( TwoPhaseModel<dim>::seff_ - PC_LOW_SW_LIMIT_ );
 
     // linear regularization for higher part of sw range
     }else if ( TwoPhaseModel<dim>::seff_ > PC_HIGH_SW_LIMIT_ ){
 
-        const double64 pc_lim = TwoPhaseModel<dim>::pc_at( PC_HIGH_SW_LIMIT_ );
-        const double64 dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT_ ) );
+        const double pc_lim = TwoPhaseModel<dim>::pc_at( PC_HIGH_SW_LIMIT_ );
+        const double dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT_ ) );
         return dpcds_lim*( TwoPhaseModel<dim>::seff_ - 1.0 );
 
     }
 
 
-    double64 m = m_from_n( n_ );
-    double64 term = std::pow( TwoPhaseModel<dim>::seff_, -1. / m ) - 1.;
+    double m = m_from_n( n_ );
+    double term = std::pow( TwoPhaseModel<dim>::seff_, -1. / m ) - 1.;
     return std::pow( term, 1. / n_ ) / alpha_;
 
 }
 
 
 template<size_t dim>
-double64 VanGenuchten<dim>::dpcds_Phase( ) const
+double VanGenuchten<dim>::dpcds_Phase( ) const
 {
     /// Not consistent way of regularization
     /// Roman, 2013
@@ -312,53 +312,53 @@ double64 VanGenuchten<dim>::dpcds_Phase( ) const
     if ( TwoPhaseModel<dim>::seff_ < PC_LOW_SW_LIMIT_   )
         return TwoPhaseModel<dim>::dpcds_at( PC_LOW_SW_LIMIT_ );
 
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // linear regularization for higher part of sw range
     if ( TwoPhaseModel<dim>::seff_ > PC_HIGH_SW_LIMIT_ )
         return (0.0 - TwoPhaseModel<dim>::pc_at(PC_HIGH_SW_LIMIT_))/( 1.0 - PC_HIGH_SW_LIMIT_ ) * seff_mult;
 
-    const double64 m  = m_from_n(  n_ );
-    const double64 term0 = std::pow( TwoPhaseModel<dim>::seff_, -1. / m );
-    const double64 term1 = term0 - 1.;
-    const double64 term2 = std::pow( term1, 1. / n_ );
+    const double m  = m_from_n(  n_ );
+    const double term0 = std::pow( TwoPhaseModel<dim>::seff_, -1. / m );
+    const double term1 = term0 - 1.;
+    const double term2 = std::pow( term1, 1. / n_ );
 
     return -(term2 * term0) / (alpha_ * n_ * m * TwoPhaseModel<dim>::seff_ * term1) * seff_mult;
 }
 
 template<size_t dim>
-double64 VanGenuchten<dim>::Sw_Phase( double64 pc ) const
+double VanGenuchten<dim>::Sw_Phase( double pc ) const
 {
 
-    double64 m = m_from_n( n_ );
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    double m = m_from_n( n_ );
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     // useful for numerical calculations
     if( pc<0.0){
 
-        const double64 pc_lim = TwoPhaseModel<dim>::pc_at( PC_HIGH_SW_LIMIT_ );
-        const double64 dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT_ ) );
+        const double pc_lim = TwoPhaseModel<dim>::pc_at( PC_HIGH_SW_LIMIT_ );
+        const double dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT_ ) );
         TwoPhaseModel<dim>::seff_ =  pc/dpcds_lim + 1.0;
         return TwoPhaseModel<dim>::SeffToSw();
 
     }else{
 
-        double64 term = std::pow( pc*alpha_, n_ ) + 1.0;
+        double term = std::pow( pc*alpha_, n_ ) + 1.0;
         TwoPhaseModel<dim>::seff_ =  pow( term, -m );
     }
 
     // linear regularization for low part of sw range
     if ( TwoPhaseModel<dim>::seff_ <= PC_LOW_SW_LIMIT_ ){
 
-        const double64 pc_lim = TwoPhaseModel<dim>::pc_at( PC_LOW_SW_LIMIT_ );
-        const double64 dpcds_lim = TwoPhaseModel<dim>::dpcds_at( PC_LOW_SW_LIMIT_ )/seff_mult;
+        const double pc_lim = TwoPhaseModel<dim>::pc_at( PC_LOW_SW_LIMIT_ );
+        const double dpcds_lim = TwoPhaseModel<dim>::dpcds_at( PC_LOW_SW_LIMIT_ )/seff_mult;
         TwoPhaseModel<dim>::seff_ =  PC_LOW_SW_LIMIT_ + (pc - pc_lim)/dpcds_lim;
 
     // linear regularization for higher part of sw range
     }else if ( TwoPhaseModel<dim>::seff_ > PC_HIGH_SW_LIMIT_ ){
 
-        const double64 pc_lim = TwoPhaseModel<dim>::pc_at( PC_HIGH_SW_LIMIT_ );
-        const double64 dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT_ ));
+        const double pc_lim = TwoPhaseModel<dim>::pc_at( PC_HIGH_SW_LIMIT_ );
+        const double dpcds_lim ( (0.0 - pc_lim)/( 1.0 - PC_HIGH_SW_LIMIT_ ));
 
         TwoPhaseModel<dim>::seff_ = pc/dpcds_lim + 1.0;
 
@@ -370,12 +370,12 @@ double64 VanGenuchten<dim>::Sw_Phase( double64 pc ) const
 
 
 template<size_t dim>
-double64 VanGenuchten<dim>::dsdpc_Phase( double64 pc ) const
+double VanGenuchten<dim>::dsdpc_Phase( double pc ) const
 {
 
-    double64 m = m_from_n( n_ );
-    double64 Seff;
-    const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+    double m = m_from_n( n_ );
+    double Seff;
+    const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
     if( pc<0.0)
         Seff = 1.5; // just means that it is more than 1
@@ -391,16 +391,16 @@ double64 VanGenuchten<dim>::dsdpc_Phase( double64 pc ) const
         return ( 1.0 - PC_HIGH_SW_LIMIT_ )/(0.0 - TwoPhaseModel<dim>::pc_at(PC_HIGH_SW_LIMIT_))/seff_mult;
 
 
-    double64 term = std::pow( pc*alpha_, n_ );
+    double term = std::pow( pc*alpha_, n_ );
     return -m*n_*term*pow( term + 1.0, -m -1.0)/pc/seff_mult;
 
 }
 
 
 template<size_t dim>
-double64 VanGenuchten<dim>::MaxFractionalFlowDerivative() const
+double VanGenuchten<dim>::MaxFractionalFlowDerivative() const
  {
-    return static_cast<double64>(7.); // as computed with dfds_Phase method
+    return static_cast<double>(7.); // as computed with dfds_Phase method
  }
 
 
@@ -419,10 +419,10 @@ Reference saturation, pore throat radius, pore radius.
 @return The capillary pressure
 */
 template<size_t dim>
-double64 VanGenuchten<dim>::PoreParametersCapillaryPressure( double64 pt, double64 pr, double64 tension ) const
+double VanGenuchten<dim>::PoreParametersCapillaryPressure( double pt, double pr, double tension ) const
  {
     // saturation function f(satw) = arccos(2satw - 1) / pi
-    double64 pc = std::acos( 2. * TwoPhaseModel<dim>::seff_ - 1. ) / PI;
+    double pc = std::acos( 2. * TwoPhaseModel<dim>::seff_ - 1. ) / PI;
 
     // capillary pressure according to Berg 75
     pc *= tension * ( 1. / pr + 1. / pt );

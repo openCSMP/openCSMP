@@ -144,17 +144,6 @@ int CGNS_Interface::ReadUnstructMesh( int cgfile, const std::string& filename, c
         ReadElements<dim>( cgfile, cgbase, cgzone, size[1], vset, mesh_topology );
     }
 
-    /// construct ModelTopology
-    bool require_unique_names_of_volumes_surfaces_and_lines = true;
-    bool correct_orientation_of_surface_elements = false;
-    bool non_box_boundary = true;
-    mesh_topology.CheckTopology( vset,
-                                 require_unique_names_of_volumes_surfaces_and_lines,
-                                 correct_orientation_of_surface_elements,
-                                 non_box_boundary );
-
-    Clear();
-
     if( error_handler.Verbose() )
         std::cout<<"\nCGNS_Interface::ReadUnstructMesh():Successfully read unstructured grid from file"<<filename<<"\n";
 
@@ -663,7 +652,7 @@ template void CGNS_Interface::WriteElements<3U>( int,int,int,const csmp::ModelSu
 CGNS_ModelSettings::CGNS_ModelSettings( const std::string& mesh_file_prefix )
     : mesh_file_prefix_     ( mesh_file_prefix )
 {
-    if( csmp::isRegionsFileExist( mesh_file_prefix.c_str() ) ){
+    if ( csmp::doesRegionsFileExist( mesh_file_prefix.c_str() ) ){
         regions_.clear();
         csmp::readDesiredRegions( mesh_file_prefix.c_str(), regions_ );
     }
@@ -692,7 +681,7 @@ CGNS_ModelSettings::~CGNS_ModelSettings()
 void CGNS_ModelSettings
 ::MeshSetup( const std::string& regions_file_prefix )
 {
-    if( csmp::isRegionsFileExist( regions_file_prefix.c_str() ) )
+    if ( csmp::doesRegionsFileExist( regions_file_prefix.c_str() ) )
     {
         regions_.clear();
         csmp::readDesiredRegions( regions_file_prefix.c_str(), regions_ );

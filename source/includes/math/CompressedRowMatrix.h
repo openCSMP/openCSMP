@@ -32,7 +32,7 @@ public:
     CompressedRowMatrix( const CompressedRowMatrix& );
     CompressedRowMatrix& operator=( const CompressedRowMatrix& );
 
-    double64  operator()( uint32, uint32 ) const;
+    double  operator()( uint32_t, uint32_t ) const;
 
     void Initialize( const csmp::SparseMatrix& );
     void InitializePointBased( const SparseMatrix&, size_t nsys );
@@ -44,13 +44,13 @@ public:
     void Out() const;
     void Out( const std::string& outfile ) const;
 
-    std::vector<int32>     ia, ///< ia(ilo) and the last row ends at position ia(ihi+1)-1 (see next).
+    std::vector<int32_t>     ia, ///< ia(ilo) and the last row ends at position ia(ihi+1)-1 (see next).
                            ja; ///< ja - pointer array pointing to the column indices. that is, for each matrix element a(j) with ia(ilo)<=j<=ia(ihi+1)-1, ja(j) contains the column index of that element. since, within each row, the diagonal element is stored first (see above), we always have ja(ia(i))=i.
-    std::vector<double64>  a;  ///< array containing the rows of the matrix, one after the other, each row starting with its diagonal element. the first row starts at position
+    std::vector<double>  a;  ///< array containing the rows of the matrix, one after the other, each row starting with its diagonal element. the first row starts at position
 };
 
 /// to print the vector of diagonal elements in the matrix
-void print( std::vector<std::pair<std::pair<uint32,uint32>, std::vector<bool> > >& );
+void print( std::vector<std::pair<std::pair<uint32_t,uint32_t>, std::vector<bool> > >& );
 
 } // end csmp
 

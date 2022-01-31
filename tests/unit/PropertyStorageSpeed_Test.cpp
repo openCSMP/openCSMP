@@ -1,5 +1,6 @@
 #include "PropertyStorageSpeed_Test.h"
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "BE_Time.h"
 
 using namespace std;
@@ -40,7 +41,7 @@ void PropertyStorageSpeed_Test::run()
    unsigned int seed(stop_watch.Second());
    // cin >> seed;
    srand(seed);
-   double64            va;
+   double            va;
    ScalarVariable      sc;  
    VectorVariable<3U>  vc;  
    TensorVariable<3U>  ts;  
@@ -49,9 +50,9 @@ void PropertyStorageSpeed_Test::run()
    for ( int i=0; i<25000; i++ )
      {
         // initialising the input properties
-        sc() = static_cast<double64>(rand()) / 3.;
-        vc   = static_cast<double64>(rand()) / 3.;
-        ts   = static_cast<double64>(rand()) / 3.;
+        sc() = static_cast<double>(rand()) / 3.;
+        vc   = static_cast<double>(rand()) / 3.;
+        ts   = static_cast<double>(rand()) / 3.;
         
         // writing properties
         for ( map<string,csmp::Index>::const_iterator it=properties.begin(); it!=properties.end(); it++ ) {
@@ -60,7 +61,7 @@ void PropertyStorageSpeed_Test::run()
              else if ( (*it).second.type == TENSOR ) model.InputPropertyValue( (*it).first.c_str(), ts );
           }
         // reading properties including some manipulations
-        double64 pmin, pmax;  
+        double pmin, pmax;  
         cout <<"\n\nmain: property ranges: ";
         for ( map<string,csmp::Index>::const_iterator it=properties.begin(); it!=properties.end(); it++ ) {
              model.MinMaxOf( (*it).first.c_str(), pmin, pmax );

@@ -42,9 +42,9 @@ class GoCadInterface {
   private:    
     bool IsInNextLine( std::ifstream& ifs, const char* search_string ) const;
     
-    BOX_BOUNDARY  IdentifyTetrahedronBoundary( const std::vector<double64>& nd1,
-                                               const std::vector<double64>& nd2,
-                                               const std::vector<double64>& nd3 );
+    BOX_BOUNDARY  IdentifyTetrahedronBoundary( const std::vector<double>& nd1,
+                                               const std::vector<double>& nd2,
+                                               const std::vector<double>& nd3 );
     bool ReadTSurface( std::ifstream& ifs, 
                        const std::list<GocadPropertyClassHeader>& properties,
                        VSet<dim>& vset );
@@ -53,7 +53,7 @@ class GoCadInterface {
     
     void FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset );
  
-    bool VerifyConsecutiveNodeNumbering( std::map<size_t,std::vector<size_t> >& plist ) const; 
+    bool VerifyConsecutiveNodeNumbering( std::map<size_t,std::vector<int64_t> >& plist ) const; 
 };
 
 } // csmp

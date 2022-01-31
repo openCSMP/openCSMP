@@ -10,8 +10,8 @@ namespace csmp {
 */
 TensorVariable<2U>::TensorVariable()
   : flag{{ANY,ANY}},
-    data{numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN(),
-         numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN()}
+    data{numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),
+         numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN()}
   {
   }
 
@@ -44,7 +44,7 @@ TensorVariable<2U>::TensorVariable( const TensorVariable<2U>& t )
     initialises variable as diagonal isotropic tensor with flag and value
     SKM 17/6/2015
 */
-TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, double64 val )
+TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, double val )
   : flag{{f,f}},
     data{val,0.,0.,val}
  {
@@ -54,8 +54,8 @@ TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, double64 val )
 
 
 TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, 
-                                    double64 v11, double64 v12,
-                                    double64 v21, double64 v22 )
+                                    double v11, double v12,
+                                    double v21, double v22 )
   : flag{{f,f}},
     data{v11,v12,v21,v22}
  {
@@ -64,8 +64,8 @@ TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f,
  
  
 TensorVariable<2U>::TensorVariable( const VARIABLE_FLAG& f11, const VARIABLE_FLAG& f22,
-                                    const double64&  v11, const double64&  v12,
-                                    const double64&  v21, const double64&  v22 )
+                                    const double&  v11, const double&  v12,
+                                    const double&  v21, const double&  v22 )
   : flag{{f11,f22}},
     data{v11,v12,v21,v22}
  {
@@ -75,7 +75,7 @@ TensorVariable<2U>::TensorVariable( const VARIABLE_FLAG& f11, const VARIABLE_FLA
 
 
 
-double64& TensorVariable<2U>::operator()( size_t i, size_t j ) 
+double& TensorVariable<2U>::operator()( size_t i, size_t j ) 
  {
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -93,7 +93,7 @@ double64& TensorVariable<2U>::operator()( size_t i, size_t j )
 
 
 
-const double64& TensorVariable<2U>::operator()( size_t i, size_t j ) const
+const double& TensorVariable<2U>::operator()( size_t i, size_t j ) const
  {
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -110,7 +110,7 @@ const double64& TensorVariable<2U>::operator()( size_t i, size_t j ) const
 
 
 
-void TensorVariable<2U>::Component( size_t i, double64 val )
+void TensorVariable<2U>::Component( size_t i, double val )
  { 
     assert( i < Size() );
     // row by row
@@ -122,7 +122,7 @@ void TensorVariable<2U>::Component( size_t i, double64 val )
 
 
 
-double64 TensorVariable<2U>::Component( size_t i ) const
+double TensorVariable<2U>::Component( size_t i ) const
  { 
     assert( i < Size() );
     // row by row
@@ -166,7 +166,7 @@ size_t TensorVariable<2U>::Size() const
     return 4U;
   }
 
-void TensorVariable<2U>::Resize( size_t, double64 newValue )
+void TensorVariable<2U>::Resize( size_t, double newValue )
   {
     data[0][0] = newValue;
     data[0][1] = newValue;
@@ -208,14 +208,14 @@ bool  TensorVariable<2U>::operator<( const TensorVariable<2U>& t ) const
 
 // re-tested: SKM 29-9-2001
 // @test tested: O.K.
-double64 TensorVariable<2U>::Determinant() const
+double TensorVariable<2U>::Determinant() const
  {
     return data[0][0]*data[1][1] - data[0][1]*data[1][0];
  }
  
 
 
-double64 TensorVariable<2U>::Trace() const
+double TensorVariable<2U>::Trace() const
  {
     return data[0][0]+data[1][1];
  }
@@ -262,12 +262,12 @@ VectorVariable<2U> TensorVariable<2U>::Column( size_t iCol ) const
 
 bool TensorVariable<2U>::Out( std::fstream& fp ) const
 {
-  const int32 flag_0( this->flag[0] );
-  const int32 flag_1( this->flag[1] );
-  const size_t flag_size = sizeof( int32 );
+  const int32_t flag_0( this->flag[0] );
+  const int32_t flag_1( this->flag[1] );
+  const size_t flag_size = sizeof( int32_t );
   fp.write( (char*)&flag_0, flag_size );
   fp.write( (char*)&flag_1, flag_size );
-  const size_t data_size = sizeof( double64 );
+  const size_t data_size = sizeof( double );
   fp.write( (char*)&this->data[0][0], data_size );
   fp.write( (char*)&this->data[1][0], data_size );
   fp.write( (char*)&this->data[0][1], data_size );
@@ -277,10 +277,10 @@ bool TensorVariable<2U>::Out( std::fstream& fp ) const
 
 bool TensorVariable<2U>::In( std::fstream& fp )
 {
-  const size_t flag_size = sizeof( int32 );
+  const size_t flag_size = sizeof( int32_t );
   fp.read( (char*)&this->flag[0], flag_size );
   fp.read( (char*)&this->flag[1], flag_size );
-  const size_t data_size = sizeof( double64 );
+  const size_t data_size = sizeof( double );
   fp.read( (char*)&this->data[0][0], data_size );
   fp.read( (char*)&this->data[1][0], data_size );
   fp.read( (char*)&this->data[0][1], data_size );
@@ -310,7 +310,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator-( const TensorVariable<2U>& t )
  }
 
 
-TensorVariable<2U>  TensorVariable<2U>::operator+( double64 val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator+( double val ) const
  {
       return TensorVariable( flag[0], flag[1],  
                              data[0][0]+val, data[0][1]+val, 
@@ -319,7 +319,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator+( double64 val ) const
  
  
 
-TensorVariable<2U>  TensorVariable<2U>::operator-( double64 val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator-( double val ) const
  {
       return TensorVariable( flag[0], flag[1], 
                              data[0][0]-val, data[0][1]-val,
@@ -328,7 +328,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator-( double64 val ) const
  
  
 
-TensorVariable<2U>  TensorVariable<2U>::operator*( double64 val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator*( double val ) const
  {
       return TensorVariable( flag[0], flag[1],  
                              data[0][0]*val, data[0][1]*val,
@@ -337,7 +337,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator*( double64 val ) const
  
  
 
-TensorVariable<2U>  TensorVariable<2U>::operator/( double64 val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator/( double val ) const
  {
       return TensorVariable( flag[0], flag[1], 
                              data[0][0]/val, data[0][1]/val,
@@ -518,7 +518,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator*=( const TensorVariable<2U>& t
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator+=( double64 val )
+TensorVariable<2U>&  TensorVariable<2U>::operator+=( double val )
  {
     data[0][0] += val;
     data[0][1] += val;
@@ -530,7 +530,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator+=( double64 val )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator-=( double64 val )
+TensorVariable<2U>&  TensorVariable<2U>::operator-=( double val )
  {
     data[0][0] -= val;
     data[0][1] -= val;
@@ -542,7 +542,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator-=( double64 val )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator*=( double64 val )
+TensorVariable<2U>&  TensorVariable<2U>::operator*=( double val )
  {
     data[0][0] *= val;
     data[0][1] *= val;
@@ -554,7 +554,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator*=( double64 val )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator/=( double64 val )
+TensorVariable<2U>&  TensorVariable<2U>::operator/=( double val )
  {
     data[0][0] /= val;
     data[0][1] /= val;
@@ -570,7 +570,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator/=( double64 val )
 // --------------------
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator=( double64 val )
+TensorVariable<2U>&  TensorVariable<2U>::operator=( double val )
  {
     data[0][0] = val;
     data[0][1] = val;
@@ -602,8 +602,8 @@ TensorVariable<2U>&  TensorVariable<2U>::operator=( const VectorVariable<2U>& vc
     flag[0] = vc.Flag(0);
     flag[1] = vc.Flag(1);
     data[0][0] = vc(0);
-    data[0][1] = static_cast<double64>(0.0);
-    data[1][0] = static_cast<double64>(0.0);
+    data[0][1] = static_cast<double>(0.0);
+    data[1][0] = static_cast<double>(0.0);
     data[1][1] = vc(1);
 
     return *this; 
@@ -617,15 +617,15 @@ TensorVariable<2U>&  TensorVariable<2U>::operator=( const VectorVariable<2U>& vc
 
 void TensorVariable<2U>::Identity()
  {
-    data[0][0] = static_cast<double64>(1.0);
-    data[0][1] = static_cast<double64>(0.0);
-    data[1][0] = static_cast<double64>(0.0);
-    data[1][1] = static_cast<double64>(1.0);
+    data[0][0] = static_cast<double>(1.0);
+    data[0][1] = static_cast<double>(0.0);
+    data[1][0] = static_cast<double>(0.0);
+    data[1][1] = static_cast<double>(1.0);
  }
 
 
 
-void TensorVariable<2U>::DiagonalValues( double64 f_00, double64 f_11 )
+void TensorVariable<2U>::DiagonalValues( double f_00, double f_11 )
 {
     data[0][0] = f_00;
     data[1][1] = f_11;
@@ -633,7 +633,7 @@ void TensorVariable<2U>::DiagonalValues( double64 f_00, double64 f_11 )
 
 
 
-void TensorVariable<2U>::DiagonalValues(const vector<double64>& vecDiags )
+void TensorVariable<2U>::DiagonalValues(const vector<double>& vecDiags )
 {
     data[0][0] = vecDiags[0];
     data[1][1] = vecDiags[1];
@@ -663,9 +663,9 @@ TensorVariable<2U>  TensorVariable<2U>::Transposed() const
 // @test tested: O.K.
 TensorVariable<2U> TensorVariable<2U>::Inverse() const
  {
-    double64  det = Determinant();
+    double  det = Determinant();
     
-    if ( det == static_cast<double64>(0.) ) {
+    if ( det == static_cast<double>(0.) ) {
          std::cerr <<"\nTensorVariable<2U>::Inverse: Determinant = 0" << std::endl;
          return TensorVariable<2U>();
       }
@@ -680,9 +680,9 @@ TensorVariable<2U> TensorVariable<2U>::Inverse() const
  
  
 /// @test re-tested: SKM 29-9-2001
-double64  TensorVariable<2U>::MinElement() const
+double  TensorVariable<2U>::MinElement() const
  {
-    double64 me = data[0][0];
+    double me = data[0][0];
      
     if ( data[0][1] < me ) me = data[0][1];
     if ( data[1][0] < me ) me = data[1][0];
@@ -694,9 +694,9 @@ double64  TensorVariable<2U>::MinElement() const
   
 /// @test re-tested: SKM 29-9-2001
 
-double64  TensorVariable<2U>::MaxElement() const
+double  TensorVariable<2U>::MaxElement() const
  {
-    double64 me = data[0][0];
+    double me = data[0][0];
 
     if ( data[0][1] > me ) me = data[0][1];
     if ( data[1][0] > me ) me = data[1][0];
@@ -709,7 +709,7 @@ double64  TensorVariable<2U>::MaxElement() const
  
 /// @test re-tested: SKM 29-9-2001
 
-bool  TensorVariable<2U>::IsWithinRange( double64 vmin, double64 vmax ) const
+bool  TensorVariable<2U>::IsWithinRange( double vmin, double vmax ) const
  {
     if ( data[0][0] < vmin || data[0][0] > vmax ) return false;
     if ( data[0][1] < vmin || data[0][1] > vmax ) return false;
@@ -815,7 +815,7 @@ bool TensorVariable<2U>::Eigen( VectorVariable<2U>& evals,
 	if(!EigenValues(evals)) return false;
 		
 	//suppose tensor is symmetric, by averaging the non diagonal elements
-	const double64 f_data01((data[0][1]+data[1][0])/2.);
+	const double f_data01((data[0][1]+data[1][0])/2.);
 	if(f_data01 == 0) 
 	{
 	  evecs.Identity();
@@ -848,10 +848,10 @@ bool TensorVariable<2U>::EigenValues( VectorVariable<2U>& vecEigenvalues ) const
 {
    // a0 and a1  are coefficients of quadratic equation " x^2 + a1 * x + a0 = 0". The roots of this equation are 
    // the Eigen values of the tensor
-   const double64 a1 = -( data[ 0 ][ 0 ] + data[ 1 ][ 1 ] );
-   const double64 a0 = ( data[ 0 ][ 0 ] * data[ 1 ][ 1 ] -
+   const double a1 = -( data[ 0 ][ 0 ] + data[ 1 ][ 1 ] );
+   const double a0 = ( data[ 0 ][ 0 ] * data[ 1 ][ 1 ] -
                          data[ 1 ][ 0 ] * data[ 0 ][ 1 ] );
-   const double64 D = a1 * a1 - 4 * a0;
+   const double D = a1 * a1 - 4 * a0;
    
    if ( D >= 0 ) // The equation has two real roots
    {
@@ -871,14 +871,14 @@ bool TensorVariable<2U>::EigenValues( VectorVariable<2U>& vecEigenvalues ) const
 
 
 
-bool TensorVariable<2U>::EigenValues( vector<double64>& vecEigenvalues ) const
+bool TensorVariable<2U>::EigenValues( vector<double>& vecEigenvalues ) const
 {
    // a0 and a1  are coefficients of quadratic equation " x^2 + a1 * x + a0 = 0". The roots of this equation are 
    // the Eigen values of the tensor
-   const double64 a1 = -( data[ 0 ][ 0 ] + data[ 1 ][ 1 ] );
-   const double64 a0 = ( data[ 0 ][ 0 ] * data[ 1 ][ 1 ] -
+   const double a1 = -( data[ 0 ][ 0 ] + data[ 1 ][ 1 ] );
+   const double a0 = ( data[ 0 ][ 0 ] * data[ 1 ][ 1 ] -
                          data[ 1 ][ 0 ] * data[ 0 ][ 1 ] );
-   const double64 D = a1 * a1 - 4 * a0;
+   const double D = a1 * a1 - 4 * a0;
    
    if ( D >= 0 ) // The equation has two real roots
    {

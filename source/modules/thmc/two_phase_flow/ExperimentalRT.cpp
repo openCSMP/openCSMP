@@ -81,11 +81,11 @@ void ExperimentalRT<dim>::ConstructRTs(const char* rt_file_name)
         {
             std::cout << "\nTable " << i << "\n";
             
-            double64 kro_start_derivative, kro_end_derivative,
+            double kro_start_derivative, kro_end_derivative,
                     krw_start_derivative, krw_end_derivative,
                     pc_start_derivative, pc_end_derivative;
-            std::vector<double64> sw, kro, krw, pc;
-            double64 sw_value, kro_value, krw_value, pc_value;
+            std::vector<double> sw, kro, krw, pc;
+            double sw_value, kro_value, krw_value, pc_value;
             unsigned int number_of_entries;
             
             rt_file >> number_of_entries;
@@ -197,11 +197,11 @@ void ExperimentalRT<dim>::ConstructRTs(const char* rt_file_name)
             
             rt_file.seekg(position);
 
-            double64 kro_start_derivative, kro_end_derivative,
+            double kro_start_derivative, kro_end_derivative,
                      krw_start_derivative, krw_end_derivative,
                      pc_start_derivative, pc_end_derivative;
-            std::vector<double64> sw, kro, krw, pc;
-            double64 sw_value, kro_value, krw_value, pc_value;
+            std::vector<double> sw, kro, krw, pc;
+            double sw_value, kro_value, krw_value, pc_value;
             
             position = rt_file.tellg();
             
@@ -265,7 +265,7 @@ void ExperimentalRT<dim>::Initialize(const Element<dim>& e)
 
     if( TwoPhaseModel<dim>::tensor_permeability_){
         e.Read( TwoPhaseModel<dim>::perm_key_, TwoPhaseModel<dim>::K_);
-        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double64>(dim);
+        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double>(dim);
     }else{
         TwoPhaseModel<dim>::k_ = e.Read( TwoPhaseModel<dim>::perm_key_ );
         TwoPhaseModel<dim>::K_.operator=( VectorVariable<dim>(PLAIN, TwoPhaseModel<dim>::k_ ) );
@@ -285,7 +285,7 @@ void ExperimentalRT<dim>::Initialize(const Element<dim>& e)
 
 
 template<size_t dim>
-double64 ExperimentalRT<dim>::krn_Phase() const
+double ExperimentalRT<dim>::krn_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krn_[rt_number_].Value(TwoPhaseModel<dim>::swr_);
     if (TwoPhaseModel<dim>::sat_ >= 1. - TwoPhaseModel<dim>::snr_) return krn_[rt_number_].Value(1. - TwoPhaseModel<dim>::snr_);
@@ -294,7 +294,7 @@ double64 ExperimentalRT<dim>::krn_Phase() const
 
 
 template<size_t dim>
-double64 ExperimentalRT<dim>::krw_Phase() const
+double ExperimentalRT<dim>::krw_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krw_[rt_number_].Value(TwoPhaseModel<dim>::swr_);
     if (TwoPhaseModel<dim>::sat_ >= 1. - TwoPhaseModel<dim>::snr_) return krw_[rt_number_].Value(1. - TwoPhaseModel<dim>::snr_);
@@ -303,7 +303,7 @@ double64 ExperimentalRT<dim>::krw_Phase() const
 
 
 template<size_t dim>
-double64 ExperimentalRT<dim>::pc_Phase( ) const
+double ExperimentalRT<dim>::pc_Phase( ) const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return pc_[rt_number_].Value(TwoPhaseModel<dim>::swr_);
     if (TwoPhaseModel<dim>::sat_ >= 1. - TwoPhaseModel<dim>::snr_) return pc_[rt_number_].Value(1. - TwoPhaseModel<dim>::snr_);
@@ -312,7 +312,7 @@ double64 ExperimentalRT<dim>::pc_Phase( ) const
 
 
 template<size_t dim>
-double64 ExperimentalRT<dim>::dkrnds_Phase() const
+double ExperimentalRT<dim>::dkrnds_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krn_[rt_number_].Derivative(TwoPhaseModel<dim>::swr_);
     if (TwoPhaseModel<dim>::sat_ >= 1. - TwoPhaseModel<dim>::snr_) return krn_[rt_number_].Derivative(1. - TwoPhaseModel<dim>::snr_);
@@ -321,7 +321,7 @@ double64 ExperimentalRT<dim>::dkrnds_Phase() const
 
 
 template<size_t dim>
-double64 ExperimentalRT<dim>::dkrwds_Phase() const
+double ExperimentalRT<dim>::dkrwds_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krw_[rt_number_].Derivative(TwoPhaseModel<dim>::swr_);
     if (TwoPhaseModel<dim>::sat_ >= 1. - TwoPhaseModel<dim>::snr_) return krw_[rt_number_].Derivative(1. - TwoPhaseModel<dim>::snr_);
@@ -330,7 +330,7 @@ double64 ExperimentalRT<dim>::dkrwds_Phase() const
 
 // capillary pressure derivatives
 template<size_t dim>
-double64 ExperimentalRT<dim>::dpcds_Phase() const
+double ExperimentalRT<dim>::dpcds_Phase() const
 {
     return pc_[rt_number_].Derivative( TwoPhaseModel<dim>::sat_);
 }

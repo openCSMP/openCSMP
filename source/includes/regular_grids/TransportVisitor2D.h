@@ -29,7 +29,7 @@ class TransportVisitor2D : public Visitor<2U> {
     virtual void Visit(Element<2U>* );   
     virtual void Visit(Model<2U>* ); 
     
-    bool AdvectUntil( Model<2U>&, double64 final_time ); 
+    bool AdvectUntil( Model<2U>&, double final_time ); 
 
     size_t    MaximumIncrements() const;
     void      MaximumIncrements( size_t maxi );
@@ -41,11 +41,11 @@ class TransportVisitor2D : public Visitor<2U> {
      FiniteDifferenceGrid              grid;
      std::vector<ElementGrid>          egrids;
      BoolVector                        visited;
-     double64                          resolution;
+     double                          resolution;
      DenseMatrix<DM_MIN>               XY, NN;
      std::vector<VectorVariable<2U> >  P;
-     std::vector<double64>             xy;
-     double64                          time_increment;
+     std::vector<double>             xy;
+     double                          time_increment;
      csmp::Index                       v_key, prop_key;
      size_t                            max_increments;
      bool                              interpolate_only_within_grid;   
@@ -53,10 +53,10 @@ class TransportVisitor2D : public Visitor<2U> {
 
      void StoreResultsInGrid();
      
-     bool IsInsideTriangle( double64 x, double64 y, bool update=true );
+     bool IsInsideTriangle( double x, double y, bool update=true );
      
-     void MinMaxCoordinates( double64& min_x, double64& max_x, 
-                             double64& min_y, double64& max_y );
+     void MinMaxCoordinates( double& min_x, double& max_x, 
+                             double& min_y, double& max_y );
                              
      void InitializeElementGrid( size_t idx );
      

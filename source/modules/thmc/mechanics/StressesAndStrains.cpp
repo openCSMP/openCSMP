@@ -7,6 +7,9 @@
 #include "CSMP_mathUtilities.h"
 #include "Element.h"
 
+#include "Exception.h"
+#include "ErrorHandler.h"
+
 using namespace std;
 
 namespace csmp {
@@ -392,19 +395,19 @@ void StressesAndStrains<3U>::ComputeContribution( Element<3U>& e )
                for ( size_t j=0; j<components_; j++ ) 
                  {  
                     // averaging strain components
-                    double64 sum(0.);
-                    for ( deque<vector<double64> >::const_iterator 
+                    double sum(0.);
+                    for ( deque<vector<double> >::const_iterator 
                           lit=temp_strains_[ e.N(i)->Idx() ].begin();
                           lit!=temp_strains_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
-                    sum /= static_cast<double64>(temp_strains_[ e.N(i)->Idx() ].size());
+                    sum /= static_cast<double>(temp_strains_[ e.N(i)->Idx() ].size());
                     STRAIN_(j,i) = sum;
 
                     // averaging stress components
                     sum = 0.;
-                    for ( deque<vector<double64> >::const_iterator
+                    for ( deque<vector<double> >::const_iterator
                           lit=temp_stresses_[ e.N(i)->Idx() ].begin();
                           lit!=temp_stresses_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
-                    sum /= static_cast<double64>(temp_stresses_[ e.N(i)->Idx() ].size());
+                    sum /= static_cast<double>(temp_stresses_[ e.N(i)->Idx() ].size());
                     STRESS_(j,i) = sum;
                  }
              }
@@ -466,7 +469,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
               IP_STRESS_TENSOR_ += ts_;
            }
         // averaging
-        const double64 ips(static_cast<double64>(e.IntegrationPoints()));
+        const double ips(static_cast<double>(e.IntegrationPoints()));
         IP_STRAIN_TENSOR_ /= ips;
         IP_STRESS_TENSOR_ /= ips;
        

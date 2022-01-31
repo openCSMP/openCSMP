@@ -46,7 +46,7 @@ Integral_dNT_op_dN_dV<dim,SIMPLEX>::Integral_dNT_op_dN_dV( const PropertyDatabas
 A reference to the current Element.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );

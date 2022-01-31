@@ -31,7 +31,7 @@ NT_op<dim,SIMPLEX>::NT_op( const PropertyDatabase<dim>& pref, const char* oper, 
 by the ComputeContribution() method.  
 */
 template<size_t dim,class SIMPLEX>
-void NT_op<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void NT_op<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
    { 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), M_ );
    }
@@ -60,7 +60,7 @@ To compute nodal forces acting on the boundary of a model.
 
 */
 template<size_t dim,class SIMPLEX>
-void NT_op<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void NT_op<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() * dim );
    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
@@ -69,7 +69,7 @@ void NT_op<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
      if ( M_[i].Flag() == NEUMANN )
        // contributions must be divided by number of elements which share the node
        // to avoid multiple accumulation
-       MathOperatorRHS<dim>::RHS[i] = M_[i]() / static_cast<double64>(e.N(i)->Parents());
+       MathOperatorRHS<dim>::RHS[i] = M_[i]() / static_cast<double>(e.N(i)->Parents());
      
 } // end ComputeContribution
 

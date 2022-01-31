@@ -18,9 +18,10 @@ namespace csmp {
 #define MEMBERS 10 // entries in one line of property description
 
 
-/// Goto ctor, initializing from text variables file
+/** initializes from text variables file
+ */
 template<size_t dim>
-PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isBinary, const set<string>* subset_variables )
+PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
     : vectorFlags(dim),
       tensorFlags(dim),
       physvarsFile((variablesFileName==NULL) ? "EmptyVariablesFile" : variablesFileName),
@@ -29,13 +30,24 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isB
       indexTracker_(),
       verbose_(true)
  {
- if(isBinary)
-   {
-     if( !BinaryIn(variablesFileName, subset_variables ) )
+    Initialize(variablesFileName);
+ }
+
+/**
+      Reader of binary variables file which also permits restriction to a subset of variables
+*/
+template<size_t dim>
+PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const set<string>& subset_variables )
+    : vectorFlags(dim),
+      tensorFlags(dim),
+      physvarsFile((variablesFileName==NULL) ? "EmptyVariablesFile" : variablesFileName),
+      variableCount_(),
+      propList_(),
+      indexTracker_(),
+      verbose_(true)
+ {
+    if ( !BinaryIn( variablesFileName, subset_variables ) )
       throw csmp::Exception( ERROR, "PropertyDatabase", "Not able to load from binary file" );
-   }
- else
-   Initialize(variablesFileName);    
  }
 
 
@@ -420,7 +432,7 @@ bool PropertyDatabase<dim>::BinaryOut( fstream& fp ) const
 
   for( auto& prop : propList_ )
     {
-      skm_C_fwrite( fp, prop.first.c_str() );
+      binaryFileWrite( fp, prop.first.c_str() );
       prop.second.Out(fp);
     }
 
@@ -458,7 +470,7 @@ bool PropertyDatabase<dim>::BinaryOut( const char* fileName ) const
  @return  true if it succeeds, false if it fails.
  */
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_variables )
+bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>& subset_variables )
 {
   size_t parameterCount(0);
   fp.read( (char*) &parameterCount, sizeof(size_t) );
@@ -466,18 +478,16 @@ bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_var
   char buf[255];
   for( size_t i(0); i < parameterCount; ++i )
   {
-    skm_C_fread( fp, buf );
+    binaryFileRead( fp, buf );
     string parameterName(buf);
     csmp::Parameter parameter;
     parameter.In( fp );
 
-    if ( subset_variables ){
-      if (subset_variables->find( parameterName ) != subset_variables->end() )
-      propList_[parameterName] = parameter;
-    }
-    else {
-      propList_[parameterName] = parameter;
-    }
+    if ( !subset_variables.empty() ) {
+        if ( subset_variables.find( parameterName ) != subset_variables.end() )
+          propList_[parameterName] = parameter;
+      }
+    else propList_[parameterName] = parameter;
   }
 
   return true; /// @todo (1-C) Meaningless return statement
@@ -486,23 +496,23 @@ bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_var
 
 /// Reads from binary file, appends '_variables.dat' if necessary, and can read only a subset of variables from the variables as an option
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryIn( const char* fileName, const set<string>* subset_variables )
+bool PropertyDatabase<dim>::BinaryIn( const char* fileName, const set<string>& subset_variables )
   {
-  InitializeCount();
+    InitializeCount();
 
-  string inputFileName(fileName);
+    string inputFileName(fileName);
 
-  fstream fp(inputFileName.c_str(), ios::in | ios::binary);
-  if (!fp.is_open())
-    return false;
+    fstream fp(inputFileName.c_str(), ios::in | ios::binary);
+    if (!fp.is_open())
+      return false;
 
-  if( !BinaryIn(fp, subset_variables ) )
-    return false;
+    if( !BinaryIn(fp, subset_variables ) )
+      return false;
 
-  fp.close();
-  UpdateParametersAndDatabase();
-  FlushToScreen();
-  return true;
+    fp.close();
+    UpdateParametersAndDatabase();
+    FlushToScreen();
+    return true;
   }
 
 
@@ -645,6 +655,7 @@ void PropertyDatabase<dim>::AssignVariableIndices()
           
      for ( auto& prop : propList_ )
        prop.second.key.index = (variableCount_[prop.second.key.place][prop.second.key.type])++;
+       
  } // AssignVariableIndices
 
 
@@ -760,7 +771,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
 
           propertyIter++;
           // physically realistic minimum and maximum values
-          double64 vmin( atof( (*propertyIter++).c_str() ) ), 
+          double vmin( atof( (*propertyIter++).c_str() ) ), 
                    vmax( atof( (*propertyIter++).c_str() ) );
           //cout<<"property name: "<< new_param.name<<endl;
           assert( vmin <= vmax );
@@ -788,6 +799,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
      
      // initialize indices and create binary database
      UpdateParametersAndDatabase(); 
+     
   } // end TextToBinaryFile
 
 
@@ -909,7 +921,7 @@ database.
 template<size_t dim>
 csmp::Index PropertyDatabase<dim>::AddProperty( const char *property_name, const char *unit,
                                                 VARIABLE_TYPE vtype, PLACEMENT vplace, size_t vsize,
-                                                double64 vmin, double64 vmax, string usage )
+                                                double vmin, double vmax, string usage )
 {
     return AddProperty( property_name, unit, VariableCount( vplace, vtype) , vtype, vplace, vsize, vmin, vmax, usage );
 }
@@ -959,7 +971,7 @@ database.
 template<size_t dim>
 csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit, size_t index,
                                                  VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
-                                                 double64 vmin, double64 vmax, string usage )
+                                                 double vmin, double vmax, string usage )
  {
     auto iter(propList_.find(string(s)));
 
@@ -1192,7 +1204,7 @@ arguments.
 
 */
 template<size_t dim>
-double64  PropertyDatabase<dim>::UnitConversionFactor( const char* sys_in, 
+double  PropertyDatabase<dim>::UnitConversionFactor( const char* sys_in, 
                                                   const char* sys_out, 
                                                   const char* unit ) const
  {
@@ -1243,12 +1255,12 @@ double64  PropertyDatabase<dim>::UnitConversionFactor( const char* sys_in,
               {
                 cerr <<"\nPropertyDatabase::convert_unit: Failure to convert " << unit;
                 cerr <<" from CGS to SI" << endl;
-                return std::numeric_limits<double64>::quiet_NaN();
+                return std::numeric_limits<double>::signaling_NaN();
               }
            }
       } // end if SI
  
-   return std::numeric_limits<double64>::quiet_NaN();
+   return std::numeric_limits<double>::signaling_NaN();
 
  } // end ConvertUnit
 
@@ -1270,14 +1282,37 @@ If the target variable has not been defined in the property database,
 an error will be reported. 
 */
 template<size_t dim>
-void PropertyDatabase<dim>::RangeOf( const char* s, double64& mn, double64& mx ) const
+void PropertyDatabase<dim>::RangeOf( const char* s, double& mn, double& mx ) const
  {
      auto iter = propList_.find(string(s));
-     
      if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
      else cout <<"\nPropertyDatabase::RangeOf: Unable to identify range of: " << s << endl;
 
  } //  end RangeOf
+
+
+
+template<size_t dim>
+double PropertyDatabase<dim>::LowerLimitOf( const char* property ) const
+ {
+     auto iter = propList_.find(string(property));
+     if ( iter != propList_.end() ) return (*iter).second.MinValue();
+     else cout <<"\nPropertyDatabase::LowerLimitOf: Unable to identify minimum value of: " << property << endl;
+     return numeric_limits<double>::quiet_NaN();
+
+ } //  end 
+
+
+template<size_t dim>
+double PropertyDatabase<dim>::UpperLimitOf( const char* property ) const
+ {
+     auto iter = propList_.find(string(property));
+     if ( iter != propList_.end() ) return (*iter).second.MaxValue();
+     else cout <<"\nPropertyDatabase::LowerLimitOf: Unable to identify maximum value of: " << property << endl;
+     return numeric_limits<double>::quiet_NaN();
+
+ } //  end 
+
 
 
 /**
@@ -1303,9 +1338,9 @@ If the target variable has not been defined in the property database,
 an error will be reported. 
 */
 template<size_t dim>
-void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
+void PropertyDatabase<dim>::CheckRange( const char* s, double& var ) const
  {
-    double64 mn, mx;
+    double mn, mx;
     auto iter = propList_.find(string(s));
     ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
@@ -1343,7 +1378,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
 template<size_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const ScalarVariable& var ) const
  {
-    double64 mn, mx;
+    double mn, mx;
     auto iter = propList_.find(string(s));
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(scalar)", "property could not be identified");
@@ -1359,7 +1394,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ScalarVariable& var
 template<size_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const VectorVariable<dim>& var ) const
  {
-    double64 mn, mx;
+    double mn, mx;
     auto iter = propList_.find(string(s));
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(vector)", "property could not be identified");
@@ -1376,11 +1411,11 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const VectorVariable<dim>
 template<size_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const TensorVariable<dim>& var ) const
  {
-    double64 mn, mx;
+    double mn, mx;
     auto iter = propList_.find(string(s));
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(tensor)", "property could not be identified");
-    const double64 det = var.Determinant();
+    const double det = var.Determinant();
     if ( isnan(det) ) return false;
     if ( det < mn ) return false;
     else if ( det > mx ) return false;
@@ -1395,12 +1430,12 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const TensorVariable<dim>
 template<size_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const ArrayVariable& var ) const
  {
-    double64 mn, mx;
+    double mn, mx;
     auto iter = propList_.find(string(s));
     //ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(array)", "property could not be identified");
-    double64 ary_min(var[0]), ary_max(var[0]);
+    double ary_min(var[0]), ary_max(var[0]);
     for ( size_t i=1U; i<var.Size(); ++i ) {
         if ( isnan(var[i]) ) return false;
         ary_min = min( ary_min, var[i] );
@@ -1419,12 +1454,12 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ArrayVariable& var 
 template<size_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const FlaggedArrayVariable& var ) const
  {
-    double64 mn, mx;
+    double mn, mx;
     auto iter = propList_.find(string(s));
     //ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(flagged array)", "property could not be identified");
-    double64 ary_min(var[0]), ary_max(var[0]);
+    double ary_min(var[0]), ary_max(var[0]);
     for ( size_t i=1U; i<var.Size(); ++i ) {
         if ( isnan(var[i]) ) return false;
         ary_min = min( ary_min, var[i] );
@@ -1444,7 +1479,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const FlaggedArrayVariabl
      Sets of the range of the target variable at runtime in case relevant information becomes available.
 */
 template<size_t dim>
-void PropertyDatabase<dim>::SetRangeOf( const char* property_name, double64 vmin, double64 vmax )
+void PropertyDatabase<dim>::SetRangeOf( const char* property_name, double vmin, double vmax )
  {
     auto iter = propList_.find(string(property_name));
     ErrorHandler& error_handler ( ErrorHandler::Instance() );

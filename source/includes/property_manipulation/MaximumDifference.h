@@ -10,7 +10,7 @@ class MaximumDifference : public Interrelation<dim> {
     Operand<dim>&   Var1; /// < total fluid pressure
     Operand<dim>&   Var2; /// < conductivity multiplier
     ScalarVariable  var1, var2;
-    double64        max_difference;
+    double        max_difference;
 
   public:
     explicit MaximumDifference( const PropertyDatabase<dim>& p,
@@ -18,23 +18,14 @@ class MaximumDifference : public Interrelation<dim> {
     ~MaximumDifference() {};
     void Calculate();
     void Reset();
-    double64   Value() const; /// < outputs the computed value
+    double   Value() const; /// < outputs the computed value
 };
 
-
-
-
+/// compare distributed variable values: calculates maximum difference between distributed variable values of the same type and placement; difference can be normalised
 template<size_t dim>
-inline void MaximumDifference<dim>::Calculate()
- {
-    Var1.AssignTo( var1 );
-    Var2.AssignTo( var2 );
-    
-    if ( std::fabs(var1() - var2()) > max_difference )
-      max_difference = std::fabs(var1() - var2());
-     
- } // end
-
+double maximumDifference( const Model<dim>&,
+                            const char* new_property, const char* old_property,
+                            bool normalise );
 
 
 

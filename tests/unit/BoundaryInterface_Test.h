@@ -49,8 +49,6 @@ size_t countAndLabelRegions( Model<3U>&, std::vector<std::string>& region_names 
 size_t labelRegionPatches( Model<3U>& model, const char* dim_1_region, const char* diagnostic_elmt_variable,
                            const std::vector<std::string>& region_names );
 
-
-
 /// establishes neighbors of lower dimensional element
 void higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key,
                                  std::pair<size_t,size_t>& nbors, std::pair<long,long>& materials );

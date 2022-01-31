@@ -10,12 +10,14 @@ class IsoparametricQuadraticTetrahedron : public FiniteElement {
     IsoparametricQuadraticTetrahedron();
     ~IsoparametricQuadraticTetrahedron();
 
-    virtual double64    Volume();
-    virtual double64    AspectRatio();
-    virtual double64    InnerRadius();
-    virtual void        EdgeLengths( std::vector<double64>& vec );
+    virtual double    Volume();
+    virtual double    AspectRatio();
+    virtual double    InnerRadius();
+    virtual void        EdgeLengths( std::vector<double>& vec );
     virtual void        NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
     virtual void        NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
     virtual void        ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes, std::vector<size_t>& fnids );
     virtual void        CornerNodes( std::vector<size_t>& ids ) const;
     virtual void        MidSideNodes( std::vector<size_t>& ids ) const;
@@ -25,33 +27,33 @@ class IsoparametricQuadraticTetrahedron : public FiniteElement {
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( size_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( size_t /* segment */ ) const { return ISOPARAMETRIC_QUADRATIC_BAR; };
 
-    virtual void        UnitNormalAtFaceBarycenter( size_t face, std::vector<double64>& nrml );
-    //virtual void      UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const;
+    virtual void        UnitNormalAtFaceBarycenter( size_t face, std::vector<double>& nrml );
+    //virtual void      UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
 
     virtual void        ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
-                                                                    const std::vector<double64>& IVAR,
-                                                                    std::vector<double64>&       NVAR ) const;
+                                                                    const std::vector<double>& IVAR,
+                                                                    std::vector<double>&       NVAR ) const;
 
-    virtual   void      N( std::vector<double64>& N, const std::vector<double64>& xyz );
-    virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double64>& N );
-    virtual   void      N_AtBaryCenter( std::vector<double64>& N );
+    virtual   void      N( std::vector<double>& N, const std::vector<double>& xyz );
+    virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double>& N );
+    virtual   void      N_AtBaryCenter( std::vector<double>& N );
     virtual   void      JacobianAtIntegrationPoint( size_t ip );
-    virtual   void      JacobianAt(const std::vector<double64>& rst);
+    virtual   void      JacobianAt(const std::vector<double>& rst);
 
-    virtual double64    dN_At( DenseMatrix<DM_MIN>& DN2, const std::vector<double64>& xyz  );
+    virtual double    dN_At( DenseMatrix<DM_MIN>& DN2, const std::vector<double>& xyz  );
     virtual void        dN( DenseMatrix<DM_MIN>& M );
-    virtual double64    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point );
-    virtual double64    dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
-    virtual double64    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
+    virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point );
+    virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
+    virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 
-    virtual void        Nrst( double64 r, double64 s, double64 t, std::vector<double64>& nrst ) const;
-    virtual void        Nrst( double64 r, double64 s, double64 t, double64* nrst ) const;
-    virtual void        dNr( double64 r, double64 s, double64 t, std::vector<double64>& dNr ) const;
-    virtual void        dNs( double64 r, double64 s, double64 t, std::vector<double64>& dNs ) const;
-    virtual void        dNt( double64 r, double64 s, double64 t, std::vector<double64>& dNt ) const;
+    virtual void        Nrst( double r, double s, double t, std::vector<double>& nrst ) const;
+    virtual void        Nrst( double r, double s, double t, double* nrst ) const;
+    virtual void        dNr( double r, double s, double t, std::vector<double>& dNr ) const;
+    virtual void        dNs( double r, double s, double t, std::vector<double>& dNs ) const;
+    virtual void        dNt( double r, double s, double t, std::vector<double>& dNt ) const;
 
-    virtual double64    WeightAtIntegrationPoint( size_t i ) const;
-    virtual   void      IntegrationPoint( size_t i, std::vector<double64>& xyz ) const;
+    virtual double    WeightAtIntegrationPoint( size_t i ) const;
+    virtual   void      IntegrationPoint( size_t i, std::vector<double>& xyz ) const;
 
     virtual void        OutputNodeDataToVTK( const char* file_name,
                                              const char* var_name,
@@ -72,27 +74,27 @@ class IsoparametricQuadraticTetrahedron : public FiniteElement {
 
   private:
     /// returns interpolation function values at barycenter of the element faces
-    std::array<double64, 10> N_AtFaceBarycenter(size_t i) const;
+    std::array<double, 10> N_AtFaceBarycenter(size_t i) const;
 
     /// returns coordinates of barycenters of the element faces
-    void FaceBarycenterCoordinates( size_t face, std::vector<double64>& barycenterCoord );
+    void FaceBarycenterCoordinates( size_t face, std::vector<double>& barycenterCoord );
   
   private:
     // (Gauss) integration point coordinates, and weights
     DenseMatrix<DM_MIN>  NXYZ, DN, IP, BEE;
-    std::vector<double64> W;
-    double64 RST[3], LXY[4];
-    double64 accDistance;
+    std::vector<double> W;
+    double RST[3], LXY[4];
+    double accDistance;
     size_t totIterations;
     size_t nonConvergenceOfProjections;
     size_t projectionCalledNTimes;
     // 3x3 matrix operations
-    double64 Determinant( DenseMatrix<DM_MIN>& M ) const;
-    double64 InvertMatrix( DenseMatrix<DM_MIN>& M ) const;
+    double Determinant( DenseMatrix<DM_MIN>& M ) const;
+    double InvertMatrix( DenseMatrix<DM_MIN>& M ) const;
 
     //Local &  Global coordinates
-    void ParametricToPhysical(std::vector<double64> &rst, std::vector<double64> &xyz);
-    void PhysicalToParametric(std::vector<double64>& rst,const std::vector<double64>& xyz);
+    void ParametricToPhysical(std::vector<double> &rst, std::vector<double> &xyz);
+    void PhysicalToParametric(std::vector<double>& rst,const std::vector<double>& xyz);
     size_t n( size_t i, size_t a ) const;
 };
 

@@ -11,7 +11,7 @@ namespace csmp
   /** custom constructor
       @attention Use only this conctructor. CriticalCurve computes results a function of temperature, which istypically computed somewhere outside this class. By using const ref to that external temperature as constructor argument, CriticalCurve is able to decipher the current value and report correct results when being queried. Only this constructor is allowed to ensure that functionality, default constructor has been made private.
   */
-  CriticalCurve::CriticalCurve(const double64& externaltemperature)
+  CriticalCurve::CriticalCurve(const double& externaltemperature)
     : temperature_(externaltemperature), 
       c0_(cp_h2o.Pressure()*1.0e-5),
       c1_(-2.36),
@@ -68,7 +68,7 @@ namespace csmp
   
   /** Pressure [Pa] on critical curve for given temperature
    */
-  double64 CriticalCurve::Pressure()
+  double CriticalCurve::Pressure()
   { 
     CheckState(); 
     return Pressure(tcurrent_)*1.0e5; 
@@ -77,7 +77,7 @@ namespace csmp
 
   /** Mole fraction NaCl on critical curve for given temperature
    */
-  double64 CriticalCurve::MoleFractionNaCl()
+  double CriticalCurve::MoleFractionNaCl()
   { 
     CheckState(); 
     return Molefraction(tcurrent_);   
@@ -86,7 +86,7 @@ namespace csmp
 
   /** Mass fraction NaCl on critical curve for given temperature
    */
-  double64 CriticalCurve::MassFractionNaCl()
+  double CriticalCurve::MassFractionNaCl()
   { 
     return XNaCl2Massfraction(MoleFractionNaCl());
   }
@@ -103,7 +103,7 @@ namespace csmp
 
   /** Equations 5 of Driesner and Heinrich (2007)
    */
-  double64 CriticalCurve::Pressure( const double64& t_ )
+  double CriticalCurve::Pressure( const double& t_ )
   {
     myt_ = t_-cp_h2o.Temperature();
     if(t_ >= cp_h2o.Temperature() && t_ <= 500.0e0)
@@ -136,7 +136,7 @@ namespace csmp
 
   /** Temperature derivative of equations 5 of Driesner and Heinrich (2007)
    */
-  double64 CriticalCurve::DPressureDT(const double64& t_)
+  double CriticalCurve::DPressureDT(const double& t_)
   {
     myt_ = t_-cp_h2o.Temperature();
 
@@ -167,7 +167,7 @@ namespace csmp
 
   /** Equations 7 of Driesner and Heinrich (2007)
    */
-  double64 CriticalCurve::Molefraction(const double64& t_)
+  double CriticalCurve::Molefraction(const double& t_)
   {
     if(t_ <= cp_h2o.Temperature()) return 0.0e0;
     else
@@ -188,7 +188,7 @@ namespace csmp
 
   /** Temperature derivative of equations 7 of Driesner and Heinrich (2007)
    */
-  double64 CriticalCurve::DMolefractionDT( const double64& t_ )
+  double CriticalCurve::DMolefractionDT( const double& t_ )
   {
     if( t_ <= cp_h2o.Temperature() ) return 0.0;
     else
@@ -212,12 +212,12 @@ namespace csmp
   /** Find temperature [C] on critical curve for given pressure [Pa]
       @attention NO RANGE CHECK is being performed
    */
-  double64 CriticalCurve::TfromP( const double64& press_ )
+  double CriticalCurve::TfromP( const double& press_ )
   {
     // Critical temperature for a given pressure
     // using Newton iteration
     // WARNING: this  code is not fail-save
-    double64 mypress_ = press_ * 1.0e-5;
+    double mypress_ = press_ * 1.0e-5;
     int i_ = 0;
 
     delta_ = 1.0;
@@ -241,7 +241,7 @@ namespace csmp
   /** Find mole fractions NaCl on critical curve for given pressure [Pa]
       @attention NO RANGE CHECK is being performed
    */
-  double64 CriticalCurve::TfromMolefractionNaCl(const double64& molefraction_)
+  double CriticalCurve::TfromMolefractionNaCl(const double& molefraction_)
   {
     // Critical temperature for a given pressure
     // using Newton iteration

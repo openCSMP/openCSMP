@@ -14,10 +14,10 @@ class FRED_Fracture {
     FRED_Fracture();
     FRED_Fracture( const FRED_Fracture& ffr );
     
-    FRED_Fracture( double64        ap,
-                   double64        compr,
-                   double64        perm,
-                   const std::list<double64>& properties,
+    FRED_Fracture( double        ap,
+                   double        compr,
+                   double        perm,
+                   const std::list<double>& properties,
                    const std::list<mjl::Point3D>& boundary );
                     
     ~FRED_Fracture();
@@ -28,37 +28,37 @@ class FRED_Fracture {
     /// compare perimeter length
     bool operator<( const FRED_Fracture& ffr ) const;
     
-    uint32    ID() const;
+    uint32_t    ID() const;
     std::string  TextID() const;
     int     SetID() const;
     std::string  TextSetID() const;
     void    BaryCenter( mjl::Point3D& ctr ) const;
-    void    BaryCenter( double64& x, double64& y, double64& z ) const;
-    double64  Perimeter() const;
-    double64  Diameter() const; // from perimeter assuming circle
+    void    BaryCenter( double& x, double& y, double& z ) const;
+    double  Perimeter() const;
+    double  Diameter() const; // from perimeter assuming circle
     void    BoundingBox( mjl::Point3D& cnr1, mjl::Point3D& cnr8 ) const;
-    void    Move( double64 dx, double64 dy, double64 dz );
-    void    Scale( double64 xfac, double64 dfac, double64 zfac );
+    void    Move( double dx, double dy, double dz );
+    void    Scale( double xfac, double dfac, double zfac );
     
     std::list<mjl::Point3D>::const_iterator  Begin() const;
     std::list<mjl::Point3D>::const_iterator  End() const;
     size_t                                  PolygonPoints() const;
-    std::list<double64>::const_iterator    PropertiesBegin() const;
-    std::list<double64>::const_iterator    PropertiesEnd() const;
+    std::list<double>::const_iterator    PropertiesBegin() const;
+    std::list<double>::const_iterator    PropertiesEnd() const;
     
     void    Erase();
     
     void    Out() const;
   
   private:
-    double64  aperture;        // always present default properties
-    double64  compressibility;
-    double64  permeability;
-    uint32    id;
+    double  aperture;        // always present default properties
+    double  compressibility;
+    double  permeability;
+    uint32_t    id;
     int     fracture_set_id;
-    static  uint32 global_id;
+    static  uint32_t global_id;
     
-    std::list<double64>     props;
+    std::list<double>     props;
     std::list<mjl::Point3D>  boundary;
     mjl::Edge3D              unit_normal;
 };
@@ -82,13 +82,13 @@ inline  size_t  FRED_Fracture::PolygonPoints() const
  }
 
 
-inline  std::list<double64>::const_iterator  FRED_Fracture::PropertiesBegin() const
+inline  std::list<double>::const_iterator  FRED_Fracture::PropertiesBegin() const
  {
     return props.begin();
  }
  
  
-inline  std::list<double64>::const_iterator  FRED_Fracture::PropertiesEnd() const
+inline  std::list<double>::const_iterator  FRED_Fracture::PropertiesEnd() const
  {
     return props.end();
  }

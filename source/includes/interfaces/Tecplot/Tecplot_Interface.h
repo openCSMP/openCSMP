@@ -48,7 +48,7 @@ class Tecplot_Interface {
     VSet<dim>  vset;
     std::map<size_t,std::vector<size_t> >  plist, transformed_plist;
     std::map<size_t,size_t>                node_mapping;
-    std::map<size_t,std::vector<double64> >  pxyz_data;
+    std::map<size_t,std::vector<double> >  pxyz_data;
 
     void NodeBasedTopology( const Model<dim>&,
                             const std::vector<size_t>& elmt_ids,
@@ -66,17 +66,17 @@ class Tecplot_Interface {
 
     void XyzData( const Model<dim>&,
                   const std::map<size_t,size_t>& node_nums,
-                  std::map<size_t,std::vector<double64> >& pxyz_data );
+                  std::map<size_t,std::vector<double> >& pxyz_data );
     
     void NodeData( const Model<dim>&,
                    const Index&     prop_key,
                    const std::map<size_t,size_t>& node_nums,
-                   std::map<size_t,std::vector<double64> >& pxyz_data );
+                   std::map<size_t,std::vector<double> >& pxyz_data );
 
     void ElementPointData( const Model<dim>&,
                            const Index&     prop_key,
                            const std::map<size_t,size_t>& node_nums,
-                           std::map<size_t,std::vector<double64> >& pxyz_data );
+                           std::map<size_t,std::vector<double> >& pxyz_data );
 
  };
 

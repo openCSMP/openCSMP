@@ -18,8 +18,8 @@ using namespace std;
 
 namespace csmp
 {
-  NaClSaturatedVaporLookup::NaClSaturatedVaporLookup(const double64& externaltemperature, 
-                                                     const double64& externalpressure)
+  NaClSaturatedVaporLookup::NaClSaturatedVaporLookup(const double& externaltemperature, 
+                                                     const double& externalpressure)
     : temperature(externaltemperature), 
       pressure(externalpressure), 
       tcurrent(0.0),
@@ -198,7 +198,7 @@ namespace csmp
         else
           {
             cout << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile1, storage_vector );
+            binaryFileWrite( outfile1, storage_vector );
             outfile1.close();
             cout << "done!\n";
           }
@@ -214,8 +214,8 @@ namespace csmp
         else
           {
             cout << "writing file " << statefilename << " ... ";
-            skm_C_fwrite( outfile2, state_vector );
-			outfile2.close();
+            binaryFileWrite( outfile2, state_vector );
+			      outfile2.close();
             cout << "done!\n";
           }
 
@@ -224,13 +224,13 @@ namespace csmp
     else
       {
         cout << "reading file " << filename << " ... ";
-        skm_C_fread( infile1, storage_vector );
-		infile1.close();		
+        binaryFileRead( infile1, storage_vector );
+	    	infile1.close();		
         cout << "done!\n";
 
         cout << "reading file " << statefilename << " ... ";
-        skm_C_fread( infile2, state_vector );
-		infile2.close();
+        binaryFileRead( infile2, state_vector );
+		    infile2.close();
         cout << "done!\n";
 	    
       }
@@ -245,17 +245,17 @@ namespace csmp
 
 
   // The data interpolation routines
-  double64 NaClSaturatedVaporLookup::Temperature(){     SetTemperatureAndPressure(); return ValueOf(temperature_index);    }
-  double64 NaClSaturatedVaporLookup::Pressure(){        SetTemperatureAndPressure(); return ValueOf(pressure_index);       }
-  double64 NaClSaturatedVaporLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
-  double64 NaClSaturatedVaporLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
-  double64 NaClSaturatedVaporLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
-  double64 NaClSaturatedVaporLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
-  double64 NaClSaturatedVaporLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
-  double64 NaClSaturatedVaporLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
+  double NaClSaturatedVaporLookup::Temperature(){     SetTemperatureAndPressure(); return ValueOf(temperature_index);    }
+  double NaClSaturatedVaporLookup::Pressure(){        SetTemperatureAndPressure(); return ValueOf(pressure_index);       }
+  double NaClSaturatedVaporLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return ValueOf(composition_index);    }
+  double NaClSaturatedVaporLookup::Density(){         SetTemperatureAndPressure(); return ValueOf(density_index);        }
+  double NaClSaturatedVaporLookup::Enthalpy(){        SetTemperatureAndPressure(); return ValueOf(enthalpy_index);       }
+  double NaClSaturatedVaporLookup::HeatCapacity(){    SetTemperatureAndPressure(); return ValueOf(heatcapacity_index);   }
+  double NaClSaturatedVaporLookup::Compressibility(){ SetTemperatureAndPressure(); return ValueOf(compressibility_index);}
+  double NaClSaturatedVaporLookup::Viscosity(){       SetTemperatureAndPressure(); return ValueOf(viscosity_index);      }
 
-  double64 NaClSaturatedVaporLookup::ReportMassFractionNaCl(){ return ValueOf(composition_index); }
-  double64 NaClSaturatedVaporLookup::ReportEnthalpy(){    return ValueOf(enthalpy_index); }
+  double NaClSaturatedVaporLookup::ReportMassFractionNaCl(){ return ValueOf(composition_index); }
+  double NaClSaturatedVaporLookup::ReportEnthalpy(){    return ValueOf(enthalpy_index); }
 
 
   void NaClSaturatedVaporLookup::SetTemperatureAndPressure()
@@ -267,7 +267,7 @@ namespace csmp
   }
 
 
-  double64 NaClSaturatedVaporLookup::DEnthalpyDT()
+  double NaClSaturatedVaporLookup::DEnthalpyDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -300,7 +300,7 @@ namespace csmp
   } 
 
 
-  double64 NaClSaturatedVaporLookup::DCompositionDT()
+  double NaClSaturatedVaporLookup::DCompositionDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -333,7 +333,7 @@ namespace csmp
   } 
 
 
-  double64 NaClSaturatedVaporLookup::DMassFractionNaClDT()
+  double NaClSaturatedVaporLookup::DMassFractionNaClDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -379,7 +379,7 @@ namespace csmp
   }
 
 
-  double64 NaClSaturatedVaporLookup::ValueOf(const int& property_index)
+  double NaClSaturatedVaporLookup::ValueOf(const int& property_index)
   {
     // do NOT set tcurrent and pcurrent here, do it outside this function too keep it versatile !!!
    
@@ -467,7 +467,7 @@ namespace csmp
       }
   }
   
-  double64 NaClSaturatedVaporLookup::NormalInterpolation( const int& property_index )
+  double NaClSaturatedVaporLookup::NormalInterpolation( const int& property_index )
   {
     //d cout << "Using NaClSaturatedVaporLookup::NormalInterpolation( const int& property_index ) ...\n";
 
@@ -490,7 +490,7 @@ namespace csmp
     return value_interpolated;
   }
 
-  double64 NaClSaturatedVaporLookup::NearVLHMaxInterpolation( const int& property_index )
+  double NaClSaturatedVaporLookup::NearVLHMaxInterpolation( const int& property_index )
   {
     tdummy = tcurrent; // to make sure that vlh_vapor returns what we need;
     // unfortunately, the topology is awkward, hope to catch everything:
@@ -538,11 +538,11 @@ namespace csmp
                            "ip_p_max_low != ip_p_max_high.missed both if-statements.\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
 
 
-        return std::numeric_limits<double>::quiet_NaN();
+        return std::numeric_limits<double>::signaling_NaN();
       }
   }
 
-  double64 NaClSaturatedVaporLookup::NearVLHInterpolationLowT( const int& property_index )
+  double NaClSaturatedVaporLookup::NearVLHInterpolationLowT( const int& property_index )
   {
     //d    cout << "Using NaClSaturatedVaporLookup::NearVLHInterpolationLowT( const int& property_index ) ...\n";
 
@@ -715,7 +715,7 @@ namespace csmp
 
 
 
-  double64 NaClSaturatedVaporLookup::NearVLHInterpolationHighT( const int& property_index )
+  double NaClSaturatedVaporLookup::NearVLHInterpolationHighT( const int& property_index )
   {
     //d    cout << "Using NaClSaturatedVaporLookup::NearVLHInterpolationHighT( const int& property_index ) ...\n";
 
@@ -867,7 +867,7 @@ namespace csmp
     return value_interpolated;
   }
 
-  void NaClSaturatedVaporLookup::GetTemperatureIndex(const double64& t)
+  void NaClSaturatedVaporLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <    0.0e0){  t_res =  5.0; it = 0; }
@@ -887,7 +887,7 @@ namespace csmp
     // t_dim is therefore (1000-550)/10+285 + 1 = 331
   }
     
-  void NaClSaturatedVaporLookup::GetPressureIndex(const double64& p)
+  void NaClSaturatedVaporLookup::GetPressureIndex(const double& p)
   {
     // new version
     if(     p <=   20.0e5){ p_res =   0.5e5; ip =     static_cast<long>( (p-   0.5e5)/p_res ); }    

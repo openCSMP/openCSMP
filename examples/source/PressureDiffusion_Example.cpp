@@ -61,7 +61,7 @@ void PressureDiffusion_Example::Specifications()
 */
 void PressureDiffusion_Example::Run()
 {
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     // 1. Set up interface and mesh container needed to read in a 'Triangle' FE mesh
     // -----------------------------------------------------------------------------
     TRIANGLE_Interface  mesh_interface;
@@ -122,15 +122,15 @@ void PressureDiffusion_Example::Run()
     // ---------------------------------------------------------------
     /// @todo SKM: to fix: method cannot handle element input variables
     //model.InputBoundaryValue( LEFT,  "influx", makeScalar(NEUMANN,1.0) );
-    const double64 pressure_left(6.0e6); // create pressure drop of 50 bars/500 m
-    const double64 pressure_right(1.0e6); // create pressure drop of 50 bars/500 m
+    const double pressure_left(6.0e6); // create pressure drop of 50 bars/500 m
+    const double pressure_right(1.0e6); // create pressure drop of 50 bars/500 m
     model.InputBoundaryValue( LEFT,  "fluid pressure", makeScalar(DIRICH,pressure_left) );
     model.InputBoundaryValue( RIGHT, "fluid pressure", makeScalar(DIRICH,pressure_right) );
 
 
     // 6.  Calculating hydraulic conductivity: 1e-3 / 1e-3 = 1.
     // --------------------------------------------------------
-    const double64 fluid_viscosity(1.0e-03);
+    const double fluid_viscosity(1.0e-03);
     ConstantFactor<2U,divides>  conductivity( model.Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );
@@ -187,7 +187,7 @@ void PressureDiffusion_Example::Run()
 
     // 11.  Let the user define the runtime and time increment for the transient calculation
     // -------------------------------------------------------------------------------------
-    double64  maxtime, time_increment;
+    double  maxtime, time_increment;
     size_t      timestep(1);
 
     printModelDimensions( model );
@@ -209,7 +209,7 @@ void PressureDiffusion_Example::Run()
     // 12.  Let the user define storativity and change of the left-hand side fluid pressure
     //      and input the new storativity value and fluid pressure dirichlet boundary conditions
     // -----------------------------------------------------------------------------------------
-    double64 storativity, pressure_change, new_pressure;
+    double storativity, pressure_change, new_pressure;
     cout << "\nEnter the storativity in m3 m-3 Pa-1 (physically meaningful values are in the range of 1.0e-06 to 1.0e-12): "<< endl;
     cin  >> storativity;
     // input the storativity to the Model

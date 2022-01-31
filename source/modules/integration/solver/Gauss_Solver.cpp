@@ -19,21 +19,21 @@ Gauss_Solver::~Gauss_Solver()
 {}
 
 void Gauss_Solver::SolveWithMeschach( SparseMatrix& A,
-                                      vector<double64>& b,
-                                      vector<double64>& x,
-                                      double64 )
+                                      vector<double>& b,
+                                      vector<double>& x,
+                                      double )
 {
     if (Verbose()) {
         cout <<"\nGauss_Solver::SolveMatrixEquation: Allocating memory..." << endl;
     }
     // build solution matrix with 2 elements per row
-    SPMAT*  M   = sp_get( static_cast<int32>(A.Rows()), static_cast<int32>(A.Cols()), 3 );
+    SPMAT*  M   = sp_get( static_cast<int32_t>(A.Rows()), static_cast<int32_t>(A.Cols()), 3 );
     convert_CSP_SparseMatrix_to_SPMAT( A, M );
     SPMAT*  LU  = sp_copy( M );
     VEC*    rhs = v_get(b.size());
     VEC*    sol = v_get(x.size());
     
-    for ( uint32 i=0; i<x.size(); i++ ) {
+    for ( uint32_t i=0; i<x.size(); i++ ) {
         rhs->ve[i] = b[i];
         sol->ve[i] = x[i];
     }
@@ -46,7 +46,7 @@ void Gauss_Solver::SolveWithMeschach( SparseMatrix& A,
     spLUfactor( LU , pivot, pivot_factor );
     spLUsolve ( LU , pivot, rhs, sol );
     
-    for ( uint32 i=0; i<x.size(); i++ ) x[i] = sol->ve[i];
+    for ( uint32_t i=0; i<x.size(); i++ ) x[i] = sol->ve[i];
     
     // giving the memory back to the system
     sp_free( M );

@@ -44,21 +44,21 @@ class SteadyStateDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
     SteadyStateDiffusor( Model<dim>&, 
                                 const char* diffusivity,
                                 const char* diffusing_variable,
-                                const char* gradient_variable, double64 gradient_multiplier );
+                                const char* gradient_variable, double gradient_multiplier );
 
     /// as above, but with FE source terms
     SteadyStateDiffusor( Model<dim>&, 
                                 const char* diffusivity,
                                 const char* diffusing_variable,
                                 const char* spatial_source_variable,
-                                const char* gradient_variable, double64 gradient_multiplier );
+                                const char* gradient_variable, double gradient_multiplier );
 
     SteadyStateDiffusor( Model<dim>&, 
                                 const char* lhs_diffusivity,
                                 const char* rhs_diffusivity,
                                 const char* diffusing_variable,
                                 const char* spatial_source_variable,
-                                const char* gradient_variable, double64 gradient_multiplier );
+                                const char* gradient_variable, double gradient_multiplier );
 
     virtual ~SteadyStateDiffusor();
 
@@ -88,7 +88,7 @@ class SteadyStateDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
     /// add extra functionality for alternative solver if needed
 #endif
 
-    const double64                  grad_multiplier_;
+    const double                  grad_multiplier_;
     std::string                     dep_var_name_;
 
     

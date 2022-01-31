@@ -10,78 +10,86 @@
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class SIMPLEX>
-FiniteElementPolicy<dim,SIMPLEX>::FiniteElementPolicy( csmp::FiniteElement* eptr )
+template<size_t dim, template<size_t> class CELL>
+FiniteElementPolicy<dim,CELL>::FiniteElementPolicy( csmp::FiniteElement* eptr )
 : fptr_(eptr)
 {
 }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::Assign( FiniteElement* fe_ptr )
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::Assign( FiniteElement* fe_ptr )
  {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
-    assert( fe_ptr != nullptr );	
-	// JC: check it later. error in the Debug mode.
-    //assert( eptr->Nodes() == fe_ptr->Nodes() );
+    assert( fe_ptr != nullptr );
     fptr_ = fe_ptr;
  }
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-CSMP_FEM_TYPE FiniteElementPolicy<dim,SIMPLEX>::FE_Type() const
+template<size_t dim, template<size_t> class CELL>
+CSMP_FEM_TYPE FiniteElementPolicy<dim,CELL>::FE_Type() const
   {
     assert( fptr_ != nullptr );
     return fptr_->ElementType();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-FiniteElement* FiniteElementPolicy<dim,SIMPLEX>::FE() const
+template<size_t dim, template<size_t> class CELL>
+FiniteElement* FiniteElementPolicy<dim,CELL>::FE() const
   {
-    assert( fptr_ != nullptr );
     return fptr_;
   }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool FiniteElementPolicy<dim,SIMPLEX>::IsLineElement() const
+template<size_t dim, template<size_t> class CELL>
+bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const
+ {
+    if constexpr ( dim == 3 ) return IsVolumeElement();
+    if constexpr ( dim == 2 ) return IsSurfaceElement();
+    if constexpr ( dim == 1 ) return IsLineElement();
+    return false;
+ }
+
+
+
+
+template<size_t dim, template<size_t> class CELL>
+bool FiniteElementPolicy<dim,CELL>::IsLineElement() const
   {
     assert( fptr_ != nullptr );
     return fptr_->IsLineElement();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool FiniteElementPolicy<dim,SIMPLEX>::IsSurfaceElement() const
+template<size_t dim, template<size_t> class CELL>
+bool FiniteElementPolicy<dim,CELL>::IsSurfaceElement() const
   {
     assert( fptr_ != nullptr );
     return fptr_->IsSurfaceElement();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool FiniteElementPolicy<dim,SIMPLEX>::IsVolumeElement() const
+template<size_t dim, template<size_t> class CELL>
+bool FiniteElementPolicy<dim,CELL>::IsVolumeElement() const
   {
     assert( fptr_ != nullptr );
     return fptr_->IsVolumeElement();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  FiniteElementPolicy<dim,SIMPLEX>::Interpolation() const
+template<size_t dim, template<size_t> class CELL>
+size_t  FiniteElementPolicy<dim,CELL>::Interpolation() const
   {
     assert( fptr_ != nullptr );
     return fptr_->Interpolation();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool   FiniteElementPolicy<dim,SIMPLEX>::UsesLocalCoordinates() const
+template<size_t dim, template<size_t> class CELL>
+bool   FiniteElementPolicy<dim,CELL>::UsesLocalCoordinates() const
   {
     assert( fptr_ != nullptr );
     return fptr_->UsesLocalCoordinates();
   }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t   FiniteElementPolicy<dim,SIMPLEX>::Segments() const
+template<size_t dim, template<size_t> class CELL>
+size_t   FiniteElementPolicy<dim,CELL>::Segments() const
  {
     assert( fptr_ != nullptr );
     return fptr_->Segments();
@@ -90,8 +98,8 @@ size_t   FiniteElementPolicy<dim,SIMPLEX>::Segments() const
 
 
 /// Returns number of integration points per element, 0 if no FiniteElement assigned
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t FiniteElementPolicy<dim,SIMPLEX>::IntegrationPoints() const
+template<size_t dim, template<size_t> class CELL>
+size_t FiniteElementPolicy<dim,CELL>::IntegrationPoints() const
   {
     if( fptr_ != nullptr ) return fptr_->IntegrationPoints();
     return 0U;
@@ -102,8 +110,8 @@ size_t FiniteElementPolicy<dim,SIMPLEX>::IntegrationPoints() const
      The coordinate value is transformed into global coordinates by the
      finite element. Therefore the coordinate matrix must be initialized.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::IntegrationPoint( size_t ip ) const
+template<size_t dim, template<size_t> class CELL>
+Point<dim>  FiniteElementPolicy<dim,CELL>::IntegrationPoint( size_t ip ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -114,8 +122,8 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::IntegrationPoint( size_t ip ) cons
   }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::WeightAtIntegrationPoint( size_t i ) const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::WeightAtIntegrationPoint( size_t i ) const
   {
     assert( fptr_ != nullptr );
     return fptr_->WeightAtIntegrationPoint(i);
@@ -189,7 +197,7 @@ void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst ) const
 */
 template<size_t dim, template<size_t> class CELL>
 void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst,
-                                          std::vector<double64>& IPOL ) const
+                                          std::vector<double>& IPOL ) const
  {
 
     const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
@@ -208,29 +216,28 @@ void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst,
 
 
 
-
-
 /**
     Returns the value of the interpolation functions at a point in physical space.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::N_AtGlobalPoint( std::vector<double64>& Nn, const std::vector<double64>& xyz ) const
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::N_AtGlobalPoint( std::vector<double>& Nn, const std::vector<double>& xyz ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
     fptr_->N( Nn, xyz );
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::N_AtIntegrationPoint( size_t ipoint, std::vector<double64>& Nn ) const
+
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::N_AtIntegrationPoint( size_t ipoint, std::vector<double>& Nn ) const
   {
     assert( fptr_ != nullptr );
     fptr_->N_AtIntegrationPoint( ipoint, Nn );
   }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::N_AtBaryCenter( std::vector<double64>& Nn ) const
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::N_AtBaryCenter( std::vector<double>& Nn ) const
   {
     assert( fptr_ != nullptr );
     if ( !fptr_->Isoparametric() ) CoordinateMatrix();
@@ -239,16 +246,17 @@ void FiniteElementPolicy<dim,SIMPLEX>::N_AtBaryCenter( std::vector<double64>& Nn
 
 
 // DERIVATIVES OF SHAPE FUNCTIONS AT DIFFERENT POINTS
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim, SIMPLEX>::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim, CELL>::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const
 {
 	assert(fptr_ != nullptr);
 	CoordinateMatrix();
 	fptr_->Integral_dNT_K_dN(M, K);
 }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::dN( DenseMatrix<DM_MIN>& M ) const
+
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::dN( DenseMatrix<DM_MIN>& M ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -256,39 +264,39 @@ void FiniteElementPolicy<dim,SIMPLEX>::dN( DenseMatrix<DM_MIN>& M ) const
   }
   
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t nd, size_t dof )  const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t nd, size_t dof )  const
   { 
     assert( fptr_ != nullptr );
     CoordinateMatrix();
     if ( dof == 1U )
         return fptr_->dN_AtNode( M, nd );
-    double64 detJ = fptr_->dN_AtNode( M, nd );
+    double detJ = fptr_->dN_AtNode( M, nd );
     dof == 2 ? dN_To2DOF( fptr_->Nodes(), M ) : dN_To3DOF( fptr_->Nodes(), M );
     return detJ;
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::dN_AtBaryCenter( DenseMatrix<DM_MIN>& M, size_t dof ) const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::dN_AtBaryCenter( DenseMatrix<DM_MIN>& M, size_t dof ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
     if ( dof == 1U )
         return fptr_->dN_AtBarycenter( M );
-    double64 detJ = fptr_->dN_AtBarycenter( M );
+    double detJ = fptr_->dN_AtBarycenter( M );
     dof == 2U ? dN_To2DOF( fptr_->Nodes(), M ) : dN_To3DOF( fptr_->Nodes(), M );
     return detJ;
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M,
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M,
                                                                   size_t gp, size_t dof )  const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
     if ( dof == 1U )
         return fptr_->dN_AtIntegrationPoint( M, gp );
-    double64 detJ = fptr_->dN_AtIntegrationPoint( M, gp );
+    double detJ = fptr_->dN_AtIntegrationPoint( M, gp );
     dof == 2U ? dN_To2DOF( fptr_->Nodes(), M ) : dN_To3DOF( fptr_->Nodes(), M );
     return detJ;
   }
@@ -297,8 +305,8 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::dN_AtIntegrationPoint( DenseMatrix<DM
 
 // INTEGRATION
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::det_JINV_AtIntegrationPoint( size_t ipoint ) const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::det_JINV_AtIntegrationPoint( size_t ipoint ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -307,8 +315,8 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::det_JINV_AtIntegrationPoint( size_t i
     return fptr_->JacobianDeterminant();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::IntegralNN( DenseMatrix<DM_MIN>& M ) const
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::IntegralNN( DenseMatrix<DM_MIN>& M ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -334,10 +342,10 @@ it is called by. If they are the same, nothing is done.
 Thus, YOU MUST SET THE ELEMENT ID for this method to have an effect.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::CoordinateMatrix() const
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::CoordinateMatrix() const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     assert( fptr_ != nullptr );
     // if this method is called the second time on the same element it will do nothing
@@ -355,20 +363,20 @@ void FiniteElementPolicy<dim,SIMPLEX>::CoordinateMatrix() const
 
 // PROPERTY INTERPOLATION, EXTRAPOLATION AND INTEGRATIONS
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyIntegral( const csmp::Index& prop_key ) const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::PropertyIntegral( const csmp::Index& prop_key ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( fptr_ != nullptr );
 
     if ( prop_key.type != SCALAR )
-        throw csmp::Exception( FATAL_ERROR, "FiniteElementPolicy<dim,SIMPLEX>::PropertyIntegral",
+        throw csmp::Exception( FATAL_ERROR, "FiniteElementPolicy<dim,CELL>::PropertyIntegral",
                                             "This method only integrates scalar properties" );
 
     if ( fptr_ == nullptr ) {
           eptr->Out();
           throw csmp::Exception( ERROR,
-                                 "FiniteElementPolicy<dim,SIMPLEX>::PropertyIntegral:",
+                                 "FiniteElementPolicy<dim,CELL>::PropertyIntegral:",
                                  "encountered element with invalid element pointer.");
        }
 
@@ -384,7 +392,7 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyIntegral( const csmp::Index& 
 
     if ( prop_key.place == ELEMENT_INTEGRATION_POINT )
       {
-         double64 sum(0.);
+         double sum(0.);
          const size_t n_integration_points(fptr_->IntegrationPoints());
          CoordinateMatrix();
          for ( size_t i=0U; i <n_integration_points; i++ )
@@ -400,7 +408,7 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyIntegral( const csmp::Index& 
     // if the element is isoparametric we loop over the integration points interpolating
     // the property values to these positions and then integrating via multiplication with 
     // weights
-    double64  sumN, sumI(0.);
+    double  sumN, sumI(0.);
     const size_t n_integration_points(fptr_->IntegrationPoints());
 
     CoordinateMatrix();
@@ -437,13 +445,13 @@ a much slower procedure than direct interpolation.
 simply return this value.
 
  */
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 template<class Var>
-void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
-                                                        const std::vector<double64>& xyz,
+void FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
+                                                        const std::vector<double>& xyz,
                                                         Var& var ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
          eptr->Read( idx, var );
@@ -453,7 +461,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
        std::cerr <<"\nFiniteElementPolicy<"<< dim;
        std::cerr <<">::PropertyValueAt: This method only interpolates the ";
        std::cerr <<"values of NODE properties."<< std::endl;
-       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt");
+       throw std::domain_error("FiniteElementPolicy<dim,CELL>::PropertyValueAt");
     }
 
     Var  temp;
@@ -477,11 +485,11 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
 
 
 // scalar version of previous method
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
-                                                            const std::vector<double64>& xyz ) const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
+                                                            const std::vector<double>& xyz ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
          return eptr->Read( idx );
@@ -490,14 +498,14 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& i
        std::cerr <<"\nFiniteElementPolicy<"<< dim;
        std::cerr <<">::PropertyValueAt: This method only interpolates the ";
        std::cerr <<"values of NODE properties."<< std::endl;
-       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt");
+       throw std::domain_error("FiniteElementPolicy<dim,CELL>::PropertyValueAt");
     }
 
     assert( fptr_ != nullptr );
     CoordinateMatrix();
     fptr_->N( fptr_->NRST, xyz );
 
-    double64 var(0.);
+    double var(0.);
     const size_t  n_nodes(fptr_->Nodes());
     for ( size_t i=0U; i<n_nodes; i++ )
        var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
@@ -515,12 +523,12 @@ Integration point variables (ELEMENT_INTEGRATION_POINT) are averaged.
 simply return this value.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 template<class Var>
-void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::Index& idx,
+void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index& idx,
                                                                   Var& var ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( fptr_ != nullptr );
 
     if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
@@ -532,7 +540,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
        std::cerr <<">::PropertyValueAtBaryCenter: This method only interpolates the ";
        std::cerr <<"values of NODE properties."<< std::endl;
        std::cerr <<"values of ELEMENT_INTEGRATION_POINT properties are averaged."<< std::endl;
-       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter");
+       throw std::domain_error("FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter");
     }
 
     Var  temp;
@@ -548,7 +556,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
             eptr->Read( i, idx, temp );
             var += temp;
          }
-       var /= static_cast<double64>(fptr_->IntegrationPoints());
+       var /= static_cast<double>(fptr_->IntegrationPoints());
        return;
     }
     if ( idx.place == SECTOR_INTEGRATION_POINT ) {
@@ -557,7 +565,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
             eptr->Read( i, 0U, idx, temp );
             var += temp;
          }
-       var /= static_cast<double64>(n_sector_integration_points);
+       var /= static_cast<double>(n_sector_integration_points);
        return;
     }
 
@@ -574,10 +582,10 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::Index& idx ) const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index& idx ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( fptr_ != nullptr );
 
     if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE )  return eptr->Read( idx );
@@ -587,10 +595,10 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp
        std::cerr <<">::PropertyValueAtBaryCenter: This method only interpolates the ";
        std::cerr <<"values of NODE properties."<< std::endl;
        std::cerr <<"values of ELEMENT_INTEGRATION_POINT properties are averaged."<< std::endl;
-       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter");
+       throw std::domain_error("FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter");
     }
 
-    double64 var(0.);
+    double var(0.);
 
     // simple averaging of integration point properties
     if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
@@ -598,7 +606,7 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp
        for ( size_t i=0U; i < n_integration_points; i++ ) {
             var += eptr->Read( i, idx );
          }
-       var /= static_cast<double64>(fptr_->IntegrationPoints());
+       var /= static_cast<double>(fptr_->IntegrationPoints());
        return var;
     }
     if ( idx.place == SECTOR_INTEGRATION_POINT ) {
@@ -606,7 +614,7 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp
        for ( size_t i=0U; i < n_sector_integration_points; i++ ) {
             var += eptr->Read( i, 0U, idx );
          }
-       var /= static_cast<double64>(n_sector_integration_points);
+       var /= static_cast<double>(n_sector_integration_points);
        return var;
     }
 
@@ -633,13 +641,13 @@ Interpolates node properties to the integration points.
 simply return this value.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 template<class Var>
-void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( const csmp::Index& idx,
+void FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csmp::Index& idx,
                                                                         size_t ip,
                                                                         Var& var ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
          eptr->Read( idx, var );
@@ -649,7 +657,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( const cs
          std::cerr <<"\nFiniteElementPolicy<"<< dim;
          std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates the ";
          std::cerr <<"values of NODE properties."<< std::endl;
-         throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint");
+         throw std::domain_error("FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint");
       }
 
     // potential size and value adjustments for array variables
@@ -678,11 +686,11 @@ Interpolates SCALAR node properties to the integration points.
 @attention If variable is an element property, method will
 simply return this value.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( const csmp::Index& idx,
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csmp::Index& idx,
                                                                             size_t ip ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     if ( (idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE) && idx.type == SCALAR ) return eptr->Read( idx );
     
@@ -690,13 +698,13 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( cons
         std::cerr <<"\nFiniteElementPolicy<"<< dim;
         std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates ";
         std::cerr <<"scalar NODE properties."<< std::endl;
-        throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint");
+        throw std::domain_error("FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint");
      }
 
     assert( fptr_ != nullptr );
     fptr_->N_AtIntegrationPoint( ip, fptr_->NRST );
 
-    double64  var(0.);
+    double  var(0.);
     const size_t  n_nodes(fptr_->Nodes());
     for ( size_t i=0U; i<n_nodes; i++ )
       var += fptr_->NRST[i] * eptr->N(i)->Read( idx );
@@ -710,17 +718,17 @@ Returns the ELEMENT_INTEGRATION_POINT variable values into the parameter
 vector.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 template<class Var>
-void  FiniteElementPolicy<dim,SIMPLEX>::IntegrationPointPropertyVector( const csmp::Index& idx,
+void  FiniteElementPolicy<dim,CELL>::IntegrationPointPropertyVector( const csmp::Index& idx,
                                                                         std::vector<Var>& var ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     if ( fptr_ == nullptr ) {
           eptr->Out();
           throw csmp::Exception( ERROR,
-                                 "FiniteElementPolicy<dim,SIMPLEX>::IntegrationPointPropertyVector:",
+                                 "FiniteElementPolicy<dim,CELL>::IntegrationPointPropertyVector:",
                                  "encountered element with invalid element pointer.");
        }
 
@@ -732,11 +740,11 @@ void  FiniteElementPolicy<dim,SIMPLEX>::IntegrationPointPropertyVector( const cs
     var.resize( n_integration_points );
 
     for ( size_t i=0U; i<n_integration_points; i++ )
-    {
-        var[i].Resize( idx.dataDepth );
-        var[i] = 0.;
-        eptr->Read( i, idx, var[i] );
-    }
+      {
+          var[i].Resize( idx.dataDepth );
+          var[i] = 0.;
+          eptr->Read( i, idx, var[i] );
+      }
   }
 
 
@@ -746,19 +754,19 @@ void  FiniteElementPolicy<dim,SIMPLEX>::IntegrationPointPropertyVector( const cs
     to its nodes.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>
 ::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
-                                              const std::vector<double64>& IVAR,
-                                              std::vector<double64>& NVAR ) const
+                                              const std::vector<double>& IVAR,
+                                              std::vector<double>& NVAR ) const
   {
     if( fptr_ == nullptr )
         throw csmp::Exception( ERROR,
-                               "FiniteElementPolicy<dim,SIMPLEX>::ExtrapolateIntegrationPointVariableToNodes:",
+                               "FiniteElementPolicy<dim,CELL>::ExtrapolateIntegrationPointVariableToNodes:",
                                "encountered element with invalid element pointer.");
     if( !fptr_->UsesLocalCoordinates() )
         throw csmp::Exception( ERROR,
-                               "FiniteElementPolicy<dim,SIMPLEX>::ExtrapolateIntegrationPointVariableToNodes:",
+                               "FiniteElementPolicy<dim,CELL>::ExtrapolateIntegrationPointVariableToNodes:",
                                "Extrapolation is not supported; only the isoparametric elements have integration points.");
 
     // NB: the following method checks that the supplied arrays have the right size
@@ -768,30 +776,72 @@ void FiniteElementPolicy<dim,SIMPLEX>
 
 
 
+    /// returns search key to match element faces
+template<size_t dim, template<size_t> class CELL>
+std::set<Node<dim>*>  FiniteElementPolicy<dim,CELL>::CornerNodesOfFace( size_t face_id )
+ {
+    assert( fptr_ != nullptr );
+    assert( face_id < fptr_->Faces() );
+ 
+    CELL<dim>* eptr( static_cast<CELL<dim>*>(this) );
+
+    std::set<Node<dim>*>  temp;
+    for ( auto nit : fptr_->CornerNodesOfFace(face_id) ) {
+         assert( eptr->N(nit) != nullptr );
+         temp.insert( eptr->N(nit) );
+      }
+      
+    return temp;
+ }
+
+
+
+
+/** returns search key to match element faces; pointers in order so that they can be searched
+ */
+template<size_t dim, template<size_t> class CELL>
+std::set<Node<dim>*> FiniteElementPolicy<dim,CELL>::CornerNodesConnectedTo( size_t node_id )
+ {
+    assert( fptr_ != nullptr );
+    assert( node_id < fptr_->CornerNodes() );
+ 
+    CELL<dim>* eptr( static_cast<CELL<dim>*>(this) );
+
+    std::set<Node<dim>*>  temp;
+    for ( auto nit : fptr_->NodesConnectedTo(node_id) ) {
+         assert( eptr->N(nit) != nullptr );
+         temp.insert( eptr->N(nit) );
+      }
+      
+    return temp;
+ }
+
+
+
 // ELEMENT GEOMETRY
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::AspectRatio() const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::AspectRatio() const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( eptr->FE() != NULL );
     CoordinateMatrix();
     return eptr->FE()->AspectRatio();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::InnerRadius() const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::InnerRadius() const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( eptr->FE() != NULL );
     CoordinateMatrix();
     return eptr->FE()->InnerRadius();
   }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::Volume() const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::Volume() const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( eptr->FE() != NULL );
     CoordinateMatrix();
     return eptr->FE()->Volume();
@@ -810,15 +860,15 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::Volume() const
     @attention this method assumes that the first two nodes returned by
     NodesOfSegment() are the corner nodes, i.e. do not include midside nodes.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-double64 FiniteElementPolicy<dim,SIMPLEX>::SegmentLength( size_t segm ) const
+template<size_t dim, template<size_t> class CELL>
+double FiniteElementPolicy<dim,CELL>::SegmentLength( size_t segm ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     if ( fptr_ == nullptr ) {
           eptr->Out();
           throw csmp::Exception( ERROR,
-                                 "FiniteElementPolicy<dim,SIMPLEX>::SegmentLenghts:",
+                                 "FiniteElementPolicy<dim,CELL>::SegmentLenghts:",
                                  "encountered element with invalid element pointer.");
        }
 
@@ -833,8 +883,8 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::SegmentLength( size_t segm ) const
 
 
 /// returns the length of all element segments=edges
-template<size_t dim, template<size_t> class SIMPLEX>
-void FiniteElementPolicy<dim,SIMPLEX>::SegmentLengths( std::vector<double64>& lengths ) const
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::SegmentLengths( std::vector<double>& lengths ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -846,10 +896,10 @@ void FiniteElementPolicy<dim,SIMPLEX>::SegmentLengths( std::vector<double64>& le
 /**
     returns the mid-point (in physical space) of the finite element segment = edge.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::SegmentMidPoint( size_t segm ) const
+template<size_t dim, template<size_t> class CELL>
+Point<dim>  FiniteElementPolicy<dim,CELL>::SegmentMidPoint( size_t segm ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
     assert( fptr_ != nullptr );
     fptr_->NodesOfSegment( segm, fptr_->IDX );
     assert( fptr_->IDX.size() == 2U );
@@ -863,6 +913,10 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::SegmentMidPoint( size_t segm ) con
 
 // FACES
 
+// STUB FOR 1D normalOfTriangle
+inline double triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>& ) {
+     return 1.;
+  }
 
 /**
 
@@ -880,15 +934,15 @@ correct spatial dimension.
 @author SKM 4/6/2014
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-double64  FiniteElementPolicy<dim,SIMPLEX>::FaceArea( size_t n ) const
+template<size_t dim, template<size_t> class CELL>
+double  FiniteElementPolicy<dim,CELL>::FaceArea( size_t n ) const
   {
-    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
     if ( fptr_ == nullptr ) {
           eptr->Out();
           throw csmp::Exception( ERROR,
-                                 "FiniteElementPolicy<dim,SIMPLEX>::FaceArea:",
+                                 "FiniteElementPolicy<dim,CELL>::FaceArea:",
                                  "encountered element with invalid element pointer.");
        }
 
@@ -934,15 +988,15 @@ double64  FiniteElementPolicy<dim,SIMPLEX>::FaceArea( size_t n ) const
 /**
     SKM new implementation
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::FaceBaryCenter( size_t face ) const
+template<size_t dim, template<size_t> class CELL>
+Point<dim>  FiniteElementPolicy<dim,CELL>::FaceBaryCenter( size_t face ) const
   {
     assert( fptr_ != nullptr );
-    const SIMPLEX<dim>* e( static_cast<const SIMPLEX<dim>*>(this) );
+    const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
     if ( fptr_ == nullptr ) {
           e->Out();
           throw csmp::Exception( ERROR,
-                                 "FiniteElementPolicy<dim,SIMPLEX>::FaceBaryCenter:",
+                                 "FiniteElementPolicy<dim,CELL>::FaceBaryCenter:",
                                 "encountered element with invalid element pointer.");
        }
     fptr_->NodesOfFace( face, fptr_->IDX );
@@ -950,7 +1004,7 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::FaceBaryCenter( size_t face ) cons
     Point<dim>  barycenter(e->N(fptr_->IDX[0])->Coordinate());
     for ( size_t i=1U; i<face_nodes; ++i )
       barycenter += e->N(fptr_->IDX[i])->Coordinate();
-    barycenter /= static_cast<double64>(face_nodes);
+    barycenter /= static_cast<double>(face_nodes);
 
     return barycenter;
   }
@@ -970,20 +1024,20 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::FaceBaryCenter( size_t face ) cons
     @note not as efficient as version that uses standard vector.
  
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  FiniteElementPolicy<dim,SIMPLEX>::UnitNormal( VectorVariable<dim>& nrml ) const
+template<size_t dim, template<size_t> class CELL>
+void  FiniteElementPolicy<dim,CELL>::UnitNormal( VectorVariable<dim>& nrml ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    std::vector<double64> un( dim, 0. );
+    std::vector<double> un( dim, 0. );
     fptr_->UnitNormal(un);
     for ( size_t d(0); d < dim; ++d )
         nrml(d) = un[d];
   }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void  FiniteElementPolicy<dim,SIMPLEX>::UnitNormal( std::vector<double64>& nrml ) const
+template<size_t dim, template<size_t> class CELL>
+void  FiniteElementPolicy<dim,CELL>::UnitNormal( std::vector<double>& nrml ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -991,12 +1045,12 @@ void  FiniteElementPolicy<dim,SIMPLEX>::UnitNormal( std::vector<double64>& nrml 
   }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::UnitNormal() const
+template<size_t dim, template<size_t> class CELL>
+Point<dim>  FiniteElementPolicy<dim,CELL>::UnitNormal() const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    std::vector<double64> un(dim,0.);
+    std::vector<double> un(dim,0.);
     fptr_->UnitNormal(un);
     return Point<dim>(un);
   }
@@ -1009,12 +1063,12 @@ Method calculates the unit normal that is outward pointing to to the queried fac
 @test SKM 22/9/2014: fixed 3D normals so that they are outward pointing.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::UnitNormalToFace( size_t face ) const
+template<size_t dim, template<size_t> class CELL>
+Point<dim>  FiniteElementPolicy<dim,CELL>::UnitNormalToFace( size_t face ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    std::vector<double64> un(dim,0.);
+    std::vector<double> un(dim,0.);
     fptr_->UnitNormalToFace( face, un );
     return Point<dim>(un);
 
@@ -1025,8 +1079,8 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::UnitNormalToFace( size_t face ) co
 /** 
     Fastest version to compute outward-pointing normal to target face.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  FiniteElementPolicy<dim,SIMPLEX>::UnitNormalToFace( size_t face, std::vector<double64>& nrml ) const
+template<size_t dim, template<size_t> class CELL>
+void  FiniteElementPolicy<dim,CELL>::UnitNormalToFace( size_t face, std::vector<double>& nrml ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
@@ -1035,12 +1089,12 @@ void  FiniteElementPolicy<dim,SIMPLEX>::UnitNormalToFace( size_t face, std::vect
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void  FiniteElementPolicy<dim,SIMPLEX>::UnitNormalToFace( size_t face, VectorVariable<dim>& nrml ) const
+template<size_t dim, template<size_t> class CELL>
+void  FiniteElementPolicy<dim,CELL>::UnitNormalToFace( size_t face, VectorVariable<dim>& nrml ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    std::vector<double64> un(dim,0.);
+    std::vector<double> un(dim,0.);
     fptr_->UnitNormalToFace( face, un );
     for ( size_t d(0); d < dim; ++d )
       nrml(d) = un[d];
@@ -1090,39 +1144,39 @@ template void FiniteElementPolicy<3U,Element>
 // property value at point
 // scalar
 template void FiniteElementPolicy<1U,Element>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 template void FiniteElementPolicy<2U,Element>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 template void FiniteElementPolicy<3U,Element>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 // array
 template void FiniteElementPolicy<1U,Element>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 template void FiniteElementPolicy<2U,Element>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 template void FiniteElementPolicy<3U,Element>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 // flagged array
 template void FiniteElementPolicy<1U,Element>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 template void FiniteElementPolicy<2U,Element>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 template void FiniteElementPolicy<3U,Element>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 // vector
 template void FiniteElementPolicy<1U,Element>
-::PropertyValueAt<VectorVariable<1U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<1U>& var) const;
+::PropertyValueAt<VectorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<1U>& var) const;
 template void FiniteElementPolicy<2U,Element>
-::PropertyValueAt<VectorVariable<2U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<2U>& var) const;
+::PropertyValueAt<VectorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<2U>& var) const;
 template void FiniteElementPolicy<3U,Element>
-::PropertyValueAt<VectorVariable<3U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<3U>& var) const;
+::PropertyValueAt<VectorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<3U>& var) const;
 // tensor
 template void FiniteElementPolicy<1U,Element>
-::PropertyValueAt<TensorVariable<1U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<1U>& var) const;
+::PropertyValueAt<TensorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<1U>& var) const;
 template void FiniteElementPolicy<2U,Element>
-::PropertyValueAt<TensorVariable<2U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<2U>& var) const;
+::PropertyValueAt<TensorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<2U>& var) const;
 template void FiniteElementPolicy<3U,Element>
-::PropertyValueAt<TensorVariable<3U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<3U>& var) const;
+::PropertyValueAt<TensorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<3U>& var) const;
 
 // property value at integration point
 // scalar
@@ -1241,39 +1295,39 @@ template void FiniteElementPolicy<3U,Face>
 // property value at point
 // scalar
 template void FiniteElementPolicy<1U,Face>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 template void FiniteElementPolicy<2U,Face>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 template void FiniteElementPolicy<3U,Face>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 // array
 template void FiniteElementPolicy<1U,Face>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 template void FiniteElementPolicy<2U,Face>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 template void FiniteElementPolicy<3U,Face>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 // flagged array
 template void FiniteElementPolicy<1U,Face>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 template void FiniteElementPolicy<2U,Face>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 template void FiniteElementPolicy<3U,Face>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 // vector
 template void FiniteElementPolicy<1U,Face>
-::PropertyValueAt<VectorVariable<1U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<1U>& var) const;
+::PropertyValueAt<VectorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<1U>& var) const;
 template void FiniteElementPolicy<2U,Face>
-::PropertyValueAt<VectorVariable<2U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<2U>& var) const;
+::PropertyValueAt<VectorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<2U>& var) const;
 template void FiniteElementPolicy<3U,Face>
-::PropertyValueAt<VectorVariable<3U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<3U>& var) const;
+::PropertyValueAt<VectorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<3U>& var) const;
 // tensor
 template void FiniteElementPolicy<1U,Face>
-::PropertyValueAt<TensorVariable<1U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<1U>& var) const;
+::PropertyValueAt<TensorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<1U>& var) const;
 template void FiniteElementPolicy<2U,Face>
-::PropertyValueAt<TensorVariable<2U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<2U>& var) const;
+::PropertyValueAt<TensorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<2U>& var) const;
 template void FiniteElementPolicy<3U,Face>
-::PropertyValueAt<TensorVariable<3U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<3U>& var) const;
+::PropertyValueAt<TensorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<3U>& var) const;
 
 // property value at integration point
 // scalar
@@ -1391,39 +1445,39 @@ template void FiniteElementPolicy<3U,InterFace>
 // property value at point
 // scalar
 template void FiniteElementPolicy<1U,InterFace>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 template void FiniteElementPolicy<2U,InterFace>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 template void FiniteElementPolicy<3U,InterFace>
-::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ScalarVariable& var) const;
+::PropertyValueAt<ScalarVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ScalarVariable& var) const;
 // array
 template void FiniteElementPolicy<1U,InterFace>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 template void FiniteElementPolicy<2U,InterFace>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 template void FiniteElementPolicy<3U,InterFace>
-::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, ArrayVariable& var) const;
+::PropertyValueAt<ArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, ArrayVariable& var) const;
 // flagged array
 template void FiniteElementPolicy<1U,InterFace>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 template void FiniteElementPolicy<2U,InterFace>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 template void FiniteElementPolicy<3U,InterFace>
-::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double64>& xyz, FlaggedArrayVariable& var) const;
+::PropertyValueAt<FlaggedArrayVariable >(const csmp::Index& idx, const std::vector<double>& xyz, FlaggedArrayVariable& var) const;
 // vector
 template void FiniteElementPolicy<1U,InterFace>
-::PropertyValueAt<VectorVariable<1U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<1U>& var) const;
+::PropertyValueAt<VectorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<1U>& var) const;
 template void FiniteElementPolicy<2U,InterFace>
-::PropertyValueAt<VectorVariable<2U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<2U>& var) const;
+::PropertyValueAt<VectorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<2U>& var) const;
 template void FiniteElementPolicy<3U,InterFace>
-::PropertyValueAt<VectorVariable<3U> >(const csmp::Index& idx, const std::vector<double64>& xyz, VectorVariable<3U>& var) const;
+::PropertyValueAt<VectorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, VectorVariable<3U>& var) const;
 // tensor
 template void FiniteElementPolicy<1U,InterFace>
-::PropertyValueAt<TensorVariable<1U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<1U>& var) const;
+::PropertyValueAt<TensorVariable<1U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<1U>& var) const;
 template void FiniteElementPolicy<2U,InterFace>
-::PropertyValueAt<TensorVariable<2U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<2U>& var) const;
+::PropertyValueAt<TensorVariable<2U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<2U>& var) const;
 template void FiniteElementPolicy<3U,InterFace>
-::PropertyValueAt<TensorVariable<3U> >(const csmp::Index& idx, const std::vector<double64>& xyz, TensorVariable<3U>& var) const;
+::PropertyValueAt<TensorVariable<3U> >(const csmp::Index& idx, const std::vector<double>& xyz, TensorVariable<3U>& var) const;
 
 // property value at integration point
 // scalar

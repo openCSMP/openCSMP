@@ -15,74 +15,74 @@ namespace csmp{
   class TwophaseVaporLookup {
 
   public:
-    TwophaseVaporLookup(const double64& externaltemperature, const double64& externalpressure);
+    TwophaseVaporLookup(const double& externaltemperature, const double& externalpressure);
     ~TwophaseVaporLookup();
     TwophaseVaporLookup(const TwophaseVaporLookup&);
     TwophaseVaporLookup& operator=(const TwophaseVaporLookup&);
 
-    double64                Temperature();
-    double64                Pressure();
-    double64                MassFractionNaCl();
-    double64                Density();
-    double64                Enthalpy();
-    double64                HeatCapacity();
-    double64                Compressibility();
-    double64                Viscosity();
-    double64                DCompositionDT();
-    double64                DSaltMassFractionDT();
-    double64                ReportMassFractionNaCl();
-    double64                ReportEnthalpy();
-    double64                DEnthalpyDT();
+    double                Temperature();
+    double                Pressure();
+    double                MassFractionNaCl();
+    double                Density();
+    double                Enthalpy();
+    double                HeatCapacity();
+    double                Compressibility();
+    double                Viscosity();
+    double                DCompositionDT();
+    double                DSaltMassFractionDT();
+    double                ReportMassFractionNaCl();
+    double                ReportEnthalpy();
+    double                DEnthalpyDT();
 
   private:
 
-    const double64&         temperature;
-    const double64&         pressure;
+    const double&         temperature;
+    const double&         pressure;
 
-    double64                tcurrent;
-    double64                pcurrent;
-    double64                xcurrent;
-    double64                tdummy;
-    double64                pdummy;
-    double64                t_res;
-    double64                p_res;
-    double64                tnorm;
-    double64                pnorm;
-    double64                pvlh;
-    double64                ph2o;
-    double64                t_iA;
-    double64                t_iB;
-    double64                t_iC;
-    double64                t_iD;
-    double64                p_iA;
-    double64                p_iB;
-    double64                p_iC;
-    double64                p_iD;
-    double64                value_iA;
-    double64                value_iB;
-    double64                value_iC;
-    double64                value_iD;
-    double64                value_bottom;
-    double64                value_top;
-    double64                value_before;
-    double64                value_behind;
-    double64                value_interpolated;
-    double64                value_crit;
-    double64                value_crit_behind;
-    double64                value_vlh;
-    double64                value_vlh_behind;
-    double64                value_vlh_before;
-    double64                value_boil;
-    double64                value_boil_behind;
-    double64                pboil_iA;
-    double64                pboil_iB;
-    double64                tboil;
-    double64                tcrit;
-    double64                tvlh;
-    double64                x_low;
-    double64                x_high;
-    double64                pcrit_iB;
-    double64                pcrit_iA;
+    double                tcurrent;
+    double                pcurrent;
+    double                xcurrent;
+    double                tdummy;
+    double                pdummy;
+    double                t_res;
+    double                p_res;
+    double                tnorm;
+    double                pnorm;
+    double                pvlh;
+    double                ph2o;
+    double                t_iA;
+    double                t_iB;
+    double                t_iC;
+    double                t_iD;
+    double                p_iA;
+    double                p_iB;
+    double                p_iC;
+    double                p_iD;
+    double                value_iA;
+    double                value_iB;
+    double                value_iC;
+    double                value_iD;
+    double                value_bottom;
+    double                value_top;
+    double                value_before;
+    double                value_behind;
+    double                value_interpolated;
+    double                value_crit;
+    double                value_crit_behind;
+    double                value_vlh;
+    double                value_vlh_behind;
+    double                value_vlh_before;
+    double                value_boil;
+    double                value_boil_behind;
+    double                pboil_iA;
+    double                pboil_iB;
+    double                tboil;
+    double                tcrit;
+    double                tvlh;
+    double                x_low;
+    double                x_high;
+    double                pcrit_iB;
+    double                pcrit_iA;
 
     long                    it;
     long                    ip;
@@ -102,31 +102,31 @@ namespace csmp{
     States                  state_iC;
     States                  state_iD;
     
-    std::vector<double64>   storage_vector; // stores data in sequence t-p-x-rho-h at each Lookup point
+    std::vector<double>   storage_vector; // stores data in sequence t-p-x-rho-h at each Lookup point
     std::vector<States>     state_vector;         // stores fluid state at each Lookup point
 
-    double64                Interpolate(const int& property_index);
-    double64                NormalInterpolation( const int& property_index );
-    double64                NearCritpointInterpolation( const int& property_index );
-    double64                NearCritcurveInterpolation( const int& property_index );
-    double64                NearBoilingCurveInterpolation( const int& property_index );
-    double64                NearVLHInterpolationLowT( const int& property_index );
-    double64                NearVLHInterpolationHighT( const int& property_index );
-    double64                InterpolateBetweenBoilingCurveAndVLH( const int& property_index);
-    double64                NearVLHMaxInterpolation(const int& property_index);
+    double                Interpolate(const int& property_index);
+    double                NormalInterpolation( const int& property_index );
+    double                NearCritpointInterpolation( const int& property_index );
+    double                NearCritcurveInterpolation( const int& property_index );
+    double                NearBoilingCurveInterpolation( const int& property_index );
+    double                NearVLHInterpolationLowT( const int& property_index );
+    double                NearVLHInterpolationHighT( const int& property_index );
+    double                InterpolateBetweenBoilingCurveAndVLH( const int& property_index);
+    double                NearVLHMaxInterpolation(const int& property_index);
 
     void                    SetTemperatureAndPressure();
     void                    GetIndex_iA(const int& property_index);
-    void                    GetTemperatureIndex(const double64& t);
-    void                    GetPressureIndex(const double64& p);
+    void                    GetTemperatureIndex(const double& t);
+    void                    GetPressureIndex(const double& p);
 
     CriticalPointH2O        cp_h2o;
     CriticalCurveLookup     critcurve;
     VLH_VaporLookup         vlh_vapor;
     H2OLookup               water;
 
-    const double64          vlh_tmax;
-    const double64          vlh_pmax;
+    const double          vlh_tmax;
+    const double          vlh_pmax;
 
     ErrorHandler&           csmp_error;
   };

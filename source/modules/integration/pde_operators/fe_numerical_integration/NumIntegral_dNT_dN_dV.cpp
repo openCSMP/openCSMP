@@ -40,7 +40,7 @@ NumIntegral_dNT_dN_dV<dim,CELL>::NumIntegral_dNT_dN_dV( const PropertyDatabase<d
 /** Laplacian operator of shape function derivatives squared.
  */
 template<size_t dim,class CELL>
-void NumIntegral_dNT_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_dNT_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -57,7 +57,7 @@ void NumIntegral_dNT_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
-         double64 detJ = e.dN_AtIntegrationPoint( B, i, 1 );
+         double detJ = e.dN_AtIntegrationPoint( B, i, 1 );
 
          // transposing B -> BT  O.K.
          B.Transposed( BT );

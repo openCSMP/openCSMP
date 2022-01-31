@@ -24,24 +24,29 @@ public:
                                     const char* oil_saturation,
                                     const char* water_pressure,
                                     const char* oil_pressure,
-                                    double64 water_density,
-                                    double64 oil_density,
-                                    double64 water_oil_contact,
-                                    double64 reference_depth,
-                                    double64 reference_pressure,
-                                    double64 lambda,
-                                    double64 entry_pressure,
-                                    double64 swc,
-                                    double64 sor);
+                                    double water_density,
+                                    double oil_density,
+                                    double water_oil_contact,
+                                    double reference_depth,
+                                    double reference_pressure,
+                                    double lambda,
+                                    double entry_pressure,
+                                    double swc,
+                                    double sor);
                  
       virtual ~PressureSaturationInitializer();
       
-      double64 FreeWaterLevel();
-      double64 PressureAtFreeWaterLevel();
-      double64 WaterSaturationFromPhasePressures(double64 oil_pressure, 
-                                                 double64 water_pressure);
+      double FreeWaterLevel();
+      double PressureAtFreeWaterLevel();
+      double WaterSaturationFromPhasePressures(double oil_pressure, 
+                                                 double water_pressure);
     
-      virtual void Visit(Node<dim>* node);      
+      virtual void Visit( Model<dim>* m ) const 
+        { std::cout <<"\nPressureSaturationInitializer:Visit(Model): "<< m->Name() <<"\n"; } 
+            
+      virtual void Visit( Node<dim>* );    
+      // for all other targets the method stubs in the base class are used
+      // this may will prompt some warnings  
     
 private:
       const PropertyDatabase<dim>&  prop_ref_;
@@ -50,7 +55,7 @@ private:
                                  oil_pressure_key_,
                                  water_saturation_key_,
                                  oil_saturation_key_;
-      double64                   water_density_,
+      double                   water_density_,
                                  oil_density_,
                                  water_oil_contact_,
                                  reference_depth_,
@@ -59,7 +64,7 @@ private:
                                  entry_pressure_,
                                  swc_,
                                  sor_;
-      const double64             gravity_acceleration_;
+      const double             gravity_acceleration_;
                                
 };
 

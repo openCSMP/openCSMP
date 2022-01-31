@@ -92,7 +92,7 @@ void TimeSteppingApproaches_Example::Run()
 
    // 4. Calculating hydraulic conductivity
    // --------------------------------------
-   const double64 fluid_viscosity(1.0e-03);
+   const double fluid_viscosity(1.0e-03);
    ConstantFactor<DIM,divides>  conductivity( model.Database(),
                                                       "conductivity", "permeability",
                                                        fluid_viscosity );
@@ -103,7 +103,7 @@ void TimeSteppingApproaches_Example::Run()
    // 5. Dirichlet boundary conditions for pressure and temperature
    // -------------------------------------------------------------
    cout <<"\nmain: Enter left and right fluid pressure: ";
-   double64 pleft, pright;
+   double pleft, pright;
    cin >> pleft >> pright;
 
    model.InputPropertyValue( "fluid pressure", makeScalar(PLAIN,pright) );
@@ -290,10 +290,10 @@ void TimeSteppingApproaches_Example::Run()
 
    // 7. Setting up the time-stepping loop for the transient calculation
    // ------------------------------------------------------------------
-   double64&        model_time( ModelTime::Instance().modelTime );
-   double64 	      maxtime, time_increment, ramp_factor;
-   const double64   year(31536000.0);  // 1 year in seconds
-   uint32           timestep(1);
+   double&        model_time( ModelTime::Instance().modelTime );
+   double 	      maxtime, time_increment, ramp_factor;
+   const double   year(31536000.0);  // 1 year in seconds
+   uint32_t           timestep(1);
 
    cout << "\nEnter the run-time in years: ";
    cin  >> maxtime;
@@ -305,7 +305,7 @@ void TimeSteppingApproaches_Example::Run()
    // 7. Transient loop: Compute fluid pressure during each time-step and output the results for each time step
    // ---------------------------------------------------------------------------------------------------------
    cout <<"\nmain: Choose timestepping method Cranck-Nicholson vs. 1 (1), Cranck-Nicholson vs. 2 (2), Backward-Euler (3): ";
-   int32  answer(0);
+   int32_t  answer(0);
    cin >> answer;
 
    while ( model_time <= maxtime )

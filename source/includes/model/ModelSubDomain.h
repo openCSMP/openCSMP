@@ -34,12 +34,12 @@ template<size_t> class Visitor;
 @date 14/3/2016
 */
 struct SubDomainInfo {
-   std::string         name;                         ///< unique name
-   std::vector<size_t> interior_elmts;               ///< elements that have no face on the perimeter
-   std::vector<size_t> perimeter_elmts;              ///< elements that have at least one face on perimeter
-   std::vector<std::vector<int8> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
-   std::vector<size_t> interior_nodes;               ///< nodes within the subdomain
-   std::vector<size_t> perimeter_nodes;              ///< nodes on the perimeter of the subdomain
+   std::string         name;                           ///< unique name
+   std::vector<size_t> interior_elmts;                 ///< elements that have no face on the perimeter
+   std::vector<size_t> perimeter_elmts;                ///< elements that have at least one face on perimeter
+   std::vector<std::vector<int8_t> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
+   std::vector<size_t> interior_nodes;                 ///< nodes within the subdomain
+   std::vector<size_t> perimeter_nodes;                ///< nodes on the perimeter of the subdomain
 };
 
 
@@ -52,7 +52,7 @@ struct SubDomainInfo {
       models or other unique names.
 */
 template<size_t dim,template<size_t> class CELL>
-class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> > {
+class ModelSubDomain {
   public:
     // any kind of finite elements; simplex or other types
     typedef CELL<dim>                                  CellType;
@@ -77,23 +77,29 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     void Name( const std::string& );
 
     /// local variable storage interface
-    virtual PLACEMENT Placement() const { return UNDEFINED; }
-    virtual bool      ValidVariable( const char* variableName ) const = 0;
+    virtual PLACEMENT Placement() const = 0;
+    virtual bool      ValidVariable( const char* variableName ) const;
 
     virtual void Accept( Visitor<dim>& );
     void Apply( Interrelation<dim>& );
 
-    /// connects simplices (=cells) with their equidimensional neighbors
-    void EstablishNeighborConnectivity( bool verbose = true );
-
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
     
+    /// creates node vector from element vector, using a set to achieve uniqueness
+    void CreateNodePointerVector1();
+    
+    /// creates node vector from element vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
+    void CreateNodePointerVector2();
+
     /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
     void SortVectors( size_t interior_cells, size_t interior_nodes );
     
     /// assuming that a partitioned (and sorted) element vector is in place, constructs the bd_face_vec_ by checking whether neighbor elements belong to the domain or not
     void BuildPerimeterFaceVector( size_t interior_elements );
+    
+    /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
+    size_t RemoveNullPointerCells();
 
     // ----------------------------------------
     // Indexes
@@ -111,43 +117,42 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     // access
     // ----------------------------------------
 
-    /// reference to container of simplices that may be either of pointer to Element, Face or InterFace objects
-    typename std::vector<CELL<dim>*>&  SimplexVector();
+    /// reference to container of finite element pointers to either Element, Face or InterFace objects; @note used for boolean operations
+    const typename std::vector<CELL<dim>*>&  CellVector() const;
+    /// do not remove!;  used for boolean operations
+    typename std::vector<CELL<dim>*>&        CellVector();
   
     /// reference to Node pointer vector
-    typename std::vector<Node<dim>*>&  NodeVector();
-  
-    // TODO: remove this proliferation of names! - if needed put into subclasses
-    typename std::vector<CELL<dim>*>&  ElementVector();
-    typename std::vector<CELL<dim>*>&  FaceVector();
-    typename std::vector<CELL<dim>*>&  InterFaceVector();
+    const typename std::vector<Node<dim>*>&  NodeVector() const;
 
     // iterators
-    typename std::vector<csmp::Node<dim>*>::iterator        NodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator        NodesEnd();
-    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesEnd();
+    typename std::vector<csmp::Node<dim>*>::iterator     NodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator     NodesEnd();
+    typename std::vector<csmp::Node<dim>*>::iterator     InteriorNodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator     InteriorNodesEnd();
+    typename std::vector<csmp::Node<dim>*>::iterator     PerimeterNodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator     PerimeterNodesEnd();
     typename std::vector<CELL<dim>*>::iterator           ElementsBegin();
     typename std::vector<CELL<dim>*>::iterator           PerimeterElementsBegin();
     typename std::vector<CELL<dim>*>::iterator           ElementsEnd();
 
-    // const iterators
-    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  InteriorNodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  InteriorNodesEnd() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesEnd() const;
-    typename std::vector<CELL<dim>*>::const_iterator     ElementsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator     ElementsEnd() const;
-    typename std::vector<CELL<dim>*>::const_iterator     PerimeterElementsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator     PerimeterElementsEnd() const;
-    typename std::vector<CELL<dim>*>::const_iterator     InteriorElementsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator     InteriorElementsEnd() const;
+    // const iterators (pointer and object that is pointed to cannot be modified)
+    typename std::vector<const csmp::Node<dim>* const>::const_iterator  NodesBegin() const;
+    typename std::vector<const csmp::Node<dim>* const>::const_iterator  NodesEnd() const;
+    typename std::vector<const csmp::Node<dim>* const>::const_iterator  InteriorNodesBegin() const;
+    typename std::vector<const csmp::Node<dim>* const>::const_iterator  InteriorNodesEnd() const;
+    typename std::vector<const csmp::Node<dim>* const>::const_iterator  PerimeterNodesBegin() const;
+    typename std::vector<const csmp::Node<dim>* const>::const_iterator  PerimeterNodesEnd() const;
+    typename std::vector<const CELL<dim>* const>::const_iterator  ElementsBegin() const;
+    typename std::vector<const CELL<dim>* const>::const_iterator  ElementsEnd() const;
+    typename std::vector<const CELL<dim>* const>::const_iterator  PerimeterElementsBegin() const;
+    typename std::vector<const CELL<dim>* const>::const_iterator  PerimeterElementsEnd() const;
+    typename std::vector<const CELL<dim>* const>::const_iterator  InteriorElementsBegin() const;
+    typename std::vector<const CELL<dim>* const>::const_iterator  InteriorElementsEnd() const;
 
     /// returns the nodes that the region shares with the given range
-    size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
-                                 typename std::vector<csmp::Node<dim>*>::const_iterator end ) const;
+    size_t SharedPerimeterNodes( typename std::vector<const csmp::Node<dim>* const>::const_iterator start,
+                                 typename std::vector<const csmp::Node<dim>* const>::const_iterator end ) const;
 
     /// check whether subdomain conatains any elements
     bool              Empty() const;
@@ -163,10 +168,10 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     size_t            PerimeterElements() const;
 
     // access via objects and local order in containers
-    bool              Contains( const CELL<dim>* ) const;
-    bool              Contains( const Node<dim>* ) const;
-    bool              IsPerimeterNode( const csmp::Node<dim>* ) const;
-    bool              IsPerimeterElement( const CELL<dim>* ) const;
+    bool              Contains( const CELL<dim>* const ) const;
+    bool              Contains( const Node<dim>* const ) const;
+    bool              IsPerimeterNode( const csmp::Node<dim>* const ) const;
+    bool              IsPerimeterElement( const CELL<dim>* const ) const;
     /// number of faces of perimeter element #eid, that lie on subdomain surface; @attention member indexes must be are uptodate
     size_t            PerimeterFaces( size_t eid ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain
@@ -187,7 +192,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     // ----------------------------------------
 
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in subdomain
-    std::pair<int32,int32>  SpatialDimensions() const;
+    std::pair<int32_t,int32_t>  SpatialDimensions() const;
 
     /// returns diagonally opposite points of bounding box
     void  MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
@@ -200,6 +205,9 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
 
     /// characteristics like 'length', 'area', 'volume' , 'aspect ratio', 'inner radius' are assigned to user-defined variable
     void AssignElementCharacteristicsTo( const char* characteristic, const char* var );
+    
+    /// writes a CSV (comma delimited ascii text) file with point coordinates, node-idx, BOX_BOUNDARY flags, and interior vs perimeter information
+    void NodeAttributesToCSV();
 
     // ----------------------------------------
     // manipulation of properties
@@ -221,8 +229,8 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     /// changes the flag of the scalar variable 'property' to new value if the scalar variable is withing the specified range
     void ChangePropertyStatusWhere( const char* property,
                                     VARIABLE_FLAG new_status_of_scalar,
-                                    double64 min_value_to_change,
-                                    double64 max_value_to_change );
+                                    double min_value_to_change,
+                                    double max_value_to_change );
 
     /// changes the flags of the vector variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter
     void ChangePropertyStatus( const char* property,
@@ -232,8 +240,8 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     /// changes the flag of the vector variable 'property' to new value if the scalar variable is withing the specified range
     void ChangePropertyStatusWhere( const char* property,
                                     const std::vector<VARIABLE_FLAG>& new_status,
-                                    double64 min_value_to_change,
-                                    double64 max_value_to_change );
+                                    double min_value_to_change,
+                                    double max_value_to_change );
 
     /// changes the flag of a particular variable component to new value; applied either in the entire subdomain or its interior or perimeter
     void ChangePropertyStatus( const char* property,
@@ -245,15 +253,15 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     void ChangePropertyStatusWhere( const char* property,
                                     size_t component,
                                     VARIABLE_FLAG new_status,
-                                    double64 min_value_to_change,
-                                    double64 max_value_to_change );
+                                    double min_value_to_change,
+                                    double max_value_to_change );
 
     /// by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned
     VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , size_t i=0 ) const;
 
     /// min/max property values (length of vectors and eigenvalues of tensors)
-    void MinMaxOf( const char* property,   double64& gmin, double64& gmax ) const;
-    void MinMaxOf( const csmp::Index&,     double64& gmin, double64& gmax ) const;
+    void MinMaxOf( const char* property,   double& gmin, double& gmax ) const;
+    void MinMaxOf( const csmp::Index&,     double& gmin, double& gmax ) const;
 
 
     // ----------------------------------------
@@ -274,7 +282,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     // ----------------------------------------
 
     /// arithmetic (number as opposed to volume weighted) average
-    double64  Average( const char* property ) const;
+    double  Average( const char* property ) const;
     bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
     void CopyReplace( const char* from, const char* to );
 
@@ -284,7 +292,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
 
     /// writes complete ModelSubDomain specifications in terms of unique indices as block to binary file
     void WriteDomainIndexesToBinaryFile( std::fstream& ) const;
-    // see non-member function readDomainIndexesFromBinaryFile() to read the indices back
+    // see non-member function readDomainIndexesFromBinaryFile() in this source file for reading the indices back
 
     void      OutputVariableToScreen( const char* prop ) const;
     void      Out() const;

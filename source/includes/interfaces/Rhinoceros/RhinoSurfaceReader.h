@@ -43,9 +43,9 @@ class SKM_RhinoSurfaceReader {
 
      void ExchangeCoordinateAxes( int axis_a, int axis_b );
      
-     void ScaleCoordinates( double64 x_fac, double64 y_fac, double64 z_fac );
+     void ScaleCoordinates( double x_fac, double y_fac, double z_fac );
      
-     void MoveCoordinates( double64 x_move, double64 y_move, double64 z_move );
+     void MoveCoordinates( double x_move, double y_move, double z_move );
      
      size_t Objects() const;
      
@@ -54,17 +54,17 @@ class SKM_RhinoSurfaceReader {
 
      bool PopObject( const char *obj_name,
                      std::map<size_t,mjl::Point3D>& points,
-                     std::map<size_t,std::vector<size_t> >& plist,
+                     std::map<size_t,std::vector<int64_t> >& plist,
                      size_t poffset=0 ) const; ///< node/element numbering (0..n-1)
                      
      void ObjectToPData( const std::string& obj_name,
                          std::map<size_t,mjl::Point3D>& pxyz,
-                         std::map<size_t,std::vector<size_t> >& plist,
+                         std::map<size_t,std::vector<int64_t> >& plist,
                          size_t poffset ) const; ///< node/element numbering (0..n-1)
                          
-     void CreateNeighborPData( const std::map<size_t,std::vector<size_t> >& plist,
-                               std::map<size_t,std::vector<long64> >& pfverts,
-                               std::unordered_map<size_t,long64>& pbflags ) const;
+     void CreateNeighborPData( const std::map<size_t,std::vector<int64_t> >& plist,
+                               std::map<size_t,std::vector<int64_t> >& pfverts,
+                               std::vector<std::int8_t>& pbflags ) const;
                          
      void WriteGocadHeader( const char* surf_name, const char* GEOLOGICAL_TYPE, std::ofstream& ofs ) const;
      

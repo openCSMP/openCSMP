@@ -18,12 +18,12 @@ namespace csmp
   class H2OFluidProperties
   {
   public:
-    H2OFluidProperties(   const double64& externaltemperature_in_C,
-                          const double64& externalpressure_in_Pa,
-                          const double64& external_fluid_enthalpy_in_J_per_kg,
-                          const double64& external_cp_rock,
-                          const double64& external_rho_rock,
-                          const double64& external_phi);
+    H2OFluidProperties(   const double& externaltemperature_in_C,
+                          const double& externalpressure_in_Pa,
+                          const double& external_fluid_enthalpy_in_J_per_kg,
+                          const double& external_cp_rock,
+                          const double& external_rho_rock,
+                          const double& external_phi);
     ~H2OFluidProperties();
 
     Fluidproperties       LiquidPropertiesFromTHP();
@@ -52,18 +52,18 @@ namespace csmp
 
   private:
 
-    const double64&       temperature;
-    const double64&       pressure;
-    const double64&       enthalpy;
-    const double64&       cpr;
-    const double64&       rr;
-    const double64&       phi;
+    const double&       temperature;
+    const double&       pressure;
+    const double&       enthalpy;
+    const double&       cpr;
+    const double&       rr;
+    const double&       phi;
 
-    double64              tcurrent;
-    double64              pcurrent;
-    double64              hcurrent;
-    double64              ph2o;
-    double64              b;
+    double              tcurrent;
+    double              pcurrent;
+    double              hcurrent;
+    double              ph2o;
+    double              b;
 
     // for debugging purposes only
     //    int                   eqtype;
@@ -83,7 +83,7 @@ namespace csmp
     CriticalCurveLookup   critcurve;
     H2OLookup             water;
 
-    double64              TwophaseCompressibility();
+    double              TwophaseCompressibility();
 
     void                  CheckEquilibrated();
     void                  ErrorCheck();
@@ -144,9 +144,9 @@ namespace csmp
 
      The most important interfaces return objects of type Fluidproperties. These are:
 
-     (1) LiquidPropertiesFromTHP(), VaporPropertiesFromTHP(), and BulkPropertiesFromTHP(). These determine the fluid state and properties primarily at the given temperature and pressure. If these conditions fall - within 5 x the available numerical precision of double64 on the given platform - very close to the boiling curve, sepcific enthalpy is used as an additional criterion to distinguish between liquid, vapor and twophase. In the case of twophase liquid+vapor, the actual enthalpy value is use to compute the saturations and mass fractions, respectively. If one of these member functions is invoked, all properties are computed. To avoid re-computation(*), properties of the other two may the also be extracted via the respective Report... functions described below. 
+     (1) LiquidPropertiesFromTHP(), VaporPropertiesFromTHP(), and BulkPropertiesFromTHP(). These determine the fluid state and properties primarily at the given temperature and pressure. If these conditions fall - within 5 x the available numerical precision of double on the given platform - very close to the boiling curve, sepcific enthalpy is used as an additional criterion to distinguish between liquid, vapor and twophase. In the case of twophase liquid+vapor, the actual enthalpy value is use to compute the saturations and mass fractions, respectively. If one of these member functions is invoked, all properties are computed. To avoid re-computation(*), properties of the other two may the also be extracted via the respective Report... functions described below. 
 
-     (2) LiquidPropertiesFromTP(), VaporPropertiesFromTP(), and BulkPropertiesFromTP(). These determine the fluid state and properties at the given temperature and pressure. Where enthalpy is needed - again if t is within 5 x the available numerical precision of double64 on the given platform - the critical enthalpy is used, which always enforces a twophase state. This may be useful for initial and boundary conditions. The user should, however, be aware that this is an arbitrary value. If one of these member functions is invoked, all properties are computed. To avoid re-computation, properties of the other two may the also be extracted via the respective Report... functions described below.
+     (2) LiquidPropertiesFromTP(), VaporPropertiesFromTP(), and BulkPropertiesFromTP(). These determine the fluid state and properties at the given temperature and pressure. Where enthalpy is needed - again if t is within 5 x the available numerical precision of double on the given platform - the critical enthalpy is used, which always enforces a twophase state. This may be useful for initial and boundary conditions. The user should, however, be aware that this is an arbitrary value. If one of these member functions is invoked, all properties are computed. To avoid re-computation, properties of the other two may the also be extracted via the respective Report... functions described below.
 
      (3) ReportLiquidProperties(), ReportVaporProperties(), ReportBulkProperties(). These should be used with care. These functions bypass the internal automatic update of temperature etc. and will hence return the fluid properties as they were computed after the last internal update. This is likely to disagree with the current values of temperature, pressure etc. in the user's code. However, if one of the above ...FreomTHP() or ...FromTP() functons has been called, properties for the other two calls have already been computed and might equally well be extracted via the respective Report... functions (e.g.: if you called BulkPropertiesFromTHP(), you can safely extract vapor and liquid properties by immediately afterwards calling ReportVaporProperties() and ReportLiquidProperties().
     

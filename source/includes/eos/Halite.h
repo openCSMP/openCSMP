@@ -15,40 +15,40 @@ namespace csmp{
   {
 
   public:
-    Halite(const double64& externaltemperature,
-           const double64& externalpressure);
+    Halite(const double& externaltemperature,
+           const double& externalpressure);
     ~Halite();
     
-    double64         MassFractionNaCl() const;           // [XNaCl]
-    double64         Density();                          // [kg/m^3]
-    double64         MolarVolume();                      // [cm^3/mol]
-    double64         Compressibility();                  // [Pa^-1]
-    double64         Enthalpy();                         // [J/kg] referenced to zero Enthalpy of liquid water at 0 C
-    double64         HeatCapacity();                     // [J/kg/K]
+    double         MassFractionNaCl() const;           // [XNaCl]
+    double         Density();                          // [kg/m^3]
+    double         MolarVolume();                      // [cm^3/mol]
+    double         Compressibility();                  // [Pa^-1]
+    double         Enthalpy();                         // [J/kg] referenced to zero Enthalpy of liquid water at 0 C
+    double         HeatCapacity();                     // [J/kg/K]
 
   private:
     Halite();
 
-    const double64   l0_;                                ///< parameter l0 for eq. 2 in Driesner (2007)
-    const double64   l1_;                                ///< parameter l1 for eq. 2 in Driesner (2007)
-    const double64   l2_;                                ///< parameter l2 for eq. 2 in Driesner (2007)
-    const double64   l3_;                                ///< parameter l3 for eq. 3 in Driesner (2007)
-    const double64   l4_;                                ///< parameter l4 for eq. 3 in Driesner (2007)
-    const double64   l5_;                                ///< parameter l5 for eq. 3 in Driesner (2007)
-    const double64&  temperature_;                       ///< reference to temperature [C] in flow code
-    const double64&  pressure_;                          ///< reference to fluid pressure [Pa] in flow code
+    const double   l0_;                                ///< parameter l0 for eq. 2 in Driesner (2007)
+    const double   l1_;                                ///< parameter l1 for eq. 2 in Driesner (2007)
+    const double   l2_;                                ///< parameter l2 for eq. 2 in Driesner (2007)
+    const double   l3_;                                ///< parameter l3 for eq. 3 in Driesner (2007)
+    const double   l4_;                                ///< parameter l4 for eq. 3 in Driesner (2007)
+    const double   l5_;                                ///< parameter l5 for eq. 3 in Driesner (2007)
+    const double&  temperature_;                       ///< reference to temperature [C] in flow code
+    const double&  pressure_;                          ///< reference to fluid pressure [Pa] in flow code
 
-    double64         tcurrent_;                          ///< temperature [C] for internal use
-    double64         pcurrent_;                          ///< fluid pressure [bar] for internal use
-    double64         myt_;                               ///< reduced temperature (t-ttriple) for internal use (eq. 30 in Driesner (2007))
+    double         tcurrent_;                          ///< temperature [C] for internal use
+    double         pcurrent_;                          ///< fluid pressure [bar] for internal use
+    double         myt_;                               ///< reduced temperature (t-ttriple) for internal use (eq. 30 in Driesner (2007))
     
     void             CheckState();
-    double64         Density(const double64& t, const double64& p);
-    double64         DDensityDP(const double64& t);
-    double64         DDensityDT(const double64& t, const double64& p);
-    double64         HeatCapacity(const double64& t, const double64& p);
-    double64         ZeroBarDensity(const double64& t);
-    double64         Enthalpy(const double64& t, const double64& p);
+    double         Density(const double& t, const double& p);
+    double         DDensityDP(const double& t);
+    double         DDensityDT(const double& t, const double& p);
+    double         HeatCapacity(const double& t, const double& p);
+    double         ZeroBarDensity(const double& t);
+    double         Enthalpy(const double& t, const double& p);
   };
 
 
@@ -72,8 +72,8 @@ namespace csmp{
      Construct an instance of "Halite" with temperature (in C) and pressure (in Pa) as they exist in the code that is supposed to use "Halite" as constructor variables. "Halite" has an internal mechanism to make sure that it always uses the current values of temperature and pressure . Public member names should be self-explanatory, I hope.
 
      @code                                                                                                            
-     double64 t; // temperature [C] in user's application
-     double64 p; // pressure [Pa] in user's application                                                             
+     double t; // temperature [C] in user's application
+     double p; // pressure [Pa] in user's application                                                             
      Halite halite(t,p);
      ...
      t = some_value;

@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp
 {
-  ThreephaseHLV::ThreephaseHLV(const double64& externaltemperature)
+  ThreephaseHLV::ThreephaseHLV(const double& externaltemperature)
     :	temperature_(externaltemperature),
       f0 (      4.64e-3),
       f1 (      5.0e-07),
@@ -30,11 +30,11 @@ namespace csmp
   }
 
 
-  double64 ThreephaseHLV::Temperature() const { return temperature_; }
+  double ThreephaseHLV::Temperature() const { return temperature_; }
 
-  double64 ThreephaseHLV::Pressure()          { CheckStatus(); return pressure_*1.0e5; }
+  double ThreephaseHLV::Pressure()          { CheckStatus(); return pressure_*1.0e5; }
 
-  double64 ThreephaseHLV::DPressureDT()       { CheckStatus(); return dpressuredt_*1.0e5; }
+  double ThreephaseHLV::DPressureDT()       { CheckStatus(); return dpressuredt_*1.0e5; }
 
 
   void ThreephaseHLV::CheckStatus()
@@ -47,7 +47,7 @@ namespace csmp
     return;
   }
 
-  double64 ThreephaseHLV::Pressure(const double64& myt_)
+  double ThreephaseHLV::Pressure(const double& myt_)
   {
     // Calculates the Pressure on the Halite-Lquid-Vapor coexistence surface
     // Current version is in bars as a function of temperature t [Celsius]
@@ -55,19 +55,19 @@ namespace csmp
   }
 
 
-  double64 ThreephaseHLV::DPressureDT(const double64& myt_, const double64& t_)
+  double ThreephaseHLV::DPressureDT(const double& myt_, const double& t_)
   {
     return myt_*(f1+myt_*(2.0*f2+myt_*(3.0*f3+myt_*(4.0*f4+myt_*(5.0*f5
                                                                  +myt_*(6.0*f6+myt_*(7.0*f7+myt_*(8.0*f8+myt_*(9.0*f9+myt_*10.0*f10)))))))))/t_;
   }
 
-  double64 ThreephaseHLV::Tmax()
+  double ThreephaseHLV::Tmax()
   {
     // this was found by iteration and is exact within 1.e-13 K
     return 5.946324429298147e+02;
   }
 
-  double64 ThreephaseHLV::Pmax()
+  double ThreephaseHLV::Pmax()
   {
     // this was found by iteration and is exact within DPressureDT(Tmax)*1.e-15 K,
     return 3.90147444337959825588768580928445e+07;

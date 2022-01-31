@@ -6,8 +6,8 @@ namespace csmp {
 
 template<size_t dim>
 HydrostaticPressure<dim>::HydrostaticPressure( const PropertyDatabase<dim>& p,
-                                               double64 highest_elevation, 
-                                               double64 ref_density ) 
+                                               double highest_elevation, 
+                                               double ref_density ) 
       : Interrelation<dim>(p),
         E( Interrelation<dim>::GlobalProperty("elevation") ),
         P( Interrelation<dim>::GlobalProperty("absolute fluid pressure") ),

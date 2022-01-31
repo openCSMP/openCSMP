@@ -1,0 +1,148 @@
+'Clair-configuration.txt' fractured reservoir with faults, horizons and deviating wells
+
+# ----------------------------------------------------------------
+# (2) global material properties
+# ----------------------------------------------------------------
+permeability							1.0e-12
+porosity								0.20
+fluid volume source						0.
+nodal fluid volume source					0.
+total system compressibility					1.0e-8
+# medium oil, 23º API gravity ~ 915 kg m3
+density oil								915.
+density water							1000.
+# data from SPE96316, p.2 left column
+viscosity water							0.5e-3
+viscosity oil							3.5e-3
+residual saturation wetting phase				0.1
+residual saturation non-wetting phase			0.25
+brooks corey parameter						2.
+entry pressure							1.
+fracture matrix interface area				10.
+fracture porosity						0.1
+fracture matrix flux ratio					1.5
+block radius							0.3
+initial water saturation					0.1
+# ----------------------------------------------------------------
+# initial conditions
+# ----------------------------------------------------------------
+saturation oil							0.9     
+saturation water							0.1
+hydrostatic pressure						0.
+fluid pressure							3.50e7
+previous fluid pressure						3.50e7
+volume flux								0.
+previous volume flux						0.
+
+# ----------------------------------------------------------------
+# (3) regional material properties 
+# ----------------------------------------------------------------
+# lower Clair group (middle to upper Devonian clastics)
+UNIT_VIU	complete		permeability		2.5e-14	
+UNIT_VIU	complete		porosity			0.14
+# lakustrine key bed - 5-m-thick shale
+UNIT_LKB	complete		permeability		1.0e-16		
+UNIT_LKB	complete		porosity			0.1
+UNIT_LKB	complete		brooks corey parameter	3.
+UNIT_LKB	complete		entry pressure		1.0e7
+# since this layer has been subject of secondary migration
+UNIT_LKB	complete		saturation water		0.75
+UNIT_LKB	complete		saturation oil		0.25
+# sandstone
+UNIT_VIL	complete		permeability		5.0e-14		
+UNIT_VIL	complete		porosity			0.13
+# important reservoir facies
+UNIT_V	complete		permeability		1.0e-13		
+UNIT_V	complete		porosity			0.15
+# finely inter-bedded (tens of centimetres) sands, silts and shales
+UNIT_IV	complete		permeability		1.0e-14
+UNIT_IV	complete		porosity			0.13	
+UNIT_IV	complete		brooks corey parameter	3.
+# aeolian sandstones, well sorted
+UNIT_III	complete		permeability		4.e-13
+UNIT_III	complete		porosity			0.14
+UNIT_III	complete		brooks corey parameter	1.
+# faults
+C_NESW3_3B_1	complete	porosity			1.0e-03					
+C_NESW3_3B_1	complete	permeability		5.57e-13
+CG_MERGE_1		complete	porosity			1.0e-03
+CG_MERGE_1		complete	permeability		5.57e-13			
+C_EW3_NESW8A_1	complete	porosity			1.0e-03
+C_EW3_NESW8A_1	complete	permeability		5.57e-13
+C_NS3_1		complete	porosity			1.00e-03
+C_NS3_1		complete	permeability		5.57e-13		
+C_R1_CR2A_1		complete	porosity			1.e-03
+C_R1_CR2A_1		complete	permeability		5.57e-13
+# wells
+# injector has a length of 1710.819 m and injecting 20,000 bpd - source and sink
+# NB: 1 bbl/day = 1.84013073e-6 m3/s
+INJECTOR	complete	fluid volume source			0.0368
+# INJECTOR	complete	fluid pressure				4.5e7	
+INJECTOR	complete	permeability				1.0e-10
+INJECTOR	complete	porosity				1.0e-3
+INJECTOR	complete	total system compressibility		1.0e-8
+INJECTOR	complete	residual saturation wetting phase	0.
+INJECTOR	complete	residual saturation non-wetting phase	0.
+INJECTOR	complete	brooks corey parameter			0.2
+INJECTOR	complete	saturation water			1.
+INJECTOR	complete	saturation oil				0.
+# producer has a length of 1097.446 m and produces 20,000 bpd 
+PRODUCER	complete	fluid volume source			-0.0368
+# PRODUCER	complete	fluid pressure				2.5e7	
+PRODUCER	complete	permeability				1.0e-10
+PRODUCER	complete	porosity				1.0e-3
+PRODUCER	complete	total system compressibility		1.0e-8
+PRODUCER	complete	residual saturation wetting phase	0.
+PRODUCER	complete	residual saturation non-wetting phase	0.
+PRODUCER	complete	brooks corey parameter			0.2
+
+# ----------------------------------------------------------------
+# (4) essential conditions on model boundaries
+# ----------------------------------------------------------------
+# initial pressure 35MPa at lower boundary
+BOTTOM	Dirichlet	saturation water	1.	1.	1.	1.
+BOTTOM	Dirichlet	saturation oil		0.	0.	0.	0.
+BOTTOM	Dirichlet	hydrostatic pressure	0.	0.	0.	0.
+BOTTOM	Dirichlet	fluid pressure		3.50e7	3.50e7	3.50e7	3.50e7
+
+# ----------------------------------------------------------------
+# (5) essential flags
+# ----------------------------------------------------------------
+INJECTOR	complete	saturation water	Dirichlet
+INJECTOR	complete	saturation oil		Dirichlet
+
+# ----------------------------------------------------------------
+# (6) computational settings
+# ----------------------------------------------------------------
+time stepping	daring	
+duration	400000000.
+output time	50000.
+output time	100000.
+output time	1000000.
+output time	10000000.
+output time	20000000.
+output time	30000000.
+output time	40000000.
+output time	50000000.
+output time	60000000.
+output time	70000000.
+output time	80000000.
+output time	90000000.
+output time	100000000.
+output time	200000000.
+output time	300000000.
+output time	400000000.
+
+
+# ----------------------------------------------------------------
+# Comments and auxiliary information
+# ----------------------------------------------------------------
+WOC: +60 meters (plus capillary fringe, maybe by smoothing)
+
+ the oil water contact (OWC) provided by BP is 2120 mtvdss (where z 
+denotes depth). In our system, y represents the -depth and the model 
+has been translated and rotated from the UTM coordinate system to the origin. 
+based on well A02, the OWC is closer to the contact between top of unit III and base unit iv in the block containing the wells. As the layer is flexed, the reading varies greatly between 130 to 260 m vertical depth in the current model. May be we can try for the two extreme cases. When this is assigned, the majority of block19_26 will be below the OWC. 
+
+
+

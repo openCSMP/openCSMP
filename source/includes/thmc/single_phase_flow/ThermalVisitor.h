@@ -104,7 +104,7 @@ class ThermalVisitor : public Visitor<dim>
                       beta_fluid_key_,
                       beta_tot_key_;
 
-      double64        pore_volume,
+      double        pore_volume,
                       rock_volume,
                       dhCl_,
                       dT; 

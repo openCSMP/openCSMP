@@ -14,8 +14,8 @@ class Integral_NT_rhsop_N_dV : public MathOperatorRHS<dim> {
                             const char* basic,
                             const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
   
   private:
     DenseMatrix<DM_MIN>           INN;

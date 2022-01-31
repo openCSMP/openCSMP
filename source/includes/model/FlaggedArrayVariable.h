@@ -62,7 +62,7 @@ class FlaggedArrayVariable
     public:
       static constexpr VARIABLE_TYPE VariableType = FLAGGEDARRAY;
 
-      typedef std::vector<double64> FlaggedArrayContainer;
+      typedef std::vector<double> FlaggedArrayContainer;
 
       FlaggedArrayVariable();
 
@@ -71,34 +71,34 @@ class FlaggedArrayVariable
       template<size_t dim>
       FlaggedArrayVariable( const char* arrayPropertyName,
                             const PropertyDatabase<dim>& pd,
-                            double64 defaultValue=std::numeric_limits<double64>::quiet_NaN(),
+                            double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                             VARIABLE_FLAG flag = ANY );
       
       explicit FlaggedArrayVariable( size_t arraySize,
-                                     double64 defaultValue = 0.,
+                                     double defaultValue = 0.,
                                      VARIABLE_FLAG flag = ANY );
       
       explicit FlaggedArrayVariable( const Index& arrayKey,
-                                     double64 defaultValue = 0.,
+                                     double defaultValue = 0.,
                                      VARIABLE_FLAG flag = ANY );
                                      
       /// assignments
       FlaggedArrayVariable& operator=( const FlaggedArrayVariable& );
       void CopyValuesOnly( ArrayVariable& av);
-      FlaggedArrayVariable& operator=( double64 );
+      FlaggedArrayVariable& operator=( double );
       FlaggedArrayVariable& operator=( const ScalarVariable& );
 
       /// standard operations
-      FlaggedArrayVariable operator+( double64 ) const;
-      FlaggedArrayVariable operator-( double64 ) const;
-      FlaggedArrayVariable operator*( double64 ) const;
-      FlaggedArrayVariable operator/( double64 ) const;
-      FlaggedArrayVariable operator^( double64 ) const;
+      FlaggedArrayVariable operator+( double ) const;
+      FlaggedArrayVariable operator-( double ) const;
+      FlaggedArrayVariable operator*( double ) const;
+      FlaggedArrayVariable operator/( double ) const;
+      FlaggedArrayVariable operator^( double ) const;
 
-      FlaggedArrayVariable& operator+=( double64 );
-      FlaggedArrayVariable& operator-=( double64 );
-      FlaggedArrayVariable& operator*=( double64 );
-      FlaggedArrayVariable& operator/=( double64 );
+      FlaggedArrayVariable& operator+=( double );
+      FlaggedArrayVariable& operator-=( double );
+      FlaggedArrayVariable& operator*=( double );
+      FlaggedArrayVariable& operator/=( double );
 
       FlaggedArrayVariable& operator+=( const ScalarVariable& );
       FlaggedArrayVariable& operator-=( const ScalarVariable& );
@@ -126,13 +126,13 @@ class FlaggedArrayVariable
       bool           operator>=( const FlaggedArrayVariable& ) const;
 
       /// accessors to the data
-      double64       operator[]( size_t ) const;
-      double64&      operator()( size_t );
-      void           Component( size_t, double64 );
-      double64       Component( size_t i ) const;
+      double       operator[]( size_t ) const;
+      double&      operator()( size_t );
+      void           Component( size_t, double );
+      double       Component( size_t i ) const;
 
       size_t         Size() const;
-      void           Resize( size_t newSize, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
+      void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
       VARIABLE_FLAG  Flag( const size_t&) const;
       VARIABLE_FLAG& Flag( const size_t&);
       void           Flag( const size_t&, VARIABLE_FLAG);
@@ -140,8 +140,8 @@ class FlaggedArrayVariable
       void           Ln();
       void           Log10();
       void           Sqrt();
-      bool           IsWithinRange( double64 min, double64 max ) const;
-      void           MinMax( double64& min, double64& max ) const;
+      bool           IsWithinRange( double min, double max ) const;
+      void           MinMax( double& min, double& max ) const;
       void           Sort();
 
       /// printing array values to screen
@@ -155,8 +155,8 @@ class FlaggedArrayVariable
       FlaggedArrayContainer::const_iterator Begin() const;
       FlaggedArrayContainer::const_iterator End()   const;
 
-      double64 NextLargestEntry(double64) const;
-      bool     HasLargerEntry(double64) const;
+      double NextLargestEntry(double) const;
+      bool     HasLargerEntry(double) const;
 
     private:
       std::vector<VARIABLE_FLAG>  flags_;
@@ -170,7 +170,7 @@ class FlaggedArrayVariable
   template<size_t dim>
   FlaggedArrayVariable::FlaggedArrayVariable( const char* arrayPropertyName,
                                               const PropertyDatabase<dim>& pd,
-                                              double64 defaultValue,
+                                              double defaultValue,
                                               VARIABLE_FLAG flag )
     : data_       ( pd.StorageKey(arrayPropertyName).dataDepth, defaultValue ),
       flags_      ( pd.StorageKey(arrayPropertyName).dataDepth, flag )

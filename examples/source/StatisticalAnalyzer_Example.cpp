@@ -43,10 +43,9 @@ void StatisticalAnalyzer_Example::Run()
   cin >> model_name;
 
   const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+  mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, true );
 
-  Model<2U> reservoir_model( mesh_topology, mesh_container, "CSMP-variables.txt" );
+  Model<2U> reservoir_model( mesh_topology, mesh_container, "StatisticalAnalyzer_Example_var.txt" );
 
   Region<2>& regionref = reservoir_model.Region("Model");
 
@@ -55,7 +54,7 @@ void StatisticalAnalyzer_Example::Run()
   for ( vector<Element<2U>*>::iterator
     it=regionref.ElementsBegin(); it!=regionref.ElementsEnd(); it++ )
   {
-      double64 porosity = NormalDistributionGenerator(0.5, 0.1, 0, 1);
+      double porosity = NormalDistributionGenerator(0.5, 0.1, 0, 1);
       (*it)->Store( porosity_key, makeScalar(PLAIN, porosity) );
   }
 
@@ -100,16 +99,16 @@ void StatisticalAnalyzer_Example::Run()
 /**
      Generates a normal distribution of variable values.
 */
-double64 StatisticalAnalyzer_Example::NormalDistributionGenerator( double64 mean, double64 sd,
-                                                                  double64 minimum, double64 maximum )
+double StatisticalAnalyzer_Example::NormalDistributionGenerator( double mean, double sd,
+                                                                  double minimum, double maximum )
 {
   static unsigned int counter( 1U );
-  double64 result( 0. );
+  double result( 0. );
 
   do
   {
-      double64 x1 ( (double64)rand() / (double64)RAND_MAX );
-      double64 x2 ( (double64)rand() / (double64)RAND_MAX );
+      double x1 ( (double)rand() / (double)RAND_MAX );
+      double x2 ( (double)rand() / (double)RAND_MAX );
 
       if ( ( counter % 2 ) == 0 )
           result = sqrt(-2. * log(x1)) * sin(2 * 3.14159265 * x2);

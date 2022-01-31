@@ -8,6 +8,7 @@
 
 #include "TwoPhaseModel_TestSuite.h"
 
+#include "Region.h"
 #include "TwoPhaseModel_Test.h"
 #include "PropertyHandle.h"
 #include "VectorVariable.h"
@@ -50,7 +51,7 @@ void TwoPhaseModel_TestSuite::AssignSaturationValues( Model<1U>* model )
     Region<1>&  sg(model->Region("Model"));
     csmp::Index     satw_key = model->Database().StorageKey("saturation water");
     csmp::Index     satn_key = model->Database().StorageKey("saturation oil");
-    const double64  sat_incr(1./model->Mesh().Nodes());
+    const double  sat_incr(1./model->Mesh().Nodes());
     ScalarVariable  saturation;
     // generating a range of saturation values for water and oil
     for ( vector<Node<1U>*>::iterator
@@ -69,8 +70,8 @@ void TwoPhaseModel_TestSuite::run()
 
   free_ = false;
 
-  const uint32  N_ELEMENTS(100);
-  const double64 length(1.);
+  const uint32_t  N_ELEMENTS(100);
+  const double length(1.);
 
   // creating 1D TestModel with a matrix and fracture region
 
@@ -78,13 +79,13 @@ void TwoPhaseModel_TestSuite::run()
 
   vector<size_t>   elms;
   elms.reserve( N_ELEMENTS );
-  for ( uint32 i = 0; i < 40; ++i )
+  for ( uint32_t i = 0; i < 40; ++i )
     elms.push_back(i);
-  for ( uint32 i = 60; i < N_ELEMENTS; ++i )
+  for ( uint32_t i = 60; i < N_ELEMENTS; ++i )
     elms.push_back(i);
   fracture_rock_model_->FormRegionFrom( "ROCK", elms );
   elms.erase( elms.begin(), elms.end() );
-  for ( uint32 i=40; i<60; i++ )
+  for ( uint32_t i=40; i<60; i++ )
     elms.push_back(i);
   fracture_rock_model_->FormRegionFrom( "FRACTURE", elms );
 
@@ -94,7 +95,7 @@ void TwoPhaseModel_TestSuite::run()
   rock_model_  = new Model1D<1U>( "RockModel1D", "CSMP-2phase-variables.txt", length, N_ELEMENTS );
 
   elms.erase( elms.begin(), elms.end() );
-  for ( uint32 i = 0; i<N_ELEMENTS; i++ )
+  for ( uint32_t i = 0; i<N_ELEMENTS; i++ )
     elms.push_back(i);
   rock_model_->FormRegionFrom( "ROCK", elms );
 
@@ -130,29 +131,29 @@ void TwoPhaseModel_TestSuite::run()
 
   VectorVariable<1U>  Vd(DIRICH,  1.0e-10 );   // Prescribed velocity
 
-  const double64 fluid_pressure ( 5.0e7 );
-  const double64 visc_water     ( 1.0e-3 );
-  const double64 visc_oil       ( 3.0e-3 );
-  const double64 dens_water     ( 1000. );
-  const double64 dens_oil       ( 800. );
+  const double fluid_pressure ( 5.0e7 );
+  const double visc_water     ( 1.0e-3 );
+  const double visc_oil       ( 3.0e-3 );
+  const double dens_water     ( 1000. );
+  const double dens_oil       ( 800. );
 
-  vector<double64> porosity       ( 1, 0.5 );
-  vector<double64> permeability   ( 1, 1.0e-12 );
-  vector<double64> swr            ( 1, 0.2 );
-  vector<double64> snr            ( 1, 0.25 );
+  vector<double> porosity       ( 1, 0.5 );
+  vector<double> permeability   ( 1, 1.0e-12 );
+  vector<double> swr            ( 1, 0.2 );
+  vector<double> snr            ( 1, 0.25 );
 
-  vector<double64> lambda         ( 1, 2.0 );     // Brooks Corey, Corey
-  vector<double64> entry_pressure ( 1, 2.0e3 );   // Brooks Corey, Corey
+  vector<double> lambda         ( 1, 2.0 );     // Brooks Corey, Corey
+  vector<double> entry_pressure ( 1, 2.0e3 );   // Brooks Corey, Corey
 
-  vector<double64> exp_w          ( 1, 2.0 );     // Corey exponent for wetting phase
-  vector<double64> exp_n          ( 1, 1.5 );     // Corey exponent for non-wetting phase
-  vector<double64> krwr           ( 1, 1.0 );     // Corey end-point wetting phase relative permeability
-  vector<double64> krnr           ( 1, 0.98 );    // Corey end-point non-wetting phase relative permeability
+  vector<double> exp_w          ( 1, 2.0 );     // Corey exponent for wetting phase
+  vector<double> exp_n          ( 1, 1.5 );     // Corey exponent for non-wetting phase
+  vector<double> krwr           ( 1, 1.0 );     // Corey end-point wetting phase relative permeability
+  vector<double> krnr           ( 1, 0.98 );    // Corey end-point non-wetting phase relative permeability
 
-  vector<double64> VG_n           ( 1, 3.0 );     // Van Genuchten rel.perm. parameter
-  vector<double64> VG_alpha       ( 1, 0.37 );    // Van Genuchten cap. press. parameter
+  vector<double> VG_n           ( 1, 3.0 );     // Van Genuchten rel.perm. parameter
+  vector<double> VG_alpha       ( 1, 0.37 );    // Van Genuchten cap. press. parameter
 
-  vector<double64> fracture_aperture( 1, 1.0-3 ); // Fourar Lenormand
+  vector<double> fracture_aperture( 1, 1.0-3 ); // Fourar Lenormand
 
   // Fracture Matrix interaction for rock model
   rock_model_->InputPropertyValue( "fracture aperture",                     makeScalar(PLAIN,fracture_aperture[0]) );
@@ -311,11 +312,11 @@ void TwoPhaseModel_TestSuite::run()
   rock_model_->InputPropertyValue( "viscosity oil",    makeScalar(PLAIN,0.000022959) );
   rock_model_->InputPropertyValue( "density water",    makeScalar(PLAIN,991.86) );
   rock_model_->InputPropertyValue( "density oil",      makeScalar(PLAIN,282.5 ) );
+  rock_model_->InputPropertyValue( "rock type",        makeScalar(PLAIN,2 ) ); // not a rate dependent rock
 
   const bool transport_variables_on_nodes(true);
   suite_.addTest( new TwoPhaseModel_Test( rock_model_,
-                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(),
-                                                                                 "rocktype", "total velocity", "entry pressure", transport_variables_on_nodes ),
+                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(), transport_variables_on_nodes ),
                                           "csmp::TwoPhaseModel_HeterogeneityAndRateAwareModel_Test",
                                           "nodal relative permeability oil",
                                           "nodal relative permeability water",

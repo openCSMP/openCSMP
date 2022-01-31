@@ -400,12 +400,13 @@ void Index::Out() const
   cout << endl;
 }
 
+
 bool Index::Out( std::fstream& fp ) const
 {
-  const size_t flag_size = sizeof( int32 );
+  const size_t flag_size = sizeof( int32_t );
   const size_t data_size = sizeof( size_t );
-  const int32 var_type( type );
-  const int32 place_type( place );
+  const int32_t var_type( type );
+  const int32_t place_type( place );
 
   fp.write( (char*)&var_type, flag_size );    // VARIABLE_TYPE
   fp.write( (char*)&place_type, flag_size );   // PLACEMENT
@@ -462,10 +463,10 @@ bool Index::Out( std::fstream& fp ) const
 
 bool Index::In( fstream& fp )
 {
-  const size_t flag_size = sizeof( int32 );
+  const size_t flag_size = sizeof( int32_t );
   const size_t data_size = sizeof( size_t );
-  int32 var_type ( SCALAR );
-  int32 place_type( NODE );
+  int32_t var_type ( SCALAR );
+  int32_t place_type( NODE );
 
   fp.read( (char*)&var_type, flag_size );   // VARIABLE_TYPE
   fp.read( (char*)&place_type, flag_size );  // PLACEMENT
@@ -523,7 +524,6 @@ bool Index::In( fstream& fp )
 
   return true; /// @todo (1-C) Meaningless return statement
 }
-
 
 
 /**

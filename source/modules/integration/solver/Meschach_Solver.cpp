@@ -21,15 +21,15 @@ Meschach_Solver::Meschach_Solver() :
 Meschach_Solver::~Meschach_Solver(){}
 
 void Meschach_Solver::SolveMatrixEquation(SparseMatrix& A,
-                                          std::vector<double64>& b,
-                                          std::vector<double64>& x,
+                                          std::vector<double>& b,
+                                          std::vector<double>& x,
                                           size_t )
 {
     ErrorHandler&  skm_err( ErrorHandler::Instance() );
-    double64 typical = GuessResidual( A, b, x );
+    double typical = GuessResidual( A, b, x );
     
     // setting the 'tolerance' for the matrix inversion
-    double64 meschach_tolerance = fmin(typical * residual_factor_, residual_factor_);
+    double meschach_tolerance = fmin(typical * residual_factor_, residual_factor_);
     
     if (Verbose()) {
         cout << "\n\tUser aspired precision of solution: " << meschach_tolerance << endl;
@@ -37,7 +37,7 @@ void Meschach_Solver::SolveMatrixEquation(SparseMatrix& A,
     
     SolveWithMeschach(A, b, x, meschach_tolerance);
     
-    double64 residual = CalculateResidual( A, b, x );
+    double residual = CalculateResidual( A, b, x );
 
     if (Verbose()) {
         cout << "\nInferred initial residual   = " << typical << endl;
@@ -56,7 +56,7 @@ void Meschach_Solver::SolveMatrixEquation(SparseMatrix& A,
 
 /*M <H4>Method:</H4><CODE>
 <!------------------------------------------------------------------------>
-  double64  Solver::GuessResidual( SpMat& A, const vector<double64>& b, vector<double64>& x )
+  double  Solver::GuessResidual( SpMat& A, const vector<double>& b, vector<double>& x )
 <!------------------------------------------------------------------------>
 </CODE>
 
@@ -82,12 +82,12 @@ whether the solver reached some convergence. <p>
 
 <!------------------------------------------------------------------------>
 tested: O.K. */
-double64 Meschach_Solver::GuessResidual(const SparseMatrix& A,
-                                        const vector<double64>& b,
-                                        vector<double64>& x)
+double Meschach_Solver::GuessResidual(const SparseMatrix& A,
+                                        const vector<double>& b,
+                                        vector<double>& x)
 {
     const size_t   len(b.size());
-    vector<double64> tvec(len,0.);
+    vector<double> tvec(len,0.);
 
     random_generator rng;
     vector_randomize( rng, x );
@@ -99,7 +99,7 @@ double64 Meschach_Solver::GuessResidual(const SparseMatrix& A,
     }
     
     // calculate the L1 norm
-    vector<double64> scale_vec;
+    vector<double> scale_vec;
     return vector_norm2( tvec, scale_vec );
 }
 
@@ -107,9 +107,9 @@ double64 Meschach_Solver::GuessResidual(const SparseMatrix& A,
 
 /*M <H4>Method:</H4><CODE>
 <!------------------------------------------------------------------------>
-double64  Solver::CalculateResidual( const SparseMatrix& A,
-                                      const vector<double64>& b,
-                                      const vector<double64>& x )
+double  Solver::CalculateResidual( const SparseMatrix& A,
+                                      const vector<double>& b,
+                                      const vector<double>& x )
 <!------------------------------------------------------------------------>
 </CODE>
 
@@ -130,9 +130,9 @@ some convergence and how good the solution actually is. <p>
 
 <!------------------------------------------------------------------------>
 tested: O.K. */
-double64 Meschach_Solver::CalculateResidual(const SparseMatrix& A,
-                                            const vector<double64>& b,
-                                            const vector<double64>& x)
+double Meschach_Solver::CalculateResidual(const SparseMatrix& A,
+                                            const vector<double>& b,
+                                            const vector<double>& x)
 {
     if ( b.size() != x.size() ) {
         cerr <<"\nSolver::CalculateResidual: Size of solution vector 'x' differs from ";
@@ -141,7 +141,7 @@ double64 Meschach_Solver::CalculateResidual(const SparseMatrix& A,
     }
 
     const size_t   len(x.size());
-    vector<double64> tvec(len,0.0);
+    vector<double> tvec(len,0.0);
     
     // calculating residual for actual solution
     for ( size_t i=0; i<len; i++ ) {
@@ -150,7 +150,7 @@ double64 Meschach_Solver::CalculateResidual(const SparseMatrix& A,
     }
     
     // calculate the L1 norm
-    vector<double64> scale_vec;
+    vector<double> scale_vec;
     return vector_norm2( tvec, scale_vec );
 }
 

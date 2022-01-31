@@ -32,11 +32,11 @@ namespace csmp {
 	}
 
 	template<size_t dim, class SIMPLEX>
-	void Integral_dNT_op_dN_dV_Analytical<dim, SIMPLEX>::ComputeContribution(SIMPLEX& e)
-	{ 
-		MathOperatorLHS<dim>::LHS.Resize(e.Nodes(), e.Nodes());
-		e.Integral_dNT_K_dN(MathOperatorLHS<dim>::LHS , MathOperatorLHS<dim>::MTRL[0]); 
-	}
+	void Integral_dNT_op_dN_dV_Analytical<dim, SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+    { 
+      MathOperatorLHS<dim>::LHS.Resize(e.Nodes(), e.Nodes());
+      e.Integral_dNT_K_dN(MathOperatorLHS<dim>::LHS , MathOperatorLHS<dim>::MTRL[0]); 
+    }
 
 
 	template class Integral_dNT_op_dN_dV_Analytical<1U, Element<1U> >;

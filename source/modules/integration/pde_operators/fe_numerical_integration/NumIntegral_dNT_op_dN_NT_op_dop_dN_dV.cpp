@@ -137,7 +137,7 @@ nodal and element variables, respectively.
 The operand is read
 */
 template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -231,9 +231,9 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( CELL& e )
 In linear elasticity computations.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
-    double64 detJ;
+    double detJ;
 
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );

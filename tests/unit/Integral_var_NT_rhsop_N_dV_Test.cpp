@@ -16,8 +16,7 @@ Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test( bool verbose )
   if ( verbose_ ) cout <<"Reading mesh..."<<endl;
   string mesh_name("pde_integrator_test");
   const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+  mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
   if ( verbose_ ) {
       cout <<"Finished reading mesh..."<<endl;
       cout <<"Building Model..."<<endl;
@@ -55,7 +54,7 @@ void Integral_var_NT_rhsop_N_dV_Test::valueTest() {
   const size_t dof = sg_->Region("Model").Nodes();
                                                     
     // Set values
-    vector<double64> mobility;
+    vector<double> mobility;
     mobility.push_back(1.0);
     mobility.push_back(2.0);
     mobility.push_back(3.0);
@@ -63,14 +62,14 @@ void Integral_var_NT_rhsop_N_dV_Test::valueTest() {
     mobility.push_back(5.0);
     setNodeVariable(mobility, "mobility");
     
-    vector<double64> conductivity;
+    vector<double> conductivity;
     conductivity.push_back(1.0);
     conductivity.push_back(2.0);
     conductivity.push_back(3.0);
     conductivity.push_back(4.0);
     setElementVariable(conductivity, "conductivity1");
     
-        vector<double64> pressure;
+        vector<double> pressure;
     pressure.push_back(1.0);
     pressure.push_back(1.0);
     pressure.push_back(1.0);
@@ -78,7 +77,7 @@ void Integral_var_NT_rhsop_N_dV_Test::valueTest() {
     pressure.push_back(1.0);
     setNodeVariable(pressure, "pressure");
     
-    std::vector<double64> rhs_vec(dof);
+    std::vector<double> rhs_vec(dof);
     calculateGlobalRHS(rhs_vec, integral);
 
     /* Matlab output
@@ -131,7 +130,7 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
   const size_t dof = sg_->Region("Model").Nodes();
                                               
 // Set values
-    vector<double64> mobility;
+    vector<double> mobility;
     mobility.push_back(1.0);
     mobility.push_back(2.0);
     mobility.push_back(3.0);
@@ -139,14 +138,14 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
     mobility.push_back(5.0);
     setNodeVariable(mobility, "total mobility");
     
-    vector<double64> conductivity;
+    vector<double> conductivity;
     conductivity.push_back(1.0);
     conductivity.push_back(2.0);
     conductivity.push_back(3.0);
     conductivity.push_back(4.0);
     setElementVariable(conductivity, "diffusivity");
     
-    vector<double64> pressure;
+    vector<double> pressure;
     pressure.push_back(0.0);
     pressure.push_back(0.0);
     pressure.push_back(1.0);
@@ -157,7 +156,7 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
     // Calculate lhs
     SparseMatrix sm;
     calculateGlobalMatrix(sm, lhs);
-    std::vector<double64> lhs_vec(dof);
+    std::vector<double> lhs_vec(dof);
     std::fill(lhs_vec.begin(), lhs_vec.end(), 0.0);
     for (size_t i = 0; i < dof; ++i) {
       for (size_t j = 0; j < dof; ++j) {
@@ -166,7 +165,7 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
     }
     
   // Calculate rhs
-    std::vector<double64> rhs_vec(dof);
+    std::vector<double> rhs_vec(dof);
     calculateGlobalRHS(rhs_vec, rhs);
     
     // Test for equality
@@ -190,24 +189,24 @@ void Integral_var_NT_rhsop_N_dV_Test::showNodeVariable(const char* var_name) {
     }
 }
 
-void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable(vector<double64>& var, const char* var_name) {
+void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable(vector<double>& var, const char* var_name) {
     //std::deque<Node<2U> >::iterator it;
     csmp::Index key(sg_->Database().StorageKey(var_name));
 
     unsigned int i = 0;
     for (vector<Node<2U>*>::iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
-        (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double64>(var[i])));
+        (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
         ++i;
     }
 }
 
-void Integral_var_NT_rhsop_N_dV_Test::setElementVariable(vector<double64>& var, const char* var_name) {
+void Integral_var_NT_rhsop_N_dV_Test::setElementVariable(vector<double>& var, const char* var_name) {
   //std::deque<Element<2U> >::iterator it;
   csmp::Index key(sg_->Database().StorageKey(var_name));
   
   unsigned int i = 0;
   for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
-    (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double64>(var[i])));
+    (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
               
     ++i;
   }
@@ -226,7 +225,7 @@ void Integral_var_NT_rhsop_N_dV_Test::calculateGlobalMatrix(SparseMatrix& sm, Ma
     
 }
 
-void Integral_var_NT_rhsop_N_dV_Test::calculateGlobalRHS(vector<double64>& rhs, MathOperatorRHS<2U>& oper) {
+void Integral_var_NT_rhsop_N_dV_Test::calculateGlobalRHS(vector<double>& rhs, MathOperatorRHS<2U>& oper) {
     //std::deque<Element<2U> >::iterator it;
     for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
         oper.GetOperands(*(*it));

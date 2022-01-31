@@ -56,9 +56,9 @@ DynamicViscosity::~DynamicViscosity()
 
 
 
-double64 DynamicViscosity::ViscosityFromTemperatureAndDensity( double64 t, double64 rho )
+double DynamicViscosity::ViscosityFromTemperatureAndDensity( double t, double rho )
  {
-   double64 trat,trat1,rhorat,rhorat1,n0,n;
+   double trat,trat1,rhorat,rhorat1,n0,n;
    int i,j,k;
 
    trat    = (t+kelvin)/tstar;

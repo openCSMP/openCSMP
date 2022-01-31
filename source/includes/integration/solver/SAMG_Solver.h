@@ -59,44 +59,44 @@ namespace csmp {
       bool Write_SAMG_TextInputFile( const char* filename ) const;
       void Write_SAMG_TextOutput( bool write );
 	    	    
-      double64 LastSolverResidual() const;
+      double LastSolverResidual() const;
 
-      void CheckSparsityCriterion( int32& levelx ) const;
-      void CheckCycleCriterion( int32& iswtch ) const;
-      void UpdateCycleCriterion( int32 iswtch );
-      bool CheckConvergence( double64 eps ) const;
+      void CheckSparsityCriterion( int32_t& levelx ) const;
+      void CheckCycleCriterion( int32_t& iswtch ) const;
+      void UpdateCycleCriterion( int32_t iswtch );
+      bool CheckConvergence( double eps ) const;
 
       void OutputVectors() const;
 
     protected:
       virtual void SolveMatrixEquation( SparseMatrix& A,
-                                        std::vector<double64>& b,
-                                        std::vector<double64>& x,
+                                        std::vector<double>& b,
+                                        std::vector<double>& x,
                                         size_t no_unknowns );
 
       virtual void SolveMatrixEquation( CompressedRowMatrix& A,
-                                        std::vector<double64>& b,
-                                        std::vector<double64>& x,
+                                        std::vector<double>& b,
+                                        std::vector<double>& x,
                                         size_t no_unknowns );
       
     private:
       SAMG_Settings*        settings_;
 
-      int32                 nsys_;    /// < Number of unknowns
-      int32                 npnts_;   /// < Number of points (in mesh)
-      int32                 nnu_;	    /// < Number of variables >= 1 (matrix size nnu^2)
-      int32                 nna_;	    /// < Number of matrix entries stored in vector a >= nnu
+      int32_t                 nsys_;    /// < Number of unknowns
+      int32_t                 npnts_;   /// < Number of points (in mesh)
+      int32_t                 nnu_;	    /// < Number of variables >= 1 (matrix size nnu^2)
+      int32_t                 nna_;	    /// < Number of matrix entries stored in vector a >= nnu
 
-      std::vector<double64> u_;	      /// < [] First guess solution to A.u=f
-      std::vector<double64> f_;	      /// < [] Right hand side
+      std::vector<double> u_;	      /// < [] First guess solution to A.u=f
+      std::vector<double> f_;	      /// < [] Right hand side
 
       // For coupled systems
-      std::vector<int32>    iscale_;  /// < [] which unknowns require scaling (nsys >= 1)
+      std::vector<int32_t>    iscale_;  /// < [] which unknowns require scaling (nsys >= 1)
                                       /// < iscale(k)=0	means k-th unknown does NOT require scaling
                                       /// < iscale(k)=1	means k-th unknown DOES require scaling
-      std::vector<int32>    iu_;	    /// < [] variable to unknown pointer
+      std::vector<int32_t>    iu_;	    /// < [] variable to unknown pointer
       int                   ndiu_;    /// < if nsys>1, m_diu=m_nnu
-      std::vector<int32>    ip_;	    /// < []
+      std::vector<int32_t>    ip_;	    /// < []
       int                   ndip_;
 
 #if defined(_OPENMP )
@@ -107,12 +107,12 @@ namespace csmp {
 #endif
 
       // Output parameters
-      double64  res_in_;      /// < residual of first guess
-      double64  res_out_;     /// < residual of final approximation
-      int32     ncyc_done_;   /// < total number cycles (iterations) performed
-      int32     ncyc_best_;   /// < stores lowest number of iterations achieved
+      double  res_in_;      /// < residual of first guess
+      double  res_out_;     /// < residual of final approximation
+      int32_t     ncyc_done_;   /// < total number cycles (iterations) performed
+      int32_t     ncyc_best_;   /// < stores lowest number of iterations achieved
 
-      int32     ierr_;        /// < error inidicator (= 0 no error, > 0 fatal error, < 0 completed with warnings)
+      int32_t     ierr_;        /// < error inidicator (= 0 no error, > 0 fatal error, < 0 completed with warnings)
 
       const bool  newed_SAMG_Settings_object; 
       bool output_amg_data_to_text_files_;

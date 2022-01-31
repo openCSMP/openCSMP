@@ -14,10 +14,10 @@ namespace csmp {
   template<size_t dim> struct NeighbourNodeCollection;
 
   template<size_t dim>
-  void calculateN(const Element<dim>& e, const Point<dim>& p, double64* coeff);
+  void calculateN(const Element<dim>& e, const Point<dim>& p, double* coeff);
 
   template<size_t dim>
-  void calculateDN(const Element<dim>& e, const Point<dim>& p, std::vector<double64>* coeff);
+  void calculateDN(const Element<dim>& e, const Point<dim>& p, std::vector<double>* coeff);
 
   template<size_t dim>
   Point<dim> directedAreaOfFacet(const Element<dim>& e, size_t iFacet);

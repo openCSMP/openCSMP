@@ -42,19 +42,19 @@ NumIntegral_PT_lhsop_P_dV<dim,CELL>::NumIntegral_PT_lhsop_P_dV( const PropertyDa
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != VECTOR )
       throw csmp::Exception( ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
-                      basic, "Operand (basic) must be a vector<double64> property placed on the nodes." );
+                      basic, "Operand (basic) must be a vector<double> property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != VECTOR )
       throw csmp::Exception( ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
-                      test, "Operand (test) must be a vector<double64> property placed on the nodes." );
+                      test, "Operand (test) must be a vector<double> property placed on the nodes." );
 }
 
 
 
 
 template<size_t dim,class CELL>
-void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -85,7 +85,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( CELL& e )
 
 
 template<size_t dim,class CELL>
-void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double64>& N, DenseMatrix<DM_MIN>& P )
+void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double>& N, DenseMatrix<DM_MIN>& P )
  {
     P.Resize(1,nodal_degrees_of_freedom*N.size());
     size_t k(0);
@@ -104,13 +104,13 @@ times the Operand. If the Operand is 1 over the element, then the volume
 integral is naturally 1 as well.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorLHS<dim>::LHS.Resize(e.Nodes()*dim,e.Nodes()*dim);
     MathOperatorLHS<dim>::LHS.Zero();
     
-    vector<double64>  N( e.Nodes() );
-    double64          det( 0.0 );
+    vector<double>  N( e.Nodes() );
+    double          det( 0.0 );
     
     for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
       {

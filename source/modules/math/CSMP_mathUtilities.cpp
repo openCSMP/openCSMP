@@ -8,18 +8,18 @@ using namespace std;
 namespace csmp {
 
 /** rsqrt -- computes reciprocal square root */
-double64
-rsqrt( double64 val )
+double
+rsqrt( double val )
 {
     return 1.0 / sqrt(val);
 }
 
 
 /** _v_norm1 -- computes (scaled) 1-norms of vectors */
-double64 vector_norm1( vector<double64>& x, vector<double64>& scale )
+double vector_norm1( vector<double>& x, vector<double>& scale )
 {
 	size_t	 i, dim = x.size();
-	double64 s, sum(0.0);
+	double s, sum(0.0);
 
     if ( scale.empty() ) {
          scale.resize(dim);
@@ -35,10 +35,10 @@ double64 vector_norm1( vector<double64>& x, vector<double64>& scale )
 }
 
 
-double64 vector_norm2( vector<double64>& x, vector<double64>& scale )
+double vector_norm2( vector<double>& x, vector<double>& scale )
 {
 	size_t	 i, dim = x.size();
-	double64 s, sum(0.0);
+	double s, sum(0.0);
 
     if ( scale.empty() ) {
          scale.resize(dim);
@@ -178,10 +178,10 @@ void  dN_To3DOF( size_t nodes, DenseMatrix<DM_MIN>& B )
 
 
 /** _v_norm_inf -- computes (scaled) infinity-norm (supremum norm) of vectors */
-double64 vector_norm_inf(  vector<double64>& x, vector<double64>& scale )
+double vector_norm_inf(  vector<double>& x, vector<double>& scale )
 {
 	size_t	 i, dim = x.size();
-	double64 sum(0.0);
+	double sum(0.0);
 
     if ( scale.empty() ) {
          scale.resize(dim);
@@ -191,7 +191,7 @@ double64 vector_norm_inf(  vector<double64>& x, vector<double64>& scale )
 cout <<"\nvector_norm_inf (in CSMP_math): function not implemented yet."<< endl;
 return 0.;
 /*
-	double64 s, tmp, maxval = 0.0;
+	double s, tmp, maxval = 0.0;
 	if ( scale == (VEC *)NULL )
 		for ( i = 0; i < dim; i++ )
 		{	tmp = fabs(x->ve[i]);
@@ -211,12 +211,26 @@ return 0.;
 }
 
 
-void  vector_randomize( random_generator& rng, vector<double64>& x, double64 scale_fac )
+void  vector_randomize( vector<double>& x, double scale_fac )
  {
-     std::uniform_real_distribution<> rndist(0,scale_fac);
-    for ( vector<double64>::iterator it=x.begin();
+   // get a different seed every time 
+    std::random_device rd;
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+    std::mt19937 gen(seed);
+    std::uniform_real_distribution<> rndist(0,scale_fac);
+ 
+    for ( vector<double>::iterator it=x.begin();
           it!=x.end(); it++ )
-      *it = rndist(rng);
+      *it = rndist(gen);
 
  } // end vector_randomize
 
@@ -246,11 +260,11 @@ void out( const Var& obj )
 
 
 /// approximation of the complementary error function using a Chebyshev polynomial
-double64  erfc_Chebyshev( double64 x )
+double  erfc_Chebyshev( double x )
 {
-	double64 z=fabs(x);
-	double64 t=1.0/(1.0+0.5*z);
-	double64 ans=t*exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
+	double z=fabs(x);
+	double t=1.0/(1.0+0.5*z);
+	double ans=t*exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
 		t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+
 		t*(-0.82215223+t*0.17087277)))))))));
 	
@@ -258,11 +272,11 @@ double64  erfc_Chebyshev( double64 x )
 }
 
 
-double64  erf_Chebyshev( double64 x )
+double  erf_Chebyshev( double x )
 {
-	double64 z=fabs(x);
-	double64 t=1.0/(1.0+0.5*z);
-	double64 ans=t*exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
+	double z=fabs(x);
+	double t=1.0/(1.0+0.5*z);
+	double ans=t*exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
 		t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+
 		t*(-0.82215223+t*0.17087277)))))))));
 	
@@ -277,8 +291,8 @@ double64  erf_Chebyshev( double64 x )
 
 template void out( const vector<ONE_BYTE_NUMBER>& );
 template void out( const vector<size_t>& );
-template void out( const vector<int32>& );
-template void out( const vector<double64>& );
+template void out( const vector<int32_t>& );
+template void out( const vector<double>& );
 
 
 
@@ -288,7 +302,7 @@ template<typename Var> void average( const vector<Var>& var_vec, Var& var )
     typename vector<Var>::const_iterator  it(var_vec.begin());
     var = *it++;
     while ( it != var_vec.end() ) var += *it++;
-    var /= static_cast<double64>(var_vec.size());
+    var /= static_cast<double>(var_vec.size());
  }
    
 template void average( const vector<ScalarVariable >&, ScalarVariable& );
@@ -306,33 +320,33 @@ template void average( const vector<TensorVariable<3U> >&, TensorVariable<3U>& )
 
 
 /// spline interpolation of values
-double64 splineValue( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+double splineValue( double x, double x1, double x2, double y1, double y2, double k1, double k2)
 {
-    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double64 t = ( x - x1) / ( x2 - x1 );
+    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double t = ( x - x1) / ( x2 - x1 );
 
     return (1. - t)*y1 + t*y2 + t*(1.-t)*( a*(1.-t) + b*t);
 }
 
 
 
-double64 splineDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+double splineDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2)
 {
-    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double64 t = ( x - x1) / ( x2 - x1 );
+    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double t = ( x - x1) / ( x2 - x1 );
 
     return (y2-y1)/( x2-x1 ) + (1.-2.*t)*( a*(1.-t)+b*t)/(x2-x1) + t*(1.-t)*(b-a)/(x2-x1);
 }
 
 
 
-double64 splineSecondDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+double splineSecondDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2)
 {
-    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double64 t = ( x - x1) / ( x2 - x1 );
+    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double t = ( x - x1) / ( x2 - x1 );
 
     return 2.*( b-2.*a +(a-b)*3.*t)/(x2-x1)/(x2-x1);
 }
@@ -344,10 +358,10 @@ double64 splineSecondDerivative( double64 x, double64 x1, double64 x2, double64 
     Finding the root of the function by the Secant method
 
 */
-double64 secant_method( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance)
+double secant_method( double xmin, double xmax, double (*function)( double ), double tolerance)
 {
-  double64 xm, x0;
-  double64 c;
+  double xm, x0;
+  double c;
   
   if (function(xmin) * function(xmax) < 0) {  // check the range for finding root
     do {
@@ -383,13 +397,13 @@ double64 secant_method( double64 xmin, double64 xmax, double64 (*function)( doub
  https://en.wikipedia.org/wiki/Golden-section_search
  
  */
-double64 maximum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance )
+double maximum_of_function( double xmin, double xmax, double (*function)( double ), double tolerance )
 {
   
-  double64 gr((sqrt(5.)+1.0)/2.0);  // golden ratio
+  double gr((sqrt(5.)+1.0)/2.0);  // golden ratio
   
-  double64 xup(xmax - (xmax - xmin) / gr);
-  double64 xlow(xmin + (xmax - xmin) / gr);
+  double xup(xmax - (xmax - xmin) / gr);
+  double xlow(xmin + (xmax - xmin) / gr);
   
   do {
     if (function(xup) > function(xlow))   // check the function is maximized
@@ -420,13 +434,13 @@ double64 maximum_of_function( double64 xmin, double64 xmax, double64 (*function)
  https://en.wikipedia.org/wiki/Golden-section_search
  
  */
-double64 minimum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance )
+double minimum_of_function( double xmin, double xmax, double (*function)( double ), double tolerance )
 {
   
-  double64 gr((sqrt(5.)+1.0)/2.0); // golden ratio
+  double gr((sqrt(5.)+1.0)/2.0); // golden ratio
   
-  double64 xup(xmax - (xmax - xmin) / gr);
-  double64 xlow(xmin + (xmax - xmin) / gr);
+  double xup(xmax - (xmax - xmin) / gr);
+  double xlow(xmin + (xmax - xmin) / gr);
   
   do {
     if (function(xup) < function(xlow))  // check the function is minimized
@@ -455,18 +469,18 @@ double64 minimum_of_function( double64 xmin, double64 xmax, double64 (*function)
  Mahyar: this is a basic function for two phase shock velocity analysis.
 
 */
-double64 g( double64 x, double64 x1, double64 (*function)( double64 ), double64 (*dfunction)( double64 ))   // "g(x) = df(x)/dx-(f(x)-f(x1))/(x-x1)"
+double g( double x, double x1, double (*function)( double ), double (*dfunction)( double ))   // "g(x) = df(x)/dx-(f(x)-f(x1))/(x-x1)"
   {
     return dfunction(x)-(function(x)-function(x1))/(x-x1) ;
   }
   
   
   
-double64 secant_line( double64 x1, double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 (*dfunction)( double64 ), double64 tolerance)
+double secant_line( double x1, double xmin, double xmax, double (*function)( double ), double (*dfunction)( double ), double tolerance)
   {
     
-    double64 xm, x0;
-    double64 c;
+    double xm, x0;
+    double c;
     
      if (g(xmin,x1,function ,dfunction) * g(xmax,x1,function ,dfunction) < 0) {  // check the range for finding root
        do {

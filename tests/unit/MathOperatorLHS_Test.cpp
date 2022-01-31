@@ -86,7 +86,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_CopyCtor()
     bool time_multiply = true;
     size_t application_cycles = 5U;
     size_t application_cycle = 3U;
-    double64 factor = 1.75;
+    double factor = 1.75;
     size_t basic_offset = 2U;
     size_t test_offset = 4U;
     csmp::Index perm_key = database_.StorageKey(op1.c_str());
@@ -145,7 +145,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_Equal()
     bool time_multiply = true;
     size_t application_cycles = 5U;
     size_t application_cycle = 3U;
-    double64 factor = 1.75;
+    double factor = 1.75;
     size_t basic_offset = 2U;
     size_t test_offset = 4U;
     csmp::Index perm_key = database_.StorageKey(op1.c_str());
@@ -321,7 +321,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_MultiplyBy()
     string op("permeability");
     string bop("fluid pressure");
     string top("hydrostatic pressure");
-    double64 factor = 1.75;    
+    double factor = 1.75;    
     
     NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     

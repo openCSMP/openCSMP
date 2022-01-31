@@ -17,7 +17,7 @@ template<size_t dim,class CELL>
 NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
                                                                  const char* oper, 
                                                                  const char* test,
-                                                                 double64 acc_gravity )
+                                                                 double acc_gravity )
   : MathOperatorRHS<dim>(pref,oper,test),
     IPOL(3),
     oper_nprop(3), 
@@ -52,7 +52,7 @@ NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyData
                                                          const char* oper, 
                                                          const char* mtrl, 
                                                          const char* test,
-                                                         double64 acc_gravity )
+                                                         double acc_gravity )
   : MathOperatorRHS<dim>(pref,oper,test),    
     mtrl_key(pref.StorageKey(mtrl)),
     IPOL(3),
@@ -92,7 +92,7 @@ property from the element, and its multipliers from the nodes for later
 interpolation to the integration points.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_op_dNi_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
    // 1. reading Operand (fluid density or something like that)
    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
@@ -130,12 +130,12 @@ A reference to the finite-element from which the contribution is
 computed.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
-    double64  ip_value;
+    double  ip_value;
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
@@ -154,7 +154,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
            {
                // interpolating Operand value and multipliers to integration point
                e.N_AtIntegrationPoint( i, IPOL );
-               double64 op_value(0.);
+               double op_value(0.);
                for ( size_t j=0; j<e.Nodes(); j++ ) op_value += IPOL[j] * oper_nprop[j]();
 
                // multiply property value it with multipliers

@@ -2,6 +2,7 @@
 #define CSMP_LINE_ELEMENT_MESHER_H
 
 #include "VSet.h"
+#include "Point.h"
 
 namespace csmp {
 
@@ -10,49 +11,49 @@ class MeshDensity {
 public:
     MeshDensity( );
     virtual ~MeshDensity();
-    virtual double64 operator()( double64 x );
+    virtual double operator()( double x );
 };
 
 /// helper subclass
 class LinDensity: virtual public MeshDensity {
 public:
-    LinDensity( double64 a = 1.0, double64 b = 0.0 );
+    LinDensity( double a = 1.0, double b = 0.0 );
     virtual ~LinDensity();
-    virtual double64 operator()( double64 x );
-    void SetA( double64 );
-    void SetB( double64 );
+    virtual double operator()( double x );
+    void SetA( double );
+    void SetB( double );
 private:
     /// y = a_ * x + b_
-    double64 a_;
-    double64 b_;
+    double a_;
+    double b_;
 };
 
 /// exponential element size variation
 class ExpDensity: virtual public MeshDensity {
 public:
-    ExpDensity( double64 a = 1.0, double64 b = 1.0  );
+    ExpDensity( double a = 1.0, double b = 1.0  );
     virtual ~ExpDensity();
-    virtual double64 operator()(double64 x );
-    void SetA( double64 );
-    void SetB( double64 );
+    virtual double operator()(double x );
+    void SetA( double );
+    void SetB( double );
 private:
     /// y = b_ * exp( a_ * x )
-    double64 a_;
-    double64 b_;
+    double a_;
+    double b_;
 };
 
 /// error function based mesh size variation
 class ErfDensity: virtual public MeshDensity {
 public:
-    ErfDensity( double64 a = 3.0, double64 b = 1.0 );
+    ErfDensity( double a = 3.0, double b = 1.0 );
     ~ErfDensity();
-    virtual double64 operator()(double64 x );
-    void SetA( double64 );
-    void SetB( double64 );
+    virtual double operator()(double x );
+    void SetA( double );
+    void SetB( double );
 private:
     /// y = b_ * erf( a * x )
-    double64 a_;
-    double64 b_;
+    double a_;
+    double b_;
 };
 
 
@@ -70,27 +71,27 @@ class LineElementMesher {
 
     /// creates an uniform mesh
     void BuildUniformMesh( VSet<dim>& vset,
-                           double64 length,
+                           double length,
                            size_t   n_elements,
-                           const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+                           const std::vector<double>& splitnode_coordinates = std::vector<double>(),
                            const Point<dim>& origin = Point<dim>(),
                            const Point<dim>& destination = Point<dim>() );
                   
     /// creates a refined mesh
     void BuildRefinedMesh( VSet<dim>& vset,
-                           double64 length,
-                           double64 dx_min,
-                           double64 dx_max,
-                           double64 width_of_transition_zone,
+                           double length,
+                           double dx_min,
+                           double dx_max,
+                           double width_of_transition_zone,
                            MeshDensity* density,
-                           const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+                           const std::vector<double>& splitnode_coordinates = std::vector<double>(),
                            const Point<dim>& origin = Point<dim>(),
                            const Point<dim>& destination = Point<dim>() );
 
     /// creates a custom mesh with vector( 1D node coordinates )
     void BuildCustomMesh( VSet<dim>& vset,
-                          const std::vector<double64>& node_coordinates,
-                          const std::vector<double64>& splitnode_coordinates = std::vector<double64>(),
+                          const std::vector<double>& node_coordinates,
+                          const std::vector<double>& splitnode_coordinates = std::vector<double>(),
                           const Point<dim>& origin = Point<dim>(),
                           const Point<dim>& destination = Point<dim>() );
 
@@ -108,7 +109,7 @@ class LineElementMesher {
                              const Point<dim>& destination );
 
     void InsertSplitNodes( VSet<dim>& vset,
-                           const std::vector<double64>& splitnodes );
+                           const std::vector<double>& splitnodes );
 
     void InsertSplitNodes( VSet<dim>& vset,
                            std::set<Point<dim> >& splitnodes );
@@ -118,7 +119,7 @@ private:
     /// Methods which include all extra functionality of mesh modificiation
 
     void CompleteMesh( VSet<dim>& vset,
-                       const std::vector<double64>& splitnodes,
+                       const std::vector<double>& splitnodes,
                        const Point<dim>& origin = Point<dim>(),
                        const Point<dim>& destination = Point<dim>() );
 
@@ -131,20 +132,20 @@ private:
     
     /// creates an uniform mesh
     void UniformMesh( VSet<dim>& vset,
-                      double64 length,
+                      double length,
                       size_t n_elements );
 
     /// creates a refined mesh based on errf
     void RefinedMesh( VSet<dim>& vset,
-                      double64 length,
-                      double64 dx_min,
-                      double64 dx_max,
-                      double64 width_of_transition_zone,
+                      double length,
+                      double dx_min,
+                      double dx_max,
+                      double width_of_transition_zone,
                       MeshDensity* density );
 
     /// creates a custom mesh with vector( 1D node coordinates )
     void CustomMesh( VSet<dim>& vset,
-                     const std::vector<double64>& node_coordinates );
+                     const std::vector<double>& node_coordinates );
 
     /// creates a custom mesh with vector( 1D, 2D or 3D node coordinates )
     void CustomMesh( VSet<dim>& vset,
@@ -157,7 +158,7 @@ private:
                                 std::set<Point<dim> >& splitnodes );
 
     VSet<dim>*          vset_;
-    std::set<double64>  splitnodes_;
+    std::set<double>  splitnodes_;
 
 };
 

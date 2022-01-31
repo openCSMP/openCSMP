@@ -3,7 +3,7 @@
 
 namespace csmp {
 
-double64 triangleArea( const Point<3U>& pt0, 
+double triangleArea( const Point<3U>& pt0, 
                        const Point<3U>& pt1, 
                        const Point<3U>& pt2 )
 {
@@ -11,7 +11,7 @@ double64 triangleArea( const Point<3U>& pt0,
 }
 
 
-double64 triangleArea( const Point<2U>& pt0, 
+double triangleArea( const Point<2U>& pt0, 
                        const Point<2U>& pt1, 
                        const Point<2U>& pt2 )
 {
@@ -20,12 +20,6 @@ double64 triangleArea( const Point<2U>& pt0,
                              pt2[0]*pt1[1] - pt1[0]*pt0[1] ) );
 }
 
-double64 triangleArea( const Point<1U>&,
-                       const Point<1U>&,
-                       const Point<1U>& )
- {
-    return 1.;
- }
 
 
 /**
@@ -52,12 +46,6 @@ Point<2U>  normalOfTriangle( const Point<2U>&,
     return Point<2U>();
  }
 
-/// normal is zero as it points into the coordinate direction that does not exist
-Point<1U>  normalOfTriangle( const Point<1U>&,
-                             const Point<1U>&,
-                             const Point<1U>& )
- {
-    return Point<1U>();
- }
+
 
 } // end csmp

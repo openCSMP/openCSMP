@@ -27,7 +27,7 @@ SumOfProducts& SumOfProducts::operator=(const SumOfProducts& s )
 // Methods 
 
 
-void SumOfProducts::AddProduct( const map<int,double64>& product )
+void SumOfProducts::AddProduct( const map<int,double>& product )
  {
      sumproducts.reserve( sumproducts.size()+1 );
      sumproducts.push_back( product );
@@ -54,17 +54,17 @@ void SumOfProducts::TokenizeString( char* s, const char* delim, list<string>& li
 
 takes character string containing the righthandside of the Algebraic equation and builds
 itself from this string.*/
-void SumOfProducts::InitializeFrom( const char* s, map<string,pair<int32,double64> >& withval,
-                                                   map<string,int32>&              withoutval )
+void SumOfProducts::InitializeFrom( const char* s, map<string,pair<int32_t,double> >& withval,
+                                                   map<string,int32_t>&              withoutval )
  {
     list<string>                                        products, product_terms;
     list<string>::iterator                              tik, tik1;
-    map<string,int32>::const_iterator                   it;
-    map<string,pair<int32,double64> >::const_iterator  vit;
-    map<int32,double64>                                    product;
+    map<string,int32_t>::const_iterator                   it;
+    map<string,pair<int32_t,double> >::const_iterator  vit;
+    map<int32_t,double>                                    product;
     char                        rhs[250], temp[100], temp1[50], temp2[50], *sub;
-    int32                         idx, idxminus=-500; // large enough to avoid overwrite by independent vars.
-    double64                      val;
+    int32_t                         idx, idxminus=-500; // large enough to avoid overwrite by independent vars.
+    double                      val;
     strcpy( rhs, s );
     TokenizeString( rhs, "+", products );
 
@@ -145,11 +145,11 @@ void SumOfProducts::InitializeFrom( const char* s, map<string,pair<int32,double6
 Add all the terms in the sum, using the supplied values in 'a' if the product term index
 is greater than zero and the stored terms (constants) where the index is less than
 zero.*/
-double64 SumOfProducts::Sum( const double64 a[] ) const
+double SumOfProducts::Sum( const double a[] ) const
  {
-    vector<map<int32,double64> >::const_iterator  it;
-    map<int32,double64>::const_iterator           sit;
-    double64  sum, product;
+    vector<map<int32_t,double> >::const_iterator  it;
+    map<int32_t,double>::const_iterator           sit;
+    double  sum, product;
     
     for ( sum=0.0, it=sumproducts.begin(); it!=sumproducts.end(); it++ )
       {
@@ -183,10 +183,10 @@ void SumOfProducts::Out() const
  {
     size_t n=1U;
     cout <<"\nSumOfProducts:: = ";
-    for ( vector<map<int32,double64> >::const_iterator
+    for ( vector<map<int32_t,double> >::const_iterator
           it1=sumproducts.begin(); it1!=sumproducts.end(); it1++, n++ )
       {
-         for ( map<int32,double64>::const_iterator sit=(*it1).begin(); sit!=(*it1).end(); sit++ )
+         for ( map<int32_t,double>::const_iterator sit=(*it1).begin(); sit!=(*it1).end(); sit++ )
            {
               if ( (*sit).first >= 0 ) 
                 {

@@ -17,7 +17,7 @@ Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_rhsop_N_dV( const Prope
                                                                           const char* basic,
                                                                           const char* test,
                                                                           const char* var,
-                                                                          const double64 prefactor)
+                                                                          const double prefactor)
   : MathOperatorRHS<dim>(pref,oper,basic),
     basic_(pref.Parameter(test)),
     var_(pref.Parameter(var)),
@@ -55,7 +55,7 @@ Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_rhsop_N_dV( const Prope
 /** Reads the Operand values from the elements.
 */
 template<size_t dim,class SIMPLEX>
-void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
    // this integral is only for analytically integrated finite elements
    assert( e.FE()->UsesLocalCoordinates() == false );
@@ -75,7 +75,7 @@ multiplied with the Operand and stores the result in the test function
 part of the right hand side vector.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
   if ( !MathOperatorRHS<dim>::LumpedFormulation() ) { // consistent formulation
     if (e.FE_Type() != LINEAR_TRIANGLE)
@@ -102,7 +102,7 @@ void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 } // end ComputeContribution
 
 template<size_t dim,class SIMPLEX>
-void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeIntegral( SIMPLEX& e ) {
+void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeIntegral( const SIMPLEX& e ) {
   assert(e.Nodes() == 3);
   assert(vvar_.size() == 3);
 

@@ -19,11 +19,11 @@ class Jacobian_Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
                            		  const char* upwind,
                            		  const char* d_upwind,
                            		  const char* trigger,
-                           		  const double64 delta,
-                           		  const double64 prefactor = 1.0);
+                           		  const double delta,
+                           		  const double prefactor = 1.0);
     
-    void ComputeContribution( SIMPLEX& e );
-    void GetOperands( SIMPLEX& e );
+    void ComputeContribution( const SIMPLEX& );
+    void GetOperands( const SIMPLEX& );
 
   private:
     DenseMatrix<DM_MIN> DN, DNT;
@@ -38,8 +38,8 @@ class Jacobian_Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
     std::vector<ScalarVariable > el_test_orig;
     std::vector<ScalarVariable > el_d_upwind;
     
-    const double64 delta_;
-    const double64 prefactor_;
+    const double delta_;
+    const double prefactor_;
 };
 
 

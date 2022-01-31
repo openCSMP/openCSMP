@@ -20,7 +20,7 @@ class StatisticalAnalyzer_Test : public Test
       void StatisticalAnalyzer_TestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1();
   
   private:
-    double64 fTolerance;
+    double fTolerance;
     Model1D<1U>* model_;
   
 }; //end class

@@ -49,7 +49,7 @@ class TensorVariable_Test : public Test
 	void Column_Function();
   
   private:
-  double64 fTolerance;
+  double fTolerance;
   
 }; //end class
 

@@ -15,9 +15,9 @@ class NumIntegral_SetRHS_to_One : public MathOperatorRHS<dim> {
     virtual ~NumIntegral_SetRHS_to_One();
     
     /// since there is no material Operand nothing needs to be done
-    virtual void GetOperands( CELL& ) {}
+    virtual void GetOperands( const CELL& ) {}
 
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
 
     virtual NumIntegral_SetRHS_to_One<dim,CELL>* clone() const
       { return new NumIntegral_SetRHS_to_One<dim,CELL> (*this); }

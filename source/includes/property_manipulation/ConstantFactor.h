@@ -17,11 +17,11 @@ class ConstantFactor : public Interrelation< dim> {
     
   public:
     ConstantFactor( const PropertyDatabase<dim>& p, const char* resultProperty,
-                    const char* argumentProperty, const double64 factor);
+                    const char* argumentProperty, const double factor);
     			          
     ~ConstantFactor() {};
     
-    void ChangeFactor( double64 factor );
+    void ChangeFactor( double factor );
     
     void Calculate();
 };

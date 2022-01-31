@@ -69,7 +69,7 @@ void DESAdvectionDiffusion3D_Example::Run()
  // 2. checking the mesh quality
  // ------------------------------------------------------------
   MeshDiagnostics<3U>  mesh_check;
-  double64             vol_min, vol_max;
+  double             vol_min, vol_max;
   mesh_check.ElementVolumeRange( model3D, vol_min, vol_max );
   cout <<"\nmain: element volume range: "<< vol_min <<" to "<< vol_max << endl;
   cout <<"\tlarge element-volume range (>10^3) can pose problems for the linear solver.2\n";
@@ -108,7 +108,7 @@ void DESAdvectionDiffusion3D_Example::Run()
  // -----------------------------------------------------------------------
  // 4. hydraulic conductivity and other interrelations
  // -----------------------------------------------------------------------
-  const double64  fluid_viscosity(1.0e-03);
+  const double  fluid_viscosity(1.0e-03);
   ConstantFactor<3U,divides>  conductivity( model3D.Database(),
                                            "conductivity", "permeability",
                                             fluid_viscosity );
@@ -147,18 +147,18 @@ void DESAdvectionDiffusion3D_Example::Run()
  // -----------------------------------------------------------------------
   printModelDimensions( model3D, true );
 
-  double64 time_interval;
+  double time_interval;
   cerr <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds,suggested value: 6.0e6)";
   cin >> time_interval;
   
-  double64 Courant_multiplier;
+  double Courant_multiplier;
   cerr <<"\nEnter CFL multiplier (suggested value: 0.3 ~ 0.7)";
   cin >> Courant_multiplier;
 
-  double64 PEP_factor = 1.0;  
+  double PEP_factor = 1.0;  
   size_t n_threads = 1;
   VTK_Interface<3U>	vtkOut;
-  double64 model_time(0.);  
+  double model_time(0.);  
     
   bool  DES = stdio.YesNo("Do you want to solve the advection equation with DES (y=DES, n=TDS)");  
   
@@ -180,7 +180,7 @@ void DESAdvectionDiffusion3D_Example::Run()
       vtkOut.OutputDataToVTK( model3D, "DES_schedule_count", "schedule count", i+1 );
       vtkOut.OutputDataToVTK( model3D, "DES_synchronization_count", "synchronize count", i+1 );
    }
-   cerr <<"\nmain: Finished DES simulation, using time (sec): "<< (clock() - T_begin)/double64(CLOCKS_PER_SEC) << endl;
+   cerr <<"\nmain: Finished DES simulation, using time (sec): "<< (clock() - T_begin)/double(CLOCKS_PER_SEC) << endl;
   }
 
   else
@@ -197,7 +197,7 @@ void DESAdvectionDiffusion3D_Example::Run()
       model_time += time_interval/20.;
       vtkOut.OutputDataToVTK( model3D, "TDS_concentration", "concentration", i+1 );
    }
-   cerr <<"\nmain: Finished TDS simulation, using time (sec): "<< (clock() - T_begin)/double64(CLOCKS_PER_SEC) << endl;   
+   cerr <<"\nmain: Finished TDS simulation, using time (sec): "<< (clock() - T_begin)/double(CLOCKS_PER_SEC) << endl;   
    }
    
 

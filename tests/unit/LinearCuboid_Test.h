@@ -20,6 +20,7 @@ TestSumShapesAtBaryCenter(const Element<3U>& )
 #define LINEARCUBOID_TEST_H
 
 #include "Test.h"
+#include "LinearCuboid.h"
 #include "Element.h"
 
 namespace csmp {
@@ -34,10 +35,10 @@ namespace csmp {
 		bool _equalTest(double a, double b, double tol) const;
 
 	private:
-		FiniteElement*  lcuboid_;
-		Element<3U>*    element_;
+		LinearCuboid    lcuboid_;
+		Element<3U>     element_;
 		Node<3U>        n0, n1, n2, n3, n4, n5, n6, n7;
-		const double64  tolerance_factor_;
+		const double  tolerance_factor_;
 		bool            verbose_;
 	};
 

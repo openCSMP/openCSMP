@@ -82,7 +82,7 @@ void Tutorial3_Example::Run()
     // clocking the runtime
     clock_t start(clock());
 
-    double64 model_time =  0.0; // time
+    double model_time(0.); // time
 
     // ---------------------------------------------------
     // 1.0 Create Model directly from ANSYS-ICEM mesh
@@ -129,16 +129,15 @@ void Tutorial3_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create a steady-state CSMP FE Algorithm using a high-level class
-    SteadyStateDiffusor<2U,Region> fluid_pressure( model,
-                                                          "total mobility",
+    SteadyStateDiffusor<2U,Region> fluid_pressure( model, "total mobility",
                                                           "fluid pressure",
                                                           "fluid volume source" );
 
     // operation to compute velocity
     VelocityAndVolumeFlux<2U,Element<2U> >  velo( model,
-                               "total mobility",
-                               "porosity",
-                               "fluid pressure", true );
+                                                 "total mobility",
+                                                 "porosity",
+                                                 "fluid pressure", true );
 
     // add velocity calculation as post process
     fluid_pressure.AddPostProcess( &velo );
@@ -151,20 +150,10 @@ void Tutorial3_Example::Run()
     printRangeOfVariable( model, "velocity" );
 
     // -----------------------------
-    // 6.0 Output initial conditions
+    // 6.0 Output conditions
     // -----------------------------
     MatlabInterface    matlab;
-    VTU_Interface<2U>  vtu(model);  // binary VTK output, creates much smaller files than VTK
-
-    // to Matlab files
-    matlab.Write2DMatlabFile(  model, "saturation_oil", "saturation oil",    0 );
-    matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    0 );
-    matlab.Write2DMatlabFile(  model, "volume_flux",    "nodal volume flux", 0 );
-    // to VTU files
-    vtu.OutputDataToVTU( "volume_flux",    "nodal volume flux", "Model", 0 );
-    vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", 0 );
-    vtu.OutputDataToVTU( "saturation oil", "saturation oil",    "Model", 0 );
-
+    VTU_Interface<2U>  vtu(model);
 
     // -------------------------------------------------------------
     // 7.0 Construct the finite volume grid and transport algorithms
@@ -186,7 +175,8 @@ void Tutorial3_Example::Run()
                                                                                       "velocity",
                                                                                       "nodal fluid volume source" );
 
-        transport->CFL_Multiplier(10000.0); // overstep CFL
+        // overstep CFL: as a consequence, the BL front will be retarded because the transport is not linearized to the shock speed
+        transport->CFL_Multiplier(10.);
      }
     else {
         // explicit finite volume scheme with 1st order accuracy in space (NB: constructor has default arguments as well!)
@@ -230,10 +220,10 @@ void Tutorial3_Example::Run()
     // -----------------------
 
     // define some constant variables
-    const double64    day(86400.0);
-    const double64    max_time (100.0*day);     // run for 100 days
-    double64          time_increment(day);      // timestep 1 day
-    const long        save_frequency(10);       // write results to file every 10 day
+    const double    day(86400.0);
+    const double    max_time (100. * day);   // run for 100 days
+    double          time_increment(day);     // timestep 1 day
+    const long        save_frequency(5);       // write results to file every 10 day
     size_t	          time, save_counter(1);
 
     // -----------------------
@@ -241,6 +231,22 @@ void Tutorial3_Example::Run()
     // -----------------------
     while ( model_time < max_time )
       {
+         // monitor the regions
+         monitor.ScalarPropertyRanges( model, model_time );
+         monitor.ScalarPropertyIntegrals( model, model_time );
+
+         // output variables
+         if ( save_counter == save_frequency ) {
+              time = static_cast<long>(model_time/day);
+              // to Matlab files
+              matlab.Write2DMatlabFile(  model, "saturation_oil", "saturation oil", time );
+              matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure", time );
+              // to VTU files
+              vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", time );
+              vtu.OutputDataToVTU( "saturation oil", "saturation oil",    "Model", time );
+              save_counter = 0;
+          }
+         save_counter++;
 
          // compute advection of phases
          transport->TransportPhase( relperm_model, time_increment );
@@ -259,23 +265,6 @@ void Tutorial3_Example::Run()
          printRangeOfVariable( model, "velocity" );
          printRangeOfVariable( model, "saturation oil" );
 
-         // monitor the regions
-         monitor.ScalarPropertyRanges( model, model_time );
-         monitor.ScalarPropertyIntegrals( model, model_time );
-
-         // output variables
-         if ( save_counter == save_frequency ) {
-              time = static_cast<long>(model_time/day);
-              // to Matlab files
-              matlab.Write2DMatlabFile(  model, "saturation_oil", "saturation oil",    time );
-              matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    time );
-              // to VTU files
-              vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", time );
-              vtu.OutputDataToVTU( "saturation oil", "saturation oil",    "Model", time );
-              save_counter = 0;
-          }
-         save_counter++;
-
          // runtime info
          cout <<"\n\nmain: RUNTIME (DAYS): "<< model_time/day << endl << endl;
 
@@ -283,8 +272,8 @@ void Tutorial3_Example::Run()
 
     // final output
     time = static_cast<size_t>(model_time/day);
-    matlab.Write2DMatlabFile(  model, "saturation_oil", "saturation oil",    time );
-    matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    time );
+    matlab.Write2DMatlabFile(  model, "saturation_oil", "saturation oil", time );
+    matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure", time );
     vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", time );
     vtu.OutputDataToVTU( "saturation oil", "saturation oil",    "Model", time );
 
@@ -293,7 +282,7 @@ void Tutorial3_Example::Run()
 
     // clocking the runtime
     clock_t end(clock());
-    cerr << "\nmain: CPU time was " << static_cast<double64>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl;
+    cerr << "\nmain: CPU time was " << static_cast<double>((end-start)/CLOCKS_PER_SEC) << " seconds " << endl;
 
     // terminate
     cerr << "\nmain: That's it..."<< endl;
@@ -304,19 +293,17 @@ void Tutorial3_Example::Run()
 void  Tutorial3_Example::computeTotalMobility( Model<2U>& mdl, TwoPhaseModel<2U>& relperm )
  {
     // keys to properties
-    static Index  mobt_key(mdl.Database().StorageKey("total mobility"));
-    static Index  satw_key(mdl.Database().StorageKey("saturation water"));
-    static Index  sato_key(mdl.Database().StorageKey("saturation oil"));
-
-    const double64  one(1.);
-    double64        sw;
+    const Index  mobt_key(mdl.Database().StorageKey("total mobility"));
+    const Index  satw_key(mdl.Database().StorageKey("saturation water"));
+    const Index  sato_key(mdl.Database().StorageKey("saturation oil"));
+    const double  one(1.);
+    double        sw;
     ScalarVariable  mob_t;
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
-    static const Region<2U>& mref = mdl.Region("Model");
-    vector<Node<2U>* >::const_iterator nit;
-    for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    Region<2U>& mref = mdl.Region("Model");
+    for ( vector<Node<2U>* >::iterator nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
       {
          // read in So, compute Sw and store back to nodes along with the flag of So
          sw = one - (*nit)->Read( sato_key );
@@ -326,8 +313,8 @@ void  Tutorial3_Example::computeTotalMobility( Model<2U>& mdl, TwoPhaseModel<2U>
 
     // 2. Computing the multiphase flow properties
     //    loop over finite elements
-    vector<Element<2U>* >::const_iterator eit;
-    for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
+    for ( vector<Element<2U>* >::const_iterator
+          eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
       {
          // 1. setting up the relative permeability model
          // ---------------------------------------------

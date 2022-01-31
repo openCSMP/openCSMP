@@ -1,6 +1,7 @@
 #include "Averaging_Example.h"
 
 #include "ANSYS_Model2D.h"
+#include "Region.h"
 #include "VTU_Interface.h"
 #include "PL_Utilities.h"
 
@@ -39,7 +40,7 @@ void Averaging_Example::Run()
   nodalSourceSinkByCount = 0.;
 
   // setting source variables
-  sourceSink = 1;
+  sourceSink = 1.;
 
   // setting up VTU interface for visualization
   VTU_Interface<2U> vtu( model, "Extrapolation Comparison" );
@@ -47,17 +48,25 @@ void Averaging_Example::Run()
   // creating a reference to the model region
   Region<2U>& region( model.Region( "Model" ) );
 
-  // using the ModelSubDomain methods
+  // using the ModelSubDomain methods to extrapolate single-valued field
   region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
   region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );
-
-  // using shahos node count function
-  extrapolateElementToNodalVariable( model, "Model", "fluid volume source", "nodal fluid volume source count" );
 
   // output
   vtu.OutputDataToVTU( "ExtrapolationByDistance", "nodal fluid volume source distance", "Model", static_cast<int>(0) );
   vtu.OutputDataToVTU( "ExtrapolationByVolume", "nodal fluid volume source volume", "Model", static_cast<int>(0) );
   vtu.OutputDataToVTU( "ExtrapolationByCount", "nodal fluid volume source count", "Model", static_cast<int>(0) );
+
+  // creating a perturbed field and extrapolating this
+  randomPerturb( model, "fluid volume source", 20. );
+
+  region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
+  region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );
+
+  vtu.OutputDataToVTU( "PerturbedFluidVolumeSource", "fluid volume source", "Model", static_cast<int>(1) );
+  vtu.OutputDataToVTU( "ExtrapolationByDistance", "nodal fluid volume source distance", "Model", static_cast<int>(1) );
+  vtu.OutputDataToVTU( "ExtrapolationByVolume", "nodal fluid volume source volume", "Model", static_cast<int>(1) );
+  vtu.OutputDataToVTU( "ExtrapolationByCount", "nodal fluid volume source count", "Model", static_cast<int>(1) );
 
 }
 

@@ -5,19 +5,19 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-double64 dotProduct( const vector<double64>& v1, const vector<double64>& v2 )
+double dotProduct( const vector<double>& v1, const vector<double>& v2 )
   {
       assert( !v1.empty() );
       assert( !v2.empty() );
       assert( v1.size() == v2.size() );
-      double64 value(0.);
+      double value(0.);
       for ( auto i=0U; i<dim; ++i ) value += v1[i] * v2[i];
       return value;
   }
 
-template double64 dotProduct<1U>( const vector<double64>&, const vector<double64>& );
-template double64 dotProduct<2U>( const vector<double64>&, const vector<double64>& );
-template double64 dotProduct<3U>( const vector<double64>&, const vector<double64>& );
+template double dotProduct<1U>( const vector<double>&, const vector<double>& );
+template double dotProduct<2U>( const vector<double>&, const vector<double>& );
+template double dotProduct<3U>( const vector<double>&, const vector<double>& );
 
 
 
@@ -91,34 +91,34 @@ Point<3U> operator/(const Point<3U>& p, const VectorVariable<3U>& v ) {
 
 // dot products: result = v . p
 template<>
-double64 dotProduct( const VectorVariable<1>& v,  const csmp::Point<1>& p ) {
+double dotProduct( const VectorVariable<1>& v,  const csmp::Point<1>& p ) {
    return std::move(v[0]*p[0]);
 }
 
 template<>
-double64 dotProduct( const VectorVariable<2>& v,  const csmp::Point<2>& p ) {
+double dotProduct( const VectorVariable<2>& v,  const csmp::Point<2>& p ) {
    return std::move(v[0]*p[0] + v[1]*p[1]);
 }
 
 template<>
-double64 dotProduct( const VectorVariable<3>& v,  const csmp::Point<3>& p ) {
+double dotProduct( const VectorVariable<3>& v,  const csmp::Point<3>& p ) {
    return std::move(v[0]*p[0] + v[1]*p[1] + v[2]*p[2]);
 }
 
 
 // dot products vector variables: result = v1 . v2
 template<>
-double64 dotProduct( const VectorVariable<1>& v1, const VectorVariable<1>& v2 ) {
+double dotProduct( const VectorVariable<1>& v1, const VectorVariable<1>& v2 ) {
    return std::move(v1[0]*v2[0]);
 }
 
 template<>
-double64 dotProduct( const VectorVariable<2>& v1, const VectorVariable<2>& v2 ) {
+double dotProduct( const VectorVariable<2>& v1, const VectorVariable<2>& v2 ) {
    return std::move(v1[0]*v2[0] + v1[1]*v2[1]);
 }
 
 template<>
-double64 dotProduct( const VectorVariable<3>& v1, const VectorVariable<3>& v2 ) {
+double dotProduct( const VectorVariable<3>& v1, const VectorVariable<3>& v2 ) {
    return std::move(v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2]);
 }
 
@@ -215,12 +215,60 @@ TensorVariable<dim> multiplyTensorByTensor( const TensorVariable<dim>& ts, const
     return std::move(resulttensor);
 }
 
+
+
+template<size_t>
+bool isDiagonalTensor( const TensorVariable<1U>& ts ) { return true; }
+
+/// 2D version
+template<size_t>
+bool isDiagonalTensor( const TensorVariable<2U>& ts )
+{
+  // if the off-diagonal elements are numerically zero
+  if ( ts( 0, 1 ) <= numeric_limits<double>::epsilon() &&
+       ts( 1, 0 ) <= numeric_limits<double>::epsilon() ) return true;
+  return false;
+}
+
+/// 3D version
+template<size_t>
+bool isDiagonalTensor( const TensorVariable<3U>& ts )
+{
+  // if the off-diagonal elements are numerically zero
+  if ( ts( 0, 1 ) <= numeric_limits<double>::epsilon() &&
+       ts( 0, 2 ) <= numeric_limits<double>::epsilon() &&
+       ts( 1, 2 ) <= numeric_limits<double>::epsilon() &&
+       ts( 1, 0 ) <= numeric_limits<double>::epsilon() &&
+       ts( 2, 0 ) <= numeric_limits<double>::epsilon() &&
+       ts( 2, 1 ) <= numeric_limits<double>::epsilon() ) return true;
+  return false;
+}
+
+// this wants to be a lambda function in the next method
+/// recovering and sorting to find minimum and maximum Eigen values
+template<size_t dim>
+void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tmax )
+{
+  VectorVariable<dim>  evals;
+
+  // doing simple case first
+  if ( isDiagonalTensor( ts ) ) for ( size_t i = 0U; i<dim; ++i ) evals( i ) = ts( i, i );
+  else ts.EigenValues( evals );
+  std::set<double> min_max;
+  for ( size_t i = 0U; i<dim; i++ ) min_max.insert( evals[i] );
+  tmin = (*min_max.begin());
+  tmax = (*min_max.rbegin());
+}
+
+
+
+
 /// return angle in degrees
 /// this function was taken from an old one called AngleTo, and templetized
 template<size_t dim>
-double64  angleBetween( const VectorVariable<dim>& v1, const VectorVariable<dim>& v2 )
+double  angleBetween( const VectorVariable<dim>& v1, const VectorVariable<dim>& v2 )
 {
-    double64 ab, a_dot_b;
+    double ab, a_dot_b;
 
     // a b
     // ---
@@ -231,7 +279,7 @@ double64  angleBetween( const VectorVariable<dim>& v1, const VectorVariable<dim>
 
     // a b
     // ---
-    double64 cos_angle = ab / a_dot_b;
+    double cos_angle = ab / a_dot_b;
 
     // if zero intercept
     if ( cos_angle == 0.0 ) return  90.0;
@@ -244,9 +292,9 @@ double64  angleBetween( const VectorVariable<dim>& v1, const VectorVariable<dim>
 
 
 
-template double64  angleBetween( const VectorVariable<1U> & v1, const VectorVariable<1U>& v2 );
-template double64  angleBetween( const VectorVariable<2U> & v1, const VectorVariable<2U>& v2 );
-template double64  angleBetween( const VectorVariable<3U> & v1, const VectorVariable<3U>& v2 );
+template double  angleBetween( const VectorVariable<1U> & v1, const VectorVariable<1U>& v2 );
+template double  angleBetween( const VectorVariable<2U> & v1, const VectorVariable<2U>& v2 );
+template double  angleBetween( const VectorVariable<3U> & v1, const VectorVariable<3U>& v2 );
 
 
 // TODO: this is what operator overloading should be for; revise!

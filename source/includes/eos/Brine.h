@@ -27,106 +27,106 @@ namespace csmp
 
   public:
 
-    Brine(const double64& externaltemperature,   // [C]
-          const double64& externalpressure,      // [Pa]
-          const double64& externalcomposition);  // [mass fraction NaCl]
+    Brine(const double& externaltemperature,   // [C]
+          const double& externalpressure,      // [Pa]
+          const double& externalcomposition);  // [mass fraction NaCl]
     ~Brine();
 
-    double64         MolarVolume();              // [cm3 mole-1]
-    double64         DMolarVolumeDT();           // [cm3 mole C-1]
-    double64         Density();                  // [kg m-3]
-    double64         CompressibilityBar();       // [bar-1]
-    double64         Compressibility();          // [Pa-1]
-    double64         Expansivity();              // [C-1]
-    double64         IsochoreSlope();            // [Pa C-1]
-    double64         Enthalpy();                 // [J kg-1]
-    double64         HeatCapacity();             // [J kg-1 C-1]
-    double64         Viscosity();                // [Pa s]
+    double         MolarVolume();              // [cm3 mole-1]
+    double         DMolarVolumeDT();           // [cm3 mole C-1]
+    double         Density();                  // [kg m-3]
+    double         CompressibilityBar();       // [bar-1]
+    double         Compressibility();          // [Pa-1]
+    double         Expansivity();              // [C-1]
+    double         IsochoreSlope();            // [Pa C-1]
+    double         Enthalpy();                 // [J kg-1]
+    double         HeatCapacity();             // [J kg-1 C-1]
+    double         Viscosity();                // [Pa s]
  
   private:
 
     Brine();                                     ///< default constructor private as public makes no sense
 
-    const  double64& temperature_;               ///< const ref to temperature [C] in flow code
-    const  double64& pressure_;                  ///< const ref to fluid pressure [Pa] in flow code
-    const  double64& composition_;               ///< const ref to salinity [mass fraction NaCl] in flow code
+    const  double& temperature_;               ///< const ref to temperature [C] in flow code
+    const  double& pressure_;                  ///< const ref to fluid pressure [Pa] in flow code
+    const  double& composition_;               ///< const ref to salinity [mass fraction NaCl] in flow code
 
-    const  double64  visc_u0_;                   ///< internal parameter of Viscosity function
-    const  double64  visc_u1_;                   ///< internal parameter of Viscosity function
-    const  double64  visc_muc800_;               ///< internal parameter of Viscosity function
+    const  double  visc_u0_;                   ///< internal parameter of Viscosity function
+    const  double  visc_u1_;                   ///< internal parameter of Viscosity function
+    const  double  visc_muc800_;               ///< internal parameter of Viscosity function
 
-    double64         tcurrent_;                  ///< internal temperature variable [C]
-    double64         pcurrent_;                  ///< internal pressure variable [bar]
-    double64         xcurrent_;                  ///< internal composition variable [mole fraction NaCl]
+    double         tcurrent_;                  ///< internal temperature variable [C]
+    double         pcurrent_;                  ///< internal pressure variable [bar]
+    double         xcurrent_;                  ///< internal composition variable [mole fraction NaCl]
 
-    double64         density_;                   ///< internal variable for density [kg m-3]
-    double64         molarvolume_;               ///< internal variable for molar volume of solution [cm3 mole-1]
-    double64         dmolarvolumedt_;            ///< temperature derivative of molarvolume_
-    double64         dmolarvolumedp_;            ///< pressure derivative of molarvolume_
-    double64         expansivity_;               ///< internal variable for themal expansivity [C-1]
-    double64         compressibility_;           ///< internal variable for isothermal compressibility [bar-1]
-    double64         isochore_;                  ///< internal variable for isochore slope [bar C-1]
+    double         density_;                   ///< internal variable for density [kg m-3]
+    double         molarvolume_;               ///< internal variable for molar volume of solution [cm3 mole-1]
+    double         dmolarvolumedt_;            ///< temperature derivative of molarvolume_
+    double         dmolarvolumedp_;            ///< pressure derivative of molarvolume_
+    double         expansivity_;               ///< internal variable for themal expansivity [C-1]
+    double         compressibility_;           ///< internal variable for isothermal compressibility [bar-1]
+    double         isochore_;                  ///< internal variable for isochore slope [bar C-1]
 
-    double64         enthalpy_;                  ///< internal variable for specific enthalpy [J kg-1]
-    double64         heatcapacity_;              ///< internal variable for specific heat capacity [J kg-1 C-1]
+    double         enthalpy_;                  ///< internal variable for specific enthalpy [J kg-1]
+    double         heatcapacity_;              ///< internal variable for specific heat capacity [J kg-1 C-1]
 
-    double64         tdummy_;                    ///< internal temperature variable [C] for interfacing with dummywater member
-    double64         pdummy_;                    ///< internal pressure variable [bar]
-    double64         pdummyPa_;                  ///< internal pressure variable [Pa] for interfacing with dummywater member
+    double         tdummy_;                    ///< internal temperature variable [C] for interfacing with dummywater member
+    double         pdummy_;                    ///< internal pressure variable [bar]
+    double         pdummyPa_;                  ///< internal pressure variable [Pa] for interfacing with dummywater member
 
-    double64         muw_;                       ///< internal variable pure water dynamic viscosity
-    double64         viscosity_;                 ///< internal variable dynamic viscosity of solution 
-    double64         pdummy_mu_;                 ///< pressure variable within viscosity computation
-    double64         xm_;                        ///< internal composition variable within viscosity computation
+    double         muw_;                       ///< internal variable pure water dynamic viscosity
+    double         viscosity_;                 ///< internal variable dynamic viscosity of solution 
+    double         pdummy_mu_;                 ///< pressure variable within viscosity computation
+    double         xm_;                        ///< internal composition variable within viscosity computation
 
-    double64         nacl_a0_;                   ///< parameter n1,XNaCl=1 in eq 11 of Driesner, GCA 2007
-    double64         nacl_a1_;                   ///< parameter n2,XNaCl=1 in eq 11 of Driesner, GCA 2007
-    double64         h_nacl_a0_;                 ///< parameter q1,XNaCl=1 in eq 25 of Driesner, GCA 2007
-    double64         h_nacl_a1_;                 ///< parameter q2,XNaCl=1 in eq 26 of Driesner, GCA 2007
-    double64         dnacl_a0dp_;                ///< pressure derivative of nacl_a0_
-    double64         dnacl_a1dp_;                ///< pressure derivative of nacl_a1_
-    double64         a0_;                        ///< parameter n1 of Driesner, GCA 2007
-    double64         a0_1_;                      ///< parameter n11 of Driesner, GCA 2007
-    double64         h_a0_;                      ///< parameter q1 of Driesner, GCA 2007
-    double64         h_a0_1_;                    ///< parameter q11 of Driesner, GCA 2007
-    double64         da0dp_;                     ///< pressure derivative of a0_
-    double64         da0_1dp_;                   ///< pressure derivative of a0_1_
-    double64         a1_0_;                      ///< parameter n21 of Driesner, GCA 2007
-    double64         a1_1_;                      ///< parameter n22 of Driesner, GCA 2007
-    double64         a1_;                        ///< parameter n2 of Driesner, GCA 2007
-    double64         h_a1_1_;                    ///< parameter q21 of Driesner, GCA 2007
-    double64         h_a1_2_;                    ///< parameter q22 of Driesner, GCA 2007
-    double64         h_a1_;                      ///< parameter q2 of Driesner, GCA 2007
-    double64         da1_0dp_;                   ///< pressure derivative of a1_0_
-    double64         da1_1dp_;                   ///< pressure derivative of a1_1_
-    double64         da1dp_;                     ///< pressure derivative of a1_
-    double64         dev_a0_0_;                  ///< parameter n300 of Driesner, GCA 2007
-    double64         dev_a0_1_;                  ///< parameter n301 of Driesner, GCA 2007
-    double64         dev_a0_2_;                  ///< parameter n302 of Driesner, GCA 2007
-    double64         dev_a0_;                    ///< parameter n30 of Driesner, GCA 2007
-    double64         dev_a1_0_;                  ///< parameter n310 of Driesner, GCA 2007
-    double64         dev_a1_1_;                  ///< parameter n311 of Driesner, GCA 2007
-    double64         dev_a1_2_;                  ///< parameter n312 of Driesner, GCA 2007
-    double64         dev_a1_;                    ///< parameter n31 of Driesner, GCA 2007
-    double64         ddev_a0_0dp_;               ///< pressure derivative of dev_a0_0_
-    double64         ddev_a0_1dp_;               ///< pressure derivative of dev_a0_1_
-    double64         ddev_a0_2dp_;               ///< pressure derivative of dev_a0_2_
-    double64         ddev_a0dp_;                 ///< pressure derivative of dev_a0_
-    double64         ddev_a1_0dp_;               ///< pressure derivative of dev_a1_0_
-    double64         ddev_a1_1dp_;               ///< pressure derivative of dev_a1_1_
-    double64         ddev_a1_2dp_;               ///< pressure derivative of dev_a1_2_
-    double64         ddev_a1dp_;                 ///< pressure derivative of dev_a1_
+    double         nacl_a0_;                   ///< parameter n1,XNaCl=1 in eq 11 of Driesner, GCA 2007
+    double         nacl_a1_;                   ///< parameter n2,XNaCl=1 in eq 11 of Driesner, GCA 2007
+    double         h_nacl_a0_;                 ///< parameter q1,XNaCl=1 in eq 25 of Driesner, GCA 2007
+    double         h_nacl_a1_;                 ///< parameter q2,XNaCl=1 in eq 26 of Driesner, GCA 2007
+    double         dnacl_a0dp_;                ///< pressure derivative of nacl_a0_
+    double         dnacl_a1dp_;                ///< pressure derivative of nacl_a1_
+    double         a0_;                        ///< parameter n1 of Driesner, GCA 2007
+    double         a0_1_;                      ///< parameter n11 of Driesner, GCA 2007
+    double         h_a0_;                      ///< parameter q1 of Driesner, GCA 2007
+    double         h_a0_1_;                    ///< parameter q11 of Driesner, GCA 2007
+    double         da0dp_;                     ///< pressure derivative of a0_
+    double         da0_1dp_;                   ///< pressure derivative of a0_1_
+    double         a1_0_;                      ///< parameter n21 of Driesner, GCA 2007
+    double         a1_1_;                      ///< parameter n22 of Driesner, GCA 2007
+    double         a1_;                        ///< parameter n2 of Driesner, GCA 2007
+    double         h_a1_1_;                    ///< parameter q21 of Driesner, GCA 2007
+    double         h_a1_2_;                    ///< parameter q22 of Driesner, GCA 2007
+    double         h_a1_;                      ///< parameter q2 of Driesner, GCA 2007
+    double         da1_0dp_;                   ///< pressure derivative of a1_0_
+    double         da1_1dp_;                   ///< pressure derivative of a1_1_
+    double         da1dp_;                     ///< pressure derivative of a1_
+    double         dev_a0_0_;                  ///< parameter n300 of Driesner, GCA 2007
+    double         dev_a0_1_;                  ///< parameter n301 of Driesner, GCA 2007
+    double         dev_a0_2_;                  ///< parameter n302 of Driesner, GCA 2007
+    double         dev_a0_;                    ///< parameter n30 of Driesner, GCA 2007
+    double         dev_a1_0_;                  ///< parameter n310 of Driesner, GCA 2007
+    double         dev_a1_1_;                  ///< parameter n311 of Driesner, GCA 2007
+    double         dev_a1_2_;                  ///< parameter n312 of Driesner, GCA 2007
+    double         dev_a1_;                    ///< parameter n31 of Driesner, GCA 2007
+    double         ddev_a0_0dp_;               ///< pressure derivative of dev_a0_0_
+    double         ddev_a0_1dp_;               ///< pressure derivative of dev_a0_1_
+    double         ddev_a0_2dp_;               ///< pressure derivative of dev_a0_2_
+    double         ddev_a0dp_;                 ///< pressure derivative of dev_a0_
+    double         ddev_a1_0dp_;               ///< pressure derivative of dev_a1_0_
+    double         ddev_a1_1dp_;               ///< pressure derivative of dev_a1_1_
+    double         ddev_a1_2dp_;               ///< pressure derivative of dev_a1_2_
+    double         ddev_a1dp_;                 ///< pressure derivative of dev_a1_
 
     void             CheckStatus();
-    void             UpdateParameters(  const double64& t, const double64& p, const double64& x);
-    double64         MolarVolumeFromWater();
-    double64         DMolarVolumeDT(    const double64& t_ );
-    double64         DMolarVolumeDP(    const double64& t_ );
-    double64         MolarVolumeHighTX( const double64& t_, const double64& p_, const double64& x_);
-    double64         MolarVolumeLowT();
-    double64         Enthalpy(          const double64& t_, const double64& p_, const double64& x_);
-    double64         HeatCapacity(      const double64& x_);
-    double64         Viscosity(         const double64& t_, const double64& x_, const double64& muw_);
+    void             UpdateParameters(  const double& t, const double& p, const double& x);
+    double         MolarVolumeFromWater();
+    double         DMolarVolumeDT(    const double& t_ );
+    double         DMolarVolumeDP(    const double& t_ );
+    double         MolarVolumeHighTX( const double& t_, const double& p_, const double& x_);
+    double         MolarVolumeLowT();
+    double         Enthalpy(          const double& t_, const double& p_, const double& x_);
+    double         HeatCapacity(      const double& x_);
+    double         Viscosity(         const double& t_, const double& x_, const double& muw_);
 
     Water            dummywater;
     ThreephaseHLV    hlv;
@@ -156,9 +156,9 @@ namespace csmp
      Construct an instance of "Brine" with the temperature (in C), Pressure (Pa) and NaCl Concentration (mass fraction) that live in your code part as constructor arguments. "Brine" has an internal mechanism (via const&) to make sure that it always uses the current values of temperature, pressure, and composition that you have calculated externally. Public member names should be self-explanatory. Don't experiment with making private memebrs public as that will almost inevitably lead to wrong results!
 
      @code
-     double64 temperature(100.0);       // temperature in your code
-     double64 fluid_pressure(10.0e6);   // fluid pressure in your code
-     double64 massfraction_nacl(0.1);   // mass fraction NaCl in fluid, in your code
+     double temperature(100.0);       // temperature in your code
+     double fluid_pressure(10.0e6);   // fluid pressure in your code
+     double massfraction_nacl(0.1);   // mass fraction NaCl in fluid, in your code
      
      Brine    brine(temperature, fluid_pressure, massfraction_nacl); // instantiate a Brine object
 

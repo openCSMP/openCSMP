@@ -37,66 +37,66 @@ LinearTetrahedron::~LinearTetrahedron()
 /** Outputs the shape function derivatives at the point 'xyz' which must lie
 within the tetrahedron.
  */
-void LinearTetrahedron::N( std::vector<double64>& N, const std::vector<double64>& xyz )
+void LinearTetrahedron::N( std::vector<double>& N, const std::vector<double>& xyz )
 {
 
-   const double64 x12( XY(0,0) - XY(1,0) );
-   const double64 x13( XY(0,0) - XY(2,0) );
-   const double64 x14( XY(0,0) - XY(3,0) );
-   const double64 x23( XY(1,0) - XY(2,0) );
-   const double64 x24( XY(1,0) - XY(3,0) );
-   const double64 x34( XY(2,0) - XY(3,0) );
-   const double64 x21( -x12 );
-   const double64 x31( -x13 );
-   const double64 x32( -x23 );
-   const double64 x42( -x24 );
-   const double64 x43( -x34 );
+   const double x12( XY(0,0) - XY(1,0) );
+   const double x13( XY(0,0) - XY(2,0) );
+   const double x14( XY(0,0) - XY(3,0) );
+   const double x23( XY(1,0) - XY(2,0) );
+   const double x24( XY(1,0) - XY(3,0) );
+   const double x34( XY(2,0) - XY(3,0) );
+   const double x21( -x12 );
+   const double x31( -x13 );
+   const double x32( -x23 );
+   const double x42( -x24 );
+   const double x43( -x34 );
 
-   const double64 y12( XY(0,1) - XY(1,1) );
-   const double64 y13( XY(0,1) - XY(2,1) );
-   const double64 y14( XY(0,1) - XY(3,1) );
-   const double64 y23( XY(1,1) - XY(2,1) );
-   const double64 y24( XY(1,1) - XY(3,1) );
-   const double64 y34( XY(2,1) - XY(3,1) );
-   const double64 y21( -y12 );
-   const double64 y31( -y13 );
-   const double64 y32( -y23 );
-   const double64 y42( -y24 );
-   const double64 y43( -y34 );
+   const double y12( XY(0,1) - XY(1,1) );
+   const double y13( XY(0,1) - XY(2,1) );
+   const double y14( XY(0,1) - XY(3,1) );
+   const double y23( XY(1,1) - XY(2,1) );
+   const double y24( XY(1,1) - XY(3,1) );
+   const double y34( XY(2,1) - XY(3,1) );
+   const double y21( -y12 );
+   const double y31( -y13 );
+   const double y32( -y23 );
+   const double y42( -y24 );
+   const double y43( -y34 );
 
-   const double64 z12( XY(0,2) - XY(1,2) );
-   const double64 z13( XY(0,2) - XY(2,2) );
-   const double64 z14( XY(0,2) - XY(3,2) );
-   const double64 z23( XY(1,2) - XY(2,2) );
-   const double64 z24( XY(1,2) - XY(3,2) );
-   const double64 z34( XY(2,2) - XY(3,2) );
-   const double64 z21( -z12 );
-   const double64 z31( -z13 );
-   const double64 z32( -z23 );
-   const double64 z42( -z24 );
-   const double64 z43( -z34 );
+   const double z12( XY(0,2) - XY(1,2) );
+   const double z13( XY(0,2) - XY(2,2) );
+   const double z14( XY(0,2) - XY(3,2) );
+   const double z23( XY(1,2) - XY(2,2) );
+   const double z24( XY(1,2) - XY(3,2) );
+   const double z34( XY(2,2) - XY(3,2) );
+   const double z21( -z12 );
+   const double z31( -z13 );
+   const double z32( -z23 );
+   const double z42( -z24 );
+   const double z43( -z34 );
 
-   const double64 a1( y42*z32 - y32*z42 );
-   const double64 a2( y31*z43 - y34*z13 );
-   const double64 a3( y24*z14 - y14*z24 );
-   const double64 a4( y13*z21 - y12*z31 );
+   const double a1( y42*z32 - y32*z42 );
+   const double a2( y31*z43 - y34*z13 );
+   const double a3( y24*z14 - y14*z24 );
+   const double a4( y13*z21 - y12*z31 );
 
-   const double64 b1( x32*z42 - x42*z32 );
-   const double64 b2( x43*z31 - x13*z34 );
-   const double64 b3( x14*z24 - x24*z14 );
-   const double64 b4( x21*z13 - x31*z12 );
+   const double b1( x32*z42 - x42*z32 );
+   const double b2( x43*z31 - x13*z34 );
+   const double b3( x14*z24 - x24*z14 );
+   const double b4( x21*z13 - x31*z12 );
 
-   const double64 c1( x42*y32 - x32*y42 );
-   const double64 c2( x31*y43 - x34*y13 );
-   const double64 c3( x24*y14 - x14*y24 );
-   const double64 c4( x13*y21 - x12*y31 );
+   const double c1( x42*y32 - x32*y42 );
+   const double c2( x31*y43 - x34*y13 );
+   const double c3( x24*y14 - x14*y24 );
+   const double c4( x13*y21 - x12*y31 );
 
-   const double64 V00( x21*( y23*z34 - y34*z23) + x32*(y34*z12 - y12*z34) + x43*(y12*z23 - y23*z12) );
+   const double V00( x21*( y23*z34 - y34*z23) + x32*(y34*z12 - y12*z34) + x43*(y12*z23 - y23*z12) );
 
-   const double64 V01( XY(1,0) * ( XY(2,1)*XY(3,2) - XY(3,1)*XY(2,2) ) + XY(2,0) * ( XY(3,1)*XY(1,2) - XY(1,1)*XY(3,2) ) + XY(3,0) * ( XY(1,1)*XY(2,2) - XY(2,1)*XY(1,2) ) );
-   const double64 V02( XY(0,0) * ( XY(3,1)*XY(2,2) - XY(2,1)*XY(3,2) ) + XY(2,0) * ( XY(0,1)*XY(3,2) - XY(3,1)*XY(0,2) ) + XY(3,0) * ( XY(2,1)*XY(0,2) - XY(0,1)*XY(2,2) ) );
-   const double64 V03( XY(0,0) * ( XY(1,1)*XY(3,2) - XY(3,1)*XY(1,2) ) + XY(1,0) * ( XY(3,1)*XY(0,2) - XY(0,1)*XY(3,2) ) + XY(3,0) * ( XY(0,1)*XY(1,2) - XY(1,1)*XY(0,2) ) );
-   const double64 V04( XY(0,0) * ( XY(2,1)*XY(1,2) - XY(1,1)*XY(2,2) ) + XY(1,0) * ( XY(0,1)*XY(2,2) - XY(2,1)*XY(0,2) ) + XY(2,0) * ( XY(1,1)*XY(0,2) - XY(0,1)*XY(1,2) ) );
+   const double V01( XY(1,0) * ( XY(2,1)*XY(3,2) - XY(3,1)*XY(2,2) ) + XY(2,0) * ( XY(3,1)*XY(1,2) - XY(1,1)*XY(3,2) ) + XY(3,0) * ( XY(1,1)*XY(2,2) - XY(2,1)*XY(1,2) ) );
+   const double V02( XY(0,0) * ( XY(3,1)*XY(2,2) - XY(2,1)*XY(3,2) ) + XY(2,0) * ( XY(0,1)*XY(3,2) - XY(3,1)*XY(0,2) ) + XY(3,0) * ( XY(2,1)*XY(0,2) - XY(0,1)*XY(2,2) ) );
+   const double V03( XY(0,0) * ( XY(1,1)*XY(3,2) - XY(3,1)*XY(1,2) ) + XY(1,0) * ( XY(3,1)*XY(0,2) - XY(0,1)*XY(3,2) ) + XY(3,0) * ( XY(0,1)*XY(1,2) - XY(1,1)*XY(0,2) ) );
+   const double V04( XY(0,0) * ( XY(2,1)*XY(1,2) - XY(1,1)*XY(2,2) ) + XY(1,0) * ( XY(0,1)*XY(2,2) - XY(2,1)*XY(0,2) ) + XY(2,0) * ( XY(1,1)*XY(0,2) - XY(0,1)*XY(1,2) ) );
 
    N[0] = ( V01 + a1*xyz[0] + b1*xyz[1] + c1*xyz[2])/V00;
    N[1] = ( V02 + a2*xyz[0] + b2*xyz[1] + c2*xyz[2])/V00;
@@ -158,7 +158,7 @@ A reference to the parent element.
 @return The volume of the tetrahedron.
 
 */
-double64  LinearTetrahedron::Volume()
+double  LinearTetrahedron::Volume()
 {
    UpdateFor();
 
@@ -171,7 +171,7 @@ double64  LinearTetrahedron::Volume()
 
 void LinearTetrahedron::IntegralNN( DenseMatrix<DM_MIN>& M )
  {
-     double64 vol = Volume();
+     double vol = Volume();
 
      // consistent formulation: see users guide chapter 7
      // off-diagonal elements
@@ -292,6 +292,37 @@ void LinearTetrahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids 
 
 
 
+vector<size_t>  LinearTetrahedron::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,3,2};
+        case 2: return vector<size_t>{0,1,3};
+        case 3: return vector<size_t>{0,2,1};
+      }
+    cerr <<"\nLinearTetrahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+
+vector<size_t>  LinearTetrahedron::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,2,3};
+        case 2: return vector<size_t>{0,1,3};
+        case 3: return vector<size_t>{0,1,2};
+        default:
+          cerr <<"\nLinearTetrahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
 CSMP_FEM_TYPE LinearTetrahedron::ElementTypeOfFace( size_t ) const
  {
     return LINEAR_TRIANGLE3D;
@@ -317,7 +348,7 @@ void LinearTetrahedron::UpdateFor()
    if ( tetrahedron_id != CurrentID() )
      {
         // test function coefficients
-        int32 j(1);
+        int32_t j(1);
         for ( size_t i=0; i<npe; i++ )
           {
              // a(i)
@@ -356,7 +387,7 @@ void LinearTetrahedron::UpdateFor()
      
      @test OK 
 */
-void  LinearTetrahedron::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  LinearTetrahedron::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);

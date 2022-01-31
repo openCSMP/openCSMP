@@ -30,7 +30,7 @@ Reads node data (=vector properties) for further processing
 by the ComputeContribution() method.  
 */
 template<size_t dim,class SIMPLEX>
-void PT_op<dim,SIMPLEX>::GetOperands(  SIMPLEX& e )
+void PT_op<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
    { 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), NODAL_FORCE );
    }
@@ -56,7 +56,7 @@ To compute nodal forces acting on the boundary of a model.
  
 */
 template<size_t dim,class SIMPLEX>
-void PT_op<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void PT_op<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() * dim );
    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
@@ -67,7 +67,7 @@ void PT_op<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
      for ( size_t j=0U; j<dim; j++ )
          // forces must be divided by number of elements they will be accumulated from
          // to avoid multiple accumulation
-         MathOperatorRHS<dim>::RHS[ i * dim + j ] = NODAL_FORCE[i][j] / static_cast<double64>(e.N(i)->Parents());
+         MathOperatorRHS<dim>::RHS[ i * dim + j ] = NODAL_FORCE[i][j] / static_cast<double>(e.N(i)->Parents());
 
 } // end ComputeContribution
      

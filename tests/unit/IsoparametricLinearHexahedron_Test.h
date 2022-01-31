@@ -18,18 +18,18 @@ class IsoparametricLinearHexahedron_Test : public Test {
 		~IsoparametricLinearHexahedron_Test();
     
 		virtual void run();
-		double64 HexaVolUsingCSMP(double64 *Xcord, double64 *Ycord, double64 *Zcord, double64 &HexaVolumeUsingFVSectors, double64 &HexaVolumeUsingFVSectorsIPWeight_);
-		double64 HexaVolUsingTetCSMP(double64 *Xcord, double64 *Ycord, double64 *Zcord);
-		double64 HexaVolAnalyticalSolution(double64 *Xcord, double64 *Ycord, double64 *Zcord);
-		double64 TetVolFromCSMP(double64 *Xcord, double64 *Ycord, double64 *Zcord, int, int, int, int);
-		double64 AnalyticalHexaVolume(double64 *Xcord, double64 *Ycord, double64 *Zcord);
-		double64 AnalyticalTetVol(double64 *X, double64 *Y, double64 *Z, int p0, int p1, int p2, int p3);
-		//double64 HexaVolUsingFVSectors(double64 *X, double64 *Y, double64 *Z);
+		double HexaVolUsingCSMP(double *Xcord, double *Ycord, double *Zcord, double &HexaVolumeUsingFVSectors, double &HexaVolumeUsingFVSectorsIPWeight_);
+		double HexaVolUsingTetCSMP(double *Xcord, double *Ycord, double *Zcord);
+		double HexaVolAnalyticalSolution(double *Xcord, double *Ycord, double *Zcord);
+		double TetVolFromCSMP(double *Xcord, double *Ycord, double *Zcord, int, int, int, int);
+		double AnalyticalHexaVolume(double *Xcord, double *Ycord, double *Zcord);
+		double AnalyticalTetVol(double *X, double *Y, double *Z, int p0, int p1, int p2, int p3);
+		//double HexaVolUsingFVSectors(double *X, double *Y, double *Z);
 
 	private:
-		double64 *Xcord, *Ycord, *Zcord;
-		double64 HexaVolumeUsingFVSectors_;
-		double64 HexaVolumeUsingFVSectorsIPWeight_;
+		double *Xcord, *Ycord, *Zcord;
+		double HexaVolumeUsingFVSectors_;
+		double HexaVolumeUsingFVSectorsIPWeight_;
 		bool verbose_;
 
 };

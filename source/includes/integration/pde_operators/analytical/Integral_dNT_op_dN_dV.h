@@ -13,8 +13,10 @@ class Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
     Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
                            const char* oper, const char* basic, const char* test );
     
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& );
+    
     virtual Integral_dNT_op_dN_dV<dim,SIMPLEX>* clone() const { return new Integral_dNT_op_dN_dV<dim,SIMPLEX> (*this); }
+    
   private:
     DenseMatrix<DM_MIN>  DN, DNT; 
 };

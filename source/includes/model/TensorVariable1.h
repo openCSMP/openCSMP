@@ -14,25 +14,25 @@ class TensorVariable<1U> {
 
     TensorVariable();
     TensorVariable( const TensorVariable& );
-    TensorVariable( VARIABLE_FLAG, double64 );
+    TensorVariable( VARIABLE_FLAG, double );
     TensorVariable( TensorVariable&& ) = default;
                                                       
     ~TensorVariable();
     
-    double64&        operator()( size_t i, size_t j );
-    const double64&  operator()( size_t i, size_t j ) const;
-    void             Component( size_t, double64 );
-    double64         Component( size_t i ) const;
+    double&        operator()( size_t i, size_t j );
+    const double&  operator()( size_t i, size_t j ) const;
+    void             Component( size_t, double );
+    double         Component( size_t i ) const;
 
-    TensorVariable   operator+( double64 val ) const;
-    TensorVariable   operator-( double64 val ) const;
-    TensorVariable   operator*( double64 val ) const;
-    TensorVariable   operator/( double64 val ) const;
+    TensorVariable   operator+( double val ) const;
+    TensorVariable   operator-( double val ) const;
+    TensorVariable   operator*( double val ) const;
+    TensorVariable   operator/( double val ) const;
     
-    TensorVariable&  operator+=( double64 val );
-    TensorVariable&  operator-=( double64 val );
-    TensorVariable&  operator*=( double64 val );
-    TensorVariable&  operator/=( double64 val );
+    TensorVariable&  operator+=( double val );
+    TensorVariable&  operator-=( double val );
+    TensorVariable&  operator*=( double val );
+    TensorVariable&  operator/=( double val );
 
     TensorVariable&  operator+=( const ScalarVariable& sc );
     TensorVariable&  operator-=( const ScalarVariable& sc );
@@ -52,7 +52,7 @@ class TensorVariable<1U> {
     TensorVariable&  operator/=( const TensorVariable& t );
     TensorVariable&  operator*=( const TensorVariable& t );
     
-    TensorVariable&  operator=( double64 val );
+    TensorVariable&  operator=( double val );
     TensorVariable&  operator=( const ScalarVariable& s );
     TensorVariable&  operator=( const VectorVariable<1U>& v );
     TensorVariable&  operator=( const TensorVariable& t );
@@ -62,18 +62,18 @@ class TensorVariable<1U> {
     bool             operator!=( const TensorVariable& t ) const; 
     bool             operator<( const TensorVariable& t ) const; 
     
-    bool             IsWithinRange( double64 vmin, double64 vmax ) const;
+    bool             IsWithinRange( double vmin, double vmax ) const;
     VARIABLE_FLAG&   Flag( size_t i=0 );
     VARIABLE_FLAG    Flag( size_t i=0 ) const;
     size_t           Size() const;
 
     /// no resizing but new values
-    void             Resize( size_t newSize, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
+    void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
     void             Identity();
-    double64         MinElement() const;
-    double64         MaxElement() const;
-    double64         Determinant() const;
-    double64         Trace() const;
+    double         MinElement() const;
+    double         MaxElement() const;
+    double         Determinant() const;
+    double         Trace() const;
     TensorVariable   Adjoint()     const;
     TensorVariable   Inverse()     const;
     TensorVariable   Transposed()  const;
@@ -93,7 +93,7 @@ class TensorVariable<1U> {
 
   private:
     VARIABLE_FLAG  flag;
-    double64       data;
+    double       data;
 };
 
 

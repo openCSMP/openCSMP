@@ -7,7 +7,7 @@
 namespace csmp {
 
   template<>
-  void calculateN<1u>(const Element<1u>& e, const Point<1u>& p, double64* coeff)
+  void calculateN<1u>(const Element<1u>& e, const Point<1u>& p, double* coeff)
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -23,7 +23,7 @@ namespace csmp {
   }
 
   template<>
-  void calculateN<2u>(const Element<2u>& e, const Point<2u>& p, double64* coeff)
+  void calculateN<2u>(const Element<2u>& e, const Point<2u>& p, double* coeff)
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -43,7 +43,7 @@ namespace csmp {
   }
 
   template<>
-  void calculateN<3u>(const Element<3u>& e, const Point<3u>& p, double64* coeff)
+  void calculateN<3u>(const Element<3u>& e, const Point<3u>& p, double* coeff)
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -68,7 +68,7 @@ namespace csmp {
 
   template<>
   void
-  calculateDN(const Element<1u>& e, const Point<1u>& p, std::vector<double64>* DN)
+  calculateDN(const Element<1u>& e, const Point<1u>& p, std::vector<double>* DN)
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -87,7 +87,7 @@ namespace csmp {
 
   template<>
   void
-  calculateDN(const Element<2u>& e, const Point<2u>& p, std::vector<double64>* DN)
+  calculateDN(const Element<2u>& e, const Point<2u>& p, std::vector<double>* DN)
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -112,7 +112,7 @@ namespace csmp {
 
   template<>
   void
-  calculateDN(const Element<3u>& e, const Point<3u>& p, std::vector<double64>* DN)
+  calculateDN(const Element<3u>& e, const Point<3u>& p, std::vector<double>* DN)
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -169,7 +169,7 @@ namespace csmp {
           tangent += weights.first * n;
           bitangent += weights.second * n;
         }
-        double64 length = tangent.Length();
+        double length = tangent.Length();
         tangent.NormalizeLengthTo(1.0);
         Point<dim> normal = bitangent - dotProduct(tangent,bitangent) * tangent;
         normal.NormalizeLengthTo(length);

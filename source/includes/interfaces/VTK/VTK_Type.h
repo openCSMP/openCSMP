@@ -4,7 +4,7 @@
 namespace csmp {
 
 /// polygonal data types supported by the Visual Tool Kit (VTK) from kitware.com
-enum VTK_TYPE 
+enum VTK_TYPE // keep default int because it is written to file
 { 
   VTK_VERTEX=1,
   VTK_POLY_VERTEX=2,

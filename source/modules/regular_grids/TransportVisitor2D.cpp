@@ -54,7 +54,7 @@ TransportVisitor2D::TransportVisitor2D( Model<2>& sg,
 
      // initializing the FiniteDifferenceGrid
      sg.AssignElementCharacteristicsTo("inner radius", "inner radius");
-     double64          rmin, rmax;
+     double          rmin, rmax;
      sg.MinMaxOf("inner radius", rmin, rmax );
      resolution = rmin;
 
@@ -99,8 +99,8 @@ void TransportVisitor2D::Visit( Model<2U>* n )
 
 
 
-void TransportVisitor2D::MinMaxCoordinates( double64& min_x, double64& max_x, 
-                                            double64& min_y, double64& max_y )
+void TransportVisitor2D::MinMaxCoordinates( double& min_x, double& max_x, 
+                                            double& min_y, double& max_y )
  {
     min_x = max_x = XY(0,0);
     min_y = max_y = XY(0,1);
@@ -115,7 +115,7 @@ void TransportVisitor2D::MinMaxCoordinates( double64& min_x, double64& max_x,
 
 
 
-bool  TransportVisitor2D::IsInsideTriangle( double64 x, double64 y, bool update )
+bool  TransportVisitor2D::IsInsideTriangle( double x, double y, bool update )
   {
      mjl::Point p1(XY(0,0),XY(0,1)), 
                 p2(XY(1,0),XY(1,1)), 
@@ -135,12 +135,12 @@ bool  TransportVisitor2D::IsInsideTriangle( double64 x, double64 y, bool update 
           
           // flipping segments if triangles are numbered counter-clockwise
           if ( a[0].Classify(mp) == mjl::RIGHT )
-            for ( int32 r=0; r<3; r++ ) a[r].Flip();
+            for ( int32_t r=0; r<3; r++ ) a[r].Flip();
        }
      // TEST: if the midpoint does not lie to the right of each edge
      // the edges are flipped to change the sense of rotation
      // of the triangle
-     for ( int32 q=0; q<3; q++ )
+     for ( int32_t q=0; q<3; q++ )
        if ( a[q].Classify(p) == mjl::RIGHT ) return false;
        
      return true;
@@ -151,16 +151,16 @@ bool  TransportVisitor2D::IsInsideTriangle( double64 x, double64 y, bool update 
 
 void TransportVisitor2D::InitializeElementGrid( size_t idx )
  {
-    double64  min_x, max_x, min_y, max_y;
-    int32      i_min, j_min, i_max, j_max;
+    double  min_x, max_x, min_y, max_y;
+    int32_t      i_min, j_min, i_max, j_max;
 
     MinMaxCoordinates( min_x, max_x, min_y, max_y );      
     grid.ClosestGridPointTo( min_x, min_y, i_min, j_min ); 
     grid.ClosestGridPointTo( max_x, max_y, i_max, j_max ); 
 
     // accumulating grid points into ElementGrid
-    for ( int32 i=i_min; i<=i_max; i++ )
-      for ( int32 j=j_min; j<=j_max; j++ ) 
+    for ( int32_t i=i_min; i<=i_max; i++ )
+      for ( int32_t j=j_min; j<=j_max; j++ ) 
         {
            // testing whether point lies within triangle
            if ( IsInsideTriangle(grid.X(j),grid.Y(i)) )
@@ -190,8 +190,8 @@ void TransportVisitor2D::Visit( Element<2U>* n )
        }
      
      // getting coordinates 
-     map<pair<int32,int32>,double64>::iterator eit    = egrids[ n->Idx() ].Begin();
-     map<pair<int32,int32>,double64>::iterator it_end = egrids[ n->Idx() ].End();
+     map<pair<int32_t,int32_t>,double>::iterator eit    = egrids[ n->Idx() ].Begin();
+     map<pair<int32_t,int32_t>,double>::iterator it_end = egrids[ n->Idx() ].End();
      
      while ( eit != it_end )
        {
@@ -205,15 +205,15 @@ void TransportVisitor2D::Visit( Element<2U>* n )
 
           // getting x and y velocity components at point
           // by summing up the testfunction values at the point
-          double64  dvx(0.), dvy(0.);
+          double  dvx(0.), dvy(0.);
           for ( size_t i=0U; i<n->Nodes(); i++ ) {
                dvx += n->FE()->NRST[i] * P[i](0);
                dvy += n->FE()->NRST[i] * P[i](1);
             }
           // getting place from where fluid comes (upstream) and interpolating 
           // the corresponding concentration value
-          double64 px = xy[0] - dvx * time_increment;
-          double64 py = xy[1] - dvy * time_increment;
+          double px = xy[0] - dvx * time_increment;
+          double py = xy[1] - dvy * time_increment;
           
           if ( interpolate_only_within_grid ) 
             (*eit).second = grid.InterpolateWithin( px, py );
@@ -226,10 +226,10 @@ void TransportVisitor2D::Visit( Element<2U>* n )
     
     
     
-bool TransportVisitor2D::AdvectUntil( Model<2U>& sg, double64 final_time )
+bool TransportVisitor2D::AdvectUntil( Model<2U>& sg, double final_time )
  {
-    int32  n(0);
-    double64  time(0.), vmin, vmax, p0min, p0max, p1min, p1max;
+    int32_t  n(0);
+    double  time(0.), vmin, vmax, p0min, p0max, p1min, p1max;
 
     Region<2>&  sgroup(sg.Region("Model"));
     renumberElementNodes( sgroup.ElementsBegin(), sgroup.ElementsEnd() );
@@ -259,7 +259,7 @@ bool TransportVisitor2D::AdvectUntil( Model<2U>& sg, double64 final_time )
          StoreResultsInGrid();
          grid.SaveToJPG( "test-grid", n );
          time += time_increment;
-         if ( n >= static_cast<int32>(max_increments) ) break;
+         if ( n >= static_cast<int32_t>(max_increments) ) break;
       }
 
     InputPropertyFromGrid( sg, adv_prop );

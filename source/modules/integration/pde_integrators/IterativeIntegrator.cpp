@@ -17,11 +17,11 @@ IterativeIntegrator<dim,COMPUTATION_DOMAIN>::IterativeIntegrator()
 
 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-double64 IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Residual()
+double IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Residual()
  {
     cout << "\nIterativeIntegrator< dim>::Residual: this method has not been defined yet."<< endl;
     cout <<" returning 1."<< endl;
-    return static_cast<double64>(1.);
+    return static_cast<double>(1.);
  }
 
 
@@ -33,7 +33,7 @@ void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::MaximalIterationNumber(size_t 
 }
 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::TargetResidual(double64 target_residual) {
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::TargetResidual(double target_residual) {
   target_residual_ = target_residual;
 }
 
@@ -95,7 +95,7 @@ template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMAIN<dim>& sg )
  {
    SAMG_KeepMemory();
-   double64 res; 
+   double res; 
    size_t i; 
   
   for ( i = 0U; i < max_iter_; ++i) {

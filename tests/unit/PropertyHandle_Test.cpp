@@ -4,6 +4,7 @@
 
 #include "PropertyHandle_Test.h"
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "PropertyHandle.h"
 
 using namespace std;
@@ -87,28 +88,28 @@ void PropertyHandle_Test::run()
         Index  nkey   = model->Database().StorageKey( "node variable 2" );
         nodeVariable2 += elementVariable1;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, sc );
-        _equal( sc(), 5.5, numeric_limits<double64>::epsilon() * 5. );
+        _equal( sc(), 5.5, numeric_limits<double>::epsilon() * 5. );
         nodeVariable2 += IPVariable1;
          (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, sc );
-        _equal( sc(), 10.5, numeric_limits<double64>::epsilon() * 10. ); // x10 since the number is double digit
+        _equal( sc(), 10.5, numeric_limits<double>::epsilon() * 10. ); // x10 since the number is double digit
 
         // ELEMENT
         Index  ekey   = model->Database().StorageKey( "element variable 2" );
         elementVariable2 += nodeVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
-        _equal( sc(), 5., numeric_limits<double64>::epsilon() );
+        _equal( sc(), 5., numeric_limits<double>::epsilon() );
         elementVariable2 += IPVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
-        _equal( sc(), 10., numeric_limits<double64>::epsilon() );
+        _equal( sc(), 10., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         Index  ipkey   = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 += nodeVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
-        _equal( sc(), 9., numeric_limits<double64>::epsilon() );
+        _equal( sc(), 9., numeric_limits<double>::epsilon() );
         IPVariable2 += elementVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
-        _equal( sc(), 10.5, numeric_limits<double64>::epsilon() );
+        _equal( sc(), 10.5, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
             cout << "\nTesting operator += function for vector variables" << endl;
@@ -121,12 +122,12 @@ void PropertyHandle_Test::run()
         nkey   = model->Database().StorageKey( "node variable 4" );
         nodeVariable4 += elementVariable3;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, vc );
-        _equal( vc(0), 17.5, numeric_limits<double64>::epsilon() * 10. );
+        _equal( vc(0), 17.5, numeric_limits<double>::epsilon() * 10. );
         nodeVariable4  = 1.3;
         IPVariable3    = 0.7;
         nodeVariable4 += IPVariable3;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, vc );
-        _equal( vc(0), 2.0, numeric_limits<double64>::epsilon() * 10. );
+        _equal( vc(0), 2.0, numeric_limits<double>::epsilon() * 10. );
 
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 4" );
@@ -134,20 +135,20 @@ void PropertyHandle_Test::run()
         nodeVariable3     = 0.4;
         elementVariable4 += nodeVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
-        _equal( vc(0), 1.0, numeric_limits<double64>::epsilon() );
+        _equal( vc(0), 1.0, numeric_limits<double>::epsilon() );
         IPVariable3       = 0.7;
         elementVariable4 += IPVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
-        _equal( vc(0), 1.7, numeric_limits<double64>::epsilon() );
+        _equal( vc(0), 1.7, numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 4" );
         IPVariable4 += nodeVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
-        _equal( vc(0), 12.4, numeric_limits<double64>::epsilon() );
+        _equal( vc(0), 12.4, numeric_limits<double>::epsilon() );
         IPVariable4 += elementVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
-        _equal( vc(0), 19.9, numeric_limits<double64>::epsilon() );
+        _equal( vc(0), 19.9, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
             cout << "\nTesting operator += function for tensor variables" << endl;
@@ -160,28 +161,28 @@ void PropertyHandle_Test::run()
         nkey   = model->Database().StorageKey( "node variable 6" );
         nodeVariable6 += elementVariable5;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, ts );
-        _equal( ts(0,0), 29.5, numeric_limits<double64>::epsilon() * 100. );
+        _equal( ts(0,0), 29.5, numeric_limits<double>::epsilon() * 100. );
         nodeVariable6 += IPVariable5;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, ts );
-        _equal( ts(0,0), 46.5, numeric_limits<double64>::epsilon() * 100. );
+        _equal( ts(0,0), 46.5, numeric_limits<double>::epsilon() * 100. );
 
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 6" );
         elementVariable6 += nodeVariable5;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
-        _equal( ts(0,0), 29., numeric_limits<double64>::epsilon() );
+        _equal( ts(0,0), 29., numeric_limits<double>::epsilon() );
         elementVariable6 += IPVariable5;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
-        _equal( ts(0,0), 46., numeric_limits<double64>::epsilon() );
+        _equal( ts(0,0), 46., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 6" );
         IPVariable6 += nodeVariable5;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
-        _equal( ts(0,0), 33., numeric_limits<double64>::epsilon() );
+        _equal( ts(0,0), 33., numeric_limits<double>::epsilon() );
         IPVariable6 += elementVariable5;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
-        _equal( ts(0,0), 46.5, numeric_limits<double64>::epsilon() );
+        _equal( ts(0,0), 46.5, numeric_limits<double>::epsilon() );
 
         /////////////////////////////////////////////////////////////////////////
 
@@ -219,7 +220,7 @@ void PropertyHandle_Test::run()
         nkey   = model->Database().StorageKey( "node variable 2" );
         nodeVariable2 -= elementVariable1;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, sc );
-        _equal( sc(), 2.5, numeric_limits<double64>::epsilon() * 10. );
+        _equal( sc(), 2.5, numeric_limits<double>::epsilon() * 10. );
         nodeVariable2 -= IPVariable1;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, sc );
         _equal( sc(), -2.5, TOLERANCE );
@@ -228,19 +229,19 @@ void PropertyHandle_Test::run()
         ekey   = model->Database().StorageKey( "element variable 2" );
         elementVariable2 -= nodeVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
-        _equal( sc(), -1, numeric_limits<double64>::epsilon() );
+        _equal( sc(), -1, numeric_limits<double>::epsilon() );
         elementVariable2 -= IPVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
-        _equal( sc(), -6., numeric_limits<double64>::epsilon() );
+        _equal( sc(), -6., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 -= nodeVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
-        _equal( sc(), 3., numeric_limits<double64>::epsilon() );
+        _equal( sc(), 3., numeric_limits<double>::epsilon() );
         IPVariable2 -= elementVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
-        _equal( sc(), 1.5, numeric_limits<double64>::epsilon() );
+        _equal( sc(), 1.5, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
             cout << "\nTesting operator -= function for vector variables" << endl;
@@ -260,19 +261,19 @@ void PropertyHandle_Test::run()
         ekey   = model->Database().StorageKey( "element variable 4" );
         elementVariable4 -= nodeVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
-        _equal( vc(0), -1., numeric_limits<double64>::epsilon() );
+        _equal( vc(0), -1., numeric_limits<double>::epsilon() );
         elementVariable4 -= IPVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
-        _equal( vc(0), -12., numeric_limits<double64>::epsilon() );
+        _equal( vc(0), -12., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 4" );
         IPVariable4 -= nodeVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
-        _equal( vc(0), 3., numeric_limits<double64>::epsilon() );
+        _equal( vc(0), 3., numeric_limits<double>::epsilon() );
         IPVariable4 -= elementVariable3;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
-        _equal( vc(0), -4.5, numeric_limits<double64>::epsilon() );
+        _equal( vc(0), -4.5, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
             cout << "\nTesting operator -= function for tensor variables" << endl;

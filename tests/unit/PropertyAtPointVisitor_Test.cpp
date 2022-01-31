@@ -75,7 +75,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
                                                                   const char* varfile_name,
                                                                   const char* mesh_type,
                                                                   bool brute_force_search,
-                                                                  double64 tolerance )
+                                                                  double tolerance )
 {
     ///--------------
     /// 1D Mesh Test
@@ -84,10 +84,10 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
     //------------------------------------
     // Geometry
     if ( verbose_ ) cout <<"Building Model..."<<endl;
-    double64    dx_min(0.1);           // min space step
-    double64    dx_max(0.5);           // max space step
-    double64    length(1.0);           // length
-    double64    width_of_transition_zone(10);
+    double    dx_min(0.1);           // min space step
+    double    dx_max(0.5);           // max space step
+    double    length(1.0);           // length
+    double    width_of_transition_zone(10);
 
     ErfDensity  erfc_density;
     Model1D<1U> model1DRegion( mesh_name, varfile_name, length, dx_min, dx_max, width_of_transition_zone, &erfc_density );
@@ -105,7 +105,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
     // -----------------------------------
     // Set points
     size_t index(0);
-    std::map<size_t,std::vector<double64> > pXYZ;
+    std::map<size_t,std::vector<double> > pXYZ;
     pXYZ.clear();
     // Nodes
     for(vector<Node<1>*>::iterator nit=nodes_begin;nit!=nodes_end;nit++)
@@ -143,14 +143,14 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
     // Comparison
     if ( verbose_ ) cout << "\nPropertyAtPointVisitor_Test:: Testing search algorihm in 1D ( "<<mesh_type<<" )..."<<endl;
     cout.setf(ios_base::scientific);
-    std::vector<double64> NI;
+    std::vector<double> NI;
     for(size_t i=0;i<pXYZ.size();i++)
     {
         eptr = pAt1DRegion.ElementThatContains(i);
         eptr->CoordinateMatrix();
         eptr->FE()->N(NI,pXYZ[i]);
 
-        vector<double64> xyz(1,0.0);
+        vector<double> xyz(1,0.0);
         for ( size_t k=0; k<eptr->Nodes(); k++ )
           for ( size_t j=0; j<1; j++ )
             xyz[j] +=  NI[k]* eptr->FE()->XYZ(k,j);
@@ -173,7 +173,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
 
 void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* mesh_name, const char* regionfile_name,
                                                                   const char* varfile_name, const char* mesh_type,
-                                                                  bool brute_force_search, double64 tolerance )
+                                                                  bool brute_force_search, double tolerance )
 {
 
     /// ---------------
@@ -197,7 +197,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
     //------------------------------------
     // Set points
     size_t index(0);
-    std::map<size_t,std::vector<double64> > pXYZ;
+    std::map<size_t,std::vector<double> > pXYZ;
     pXYZ.clear();
     // Nodes
     for(vector<Node<2>*>::iterator nit=nodes_begin;nit!=nodes_end;nit++)
@@ -237,14 +237,14 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
     // Comparison
     if ( verbose_ ) cout << "\nPropertyAtPointVisitor_Test:: Testing search algorihm in 2D ( "<<mesh_type<<" )..."<<endl;
     cout.setf(ios_base::scientific);
-    std::vector<double64> NI;
+    std::vector<double> NI;
     for(size_t i=0;i<pXYZ.size();i++)
     {
         eptr = pAt2DRegion.ElementThatContains(i);
         eptr->CoordinateMatrix();
         eptr->FE()->N(NI,pXYZ[i]);
 
-        vector<double64> xyz(3,0.0);
+        vector<double> xyz(3,0.0);
         for ( size_t k=0; k<eptr->Nodes(); k++ )
           for ( size_t j=0; j<2; j++ )
             xyz[j] +=  NI[k]* eptr->FE()->XYZ(k,j);
@@ -268,7 +268,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
 
 void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* mesh_name, const char* regionfile_name,
                                                                   const char* varfile_name, const char* mesh_type,
-                                                                  bool brute_force_search, double64 tolerance )
+                                                                  bool brute_force_search, double tolerance )
 {
 
     ///----------------
@@ -295,7 +295,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
     //------------------------------------
     // Set points
     size_t index(0);
-    std::map<size_t,std::vector<double64> > pXYZ;
+    std::map<size_t,std::vector<double> > pXYZ;
     pXYZ.clear();
     // Nodes
     for(vector<Node<3>*>::iterator nit=nodes_begin;nit!=nodes_end;nit++)
@@ -337,13 +337,13 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
     // Comparison
     if ( verbose_ ) cout << "\nPropertyAtPointVisitor_Test:: Testing search algorihm in 3D at Reigon ("<<mesh_type<<") ..."<<endl;
     cout.setf(ios_base::scientific);
-    std::vector<double64> NI;
+    std::vector<double> NI;
     for( size_t i=0;i<pXYZ.size();i++ )
     {
         eptr = pAt3DRegion.ElementThatContains(i);
         eptr->CoordinateMatrix();
         eptr->FE()->N(NI,pXYZ[i]);
-        vector<double64> xyz(3,0.0);
+        vector<double> xyz(3,0.0);
         for ( size_t k=0; k<eptr->Nodes(); k++ )
           for ( size_t j=0; j<3; j++ )
               xyz[j] +=  NI[k]*eptr->FE()->XYZ(k,j);
@@ -371,8 +371,8 @@ void PropertyAtPointVisitor_Test::OutputElapsedTime( clock_t start, clock_t end 
 
     unsigned long millisec ( (end - start) * 1000 / CLOCKS_PER_SEC);
 
-    if ( verbose_ ) cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double64)(millisec)/1000.<<" sec; "
-                        <<(double64)(millisec)/60000.<<" min; "<<(double64)(millisec)/3600000.<<" hours)"<<endl;
+    if ( verbose_ ) cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double)(millisec)/1000.<<" sec; "
+                        <<(double)(millisec)/60000.<<" min; "<<(double)(millisec)/3600000.<<" hours)"<<endl;
     cout.flush();
 
 }

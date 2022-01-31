@@ -59,7 +59,7 @@ depedendent variables in the reaction file is the same as in the
 properties input file (it should be). If not, an error is reported. 
 */
 template<size_t dim>
-AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file, double64 dt )
+AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file, double dt )
     : pref(sg.Database()), 
       group_name("Model"),
       time_increment(dt),
@@ -96,7 +96,7 @@ AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file,
  
      // finding the ODE solver index for H2O
      // ------------------------------------ 
-     typename vector<pair<int32,string> >::iterator  dit;
+     typename vector<pair<int32_t,string> >::iterator  dit;
      
      for ( dit=dependent_comps.begin(); dit!=dependent_comps.end(); dit++ ) 
        if ( (*dit).second == "H2O_aq" ) h2o_index = static_cast<size_t>((*dit).first + 1);
@@ -114,7 +114,7 @@ AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file,
      // setting up the vectors which will hold the absolute amounts of species and the 
      // rates of change at the last visitation of the element
      // -----------------------------------------------------
-     typename vector<vector<double64> >::iterator  it;
+     typename vector<vector<double> >::iterator  it;
      for ( it=amounts.begin(); it!=amounts.end(); it++ )
        {
           // reserve storage in single foul swoops then initialize it
@@ -162,7 +162,7 @@ system has to evolve.
 The new integration time for the ODE solver. 
 */
 template<size_t dim>
-void AlterationVisitor<dim>::AdjustTimeIncrement( double64 new_dt ) 
+void AlterationVisitor<dim>::AdjustTimeIncrement( double new_dt ) 
  { time_increment = new_dt; }
 
 
@@ -185,7 +185,7 @@ The accuracy to which all reactant and product concentrations shall be
 calculated. 
  */
 template<size_t dim>
-void AlterationVisitor<dim>::Precision( double64 tol )
+void AlterationVisitor<dim>::Precision( double tol )
  { tolerance = tol; }
 
 
@@ -203,7 +203,7 @@ The default factor is 1.5.
 The multiplication factor for absolute reactant concentrations. 
 */
 template<size_t dim>
-void AlterationVisitor<dim>::ThresholdReactantChangeFactor( double64 fac )
+void AlterationVisitor<dim>::ThresholdReactantChangeFactor( double fac )
  {
     val_tolerance = fac;  // tolerance factor for absolute concentration values
  }
@@ -224,7 +224,7 @@ The new rate above which the solver shall be applied to the chemical
 system of interest.  
 */
 template<size_t dim>
-void AlterationVisitor<dim>::ThresholdReactantChangeRate( double64 rate )
+void AlterationVisitor<dim>::ThresholdReactantChangeRate( double rate )
  {
     rate_tolerance = rate; // maximal rates of change before solver is invoked
  }
@@ -402,7 +402,7 @@ template<size_t dim>
 void AlterationVisitor<dim>::Visit( Node<dim>* n ) 
   { 
      bool    invoke_solver(false);
-     double64      val;
+     double      val;
      
      if ( verbose ) cout <<"\n\nAlterationVisitor::Visit: Visiting Node: "<< n->Idx() << endl;
      // ------------------------------------------------------------------------
@@ -430,7 +430,7 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
      // 2. read all the moles (per unit volume [m-3] of fluid) from the Model 
      //    and convert these to moles per kg. 
      // ----------------------------------------------------------------------------
-     for ( typename map<uint32,pair<Index,Reactant>  >::iterator
+     for ( typename map<uint32_t,pair<Index,Reactant>  >::iterator
            it=phase_properties.begin(); it!=phase_properties.end(); it++ )
        {
           // reading concentration/amount of aqueous species / mineral
@@ -465,7 +465,7 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
      // if the solver has to be called, the new initial fractions / concentrations are 
      // memorized (else, the old quantities are kept for continued monitoring of slow 
      // cumulative change in the reactant quantities).      
-     for ( typename map<uint32,pair<Index,Reactant>  >::iterator
+     for ( typename map<uint32_t,pair<Index,Reactant>  >::iterator
            it=phase_properties.begin(); it!=phase_properties.end(); it++ ) {
           n->Read( (*it).second.first, sc );
           amounts[ n->Idx() ][ (*it).first ] = sc();
@@ -474,7 +474,7 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
      if ( verbose ) {
           cout <<"\nAlterationVisitor::Visit(Node "<< n->Idx() <<"): Initial system: ";
           cout << solver.Equations() <<" equations: "<< endl << endl;
-          for ( typename map<uint32,pair<Index,Reactant>  >::iterator
+          for ( typename map<uint32_t,pair<Index,Reactant>  >::iterator
                 it=phase_properties.begin(); it!=phase_properties.end(); it++ )
             {
                cout.width(30);
@@ -496,7 +496,7 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
      if ( verbose ) {
           cout <<"\nAlterationVisitor::Visit(Node "<< n->Idx() <<"): Equilibrium solution: ";
           cout << solver.Equations() <<" equations: "<< endl << endl;
-          for ( typename map<uint32,pair<Index,Reactant>  >::iterator
+          for ( typename map<uint32_t,pair<Index,Reactant>  >::iterator
                 it=phase_properties.begin(); it!=phase_properties.end(); it++ )
             {
                cout.width(30);
@@ -515,7 +515,7 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
      if ( verbose ) cout <<"\nDissolved volume fraction (X) of: "<< endl << endl;
 
      rho_r_new=sum=0.;
-     for ( typename map<uint32,pair<Index,Reactant>  >::iterator
+     for ( typename map<uint32_t,pair<Index,Reactant>  >::iterator
            it=phase_properties.begin(); it!=phase_properties.end(); it++ )
        {
           if ( (*it).second.second.State() == AQUEOUS ) 
@@ -551,7 +551,7 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
        }
      if ( verbose ) {
           cout <<"\nRates of reactant change in last ODE finite-difference step:"<< endl << endl;
-          for ( typename map<uint32,pair<Index,Reactant>  >::iterator
+          for ( typename map<uint32_t,pair<Index,Reactant>  >::iterator
                 it=phase_properties.begin(); it!=phase_properties.end(); it++ )
             {  
                cout.width(27); // since /dt is appended   
@@ -662,12 +662,12 @@ size_t  AlterationVisitor<dim>::ReadDependentVariablePhaseState( const char* fna
  {
     phase_properties.erase( phase_properties.begin(), phase_properties.end() );
  
-    typename vector<pair<int32,string> >::const_iterator  it;
+    typename vector<pair<int32_t,string> >::const_iterator  it;
     char                      intext[INFO_STRING], name[NAME_STRING];
     const char* const         white_delims =" ,\t", *token;
-    int32                     index;
-    int32                     charge(0);
-    double64                  density(0.0), molar_weight(0.0);
+    int32_t                     index;
+    int32_t                     charge(0);
+    double                  density(0.0), molar_weight(0.0);
     PHASE_STATE               pstate;
     pair<Index,Reactant>      entry;
     ifstream                  ifs(fname);
@@ -776,11 +776,11 @@ The species concentrations are queried from the ODE solver object.
 To test whether charge balance is maintained in the reacting system. 
 */
 template<size_t dim>
-double64 AlterationVisitor<dim>::TestChargeBalance()
+double AlterationVisitor<dim>::TestChargeBalance()
  {
-    double64 balance(0.);
+    double balance(0.);
  
-    for ( typename map<uint32,pair<Index,Reactant> >::iterator
+    for ( typename map<uint32_t,pair<Index,Reactant> >::iterator
           it=phase_properties.begin(); it!= phase_properties.end(); it++ )
       // only aqueous species can be charged
       if ( (*it).second.second.State() == AQUEOUS )

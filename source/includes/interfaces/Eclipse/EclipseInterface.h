@@ -276,7 +276,7 @@ private:
   size_t                      NX_;
   size_t                      NY_;
   size_t                      NZ_;
-  std::vector<double64>       zcorn_;
+  std::vector<double>       zcorn_;
   CornerPointGrid             grid_;
   CellCenteredGrid            block_grid_;
 

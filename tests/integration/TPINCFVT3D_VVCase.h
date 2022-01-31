@@ -4,7 +4,6 @@
 #include <iostream>
 #include <iomanip>
 #include <limits>
-#include "CSMP_number_types.h"
 #include "Test.h"
 
 

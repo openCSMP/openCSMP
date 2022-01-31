@@ -42,7 +42,7 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
     const size_t  components_;  // stress strain components
     
     csmp::Index strain_key_, stress_key_,                  ///< tensor variables
-                strain1_key_, strain2_key_, strain3_key_,  ///< vector<double64> variables (Eigenvectors)
+                strain1_key_, strain2_key_, strain3_key_,  ///< vector<double> variables (Eigenvectors)
                 sigma1_key_, sigma2_key_, sigma3_key_,
                 means_key_, dilat_key_,                    ///< mean stress (scalar), dilatation (scalar)
                 shear_key_;                                ///< maximum shear stress (scalar)
@@ -51,7 +51,7 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
                                           STRESS_, STRAIN_,
                                           EGP_, SGP_, PEGP_, PSGP_;
     std::vector<DenseMatrix<DM_MIN> >     STIFF_;
-    std::vector<double64>                 IPSTRAIN_, IPSTRESS_,
+    std::vector<double>                 IPSTRAIN_, IPSTRESS_,
                                           NSTRAIN_,  NSTRESS_, 
                                           eps_, sigma_, sum_;
     TensorVariable<3U>                    ts_, evecs_;
@@ -68,7 +68,7 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
                                           geomechanics_conventions_;
     // to prevent duplicate node output
     std::vector<bool>                           node_output_;  
-    std::vector<std::deque<std::vector<double64> > >  temp_strains_, 
+    std::vector<std::deque<std::vector<double> > >  temp_strains_, 
                                                       temp_stresses_;
 };
 

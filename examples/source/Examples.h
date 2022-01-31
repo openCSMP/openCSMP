@@ -23,7 +23,7 @@
 #include "StreamFunction_Example.h"         // post processing of streamlines
 #include "TimeSteppingApproaches_Example.h" // 1D comparison
 #include "ErrorMetric_Example.h"            // 3D fluid pressure
-#include "ReadingBinaries_Example.h"        // read from binaries created in SteadyStatePressureToVset_Example
+// deprecated: #include "ReadingBinaries_Example.h"        // read from binaries created in SteadyStatePressureToVset_Example
 #include "StokesDiscrepancyMeasure_Example.h" // Darcy velocity, stokes flow
 #include "StokesDiscrepancyMeasureQuadratic_Example.h" // as above, but quadratic
 #include "EffectiveStressDilatation2D_Example.h" 

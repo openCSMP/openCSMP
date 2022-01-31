@@ -57,19 +57,19 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
     virtual ~ExplicitNodeCenteredFiniteVolumeTransport();
     
     /// single-phase transport (@todo NEEDS TO BECOME A VIRTUAL FUNCTION TEMPLATE)
-    virtual double64 AdvectVariable( double64 time_interval,
-                                     double64 cfl_multiplication_factor, ///< ideally 0.1
+    virtual double AdvectVariable( double time_interval,
+                                     double cfl_multiplication_factor, ///< ideally 0.1
                                      bool apply_flux_balance_correction, ///< usually desirable
                                      bool update_pore_volumes );         ///< normally not needed
 
     /// single-phase passive advection, does NOT return courant increment, single timestep calculation
     /// no checks are made for courant condition.  Assumes external checks.
-    virtual void AdvectVariableSingleStep( double64 time_increment,
+    virtual void AdvectVariableSingleStep( double time_increment,
                                       bool apply_flux_balance_correction,
                                       bool update_pore_volumes);
 
     /// results are stored back wherever flags are not DIRICH
-    double64 OutputResults(const PropertyDatabase<dim>&,
+    double OutputResults(const PropertyDatabase<dim>&,
                            const csmp::Index& adv_key,
                            bool  show_range ,
                            const size_t var_comp_nr=0) const;
@@ -81,10 +81,10 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
     virtual void AssignFluxBoundaryConditions(const size_t var_comp_nr=0 );
     
     /// passive advection: gives transported variable at end of time_interval
-    virtual void ComposeSolution( double64 time_interval,const size_t var_comp_nr=0 );
+    virtual void ComposeSolution( double time_interval,const size_t var_comp_nr=0 );
     
     STP<dim>               stencil_;
-    std::vector<double64>  RESULT;
+    std::vector<double>  RESULT;
 #if defined(_OPENMP )
 
     std::vector<STP<dim>* >  thread_stencil_processor_;
@@ -92,17 +92,17 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
 
   protected:  
     /// explicit conservative
-    void AdvectVariable1stOrder( double64 time_interval, bool output_result_range );
+    void AdvectVariable1stOrder( double time_interval, bool output_result_range );
     
   private:
     /// explicit conservative
-    void AdvectAndDiffuseVariable1stOrder( double64 time_interval, bool output_result_range );
+    void AdvectAndDiffuseVariable1stOrder( double time_interval, bool output_result_range );
 
     /// 2nd-order explicit conservative, using slope limiting
-    void AdvectVariable2ndOrder( double64 time_increment, bool output_result_range );
+    void AdvectVariable2ndOrder( double time_increment, bool output_result_range );
 
     /// 2nd-order explicit conservative, using slope limiting
-    void AdvectAndDiffuseVariable2ndOrder( double64 time_increment, bool output_result_range );
+    void AdvectAndDiffuseVariable2ndOrder( double time_increment, bool output_result_range );
 };
 
 
@@ -200,7 +200,7 @@ This is an example of how the second order accurate scheme is applied:
  else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
  cout <<"\nThe grid Courant number is "<< explicit_advector.CourantIncrement( sg ) << endl;
  cout <<"\nEnter advection time: ";
- double64 time_interval;
+ double time_interval;
  cin >> time_interval;
 
  cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
@@ -298,10 +298,10 @@ on node-centered finite volumes.
 
 The constructor creates minor storage array for repetitively used
 variables like the finite (pore) volumes, the flux balance for each
-FV cell and a vector<double64> of FV_parameters called FV_stencil_data that holds
+FV cell and a vector<double> of FV_parameters called FV_stencil_data that holds
 the FV sector volumes, facet areas and facet normal fluxes which are 
 always updated before the first advection step, when the CFL criterion
-is computed. This vector<double64> will become redundant when the generic FV scheme
+is computed. This vector<double> will become redundant when the generic FV scheme
 has been optimized for speed.  
 
 @section application Application
@@ -361,12 +361,12 @@ ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::~ExplicitNodeCenteredFiniteV
  }
 
 
-
+/*
 template<size_t dim,template<size_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
 {
-    double64        inflow, flux_balance;
-    const double64  zero(0.);
+    double        inflow, flux_balance;
+    const double  zero(0.);
     
     if (this->adv1_key_.type ==SCALAR){
         // loop over the boundary cells and adjust fluxes
@@ -419,8 +419,37 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryCondi
     }
     
 } // end AssignFluxBoundaryConditions
+*/
 
 
+/**
+         Luat's fix 4/6/2020
+*/
+template<size_t dim,template<size_t> class STP>
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
+  {
+      double        inflow, flux_balance;
+      const double  zero(0.);
+
+      if (this->adv1_key_.type != SCALAR)
+      {
+          throw "advective is not scalar variable";
+      }
+      
+      // loop over the boundary cells and adjust fluxes
+      for ( auto nit=this->gref_.PerimeterNodesBegin(); nit!=this->gref_.NodesEnd(); ++nit)
+      {
+          this->FluxThroughBoundaryFiniteVolume( (*nit), inflow, flux_balance ) ;
+          if(inflow != zero)
+          {
+              RESULT[ (*nit)->Idx() ] += (*nit)->Read( this->adv1_key_ ) * -inflow;
+          }
+          else
+          {
+              RESULT[ (*nit)->Idx() ] += (*nit)->Read( this->adv1_key_ ) * flux_balance;
+          }
+      }
+  } // end AssignFluxBoundaryConditions
 
 
    
@@ -454,10 +483,10 @@ screen as a progress monitor.
 
 */
 template<size_t dim,template<size_t> class STP>
-double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable( double64 time_interval,
-                                                                              double64 cfl_multiplication_factor,
-                                                                              bool apply_flux_balance_correction,
-                                                                              bool update_pore_volumes )
+double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable( double time_interval,
+                                                                             double cfl_multiplication_factor,
+                                                                             bool apply_flux_balance_correction,
+                                                                             bool update_pore_volumes )
  {
     this->gref_.RenumberNodes();
 
@@ -469,7 +498,7 @@ double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable( dou
          this->InitializeArraysForFirstOrderMethod();
       }
 
-    const double64 courant_increment( this->AnisotropicCourantIncrement() );
+    const double courant_increment( this->AnisotropicCourantIncrement() );
 
     if ( cfl_multiplication_factor > 0.5 ) {
       if (this->Verbose())
@@ -489,7 +518,7 @@ double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable( dou
 
     // 2. compute the CFL condition to identify value for overstepping
     // --------------------------------------------------------------
-    double64 time(0.), time_increment = std::min( courant_increment * cfl_multiplication_factor, time_interval ); 
+    double time(0.), time_increment = std::min( courant_increment * cfl_multiplication_factor, time_interval ); 
     bool output_result_range(false);
     bool finish(false);
       
@@ -544,7 +573,7 @@ increment is not checked for in this method (and should be, externally, of cours
 
  */
 template<size_t dim,template<size_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariableSingleStep( double64 time_increment,
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariableSingleStep( double time_increment,
                                                                                    bool apply_flux_balance_correction,
                                                                                    bool update_pore_volumes )
  {
@@ -610,7 +639,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariableSingleSte
 Explicit first-order advection algorithm of a passive conservative tracer.
 AdvectVariableFirstOrder() uses the upstream 
 values of the advected variable to compose the solution in the result
-vector<double64> managed by the ExplicitFiniteVolumeAlgorithm which performs 
+vector<double> managed by the ExplicitFiniteVolumeAlgorithm which performs 
 a range check and writes the RESULT back to the Model.  
 
 @section arguments Input Arguments 
@@ -633,12 +662,12 @@ explicit solution, there is not much rational to use this method.
 */
 template<size_t dim,template<size_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable1stOrder( 
-                                                            double64 time_increment,
+                                                            double time_increment,
                                                             bool output_result_range )
 {
     for (size_t ncom = 0 ; ncom< this->var_ncomponents_;ncom++){
         if ( this->Verbose() ) std::cout<<" Advecting component (ENCFVT): "<< ncom <<std::endl;
-        std::fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
+        std::fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
         std::vector<FV_Parameter>::const_iterator  fvt = this->STENCIL_DATA.begin();
 
         for ( typename std::vector<Element<dim>*>::const_iterator
@@ -684,7 +713,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable1stOrder(
 Explicit second-order advection algorithm of a passive conservative tracer.
 AdvectVariableSecondOrder() uses the slope-limited values of the advected 
 variable which were interpolated to the FV facet integration points in order 
-to compose the solution into the result vector<double64> as managed by the 
+to compose the solution into the result vector<double> as managed by the 
 ExplicitFiniteVolumeAlgorithm. The latter performs a range check before 
 the RESULT are written back to the Model.  
 
@@ -708,10 +737,10 @@ one should use the implicit approach rather than this method, when the
 velocity field is not rapidly changing.  
  */
 template<size_t dim,template<size_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder( double64 time_increment, 
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder( double time_increment,
                                                                                  bool output_result_range )
  {
-    std::fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
+    std::fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
     
     // 0. diffusion is taken into account if the diffusion key in the base class is initialized
     //const bool with_diffusion( (this->dif_key_ == csmp::Index()) ? false : true );
@@ -761,12 +790,12 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder(
 
 
 template<size_t dim,template<size_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable1stOrder( double64 time_increment,
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable1stOrder( double time_increment,
                                                                                             bool output_result_range )
  {
     for (size_t ncom = 0 ; ncom< this->var_ncomponents_;ncom++){
         if (this->Verbose() ) std::cout<<" Advecting and diffusing component (ENCFVT): "<<ncom<<std::endl;
-        std::fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
+        std::fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
         // 0. diffusion is taken into account if the diffusion key in the base class is initialized
         //const bool with_diffusion( (this->dif_key_ == csmp::Index()) ? false : true );
         std::vector<FV_Parameter>::const_iterator  fvt(this->STENCIL_DATA.begin());
@@ -793,10 +822,10 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariabl
 
 
 template<size_t dim,template<size_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable2ndOrder( double64 time_increment, 
-	                                                                                        bool output_result_range )
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable2ndOrder( double time_increment,
+	                                                                                         bool output_result_range )
  {
-    std::fill( RESULT.begin(), RESULT.end(), static_cast<double64>(0.) );
+    std::fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
     
     // 0. diffusion is taken into account if the diffusion key in the base class is initialized
     //const bool with_diffusion( (this->dif_key_ == csmp::Index()) ? false : true );
@@ -868,15 +897,15 @@ this is an explicit transport scheme.
 For the passive advection of tracers.  
 */
 template<size_t dim,template<size_t> class STP>
-void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double64 time_interval, const size_t var_comp_nr)
+void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double time_interval, const size_t var_comp_nr)
 {
     if (this->adv1_key_.type == SCALAR){
         for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ )
         {
             // reading the transported variable value
-            double64 solution = this->gref_.N(nidx)->Read( this->adv1_key_ );
+            double solution = this->gref_.N(nidx)->Read( this->adv1_key_ );
             // adding potential (volumetric) source or sink terms due to a divergence of the flow (+ dt sum_j^e 1/3 V_e q_j)
-            if ( this->FLUX_BALANCE[nidx] != static_cast<double64>(0.) )
+            if ( this->FLUX_BALANCE[nidx] != static_cast<double>(0.) )
                 RESULT[nidx] += solution * -this->FLUX_BALANCE[nidx];
             // subtracting the flux time-interval product
             RESULT[nidx] = solution - (time_interval / this->FVPOREVOL[nidx]) * RESULT[nidx];
@@ -893,9 +922,9 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double
           {
               // reading the transported variable value
               this->gref_.N(nidx)->Read( this->adv1_key_ ,av);
-              double64 solution = av(var_comp_nr);
+              double solution = av(var_comp_nr);
               // adding potential (volumetric) source or sink terms due to a divergence of the flow (+ dt sum_j^e 1/3 V_e q_j)
-              if ( this->FLUX_BALANCE[nidx] != static_cast<double64>(0.) )
+              if ( this->FLUX_BALANCE[nidx] != static_cast<double>(0.) )
                   RESULT[nidx] += solution * -this->FLUX_BALANCE[nidx];
               // subtracting the flux time-interval product
               RESULT[nidx] = solution - (time_interval / this->FVPOREVOL[nidx]) * RESULT[nidx];
@@ -906,16 +935,16 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double
         else if (this->src_key_.type == ARRAY)
         {
           ArrayVariable src_av;
-          double64 source;
+          double source;
           for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ )
           {
               // reading the transported variable value
               this->gref_.N(nidx)->Read( this->adv1_key_ ,av);
-              double64 solution = av(var_comp_nr);
+              double solution = av(var_comp_nr);
               this->gref_.N(nidx)->Read( this->src_key_ , src_av);
               source = src_av[var_comp_nr];  
               // adding potential (volumetric) source or sink terms due to a divergence of the flow (+ dt sum_j^e 1/3 V_e q_j)
-              if ( this->FLUX_BALANCE[nidx] != static_cast<double64>(0.) )
+              if ( this->FLUX_BALANCE[nidx] != static_cast<double>(0.) )
                   RESULT[nidx] += solution * -this->FLUX_BALANCE[nidx];
               // subtracting the flux time-interval product
               RESULT[nidx] = solution - (time_interval / this->FVPOREVOL[nidx]) * RESULT[nidx];
@@ -934,9 +963,9 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double
         {
             // reading the transported variable value
             this->gref_.N(nidx)->Read( this->adv1_key_ ,fav);
-            double64 solution = fav(var_comp_nr);
+            double solution = fav(var_comp_nr);
             // adding potential (volumetric) source or sink terms due to a divergence of the flow (+ dt sum_j^e 1/3 V_e q_j)
-            if ( this->FLUX_BALANCE[nidx] != static_cast<double64>(0.) )
+            if ( this->FLUX_BALANCE[nidx] != static_cast<double>(0.) )
                 RESULT[nidx] += solution * -this->FLUX_BALANCE[nidx];
             // subtracting the flux time-interval product
             RESULT[nidx] = solution - (time_interval / this->FVPOREVOL[nidx]) * RESULT[nidx];
@@ -986,7 +1015,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AccumulateFluxUpwindPro
 
 
 /** Where the condition flag is not DIRICH, results are mapped from solution
-vector<double64> back to finite volume cells after performing a range cheque.
+vector<double> back to finite volume cells after performing a range cheque.
 
 @section messages Messages
 
@@ -996,12 +1025,12 @@ is returned. If errors occur at more than 2 per cent of the nodes, an
 
 */
 template<size_t dim,template<size_t> class STP>
-double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const PropertyDatabase<dim>& p,
+double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const PropertyDatabase<dim>& p,
                                                                             const csmp::Index& adv_key,
                                                                             bool show_range ,
                                                                             const size_t var_comp_nr ) const
 {
-    double64  rmin, rmax,
+    double  rmin, rmax,
               amin = RESULT[0],
               amax = RESULT[0],
               difference_to_last_output(0.);
@@ -1015,7 +1044,7 @@ double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( cons
             amax = std::max( amax, RESULT[i] );
             if ( this->gref_.N(i)->Status( adv_key ) != DIRICH ) {
                 // reading the pre-existing value and calculating the maximum change per node
-                double64 sc = this->gref_.N(i)->Read( adv_key );
+                double sc = this->gref_.N(i)->Read( adv_key );
                 difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc) );
                 // result checking
                 if ( RESULT[i] <= rmax && RESULT[i] >= rmin )

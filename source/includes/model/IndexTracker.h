@@ -24,6 +24,8 @@ namespace csmp {
    
    By tracking all Index objects that exist in a model, these can be updated
    by the PropertyDatabase everytime a variable is created or deleted.
+   
+   @note this implementation is based on the "Observer" design pattern.
   
    @author  P. Lang
    @date  9/25/2012

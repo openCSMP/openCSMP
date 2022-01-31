@@ -82,7 +82,7 @@ void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::Visit( Node<dim>* nd )
                 {
                    const size_t facet = eptr->FV()->FacetSurroundingSector( parent_nd, j );
                    // if the sector node is the inside node then an incoming flux will create a positive source term
-                   const double64  fsign = (parent_nd == nd->Parent(i)->FV()->InsideNode(facet)) ? -1. : 1.;
+                   const double  fsign = (parent_nd == nd->Parent(i)->FV()->InsideNode(facet)) ? -1. : 1.;
                    FVinflux_ += fsign * eptr->FacetArea(facet) * eptr->ProjectionOnFacetNormal(facet,vt_) * delta_t_;
                 }
            }
@@ -93,7 +93,7 @@ void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::Visit( Node<dim>* nd )
 
 /// returns the flux through the region boundary
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-double64 RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::InFlux() const
+double RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::InFlux() const
 {
     return FVinflux_;
 } // end
@@ -109,7 +109,7 @@ void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::ResetFlux()
 
 /// use this to set the time interval over which the flux shall be integrated
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::TimeIncrement( double64 dt )
+void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::TimeIncrement( double dt )
 {
    delta_t_ = dt;
 } // end

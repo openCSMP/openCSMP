@@ -14,7 +14,7 @@ BoolVector::BoolVector(size_t uSize) :
 {
   if( uSize != 0 ) //if not, it will allocate 1 byte although empty
   {
-   pBits_ = new uint8[uSize/8+1];
+   pBits_ = new uint8_t[uSize/8+1];
   
    // uSize/8+1 is the byte size
    // initialize everything to false   
@@ -31,7 +31,7 @@ BoolVector::BoolVector(const BoolVector& bv) :
 {
   if( uSize_ != 0 ) //special case
   {
-   pBits_ = new uint8[uSize_/8+1];
+   pBits_ = new uint8_t[uSize_/8+1];
   
    // copy bits
    memcpy(pBits_,bv.pBits_,uSize_/8+1);
@@ -50,7 +50,7 @@ BoolVector& BoolVector::operator=( const BoolVector& bv )
       else   
         {
            const size_t uHowManyBytes ( bv.uSize_/8+1 );
-           pBits_ = new uint8[uHowManyBytes];
+           pBits_ = new uint8_t[uHowManyBytes];
            memcpy(pBits_,bv.pBits_,uHowManyBytes);
         }
     }
@@ -127,13 +127,13 @@ void BoolVector::Resize(size_t uSize)
   const size_t uCurrentByteSize(uSize_/8+1); 
   
   //remember old bit container ptr
-  uint8 * pBits_Tmp = pBits_;
+  uint8_t * pBits_Tmp = pBits_;
   
   //compute how many to copy
   const size_t uHowMany(std::min(uCurrentByteSize,uByteSize));
   
   //resize bit container
-  pBits_ = new uint8[uByteSize];
+  pBits_ = new uint8_t[uByteSize];
   
   //initiallize to false
   memset(pBits_,0,uByteSize);

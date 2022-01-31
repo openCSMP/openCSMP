@@ -44,7 +44,7 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
     Point<DIM> min, max;
     model.MinMaxCoordinates( min, max );
     printModelDimensions( model, true );
-    double64 domain_volume = model.Region("Model").Volume();
+    double domain_volume = model.Region("Model").Volume();
     cout <<"\nThe model has a volume of: "<< domain_volume <<" m^3."<< endl;
     // END GEOMETRY SECTION
     // -----------------------------------
@@ -124,7 +124,7 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
     csmp::Index  p_key(model.Database().StorageKey("fluid pressure"));
     vector<Node<DIM>*>::iterator nodes_end=model.Region("Model").NodesEnd();
     vector<Node<DIM>*>::iterator nodes_begin=model.Region("Model").NodesBegin();
-    double64 press;
+    double press;
     for (vector<Node<DIM>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++)
     {
       press=(*npit)->Read(p_key);
@@ -143,7 +143,7 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
     // but this allows for flexibility when looking at why tests fail.
 
     //    ModelComparator<DIM> comparitor;
-    //    double64 shouldBeZero( comparitor.CompareVSets( (this->getName()+".vset").c_str(), (this->getName()+"_Comparison.vset").c_str(),
+    //    double shouldBeZero( comparitor.CompareVSets( (this->getName()+".vset").c_str(), (this->getName()+"_Comparison.vset").c_str(),
     //                                                    "fluid pressure", "fluid pressure", (this->getName()+".txt").c_str(),
     //                                                    (this->getName()+".txt").c_str(), true ) );
 

@@ -49,7 +49,7 @@ void ElementToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolatedValues()
  {
     
     
-     if ( summed_weights_[0] > numeric_limits<double64>::epsilon() )
+     if ( summed_weights_[0] > numeric_limits<double>::epsilon() )
        throw csmp::Exception( ERROR, "ElementToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
                       "this visitor has to be applied beforehand to collect the weights for the nodes");
        
@@ -75,7 +75,7 @@ void ElementToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
     // accumulating results into nodes vector for later averaging
     for ( size_t i=0U; i<eptr->Nodes(); i++ ) {
          // using 1 / (distance from barycenter to node)  as a weight
-         const double64 weight = 1. / (bc - eptr->N(i)->Coordinate()).Length();
+         const double weight = 1. / (bc - eptr->N(i)->Coordinate()).Length();
          assert( eptr->N(i)->Idx() < summed_weights_.size() );
          summed_weights_[ eptr->N(i)->Idx() ] += weight;
          

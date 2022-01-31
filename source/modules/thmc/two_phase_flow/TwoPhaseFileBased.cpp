@@ -107,7 +107,7 @@ void TwoPhaseFileBased<dim>::Initialize( const Element<dim>& e )
 
   if( TwoPhaseModel<dim>::tensor_permeability_){
       e.Read( TwoPhaseModel<dim>::perm_key_, TwoPhaseModel<dim>::K_);
-      TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double64>(dim);
+      TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double>(dim);
   }else{
       TwoPhaseModel<dim>::k_ = e.Read( TwoPhaseModel<dim>::perm_key_ );
       TwoPhaseModel<dim>::K_.operator=( VectorVariable<dim>(PLAIN, TwoPhaseModel<dim>::k_ ) );
@@ -118,12 +118,12 @@ void TwoPhaseFileBased<dim>::Initialize( const Element<dim>& e )
 
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::krw_Phase() const
+double TwoPhaseFileBased<dim>::krw_Phase() const
  {
-  double64 se = TwoPhaseModel<dim>::seff_;
+  double se = TwoPhaseModel<dim>::seff_;
 
-  if ( se <= 0.) return static_cast<double64>(0.);
-  if ( se >= 1.) return static_cast<double64>(1.);
+  if ( se <= 0.) return static_cast<double>(0.);
+  if ( se >= 1.) return static_cast<double>(1.);
 
    size_t i(0);
     for( i = 1; i < seff_.size(); ++i )
@@ -134,12 +134,12 @@ double64 TwoPhaseFileBased<dim>::krw_Phase() const
 
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::krn_Phase() const
+double TwoPhaseFileBased<dim>::krn_Phase() const
  {
-  double64 se = TwoPhaseModel<dim>::seff_;
+  double se = TwoPhaseModel<dim>::seff_;
 
-  if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double64>(1.);
-  if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double64>(0.);
+  if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(1.);
+  if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double>(0.);
 
   size_t i(0);
   for( i = 1; i < seff_.size(); ++i )
@@ -149,14 +149,14 @@ double64 TwoPhaseFileBased<dim>::krn_Phase() const
  }
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::dkrwds_Phase() const
+double TwoPhaseFileBased<dim>::dkrwds_Phase() const
  {
-  double64 se = TwoPhaseModel<dim>::seff_;
+  double se = TwoPhaseModel<dim>::seff_;
 
-  if ( se <= 0.) return static_cast<double64>(0.);
-  if ( se >= 1.) return static_cast<double64>(0.);
+  if ( se <= 0.) return static_cast<double>(0.);
+  if ( se >= 1.) return static_cast<double>(0.);
 
-  const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+  const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
    size_t i(0);
     for( i = 1; i < seff_.size(); ++i )
@@ -167,14 +167,14 @@ double64 TwoPhaseFileBased<dim>::dkrwds_Phase() const
 
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::dkrnds_Phase() const
+double TwoPhaseFileBased<dim>::dkrnds_Phase() const
  {
-  double64 se = TwoPhaseModel<dim>::seff_;
+  double se = TwoPhaseModel<dim>::seff_;
 
-  if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double64>(0.);
-  if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double64>(0.);
+  if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(0.);
+  if ( TwoPhaseModel<dim>::seff_ >= 1.) return static_cast<double>(0.);
 
-  const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+  const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
   size_t i(0);
   for( i = 1; i < seff_.size(); ++i )
@@ -186,14 +186,14 @@ double64 TwoPhaseFileBased<dim>::dkrnds_Phase() const
 
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::pc_Phase( ) const
+double TwoPhaseFileBased<dim>::pc_Phase( ) const
 {
-  double64 se = TwoPhaseModel<dim>::seff_;
+  double se = TwoPhaseModel<dim>::seff_;
 
   // only for the min saturation of water precautions are needed
   // the actual saturation is used instead of the effective saturation
   if ( se == 0. ) return TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_;
-  if ( se == 1. ) return static_cast<double64>(0.);
+  if ( se == 1. ) return static_cast<double>(0.);
 
   size_t i(0);
   for( i = 1; i < seff_.size(); ++i )
@@ -203,14 +203,14 @@ double64 TwoPhaseFileBased<dim>::pc_Phase( ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::dpcds_Phase( ) const
+double TwoPhaseFileBased<dim>::dpcds_Phase( ) const
 {
-  double64 se = TwoPhaseModel<dim>::seff_;
+  double se = TwoPhaseModel<dim>::seff_;
 
   if ( se == 0. ) return -MAX_CAPILLARY_PRESSURE_SLOPE_;
   if ( se == 1. ) return -MAX_CAPILLARY_PRESSURE_SLOPE_;
 
-  const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+  const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
   size_t i(0);
   for( i = 1; i < seff_.size(); ++i )
@@ -222,7 +222,7 @@ double64 TwoPhaseFileBased<dim>::dpcds_Phase( ) const
 
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::Sw_Phase( double64 pc ) const
+double TwoPhaseFileBased<dim>::Sw_Phase( double pc ) const
 {
 
   // only for the min saturation of water precautions are needed
@@ -247,7 +247,7 @@ double64 TwoPhaseFileBased<dim>::Sw_Phase( double64 pc ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::dsdpc_Phase( double64 pc ) const
+double TwoPhaseFileBased<dim>::dsdpc_Phase( double pc ) const
 {
 
   if ( pc == TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ )
@@ -255,7 +255,7 @@ double64 TwoPhaseFileBased<dim>::dsdpc_Phase( double64 pc ) const
   if ( pc == 0.0 )
       return -1.0/MAX_CAPILLARY_PRESSURE_SLOPE_;
 
-  const double64 seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
+  const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
 
   size_t i(0);
   for( i = 1; i < pc_.size() ; ++i )
@@ -267,20 +267,20 @@ double64 TwoPhaseFileBased<dim>::dsdpc_Phase( double64 pc ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::MaxFractionalFlowDerivative() const
+double TwoPhaseFileBased<dim>::MaxFractionalFlowDerivative() const
  {
-    return static_cast<double64>(7.); // as computed with dfds_Phase method
+    return static_cast<double>(7.); // as computed with dfds_Phase method
  }
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::dfds() const
+double TwoPhaseFileBased<dim>::dfds() const
 {  
     return TwoPhaseModel<dim>::dfds_numerical();
 }  // end dfdS_Phase
 
 
 template<size_t dim>
-double64 TwoPhaseFileBased<dim>::dGds( ) const
+double TwoPhaseFileBased<dim>::dGds( ) const
 {
     return TwoPhaseModel<dim>::dGds_numerical();
 }
@@ -300,9 +300,9 @@ streampos  TwoPhaseFileBased<dim>::findPosition( std::ifstream& file ) const{
 
 /// reads line values to vector
 template<size_t dim>
-int32 TwoPhaseFileBased<dim>::readData(){
+int32_t TwoPhaseFileBased<dim>::readData(){
 
-  int32           count = 0;
+  int32_t           count = 0;
   double          cache;
   const streampos position( findPosition( relpermFile_ ) );
 
@@ -323,7 +323,7 @@ int32 TwoPhaseFileBased<dim>::readData(){
 }
 
 template<size_t dim>
-int32 TwoPhaseFileBased<dim>::writeData(){
+int32_t TwoPhaseFileBased<dim>::writeData(){
 
   ofstream file( "TwoPhaseFileBased.txt", ios::out );
   file << "Seff\tKrw\tKrn\tPc\n";

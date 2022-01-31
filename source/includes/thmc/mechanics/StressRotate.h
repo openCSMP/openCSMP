@@ -12,7 +12,7 @@ class StressRotate {
   public:
     StressRotate( const Point<3U>& n1, 
                   const Point<3U>& n3, 
-                  double64 sigma1, double64 sigma2, double64 sigma3 );
+                  double sigma1, double sigma2, double sigma3 );
   
     StressRotate( const StressRotate& );
                   
@@ -22,20 +22,20 @@ class StressRotate {
     void CartesianStressTensor( TensorVariable<3U>& stress ) const;
   
     /// as previous, but augmentation modification of principal stresses by user-supplied isostatic stress
-    void CartesianStressTensor( TensorVariable<3U>& stress, double64 iso_stress_offset ) const;
+    void CartesianStressTensor( TensorVariable<3U>& stress, double iso_stress_offset ) const;
     
     /// counter-clockwise rotation of stress vectors (n1,n3) looking down on the rotation axis (use 180-angle to get cw.)
-    void Rotate( char axis, double64 angle ); 
+    void Rotate( char axis, double angle ); 
   
     /// loss free restoration of stress to state before rotation
     void Reset();
    
     /// maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor
-    double64 Sigma1() const;
+    double Sigma1() const;
     /// intermediate principal stress (Pa/m2)
-    double64 Sigma2() const;
+    double Sigma2() const;
     /// minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor
-    double64 Sigma3() const;
+    double Sigma3() const;
     
     void Out() const;
   
@@ -52,12 +52,12 @@ class StressRotate {
   protected:
     Point<3U> original_n1_, original_n3_;
     Point<3U> n1_, n3_;
-    double64 sigma1_, sigma2_, sigma3_;
+    double sigma1_, sigma2_, sigma3_;
     
     //rotations x,y,z
-    double64 x_;
-    double64 y_;
-    double64 z_;
+    double x_;
+    double y_;
+    double z_;
 };
 
 } // end csmp

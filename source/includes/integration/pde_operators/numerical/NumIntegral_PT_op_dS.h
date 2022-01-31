@@ -26,8 +26,8 @@ class NumIntegral_PT_op_dS : public MathOperatorRHS<dim> {
                           const char* oper,    // VECTOR/SCALAR variable on FACE   
                           const char* test );  // VECTOR variable on NODE
     
-    virtual void GetOperands( Face<dim>& f );
-    virtual void ComputeContribution( Face<dim>& f );
+    virtual void GetOperands( const Face<dim>& );
+    virtual void ComputeContribution( const Face<dim>& );
   
     virtual ::csmp::NumIntegral_PT_op_dS<dim>* clone() const { return new NumIntegral_PT_op_dS<dim> (*this); }
 

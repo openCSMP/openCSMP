@@ -19,7 +19,7 @@ IAPWS_H2O_Density::~IAPWS_H2O_Density() {}
 
 
 /// outputs density (kg m-3) for temperature (oC) and pressure (Pa)
-double64 IAPWS_H2O_Density::Density( double64 T, double64 P )
+double IAPWS_H2O_Density::Density( double T, double P )
 {
     if ( P < 101325.0 )
       {
@@ -37,7 +37,7 @@ double64 IAPWS_H2O_Density::Density( double64 T, double64 P )
 
 
 /// outputs density (kg m-3) for temperature (oC) and pressure (MPa)
-double64 IAPWS_H2O_Density::Density_P_MPa( double64 T, double64 P )
+double IAPWS_H2O_Density::Density_P_MPa( double T, double P )
  {
     T += 273.15;
     P *= 1.0e+06;
@@ -49,7 +49,7 @@ double64 IAPWS_H2O_Density::Density_P_MPa( double64 T, double64 P )
 
 
 /// outputs pressure (Pa) for temperature (oC) and density (kg m-3)
-double64 IAPWS_H2O_Density::Pressure( double64 T, double64 rho )
+double IAPWS_H2O_Density::Pressure( double T, double rho )
  {
     T += 273.15;
     water_td(T, rho, props);
@@ -59,7 +59,7 @@ double64 IAPWS_H2O_Density::Pressure( double64 T, double64 rho )
 
 
 /// outputs heat capacity (J K-1 kg-1) for temperature (oC) and pressure (Pa)
-double64 IAPWS_H2O_Density::HeatCapacity( double64 T, double64 P )
+double IAPWS_H2O_Density::HeatCapacity( double T, double P )
  {
     T += 273.15;
     water_tp(T, P, d, dp, props);
@@ -70,7 +70,7 @@ double64 IAPWS_H2O_Density::HeatCapacity( double64 T, double64 P )
 
 
 /// outputs heat capacity (J K-1 kg-1) from density (oC) and temperature (oC)
-double64 IAPWS_H2O_Density::HeatCapacityDensTemp( double64 rho, double64 T )
+double IAPWS_H2O_Density::HeatCapacityDensTemp( double rho, double T )
  {
     T += 273.15;
     water_td(T, rho, props);
@@ -81,21 +81,21 @@ double64 IAPWS_H2O_Density::HeatCapacityDensTemp( double64 rho, double64 T )
 
 
 /// outputs enthalpy=heat content (J K-1 kg-1) from density (oC) and temperature (oC)
-double64 IAPWS_H2O_Density::EnthalpyDensTemp( double64 rho, double64 T )
+double IAPWS_H2O_Density::EnthalpyDensTemp( double rho, double T )
  {
     T += 273.15;
     water_td(T, rho, props);
     return props->h;
  }
 
-double64 IAPWS_H2O_Density::Enthalpy( double64 P, double64 T )
+double IAPWS_H2O_Density::Enthalpy( double P, double T )
  {
     T += 273.15;
     water_tp(T, P, d, dp, props);
     return props->h;
  }
 
-double64 IAPWS_H2O_Density::Viscosity( double64 P, double64 T )
+double IAPWS_H2O_Density::Viscosity( double P, double T )
  {
     T += 273.15;
     water_tp(T, P, d, dp, props);
@@ -107,7 +107,7 @@ double64 IAPWS_H2O_Density::Viscosity( double64 P, double64 T )
 
 
 /// outputs  vapour density (kg m-3) for temperature (oC) and pressure (Pa)
-double64 IAPWS_H2O_Density::LiquidSaturation( double64 T, double64 P )
+double IAPWS_H2O_Density::LiquidSaturation( double T, double P )
  {
     sat_p( P, lprops, sprops ); 
     T +=273.15;

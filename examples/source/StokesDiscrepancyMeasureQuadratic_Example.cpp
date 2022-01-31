@@ -53,7 +53,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
 
-  const size_t   dim(3U);
+    const size_t   dim(3U);
     const string   model_name("one_sphere_0.45_tetra");
 
     // read ANSYS model data and build model
@@ -67,8 +67,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
     // -------------------------------------------------
     string  in_file(model_name);
     const bool binary_file( true );
-    const bool irregular_mesh( false );
-    mesh_interface.Read_ANSYS_Mesh( in_file.c_str(), vset, mesh_topology, binary_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( in_file.c_str(), vset, mesh_topology, binary_file, true );
     // 1. eliminating the unwanted mesh regions from topology and vset
     mesh_topology.ReduceToRegions( in_file.c_str() );
     map<size_t,size_t>  old_and_new_elmtids;

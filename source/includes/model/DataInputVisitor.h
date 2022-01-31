@@ -30,7 +30,7 @@ class DataInputVisitor : public Visitor<dim> {
   public:
     DataInputVisitor( Model<dim>& sg, 
                       const char* input_prop,
-                      const std::vector<double64>& input_data );
+                      const std::vector<double>& input_data );
 
     virtual ~DataInputVisitor();
     
@@ -44,7 +44,7 @@ class DataInputVisitor : public Visitor<dim> {
     void  Reset();
 
   private:
-    const std::vector<double64>&  input_data_ref_;
+    const std::vector<double>&  input_data_ref_;
     csmp::Index             prop_key_;
     Var                     variable_;
     size_t                  counter_;

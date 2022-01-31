@@ -1,53 +1,51 @@
-#ifndef COMPARE_FLOATS_H
-#define COMPARE_FLOATS_H
+#ifndef CSMP_COMPARE_FLOATS_H
+#define CSMP_COMPARE_FLOATS_H
 
 #include <limits>
 #include <cmath>
 
-#include "CSMP_definitions.h"
-
 namespace csmp
 {
 
-  // Functions that directly test within the numerical precision for double64 
-  inline bool approximatelyEqual(double64 a, double64 b)
+  // Functions that directly test within the numerical precision for double 
+  inline bool approximatelyEqual(double a, double b)
   {
-    return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double64>::epsilon());
+    return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double>::epsilon());
   }
   
-  inline bool essentiallyEqual(double64 a, double64 b)
+  inline bool essentiallyEqual(double a, double b)
   {
-    return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double64>::epsilon());
+    return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double>::epsilon());
   }
   
-  inline bool definitelyGreaterThan(double64 a, double64 b)
+  inline bool definitelyGreaterThan(double a, double b)
   {
-    return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double64>::epsilon());
+    return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double>::epsilon());
   }
   
-  inline bool definitelyLessThan(double64 a, double64 b)
+  inline bool definitelyLessThan(double a, double b)
   {
-    return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double64>::epsilon());
+    return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * std::numeric_limits<double>::epsilon());
   }
 
 
   // For user-defined tolerance
-  inline bool approximatelyEqual(double64 a, double64 b, double64 epsilon)
+  inline bool approximatelyEqual(double a, double b, double epsilon)
   {
     return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon );
   }
   
-  inline bool essentiallyEqual(double64 a, double64 b, double64 epsilon )
+  inline bool essentiallyEqual(double a, double b, double epsilon )
   {
     return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon );
   }
   
-  inline bool definitelyGreaterThan(double64 a, double64 b, double64 epsilon )
+  inline bool definitelyGreaterThan(double a, double b, double epsilon )
   {
     return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon );
   }
   
-  inline bool definitelyLessThan(double64 a, double64 b, double64 epsilon )
+  inline bool definitelyLessThan(double a, double b, double epsilon )
   {
     return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon );
   }

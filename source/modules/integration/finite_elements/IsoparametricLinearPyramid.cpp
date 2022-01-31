@@ -105,10 +105,10 @@ the element.
 
 */
 /// Roman, 2013. Corrected(optimised) approximation according to Bedrosian paper
-void IsoparametricLinearPyramid::Nrst( double64 r,
-                                       double64 s,
-                                       double64 t,
-                                       std::vector<double64>& N ) const
+void IsoparametricLinearPyramid::Nrst( double r,
+                                       double s,
+                                       double t,
+                                       std::vector<double>& N ) const
 {
 
    /// Zganski et. al.,1996. "A new family of finite elements: The pyramidal elements"
@@ -116,9 +116,9 @@ void IsoparametricLinearPyramid::Nrst( double64 r,
 
     N.resize(npe);
 
-   const double64 tMinus(1.-t);
+   const double tMinus(1.-t);
 
-   double64 fRationalTerm( 0. );
+   double fRationalTerm( 0. );
    if( t != 1. )
        fRationalTerm = r*s/tMinus;
 
@@ -129,11 +129,11 @@ void IsoparametricLinearPyramid::Nrst( double64 r,
    N[4] = t;
 
 //   // alternative approximation
-//   const double64 rPlus(1.+r);
-//   const double64 sPlus(1.+s);
-//   const double64 rMinus(1.-r);
-//   const double64 sMinus(1.-s);
-//   const double64 tMinus(1.-t);
+//   const double rPlus(1.+r);
+//   const double sPlus(1.+s);
+//   const double rMinus(1.-r);
+//   const double sMinus(1.-s);
+//   const double tMinus(1.-t);
 //   N[0] = 0.25*rMinus*sMinus*tMinus;
 //   N[1] = 0.25*rPlus *sMinus*tMinus;
 //   N[2] = 0.25*rPlus *sPlus *tMinus;
@@ -141,18 +141,18 @@ void IsoparametricLinearPyramid::Nrst( double64 r,
 //   N[4] = t;
 }
 
-void IsoparametricLinearPyramid::Nrst( double64 r,
-                                       double64 s,
-                                       double64 t,
-                                       double64* N ) const
+void IsoparametricLinearPyramid::Nrst( double r,
+                                       double s,
+                                       double t,
+                                       double* N ) const
 {
 
    /// Zganski et. al.,1996. "A new family of finite elements: The pyramidal elements"
    /// G.Bedrosian, 1992. "Shape functions for three-dimentional finite element analysis"
 
-   const double64 tMinus(1.-t);
+   const double tMinus(1.-t);
 
-   double64 fRationalTerm( 0. );
+   double fRationalTerm( 0. );
    if( t != 1. )
        fRationalTerm = r*s/tMinus;
 
@@ -163,11 +163,11 @@ void IsoparametricLinearPyramid::Nrst( double64 r,
    N[4] = t;
 
 //   // alternative approximation
-//   const double64 rPlus(1.+r);
-//   const double64 sPlus(1.+s);
-//   const double64 rMinus(1.-r);
-//   const double64 sMinus(1.-s);
-//   const double64 tMinus(1.-t);
+//   const double rPlus(1.+r);
+//   const double sPlus(1.+s);
+//   const double rMinus(1.-r);
+//   const double sMinus(1.-s);
+//   const double tMinus(1.-t);
 //   N[0] = 0.25*rMinus*sMinus*tMinus;
 //   N[1] = 0.25*rPlus *sMinus*tMinus;
 //   N[2] = 0.25*rPlus *sPlus *tMinus;
@@ -202,10 +202,10 @@ see inlined source code in the header file.
 The shape function derivatives are needed in most integration
 procedures for elements.
 */
-void IsoparametricLinearPyramid::dNr ( double64,
-                                        double64 s,
-                                        double64 t,
-                                        std::vector<double64>& DNR ) const
+void IsoparametricLinearPyramid::dNr ( double,
+                                        double s,
+                                        double t,
+                                        std::vector<double>& DNR ) const
 {
    DNR.resize(npe);
 
@@ -227,9 +227,9 @@ void IsoparametricLinearPyramid::dNr ( double64,
    }
 
 //   // alternative approximation
-//   const double64 sPlus(1.0+s);
-//   const double64 sMinus(1.0-s);
-//   const double64 tMinus(1.-t);
+//   const double sPlus(1.0+s);
+//   const double sMinus(1.0-s);
+//   const double tMinus(1.-t);
 
 //   DNR[0] = -0.25*sMinus*tMinus;
 //   DNR[1] =  0.25*sMinus*tMinus;
@@ -240,10 +240,10 @@ void IsoparametricLinearPyramid::dNr ( double64,
 }
 
 void IsoparametricLinearPyramid::dNs(
-                double64 r,
-                double64,
-                double64 t,
-                std::vector<double64>& DNS ) const
+                double r,
+                double,
+                double t,
+                std::vector<double>& DNS ) const
 {
    DNS.resize(npe);
 
@@ -265,9 +265,9 @@ void IsoparametricLinearPyramid::dNs(
    }
 
 //   // alternative approximation
-//   const double64 rPlus(1.+r);
-//   const double64 rMinus(1.-r);
-//   const double64 tMinus(1.-t);
+//   const double rPlus(1.+r);
+//   const double rMinus(1.-r);
+//   const double tMinus(1.-t);
 
 //   DNS[0] = -0.25*rMinus*tMinus;
 //   DNS[1] = -0.25*rPlus *tMinus;
@@ -278,18 +278,18 @@ void IsoparametricLinearPyramid::dNs(
 }
 
 void IsoparametricLinearPyramid::dNt(
-                double64 r,
-                double64 s,
-                double64 t,
-                std::vector<double64>& DNT ) const
+                double r,
+                double s,
+                double t,
+                std::vector<double>& DNT ) const
 {
    DNT.resize(npe);
 
    if ( t != 1.0 )
    {
-       const double64 RS( r*s );
-       const double64 TMinus2( (1.0-t)*(1.0-t) );
-       const double64 RST(RS/TMinus2);
+       const double RS( r*s );
+       const double TMinus2( (1.0-t)*(1.0-t) );
+       const double RST(RS/TMinus2);
        DNT[0] = -0.25+0.25*RST;
        DNT[1] = -0.25-0.25*RST;
        DNT[2] = -0.25+0.25*RST;
@@ -306,10 +306,10 @@ void IsoparametricLinearPyramid::dNt(
    }
 
 //   // alternative approximation
-//   const double64 rPlus(1.+r);
-//   const double64 sPlus(1.+s);
-//   const double64 rMinus(1.-r);
-//   const double64 sMinus(1.-s);
+//   const double rPlus(1.+r);
+//   const double sPlus(1.+s);
+//   const double rMinus(1.-r);
+//   const double sMinus(1.-s);
 
 //   DNT[0] = -0.25*rMinus*sMinus;
 //   DNT[1] = -0.25*rPlus *sMinus;
@@ -456,6 +456,36 @@ void IsoparametricLinearPyramid::NodesOfFace( size_t face_id, std::vector<size_t
 
 
 
+vector<size_t>  IsoparametricLinearPyramid::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,1,4};
+        case 1: return vector<size_t>{1,2,4};
+        case 2: return vector<size_t>{2,3,4};
+        case 3: return vector<size_t>{0,4,3};
+        case 4: return vector<size_t>{0,3,2,1};
+      }
+    cerr <<"\nIsoparametricLinearPyramid::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+vector<size_t>  IsoparametricLinearPyramid::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,3,4};
+        case 1: return vector<size_t>{0,2,4};
+        case 2: return vector<size_t>{1,3,4};
+        case 3: return vector<size_t>{0,2,4};
+        case 4: return vector<size_t>{0,1,2,3};
+        default:
+          cerr <<"\nIsoparametricLinearPyramid::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
 CSMP_FEM_TYPE
 IsoparametricLinearPyramid::ElementTypeOfFace( size_t face )  const
  {
@@ -464,26 +494,26 @@ IsoparametricLinearPyramid::ElementTypeOfFace( size_t face )  const
     return ISOPARAMETRIC_LINEAR_TRIANGLE;
  }
 
-double64 IsoparametricLinearPyramid::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearPyramid::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
 
 
 
 /// Method to generate 8 integration points, needed for hex-like full bi-linear interpolation
 /// @note Normally for linear pyramid number of integration poins as required by accuracy is 1
 void
-IsoparametricLinearPyramid::GenerateIntegrationPoints(DenseMatrix<DM_MIN> &Ip, std::vector<double64>& We)
+IsoparametricLinearPyramid::GenerateIntegrationPoints(DenseMatrix<DM_MIN> &Ip, std::vector<double>& We)
 {
      const size_t numberOfQuadIntegrationPoints=4;
      const size_t numberOfDimensionsInPlane=2;
      DenseMatrix<DM_MIN> IPQUAD(numberOfQuadIntegrationPoints,numberOfDimensionsInPlane);
-     const double64 constA=0.577350269189626;
+     const double constA=0.577350269189626;
 
      IPQUAD(0,0)=-constA; IPQUAD(0,1)=-constA;
      IPQUAD(1,0)= constA; IPQUAD(1,1)=-constA;
      IPQUAD(2,0)= constA; IPQUAD(2,1)= constA;
      IPQUAD(3,0)=-constA; IPQUAD(3,1)= constA;
 
-     vector<double64> WQUAD(numberOfQuadIntegrationPoints);
+     vector<double> WQUAD(numberOfQuadIntegrationPoints);
 
      WQUAD[0]=1.0;
      WQUAD[1]=1.0;
@@ -491,9 +521,9 @@ IsoparametricLinearPyramid::GenerateIntegrationPoints(DenseMatrix<DM_MIN> &Ip, s
      WQUAD[3]=1.0;
 
      const size_t numberOfPointsInTdimension=2;
-     vector<double64> T(numberOfPointsInTdimension);
+     vector<double> T(numberOfPointsInTdimension);
      T[0]=0.455848155988775; T[1]=0.877485177344559;
-     vector<double64> b(numberOfPointsInTdimension);
+     vector<double> b(numberOfPointsInTdimension);
      b[0]=0.100785882079825; b[1]=0.232547451253508;
      size_t i=0;
      for(size_t j=0;j<numberOfQuadIntegrationPoints;j++)
@@ -527,7 +557,7 @@ For degenerate configurations?
                      0=>2  1=>0  2==1
 
 @warning Coordinate axes mapped, but work for cube at COFC?? */
-double64
+double
 IsoparametricLinearPyramid::VolumeOfTetra(
                             size_t verticeIndex1,
                             size_t verticeIndex2,
@@ -562,7 +592,7 @@ IsoparametricLinearPyramid::VolumeOfTetra(
     if(d4TimesXYi2<0.0) cout<< " IsoparametricLinearPyramid::VolTetra d4TimesXYi2 <0.0"<<endl;
     //if(d4TimesXYi2<0.0) throw std::range_error(" LinearHexahedron::VolTetra d4TimesXYi2 <0.0");
 
-    double64 volume =fabs(d1Times1) + fabs(d2TimesXYi0) + fabs(d3TimesXYi1) + fabs(d4TimesXYi2);
+    double volume =fabs(d1Times1) + fabs(d2TimesXYi0) + fabs(d3TimesXYi1) + fabs(d4TimesXYi2);
 
     return volume/6.0;
 }
@@ -570,11 +600,11 @@ IsoparametricLinearPyramid::VolumeOfTetra(
 
 
 /// @warning Not applicable for irregular pyramid
-double64
+double
 IsoparametricLinearPyramid::VolumeOfPyramid()
 {
-    //double64 volume= VolumeOfTetra(0,1,2,4)+VolumeOfTetra(0,2,3,4);
-    double64 volume= VolumeOfTetra(0,1,2,4)+VolumeOfTetra(3,0,2,4);
+    //double volume= VolumeOfTetra(0,1,2,4)+VolumeOfTetra(0,2,3,4);
+    double volume= VolumeOfTetra(0,1,2,4)+VolumeOfTetra(3,0,2,4);
     cout<<" IsoparametricLinearPyramid::VolumeOfPyramid() V1="<<VolumeOfTetra(0,1,2,4)<<", V2="<<VolumeOfTetra(3,0,2,4)<<endl;
   return volume;
 }
@@ -652,12 +682,12 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 @return The interpolation-function derivative matrix is returned into the
 second method argument.
 */
-double64
+double
 IsoparametricLinearPyramid::dN( DenseMatrix<DM_MIN>& DN2,
-                                const vector<double64>& xyz  )
+                                const vector<double>& xyz  )
   {
 
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -667,7 +697,7 @@ IsoparametricLinearPyramid::dN( DenseMatrix<DM_MIN>& DN2,
     dNt( rst[0], rst[1], rst[2], DNT );
 
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     DN2.Resize(dim,dim);
     DN2  = JINV;
@@ -693,11 +723,11 @@ within the Hexahedron.
 */
 void
 IsoparametricLinearPyramid::N(
-                    std::vector<double64>& N,
-                    const std::vector<double64>& xyz
+                    std::vector<double>& N,
+                    const std::vector<double>& xyz
                     )
 {
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -728,7 +758,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 
 tested AAM ok*/
-double64
+double
 IsoparametricLinearPyramid::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
  {
     assert( nd < npe );
@@ -738,7 +768,7 @@ IsoparametricLinearPyramid::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 5 in global coordinates
     // by multiplication of JINV with local DN
@@ -759,7 +789,7 @@ IsoparametricLinearPyramid::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 //
 //********************************************************************************
 void
-IsoparametricLinearPyramid::ParametricToPhysical(std::vector<double64> &rst, std::vector<double64>& xyz)
+IsoparametricLinearPyramid::ParametricToPhysical(std::vector<double> &rst, std::vector<double>& xyz)
 {
     Nrst(rst[0],rst[1],rst[2], NRST );
 
@@ -787,28 +817,28 @@ IsoparametricLinearPyramid::ParametricToPhysical(std::vector<double64> &rst, std
 //********************************************************************************
 void
 IsoparametricLinearPyramid::PhysicalToParametric(
-                                       std::vector<double64>& rSt,
-                                       const std::vector<double64>& xyz
+                                       std::vector<double>& rSt,
+                                       const std::vector<double>& xyz
                                     )
 {
 
-    vector<double64> outxyz(dim);
-    vector<double64> rstHatK(dim);
+    vector<double> outxyz(dim);
+    vector<double> rstHatK(dim);
 
-    std::vector<double64> distanceFromGivenPointLinf(dim,0.0);
-    double64 distanceFromGivenPointL2;
+    std::vector<double> distanceFromGivenPointLinf(dim,0.0);
+    double distanceFromGivenPointL2;
 
     // Find largest and smallest segments in order to define precision
-    vector<double64> vec(spe);
+    vector<double> vec(spe);
     EdgeLengths( vec );
-    double64 seg_max(vec[0]), seg_min(vec[0]);
+    double seg_max(vec[0]), seg_min(vec[0]);
     for ( size_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
     }
 
-    const double64 geometricTolerance = 0.005*seg_min;
+    const double geometricTolerance = 0.005*seg_min;
 
     // First guess as BaryCenter
     rstHatK[0] = 0.0;
@@ -831,17 +861,17 @@ IsoparametricLinearPyramid::PhysicalToParametric(
     //    (distanceFromGivenPointLinf[2] > geometricTolerance)  )
     {
 
-        vector<double64> rstHatK_PlusOne(dim);
-        double64 minDistanceFromGivenPoint;
+        vector<double> rstHatK_PlusOne(dim);
+        double minDistanceFromGivenPoint;
 
-        const double64 constantMu               = 1.0;
+        const double constantMu               = 1.0;
         const size_t numberOfFirstIterrations   = 5;
         const size_t maxNumberOfIterrations     = 20;
         const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
-        const double64 incrementR = 2.0/(numberOfFirstIterrations-1);
-        const double64 incrementS = 2.0/(numberOfFirstIterrations-1);
-        const double64 incrementT = 1.0/(numberOfFirstIterrations-1);
+        const double incrementR = 2.0/(numberOfFirstIterrations-1);
+        const double incrementS = 2.0/(numberOfFirstIterrations-1);
+        const double incrementT = 1.0/(numberOfFirstIterrations-1);
 
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
@@ -918,7 +948,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
                 dNt( rstHatK[0], rstHatK[1], rstHatK[2], DNT );
                 Jacobian( DNR, DNS, DNT );
                 // Check whether Jacobian is positive ( might be not true for the point outside the element )
-                //const double64 detJ = JacobianDeterminant();
+                //const double detJ = JacobianDeterminant();
                 //if( detJ > 0.0 )
                 JacobianInverse();
             }
@@ -967,7 +997,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
                <<"s = "<<rstHatK[1]<<" ;\t"
                <<"t = "<<rstHatK[2]<<"\n";
 
-            std::vector<double64> N(npe,0.0);
+            std::vector<double> N(npe,0.0);
             Nrst(rstHatK[0], rstHatK[1], rstHatK[2], N );
             cout<<" IsoparametricLinearPyramid::PhysicalToParametric: Shape functions:\t"
                 <<"N[0] = "<<N[0]<<" ;\t"
@@ -998,7 +1028,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
      
      @test OK
 */
-void  IsoparametricLinearPyramid::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  IsoparametricLinearPyramid::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);
@@ -1076,13 +1106,13 @@ and the shortest boundary segment.
 
 The Element is consulted for its global coordinates.
 */
-double64  IsoparametricLinearPyramid::AspectRatio()
+double  IsoparametricLinearPyramid::AspectRatio()
 {
-   vector<double64> vec(spe);
+   vector<double> vec(spe);
 
    EdgeLengths( vec );
 
-   double64 seg_max(vec[0]), seg_min(vec[0]);
+   double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
    for ( size_t i=1; i<spe; i++ )
@@ -1110,9 +1140,9 @@ vertices of the edge.
 
 */
 void
-IsoparametricLinearPyramid::EdgeLengths( std::vector<double64>& len )
+IsoparametricLinearPyramid::EdgeLengths( std::vector<double>& len )
 {
-    double64 sum;
+    double sum;
     len.resize(spe);
 
     // segment 1 1-2
@@ -1161,10 +1191,10 @@ IsoparametricLinearPyramid::EdgeLengths( std::vector<double64>& len )
 
 
 
-double64
+double
 IsoparametricLinearPyramid::Volume()
  {
-    double64  area(0.); // determinant
+    double  area(0.); // determinant
 
     // numerical integration:
     // looping over the 8 Gauss points calculating determinant
@@ -1196,7 +1226,7 @@ A reference to the parent Element, the number of the integration point.
 
 */
 inline void
-IsoparametricLinearPyramid::N_AtIntegrationPoint( size_t ip, std::vector<double64>& N )
+IsoparametricLinearPyramid::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
 
@@ -1230,7 +1260,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 
 */
-double64 IsoparametricLinearPyramid::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
+double IsoparametricLinearPyramid::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
     // get local shape function derivatives at Gauss point
@@ -1244,7 +1274,7 @@ double64 IsoparametricLinearPyramid::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
@@ -1279,7 +1309,7 @@ double64 IsoparametricLinearPyramid::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&
 
 
 void
-IsoparametricLinearPyramid::N_AtBaryCenter( std::vector<double64>& N )
+IsoparametricLinearPyramid::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
     Nrst(0.0,0.0,0.25,N);
@@ -1304,17 +1334,17 @@ Tetrahedron
 The parent element is queried for its node coordinates.
 
 */
-double64
+double
 IsoparametricLinearPyramid::InnerRadius()
 {
-   static  vector<double64> segms(spe);
-   double64                 sum(0.0);
+   static  vector<double> segms(spe);
+   double                 sum(0.0);
 
    EdgeLengths( segms );
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
 
    if(AspectRatio()>4.0)
-   cout<<" IsoparametricLinearPyramid::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+      cerr<<"\nIsoparametricLinearPyramid::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
    return Volume() / (sum/6.);
 }
@@ -1332,8 +1362,7 @@ for the element.
 void
 IsoparametricLinearPyramid::MidSideNodes(std::vector<size_t>& ids) const
  {
-    cout<<
-    " IsoparametricLinearPyramid::MidSideNodes ***WARNING: For linear element MidSideNodes not present... "<<endl;
+    cerr<<"\nIsoparametricLinearPyramid::MidSideNodes WARNING: linear element has no MidSideNodes.\n"<<endl;
     ids[0]=0;
  }
  
@@ -1381,7 +1410,7 @@ IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary( const vector<size_t>& bn
 
 
 
-double64
+double
 IsoparametricLinearPyramid::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
     // Barycenter of the regular square-sided pyramid is located on the symmetry 1/4 from base
@@ -1391,7 +1420,7 @@ IsoparametricLinearPyramid::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 5 in global coordinates
     // by multiplication of JINV with local DN
@@ -1427,8 +1456,8 @@ to the nodes.  This involves the steps:
 void
 IsoparametricLinearPyramid::ExtrapolateIntegrationPointVariableToNodes(
                                                         size_t nvars,
-                                                        const vector<double64>& IVAR,
-                                                        vector<double64>& NVAR
+                                                        const vector<double>& IVAR,
+                                                        vector<double>& NVAR
                                                                 )
 const
 {
@@ -1451,7 +1480,7 @@ const
 // integration point location transformed into global coordinates
 // NB: the matrix XYZ must be uptodate
 void  IsoparametricLinearPyramid::IntegrationPoint( size_t ip,
-                                                    vector<double64>& xyz ) const
+                                                    vector<double>& xyz ) const
  {
     assert( ip < gpe );
     xyz.resize(3U);
@@ -1479,7 +1508,7 @@ IsoparametricLinearPyramid::ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoords
 }
 
 
-void IsoparametricLinearPyramid::JacobianAt( const std::vector<double64>& rst )
+void IsoparametricLinearPyramid::JacobianAt( const std::vector<double>& rst )
 {
     dNr( rst[0], rst[1], rst[2], DNR );
     dNs( rst[0], rst[1], rst[2], DNS );

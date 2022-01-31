@@ -31,9 +31,10 @@ template<size_t> class Model;
  
     TODO: account for the effects of potential element based 'fluid volume source' terms.
     TODO: return rates of solute influx/outflux into/from the model
-    double64 InFlux() const;
-    double64 OutFlux() const;
+    double InFlux() const;
+    double OutFlux() const;
     TODO: add choice of transport scheme: 1st versus 2nd order in space
+    TODO: Generalise scheme so that it can handle Face and InterFace objects
 */
 template<size_t dim>
 class ExplicitTransport : public variables::VariableSet_TracerTransfer,
@@ -41,31 +42,31 @@ class ExplicitTransport : public variables::VariableSet_TracerTransfer,
                           public TimeStepEvaluator<dim,ExplicitTransport> {
   public:
     friend class ExplicitTransport_Test;
+    
+    /// shorthand to get to variable names
+    const VariableSet_TracerTransfer&  Notation;
 
-    /// constructor for target region; by default all driving forces are considered
-    ExplicitTransport( Model<dim>&, const char* target_region );
+    /// constructor for target region; by default all driving forces are considered; @attention if there is a velocity field, it is used to initialise facet fluxes
+    ExplicitTransport( Model<dim>&, const std::string& target_region );
     
     /// initialises transport class for current pressure/velocity/transport variable field
     void UpdateFluxesAndFluxBalances();
   
     /// computes the time constraint
-    double64 TimeIncrement();
+    double TimeIncrement() const;
     
     /// executes incremental time-stepping (a suitable time increment is computed by scheme)
-    void AdvectVariable( double64 time_interval );
+    void AdvectVariable( double time_interval );
     
-    double64 IncomingVolumetricFlow() const;
-    double64 OutgoingVolumetricFlow() const;
-    
-    const csmp::Index  key_acc_;  ///< accumulated interim result on the FV (scalar)
-    const csmp::Index  key_out_;  ///< outflow from the cell at the current timestep
+    double IncomingVolumetricFlow() const;
+    double OutgoingVolumetricFlow() const;
 
   private:
     /// identifies "halo elements", i.e. which contribute to domain FVs, but are outside of domain, returns number
     size_t CollectHaloStencils();
     
     /// true if the computational domain has parts that are removed from the model boundary
-    bool HasHaloElements() const { return !halo_elmts_.empty(); }
+    bool HasHaloStencils() const { return !halo_elmts_.empty(); }
     
     /// 1.a computations of  volumetric flows and (chemical) fluxes across facets using FacetFlux (facet flux) policy
     void VolumetricFlowAndTransportVariableFluxBalances();
@@ -74,23 +75,23 @@ class ExplicitTransport : public variables::VariableSet_TracerTransfer,
     void TransportVariableFluxBalances();
     
     /// 2. calculates optimal time increment, flux balance, and in- and out flows for each FV
-    double64 TimeIncrement_CFL_Outflow( double64 max_time_increment );
+    double TimeIncrement_CFL_Outflow( double max_time_increment ) const;
     
     /// 4. composes 'new concentration': C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [vi]
-    void Assemble1stOrderSolution( double64 delta_t, bool enforce_divergence_free_vt_field );
+    void Assemble1stOrderSolution( double delta_t, bool enforce_divergence_free_vt_field );
     
     /// 5. transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error
-    double64 VerifyAndAssignResults( bool show_range, bool do_range_check ) const;
+    double VerifyAndAssignResults( bool show_range, bool do_range_check ) const;
     
   private:
     // DEPRACATE ?
     /// if we know beforehand that velocity field will be divergence free, this method compensates for small abberations from this
-    void AdjustResultsAssumingDivergenceFreeVelocityField( double64 time_interval );
+    void AdjustResultsAssumingDivergenceFreeVelocityField( double time_interval );
     
   private:
     Region<dim>&                subdomain_;   ///< region to which transport algorithm is applied
     std::vector<Element<dim>*>  halo_elmts_;  ///< elements outside of subdomain, contributing stencils to subdomain FVs
-    double64  upper_limit_, lower_limit_;     ///< range in which the result is allowed to vary
+    double  upper_limit_, lower_limit_;     ///< range in which the result is allowed to vary
 };
 
 

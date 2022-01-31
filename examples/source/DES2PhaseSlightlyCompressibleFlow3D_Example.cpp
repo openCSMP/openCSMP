@@ -49,14 +49,12 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Specifications()
 
     Use models 'fracs4' (.dat, .asc, -regions.txt, -configuration.txt) as input file suites.
 */
-
 void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
 {
     // -------------------------------------
     // 0.0 Set variables used throughout the simulation
     // -------------------------------------
-
-    double64 model_time =  0.0; // time
+    double model_time =  0.0; // time
 
     // ---------------------------------------------------
     // 1.0 Create Model directly from ANSYS-ICEM mesh
@@ -68,14 +66,14 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
 
     Standard_IO_Handler  stdio;
     bool  DES = stdio.YesNo("Do you want to solve the transport equation with DES? (y=DES, n=TDS)"); 
-    double64 Courant_multiplier, PEP_parameter;
+    double Courant_multiplier, PEP_parameter;
     cerr <<"\nEnter CFL multiplier (suggested value: 0.2) and PEP parameter (suggested value: 0.1)" << endl;
     cin >> Courant_multiplier >> PEP_parameter;  
      
     bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?"); 
     bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?"); 
     
-    ANSYS_Model3D                model( input_file.c_str(), "DES_2phase_variables.txt" );
+    ANSYS_Model3D model( input_file.c_str(), "DES_2phase_variables.txt" );
 
     // give the model dimensions
     printModelDimensions( model, true );
@@ -157,9 +155,9 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
     // -----------------------
 
     // define some constant variables
-    const double64    day(86400.0);
-    const double64    max_time (60.0*day);     // run for 60 days
-    double64          time_increment(0.6*day);      // timestep 0.6 day
+    const double    day(86400.0);
+    const double    max_time (60.0*day);     // run for 60 days
+    double          time_increment(0.6*day);      // timestep 0.6 day
     const long        save_frequency(3);       // write results to file every 3 days
     size_t	      time, save_counter(1);    
     size_t	      n_threads(1);
@@ -167,7 +165,7 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
     // -----------------------
     // 9.0 Transient loop
     // -----------------------
-    double64 solving_time = 0.;
+    double solving_time = 0.;
     clock_t  T_begin;    
     while ( model_time < max_time )
       {
@@ -220,8 +218,8 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
       }
 
     // clocking the runtime
-    if(DES) cerr << "\nmain: DES transport uses " << static_cast<double64>(solving_time/CLOCKS_PER_SEC) << " seconds " << endl;
-    else    cerr << "\nmain: TDS transport uses " << static_cast<double64>(solving_time/CLOCKS_PER_SEC) << " seconds " << endl;
+    if(DES) cerr << "\nmain: DES transport uses " << static_cast<double>(solving_time/CLOCKS_PER_SEC) << " seconds " << endl;
+    else    cerr << "\nmain: TDS transport uses " << static_cast<double>(solving_time/CLOCKS_PER_SEC) << " seconds " << endl;
     
     // terminate
     cerr << "\nmain: That's it..."<< endl;
@@ -232,7 +230,7 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
 void DES2PhaseSlightlyCompressibleFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFunctionsModule1<3U>& flowfunctions )
  {
      
-    static const Region<3U>& mref = mdl.Region("Model"); 
+    Region<3U>& mref = mdl.Region("Model"); 
     // keys to properties
     static Index  mobt_key(mdl.Database().StorageKey("total mobility permeability product"));
     static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
@@ -243,28 +241,26 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::computeTotalMobility( Model<3U
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
-    vector<Node<3U>* >::const_iterator nit;
-    for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
     {
-        double64 sw = 1. - (*nit)->Read(snw_key);
+        double sw = 1. - (*nit)->Read(snw_key);
         (*nit)->Store( sw_key, makeScalar((*nit)->Status(snw_key),sw));
     }
 
     
     // 2. Computing the multiphase flow properties
     //    loop over finite elements
-    vector<Element<3U>* >::const_iterator eit;
-    for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
+    for ( auto eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
         //flowfunctions.InitialiseBrooksCoreyParameters(*eit);
         //total mobility
-        double64 mob_t = flowfunctions.TotalMobility(*eit);
+        double mob_t = flowfunctions.TotalMobility(*eit);
         /*
         TensorVariable<3U> K;
         e.Read( k_key, K );
         double k = K.Trace() / 3.;
         */
-        double64 k = (*eit)->Read(k_key);
+        double k = (*eit)->Read(k_key);
         mob_t *= k;  
         (*eit)->Store( mobt_key, makeScalar(PLAIN, mob_t) );
     } 

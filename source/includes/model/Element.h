@@ -145,144 +145,148 @@ Thus, one can have an element with FEM but without FVM, but not vice versa.
 template<size_t dim>
 class Element : public FiniteElementPolicy<dim, Element>,
                 public FiniteVolumePolicy<dim, Element>,
-                public LocalVariableStorage<dim, Element<dim> > ///< TODO: @todo fix template - template parameter
-{
-public:
-  explicit Element( BOX_BOUNDARY bflag = IRREGULAR );
+                public LocalVariableStorage<dim, Element> {
+  public:
+    /// constructor for testing element in isolation
+    explicit Element( FiniteElement* );
 
-  /// constructor for testing element in isolation
-  explicit Element( FiniteElement* );
+    /// constructor for testing element in isolation
+    Element( FiniteElement*,
+             const FiniteVolumeStencil<dim>* );
 
-  /// constructor for testing element in isolation
-  Element( FiniteElement*,
-           FiniteVolumeStencil<dim>* );
+    Element( FiniteElement*,
+             const FiniteVolumeStencil<dim>*,
+             const LocalVariables& element_props,
+             const IntegrationPointVariables& integration_point_props );
 
-  Element( FiniteElement*,
-           FiniteVolumeStencil<dim>*,
-           const LocalVariables& element_props,
-           const IntegrationPointVariables& integration_point_props );
+    /// for model reconstruction from CSMP native binary file
+    Element( size_t index,
+             FiniteElement*,
+             const FiniteVolumeStencil<dim>*,
+             const LocalVariables& element_props,
+             const IntegrationPointVariables& integration_point_props,
+             int32_t material );
 
-  /// for model reconstruction from CSMP native binary file
-  Element( size_t index,
-           FiniteElement*,
-           const LocalVariables& element_props,
-           const IntegrationPointVariables& integration_point_props,
-           BOX_BOUNDARY = NOT );
+    /// exact copy: same idx, properties, nodes and neighbor elements
+    Element( const Element& );
 
-  Element( const Element& );
+    /// handcoded move constructor to deal with pointers
+    Element( Element&& );
 
-  /// handcoded move constructor to deal with pointers
-  Element( Element&& );
+    ~Element();
 
-  ~Element();
+    Element&  operator=( const Element& );
 
-  Element&  operator=( const Element& );
+    /// hand-coded assignment to deal with pointers
+    Element& operator=( Element&& );
 
-  /// hand-coded assignment to deal with pointers
-  Element& operator=( Element&& );
+     // TODO: deprecate or make stand-alone binary operator? - cheapest comparison at the moment
+    bool operator==( const Element<dim>& ) const;
 
-  /// relation operators
-  bool operator==( const Element<dim>& );
+    /// less than operator for comparing barycentre locations using operator of the corresponding point object
+    bool operator<( const Element<dim>& ) const;
+ 
+    /// Local variable storage interface
+    PLACEMENT Placement() const { return ELEMENT; }
 
-  /// Local variable storage interface
-  PLACEMENT Placement() const { return ELEMENT; }
+    void Accept( csmp::Visitor<dim>& );
 
-  void Accept( csmp::Visitor<dim>& );
+    // ------------------------------------------------------------------------
+    // Functionality of construction process
+    // ------------------------------------------------------------------------
 
-  // ------------------------------------------------------------------------
-  // Functionality of construction process
-  // ------------------------------------------------------------------------
+    /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
+    void Assign( size_t nbor, Element<dim>* const );
+    /// sets pointer to given neighbor element to zero
+    void Unassign( const Element<dim>* const );
 
-  /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
-  void Assign( size_t nbor, Element<dim>* const );
-  void Unassign( Element<dim>* );
+    /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
+    void Assign( size_t node, Node<dim>* const );
+    /// sets pointer to given node to zero
+    void Unassign( const csmp::Node<dim>* const );
 
-  /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
-  void Assign( size_t node, Node<dim>* const );
-  void Unassign( csmp::Node<dim>* const nd_ptr );
+    // ------------------------------------------------------------------------
+    // Member access
+    // ------------------------------------------------------------------------
 
-  // ------------------------------------------------------------------------
-  // Member access
-  // ------------------------------------------------------------------------
+    /// number of nodes of this element
+    size_t  Nodes() const;
 
-  /// number of nodes of this element
-  size_t  Nodes() const;
+    /// number of equidimensional neighbor elements of this element (not necessarily connected)
+    size_t  Neighbors() const;
 
-  /// number of equidimensional neighbor elements of this element (not necessarily connected)
-  size_t  Neighbors() const;
+    /// number of equidimensional neighbor elements of this element (necessarily connected)
+    size_t  ConnectedNeighbors() const;
 
-  /// number of equidimensional neighbor elements of this element (necessarily connected)
-  size_t  ConnectedNeighbors() const;
+    /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
+    size_t  Faces() const;
 
-  /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
-  size_t  Faces() const;
+    typename std::vector<csmp::Node<dim>*>::iterator            NodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator            NodesEnd();
+    typename std::vector<csmp::Element<dim>*>::iterator         NeighborsBegin();
+    typename std::vector<csmp::Element<dim>*>::iterator         NeighborsEnd();
 
-  typename std::vector<csmp::Node<dim>*>::iterator            NodesBegin();
-  typename std::vector<csmp::Node<dim>*>::iterator            NodesEnd();
-  typename std::vector<csmp::Element<dim>*>::iterator         NeighborsBegin();
-  typename std::vector<csmp::Element<dim>*>::iterator         NeighborsEnd();
+    typename std::vector<const csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator      NodesEnd()       const;
+    typename std::vector<const csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
+    typename std::vector<const csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
 
-  typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
-  typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd()       const;
-  typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
-  typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
+    typename  std::vector<csmp::Node<dim>*>&                    NodeVector();
+    typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();
 
-  typename  std::vector<csmp::Node<dim>*>&                    NodeVector();
-  typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();
+    /// accessor of the nodes of the current finite element
+    csmp::Node<dim>*       N( size_t n_local );
+    const csmp::Node<dim>* N( size_t n_local ) const;
 
-  /// accessor of the nodes of the current finite element
-  csmp::Node<dim>*     N( size_t n_local ) const;
+    /// accessor of the equidimensional neighbor elements of the current element (volume->volume, surface->surfaces element etc.)
+    csmp::Element<dim>*        Neighbor( size_t );
+    const csmp::Element<dim>*  Neighbor( size_t ) const;
 
-  /// accessor of the equidimensional neighbor elements of the current element (volume->volume, surface->surfaces element etc.)
-  csmp::Element<dim>*  Neighbor( size_t )  const;
+    /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
+    void         Idx( size_t ) const;
+    size_t       Idx() const;
 
-  /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
-  void         Idx( size_t ) const;
-  size_t       Idx() const;
+    /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
+    BOX_BOUNDARY AtBoundary( size_t boundary_face ) const;
+    
+    /// unique material identifier that matches number of parent unique region
+    int32_t Material_ID() const;
+    void Material_ID( int32_t id );
 
-  /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
-  void         AtBoundary( BOX_BOUNDARY b );
-  BOX_BOUNDARY AtBoundary() const;
-  
-  /// unique material identifier that matches number of parent unique region
-  int32 Material_ID() const;
-  void Material_ID( int32 id );
+    // ------------------------------------------------------------------------
+    // Functionality
+    // ------------------------------------------------------------------------
 
-  // ------------------------------------------------------------------------
-  // Functionality
-  // ------------------------------------------------------------------------
+    /// returns a vector of the property of interest discretized on the node
+    template<class Var>
+    void        NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const;
 
-  /// returns a vector of the property of interest discretized on the node
-  template<class Var>
-  void        NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const;
+    /// inputs node coordinates into supplied matrix
+    void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
 
-  /// inputs node coordinates into supplied matrix
-  void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
+    /// the centre of gravity of the elemt
+    Point<dim>  BaryCenter() const;
 
-  /// the centre of gravity of the elemt
-  Point<dim>  BaryCenter() const;
-
-  /// projects node points onto line returning max distance between them; vec direction can have any length
-  double64    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
-
-
-  // ------------------------------------------------------------------------
-  // Screen Output
-  // ------------------------------------------------------------------------
-
-  void Out() const;
+    /// projects node points onto line returning max distance between them; vec direction can have any length
+    double    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
 
 
-private:
-  // ------------------------------------------------------------------------
-  // Data members
-  // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // Screen Output
+    // ------------------------------------------------------------------------
 
-  mutable size_t                 idx_;
-  std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
-  std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
-  BOX_BOUNDARY                   at_boundary_;    ///< legacy boundary flag from before the creation of Boundary and Face classes
-  int32                          material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
+    void Out() const;
+
+  private:
+    template<size_t> friend class MeshManager;
+    void* operator new( size_t size );
+    void operator  delete( void* p );
+
+  private:
+    mutable size_t                 idx_;
+    std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
+    std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
+    int32_t                        material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
 };
 
 

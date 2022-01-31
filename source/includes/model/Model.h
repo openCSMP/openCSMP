@@ -16,6 +16,7 @@ namespace csmp {
 
 class PropertyConstraints;
 class ModelTopology;
+class Standard_IO_Handler;
 template<size_t> class Face;
 template<size_t> class InterFace;
 template<size_t> class Element;
@@ -23,6 +24,7 @@ template<size_t> class VSet;
 template<size_t> class Interrelation;
 template<size_t> class Visitor;
 template<size_t> class FiniteVolumeStencilManager;
+template<typename> class FEM_Data;
 
 template<size_t, template<size_t> class> class PDE_Integrator;
 template<size_t, template<size_t> class> class PDE_Integrator_UoM;
@@ -184,30 +186,31 @@ model.OutputDataToHDF ( "computed_temperature", "temperature" );
 */
 template<size_t dim>
 class Model : public RegionInterface<dim, Model>,
-  public BoundaryInterface<dim, Model>,
-  public SplitBoundaryInterface<dim, Model>,
-  public LocalVariableStorage<dim, Model<dim> > ///< @todo FIX TEMPLATE-TEMPLATE parameter
+              public BoundaryInterface<dim, Model>,
+              public SplitBoundaryInterface<dim, Model>,
+              public LocalVariableStorage<dim, Model> 
 {
 
 public:
+  // class Model is not copy constructable
 
   /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
-  Model( VSet<dim>&, const char* var_file, bool isoparametric = false, bool binaryVariablesFile = false );
+  Model( VSet<dim>&, const char* var_file, bool isoparametric = false );
 
   /// using the supplied polygonal data constructs unnamed single-domain model without regions, boundaries nor variable storage
   Model( VSet<dim>&, bool isoparametric = false );
 
-  /// constructs model with regions supplied as labeled element lists
-  Model( ModelTopology&, VSet<dim>&, const char* var_file,
-         bool binaryVariablesFile = false, bool create_boundary_objects = false, bool box_shaped = true );
-
-  /// constructs model with regions supplied as labeled element lists
+  /// constructs model with regions supplied as labeled element lists, variables file name is "*-variables.txt" where * is the name of the model
   Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects = false, bool box_shaped = true );
+
+  /// constructs model with regions supplied as labeled element lists and with the possibility to specific a variables file with unique name
+  Model( ModelTopology&, VSet<dim>&, const char* var_file,
+         bool create_boundary_objects = false, bool box_shaped = true );
 
   /// to read model from set of CSMP native binary files
   explicit Model( const std::string& binaryFiles );
 
-  /// to read model from set of CSMP native binary files; but only with a subset of variables
+  /// to read model from set of CSMP native binary files; but only with the specified subset of variables from the binary variables file
   Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
   /// destructor that needs to be overloaded when a subclass is derived from model
@@ -228,31 +231,21 @@ public:
   /// read-only access to the finite element types that are needed to support the current mesh
   const  FiniteElementManager&  FE_Manager() const;
 
-  /// access to the finite element types that are needed to support the current mesh
-  FiniteElementManager&  FE_Manager();
-
-  /// read only access to low-level finite volume functionality
-  const  FiniteVolumeStencilManager<dim>*  FV_Manager() const;
-
-  /// access to low-level finite volume functionality
-  FiniteVolumeStencilManager<dim>*  FV_Manager();
-
   PLACEMENT Placement() const { return MODEL; }
 
-  /// connects the finite-volume stencil pointers of the elements to the stencils after initialising them
-  void InstantiateFiniteVolumes();
 
   // -----------------------------------------------
   // Binary input/output
   // -----------------------------------------------
 
-  // NEW output and input interfaces
-  /// writes entire model with associated properties to disk; non-constant because this involves region creation
-  void OutputToBinaryFile( const char* ) const;
+  /// writes entire model with associated properties to disk; non-constant because this involves region creation; not const because mesh is updated
+  void OutputToBinaryFile( const char* );
 
-  // NEW
-  /// reads model written by OutputToDisk() including all associated properties; it can also read only a subset of variables
-  void InputFromBinaryFile( const char* model_name, const std::set<std::string>* subset_variables = nullptr );
+  /// reads model written by OutputToBinaryFile() including all associated properties; if subset of variables is not empty only these will be read
+  void InputFromBinaryFile( const char* model_name, const std::set<std::string>& subset_variables );
+  
+  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+  void OutputMeshTo( VSet<dim>&, bool get_indices_from_stored_variables=false );
 
   /// writes discretised variable to generic variable container
   template<class Var>
@@ -261,7 +254,7 @@ public:
   /// initialised the input property using the data supplied via the VSet
   template<class T>
   void InputVariableFrom( const char* input_prop, const FEM_Data<T>& );
-
+  
   /// inputs all discretised variables stored in the supplied VSet into the model
   void InputVariablesFrom( const VSet<dim>& );
 
@@ -272,17 +265,14 @@ public:
   /// inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized
   csmp::Index  CreateProperty( const char* new_prop, const char* unit,
                                VARIABLE_TYPE type = SCALAR, PLACEMENT place = NODE,
-                               size_t vsize = 1, double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
+                               size_t vsize = 1, double vmin = -1.0e+30, double vmax = 1.0e+30,
                                std::string usage = "???" );
 
   /// deletes property from the database and the distributed containers all across the model
   void DeleteProperty( const char* property );
 
-  /// renumbers everything, starting face and interface numbers after element index max; TODO: deprecate
-  size_t UpdateIndices() const;
-
-  /// renumbers everything, starting face and interface numbers after element index max in the subdomain; TODO: deprecate
-  size_t UpdateIndices( const char* region_name ) const;
+  /// renumbers everything, using stored  "node number" etc. if available, else MeshManager is prompted to created unique numbering
+  void IndexByPropertyValues();
 
   /// sets the values of the distributed variable all across the model; to enter scalar value use makeScalar(flag,value) helper function
   template<class T>
@@ -326,13 +316,16 @@ public:
   void ChangePropertyStatus( const char* input_prop, VARIABLE_FLAG new_status );
 
   /// where the values of the target property are within the given range the flag of the target variables are changed to the new status
-  void ChangePropertyStatusWhere( const char* var, double64 min, double64 max, VARIABLE_FLAG new_status );
+  void ChangePropertyStatusWhere( const char* var, double min, double max, VARIABLE_FLAG new_status );
 
   /// returns the opposite corners of the bounding box that encloses the model
   void MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
 
   /// returns the value range of the target property within the entire model
-  void MinMaxOf( const char* prop, double64& min, double64& max ) const;
+  void MinMaxOf( const char* prop, double& min, double& max ) const;
+  
+  /// checks the value range of a variable against the range specified in its Parameter record in the PropertyDatabse
+  bool IsWithinRange( const char* prop, const char* model_subdomain="Model" ) const;
 
   /// permits to transfer node coordinate components to the target scalar node variable; char options are 'x', 'y', 'z'
   void AssignNodeCoordinatesTo( const char* scalar_variable, char coord ); // x, y, z
@@ -395,6 +388,9 @@ public:
 protected:
 
   Model();
+  
+  /// to construct model  as a base class to a derived model built from an external dataset using a variable file in ASCII format
+  explicit Model( const char* complete_variables_file_name );
 
   /// to read model from set of CSMP native binary files; boolean whether a binary variable file with same name as model is available or not
   Model( const std::string& modelName, bool with_binary_variables_file );
@@ -444,22 +440,98 @@ protected:
 
 private:
 
-  /// prevent accidential copy construction of large object
-  Model( const Model& );
-  Model& operator=( const Model& );
+  /// prevent accidential copy construction of large Model object
+  Model( const Model& ) = delete;
+  Model& operator=( const Model& ) = delete;
 
-  void CheckElementsAfterBuilding();
+  /// checks wether elements have their correct neighbors and are in the expected model domains; @return number of major errors encoutered.
+  int32_t CheckElementConnectivity();
 
-  std::string                       model_name_;       ///< name of simulation model
-  PropertyDatabase<dim>             database_;         ///< where variable specifications are stored
-  FiniteElementManager              fem_manager_;      ///< current FiniteElement objects in model
-  MeshManager<dim>                  mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
-  FiniteVolumeStencilManager<dim>*  fvStencilManager_; ///< current finite volume specifications
-  bool                              verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
+  std::string            model_name_;       ///< name of simulation model
+  PropertyDatabase<dim>  database_;         ///< where variable specifications are stored
+  MeshManager<dim>       mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
+  bool                   verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
 };
 
+// SUPPORTING FUNCTIONS
+
+/// attempts to return the spatial dimension of the model stored in the file (1-3D)
+size_t spatialDimensionOfModel( const char* csmp_binary );
+
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
-std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z );
+std::string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z );
+
+/// returns intermediate (true) or maximum (false) model dimensions
+template<size_t  dim>
+double  printModelDimensions( const Model<dim>&, bool intermed_or_max = false );
+
+/// calculates the center of gravity of the model
+template<size_t  dim>
+Point<dim>  centerOfGravity( const Model<dim>& );
+
+/// prints range to screen; returns either min(arg=false) or maximum variable value (default)
+template<size_t  dim>
+double  printRangeOfVariable( const Model<dim>&,
+                                const char* var, bool print_maximum = true );
+
+/// prints range of target variable in model to screen and logs it to IO handler
+template<size_t  dim>
+double  printRangeOfVariable( const Model<dim>&,
+                                Standard_IO_Handler& io, const char* var,
+                                bool max_instead_of_min = true );
+
+/// prints range of target variable within specific model subdomain
+template<size_t  dim>
+double  printRangeOfVariable( const Model<dim>&,
+                                const char* group, const char* var, bool max_or_min = true );
+
+/// prints range of target variable within specific model subdomain and logs it to IO handler
+template<size_t  dim>
+double  printRangeOfVariable( const Model<dim>&,
+                                Standard_IO_Handler&,
+                                const char* group, const char* var,
+                                bool max_instead_of_min = true );
+
+/// prints min/max values stored in supplied vector
+void printRangeOf( const std::vector<std::pair<double, double> >& );
+
+/// prints min/max values stored in supplied vector of vectors
+void printRangeOfVectorOfVectors( const std::vector<std::vector<double> >& );
+
+/// convert the flag(s) of a variable into integer values stored in its number part
+template<size_t dim>
+void flagToNumber( Model<dim>&, const char* variable );
+
+/// convert the flag(s) of first variable into integer values stored in the second variable
+template<size_t dim>
+void flagToNumber( Model<dim>&, const char* flag_variable, const char* number_variable );
+
+/// using random number generator, adds percentage of Gaussian noise to variable values
+template<size_t dim>
+void randomPerturb( Model<dim>&, const char* prop, double by_percent_of_max_value );
+
+/// compares the mesh connectivity in the model with that of the input vset; returns true if both have the same
+template<size_t dim>
+bool compareConnectivity( const Model<dim>&, const VSet<dim>& );
+
+/// in target region, element variable is extrapolated to node and back as many times as indicated by n_smoothing_cycles
+template<size_t dim>
+void smoothElementVariable( Model<dim>&, const char*, const char* element_var, const char* temp_node_var, size_t n_smoothing_cycles );
+
+/// replaces no-data values of target variable with nearest-neighbor values until there are none left, by default NAN's are no-data values
+template<size_t dim>
+void nearestNeighborFill( Model<dim>&, const char* target_region, const char* variable, double no_data_value );
+
+/// imposes either an upper- or a lower limit on the variable in the region of interest
+template<size_t dim>
+void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double limit_value );
+
+/// mapping node coordinates to a node variable
+template<size_t dim>
+void assignNodeCoordinatesTo( Model<dim>& sg, const char coordinate, const char* nodal_variable );
+
+/// for Triangulator meshes: for meshes created from pixels, finds outlier triangles (3 nodes at region boundaries) and flips their property values
+void stripDomainEdgesFor( Model<2U>&, const char* el_prop );
 
 } // end namespace csmp
 

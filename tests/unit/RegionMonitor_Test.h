@@ -3,7 +3,6 @@
 
 #include "RegionMonitor.h"
 #include "Test.h"
-#include "CSMP_number_types.h"
 
 namespace csmp 
 {
@@ -19,7 +18,7 @@ class RegionMonitor_Test : public Test
 	void RegionMonitorScalarPropertyIntegrals3D();
 	
   private:
-  double64 fTolerance;
+  double fTolerance;
   
 }; //end class
 

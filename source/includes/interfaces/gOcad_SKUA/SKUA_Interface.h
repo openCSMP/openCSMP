@@ -15,6 +15,17 @@ namespace csmp {
 
 template<size_t> class Model;
 
+/**
+
+@section Some conventions regarding neighbor connectivity
+
+In CSMP, only the neighbors of equidimensional elements are recorded: 
+the volumetric neighbors of volumetric elements, the surface neighbors of surface elements and the line element neighbors of bar elements.
+Now, on the outer perimeter of the model, elements that make up the boundary surfaces would normally have the elements of adjacent 
+boundary surfaces as neighbors. This connectivity is ignored. Instead, missing neighbors are indicated in the VSet::VData by the BOX_BOUNDARY
+flags that correspond to the model edges.
+
+*/
 class SKUA_Interface {
   public:
   
@@ -22,7 +33,7 @@ class SKUA_Interface {
   
     /// region-by-region property assignment from column-based texfile (Kuncho Kurtev)
     template<size_t dim>
-    bool ImportElementPropertyValuesFromSKUA( Model<dim>& );
+    bool ImportElementPropertyValuesFromSKUA( Model<dim>&, const std::string& data_file=std::string() );
 
 
   // OUTPUT INTERFACES FOR POINT DATA (DOIMOI FAULT MODELLING 2011-2013)
@@ -50,7 +61,7 @@ class SKUA_Interface {
     /// For each rock type the elements will be converted into regions with the corresponding name
     void ConvertRockTypesIntoRegions( Model<3U>&, const std::string& rocktype_info_file );
 
-    void Remove_NO_DATA_ElementsInModel( Model<3U>&, const std::string& target_region, std::set<long>& no_data_elmt_numbers );
+    void Erase_NO_DATA_ElementsFromModel( Model<3U>&, const std::string& target_region, std::set<size_t>& no_data_elmt_numbers );
 
   private:
   
@@ -58,7 +69,7 @@ class SKUA_Interface {
   
     /// Enlists 'element number's of elements with NO_DATA values (-9999, -99999) in the target region
     bool Detect_NO_DATA_ElementsInDatasetFromSKUA( const std::string& input_txt_file, const std::string& target_region,
-                                                   std::set<long>& no_data_elmt_numbers );
+                                                   std::set<size_t>& no_data_elmt_numbers );
 
 };
 

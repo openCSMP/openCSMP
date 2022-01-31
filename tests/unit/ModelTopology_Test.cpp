@@ -150,10 +150,10 @@ void ModelTopology_Test::run()
   if ( verbose ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
   for( set<string>::const_iterator it = csmpTypes.begin(); it != csmpTypes.end(); ++it )
     if ( verbose ) cout << *it << endl;
-  set<int32> csmpTypesENUM;
+  set<int32_t> csmpTypesENUM;
   topology6.FiniteElementTypes( csmpTypesENUM );
   if ( verbose ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
-  for( set<int32>::const_iterator it = csmpTypesENUM.begin(); it != csmpTypesENUM.end(); ++it )
+  for( set<int32_t>::const_iterator it = csmpTypesENUM.begin(); it != csmpTypesENUM.end(); ++it )
     if ( verbose ) cout << *it << endl;
   set<string> typesCheck;
   _test( 22 == topTypes.FiniteElementTypes( typesCheck ) );

@@ -39,7 +39,7 @@ class StressesAndStrainsIP3D : public MathOperatorLHS<3U> {
     const size_t  components_;  // stress strain components
     
     csmp::Index strain_key_, stress_key_,                  ///< tensor variables
-                strain1_key_, strain2_key_, strain3_key_,  ///< vector<double64> variables (Eigenvectors)
+                strain1_key_, strain2_key_, strain3_key_,  ///< vector<double> variables (Eigenvectors)
                 sigma1_key_, sigma2_key_, sigma3_key_,
                 means_key_, dilat_key_,                    ///< mean stress (scalar), dilatation (scalar)
                 shear_key_;                                ///< maximum shear stress (scalar)
@@ -48,7 +48,7 @@ class StressesAndStrainsIP3D : public MathOperatorLHS<3U> {
                                           STRESS_, STRAIN_,
                                           EGP_, SGP_, PEGP_, PSGP_;
     std::vector<DenseMatrix<DM_MIN> >     STIFF_;
-    std::vector<double64>                 IPSTRAIN_, IPSTRESS_, ///< stresses and strains at the element integration points
+    std::vector<double>                 IPSTRAIN_, IPSTRESS_, ///< stresses and strains at the element integration points
                                           NSTRAIN_,  NSTRESS_, 
                                           eps_, sigma_, sum_;
     TensorVariable<3U>                    ts_, evecs_;

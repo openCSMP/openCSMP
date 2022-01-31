@@ -17,7 +17,7 @@ GocadPropertyClassHeader::GocadPropertyClassHeader()
  }
  
 GocadPropertyClassHeader::GocadPropertyClassHeader( const char* name, 
-                                                    double64 lclip, double64 hclip, 
+                                                    double lclip, double hclip, 
                                                     long pclip, size_t comp )
  : property_name(name), property_class(name),
    components(comp), no_data_value(1.0e-30),

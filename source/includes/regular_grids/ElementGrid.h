@@ -17,25 +17,25 @@ class ElementGrid {
     ElementGrid( const ElementGrid& );
     ~ElementGrid() {};
     ElementGrid& operator=( const ElementGrid& );
-    void AddPoint( int32 i, int32 j, double64 val );
-    std::map<std::pair<int32,int32>,double64>::iterator  Begin();
-    std::map<std::pair<int32,int32>,double64>::iterator  End();
-    double64 Value( int32 i, int32 j ) const;
-    double64 GridAverage() const;
-    double64 Sum() const;
-    void     MinMax( double64& dmin, double64& dmax ) const;
+    void AddPoint( int32_t i, int32_t j, double val );
+    std::map<std::pair<int32_t,int32_t>,double>::iterator  Begin();
+    std::map<std::pair<int32_t,int32_t>,double>::iterator  End();
+    double Value( int32_t i, int32_t j ) const;
+    double GridAverage() const;
+    double Sum() const;
+    void     MinMax( double& dmin, double& dmax ) const;
     void     TransferDataToGrid( FiniteDifferenceGrid& ) const;
     bool     Empty() const;
-    int32    Size() const;
+    int32_t    Size() const;
 
     void     Out() const;
 
   private:
-    std::map<std::pair<int32,int32>,double64>  grid;
+    std::map<std::pair<int32_t,int32_t>,double>  grid;
 };
   
-typedef std::map<std::pair<int32,int32>,double64>::iterator  EGridIterator;
-typedef std::map<std::pair<int32,int32>,double64>::const_iterator  cEGridIterator;
+typedef std::map<std::pair<int32_t,int32_t>,double>::iterator  EGridIterator;
+typedef std::map<std::pair<int32_t,int32_t>,double>::const_iterator  cEGridIterator;
 
 } // csmp
   

@@ -15,7 +15,7 @@ namespace csmp {
 template<typename Var, size_t dim>
 DataInputVisitor<Var,dim>::DataInputVisitor( Model<dim>& sg, 
                                              const char* input_prop,
-                                             const vector<double64>& input_data  )
+                                             const vector<double>& input_data  )
     : input_data_ref_(input_data),
       prop_key_(sg.Database().StorageKey(input_prop)),
       counter_(0U)

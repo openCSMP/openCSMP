@@ -10,7 +10,7 @@ namespace csmp {
 
 template<size_t dim,class SIMPLEX>
 Integral_NT_N_dV<dim,SIMPLEX>::Integral_NT_N_dV( const PropertyDatabase<dim>& pref,
-                                                        const char* test )
+                                                 const char* test )
   : MathOperatorLHS<dim>(pref,"permeability",test,test)
  {
     MathOperatorLHS<dim>::Name("Integral_NT_N_dV", "__", test, test );
@@ -31,7 +31,7 @@ Integral_NT_N_dV<dim,SIMPLEX>::Integral_NT_N_dV( const PropertyDatabase<dim>& pr
 multiplied with the Operand.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_NT_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -46,7 +46,7 @@ void Integral_NT_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     else
       {
          MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
-         double64 vol_div3 = e.Volume() / static_cast<double64>(e.Nodes());
+         double vol_div3 = e.Volume() / static_cast<double>(e.Nodes());
          for ( size_t i=0; i<e.Nodes(); i++ )
            for ( size_t j=0; j<e.Nodes(); j++ )
              if ( i == j ) MathOperatorLHS<dim>::LHS(i,j) = vol_div3;

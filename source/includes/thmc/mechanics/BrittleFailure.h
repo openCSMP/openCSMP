@@ -14,7 +14,7 @@
 
 namespace csmp {
 
-enum FAILURE { COMPRESSIVE=-1,
+enum FAILURE : std::int8_t { COMPRESSIVE=-1,
                NONE=0,
                FRICTIONAL_SLIDING=1,
                SHEAR_FRACTURE=2,
@@ -34,7 +34,7 @@ class BrittleFailure  {
     static FAILURE Evaluate( const MechanicalProperties&, const csmp::StressInvariants& );
 
     /// evaluates failure criteria -1 to 4 with consideration of pore pressure
-    static FAILURE Evaluate( const MechanicalProperties&, const csmp::StressInvariants&, double64 pf );
+    static FAILURE Evaluate( const MechanicalProperties&, const csmp::StressInvariants&, double pf );
 };
 
 } // csmp

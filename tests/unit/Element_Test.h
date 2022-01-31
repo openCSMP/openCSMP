@@ -33,7 +33,7 @@ class Element_Test : public Test
   void PointInVolumeElementTest();
   
   private:
-    double64 fTolerance;
+    double fTolerance;
     const bool verbose_;
 };
 

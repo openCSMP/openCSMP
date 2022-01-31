@@ -12,7 +12,7 @@ namespace csmp {
 Matrix& Matrix::operator=( const Matrix& mat )
  {
     if ( &mat != this ) {
-         data.resize( mat.Rows(), vector<double64>(mat.Cols(),0.) );
+         data.resize( mat.Rows(), vector<double>(mat.Cols(),0.) );
          rows  = mat.rows;
          cols  = mat.cols;
 
@@ -27,7 +27,7 @@ Matrix& Matrix::operator=( const Matrix& mat )
 
 
 
-Matrix& Matrix::operator=( double64 val )
+Matrix& Matrix::operator=( double val )
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] = val; 
@@ -50,8 +50,8 @@ Matrix::Matrix( const Matrix& mat )
 // constructor (i,j, value)
 // ---------------------------------------
 
-Matrix::Matrix( size_t m, size_t n, double64 val )
- : rows(m), cols(n), data(m,vector<double64>(n,val))
+Matrix::Matrix( size_t m, size_t n, double val )
+ : rows(m), cols(n), data(m,vector<double>(n,val))
  {
  }
 
@@ -67,7 +67,7 @@ Matrix::~Matrix()
 
 
 
-Matrix&  Matrix::operator*=( double64 val )
+Matrix&  Matrix::operator*=( double val )
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] *= val;
@@ -95,7 +95,7 @@ Matrix&
     
          for ( size_t i=0U; i<rows; i++ )
            for ( size_t j=0U; j<3U; j++ ) {
-                 temp.data[i][j] = static_cast<double64>(0.0);
+                 temp.data[i][j] = static_cast<double>(0.0);
                  for ( size_t k=0U; k<3U; k++ ) 
                    temp.data[i][j] += data[i][k] * ts(k,j);
              }
@@ -145,7 +145,7 @@ Matrix&  Matrix::operator*=( const Matrix& mat )
     for ( size_t i=0U; i<cols; i++ )
     {
       for ( size_t j=0U; j<mat.rows; j++ ) {
-        //temp.data[i][j] = static_cast<double64>(0.0);
+        //temp.data[i][j] = static_cast<double>(0.0);
         for ( size_t k=0U; k<mat.rows; k++ )
         {
           temp.data[i][j] += this->data[i][k] * mat.data[k][j];
@@ -178,7 +178,7 @@ Matrix::operator*=( const TensorVariable<2U>& ts )
     
          for ( size_t i=0U; i<rows; i++ )
            for ( size_t j=0U; j<2U; j++ ) {
-                 temp.data[i][j] = static_cast<double64>(0.0);
+                 temp.data[i][j] = static_cast<double>(0.0);
                  for ( size_t k=0U; k<2U; k++ ) 
                    temp.data[i][j] += data[i][k] * ts(k,j);
              }
@@ -201,10 +201,10 @@ Matrix::operator*=( const TensorVariable<2U>& ts )
 // ---------------------------------------
 /// vec = Mat * unity vector
 
-void Matrix::RowCondenseTo( std::vector<double64>& vec ) const
+void Matrix::RowCondenseTo( std::vector<double>& vec ) const
  {
     vec.resize(rows);
-    vector<double64>( vec ).swap( vec );
+    vector<double>( vec ).swap( vec );
     for ( size_t i=0; i<rows; i++ ) vec[i] = RowSum(i);
  } 
 
@@ -279,12 +279,12 @@ Matrix&
   Matrix::operator*=( const VectorVariable<2U>& vc )
  {   
     assert ( cols == 2U );
-    double64 sum;
+    double sum;
     
     // when loop unrolling is not possible
     if ( rows != cols ) {
         for ( size_t i=0; i<rows; i++ ) {
-               sum = static_cast<double64>(0.0);
+               sum = static_cast<double>(0.0);
                for ( size_t j=0; j<cols; j++ ) 
                  sum +=  data[i][j] * vc[j];
                data[i][0] = sum;
@@ -310,12 +310,12 @@ Matrix&
   Matrix::operator*=( const VectorVariable<3U>& vc )
  {
     assert ( cols == 3U );
-    double64 sum;
+    double sum;
     
     // when loop unrolling is not possible
     if ( rows != cols ) {
         for ( size_t i=0; i<rows; i++ ) {
-               sum = static_cast<double64>(0.0);
+               sum = static_cast<double>(0.0);
                for ( size_t j=0; j<cols; j++ ) 
                  sum +=  data[i][j] * vc[j];
                data[i][0] = sum;
@@ -358,7 +358,7 @@ Matrix  Matrix::operator*( const Matrix& mat ) const
     //temp.Out(3);
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<mat.cols; j++ ) {
-           temp.data[i][j] = static_cast<double64>(0.0);
+           temp.data[i][j] = static_cast<double>(0.0);
            for ( size_t k=0U; k<mat.rows; k++ ) 
              temp.data[i][j] += data[i][k]*mat.data[k][j];
         }  
@@ -368,23 +368,23 @@ Matrix  Matrix::operator*( const Matrix& mat ) const
 
 
 
-// operator*  matrix with STL vector<double64> multiplication
+// operator*  matrix with STL vector<double> multiplication
 // ------------------------------------------------
 
-Matrix& Matrix::operator*=( const std::vector<double64>& vecT )
+Matrix& Matrix::operator*=( const std::vector<double>& vecT )
  {
     if ( cols != vecT.size() ) {
          std::cout <<"\nMatrix<double>::operator*=: ";
-         std::cout <<"Matrix and vector<double64> cannot be multiplied "; 
+         std::cout <<"Matrix and vector<double> cannot be multiplied "; 
          std::cout <<"because of incompatible sizes (A(cols != vecT(size)): "<< vecT.size() << std::endl;
          throw std::length_error("Matrix<mn_max>::operator*=");
       }
     
     size_t  i, j;
-    double64            sum;
+    double            sum;
     
     for ( i=0; i<rows; i++ ) {
-         for ( sum=static_cast<double64>(0.0), j=0; j<vecT.size(); j++ ) sum += data[i][j] * vecT[j];
+         for ( sum=static_cast<double>(0.0), j=0; j<vecT.size(); j++ ) sum += data[i][j] * vecT[j];
          data[i][0U] = sum;
       }
       
@@ -399,18 +399,18 @@ Matrix& Matrix::operator*=( const std::vector<double64>& vecT )
 // ---------------------------------------------
 /// Clearly, all hell will break loose if the C-array has not been initialized properly
 
-Matrix& Matrix::operator*=( const double64* vecT ) 
+Matrix& Matrix::operator*=( const double* vecT ) 
  {
     if ( vecT == NULL ) {
-         std::cout <<"\nMatrix<double>::operator*=: Matrix and vector<double64> cannot be multiplied "; 
+         std::cout <<"\nMatrix<double>::operator*=: Matrix and vector<double> cannot be multiplied "; 
          std::cout <<"because vecT C-array is not initialized." << std::endl;
          throw std::length_error("Matrix<mn_max>::operator*=");
       }
     size_t  i, j;
-    double64      sum;
+    double      sum;
     
     for ( i=0U; i<rows; i++ ) {
-         for ( sum=static_cast<double64>(0.0), j=0; j<rows; j++ ) sum += data[i][j] * vecT[j];
+         for ( sum=static_cast<double>(0.0), j=0; j<rows; j++ ) sum += data[i][j] * vecT[j];
          data[i][0] = sum;
       }
       
@@ -439,11 +439,11 @@ Matrix::MultiplyWithTransposedOf( const Matrix& B, Matrix& RES ) const
       }
     
     RES.Resize( rows, B.rows );
-    double64  sum;
+    double  sum;
     
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<B.rows; j++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<cols; k++ ) 
              sum += data[i][k] * B.data[j][k];
            RES.data[i][j] = sum;  
@@ -469,11 +469,11 @@ Matrix::MultiplyTransposedOfWith( const Matrix& B, Matrix& RES ) const
       }
     
     RES.Resize( cols, B.cols );
-    double64  sum;
+    double  sum;
     
     for ( size_t i=0U; i<cols; i++ )
       for ( size_t j=0U; j<B.cols; j++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<B.rows; k++ ) 
              sum += data[k][i] * B.data[k][j];
            RES.data[i][j] = sum;
@@ -490,11 +490,11 @@ void
 Matrix::TransposedProduct( Matrix& RES ) const
  {
     RES.Resize( cols, cols );
-    double64  sum;
+    double  sum;
     
     for ( size_t i=0U; i<cols; i++ )
       for ( size_t j=0U; j<cols; j++ ) {
-           sum = static_cast<double64>(0.0);
+           sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<rows; k++ ) 
              sum += data[k][i] * data[k][j];
            RES.data[j][i] = sum;  
@@ -506,17 +506,17 @@ Matrix::TransposedProduct( Matrix& RES ) const
 
 /// unscaled L_infinity matrix norm ||A||inf = max_i * sum_j |aij|
 
-double64 Matrix::NormL_Infinity() const
+double Matrix::NormL_Infinity() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nMatrix<double>::NormL_Infinity: empty matrix!\n";
-         return std::numeric_limits<double64>::quiet_NaN();
+         return std::numeric_limits<double>::signaling_NaN();
       }
 
-	double64  maxval(static_cast<double64>(0.0)), sum;
+	double  maxval(static_cast<double>(0.0)), sum;
 
 	for ( size_t i=0; i<rows; i++ ) {
-		 sum = static_cast<double64>(0.0);
+		 sum = static_cast<double>(0.0);
 		 for ( size_t j=0; j<cols; j++ )
 		   sum += fabs(data[i][j]);
 		 maxval = max(maxval,sum);
@@ -567,7 +567,7 @@ Matrix  operator*( const Matrix& a, const Matrix& b )
     
     for ( size_t i=0U; i<a.Rows(); i++ )
       for ( size_t j=0U; j<b.Cols(); j++ ) {
-           temp(i,j) = static_cast<double64>(0.0);
+           temp(i,j) = static_cast<double>(0.0);
            for ( size_t k=0U; k<b.Rows(); k++ ) 
              temp(i,j) += a(i,k) * b(k,j);
         }
@@ -579,17 +579,17 @@ Matrix  operator*( const Matrix& a, const Matrix& b )
 
 /// unscaled L1 matrix norm ||A1|| = max_j * sum_i |aij|
 
-double64 Matrix::NormL1() const
+double Matrix::NormL1() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nMatrix<double>::NormL1: empty matrix!\n";
-         return std::numeric_limits<double64>::quiet_NaN();
+         return std::numeric_limits<double>::signaling_NaN();
       }
 
-	double64  maxval(static_cast<double64>(0.0)), sum;
+	double  maxval(static_cast<double>(0.0)), sum;
 
 	for ( size_t j=0; j<cols; j++ ) {
-		 sum = static_cast<double64>(0.0);
+		 sum = static_cast<double>(0.0);
 		 for ( size_t i=0; i<rows; i++ )
 		   sum += fabs(data[i][j]);
 		 maxval = max(maxval,sum);
@@ -606,11 +606,11 @@ double64 Matrix::NormL1() const
 /// vector^T = Matrix * vector^T
 // ---------------------------------------
 
-vector<double64>  operator*( const Matrix& mat, const vector<double64>& vec )
+vector<double>  operator*( const Matrix& mat, const vector<double>& vec )
  {
     assert ( mat.Cols() == vec.size() );
     
-    vector<double64> temp(mat.Rows(),static_cast<double64>(0.0));
+    vector<double> temp(mat.Rows(),static_cast<double>(0.0));
     
     for ( size_t i=0; i<mat.Rows(); i++ )
       for ( size_t j=0; j<mat.Cols(); j++ ) temp[i] += mat(i,j) * vec[j];
@@ -624,10 +624,10 @@ vector<double64>  operator*( const Matrix& mat, const vector<double64>& vec )
 /// Matrix = vector^T * Matrix
 // ---------------------------------------
 
-Matrix  operator*( const vector<double64>& vec, const Matrix& mat )
+Matrix  operator*( const vector<double>& vec, const Matrix& mat )
  {
     if ( vec.size() != mat.Rows() ) {
-         cout <<"\noperator*: vector<double64> cannot be multiplied with matrix"; 
+         cout <<"\noperator*: vector<double> cannot be multiplied with matrix"; 
          cout <<"because of incompatible sizes (v * M): "<< endl;
          throw length_error("Matrix<mn_max>::operator*");
       }
@@ -635,7 +635,7 @@ Matrix  operator*( const vector<double64>& vec, const Matrix& mat )
     
     for ( size_t i=0U; i<vec.size(); i++ )
       for ( size_t j=0U; j<mat.Cols(); j++ ) {
-           temp(i,j) = static_cast<double64>(0.0);
+           temp(i,j) = static_cast<double>(0.0);
            for ( size_t k=0U; k<mat.Rows(); k++ ) 
              temp(i,j) += vec[k] * mat(k,j);
         }
@@ -664,10 +664,10 @@ void Matrix::Resize( size_t m, size_t n )
     rows = m;
     cols = n;    
     data.resize(m);
-    vector<vector<double64> >( data ).swap( data );
+    vector<vector<double> >( data ).swap( data );
     for ( size_t i=0U; i<m; i++ ) {
          data[i].resize(n);
-         vector<double64>( data[i] ).swap( data[i] );
+         vector<double>( data[i] ).swap( data[i] );
       }
  }
 
@@ -679,8 +679,8 @@ void Matrix::Identity()
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
-        if ( i == j ) data[i][j] = static_cast<double64>(1.0);
-        else          data[i][j] = static_cast<double64>(0.0);         
+        if ( i == j ) data[i][j] = static_cast<double>(1.0);
+        else          data[i][j] = static_cast<double>(0.0);         
  }
  
 
@@ -691,7 +691,7 @@ void Matrix::Zero()
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
-        data[i][j] = static_cast<double64>(0.0);
+        data[i][j] = static_cast<double>(0.0);
  }
  
 
@@ -701,12 +701,12 @@ void Matrix::Zero()
 void Matrix::ZeroRow( size_t row )
  {
     if ( row < rows ) for ( size_t j=0; j<cols; j++ ) 
-      data[row][j] = static_cast<double64>(0.0);
+      data[row][j] = static_cast<double>(0.0);
       
     else {
         std::cout <<"\nMatrix<double>::ZeroRow: ";
         std::cout <<"Target rows does not exist: "<< row << std::endl;
-        throw std::range_error("Matrix<double64>::ZeroRow");
+        throw std::range_error("Matrix<double>::ZeroRow");
      }
  }
 
@@ -716,7 +716,7 @@ void Matrix::ZeroRow( size_t row )
 
 void Matrix::ZeroCol( size_t col )
  {
-    if ( col < cols ) for ( size_t i=0; i<rows; i++ ) data[i][col] = static_cast<double64>(0.0);
+    if ( col < cols ) for ( size_t i=0; i<rows; i++ ) data[i][col] = static_cast<double>(0.0);
     else
     std::cout <<"\nMatrix<double>::ZeroCol: Target column does not exist: "<< col << std::endl;
  }
@@ -726,7 +726,7 @@ void Matrix::ZeroCol( size_t col )
 // Fill()
 // ---------------------------------------------
 
-void Matrix::Fill( double64 val )
+void Matrix::Fill( double val )
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] = val;
@@ -736,7 +736,7 @@ void Matrix::Fill( double64 val )
 // FillRow()
 // ---------------------------------------------
 
-void Matrix::FillRow( size_t row, double64 val )
+void Matrix::FillRow( size_t row, double val )
  {
     if ( row < rows ) for ( size_t j=0U; j<cols; j++ ) data[row][j] = val;
     else {
@@ -749,7 +749,7 @@ void Matrix::FillRow( size_t row, double64 val )
 // FillCol()
 // ---------------------------------------------
 
-void Matrix::FillCol( size_t col, double64 val )
+void Matrix::FillCol( size_t col, double val )
  {
     if ( col < cols ) for ( size_t i=0U; i<rows; i++ ) data[i][col] = val;
     else {
@@ -776,9 +776,9 @@ void Matrix::Transposed( Matrix& M ) const
 // RowSum()
 // ---------------------------------------------
 
-double64   Matrix::RowSum( size_t row ) const
+double   Matrix::RowSum( size_t row ) const
  {
-    double64  sum(0.);
+    double  sum(0.);
  
     if ( row < rows ) {
          for ( size_t j=0U; j<cols; j++ ) sum += data[row][j];
@@ -789,16 +789,16 @@ double64   Matrix::RowSum( size_t row ) const
     std::cout <<"Target rows does not exist: "<< row << std::endl;
     throw std::length_error("Matrix<mn_max>::RowSum");
 
-    return static_cast<double64>(0.0);
+    return static_cast<double>(0.0);
  }
  
 
 // ColSum()
 // ---------------------------------------------
 
-double64   Matrix::ColSum( size_t col ) const
+double   Matrix::ColSum( size_t col ) const
  {
-    double64  sum(0.0);
+    double  sum(0.0);
  
     if ( col < cols ) {
          for ( size_t i=0U; i<rows; i++ ) sum += data[i][col];
@@ -809,7 +809,7 @@ double64   Matrix::ColSum( size_t col ) const
     std::cout <<"Target column does not exist: "<< col << std::endl;
     throw std::length_error("Matrix<mn_max>::ColSum");
 
-    return static_cast<double64>(0.0);
+    return static_cast<double>(0.0);
  }
 
 
@@ -842,7 +842,7 @@ void Matrix::Out( long digits ) const
     long  prec(cout.precision(digits));
     cout <<"\nMatrix<double>::Out(): m="<< rows <<", n="<< cols << endl;
     if ( digits != 0U ) cout.setf(ios::scientific);
-    size_t row_break, split_adouble64er(10U);
+    size_t row_break, split_adoubleer(10U);
      
     for ( size_t i=0; i<rows; i++ )
       {
@@ -851,7 +851,7 @@ void Matrix::Out( long digits ) const
            {
               if ( data[i][j] >= 0. ) cout <<" ";
               cout << data[i][j] <<" ";
-              if ( row_break == split_adouble64er )
+              if ( row_break == split_adoubleer )
                 {
                    cout << endl;
                    row_break = 0U;
@@ -915,7 +915,7 @@ Matrix::Matrix()
 
 /// constructor (i,j)
 Matrix::Matrix( size_t m, size_t n )
- : rows(m), cols(n), data(m,std::vector<double64>(n))
+ : rows(m), cols(n), data(m,std::vector<double>(n))
  {
  }
 
@@ -924,7 +924,7 @@ Matrix::Matrix( size_t m, size_t n )
 
 
 /// operator (i,j)
-double64& Matrix::operator()( size_t m, size_t n )
+double& Matrix::operator()( size_t m, size_t n )
  {
 #ifndef NDEBUG
     CheckRange( m, n, "Matrix::operator()");
@@ -935,7 +935,7 @@ double64& Matrix::operator()( size_t m, size_t n )
 
 
 /// operator (i,j) const
-const double64& Matrix::operator()( size_t m, size_t n ) const
+const double& Matrix::operator()( size_t m, size_t n ) const
  {
 #ifndef NDEBUG
     CheckRange( m, n, "Matrix::operator()");
@@ -1006,8 +1006,8 @@ void Matrix::AssignToDiagonal( const VectorVariable<2U>& vc )
  {
     assert ( rows == cols && cols == 2U );
     data[0][0] = vc(0);
-    data[0][1] = static_cast<double64>(0.);
-    data[1][0] = static_cast<double64>(0.);
+    data[0][1] = static_cast<double>(0.);
+    data[1][0] = static_cast<double>(0.);
     data[1][1] = vc(1);
  }
 
@@ -1019,13 +1019,13 @@ void Matrix::AssignToDiagonal( const VectorVariable<3U>& vc )
  {
     assert ( rows == cols && cols == 3U );
     data[0][0] = vc(0);
-    data[0][1] = static_cast<double64>(0.);
-    data[0][2] = static_cast<double64>(0.);
-    data[1][0] = static_cast<double64>(0.);
+    data[0][1] = static_cast<double>(0.);
+    data[0][2] = static_cast<double>(0.);
+    data[1][0] = static_cast<double>(0.);
     data[1][1] = vc(1);
-    data[1][2] = static_cast<double64>(0.);
-    data[2][0] = static_cast<double64>(0.);
-    data[2][1] = static_cast<double64>(0.);
+    data[1][2] = static_cast<double>(0.);
+    data[2][0] = static_cast<double>(0.);
+    data[2][1] = static_cast<double>(0.);
     data[2][2] = vc(2); 
  }
 
@@ -1064,13 +1064,13 @@ void Matrix::ExportTo( TensorVariable<3U>& ts ) const
     ts(2,2) = data[2][2];
  }
 
-void Matrix::LUDecomposition(std::vector<size_t>& index, double64& d)
+void Matrix::LUDecomposition(std::vector<size_t>& index, double& d)
 {
-    const double64 TINY(1.0e-20);
+    const double TINY(1.0e-20);
     int i,imax(0),j,k;
-    double64 big,dum,sum,temp;
+    double big,dum,sum,temp;
 
-    std::vector<double64> vv(rows);
+    std::vector<double> vv(rows);
     index.resize(rows);
 
     d=1.0;
@@ -1120,7 +1120,7 @@ void Matrix::LUDecomposition(std::vector<size_t>& index, double64& d)
 
 }
 
-void Matrix::LUBackSubstitution(std::vector<size_t>& index, std::vector<double64> &b)
+void Matrix::LUBackSubstitution(std::vector<size_t>& index, std::vector<double> &b)
 {
 
    if (index.size() != rows or b.size() != rows) {
@@ -1129,7 +1129,7 @@ void Matrix::LUBackSubstitution(std::vector<size_t>& index, std::vector<double64
     }
 
   long i,ii=0,ip,j;
-  double64 sum;
+  double sum;
   for (i=0;i<rows;i++) {
       ip=index[i];
       sum=b[ip];
@@ -1150,9 +1150,9 @@ void Matrix::LUBackSubstitution(std::vector<size_t>& index, std::vector<double64
 
 // ReturnRow()
 // ---------------------------------------------
-std::vector<double64> Matrix::ReturnRow( size_t row ) const
+std::vector<double> Matrix::ReturnRow( size_t row ) const
  {
-    std::vector<double64> row_vals(cols,0.);
+    std::vector<double> row_vals(cols,0.);
     if ( row < rows ) {
         for ( size_t j=0U; j<cols; j++ ) row_vals[j] = data[row][j];
       }
@@ -1165,9 +1165,9 @@ std::vector<double64> Matrix::ReturnRow( size_t row ) const
 
 // ReturnCol()
 // ---------------------------------------------
-std::vector<double64>  Matrix::ReturnCol( size_t col ) const
+std::vector<double>  Matrix::ReturnCol( size_t col ) const
  {
-    std::vector<double64> col_vals(rows,0.);
+    std::vector<double> col_vals(rows,0.);
     if ( col < cols ) {
         for ( size_t i=0U; i<rows; i++ ) col_vals[i] = data[i][col];
       }
@@ -1180,7 +1180,7 @@ std::vector<double64>  Matrix::ReturnCol( size_t col ) const
 
 
 
-void Matrix::AssignToRow( size_t row, std::vector<double64>& vec )
+void Matrix::AssignToRow( size_t row, std::vector<double>& vec )
  {
     if ( vec.size() != cols ) {
       std::cout <<"\nMatrix<double>::AssignToRow: ";
@@ -1196,7 +1196,7 @@ void Matrix::AssignToRow( size_t row, std::vector<double64>& vec )
 
 
 
-void Matrix::AssignToCol( size_t col, std::vector<double64>& vec )
+void Matrix::AssignToCol( size_t col, std::vector<double>& vec )
 {
   if ( vec.size() != rows ) {
     std::cout <<"\nMatrix<double>::AssignToCol: ";

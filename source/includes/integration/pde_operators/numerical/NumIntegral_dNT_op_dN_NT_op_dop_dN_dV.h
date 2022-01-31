@@ -28,20 +28,20 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
                                            const char* basic,           // e.g., temperature
                                            const char* test );          // e.g., temperature
     
-    virtual void GetOperands( CELL& e );
-    virtual void ComputeContribution( CELL& e );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
     
     void SpatialDerivative( size_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, // derivatives of basis functions
-                                VIP;     // 'v' (velocity) vector<double64> variable
-    std::vector<double64>             IPOL;    // basis function values (at integration point)
+                                VIP;     // 'v' (velocity) vector<double> variable
+    std::vector<double>             IPOL;    // basis function values (at integration point)
     std::vector<DenseMatrix<DM_MIN> >  NT3;     // IPOL at integration points stored in columns of matrix NTNTNT
-    std::vector<double64>             NGRAD,   // variable to compute gradient of for calculation of 'v'
+    std::vector<double>             NGRAD,   // variable to compute gradient of for calculation of 'v'
                                 RDENS;   // relative density if so specified
                     
-    std::vector<ScalarVariable >  sc_prop_vec, // vector<double64> to read node properties into
+    std::vector<ScalarVariable >  sc_prop_vec, // vector<double> to read node properties into
                                       rrho_vec; 
     ScalarVariable                emult, econd; 
          
@@ -50,7 +50,7 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
                     cond_key,    // e.g., op to be multiplied with dop
                     mult_key;    // for instance heat transport velocity coefficient
     bool            with_gravity;
-    const double64        gravity;
+    const double        gravity;
     size_t       xyz;
 };
 

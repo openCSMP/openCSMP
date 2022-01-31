@@ -31,11 +31,11 @@ SumOfProductsWithExponents& SumOfProductsWithExponents::operator=(const SumOfPro
 
 // Methods 
 
-double64 SumOfProductsWithExponents::Sum( double64 a[] ) const
+double SumOfProductsWithExponents::Sum( double a[] ) const
  {
     std::vector<sumofproducts_pair>::const_iterator                it;
-    std::map<int,std::pair<double64,double64> >::const_iterator  sit;
-    double64  sum, product;
+    std::map<int,std::pair<double,double> >::const_iterator  sit;
+    double  sum, product;
     
     for ( sum=0.0, it=sumproducts.begin(); it!=sumproducts.end(); it++ )
       {
@@ -60,11 +60,11 @@ double64 SumOfProductsWithExponents::Sum( double64 a[] ) const
 go through all products and enlist all terms that contain requested species index while
 omitting respective species from product. 'a' is the vector that contains the multiplication factors for
 each component of the product */
-double64 SumOfProductsWithExponents::DerivativeWithRespectTo( int32 spec_idx, double64 a[] ) const
+double SumOfProductsWithExponents::DerivativeWithRespectTo( int32_t spec_idx, double a[] ) const
  {
     std::vector<sumofproducts_pair>::const_iterator                it;
-    std::map<int32,std::pair<double64,double64> >::const_iterator  sit;
-    double64  derivative, product;
+    std::map<int32_t,std::pair<double,double> >::const_iterator  sit;
+    double  derivative, product;
  
     assert( spec_idx >= 0 );
  
@@ -107,7 +107,7 @@ double64 SumOfProductsWithExponents::DerivativeWithRespectTo( int32 spec_idx, do
 
 const valued product terms must have negative exponents, such that when derivatives are taken they are not
 input from the supplied a[] vector. */
-void SumOfProductsWithExponents::AddProduct( int32 coeff_idx, double64 coeff, const map<int32,pair<double64,double64> >& product )
+void SumOfProductsWithExponents::AddProduct( int32_t coeff_idx, double coeff, const map<int32_t,pair<double,double> >& product )
  {
      sumproducts.reserve( sumproducts.size()+1 );
      sumproducts.push_back( sumofproducts_pair(make_pair(coeff_idx,coeff),product) );
@@ -131,7 +131,7 @@ void SumOfProductsWithExponents::Out() const
           it=sumproducts.begin(); it!=sumproducts.end(); it++, n++ )
       {
          cout << (*it).first.second <<"(c"<< (*it).first.first <<") ";
-         for ( map<int32,pair<double64,double64> >::const_iterator
+         for ( map<int32_t,pair<double,double> >::const_iterator
                sit=(*it).second.begin(); sit!=(*it).second.end(); sit++ )
            {
               if ( (*sit).first >= 0 )

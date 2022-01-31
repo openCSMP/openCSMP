@@ -14,7 +14,7 @@ using namespace std;
 
 namespace csmp
 {
-  TwophaseVaporLookup::TwophaseVaporLookup(const double64& externaltemperature, const double64& externalpressure)
+  TwophaseVaporLookup::TwophaseVaporLookup(const double& externaltemperature, const double& externalpressure)
     : temperature(externaltemperature), 
       pressure(externalpressure), 
       tcurrent(0.0),
@@ -253,8 +253,8 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile1, storage_vector );
-			outfile1.close();
+            binaryFileWrite( outfile1, storage_vector );
+			      outfile1.close();
             cerr << "done!\n";
           }
 
@@ -269,8 +269,8 @@ namespace csmp
         else
           {
             cerr << "writing file " << statefilename << " ... ";
-            skm_C_fwrite( outfile2, state_vector );
-			outfile2.close();
+            binaryFileWrite( outfile2, state_vector );
+			     outfile2.close();
             cerr << "done!\n";
           }
 
@@ -279,15 +279,14 @@ namespace csmp
     else
       {
         cerr << "reading file " << filename << " ... ";
-        skm_C_fread( infile1, storage_vector );
-		infile1.close();		
+        binaryFileRead( infile1, storage_vector );
+		    infile1.close();		
         cerr << "done!\n";
 
         cerr << "reading file " << statefilename << " ... ";
-        skm_C_fread( infile2, state_vector );
-		infile2.close();
+        binaryFileRead( infile2, state_vector );
+		    infile2.close();
         cerr << "done!\n";
-	    
       }
     cerr << "TwophaseVaporLookup, leaving constructor ...\n\n";
   }
@@ -301,23 +300,23 @@ namespace csmp
 
 
   // The data interpolation routines
-  double64 TwophaseVaporLookup::Temperature(){     SetTemperatureAndPressure(); return Interpolate(temperature_index);    }
-  double64 TwophaseVaporLookup::Pressure(){        SetTemperatureAndPressure(); return Interpolate(pressure_index);       }
-  double64 TwophaseVaporLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return Interpolate(composition_index);    }
-  double64 TwophaseVaporLookup::Density(){         SetTemperatureAndPressure(); return Interpolate(density_index);        }
-  double64 TwophaseVaporLookup::Enthalpy(){        SetTemperatureAndPressure(); return Interpolate(enthalpy_index);       }
-  double64 TwophaseVaporLookup::HeatCapacity(){    SetTemperatureAndPressure(); return Interpolate(heatcapacity_index);   }
-  double64 TwophaseVaporLookup::Compressibility(){ SetTemperatureAndPressure(); return Interpolate(compressibility_index);}
-  double64 TwophaseVaporLookup::Viscosity(){       SetTemperatureAndPressure(); return Interpolate(viscosity_index);      }
+  double TwophaseVaporLookup::Temperature(){     SetTemperatureAndPressure(); return Interpolate(temperature_index);    }
+  double TwophaseVaporLookup::Pressure(){        SetTemperatureAndPressure(); return Interpolate(pressure_index);       }
+  double TwophaseVaporLookup::MassFractionNaCl(){     SetTemperatureAndPressure(); return Interpolate(composition_index);    }
+  double TwophaseVaporLookup::Density(){         SetTemperatureAndPressure(); return Interpolate(density_index);        }
+  double TwophaseVaporLookup::Enthalpy(){        SetTemperatureAndPressure(); return Interpolate(enthalpy_index);       }
+  double TwophaseVaporLookup::HeatCapacity(){    SetTemperatureAndPressure(); return Interpolate(heatcapacity_index);   }
+  double TwophaseVaporLookup::Compressibility(){ SetTemperatureAndPressure(); return Interpolate(compressibility_index);}
+  double TwophaseVaporLookup::Viscosity(){       SetTemperatureAndPressure(); return Interpolate(viscosity_index);      }
     
   // these are only needed for the DT function, consider cleaning up such that "SetTemperatureAndPressure" might
   // be moved into "Interpolate"(consistency with conventions in other Lookups !)
-  double64 TwophaseVaporLookup::ReportMassFractionNaCl(){ return Interpolate(composition_index); }
-  double64 TwophaseVaporLookup::ReportEnthalpy(){    return Interpolate(enthalpy_index); }
+  double TwophaseVaporLookup::ReportMassFractionNaCl(){ return Interpolate(composition_index); }
+  double TwophaseVaporLookup::ReportEnthalpy(){    return Interpolate(enthalpy_index); }
     
 
 
-  double64 TwophaseVaporLookup::DEnthalpyDT()
+  double TwophaseVaporLookup::DEnthalpyDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -376,7 +375,7 @@ namespace csmp
   }
     
     
-  double64 TwophaseVaporLookup::DCompositionDT()
+  double TwophaseVaporLookup::DCompositionDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -435,7 +434,7 @@ namespace csmp
   }
     
 
-  double64 TwophaseVaporLookup::DSaltMassFractionDT()
+  double TwophaseVaporLookup::DSaltMassFractionDT()
   {
     SetTemperatureAndPressure(); 
     tdummy   = tcurrent;
@@ -513,7 +512,7 @@ namespace csmp
   }
     
     
-  double64 TwophaseVaporLookup::Interpolate(const int& property_index)
+  double TwophaseVaporLookup::Interpolate(const int& property_index)
   {
     // do NOT set tcurrent and pcurrent here, do it outside this function too keep it versatile !!!
 	
@@ -606,7 +605,7 @@ namespace csmp
       }
   }
     
-  double64 TwophaseVaporLookup::NormalInterpolation( const int& property_index )
+  double TwophaseVaporLookup::NormalInterpolation( const int& property_index )
   {
     //d  cout << "Using TwophaseVaporLookup::NormalInterpolation( const int& property_index ) ...\n";
 	
@@ -630,7 +629,7 @@ namespace csmp
   }
     
 
-  double64 TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index)
+  double TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index)
   {
     // Feb. 2011
     // The following treatment strongl;y relies on a correct detrmination that we are
@@ -735,7 +734,7 @@ namespace csmp
                 csmp_error.notice( FATAL_ERROR, 
                                    "TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index) - ",
                                    "p < vlh_pmax (in cell ip_p_max+1) but neither tcurrent<vlh_tmax nor tcurrent>vlh_tmax condition worked!\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
-                return std::numeric_limits<double>::quiet_NaN();
+                return std::numeric_limits<double>::signaling_NaN();
              }
           }
       }
@@ -782,7 +781,7 @@ namespace csmp
             csmp_error.notice( FATAL_ERROR, 
                                "TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index) - ",
                                "p < vlh_pmax (in cell ip_p_max) but neither tcurrent<vlh_tmax nor tcurrent>vlh_tmax condition worked!\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
-            return std::numeric_limits<double>::quiet_NaN();
+            return std::numeric_limits<double>::signaling_NaN();
          }
       }
     else
@@ -791,12 +790,12 @@ namespace csmp
                            "TwophaseVaporLookup::NearVLHMaxInterpolation(const int& property_index) - ",
                            "Missed ALL if-statements!\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
 
-        return std::numeric_limits<double>::quiet_NaN();
+        return std::numeric_limits<double>::signaling_NaN();
       }
   }
     
 
-  double64 TwophaseVaporLookup::NearCritpointInterpolation( const int& property_index )
+  double TwophaseVaporLookup::NearCritpointInterpolation( const int& property_index )
   {
     // This is  the topology:
     //                           
@@ -845,7 +844,7 @@ namespace csmp
 
 
     
-  double64 TwophaseVaporLookup::NearCritcurveInterpolation( const int& property_index )
+  double TwophaseVaporLookup::NearCritcurveInterpolation( const int& property_index )
   {
     //d  cout << "Using TwophaseVaporLookup::NearCritcurveInterpolation( const int& property_index ) ...\n";
     //d  cout << "Critical Pressure at T of interest is " << critcurve.Pressure() << endl;
@@ -1005,7 +1004,7 @@ namespace csmp
     
     
     
-  double64 TwophaseVaporLookup::NearBoilingCurveInterpolation( const int& property_index )
+  double TwophaseVaporLookup::NearBoilingCurveInterpolation( const int& property_index )
   {
     //d  cout << "Using TwophaseVaporLookup::NearBoilingCurveInterpolation( const int& property_index ) ...\n";
     //d  cout << "Boiling Pressure at T of interest is " << water.SaturationPressureFromT(tcurrent) << endl;
@@ -1157,7 +1156,7 @@ namespace csmp
     
     
     
-  double64 TwophaseVaporLookup::NearVLHInterpolationLowT( const int& property_index )
+  double TwophaseVaporLookup::NearVLHInterpolationLowT( const int& property_index )
   {
     //d  cout << "Using TwophaseVaporLookup::NearVLHInterpolationLowT( const int& property_index ) ...\n";
 	
@@ -1304,7 +1303,7 @@ namespace csmp
 
 
 
-  double64 TwophaseVaporLookup::NearVLHInterpolationHighT( const int& property_index )
+  double TwophaseVaporLookup::NearVLHInterpolationHighT( const int& property_index )
   {
     //d  cout << "Using TwophaseVaporLookup::NearVLHInterpolationHighT( const int& property_index ) ...\n";
     tdummy = tcurrent;
@@ -1436,7 +1435,7 @@ namespace csmp
     return value_interpolated;
   }
     
-  double64 TwophaseVaporLookup::InterpolateBetweenBoilingCurveAndVLH( const int& property_index )
+  double TwophaseVaporLookup::InterpolateBetweenBoilingCurveAndVLH( const int& property_index )
   {
     //d  cout << "Using TwophaseVaporLookup::InterpolateBetweenBoilingCurveAndVLH( const int& property_index ) ..\n";
     tdummy = tcurrent;
@@ -1448,7 +1447,7 @@ namespace csmp
     
     
     
-  void TwophaseVaporLookup::GetTemperatureIndex(const double64& t)
+  void TwophaseVaporLookup::GetTemperatureIndex(const double& t)
   {
     // new version
     if(     t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-  0.0)/t_res ); }
@@ -1467,7 +1466,7 @@ namespace csmp
     // t_dim is therefore (1000-550)/10+285 + 1 = 331
   }
     
-  void TwophaseVaporLookup::GetPressureIndex(const double64& p)
+  void TwophaseVaporLookup::GetPressureIndex(const double& p)
   {
     // new version
     if(     p <=   20.0e5){ p_res =   0.5e5; ip =     static_cast<long>( (p-   0.5e5)/p_res ); }    

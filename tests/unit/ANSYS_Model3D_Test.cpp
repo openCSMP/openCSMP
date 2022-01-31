@@ -1,6 +1,7 @@
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_Model3D.h"
 #include "Boundary.h"
+#include "Region.h"
 #include "VTU_Interface.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "Timer.hpp"
@@ -28,7 +29,7 @@ namespace csmp
 
       size_t nullNeighborsOut(0);
       const Region<3U> model_domain1(modelOutput1.Region("Model"));
-      for ( vector<Element<3>*>::const_iterator it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it )
+      for ( auto it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it )
         for ( size_t n(0); n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighborsOut;
@@ -77,7 +78,8 @@ namespace csmp
       // Verification Binary
       //------------------------------------
       timer.Start();
-      Model<3> modelInput1("ANSYS_Model3D_Test_modelOutput1");
+      const string file_name("ANSYS_Model3D_Test_modelOutput1");
+      Model<3> modelInput1( file_name, set<string>({}) );
       const Region<3U> model_domain2(modelInput1.Region("Model"));
       const double binaryModelTime( timer.Stop() );
       _test( elementCount == modelInput1.Region("Model").Elements() );
@@ -85,7 +87,7 @@ namespace csmp
       
       if ( verbose ) cout <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
-      for ( vector<Element<3>*>::const_iterator it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
+      for ( auto it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
         for ( size_t n(0); n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighbors;
@@ -166,7 +168,8 @@ namespace csmp
       if ( verbose ) cout<<"The Output of Model with boundaries done..."<<endl;
 
       cout <<"Re-building ModelInput with boundaries..."<<endl;
-      Model<3U> modelInput2("ANSYS_Model3D_Test_modelOutput2");
+      const string file_name2("ANSYS_Model3D_Test_modelOutput2");
+      Model<3U> modelInput2( file_name2, set<string>({}) );
       _test( modelInput2.Boundary("BOUNDARY1").Read(boundaryScalarKey) == 1. );
       modelInput2.Region("Model").Read( regionVectorKey, vvPlain );
       _test( vvPlain == vv );
@@ -243,8 +246,6 @@ namespace csmp
       
       // testing model with finite volume variables
       ANSYS_Model3D modelOutput3( "FracBox", "FracBoxNoFrac", "Vset_TestCase.txt",true,true,true);
-      //Instantiate Finite Volumes
-      modelOutput3.InstantiateFiniteVolumes();
 
       Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector") );
       Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor") );
@@ -266,7 +267,8 @@ namespace csmp
         }
         modelOutput3.OutputToBinaryFile("ANSYS_Model3D_Test_modelOutput3");
 
-        Model<3> modelInput3("ANSYS_Model3D_Test_modelOutput3");
+        const string file_name3("ANSYS_Model3D_Test_modelOutput3");
+        Model<3> modelInput3( file_name, set<string>({}) );
         _test( modelInput3.Boundary("BOUNDARY1").Nodes() == modelOutput3_boundar1NodesOut );
         _test( modelInput3.Boundary("BOUNDARY2").Nodes() == modelOutput3_boundar2NodesOut );
         _test( modelInput3.Boundary("BOUNDARY3").Nodes() == modelOutput3_boundar3NodesOut );
@@ -303,9 +305,6 @@ namespace csmp
             cout << "\nFacet IPs accessed: " << ctrFaIps << endl;
             cout << "\nSector IPs accessed: " << ctrSeIps << endl;
           }
-
-        // Instantiate Finite Volumes
-        modelInput3.InstantiateFiniteVolumes();
 
         ctrFaIps = 0;
         ctrSeIps = 0;

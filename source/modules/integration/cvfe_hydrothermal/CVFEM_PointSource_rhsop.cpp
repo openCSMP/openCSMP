@@ -33,7 +33,7 @@ void CVFEM_PointSource_rhsop<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), SRC_ );
       // taking into account that the source contributes to several elements
       for ( size_t i=0U; i<e.Nodes(); i++ )
-        SRC_[i] /= static_cast<double64>(e.N(i)->Parents()); 
+        SRC_[i] /= static_cast<double>(e.N(i)->Parents()); 
 
    } // end GetOperands
 
@@ -47,7 +47,7 @@ void CVFEM_PointSource_rhsop<dim,SIMPLEX>::GetOperandsCVFEM( SIMPLEX& e, csmp::I
        
       // taking into account that the source contributes to several elements
       for ( size_t i=0U; i<e.Nodes(); i++ )
-        SRC_[i] /= static_cast<double64>(e.N(i)->Parents()); 
+        SRC_[i] /= static_cast<double>(e.N(i)->Parents()); 
 
       for (size_t i = 0; i < upwind_var_.size(); i++)
          SRC_[i]() *= upwind_var_[i]();

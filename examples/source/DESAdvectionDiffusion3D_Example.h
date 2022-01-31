@@ -3,8 +3,6 @@
 
 #include "Example.h"
 
-#include "CSMP_number_types.h"
-
 namespace csmp {
 
   template<size_t dim> class Model;

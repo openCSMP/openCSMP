@@ -42,20 +42,20 @@ class FemToGridVisitor : public Visitor<dim> {
     std::vector<bool>             visited;
     std::vector<ElementGrid>      egrids;
     cEGridIterator                eit, it_end;
-    std::vector<double64>         NF;
-    std::vector<double64>         xy;
+    std::vector<double>         NF;
+    std::vector<double>         xy;
     std::vector<ScalarVariable >  P;
     ScalarVariable                sc;
     DenseMatrix<DM_MIN>           XY, NN;
     csmp::Index                   prop_key; 
-    double64                      time_increment;   
+    double                      time_increment;   
     bool                          overwrite;
 
-    bool IsInsideTriangle( double64 x, double64 y, bool update=true );
-    bool IsInsideQuadrilateral( double64 x, double64 y );
+    bool IsInsideTriangle( double x, double y, bool update=true );
+    bool IsInsideQuadrilateral( double x, double y );
     
-    void MinMaxCoordinates( double64& min_x, double64& max_x, 
-                            double64& min_y, double64& max_y );
+    void MinMaxCoordinates( double& min_x, double& max_x, 
+                            double& min_y, double& max_y );
                             
     void InitializeElementGrid( size_t id, CSMP_FEM_TYPE );
      

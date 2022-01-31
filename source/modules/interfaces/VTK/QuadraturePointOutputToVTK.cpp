@@ -6,8 +6,9 @@
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#include "CSMP_definitions.h"
 #include "QuadraturePointOutputToVTK.h"
+#include "Model.h"
+#include "Region.h"
 
 using namespace std;
 
@@ -125,7 +126,7 @@ namespace csmp {
      ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
    
      // extrapolating the integration point data to the node points and writing them to file
-     vector<double64> IVAR, NVAR;
+     vector<double> IVAR, NVAR;
      for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
            // collecting the variable values from the integration points
            IVAR.resize( (*it)->IntegrationPoints() );

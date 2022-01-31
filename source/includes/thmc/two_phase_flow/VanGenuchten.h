@@ -37,29 +37,29 @@ class VanGenuchten : public TwoPhaseModel<dim> {
     void InitializeVirtualMatrix( const Element<dim>& e );
 
     // relative permeabilities
-    virtual double64 krn_Phase() const;
-    virtual double64 krw_Phase() const;
+    virtual double krn_Phase() const;
+    virtual double krw_Phase() const;
 
     // derivatives of relative permeabilities
-    virtual double64 dkrnds_Phase() const;
-    virtual double64 dkrwds_Phase() const;
+    virtual double dkrnds_Phase() const;
+    virtual double dkrwds_Phase() const;
 
     // capillary pressure
-    virtual double64 pc_Phase( ) const;
+    virtual double pc_Phase( ) const;
 
     // capillary pressure derivatives
-    virtual double64 dpcds_Phase( ) const;
+    virtual double dpcds_Phase( ) const;
 
     // inverse capillary pressure function
-    virtual double64 Sw_Phase( double64 pc_Phase ) const;
+    virtual double Sw_Phase( double pc_Phase ) const;
 
     // inverse capillary pressure derivative
-    virtual double64 dsdpc_Phase( double64 pc_Phase ) const;
+    virtual double dsdpc_Phase( double pc_Phase ) const;
 
     // maximum absolute value returned by dfdS
-    virtual double64 MaxFractionalFlowDerivative() const;
+    virtual double MaxFractionalFlowDerivative() const;
 
-    double64 PoreParametersCapillaryPressure( double64 pt, double64 pr, double64 tension ) const;
+    double PoreParametersCapillaryPressure( double pt, double pr, double tension ) const;
 
   protected:
 
@@ -74,14 +74,14 @@ class VanGenuchten : public TwoPhaseModel<dim> {
     csmp::Index  residualMatrixSaturationOKey_;
     csmp::Index  matrixPermeabilityKey_;
     bool         matrix_tensor_permeability_;
-    mutable double64  n_, alpha_;
-    const   double64  acc_gravity_,
+    mutable double  n_, alpha_;
+    const   double  acc_gravity_,
                 PC_LOW_SW_LIMIT_,
                 PC_HIGH_SW_LIMIT_,
                 KRW_HIGH_SW_LIMIT_,
                 KRN_LOW_SW_LIMIT_;
 
-   double64 m_from_n( double64 n_ ) const;
+   double m_from_n( double n_ ) const;
 
 };
 

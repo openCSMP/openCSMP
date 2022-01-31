@@ -16,9 +16,10 @@ class Integral_NT_op_N_dV : public MathOperatorRHS<dim> {
     Integral_NT_op_N_dV( const PropertyDatabase<dim>& p, 
                          const char* oper, const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
     // integration etc.
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& );
+    
     virtual Integral_NT_op_N_dV<dim,SIMPLEX>* clone() const { return new Integral_NT_op_N_dV<dim,SIMPLEX> (*this); }
   private:
     DenseMatrix<DM_MIN>  INN;

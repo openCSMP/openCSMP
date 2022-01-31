@@ -40,7 +40,7 @@ RULES for using righthand Mathoperators
       specified for the particular element type.
  
     - if a node or a integration point has multiple degrees of freedom, then
-      the node property vector<double64> will be of dimension (nds+ips) * dof
+      the node property vector<double> will be of dimension (nds+ips) * dof
       in this case, the entries will be 'dof' per node or constraint point in the
       order as given above.
 
@@ -114,7 +114,7 @@ class MathOperatorRHS {
     bool          LumpedFormulation()           const;
     size_t        ApplicationCycle()            const;
     size_t        ApplicationCycles()           const;
-    double64      MultiplyBy()                  const;
+    double      MultiplyBy()                  const;
     bool          MultiplyWithTimeIncrement()   const;
     bool          DivideByTimeIncrement()       const;
 
@@ -127,7 +127,7 @@ class MathOperatorRHS {
     void          LumpedFormulation ( bool );
     void          ApplicationCycle  ( size_t        );
     void          ApplicationCycles ( size_t        );
-    void          MultiplyBy( double64 integral_mult_factor );
+    void          MultiplyBy( double integral_mult_factor );
     void          MultiplyWithTimeIncrement( bool multiply );
     void          DivideByTimeIncrement( bool divide );
 
@@ -140,32 +140,32 @@ class MathOperatorRHS {
                                               size_t ip, DenseMatrix<DM_MIN>& );
 
     /// getting data from the Element, Face, InterFace
-    virtual void  GetOperands        ( Element<dim>& );
-    virtual void  GetOperands        ( Face<dim>& );
-    virtual void  GetOperands        ( InterFace<dim>& );
-
-    /// writing data to the Element, Face, InterFace
-    virtual void  WriteOperands      ( Element<dim>& );
-    virtual void  WriteOperands      ( Face<dim>&  );
-    virtual void  WriteOperands      ( InterFace<dim>& );
+    virtual void  GetOperands( const Element<dim>& );
+    virtual void  GetOperands( const Face<dim>& );
+    virtual void  GetOperands( const InterFace<dim>& );
 
     /// integration performed on Element, Face, InterFace
-    virtual void  ComputeContribution( Element<dim>& );
-    virtual void  ComputeContribution( Face<dim>& );
-    virtual void  ComputeContribution( InterFace<dim>& );
+    virtual void  ComputeContribution( const Element<dim>& );
+    virtual void  ComputeContribution( const Face<dim>& );
+    virtual void  ComputeContribution( const InterFace<dim>& );
   
+    /// writing data to the Element, Face, InterFace
+    virtual void  WriteOperands( Element<dim>& );
+    virtual void  WriteOperands( Face<dim>&  );
+    virtual void  WriteOperands( InterFace<dim>& );
+
     /// if so specified multiply with time increment
-    virtual void  MultiplyWithTimeFactor( double64 dt );
+    virtual void  MultiplyWithTimeFactor( double dt );
 
     /// assigment to the right hand side global vector (after everything was calculated )
-    virtual void  AssignToGlobal( const Element<dim>&,   std::vector<double64>& rhs );
-    virtual void  AssignToGlobal( const Face<dim>&,      std::vector<double64>& rhs );
-    virtual void  AssignToGlobal( const InterFace<dim>&, std::vector<double64>& rhs );
+    virtual void  AssignToGlobal( const Element<dim>&,   std::vector<double>& rhs );
+    virtual void  AssignToGlobal( const Face<dim>&,      std::vector<double>& rhs );
+    virtual void  AssignToGlobal( const InterFace<dim>&, std::vector<double>& rhs );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void  AssignToGlobal(const Element<dim>&, std::vector<double64>& rhs, const std::vector<size_t>&  );
-    virtual void  AssignToGlobal(const Face<dim>&, std::vector<double64>& rhs, const std::vector<size_t>&  );
-    virtual void  AssignToGlobal(const InterFace<dim>&, std::vector<double64>& rhs, const std::vector<size_t>& );
+    virtual void  AssignToGlobal(const Element<dim>&, std::vector<double>& rhs, const std::vector<size_t>&  );
+    virtual void  AssignToGlobal(const Face<dim>&, std::vector<double>& rhs, const std::vector<size_t>&  );
+    virtual void  AssignToGlobal(const InterFace<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
 
     virtual MathOperatorRHS<dim>* clone() const = 0;
 
@@ -173,21 +173,21 @@ class MathOperatorRHS {
     std::string                         name_;               ///< name of operator
 
     Parameter                           op;                  ///< material property operand
-    std::pair<Parameter, size_t >       top;                 ///< test function operand
+    std::pair<Parameter, size_t>       top;                 ///< test function operand
 
-    std::vector<double64>               RHS;                 ///< solution vector<double64> to be accumulated
+    std::vector<double>               RHS;                 ///< solution vector<double> to be accumulated
     std::vector<size_t>                 IDT;                 ///< node-ID & global constraint points vector ( test operand )
 
     std::vector<DenseMatrix<DM_MIN> >   MTRL;                ///< material property matrix(es) needed for PDE operand
     DenseMatrix<DM_MIN>                 DERIV;               ///< shape function derivative matrix
-    std::vector<double64>               IPOL;                ///< shape function vector
-    std::vector<ScalarVariable >        SC;                  ///< node property vector<double64> of scalars
+    std::vector<double>               IPOL;                ///< shape function vector
+    std::vector<ScalarVariable >        SC;                  ///< node property vector<double> of scalars
     std::vector<VectorVariable<dim> >   VC;                  ///< vectors
     std::vector<TensorVariable<dim> >   TS;                  ///< tensors
     std::vector<ArrayVariable >         AR;                  ///< arrays
     std::vector<FlaggedArrayVariable >  FR;                  ///< flagged arrays
 
-    double64                            factor_;             ///< constant factor
+    double                            factor_;             ///< constant factor
 
     /// specifies accumulation procedure
     bool        add_accumulate_;

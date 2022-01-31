@@ -2,17 +2,17 @@
 #define NACLH2OPROPERTIESVISITORPHX_H
 
 #include "CSMP_definitions.h"
-#include "Model.h"
 #include "Visitor.h"
-#include "ErrorHandler.h"
-
 #include "H2ONaClFluidProperties.h"
 #include "H2ONaClThermalEquilibrator.h"
 
 #include "Rock.h"
+#include "Index.h"
+#include "ScalarVariable.h"
 
 namespace csmp
 {
+  template<size_t> class Model;
 
   template<size_t dim> 
     class NaClH2OPropertiesVisitorPHX : public Visitor<dim> 
@@ -22,27 +22,23 @@ namespace csmp
       NaClH2OPropertiesVisitorPHX( Model<dim>& );
       ~NaClH2OPropertiesVisitorPHX();
       
-      virtual void Visit(Node<dim>* n);  
-	  virtual void Visit(Region<dim>* n);
+      virtual void Visit( Node<dim>* );
+	    virtual void Visit( Region<dim>* );
 
-      void SetTimeIncrement( double64 time_increment );
-      void InitialPropertiesFromPTX();
+      void SetTimeIncrement( double time_increment );
+      void InitialPropertiesFromPTX( Model<dim>& );
       void TopBoundaryHandling( bool TB );
       
-      void TemperatureDependentHeatCapacityRock( double64 cpr_min_ext, double64 t_min_ext,
-                                                 double64 cpr_max_ext, double64 t_max_ext );
-      void WithOpenBoundaries( double64 reference_specific_enthalpy, double64 reference_salinity );
-      void WithOpenBoundaries( double64 reference_salinity );
+      void TemperatureDependentHeatCapacityRock( double cpr_min_ext, double t_min_ext,
+                                                 double cpr_max_ext, double t_max_ext );
+      void WithOpenBoundaries( double reference_specific_enthalpy, double reference_salinity );
+      void WithOpenBoundaries( double reference_salinity );
 
       void SetAdjustCompressibilityAfterPhaseChangeBoolTo( bool adjust ); // default true, set to false if you want to switch off
-      void SetMaximumCompressibilityCyclesAfterPhaseChange( double64  max );    // number of timesteps after phase change where this should be applied
+      void SetMaximumCompressibilityCyclesAfterPhaseChange( double  max );    // number of timesteps after phase change where this should be applied
       // potentially problematic if yet another phase change within this number of timesteps!
 
     private:
-      // Accessing CSMP memory
-      PropertyDatabase<dim>&     pref;
-      /* csmp::MemoryManager<dim>&  pmem; */
-      csmp::MeshManager<dim>&    pmesh;
 
       bool                         top_boundary;
       bool                         bogus_variables;
@@ -55,61 +51,61 @@ namespace csmp
       bool                         verbose_eq;
 
       bool                         adjust_compressibility_after_phasechange;
-      double64                     max_after_phasechange_counter;
+      double                     max_after_phasechange_counter;
 
       // Variables for the "FluidRockEquilibrator" object
-      double64                     m_rock_; 
-      double64                     cp_rock_; 
-      double64                     phi_; 
-      double64                     m_fluid_; 
-      double64                     tp_; 
-      double64                     p_current_; 
-      double64                     H_current_; 
-      double64                     MS_current_;
-      double64                     H_previous_; 
-      double64                     t_fixed; 
-      double64                     rho_rock_; 
-      double64                     t_diffusion_;
-      double64                     dT_diff_; 
-      double64                     dh_rock_diff_; 
-      double64                     dh_fluid_diff_; 
-      double64                     dhCl_; 
-      double64                     dhCv_;
-      double64                     dxCl_; 
-      double64                     dxCv_; 
-      double64                     dx_diff_; 
-      double64                     x_;
-      double64                     dmt_src; 
-      double64                     dh_src; 
-      double64                     ds_src; 
-      double64                     dt_; 
-      double64                     dml_; 
-      double64                     dmv_; 
-      double64                     h_fluid_; 
-      double64                     wt_;
-      double64                     t_; 
-      double64                     p_bar_; 
-      double64                     previous_state;
-      double64                     mlv_;
-      double64                     volume_factor; 
-      double64                     volume_factor_LHS; 
-      double64                     volume_factor_RHS;
-      double64                     pore_volume;
-      double64                     rock_volume;
-      double64                     kelvin;
-      double64                     res_sl;
-      double64                     res_sv;
-      double64                     krl;
-      double64                     krv;
-      double64                     ref_spec_h; // reference specific enthalpy (only for constant p at top)
-      double64                     ref_sal; // reference salinity at open top
-      double64                     time_factor_p;
+      double                     m_rock_; 
+      double                     cp_rock_; 
+      double                     phi_; 
+      double                     m_fluid_; 
+      double                     tp_; 
+      double                     p_current_; 
+      double                     H_current_; 
+      double                     MS_current_;
+      double                     H_previous_; 
+      double                     t_fixed; 
+      double                     rho_rock_; 
+      double                     t_diffusion_;
+      double                     dT_diff_; 
+      double                     dh_rock_diff_; 
+      double                     dh_fluid_diff_; 
+      double                     dhCl_; 
+      double                     dhCv_;
+      double                     dxCl_; 
+      double                     dxCv_; 
+      double                     dx_diff_; 
+      double                     x_;
+      double                     dmt_src; 
+      double                     dh_src; 
+      double                     ds_src; 
+      double                     dt_; 
+      double                     dml_; 
+      double                     dmv_; 
+      double                     h_fluid_; 
+      double                     wt_;
+      double                     t_; 
+      double                     p_bar_; 
+      double                     previous_state;
+      double                     mlv_;
+      double                     volume_factor; 
+      double                     volume_factor_LHS; 
+      double                     volume_factor_RHS;
+      double                     pore_volume;
+      double                     rock_volume;
+      double                     kelvin;
+      double                     res_sl;
+      double                     res_sv;
+      double                     krl;
+      double                     krv;
+      double                     ref_spec_h; // reference specific enthalpy (only for constant p at top)
+      double                     ref_sal; // reference salinity at open top
+      double                     time_factor_p;
       // next two unused for the moment
-      double64                     time_factor_h;
-      double64                     time_factor_s;
-      double64                     expected_dp;
-      double64                     hrock_prev;
-      double64                     hrock_curr;
+      double                     time_factor_h;
+      double                     time_factor_s;
+      double                     expected_dp;
+      double                     hrock_prev;
+      double                     hrock_curr;
 
       int                          old_state;
       int                          current_state;
@@ -369,8 +365,8 @@ namespace csmp
       Fluidproperties              Salt;
 
       // Private Memberfunctions
-      double64                     EffectiveLiquidSaturationHalitePresent( double64 sat_liquid, double64 sat_vapor ) const;
-      double64                     RelativePermeabilityLiquid( double64 sat_liquid, double64 sat_vapor ) const;
+      double                     EffectiveLiquidSaturationHalitePresent( double sat_liquid, double sat_vapor ) const;
+      double                     RelativePermeabilityLiquid( double sat_liquid, double sat_vapor ) const;
       void                         ReadAllVariables( Node<dim>* n );
 
       void                         CheckForOutOfRange( Node<dim>* n );
@@ -382,7 +378,7 @@ namespace csmp
       void                         ScreenOutputSowatVariables();
       void                         UpdateCSMPVariables( Node<dim>& n );
 
-      double64                           TwoPhasePureWaterCompressibility(double64 cpl, double64 cpv);
+      double                     TwoPhasePureWaterCompressibility(double cpl, double cpv);
 
       void                         Output_PTXState();
 
@@ -390,7 +386,7 @@ namespace csmp
       void                         StoreInitialPropertiesAndFlags( Node<dim>& n );  
 
       void                         BoundaryHandling( Node<dim>* n );
-      double64                           BoundaryFlow( );
+      double                     BoundaryFlow( );
       void                         BoundaryIteration( );
 
       void                         CheckVolumeMismatchCompensation();
@@ -399,18 +395,12 @@ namespace csmp
       void                         TimeStepAdjustment();
       void                         VolumeFactorComputations( Node<dim>* n );
       void                         PrepareVariablesForStorage();
-
-      ErrorHandler&                csmp_error;
-      //      void BoundaryIteration( Node<dim>* n );
-      //      void BoundaryIteration( Node<dim>& n );
-      //	                         void UpdatePorosity();
-      //	double64  CalculateTimeMultiplicationFactor( Node<dim>* n );
     };
   
   
   /*!
     <!-- ================================================================== -->
-    <H1>NaClH2OPropertiesVisitorPHX</H1> <!-- ======================================= -->
+    <H1>NaClH2OPropertiesVisitorPHX</H1> <!-- ================================= -->
     <!-- ================================================================== -->
 
     <!-- ================================================================== -->
@@ -491,40 +481,40 @@ namespace csmp
   // NaClH2OPropertiesVisitorPHX Methods ====================
 
   template<size_t dim>
-    inline double64  NaClH2OPropertiesVisitorPHX<dim>::EffectiveLiquidSaturationHalitePresent( double64 sat_liquid, double64 sat_vapor ) const
+    inline double  NaClH2OPropertiesVisitorPHX<dim>::EffectiveLiquidSaturationHalitePresent( double sat_liquid, double sat_vapor ) const
     {
-      double64 seff;
-      double64 my_res_sl(res_sl*(sat_liquid+sat_vapor)),
+      double seff;
+      double my_res_sl(res_sl*(sat_liquid+sat_vapor)),
         my_res_sv(res_sv*(sat_liquid+sat_vapor));
 
       // Changed JPW 26.5.2011
       //      seff = (sat_liquid - res_sl) / (sat_liquid + sat_vapor - res_sl - res_sv);
       //      seff = (sat_liquid - my_res_sl) / (sat_liquid + sat_vapor - my_res_sl - my_res_sv);
       seff = (sat_liquid - my_res_sl) / (sat_liquid + sat_vapor - my_res_sl - my_res_sv);
-      if      ( seff > static_cast<double64>(1.0) ) return 1.0;
-      else if ( seff < static_cast<double64>(0.0) ) return 0.0;
+      if      ( seff > static_cast<double>(1.0) ) return 1.0;
+      else if ( seff < static_cast<double>(0.0) ) return 0.0;
       else                                    return seff;
 
     } // end EffectiveSaturation
 
   template<size_t dim>
-    inline double64  NaClH2OPropertiesVisitorPHX<dim>::RelativePermeabilityLiquid( double64 sat_liquid, double64 sat_vapor ) const
+    inline double  NaClH2OPropertiesVisitorPHX<dim>::RelativePermeabilityLiquid( double sat_liquid, double sat_vapor ) const
     {
-      double64 seff, sat_total(sat_liquid+sat_vapor);
-      double64 my_res_sl(res_sl*sat_total),
+      double seff, sat_total(sat_liquid+sat_vapor);
+      double my_res_sl(res_sl*sat_total),
         my_res_sv(res_sv*sat_total);
 
       // Changed JPW 26.5.2011
       seff = sat_total*(sat_liquid - my_res_sl) / (sat_liquid + sat_vapor - my_res_sl - my_res_sv);
-      if      ( seff > static_cast<double64>(sat_total) ) return sat_total;
-      else if ( seff < static_cast<double64>(0.0) ) return 0.0;
+      if      ( seff > static_cast<double>(sat_total) ) return sat_total;
+      else if ( seff < static_cast<double>(0.0) ) return 0.0;
       else                                    return seff;
 
     } // end RelativePermeabilityLiquid
 
   //*** new TD May 2011
   template<size_t dim>
-    inline void NaClH2OPropertiesVisitorPHX<dim>::SetMaximumCompressibilityCyclesAfterPhaseChange( double64 max )
+    inline void NaClH2OPropertiesVisitorPHX<dim>::SetMaximumCompressibilityCyclesAfterPhaseChange( double max )
     {
       max_after_phasechange_counter = max;
     }

@@ -26,11 +26,11 @@ namespace csmp {
   private:
     void compareTest(bool lumped);
 
-    void setNodeVariable( std::vector<double64>& var, const char* var_name);
+    void setNodeVariable( std::vector<double>& var, const char* var_name);
     void showNodeVariable( const char* var_name);
-    void setElementVariable( std::vector<double64>& var, const char* var_name);
+    void setElementVariable( std::vector<double>& var, const char* var_name);
     void calculateGlobalMatrix( SparseMatrix& sm, MathOperatorLHS<2U>& oper);
-    void calculateGlobalRHS( std::vector<double64>& rhs, MathOperatorRHS<2U>& oper);
+    void calculateGlobalRHS( std::vector<double>& rhs, MathOperatorRHS<2U>& oper);
 
     Model<2U>*    sg_;
     const double  tol_;

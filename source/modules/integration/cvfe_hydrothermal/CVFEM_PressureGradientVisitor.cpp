@@ -1,4 +1,5 @@
 #include "CVFEM_PressureGradientVisitor.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -95,7 +96,7 @@ void CVFEM_PressureGradientVisitor<dim>::ComputeGradient( Element<dim>& e )
 //          KgradP(j) += min(lp[i](),p[i]()) * -DERIV(j,i);
             KgradP_(j) += lp_[in]() * -DERIV_(j,in);
    }
-  KgradP_  /= static_cast<double64>(e.IntegrationPoints());
+  KgradP_  /= static_cast<double>(e.IntegrationPoints());
 //  gradP_factor_() = 1./KgradP_.Length();
   gradP_factor_() = 1./KgradP_(dim-1);
 
@@ -108,7 +109,7 @@ void CVFEM_PressureGradientVisitor<dim>::ComputeGradient( Element<dim>& e )
        for ( size_t j=0; j<dim; j++ )
           KgradP_(j) += p_[in]() * -DERIV_(j,in);
     }
-  KgradP_ /= static_cast<double64>(e.IntegrationPoints());
+  KgradP_ /= static_cast<double>(e.IntegrationPoints());
 //  gradP_factor_() *= KgradP_.Length();
   gradP_factor_() *= KgradP_(dim-1);
 
@@ -135,8 +136,8 @@ void CVFEM_PressureGradientVisitor<dim>::ComputeGradient2( Element<dim>& e )
      else
       gradP_factor_() += 1.;
    }
-  gradP_factor_() /= static_cast<double64>(e.Nodes());
-  if (definitelyLessThan( gradP_factor_(), 1.0, numeric_limits<double64>::epsilon()))
+  gradP_factor_() /= static_cast<double>(e.Nodes());
+  if (definitelyLessThan( gradP_factor_(), 1.0, numeric_limits<double>::epsilon()))
     gradP_factor_() = 1.0;
 
   KgradP_ = 0.;
@@ -148,7 +149,7 @@ void CVFEM_PressureGradientVisitor<dim>::ComputeGradient2( Element<dim>& e )
        for ( size_t j=0; j<dim; j++ )
           KgradP_(j) += p_[in]() * -DERIV_(j,in);
     }
-  KgradP_  /= static_cast<double64>(e.IntegrationPoints());
+  KgradP_  /= static_cast<double>(e.IntegrationPoints());
   KgradP_  *= k_();
 
 } // end ComputeContribution2

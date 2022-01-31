@@ -1,10 +1,10 @@
 #include "Box.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "Element.h"
 #include "Model.h"
+#include "ErrorHandler.h"
 #include "Exception.h"
-
-#include "SmallSet.h"
 
 using namespace std;
 
@@ -42,6 +42,8 @@ bool isCorner( BOX_BOUNDARY bd )
   if ( bd == CNR4 )  return true;
   if ( bd == CNR5 )  return true;
   if ( bd == CNR6 )  return true;
+  if ( bd == CNR7 )  return true;
+  if ( bd == CNR8 )  return true;
   return false;
 }
 
@@ -55,6 +57,7 @@ bool isSide( BOX_BOUNDARY bd )
   if ( bd == BOTTOM ) return true;
   if ( bd == FRONT )  return true;
   if ( bd == BACK )   return true;
+  if ( bd == IRREGULAR ) return true;
   return false;
 }
 
@@ -156,10 +159,10 @@ bool isBACK( BOX_BOUNDARY bd )
 
 
 
-BOX_BOUNDARY intToBOX_BOUNDARY( long64 i )
+BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
 {
-  if ( i == 0 )              return NOT;
-  if ( i == 1 )              return IRREGULAR;
+  if ( i == 0 )                 return NOT;
+  if ( i == IRREGULAR_OUTSIDE ) return IRREGULAR;
   if ( i == LEFT_OUTSIDE )    return LEFT;
   if ( i == RIGHT_OUTSIDE )   return RIGHT;
   if ( i == BOTTOM_OUTSIDE )  return BOTTOM;
@@ -187,9 +190,10 @@ BOX_BOUNDARY intToBOX_BOUNDARY( long64 i )
   if ( i == FRONT_TOP )       return EDGE11;
   if ( i == FRONT_LEFT )      return EDGE12;
   if ( i == REGION_BOUNDARY ) return INTERNAL;
+  if ( i == MULTIPLE_BOUNDARIES ) return MULTIPLE;
 
   //cout <<"\nintToSG_BOUNDARY(int): unable to parse integer: "<< i << endl;
-  return NOT;
+  return MULTIPLE;
 }
 
 
@@ -224,9 +228,10 @@ std::string  parseBoundary( BOX_BOUNDARY i )
   if ( i == EDGE11 )   return string( "EDGE11" );
   if ( i == EDGE12 )   return string( "EDGE12" );
   if ( i == INTERNAL ) return string( "INTERNAL" );
+  if ( i == MULTIPLE ) return string( "MULTIPLE" );
 
-  cerr << "\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: " << i << endl;
-  return string( "NOT" );
+//  cerr << "\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: " << i << endl;
+  return string( "UNDEFINED" );
 }
 
 
@@ -263,8 +268,10 @@ BOX_BOUNDARY  parseBoundary( const string& i )
   if ( i == "EDGE11" )   return EDGE11;
   if ( i == "EDGE12" )   return EDGE12;
   if ( i == "INTERNAL" ) return INTERNAL;
+  if ( i == "MULTIPLE" ) return MULTIPLE;
+  
   // if the name is not recognized it is not a BOX_BOUNDARY
-  return NOT;
+  return MULTIPLE;
 }
 
 
@@ -306,6 +313,7 @@ bool belongsToSide( BOX_BOUNDARY side, BOX_BOUNDARY bd )
   else if ( side == BOTTOM ) return isBOTTOM( bd );
   else if ( side == FRONT )  return isFRONT( bd );
   else if ( side == BACK )   return isBACK( bd );
+  else if ( side == IRREGULAR && bd == IRREGULAR ) return true;
   return false;
 }
 
@@ -450,7 +458,7 @@ void boundaryMinMaxCoordinates( BOX_BOUNDARY boundary,
 /**
 Returns a normal (vector) to the specified boundary of a box-shaped model.
 */
-void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double64>& nrml ) const
+void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double>& nrml ) const
 {
   nrml.resize( dim );
 
@@ -596,6 +604,46 @@ bool isDiagnosticBoxBoundaryClassifier( const string& i )
 
 
 /**
+prints a summary of the current flags of the nodes and elements to screen.
+*/
+template<size_t dim>
+void printBoxBoundaryFlags( const Model<dim>& model )
+ {
+    const Region<dim>& modeldomain(model.Region("Model"));
+    
+    cout <<"\n\nprintBoxBoundaryFlags: Current flags and numbers assigned to node and element objects:\n";
+    size_t equal_entries(0);
+    multiset<BOX_BOUNDARY> node_flags;
+    for ( auto nit=modeldomain.NodesBegin(); nit!=modeldomain.NodesEnd(); ++nit )
+      node_flags.insert( (*nit)->AtBoundary() );
+    multiset<BOX_BOUNDARY>::const_iterator it=node_flags.begin();
+    while( it!=node_flags.end() ) {
+         cout <<"\n\t"<< parseBoundary( (*it) ) <<": "<<  (equal_entries=node_flags.count( (*it) )) <<" nodes.";
+         // avoiding printing of duplicates
+         advance( it, equal_entries );
+      }
+    cout << endl;  
+      
+    multiset<BOX_BOUNDARY> elmt_flags;
+    for ( auto eit=modeldomain.ElementsBegin(); eit!=modeldomain.ElementsEnd(); ++eit )
+      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+        elmt_flags.insert( (*eit)->AtBoundary(i) );
+      
+    it = elmt_flags.begin();
+    while( it!=elmt_flags.end() ) {
+         cout <<"\n\t"<< parseBoundary( (*it) ) <<": "<<  (equal_entries=elmt_flags.count( (*it) )) <<" elements.";
+         advance( it, equal_entries );
+      }
+    cout << endl;  
+ }
+
+template void printBoxBoundaryFlags( const Model<1U>& );
+template void printBoxBoundaryFlags( const Model<2U>& );
+template void printBoxBoundaryFlags( const Model<3U>& );
+
+
+
+/**
 */
 void recreateBoxBoundaryFlags( Model<1U>& )
 {
@@ -680,82 +728,6 @@ void recreateBoxBoundaryFlags( Model<2U>& model )
   if ( !corner4.empty() ) {
     (*corner4.begin())->AtBoundary( CNR4 );
     cout << "\nrecreateBoxBoundaryFlags: found CNR4 (min_x,max_y)";
-  }
-
-
-  // Flagging the elements on the perimeter of model (assuming that the interior ones are already flagged correctly as NOT)
-  // Elements are flagged according to the flagging of the nodes on their boundary faces
-  Region<2U>&  model_domain( model.Region( "Model" ) );
-  for ( auto it = model_domain.PerimeterElementsBegin(); it != model_domain.ElementsEnd(); ++it ) {
-    // the bflags of each element are stored in a set
-    SmallSet<BOX_BOUNDARY>  eflags;
-    for ( size_t i = 0U; i<(*it)->Nodes(); ++i )              // NB: negative numbers !
-      if ( (*it)->N( i )->AtBoundary() != NOT and (*it)->N( i )->AtBoundary() >= INTERNAL )
-        eflags.insert( (*it)->N( i )->AtBoundary() );
-
-    // if only a non-descript identifier could be found the boundary is set to irregular
-    if ( eflags.empty() ) (*it)->AtBoundary( IRREGULAR );
-    // if only a single flag is contained the decision is easy
-    else if ( eflags.size() == 1U ) (*it)->AtBoundary( (*eflags.begin()) );
-    // if there are 2 flags and one of them is IRREGULAR, it is removed
-    else if ( eflags.size() == 2U )
-    {
-      // if one of the 2 flags is IRREGULAR, it is removed
-      if ( eflags.count( IRREGULAR ) ) {
-        eflags.erase( IRREGULAR );
-        (*it)->AtBoundary( (*eflags.begin()) );
-      }
-      else {
-        // possibilities relating to edge elements
-        auto sit( eflags.begin() );
-        const BOX_BOUNDARY flag1 = (*sit); sit++;
-        const BOX_BOUNDARY flag2 = (*sit);
-
-        if ( flag1 == BOTTOM and flag2 == BOTTOM ) (*it)->AtBoundary( BOTTOM );
-        else if ( flag1 == RIGHT and flag2 == RIGHT ) (*it)->AtBoundary( RIGHT );
-        else if ( flag1 == LEFT and flag2 == LEFT ) (*it)->AtBoundary( LEFT );
-        else if ( flag1 == TOP and flag2 == TOP ) (*it)->AtBoundary( TOP );
-
-        // BOTTOM_RIGHT
-        else if ( flag1 == BOTTOM and flag2 == RIGHT ) (*it)->AtBoundary( CNR2 );
-        // TOP_RIGHT
-        else if ( flag1 == TOP and flag2 == RIGHT ) (*it)->AtBoundary( CNR3 );
-        // TOP_LEFT
-        else if ( flag1 == TOP and flag2 == LEFT ) (*it)->AtBoundary( CNR4 );
-        // BOTTOM_LEFT
-        else if ( flag1 == BOTTOM and flag2 == LEFT ) (*it)->AtBoundary( CNR1 );
-
-        // CORNER CASES
-        else if ( flag1 == CNR1 and flag2 == BOTTOM ) (*it)->AtBoundary( CNR1 );
-        else if ( flag1 == CNR1 and flag2 == LEFT ) (*it)->AtBoundary( CNR1 );
-
-        else if ( flag1 == CNR4 and flag2 == TOP ) (*it)->AtBoundary( CNR4 );
-        else if ( flag1 == CNR4 and flag2 == LEFT ) (*it)->AtBoundary( CNR4 );
-
-        else if ( flag1 == CNR2 and flag2 == RIGHT ) (*it)->AtBoundary( CNR2 );
-        else if ( flag1 == CNR2 and flag2 == BOTTOM ) (*it)->AtBoundary( CNR2 );
-
-        else if ( flag1 == CNR3 and flag2 == RIGHT ) (*it)->AtBoundary( CNR3 );
-        else if ( flag1 == CNR3 and flag2 == TOP ) (*it)->AtBoundary( CNR3 );
-
-        else cerr << "\n\tmissed case: " << parseBoundary( flag1 ) << ", " << parseBoundary( flag2 ) << endl;
-      }
-    }
-    else if ( eflags.size() > 2U ) {
-      // PATHETIC CASES where the element sits in the corner and has all nodes on the boundary
-      if ( eflags.count( CNR1 ) && eflags.count( LEFT ) && eflags.count( BOTTOM ) ) (*it)->AtBoundary( CNR1 );
-      else if ( eflags.count( CNR2 ) && eflags.count( RIGHT ) && eflags.count( BOTTOM ) ) (*it)->AtBoundary( CNR2 );
-      else if ( eflags.count( CNR3 ) && eflags.count( RIGHT ) && eflags.count( TOP ) ) (*it)->AtBoundary( CNR3 );
-      else if ( eflags.count( CNR4 ) && eflags.count( LEFT ) && eflags.count( TOP ) ) (*it)->AtBoundary( CNR4 );
-      // WARNING
-      else {
-        cerr << "\n\n\nrecreateBoxBoundaryFlags(2D): unable to determine box boundary flag for element:\n";
-        for ( auto b : eflags )
-          cout << parseBoundary( b ) << " ";
-        cout << endl;
-        (*it)->Out();
-      }
-    }
   }
 
 } // end recreateBoxBoundaryFlags (2D version)
@@ -1127,234 +1099,731 @@ void recreateBoxBoundaryFlags( Model<3>& model )
   }
   cout << endl;
 
-  // Flagging the elements on the perimeter of model (assuming that the interior ones are already flagged correctly as NOT)
-  // Elements are flagged according to the flagging of the nodes on their boundary faces
-  Region<3>&  model_domain( model.Region( "Model" ) );
-  for ( auto it = model_domain.PerimeterElementsBegin(); it != model_domain.PerimeterElementsEnd(); ++it ) {
-    // the bflags of each node are stored in a set
-    SmallSet<BOX_BOUNDARY>  nflags;
-    for ( size_t i = 0U; i<(*it)->Nodes(); ++i )              // NB: negative numbers !
-      if ( (*it)->N( i )->AtBoundary() != NOT and (*it)->N( i )->AtBoundary() >= INTERNAL )
-        nflags.insert( (*it)->N( i )->AtBoundary() );
-
-    // if only a non-descript identifier could be found the boundary is set to irregular
-    if ( nflags.empty() ) (*it)->AtBoundary( IRREGULAR );
-    // if only a single flag is contained the decision is easy
-    else if ( nflags.size() == 1U ) (*it)->AtBoundary( (*nflags.begin()) );
-    // if there are 2 flags and one of them is IRREGULAR, it is removed
-    else if ( nflags.size() == 2U )
-    {
-      // if one of the 2 flags is IRREGULAR, it is removed
-      if ( nflags.find( IRREGULAR ) != nflags.end() ) {
-        nflags.erase( IRREGULAR );
-        (*it)->AtBoundary( (*nflags.begin()) );
-      }
-      else {
-        // 12 possibilities relating to edge elements
-        auto sit = nflags.begin();
-        const BOX_BOUNDARY flag1 = (*sit); sit++;
-        const BOX_BOUNDARY flag2 = (*sit);
-        // BACK_BOTTOM
-        if ( flag1 == BACK and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE1 );
-        // BACK_RIGHT
-        else if ( flag1 == BACK and flag2 == RIGHT ) (*it)->AtBoundary( EDGE2 );
-        // BACK_TOP
-        else if ( flag1 == BACK and flag2 == TOP ) (*it)->AtBoundary( EDGE3 );
-        // BACK_LEFT
-        else if ( flag1 == BACK and flag2 == LEFT ) (*it)->AtBoundary( EDGE4 );
-        // BOTTOM_RIGHT
-        else if ( flag1 == BOTTOM and flag2 == RIGHT ) (*it)->AtBoundary( EDGE5 );
-        // TOP_RIGHT
-        else if ( flag1 == TOP and flag2 == RIGHT ) (*it)->AtBoundary( EDGE6 );
-        // TOP_LEFT
-        else if ( flag1 == TOP and flag2 == LEFT ) (*it)->AtBoundary( EDGE7 );
-        // BOTTOM_LEFT
-        else if ( flag1 == BOTTOM and flag2 == LEFT ) (*it)->AtBoundary( EDGE8 );
-        // FRONT_BOTTOM
-        else if ( flag1 == FRONT and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE9 );
-        // FRONT_RIGHT
-        else if ( flag1 == FRONT and flag2 == RIGHT ) (*it)->AtBoundary( EDGE10 );
-        // FRONT_TOP
-        else if ( flag1 == FRONT and flag2 == TOP ) (*it)->AtBoundary( EDGE11 );
-        // FRONT_LEFT
-        else if ( flag1 == FRONT and flag2 == LEFT ) (*it)->AtBoundary( EDGE12 );
-        // if a corner is contained that corner flag is choosen
-        else if ( flag1 <= CNR1 and flag1 >= CNR8 ) (*it)->AtBoundary( flag1 );
-        else if ( flag2 <= CNR1 and flag2 >= CNR8 ) (*it)->AtBoundary( flag2 );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( flag1 <= EDGE1 and flag1 > INTERNAL ) (*it)->AtBoundary( flag1 );
-        else if ( flag2 <= EDGE1 and flag2 > INTERNAL ) (*it)->AtBoundary( flag2 );
-        else {
-          cerr << "\n\tmissed case: " << parseBoundary( flag1 ) << ", " << parseBoundary( flag2 ) << endl;
-        }
-      }
-    }
-    else if ( nflags.size() > 2U ) {
-      // erase the basic boundary options
-      nflags.erase( LEFT );
-      nflags.erase( RIGHT );
-      nflags.erase( TOP );
-      nflags.erase( BOTTOM );
-      nflags.erase( FRONT );
-      nflags.erase( BACK );
-      if ( nflags.empty() ) {
-        (*it)->AtBoundary( NOT );
-      }
-      else {
-        const BOX_BOUNDARY flag_min = (*min_element( nflags.begin(), nflags.end() ));
-        const BOX_BOUNDARY flag_max = (*max_element( nflags.begin(), nflags.end() ));
-
-        // if a corner is contained that corner flag is choosen
-        if ( flag_max <= CNR1 and flag_max >= CNR8 ) (*it)->AtBoundary( flag_max );
-        else if ( flag_min <= CNR1 and flag_min >= CNR8 ) (*it)->AtBoundary( flag_min );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( flag_max <= EDGE1 and flag_max > INTERNAL ) (*it)->AtBoundary( flag_max );
-        else if ( flag_min <= EDGE1 and flag_min > INTERNAL ) (*it)->AtBoundary( flag_min );
-        // if a corner is contained that corner flag is choosen
-        else if ( (*nflags.begin()) <= CNR1 and
-                  (*nflags.begin()) >= CNR8 ) (*it)->AtBoundary( (*nflags.begin()) );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( (*nflags.begin()) >= EDGE1 and
-                  (*nflags.begin()) <  INTERNAL ) (*it)->AtBoundary( (*nflags.begin()) );
-        else if ( (*nflags.begin()) == IRREGULAR ) (*it)->AtBoundary( IRREGULAR );
-        else {
-          cerr << "\n\n\nrecreateAtBoundaryFlags: unable to determine box boundary flag for element:\n";
-          for ( auto b : nflags )
-            cout << parseBoundary( b ) << " ";
-          cout << endl;
-          (*it)->Out();
-        }
-      }
-    }
-  }
-
 } // end recreateAtBoundaryFlags
 
 
 
 
 
+
+
 /**
-Assuming that the nodes of the box-shaped model are flagged correctly,
-this method considers the existing combinations of node flags and assign
-the appropriate BOX_BOUNDARY flags to all elements of the model.
-
-Furthermore the methods assumes that provided iterator range encompasses
-all elements.
-*/
-template<size_t dim>
-void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator it,
-                                               typename std::deque<csmp::Element<dim>* >::iterator last_elmt )
-{
-  assert( it != last_elmt );
-  while ( it != last_elmt ) {
-
-    // the bflags of each element are stored in a set
-    SmallSet<BOX_BOUNDARY>  eflags;
-    const size_t nodes( (*it)->Nodes() );
-    for ( size_t i = 0U; i<nodes; ++i )              // NB: negative numbers !
-      if ( (*it)->N( i )->AtBoundary() != NOT && (*it)->N( i )->AtBoundary() >= INTERNAL )
-        eflags.insert( (*it)->N( i )->AtBoundary() );
-
-    // if only a non-descript identifier could be found the boundary is set to irregular
-    if ( eflags.empty() )
-      (*it)->AtBoundary( IRREGULAR );
-    // if only a single flag is contained the decision is easy
-    else if ( eflags.size() == 1U )
-      (*it)->AtBoundary( (*eflags.begin()) );
-    // if there are 2 flags and one of them is IRREGULAR, it is removed
-    else if ( eflags.size() == 2U )
-    {
-      // if one of the 2 flags is IRREGULAR, it is removed
-      if ( eflags.count( IRREGULAR ) ) {
-        eflags.erase( IRREGULAR );
-        (*it)->AtBoundary( (*eflags.begin()) );
+       Establishes the BOX_BOUNDARY flagging for a 2D model consisting out of quadrilateral elements. 
+       
+       @note this method is quick.
+*/ 
+void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& model )
+ { 
+    Region<2U>&  modeldomain(model.Region("Model"));
+    for ( vector<Element<2U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+      {  // current version only works for linear quadrilaterals
+         assert( (*it)->Nodes() <= 5 );
+         
+         if ( !isQuadrilateral( (*it)->FE_Type() ) )
+           throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForQuadrilateralModel", "this method only works for quadrilateral elements");
+           
+         for ( size_t i=0; i<(*it)->Nodes(); ++i )
+           (*it)->N(i)->AtBoundary( NOT );
+        // BOTTOM 
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->N(0)->AtBoundary( BOTTOM );
+              (*it)->N(1)->AtBoundary( BOTTOM );
+              continue;
+           }
+         // RIGHT 
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(2)->AtBoundary( RIGHT );
+              continue;
+           }
+         // TOP 
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->N(2)->AtBoundary( TOP );
+              (*it)->N(3)->AtBoundary( TOP );
+              continue;
+           }
+         // LEFT 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->N(0)->AtBoundary( LEFT );
+              (*it)->N(3)->AtBoundary( LEFT );
+              continue;
+           }
+         // CORNERS 
+         // CNR1
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->N(0)->AtBoundary( CNR1 );
+              (*it)->N(1)->AtBoundary( BOTTOM );
+              (*it)->N(3)->AtBoundary( LEFT );
+              continue;
+           } 
+         // CNR2
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr ) {
+              (*it)->N(1)->AtBoundary( CNR2 );
+              (*it)->N(0)->AtBoundary( BOTTOM );
+              (*it)->N(2)->AtBoundary( RIGHT );
+              continue;
+           } 
+         // CNR3
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr ) {
+              (*it)->N(2)->AtBoundary( CNR3 );
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(3)->AtBoundary( TOP );
+              continue;
+           } 
+         // CNR4
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->N(3)->AtBoundary( CNR4 );
+              (*it)->N(2)->AtBoundary( TOP );
+              (*it)->N(0)->AtBoundary( LEFT );
+              continue;
+           } 
       }
-      else {
-        // 12 possibilities relating to edge elements
-        auto sit = eflags.begin();
-        const BOX_BOUNDARY flag1 = (*sit); sit++;
-        const BOX_BOUNDARY flag2 = (*sit);
-        // BACK_BOTTOM
-        if ( flag1 == BACK and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE1 );
-        // BACK_RIGHT
-        else if ( flag1 == BACK and flag2 == RIGHT ) (*it)->AtBoundary( EDGE2 );
-        // BACK_TOP
-        else if ( flag1 == BACK and flag2 == TOP ) (*it)->AtBoundary( EDGE3 );
-        // BACK_LEFT
-        else if ( flag1 == BACK and flag2 == LEFT ) (*it)->AtBoundary( EDGE4 );
-        // BOTTOM_RIGHT
-        else if ( flag1 == BOTTOM and flag2 == RIGHT ) (*it)->AtBoundary( EDGE5 );
-        // TOP_RIGHT
-        else if ( flag1 == TOP and flag2 == RIGHT ) (*it)->AtBoundary( EDGE6 );
-        // TOP_LEFT
-        else if ( flag1 == TOP and flag2 == LEFT ) (*it)->AtBoundary( EDGE7 );
-        // BOTTOM_LEFT
-        else if ( flag1 == BOTTOM and flag2 == LEFT ) (*it)->AtBoundary( EDGE8 );
-        // FRONT_BOTTOM
-        else if ( flag1 == FRONT and flag2 == BOTTOM ) (*it)->AtBoundary( EDGE9 );
-        // FRONT_RIGHT
-        else if ( flag1 == FRONT and flag2 == RIGHT ) (*it)->AtBoundary( EDGE10 );
-        // FRONT_TOP
-        else if ( flag1 == FRONT and flag2 == TOP ) (*it)->AtBoundary( EDGE11 );
-        // FRONT_LEFT
-        else if ( flag1 == FRONT and flag2 == LEFT ) (*it)->AtBoundary( EDGE12 );
-        // if a corner is contained that corner flag is choosen
-        else if ( flag1 <= CNR1 and flag1 >= CNR8 ) (*it)->AtBoundary( flag1 );
-        else if ( flag2 <= CNR1 and flag2 >= CNR8 ) (*it)->AtBoundary( flag2 );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( flag1 <= EDGE1 and flag1 > INTERNAL ) (*it)->AtBoundary( flag1 );
-        else if ( flag2 <= EDGE1 and flag2 > INTERNAL ) (*it)->AtBoundary( flag2 );
-        else {
-          cerr << "\n\tmissed case: " << parseBoundary( flag1 ) << ", " << parseBoundary( flag2 ) << endl;
-        }
-      }
-    }
-    else if ( eflags.size() > 2U ) {
-      // erase the basic boundary options
-      eflags.erase( LEFT );
-      eflags.erase( RIGHT );
-      eflags.erase( TOP );
-      eflags.erase( BOTTOM );
-      eflags.erase( BACK );
-      eflags.erase( FRONT );
+      
+    // testing nodes and elements
+    printBoxBoundaryFlags( model ); 
+       
+ } // end recreateBoxBoundaryFlagsForQuadrilateralModel
 
-      if ( !eflags.empty() ) {
-        const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
-        const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
 
-        // if a corner is contained that corner flag is choosen
-        if ( flag_max <= CNR1 and flag_max >= CNR8 ) (*it)->AtBoundary( flag_max );
-        else if ( flag_min <= CNR1 and flag_min >= CNR8 ) (*it)->AtBoundary( flag_min );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( flag_max <= EDGE1 and flag_max > INTERNAL ) (*it)->AtBoundary( flag_max );
-        else if ( flag_min <= EDGE1 and flag_min > INTERNAL ) (*it)->AtBoundary( flag_min );
-        // if a corner is contained that corner flag is choosen
-        else if ( (*eflags.begin()) <= CNR1 and
-                  (*eflags.begin()) >= CNR8 ) (*it)->AtBoundary( (*eflags.begin()) );
-        // if the first integer entry in the set is an edge, that flag is chosen
-        else if ( (*eflags.begin()) >= EDGE1 and
-                  (*eflags.begin()) <  INTERNAL ) (*it)->AtBoundary( (*eflags.begin()) );
-        else if ( (*eflags.begin()) == IRREGULAR ) (*it)->AtBoundary( IRREGULAR );
-        else {
-          cerr << "\n\n\nflagElementUsingNodalAtBoundaryFlags: unable to determine box boundary flag for element:\n";
-          for ( auto boundary : eflags )
-            cout << parseBoundary( boundary ) << " ";
-          cout << endl;
-          (*it)->Out();
-        }
+
+
+
+
+
+
+/**
+       Establishes the BOX_BOUNDARY flagging for a 3D model consisting out of hexahedral elements. 
+       
+       @note this method is quick.
+*/ 
+void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
+ { 
+    Region<3U>&    modeldomain(model.Region("Model"));
+    vector<size_t> fnids;
+    
+    for ( vector<Element<3U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+      {
+         // current version only works for linear hexahedra
+         assert( (*it)->Nodes() <= 9 );
+
+         if ( !isHexahedral( (*it)->FE_Type() ) )
+           throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for quadrilateral elements");
+           
+         // DEFAULT (not at any boundary)
+         for ( size_t i=0; i<(*it)->Nodes(); ++i )
+           (*it)->N(i)->AtBoundary( NOT );
+           
+         // BOTTOM 
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->FE()->NodesOfFace( 0U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( BOTTOM );
+              continue;
+           }
+         // RIGHT 
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->FE()->NodesOfFace( 2U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( RIGHT );
+              continue;
+           }
+         // TOP 
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(3) != nullptr ) {
+              (*it)->FE()->NodesOfFace( 5U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( TOP );
+              continue;
+           }
+         // LEFT 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->FE()->NodesOfFace( 4U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( LEFT );
+              continue;
+           }
+         // FRONT 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->FE()->NodesOfFace( 1U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( FRONT );
+              continue;
+           }
+         // BACK 
+         if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
+              (*it)->FE()->NodesOfFace( 3U, fnids );
+              for ( size_t j=0U; j<fnids.size(); ++j )
+                (*it)->N( fnids[j] )->AtBoundary( BACK );
+              continue;
+           }
+         // BACK CORNERS 
+         // CNR1
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->N(3)->AtBoundary( CNR1 );
+              // sides
+              (*it)->N(1)->AtBoundary( BOTTOM );
+              (*it)->N(2)->AtBoundary( BACK );
+              (*it)->N(4)->AtBoundary( LEFT );
+              // edges
+              (*it)->N(0)->AtBoundary( EDGE5 );
+              (*it)->N(2)->AtBoundary( EDGE1 );
+              (*it)->N(7)->AtBoundary( EDGE4 );
+              continue;
+           } 
+         // CNR2
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr ) {
+              (*it)->N(2)->AtBoundary( CNR2 );
+              // sides
+              (*it)->N(0)->AtBoundary( BOTTOM );
+              (*it)->N(5)->AtBoundary( RIGHT );
+              (*it)->N(7)->AtBoundary( BACK );
+              // edges
+              (*it)->N(1)->AtBoundary( EDGE6 );
+              (*it)->N(3)->AtBoundary( EDGE1 );
+              (*it)->N(6)->AtBoundary( EDGE2 );
+              continue;
+           } 
+         // CNR3
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr ) {
+              (*it)->N(6)->AtBoundary( CNR3 );
+              // sides
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(3)->AtBoundary( BACK );
+              (*it)->N(4)->AtBoundary( TOP );
+              // edges
+              (*it)->N(2)->AtBoundary( EDGE2 );
+              (*it)->N(5)->AtBoundary( EDGE7 );
+              (*it)->N(7)->AtBoundary( EDGE3 );
+              continue;
+           } 
+         // CNR4
+         if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(3) == nullptr ) {
+              (*it)->N(7)->AtBoundary( CNR4 );
+              // sides
+              (*it)->N(2)->AtBoundary( BACK );
+              (*it)->N(0)->AtBoundary( LEFT );
+              (*it)->N(5)->AtBoundary( TOP );
+              // edges
+              (*it)->N(3)->AtBoundary( EDGE4 );
+              (*it)->N(6)->AtBoundary( EDGE3 );
+              (*it)->N(4)->AtBoundary( EDGE8 );
+              continue;
+           } 
+         // FRONT CORNERS 
+         // CNR5
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(4) == nullptr ) {
+              (*it)->N(0)->AtBoundary( CNR5 );
+              // sides
+              (*it)->N(2)->AtBoundary( BOTTOM );
+              (*it)->N(5)->AtBoundary( FRONT );
+              (*it)->N(7)->AtBoundary( LEFT );
+              // edges
+              (*it)->N(1)->AtBoundary( EDGE9 );
+              (*it)->N(3)->AtBoundary( EDGE5 );
+              (*it)->N(4)->AtBoundary( EDGE12 );
+              continue;
+           } 
+         // CNR6
+         if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr ) {
+              (*it)->N(1)->AtBoundary( CNR6 );
+              // sides
+              (*it)->N(3)->AtBoundary( BOTTOM );
+              (*it)->N(6)->AtBoundary( RIGHT );
+              (*it)->N(4)->AtBoundary( FRONT );
+              // edges
+              (*it)->N(0)->AtBoundary( EDGE9 );
+              (*it)->N(2)->AtBoundary( EDGE6 );
+              (*it)->N(5)->AtBoundary( EDGE10 );
+              continue;
+           } 
+         // CNR7
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(5) == nullptr ) {
+              (*it)->N(5)->AtBoundary( CNR7 );
+              // sides
+              (*it)->N(1)->AtBoundary( RIGHT );
+              (*it)->N(0)->AtBoundary( FRONT );
+              (*it)->N(7)->AtBoundary( TOP );
+              // edges
+              (*it)->N(1)->AtBoundary( EDGE10 );
+              (*it)->N(6)->AtBoundary( EDGE7 );
+              (*it)->N(4)->AtBoundary( EDGE11 );
+              continue;
+           } 
+         // CNR8
+         if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(4) == nullptr && (*it)->Neighbor(5) == nullptr ) {
+              (*it)->N(4)->AtBoundary( CNR8 );
+              // sides
+              (*it)->N(1)->AtBoundary( FRONT );
+              (*it)->N(3)->AtBoundary( LEFT );
+              (*it)->N(6)->AtBoundary( TOP );
+              // edges
+              (*it)->N(0)->AtBoundary( EDGE12 );
+              (*it)->N(5)->AtBoundary( EDGE11 );
+              (*it)->N(7)->AtBoundary( EDGE8 );
+              continue;
+           } 
       }
-    }
-    ++it;
+      
+    // testing nodes and elements
+    printBoxBoundaryFlags( model ); 
+       
+ } // end recreateBoxBoundaryFlagsForHexahedralModel
+
+
+
+
+/// helper function for atBoundary() below (substitute for C++20 contains)
+static bool isIn( const set<BOX_BOUNDARY>& bflags, initializer_list<BOX_BOUNDARY> flags ) {
+     for ( auto it : flags )
+       if ( bflags.find(it) != bflags.end() ) return true;
+     return false;
   }
 
-} // end flagElementUsingNodalAtBoundaryFlags
+
+/**
+    Infers from the node flags and the boundary face (local) number, which boundary the cell lies on;
+    returns INTERNAL if all flags are not but the cell has no neighbor
+    
+    @attention only cells which have a face on the BOX_BOUNDARY are considered boundary elements
+    
+    @attention lower dimensional cells may be flagged as INTERNAL boundary if they have no neighbor
+    but occur inside of the model.
+    
+      @author SKM
+      @date 14/10/21
+      @test OK
+*/
+template<size_t dim, template<size_t> class CELL>
+BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
+ {
+    assert( eptr != nullptr );
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( eptr->Neighbor(b_face) != nullptr ) {
+//         csmp_error.notice( ERROR, "atBoundary:", "element face is not a boundary face.");
+         return NOT;
+      }
+    if ( b_face >= eptr->Neighbors() ) {
+         csmp_error.notice( ERROR, "atBoundary:", "element face number is out of range:", to_string(b_face) );
+         return NOT;
+      }
+
+    // storing the box-boundary flags of the boundary face in a set
+    set<BOX_BOUNDARY>  eflags;
+    vector<size_t>     fnids;
+    eptr->FE()->NodesOfFace( b_face, fnids );
+    for ( size_t j{0}; j<fnids.size(); ++j )
+      if ( eptr->N( fnids[j] )->AtBoundary() != NOT )
+        eflags.insert( eptr->N( fnids[j] )->AtBoundary() );
+      
+    // even if all flags=NOT, the face lies on an internal boundary
+    if ( eflags.empty() ) return INTERNAL;
+
+    // Case 1: one-dimensional model
+    // -----------------------------
+    if constexpr( dim == 1 ) {
+         if ( eflags.size() == 1U ) return (*eflags.begin());
+      }
+    
+    // Case 2: two-dimensional model
+    // -----------------------------
+    if constexpr ( dim == 2 ) {
+         // elements are considered boundary elements only if they have a face on the model boundary
+         if ( eflags.size() == 1U ) {
+              return (*eflags.begin());
+           }
+         // if there are two different flags
+         else if ( eflags.size() == 2U ) {
+              // if there is a corner involved, the other flag is chosen because an element must not span a corner
+              // and its boundary face will lie on one of the sides of the model
+              auto flag_it = eflags.begin();
+              const BOX_BOUNDARY flag1 = (*flag_it);
+              flag_it++;
+              const BOX_BOUNDARY flag2 = (*flag_it);
+              if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
+              if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
+              // there should be no other cases because the 2D model has no edges
+              cerr <<"\n\tmissed case: ";
+              for ( auto boundary : eflags )
+                cerr << parseBoundary( boundary ) << " ";
+              csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
+              return flag1;
+           }
+         // in 2D, a face can only have 2D nodes unless this is a higher order element
+         else if ( eflags.size() >= 3U ) {
+              // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
+              if ( eptr->FE()->OrderOfShapeFunctions() == 1 ) {
+                   cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
+                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                     cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+                   cerr << endl;
+                   csmp_error.notice( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
+                }
+              else {
+                   // only the corner nodes are considered
+                   BOX_BOUNDARY flag1 = eptr->N( fnids[0] )->AtBoundary();
+                   BOX_BOUNDARY flag2 = eptr->N( fnids[1] )->AtBoundary();
+                   if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
+                   if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
+                }
+           }
+          return MULTIPLE;
+            
+      } // if dim=2
 
 
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<1U>( typename std::deque<csmp::Element<1U>*>::iterator, typename std::deque<csmp::Element<1U>*>::iterator );
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<2U>( typename std::deque<csmp::Element<2U>*>::iterator, typename std::deque<csmp::Element<2U>*>::iterator );
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<3U>( typename std::deque<csmp::Element<3U>*>::iterator, typename std::deque<csmp::Element<3U>*>::iterator );
+    // Case 3: three-dimensional model
+    // -------------------------------
+    if constexpr ( dim == 3U )
+      {
+         // assumes that all nodes of the boundary face have the same flag
+         if ( eflags.size() == 1U ) return (*eflags.begin());
+         
+         // only for surface elements two different flags if they belong to the same face indicate a boundary position
+         if ( eflags.size() >= 2U ) {
+              // if a surface element face is located on a model edge
+              if ( eptr->FE()->IsSurfaceElement() ) {
+                   auto flag_it = eflags.begin();
+                   const BOX_BOUNDARY flag1 = (*flag_it);
+                   flag_it++;
+                   const BOX_BOUNDARY flag2 = (*flag_it);
+                   // if there is a corner involved, the other flag is chosen because an element face cannot span a corner
+                   if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
+                   if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
+                   return whichBoundary( flag1, flag2 );
+                }
+              // only the sides of the model are an option
+              else if ( eptr->FE()->IsVolumeElement() ) {
+                   for ( auto bit : eflags )
+                     if ( isSide(bit) )
+                      return bit;
+                }
+              else {
+                   csmp_error.notice( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
+                }
 
+           }
+         
+      } // end dim=3
+
+   return INTERNAL;
+    
+ } // end atBoundary
+
+template BOX_BOUNDARY atBoundary( const Element<1U>* const, size_t );
+template BOX_BOUNDARY atBoundary( const Element<2U>* const, size_t  );
+template BOX_BOUNDARY atBoundary( const Element<3U>* const, size_t  );
+
+// TESTING
+/*
+if ( eptr->FE()->IsLineElement() ) {
+     cerr <<"\nelement "<< eptr->Idx() <<": "<< parseFiniteElementType(eptr->FE_Type()) <<", nodes:\n";
+     for ( size_t i{0}; i<eptr->Nodes(); ++i )
+       cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+     cerr << endl;
+  }
+*/
+
+
+
+/// returns whether the cell is at the model boundary; this is so if all nodes of a line or surface element are flagged boundary or one face of a volume element
+template<size_t dim, template<size_t> class CELL>
+bool atBoundary( const CELL<dim>* const cptr )
+ {
+     // for surface and line elements all nodes must be at the boundary
+     if ( !cptr->IsEquidimensional() ) {
+          const size_t n_nodes{ cptr->Nodes() };
+          for( size_t i{0}; i<n_nodes; ++i )
+            if ( cptr->N(i)->AtBoundary() == NOT )
+              return false;
+       }
+     else { // equidimensional elements
+          const size_t n_nbors{ cptr->Neighbors() };
+          for ( size_t i{0}; i<n_nbors; ++i )
+            if ( cptr->Neighbor(i) == nullptr )
+              return true;
+          return false;
+       }
+       
+    return true;
+       
+ } // end atBoundary(bool)
+
+template bool atBoundary( const Element<1U>* const );
+template bool atBoundary( const Element<2U>* const );
+template bool atBoundary( const Element<3U>* const );
+
+
+
+
+/* FAILS AT TIMES
+
+template<size_t dim, template<size_t> class CELL>
+BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
+ {
+    assert( eptr != nullptr );
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    // nodal bflags are stored in a set
+    set<BOX_BOUNDARY>  eflags;
+    const size_t nodes( eptr->Nodes() );
+    for ( size_t i = 0U; i<nodes; ++i ) {
+         assert( eptr->N(i) != nullptr );
+         if ( eptr->N(i)->AtBoundary() != NOT )
+           eflags.insert( eptr->N( i )->AtBoundary() );
+      }
+      
+    // even if all flags=NOT, the element may lie on an internal boundary
+    // in which case it is missing on of its neighbors
+    if ( eflags.empty() ) {
+         size_t n_nbors{eptr->Neighbors()};
+         for ( size_t i{0}; i<n_nbors; ++i )
+           if ( eptr->Neighbor(i) == nullptr )
+             return INTERNAL;
+         return NOT;
+      }
+
+    // if there were boundary flags
+    // ----------------------------
+    
+    // Case 1: one-dimensional model
+    // -----------------------------
+    if constexpr( dim == 1 ) {
+         if ( eflags.size() == 1U ) {
+              if ( eptr->N(0)->AtBoundary() != NOT && eptr->N(1)->AtBoundary() != NOT )
+                csmp_error.notice( ERROR, "atBoundary(1D):", "1D line element has the same 2 bflags.");
+              return (*eflags.begin());
+           }
+         // there may only be 2 different flags when this is a single element model
+         csmp_error.notice( ERROR, "atBoundary(1D):", "1D line element has the two different 2 bflags.");
+      }
+    
+    // Case 2: two-dimensional model
+    // -----------------------------
+    if constexpr ( dim == 2 ) {
+         // elements are considered boundary elements only if they have a face on the model boundary
+         if ( eflags.size() == 1U ) {
+              if ( eptr->FE()->IsLineElement() ) return (*eflags.begin());
+              else {
+                   // checking that there is indeed a face on the model boundary
+                   const size_t n_nbors{eptr->Neighbors()};
+                   for ( size_t i{0}; i<n_nbors; ++i )
+                     if ( eptr->Neighbor(i) == nullptr )
+                       return (*eflags.begin());
+                }
+           }
+         // if there are two different flags
+         if ( eflags.size() == 2U ) {
+              // if there is a corner involved, the other flag is chosen because an element must not span a corner
+              // and its boundary face will lie on one of the sides of the model
+              auto flag_it = eflags.begin();
+              const BOX_BOUNDARY flag1 = (*flag_it);
+              flag_it++;
+              const BOX_BOUNDARY flag2 = (*flag_it);
+              if ( isCorner(flag1) ) return flag2;
+              if ( isCorner(flag2) ) return flag1;
+              // there should be no other cases because the 2D model has no edges
+              cerr <<"\n\tmissed case: ";
+              for ( auto boundary : eflags )
+                cerr << parseBoundary( boundary ) << " ";
+              csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
+              return flag1;
+           }
+         // corner cases
+         else if ( eflags.size() == 3U ) {
+              // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
+              if ( !isQuadrilateral( eptr->FE_Type() ) ) {
+                   cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
+                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                     cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+                   cerr << endl;
+                   csmp_error.notice( ERROR, "atBoundary(2D):",
+                    "triangular element with two faces at boundary should be removed because it may cause problems when applying boundary conditions.");
+                }
+              else {
+                   // from C++20 onwards use eflags.contains( BOTTOM ) );
+                   if ( isIn( eflags, {BOTTOM,LEFT} ) ) return CNR1;
+                   if ( isIn( eflags, {BOTTOM,RIGHT} ) ) return CNR2;
+                   if ( isIn( eflags, {TOP,RIGHT} ) ) return CNR3;
+                   if ( isIn( eflags, {LEFT,TOP} ) ) return CNR4;
+                }
+           }
+         else {
+                   cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
+                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                     cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+                   cerr << endl;
+                   csmp_error.notice( ERROR, "atBoundary(2D):", "all nodes of 2D triangular element appear to be located on boundary.");
+              }
+          return MULTIPLE;
+            
+      } // if dim=2
+
+
+    // Case 3: three-dimensional model
+    // -------------------------------
+    if constexpr ( dim == 3U )
+      {
+         // only line and surface elements may be at boundary if there is only one boundary flag
+         if ( eflags.size() == 1U && !eptr->IsVolumeElement() )
+           return (*eflags.begin());
+         
+         // only for surface elements two different flags if they belong to the same face indicate a boundary position
+         if ( eflags.size() == 2U ) {
+              if ( eptr->FE()->IsSurfaceElement() ) {
+                   // if there is a corner involved, the other flag is chosen because an element must not span a corner
+                   // and its boundary face will lie on one of the sides of the model
+                   auto flag_it = eflags.begin();
+                   const BOX_BOUNDARY flag1 = (*flag_it);
+                   flag_it++;
+                   const BOX_BOUNDARY flag2 = (*flag_it);
+                   if ( isCorner(flag1) ) return flag2;
+                   if ( isCorner(flag2) ) return flag1;
+                   // the element face must be located on a model edge
+                   return whichBoundary( flag1, flag2 );
+                }
+              // corner quadrilaterals that should not exist unless the element is a non simplex element
+              if ( !isQuadrilateral( eptr->FE_Type() ) ) {
+                   cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
+                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                     cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
+                   cerr << endl;
+                   csmp_error.notice( ERROR, "atBoundary(3D):", "simplex element with two faces at boundary.");
+                }
+              else {
+                   if ( isIn( eflags, {BOTTOM,LEFT} ) ) return CNR1;
+                   if ( isIn( eflags, {BOTTOM,RIGHT} ) ) return CNR2;
+                   if ( isIn( eflags, {TOP,RIGHT} ) ) return CNR3;
+                   if ( isIn( eflags, {LEFT,TOP} ) ) return CNR4;
+                }
+           }
+         // three flags may imply that a tetrahedral, pyramid, or prism element is located at boundary
+         else if ( eflags.size() == 3U ) {
+            const size_t n_nbors{eptr->Neighbors()};
+            for ( size_t i{0}; i<n_nbors; ++i )
+              if ( eptr->Neighbor(i) == nullptr )
+                if ( isTriangular( eptr->FE()->ElementTypeOfFace(i) ) )
+                  {
+                     // diagnosing which side of the model this boundary face with 3 different flags is on
+                     // (one of the flags must denote a side)
+                     if ( isIn( eflags, {BOTTOM} ) ) return BOTTOM;
+                     else if ( isIn( eflags, {RIGHT} ) ) return RIGHT;
+                     else if ( isIn( eflags, {TOP} ) ) return TOP;
+                     else if ( isIn( eflags, {LEFT} ) ) return LEFT;
+                     else if ( isIn( eflags, {BACK} ) ) return BACK;
+                     else if ( isIn( eflags, {FRONT} ) ) return FRONT;
+                     else if ( isIn( eflags, {IRREGULAR} ) ) return IRREGULAR;
+                     else {
+                          // something went wrong
+                          cerr <<"\n\n\ttriangular element face: "<< i <<", boundary flags:\n\t\t\t";
+                          vector<size_t> fnids;
+                          eptr->FE()->NodesOfFace( i, fnids );
+                          for ( size_t j{0}; j<fnids.size(); ++j )
+                            cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
+                          cerr << endl;
+                          csmp_error.notice( ERROR, "atBoundary(3D):", "could not resolve placement of triangular boundary face.");
+                       }
+                  }
+           }
+         // 4 flags may imply that a pyramid, prism or hexahedral element is located at boundary
+         else if ( eflags.size() == 4U ) {
+            const size_t n_nbors{eptr->Neighbors()};
+            for ( size_t i{0}; i<n_nbors; ++i )
+              if ( eptr->Neighbor(i) == nullptr )
+                if ( isQuadrilateral( eptr->FE()->ElementTypeOfFace(i) ) )
+                  {
+                     // diagnosing which side of the model this boundary face with 3 different flags is on
+                     // (one of the flags must denote a side)
+                     if ( isIn( eflags, {BOTTOM} ) ) return BOTTOM;
+                     else if ( isIn( eflags, {RIGHT} ) ) return RIGHT;
+                     else if ( isIn( eflags, {TOP} ) ) return TOP;
+                     else if ( isIn( eflags, {LEFT} ) ) return LEFT;
+                     else if ( isIn( eflags, {BACK} ) ) return BACK;
+                     else if ( isIn( eflags, {FRONT} ) ) return FRONT;
+                     else if ( isIn( eflags, {IRREGULAR} ) ) return IRREGULAR;
+                     else {
+                          // something went wrong
+                          cerr <<"\n\n\tquadrilateral element face: "<< i <<", boundary flags:\n\t\t\t";
+                          vector<size_t> fnids;
+                          eptr->FE()->NodesOfFace( i, fnids );
+                          for ( size_t j{0}; j<fnids.size(); ++j )
+                            cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
+                          cerr << endl;
+                          csmp_error.notice( ERROR, "atBoundary(3D):", "could not resolve placement of quadrilateral boundary face.");
+                       }
+                  }
+           }
+         // more than 4 flags
+         else {
+              // edge and corner cases
+              auto sit = eflags.begin();
+              const BOX_BOUNDARY flag1 = (*sit); sit++;
+              const BOX_BOUNDARY flag2 = (*sit); sit++;
+              const BOX_BOUNDARY flag3 = (*sit);
+              // corner combinations
+              // CNR1 (order from most negative integer to highest value)
+              if ( flag1 == BACK and flag2 == BOTTOM  and flag3 == LEFT ) return CNR1;
+              // CNR2
+              if ( flag1 == BACK and flag2 == BOTTOM  and flag3 == RIGHT ) return CNR2;
+              // CNR3
+              if ( flag1 == BACK and flag2 == TOP     and flag3 == RIGHT ) return CNR3;
+              // CNR4
+              if ( flag1 == BACK and flag2 == TOP     and flag3 == LEFT ) return CNR4;
+              // CNR5
+              if ( flag1 == FRONT and flag2 == BOTTOM and flag3 == LEFT ) return CNR5;
+              // CNR6
+              if ( flag1 == FRONT and flag2 == BOTTOM and flag3 == RIGHT ) return CNR6;
+              // CNR7
+              if ( flag1 == FRONT and flag2 == TOP    and flag3 == RIGHT ) return CNR7;
+              // CRN8
+              if ( flag1 == FRONT and flag2 == TOP    and flag3 == LEFT ) return CNR8;
+              
+              // erase basic boundary options to focus on edges
+              eflags.erase( LEFT );
+              eflags.erase( RIGHT );
+              eflags.erase( BOTTOM );
+              eflags.erase( TOP );
+              eflags.erase( FRONT );
+              eflags.erase( BACK );
+
+              if ( !eflags.empty() )
+                {
+                  const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
+                  const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
+                  // if a corner is contained that corner flag is choosen
+                  if ( flag_max <= CNR1 and flag_max >= CNR8 ) return flag_max;
+                  if ( flag_min <= CNR1 and flag_min >= CNR8 ) return flag_min;
+                  // if the first integer entry in the set is an edge, that flag is chosen
+                  if ( flag_max <= EDGE1 and flag_max > INTERNAL ) return flag_max;
+                  if ( flag_min <= EDGE1 and flag_min > INTERNAL ) return flag_min;
+                  // if a corner is contained that corner flag is choosen
+                  if ( (*eflags.begin()) <= CNR1 and
+                       (*eflags.begin()) >= CNR8 ) return (*eflags.begin());
+                  // if the first integer entry in the set is an edge, that flag is chosen
+                  if ( (*eflags.begin()) >= EDGE1 and
+                       (*eflags.begin()) <  INTERNAL ) return (*eflags.begin());
+                  if ( (*eflags.begin()) == IRREGULAR ) return IRREGULAR;
+                  // no success
+                  cerr << "\n\n\natBoundary(3D): unable to determine box boundary flag for element: ";
+                  cerr << eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<") with the boundary flags:\n\t\t\t";
+                  for ( auto boundary : eflags )
+                    cerr << parseBoundary( boundary ) << " ";
+                  cerr << endl;
+                }
+              csmp_error.notice( ERROR, "atBoundary(3D):", "implausible case where more than 4 element nodes are located on model boundary.");
+           }
+         
+        return MULTIPLE;
+         
+      } // end dim=3
+
+   return MULTIPLE;
+    
+ } // end atBoundary(element pointer)
+
+template BOX_BOUNDARY atBoundary( const Element<1U>* const );
+template BOX_BOUNDARY atBoundary( const Element<2U>* const );
+template BOX_BOUNDARY atBoundary( const Element<3U>* const );
+*/
 
 
 
@@ -1366,7 +1835,7 @@ all nodes are considered.
 */
 bool isStrictlyBoxShaped( const Model<2U>& model )
 {
-  SmallSet<BOX_BOUNDARY> flags2d, flags_of_model;
+  set<BOX_BOUNDARY> flags2d, flags_of_model;
   flags2d.insert( LEFT );
   flags2d.insert( RIGHT );
   flags2d.insert( TOP );
@@ -1397,12 +1866,16 @@ bool isStrictlyBoxShaped( const Model<2U>& model )
 } // end isStrictlyBoxShaped
 
 
+
+
+
+
 /**
 tests (only) if all boundary identifiers are there
 */
 bool isStrictlyBoxShaped( const Model<3U>& model )
 {
-  SmallSet<BOX_BOUNDARY> flags3d, flags_of_model;
+  set<BOX_BOUNDARY> flags3d, flags_of_model;
   flags3d.insert( LEFT );
   flags3d.insert( RIGHT );
   flags3d.insert( TOP );
@@ -1457,7 +1930,7 @@ returns true if the model contains all the side boundary identifiers of the box
 */
 bool hasAllSideBoundaries( const Model<3U>& model )
 {
-  SmallSet<BOX_BOUNDARY> flags3d, flags_of_model;
+  set<BOX_BOUNDARY> flags3d, flags_of_model;
   flags3d.insert( LEFT );
   flags3d.insert( RIGHT );
   flags3d.insert( TOP );
@@ -1484,10 +1957,13 @@ bool hasAllSideBoundaries( const Model<3U>& model )
   return false;
 }
 
+
+
+
 /// 2D side boudaries only
 bool hasAllSideBoundaries( const Model<2U>& model )
 {
-  SmallSet<BOX_BOUNDARY> flags3d, flags_of_model;
+  set<BOX_BOUNDARY> flags3d, flags_of_model;
   flags3d.insert( LEFT );
   flags3d.insert( RIGHT );
   flags3d.insert( TOP );
@@ -1530,10 +2006,22 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
   Region<dim>&  mregion( model.Region( "Model" ) );
 
   for ( auto nit = mregion.NodesBegin(); nit != mregion.NodesEnd(); nit++ )
-    (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double64>((*nit)->AtBoundary()) ) );
+    (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double>((*nit)->AtBoundary()) ) );
 
-  for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ )
-    (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double64>((*eit)->AtBoundary()) ) );
+  for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ ) {
+       size_t face = UNSPECIFIED;
+       bool at_boundary{false};
+       for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+         if ( (*eit)->Neighbor(i) == nullptr ) {
+              face        = i;
+              at_boundary = true;
+              break;
+           }
+       if ( at_boundary )
+         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double>(atBoundary(*eit,face)) ) );
+       else
+         (*eit)->Store( eprop_key, makeScalar( ANY, static_cast<double>(NOT) ) );
+    }
 
 } // end boxFlagsToVariable
 
@@ -1542,9 +2030,11 @@ template void boxFlagsToVariable( Model<3>&, const char*, const char* );
 
 
 
+
+
 template<size_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
-                               const char* node_property, double64& bmin, double64& bmax )
+                               const char* node_property, double& bmin, double& bmax )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1559,31 +2049,183 @@ void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
   const csmp::Region<dim>& sgref = sg.Region( "Model" );
 
   // measuring the property ranges
-  for ( typename vector<Node<dim>*>::const_iterator
-        nit = sgref.PerimeterNodesBegin(); nit != sgref.NodesEnd(); nit++ )
+  for ( auto nit = sgref.PerimeterNodesBegin(); nit != sgref.NodesEnd(); nit++ )
     if ( (*nit)->AtBoundary() == boundary )
-    {
-      if ( first_value ) {
-        bmin = bmax = (*nit)->Read( prop_key );
-        first_value = false;
+      {
+        if ( first_value ) {
+          bmin = bmax = (*nit)->Read( prop_key );
+          first_value = false;
+        }
+        else {
+          bmin = std::min( bmin, (*nit)->Read( prop_key ) );
+          bmax = std::max( bmax, (*nit)->Read( prop_key ) );
+        }
+        if ( verbose )
+          cout << "\nboundary node " << (*nit)->Idx() << ": " << (*nit)->x() << " " << (*nit)->y() << " " << (*nit)->z();
       }
-      else {
-        bmin = std::min( bmin, (*nit)->Read( prop_key ) );
-        bmax = std::max( bmax, (*nit)->Read( prop_key ) );
-      }
-      if ( verbose )
-        cout << "\nboundary node " << (*nit)->Idx() << ": " << (*nit)->x() << " " << (*nit)->y() << " " << (*nit)->z();
-    }
 
   if ( verbose ) {
-    cout << "\nFiniteVolumeTransport::BoundaryPropertyRanges: of physical variable '" << node_property << "':";
-    cout << "\nrange of '" << node_property << "' at boundary:  " << bmin << " to " << bmax << endl;
-  }
+      cout << "\nFiniteVolumeTransport::BoundaryPropertyRanges: of physical variable '" << node_property << "':";
+      cout << "\nrange of '" << node_property << "' at boundary:  " << bmin << " to " << bmax << endl;
+    }
 
 } // end BoundaryPropertyRanges
 
-template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double64&, double64& );
-template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double64&, double64& );
-template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double64&, double64& );
+
+
+
+BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 )
+{
+  // dealing with the case where the 2 flags are the same so that this is not an EDGE
+  if (side1 == side2) return side1;
+
+  if (side1 == LEFT and side2 == BOTTOM) return EDGE1;
+  if (side1 == LEFT and side2 == RIGHT)  return EDGE2;
+  if (side1 == LEFT and side2 == TOP)    return EDGE3;
+  if (side1 == LEFT and side2 == FRONT)  return EDGE4;
+
+  if (side1 == BOTTOM and side2 == FRONT) return EDGE5;
+  if (side1 == BOTTOM and side2 == LEFT) return EDGE1;
+  if (side1 == BOTTOM and side2 == BACK) return EDGE6;
+  if (side1 == BOTTOM and side2 == TOP) return EDGE7;
+
+  if (side1 == TOP and side2 == FRONT) return EDGE8;
+  if (side1 == TOP and side2 == LEFT) return EDGE3;
+  if (side1 == TOP and side2 == BACK) return EDGE7;
+  if (side1 == TOP and side2 == RIGHT) return EDGE12;
+
+  if (side1 == FRONT and side2 == BOTTOM) return EDGE5;
+  if (side1 == FRONT and side2 == LEFT) return EDGE4;
+  if (side1 == FRONT and side2 == TOP) return EDGE8;
+  if (side1 == FRONT and side2 == RIGHT) return EDGE12;
+
+  if (side1 == RIGHT and side2 == BOTTOM) return EDGE9;
+  if (side1 == RIGHT and side2 == BACK) return EDGE10;
+  if (side1 == RIGHT and side2 == TOP) return EDGE11;
+  if (side1 == RIGHT and side2 == FRONT) return EDGE12;
+  return NOT;
+}
+
+
+BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY side3 )
+{
+  set<BOX_BOUNDARY> sides({ side1,side2,side3 });
+  auto s3 = (*sides.begin());
+  auto s2 = (*(next(sides.begin(), 1)));
+  auto s1 = (*sides.rbegin());
+
+  if (sides.empty()) return NOT;
+
+  if (sides.size() == 1U) return (*sides.begin());
+
+  // dealing with duplicates (there will only be 1 or 2 entries so this can only be a corner if the entries are edges)
+  if (sides.size() == 2U) {
+    // 2 edges EDGE12, EDGE11... EDGE1
+    if (side1 == EDGE12 and side2 == EDGE11) return CNR8;
+    if (side1 == EDGE12 and side2 == EDGE9) return CNR5;
+
+    if (side1 == EDGE11 and side2 == EDGE10) return CNR7;
+
+    if (side1 == EDGE10 and side2 == EDGE9) return CNR6;
+    if (side1 == EDGE10 and side2 == EDGE6) return CNR6;
+
+    if (side1 == EDGE9 and side2 == EDGE6) return CNR6;
+    if (side1 == EDGE9 and side2 == EDGE5) return CNR5;
+
+    if (side1 == EDGE8 and side2 == EDGE4) return CNR4;
+    if (side1 == EDGE8 and side2 == EDGE3) return CNR4;
+
+    if (side1 == EDGE7 and side2 == EDGE3) return CNR3;
+    if (side1 == EDGE7 and side2 == EDGE2) return CNR3;
+
+    if (side1 == EDGE6 and side2 == EDGE2) return CNR2;
+    if (side1 == EDGE6 and side2 == EDGE1) return CNR2;
+
+    if (side1 == EDGE5 and side2 == EDGE4) return CNR1;
+    if (side1 == EDGE5 and side2 == EDGE1) return CNR1;
+
+    if (side1 == EDGE4 and side2 == EDGE3) return CNR4;
+    if (side1 == EDGE4 and side2 == EDGE1) return CNR1;
+
+    if (side1 == EDGE3 and side2 == EDGE2) return CNR3;
+
+    if (side1 == EDGE2 and side2 == EDGE1) return CNR2;
+
+    // not a corner
+    if (side1 == BACK and side2 == TOP) return EDGE7;
+    if (side1 == BACK and side2 == BOTTOM) return EDGE6;
+    if (side1 == BACK and side2 == RIGHT) return EDGE10;
+    if (side1 == BACK and side2 == LEFT) return EDGE2;
+
+    if (side1 == FRONT and side2 == TOP) return EDGE8;
+    if (side1 == FRONT and side2 == BOTTOM) return EDGE5;
+    if (side1 == FRONT and side2 == RIGHT) return EDGE12;
+    if (side1 == FRONT and side2 == LEFT) return EDGE4;
+
+    if (side1 == TOP and side2 == RIGHT) return EDGE11;
+    if (side1 == TOP and side2 == LEFT) return EDGE3;
+
+    if (side1 == BOTTOM and side2 == LEFT) return EDGE1;
+    if (side1 == BOTTOM and side2 == RIGHT) return EDGE9;
+  }
+
+  // obeying increasing value constraint: BACK, FRONT, TOP, BOTTOM, RIGHT, LEFT
+  if (s1 == FRONT and s2 == BOTTOM and s3 == LEFT) return CNR1;
+  if (s1 == BACK  and s2 == BOTTOM and s3 == LEFT) return CNR2;
+  if (s1 == BACK  and s2 == TOP    and s3 == BOTTOM) return CNR3;
+  if (s1 == FRONT and s2 == TOP    and s3 == LEFT) return CNR4;
+
+  if (s1 == FRONT and s2 == BOTTOM and s3 == RIGHT) return CNR5;
+  if (s1 == BACK  and s2 == BOTTOM and s3 == RIGHT) return CNR6;
+  if (s1 == BACK  and s2 == TOP    and s3 == RIGHT) return CNR7;
+  if (s1 == FRONT and s2 == TOP    and s3 == RIGHT) return CNR5;
+
+  return NOT;
+}
+
+
+
+/// return which boundary the edge or lower-dim face with the two end-node flags is on
+BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 )
+ {
+    if ( node_flag1 == node_flag2 ) return node_flag1;
+    // sides
+    if ( isLEFT(node_flag1)   && isLEFT(node_flag2) )   return LEFT;
+    if ( isRIGHT(node_flag1)  && isRIGHT(node_flag2) )  return RIGHT;
+    if ( isBOTTOM(node_flag1) && isBOTTOM(node_flag2) ) return BOTTOM;
+    if ( isTOP(node_flag1)    && isTOP(node_flag2) )    return TOP;
+    if ( isFRONT(node_flag1)  && isFRONT(node_flag2) )  return FRONT;
+    if ( isBACK(node_flag1)   && isBACK(node_flag2) )   return BACK;
+    // edges
+    if ( node_flag1 == EDGE1 || node_flag2 == EDGE1 ) return EDGE1;
+    if ( node_flag1 == EDGE2 || node_flag2 == EDGE2 ) return EDGE2;
+    if ( node_flag1 == EDGE3 || node_flag2 == EDGE3 ) return EDGE3;
+    if ( node_flag1 == EDGE4 || node_flag2 == EDGE4 ) return EDGE4;
+    if ( node_flag1 == EDGE5 || node_flag2 == EDGE5 ) return EDGE5;
+    if ( node_flag1 == EDGE6 || node_flag2 == EDGE6 ) return EDGE6;
+    if ( node_flag1 == EDGE7 || node_flag2 == EDGE7 ) return EDGE7;
+    if ( node_flag1 == EDGE8 || node_flag2 == EDGE8 ) return EDGE8;
+    if ( node_flag1 == EDGE9 || node_flag2 == EDGE9 ) return EDGE9;
+    if ( node_flag1 == EDGE10 || node_flag2 == EDGE10 ) return EDGE10;
+    if ( node_flag1 == EDGE11 || node_flag2 == EDGE11 ) return EDGE11;
+    if ( node_flag1 == EDGE12 || node_flag2 == EDGE12 ) return EDGE12;
+    
+    return MULTIPLE;
+ 
+ } // end whichBoundary
+
+
+
+
+
+
+
+template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double&, double& );
+template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double&, double& );
+template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double&, double& );
+
+
+
+
 
 } // end namespace csmp

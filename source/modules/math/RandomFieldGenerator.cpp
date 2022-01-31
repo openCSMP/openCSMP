@@ -1,24 +1,41 @@
 #include "RandomFieldGenerator.h"
+#include "Region.h"
+#include "Exception.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
 namespace csmp {
 
 template<size_t dim>
-RandomFieldGenerator<dim>::RandomFieldGenerator(random_generator rng)
- : rng_(std::move(rng)), m1_(0,0), m2_(0,0), m3_(0,0), pi_(csmp::PI), k_(0), fname("random_permeability_field.txt")
+RandomFieldGenerator<dim>::RandomFieldGenerator()
+ : m1_(0,0), m2_(0,0), m3_(0,0), pi_(csmp::PI), k_(0), fname("random_permeability_field.txt")
 {
 
 } 
 
 template<size_t dim>
 Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
-{    
+{
+   // ascertain that we get a different distribution everytime we call this
+    std::random_device rd;
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+  std::mt19937 gen(seed);
   std::uniform_real_distribution<> rndist(0,1);
+  
   m1_.Resize(m,n);
   for(size_t i=0; i<m; i++) {
       for(size_t j=0; j<n; j++)
-          m1_(i,j) = rndist(rng_);
+          m1_(i,j) = rndist(gen);
     } 
   return m1_;
 }
@@ -27,33 +44,46 @@ Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
 template<size_t dim>
 Matrix& RandomFieldGenerator<dim>::NormalRandomMatrix(size_t m, size_t n)
 {    
+    std::random_device rd;
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+  std::mt19937 gen(seed);
   std::normal_distribution<> rndist(0,1);
+  
   m3_.Resize(m,n);
   for (size_t i=0; i<m; i++) {
       for (size_t j=0; j<n; j++) {
-          m3_(i,j) = rndist(rng_);
+          m3_(i,j) = rndist(gen);
       }
   }
   return m3_;
 }
 
 template<size_t dim>
-double64 RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, double64 xl, double64 yl, double64 Lx, double64 Ly)
+double RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, double xl, double yl, double Lx, double Ly)
 {    
   const size_t cnt(m+2);
-  const double64 t1(pi_*xl/Lx), t2(pi_*yl/Ly), pi2(2.0*pi_);
+  const double t1(pi_*xl/Lx), t2(pi_*yl/Ly), pi2(2.0*pi_);
   Matrix M1(cnt, cnt), M2(cnt, cnt);
   
   for ( size_t i=0; i<cnt; i++ )
       for (size_t j=0; j<cnt; j++ ) {
-          M1(i,j) = static_cast<double64>(j)*t1;
-          M2(i,j) = static_cast<double64>(i)*t2;
+          M1(i,j) = static_cast<double>(j)*t1;
+          M2(i,j) = static_cast<double>(i)*t2;
         }
 
   M1 *= M1;
   M2 *= M2;
 
-  double64 sigma(0.0);
+  double sigma(0.0);
   for ( size_t i=0; i<cnt; i++ )
       for (size_t j=0; j<cnt; j++ )
         sigma += std::exp(-(M1(i,j)+M2(i,j))/pi2);
@@ -65,7 +95,7 @@ double64 RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, doubl
 
 /*M <H4>Method:</H4><CODE>
 <!------------------------------------------------------------------------>
-void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const char* variable, double64 mean, double64 sigma, double64 xlength, double64 ylength, 
+void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const char* variable, double mean, double sigma, double xlength, double ylength, 
                                                       bool logarithmic, const char* region, size_t iterations )
 <!------------------------------------------------------------------------>
 </CODE>
@@ -100,26 +130,26 @@ iteration will become inaccurate.
 <!------------------------------------------------------------------------>
 tested: O.K. */
 template<size_t dim>
-void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const char* variable, double64 mean, double64 sigma, double64 xlength, double64 ylength, 
+void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const char* variable, double mean, double sigma, double xlength, double ylength, 
 													  bool logarithmic, const char* region, size_t iterations )
 {
   
   Index         key(mdl.Database().StorageKey(variable));
   
   if ( key.place != ELEMENT or key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomElementField2D",
                      variable,    "Property must be a scalar variable placed on the elements");
   if ( dim != 2 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomElementField2D",
                      "Methods works only in two dimensions");
   if ( xlength <= 0.0 or ylength <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomElementField2D",
                      "Correlation must be larger than zero");
   if ( sigma <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomElementField2D",
                      "Standard deviation must be larger than zero");
   if ( iterations < 50 ) {
-     throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::RandomElementField2D",
                      "Number of iterations less than 50, Monte Carlo iteration possibly incorrect, resetting iterations to 50");
      iterations = 50;
    }
@@ -132,32 +162,30 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
   // define compute model dimensions and some other constant variables
   Point<dim> xy_min, xy_max;
   mdl.MinMaxCoordinates( xy_min, xy_max );
-  const double64 Lx(xy_max[0]-xy_min[0]);
-  const double64 Ly(xy_max[1]-xy_min[1]);
-  const double64 sqrt2(std::sqrt(2.0));
-  const double64 sqrtLxLy(std::sqrt(Lx*Ly));
-  const double64 sqrtLxLy2(2.0/sqrtLxLy);
-  const double64 term(sqrt2/sqrtLxLy);
-  const double64 pi2(pi_*2.0);
-  const double64 sigma2(TheoreticalStandardDeviation(iterations, xlength, xlength, Lx, Ly));
-  const double64 min(1.0e-25);
+  const double Lx(xy_max[0]-xy_min[0]);
+  const double Ly(xy_max[1]-xy_min[1]);
+  const double sqrt2(std::sqrt(2.0));
+  const double sqrtLxLy(std::sqrt(Lx*Ly));
+  const double sqrtLxLy2(2.0/sqrtLxLy);
+  const double term(sqrt2/sqrtLxLy);
+  const double pi2(pi_*2.0);
+  const double sigma2(TheoreticalStandardDeviation(iterations, xlength, xlength, Lx, Ly));
+  const double min(1.0e-25);
   
   
-  double64   sc, sc2;
+  double   sc, sc2;
   Point<dim> bc;
-  double64   v1, v2, v3, t1, t2, t3, t4;
+  double   v1, v2, v3, t1, t2, t3, t4;
   
   // resize the storage vector for the random permeability field
-  const Region<dim>& mref = mdl.Region(region);
+  Region<dim>& mref = mdl.Region(region);
   k_.resize(mdl.Region("Model").Elements());
 
   cout << "\nRandomFieldGenerator<dim>::RandomElementField2D: Generating random field for '" << variable << "' in region " << region;
   cout << "\nUsing mean: " << mean << ", standard deviation: " << sigma << ", correlation length x: " << xlength << ", correlation length y: " << ylength << endl;
     
   // loop over elements
-  typename vector<Element<dim>* >::const_iterator  it;
-
-  for ( it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
 
       sc = (1.0/sqrtLxLy*R(0,0));
       bc = (*it)->BaryCenter(); // xy coordinates of bary centre
@@ -202,7 +230,7 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
 template<size_t dim>
 /*M <H4>Method:</H4><CODE>
 <!------------------------------------------------------------------------>
-void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* variable, double64 mean, double64 sigma, double64 xlength, double64 ylength, 
+void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* variable, double mean, double sigma, double xlength, double ylength, 
                                                   bool logarithmic, const char* region, size_t iterations )
 <!------------------------------------------------------------------------>
 </CODE>
@@ -236,7 +264,7 @@ iteration will become inaccurate.
 
 <!------------------------------------------------------------------------>
 tested: O.K. */
-void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* variable, double64 mean, double64 sigma, double64 xlength, double64 ylength, 
+void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* variable, double mean, double sigma, double xlength, double ylength, 
 												  bool logarithmic, const char* region, size_t iterations )
 {
   
@@ -244,19 +272,19 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
   Index         key(mdl.Database().StorageKey(variable));
   
   if ( key.place != NODE or key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomNodeField2D",
                      variable,    "Property must be a scalar variable placed on the nodes");
   if ( dim != 2 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomNodeField2D",
                      "Methods works only in two dimensions");
   if ( xlength <= 0.0 or ylength <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomNodeField2D",
                      "Correlation must be larger than zero");
   if ( sigma <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double,2>::RandomNodeField2D",
                      "Standard deviation must be larger than zero");
   if ( iterations < 50 ) {
-     throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::RandomNodeField2D",
                      "Number of iterations less than 50, Monte Carlo iteration possibly incorrect, resetting iterations to 50");
      iterations = 50;
    }
@@ -269,32 +297,30 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
   // define compute model dimensions and some other constant variables
   Point<dim> xy_min, xy_max;
   mdl.MinMaxCoordinates( xy_min, xy_max );
-  const double64 Lx(xy_max[0]-xy_min[0]);
-  const double64 Ly(xy_max[1]-xy_min[1]);
-  const double64 sqrt2(std::sqrt(2.0));
-  const double64 sqrtLxLy(std::sqrt(Lx*Ly));
-  const double64 sqrtLxLy2(2.0/sqrtLxLy);
-  const double64 term(sqrt2/sqrtLxLy);
-  const double64 pi2(pi_*2.0);
-  const double64 sigma2(TheoreticalStandardDeviation(iterations, xlength, xlength, Lx, Ly));
-  const double64 min(1.0e-25);
+  const double Lx(xy_max[0]-xy_min[0]);
+  const double Ly(xy_max[1]-xy_min[1]);
+  const double sqrt2(std::sqrt(2.0));
+  const double sqrtLxLy(std::sqrt(Lx*Ly));
+  const double sqrtLxLy2(2.0/sqrtLxLy);
+  const double term(sqrt2/sqrtLxLy);
+  const double pi2(pi_*2.0);
+  const double sigma2(TheoreticalStandardDeviation(iterations, xlength, xlength, Lx, Ly));
+  const double min(1.0e-25);
   
   
-  double64   sc, sc2;
+  double   sc, sc2;
   Point<dim> bc;
-  double64   v1, v2, v3, t1, t2, t3, t4;
+  double   v1, v2, v3, t1, t2, t3, t4;
 
   // resize the storage vector for the random permeability field
-  const Region<dim>& mref = mdl.Region(region);
+  Region<dim>& mref = mdl.Region(region);
   k_.resize( mdl.Region("Model").Nodes());
 
   cout << "\nRandomFieldGenerator<dim>::RandomNodeField2D: Generating random field for '" << variable << "' in region " << region;
   cout << "\nUsing mean: " << mean << ", standard deviation: " << sigma << ", correlation length x: " << xlength << ", correlation length y: " << ylength << endl;
     
   // loop over nodes
-  typename vector<Node<dim>* >::const_iterator  it;
-
-  for ( it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
+  for ( auto it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
 
       sc = (1.0/sqrtLxLy*R(0,0)); 
       bc[0] = (*it)->x();
@@ -341,14 +367,14 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
 {
 
   if ( k_.size() == 0 ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomElementField2D",
+      throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::OutputRandomElementField2D",
                       "Random field was not generated, no field is saved");
       return;
     }
  
   const Region<dim>& mref = mdl.Region("Model");
   if ( k_.size() != mref.Elements() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomElementField2D",
+      throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::OutputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
     }
@@ -356,11 +382,8 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
   std::ofstream ofs;
   ofs.open( fname.c_str(), ios::out|ios::trunc );  
   
-  typename vector<Element<dim>* >::const_iterator  it;
-
-  for ( it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
-      ofs << k_[(*it)->Idx()] << endl;
-    }
+  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ )
+    ofs << k_[(*it)->Idx()] << endl;
 
   ofs.close();
   
@@ -373,14 +396,14 @@ void RandomFieldGenerator<dim>::OutputRandomNodeField( Model<dim>& mdl )
 {
 
   if ( k_.size() == 0 ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomNodeField2D",
+      throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::OutputRandomNodeField2D",
                       "Random field was not generated, no field is saved");
       return;
     }
   
   const Region<dim>& mref = mdl.Region("Model");
   if ( k_.size() != mref.Nodes() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomNodeField2D",
+      throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::OutputRandomNodeField2D",
                       "Size of the random field does not correspond to number of nodes in Model");
       return;
     }
@@ -388,11 +411,8 @@ void RandomFieldGenerator<dim>::OutputRandomNodeField( Model<dim>& mdl )
   std::ofstream ofs;
   ofs.open( fname.c_str(), ios::out|ios::trunc );  
 
-  typename vector<Node<dim>* >::const_iterator  it;
-
-  for ( it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
-      ofs << k_[(*it)->Idx()] << endl;
-    }                                                     
+  for ( auto it = mref.NodesBegin(); it != mref.NodesEnd(); it++ )
+    ofs << k_[(*it)->Idx()] << endl;
 
   ofs.close();
   
@@ -408,11 +428,11 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   
   std::ifstream ifs;
   std::string text_line;
-  std::vector<double64> k_temp;
+  std::vector<double> k_temp;
   ifs.open( fname.c_str() );
   
   if ( !ifs.is_open() ) { 
-       throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomElementField2D",
+       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomElementField2D",
                       "Input file for random element field could not be located");
       return;
     }
@@ -421,9 +441,9 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
    
   ifs.close();
 
-  const Region<dim>& mref = mdl.Region("Model");
+  Region<dim>& mref = mdl.Region("Model");
   if ( k_temp.size() != mref.Elements() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomElementField2D",
+      throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
     }
@@ -431,9 +451,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
 
-  typename vector<Element<dim>* >::const_iterator  it;
-
-  for ( it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
       sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }
@@ -449,11 +467,11 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
 
   std::ifstream ifs;
   std::string text_line;
-  std::vector<double64> k_temp;
+  std::vector<double> k_temp;
   ifs.open( fname.c_str() );
   
   if ( !ifs.is_open() ) { 
-       throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomNodeField2D",
+       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomNodeField2D",
                       "Input file for random element field could not be located");
       return;
     }
@@ -462,9 +480,9 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
    
   ifs.close();
 
-  const Region<dim>& mref = mdl.Region("Model");
+  Region<dim>& mref = mdl.Region("Model");
   if ( k_temp.size() != mref.Nodes() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomNodeField2D",
+      throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomNodeField2D",
                       "Size of the random field does not correspond to number of nodes in Model");
       return;
     }
@@ -472,9 +490,7 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
   const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
   
-  typename vector<Node<dim>* >::const_iterator  it;
-
-  for ( it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
+  for ( auto it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
       sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }

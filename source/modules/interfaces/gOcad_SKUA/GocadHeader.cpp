@@ -161,7 +161,7 @@ bool  GocadHeader::InitializeFrom( ifstream& ifn )
  
  
  
-void  GocadHeader::AddProperty( const char* pname, double64 lclip, double64 hclip, int32 pclip, int32 comp )
+void  GocadHeader::AddProperty( const char* pname, double lclip, double hclip, int32_t pclip, int32_t comp )
  {
    string temp(pname);
    replaceWhiteSpaceBy( temp, '_' );
@@ -176,7 +176,7 @@ void GocadHeader::WriteToText( ofstream& ofs ) const
  {
     // 1. the first header block
     // -------------------------
-    const double64 TOLERANCE = 0.0001,
+    const double TOLERANCE = 0.0001,
                  NO_VALUE  = 1.0e-30;
 
     //              e.g. TSolid

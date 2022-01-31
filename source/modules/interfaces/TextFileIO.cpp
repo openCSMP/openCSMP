@@ -1,4 +1,6 @@
 #include "TextFileIO.h"
+#include "Model.h"
+#include "Region.h"
 #include "Boundary.h"
 
 #include <algorithm>
@@ -618,11 +620,11 @@ bool isIntegerNumber( const char* s, int len )
  
     "nodata", "NO_DATA", "no data", "NaN", "NAN"
 */
-double64 parseDataValue( const std::string& value )
+double parseDataValue( const std::string& value )
  {
     if ( value == "nodata" || value == "NO_DATA" || value == "no data" ||
          value == "NaN" || value == "NAN" )
-      return numeric_limits<double64>::quiet_NaN();
+      return numeric_limits<double>::signaling_NaN();
    
     return atof( value.c_str() );
  }
@@ -651,7 +653,7 @@ void readPropertyValue( ScalarVariable& sc )
 
   token = strtok( NULL, delims );
   if ( token == NULL ) {
-    sc = std::numeric_limits<double64>::quiet_NaN();
+    sc = std::numeric_limits<double>::quiet_NaN();
     cout << "\n" << token << endl;
     throw csmp::Exception( ERROR,
                            "readPropertyValue(scalar)",
@@ -659,7 +661,7 @@ void readPropertyValue( ScalarVariable& sc )
   }
   else if ( !isdigit( token[0] ) && token[0] != '-' )
   {
-    sc = std::numeric_limits<double64>::quiet_NaN();
+    sc = std::numeric_limits<double>::quiet_NaN();
     cout << "\n" << token << endl;
     throw csmp::Exception( ERROR,
                            "readPropertyValue(scalar)",
@@ -696,7 +698,7 @@ void readPropertyValue( VectorVariable<dim>& vc )
 
   if ( i == 0 )
   {
-    vc = std::numeric_limits<double64>::quiet_NaN();
+    vc = std::numeric_limits<double>::quiet_NaN();
     throw csmp::Exception( ERROR,
                            "readPropertyValue(vector)",
                            "Property value could not be read properly" );
@@ -710,7 +712,7 @@ void readPropertyValue( TensorVariable<dim>& ts )
   char*  token( 0 );
   const char*  delims = " ,:,\t,\n,\r";
 
-  double64 values[dim*dim];
+  double values[dim*dim];
   std::memset( (void*)values, 0, sizeof( values ) );
 
   size_t value_count = 0;
@@ -726,7 +728,7 @@ void readPropertyValue( TensorVariable<dim>& ts )
 
   if ( value_count == dim*dim ) {
     // Interpret dim*dim numbers as the full tensor
-    const double64* val = &values[0];
+    const double* val = &values[0];
     for ( size_t i = 0; i < dim; ++i )
     {
       for ( size_t j = 0; j < dim; ++j )
@@ -737,7 +739,7 @@ void readPropertyValue( TensorVariable<dim>& ts )
   }
   else if ( value_count == dim ) {
     // Interpret dim numbers as the tensor diagonal
-    const double64* val = &values[0];
+    const double* val = &values[0];
     for ( size_t i = 0; i < dim; ++i )
     {
       ts( i, i ) = *val++;
@@ -751,7 +753,7 @@ void readPropertyValue( TensorVariable<dim>& ts )
     }
   }
   else {
-    ts = std::numeric_limits<double64>::quiet_NaN();
+    ts = std::numeric_limits<double>::quiet_NaN();
     throw csmp::Exception( ERROR,
                            "readPropertyValue(tensor)",
                            "Property value could not be read properly" );
@@ -783,7 +785,7 @@ void readPropertyValue( ArrayVariable& av )
 
   if ( i == 0 )
   {
-    av = std::numeric_limits<double64>::quiet_NaN();
+    av = std::numeric_limits<double>::quiet_NaN();
     throw csmp::Exception( ERROR,
                            "readPropertyValue(array)",
                            "Property value could not be read properly" );
@@ -814,7 +816,7 @@ void readPropertyValue( FlaggedArrayVariable& fv )
 
   if ( i == 0 )
   {
-    fv = std::numeric_limits<double64>::quiet_NaN();
+    fv = std::numeric_limits<double>::quiet_NaN();
     throw csmp::Exception( ERROR,
                            "readPropertyValue(flagged array)",
                            "Property value could not be read properly" );
@@ -1548,7 +1550,7 @@ The method reports problems during the reading process.
 
 */
 template<size_t dim>
-bool readPointData( std::map<std::string, std::vector<double64> >& pdata,
+bool readPointData( std::map<std::string, std::vector<double> >& pdata,
                     int ndata,
                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -1575,8 +1577,8 @@ bool readPointData( std::map<std::string, std::vector<double64> >& pdata,
         point_name = token;
 
       // 2. configuring the output map
-      pair<typename map<string, vector<double64> >::iterator, bool>  it =
-        pdata.insert( make_pair( point_name, vector<double64>( dim + ndata ) ) );
+      pair<typename map<string, vector<double> >::iterator, bool>  it =
+        pdata.insert( make_pair( point_name, vector<double>( dim + ndata ) ) );
       if ( !it.second )
         throw csmp::Exception( ERROR, "readPointData",
                                "Duplicate record for", token );
@@ -1603,9 +1605,9 @@ bool readPointData( std::map<std::string, std::vector<double64> >& pdata,
 
 } // end readPointData
 
-template bool readPointData<1U>( std::map<std::string, std::vector<double64> >&, int, std::ifstream&, char*, size_t, bool );
-template bool readPointData<2U>( std::map<std::string, std::vector<double64> >&, int, std::ifstream&, char*, size_t, bool );
-template bool readPointData<3U>( std::map<std::string, std::vector<double64> >&, int, std::ifstream&, char*, size_t, bool );
+template bool readPointData<1U>( std::map<std::string, std::vector<double> >&, int, std::ifstream&, char*, size_t, bool );
+template bool readPointData<2U>( std::map<std::string, std::vector<double> >&, int, std::ifstream&, char*, size_t, bool );
+template bool readPointData<3U>( std::map<std::string, std::vector<double> >&, int, std::ifstream&, char*, size_t, bool );
 
 
 
@@ -1822,7 +1824,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
   ScalarVariable      sc1, sc2, sc3, sc4;
   VectorVariable<dim> vc1, vc2, vc3, vc4;
   TensorVariable<dim> ts1, ts2, ts3, ts4;
-  double64            val;
+  double            val;
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2130,12 +2132,12 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
       // 3b. property name and type
 
       // 3b. property value
-      VARIABLE_TYPE  prop_type = sg.Database().Type( prop_name.c_str() );
+      const VARIABLE_TYPE  prop_type = sg.Database().Type( prop_name.c_str() );
       size_t  length = sg.Database().Components( prop_name.c_str() );
       string  unit( " [" ); unit += sg.Database().Unit( prop_name.c_str() ); unit += "] ";
 
       // overwrite protection flag
-      VARIABLE_FLAG do_not_overwrite = parseStatus( prop_flag.c_str() );
+      const VARIABLE_FLAG do_not_overwrite = parseStatus( prop_flag.c_str() );
 
       if ( prop_type == SCALAR )
       {
@@ -2169,7 +2171,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
           vc.Flag( i ) = parseCondition( prop_flag );
         }
         readPropertyValue( vc );
-        double64  val = vc.Length();
+        double  val = vc.Length();
         sg.Database().CheckRange( prop_name.c_str(), val );
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
           boundary.InputPropertyValue( prop_name.c_str(), vc, do_not_overwrite, INTERIOR );
@@ -2196,7 +2198,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
         for ( size_t i = 0; i < dim; ++i )
           ts.Flag( i ) = parseCondition( prop_flag );
         readPropertyValue( ts );
-        double64  val = ts.MinElement();
+        double  val = ts.MinElement();
         sg.Database().CheckRange( prop_name.c_str(), val );
         val = ts.MaxElement();
         sg.Database().CheckRange( prop_name.c_str(), val );
@@ -2227,7 +2229,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
         av.Flag() = parseCondition( prop_flag );
         readPropertyValue( av );
         for ( size_t i = 0; i< av.Size(); i++ ) {
-          double64  val = av( i );
+          double  val = av( i );
           sg.Database().CheckRange( prop_name.c_str(), val );
         }
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
@@ -2259,7 +2261,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
         }
         readPropertyValue( fv );
         for ( size_t i = 0; i< fv.Size(); i++ ) {
-          double64  val = fv( i );
+          double  val = fv( i );
           sg.Database().CheckRange( prop_name.c_str(), val );
         }
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
@@ -2700,7 +2702,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
       {
         VectorVariable<dim> vc;
         readPropertyValue( vc );
-        double64  val = vc.Length();
+        double  val = vc.Length();
         model.Database().CheckRange( prop_name.c_str(), val );
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
           boundary.InputPropertyValue( prop_name.c_str(), vc, INTERIOR );
@@ -2727,7 +2729,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
       {
         TensorVariable<dim> ts;
         readPropertyValue( ts );
-        double64  val = ts.MinElement();
+        double  val = ts.MinElement();
         model.Database().CheckRange( prop_name.c_str(), val );
         val = ts.MaxElement();
         model.Database().CheckRange( prop_name.c_str(), val );
@@ -2759,7 +2761,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
         av.Resize( length );
         readPropertyValue( av );
         for ( size_t i = 0; i< av.Size(); i++ ) {
-          double64  val = av( i );
+          double  val = av( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
@@ -2789,7 +2791,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
         fv.Resize( length );
         readPropertyValue( fv );
         for ( size_t i = 0; i< fv.Size(); i++ ) {
-          double64  val = fv( i );
+          double  val = fv( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
@@ -2938,7 +2940,7 @@ bool readRegionPropertyValues( Model<dim>& model,
       else if ( prop_type == VECTOR ) {
         VectorVariable<dim> vc;
         readPropertyValue( vc );
-        double64  val = vc.Length();
+        double  val = vc.Length();
         model.Database().CheckRange( prop_name.c_str(), val );
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
           model.Region( group_name.c_str() ).InputPropertyValue( prop_name.c_str(), vc, INTERIOR );
@@ -2975,7 +2977,7 @@ bool readRegionPropertyValues( Model<dim>& model,
                              "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }
         for ( size_t i = 0; i < dim; ++i ) {
-          double64  val = eigVals( i );
+          double  val = eigVals( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
@@ -3005,7 +3007,7 @@ bool readRegionPropertyValues( Model<dim>& model,
         av.Resize( length );
         readPropertyValue( av );
         for ( size_t i = 0; i< av.Size(); i++ ) {
-          double64  val = av( i );
+          double  val = av( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
@@ -3035,7 +3037,7 @@ bool readRegionPropertyValues( Model<dim>& model,
         fv.Resize( length );
         readPropertyValue( fv );
         for ( size_t i = 0; i< fv.Size(); i++ ) {
-          double64  val = fv( i );
+          double  val = fv( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         if ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
@@ -3143,7 +3145,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
       else if ( prop_type == VECTOR ) {
         VectorVariable<dim> vc;
         readPropertyValue( vc );
-        double64  val = vc.Length();
+        double  val = vc.Length();
         model.Database().CheckRange( prop_name.c_str(), val );
         model.InputPropertyValue( prop_name.c_str(), vc );
         if ( verbose )
@@ -3165,7 +3167,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
                                 "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }
         for ( size_t i = 0; i < dim; ++i ) {
-          double64  val = eigVals( i );
+          double  val = eigVals( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         model.InputPropertyValue( prop_name.c_str(), ts );
@@ -3180,7 +3182,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
         av.Resize( length );
         readPropertyValue( av );
         for ( size_t i = 0; i< av.Size(); i++ ) {
-          double64  val = av( i );
+          double  val = av( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         model.InputPropertyValue( prop_name.c_str(), av );
@@ -3195,7 +3197,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
         fv.Resize( length );
         readPropertyValue( fv );
         for ( size_t i = 0; i< fv.Size(); i++ ) {
-          double64  val = fv( i );
+          double  val = fv( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
         model.InputPropertyValue( prop_name.c_str(), fv );
@@ -3271,9 +3273,9 @@ bool readComputationalSettings( ComputationalSettings& settings,
   if ( verbose )
     cout << "\n\nreading computational settings..." << endl << endl;
 
-  double64 time_unit( 1.0 );
-  double64 output_time_unit( 1.0 );
-  double64 monitor_time_unit( 1.0 );
+  double time_unit( 1.0 );
+  double output_time_unit( 1.0 );
+  double monitor_time_unit( 1.0 );
 
   do {
     if ( !isCommentLine( text_line ) )
@@ -3361,6 +3363,102 @@ bool readUnknownOrInvalidBlock( const std::string& keyword,
     cout << "\nreadUnknownBlock: block " << keyword << " have been successfully skiped!\n";
   return true;
 }
+
+
+
+
+/**
+    Reads comma delimited point-data from ASCII file (ext. .csv),  returning them into the supplied vector,
+    where the first  three column represent the point coordinates x,y,z, and then the data follow.
+    
+    The first line is a headline with column header names, the number of which determines the number of columns in the file.
+    
+    @todo this wants to be a CSV_Reader module, not just a function.
+*/
+size_t  read_CSV_File( string filename, vector<string>& col_titles, vector<vector<double>>& rows_of_columns )
+ {
+    ifstream  ifs( filename + ".csv" );
+
+    if ( !ifs.is_open() )
+      throw csmp::Exception( ERROR, "read_CSV_File:", "input file could not be opened:", filename );
+      
+    const long LMAX(1024);
+    const char* const delims =",";
+    char              text_line[LMAX];
+    char*             token(0);
+
+    // reading and parsing the file header: region name, coordinates (double x dim), scalar-variable names
+    // ---------------------------------------------------------------------------------------------------
+    ifs.getline( text_line, LMAX );
+    cout <<"\nread_CSV_File: file '"<< filename;
+    cout <<"' header:\n\n"<< text_line << endl;
+    
+    // extracting information
+    string  data_name(strtok(text_line,delims));
+    string  data_X(strtok(NULL,delims));
+    string  data_Y(strtok(NULL,delims));
+    string  data_Z(strtok(NULL,delims));
+
+    // parsing the column header / variable names
+    if ( !col_titles.empty() ) col_titles.clear();
+    else col_titles.reserve( 5 ); // three coordinates, a value and a region identifier
+    while( (token = strtok(NULL,delims)) != NULL  )
+      col_titles.push_back(token);
+    
+    cout <<"\nread_CSV_File: file contains the variables:\n";
+    for ( auto lt : col_titles )
+      cout <<"\t"<< lt << endl;
+   
+    const size_t n_properties(col_titles.size() - 3 ); // the coordinate values
+   
+   
+    // reading the data records storing them in the respective regions
+    // ---------------------------------------------------------------
+    double xmin(1.0e30), ymin(1.0e30), zmin(1.0e30), xmax(-1.0e30), ymax(-1.0e30), zmax(-1.0e30);
+    if ( !rows_of_columns.empty() ) rows_of_columns.clear();
+    size_t row_count{0};
+
+    while ( !ifs.eof() )
+      {
+         // if the end of file or another errror is encountered, the reading proces is interrupted
+         if ( !ifs.getline( text_line, LMAX ) ) break;
+
+         // line is read, and a new dataset is started if necessary
+         // reading the point coordinates
+         double x = atof(strtok(NULL,delims));
+         double y = atof(strtok(NULL,delims));
+         double z = atof(strtok(NULL,delims));
+         xmin = std::min(xmin,x);
+         xmax = std::max(xmax,x);
+         ymin = std::min(ymin,y);
+         ymax = std::max(ymax,y);
+         zmin = std::min(zmin,z);
+         zmax = std::max(zmax,z);
+         // assigning these
+         rows_of_columns.emplace_back( vector<double>{ x, y, z } );
+
+         // reading the property values
+         for ( size_t i=0U; i<n_properties; i++ ) {
+              double data_value = atof(strtok(NULL,delims));
+              // TODO: perhaps add a value check against property database here
+              rows_of_columns[row_count].push_back( data_value );
+           }
+           
+         row_count++;
+        
+      } // end while !eof
+   
+    ifs.close(); // data text file
+   
+    cout <<"\n\nread_CSV_File: successfully finished reading '"<< filename <<"' file.\n";
+    cout <<"\n\tpoint data fall into the bounding box:\n";
+    cout <<"\t\tx: "<< xmin <<" - "<< xmax <<" m.\n";
+    cout <<"\t\ty: "<< ymin <<" - "<< ymax <<" m.\n";
+    cout <<"\t\tz: "<< zmin <<" - "<< zmax <<" m.\n";
+    
+    return row_count;
+ 
+ } // end read_CSV_File
 
 
 } // end csmp

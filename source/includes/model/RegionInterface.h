@@ -1,18 +1,15 @@
 #ifndef REGIONS_INTERFACE_H
 #define REGIONS_INTERFACE_H
 
-#include "Region.h"
-#include "ErrorHandler.h"
-#include "ModelTopology.h"
-#include "PropertyConstraints.h"
-#include "CSMP_highLevelUtilities.h"
-
-#include <map>
-#include <set>
-#include <utility>
-#include <tuple>
+#include "CSMP_definitions.h"
 
 namespace csmp {
+
+class PropertyConstraints;
+class ModelTopology;
+template<size_t> class Region;
+template<size_t> class Element;
+template<size_t> class Point;
 
 /**
 @brief Policy of the class model for the management of its labeled subdomains that
@@ -70,8 +67,9 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 class RegionInterface
 {
 public:
-  RegionInterface();
-  virtual ~RegionInterface();
+  RegionInterface() {}
+  RegionInterface( const RegionInterface& ) = delete;
+  ~RegionInterface() {}
 
   /// checks whether region exists considering both unique and non-unique regions
   bool ContainsRegion( const std::string& regionname ) const;
@@ -87,6 +85,10 @@ public:
 
   /// checks whether all elements within the region are interconnected (if the region has multi-dimensional elements this is never the case)
   bool IsContiguous( const std::string& regionname ) const;
+  
+  /// checks that there is a model region and that it contains elements
+  bool HasValidModelRegion() const;
+
 
   // -----------------------------------------------
   //  Input/output
@@ -95,23 +97,11 @@ public:
   void RegionsOut() const;
 
   /// writes unique and non-unique regions to binary file, including, interior/perimeter/boundary face information; relies on unique indexes
-  void OutputAllRegionsToBinary( const char* file_name ) const;
+  void OutputRegionsToBinary( const char* file_name ) const;
 
   /// Reads unique and non-unique regions from binary file as written by OutputAllRegionsToBinary(); it can also read only a subset of variables
-  void InputAllRegionsFromBinary( const char* file_name, const std::set<std::string>* subset_variables = nullptr );
+  void InputRegionsFromBinary( const char* file_name, const std::set<std::string>& subset_variables );
 
-  // TODO: DEPRECATE THESE METHODS AFTER FIRST TWO HAVE BEEN VERIFIED
-  /// writes a single region to binary file relying on a prexisting unique element and node numbering
-  void OutputRegionToBinary( const char* region_name, const char* file_name ) const;
-
-  /// appends unique and non-unique region information to CSMP native binary file
-  void AppendRegionsToBinary( const char* file_name ) const;
-
-  /// reads a single region from binary file relying on a prexisting unique element and node numbering
-  void InputRegionFromBinary( const char* region_name, bool is_unique, const char* file_name );
-
-  /// initializes region from CSMP native binary file using a pre-existing master region that contains all elements
-  void InputRegionsFromBinary( const char* file_name );
 
   // -------------------------------------------------------------------------
   //  Regions access and manipulations with the list of Regions
@@ -121,11 +111,13 @@ public:
   typedef typename std::map<std::string, csmp::Region<dim> >::iterator        regionIterator;
   typedef typename std::map<std::string, csmp::Region<dim> >::const_iterator  regionConstIterator;
 
+  // non-unique (potentially overlapping) regions
   regionIterator            RegionsBegin();
   regionIterator            RegionsEnd();
   regionConstIterator       RegionsBegin() const;
   regionConstIterator       RegionsEnd() const;
 
+  // unique (spatially exclusive) regions
   regionIterator            UniqueRegionsBegin();
   regionIterator            UniqueRegionsEnd();
   regionConstIterator       UniqueRegionsBegin() const;
@@ -140,39 +132,41 @@ public:
   // Regions creation
   // -----------------------------------------------
 
-  /// forms contiguous multiple domains by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
-  // TODO: add material ID initialisation here
-  bool CreateRegions( bool is_unique, bool reestablishNeighborConnectivity = true );
+  /// builds master region 'Model' (discontigous or not) including all elements (line, surface, or volume if any); this regions is then used to build others
+  size_t FormModelRegion( bool is_unique );
+  
+  /// forms unique or non-unique region including entire range of elements; returns number of elements created (USED TO CREATE MODEL REGION 22/5/21)
+  size_t FormRegionFrom( const char* regionname,
+                         typename std::vector<Element<dim>*>::iterator first,
+                         typename std::vector<Element<dim>*>::iterator last,
+                         bool unique = false );
 
-  /// forms region by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
-  bool CreateRegionFromRootNode( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity = true );
+  /// treats the values of the property as discrete, forming one region per value and returning their names into the set; returns number of regions
+  size_t FormRegionsFromPropertyValues( const char* prop, std::set<std::string>& region_names );
 
-  /// forms region from the largest component in the mesh. Does not expect element-no-neighbour connections
-  bool CreateRegionFromLargestComponent( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity );
+  /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object, and assigns region number to the material ID of the elements; returns # of regions
+  size_t FormRegionsFrom( const ModelTopology& );
 
-  /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object, and assigns region number to the material ID of the elements
-  bool FormRegionsFrom( const ModelTopology& );
+  // FROM THE 'MODEL' REGION THAT NEEDS TO BE CREATED BEFORE
 
-  /// treats the values of the property as discrete, forming one region per value and returning their names into the set
-  void FormRegionsFromPropertyValues( const char* prop, std::set<std::string>& region_names );
+  /// creates unique regions from material IDs which must have been defined earlier; returns number of regions formed; returns number of regions
+  size_t FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity = true );
+  
+  /// Assuming that elements have been numbered as required by caller, method forms region of elements with this Idx() values; returns # of elements in region; returns number of elements
+  size_t FormRegionFrom( const char* regionname, std::vector<size_t>& elmt_ids, bool is_unique=true );
 
-  /// forms a new non-unique region from elements whose property value falls into the user-defined range
-  bool FormRegionFrom( const char* regionname, const char* prop, double64 pmin, double64 pmax, bool unique = false );
+  /// forms a new non-unique region from elements whose property value falls into the user-defined range; returns number of elements
+  size_t FormRegionFrom( const char* regionname, const char* prop, double pmin, double pmax, bool unique = false );
 
-  /// forms region from complex value constraints as provided via a PropertyContraints object that has to be configured before
-  bool FormRegionFrom( const char* regionname, PropertyConstraints&, bool unique = false );
+  /// forms region from complex value constraints as provided via a PropertyContraints object that has to be configured before; returns number of elements
+  size_t FormRegionFrom( const char* regionname, PropertyConstraints&, bool unique = false );
 
-  /// forms region from element id numbers that must be in the range 0..n-1
-  bool FormRegionFrom( const char* regionname, std::vector<size_t>& element_numbers, bool unique = false );
+  /// forms region that represents union of preexisting regions. @todo SKM remove method as it duplicates MergeRegions(); returns number of elements
+  size_t FormRegionFrom( const char* regionname, const std::set<std::string>& region_names );
 
-  /// forms region that represents union of preexisting regions. @todo SKM remove method as it duplicates MergeRegions()
-  void FormRegionFrom( const char* regionname, const std::set<std::string>& region_names );
-
+  /// ; returns number of elements
   template<template<size_t> class ElementComp>
-  bool FormRegionFrom( const char* regionname, ElementComp<dim> const& elementComp, const char* hostRegion = "Model" );
-
-  /// forms unique or non-unique regions. @todo SKM deprecate this method as it is equivalent to CopyRegion()
-  bool FormRegionFrom( const char* regionname, const csmp::Region<dim>& region, bool unique = false );
+  size_t FormRegionFrom( const char* regionname, ElementComp<dim> const& elementComp, const char* hostRegion = "Model" );
 
 
   // -----------------------------------------------
@@ -180,19 +174,19 @@ public:
   // -----------------------------------------------
 
   /// assigns unique region-indicative variable values to the elements of all unique regions and returns name value mapping vector[value]=name
-  size_t CountAndLabelRegions( const char* region_identifier, std::vector<std::string>& region_names );
+  size_t  CountAndLabelRegions( const char* region_identifier, std::vector<std::string>& region_names );
 
   /// finds disconnected subregions in region, dividing it into these. The new subregion are numbered and their total # is returned
   size_t  PartitionRegionIntoContiguousSubRegions( const char* region );
-
-  /// like partitionR.. but using element ids instead of pointers
-  size_t  PartitionRegionIntoContiguousSubRegionsByIdx( const char* region );
+  
+  // Andrew Bromage implementation using UnionFind
+  size_t  PartitionRegionIntoContiguousSubRegions_Bromage( const char* region );
 
   /// removes all regions with the given name followed by an arbitrary number; returns number of removed regions=partitions
   size_t  RemoveRegionPartitionsFor( const char* name );
 
   /// forms a non-unique rectangular region of elements whose barycenter falls into the bounding box defined by the points
-  bool    FormRectangularRegion( const char* regionname, const csmp::Point<dim>& xyz_min, const csmp::Point<dim>& xyz_max );
+  size_t  FormRectangularRegion( const char* regionname, const csmp::Point<dim>& xyz_min, const csmp::Point<dim>& xyz_max );
 
   /// replicates region and gives duplicate a new name (@attention now you also have new property storage for regional variables)
   void    CopyRegion( const char* existing_region, const char* copied_region, bool place_copy_in_unique_regions = false );
@@ -204,17 +198,14 @@ public:
   void    MergeRegions( const std::set<std::string>& input_regions, const char* ensemble_region );
   size_t  MergeRegions( const char* region_name_tag, const char* ensemble_region );
 
-  /// removes region and associated variable storage, and optionally the underlying elements, nodes etc.
-  void    RemoveRegion( const char* regionname, bool delete_elements );
-
-  /// removes the defined elements and their nodes.
-  size_t  RemoveElements( const char* region_name, const std::set<long>& elmt_numbers );
+  /// removes region and associated variable storage; DOES NOT!  erase  the underlying elements and nodes, this is the task of the MeshManager
+  void    RemoveRegion( const char* regionname );
 
   /// excludes the intersection of elements of the 2 regions from the non-unique region
   bool    RemoveFromRegion( const char* region, const char* region_to_subtract );
 
   /// removes the elements shared with the supplied set from the region
-  bool    RemoveFromRegion( const char* region, const std::set<Element<dim>*>& elmt_set );
+  bool    RemoveFromRegion( const char* region, const std::set<Element<dim>* const>& elmt_set );
 
   /// moves region to from the unique- to the non-unique regions map
   bool    MoveToNonUniqueRegions( const char* unique_region );
@@ -235,19 +226,19 @@ public:
   bool    RegionSymmetricDifference( const char* region_a, const char* region_b, const char* region_symdiff );
 
   // TODO: test
-  /// creates a lower-dimensiona region along the contact area of 2 higher dimensional ones
-  bool    RegionBetween( const char* region_a, const char* region_b, const char* region_between );
+  /// creates a lower-dimensional region along the contact area of 2 higher dimensional ones
+  size_t  RegionBetween( const char* region_a, const char* region_b, const char* region_between, int32_t material_id );
 
   /// finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
   size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
                                 std::vector<std::tuple<Element<dim>*, Element<dim>*, size_t, size_t> >& shared ) const;
 
+  /// if the mesh changed this brute-force method rebuild the node and element vectors of all regions
+  void RebuildRegions();
+
 protected:
   std::map<std::string, csmp::Region<dim> >  uniqueGroupMap_; ///< map of regions that do not overlap
   std::map<std::string, csmp::Region<dim> >  groupMap_;       ///< map of potentially overlapping regions
-
-private:
-  RegionInterface( const RegionInterface& );
 };
 
 } // csmp

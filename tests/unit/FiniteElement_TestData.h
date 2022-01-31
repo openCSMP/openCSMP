@@ -1,30 +1,23 @@
-#ifndef FINITEELEMENT_TESTDATA_H
-#define FINITEELEMENT_TESTDATA_H
-
-#include <string>
-#include <iostream>
-#include <vector>
-#include <map>
+#ifndef FINITE_ELEMENT_TESTDATA_H
+#define FINITE_ELEMENT_TESTDATA_H
 
 #include "FiniteElement.h"
 #include "Node.h"
 
-namespace csmp{
+namespace csmp {
 
 /// Container class for FEM Test/Validation Data
-class FiniteElement_TestData
-{
-
-friend std::istream& operator >> ( std::istream&, FiniteElement_TestData& );
+class FiniteElement_TestData {
+   friend std::istream& operator >> ( std::istream&, FiniteElement_TestData& );
 
 public:
   FiniteElement_TestData( bool verbose ) : verbose_(verbose) {}
   ~FiniteElement_TestData()
-  {
-	  for( std::vector<Node<3U>*>::iterator it = nodes_.begin(); it != nodes_.end(); ++it )
-		  delete (*it);
-      nodes_.clear();
-  }
+    {
+      for( std::vector<Node<3U>*>::iterator it = nodes_.begin(); it != nodes_.end(); ++it )
+        delete (*it);
+        nodes_.clear();
+    }
 
   std::string FemName() const { return femName_; }
   void        FemName( std::string femName ) { femName_ = femName; }

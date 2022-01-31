@@ -65,7 +65,7 @@ class FaceConstructionData {
   
   private:
     FaceConstructionData();
-    FaceConstructionData& operator=( const FaceConstructionData& ) = default;
+    FaceConstructionData& operator=( const FaceConstructionData& );
   
   private:
     const size_t  parent_element_;              ///< idx of lower-dimensional parent element

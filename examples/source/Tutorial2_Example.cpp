@@ -79,7 +79,7 @@ void Tutorial2_Example::Run()
     Quadrilaterator    quadrilaterator; // simple FE mesher
     VSet<2U>           mesh_container;  // container to store the input mesh
     string             file_name;
-    double64           x, y;
+    double           x, y;
     cout << "\nmain: Enter the pixel-based input geometry for the quadrilaterator: " << endl;
     cin >> file_name;
     cout << "\nmain: The x- and y-dimensions of your model (in m): " << endl;
@@ -223,7 +223,7 @@ void Tutorial2_Example::Run()
     // 8.0 Construct the finite volume grid and transport algorithms
     // -------------------------------------------------------------
     Standard_IO_Handler  stdio;
-    double64 cfl_multiplier(0.5); // for explicit transport, CFL should be mulitplied by 0.5
+    double cfl_multiplier(0.5); // for explicit transport, CFL should be mulitplied by 0.5
 
     // query user if implicit or explicit FV scheme should be used
     cerr << "\nHit enter to continue..." << endl;
@@ -264,9 +264,9 @@ void Tutorial2_Example::Run()
     // 9.0 Time Loop Variables
     // -----------------------
     // define some constant variables
-    const double64    hour(3600.0);
-    const double64    max_time (240.0*hour);    // run for 10 days
-    double64          time_increment(2.0*hour); // timestep 2 hours
+    const double    hour(3600.0);
+    const double    max_time (240.0*hour);    // run for 10 days
+    double          time_increment(2.0*hour); // timestep 2 hours
     const long        save_frequency(6);        // write results to file every 12 hours
     size_t	          save_counter(1), time;
 
@@ -275,7 +275,7 @@ void Tutorial2_Example::Run()
     // 10.0 Transient loop
     // -----------------------
     // define the variables used throughout the simulation
-    double64  model_time(0.);                                 // global time for simulated runtime
+    double  model_time(0.);                                 // global time for simulated runtime
 
     while ( model_time < max_time )
       {

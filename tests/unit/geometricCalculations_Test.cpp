@@ -7,7 +7,7 @@
 //
 
 #include "geometricCalculations_Test.h"
-#include "GeometricCalculations.h"
+#include "geometricCalculations.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ void geometricCalculations_Test::run()
    getCartesianAxes( pt1, pt2, e1 );
    // testing
    // unit length
-   _equal( e1.Length(), 1., numeric_limits<double64>::epsilon() );
+   _equal( e1.Length(), 1., numeric_limits<double>::epsilon() );
    // does the vector point in the right direction (from origin to axes end)
    pt2 -= pt1;
    _test( dotProduct(e1,pt2) > 0. );

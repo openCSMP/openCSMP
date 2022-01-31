@@ -24,7 +24,8 @@ class NumIntegral_NT_op_N_dS : public MathOperatorRHS<dim> {
     NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>& p, 
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( CELL<dim>& e );
+    virtual void ComputeContribution( const CELL<dim>& );
+    
     virtual NumIntegral_NT_op_N_dS<dim,CELL>* clone() const { return new NumIntegral_NT_op_N_dS<dim,CELL> (*this); }
 
   private:

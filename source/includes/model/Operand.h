@@ -86,7 +86,7 @@ enumerations which are defined in CSMP_definitions.h (e.g., VARIABLE_FLAG...).
  
 
 The operators \f$+, -, *, /, +=, -=, *=, /= \f$ are overloaded for Operands such
-that they can interact with eachother, double64 data, and the CSP basic
+that they can interact with eachother, double data, and the CSP basic
 variables. One should not write expressions like A = C. Following the logic
 of an assignment, A = B means: The Operand A now 
 refers to exactly the same variable as B and it will also contain the same 
@@ -198,20 +198,20 @@ class Operand {
     Operand( const csmp::Index&, const FlaggedArrayVariable&  );
     ~Operand();
     // these calculate using 'val' on right and object specs on the left
-    Operand   operator+( double64 ) const;
-    Operand   operator-( double64 ) const;
-    Operand   operator*( double64 ) const;
-    Operand   operator/( double64 ) const;
+    Operand   operator+( double ) const;
+    Operand   operator-( double ) const;
+    Operand   operator*( double ) const;
+    Operand   operator/( double ) const;
     // these will create copies of the specifications of object on the right 
     Operand   operator+( const Operand& ) const;
     Operand   operator-( const Operand& ) const;
     Operand   operator*( const Operand& ) const;
     Operand   operator/( const Operand& ) const;
     // these will "self-assign" calculation result to object on the left
-    Operand&  operator+=( double64 );
-    Operand&  operator-=( double64 );
-    Operand&  operator*=( double64 );
-    Operand&  operator/=( double64 );
+    Operand&  operator+=( double );
+    Operand&  operator-=( double );
+    Operand&  operator*=( double );
+    Operand&  operator/=( double );
     // with ScalarVariables
     Operand&  operator+=( const ScalarVariable& );
     Operand&  operator-=( const ScalarVariable& );
@@ -243,12 +243,12 @@ class Operand {
     Operand&  operator*=( const Operand& );
     Operand&  operator/=( const Operand& );
     // logical
-    bool       operator>(  double64 val ) const;
-    bool       operator<(  double64 val ) const;
-    bool       operator>=( double64 val ) const;
-    bool       operator<=( double64 val ) const;
-    bool       operator==( double64 val ) const;
-    bool       operator!=( double64 val ) const;
+    bool       operator>(  double val ) const;
+    bool       operator<(  double val ) const;
+    bool       operator>=( double val ) const;
+    bool       operator<=( double val ) const;
+    bool       operator==( double val ) const;
+    bool       operator!=( double val ) const;
 
     bool       operator==( const ScalarVariable& )      const;
     bool       operator!=( const ScalarVariable& )      const;
@@ -268,7 +268,7 @@ class Operand {
     bool       operator==( Operand& ) const;
     bool       operator!=( Operand& ) const;
     // assignment
-    Operand&   operator=( double64 );
+    Operand&   operator=( double );
     Operand&   operator=( const ScalarVariable& );
     Operand&   operator=( const VectorVariable<dim>& );
     Operand&   operator=( const TensorVariable<dim>& );
@@ -282,8 +282,8 @@ class Operand {
     size_t              Size( );
     bool                IsWithinRange()     const;
     template<class cspT> bool IsWithinRange( const cspT& val ) const;
-    double64            MaxValue()          const;
-    double64            MinValue()          const;
+    double            MaxValue()          const;
+    double            MinValue()          const;
     
     const csmp::Index&  Key()               const;
     size_t              Index()             const;
@@ -308,7 +308,7 @@ class Operand {
   private:
     std::string          name_;
     csmp::Index          prop_key_;
-    double64             omin, omax; 
+    double             omin, omax; 
     VARIABLE_FLAG        flag_essential_, flag_output_;
     size_t               calc_offset_;
     ScalarVariable       scalar_storage_;

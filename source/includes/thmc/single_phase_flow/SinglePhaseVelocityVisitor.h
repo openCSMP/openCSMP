@@ -52,12 +52,10 @@ class SinglePhaseVelocityVisitor : public Visitor<dim> {
                 flux_key_, nflux_key_;
 
     VectorVariable<dim>           gravity_unit_vector_;
-    ErrorHandler& err_handler_;
-    bool with_gravity_;
-
-    double64                               gravitational_acceleration_;
-    uint32                                 application_cycle_;
-    std::pair<double64,double64>           minmaxV_, minmaxF_;
+    bool                          with_gravity_;
+    double                      gravitational_acceleration_;
+    uint32_t                        application_cycle_;
+    std::pair<double,double>  minmaxV_, minmaxF_;
 
 #if defined(_OPENMP )
     std::vector<FiniteElementManager> femgrs_; // one manager per thread

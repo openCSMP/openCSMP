@@ -26,8 +26,8 @@ namespace csmp
 	FiniteElement* feptr= new IsoparametricLinearTetrahedron( 4 );
 	FiniteVolumeStencil<DIM>* fvptr = new FiniteVolumeStencil<DIM>( "ISOPARAMETRIC_LINEAR_TETRAHEDRON" );
 
-    Face<DIM> face( feptr,
-                    fvptr,
+    size_t face_number{1};
+    Face<DIM> face( face_number, feptr, fvptr,
                     LocalVariables( 1,0,0,0,0,0,0,1,1 ),
                     IntegrationPointVariables() );
 

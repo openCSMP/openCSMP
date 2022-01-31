@@ -59,7 +59,7 @@ void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::SpatialDerivative( size_t num_xyz
 
 
 template<size_t dim,class CELL>
-void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::MaterialPropertyTimeMultiplier( double64 time_increment )
+void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::MaterialPropertyTimeMultiplier( double time_increment )
  {
     mtrl_time_multiplier = time_increment;
  }
@@ -81,7 +81,7 @@ system. Do not use MultiplyWithTimeIncrement() in this case, since
 the acceleration of gravity must not be multiplied with delta t.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -126,9 +126,9 @@ property which is used as material multiplier.
 A reference to the finite-element from which the contribution is 
 computed.  */
 template<size_t dim,class CELL>
-void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
-    double64         ip_value, op_value, nmult_fac, detJ;
+    double         ip_value, op_value, nmult_fac, detJ;
     size_t  i, j;
     
     DNI.resize(e.Nodes());

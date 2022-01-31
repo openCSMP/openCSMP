@@ -43,12 +43,12 @@ EOS_CO2H2ONaCl_Spycher04::~EOS_CO2H2ONaCl_Spycher04()
 
 
 /// acos function for complex numbers specifically implemented because it gives problems with GNU and Intel compilers
-complex<double64> EOS_CO2H2ONaCl_Spycher04::complex_acos(const complex<double64>& x)
+complex<double> EOS_CO2H2ONaCl_Spycher04::complex_acos(const complex<double>& x)
 {
-    complex<double64> y = std::log(x + std::sqrt(x*x - 1.0));
+    complex<double> y = std::log(x + std::sqrt(x*x - 1.0));
     if (y.imag() < 0.0)
-        return complex<double64>(-y.imag(), y.real());
-    return complex<double64>(y.imag(), -y.real());
+        return complex<double>(-y.imag(), y.real());
+    return complex<double>(y.imag(), -y.real());
 }
 
 
@@ -73,38 +73,38 @@ complex<double64> EOS_CO2H2ONaCl_Spycher04::complex_acos(const complex<double64>
     Range P:  P<600 bar
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, double64 temperature  )
+double EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double pressure, double temperature  )
 {
     assert( temperature >= 12. );
     assert( temperature <= 100. );
     assert( pressure <= 6.0e7 );
 
-    complex<double64> delta(0.,0.), lambda(0.,0.), theta(0.,0.), h(0.,0.), complex2RealDummy;
+    complex<double> delta(0.,0.), lambda(0.,0.), theta(0.,0.), h(0.,0.), complex2RealDummy;
 
-    const double64 temp(degreeCToKelvin(temperature)), coeff_a(1.);
+    const double temp(degreeCToKelvin(temperature)), coeff_a(1.);
 
     //  coeff_b = - R * T / P;
-    double64 coeff_b = R;
+    double coeff_b = R;
     coeff_b *=  temp;
     coeff_b /=  pressure;
     coeff_b *=  -1.;
 
     //  coeff_c = -( R * T * b_co2 / P ) + a_mix / (P * sqrt( T ) ) - pow(b_co2,2);
-    double64 coeff_c = R;
+    double coeff_c = R;
     coeff_c *=  temp;
     coeff_c *=  b_co2;
     coeff_c /=  pressure;
     coeff_c *=  -1.;
-    double64 dummy1  = a_mix(temperature);
+    double dummy1  = a_mix(temperature);
     dummy1  /=  pressure;
-    double64 dummy2  = sqrt( temp );
+    double dummy2  = sqrt( temp );
     dummy1  /=  dummy2;
     coeff_c +=  dummy1;
     dummy1  =   b_co2 * b_co2;
     coeff_c -=  dummy1;
 
     //  coeff_d = - a_mix * b_co2 /  (P * sqrt( T ));
-    double64 coeff_d = a_mix(temperature);
+    double coeff_d = a_mix(temperature);
     coeff_d *=  b_co2;
     coeff_d /=  pressure;
     dummy1  =   sqrt( temp );
@@ -112,13 +112,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     coeff_d *=  -1.;
 
     //  x_N     = - coeff_b / ( 3. * coeff_a );
-    double64 x_N = coeff_b;
+    double x_N = coeff_b;
     x_N /=  3.;
     x_N /=  coeff_a;
     x_N *=  -1;
 
     //  y_N     = pow(x_N,3) * coeff_a +  pow(x_N,2) * coeff_b + x_N * coeff_c + coeff_d;
-    double64 y_N = x_N * x_N * x_N;
+    double y_N = x_N * x_N * x_N;
     y_N     *=  coeff_a;
     dummy1  =   x_N * x_N;
     dummy1  *=  coeff_b;
@@ -129,7 +129,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     y_N     +=  coeff_d;
 
     //  test = ( pow(coeff_b,2) - 3. * coeff_a * coeff_c) / (9. *  pow(coeff_a,2) );
-    double64 test = coeff_b * coeff_b;
+    double test = coeff_b * coeff_b;
     dummy1  =   -3.;
     dummy1  *=  coeff_a;
     dummy1  *=  coeff_c;
@@ -140,7 +140,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
 
     // test =delta^2
     if ( test < 0. ) {
-        const  complex<double64>& worzel = test;
+        const  complex<double>& worzel = test;
         delta = sqrt( worzel );
     }
     else
@@ -156,29 +156,29 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     h  =  delta*delta*delta;
     h *=  2.;
 
-    double64 yNSquare(y_N*y_N);
+    double yNSquare(y_N*y_N);
     complex2RealDummy = h*h;
-    double64 hSquare = complex2RealDummy.real();
+    double hSquare = complex2RealDummy.real();
 
-    valarray<double64> root(0.0,1);
+    valarray<double> root(0.0,1);
 
     if ( yNSquare > hSquare ) {
         //    aux1 = 0.5 * ( -y_N + sqrt( yNSquare - hSquare ) );
-        double64 aux1 = yNSquare;
+        double aux1 = yNSquare;
         aux1 -= hSquare;
         aux1 =  sqrt( aux1 );
         aux1 -= y_N;
         aux1 *= 0.5;
 
         //    aux2 = 0.5 * ( -y_N - sqrt( yNSquare - hSquare ) );
-        double64 aux2 =  yNSquare;
+        double aux2 =  yNSquare;
         aux2 -= hSquare;
         aux2 =  sqrt( aux2 );
         aux2 *= -1.;
         aux2 -= y_N;
         aux2 *= 0.5;
       
-        double64 alpha(numeric_limits<double64>::quiet_NaN());
+        double alpha(numeric_limits<double>::quiet_NaN());
         if ( aux1 < 0. && aux2 < 0 ) {
             // alpha = x_N - pow( -aux1, 1.0/3. ) - pow( -aux2, 1.0/3. );
             alpha   =   x_N;
@@ -217,7 +217,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     }
     else if ( yNSquare < hSquare ) {
         // SKM FIX - pi as in Robert's original equation
-        constexpr double64 PI(3.14159265359);
+        constexpr double PI(3.14159265359);
         //    theta  = acos ( -y_N / h ) / 3.;
         theta  =  -y_N;
         theta /=  h ;
@@ -229,7 +229,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
         complex2RealDummy *=  delta;
 
         //    gamma1            = x_N + 2. * complex2RealDummy.real();
-        double64 gamma1  =   complex2RealDummy.real();
+        double gamma1  =   complex2RealDummy.real();
         gamma1  *=  2.;
         gamma1  +=  x_N;
 
@@ -242,7 +242,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
         complex2RealDummy *=  delta ;
 
         //    gamma2            = x_N + 2. * complex2RealDummy.real();
-        double64 gamma2  = complex2RealDummy.real();
+        double gamma2  = complex2RealDummy.real();
         gamma2  *=  2.;
         gamma2  +=  x_N;
 
@@ -255,7 +255,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
         complex2RealDummy *=  delta ;
 
         //    gamma3            = x_N + 2. * complex2RealDummy.real();
-        double64 gamma3  = complex2RealDummy.real();
+        double gamma3  = complex2RealDummy.real();
         gamma3  *= 2.;
         gamma3  += x_N;
 
@@ -266,7 +266,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     }
     else {
         root.resize(1);
-        double64 beta1, beta2(2.);
+        double beta1, beta2(2.);
         if (h != 0.) {
             // delta = pow( y_N / ( 2. * coeff_a), 1. / 3.);
             delta =   y_N;
@@ -293,16 +293,16 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
         root[1] = beta2;
     }
 
-    double64 V_gas = root.max();
-    double64 V_liq = root.min();
+    double V_gas = root.max();
+    double V_liq = root.min();
 
     //  work1 = P * (V_gas - V_liq);
-    double64 work1 = V_gas;
+    double work1 = V_gas;
     work1 -=  V_liq;
     work1 *=  pressure ;
 
     //  work2 = R * T * log( (V_gas - b_co2) / ( V_liq - b_co2) ) + a_mix / ( sqrt(T) * b_co2 ) * log( ( V_gas + b_co2) / ( V_liq + b_co2) * V_liq / V_gas );
-    double64 work2  =  V_gas;
+    double work2  =  V_gas;
     work2   -=  b_co2;
     dummy1  =   V_liq;
     dummy1  -=  b_co2;
@@ -349,29 +349,29 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     // Range T:  12 < T <100 C
     // Range P:  P<600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double64 pressure,
-                                                double64 temperature,
-                                                double64 phaseVolumeCo2 )
+double EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double pressure,
+                                                double temperature,
+                                                double phaseVolumeCo2 )
 {
     assert( temperature >= 12. );
     assert( temperature <= 100. );
     assert( pressure <= 6.0e7 );
 
-    const double64 temp(degreeCToKelvin(temperature));
+    const double temp(degreeCToKelvin(temperature));
 
     //  A1 = log ( V_root / ( V_root - b_mix ) );
-    double64 A1      =   phaseVolumeCo2;
-    double64 dummy1  =   phaseVolumeCo2;
+    double A1      =   phaseVolumeCo2;
+    double dummy1  =   phaseVolumeCo2;
     dummy1  -=  b_mix;
     A1      /=  dummy1;
     A1      =   log( A1 );
 
     //  A2 = b_co2 / ( V_root - b_mix );
-    double64 A2 =  b_co2;
+    double A2 =  b_co2;
     A2 /= dummy1;
 
     //  A3 = - 2 * ( y_co2 * a_co2  ) / ( R * pow( T, 1.5 ) * b_mix ) * log ( ( V_root + b_mix ) / V_root );
-    double64 A3      =   -2.;
+    double A3      =   -2.;
     // A3      *=  y_co2;
     A3      *=  a_Co2(temperature);
     dummy1  =   pow( temp, 1.5 );
@@ -380,16 +380,16 @@ double64 EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double64 pressure,
     A3      /=  dummy1;
     dummy1  =   phaseVolumeCo2;
     dummy1  +=  b_mix;
-    double64 dummy2  =   dummy1;
+    double dummy2  =   dummy1;
     dummy1  /=  phaseVolumeCo2;
     dummy1  =   log( dummy1 );
     A3      *=  dummy1;
 
     //  A4 = ( a_mix * b_co2 / ( R * pow( T, 1.5 ) * pow( b_mix,2 )  ) * ( log ( (V_root + b_mix) / V_root ) - b_mix / (V_root + b_mix) ) );
-    double64 A4      =   a_mix(temperature);
+    double A4      =   a_mix(temperature);
     A4      *=  b_co2;
     dummy1  =   R;
-    double64 dummy3  =   pow( temp, 1.5 );
+    double dummy3  =   pow( temp, 1.5 );
     dummy1  *=  dummy3;
     dummy3  =   pow( b_mix,2 );
     dummy1  *=  dummy3;
@@ -403,14 +403,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double64 pressure,
     A4      *=  dummy1;
 
     //  A5 = - log( P * V_root / ( R * T )  );
-    double64 A5 =    pressure;
+    double A5 =    pressure;
     A5 *=   phaseVolumeCo2;
     A5 /=   R;
     A5 /=   temp;
     A5 =    log( A5 );
     A5 *=   -1;
 
-    double64 phi_co2 =   A1;
+    double phi_co2 =   A1;
     phi_co2 +=  A2;
     phi_co2 +=  A3;
     phi_co2 +=  A4;
@@ -440,29 +440,29 @@ double64 EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double64 pressure,
     // Range T:  12 < T <100 C
     // Range P:  P<600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double64 pressure,
-                                                double64 temperature,
-                                                double64 phaseVolumeCo2 )
+double EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double pressure,
+                                                double temperature,
+                                                double phaseVolumeCo2 )
 {
     assert( temperature >= 12. );
     assert( temperature <= 100. );
     assert( pressure <= 6.0e7 );
 
-    const double64 temp(degreeCToKelvin(temperature));
+    const double temp(degreeCToKelvin(temperature));
 
     //  B1 = log ( V_root / ( V_root - b_mix ) );
-    double64 B1      =   phaseVolumeCo2;
-    double64 dummy1  =   phaseVolumeCo2;
+    double B1      =   phaseVolumeCo2;
+    double dummy1  =   phaseVolumeCo2;
     dummy1  -=  b_mix;
     B1      /=  dummy1;
     B1      =   log(B1);
 
     //  B2 = b_h2o / ( V_root - b_mix );
-    double64 B2 =  b_h2o;
+    double B2 =  b_h2o;
     B2 /= dummy1;
 
     //  B3 = - 2 * ( y_co2 * a_h2oco2 ) / ( R * pow( T, 1.5 ) * b_mix ) * log ( ( V_root + b_mix ) / V_root) ;
-    double64 B3 =  -2.;
+    double B3 =  -2.;
     // B3      *=  1.0 (y_co2);
     B3      *=  a_h2oco2;
     dummy1  =   pow( temp, 1.5 );
@@ -471,16 +471,16 @@ double64 EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double64 pressure,
     B3      /=  dummy1;
     dummy1  =   phaseVolumeCo2;
     dummy1  +=  b_mix;
-    double64 dummy2  =   dummy1;
+    double dummy2  =   dummy1;
     dummy1  /=  phaseVolumeCo2;
     dummy1  =   log( dummy1 );
     B3      *=  dummy1;
 
     //  B4 = ( a_mix * b_h2o / ( R * pow( T, 1.5 ) *  pow( b_mix,2 ) ) ) * ( log ( (V_root + b_mix) / V_root ) - b_mix / (V_root + b_mix) );
-    double64 B4      =   a_mix(temperature);
+    double B4      =   a_mix(temperature);
     B4      *=  b_h2o;
     dummy1  =   R;
-    double64 dummy3  =   pow( temp, 1.5 );
+    double dummy3  =   pow( temp, 1.5 );
     dummy1  *=  dummy3;
     dummy3  =   pow( b_mix,2 );
     dummy1  *=  dummy3;
@@ -494,7 +494,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double64 pressure,
     B4      *=  dummy1;
 
     //  B5 = - log( P * V_root / ( R * T )  );
-    double64 B5 =  pressure;
+    double B5 =  pressure;
     B5 *= phaseVolumeCo2;
     B5 /= R;
     B5 /= temp;
@@ -502,7 +502,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double64 pressure,
     B5 *= -1;
 
     //  phi_h2o = B1 + B2 + B3 + B4 + B5;
-    double64 phi_h2o =   B1;
+    double phi_h2o =   B1;
     phi_h2o +=  B2;
     phi_h2o +=  B3;
     phi_h2o +=  B4;
@@ -528,12 +528,12 @@ double64 EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double64 pressure,
     //thermEquilConstH2o for P0=1 bar
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::thermEquilConstH2o( double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::thermEquilConstH2o( double temperature )
 {
     //  kH2o    = -2.209 + 3.097e-2 * (T) - 1.098e-4 * pow( T, 2. ) + 2.048e-7 * pow( T, 3. );
     //  kH2o    = pow(10, kH2o);
-    double64 kH2o    =   -2.209;
-    double64 dummy1  =   temperature;
+    double kH2o    =   -2.209;
+    double dummy1  =   temperature;
     dummy1  *=  3.097e-2;
     kH2o    +=  dummy1;
     dummy1  =   temperature;
@@ -565,12 +565,12 @@ double64 EOS_CO2H2ONaCl_Spycher04::thermEquilConstH2o( double64 temperature )
 
     //thermEquilConstCo2G for P0=1 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2G( double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2G( double temperature )
 {
     //  kCo2G   = 1.198 + 1.304e-2 * (T) - 5.446e-5 * pow( T, 2. );
     //  kCo2G   = pow(10, kCo2G);
-    double64 kCo2G   =   1.198;
-    double64 dummy1  =   temperature;
+    double kCo2G   =   1.198;
+    double dummy1  =   temperature;
     dummy1  *=  1.304e-2;
     kCo2G   +=  dummy1;
     dummy1  =   temperature;
@@ -597,13 +597,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2G( double64 temperature )
     // range T 12–31°C
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2L( double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2L( double temperature )
 {
     //thermEquilConstCo2L for P0=1 bar
     //  kCo2L   = 1.169 + 1.368e-2 * (T) - 5.380e-5 * pow( T, 2.);
     //  kCo2L   = pow( 10, kCo2L);
-    double64 kCo2L   =   1.169;
-    double64 dummy1  =   temperature;
+    double kCo2L   =   1.169;
+    double dummy1  =   temperature;
     dummy1  *=  1.368e-2;
     kCo2L   +=  dummy1;
     dummy1  =   temperature;
@@ -636,21 +636,21 @@ double64 EOS_CO2H2ONaCl_Spycher04::thermEquilConstCo2L( double64 temperature )
     // range msalt: 0–6.5 m
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientDrummond1981(double64 pressure, double64 temperature, double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::activityCoefficientDrummond1981(double pressure, double temperature, double mSalt )
  {
-    double64 temp(degreeCToKelvin(temperature)); // conversion from C to K
+    double temp(degreeCToKelvin(temperature)); // conversion from C to K
 
     //  activityCoeff = (-1.0312 + 1.2806e-3 * T + 255.9 / T ) * mSalt - ( 4.445e-1 - 1.606e-3 * T ) * mSalt / (mSalt + 1) ;
     //  activityCoeff = exp ( activityCoeff );
-    double64 dummy1 =   -1.0312;
-    double64 dummy2 =   1.2806e-3;
+    double dummy1 =   -1.0312;
+    double dummy2 =   1.2806e-3;
     dummy2        *=  temp;
     dummy1        +=  dummy2;
     dummy2        =   255.9;
     dummy2        /=  temp;
     dummy1        +=  dummy2;
     dummy1        *=  mSalt;
-    double64 activityCoeff =   dummy1;
+    double activityCoeff =   dummy1;
     dummy1        =   -1.606e-3;
     dummy1        *=  temp;
     dummy1        +=  4.445e-1;
@@ -662,15 +662,15 @@ double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientDrummond1981(double64 pres
     activityCoeff =   exp ( activityCoeff );// activity in terms of molality gamm_m
 
     // conversion to activity in terms of mole fraction gamm_x
-    double64 xCo2 = x_Co2(pressure,temperature,mSalt);
+    double xCo2 = x_Co2(pressure,temperature,mSalt);
 
-    double64 mCO2 = molalCo2FromBrineMoleFractionCo2(xCo2,mSalt);
+    double mCO2 = molalCo2FromBrineMoleFractionCo2(xCo2,mSalt);
 
-    double64 aux = mCO2+mSalt;
+    double aux = mCO2+mSalt;
     aux /= 55.508;
     aux += 1.;
 
-    double64 dummy = mCO2;
+    double dummy = mCO2;
     dummy /= 55.508;
     dummy += 1.;
 
@@ -704,11 +704,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientDrummond1981(double64 pres
 
     This version is just valid for NaCl [mNaCl](mK=mCa=mMg=mSo4=0)
 */
-double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientDuanSun2003( double64 temperature,
-                                                                   double64 pressure,
-                                                                   double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::activityCoefficientDuanSun2003( double temperature,
+                                                                   double pressure,
+                                                                   double mSalt )
 {
-    const double64
+    const double
             aa1( -0.411370585 ),
             aa2( 6.07632013e-4 ),
             aa3( 97.5347708 ),
@@ -722,10 +722,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientDuanSun2003( double64 temp
             p( pressure * 1.e-5 ), //conversion pressure from Pa to bar
             temp(degreeCToKelvin(temperature)); // conversion of temperature from C to K
 
-    double64 lambda  = aa1 + aa2 * temp + aa3 / temp + aa4 * p / temp + aa5 * p / (630 - temp) + aa6 * temp * log( p );
-    double64 zeta    = b1 + b2 * temp  + b3 * p / temp + b4 * p / ( 630 - temp );
+    double lambda  = aa1 + aa2 * temp + aa3 / temp + aa4 * p / temp + aa5 * p / (630 - temp) + aa6 * temp * log( p );
+    double zeta    = b1 + b2 * temp  + b3 * p / temp + b4 * p / ( 630 - temp );
 
-    double64 activityCoeff = 2 * lambda * mSalt + zeta * pow( mSalt, 2);
+    double activityCoeff = 2 * lambda * mSalt + zeta * pow( mSalt, 2);
     activityCoeff          = exp( activityCoeff );
 
     return activityCoeff;
@@ -749,23 +749,23 @@ double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientDuanSun2003( double64 temp
     // range T : 0 – 350 C
     // range NaCl molality: 0–1.95 m
 */
-double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientBattistelliEtal1997( double64 temperature,
-                                                                 double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::activityCoefficientBattistelliEtal1997( double temperature,
+                                                                 double mSalt )
 {
-    const double64
+    const double
             aa1( 1.19784e-1 ),
             aa2( -7.17823e-4 ),
             aa3( 4.93854e-6 ),
             aa4( -1.03826e-8 ),
             aa5( 1.08233e-11 );
 
-    double64 ks( aa1 );
+    double ks( aa1 );
     ks += aa2 * temperature;
     ks += aa3 * pow( temperature, 2 );
     ks += aa4 * pow( temperature, 3 );
     ks += aa5 * pow( temperature, 4 );
 
-    double64 activityCoeff = ks * mSalt;
+    double activityCoeff = ks * mSalt;
     activityCoeff = pow(10, activityCoeff );
 
     return activityCoeff;
@@ -787,10 +787,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientBattistelliEtal1997( doubl
     // range NaCl molality: 0–6.0 m
     // just the NaCl was taken into account
 */
-double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientRumpf1994( double64 pressure ,double64 temperature,double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::activityCoefficientRumpf1994( double pressure ,double temperature,double mSalt )
 {
     // activityCoefficient need conversion to mole fraction to be used (we added the conversion)
-    const double64
+    const double
             aa1( 0.254 ),
             aa2( -76.82 ),
             aa3( -10656 ),
@@ -798,24 +798,24 @@ double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientRumpf1994( double64 pressu
             gamma( 0.0028 ),
             temp(degreeCToKelvin(temperature));
 
-    double64 B0 = aa1;
+    double B0 = aa1;
     B0 += aa2 / temp;
     B0 += aa3 / pow( temp, 2 );
     B0 += aa4 / pow( temp, 3 );
 
-    double64 activityCoeff = 2 * mSalt *B0 + 3 * pow(mSalt,2) * gamma;
+    double activityCoeff = 2 * mSalt *B0 + 3 * pow(mSalt,2) * gamma;
     activityCoeff = exp (activityCoeff );
 
     // conversion to molar fraction
-    double64 xCo2 = x_Co2(pressure,temperature,mSalt);
+    double xCo2 = x_Co2(pressure,temperature,mSalt);
 
-    double64 mCO2 = molalCo2FromBrineMoleFractionCo2(xCo2,mSalt);
+    double mCO2 = molalCo2FromBrineMoleFractionCo2(xCo2,mSalt);
 
-    double64 aux = mCO2+mSalt;
+    double aux = mCO2+mSalt;
     aux /= 55.508;
     aux += 1.;
 
-    double64 dummy = mCO2;
+    double dummy = mCO2;
     dummy /= 55.508;
     dummy += 1.;
 
@@ -835,17 +835,17 @@ double64 EOS_CO2H2ONaCl_Spycher04::activityCoefficientRumpf1994( double64 pressu
     // SpycherA in bar-1
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::calculateSpycherA( double64 pressure,
-                                            double64 temperature,
-                                            double64 kH2o,
-                                            double64 phiH2o )
+double EOS_CO2H2ONaCl_Spycher04::calculateSpycherA( double pressure,
+                                            double temperature,
+                                            double kH2o,
+                                            double phiH2o )
 {
-    const double64 pTotal(pressure),
+    const double pTotal(pressure),
                    temp(degreeCToKelvin(temperature)); // conversion from C to K
 
     //  A = kH2o / ( phiH2o * pTotal * 1.0e-5) * exp( ( P - p0 ) * vH2o / (R * T) );
-    double64 A       =   kH2o;
-    double64 dummy1  =   phiH2o;
+    double A       =   kH2o;
+    double dummy1  =   phiH2o;
     dummy1  *=  pTotal;
     dummy1  *=  1.0e-5;
     A       /=  dummy1;
@@ -872,23 +872,23 @@ double64 EOS_CO2H2ONaCl_Spycher04::calculateSpycherA( double64 pressure,
     SpycherB in bar
     activityCoeff (molar fraction gamm_s)
 */
-double64 EOS_CO2H2ONaCl_Spycher04::calculateSpycherB( double64 pressure,
-                                                      double64 temperature,
-                                                      double64 phaseVolumeCo2,
-                                                      double64  phiCo2,
-                                                      double64 kCo2L,
-                                                      double64 kCo2G,
-                                                      double64 activityCoeffCO2 )
+double EOS_CO2H2ONaCl_Spycher04::calculateSpycherB( double pressure,
+                                                      double temperature,
+                                                      double phaseVolumeCo2,
+                                                      double  phiCo2,
+                                                      double kCo2L,
+                                                      double kCo2G,
+                                                      double activityCoeffCO2 )
 {
-    const double64 pTotal(pressure), temp(degreeCToKelvin(temperature));
+    const double pTotal(pressure), temp(degreeCToKelvin(temperature));
 
     if ( ( temp < 304 ) && (phaseVolumeCo2 < 94 * 1e-6) )
       {
         //    B = phiCo2 * pTotal* 1.0e-5 / ( 55.508 * activityCoeff * kCo2L ) * exp( -( P - p0 ) * vCo2 / (R * T) );
-        double64 B       =   phiCo2;
+        double B       =   phiCo2;
         B       *=  pTotal;
         B       *=  1.0e-5;
-        double64 dummy1  =   55.508;
+        double dummy1  =   55.508;
         dummy1  *=  activityCoeffCO2;
         dummy1  *=  kCo2L;
         B       /=  dummy1;
@@ -904,10 +904,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::calculateSpycherB( double64 pressure,
   
     // else
     //    B = phiCo2 * pTotal * 1.0e-5/ ( 55.508 * activityCoeff * kCo2G ) * exp( -( P - p0 ) * vCo2 / (R * T) );
-    double64 B       =   phiCo2;
+    double B       =   phiCo2;
     B       *=  pTotal;
     B       *=  1.0e-5;
-    double64 dummy1  =   55.508;
+    double dummy1  =   55.508;
     dummy1  *=  activityCoeffCO2;
     dummy1  *=  kCo2G;
     B       /=  dummy1;
@@ -930,9 +930,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::calculateSpycherB( double64 pressure,
     //  CO2-H2O Mixtures in the Geological Sequestration of CO2.
     //  II. Partitioning in Chloride Brines at 12-100oC and up to 600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molarFracH2oCarbon( double64 spycherA,
-                                             double64 spycherB,
-                                             double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::molarFracH2oCarbon( double spycherA,
+                                             double spycherB,
+                                             double mSalt )
 {
     // spycherA in bar-1
     // SpycherB in bar
@@ -940,14 +940,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::molarFracH2oCarbon( double64 spycherA,
 
     // approximation XH20= aH20
     //molarFracH2oCarbon = yH20
-    const double64 A(spycherA),
+    const double A(spycherA),
                    B(spycherB);
 
     //  yH2o = ( 1 - B ) * 55.508 / ( ( 1/ A - B ) * ( stoichio * mSalt + 55.508 ) + stoichio * mSalt * B ) ;
-    double64 yH2o    =   1;
+    double yH2o    =   1;
     yH2o    /=  A;
     yH2o    -=  B;
-    double64 dummy1   =  stoichio;
+    double dummy1   =  stoichio;
     dummy1  *=  mSalt;
     dummy1  +=  55.508;
     yH2o    *=  dummy1;
@@ -969,18 +969,18 @@ double64 EOS_CO2H2ONaCl_Spycher04::molarFracH2oCarbon( double64 spycherA,
     //  CO2-H2O Mixtures in the Geological Sequestration of CO2.
     //  II. Partitioning in Chloride Brines at 12-100oC and up to 600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molarFracCO2Brine( double64 yH2o,
-                                                      double64 spycherB )
+double EOS_CO2H2ONaCl_Spycher04::molarFracCO2Brine( double yH2o,
+                                                      double spycherB )
 {
     // spycherA in bar-1
     // SpycherB in bar
 
     // molarFracCO2Brine XC02
 
-    const double64 B(spycherB);
+    const double B(spycherB);
 
     //  xCo2 =  B * (1 - yH2o);
-    double64 xCo2(1.);
+    double xCo2(1.);
     xCo2  -=  yH2o;
     xCo2  *=  B;
 
@@ -996,9 +996,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::molarFracCO2Brine( double64 yH2o,
 
     // in the case of pure water => molality salt : msalt=0
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molalCo2FromPureWaterMolarFracCo2( double64 MolarFracCo2 )
+double EOS_CO2H2ONaCl_Spycher04::molalCo2FromPureWaterMolarFracCo2( double MolarFracCo2 )
 {
-    double64 molalCo2 = 55.508;
+    double molalCo2 = 55.508;
     molalCo2 *= MolarFracCo2;
     molalCo2 /= (1 - MolarFracCo2);
 
@@ -1019,10 +1019,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalCo2FromPureWaterMolarFracCo2( double64 M
     // activity coefficient in this case is the same as of Duan
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molalCo2FromPureWaterMolalCo2( double64 molalCo2Pure,
-                                                        double64 activityCoeff )
+double EOS_CO2H2ONaCl_Spycher04::molalCo2FromPureWaterMolalCo2( double molalCo2Pure,
+                                                        double activityCoeff )
 {
-    double64 molalCo2 = molalCo2Pure;
+    double molalCo2 = molalCo2Pure;
     molalCo2  /= activityCoeff;
 
     return molalCo2;
@@ -1038,15 +1038,15 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalCo2FromPureWaterMolalCo2( double64 molal
 
     // in this case we have saline water => molality salt : msalt
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molalCo2FromBrineMoleFractionCo2( double64 xCo2,
-                                                           double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::molalCo2FromBrineMoleFractionCo2( double xCo2,
+                                                           double mSalt )
 {
     //  molalityCo2 = xCo2 * ( stoichio * mSalt + 55.508 )  / ( 1 - xCo2 );
-    double64 molalityCo2 =   stoichio;
+    double molalityCo2 =   stoichio;
     molalityCo2 *=  mSalt;
     molalityCo2 +=  55.508;
     molalityCo2 *=  xCo2;
-    double64 dummy1      =   1.;
+    double dummy1      =   1.;
     dummy1      -=  xCo2;
     molalityCo2 /=  dummy1;
 
@@ -1062,8 +1062,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalCo2FromBrineMoleFractionCo2( double64 xC
     //  CO2-H2O Mixtures in the Geological Sequestration of CO2.
     //  II. Partitioning in Chloride Brines at 12-100oC and up to 600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molarFracCo2FromBrineMolalCo2( double64 molalCo2,
-                                                                  double64 mSalt)
+double EOS_CO2H2ONaCl_Spycher04::molarFracCo2FromBrineMolalCo2( double molalCo2,
+                                                                  double mSalt)
 {
    return molalCo2 / ( molalCo2 + 55.508 + stoichio * mSalt );
 }
@@ -1079,13 +1079,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::molarFracCo2FromBrineMolalCo2( double64 molal
     // water contains NaCl and Co2
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToMolarFracNaClInCo2SatAqueousPhase(double64 molalCo2,
-                                                                                double64 mSalt)
+double EOS_CO2H2ONaCl_Spycher04::molalNaClToMolarFracNaClInCo2SatAqueousPhase(double molalCo2,
+                                                                                double mSalt)
 {
     //  massSalt = stoichio * mSalt / ( 55.508 + stoichio * mSalt + molalityCo2 );
-    double64 xSalt = stoichio;
+    double xSalt = stoichio;
     xSalt    *=  mSalt;
-    double64 dummy1 = stoichio;
+    double dummy1 = stoichio;
     dummy1   *=  mSalt;
     dummy1   +=  55.508;
     dummy1   +=  molalCo2;
@@ -1105,25 +1105,25 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToMolarFracNaClInCo2SatAqueousPhase(
     // water contains NaCl and Co2
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molarFracH2oBrine ( double64 xCo2,
-                                                       double64 xSalt )
+double EOS_CO2H2ONaCl_Spycher04::molarFracH2oBrine ( double xCo2,
+                                                       double xSalt )
 {
     return 1. - xCo2 - xSalt;
 }
 
 
 /// returns yCo2Brine calculated from 1-yH2oBrine
-double64 EOS_CO2H2ONaCl_Spycher04::molarFracCo2Carbon( double64 yH2oBrine )
+double EOS_CO2H2ONaCl_Spycher04::molarFracCo2Carbon( double yH2oBrine )
 {
    return 1. - yH2oBrine;
 }
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::massFracCo2InCarbonicPhase( double64 molarFracCo2InCarbonicPhase,
-                                                               double64 molarFracH2oInCarbonicPhase )
+double EOS_CO2H2ONaCl_Spycher04::massFracCo2InCarbonicPhase( double molarFracCo2InCarbonicPhase,
+                                                               double molarFracH2oInCarbonicPhase )
 {
-    double64 bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
+    double bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
     bulkMassFrac += molarFracH2oInCarbonicPhase * molarMassH2o;
 
     return    (molarFracCo2InCarbonicPhase * molarMassCo2 / bulkMassFrac)*100.;// mass fraction in % weight;
@@ -1131,10 +1131,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracCo2InCarbonicPhase( double64 molarFra
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::massFracH2oInCarbonicPhase( double64 molarFracCo2InCarbonicPhase,
-                                                               double64 molarFracH2oInCarbonicPhase )
+double EOS_CO2H2ONaCl_Spycher04::massFracH2oInCarbonicPhase( double molarFracCo2InCarbonicPhase,
+                                                               double molarFracH2oInCarbonicPhase )
 {
-    double64 bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
+    double bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
     bulkMassFrac += molarFracH2oInCarbonicPhase * molarMassH2o;
 
     return    (molarFracH2oInCarbonicPhase * molarMassH2o / bulkMassFrac)*100.;// mass fraction in % weight;
@@ -1142,11 +1142,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracH2oInCarbonicPhase( double64 molarFra
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::massFracCo2inAqueousPhase( double64 molarFracCo2InAqueousPhase,
-                                                    double64 molarFracH2oInAqueousPhase,
-                                                    double64 molarFracNaclInAqueousPhase )
+double EOS_CO2H2ONaCl_Spycher04::massFracCo2inAqueousPhase( double molarFracCo2InAqueousPhase,
+                                                    double molarFracH2oInAqueousPhase,
+                                                    double molarFracNaclInAqueousPhase )
 {
-    double64 bulkMassFrac  = molarFracCo2InAqueousPhase * molarMassCo2;
+    double bulkMassFrac  = molarFracCo2InAqueousPhase * molarMassCo2;
 
     bulkMassFrac += molarFracH2oInAqueousPhase * molarMassH2o;
     bulkMassFrac += molarFracNaclInAqueousPhase * molarMassNacl;
@@ -1154,11 +1154,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracCo2inAqueousPhase( double64 molarFrac
     return (molarFracCo2InAqueousPhase * molarMassCo2 / bulkMassFrac)*100;// mass fraction in % weight
 }
 
-double64 EOS_CO2H2ONaCl_Spycher04::massFracH2oInAqueousPhase( double64 molarFracCo2InAqueousPhase,
-                                                    double64 molarFracH2oInAqueousPhase,
-                                                    double64 molarFracNaclInAqueousPhase )
+double EOS_CO2H2ONaCl_Spycher04::massFracH2oInAqueousPhase( double molarFracCo2InAqueousPhase,
+                                                    double molarFracH2oInAqueousPhase,
+                                                    double molarFracNaclInAqueousPhase )
 {
-    double64 bulkMassFrac  = molarFracCo2InAqueousPhase * molarMassCo2;
+    double bulkMassFrac  = molarFracCo2InAqueousPhase * molarMassCo2;
 
     bulkMassFrac += molarFracH2oInAqueousPhase * molarMassH2o;
     bulkMassFrac += molarFracNaclInAqueousPhase * molarMassNacl;
@@ -1168,11 +1168,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracH2oInAqueousPhase( double64 molarFrac
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClInAqueousPhase( double64 molarFracCo2InAqueousPhase,
-                                                     double64 molarFracH2oInAqueousPhase,
-                                                     double64 molarFracNaclInAqueousPhase )
+double EOS_CO2H2ONaCl_Spycher04::massFracNaClInAqueousPhase( double molarFracCo2InAqueousPhase,
+                                                     double molarFracH2oInAqueousPhase,
+                                                     double molarFracNaclInAqueousPhase )
 {
-    double64 bulkMassFrac  = molarFracCo2InAqueousPhase * molarMassCo2;
+    double bulkMassFrac  = molarFracCo2InAqueousPhase * molarMassCo2;
     bulkMassFrac += molarFracH2oInAqueousPhase * molarMassH2o;
     bulkMassFrac += molarFracNaclInAqueousPhase * molarMassNacl;
 
@@ -1204,9 +1204,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClInAqueousPhase( double64 molarFra
     // yH20=0 and yCo2=1
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::a_Co2(double64 temperature)
+double EOS_CO2H2ONaCl_Spycher04::a_Co2(double temperature)
 {
-    double64 dummy1,aCo2(0.),
+    double dummy1,aCo2(0.),
              temp(degreeCToKelvin(temperature)); //conversion from C to K
 
     aCo2    =   7.54;
@@ -1223,7 +1223,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::a_Co2(double64 temperature)
 
 
 /// activity of mixture
-double64 EOS_CO2H2ONaCl_Spycher04::a_mix(double64 temperature)
+double EOS_CO2H2ONaCl_Spycher04::a_mix(double temperature)
 {
     return a_Co2(temperature);
 }
@@ -1233,7 +1233,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::a_mix(double64 temperature)
 
 
 /// compressed volume molar CO2
-double64 EOS_CO2H2ONaCl_Spycher04::V_Co2(double64 pressure,double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::V_Co2(double pressure,double temperature )
 {
     return CompressedVolumeCo2 (pressure,temperature);
 }
@@ -1242,9 +1242,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::V_Co2(double64 pressure,double64 temperature 
 // molar fractions
 
 /// molar fraction CO2 in carbonic phase, yCO2
-double64 EOS_CO2H2ONaCl_Spycher04::y_Co2(double64 pressure,double64 temperature, double64 msalt  )
+double EOS_CO2H2ONaCl_Spycher04::y_Co2(double pressure,double temperature, double msalt  )
 {
-    double64 yH2o=y_H2o(pressure,temperature,msalt);
+    double yH2o=y_H2o(pressure,temperature,msalt);
 
     return molarFracCo2Carbon(yH2o);
 }
@@ -1253,25 +1253,25 @@ double64 EOS_CO2H2ONaCl_Spycher04::y_Co2(double64 pressure,double64 temperature,
 /**
     computes mole fraction CO2 in aqueous phase, xCo2 at equilibrium
 */
-double64 EOS_CO2H2ONaCl_Spycher04::x_Co2(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::x_Co2(double pressure,double temperature, double msalt )
 {
-    double64 yH2o=y_H2o(pressure,temperature,msalt);
+    double yH2o=y_H2o(pressure,temperature,msalt);
 
-    double64 phaseVolumeCo2=V_Co2(pressure,temperature);
+    double phaseVolumeCo2=V_Co2(pressure,temperature);
 
-    double64 kCo2L  = thermEquilConstCo2L( temperature );
+    double kCo2L  = thermEquilConstCo2L( temperature );
 
-    double64 kCo2G = thermEquilConstCo2G( temperature );
+    double kCo2G = thermEquilConstCo2G( temperature );
 
-    double64 phiCo2 = FugacityCo2( pressure,temperature,phaseVolumeCo2 );
+    double phiCo2 = FugacityCo2( pressure,temperature,phaseVolumeCo2 );
 
 // to use the activity Coefficient of Battistelli Etal 1997 as it is ready to use
 // activityCoeff = activityCoefficientBattistelliEtal1997( temperature,msalt );
 // or activityCoeff = activityCoefficientRumpf1994( pressure,temperature,msalt );
 
-    double64 activityCoeff = activityCoefficientDuanSun2003( temperature,pressure,msalt );
+    double activityCoeff = activityCoefficientDuanSun2003( temperature,pressure,msalt );
 
-    double64 spycherB= calculateSpycherB( pressure,temperature,phaseVolumeCo2,phiCo2,kCo2L,kCo2G,activityCoeff );
+    double spycherB= calculateSpycherB( pressure,temperature,phaseVolumeCo2,phiCo2,kCo2L,kCo2G,activityCoeff );
 
     return molarFracCO2Brine(yH2o,spycherB);
 }
@@ -1279,9 +1279,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::x_Co2(double64 pressure,double64 temperature,
 
 
 /// molality CO2 in aqueuse phase, mco2
-double64 EOS_CO2H2ONaCl_Spycher04::m_Co2(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::m_Co2(double pressure,double temperature, double msalt )
 {
-    double64 xco2 = x_Co2(pressure,temperature,msalt);
+    double xco2 = x_Co2(pressure,temperature,msalt);
 
     return molalCo2FromBrineMoleFractionCo2(xco2,msalt);
 }
@@ -1289,32 +1289,32 @@ double64 EOS_CO2H2ONaCl_Spycher04::m_Co2(double64 pressure,double64 temperature,
 
 
 /// molar fraction H20 in carbonic phase, yH2o
-double64 EOS_CO2H2ONaCl_Spycher04::y_H2o(double64 pressure,double64 temperature, double64 msalt  )
+double EOS_CO2H2ONaCl_Spycher04::y_H2o(double pressure,double temperature, double msalt  )
 
 {
-     double64 phaseVolumeCo2=V_Co2(pressure,temperature);
+     double phaseVolumeCo2=V_Co2(pressure,temperature);
 
-     double64 kH2o = thermEquilConstH2o( temperature );
+     double kH2o = thermEquilConstH2o( temperature );
 
-     double64 kCo2L  = thermEquilConstCo2L( temperature );
+     double kCo2L  = thermEquilConstCo2L( temperature );
 
-     double64 kCo2G = thermEquilConstCo2G( temperature );
+     double kCo2G = thermEquilConstCo2G( temperature );
 
-     double64 phiCo2 = FugacityCo2( pressure,temperature,phaseVolumeCo2 );
+     double phiCo2 = FugacityCo2( pressure,temperature,phaseVolumeCo2 );
 
-     double64 phiH2o = FugacityH2o( pressure,temperature,phaseVolumeCo2 );
+     double phiH2o = FugacityH2o( pressure,temperature,phaseVolumeCo2 );
 
      // we will use the  activity Coefficient of Battistelli Etal 1997 as it is ready to use
 
    //  activityCoeff = activityCoefficientBattistelliEtal1997( temperature,msalt );
 
-     double64 activityCoeff = activityCoefficientDuanSun2003( temperature,pressure,msalt );
+     double activityCoeff = activityCoefficientDuanSun2003( temperature,pressure,msalt );
 
  //    activityCoeff = activityCoefficientRumpf1994( pressure,temperature,msalt );
 
-     double64 spycherA = calculateSpycherA( pressure,temperature,kH2o,phiH2o );
+     double spycherA = calculateSpycherA( pressure,temperature,kH2o,phiH2o );
 
-     double64 spycherB= calculateSpycherB( pressure,temperature,phaseVolumeCo2,phiCo2,kCo2L,kCo2G,activityCoeff );
+     double spycherB= calculateSpycherB( pressure,temperature,phaseVolumeCo2,phiCo2,kCo2L,kCo2G,activityCoeff );
 
     return molarFracH2oCarbon(spycherA, spycherB, msalt );
 }
@@ -1323,11 +1323,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::y_H2o(double64 pressure,double64 temperature,
 
 
 /// molar fraction H20 in aqueuse phase, xH2o
-double64 EOS_CO2H2ONaCl_Spycher04::x_H2o(double64 pressure,double64 temperature, double64 msalt  )
+double EOS_CO2H2ONaCl_Spycher04::x_H2o(double pressure,double temperature, double msalt  )
 {
-    double64 xSalt=X_s(pressure,temperature,msalt);
+    double xSalt=X_s(pressure,temperature,msalt);
 
-    double64 xCo2=x_Co2(pressure,temperature,msalt );
+    double xCo2=x_Co2(pressure,temperature,msalt );
 
     return molarFracH2oBrine( xCo2,xSalt );
 }
@@ -1335,11 +1335,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::x_H2o(double64 pressure,double64 temperature,
 
 
 /// molar fraction salt in aqueous phase, Xs
-double64 EOS_CO2H2ONaCl_Spycher04::X_s(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::X_s(double pressure,double temperature, double msalt )
 {
-    double64 xCo2=x_Co2(pressure,temperature,msalt );
+    double xCo2=x_Co2(pressure,temperature,msalt );
 
-    double64 mCo2=molalCo2FromBrineMoleFractionCo2(xCo2,msalt); // CO2 molality
+    double mCo2=molalCo2FromBrineMoleFractionCo2(xCo2,msalt); // CO2 molality
 
     return molalNaClToMolarFracNaClInCo2SatAqueousPhase(mCo2,msalt);
 }
@@ -1349,11 +1349,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::X_s(double64 pressure,double64 temperature, d
 
 
 /// mass fraction CO2 in carbonic phase Y_CO2 @todo DOES THIS MAKE SENSE?
-double64 EOS_CO2H2ONaCl_Spycher04::Y_Co2(double64 pressure,double64 temperature, double64 msalt  )
+double EOS_CO2H2ONaCl_Spycher04::Y_Co2(double pressure,double temperature, double msalt  )
 {
-    double64 yCo2=y_Co2(pressure,temperature,msalt );
+    double yCo2=y_Co2(pressure,temperature,msalt );
 
-    double64 yH20=y_H2o(pressure,temperature,msalt );
+    double yH20=y_H2o(pressure,temperature,msalt );
 
     return massFracCo2InCarbonicPhase(yCo2,yH20);
 }
@@ -1361,11 +1361,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::Y_Co2(double64 pressure,double64 temperature,
 
 
 /// mass fraction H20 in carbonic phase, Y_H2O
-double64 EOS_CO2H2ONaCl_Spycher04::Y_H2o(double64 pressure,double64 temperature, double64 msalt  )
+double EOS_CO2H2ONaCl_Spycher04::Y_H2o(double pressure,double temperature, double msalt  )
 {
-    double64 yCo2=y_Co2(pressure,temperature,msalt );
+    double yCo2=y_Co2(pressure,temperature,msalt );
 
-    double64 yH20=y_H2o(pressure,temperature,msalt );
+    double yH20=y_H2o(pressure,temperature,msalt );
 
     return massFracH2oInCarbonicPhase(yCo2,yH20);
 }
@@ -1373,13 +1373,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::Y_H2o(double64 pressure,double64 temperature,
 
 
 /// mass fraction CO2 in aqueous phase, X_CO2
-double64 EOS_CO2H2ONaCl_Spycher04::X_Co2(double64 pressure,double64 temperature, double64 msalt  )
+double EOS_CO2H2ONaCl_Spycher04::X_Co2(double pressure,double temperature, double msalt  )
 {
-    double64 xCo2=x_Co2(pressure,temperature,msalt );
+    double xCo2=x_Co2(pressure,temperature,msalt );
 
-    double64 xH20=x_H2o(pressure,temperature,msalt );
+    double xH20=x_H2o(pressure,temperature,msalt );
 
-    double64 xs=X_s(pressure,temperature,msalt );
+    double xs=X_s(pressure,temperature,msalt );
 
     return massFracCo2inAqueousPhase(xCo2,xH20,xs);
 }
@@ -1388,13 +1388,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::X_Co2(double64 pressure,double64 temperature,
 
 
 /// mass fraction H20 in aqueous phase, X_H2O
-double64 EOS_CO2H2ONaCl_Spycher04::X_H2o(double64 pressure,double64 temperature, double64 msalt  )
+double EOS_CO2H2ONaCl_Spycher04::X_H2o(double pressure,double temperature, double msalt  )
 {
-    double64 xCo2=x_Co2(pressure,temperature,msalt );
+    double xCo2=x_Co2(pressure,temperature,msalt );
 
-    double64 xH20=x_H2o(pressure,temperature,msalt );
+    double xH20=x_H2o(pressure,temperature,msalt );
 
-    double64 xs=X_s(pressure,temperature,msalt );
+    double xs=X_s(pressure,temperature,msalt );
 
     return massFracH2oInAqueousPhase(xCo2,xH20,xs);
 }
@@ -1402,20 +1402,20 @@ double64 EOS_CO2H2ONaCl_Spycher04::X_H2o(double64 pressure,double64 temperature,
 
 
 /// mass fraction of salt in aqueous phase after equilibration
-double64 EOS_CO2H2ONaCl_Spycher04::X_salt(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::X_salt(double pressure,double temperature, double msalt )
 {
-    double64 xCo2=x_Co2(pressure,temperature,msalt );
+    double xCo2=x_Co2(pressure,temperature,msalt );
 
-    double64 xH20=x_H2o(pressure,temperature,msalt );
+    double xH20=x_H2o(pressure,temperature,msalt );
 
-    double64 xs=X_s(pressure,temperature,msalt );
+    double xs=X_s(pressure,temperature,msalt );
 
     return massFracNaClInAqueousPhase(xCo2,xH20,xs);
 }
 
 
 /// mole fraction of salt in aqueous phase after equilibration
-double64 EOS_CO2H2ONaCl_Spycher04::x_salt(double64 molalityCO2, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::x_salt(double molalityCO2, double msalt )
 {
    return  molalNaClToMolarFracNaClInCo2SatAqueousPhase(molalityCO2,msalt);
 }
@@ -1443,10 +1443,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::x_salt(double64 molalityCO2, double64 msalt )
     //  volume Partial Molar CO2 is  the apparent molar volume of dissolved CO2 (m3/mol)
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::volumePartialMolarCo2( double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::volumePartialMolarCo2( double temperature )
 {
-    const double64 temperature2(temperature * temperature);
-    double64 vPartialmolar = ( 37.51 - 9.585e-2 * temperature + 8.740e-4 * temperature2 - 5.044e-7 * temperature2*temperature );
+    const double temperature2(temperature * temperature);
+    double vPartialmolar = ( 37.51 - 9.585e-2 * temperature + 8.740e-4 * temperature2 - 5.044e-7 * temperature2*temperature );
 
     return vPartialmolar* 1e-6;// conversion from cm^3/mol to m^3/mol
 }
@@ -1479,11 +1479,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::volumePartialMolarCo2( double64 temperature )
     // valid for a range of salt molality : 0 < m_salt < 6 molality
     //   equivalent to salt mass fraction : 0 < massFracSalt < 0.95347 %weight
 */
-double64 EOS_CO2H2ONaCl_Spycher04::densityBrine( double64 pressure,
-                                                 double64 temperature,
-                                                 double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::densityBrine( double pressure,
+                                                 double temperature,
+                                                 double mSalt )
 {
-    double64
+    double
             A(0.),
             B(0.),
             C(0.),
@@ -1501,8 +1501,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityBrine( double64 pressure,
     massFracSalt = molalNaClToMassFracNaClInAqueousPhase(mSalt)*1.e-2; //conversion from salt molality to salt mass fraction
 
     //  density brine = 1/(A - B * press - C * pow(press, 2.) + massFracSalt * D  + pow(massFracSalt, 2.) * E - massFracSalt * F * press  - pow( massFracSalt, 2.) * G * press - 0.5 * H  * pow( press, 2.))
-    const double64 temp2(temp * temp);
-    const double64 press2(press * press);
+    const double temp2(temp * temp);
+    const double press2(press * press);
     A         = 1.006741e2 / temp2 - 1.127522 / temp + 5.916365e-3 - 1.035794e-5 * temp + 9.270048e-9 * temp2;
     B         = 1.042948 / temp2 - 1.1933677e-2 / temp + 5.307535e-5 - 1.0688768e-7 * temp + 8.492739e-11 * temp2;
     C         = 1.23268e-9 - 6.861928e-12 * temp;
@@ -1511,7 +1511,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityBrine( double64 pressure,
     F         = -1.5106e-5 + 8.4605e-8 * temp - 1.2715e-10 * temp2;
     G         = 2.7676e-5 - 1.5694e-7 * temp + 2.3102e-10 * temp2;
     H         = 6.4633e-8 - 4.1671e-10 * temp + 6.8599e-13 * temp2;
-    const double64  massFracSalt2(massFracSalt * massFracSalt);
+    const double  massFracSalt2(massFracSalt * massFracSalt);
     dummy1    = A - B * press - C * press2 + massFracSalt * D  + massFracSalt2 * E - massFracSalt * F * press  - massFracSalt2 * G * press - 0.5 * H  * press2;
     densBrine = 1 / dummy1;
 
@@ -1533,12 +1533,12 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityBrine( double64 pressure,
     //  xCo2 in                 mol fraction
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::densityAqueousPhase( double64 vPartialmolar,
-                                                        double64 densBrine,
-                                                        double64 xCo2 )
+double EOS_CO2H2ONaCl_Spycher04::densityAqueousPhase( double vPartialmolar,
+                                                        double densBrine,
+                                                        double xCo2 )
 {
-    double64 xH2o       = 1 - xCo2;
-    double64 itsDensAq  = 1 + xCo2 * molarMassCo2 / ( xH2o * molarMassH2o);
+    double xH2o       = 1 - xCo2;
+    double itsDensAq  = 1 + xCo2 * molarMassCo2 / ( xH2o * molarMassH2o);
 
     itsDensAq  /= ( xCo2 * vPartialmolar / ( molarMassH2o * xH2o) + 1 / densBrine );
 
@@ -1549,11 +1549,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityAqueousPhase( double64 vPartialmolar,
 
 
 /// Density of carbonic phase
-double64 EOS_CO2H2ONaCl_Spycher04::densityCarbonicPhase( double64 phaseVolumeCo2 )
+double EOS_CO2H2ONaCl_Spycher04::densityCarbonicPhase( double phaseVolumeCo2 )
 {
     //  phaseVolumeCo2 in              m^3 /mol
     //  densityCarbonicPhase in        kg/m^3
-    // double64 itsDensCo2    =  molarMassCo2 / phaseVolumeCo2;
+    // double itsDensCo2    =  molarMassCo2 / phaseVolumeCo2;
     assert( molarMassCo2 > 0. );
 
     return  molarMassCo2 / phaseVolumeCo2;
@@ -1575,13 +1575,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityCarbonicPhase( double64 phaseVolumeCo2
     //  [density]               = kg/m^3
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::compressibilityBrine( double64 densBrine,
-                                                         double64 pressure,
-                                                         double64 densBrineRef )
+double EOS_CO2H2ONaCl_Spycher04::compressibilityBrine( double densBrine,
+                                                         double pressure,
+                                                         double densBrineRef )
 {
-    const double64 pressureRef( 101.325 ), press( pressure * 1e-3);
+    const double pressureRef( 101.325 ), press( pressure * 1e-3);
 
-    double64 comprBrine = ( densBrine - densBrineRef ) / ( densBrine * ( press  - pressureRef ) );
+    double comprBrine = ( densBrine - densBrineRef ) / ( densBrine * ( press  - pressureRef ) );
 
     comprBrine *= 1.0e-03; //  1/kPa -> 1/Pa
 
@@ -1602,10 +1602,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::compressibilityBrine( double64 densBrine,
     //  [pressure]    = Pa
     //  [volume]      = molar volume at pressure p  here , unit is m3/mol:
 */
-double64 EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhase( double64 temperature,
-                                                                 double64 phaseVolumeCo2 )
+double EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhase( double temperature,
+                                                                 double phaseVolumeCo2 )
 {
-    double64 pressureVolumeGradient( 0. ),
+    double pressureVolumeGradient( 0. ),
             a ( a_mix(temperature) ),
             b ( b_mix ),
             phaseVolCo2(0.),
@@ -1649,14 +1649,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhase( double64 temper
 
 
 /// Compressibility of carbonic phase
-double64 EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhaseZ( double64 pressure,
-                                                        double64 temperature,
-                                                        double64 phaseVolumeCo2 )
+double EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhaseZ( double pressure,
+                                                        double temperature,
+                                                        double phaseVolumeCo2 )
 {
     //  Pressure in             Pa
     //  Temperature in          °C
     //  phaseVolumeCo2 in       m^3
-    double64 temp(degreeCToKelvin(temperature)); //conversion to K
+    double temp(degreeCToKelvin(temperature)); //conversion to K
 
     // zFactor
     return pressure * phaseVolumeCo2 / ( R * temp );
@@ -1692,11 +1692,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhaseZ( double64 press
     // Attention: pressure coeeficients \betas ' s in GPa^(-1 )
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double64 pressure,
-                                         double64 temperature,
-                                         double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double pressure,
+                                         double temperature,
+                                         double mSalt )
 {
-    const double64
+    const double
             aa1( 3.324e-2 ),
             aa2( 3.624e-3 ),
             aa3( -1.879e-4 ),
@@ -1716,7 +1716,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double64 pressure,
             beta4( 4.47e-6),
             beta5( -1.05e-8);
 
-    double64
+    double
             cs(0.),
             betaW(0.),
             betaStar(0.),
@@ -1730,8 +1730,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double64 pressure,
             BB(0.),
             press( pressure * 1e-6);
 
-    const double64 temperature2(temperature * temperature);
-    const double64 mSalt2(mSalt * mSalt);
+    const double temperature2(temperature * temperature);
+    const double mSalt2(mSalt * mSalt);
 
     cs          = dd1 + dd2 * temperature + dd3 * temperature2;
     betaW       = beta1 + beta2 * temperature + beta3 * temperature2 + beta4 * temperature2 * temperature + beta5 * temperature2 * temperature2;
@@ -1771,10 +1771,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double64 pressure,
     //  [viscosity]   = Pa s
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double64 temperature,
-                                                           double64 phaseVolumeCo2 )
+double EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double temperature,
+                                                           double phaseVolumeCo2 )
 {
-    const double64
+    const double
             aa0(0.235156),
             aa1(-0.491266),
             aa2(5.211155e-2),
@@ -1790,19 +1790,19 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double64 temperature,
             //ee3(0.0),
             //ee4(2.6430e-11);
 
-    const double64 molarvolume(phaseVolumeCo2), temp(degreeCToKelvin(temperature));
+    const double molarvolume(phaseVolumeCo2), temp(degreeCToKelvin(temperature));
 
-    double64 rho      = densityCarbonicPhase(molarvolume);
-    double64 T_red    = temp / 251.196;
-    double64 logT_red = log(T_red);
-    double64 dummy1 = aa0 * 1. + aa1 * logT_red + aa2 * logT_red*logT_red + aa3 * pow( logT_red, 3. ) + aa4 * pow( logT_red, 4. );
+    double rho      = densityCarbonicPhase(molarvolume);
+    double T_red    = temp / 251.196;
+    double logT_red = log(T_red);
+    double dummy1 = aa0 * 1. + aa1 * logT_red + aa2 * logT_red*logT_red + aa3 * pow( logT_red, 3. ) + aa4 * pow( logT_red, 4. );
     dummy1          = exp( dummy1 );
-    double64 eta_0       = 1.00697 * pow( temp, 0.5 ) / dummy1;  //Eq. (3)
-    double64 eta_excess  = dd1 * rho + dd2 * rho*rho + dd3 * pow(rho, 6. ) / pow(T_red, 3.) + dd4 * pow(rho, 8.) + dd5 * pow(rho, 8) / T_red;  //Eq.(8)
+    double eta_0       = 1.00697 * pow( temp, 0.5 ) / dummy1;  //Eq. (3)
+    double eta_excess  = dd1 * rho + dd2 * rho*rho + dd3 * pow(rho, 6. ) / pow(T_red, 3.) + dd4 * pow(rho, 8.) + dd5 * pow(rho, 8) / T_red;  //Eq.(8)
 
     //    eta_crit    = ee1 * rho + ee2 * pow(rho, 2.) + ee3 * pow(rho, 3.) + ee4 * pow(rho, 4.);
     //    viscosCo2   = eta_0 +  eta_excess + eta_crit;
-    double64 viscosCo2 = eta_0 +  eta_excess ;
+    double viscosCo2 = eta_0 +  eta_excess ;
     viscosCo2 *= 1.0e-6; // convert muPa s -> Pa s
 
     return viscosCo2;
@@ -1835,14 +1835,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double64 temperature,
     [molecularDiffCoeffCo2intoBrine] = m^2/s
     [viscoBrine] = Pa s
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molecularDiffCoeffCo2intoBrine( double64 temperature,
-                                                         double64 viscoBrine )
+double EOS_CO2H2ONaCl_Spycher04::molecularDiffCoeffCo2intoBrine( double temperature,
+                                                         double viscoBrine )
 {
-    double64 temp(degreeCToKelvin(temperature));
+    double temp(degreeCToKelvin(temperature));
 
-    double64 D0 =  pow( 10.,  -4.1764 + 712.52 /  temp - 2.5907e5 / ( temp*temp ) );
+    double D0 =  pow( 10.,  -4.1764 + 712.52 /  temp - 2.5907e5 / ( temp*temp ) );
 
-    double64 Db = D0 / pow( 10, 0.87 * log10( viscoBrine *1e6 /1002 ) ); //conversion from Pa s to micro Pa s
+    double Db = D0 / pow( 10, 0.87 * log10( viscoBrine *1e6 /1002 ) ); //conversion from Pa s to micro Pa s
 
     return Db * 1e-4; // conversion from cm^2/s to m^2/s
 }
@@ -1859,11 +1859,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::molecularDiffCoeffCo2intoBrine( double64 temp
     //  Pressure in             Pa
     //  Temperature in          °C
 */
-double64 EOS_CO2H2ONaCl_Spycher04::equilKH2o( double64 temperature,
-                                    double64 pressure,
-                                    double64 kH2o )
+double EOS_CO2H2ONaCl_Spycher04::equilKH2o( double temperature,
+                                    double pressure,
+                                    double kH2o )
 {
-    double64 temp(degreeCToKelvin(temperature)); //conversion from °C to K
+    double temp(degreeCToKelvin(temperature)); //conversion from °C to K
 
     return kH2o * exp( (pressure - p0) * vH2o / (R * temp) );
 }
@@ -1879,11 +1879,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::equilKH2o( double64 temperature,
 //  Pressure in             Pa
 //  Temperature in          °C
 */
-double64 EOS_CO2H2ONaCl_Spycher04::equilKCo2( double64 temperature,
-                                    double64 pressure,
-                                    double64 kCo2G )
+double EOS_CO2H2ONaCl_Spycher04::equilKCo2( double temperature,
+                                    double pressure,
+                                    double kCo2G )
 {
-    double64 temp(degreeCToKelvin(temperature)); //conversion from °C to K
+    double temp(degreeCToKelvin(temperature)); //conversion from °C to K
 
     return kCo2G * exp( (pressure - p0) * vCo2 / (R * temp) );
 }
@@ -1891,7 +1891,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::equilKCo2( double64 temperature,
 
 
 /// volume molar dissolved CO2 in brine
-double64 EOS_CO2H2ONaCl_Spycher04::Vdiss_Co2(double64 temperature)
+double EOS_CO2H2ONaCl_Spycher04::Vdiss_Co2(double temperature)
 {
     return volumePartialMolarCo2(temperature);
 }
@@ -1899,7 +1899,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::Vdiss_Co2(double64 temperature)
 
 
 /// density brine
-double64 EOS_CO2H2ONaCl_Spycher04::Rho_brine(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::Rho_brine(double pressure,double temperature, double msalt )
 {
     return densityBrine(pressure,temperature,msalt);
 }
@@ -1907,7 +1907,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::Rho_brine(double64 pressure,double64 temperat
 
 
 /// viscosity brine
-double64 EOS_CO2H2ONaCl_Spycher04::mu_brine(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::mu_brine(double pressure,double temperature, double msalt )
 {
     return viscosityBrine(pressure,temperature,msalt);
 }
@@ -1915,12 +1915,12 @@ double64 EOS_CO2H2ONaCl_Spycher04::mu_brine(double64 pressure,double64 temperatu
 
 
 /// compressibility brine
-double64 EOS_CO2H2ONaCl_Spycher04::C_brine(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::C_brine(double pressure,double temperature, double msalt )
 {
-    double64 densbrine=Rho_brine(pressure,temperature,msalt);
+    double densbrine=Rho_brine(pressure,temperature,msalt);
 
     // pressure =p0 = 1 bar refernce pressure
-    double64 densBrineRef=Rho_brine(p0,temperature,msalt);
+    double densBrineRef=Rho_brine(p0,temperature,msalt);
 
     // compressibility
     return compressibilityBrine(densbrine,pressure,densBrineRef);
@@ -1928,13 +1928,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::C_brine(double64 pressure,double64 temperatur
 
 
 /// density Aqueous Phase (contains dissolved CO2)
-double64 EOS_CO2H2ONaCl_Spycher04::Rho_AqueousPhase(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::Rho_AqueousPhase(double pressure,double temperature, double msalt )
 {
-    double64 vPartialmolar=Vdiss_Co2(temperature);
+    double vPartialmolar=Vdiss_Co2(temperature);
 
-    double64 densbrine= Rho_brine(pressure,temperature,msalt);
+    double densbrine= Rho_brine(pressure,temperature,msalt);
 
-    double64 xCo2=x_Co2(pressure,temperature,msalt);
+    double xCo2=x_Co2(pressure,temperature,msalt);
 
     // density
     return densityAqueousPhase(vPartialmolar,densbrine,xCo2);
@@ -1946,14 +1946,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::Rho_AqueousPhase(double64 pressure,double64 t
     viscosity Aqueous Phase (contain dissolved CO2)
     @note we ignore The effect of dissolved CO2 in the viscosity of aqeuse phase
 */
-double64 EOS_CO2H2ONaCl_Spycher04::mu_AqueousPhase(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::mu_AqueousPhase(double pressure,double temperature, double msalt )
 {
    return mu_brine(pressure,temperature,msalt);
 }
 
 
 /// compressibility Aqueous Phase (contain dissolved CO2)
-double64 EOS_CO2H2ONaCl_Spycher04::C_AqueousPhase(double64 pressure,double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::C_AqueousPhase(double pressure,double temperature, double msalt )
 {
     // we ignore The effect of dissolved CO2 in the viscosity of aqeuse phase
     return C_brine(pressure,temperature,msalt);
@@ -1962,9 +1962,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::C_AqueousPhase(double64 pressure,double64 tem
 
 
 /// density Carbonic Phase
-double64 EOS_CO2H2ONaCl_Spycher04::Rho_CarbonicPhase(double64 pressure,double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::Rho_CarbonicPhase(double pressure,double temperature )
 {
-    const double64 phaseVolumeCo2=V_Co2(pressure,temperature);
+    const double phaseVolumeCo2=V_Co2(pressure,temperature);
 
     return densityCarbonicPhase(phaseVolumeCo2);
 }
@@ -1972,9 +1972,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::Rho_CarbonicPhase(double64 pressure,double64 
 
 
 /// viscosity Carbonic Phase
-double64 EOS_CO2H2ONaCl_Spycher04::mu_CarbonicPhase(double64 pressure,double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::mu_CarbonicPhase(double pressure,double temperature )
 {
-    double64 phaseVolumeCo2=V_Co2(pressure,temperature);
+    double phaseVolumeCo2=V_Co2(pressure,temperature);
 
     return viscosityCarbonicPhase(temperature,phaseVolumeCo2);
 }
@@ -1982,13 +1982,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::mu_CarbonicPhase(double64 pressure,double64 t
 
 
 /// compressibility of the carbonic phase
-double64 EOS_CO2H2ONaCl_Spycher04::C_CarbonicPhase(double64 pressure,double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::C_CarbonicPhase(double pressure,double temperature )
 {
-//    double64 comp(0.0),phaseVolumeCo2(0.);
+//    double comp(0.0),phaseVolumeCo2(0.);
 //    phaseVolumeCo2=V_Co2(pressure,temperature);
     // problem with compressibilityCarbonicPhase
 //    comp= compressibilityCarbonicPhase(temperature,phaseVolumeCo2);
-    const double64 intP(1.);
+    const double intP(1.);
 
     return -(Bg(pressure+intP,temperature) - Bg(pressure,temperature) ) / (Bg(pressure,temperature) * intP);
 }
@@ -1997,9 +1997,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::C_CarbonicPhase(double64 pressure,double64 te
 
 
 /// Z compressbility factor Carbonic Phase
-double64 EOS_CO2H2ONaCl_Spycher04::Z_CarbonicPhase(double64 pressure, double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::Z_CarbonicPhase(double pressure, double temperature )
 {
-    double64 phaseVolumeCo2=V_Co2(pressure,temperature);
+    double phaseVolumeCo2=V_Co2(pressure,temperature);
     // Zcomp=
     return compressibilityCarbonicPhaseZ(pressure,temperature,phaseVolumeCo2);
 }
@@ -2007,27 +2007,27 @@ double64 EOS_CO2H2ONaCl_Spycher04::Z_CarbonicPhase(double64 pressure, double64 t
 
 
 /// molecular Diffusivity Coefficient Co2 into Brine
-double64 EOS_CO2H2ONaCl_Spycher04::D_Co2(double64 pressure, double64 temperature, double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::D_Co2(double pressure, double temperature, double msalt )
 {
-    double64 visBrine=viscosityBrine(pressure,temperature,msalt);
+    double visBrine=viscosityBrine(pressure,temperature,msalt);
     return molecularDiffCoeffCo2intoBrine(temperature,visBrine);
 }
 
 
 
 /// equilibrium KCO2
-double64 EOS_CO2H2ONaCl_Spycher04::KCo2(double64 pressure, double64 temperature)
+double EOS_CO2H2ONaCl_Spycher04::KCo2(double pressure, double temperature)
 {
-    double64 kco2const=thermEquilConstCo2G(temperature);
+    double kco2const=thermEquilConstCo2G(temperature);
     return equilKCo2(temperature,pressure,kco2const);
 }
 
 
 
 /// equilibrium KH2O
-double64 EOS_CO2H2ONaCl_Spycher04::KH2o(double64 pressure, double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::KH2o(double pressure, double temperature )
 {
-    double64 kh2oconst=thermEquilConstH2o(temperature);
+    double kh2oconst=thermEquilConstH2o(temperature);
     return equilKH2o(temperature,pressure,kh2oconst);
 }
 
@@ -2044,7 +2044,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::KH2o(double64 pressure, double64 temperature 
     // black-oil simulation of CO2 geological storage
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::solutionAqueousCarbonicRatio( double64 pressure, double64 temperature ,double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::solutionAqueousCarbonicRatio( double pressure, double temperature ,double msalt )
 {
     // Rs volume of dissolved Co2 @ Sc/
     //  rs    =   Rho_AqueousPhase(pSC,tSC,msalt);
@@ -2052,7 +2052,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::solutionAqueousCarbonicRatio( double64 pressu
     //  rs    /=  Rho_CarbonicPhase(pSC,tSC);
     //  rs    /=  aux;
 
-    double64 rs = Rho_brine(pSC,tSC,msalt);
+    double rs = Rho_brine(pSC,tSC,msalt);
     rs    *=  x_Co2(pressure,temperature,msalt);
     rs    /=  Rho_CarbonicPhase(pSC,tSC);
     rs    /=  1-x_Co2(pressure,temperature,msalt);
@@ -2063,9 +2063,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::solutionAqueousCarbonicRatio( double64 pressu
 
 
 /// vCo2 @RC / vCo2 @SC unit => Rm^3/Sm^3
-double64 EOS_CO2H2ONaCl_Spycher04::GasFormationVolumeFactor( double64 pressure, double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::GasFormationVolumeFactor( double pressure, double temperature )
 {
-    double64 bg = V_Co2(pressure,temperature );
+    double bg = V_Co2(pressure,temperature );
     bg         /= V_Co2( pSC, tSC );
 
     return bg;
@@ -2082,11 +2082,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::GasFormationVolumeFactor( double64 pressure, 
     // Vwater @RC / Vwater @SC  unit => Rm^3/Sm^3
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::WaterFormationVolumeFactor( double64 pressure, double64 temperature,double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::WaterFormationVolumeFactor( double pressure, double temperature,double msalt )
 {
     //  bw    =   Rho_AqueousPhase(pSC,tSC,msalt);
     //  bw    /=  Rho_AqueousPhase(pressure,temperature,msalt);
-    double64 bw =   Rho_brine(pSC,tSC,msalt);
+    double bw =   Rho_brine(pSC,tSC,msalt);
     bw    /=  Rho_brine(pressure,temperature,msalt);
     bw    /=  1-X_Co2(pressure,temperature,msalt)*1e-2;
 
@@ -2097,7 +2097,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::WaterFormationVolumeFactor( double64 pressure
 
 
 /// Reservoir solution Aqueous Carbonic Ratio (gas-water ratio)
-double64 EOS_CO2H2ONaCl_Spycher04::Rs( double64 pressure, double64 temperature,double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::Rs( double pressure, double temperature,double msalt )
 {
    return solutionAqueousCarbonicRatio(pressure,temperature,msalt);
 }
@@ -2105,7 +2105,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::Rs( double64 pressure, double64 temperature,d
 
 
 /// gas (CO2) formation volume factor, Bg (CO2)
-double64 EOS_CO2H2ONaCl_Spycher04::Bg( double64 pressure, double64 temperature )
+double EOS_CO2H2ONaCl_Spycher04::Bg( double pressure, double temperature )
 {
     return GasFormationVolumeFactor(pressure,temperature);
 }
@@ -2113,7 +2113,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::Bg( double64 pressure, double64 temperature )
 
 
 /// formation factor, Bw (brine
-double64 EOS_CO2H2ONaCl_Spycher04::Bw( double64 pressure, double64 temperature,double64 msalt )
+double EOS_CO2H2ONaCl_Spycher04::Bw( double pressure, double temperature,double msalt )
 {
     return WaterFormationVolumeFactor(pressure,temperature,msalt);
 }
@@ -2124,7 +2124,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::Bw( double64 pressure, double64 temperature,d
 
 
 /// Mass Fraction salt (massFracNaCl) in % weight substance in weight solvent NOT in ppm
-double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt)
+double EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolalNaClInAqueousPhase( double massFracSalt)
 {
     // mass fraction in % weight
     return 1. * massFracSalt / ( molarMassNacl * ( 100. - massFracSalt ) );
@@ -2133,19 +2133,19 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolalNaClInAqueousPhase( double
 
 
 /// Mass Fraction salt (massFracNaCl) in % weight substance in weight solvent NOT in ppm
-double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToMassFracNaClInAqueousPhase( double64 mSalt)
+double EOS_CO2H2ONaCl_Spycher04::molalNaClToMassFracNaClInAqueousPhase( double mSalt)
 {
-    double64 dummy = mSalt * molarMassNacl;
+    double dummy = mSalt * molarMassNacl;
     return dummy / (1 + dummy) * 100.; // in % weight
 }
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt)
+double EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolarFracNaClInAqueousPhase( double massFracSalt)
 {
-    double64 molarFrac =  massFracSalt * molarMassH2o;
+    double molarFrac =  massFracSalt * molarMassH2o;
 
-    double64 dummy = massFracSalt * (molarMassH2o - molarMassNacl) + 100. * molarMassNacl;
+    double dummy = massFracSalt * (molarMassH2o - molarMassNacl) + 100. * molarMassNacl;
 
     return molarFrac / dummy;
 }
@@ -2153,18 +2153,18 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolarFracNaClInAqueousPhase( do
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt)
+double EOS_CO2H2ONaCl_Spycher04::molalNaClToMolarFracNaClInAqueousPhase( double mSalt)
 {
-    double64 molarFrac = mSalt / (mSalt + 55.508);
+    double molarFrac = mSalt / (mSalt + 55.508);
 
     return molarFrac;
 }
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToPpmInAqueousPhase( double64 mSalt )
+double EOS_CO2H2ONaCl_Spycher04::molalNaClToPpmInAqueousPhase( double mSalt )
 {
-    double64
+    double
             conversion( molalNaClToMassFracNaClInAqueousPhase( mSalt) );
 
     conversion  *=  1.e-2*1.e6; //  ppm \in [0, 1.e6] ,1.e-2 because mass fraction is in %
@@ -2174,66 +2174,66 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToPpmInAqueousPhase( double64 mSalt 
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt )
+double EOS_CO2H2ONaCl_Spycher04::ppmNaClToMolalNaClInAqueousPhase( double ppmSalt )
 {
     return massFracNaClToMolalNaClInAqueousPhase(ppmSalt*1.e-6*1.e2); //conversion from massfraction to molality
 }
 
 // NON MEMBER FUNCTIONS
 
-double64 psiToPa( double64 pressureInPsi )
+double psiToPa( double pressureInPsi )
 {
     return pressureInPsi * 6894.75729;
 }
 
 
-double64 paToPsi( double64 pressureInPa )
+double paToPsi( double pressureInPa )
 {
     return pressureInPa * 0.000145037738;
 }
 
 
 
-double64 paTobar( double64 pressureInPa )
+double paTobar( double pressureInPa )
 {
     return  pressureInPa * 1.0e-5;
 }
 
 
 
-double64 barTopa( double64 pressureInbar )
+double barTopa( double pressureInbar )
 {
     return  pressureInbar * 1.0e+5;
 }
 
 
 
-double64 degreeCToKelvin( double64 temperatureInC )
+double degreeCToKelvin( double temperatureInC )
 {
    return  temperatureInC + 273.15;
 }
 
 
 
-double64 KelvinTodegreeC( double64 temperatureInK )
+double KelvinTodegreeC( double temperatureInK )
 {
    return  temperatureInK - 273.15;
 }
 
 
 
-double64 temp( double64 depth )
+double temp( double depth )
  {
-    const double64 temp_surface(20); // 20 C
-    const double64 therm_grad(0.03); //3 C/100m
+    const double temp_surface(20); // 20 C
+    const double therm_grad(0.03); //3 C/100m
     return temp_surface + depth * therm_grad;
  }
 
 
-double64 pres( double64 depth )
+double pres( double depth )
  {
-    const double64 pres_grad(10000.); // 0.1 bar/m
-    const double64 pres_surface(100000); // 1 bar
+    const double pres_grad(10000.); // 0.1 bar/m
+    const double pres_surface(100000); // 1 bar
     return pres_surface + depth * pres_grad;
  }
 
@@ -2242,18 +2242,18 @@ double64 pres( double64 depth )
 void EOS_CO2H2ONaCl_Spycher04::plot_brine()
 {
     // needed for plotting
-    const double64 Tmax(100.);
-    const double64 Tmin(20.);
-    const double64 Pmax(35000000.); //350 bar
-    const double64 Pmin(100000.); // 1 bar
-    const double64 msaltmin(0.);
-    const double64 msaltmax(1.5); //87664.5 ppm
-    const double64 nTP(100);
-    const double64 nmsalt(4);
-    const double64 max_depth(2600.); //2600 m
+    const double Tmax(100.);
+    const double Tmin(20.);
+    const double Pmax(35000000.); //350 bar
+    const double Pmin(100000.); // 1 bar
+    const double msaltmin(0.);
+    const double msaltmax(1.5); //87664.5 ppm
+    const double nTP(100);
+    const double nmsalt(4);
+    const double max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_Brine_depth,fout_viscosity_Brine_depth,fout_compressibility_Brine_depth;
-    vector<double64> T(nTP),P(nTP),msalt(nmsalt),depth(nTP);
+    vector<double> T(nTP),P(nTP),msalt(nmsalt),depth(nTP);
 
     fout.open("density_brine.txt");
     fout_density_Brine_depth.open("density_brine_depth.txt");
@@ -2314,22 +2314,22 @@ void EOS_CO2H2ONaCl_Spycher04::plot_brine()
 void EOS_CO2H2ONaCl_Spycher04::plot_AqueousPhase()
 {
     // needed for plotting
-    const double64 Tmax(100.);
-    const double64 Tmin(20.);
-    const double64 Pmax(35000000.); //350 bar
-    const double64 Pmin(100000.); // 1 bar
-    const double64 msaltmin(0.);
-    const double64 msaltmax(1.5); //87664.5 ppm
-    const double64 nTP(100);
-    const double64 nmsalt(4);
-    const double64 max_depth(2600.); //2600 m
+    const double Tmax(100.);
+    const double Tmin(20.);
+    const double Pmax(35000000.); //350 bar
+    const double Pmin(100000.); // 1 bar
+    const double msaltmin(0.);
+    const double msaltmax(1.5); //87664.5 ppm
+    const double nTP(100);
+    const double nmsalt(4);
+    const double max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_AqueousPhase_depth,fout_density_difference_depth,
             fout_Rs_depth,fout_D_Co2_depth,fout_Bw_depth,
             fout_density_AqueousPhase_T50_msalt0,fout_density_AqueousPhase_T100_msalt0,
             fout_viscosity_AqueousPhase_T50_msalt0,fout_viscosity_AqueousPhase_T100_msalt0,
             fout_viscosity_AqueousPhase_T50_SeaWater,fout_density_AqueousPhase_T50_SeaWater;
-    vector<double64> T(nTP), P(nTP), msalt(nmsalt), depth(nTP), PP(1000);
+    vector<double> T(nTP), P(nTP), msalt(nmsalt), depth(nTP), PP(1000);
 
     fout.open("density_AqueousPhase.txt");
     fout_density_AqueousPhase_depth.open("density_AqueousPhase_depth.txt");
@@ -2420,13 +2420,13 @@ void EOS_CO2H2ONaCl_Spycher04::plot_AqueousPhase()
 void EOS_CO2H2ONaCl_Spycher04::plot_CarbonicPhase()
 {
     // needed for plotting
-    const double64 Tmax(100.);
-    const double64 Tmin(20.);
-    const double64 Pmax(35000000.); //350 bar
-    const double64 Pmin(100000.); // 1 bar
-    const double64 nTP(100);
-    const double64 nmsalt(4);
-    const double64 max_depth(2600.); //2600 m
+    const double Tmax(100.);
+    const double Tmin(20.);
+    const double Pmax(35000000.); //350 bar
+    const double Pmin(100000.); // 1 bar
+    const double nTP(100);
+    const double nmsalt(4);
+    const double max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_CarbonicPhase_depth,fout_viscosity_CarbonicPhase_depth,
             fout_compressibility_CarbonicPhase_depth,fout_Zfacor_CarbonicPhase_depth,
@@ -2434,7 +2434,7 @@ void EOS_CO2H2ONaCl_Spycher04::plot_CarbonicPhase()
             fout_density_CarbonicPhase_T50,fout_density_CarbonicPhase_T100,
             fout_viscosity_CarbonicPhase_T50,fout_viscosity_CarbonicPhase_T100,
             fout_viscosity_CarbonicPhase_T320K,fout_compressibility_CarbonicPhase_T50,fout_Bg_T50;
-    vector<double64> T(nTP),P(nTP),msalt(nmsalt),depth(nTP),PP(1000);
+    vector<double> T(nTP),P(nTP),msalt(nmsalt),depth(nTP),PP(1000);
 
     fout.open("density_CarbonicPhase.txt");
     fout_density_CarbonicPhase_depth.open("density_CarbonicPhase_depth.txt");
@@ -2537,22 +2537,22 @@ void EOS_CO2H2ONaCl_Spycher04::plot_CarbonicPhase()
 void EOS_CO2H2ONaCl_Spycher04::plot_thermodynamics()
 {
     // needed for plotting
-    const double64 Tmax(100.);
-    const double64 Tmin(20.);
-    const double64 Pmax(35000000.); //350 bar
-    const double64 Pmin(100000.); // 1 bar
-    const double64 msaltmin(0.);
-    const double64 msaltmax(1.5); //87664.5 ppm
-    const double64 nTP(100);
-    const double64 nmsalt(4);
-    const double64 max_depth(2600.); //2600 m
+    const double Tmax(100.);
+    const double Tmin(20.);
+    const double Pmax(35000000.); //350 bar
+    const double Pmin(100000.); // 1 bar
+    const double msaltmin(0.);
+    const double msaltmax(1.5); //87664.5 ppm
+    const double nTP(100);
+    const double nmsalt(4);
+    const double max_depth(2600.); //2600 m
 
     ofstream fout_y_Co2_depth,fout_y_H2o_depth,fout_x_Co2_depth,
             fout_x_H2o_depth,fout_x_s_depth,
             fout_y_H2o_T50,fout_y_H2o_T100,fout_x_Co2_T50,fout_x_Co2_T100,fout_x_Co2_T50_SeaWater,
             fout_y_H2o_T50_SeaWater,fout_x_H2o_T50_SeaWater,fout_x_s_T50_SeaWater,
             fout_m_Co2_T40_SeaWater,fout_m_Co2_T60_SeaWater;
-    vector<double64> T(nTP),P(nTP),msalt(nmsalt),depth(nTP),PP(1000);
+    vector<double> T(nTP),P(nTP),msalt(nmsalt),depth(nTP),PP(1000);
 
     //    fout.open("density_brine.txt");
     fout_y_Co2_depth.open("y_Co2_depth.txt");

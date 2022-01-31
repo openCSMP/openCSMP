@@ -11,24 +11,28 @@ class LinearTetrahedron : public FiniteElement {
     LinearTetrahedron();
     virtual ~LinearTetrahedron();
 
-    virtual double64       Volume();
-    virtual void           CounterClockwiseNodes( std::vector<size_t>& ids ) const;
-    virtual size_t         CornerNodes() const  { return 4U; }
-    virtual void           CornerNodes( std::vector<size_t>& ids ) const;
-    virtual void           NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
-    virtual void           NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual double  Volume();
+    virtual void    CounterClockwiseNodes( std::vector<size_t>& ids ) const;
+    virtual size_t  CornerNodes() const  { return 4U; }
+    virtual void    CornerNodes( std::vector<size_t>& ids ) const;
+    virtual void    NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
+    virtual void    NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
+    
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( size_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( size_t /* segment */ ) const { return LINEAR_BAR; };
   
-    virtual void           UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const;
-
-    virtual   void         N( std::vector<double64>& N, const std::vector<double64>& xyz );
-    virtual   void         dN( DenseMatrix<DM_MIN>& M );
-    virtual   void         IntegralNN( DenseMatrix<DM_MIN>& M );
+    virtual void UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
+    
+    virtual void N( std::vector<double>& N, const std::vector<double>& xyz );
+    virtual void dN( DenseMatrix<DM_MIN>& M );
+    virtual void IntegralNN( DenseMatrix<DM_MIN>& M );
 
   private:
-    size_t                 n( size_t i, size_t a );
-    void                   UpdateFor();
+    size_t n( size_t i, size_t a );
+    void   UpdateFor();
 };
 
 /**

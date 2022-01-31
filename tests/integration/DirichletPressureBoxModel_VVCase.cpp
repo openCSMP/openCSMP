@@ -10,6 +10,8 @@
 #include "ANSYS_Interface.h"
 #include "ANSYS_Model3D.h"
 #include "MeshDiagnostics.h"
+#include "ModelTopology.h"
+#include "CSMP_highLevelUtilities.h"
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
 #include "Region.h"
@@ -156,15 +158,14 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS_AnalyticallyIntegrated
    ANSYS_Interface  mesh_interface(isoparametric);
 
    const bool binary_file( true );
-   const bool irregular_mesh( true );
-   mesh_interface.Read_ANSYS_Mesh( model_name_.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+   mesh_interface.Read_ANSYS_Mesh( model_name_.c_str(), mesh_container, mesh_topology, binary_file, true );
 
    mesh_topology.ReduceToRegions( model_name_.c_str() );
    map<size_t,size_t>  old_and_new_elmtids;
    mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
    mesh_container.ReduceTo( old_and_new_elmtids );
 
-   Model<DIM> model( mesh_topology, mesh_container, "DirichletPressureBoxModel_VVCase-variables.txt", false, true, true );
+   Model<DIM> model( mesh_topology, mesh_container, "DirichletPressureBoxModel_VVCase-variables.txt", true, true );
 
    model.InputPropertyValue( "conductivity", makeScalar(PLAIN,1.0e-12) );
    model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.) );

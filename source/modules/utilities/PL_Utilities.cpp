@@ -1,19 +1,22 @@
 #include "PL_Utilities.h"
+#include "Region.h"
+#include "Exception.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
 namespace csmp {
 
 template<>
-double64 maximumDifference<3U,Node>( Model<3U>& model, const char* prop1Name, const char* prop2Name, const char* region )
+double maximumDifference<3U,Node>( Model<3U>& model, const char* prop1Name, const char* prop2Name, const char* region )
 {
   // keys to database for props
   const Index prop1Key( model.Database().StorageKey( prop1Name ) );
   const Index prop2Key( model.Database().StorageKey( prop2Name ) );
 
   // max difference
-  double64 maxDifference( 0. ), difference( 0. );
-  double64 prop1, prop2;
+  double maxDifference( 0. ), difference( 0. );
+  double prop1, prop2;
 
   // looping over all nodes of the region of interest
   Region<3>& rref( model.Region( region ) );
@@ -36,15 +39,15 @@ double64 maximumDifference<3U,Node>( Model<3U>& model, const char* prop1Name, co
 
 
 template<>
-double64 averageDifference<3U,Node>( Model<3U>& model, const char* prop1Name, const char* prop2Name, const char* region )
+double averageDifference<3U,Node>( Model<3U>& model, const char* prop1Name, const char* prop2Name, const char* region )
 {
   // keys to database for props
   const Index prop1Key( model.Database().StorageKey( prop1Name ) );
   const Index prop2Key( model.Database().StorageKey( prop2Name ) );
 
   // max difference
-  double64 cumulativeDifference( 0. ), averageDifference;
-  double64 prop1, prop2;
+  double cumulativeDifference( 0. ), averageDifference;
+  double prop1, prop2;
 
   // looping over all nodes of the region of interest
   Region<3>& rref( model.Region( region ) );
@@ -65,13 +68,13 @@ double64 averageDifference<3U,Node>( Model<3U>& model, const char* prop1Name, co
 
 
 template<>
-double64 maximumOfProperty<3U,Node>( Model<3U>& model, const char* propName, const char* region )
+double maximumOfProperty<3U,Node>( Model<3U>& model, const char* propName, const char* region )
 {
   // keys to database for props
   const Index propKey( model.Database().StorageKey( propName ) );
 
   // max
-  double64 maxOfProp( 0. ), prop;
+  double maxOfProp( 0. ), prop;
 
   // looping over all nodes of the region of interest
   Region<3>& rref( model.Region( region ) );
@@ -152,7 +155,7 @@ void bubbleSortNodes1D( vector<Node<1U>*>::iterator NODES_END,
 } // bubbleSortNodes1D
 
 
-void scaleModelByFactor( Model<3U>& model, double64 xFactor, double yFactor, double zFactor )
+void scaleModelByFactor( Model<3U>& model, double xFactor, double yFactor, double zFactor )
 {
   Region<3>& mref( model.Region( "Model" ) );
   const vector<Node<3U>*>::const_iterator nodesEnd( mref.NodesEnd() );
@@ -169,11 +172,11 @@ void scaleModelByFactor( Model<3U>& model, double64 xFactor, double yFactor, dou
 
 void minMaxXYZ( Point<3U>& min, Point<3U>& max, const Model<3U>& model, const char* regionName )
 {
-  double64 xMin( 0. ), xMax( 0. ), yMin( 0. ), yMax( 0. ), zMin( 0. ), zMax( 0. );
+  double xMin( 0. ), xMax( 0. ), yMin( 0. ), yMax( 0. ), zMin( 0. ), zMax( 0. );
   const Region<3>& region( model.Region( regionName ) );
 
-  const std::vector<csmp::Node<3U>*>::const_iterator regionNodesEnd( region.NodesEnd() );
-  for( std::vector<csmp::Node<3U>*>::const_iterator it = region.NodesBegin(); it != regionNodesEnd; ++it )
+  const auto regionNodesEnd( region.NodesEnd() );
+  for( auto it = region.NodesBegin(); it != regionNodesEnd; ++it )
   {
     xMax = (*it)->x() > xMax ? (*it)->x() : xMax;
     yMax = (*it)->y() > yMax ? (*it)->y() : yMax;

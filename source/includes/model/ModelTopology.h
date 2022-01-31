@@ -9,7 +9,62 @@ namespace csmp {
 
 template<size_t> class VSet;
 
-/// Stores model topology as defined in ANSYS model and conveyed to CSMP as '.asc' file
+/** 
+     Model topology  associates elements with regions and (future) boundaries,
+     recording the region and boundary names, element types, and their dimensionality.
+     This is important in model construction process.
+     The ModelTopology stores this "topologic" information, which
+     cannot be stored in the VSet.
+     
+     Model topology is used also to perform a consistency check on the VSet. It checks the neighbor connectivity and gets VSet to fix it if there is a problem.
+    
+     When the model is supposed box-shaped, this is tested and potentially missing information is restored in collaboration with the VSet / VDataand Box.
+     
+     When the model was created by ANSYS and output using its CSP interface,
+     the information needed to initialise the ModelToplogy class is contained in the '.asc' file.
+
+    @author S.K. Matthaei
+    @date 2001
+     
+
+    @section motivation Motivation
+
+    ModelTopology was created to convey topological information from
+    an ANSYS model to CSMP so that corresponding named groups of elements 
+    can be created and assigned specific material properties.  
+
+    For this purpose, ModelTopology stores named maps of the element
+    IDs and types that make up specific model regions. By default, the 
+    element names are the ANSYS element names as captured inside
+    the class ANSYS_ElementSpecifications. Functionality is there
+    in the public interface to convert these into CSMP names.
+
+    Since one does not always want to use all topological information and
+    or finite elements in a simulation, ModelTopology allows the user
+    to reduce the initial topology as, for instance, obtained from ANSYS's
+    meshing tools, to a few target regions - or element types, such as
+    only the volume elements. Several interfaces are provided for this
+    purpose.  
+
+    @section structure Structure
+     
+    ModelTopology assumes a complementary role to the VSet which 
+    stores the connectivity between elements and their nodes. Thus, there
+    must always be a supporting VSet in order to build a Model.
+    When the ModelTopology is reduced to a subset of the original 
+    model, corresponding operations must be performed on the VSet.
+     
+     
+    @section participants Participants
+     
+    The current implementation depends on the ANSYS_ElementSpecifications 
+    object for the interpretation of finite element names.  
+     
+     
+    @section examples Application Examples
+     
+    The topology class is used inside of ANSYS_Model3D  and  2D.
+ */
 class ModelTopology {
   public:
     explicit ModelTopology( bool isoparametric_element_mesh=false );
@@ -17,10 +72,6 @@ class ModelTopology {
     ModelTopology( const ModelTopology& mt );
     ModelTopology& operator=( const ModelTopology& mt );
     ~ModelTopology();
-
-    /// output info
-    void        Out() const;
-    void        Out( const char* output_file ) const;
 
     /// general model info
     void        ModelName( const char* name );
@@ -44,7 +95,7 @@ class ModelTopology {
     
     /// return total number and CSMP names of FE-types in the model
     size_t      FiniteElementTypes( std::set<std::string>& etypes ) const;
-    size_t      FiniteElementTypes( std::set<int32>& etypes ) const;
+    size_t      FiniteElementTypes( std::set<int32_t>& etypes ) const;
     void        ChangeElementType( const std::string& old_element_type, std::string new_element_type );
     void        EliminateElementType( const char* etype );
     void        EliminateElementTypes( const std::list<std::string>& etypes );
@@ -69,7 +120,7 @@ class ModelTopology {
     /// check whether region is alreday included
     bool        Contains( const char* region ) const;
     /// remove certain regions
-    void        Erase();
+    void        Erase(); ///< all regions
     void        RemoveRegions( const std::set<std::string>& regions );
     void        RemoveRegion( const char* name );
     /// eliminate all model regions other than the ones specified in '*-regions.txt' file
@@ -87,72 +138,88 @@ class ModelTopology {
                                     size_t elm );
     void        AddRegionElementIds( const char* rname,
                                      const std::vector<size_t>& elms );
+                                     
+    /// adds unique (non-overlapping) regions to topology, using the name, element types and element indices supplied
     bool        AddRegions( const std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >& unique_regions );
-    bool        AddRegionsWithoutEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
-                                                       const std::multimap<std::string,std::vector<size_t> >& object_elements );
+    
+    /// adds unique (non-overlapping) regions to topology, using the region specifications (name and element types) and element index lists supplied
+    bool        AddRegions( const std::multimap<std::string,std::string>& object_specs,
+                            const std::multimap<std::string,std::vector<size_t> >& object_elements );
+     
+    /// adds regions to topology, eliminating lower-dimensional regions with the same name as the ones with the same dimension as the model
     bool        AddRegionsWithEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
                                                     const std::multimap<std::string,std::vector<size_t> >& object_elements );
     template<size_t dim>
     void        RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset );
 
-	/// region names
-	void		RegionNames( std::vector<std::string>& ) const;
+	  /// region names
+	  void		    RegionNames( std::vector<std::string>& ) const;
 
     /// properties of regions
     void        PropertiesOfRegions( const char* regions_file,
                                      std::list<std::string>& properties,
-                                     std::map<std::string,std::list<double64> >& props ) const;
-    template<size_t dim>
-    void        AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements);
+                                     std::map<std::string,std::list<double> >& props ) const;
 
-    /// numbering
-    template<size_t dim>
-    void        RenumberElements( VSet<dim>& vset, bool check_whether_already_correct );
-    void        RenumberElements( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
-    bool        CheckElementNumbering() const;
-//    void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping );
-    void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
 
-    /// checks and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes etc
+    // ---------------------------------------------------------
+    // consistency checks and restoration of missing information
+    // ---------------------------------------------------------
+
+    /// initialises topology object and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes, neighbor connectivity etc.
     template<size_t dim>
-    bool        CheckTopology( VSet<dim>& vset,
-                               const std::multimap<std::string,std::string>& object_specs,
-                               const std::multimap<std::string,std::vector<size_t> >& object_elements,
-                               bool require_unique_names_for_vol_surf_lines  = true,
-                               bool interactive_property_assignment = false,
-                               bool correct_orientation_of_surface_elements = false,
-                               bool non_box_boundary = true );
+    bool        EstablishTopology( VSet<dim>& vset,
+                                   const std::multimap<std::string,std::string>& object_specs,
+                                   const std::multimap<std::string,std::vector<size_t> >& object_elements,
+                                   bool require_unique_names_for_vol_surf_lines  = true,
+                                   bool interactive_property_assignment = false,
+                                   bool correct_orientation_of_surface_elements = false,
+                                   bool reassign_boundary_flags = true );
   
-    /// calls CheckTopology with a reduced set of options
+    /// calls EstablishTopology with a reduced set of options
     template<size_t dim>
-    bool        CheckTopology( VSet<dim>& vset,
-                               bool require_unique_names_for_vol_surf_lines = true,
-                               bool correct_orientation_of_surface_elements = false,
-                               bool non_box_boundary = true );
+    bool        EstablishTopology( VSet<dim>& vset,
+                                   bool require_unique_names_for_vol_surf_lines = true,
+                                   bool correct_orientation_of_surface_elements = false,
+                                   bool reassign_boundary_flags = true );
+  
+    /// checks that 2D model contains the boundaries LEFT, RIGHT, BOTTOM, TOP
+    bool RectangleShapedModel() const;
+    
+    /// checks that 3D model contains the boundaries LEFT, RIGHT, BOTTOM, FRONT, BACK; TOP omitted because it may be IRREGULAR
+    bool BoxShapedModel() const;
+    
+    /// recreates the BOX_BOUNDARY node flags if a problem was detected
+    template<size_t dim> 
+    bool  AssignBoxShapedModelFlags( VSet<dim>& ) const;
+
+    template<size_t dim>
+    void  AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements);
+
+    bool  CheckElementNumbering() const;
+
+    /// numbering / repair
+    void  CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
+
+    /// output info
+    void  Out() const;
+    void  Out( const char* output_file ) const;
 
 
-    /// box shaped model related
-    bool        BoxShapedModel() const; // verifies that model has correctly named boundaries
-    bool        RectangleShapedModel() const;
+  private:  
     template<size_t dim>
-    void        AssignBoxShapedModelFlags( VSet<dim>& );
-    void        BuildNeighborConnectivityOfRectangleShapedModel( VSet<3U>& );
-    void        BuildNeighborConnectivityOfRectangleShapedModel( VSet<2U>& );
-    void        BuildNeighborConnectivityOfRectangleShapedModel( VSet<1U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<3U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<2U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( VSet<1U>& );
-    // works only for specific elements
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<3U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<2U>& );
-    bool        FlagNeighborFacesOfBoxShapedModel( int32 ANSYS_etype, int32 ANSYS_bound_etype, VSet<1U>& );
-    bool        FlagBoundaryNodesOfBoxShapedModel( VSet<3U>& );
-    bool        FlagBoundaryNodesOfBoxShapedModel( VSet<2U>& );
-    bool        FlagBoundaryNodesOfBoxShapedModel( VSet<1U>& );
+    void  RenumberElements( VSet<dim>& vset, bool check_whether_already_correct );
+    void  RenumberElements( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
+
+    /// tests that the corner elements are indeed present
+    bool Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VSet<2U>& ) const;
+    
+    /// deduces node boundary flags from BOX_BOUNDARY and other regions the name of which contains 'BOUNDARY'
+    bool  FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const;
+    bool  FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const;
+
 
   private:
-
-    //       region name          etypes-of-region       ids of elements in region
+    //       region name           etypes-of-region      ids of elements in region
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >  model_regions;
     // public information on csmp element types
     typedef CSMP_ElementSpecifications  fem_specs;
@@ -160,67 +227,14 @@ class ModelTopology {
     bool  isoparametric_mesh; // default is false
 };
 
+
 /// read regions from file
-bool isRegionsFileExist( const char* regions_file );
+bool doesRegionsFileExist( const char* regions_file );
 void readDesiredRegions( const char* regions_file, std::set<std::string>& desired_regions );
 
 /// box-shaped models
 void BoundariesOfBoxShapedModel( std::set<std::string>& bs );
 void BoundariesOfRectangleShapedModel( std::set<std::string>& );
-
-/// surface elements orientation ( works soo far only for linear elements )
-void CorrectSurfaceElementOrientations( VSet<3U>& vset );
-void CorrectSurfaceElementOrientations( VSet<2U>& vset );
-void CorrectSurfaceElementOrientations( VSet<1U>& vset );
-
-
-/**
- @class ModelTopology ModelTopology "main_library/ModelTopology.h"
-
-@author S.K. Matthaei
-@date 2001
- 
-
-@section motivation Motivation
-
-ModelTopology was created to convey topological information from
-an ANSYS model to CSMP so that corresponding named groups of elements 
-can be created and assigned specific material properties.  
-
-For this purpose, ModelTopology stores named maps of the element
-IDs and types that make up specific model regions. By default, the 
-element names are the ANSYS element names as captured inside
-the class ANSYS_ElementSpecifications. Functionality is there
-in the public interface to convert these into CSMP names.
-
-Since one does not always want to use all topological information and
-or finite elements in a simulation, ModelTopology allows the user
-to reduce the initial topology as, for instance, obtained from ANSYS's
-meshing tools, to a few target regions - or element types, such as
-only the volume elements. Several interfaces are provided for this
-purpose.  
-
-@section structure Structure
- 
-ModelTopology assumes a complementary role to the VSet which 
-stores the connectivity between elements and their nodes. Thus, there
-must always be a supporting VSet in order to build a Model.
-When the ModelTopology is reduced to a subset of the original 
-model, corresponding operations must be performed on the VSet.
- 
- 
-@section participants Participants
- 
-The current implementation depends on the ANSYS_ElementSpecifications 
-object for the interpretation of finite element names.  
- 
- 
-@section examples Application Examples
- 
-The topology class is used inside of ANSYS_Model3D  and  2D.
- 
- */
-
 
 } // csmp
 

@@ -10,7 +10,7 @@ namespace csmp {
 template<size_t dim>
 StencilProcessorPHX<dim>::StencilProcessorPHX( )
  {
-   std::vector<double64> g;
+   std::vector<double> g;
    g.resize(dim,0.0);
    if (dim==1) g[0] = -9.80665;
    else g[1] = -9.80665;
@@ -31,8 +31,8 @@ template<size_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& param,
                                               const Element<dim>& e,
                                               DenseMatrix<DM_MIN>& upwind,
-                                              std::vector<std::vector<double64> >& facet_flux,
-                                              std::vector<double64>& flux_out,
+                                              std::vector<std::vector<double> >& facet_flux,
+                                              std::vector<double>& flux_out,
                                               csmp::Index rhs_key,
                                               csmp::Index rho_key,
                                               csmp::Index k_key)
@@ -85,8 +85,8 @@ template<size_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOutWithoutGravity( const FV_Parameter& param,
                                               const Element<dim>& e,
                                               DenseMatrix<DM_MIN>& upwind,
-                                              std::vector<std::vector<double64> >& facet_flux,
-                                              std::vector<double64>& flux_out,
+                                              std::vector<std::vector<double> >& facet_flux,
+                                              std::vector<double>& flux_out,
                                               csmp::Index rhs_key)
   {
 
@@ -124,9 +124,9 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithoutGravity( const FV_Paramete
 /** Calculating fluxes into the control volumes */
 template<size_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxIn( const Element<dim>& e,
-                                              std::vector<std::vector<double64> >& facet_flux,
-                                              std::vector<double64>& flux_in,
-                                              std::vector<double64>& mass_balance )
+                                              std::vector<std::vector<double> >& facet_flux,
+                                              std::vector<double>& flux_in,
+                                              std::vector<double>& mass_balance )
   {
   
    eidx_ = e.Idx();
@@ -148,12 +148,12 @@ void StencilProcessorPHX<dim>::DetermineFluxIn( const Element<dim>& e,
 template<size_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
                                               const Element<dim>& e,
-                                              std::vector<std::vector<double64> >& facet_flux,
-                                              std::vector<double64>& flux_out,
+                                              std::vector<std::vector<double> >& facet_flux,
+                                              std::vector<double>& flux_out,
                                               csmp::Index rhs_key )
   {
 
-  const double64 zero(0.);
+  const double zero(0.);
   ScalarVariable rhs_property;
   eidx_ = e.Idx();
   
@@ -164,7 +164,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
 
           if ( param.FacetNormalVelocity(i) != zero ) {
 
-               const double64 n_x_A(param.FacetNormalVelocity(i) * param.FacetArea(i));
+               const double n_x_A(param.FacetNormalVelocity(i) * param.FacetArea(i));
  	           // identifying the upstream node and initialize variables for it
                const size_t  nidx( (param.FacetNormalVelocity(i) < zero) ? outside_node_ : inside_node_ );
 

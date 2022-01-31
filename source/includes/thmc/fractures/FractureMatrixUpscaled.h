@@ -73,23 +73,23 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
     void InitializeForSw( double sw );
 
     // relative permeabilities
-    virtual double64 krn_Phase() const;
-    virtual double64 krw_Phase() const;
+    virtual double krn_Phase() const;
+    virtual double krw_Phase() const;
 
 
     // derivative of fractional flow (advection multipliers)
-    virtual double64 dfds() const;
+    virtual double dfds() const;
 
     // maximum absolute value returned by dfdS
-    virtual double64 MaxFractionalFlowDerivative() const;
+    virtual double MaxFractionalFlowDerivative() const;
 
     // derivatives of gravitational flow (advection multipliers)
-    virtual double64 dGds( ) const;
+    virtual double dGds( ) const;
 
-    virtual double64 pc_Phase( ) const;
+    virtual double pc_Phase( ) const;
 
     // capillary pressure derivatives (treat seff as for previous function)
-    virtual double64 dpcds_Phase( ) const { std::cout <<"\ndpcds_Phase: not needed\n"; return 0.; };
+    virtual double dpcds_Phase( ) const { std::cout <<"\ndpcds_Phase: not needed\n"; return 0.; };
 
     virtual void Out( size_t phase ) const;
 
@@ -97,11 +97,11 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
   private:
     FractureMatrixUpscaled();
 
-    double64  Af_sw() const;
+    double  Af_sw() const;
 
     csmp::Index  pd_key_, lambda_key_, Af_key_, phim_key_, phif_key_,
                  qfqm_key_, flux_key_, r_key_, swi_key_;
-    double64     Af_, pd_, lambda_, phim_, phif_, qfqm_,
+    double     Af_, pd_, lambda_, phim_, phif_, qfqm_,
                  qv_, radius_;
 
     ScalarVariable  swi_;
@@ -110,7 +110,7 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
 
 /// exponential function from 0.1 to 1 at sw=1, should be fitted to simulation results
 template<size_t dim>
-inline double64 FractureMatrixUpscaled<dim>::Af_sw() const
+inline double FractureMatrixUpscaled<dim>::Af_sw() const
  {
     // .1 * exp(2.3*x^3)
     return Af_ * 0.1 * std::exp( 2.3 * std::pow( TwoPhaseModel<dim>::sat_, 3. ) );

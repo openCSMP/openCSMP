@@ -26,7 +26,7 @@ namespace csmp {
 */
 template<size_t dim>
 OverburdenPressureVisitor<dim>::OverburdenPressureVisitor( Model<dim>& model, // Pa.s
-                                                           double64 acc_gravity )
+                                                           double acc_gravity )
     : Visitor<dim>( MODEL, ELEMENT ),
       rhof_key_(model.Database().StorageKey("fluid density")),
       rhor_key_(model.Database().StorageKey("dry rock density")),
@@ -80,7 +80,7 @@ void OverburdenPressureVisitor<dim>::Visit( Element<dim>* e )
    e->PropertyValueAtBaryCenter( rhof_key_, erho_fluid );
   
    // gravity force (negative as it acts against Y-axis)
-   const double64 dry_rhor = dryDensityFromBulkDensity( e->Read(rhob_key_), erho_fluid(), e->Read(phi_key_) );
+   const double dry_rhor = dryDensityFromBulkDensity( e->Read(rhob_key_), erho_fluid(), e->Read(phi_key_) );
    e->Store( rhor_key_, makeScalar( PLAIN, dry_rhor ) );
    gravity_(1) = dry_rhor * -acc_gravity_;
    e->Store( gf_key_, gravity_ );

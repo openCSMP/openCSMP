@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
+#include "ErrorHandler.h"
+
 #if defined(_OPENMP )
 #include "omp.h"
 #endif

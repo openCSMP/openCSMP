@@ -1,11 +1,12 @@
 #include "compute2PhaseMobilityAtBaryCenter.h"
 #include "Model.h"
+#include "Region.h"
 #include "TwoPhaseModel.h"
 
 using namespace std;
 namespace csmp
 {
-template<size_t dim,template<size_t > class SIMPLEX >
+template<size_t dim,template<size_t> class SIMPLEX >
 void compute2PhaseMobilityAtBaryCenter( ModelSubDomain<dim,SIMPLEX>& sg,
                                         TwoPhaseModel<dim>& relperm)
 {
@@ -26,10 +27,9 @@ void compute2PhaseMobilityAtBaryCenter( ModelSubDomain<dim,SIMPLEX>& sg,
   }
   */
 
-  const typename vector<SIMPLEX<dim>*>::iterator elementsend=sg.ElementsEnd();
+  const auto elementsend=sg.ElementsEnd();
   // 2. Computing the multiphase flow properties
-  for ( typename vector<SIMPLEX<dim>*>::iterator
-        it=sg.ElementsBegin(); it!=elementsend; ++it )
+  for ( auto it=sg.ElementsBegin(); it!=elementsend; ++it )
   {
     // 0. setting up the relative permeability model
     // ---------------------------------------------

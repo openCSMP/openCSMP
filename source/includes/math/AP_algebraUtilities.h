@@ -24,7 +24,7 @@ namespace csmp {
    well as one of the step in the calculation of the vector norm.
    
    */
-  inline double64 dotProduct(const std::vector<double64>& vec1, const std::vector<double64>& vec2)
+  inline double dotProduct(const std::vector<double>& vec1, const std::vector<double>& vec2)
   {
     assert(vec1.size() == vec2.size());
     return std::inner_product(vec1.begin(), vec1.end(), vec2.begin(), 0.);
@@ -33,11 +33,11 @@ namespace csmp {
   
   
   
-  std::vector<double64> crossProduct( const std::vector<double64>&, const std::vector<double64>&);
+  std::vector<double> crossProduct( const std::vector<double>&, const std::vector<double>&);
   
   
-  std::vector<double64> crossProduct3by3(/*1st std::vector*/const double64&, const double64&, const double64&,
-                                         /*2nd std::vector*/const double64&, const double64&, const double64&);
+  std::vector<double> crossProduct3by3(/*1st std::vector*/const double&, const double&, const double&,
+                                         /*2nd std::vector*/const double&, const double&, const double&);
   
   
   template<size_t dim>
@@ -47,7 +47,7 @@ namespace csmp {
   bool normalOfPolygon(const std::vector< Point<3U> >& vecPolygon, const Point<3U>& vecNormalAt, Point<3U>& vecNormal);
   
   template<size_t dim>
-  bool areaOfPolygon(const std::vector< Point<dim> >& vecPolygon, const size_t& iNrOfFacetPoints, double64 & fArea);
+  bool areaOfPolygon(const std::vector< Point<dim> >& vecPolygon, const size_t& iNrOfFacetPoints, double & fArea);
   
   template<size_t dim>
   void localSurfaceNormal(const std::vector< Point< dim> >& vecPoints, const Point<dim>& vecNormalAt, const size_t& iLevelOfRefinement, Point<dim>& vecNormal);
@@ -58,7 +58,7 @@ namespace csmp {
                     Point< dim>&);
   
   
-  double64 distanceBetweenPoints(const std::vector<double64>&, const std::vector<double64>&);
+  double distanceBetweenPoints(const std::vector<double>&, const std::vector<double>&);
   
   
   /** Calculates the norm of a given vector.
@@ -79,7 +79,7 @@ namespace csmp {
    The main objective is to calculate the length / norm of a given vector in
    order to evaluate its magnitude.
    */
-  inline double64 normOfVector(const std::vector<double64>& vector1)
+  inline double normOfVector(const std::vector<double>& vector1)
   {
     return std::sqrt(dotProduct(vector1, vector1));
   }
@@ -105,15 +105,15 @@ namespace csmp {
    This method is used to make the input vector a unitary vector, thus to make
    its length equal to one, preserving its original direction and orientation.
    
-   @note SKM - replaced - std::bind2nd(std::multiplies<double64>(), fNorm - by lambda function
+   @note SKM - replaced - std::bind2nd(std::multiplies<double>(), fNorm - by lambda function
    
    */
-  inline void euclideanNormalize( std::vector<double64>& vectorToNormalize )
+  inline void euclideanNormalize( std::vector<double>& vectorToNormalize )
   {
-    const double64 fNorm(1.0 / std::sqrt(dotProduct(vectorToNormalize, vectorToNormalize)));
+    const double fNorm(1.0 / std::sqrt(dotProduct(vectorToNormalize, vectorToNormalize)));
     if(fNorm != 0)
       std::transform( vectorToNormalize.begin(), vectorToNormalize.end(), vectorToNormalize.begin(),
-                      [fNorm](const double64 val){ return val * fNorm; } );
+                      [fNorm](const double val){ return val * fNorm; } );
   }
   
   /** Binary predicate used to compare elements of a set to be order by magnitude.
@@ -142,7 +142,7 @@ namespace csmp {
    */
   //binary predicate for the larger magnitude of vectors
   template <class fT>
-  struct greater_fabs : std::binary_function<fT,double64,bool>
+  struct greater_fabs : std::binary_function<fT,double,bool>
   {
     bool operator()(const fT& x, const fT& y) const {return static_cast<bool>(std::fabs(x) > std::fabs(y));}
   };

@@ -127,7 +127,7 @@ void FractureMatrixUpscaled<dim>::Initialize( const Element<dim>& e )
  {
     if( TwoPhaseModel<dim>::tensor_permeability_){
         e.Read( TwoPhaseModel<dim>::perm_key_, TwoPhaseModel<dim>::K_);
-        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double64>(dim);
+        TwoPhaseModel<dim>::k_ = TwoPhaseModel<dim>::K_.Trace()/static_cast<double>(dim);
     }else{
         TwoPhaseModel<dim>::k_ = e.Read( TwoPhaseModel<dim>::perm_key_ );
         TwoPhaseModel<dim>::K_.operator=( VectorVariable<dim>(PLAIN, TwoPhaseModel<dim>::k_ ) );
@@ -183,14 +183,14 @@ void FractureMatrixUpscaled<dim>::InitializeForNode( const Element<dim>& e,
 /// wetting phase relative permeability
 /// @note these functions are all based on the absolute saturation
 template<size_t dim>
-double64 FractureMatrixUpscaled<dim>::krw_Phase() const
+double FractureMatrixUpscaled<dim>::krw_Phase() const
  {
     // 1. Brooks-Corey based upscaled model using the GTF without boost factor
     GenericTransferFunction  gtf( phim_, pd_, lambda_, this->muw_, this->mun_ );
     // matrix relperm
-    const double64 krw_m = gtf.krw_BC( this->seff_ );
+    const double krw_m = gtf.krw_BC( this->seff_ );
     // fracture relperm from SKM's new formulation
-    const double64 krw_f = (erf(this->sat_/phif_) * this->sat_ * qfqm_) / ((1.-this->sat_) / qfqm_ + this->sat_ * qfqm_);
+    const double krw_f = (erf(this->sat_/phif_) * this->sat_ * qfqm_) / ((1.-this->sat_) / qfqm_ + this->sat_ * qfqm_);
 
     // krw weighted by qfqm ratio
     return ( qfqm_ > 1. ) ? krw_f : krw_m;
@@ -202,7 +202,7 @@ double64 FractureMatrixUpscaled<dim>::krw_Phase() const
 
 /// nonwetting phase relative permeability with transfer term
 template<size_t dim>
-double64 FractureMatrixUpscaled<dim>::krn_Phase() const
+double FractureMatrixUpscaled<dim>::krn_Phase() const
  {
 
     // 1. upscaled relative permeability
@@ -210,10 +210,10 @@ double64 FractureMatrixUpscaled<dim>::krn_Phase() const
     // cout <<"\ngtf "<< gtf.Transfer( this->sat, swi_(), swi_(), this->k, radius_ );
 
     // matrix relperm
-    const double64 krn_m = gtf.krn_BC( this->seff_ );
+    const double krn_m = gtf.krn_BC( this->seff_ );
 
     // fracture relperm
-    double64 krn_f = (erfc(this->sat_/phif_) * (1.-this->sat_)) / (qfqm_ * ((1.-this->sat_)/qfqm_ + this->sat_ * qfqm_));
+    double krn_f = (erfc(this->sat_/phif_) * (1.-this->sat_)) / (qfqm_ * ((1.-this->sat_)/qfqm_ + this->sat_ * qfqm_));
 
     // contribution to kro due to capillary transfer
     krn_f += Af_sw() * gtf.Transfer( this->sat_, swi_(), swi_(), this->k_, radius_ ) / (1. + qv_ * qfqm_);
@@ -223,7 +223,7 @@ double64 FractureMatrixUpscaled<dim>::krn_Phase() const
   }
 
 template<size_t dim>
-double64 FractureMatrixUpscaled<dim>::pc_Phase( ) const
+double FractureMatrixUpscaled<dim>::pc_Phase( ) const
 {
    GenericTransferFunction  gtf( phim_, pd_, lambda_, this->muw_, this->mun_ );
    return gtf.Pc( this->sat_ );
@@ -232,13 +232,13 @@ double64 FractureMatrixUpscaled<dim>::pc_Phase( ) const
 
 /// for the wetting phase
 template<size_t dim>
-double64 FractureMatrixUpscaled<dim>::MaxFractionalFlowDerivative() const
+double FractureMatrixUpscaled<dim>::MaxFractionalFlowDerivative() const
  {
-    return static_cast<double64>(5.6); // as computed with dfds method
+    return static_cast<double>(5.6); // as computed with dfds method
  }
 
 template<size_t dim>
-double64 FractureMatrixUpscaled<dim>::dfds() const
+double FractureMatrixUpscaled<dim>::dfds() const
 {
 
     return TwoPhaseModel<dim>::dfds_numerical();
@@ -248,7 +248,7 @@ double64 FractureMatrixUpscaled<dim>::dfds() const
 
 
 template<size_t dim>
-double64 FractureMatrixUpscaled<dim>::dGds( ) const
+double FractureMatrixUpscaled<dim>::dGds( ) const
 {
 
     return TwoPhaseModel<dim>::dGds_numerical();

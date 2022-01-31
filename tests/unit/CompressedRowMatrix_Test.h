@@ -24,14 +24,14 @@ namespace csmp
     {
        public:
          explicit CompressedRowMatrix_Test( bool verbose = false,
-                                            double64 tolerance = std::numeric_limits<double64>::epsilon() * 10. )
+                                            double tolerance = std::numeric_limits<double>::epsilon() * 10. )
            : tolerance_(tolerance),
               verbose_(verbose) {}
               
          virtual void run();
 
     private:
-        const double64 tolerance_;
+        const double tolerance_;
         const bool verbose_;
   };
   /**

@@ -19,7 +19,7 @@ EGridIterator  ElementGrid::End()
 
 
 
-void ElementGrid::AddPoint( int32 i, int32 j, double64 val )
+void ElementGrid::AddPoint( int32_t i, int32_t j, double val )
  {
     grid[ std::make_pair(i,j) ] = val;
  }
@@ -27,7 +27,7 @@ void ElementGrid::AddPoint( int32 i, int32 j, double64 val )
 
 
 
-double64 ElementGrid::Value( int32 i, int32 j ) const
+double ElementGrid::Value( int32_t i, int32_t j ) const
  {
     assert( grid.count( std::make_pair(i,j) ) > 0 );
     return (*grid.find( std::make_pair(i,j) )).second;
@@ -51,23 +51,23 @@ ElementGrid::ElementGrid( const ElementGrid& g )
  }
 
 
-double64 ElementGrid::GridAverage() const
+double ElementGrid::GridAverage() const
  {
-    double64 avg = 0.0F;
+    double avg = 0.0F;
     long     n   = 0;
     
     for ( cEGridIterator cit=grid.begin(); cit!=grid.end(); cit++, n++ )
       {
           avg += (*cit).second;
       }
-    return avg / static_cast<double64>(n);  
+    return avg / static_cast<double>(n);  
  }
 
 
 
-double64 ElementGrid::Sum() const
+double ElementGrid::Sum() const
  {
-    double64 sum = 0.0F;
+    double sum = 0.0F;
     
     for ( cEGridIterator cit=grid.begin(); cit!=grid.end(); cit++ ) sum += (*cit).second;
 
@@ -76,7 +76,7 @@ double64 ElementGrid::Sum() const
 
 
 
-void ElementGrid::MinMax( double64& dmin, double64& dmax ) const
+void ElementGrid::MinMax( double& dmin, double& dmax ) const
  {
     cEGridIterator  cit(grid.begin());
     dmin = dmax = (*cit).second;
@@ -103,15 +103,15 @@ bool  ElementGrid::Empty() const
  }
  
  
-int32  ElementGrid::Size() const
+int32_t  ElementGrid::Size() const
  {
-    return static_cast<int32>(grid.size());
+    return static_cast<int32_t>(grid.size());
  }
 
 
 void ElementGrid::Out() const
  {
-    pair<int32,int32>  index;
+    pair<int32_t,int32_t>  index;
     
     cout <<"\nElementGrid::Out(): printing grid...\n" << endl;
     for ( cEGridIterator it=grid.begin(); it!=grid.end(); it++ )

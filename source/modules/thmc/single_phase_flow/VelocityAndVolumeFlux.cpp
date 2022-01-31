@@ -1,9 +1,11 @@
 #include "VelocityAndVolumeFlux.h"
 #include "Model.h"
+#include "Region.h"
 #include "MathOperatorLHS.h"
 #include "STL_utilities.h"
 #include "Element.h"
 #include "Face.h"
+#include "ErrorHandler.h"
 #include "CSMP_physical_constants.h"
 
 using namespace std;
@@ -395,7 +397,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::TestRangeOfOutputVariables() const
 template<size_t dim,class SIMPLEX>
 bool VelocityAndVolumeFlux<dim,SIMPLEX>::WithLowerDimensionalElements( const Model<dim>& m ) const
  {
-    std::pair<int32,int32>  dimensionality = m.Region("Model").ElementSpatialDimensions();
+    std::pair<int32_t,int32_t>  dimensionality = m.Region("Model").ElementSpatialDimensions();
     if ( dimensionality.first > 1 ) return true;
    
     return false;
@@ -501,7 +503,7 @@ A reference to the Element for which the post-processing is done.
 template<size_t dim,class SIMPLEX>
 void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
-   typename list<vector<double64> >::const_iterator  lit;
+   typename list<vector<double> >::const_iterator  lit;
 
    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
         if ( verbose_ )
@@ -630,9 +632,9 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                }              
              // Averaging integration point values to get the element variables
              // ---------------------------------------------------------------
-             velo_  /= static_cast<double64>(e.FE()->IntegrationPoints());
-             flux_  /= static_cast<double64>(e.FE()->IntegrationPoints());
-             ivelo_ /= static_cast<double64>(e.FE()->IntegrationPoints());
+             velo_  /= static_cast<double>(e.FE()->IntegrationPoints());
+             flux_  /= static_cast<double>(e.FE()->IntegrationPoints());
+             ivelo_ /= static_cast<double>(e.FE()->IntegrationPoints());
          }
         
        if ( nodal_averaging_ )
@@ -685,7 +687,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                           lit =temp_veloflux_[ e.N(i)->Idx() ].begin();
                           lit!=temp_veloflux_[ e.N(i)->Idx() ].end(); lit++ )
                           sum_ += (*lit)[j];
-                    sum_ /= static_cast<double64>(temp_veloflux_[ e.N(i)->Idx() ].size());
+                    sum_ /= static_cast<double>(temp_veloflux_[ e.N(i)->Idx() ].size());
                     RESULT_(j,i) = sum_;
                  }
              }

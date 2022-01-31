@@ -2,180 +2,320 @@
 #define CSMP_MESH_MANAGER_H
 
 #include "Node.h"
+#include "NodeManifold.h"
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
-#include "Region.h"
+#include "FiniteElementManager.h"
+#include "FiniteVolumeStencilManager.h"
+#include "plf_colony.h"
 
 namespace csmp {
 
+class MeshManager_Test;
 class ModelTopology;
-class FiniteElementManager;
+template<size_t> struct IndexToPointerMapping;
 template<size_t> class PropertyDatabase;
 template<size_t> class VSet;
-template<size_t> class FiniteVolumeStencilManager;
+template<size_t> class NodeManifoldManager;
 
 /**
 @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
 internal application is hidden and may vary between models (tree-storage is default).
 
-@author S.K. Matthaei
-@date 2007
+@author S.K. Matthai
+@date 2021 (complete rewrite)
 
 @remark gain access via Mesh() public interface of Model.
 
 @attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
 Region or Boundary objects merely contain pointers to these.
+
+TODO: which kind of mesh error diagnostics should the MeshManager implement? - should these be in a separate compilation unit?
 */
 template<size_t dim>
 class MeshManager {
 public:
   MeshManager();
-  MeshManager( const PropertyDatabase<dim>&, const FiniteElementManager&, VSet<dim>& );
-  MeshManager&  operator=( const MeshManager& );
+  MeshManager( const PropertyDatabase<dim>&, const VSet<dim>& );
+  
+  /// MeshManager is not copy constructible
+  MeshManager( const MeshManager& ) = delete;
+  MeshManager&  operator=( const MeshManager& ) = delete;
 
   ~MeshManager();
 
-  /// sets up distributed storage for variables, finite elements, and mesh connectivity
-  bool Initialize( const PropertyDatabase<dim>&,
-                   const FiniteElementManager&,
-                   const VSet<dim>& );
+  /// sets up distributed storage for variables, finite elements, and mesh connectivity, returns vectors of pointers remembering index-pointer mapping
+  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>& );
 
-  /// updates the root pointers of the mesh after modifying the mesh
-  void Update();
-  void Update( std::deque<Node<dim>*> nodes, std::deque<Element<dim>*> elmts );
-
-  /// assigns finite volume stencils to the FV pointers stored in each element
-  void InitializeFiniteVolumeStencils( const PropertyDatabase<dim>&,
-                                       const FiniteElementManager&,
-                                       FiniteVolumeStencilManager<dim>& );
+  // ==============================================================
+  //
+  // MESH DIAGNOSTICS & ACCESS
+  //
+  // ==============================================================
 
   /// returns true if the mesh consists of multiple element types
   bool HybridElementMesh() const;
-
-  /// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
-  size_t DetectElementsWithAllNodesOnBoundary( std::set<size_t>& ) const;
+  
+  /// uses a floodfill on the highest-dimensional elements in the mesh to identify whether the model consists  of disconnected mesh patches
+  bool IsContiguous() const; 
 
   /// returns number of nodes=vertices in the current mesh
   size_t Nodes() const;
 
-  /// returns number of node groups
-  size_t NodeGroups() const;
-
   /// returns number of elements in the current mesh
   size_t Elements() const;
-
-  /// returns number of element groups
-  size_t ElementGroups() const;
 
   /// returns number of Faces=lower-dimensional elements in current mesh
   size_t Faces() const;
 
-  /// returns number of face groups
-  size_t FaceGroups() const;
-
-  /// returns number of interfaces=faces with multiplicated nodes
+  /// returns number of InterFaces=lower-dimensional elements in current mesh
   size_t InterFaces() const;
+  
+  typename plf::colony<Node<dim> >::iterator      NodesBegin();
+  typename plf::colony<Node<dim> >::iterator      NodesEnd();
 
-  /// returns number of interface groups
-  size_t InterFaceGroups() const;
+  typename plf::colony<Element<dim> >::iterator   ElementsBegin();
+  typename plf::colony<Element<dim> >::iterator   ElementsEnd();
 
-  /// the node's root pointer at the basis of node tree for contiguous regions
-  Node<dim>*			RootNode( size_t group_idx );
+  typename plf::colony<Face<dim> >::iterator      FacesBegin();
+  typename plf::colony<Face<dim> >::iterator      FacesEnd();
 
-  /// assigns node's root pointer at the basis of node tree for contiguous regions
-  void				SetRootNode( Node<dim>* );
+  typename plf::colony<InterFace<dim> >::iterator InterFacesBegin();
+  typename plf::colony<InterFace<dim> >::iterator InterFacesEnd();
 
-  /// the element's root pointer at the basis of element tree for contiguous regions
-  Element<dim>*		RootElement( size_t group_idx );
+  typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldsBegin();
+  typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldsEnd();
 
-  /// assigns element's root pointer at the basis of element tree for contiguous regions
-  void				SetRootElement( Element<dim>* );
+  // const versions
+  typename plf::colony<Node<dim> >::const_iterator      NodesBegin() const;
+  typename plf::colony<Node<dim> >::const_iterator      NodesEnd() const;
 
-  /// the face's root pointer at the basis of face tree for multiple boundaries
-  Face<dim>*			RootFace( size_t group_idx );
+  typename plf::colony<Element<dim> >::const_iterator   ElementsBegin() const;
+  typename plf::colony<Element<dim> >::const_iterator   ElementsEnd() const;
 
-  /// assigns face's root pointer at the basis of face tree for multiple boundaries
-  void				SetRootFace( Face<dim>* );
+  typename plf::colony<Face<dim> >::const_iterator      FacesBegin() const;
+  typename plf::colony<Face<dim> >::const_iterator      FacesEnd() const;
 
-  /// the interface's root pointer at the basis of interface tree for multiple split boundaries
-  InterFace<dim>*		RootInterFace( size_t group_idx );
+  typename plf::colony<InterFace<dim> >::const_iterator InterFacesBegin() const;
+  typename plf::colony<InterFace<dim> >::const_iterator InterFacesEnd() const;
+  
+  typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsBegin() const;
+  typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsEnd() const;
 
-  /// assigns interface's root pointer at the basis of interface tree for multiple split boundaries
-  void				SetRootInterFace( InterFace<dim>* );
+/* not for colony
+  Node<dim>* const      N( size_t ) const;
+  Element<dim>* const   E( size_t ) const;
+  Face<dim>* const      F( size_t ) const;
+  InterFace<dim>* const I( size_t ) const;
+*/
+  /// direct access for backward compatibility
+  const FiniteElementManager& FiniteElements() const { return fem_manager_; }
 
-  /// the node's root pointer at the basis of node tree for contiguous regions
-  const Node<dim>*	RootNode( size_t group_idx ) const;
+  /// direct access for backward compatibility
+  const FiniteVolumeStencilManager<dim>& FiniteVolumes() const { return fvm_manager_; }
 
-  /// the element's root pointer at the basis of element tree for contiguous regions
-  const Element<dim>*	RootElement( size_t group_idx ) const;
+  
+  // ==============================================================
+  //
+  // MESH MODIFICATION
+  //
+  // ==============================================================
+  
+  /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
+  std::vector<Face<dim>*>  ReplaceElementsByFaces( const PropertyDatabase<dim>&,
+                                                   typename std::vector<Element<dim>*>::iterator first,
+                                                   typename std::vector<Element<dim>*>::iterator last );
 
-  /// the face's root pointer at the basis of face tree for multiple boundaries
-  const Face<dim>*	RootFace( size_t group_idx ) const;
+  /// by location only, no parent element  gets connected
+  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
 
-  /// the interface's root pointer at the basis of interface tree for multiple split boundaries
-  const InterFace<dim>* RootInterFace( size_t group_idx ) const;
+  /// only if there is not already a node at this location, else a pointer to that node is returned, no parent element  gets connected
+  Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
+                                                const LocalVariables& node_variables,
+                                                BOX_BOUNDARY = NOT );
 
-  /// inserts new primitive if it does not already exist in the tree, otherwise returns the pointer of the existing one.
-  Node<dim>*			AddIfUnique( Node<dim>& );
-  Element<dim>*		AddIfUnique( Element<dim>& );
-  Face<dim>*			AddIfUnique( Face<dim>& );
-  InterFace<dim>*		AddIfUnique( InterFace<dim>& );
+  /// method tries to find neighbors through the parent connectivity of the nodes
+  Element<dim>*	const AddElement( CSMP_FEM_TYPE,
+                                  const LocalVariables& element_variables,
+                                  const IntegrationPointVariables& element_integration_point_variables,
+                                  const std::vector<Node<dim>*>& nodes, int32_t material_id );
 
-  /// inserts new primitive without checking whether it does not already exist in the tree and its connectivity is valid
-  Node<dim>*			Add( Node<dim>& );
-  Element<dim>*		Add( Element<dim>& );
-  Face<dim>*			Add( Face<dim>& );
-  InterFace<dim>*		Add( InterFace<dim>& );
+  /// puts lower-dimensional element inside of an InterFace, connecting it to its base pointer; the neighbors are not connected yet
+  Element<dim>*	const AddInterveningElement( csmp::InterFace<dim>* const,
+                                             const LocalVariables&,
+                                             const IntegrationPointVariables&,
+                                             const std::vector<Node<dim>*>& nodes,
+                                             int32_t material_id );
 
-  /// removes primitive after checking its connectivities
-  void Erase( Node<dim>& );
-  void Erase( Element<dim>& );
-  void Erase( Face<dim>& );
-  void Erase( InterFace<dim>& );
+  /// creates a Face matching the current lower-dimensional element and deletes the element subsequently
+  Face<dim>* const ReplaceElementByFace( csmp::Element<dim>* eptr,
+                                         csmp::Element<dim>* inner_eptr,
+                                         csmp::Element<dim>* outer_eptr,
+                                         size_t adjacent_face_of_inner_element,
+                                         size_t adjacent_face_of_outer_element,
+                                         const LocalVariables& face_variables,
+                                         const IntegrationPointVariables& face_integration_point_variables );
 
-  /// removes primitive without checking its connectivities since its pointer indicates its original primitive.
-  void Erase( Node<dim>* );
-  void Erase( Element<dim>* );
-  void Erase( Face<dim>* );
-  void Erase( InterFace<dim>* );
+  /// creates Face matching the supplied lower-dimensional element but without deleting the underlying element 
+  Face<dim>* const ConstructFaceFromElement( csmp::Element<dim>* eptr,
+                                             csmp::Element<dim>* inner_eptr,
+                                             csmp::Element<dim>* outer_eptr,
+                                             size_t adjacent_face_of_inner_element,
+                                             size_t adjacent_face_of_outer_element,
+                                             const LocalVariables& face_variables,
+                                             const IntegrationPointVariables& face_integration_point_variables );
 
-  /// erase all objects of the given type
-  bool EraseNodes();
-  bool EraseElements();
-  bool EraseFaces();
-  bool EraseInterFaces();
+  /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in; deduces element type
+  Face<dim>* const AddFace( Element<dim>* const inner_parent, size_t inner_parent_face_id,
+                            Element<dim>* const outer_parent, size_t outer_parent_face_id,
+                            const LocalVariables&,
+                            const IntegrationPointVariables& );
 
-  /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
-  void AssignUniqueNumbers( bool in_a_single_sequence ) const;
+  /// creates a lower-dimensional face with parents of adjacent higher-dimensional Face objects as parents; deduces element type
+  Face<dim>* const AddEdgeFace( Face<dim>* const adjacent_face1, size_t parent_elmt1_segm_id,
+                                Face<dim>* const adjacent_face2, size_t parent_elmt2_segm_id,
+                                const LocalVariables&,
+                                const IntegrationPointVariables&,
+                                const std::vector<Node<dim>*>& nodes );
 
-  /// outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
-  void OutputMeshTo( VSet<dim>& ) const;
+  /// adds Face that caps a higher-dimensional Element at the model boundary
+  Face<dim>* const AddBoundaryFace( csmp::Element<dim>* const innerParent,
+                                    size_t local_face_id,
+                                    const LocalVariables&,
+                                    const IntegrationPointVariables& ); ///< optional
 
-  /// storing distributed variables associated with the mesh in the VSet
-  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, VSet<dim>& ) const;
-  void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
+   /// assuming that the nodes on either side of the interface are already there, the face gets replaced
+  InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
+                                                const LocalVariables&,
+                                                const IntegrationPointVariables& );
+ 
+  /// For connecting node-matched mesh patches, creating / updating their node manifolds
+  InterFace<dim>*	const	AddInterFace( Element<dim>* const inner_parent, size_t inner_element_face_id,
+                                      Element<dim>* const outer_parent, size_t outer_element_face_id,
+                                      const LocalVariables& interface_variables,
+                                      const IntegrationPointVariables& interface_integration_point_variables );
 
-  /// Rebuild parent relationships, for example after a region was removed
-  void RebuildParentRelationships( typename std::vector<Node<dim>*>::iterator begin, typename std::vector<Node<dim>*>::iterator end );
+   /// duplicates Node, automatically creating a node manifold or adding it to an existing one.
+  Node<dim>* const      Duplicate( Node<dim>* const nptr_inside,
+                                   INTERFACE_SIDE new_node_side,
+                                   ManifoldType geometry );
+
+  /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
+  void UpdateConnectivity();
+  // TODO: create version of method that permits selective update of cells
+
+  /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
+  /// @todo disambiguate connectivity between Face and InterFace object at manifolds
+  template<template<size_t> class CELL>
+  void BuildConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                          typename std::vector<CELL<dim>*>::iterator last );
+
+  template<template<size_t> class CELL>
+  void BuildVolumeConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                typename std::vector<CELL<dim>*>::iterator last );
+                                       
+  template<template<size_t> class CELL>
+  void BuildSurfaceConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                                 typename std::vector<CELL<dim>*>::iterator last );
+                                        
+  template<template<size_t> class CELL>
+  void BuildLineConnectivity( typename std::vector<CELL<dim>*>::iterator first,
+                              typename std::vector<CELL<dim>*>::iterator last );
+
+  /// Starting with an existing node-to-parent element relationships, these are validated, removing excess connections, for example after a region was removed
+  void RebuildNodeParentElementRelationships();
+
+
+  // DELETIONS & MAINTANANCE OF MESH CONNECTIVITY
+  // --------------------------------------------
+  // NB: elements are responsible for the nodes, nodes for their manifolds
+
+  /// after disconnecting the nodes from potential manifolds, the supplied range of nodes is deleted
+  size_t Delete( typename std::vector<Node<dim>*>::iterator first,
+                 typename std::vector<Node<dim>*>::iterator last );
+
+  /// deletes the supplied range of elements, and orphaned nodes if any; the parent element storage of the nodes is rebuild; @note all input pointers are nulled
+  size_t Delete( typename std::vector<Element<dim>*>::iterator first,
+                 typename std::vector<Element<dim>*>::iterator last );
+
+  size_t Delete( typename std::vector<InterFace<dim>*>::iterator first,
+                 typename std::vector<InterFace<dim>*>::iterator last );
+
+  size_t Delete( typename std::vector<Face<dim>*>::iterator first,
+                 typename std::vector<Face<dim>*>::iterator last );
+
+  /// JCK's method to test the connectivity of a mesh after it had been read from binary file
+  int32_t CheckElementConnectivity() const;
 
   /// prints stored objects and their connectivity to screen
   void Out() const;
+  
+  
+private:
+
+  void Erase( typename plf::colony<Node<dim>>::const_iterator nit ) { nodes_.erase(nit); }
+  void Erase( typename plf::colony<Element<dim>>::const_iterator it ) { elements_.erase(it); }
+  void Erase( typename plf::colony<Face<dim>>::const_iterator it ) { faces_.erase(it); }
+  void Erase( typename plf::colony<InterFace<dim>>::const_iterator it ) { interfaces_.erase(it); }
+
+  size_t Erase( typename plf::colony<Node<dim>>::const_iterator first,
+                typename plf::colony<Node<dim>>::const_iterator last ) { nodes_.erase(first,last); return nodes_.size(); }
+              
+  size_t Erase( typename plf::colony<Element<dim>>::const_iterator first,
+                typename plf::colony<Element<dim>>::const_iterator last ) { elements_.erase(first,last); return elements_.size(); }
+              
+  size_t Erase( typename plf::colony<Face<dim>>::const_iterator first,
+                typename plf::colony<Face<dim>>::const_iterator last ) { faces_.erase(first,last); return faces_.size(); }
+              
+  size_t Erase( typename plf::colony<InterFace<dim>>::const_iterator first,
+                typename plf::colony<InterFace<dim>>::const_iterator last ) { interfaces_.erase(first,last); return interfaces_.size(); }
+
+  /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
+  void AssignUniqueNumbers( bool in_a_single_sequence=false );
+  
+  /// puts nodes, elements, faces, and interfaces into the order given by Idx() variables; removes nullptr cells first
+  void ReorderObjectsByIndexes();
+
+  /// returns numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+  void OutputMeshTo( VSet<dim>&, bool get_indices_from_stored_variables=false );
+
+  /// adds distributed variables to the VSet
+  void OutputStoredVariablesTo( const PropertyDatabase<dim>&, VSet<dim>& ) const;
+  
+  /// reads distributed variables from VSet
+  void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
 
 private:
-  /// access is via root node or element only    
-  bool								hybrid_element_mesh_;	///< true if the mesh consists of different FE types
 
-  size_t								n_nodes_;				///< total number of nodes
-  size_t								n_elmts_;				///< total number of elements
-  size_t								n_faces_;				///< total number of faces
-  size_t								n_interfaces_;			///< total number of interfaces
+  FiniteElementManager             fem_manager_;
+  FiniteVolumeStencilManager<dim>  fvm_manager_; ///< current finite volume specifications // TODO: make this a trait class because it needs no dynamic data!
 
-  std::deque<Node<dim>*>				root_node_group_;		///< pointers to root nodes for contiguous regions
-  std::deque<Element<dim>*>			root_elmt_group_;		///< pointers to root elements for contiguous regions
-  std::deque<Face<dim>*>				root_face_group_;		///< pointers to root faces for multiple boundaries
-  std::deque<InterFace<dim>*>			root_interface_group_;	///< pointers to root interfaces for multiple split boundaries
+  /// access is via root node or element only
+  bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types
+
+  // root pointers to contiguous mesh patches; mutable to allow for behind scene updates
+  plf::colony<Node<dim>>      nodes_;          ///<  nodes
+  plf::colony<Element<dim>>   elements_;       ///<  pointers elements
+  plf::colony<Face<dim>>      faces_;          ///<  pointers faces making up the boundaries
+  plf::colony<InterFace<dim>> interfaces_;     ///<  pointers to interfaces making up the split boundaries
+  // only used in models that contain node SplitBoundaries / IterFace objects
+  NodeManifoldManager<dim>*   node_manifold_manager_ = nullptr; ///<  node manifolds of SplitBoundaries
+
+  friend class MeshManager_Test; ///< so that private methods can be tested
+  friend class Model<dim>;       ///<  exclusive access to private member functions
 };
+
+// POTENTIAL METHODS?
+
+
+   /// replaces face, constructing new nodes & manifolds where indicated by vector
+//  InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
+//                                                const std::vector<bool>&  nodes_to_duplicate,
+//                                                const LocalVariables&,
+//                                                const IntegrationPointVariables& );
+
+
 
 } // end namespace csmp
 

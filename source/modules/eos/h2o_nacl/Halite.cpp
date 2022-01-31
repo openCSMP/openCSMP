@@ -13,8 +13,8 @@ namespace csmp
       
       @attention Use only this conctructor. Halite computes halite properties as a function of temperature and pressure. These are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, HaliteLiquidus is able to decipher their current values when being queried for halite properties. Only this constructor is allowed to ensure that functionality, default constructor has been made private.
   */
-  Halite::Halite(const double64& externaltemperature, 
-                 const double64& externalpressure)
+  Halite::Halite(const double& externaltemperature, 
+                 const double& externalpressure)
     : l0_(2.1704e3),
       l1_(-2.4599e-1),
       l2_(-9.5797e-05),
@@ -38,33 +38,33 @@ namespace csmp
 
   /** Value of mass fraction of NaCl in halite (trivial as that is always 1.0)
    */
-  double64 Halite::MassFractionNaCl() const { return 1.0e0; }
+  double Halite::MassFractionNaCl() const { return 1.0e0; }
 
 
   /** Density [kg/m3] of halite as a function of temperature and pressure
    */
-  double64 Halite::Density()        { CheckState(); return Density(tcurrent_,pcurrent_); } 
+  double Halite::Density()        { CheckState(); return Density(tcurrent_,pcurrent_); } 
 
 
   /** Molar volume [cm3/mol] of halite as a function of temperature and pressure; used by other classes of the H2O-NaCl eos module
    */
-  double64 Halite::MolarVolume()    { CheckState(); return mnacl/Density(tcurrent_,pcurrent_)*1.0e3; }
+  double Halite::MolarVolume()    { CheckState(); return mnacl/Density(tcurrent_,pcurrent_)*1.0e3; }
 
 
   /** Isothermal compressibility [Pa-1] of halite as a function of temperature and pressure
    */
-  double64 Halite::Compressibility(){ CheckState(); return 1.0e-5/Density(tcurrent_,pcurrent_)*DDensityDP(tcurrent_); } // to be tested: bar vs. Pa 
+  double Halite::Compressibility(){ CheckState(); return 1.0e-5/Density(tcurrent_,pcurrent_)*DDensityDP(tcurrent_); } // to be tested: bar vs. Pa 
 
 
   /** Specific enthalpy [J/kg] of halite as a function of temperature and pressure
       @attention Enthalpy NEVER has an absolute value but is computed relative to a reference value. For the conventions adopted here, please check Driesner (2007). 
    */
-  double64 Halite::Enthalpy()       { CheckState(); return Enthalpy(tcurrent_,pcurrent_); } 
+  double Halite::Enthalpy()       { CheckState(); return Enthalpy(tcurrent_,pcurrent_); } 
 
 
   /** Specific heat capacity [J/kg/C] of halite as a function of temperature and pressure
    */
-  double64 Halite::HeatCapacity()   { CheckState(); return HeatCapacity(tcurrent_,pcurrent_); }
+  double Halite::HeatCapacity()   { CheckState(); return HeatCapacity(tcurrent_,pcurrent_); }
 
 
   /** Update internal temperature and pressure values
@@ -79,7 +79,7 @@ namespace csmp
 
   /** Equation 1 of Driesner (2007)
    */
-  double64 Halite::Density( const double64& t_, const double64& p_ )
+  double Halite::Density( const double& t_, const double& p_ )
   {
     
     return( ZeroBarDensity(t_) + DDensityDP(t_)*p_ );
@@ -88,7 +88,7 @@ namespace csmp
 
   /** Equation 2 of Driesner (2007)
    */
-  double64 Halite::ZeroBarDensity(const double64& t_)
+  double Halite::ZeroBarDensity(const double& t_)
   { 
     return( l0_ + t_*(l1_ + l2_*t_) ); 
   }
@@ -96,7 +96,7 @@ namespace csmp
 
   /** Equation 3 of Driesner (2007)
    */
-  double64 Halite::DDensityDP(const double64& t_)
+  double Halite::DDensityDP(const double& t_)
   {
     return l3_+l4_*exp(t_/l5_);
   }
@@ -104,7 +104,7 @@ namespace csmp
 
   /** Equation 30 of Driesner (2007)
    */
-  double64 Halite::HeatCapacity(const double64& t_, const double64& p_)
+  double Halite::HeatCapacity(const double& t_, const double& p_)
   {
     myt_ = t_-800.7;
     return 1148.81+2.0*0.275774*myt_+3.0*8.8103e-05*myt_*myt_
@@ -116,7 +116,7 @@ namespace csmp
   /** Combined Equations 29 and 30 of Driesner (2007) and integrated to get specific enthalpy.
       @attention The integration constant has been optimized manually to get best possible consistency between volumetric and enthalpic data. Minor inconsistencies may still arise due to accumulation of numerical roundoff errors. These should not affect a normal simulation.
    */
-  double64 Halite::Enthalpy(const double64& t_, const double64& p_)
+  double Halite::Enthalpy(const double& t_, const double& p_)
   {
     myt_ = t_-800.7;
     // although this formula looks odd, please keep it as is;

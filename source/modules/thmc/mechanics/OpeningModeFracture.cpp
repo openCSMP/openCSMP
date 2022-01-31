@@ -18,7 +18,7 @@ OpeningModeFracture::OpeningModeFracture()          // 0.1 mm
 
 
 
-OpeningModeFracture::OpeningModeFracture( double64 l, double64 n, double64 E )
+OpeningModeFracture::OpeningModeFracture( double l, double n, double E )
    : length(l), a(l/2.), nu(n), E(E), MINIMUM_APERTURE(1.0e-4)
  {
  }
@@ -36,14 +36,14 @@ OpeningModeFracture::OpeningModeFracture( const OpeningModeFracture& of )
 /**
     NB: also setting fracture half-length a !
 */
-void  OpeningModeFracture::Length( double64 len )
+void  OpeningModeFracture::Length( double len )
  {
     length = len;
     a      = len / 2.;
  }
 
 
-double64  OpeningModeFracture::Length() const
+double  OpeningModeFracture::Length() const
  {
     return length;
  }
@@ -51,7 +51,7 @@ double64  OpeningModeFracture::Length() const
 
 
 /// normal stress is negative if tensile
-double64  OpeningModeFracture::CenterAperture( double64 pf, double64 syy ) const
+double  OpeningModeFracture::CenterAperture( double pf, double syy ) const
  {
     assert( pf > 0.);
     if ( syy > pf ) {
@@ -63,7 +63,7 @@ double64  OpeningModeFracture::CenterAperture( double64 pf, double64 syy ) const
  }
 
 
-double64  OpeningModeFracture::Aperture( double64 pf, double64 syy, double64 cx ) const
+double  OpeningModeFracture::Aperture( double pf, double syy, double cx ) const
  {
     assert( pf > 0.);
     if ( syy > pf ) {
@@ -75,11 +75,11 @@ double64  OpeningModeFracture::Aperture( double64 pf, double64 syy, double64 cx 
  }
 
 
-double64  OpeningModeFracture::Transmissivity( double64 pf, double64 syy, double64 visc ) const
+double  OpeningModeFracture::Transmissivity( double pf, double syy, double visc ) const
   {
      assert( pf > 0.);
      // Renshaw 95, JGR 100:B2, 24,629-24,636, Tf in equation 13, p. 24,631
-     double64 ap  = CenterAperture( pf, syy );
+     double ap  = CenterAperture( pf, syy );
      ap *= ap;
      ap *= ap;
      return ap / (12. * visc);
@@ -89,7 +89,7 @@ double64  OpeningModeFracture::Transmissivity( double64 pf, double64 syy, double
 
 
 /// joint volume (assuming unit thickness)
-double64  OpeningModeFracture::Mode_I_Volume( double64 p, double64 syy ) const
+double  OpeningModeFracture::Mode_I_Volume( double p, double syy ) const
  {
     assert( p > 0.);
     if ( syy - p > 0. ) return MINIMUM_APERTURE * length;
@@ -99,21 +99,21 @@ double64  OpeningModeFracture::Mode_I_Volume( double64 p, double64 syy ) const
 
 
 /// volume of a joint in shear (assuming unit thickness)
-double64  OpeningModeFracture::Mode_II_Volume( double64 sxy ) const
+double  OpeningModeFracture::Mode_II_Volume( double sxy ) const
  {
     assert( sxy >= 0.);
-    if ( sxy < numeric_limits<double64>::epsilon() ) return MINIMUM_APERTURE * length;
+    if ( sxy < numeric_limits<double>::epsilon() ) return MINIMUM_APERTURE * length;
     return (1./4. * sxy * (1 - nu) * (length*length) * PI) / E;
 
  } // end Mode_II_Volume
 
 
 /// maximum volume in response to tensile and shear stresses
-double64  OpeningModeFracture::MaximumVolume( double64 pf, double64 syy, double64 sxy ) const
+double  OpeningModeFracture::MaximumVolume( double pf, double syy, double sxy ) const
  {
     assert( pf > 0.);
     assert( sxy >= 0.);
-    if ( sxy < numeric_limits<double64>::epsilon() && syy > pf ) return MINIMUM_APERTURE * length;
+    if ( sxy < numeric_limits<double>::epsilon() && syy > pf ) return MINIMUM_APERTURE * length;
     return std::max( Mode_I_Volume( pf, syy ), Mode_II_Volume( sxy ) );
    
  } // end MaximumVolume
@@ -122,12 +122,12 @@ double64  OpeningModeFracture::MaximumVolume( double64 pf, double64 syy, double6
 /**
    dilatation of a square block of rock with fracture intensity (f/m), and dimensions = frac length^2
 */
-double64  OpeningModeFracture::Dilatation( double64 frac_intensity, double64 pf, double64 syy, double64 sxy ) const
+double  OpeningModeFracture::Dilatation( double frac_intensity, double pf, double syy, double sxy ) const
  {
     assert( pf > 0.);
     assert( sxy >= 0.);
     assert( frac_intensity >= 0. );
-    if ( sxy < numeric_limits<double64>::epsilon() && syy > pf ) return 0.;
+    if ( sxy < numeric_limits<double>::epsilon() && syy > pf ) return 0.;
     //      n fractures
     return (frac_intensity * length) * MaximumVolume( pf, syy, sxy ) / (length * length);
    
@@ -141,8 +141,8 @@ double64  OpeningModeFracture::Dilatation( double64 frac_intensity, double64 pf,
 
 
 // tested: O.K.
-void OpeningModeFracture::SixteenPointConvexHull( double64 pf,
-                                                  double64 syy,
+void OpeningModeFracture::SixteenPointConvexHull( double pf,
+                                                  double syy,
                                                   const mjl::Point& b, // left
                                                   const mjl::Point& c, // right
                                                   list<mjl::Point>& chain )
@@ -157,10 +157,10 @@ void OpeningModeFracture::SixteenPointConvexHull( double64 pf,
            
     // getting apertures at x0, x1 and x2 
     // O.K.      
-    double64 a0 = Aperture( pf, syy, 0.0 );
-    double64 a1 = Aperture( pf, syy, a - a*1.0e-1 );
-    double64 a2 = Aperture( pf, syy, a - a*1.0e-2 );
-    double64 a3 = Aperture( pf, syy, a / 2.0 );
+    double a0 = Aperture( pf, syy, 0.0 );
+    double a1 = Aperture( pf, syy, a - a*1.0e-1 );
+    double a2 = Aperture( pf, syy, a - a*1.0e-2 );
+    double a3 = Aperture( pf, syy, a / 2.0 );
     
     // checking apertures
     if ( a0 < MINIMUM_APERTURE ) a0 = MINIMUM_APERTURE;
@@ -179,7 +179,7 @@ void OpeningModeFracture::SixteenPointConvexHull( double64 pf,
     // aperture is to be constructed.
     
     // 1. find the 2 points for the first fracture opening
-    double64 t_p = (a * 1.0e-2) / length - (a2/2.0) / length, 
+    double t_p = (a * 1.0e-2) / length - (a2/2.0) / length, 
            t_q = (a * 1.0e-2) / length + (a2/2.0) / length;    
          
    // 2. build new edge for those points  
@@ -266,8 +266,8 @@ void OpeningModeFracture::SixteenPointConvexHull( double64 pf,
 
 
 // tested: O.K. 
-void OpeningModeFracture::BluntTenPointHull( double64 pf,
-                                             double64 syy,
+void OpeningModeFracture::BluntTenPointHull( double pf,
+                                             double syy,
                                              const mjl::Point& b, // left
                                              const mjl::Point& c, // right
                                              list<mjl::Point>& chain )
@@ -285,9 +285,9 @@ void OpeningModeFracture::BluntTenPointHull( double64 pf,
            
     // getting apertures at x0, x1 and x2 
     // O.K.      
-    double64 a0 = Aperture( pf, syy, 0.0 );
-    double64 a1 = Aperture( pf, syy, a - a*0.1 ); // is moved to fracture tip
-    double64 a3 = Aperture( pf, syy, a / 2.0 );
+    double a0 = Aperture( pf, syy, 0.0 );
+    double a1 = Aperture( pf, syy, a - a*0.1 ); // is moved to fracture tip
+    double a3 = Aperture( pf, syy, a / 2.0 );
 
     // checking apertures
     if ( a0 < MINIMUM_APERTURE ) a0 = MINIMUM_APERTURE;
@@ -307,7 +307,7 @@ void OpeningModeFracture::BluntTenPointHull( double64 pf,
     
     // 1. find the 2 points for the blunt end of fracture
     //    exaggerating its aperture
-    double64 t_p = 0.0  -  (a1/2.0) / length, 
+    double t_p = 0.0  -  (a1/2.0) / length, 
            t_q = 0.0  +  (a1/2.0) / length;    
          
    // 2. build new edge for those points  
@@ -372,7 +372,7 @@ void OpeningModeFracture::BluntTenPointHull( double64 pf,
 
 
 
-void OpeningModeFracture::RectangleHull( double64 pf, double64 syy,
+void OpeningModeFracture::RectangleHull( double pf, double syy,
                                          mjl::Point& b,
                                          mjl::Point& c,
                                          list<mjl::Point>& chain )
@@ -382,14 +382,14 @@ void OpeningModeFracture::RectangleHull( double64 pf, double64 syy,
     // make sure that counter-clockwise building occurs
     if ( b > c ) line.Flip();
 
-    double64 aperture = CenterAperture( pf, syy );
+    double aperture = CenterAperture( pf, syy );
 
     // checking apertures
     if ( aperture < MINIMUM_APERTURE ) aperture = MINIMUM_APERTURE;
 
     // 1. find the 2 points for the end edge of the fracture
     length = sqrt( (c[0]-b[0])*(c[0]-b[0]) + (c[1]-b[1])*(c[1]-b[1]) );
-    double64 t_p = -(aperture/2.0) / length, 
+    double t_p = -(aperture/2.0) / length, 
            t_q =  (aperture/2.0) / length;  
          
     // 2. build new edge for those points  
@@ -426,7 +426,7 @@ void OpeningModeFracture::RectangleHull( double64 pf, double64 syy,
 
 
 
-void OpeningModeFracture::RectangleHull( double64 fixed_aperture,
+void OpeningModeFracture::RectangleHull( double fixed_aperture,
                                          mjl::Point& b,
                                          mjl::Point& c,
                                          list<mjl::Point>& chain )
@@ -436,11 +436,11 @@ void OpeningModeFracture::RectangleHull( double64 fixed_aperture,
     // make sure that counter-clockwise building occurs
     if ( b > c ) line.Flip();
 
-    double64 aperture = fixed_aperture;
+    double aperture = fixed_aperture;
 
     // 1. find the 2 points for the end edge of the fracture
     length = sqrt( (c[0]-b[0])*(c[0]-b[0]) + (c[1]-b[1])*(c[1]-b[1]) );
-    double64 t_p = -(aperture/2.0) / length, 
+    double t_p = -(aperture/2.0) / length, 
            t_q =  (aperture/2.0) / length;  
          
     // 2. build new edge for those points  

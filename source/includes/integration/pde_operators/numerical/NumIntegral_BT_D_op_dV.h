@@ -20,12 +20,14 @@ class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim> {
                                                           const char* poissons, // Poisson's ratio
                                                           const char* test, bool plane_strain=true );   // displacement
 
-    virtual void GetOperands( CELL& e );
+    virtual void GetOperands( const CELL& );
 
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
     
     void PlaneStress();
+    
     virtual NumIntegral_BT_D_op_dV<dim,CELL>* clone() const { return new NumIntegral_BT_D_op_dV<dim,CELL> (*this); }
+    
   private:  
     csmp::Index                       nu_key_;    ///< Poisson's ratio
     csmp::Index                       Y_key_;     ///< Young's modulus

@@ -17,8 +17,8 @@ class Integral_NT_N_dV : public MathOperatorLHS<dim> {
     // variable must be the same as in the RHS (it is not used to form integral)
     Integral_NT_N_dV( const PropertyDatabase<dim>& p, const char* test_variable );
     
-    virtual void GetOperands( SIMPLEX& );
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void GetOperands( const SIMPLEX& ) {}
+    virtual void ComputeContribution( const SIMPLEX& );
 };
 
 
@@ -28,14 +28,6 @@ class Integral_NT_N_dV : public MathOperatorLHS<dim> {
 copyright (c) 1999 by Dr. Stephan K. Matthaei & Stephen G. Roberts */
 
 
-
-
-/** Reads the scalar node variables.
-*/
-template<size_t dim,class SIMPLEX>
-inline void Integral_NT_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& )
- { 
- }
 
 } // csmp
 

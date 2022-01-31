@@ -28,7 +28,7 @@ class NumIntegral_NT_lhs_nodal_op_N_dV : public MathOperatorLHS<dim> {
 
     NumIntegral_NT_lhs_nodal_op_N_dV();    
     std::vector<ScalarVariable> VAR;    
-    double64 volume;
+    double volume;
 
 };
 

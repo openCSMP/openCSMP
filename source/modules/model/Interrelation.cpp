@@ -5,6 +5,7 @@
 #include "InterFace.h"
 #include "Element.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "Region.h"
 #include "Model.h"
 #include "Exception.h"
@@ -826,14 +827,14 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                           case REGION:
                                switch( prop_key.type ) {
                                     case SCALAR:
-                                         (*oiter).second = gref.Read( prop_key ); 
+                                         (*oiter).second = dynamic_cast<Region<dim>&>(gref).Read( prop_key ); 
                                       break;
                                     case VECTOR:
-                                         gref.Read( prop_key, vc ); 
+                                         dynamic_cast<Region<dim>&>(gref).Read( prop_key, vc ); 
                                          (*oiter).second = vc;
                                       break;
                                     case TENSOR:
-                                         gref.Read( prop_key, ts ); 
+                                         dynamic_cast<Region<dim>&>(gref).Read( prop_key, ts ); 
                                          (*oiter).second = ts;
                                       break;
                                     default: 
@@ -844,14 +845,32 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                            case BOUNDARY:
                                switch( prop_key.type ) {
                                     case SCALAR:
-                                         (*oiter).second = gref.Read( prop_key ); 
+                                         (*oiter).second = dynamic_cast<Boundary<dim>&>(gref).Read( prop_key ); 
                                       break;
                                     case VECTOR:
-                                         gref.Read( prop_key, vc ); 
+                                         dynamic_cast<Boundary<dim>&>(gref).Read( prop_key, vc ); 
                                          (*oiter).second = vc;
                                       break;
                                     case TENSOR:
-                                         gref.Read( prop_key, ts ); 
+                                         dynamic_cast<Boundary<dim>&>(gref).Read( prop_key, ts ); 
+                                         (*oiter).second = ts;
+                                      break;
+                                    default: 
+                                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                                                           "boundary variable type could not be resolved.");
+                                  }
+                            break;
+                           case SPLIT_BOUNDARY:
+                               switch( prop_key.type ) {
+                                    case SCALAR:
+                                         (*oiter).second = dynamic_cast<SplitBoundary<dim>&>(gref).Read( prop_key ); 
+                                      break;
+                                    case VECTOR:
+                                         dynamic_cast<SplitBoundary<dim>&>(gref).Read( prop_key, vc ); 
+                                         (*oiter).second = vc;
+                                      break;
+                                    case TENSOR:
+                                         dynamic_cast<SplitBoundary<dim>&>(gref).Read( prop_key, ts ); 
                                          (*oiter).second = ts;
                                       break;
                                     default: 
@@ -987,18 +1006,56 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                                          "variable type could not be resolved");
                                 }
                            break;
-                        case REGION:
+                         case REGION:
                              switch( prop_key.type )
                                {
                                   case SCALAR:
-                                       (*oiter).second = gref.Read( prop_key ); 
+                                       (*oiter).second = dynamic_cast<Region<dim>&>(gref).Read( prop_key ); 
                                     break;
                                   case VECTOR:
-                                       gref.Read( prop_key, vc ); 
+                                       dynamic_cast<Region<dim>&>(gref).Read( prop_key, vc ); 
                                        (*oiter).second = vc;
                                     break;
                                   case TENSOR:
-                                       gref.Read( prop_key, ts ); 
+                                       dynamic_cast<Region<dim>&>(gref).Read( prop_key, ts ); 
+                                       (*oiter).second = ts;
+                                    break;
+                                  default: 
+                                  throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                                                         "variable type could not be resolved");
+                              }
+                           break;
+                        case BOUNDARY:
+                             switch( prop_key.type )
+                               {
+                                  case SCALAR:
+                                       (*oiter).second = dynamic_cast<Boundary<dim>&>(gref).Read( prop_key ); 
+                                    break;
+                                  case VECTOR:
+                                       dynamic_cast<Boundary<dim>&>(gref).Read( prop_key, vc ); 
+                                       (*oiter).second = vc;
+                                    break;
+                                  case TENSOR:
+                                       dynamic_cast<Boundary<dim>&>(gref).Read( prop_key, ts ); 
+                                       (*oiter).second = ts;
+                                    break;
+                                  default: 
+                                  throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                                                         "variable type could not be resolved");
+                               }
+                             break;
+                       case SPLIT_BOUNDARY:
+                             switch( prop_key.type )
+                               {
+                                  case SCALAR:
+                                       (*oiter).second = dynamic_cast<SplitBoundary<dim>&>(gref).Read( prop_key ); 
+                                    break;
+                                  case VECTOR:
+                                       dynamic_cast<SplitBoundary<dim>&>(gref).Read( prop_key, vc ); 
+                                       (*oiter).second = vc;
+                                    break;
+                                  case TENSOR:
+                                       dynamic_cast<SplitBoundary<dim>&>(gref).Read( prop_key, ts ); 
                                        (*oiter).second = ts;
                                     break;
                                   default: 

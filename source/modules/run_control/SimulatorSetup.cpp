@@ -181,7 +181,7 @@ void SimulatorSetup<dim>::AddPreExistingModelVariables()
     this->GetModel()->Database().ListProperties(pre_existing_props_in_model);
     for (map<string,csmp::Index>::iterator peim_it = pre_existing_props_in_model.begin(); peim_it != pre_existing_props_in_model.end();peim_it++){
         SimulatorSetupParameter p;
-        double64 min,max;
+        double min,max;
         p.name=peim_it->first;
         p.notation=this->GetModel()->Database().Parameter(p.name.c_str()).notation;
         p.unit=this->GetModel()->Database().Unit(p.name.c_str());
@@ -384,7 +384,7 @@ bool SimulatorSetup<dim>::CheckProperties()
     std::list<SimulatorSetupParameter>::const_iterator dictBegin ( parameter_list_.begin());
     std::list<SimulatorSetupParameter>::const_iterator dictEnd   ( parameter_list_.end());
     const PropertyDatabase<dim>& p=model_->Database();
-    double64 vmin, vmax;
+    double vmin, vmax;
     std::string property_name, notation_name;
     bool no_mistakes(true);
 
@@ -429,7 +429,7 @@ void SimulatorSetup<dim>::CheckInputRanges(){
     std::list<SimulatorSetupParameter>::const_iterator dictBegin ( parameter_list_.begin());
     std::list<SimulatorSetupParameter>::const_iterator dictEnd   ( parameter_list_.end());
     const PropertyDatabase<dim>& p=model_->Database();
-    double64 vmin, vmax;
+    double vmin, vmax;
     std::string property_name, usage;
     bool no_mistakes(true);
     for( std::list<SimulatorSetupParameter>::const_iterator pit = dictBegin; pit!=dictEnd; pit++){
@@ -632,7 +632,7 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
                         throw csmp::Exception( ERROR, "SimulatorSetup::SetupWellsBasedOnRates()","nan injection rate detected" );
 
                     // The volume method calculates volume, surface, or length depending on the type of element that composes the well.
-                    double64 wellvolume=model_->Region((*sit).c_str()).Volume();
+                    double wellvolume=model_->Region((*sit).c_str()).Volume();
                     typename std::vector<Element<dim>* >::iterator ebegin=model_->Region((*sit).c_str()).ElementsBegin();
                     typename std::vector<Element<dim>* >::iterator eend=model_->Region((*sit).c_str()).ElementsEnd();
                     // calculate volume flow rate per unit length of well (this assumes it is uniform throughout the well!)

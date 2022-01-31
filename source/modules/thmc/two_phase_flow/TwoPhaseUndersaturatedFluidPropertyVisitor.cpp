@@ -7,7 +7,7 @@
 //
 
 #include "TwoPhaseUndersaturatedFluidPropertyVisitor.h"
-//#include <math.h>
+#include "Exception.h"
 #include <algorithm>
 #include "Node.h"
 
@@ -71,21 +71,21 @@ namespace csmp {
     assert(rho_o_b>=0.0);
     
     //Initialization of coefficients
-    double64 rho_w_pure_coeffs_c[5] = {-0.127213,   0.645486,   1.03265,        -0.070291,  0.639589    };
-    double64 Ew_coeffs_c[5]         = {4.221,       -3.478,     6.221,          0.5182,     -0.4405     };
-    double64 Fw_coeffs_c[5]         = {-11.403,     29.932,     27.952,         0.20684,    0.3768      };
+    double rho_w_pure_coeffs_c[5] = {-0.127213,   0.645486,   1.03265,        -0.070291,  0.639589    };
+    double Ew_coeffs_c[5]         = {4.221,       -3.478,     6.221,          0.5182,     -0.4405     };
+    double Fw_coeffs_c[5]         = {-11.403,     29.932,     27.952,         0.20684,    0.3768      };
 
-    double64 dm_2_coeffs_c[5]       = {-1.1149E-4,  1.7105E-4,  -4.3766E-4,     0.0,        0.0         };
-    double64 dm_3_2_coeffs_c[5]     = {-8.878E-4,   -1.388E-4,  -2.96318E-3,    0.0,        0.51103     };
-    double64 dm_1_coeffs_c[5]       = {2.1466E-3,   1.2427E-2,  4.2648E-2,      -8.1009E-2, 0.525417    };
-    double64 dm_1_2_coeffs_c[5]     = {2.356E-4, -  3.636E-4,   -2.278E-4,      0.0,        0.0         };
+    double dm_2_coeffs_c[5]       = {-1.1149E-4,  1.7105E-4,  -4.3766E-4,     0.0,        0.0         };
+    double dm_3_2_coeffs_c[5]     = {-8.878E-4,   -1.388E-4,  -2.96318E-3,    0.0,        0.51103     };
+    double dm_1_coeffs_c[5]       = {2.1466E-3,   1.2427E-2,  4.2648E-2,      -8.1009E-2, 0.525417    };
+    double dm_1_2_coeffs_c[5]     = {2.356E-4, -  3.636E-4,   -2.278E-4,      0.0,        0.0         };
 
-    double64 em_coeffs_c[5]         = {0.0,         0.0,        0.1249,         0.0,        0.0         };
-    double64 fm_3_2_coeffs_c[5]     = {-0.617,      -0.747,     -0.4339,        0.0,        10.26       };
-    double64 fm_1_coeffs_c[5]       = {0.0,         9.917,      5.1128,         0.0,        3.892       };
-    double64 fm_1_2_coeffs_c[5]     = {0.0365,      -0.0369,    0.0,            0.0,        0.0         };
+    double em_coeffs_c[5]         = {0.0,         0.0,        0.1249,         0.0,        0.0         };
+    double fm_3_2_coeffs_c[5]     = {-0.617,      -0.747,     -0.4339,        0.0,        10.26       };
+    double fm_1_coeffs_c[5]       = {0.0,         9.917,      5.1128,         0.0,        3.892       };
+    double fm_1_2_coeffs_c[5]     = {0.0365,      -0.0369,    0.0,            0.0,        0.0         };
 
-    double64 di_c[10] = {0.28853170E7, -0.11072577E5, -0.90834095E1, 0.30925651E-1, -0.27407100E-4, -0.192827250E7, 0.56216046E4, 0.13827250E2, -0.47609523E-1, 0.35545041E-4};
+    double di_c[10] = {0.28853170E7, -0.11072577E5, -0.90834095E1, 0.30925651E-1, -0.27407100E-4, -0.192827250E7, 0.56216046E4, 0.13827250E2, -0.47609523E-1, 0.35545041E-4};
 
 
     std::copy(rho_w_pure_coeffs,    rho_w_pure_coeffs + 5,  rho_w_pure_coeffs_c );
@@ -131,10 +131,10 @@ namespace csmp {
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyOilCompressibilityCorrelation(double64 P, double64 T)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyOilCompressibilityCorrelation(double P, double T)
   {
     
-    double64 log_P_Pb, log_Tr, dz_dp, dcofb_dp;
+    double log_P_Pb, log_Tr, dz_dp, dcofb_dp;
     Tr = T;
     log_P_Pb = log(P/Pb);
     log_Tr = log(Tr);
@@ -159,25 +159,25 @@ namespace csmp {
     co = cofb + (P-Pb)*dcofb_dp;
   }
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::DensityOilGreaterPb(double64 P)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::DensityOilGreaterPb(double P)
   {
     rho_o = rho_o_b*exp(cofb*(P-Pb));
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::PetroskyFarshadOilViscosityGreaterPb(double64 P)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::PetroskyFarshadOilViscosityGreaterPb(double P)
   {
     my_o = my_o_b + 1.3449E-3*(P-Pb)*pow(10, A);
   }
   
   template<size_t dim>
-  double64 TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyA(const double64 ai[], double64 T) const
+  double TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyA(const double ai[], double T) const
   {
     return (ai[0]*pow(T/100,2)+ai[1]*(T/100)+ai[2])/(ai[3]*pow(T/100,2)+ai[4]*(T/100)+1);
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineAFactors(double64 T)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineAFactors(double T)
   {
     rho_w_pure_p_ref = SpiveyA(Ew_coeffs, T);
     Ew = SpiveyA(Ew_coeffs, T);
@@ -197,14 +197,14 @@ namespace csmp {
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineCompressibilityPure(double64 P)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineCompressibilityPure(double P)
   {
     c_w_pure = (1.0/70.0)*1.0/(Ew*(P/70.0)+Fw);
     //cout << c_w_pure << endl;
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineDensityPure(double64 P)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineDensityPure(double P)
   {
     Iw_p_ref = (1.0/Ew)*log(fabs(Ew+Fw));
     Iw = (1.0/Ew)*log(fabs(Ew*(P/70.0)+Fw));
@@ -212,13 +212,13 @@ namespace csmp {
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrindeDensityPRef(double64 m)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrindeDensityPRef(double m)
   {
     rho_b_p_ref = rho_w_pure_p_ref + dm_2*pow(m, 2) + dm_3_2*pow(m, 1.5) + dm_1*m + dm_1_2*sqrt(m);
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineCompressibility(double64 P, double64 m)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineCompressibility(double P, double m)
   {
     Eb = Ew + Em;
     Fb = Fw + Fm_3_2*pow(m, 1.5) + Fm_1 * m + Fm_1_2 * sqrt(m);
@@ -227,7 +227,7 @@ namespace csmp {
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineDensity(double64 P)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineDensity(double P)
   {
     Ib_p_ref = 1.0/Eb * log(fabs(Eb+Fb));
     Ib = (1.0/Eb)*log(fabs(Eb*(P/70.0)+Fb));
@@ -235,10 +235,10 @@ namespace csmp {
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::MaoDuanWaterViscosityPure(double64 T)
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::MaoDuanWaterViscosityPure(double T)
   {
-    double64 a = 0;
-    double64 b = 0;
+    double a = 0;
+    double b = 0;
     for(int i = 1; i <= 5; ++i) {
       a += di[i-1]*pow(T, i-3);
     }
@@ -252,11 +252,11 @@ namespace csmp {
   }
   
   template<size_t dim>
-  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::MaoDuanBrineRelativeViscosity( double64 T, double64 m ) {
-    const double64 Tsquared(T*T);
-    const double64 A = -0.21319213+0.13651589E-2*T - 0.12191756E-5*Tsquared;
-    const double64 B = 0.69161945E-1 - 0.27292263E-3*T + 0.20852448E-6*Tsquared;
-    const double64 C = -0.25988855E-2 + 0.77989227E-5*T;
+  void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::MaoDuanBrineRelativeViscosity( double T, double m ) {
+    const double Tsquared(T*T);
+    const double A = -0.21319213+0.13651589E-2*T - 0.12191756E-5*Tsquared;
+    const double B = 0.69161945E-1 - 0.27292263E-3*T + 0.20852448E-6*Tsquared;
+    const double C = -0.25988855E-2 + 0.77989227E-5*T;
     
     log_my_b_rel = A*m + B*pow(m, 2) + C*pow(m, 3);
     my_b_rel = exp(log_my_b_rel);
@@ -266,17 +266,17 @@ namespace csmp {
   template<size_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::Visit( Node<dim>* node )
   {
-    const double64 Pw = node->Read(water_pressure_key_ );
-    const double64 Po = node->Read(oil_pressure_key_ );
-    const double64 T = node->Read(temperature_key_ );
+    const double Pw = node->Read(water_pressure_key_ );
+    const double Po = node->Read(oil_pressure_key_ );
+    const double T = node->Read(temperature_key_ );
     
-// NOT USED   double64 P_w_field = Pw * 1E-6 * 1.45037738E2; // Pa -> MPa -> PSIA
-    double64 P_w_SI = Pw * 1E-6; //MPa
-    double64 P_o_field = Po * 1E-6 * 1.45037738E2; // Pa -> MPa -> PSIA;
-// NOT USED   double64 P_o_SI = Po * 1E-6; //MPa
-    double64 T_field = T * 1.8 + 32; //T [F]
-    double64 T_cels = T; //T [Celsius]
-    double64 T_SI = T + 273.15; // T [Kelvin]
+// NOT USED   double P_w_field = Pw * 1E-6 * 1.45037738E2; // Pa -> MPa -> PSIA
+    double P_w_SI = Pw * 1E-6; //MPa
+    double P_o_field = Po * 1E-6 * 1.45037738E2; // Pa -> MPa -> PSIA;
+// NOT USED   double P_o_SI = Po * 1E-6; //MPa
+    double T_field = T * 1.8 + 32; //T [F]
+    double T_cels = T; //T [Celsius]
+    double T_SI = T + 273.15; // T [Kelvin]
     
     //Calculate Oil Properties
     SpiveyOilCompressibilityCorrelation(P_o_field, T_field);

@@ -23,13 +23,6 @@ Model1D<dim>::Model1D( const std::string& input_file)
    this->Name( input_file.c_str() );
  }
 
-template<size_t dim>
-Model1D<dim>::Model1D( const std::string& input_file,
-                       const std::string& variable_file )
- : Model<dim>( input_file.c_str(), variable_file.c_str() )
- {
-   this->Name( input_file.c_str() );
- }
 
 
 /**
@@ -40,12 +33,12 @@ Then the model is build using the method Initialize.
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        const std::string& variable_file,
-                       double64 length,
+                       double length,
                        size_t   elements,
-                       const std::vector<double64>& splitnode_coordinates,
+                       const std::vector<double>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
  {
     this->Name(name.c_str());
     Initialize( length, elements,
@@ -53,11 +46,13 @@ Model1D<dim>::Model1D( const std::string& name,
                 origin, destination );
  }
 
+
+
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
-                       double64 length,
+                       double length,
                        size_t   elements,
-                       const std::vector<double64>& splitnode_coordinates,
+                       const std::vector<double>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
  {
@@ -66,19 +61,20 @@ Model1D<dim>::Model1D( const std::string& name,
                 splitnode_coordinates,
                 origin, destination );
  }
+
 
 
 template<size_t dim>
 Model1D<dim>::Model1D(const std::string& name,
                        const std::string& variable_file,
-                       double64 length,
-                       double64 min_size, double64 max_size,
-                       double64 width_of_transition_zone,
+                       double length,
+                       double min_size, double max_size,
+                       double width_of_transition_zone,
                        MeshDensity* density,
-                       const std::vector<double64>& splitnode_coordinates,
+                       const std::vector<double>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
  {
     this->Name(name.c_str());
     Initialize( length, min_size, max_size, width_of_transition_zone, density,
@@ -88,11 +84,11 @@ Model1D<dim>::Model1D(const std::string& name,
 
 template<size_t dim>
 Model1D<dim>::Model1D(const std::string& name,
-                      double64 length,
-                      double64 dx_min, double64 dx_max,
-                      double64 width_of_transition_zone,
+                      double length,
+                      double dx_min, double dx_max,
+                      double width_of_transition_zone,
                       MeshDensity* density,
-                      const std::vector<double64>& splitnode_coordinates,
+                      const std::vector<double>& splitnode_coordinates,
                       const Point<dim>& origin,
                       const Point<dim>& destination )
  {
@@ -101,15 +97,17 @@ Model1D<dim>::Model1D(const std::string& name,
                 splitnode_coordinates,
                 origin, destination );
  }
+ 
+ 
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        const std::string& variable_file,
-                       const std::vector<double64>& node_coordinates,
-                       const std::vector<double64>& splitnode_coordinates,
+                       const std::vector<double>& node_coordinates,
+                       const std::vector<double>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
 {
    this->Name(name.c_str());
    Initialize( node_coordinates,
@@ -117,10 +115,12 @@ Model1D<dim>::Model1D( const std::string& name,
                origin, destination );
 }
 
+
+
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
-                       const std::vector<double64>& node_coordinates,
-                       const std::vector<double64>& splitnode_coordinates,
+                       const std::vector<double>& node_coordinates,
+                       const std::vector<double>& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
 {
@@ -129,6 +129,8 @@ Model1D<dim>::Model1D( const std::string& name,
                splitnode_coordinates,
                origin, destination );
 }
+
+
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
@@ -137,13 +139,15 @@ Model1D<dim>::Model1D( const std::string& name,
                        const std::vector<Point<dim> >& splitnode_coordinates,
                        const Point<dim>& origin,
                        const Point<dim>& destination )
- : Model<dim>( variable_file.c_str(), false )
+ : Model<dim>( variable_file.c_str() )
 {
    this->Name(name.c_str());
    Initialize( node_coordinates,
                splitnode_coordinates,
                origin, destination );
 }
+
+
 
 template<size_t dim>
 Model1D<dim>::Model1D( const std::string& name,
@@ -186,8 +190,8 @@ void Model1D<dim>::Initialize( VSet<dim>& vset )
 /// creates an uniform mesh
 
 template<size_t dim>
-void Model1D<dim>::Initialize( double64 length, size_t elements,
-                               const std::vector<double64>& splitnode_coordinates,
+void Model1D<dim>::Initialize( double length, size_t elements,
+                               const std::vector<double>& splitnode_coordinates,
                                const Point<dim>& origin,
                                const Point<dim>& destination )
 {
@@ -208,8 +212,8 @@ void Model1D<dim>::Initialize( double64 length, size_t elements,
 /// creates an exponentially refined mesh
 
 template<size_t dim>
-void Model1D<dim>::Initialize(double64 length, double64 dx_min, double64 dx_max, double64 width_of_transition_zone, MeshDensity* density,
-                              const std::vector<double64>& splitnode_coordinates,
+void Model1D<dim>::Initialize(double length, double dx_min, double dx_max, double width_of_transition_zone, MeshDensity* density,
+                              const std::vector<double>& splitnode_coordinates,
                               const Point<dim>& origin,const Point<dim>& destination )
 {
   VSet<dim>      vset;
@@ -227,8 +231,8 @@ void Model1D<dim>::Initialize(double64 length, double64 dx_min, double64 dx_max,
 /// creates a custom mesh with vector( 1D node coordinates )
 
 template<size_t dim>
-void Model1D<dim>::Initialize( const std::vector<double64>& node_coordinates,
-                               const std::vector<double64>& splitnode_coordinates,
+void Model1D<dim>::Initialize( const std::vector<double>& node_coordinates,
+                               const std::vector<double>& splitnode_coordinates,
                                const Point<dim>& origin,
                                const Point<dim>& destination )
 {

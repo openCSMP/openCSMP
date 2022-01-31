@@ -42,28 +42,19 @@ void Region_Example::Specifications()
 
 void Region_Example::Run()
 {
-  // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
-
-  // -----------------------------------------------------------------------
-  //
-  //  Setup: Demonstrate how to create a model from ANSYS mesh
-  //         and configure it from file
-  //
-  // -----------------------------------------------------------------------
+  //  Create a model from ANSYS mesh and configure it from file
    const char* model_name="fracs4";
    ANSYS_Model3D  model( model_name, "CSMP-1phase-variables.txt");
-
    printModelDimensions( model, true );
 
-   // testing whether the model contains the right regions and another not contained one
+   // testing whether model contains the desired regions
    cout <<"\nmain: Does the model contain FRACS and MATRIX regions? ";
    cout << model.ContainsRegion("FRACS") <<" "<< model.ContainsRegion("MATRIX") << endl;
    cout <<"or a non-existing one called 'dummy'? - "<< model.ContainsRegion("dummy");
    cout <<"\nmain: Are they unique (have no overlap)? ";
    cout << model.IsUnique("FRACS") <<" "<< model.IsUnique("MATRIX") << endl;
 
-   // configure model from file 'fracs4-configuration.txt'
+   // configure model / regions from file 'fracs4-configuration.txt'
    InputDataManager<DIM>().ConfigureFromFile( model, model_name,
                                               false, true, true, true, false );
 
@@ -80,7 +71,7 @@ void Region_Example::Run()
    delete log_k;
 
    // calculate hydraulic conductivity, K = k / mu
-   const double64 fluid_viscosity(1.0e-03);
+   const double fluid_viscosity(1.0e-03);
    ConstantFactor<DIM,divides>  conductivity( model.Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );
@@ -135,11 +126,11 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "permeability_regions", "permeability_regions", "permeability", 1, true );
    // test 3: O.K.
    cout <<"\n\n\nmain: RemoveRegion()  removing region 'permeability_regions' and other new regions."<< endl;
-   model.RemoveRegion( "permeability_regions", false );
+   model.RemoveRegion( "permeability_regions" );
    //    ^^^^^^^^^^^^
    // removal of the new permeability-based unique regions:
    for ( set<string>::const_iterator it=group_names.begin(); it!=group_names.end(); it++ )
-     model.RemoveRegion( (*it).c_str(), false );
+     model.RemoveRegion( (*it).c_str() );
 
 
    // creation of a region from combined property values using PropertyConstraints
@@ -157,8 +148,8 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "pressure_permeability_overlap1", "region_kpf1", "fluid pressure", 1, true );
    vtk_output.OutputDataToVTK( model, "pressure_permeability_overlap1", "region_kpf1", "fluid pressure", 1, true );
    // removal
-   model.RemoveRegion( "pressure_permeability_overlap1", false );
-   model.RemoveRegion( "pressure_permeability_overlap2", false );
+   model.RemoveRegion( "pressure_permeability_overlap1" );
+   model.RemoveRegion( "pressure_permeability_overlap2" );
 
 
    // creating a region from element-, node- or other properties within a specified range
@@ -169,7 +160,7 @@ void Region_Example::Run()
    // visualisation
    vtk_output.OutputDataToVTK( model, "pf_window", "pf_window", "fluid pressure", 1, true );
    // removal
-   model.RemoveRegion( "pf_window", false );
+   model.RemoveRegion( "pf_window" );
 
    // breaking a region into contiguous sub-regions
    cout <<"\n\n\nmain: number of contiguous sub regions: ";
@@ -188,7 +179,6 @@ void Region_Example::Run()
   
    // removal of new partitions
    cout <<"\n\n\nmain: removing the previously created subregions of FRACS:\n";
-   // TODO: SKM this step does not work at the moment (8/10/2014)
    cout <<"\n\tsubregions removed: "<<  model.RemoveRegionPartitionsFor("FRACS");
    //                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -203,7 +193,7 @@ void Region_Example::Run()
    model.FormRectangularRegion( "rectangular region", p1, p2 );
    //    ^^^^^^^^^^^^^^^^^^^^^^
    vtk_output.OutputDataToVTK( model, "rectangular region", "box", "fluid pressure", 1, true );
-   model.RemoveRegion( "rectangular region", false );
+   model.RemoveRegion( "rectangular region" );
 
 
    // building a region from a subset of element numbers
@@ -218,7 +208,7 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "elements10to100", "conductivity", "conductivity", 1, true );
 
 
-   // assimilating this regions into a new region of elements 110 to 200, using a lambda function
+   // assimilating this regions into a new region of elements 110 to 200, using a C++ lambda function
    transform( element_ids.begin(), element_ids.end(), element_ids.begin(), [&]( auto elmt ){ return elmt + 101U; } );
    model.FormRegionFrom( "elements110to200", element_ids );
    // test 11: O.K.
@@ -229,7 +219,7 @@ void Region_Example::Run()
    cout << model.Region("elements10to100").Elements() << endl;
 
    vtk_output.OutputDataToVTK( model, "elements10to100", "fluid-pressure", "fluid pressure", 1, true );
-   model.RemoveRegion( "elements110to200", false );
+   model.RemoveRegion( "elements110to200" );
 
 
 
@@ -250,12 +240,12 @@ void Region_Example::Run()
    model.RegionUnion( "FRACS", "MATRIX", "MODEL" );
    //    ^^^^^^^^^^^
    assert( model.Region("Model").Elements() == model.Region("MODEL").Elements() );
-   model.RemoveRegion( "MODEL", false );
+   model.RemoveRegion( "MODEL" );
 
    cout <<"\n\n\nmain: RegionIntersection() between FRACS and MATRIX."<< endl;
    // test: O.K.
-   cout <<"\nmain: Does region FRACS1 overlap with MATRIX? (no): ";
-   cout << model.RegionIntersection( "FRACS1", "MATRIX", "empty_group" );
+   cout <<"\nmain: Does region FRACS overlap with MATRIX? (no): ";
+   cout << model.RegionIntersection( "FRACS", "MATRIX", "empty_group" );
    //            ^^^^^^^^^^^^^^^^^^             empty_region will not be formed
    cout <<"\nmain: Does region FRACS overlap with Model? (yes): ";
    cout << model.RegionIntersection( "FRACS", "Model", "fractures" );
@@ -277,7 +267,7 @@ void Region_Example::Run()
    cout <<"\n\n\nmain: Add()  adding difference and FRACS."<< endl;
    model.Region("difference").Add( model.Region("FRACS") );
    //                         ^^^
-   model.RemoveRegion( "difference", false );
+   model.RemoveRegion( "difference" );
 
 
   // -----------------------------------------------------------------------
@@ -294,7 +284,7 @@ void Region_Example::Run()
    xyz_max.Out();
 
    cout <<"\n\n\nmain: fluid pressure min/max: ";
-   double64  gmin, gmax;
+   double  gmin, gmax;
    model.Region("FRACS").MinMaxOf( "fluid pressure", gmin, gmax );
    //  test: O.K.        ^^^^^^^^
    cout << gmin <<" - "<< gmax << endl;
@@ -343,7 +333,7 @@ void Region_Example::Run()
 
    PropertyHandle<DIM>  cpoint_k( model, "cpoint permeability", TENSOR, ELEMENT_INTEGRATION_POINT );
    TensorVariable<DIM> ts;
-   ts=1.0e-12;
+   ts      = 1.0e-12;
    ts(0,0) = ts(1,1) = 2.;
    ts(2,2) = 3.;
    ts.Out();
@@ -395,10 +385,10 @@ void Region_Example::Run()
    cout <<"\n\tinterior elements: "<< gref.InteriorElements(); // test: O.K.
    cout <<"\n\tIs empty?          "<< gref.Empty() << endl; // test: O.K.
 
-   const Element<DIM>&  e1(*(model.Mesh().RootElement(0)));
-   cout <<"\nmain: Does the model contain a certain element? "<< model.Region("Model").Contains( &e1 ) << endl; // test: O.K.
+   const Element<DIM>*  e1 = &(*(model.Mesh().ElementsBegin()));
+   cout <<"\nmain: Does the model contain a certain element? "<< model.Region("Model").Contains( e1 ) << endl; // test: O.K.
    //                                                                                  ^^^^^^^^
-   cout <<"\nmain: At its boundary? "<< model.Region("Model").IsPerimeterElement( &e1 ) << endl; // test: O.K.
+   cout <<"\nmain: At its boundary? "<< model.Region("Model").IsPerimeterElement( e1 ) << endl; // test: O.K.
    //                                                         ^^^^^^^^^^^^^^^^^^
 
    // output of group data

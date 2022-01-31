@@ -46,12 +46,12 @@ namespace csmp {
 
 	void Transient_Test::run()
 	{
-		double64& model_time(ModelTime::Instance().modelTime);
+		double& model_time(ModelTime::Instance().modelTime);
 		model_time = 0.;
 		Quadrilaterator    quadrilaterator; // simple FE mesher
 		VSet<2U>           mesh_container;  // container to store the input mesh
 		string             file_name("tutorial1_input");
-		double64           x(10); double64 y(10);
+		double           x(10); double y(10);
 		cout << "\nmain: Enter the pixel-based input geometry for the quadrilaterator: " << endl;
 		cout << "\nmain: The x- and y-dimensions of your model (in m): " << endl;
 
@@ -176,16 +176,16 @@ namespace csmp {
 		vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 0);
 
 		// define some constant variables
-		const double64     hour(3600.0);
-		double64           time_increment(2.0 * hour); // timestep 2 hours
+		const double     hour(3600.0);
+		double           time_increment(2.0 * hour); // timestep 2 hours
 
 		// set the time increment for the FE algorithm
 		pde_validate.TimeIncrement(1.0 / time_increment);
 		pde_test.TimeIncrement(1.0 / time_increment);
 		vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 1);
 		const std::vector<size_t>& index = pde_test.GetDOFIndex();
-		const vector<double64> & rh_validate = *pde_validate.GetRH();
-		const vector<double64> & rh_test = *pde_test.GetRH();
+		const vector<double> & rh_validate = *pde_validate.GetRH();
+		const vector<double> & rh_test = *pde_test.GetRH();
 
 
 		// ====================== TESTING PROCESS ======================
@@ -245,7 +245,7 @@ namespace csmp {
 	}
 
 
-	void Transient_Test::outVector(const vector<double64>& vector, std::string file) {
+	void Transient_Test::outVector(const vector<double>& vector, std::string file) {
 		ofstream  ofs(file);
 		long         prec;
 		const long   digits(3);

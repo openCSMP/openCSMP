@@ -23,11 +23,12 @@ Element types gets a size of 1 in this case which is just enough to
 store the type of the single element of which the mesh consists.
 */
 template<size_t dim>
-VSet<dim>::VSet(size_t nodes_per_element,
-				size_t nbors_per_element,
-				int32 etype,
-				size_t nodes, size_t elmts)
-				: VData(nodes_per_element, nbors_per_element, nodes, elmts)
+VSet<dim>::VSet( size_t nodes_per_element,
+                 size_t nbors_per_element,
+                 int8_t etype,
+                 size_t nodes, size_t elmts )
+: VData(nodes_per_element, nbors_per_element, nodes, elmts),
+  pmtrl_( elmts, UNSPECIFIED )
 {
 	SingleElementType(etype);
 }
@@ -36,33 +37,36 @@ VSet<dim>::VSet(size_t nodes_per_element,
 /// creates empty VSet of the desired dimensions
 template<size_t dim>
 VSet<dim>::VSet(const deque<size_t>& npes,
-				const deque<size_t>& epes,
-				size_t nodes)
-				: VData(npes, epes, nodes)
+                const deque<size_t>& epes,
+                size_t nodes)
+: VData(npes, epes, nodes),
+  pmtrl_( epes.size(), UNSPECIFIED )
 {
 	SingleElementType(0);
 }
 
 
+
 /// copy constructor
 template<size_t dim>
-VSet<dim>::VSet(const VSet<dim>& a)
-				: VData(a),
-				property_map_(a.property_map_)
-{
-}
+VSet<dim>::VSet( const VSet<dim>& a )
+ : VData(a), pmtrl_(a.pmtrl_), property_map_(a.property_map_)
+ {
+ }
 
 
 /** Assignment operator
 */
 template<size_t dim>
-VSet<dim>& VSet<dim>::operator=(const VSet<dim>& a)
-{
-	if (&a != this) {
-		property_map_ = a.property_map_;
-	}
-	return *this;
-}
+VSet<dim>& VSet<dim>::operator=( const VSet<dim>& a )
+  {
+    if (&a != this) {
+         VData::operator=( a ); 
+         pmtrl_        = a.pmtrl_; 
+         property_map_ = a.property_map_;
+      }
+    return *this;
+  }
 
 
 /**
@@ -72,12 +76,16 @@ of the specified size.
 */
 template<size_t dim>
 void VSet<dim>::Resize( size_t nodes_per_element,
-						size_t nbors_per_element,
-						int32  csmp_etype,
-						size_t nodes,
-						size_t elmts)
+                        size_t nbors_per_element,
+                        int8_t csmp_etype,
+                        size_t nodes,
+                        size_t elmts )
 {
 	VData::Resize(nodes_per_element, nbors_per_element, csmp_etype, nodes, elmts);
+  if ( !pmtrl_.empty() || !property_map_.empty() ) {
+       cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
+       pmtrl_.resize( elmts );
+    }
 }
 
 
@@ -87,12 +95,16 @@ Just resizes all storage according to specifications without actually
 assigning any values to the subdeques.
 */
 template<size_t dim>
-void VSet<dim>::Resize( const deque<int32>& etypes,
-						const deque<size_t>& npes,
-						const deque<size_t>& epes,
-						size_t nodes, size_t faces, size_t interfaces)
+void VSet<dim>::Resize( const deque<int8_t>& etypes,
+                        const deque<size_t>& npes,
+                        const deque<size_t>& epes,
+                        size_t nodes, size_t faces, size_t interfaces )
 {
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
+  if ( !pmtrl_.empty() || !property_map_.empty() ) {
+       pmtrl_.resize( epes.size() - faces - interfaces );
+       cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
+    }
 }
 
 
@@ -106,32 +118,32 @@ VSet<dim>::~VSet()
 Adds node coordinates to VSet
 */
 template<size_t dim>
-void VSet<dim>::AddXYZ( const deque<double64>& x,
-						const deque<double64>& y,
-						const deque<double64>& z)
+void VSet<dim>::AddXYZ( const deque<double>& x,
+                        const deque<double>& y,
+                        const deque<double>& z )
 {
 	if (x.size() != Vertices())
-	{
-		if (Vertices() > 0) {
-			cout << "\nVSet::AddXYZ: Warning: Changing node-coordinate " << endl;
-			cout << "array size from " << Vertices() << " to " << x.size() << endl;
-		}
-		VData::ResizeNodes(x.size());
-	}
+    {
+      if (Vertices() > 0) {
+          cout << "\nVSet<"<< dim <<">::AddXYZ: Warning: Changing node-coordinate " << endl;
+          cout << "array size from " << Vertices() << " to " << x.size() << endl;
+        }
+      VData::ResizeNodes(x.size());
+    }
 
 	for (size_t i = 0; i<x.size(); i++) Px(i, x[i]);
 
-	if (dim > 1)
-	{
-		assert(x.size() == y.size());
-		for (size_t i = 0; i<y.size(); i++) Py(i, y[i]);
-	}
+	if ( dim > 1 )
+    {
+      assert(x.size() == y.size());
+      for (size_t i = 0; i<y.size(); i++) Py(i, y[i]);
+    }
 
-	if (dim > 2)
-	{
-		assert(y.size() == z.size());
-		for (size_t i = 0; i<x.size(); i++) Pz(i, z[i]);
-	}
+	if ( dim > 2 )
+    {
+      assert(y.size() == z.size());
+      for (size_t i = 0; i<x.size(); i++) Pz(i, z[i]);
+    }
 }
 
 
@@ -143,17 +155,18 @@ to recuperate element types and the nodes per element information when
 reading the VSet.
 */
 template<size_t dim>
-void VSet<dim>::AddPlist(typename map<size_t, vector<size_t> >::const_iterator first,
-						 typename map<size_t, vector<size_t> >::const_iterator last)
+void VSet<dim>::AddPlist( typename map<size_t, vector<int64_t> >::const_iterator first,
+						              typename map<size_t, vector<int64_t> >::const_iterator last)
 {
-	typename deque<vector<size_t> >::iterator it = PlistBegin();
+	typename deque<vector<int64_t> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
-	{
-		(*it) = (*first).second;
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first).second;
+      first++;
+      it++;
+    }
+    
 } // end
 
 
@@ -164,17 +177,18 @@ void VSet<dim>::AddPlist(typename map<size_t, vector<size_t> >::const_iterator f
 	reading the VSet.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPlist(typename deque<vector<size_t> >::const_iterator first,
-						 typename deque<vector<size_t> >::const_iterator last)
+void VSet<dim>::AddPlist( typename deque<vector<int64_t> >::const_iterator first,
+                          typename deque<vector<int64_t> >::const_iterator last )
 {
-	typename deque<vector<size_t> >::iterator it = PlistBegin();
+	typename deque<vector<int64_t> >::iterator it = PlistBegin();
 
 	while (first != last && it != PlistEnd())
-	{
-		(*it) = (*first);
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first);
+      first++;
+      it++;
+    }
+    
 } // end
 
 
@@ -187,17 +201,18 @@ void VSet<dim>::AddPlist(typename deque<vector<size_t> >::const_iterator first,
 	These manifolds cannot be captured by this classical neighbor record.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPfverts(typename map<size_t, vector<long64> >::const_iterator first,
-						   typename map<size_t, vector<long64> >::const_iterator last)
+void VSet<dim>::AddPfverts( typename map<size_t, vector<int64_t> >::const_iterator first,
+						                typename map<size_t, vector<int64_t> >::const_iterator last )
 {
-	typename deque<vector<long64> >::iterator it = PfvertsBegin();
+	typename deque<vector<int64_t> >::iterator it = PfvertsBegin();
 
 	while (first != last && it != PfvertsEnd())
-	{
-		(*it) = (*first).second;
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first).second;
+      first++;
+      it++;
+    }
+    
 } // end
 
 
@@ -211,17 +226,18 @@ void VSet<dim>::AddPfverts(typename map<size_t, vector<long64> >::const_iterator
 	These manifolds cannot be captured by this classical neighbor record.
 	*/
 template<size_t dim>
-void VSet<dim>::AddPfverts(typename deque<vector<long64> >::const_iterator first,
-						   typename deque<vector<long64> >::const_iterator last)
+void VSet<dim>::AddPfverts( typename deque<vector<int64_t> >::const_iterator first,
+						                typename deque<vector<int64_t> >::const_iterator last )
 {
-	typename deque<vector<long64> >::iterator it = PfvertsBegin();
+	typename deque<vector<int64_t> >::iterator it = PfvertsBegin();
 
 	while (first != last && it != PfvertsEnd())
-	{
-		(*it) = (*first);
-		first++;
-		it++;
-	}
+    {
+      (*it) = (*first);
+      first++;
+      it++;
+    }
+    
 } // end
 
 
@@ -230,15 +246,52 @@ void VSet<dim>::AddPfverts(typename deque<vector<long64> >::const_iterator first
 	BOX_BOUNDARY flags as values.
 	*/
 template<size_t dim>
-void VSet<dim>::AddBFlags(typename unordered_map<size_t, long64>::const_iterator first,
-                          typename unordered_map<size_t, long64>::const_iterator last)
+void VSet<dim>::AddBFlags( typename vector<std::int8_t>::const_iterator first,
+                           typename vector<std::int8_t>::const_iterator last )
 {
-	while (first != last)
-	{
-		AddBFlag((*first).first, (*first).second);
-		first++;
-	}
+   const size_t bflags_size(distance(first,last));
+   if ( bflags_size != Vertices() ) {
+        cerr <<"\nVSet<dim>::AddBFlags: supplied BOX_BOUNDARY flag range does not match the number of nodes: ";
+        cerr << bflags_size <<" vs. "<< Vertices() << endl;
+        cerr <<"No assignments were made.\n";
+        return;
+     }
+     
+   ResizeBFlags();
+   auto bit=BFlagsBegin();
+	 while ( first != last ) {
+       (*bit) = (*first);
+       first++;
+       bit++;
+     }
+    
 } // end
+
+
+
+
+/**
+       Material ID identifiers need to be provided for all elements, boundaries and split boundaries.
+*/
+template<size_t dim>
+void VSet<dim>::AddPmtrl( typename std::vector<int32_t>::const_iterator first,
+                          typename std::vector<int32_t>::const_iterator last )
+ {
+    pmtrl_.clear();
+    pmtrl_.assign( first, last );
+    if ( pmtrl_.size() != Elements() )
+      cerr <<"\nVSet<"<< dim <<">::AddPmtrl: mismatch between the number of elements and material IDs in vset.\n";
+ }
+
+
+template<size_t dim>
+std::vector<int32_t>::const_iterator VSet<dim>::PmtrlBegin() const
+ { return pmtrl_.begin(); }
+
+template<size_t dim>
+std::vector<int32_t>::const_iterator VSet<dim>::PmtrlEnd() const
+ { return pmtrl_.end(); }
+
 
 
 
@@ -265,12 +318,15 @@ New much more memory efficient variable storage framework.
 @note NEW!
 */
 template<size_t dim>
-bool VSet<dim>::AddData(const char* s, const PropertyData& data)
+bool VSet<dim>::AddData( const char* s, const PropertyData& data )
 {
 	auto result = property_map_.insert(make_pair(s, data));
 	return result.second;
 
 } // end AddData
+
+
+
 
 
 /**
@@ -282,6 +338,9 @@ void VSet<dim>::RemoveData( const char* s )
    property_map_.erase(s);
 
 } // end RemoveData
+
+
+
 
 
 /**
@@ -327,12 +386,12 @@ template<size_t dim>
 bool  VSet<dim>::ContainsFiniteVolumeIntegrationPointData() const
 {
 	for (auto it = property_map_.begin(); it != property_map_.end(); ++it)
-		if ((*it).second.Placement() == SECTOR_INTEGRATION_POINT or
-			(*it).second.Placement() == FACET_INTEGRATION_POINT or
-			(*it).second.Placement() == FACE_SECTOR_INTEGRATION_POINT or
-			(*it).second.Placement() == FACE_FACET_INTEGRATION_POINT or
-			(*it).second.Placement() == INTER_FACE_SECTOR_INTEGRATION_POINT or
-			(*it).second.Placement() == INTER_FACE_FACET_INTEGRATION_POINT) return true;
+		if ( (*it).second.Placement() == SECTOR_INTEGRATION_POINT or
+			   (*it).second.Placement() == FACET_INTEGRATION_POINT or
+			   (*it).second.Placement() == FACE_SECTOR_INTEGRATION_POINT or
+			   (*it).second.Placement() == FACE_FACET_INTEGRATION_POINT or
+			   (*it).second.Placement() == INTER_FACE_SECTOR_INTEGRATION_POINT or
+			   (*it).second.Placement() == INTER_FACE_FACET_INTEGRATION_POINT) return true;
 	return false;
 }
 
@@ -353,7 +412,7 @@ The binary writing is done with the templatized set of functions declared
 in 'binaryReadWrite.h'. These can read and write all CSMP type of datasets.
 */
 template<size_t dim>
-bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
+bool  VSet<dim>::OutputTo( const char* bin_file, double time ) const
 {
 	char file_name[200], num[20];
 	sprintf(num, "%lf", time);
@@ -376,7 +435,7 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 		strcat(heading, bin_file);
 		strcat(heading, " saved at time: ");
 		strcat(heading, num);
-		skm_C_fwrite(fp, heading);
+		binaryFileWrite(fp, heading);
 	}
 
 	// 3. Writing the mesh connectivity to file
@@ -385,32 +444,40 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 		OutBinary(fp);
 	}
 
-	// NEW: Writing the property data records to file
+	// 4. Writing material / rocktype identifiers ('pmtrl' keys from the elements)
+	{
+		BinaryFileSectionWrite sect(fp, "VSETMTRL");
+    // number of property records
+    records = pmtrl_.size();
+    fp.write( reinterpret_cast<const char*>(&records), sizeof(int32_t));
+    // individual records (all together)
+    fp.write( reinterpret_cast<const char*>(&pmtrl_[0]), sizeof(int32_t) * records );
+	}
+
+	// 5. Writing the property data records to file
 	{
 		BinaryFileSectionWrite sect(fp, "VSETPROP");
 		if (!property_map_.empty()) {
-			// number of property records
-			records = property_map_.size();
-			fp.write((char*)&records, sizeof(size_t));
-			// individual records
-			for (auto it = property_map_.begin(); it != property_map_.end(); ++it) {
-				// writing the property name
-				skm_C_fwrite(fp, (*it).first.c_str());
-				// writing the dataset
-				(*it).second.OutBinary(fp);
-			}
-		}
+        // number of property records
+        records = property_map_.size();
+        fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
+        // individual records
+        for (auto it = property_map_.begin(); it != property_map_.end(); ++it) {
+          // writing the property name
+          binaryFileWrite(fp, (*it).first.c_str());
+          // writing the dataset
+          (*it).second.OutBinary(fp);
+        }
+     }
 		else { // no data record is registered for later reading
 			records = 0U;
-			fp.write((char*)&records, sizeof(size_t));
+			fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t));
 		}
 	}
 
 
-	// 5. cleaning up
-	{
-		BinaryFileSectionWrite sect(fp, "VSETFOTR");
-	}
+	// 6. cleaning up
+  BinaryFileSectionWrite sect(fp, "VSETFOTR");
 
 	fp.close();
 	cout << "\nVSet<" << dim << ">::OutputTo: VSet has been successfully written to: ";
@@ -421,11 +488,23 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 } // end OutputTo
 
 
+
+/**
+Key method for recovery of a model from binary file. 
+*/
+template<size_t dim>
+bool  VSet<dim>::InputFrom( const char* bin_file, double& time )
+{
+   const set<string> empty_subset;
+   return InputFrom( bin_file, time, empty_subset );
+}
+
+
 /**
 Key method for recovery of a model from binary file. It can load only a subset of variables if neccesary.
 */
 template<size_t dim>
-bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<string>* subset_variables )
+bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string>& subset_variables )
 {
 	char file_name[NAME_STRING];
 	strcpy(file_name, bin_file);
@@ -444,7 +523,7 @@ bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<strin
 		BinaryFileSectionRead sect(fp, "VSETHEDR");
 		char heading[INFO_STRING];
 
-		skm_C_fread(fp, heading);
+		binaryFileRead(fp, heading);
 		cout << "\nVSet<dim>::InputFrom: Reading: " << heading << endl;
 		strtok(heading, ":");
 		strtok(NULL, ":");
@@ -453,44 +532,49 @@ bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<strin
 		time = atof(strtok(NULL, ":"));
 	}
 
-	// 3. reading the mesh connectivity to file
+	// 3. reading the mesh connectivity to file (VData)
 	{
 		BinaryFileSectionRead sect(fp, "VSETCONN");
-
 		cout << "\nVSet<dim>::InputFrom: reading finite element mesh..." << endl;
 		InBinary(fp);
 	}
 
-	// NEW: Reading the property data records from file
+	// 4. reading material / rocktype identifiers ('pmtrl' keys from the elements)
+	{
+		BinaryFileSectionRead sect(fp, "VSETMTRL");
+    // number of property records
+    fp.read( reinterpret_cast<char*>(&records), sizeof(int32_t));
+    pmtrl_.resize( records );
+    // individual records (all together)
+    fp.read( reinterpret_cast<char*>(&pmtrl_[0]), records * sizeof(int32_t) );
+	}
+
+	// Reading the property data records from file (PropertyData)
 	{
 		BinaryFileSectionRead sect(fp, "VSETPROP");
 
-		fp.read((char*)&records, sizeof(size_t));
+		fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
 		if (records > 0)
 			// reading the datasets sequentially
 			for (size_t i = 0; i<records; ++i)
 			{
 				// reading the property name
 				char heading[INFO_STRING];
-				skm_C_fread(fp, heading);
+				binaryFileRead(fp, heading);
 				dname = heading;
 
         auto prop = make_pair( dname, inBinaryPropertyData( fp ) );
-        if ( subset_variables ) {
-          if ( subset_variables->find( dname ) != subset_variables->end() )
-            property_map_.insert( prop );
-        }
-        else {
-          property_map_.insert( prop );
-        }
+        if ( !subset_variables.empty() ) {
+            if ( subset_variables.find( dname ) != subset_variables.end() )
+              property_map_.insert( prop );
+          }
+        else  property_map_.insert( prop );
 			}
 		else cout << "\nVSet<dim>::InputFrom: no PropertyData objects detected." << endl;
 	}
 
 	// 5. cleaning up
-	{
-		BinaryFileSectionRead sect(fp, "VSETFOTR");
-	}
+  BinaryFileSectionRead sect(fp, "VSETFOTR");
 
 	fp.close();
 
@@ -520,7 +604,7 @@ TODO: @todo Refactor to work with PropertyData based variable storage
 
 */
 template<size_t dim>
-bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t first_outerhalo) const
+bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double time, size_t first_outerhalo) const
 {
 	char file_name[200], num[20];
 	sprintf(num, "%lf", time);
@@ -530,7 +614,7 @@ bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t fi
 	strcat(heading, bin_file);
 	strcat(heading, " saved at time: ");
 	strcat(heading, num);
-	sprintf(num, "%lu", static_cast<long>(first_outerhalo));
+	sprintf(num, "%lu", first_outerhalo );
 	strcat(heading, ", first outerhalo: ");
 	strcat(heading, num);
 
@@ -542,7 +626,7 @@ bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t fi
 		return false;
 	}
 	// 2. writing the file header   
-	skm_C_fwrite(fp, heading);
+	binaryFileWrite(fp, heading);
 
 	// 3. Writing the mesh connectivity to file
 	OutBinary(fp);
@@ -562,7 +646,7 @@ bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double64 time, size_t fi
 TODO: @todo Refactor to work with PropertyData based variable storage
 */
 template<size_t dim>
-bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t& first_outerhalo)
+bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double& time, size_t& first_outerhalo)
 {
 	cerr << "\nVSet<dim>::ParallelInputFrom: variable output has not been implemented yet.\n";
 
@@ -578,14 +662,14 @@ bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t&
 		return false;
 	}
 	// 2. reading the file header and extracting time
-	skm_C_fread(fp, heading);
+	binaryFileRead(fp, heading);
 	cout << "\nVSet<dim>::ParallelInputFrom: Reading: " << heading << endl;
 	strtok(heading, ":");
 	strtok(NULL, ":");
 	strtok(NULL, ":");
 	strtok(NULL, ":");
 	time = atof(strtok(NULL, ":"));
-	first_outerhalo = static_cast<size_t> (atoi(strtok(NULL, ":")));
+	first_outerhalo = atoi(strtok(NULL, ":"));
 
 	// 3. reading the mesh connectivity to file
 	cout << "\nVSet<dim>::ParallelInputFrom: reading finite element mesh..." << endl;
@@ -602,9 +686,15 @@ bool  VSet<dim>::ParallelInputFrom(const char* bin_file, double64& time, size_t&
 } // end ParallelInputFrom
 
 
-/// reads -in polygonal dataset to internal VData container
+
+
+/** reads -in polygonal dataset to internal VData container
+ 
+ @todo read 'pmtrl' and property data as well
+ 
+ */
 template<size_t dim>
-bool  VSet<dim>::InputFromTextFile(const char* text_file)
+bool  VSet<dim>::InputFromTextFile( const char* text_file )
 {
 	string file(text_file);
 	file += ".txt";
@@ -631,24 +721,116 @@ bool  VSet<dim>::InputFromTextFile(const char* text_file)
 } // end InputFrom(textfile)
 
 
+
+
+/**
+       Writes VSet to text file.
+       
+        @todo write non-scalar property data as well
+
+*/
 template<size_t dim>
-void VSet<dim>::Out(bool data_as_well) const
+void VSet<dim>::Out( bool print_data_as_well ) const
 {
 	VData::Out();
 
-	if (data_as_well)
-	{
-		// scalar type data
-		cout << "\nVSet<dim>::Out: property records stored in VSet:\n";
-		for (map<string, PropertyData>::const_iterator
-			it = property_map_.begin(); it != property_map_.end(); it++)
-		{
-			cout << "\n" << (*it).first << endl;
-			(*it).second.Out();
-		}
-	}
+	if ( print_data_as_well )
+    {
+      if ( distance(PmtrlBegin(),PmtrlEnd()) > 0 )
+        cout << "\nVSet<"<< dim <<">::Out: material identifiers (rocktypes) for each element stored in VSet:\n";
+      // material records
+      for ( auto& it : pmtrl_ ) 
+        cout << it <<" ";
+      // scalar type data
+      if ( distance(PropertyValuesBegin(),PropertyValuesEnd()) > 0 )
+        cout << "\nproperty records stored in VSet:\n";
+      for ( map<string, PropertyData>::const_iterator
+            it = property_map_.begin(); it != property_map_.end(); it++ )
+        {
+          cout << "\n" << (*it).first << endl;
+          (*it).second.Out();
+        }
+    }
 
 } // end Out
+
+
+
+
+
+
+
+    /// writes C++17  code that reproduces a hardwired version of the current VSet
+template<size_t dim>
+void VSet<dim>::OutCPP17( const char* cpp_file ) const
+ {
+    ofstream  ofs( string(cpp_file) +".cpp" );
+    
+    //----------------------------FILE HEADER
+    ofs <<"// '"<< cpp_file <<"' - cplusplus source code file for the generatioon of a VSet.\n";
+    
+    ofs <<"\n\nVSet<dim>  vset;";
+    
+    //----------------------------WRITING THE VDATA
+    VData::OutCPP17( ofs );
+    
+    //----------------------------MATERIAL IDENFIFIERS FOR EACH ELEMENT
+    // vector<int32_t> pmtrl(45,1); // matrix
+    ofs <<"\nconst int32_t  material_identifier{1};";
+    ofs <<"\nvector<int32_t> pmtrl( "<< Elements() <<", material_identifier );";
+    //fill( next(pmtrl.begin(),25), next(pmtrl.begin(),31), 2 ); // fine because wrong values will be overwritten next
+    ofs <<"\n\nvset.AddPmtrl( pmtrl.begin(), pmtrl.end() );";
+    
+    //----------------------------NODE & ELEMENT NUMBERS AS PROPERTIES
+    // adding node and element numbers for comparisons
+    ofs <<"\n\nPropertyData elmt_nums( ELEMENT, SCALAR, 2U );";
+    ofs <<"\nelmt_nums.Reserve( vset.Elements() );";
+    ofs <<"\n\nfor ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );";
+    ofs <<"\nvset.AddData( \"element number\" , elmt_nums );";
+    // node numbers
+    ofs <<"\n\nPropertyData node_nums( NODE, SCALAR, 2U );";
+    ofs <<"\nnode_nums.Reserve( vset.Vertices() );";
+    ofs <<"\n\nfor ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );";
+    ofs <<"\nvset.AddData( \"node number\", node_nums );";
+ 
+ } // end OutCPP17
+
+
+
+
+
+
+/**
+   updates pmtrl and property storage to size changes in VData
+*/
+template<size_t dim>
+void VSet<dim>::UpdatePropertyStorage()
+ {
+    const int32_t  pmtrl_default_value{1};
+     if ( pmtrl_.size() != Elements() )
+       pmtrl_.resize( Elements(), pmtrl_default_value );
+       
+    // storage of discretised variables
+    if ( !property_map_.empty() ) {
+        for ( auto& it : property_map_ ) {
+             switch ( it.second.Placement() ) {
+               case NODE:
+                   if ( Vertices() != it.second.Size() )
+                     it.second.Resize( Vertices() );
+                 break;
+               case ELEMENT:
+                   if ( Elements() != it.second.Size() )
+                     it.second.Resize( Elements() );
+                 break;
+               default:
+                 cerr <<"\nplacement of '"<< it.first <<"', not handled yet; no resizing done.\n";
+             }
+          }
+    }
+    
+ } // end UpdatePropertyStorage
+
+
 
 
 /**
@@ -657,40 +839,77 @@ Reduces the number of elements in the 'vset' to those identified by their
 ID number (1...n) in the supplied set. Then the correspond element
 material property data containers are also reduced.
 
+@parameter o_n_elmt_ids is a mapping that allows to retrieve the new element IDs by their old ones.
+
+@note revised by SKM 4/12/20 - to include properties placed on the node as well and warning user about errors for properties with any other placement.
+
 */
 template<size_t dim> //             old    new
-void VSet<dim>::ReduceTo(const map<size_t, size_t>& o_n_elmt_ids)
+void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
 {
 	if (o_n_elmt_ids.empty())
 		throw csmp::Exception(ERROR, "VSet<dim>::ReduceTo:", "new element ID set is empty.");
 
-	// 'plist' and 'pfverts' in base class
-	if (Elements() > 0) {
-		std::map<size_t, size_t> o_n_node_ids;
-		VData::ReduceTo(o_n_elmt_ids, o_n_node_ids);
-	}
+  std::map<size_t, size_t> o_n_node_ids;
+	if ( Elements() > 0 )
+	// adjusting 'plist' and 'pfverts' in base class, retrieving which nodes are kept
+   VData::ReduceTo( o_n_elmt_ids, o_n_node_ids );
+   
+  // if there are no properties, all is done already
+	if ( property_map_.empty() && pmtrl_.empty() ) return;
 
-	if (property_map_.empty()) {
-		return;
-	}
+  // condensing the pmtrl vector and property maps
+  // ---------------------------------------------
+  // required vector of elements that are kept
 	std::vector<size_t> n_o_elmt_ids;
 	n_o_elmt_ids.resize(o_n_elmt_ids.size());
-	for (auto& o_n : o_n_elmt_ids) {
-		n_o_elmt_ids[o_n.second] = o_n.first;
-	}
-	for (auto& property : property_map_) {
-		auto& oldprop = property.second;
-		PropertyData new_data(oldprop.Placement(), oldprop.Type(), dim);
-		new_data.Reserve(n_o_elmt_ids.size());
-		const size_t components = oldprop.Components();
-
-		for (auto id : n_o_elmt_ids) {
-			new_data.PushBackFrom(oldprop, id);
-		}
-
-		property.second = std::move(new_data);
-	}
+	for ( const auto& o_n : o_n_elmt_ids )
+    n_o_elmt_ids[o_n.second] = o_n.first;
+  // node vector
+	std::vector<size_t> n_o_node_ids;
+	n_o_node_ids.resize(o_n_node_ids.size());
+	for ( const auto& o_n : o_n_node_ids )
+    n_o_node_ids[o_n.second] = o_n.first;
+  
+  // material indentifiers
+  vector<int32_t> new_pmtrl;
+  new_pmtrl.reserve( n_o_elmt_ids.size() );
+  for ( auto id : n_o_elmt_ids )
+    new_pmtrl.push_back( pmtrl_[id] );
+  pmtrl_ = new_pmtrl;
+  
+  // distributed properties
+	for ( auto& property : property_map_ ) 
+    {
+      auto& oldprop = property.second;
+      // handling properties with different placements
+      if ( oldprop.Placement() == ELEMENT ) {
+          PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
+          new_data.Reserve(n_o_elmt_ids.size());
+          for (auto& id : n_o_elmt_ids)
+            new_data.PushBackFrom(oldprop, id);
+          // reassigning reduced set
+          property.second = std::move(new_data);
+       }
+      else if ( oldprop.Placement() == NODE ) {
+          PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
+          new_data.Reserve(n_o_node_ids.size());
+          for (auto& id : n_o_node_ids)
+            new_data.PushBackFrom(oldprop, id);
+          // reassigning reduced set
+          property.second = std::move(new_data);
+       }
+      else {
+          cerr <<"\nERROR: VSet<"<< dim <<">::ReduceTo: placement of property '"<< property.first <<"' not handled. yet.\n";
+          cerr <<"\n\tProperties with the placement "<< parsePlacement(oldprop.Placement()) <<" were not transferred correctly\n";
+          throw logic_error("VSet<dim>::ReduceTo");
+       }
+	  }
+    
 } // end ReduceTo
+
+
+
 
 
 /** Frees up all the storage in the VSet<dim>; all contained data are deleted.
@@ -708,6 +927,33 @@ void VSet<dim>::Erase()
 	property_map_.clear();
 
 } // end Erase
+
+
+
+/**
+   uses the node coordinates to infer the model dimension: if Z-range=zero, dim=2, if Y-range=2, dim=1, else dim=3
+*/
+template<size_t dim>
+int32_t  VSet<dim>::MeshDimension( bool check_coordinates ) const
+ {
+    if ( !check_coordinates ) return dim;
+    
+    // if they are not empty but all coordinate values are zero, the model has no extent in these directions
+    pair<double,double> z_range = Z_Range(), y_range = Y_Range();
+    bool z_zero = ( fabs( z_range.second - z_range.first ) <= numeric_limits<double>::epsilon() ) ? true : false; 
+    bool y_zero = ( fabs( y_range.second = y_range.first ) <= numeric_limits<double>::epsilon() ) ? true : false; 
+    
+    if ( z_zero and  y_zero ) return 1;
+    if ( z_zero and !y_zero ) return 2;
+    
+    // if there is nothing that allows a diagnosis
+    return UNSPECIFIED;
+    
+ } // MeshDimension
+
+
+
+
 
 
 template class VSet<1U>;

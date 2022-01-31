@@ -45,7 +45,7 @@ namespace csmp
       model.MinMaxCoordinates( min, max );
       const double length( max[0]-min[0] ), height( max[1]-min[1] );
       printModelDimensions( model, true );
-      double64 volumePrior = model.Region("Model").Volume();
+      double volumePrior = model.Region("Model").Volume();
       cout <<"\nThe model has a volume of: "<< volumePrior <<" m^3 unloaded."<< endl;
 
       // output properties & initial output
@@ -101,7 +101,7 @@ namespace csmp
       vtu.OutputDataToVTU( "BeamLoaded", outputProps, "Model", static_cast<int>(0) );
 
       // model dimension posteriori
-      double64 volumePost = model.Region("Model").Volume();
+      double volumePost = model.Region("Model").Volume();
       double minDisplacement(0.), maxDisplacement(0.);
       model.MinMaxOf( "displacement", minDisplacement, maxDisplacement );
 

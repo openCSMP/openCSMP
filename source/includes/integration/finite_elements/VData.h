@@ -48,32 +48,37 @@ class VData {
 
     VData();
 
-    VData( const std::deque<size_t>& npes, 
+    /// constructor for hybrid element meshes 
+    VData( const std::deque<size_t>& npes, ///< just the sizes of the different vectors
            const std::deque<size_t>& epes,
            size_t nodes );
-                        
+
+    /// constructor for meshes that only hold a single element type
     VData( size_t nodes_per_element, size_t nbors_per_element, size_t nodes, size_t elmts );
     
-    void SingleElementType( int32 etype );
+    void SingleElementType( int8_t etype );
     
-    void ElementTypes( const std::vector<int32>& elmt_types );
+    /// maps to CSMP_FEM_TYPE
+    void ElementTypes( const std::vector<int8_t>& elmt_types );
     
-    void AddElementTypes( std::vector<int32>::const_iterator first,
-                          std::vector<int32>::const_iterator last );
+    void AddElementTypes( std::vector<int8_t>::const_iterator first,
+                          std::vector<int8_t>::const_iterator last );
 
-    void AddElementTypes( std::vector<int32>::iterator first,
-                          std::vector<int32>::iterator last );
+    void AddElementTypes( std::deque<int8_t>::const_iterator first,
+                          std::deque<int8_t>::const_iterator last );
 
-    void Resize( size_t nodes_per_element, size_t nbors_per_element, int32 etype, size_t nodes, size_t elmts );
+    /// resizes for a single-element type mesh
+    void Resize( size_t nodes_per_element, size_t nbors_per_element, int8_t etype, size_t nodes, size_t elmts );
    
-    void Resize( const std::deque<int32>& etypes,
-                 const std::deque<size_t>& npes, 
-                 const std::deque<size_t>& epes, 
+    void Resize( const std::deque<int8_t>& etypes,
+                 const std::deque<size_t>& npes,  ///< sizes for resizing the member vectors
+                 const std::deque<size_t>& epes,
                  size_t nodes, size_t faces, size_t interfaces );
-  
-    void ResizeNodes( size_t nodes );
-    // TODO: refactor this dangerous method as it may corrupt vdata if not used wisely
+
+    /// for hybrid element meshes, increasing the storage for element types to the new size without invalidating existing types unless the storage is shrunk
     void ResizeElementTypes( size_t elements );
+
+    void ResizeNodes( size_t nodes );
     void ResizePlist( size_t elements );
     void ResizePlist( size_t elements, size_t nperelmt );
     void ResizeElementNodes( size_t eid, size_t nperelmt );
@@ -82,12 +87,15 @@ class VData {
     void ResizePfverts( size_t elements, size_t nperelmt );
     void ResizeElementNeighbors( size_t eid, size_t nperelmt );
     void ResizePfverts( const std::deque<size_t>& mixed_ele_pfverts );
+    void ResizeBFlags( /* nodes */ );
 
     virtual ~VData();
     VData( const VData& );
     VData( VData&& ) = default;
     VData& operator=( const VData& );
     VData& operator=( VData&& ) = default;
+    
+    /// compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the VData; specific mismatches are reported to std::cerr
     bool   operator==( const VData& ) const;
 
     /// returns number of nodes in the mesh
@@ -103,7 +111,7 @@ class VData {
     size_t InterFaces() const;
   
     /// combined number of any entities: elements + faces + interfaces
-    size_t Simplices() const;
+    size_t TotalNumberOfCells() const;
 
     /// CSMP types of the elements, faces and interfaces contained in the mesh
     size_t ElementTypes() const;
@@ -119,38 +127,53 @@ class VData {
 
     /// number of neighbors stored for element, face or interface
     size_t PfvertsSize( size_t eidx ) const;
-  
+    
     /// get type; a mesh is of hybrid-element type if it contains multiple element types
     bool   HybridElementTypeMesh() const;
   
     /// set whether mesh contains multiple element types
     void   HybridElementTypeMesh( bool hybrid_mesh );
+    
+    /// reports whether the model contains only isoparametric element types
+    bool   IsoparametricElementMesh() const;
   
     /// if numbering is not 0..n-1, this method establishes thos
     void   EstablishZeroBasedNumbering();
   
-    /// remove any gaps in the numbering of nodes and elements
-    bool   CheckFix();
-
     /// x-coordinate of node i
-    void      Px( size_t i, double64 );
-    void      Py( size_t i, double64 );
-    void      Pz( size_t i, double64 );
-    double64  Px( size_t i ) const;
-    double64  Py( size_t i ) const;
-    double64  Pz( size_t i ) const;
+    void    Px( size_t i, double );
+    void    Py( size_t i, double );
+    void    Pz( size_t i, double );
+    double  Px( size_t i ) const;
+    double  Py( size_t i ) const;
+    double  Pz( size_t i ) const;
+ 
+    /// range of the X coordinate (increasing to the east)
+    std::pair<double,double>  X_Range() const;
+
+    /// range of the Y coordinate (increasing upward and often indicating elevation above sealevel)
+    std::pair<double,double>  Y_Range() const;
+
+    /// range of the Z coordinate (from north to south)
+    std::pair<double,double>  Z_Range() const;
   
+    /// calculates min-max vertex coordinate values of mesh stored in VData
+    void CoordinateRange( char coordinate_axis, double& cmin, double& cmax ) const;
+  
+    /// rescales vertex coordinate values in given spatial direction
+    void ScaleCoordinateToRange( char coordinate_axis, double cmin, double cmax ); 
+    
     /// to set vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
-    void      P( size_t coordinate_axis, size_t i, double64 );
+    void  P( size_t coordinate_axis, size_t i, double );
 
     /// to get vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
-    double64  P( size_t coordinate_axis, size_t i ) const;
+    double  P( size_t coordinate_axis, size_t i ) const;
 
     /// set CSMP finite element type of element in 'pelmt' container
-    void   ElementType( size_t eidx, int32 type );
+    void   ElementType( size_t eidx, int8_t type );
   
     /// get CSMP finite element type from 'pelmt' container; stores only 1 elmt in single element-type mesh
-    int32  ElementType( size_t eidx ) const;
+    int8_t ElementType( size_t eidx ) const;
 
     /// assuming that all interpolation functions have same order, returns that order
     size_t OrderOfFiniteElementInterpolationFunctions() const;
@@ -159,22 +182,22 @@ class VData {
     void   Plist( size_t eidx, size_t node, size_t val );
 
     /// get node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
-    size_t Plist( size_t eidx, size_t node ) const;
+    int64_t  Plist( size_t eidx, size_t node ) const;
   
     /// set neighbor element index (or boundary identifier) for neighbor i of element eidx
-    void   Pfvert( size_t eidx, size_t i, int32 val );
+    void   Pfvert( size_t eidx, size_t i, int64_t val );
 
     /// get neighbor element index (or boundary identifier) for neighbor i of element eidx
-    long64 Pfvert( size_t eidx, size_t i ) const;
+    int64_t  Pfvert( size_t eidx, size_t i ) const;
 
     /// adds id (0..n-1) of boundary node and its BOX_BOUNDARY flag (negative integer)
-    void AddBFlag( size_t node_id, long64 bflag );
-  
-    /// calculates min-max vertex coordinate values of mesh stored in VData
-    void CoordinateRange( char coordinate_axis, double64& cmin, double64& cmax ) const;
-  
-    /// rescales vertex coordinate values in given spatial direction
-    void ScaleCoordinateToRange( char coordinate_axis, double64 cmin, double64 cmax ); 
+    void AddBFlag( size_t node_id, std::int8_t bflag );
+
+    /// returns the boundary flag BOX_BOUNDARY  of the node
+    std::int8_t BFlag( size_t node_id ) const;
+
+    /// returns the box boundary identifier of the node if it is located on the model boundary; else returs NOT
+    std::int8_t BoundaryFlag( size_t vertex ) const;
   
     /// empties 'pfverts' container if the contained info is flaky so that later code is prompted to recreate it
     void RemovePfverts() { pfverts.clear(); }
@@ -183,77 +206,88 @@ class VData {
     void RemoveBflags();
 
     // iterators (for any element, face or interface)
-    std::deque<std::vector<size_t> >::iterator    PlistBegin();
-    std::deque<std::vector<size_t> >::iterator    PlistEnd();
-    std::deque<std::vector<long64> >::iterator    PfvertsBegin();
-    std::deque<std::vector<long64> >::iterator    PfvertsEnd();
+    std::deque<std::vector<int64_t> >::iterator    PlistBegin();
+    std::deque<std::vector<int64_t> >::iterator    PlistEnd();
+    std::deque<std::vector<int64_t> >::iterator    PfvertsBegin();
+    std::deque<std::vector<int64_t> >::iterator    PfvertsEnd();
 
-    std::vector<size_t>::iterator                 PlistBegin( size_t eidx );
-    std::vector<size_t>::iterator                 PlistEnd( size_t eidx );
-    std::vector<long64>::iterator                 PfvertsBegin( size_t eidx );
-    std::vector<long64>::iterator                 PfvertsEnd( size_t eidx );
+    std::vector<int64_t>::iterator                 PlistBegin( size_t eidx );
+    std::vector<int64_t>::iterator                 PlistEnd( size_t eidx );
+    std::vector<int64_t>::iterator                 PfvertsBegin( size_t eidx );
+    std::vector<int64_t>::iterator                 PfvertsEnd( size_t eidx );
 
-    std::unordered_map<size_t,long64>::iterator       BFlagsBegin();
-    std::unordered_map<size_t,long64>::iterator       BFlagsEnd();
-    std::unordered_map<size_t,long64>::const_iterator BFlagsBegin() const;
-    std::unordered_map<size_t,long64>::const_iterator BFlagsEnd() const;
+    std::vector<std::int8_t>::iterator            BFlagsBegin();
+    std::vector<std::int8_t>::iterator            BFlagsEnd();
+    std::vector<std::int8_t>::const_iterator      BFlagsBegin() const;
+    std::vector<std::int8_t>::const_iterator      BFlagsEnd() const;
 
     // const iterators
-    std::vector<int32>::const_iterator                 PelmtBegin() const;
-    std::vector<int32>::const_iterator                 PelmtEnd() const;
-    std::deque<std::vector<size_t> >::const_iterator   PlistBegin() const;
-    std::deque<std::vector<size_t> >::const_iterator   PlistEnd() const;
-    std::deque<std::vector<long64> >::const_iterator   PfvertsBegin() const;
-    std::deque<std::vector<long64> >::const_iterator   PfvertsEnd() const;
+    std::vector<int8_t>::const_iterator                 PelmtBegin() const;
+    std::vector<int8_t>::const_iterator                 PelmtEnd() const;
+    std::deque<std::vector<int64_t> >::const_iterator   PlistBegin() const;
+    std::deque<std::vector<int64_t> >::const_iterator   PlistEnd() const;
+    std::deque<std::vector<int64_t> >::const_iterator   PfvertsBegin() const;
+    std::deque<std::vector<int64_t> >::const_iterator   PfvertsEnd() const;
   
     /// checks whether pfverts, has right size and contains plausible information (no guarantees!)
     bool WithNeighbourConnectivity() const;
 
-    std::vector<size_t>::const_iterator                PlistBegin( size_t eidx ) const;
-    std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
-    std::vector<long64>::const_iterator                PfvertsBegin( size_t eidx ) const;
-    std::vector<long64>::const_iterator                PfvertsEnd( size_t eidx ) const;
-  
+    std::vector<int64_t>::const_iterator                PlistBegin( size_t eidx ) const;
+    std::vector<int64_t>::const_iterator                PlistEnd( size_t eidx ) const;
+    std::vector<int64_t>::const_iterator                PfvertsBegin( size_t eidx ) const;
+    std::vector<int64_t>::const_iterator                PfvertsEnd( size_t eidx ) const;
+    
     // specific element, face and interface iterators
     /// iterator to CSMP finite element type of first face stored in mesh
-    std::vector<int32>::const_iterator                 PelmtFacesBegin() const;
+    std::vector<int8_t>::const_iterator                 PelmtFacesBegin() const;
     /// iterator to CSMP finite element type of first interface stored in mesh
-    std::vector<int32>::const_iterator                 PelmtInterfacesEnd() const;
+    std::vector<int8_t>::const_iterator                 PelmtInterfacesBegin() const;
   
     // node iterators for subsets of the Plist
     /// Iterator to beginning of elements in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsBegin() const;
+    std::deque<std::vector<int64_t> >::const_iterator    PlistElmtsBegin() const;
     /// Iterator to end of elements in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsEnd() const;
+    std::deque<std::vector<int64_t> >::const_iterator    PlistElmtsEnd() const;
     /// Iterator to beginning of faces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistFacesBegin() const;
+    std::deque<std::vector<int64_t> >::const_iterator    PlistFacesBegin() const;
     /// Iterator to end of faces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistFacesEnd() const;
+    std::deque<std::vector<int64_t> >::const_iterator    PlistFacesEnd() const;
     /// Iterator to beginning of interfaces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesBegin() const;
+    std::deque<std::vector<int64_t> >::const_iterator    PlistInterFacesBegin() const;
     /// Iterator to end of interfaces in the Plist
-    std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesEnd() const;
+    std::deque<std::vector<int64_t> >::const_iterator    PlistInterFacesEnd() const;
 
     /// neighbor iterator for first face in plist (use PlistInterFacesBegin() to find last one)
-    std::deque<std::vector<long64> >::const_iterator    PfvertsFacesBegin() const;
+    std::deque<std::vector<int64_t> >::const_iterator    PfvertsFacesBegin() const;
     /// neighbor iterator for first interface plist; equivalent to PlistFacesEnd; use PlistEnd() for last one
-    std::deque<std::vector<long64> >::const_iterator    PfvertsInterfaceBegin() const;
-  
+    std::deque<std::vector<int64_t> >::const_iterator    PfvertsInterfaceBegin() const;
+ 
+ 
+    // EXTRA DATA, MESH MODIFICATION AND REPAIR 
 
-    /// write mesh to supplied binary file
-    void OutBinary( std::fstream& fp ) const;
-  
-    /// read mesh from supplied binary file
-    void InBinary( std::fstream& fp );
-  
-    /// initialise VData=mesh connectivity structures from binary file
-    void InText( std::ifstream& ifs );
-  
-    /// wrtie connectivity structure to ASCII text file
-    void OutASCII( const char* file ) const;
-  
-    /// print connectivity information to screen
-    void Out() const;
+    /// flips clockwise-numbered elements, into counter-clockwise right-hand rule compliant orientation; lower dimensional elements are made consistent; returns how many were flipped
+    size_t RenumberElementsCounterClockwise2D();
+    
+    /// computes neighbor element connectivity between line and surface elements, faces and interfaces and replaces existing connectivity with it
+    void   EstablishElementConnectivity2D();
+    
+    /// rebuilds 'pfverts' from scratch
+    void   EstablishElementConnectivity3D(); // retested: OK 3/12/21 by SKM
+    
+    /// eliminates corner tetrahedra with all nodes on the model boundary; extra element degrees of freedom are introduced for boundary condition assignment
+    size_t RemeshCornerSpanningTetrahedra();
+    
+    /// creates an extra array 'pnode' equivalent to a sparsity pattern recording to which nodes each node pnode[i] is connected to
+    void   EstablishNodeNeighborConnectivity( std::vector<std::set<size_t>>& pnode ) const;
+
+    
+    // PERSISTANCE (storing mesh in binary file)
+    
+    /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
+    typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
+    
+    /// checks for collocated vertices into transfer data structure
+    bool ExtractNodeManifolds( vertexManifoldIndices& ) const;
   
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );
@@ -261,24 +295,69 @@ class VData {
     /// clear the container
     void Erase();
 
-  protected:
+    /// write mesh to supplied binary file
+    void OutBinary( std::fstream& ) const;
+  
+    /// read mesh from supplied binary file
+    void InBinary( std::fstream& );
+  
+    /// wrtie connectivity structure to ASCII text file
+    void OutASCII( const char* file ) const;
+    
+    /// writes initialiser lists for the current VData in C++17 format
+    void OutCPP17( std::ofstream& ) const;
+  
+    /// initialise VData=mesh connectivity structures from binary file
+    void InText( std::ifstream& );
+  
+    /// print connectivity information to screen
+    void Out() const;
 
+  protected:
+  
+    /// remove any gaps in the numbering of nodes and elements
+    bool   CheckFix();
+
+    /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
+    void   CreateConsistentLineElementOrientations2D();
+    
+    /// angle between line elements in degrees
+    double AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );
+    
+    /// computes the unit normals to the surfaces and then returns the angle between them
+    double AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 );
+    
+    /// reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts'
+    size_t SwitchCornerTriangles2D();
+    
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );
- 
-    std::vector<int32>                pelmt;            ///< CSMP element type info, needed to read plist & pfverts
 
   private:
 
-    bool                              hybrid_mesh_;      ///< mesh that consists of different element types
-    std::vector<double64>             px, py, pz;        ///< node coordinates
-    std::deque<std::vector<size_t> >  plist;             ///< nodes of each element
-    std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
-    std::unordered_map<size_t,long64> bflags;            ///< flags for those nodes that lie on model boundary
-    size_t                            first_interface_;  ///< faces come after elements; if none this is equal to elements
-    size_t                            first_face_;       ///< interfaces come after faces; if none this is equal to elements 
+    bool                               hybrid_mesh_;      ///< mesh that consists of different element types
+    std::vector<double>                px, py, pz;        ///< node coordinates
+    std::vector<int8_t>                pelmt;             ///< CSMP element type info, needed to read plist & pfverts
+    // although there's little point to having 64-bit pointers but not 64-bit sizes, after all.
+    std::deque<std::vector<int64_t> >  plist;             ///< nodes of each element, face and interface in that order
+    std::deque<std::vector<int64_t> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
+    // all enums / flags must fit into 8-bit integers
+    std::vector<std::int8_t>           bflags;            ///< flags for those nodes that lie on model boundary
+    int64_t                            first_face_;       ///< faces come after elements; if none this is equal to elements
+    int64_t                            first_interface_;  ///< interfaces come after faces; if none this is equal to elements
 
     friend class VData_Test;
 };
+
+// RELATED FUNCTIONS
+
+/// converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
+void splitCornerTetrahedron( VData&, size_t cnr, size_t only_neighbor );
+
+/// returns the 3D bounding box of the element
+std::array<double,3>  boundingBox( const VData&, size_t elmt );
+
+/// thus far, only writes tetrahedra to file, appending the element number to the name
+void elementToVTK( const VData& vdata, size_t eidx, const char* outfile );
 
 } // csmp
 

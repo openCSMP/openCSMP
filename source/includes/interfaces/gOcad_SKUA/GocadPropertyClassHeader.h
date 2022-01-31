@@ -9,17 +9,17 @@ class  GocadPropertyClassHeader {
     std::string  property_name, 
                  property_class;
     size_t    components;  // ESIZE
-    double64    no_data_value;
-    double64    low_clip;    // 1e-30
-    double64    high_clip;   // 274.403
+    double    no_data_value;
+    double    low_clip;    // 1e-30
+    double    high_clip;   // 274.403
     long         p_clip;      // :99
     std::string  colormap;
-    double64    colormap_contrast;
+    double    colormap_contrast;
     
   public:
     GocadPropertyClassHeader();
     GocadPropertyClassHeader( const char* name, 
-                              double64 lclip, double64 hclip, long pclip=99, 
+                              double lclip, double hclip, long pclip=99, 
                               size_t comp=1 );
                               
     GocadPropertyClassHeader( const GocadPropertyClassHeader& p );
@@ -35,17 +35,17 @@ class  GocadPropertyClassHeader {
     void        PropertyClass( const std::string& s ) { property_class = s; };
     void        PropertyClass( const char* s ) { property_class = s; };
     
-    double64   LowClip() const { return low_clip; };
-    void        LowClip( double64 lc ) { low_clip = lc; };
+    double   LowClip() const { return low_clip; };
+    void        LowClip( double lc ) { low_clip = lc; };
     
-    double64   HighClip() const { return high_clip; };
-    void        HighClip( double64 hc ) { high_clip = hc; };
+    double   HighClip() const { return high_clip; };
+    void        HighClip( double hc ) { high_clip = hc; };
     
     long        PClip() const { return p_clip; };
     void        PClip( long pc ) { p_clip = pc; };
     
-    double64   ColorContrast() const { return colormap_contrast; };
-    void        ColorContrat( double64 ct ) { colormap_contrast = ct; };
+    double   ColorContrast() const { return colormap_contrast; };
+    void        ColorContrat( double ct ) { colormap_contrast = ct; };
     
     std::string ColorMap() const { return colormap; };
     void        ColorMap( const std::string& s ) { colormap = s; };
@@ -56,8 +56,8 @@ class  GocadPropertyClassHeader {
     size_t   ESize() const { return components; };
     void        ESize( size_t esize ) { components = esize; };
     
-    double64   NoDataValue() const { return no_data_value; };
-    void        NoDataValue( double64 val ) { no_data_value = val;  };
+    double   NoDataValue() const { return no_data_value; };
+    void        NoDataValue( double val ) { no_data_value = val;  };
     
     bool        InitializeFrom( std::ifstream& ifn );
     void        WriteToText( std::ofstream& ofs ) const;

@@ -24,18 +24,18 @@ class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
                                    const char* mtrl2,         // e.g., conductivity
                                    const char* test );        // e.g., fluid pressure
     
-    virtual void GetOperands( CELL& e );
+    virtual void GetOperands( const CELL& );
 
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
     
-    virtual void MultiplyWithTimeFactor( double64 dt );
+    virtual void MultiplyWithTimeFactor( double dt );
   
   private:
-    std::vector<double64>                   IPOL;
+    std::vector<double>                   IPOL;
     DenseMatrix<DM_MIN>            DN;
     csmp::Index                        mtrl1_key, mtrl2_key;
     ScalarVariable                oper_eprop, mtrl1_prop, mtrl2_prop;
-    const double64                          gravity;   // acceleration of gravity
+    const double                          gravity;   // acceleration of gravity
     const size_t                   xyz; // 1=x, 2=y
     std::vector<ScalarVariable >  oper_nprop;
 };

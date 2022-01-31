@@ -25,7 +25,7 @@ class NewtonIntegrator : public IterativeIntegrator<dim,COMPUTATION_DOMAIN> {
 public:
   NewtonIntegrator();
   
-  virtual double64 Residual();
+  virtual double Residual();
   
 private:
   

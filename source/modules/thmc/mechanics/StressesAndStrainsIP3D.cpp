@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "CSMP_mathUtilities.h"
 #include "Element.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -378,7 +379,7 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
               IP_STRESS_TENSOR_ += ts_;
            }
         // averaging
-        const double64 ips(static_cast<double64>(e.IntegrationPoints()));
+        const double ips(static_cast<double>(e.IntegrationPoints()));
         IP_STRAIN_TENSOR_ /= ips;
         IP_STRESS_TENSOR_ /= ips;
        

@@ -30,13 +30,14 @@ class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim> {
                                  const char* oper,          
                                  const char* test );       
     
-    virtual void GetOperands( CELL& e );
+    virtual void GetOperands( const CELL& );
 
-    virtual void ComputeContribution( CELL& e );
+    virtual void ComputeContribution( const CELL& );
     
     void IgnoreOperand( bool ignore );
     virtual NumIntegral_DNT_rhsop_DN_dV<dim,CELL>* clone() const
       { return new NumIntegral_DNT_rhsop_DN_dV<dim,CELL> (*this); }
+      
   private:
     DenseMatrix<DM_MIN>        DN, DNT, OPMAT;
     std::vector<ScalarVariable >  noperand;

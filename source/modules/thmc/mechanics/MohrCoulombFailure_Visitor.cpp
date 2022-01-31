@@ -83,18 +83,18 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
           {
             // 1. reading input variables
             e->Read(i, Stress_key_, Cartesian_stress_ );
-            double64 cohesion = e->Read(i,Cohesion_key_);
-            double64 alpha    = e->Read(i,Friction_key_) * degrees_to_radians_;
+            double cohesion = e->Read(i,Cohesion_key_);
+            double alpha    = e->Read(i,Friction_key_) * degrees_to_radians_;
             if ( pf_key_.place != UNDEFINED )
               fluid_pressure_ = e->PropertyValueAtIntegrationPoint( pf_key_, i );
 
             // six components of symmetric stress tensor
-            double64 sigmaxx = Cartesian_stress_(0,0);
-            double64 sigmayy = Cartesian_stress_(1,1);
-            double64 sigmazz = Cartesian_stress_(2,2);
-            double64 sigmaxy = Cartesian_stress_(0,1);
-            double64 sigmaxz = Cartesian_stress_(0,2);
-            double64 sigmayz = Cartesian_stress_(1,2);
+            double sigmaxx = Cartesian_stress_(0,0);
+            double sigmayy = Cartesian_stress_(1,1);
+            double sigmazz = Cartesian_stress_(2,2);
+            double sigmaxy = Cartesian_stress_(0,1);
+            double sigmaxz = Cartesian_stress_(0,2);
+            double sigmayz = Cartesian_stress_(1,2);
 
             // Biot coefficient (alpha) should be included as
             // alpha = 1. - (K/K_{s}),
@@ -105,13 +105,13 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
             // 2. computing parameter s
             //    Smith & Griffiths, eqn. 6.3, p. 227
             //    s ( distance from the origin to the pi-plane in which the stress point lies )
-            const double64 s = (dim==2) ? (sigmaxx + sigmayy) / sqrt3_
+            const double s = (dim==2) ? (sigmaxx + sigmayy) / sqrt3_
                                         : (sigmaxx + sigmayy + sigmazz) / sqrt3_;
 
             // 3. computing parameter t
             //    Smith & Griffiths, eq. 6.3, p. 227
             //    t ( perpendicular distance of the stress point from the space diagonal: sigma1 = sigma2 = sigma3 )
-            double64 t(0.);
+            double t(0.);
             if ( dim == 2 ) {
                  t = ((sigmaxx - sigmayy)*(sigmaxx - sigmayy)) + 3. * sigmaxy * sigmaxy;
               }
@@ -126,7 +126,7 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
 
             // 4. calculate Lode angle(theta), in radians
             //    Smith & Griffiths, eq. 6.3. p. 227
-            double64 sx, sy, sz, J3(std::numeric_limits<double64>::quiet_NaN());
+            double sx, sy, sz, J3(std::numeric_limits<double>::quiet_NaN());
             if ( dim == 2 ) {
                 // 2D case not sure yet, search reference
                 sx  = (2. * sigmaxx - sigmayy) / 2.;
@@ -144,12 +144,12 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
                 J3 += 2. * sigmaxy * sigmaxz * sigmayz;
               }
             // the Lode angle theta
-            const double64 theta = 1./3. * asin( (-3.* sqrt(6.) * J3) / (t * t * t) );
+            const double theta = 1./3. * asin( (-3.* sqrt(6.) * J3) / (t * t * t) );
 
             // 5. computing mean stress,
             //    Smith & Griffiths, eq. 6.4, p. 228
             //    mean stress = sqrt(1/3)*s
-            double64 meanstress = s/sqrt3_;
+            double meanstress = s/sqrt3_;
 
             // taking into account sign convention,
             // since current formulation is ment to be used for positive tensile stress convention,
@@ -167,13 +167,13 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
             // 6. computing deviatoric stress,
             //    Smith & Griffiths, eq. 6.4, p. 228
             //    deviatoric stress = sqrt(3/2)*t
-            const double64 devstress = t*sqrt32_;
+            const double devstress = t*sqrt32_;
 
             // 7. computing K_OfTheta ( original Mohr-Coulomb yield surface )
             //    Zienkiewitz, Finite element method for solid and structural mechanics,
             //    Chapter 4. Inelastic and non-linear materials
             //    4.5.1 Isotropic yield surfaces
-            //double64 K_OfTheta = -sin(alpha);
+            //double K_OfTheta = -sin(alpha);
             //K_OfTheta *= sin(theta);
             //K_OfTheta /= sqrt3_;
             //K_OfTheta += cos(theta);
@@ -183,10 +183,10 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
             //    Zienkiewitz, Finite element method for solid and structural mechanics,
             //    Chapter 4. Inelastic and non-linear materials
             //    4.11. Non-uniqueness and localization in elasto-plastic deformations
-            double64 K(sin(alpha));
+            double K(sin(alpha));
             K = (3. - K) / (3. + K);
-            const double64 G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta) * (1-K));
-            const double64 K_OfTheta = 1.0/G_OfTheta;
+            const double G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta) * (1-K));
+            const double K_OfTheta = 1.0/G_OfTheta;
 
             // 8. calculating friction criterion Fmc
             //    Yielding can occur when Fmc >= 0,
@@ -195,12 +195,12 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
             // TODO: organise failure modes like in fault module
             // TODO: add failure if bulk modulus is exceeded
             // TODO: deal with pure tensile failure if normal stress is negative
-            double64 Fmc = meanstress * sin(alpha) - cohesion * cos(alpha) + devstress * K_OfTheta;
+            double Fmc = meanstress * sin(alpha) - cohesion * cos(alpha) + devstress * K_OfTheta;
 
             // tensile failure determination assuming that the tensile strength is about 0.1 of
             // the value of the cohesion
-            const double64 tensile_strength(cohesion * 0.1);
-            double64 F01 = ( (Fmc - tensile_strength ) <= 0. ) ? F01 = 1. : F01 = 0.;
+            const double tensile_strength(cohesion * 0.1);
+            double F01 = ( (Fmc - tensile_strength ) <= 0. ) ? F01 = 1. : F01 = 0.;
 
             // 9. store variables
             e->Store(i, Failure_key_,   makeScalar(PLAIN,Fmc) );
@@ -223,19 +223,19 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
       {
           // 1. reading input variables
           e->Read( Stress_key_, Cartesian_stress_ );
-          const double64 alpha    = e->Read(Friction_key_) * degrees_to_radians_;
-          const double64 cohesion = e->Read( Cohesion_key_ );
+          const double alpha    = e->Read(Friction_key_) * degrees_to_radians_;
+          const double cohesion = e->Read( Cohesion_key_ );
           if ( pf_key_.place != UNDEFINED ) {
                ScalarVariable sc;
                e->PropertyValueAtBaryCenter( pf_key_, sc );
                fluid_pressure_ = sc();
             }
-          const double64 sigmaxx = Cartesian_stress_(0,0);
-          const double64 sigmayy = Cartesian_stress_(1,1);
-          const double64 sigmazz = Cartesian_stress_(2,2);
-          const double64 sigmaxy = Cartesian_stress_(0,1);
-          const double64 sigmaxz = Cartesian_stress_(0,2);
-          const double64 sigmayz = Cartesian_stress_(1,2);
+          const double sigmaxx = Cartesian_stress_(0,0);
+          const double sigmayy = Cartesian_stress_(1,1);
+          const double sigmazz = Cartesian_stress_(2,2);
+          const double sigmaxy = Cartesian_stress_(0,1);
+          const double sigmaxz = Cartesian_stress_(0,2);
+          const double sigmayz = Cartesian_stress_(1,2);
 
           // Biot coefficient (alpha) should be included as
           // alpha = 1. - (K/K_{s}),
@@ -246,13 +246,13 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
           // 2. computing parameter s
           //    Smith & Griffiths, eqn. 6.3, p. 227
           //    s ( distance from the origin to the pi-plane in which the stress point lies )
-          const double64 s = (dim==2) ? (sigmaxx + sigmayy) / sqrt3_
+          const double s = (dim==2) ? (sigmaxx + sigmayy) / sqrt3_
                                       : (sigmaxx + sigmayy + sigmazz) / sqrt3_;
 
           // 3. computing parameter t
           //    Smith & Griffiths, eq. 6.3, p. 227
           //    t ( perpendicular distance of the stress point from the space diagonal: sigma1 = sigma2 = sigma3 )
-          double64 t(0.);
+          double t(0.);
           if ( dim == 2 ) {
                t = ((sigmaxx - sigmayy)*(sigmaxx - sigmayy)) + 3. * sigmaxy * sigmaxy;
             }
@@ -267,7 +267,7 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
 
           // 4. calculate Lode angle(theta), in radians
           //    Smith & Griffiths, eq. 6.3. p. 227
-          double64 sx, sy, sz, J3(std::numeric_limits<double64>::quiet_NaN());
+          double sx, sy, sz, J3(std::numeric_limits<double>::quiet_NaN());
           if ( dim == 2 ) {
               // 2D case not sure yet, search reference
               sx  = (2. * sigmaxx - sigmayy) / 2.;
@@ -285,12 +285,12 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
               J3 += 2. * sigmaxy * sigmaxz * sigmayz;
             }
           // the Lode angle theta
-          const double64 theta = 1./3. * asin( (-3.* sqrt(6.) * J3) / (t * t * t) );
+          const double theta = 1./3. * asin( (-3.* sqrt(6.) * J3) / (t * t * t) );
 
           // 5. computing mean stress,
           //    Smith & Griffiths, eq. 6.4, p. 228
           //    mean stress = sqrt(1/3)*s
-          double64 meanstress = s/sqrt3_;
+          double meanstress = s/sqrt3_;
 
           // taking into account sign convention,
           // since current formulation is ment to be used for positive tensile stress convention,
@@ -308,13 +308,13 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
           // 6. computing deviatoric stress,
           //    Smith & Griffiths, eq. 6.4, p. 228
           //    deviatoric stress = sqrt(3/2)*t
-          const double64 devstress = t*sqrt32_;
+          const double devstress = t*sqrt32_;
 
           // 7. computing K_OfTheta ( original Mohr-Coulomb yield surface )
           //    Zienkiewitz, Finite element method for solid and structural mechanics,
           //    Chapter 4. Inelastic and non-linear materials
           //    4.5.1 Isotropic yield surfaces
-          //double64 K_OfTheta = -sin(alpha);
+          //double K_OfTheta = -sin(alpha);
           //K_OfTheta *= sin(theta);
           //K_OfTheta /= sqrt3_;
           //K_OfTheta += cos(theta);
@@ -324,10 +324,10 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
           //    Zienkiewitz, Finite element method for solid and structural mechanics,
           //    Chapter 4. Inelastic and non-linear materials
           //    4.11. Non-uniqueness and localization in elasto-plastic deformations
-          double64 K(sin(alpha));
+          double K(sin(alpha));
           K = (3. - K) / (3. + K);
-          const double64 G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta) * (1-K));
-          const double64 K_OfTheta = 1.0/G_OfTheta;
+          const double G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta) * (1-K));
+          const double K_OfTheta = 1.0/G_OfTheta;
 
           // 8. calculating friction criterion Fmc
           //    Yielding can occur when Fmc >= 0,
@@ -336,12 +336,12 @@ void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
           // TODO: organise failure modes like in fault module
           // TODO: add failure if bulk modulus is exceeded
           // TODO: deal with pure tensile failure if normal stress is negative
-          double64 Fmc = meanstress * sin(alpha) - cohesion * cos(alpha) + devstress * K_OfTheta;
+          double Fmc = meanstress * sin(alpha) - cohesion * cos(alpha) + devstress * K_OfTheta;
 
           // tensile failure determination assuming that the tensile strength is about 0.1 of
           // the value of the cohesion
-          const double64 tensile_strength(cohesion * 0.1);
-          double64 F01 = ( (Fmc - tensile_strength ) <= 0. ) ? F01 = 1. : F01 = 0.;
+          const double tensile_strength(cohesion * 0.1);
+          double F01 = ( (Fmc - tensile_strength ) <= 0. ) ? F01 = 1. : F01 = 0.;
 
           // 9. store variables
           e->Store( Failure_key_,   makeScalar(PLAIN,Fmc)   );

@@ -1,7 +1,6 @@
 #ifndef CSMP_ERROR_HANDLER_H
 #define CSMP_ERROR_HANDLER_H
 
-#include "CSMP_number_types.h"
 #include "GenericSingleton.h"
 #include "Exception.h"
 #include "BE_Time.h"
@@ -9,7 +8,7 @@
 namespace csmp {
 
 /// reporting level set for the error handler; default=verbose
-enum CSMP_OUTPUT_LEVEL { VERBOSE=100, SILENT=0, IMPORTANT_OUTPUT=1, PROCESS_OUTPUT=2, INFO_OUTPUT=3 };
+enum CSMP_OUTPUT_LEVEL : std::int8_t { VERBOSE=100, SILENT=0, IMPORTANT_OUTPUT=1, PROCESS_OUTPUT=2, INFO_OUTPUT=3 };
 
 /**
  

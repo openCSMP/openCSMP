@@ -22,8 +22,8 @@ class StencilProcessorPHX {
     void DetermineFluxOutWithGravity( const FV_Parameter& param,
                                       const Element<dim>& e,
                                       DenseMatrix<DM_MIN>& upwind, //matrix indicating pre-defined upwind nodes
-                                      std::vector<std::vector<double64> >& facet_flux,  //vector storing flux across each facet
-                                      std::vector<double64>& flux_out, // vector storing the flux out of the control volumes
+                                      std::vector<std::vector<double> >& facet_flux,  //vector storing flux across each facet
+                                      std::vector<double>& flux_out, // vector storing the flux out of the control volumes
                                       csmp::Index rhs_key, // key for the right-hand side variable of fintite volume calculations
                                       csmp::Index rho_key, // density of the transported phase
                                       csmp::Index k_key);  // element permeability
@@ -31,19 +31,19 @@ class StencilProcessorPHX {
 	void DetermineFluxOutWithoutGravity( const FV_Parameter& param,
                                          const Element<dim>& e,
                                          DenseMatrix<DM_MIN>& upwind, //matrix indicating pre-defined upwind nodes
-                                         std::vector<std::vector<double64> >& facet_flux, //vector storing flux across each facet
-                                         std::vector<double64>& flux_out, // vector storing the flux out of the control volumes
+                                         std::vector<std::vector<double> >& facet_flux, //vector storing flux across each facet
+                                         std::vector<double>& flux_out, // vector storing the flux out of the control volumes
                                          csmp::Index rhs_key);  // density of the transported phase
 
     void DetermineFluxIn( const Element<dim>& e,
-                          std::vector<std::vector<double64> >& facet_flux, //vector storing flux across each facet
-                          std::vector<double64>& flux_in, // vector storing the flux into of the control volumes
-                          std::vector<double64>& mass_balance ); // vector for mass balance corrections
+                          std::vector<std::vector<double> >& facet_flux, //vector storing flux across each facet
+                          std::vector<double>& flux_in, // vector storing the flux into of the control volumes
+                          std::vector<double>& mass_balance ); // vector for mass balance corrections
 
 	void DetermineFluxOut( const FV_Parameter& param,
                            const Element<dim>& e,
-                           std::vector<std::vector<double64> >& facet_flux, //vector storing flux across each facet
-                           std::vector<double64>& flux_out, // vector storing the flux out of the control volumes
+                           std::vector<std::vector<double> >& facet_flux, //vector storing flux across each facet
+                           std::vector<double>& flux_out, // vector storing the flux out of the control volumes
                            csmp::Index rhs_key); // density of the transported phase
 
     ~StencilProcessorPHX();
@@ -56,7 +56,7 @@ class StencilProcessorPHX {
     mutable size_t      inside_node_, outside_node_;
 
     ScalarVariable      rhs_property_, density_, perm_;
-    double64            grav_, g_component_, vel_;
+    double            grav_, g_component_, vel_;
 
 };
   /**

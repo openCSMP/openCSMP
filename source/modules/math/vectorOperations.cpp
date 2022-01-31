@@ -13,17 +13,17 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-double64 valueAverage( const VectorVariable<dim>& vc )
+double valueAverage( const VectorVariable<dim>& vc )
  {
-     double64 sum(0.);
+     double sum(0.);
      for ( size_t i=0U; i<dim; ++i )
        sum += vc[i];
    
-     return sum / static_cast<double64>(dim);
+     return sum / static_cast<double>(dim);
  }
 
-template double64 valueAverage( const VectorVariable<1U>& );
-template double64 valueAverage( const VectorVariable<2U>& );
-template double64 valueAverage( const VectorVariable<3U>& );
+template double valueAverage( const VectorVariable<1U>& );
+template double valueAverage( const VectorVariable<2U>& );
+template double valueAverage( const VectorVariable<3U>& );
 
 } // end csmp

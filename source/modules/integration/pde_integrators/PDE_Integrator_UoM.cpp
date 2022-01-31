@@ -224,15 +224,15 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COM
    // ----------------------------------------------------------------------
    this->G_.Resize( offset );
    this->rh_.resize( offset );
-   vector<double64>( this->rh_ ).swap( this->rh_ );
+   vector<double>( this->rh_ ).swap( this->rh_ );
    fill( this->rh_.begin(), this->rh_.end(), 0. );
    this->x_.resize( offset );
-   vector<double64>( this->x_ ).swap( this->x_ );
+   vector<double>( this->x_ ).swap( this->x_ );
 #if defined(_OPENMP )
    for (size_t tid = 0 ; tid < omp_get_max_threads() ; tid++){
        this->thread_G_[tid].Resize(offset);
        this->thread_rh_[tid].resize(offset);
-       vector<double64>( thread_rh_[tid] ).swap( thread_rh_[tid] );
+       vector<double>( thread_rh_[tid] ).swap( thread_rh_[tid] );
        fill( thread_rh_[tid].begin(), thread_rh_[tid].end(), 0. );
    }
 #endif
@@ -269,7 +269,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignInitialConditions(const 
       {
         prop_key = (*it).first.key;
         offset = (*it).second;
-        typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+        auto  niter(gref.NodesBegin());
 
         if (prop_key.place != NODE )
           throw csmp::Exception( WARNING, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
@@ -367,8 +367,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for (typename map<string, MathOperatorLHS<dim>*>::iterator
       it_lhs = this->lhs_operators_.begin(); it_lhs != this->lhs_operators_.end(); it_lhs++)
       if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater())
-        for (typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-          git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
+        for ( auto git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++ )
         {
           (*it_lhs).second->GetOperands(*(*git));
           (*it_lhs).second->ComputeContribution(*(*git));
@@ -386,18 +385,17 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for (typename map<string, MathOperatorRHS<dim>*>::iterator
       it_rhs = this->rhs_operators_.begin(); it_rhs != this->rhs_operators_.end(); it_rhs++)
       if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater())
-        for (typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-          git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
-        {
-          (*it_rhs).second->GetOperands(*(*git));
-          (*it_rhs).second->ComputeContribution(*(*git));
-          if ((*it_rhs).second->MultiplyWithTimeIncrement())
-            (*it_rhs).second->MultiplyWithTimeFactor(this->time_increment_);
-          if ((*it_rhs).second->DivideByTimeIncrement())
-            (*it_rhs).second->MultiplyWithTimeFactor(1. / this->time_increment_);
-          //(*it_rhs).second->AssignToGlobal(*(*git), rh_);
-          (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_); // luat changed here
-        }
+        for ( auto git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
+          {
+            (*it_rhs).second->GetOperands(*(*git));
+            (*it_rhs).second->ComputeContribution(*(*git));
+            if ((*it_rhs).second->MultiplyWithTimeIncrement())
+              (*it_rhs).second->MultiplyWithTimeFactor(this->time_increment_);
+            if ((*it_rhs).second->DivideByTimeIncrement())
+              (*it_rhs).second->MultiplyWithTimeFactor(1. / this->time_increment_);
+            //(*it_rhs).second->AssignToGlobal(*(*git), rh_);
+            (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_); // luat changed here
+          }
 #else
     // accumulating into the compressed row matrix 'G' for each thread
     // ---------------------------------------
@@ -409,7 +407,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_lhs = this->thread_lhs_operators_[tid].begin(); it_lhs != this->thread_lhs_operators_[tid].end(); it_lhs++) {
         if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater()) {
 #pragma omp for
-          for (int32 e = 0; e < gref.Elements(); e++)
+          for (int32_t e = 0; e < gref.Elements(); e++)
           {
             //                    cout<<"element: "<<e<<endl;
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
@@ -444,7 +442,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_rhs = this->thread_rhs_operators_[tid].begin(); it_rhs != this->thread_rhs_operators_[tid].end(); it_rhs++) {
         if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater()) {
 #pragma omp for
-          for (int32 e = 0; e < gref.Elements(); e++)
+          for (int32_t e = 0; e < gref.Elements(); e++)
           {
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
             fe_tmp = eit->FE(); //save old pointer.
@@ -507,7 +505,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsConstIterator
           it = this->test_operands_.begin(); it != this->test_operands_.end(); it++)
         {
-          typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+          auto  niter(gref.NodesBegin());
           csmp::Index prop_key = (*it).first.key;
           size_t      offset = (*it).second;
 
@@ -622,13 +620,13 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
 
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
-    vector<double64>(this->rh_).swap(this->rh_);
+    vector<double>(this->rh_).swap(this->rh_);
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
     
     pivotVector_.resize(DOF);
 	  fill(pivotVector_.begin(), pivotVector_.end(), 0.);
-    vector<double64>(this->x_).swap(this->x_);
+    vector<double>(this->x_).swap(this->x_);
 
  } // end
  
@@ -642,8 +640,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
     for (typename map<string, MathOperatorRHS<dim>*>::const_iterator
       it_rhs = this->rhs_operators_.begin(); it_rhs != this->rhs_operators_.end(); it_rhs++ )
       if ((*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater())
-        for (typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-             git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
+        for ( auto git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
           {
             (*it_rhs).second->GetOperands(*(*git));
             (*it_rhs).second->ComputeContribution(*(*git));
@@ -687,7 +684,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
             position = (*gfirst)->Idx() + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {
-              const double64 sc = this->x_[position];
+              const double sc = this->x_[position];
               (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
             }
             gfirst++;

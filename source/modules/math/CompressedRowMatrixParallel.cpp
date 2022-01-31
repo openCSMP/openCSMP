@@ -15,7 +15,7 @@ CompressedRowMatrixParallel::CompressedRowMatrixParallel()
 
 @param  nrhalo = total number of rows which need to be removed
 */
-void CompressedRowMatrixParallel::RemoveHalo(int32& nrhalo)
+void CompressedRowMatrixParallel::RemoveHalo(int32_t& nrhalo)
  {
    // This method should be used when doing a mesh partitioning
    // rather than a matrix partitioning. In the case of a mesh partitioning
@@ -23,11 +23,11 @@ void CompressedRowMatrixParallel::RemoveHalo(int32& nrhalo)
    // solution matrix. This needs to be done in SAMGp_Solver:SolveMatrixEquation()
    // Outer halo nodes have the highest node ID's, so rows (Rows()-nrhalo)
    // till Rows() need to be removed. The columns should be kept as is.
-   int32 new_nna = ia[ia.size()-nrhalo-1]-1;
+   int32_t new_nna = ia[ia.size()-nrhalo-1]-1;
 
-   ja.resize(new_nna);            vector<int32>( ja ).swap( ja );
-   a.resize (new_nna);            vector<double64>( a ).swap( a );
-   ia.resize(ia.size()-nrhalo);   vector<int32>( ia ).swap( ia );
+   ja.resize(new_nna);            vector<int32_t>( ja ).swap( ja );
+   a.resize (new_nna);            vector<double>( a ).swap( a );
+   ia.resize(ia.size()-nrhalo);   vector<int32_t>( ia ).swap( ia );
  }
 
 /**
@@ -37,20 +37,20 @@ Break matrix into even row ranges and return them into argument vector.
 @param ranges The ranges are stored in the first pair of the vector.
 
 */
-void CompressedRowMatrixParallel::CreatePartitions( uint32 n_parts, vector<pair<pair<uint32,uint32>,vector<bool> > >&  ranges ) const
+void CompressedRowMatrixParallel::CreatePartitions( uint32_t n_parts, vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >&  ranges ) const
  {
       if  ( !ranges.empty() )  ranges.erase( ranges.begin(), ranges.end() );
 
-       uint32 nrow= static_cast<uint32>(floor(static_cast<double64>((ia.size()-1)/n_parts)));
+       uint32_t nrow= static_cast<uint32_t>(floor(static_cast<double>((ia.size()-1)/n_parts)));
        // N1 partitions which store (nrow) rows
        // (n_parts - N1) partitions which store (nrow+1) rows
-       uint32 N1 = n_parts - (ia.size() - nrow * n_parts) + 1U; // Number of partitions with (nrow) rows
+       uint32_t N1 = n_parts - (ia.size() - nrow * n_parts) + 1U; // Number of partitions with (nrow) rows
 
        ranges.resize(n_parts);
-       vector<pair<pair<uint32,uint32>,vector<bool> > >( ranges ).swap( ranges );
-       int32 p(0);
+       vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >( ranges ).swap( ranges );
+       int32_t p(0);
 
-       for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator
+       for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::iterator
              it=ranges.begin(); it!=ranges.end(); it++, p++)
          {
               if (p < N1) { 			// Partition gets size nrow
@@ -79,10 +79,10 @@ of the boolean vectors.
 While all boolean vectors are set to the same size = nrows of current
 bock, the column ranges of the partitions are used in the scanning.
 */
-void CompressedRowMatrixParallel::ScanHaloOfPartition( uint32 n_block, vector<pair<pair<uint32,uint32>,std::vector<bool> > >&  partition_vector  ) const
+void CompressedRowMatrixParallel::ScanHaloOfPartition( uint32_t n_block, vector<pair<pair<uint32_t,uint32_t>,std::vector<bool> > >&  partition_vector  ) const
  {
     // for the current block the boolean vectors (one for each connected processor) are initialized
-    for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator
+    for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::iterator
             it=partition_vector.begin(); it!=partition_vector.end(); it++ ) {
             // make zero-initialized storage for flags that signify the rows in the blocks that have elements
             (*it).second.resize(  partition_vector[n_block].first.second - partition_vector[n_block].first.first + 1U );
@@ -95,7 +95,7 @@ void CompressedRowMatrixParallel::ScanHaloOfPartition( uint32 n_block, vector<pa
     for ( i=partition_vector[n_block].first.first; i<= partition_vector[n_block].first.second; i++ ){
       if ( i < ia.size()-1U ) 							// if not last row
         for ( j=ia[i]-1U; j<ia[i+1U]-1U; j++ ){       // loop over colum
-          for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator
+          for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::iterator
               it=partition_vector.begin(); it!=partition_vector.end(); it++ ) {
                // for those row entries that fall into the column range of the iterated slice set boolean vector to true
                if ( ja[j]-1U >= (*it).first.first  and  ja[j]-1U <= (*it).first.second )
@@ -104,7 +104,7 @@ void CompressedRowMatrixParallel::ScanHaloOfPartition( uint32 n_block, vector<pa
      }
       else
         for ( j=ia[i]-1U; j<ja.size(); j++ ){
-          for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator
+          for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::iterator
               it=partition_vector.begin(); it!=partition_vector.end(); it++ ) {
                if ( ja[j]-1U >= (*it).first.first  and  ja[j]-1U <= (*it).first.second )
                  (*it).second[i-partition_vector[n_block].first.first] = true;
@@ -121,21 +121,21 @@ void CompressedRowMatrixParallel::ScanHaloOfPartition( uint32 n_block, vector<pa
 
 The SAMGp_CommunicationData dealing with receiving data are determined for the curren processor
 */
-void CompressedRowMatrixParallel::CreateReceiveList( uint32 n_block,
-                                             const vector<pair<pair<uint32,uint32>,vector<bool> > >&  partition_vector,
-                                             vector<int32>& irankrec,
-                                             vector<int32>& ireclists,
-                                             vector<int32>& iptr ) const
+void CompressedRowMatrixParallel::CreateReceiveList( uint32_t n_block,
+                                             const vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >&  partition_vector,
+                                             vector<int32_t>& irankrec,
+                                             vector<int32_t>& ireclists,
+                                             vector<int32_t>& iptr ) const
 {
     assert( n_block < partition_vector.size() );
 
-    set<int32> receivelist;
+    set<int32_t> receivelist;
     size_t quantity(0U);
     iptr.resize(1U);
-    vector<int32>( iptr ).swap( iptr );
+    vector<int32_t>( iptr ).swap( iptr );
     iptr[0]=1U;
 
-    for( vector<pair<pair<uint32,uint32>,vector<bool> > >::const_iterator
+    for( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::const_iterator
            it=partition_vector.begin(); it!=partition_vector.end(); it++)
         // block is not the partition
         if((*it)!=partition_vector[n_block])
@@ -161,11 +161,11 @@ void CompressedRowMatrixParallel::CreateReceiveList( uint32 n_block,
           }
     ireclists.assign(receivelist.begin(), receivelist.end());
 
-    set<int32>  processors;
-    int32       n_proc(0);
+    set<int32_t>  processors;
+    int32_t       n_proc(0);
 
     // calculate the size of the receivelist vector that will be created
-    for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::const_iterator
+    for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::const_iterator
           it=partition_vector.begin(); it!=partition_vector.end(); it++, n_proc++ )
        for ( vector<bool>::const_iterator  bt=(*it).second.begin(); bt!=(*it).second.end(); bt++ )
          if ( *bt == true ) {
@@ -182,7 +182,7 @@ void CompressedRowMatrixParallel::CreateReceiveList( uint32 n_block,
 
 /*
    cout <<"Irec size = "<< (*rit.first).second.size() << endl;
-   for (vector<int32>::const_iterator i=(*rit.first).second.begin(); i!=(*rit.first).second.end();i++)
+   for (vector<int32_t>::const_iterator i=(*rit.first).second.begin(); i!=(*rit.first).second.end();i++)
       cout <<"Reclist: "<< *i << endl;
    cout <<"\nLooping over block "<< dummy << endl;
    cout <<"Min, Max: "<< (*it).first.first <<", "<< (*it).first.second << endl;
@@ -195,29 +195,29 @@ void CompressedRowMatrixParallel::CreateReceiveList( uint32 n_block,
 
 
 
-void CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast( uint32 n_block,
-                                                              const vector<pair<pair<uint32,uint32>,vector<bool> > >&  partition_vector,
-                                                              vector<int32>& iranksnd, vector<int32>& isndlists, vector<int32>& ipts ) const
+void CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast( uint32_t n_block,
+                                                              const vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >&  partition_vector,
+                                                              vector<int32_t>& iranksnd, vector<int32_t>& isndlists, vector<int32_t>& ipts ) const
 {
     assert( n_block < partition_vector.size() );
-    uint32 n_proc(0U);
-    ipts.resize(1U);   vector<int32>( ipts ).swap( ipts );
+    uint32_t n_proc(0U);
+    ipts.resize(1U);   vector<int32_t>( ipts ).swap( ipts );
     ipts[0]=1U;
-    set<int32> proc;
+    set<int32_t> proc;
     size_t counter(1U);
-    int32  temp2(0);
+    int32_t  temp2(0);
 
 
     // Loop over partition_vector
-    for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::const_iterator
+    for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::const_iterator
           it=partition_vector.begin(); it!=partition_vector.end(); it++, n_proc++)
         if ((*it)!=partition_vector[n_block])
           {
-            set<int32> sendlist;
-            vector<int32> temp;
+            set<int32_t> sendlist;
+            vector<int32_t> temp;
             // loop over entries in matrix
             if ( (*it).first.second+1U != ia.size() ) 	// if not last column
-              for( int32 j=ia[(*it).first.first]; j!=ia[(*it).first.second+1U]; j++ )
+              for( int32_t j=ia[(*it).first.first]; j!=ia[(*it).first.second+1U]; j++ )
                 {
                   // if column is within block
                   if( (ja[j-1U]-1U)>=partition_vector[n_block].first.first and (ja[j-1U]-1U)<=partition_vector[n_block].first.second)
@@ -237,7 +237,7 @@ void CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast( uint32 n_b
             temp2=sendlist.size();
             temp.assign(sendlist.begin(), sendlist.end());
             // loop over set and store values in isndlist
-            for(uint32 i=0U; i<temp.size(); i++)
+            for(uint32_t i=0U; i<temp.size(); i++)
               isndlists.push_back(temp[i]);
           }
 
@@ -258,25 +258,25 @@ cout <<"STORING NEW IPTS ENTRY" << endl;
 
 
 
-void CompressedRowMatrixParallel::CreateIpts( int32 n_block,
-										const std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >& partition_vector,
-										vector<int32>& iranksnd, vector<int32>& isndlists, vector<int32>& ipts) const
+void CompressedRowMatrixParallel::CreateIpts( int32_t n_block,
+										const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >& partition_vector,
+										vector<int32_t>& iranksnd, vector<int32_t>& isndlists, vector<int32_t>& ipts) const
 
 {
 
 	// resize of the ipts vector
-	ipts.resize(iranksnd.size()+1U);  vector<int32>( ipts ).swap( ipts );
-	uint32 proc(0), number(0);
+	ipts.resize(iranksnd.size()+1U);  vector<int32_t>( ipts ).swap( ipts );
+	uint32_t proc(0), number(0);
 	ipts[0]=1U;
 
 	//loop over partition vector
-	for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::const_iterator
+	for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::const_iterator
 						 it=partition_vector.begin(); it!=partition_vector.end(); it++ )
 			// if columns outside the partition
 			if( (*it) != partition_vector[n_block] ){
 						 proc++;
 						 // loop over boolean vector
-						 for ( int32 i=0; i<static_cast<int32>((*it).second.size()); i++ )
+						 for ( int32_t i=0; i<static_cast<int32_t>((*it).second.size()); i++ )
 							 // if there is non-zero element in the row in the column range of the looped over block
 							 if ( (*it).second[i] == true ) number++;
 						 ipts[proc]=number+1;
@@ -287,25 +287,25 @@ void CompressedRowMatrixParallel::CreateIpts( int32 n_block,
 }
 
 
-void CompressedRowMatrixParallel::CreateIptr( int32 n_block,
-										const std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >& partition_vector,
-										vector<int32>& irankrec, vector<int32>& ireclists, vector<int32>& iptr) const
+void CompressedRowMatrixParallel::CreateIptr( int32_t n_block,
+										const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >& partition_vector,
+										vector<int32_t>& irankrec, vector<int32_t>& ireclists, vector<int32_t>& iptr) const
 
 {
 
 	// resize of the iptr vector
-	iptr.resize(irankrec.size()+1U);  vector<int32>( iptr ).swap( iptr );
-		uint32 proc(0), number(1U);
+	iptr.resize(irankrec.size()+1U);  vector<int32_t>( iptr ).swap( iptr );
+		uint32_t proc(0), number(1U);
 		iptr[0]=number;
 
 	//loop over partition vector
-	for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::const_iterator
+	for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::const_iterator
 						 it=partition_vector.begin(); it!=partition_vector.end(); it++ )
 			// if columns outside the partition
 			if( (*it) != partition_vector[n_block] ){
 					 proc++;
 					 // loop over boolean vector
-					 for ( int32 i=0; i<static_cast<int32>((*it).second.size()); i++ )
+					 for ( int32_t i=0; i<static_cast<int32_t>((*it).second.size()); i++ )
 						 // if there is non-zero element in the row in the column range of the looped over block
 						 if ( (*it).second[i] == true ) number++;
 					 iptr[proc]=number;
@@ -321,16 +321,16 @@ are halo elements in the corresponding row.
 @param partition_vector the number of true values in this vector.
 
 */
-void CompressedRowMatrixParallel::Renumber( uint32 n_block, const vector<pair<pair<uint32,uint32>,vector<bool> > >& partition_vector,
-																		vector<int32>& ireclists, vector<int32>& isndlists) const
+void CompressedRowMatrixParallel::Renumber( uint32_t n_block, const vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >& partition_vector,
+																		vector<int32_t>& ireclists, vector<int32_t>& isndlists) const
 {
 	// isndlists is straightforward:
-	for (vector<int32>::iterator it=isndlists.begin();it!=isndlists.end();it++)
+	for (vector<int32_t>::iterator it=isndlists.begin();it!=isndlists.end();it++)
 		 (*it) -= partition_vector[n_block].first.first;
 
-	uint32 counter=partition_vector[n_block].first.second - partition_vector[n_block].first.first+1U;
+	uint32_t counter=partition_vector[n_block].first.second - partition_vector[n_block].first.first+1U;
 	// loop over ireclists
-	for (vector<int32>::iterator it=ireclists.begin();it!=ireclists.end();it++)
+	for (vector<int32_t>::iterator it=ireclists.begin();it!=ireclists.end();it++)
 		{
 			 // ireclists should never have entries with the same value
 			 counter++;
@@ -345,8 +345,8 @@ are halo elements in the corresponding row.
 
 @return the number of true values in this vector.
 */
-uint32 CompressedRowMatrixParallel::RowsWithHaloElements( int32 n_block,
-                                                  vector<pair<pair<uint32,uint32>,vector<bool> > > & partition_vector  ) const
+uint32_t CompressedRowMatrixParallel::RowsWithHaloElements( int32_t n_block,
+                                                  vector<pair<pair<uint32_t,uint32_t>,vector<bool> > > & partition_vector  ) const
  {
     // falsify boolean vector of current partition
     fill( partition_vector[n_block].second.begin(), partition_vector[n_block].second.end(), false );
@@ -356,7 +356,7 @@ uint32 CompressedRowMatrixParallel::RowsWithHaloElements( int32 n_block,
     for ( i=partition_vector[n_block].first.first; i<= partition_vector[n_block].first.second; i++ ){
       if ( i < ia.size()-1U ){ 							// if not last row
         for ( j=ia[i]-1U; j<ia[i+1U]-1U; j++ )          // loop over colum
-          for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator
+          for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::iterator
               it=partition_vector.begin(); it!=partition_vector.end(); it++ )
                // for those row entries that fall into the column range of the iterated slice set boolean vector to true
                if ( ja[j]-1U < partition_vector[n_block].first.first  or  ja[j]-1U > partition_vector[n_block].first.second ) // if outside current partition
@@ -366,7 +366,7 @@ uint32 CompressedRowMatrixParallel::RowsWithHaloElements( int32 n_block,
       }
       else {
         for ( j=ia[i]-1U; j<ja.size(); j++ )
-          for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator
+          for ( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >::iterator
               it=partition_vector.begin(); it!=partition_vector.end(); it++ )
                // for those row entries that fall into the column range of the iterated slice set boolean vector to true
                if ( ja[j]-1U < partition_vector[n_block].first.first  or  ja[j]-1U > partition_vector[n_block].first.second ) // if outside current partition

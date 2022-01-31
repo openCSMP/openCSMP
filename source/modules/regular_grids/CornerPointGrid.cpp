@@ -4,6 +4,7 @@
 #include "STL_utilities.h"
 #include "Pillar.h"
 #include "CellGenerator.h"
+#include "Box.h"
 
 #include "ErrorHandler.h"
 #include "EclipseInterface.h"
@@ -94,14 +95,14 @@ CornerPointGrid::GetCellActivity()
 /**
 Builds the pillars and columns.
 */
-void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double64>& zcorn )
+void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double>& zcorn )
 {
   const size_t NXxNY = NX_ * NY_;
   size_t node_count = 0;
 
   {
     // 1. Build pillars
-    std::vector<double64> zcoord;
+    std::vector<double> zcoord;
     zcoord.reserve( 4 * (NZ_ + 1) );
     for ( size_t i = 0; i <= NX_; ++i )
     {
@@ -224,7 +225,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
       Pillar& p2 = (*this)(i + 1, j + 1); //se
       Pillar& p3 = (*this)(i + 0, j + 1); //sw
 
-      double64 z[4][2];
+      double z[4][2];
       z[0][0] = p0.GetZCoord( cell.z[0][0] );
       z[0][1] = p0.GetZCoord( cell.z[0][1] );
       z[1][0] = p1.GetZCoord( cell.z[1][0] );
@@ -392,7 +393,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   std::cerr << " removed invalid lines: " << badLines_ << '\n';
 
   // 3. store node coordinates
-  deque<double64> x, y, z;
+  deque<double> x, y, z;
   for ( size_t i = 0; i <= NX_; ++i ) {
     for ( size_t j = 0; j <= NY_; ++j ) {
       Pillar& pillar = (*this)(i, j);
@@ -427,19 +428,20 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
 
     Point<3U> m_pt;
   };
-  unordered_map< size_t, long64> pbflags; // boundary type      
+  
+  vector<std::int8_t> pbflags( vset.Vertices(), 0 ); // boundary flags
   for ( size_t i = 0U; i < vset.Vertices(); ++i )
-  {
-    vector<double64> coord( 3U );
-    for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
-    Point<3U> pt( coord );
-    if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
-      pbflags.insert( make_pair( i, BOX_BOUNDARY::TOP ) );
-    else if ( std::find_if( bt_pts.begin(), bt_pts.end(), isEqual( pt ) ) != bt_pts.end() )
-      pbflags.insert( make_pair( i, BOX_BOUNDARY::BOTTOM ) );
-    else
-      pbflags.insert( make_pair( i, BOX_BOUNDARY::IRREGULAR ) );
-  }
+    {
+      vector<double> coord( 3U );
+      for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
+      Point<3U> pt( coord );
+      if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
+        pbflags[i] = BOX_BOUNDARY::TOP;
+      else if ( std::find_if( bt_pts.begin(), bt_pts.end(), isEqual( pt ) ) != bt_pts.end() )
+        pbflags[i] = BOX_BOUNDARY::BOTTOM;
+      else
+        pbflags[i] = BOX_BOUNDARY::IRREGULAR;
+    }
 
   // 5. Set up the rest of the vset
   // There is no neighbor information in the Eclipse data(*.grdecl). The information will be created later.
@@ -449,6 +451,9 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   vset.AddElementTypes( generator_->fem_types.begin(), generator_->fem_types.end() );
   vset.AddBFlags( pbflags.begin(), pbflags.end() );
 }
+
+
+
 
 bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   bool faceAboveIsQuad = !cellAbove || generator_->getShapeOfBottomFace( *cellAbove ) == FACE_TYPE::FULL_QUAD;
@@ -1366,7 +1371,7 @@ The PolygonGridManager is used to construct the pillars.
 void CornerPointGrid::CreateModel( const std::string&     model_name,
                                        csmp::VSet<3U>&       vset,
                                        csmp::ModelTopology&   model_topology,
-                                       const std::vector<double64>& zcorn,
+                                       const std::vector<double>& zcorn,
                                        std::set<std::string>& regions,
                                        std::set<std::string>& faults,
                                        std::set<std::string>& wells,

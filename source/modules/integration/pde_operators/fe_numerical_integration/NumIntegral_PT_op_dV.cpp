@@ -41,7 +41,7 @@ A reference to the variable storage inside of the Model<dim>  and a
 reference to the Element from which the Operand shall be read.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -112,7 +112,7 @@ member vector {V}.
 In linear elasticity computations.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     MathOperatorRHS<dim>::RHS.resize( BFORCE.size() );
     // if a quadratic triangle element is used, the body forces are assigned only 
@@ -121,13 +121,13 @@ void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
         e.FE_Type() == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
       {
          // watch out, this is not generic but restricted to 6-noded triangle in 2D
-         const double64 volume_div_n(e.Volume() / static_cast<double64>(e.FE()->MidSideNodes()));
+         const double volume_div_n(e.Volume() / static_cast<double>(e.FE()->MidSideNodes()));
          for ( size_t i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }
    else
      {
-         const double64 volume_div_n(e.Volume() / static_cast<double64>(e.Nodes()));
+         const double volume_div_n(e.Volume() / static_cast<double>(e.Nodes()));
          for ( size_t i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }

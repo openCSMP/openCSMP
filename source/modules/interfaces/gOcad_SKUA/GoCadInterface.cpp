@@ -47,9 +47,9 @@ bool  GoCadInterface<dim>::IsInNextLine( ifstream& ifs, const char* search_strin
 
 
 template<size_t dim>
-BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<double64>& nd1,
-                                                                      const vector<double64>& nd2,
-                                                                      const vector<double64>& nd3 )
+BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<double>& nd1,
+                                                                      const vector<double>& nd2,
+                                                                      const vector<double>& nd3 )
  {
     assert( nd1.size() == 3U );
     assert( nd2.size() == 3U );
@@ -59,7 +59,7 @@ BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<dou
                            (mjl::Point3D( nd2[0],nd2[1],nd2[2] )),
                            (mjl::Point3D( nd3[0],nd3[1],nd3[2] )), 1 );
 
-    int32  facing_direction = face.FacingDirection();
+    int32_t  facing_direction = face.FacingDirection();
 
     if ( facing_direction == MJL3D_BOTTOM ) return BOTTOM;
     if ( facing_direction == MJL3D_FRONT )  return FRONT;
@@ -345,16 +345,16 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
       data_entries += (*propit).ESize();
       
     //   id      attr   node xyz
-    map<size_t,pair<int32,vector<double64> > >                  nodes;
-    typename map<size_t,pair<int32,vector<double64> > >::const_iterator  nit;
-    map<size_t,vector<double64> >                             node_properties;
-    typename map<size_t,vector<double64> >::const_iterator             nprop_it;
-    vector<double64>                                                   props(data_entries);
-    vector<double64>             xyz(3);
+    map<size_t,pair<int32_t,vector<double> > >                  nodes;
+    typename map<size_t,pair<int32_t,vector<double> > >::const_iterator  nit;
+    map<size_t,vector<double> >                             node_properties;
+    typename map<size_t,vector<double> >::const_iterator             nprop_it;
+    vector<double>                                                   props(data_entries);
+    vector<double>             xyz(3);
     size_t                  nodeID;
-    int32                        attr;
+    int32_t                        attr;
     //   attr       value
-    pair<int,vector<double64> >  node;
+    pair<int,vector<double> >  node;
 
     while ( ifs.getline( text_line, 256 ) )
       {
@@ -418,9 +418,9 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Reading triangle elements TRGL
     // ---------------------------------
-    map<size_t,vector<size_t> >  triangles;
-    vector<size_t>                        node_ids(3);
-    size_t                                triangleID(1);
+    map<size_t,vector<int64_t> >  triangles;
+    vector<int64_t>               node_ids(3);
+    size_t                       triangleID(1);
 
     do
       {
@@ -457,7 +457,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<size_t> >::iterator  plit;
+    typename map<size_t,vector<int64_t> >::iterator  plit;
     size_t n;
     
     if ( !properties.empty() ) assert( node_properties.size() == nodes.size() );
@@ -562,10 +562,10 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
    //    The boundary nodes at corresponding faces are flagged exactly as the 
    //    as the faceverts.
    // --------------------------------------------------------------------------------------
-   deque<vector<long64> > pfverts( triangles.size() );
-   vector<long64>         pfvert(  triangle.Neighbors() );
-   unordered_map<size_t,long64> pbflags;
-   vector<double64>       nd1(3), nd2(3), nd3(3);
+   deque<vector<int64_t> > pfverts( triangles.size() );
+   vector<int64_t>         pfvert(  triangle.Neighbors() );
+   vector<int8_t>         pbflags( vset.Vertices(), 0 );
+   vector<double>       nd1(3), nd2(3), nd3(3);
    char                   face_key[30];
 
    cout <<"\nGoCadInterface::ReadTSurface: Identifying the neighbors of each element..." << endl;
@@ -615,7 +615,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // ----------------------------------------------------
        if ( debug ) cout <<"\nTest1 face1: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[0] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[0] = ((*face_it).second);
        // if the face belongs to the same element one searches for
        // the next occurrence of the key in the multimap
        // ----------------------------------------------
@@ -624,7 +624,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // -----------------------
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[0] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[0] = ((*face_it).second);
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 1: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -636,8 +636,9 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
                   
                 // flagging the boudary nodes as such
                 // ----------------------------------
-                pbflags[ (*plit).second[1] ] = pfvert[0];
-                pbflags[ (*plit).second[2] ] = pfvert[0];
+                assert( pfvert[0] < 0 );
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[0]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[0]);
              }
          }
        // ------
@@ -651,17 +652,17 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( debug ) cout <<"\nTest1 face2: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[1] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[1] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[1] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[1] = (*face_it).second;
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[1] = IRREGULAR;
-                pbflags[ (*plit).second[0] ] = pfvert[1];
-                pbflags[ (*plit).second[2] ] = pfvert[1];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[1]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[1]);
              }
          }
        // ------
@@ -675,28 +676,30 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( debug ) cout <<"\nTest1 face3: Element ID recovered for key: "<< face_key;
        if ( debug ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[2] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[2] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[2] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[2] = ((*face_it).second);
             else {
                 if ( debug ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( debug ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[2] = IRREGULAR;
-                pbflags[ (*plit).second[0] ] = pfvert[2];
-                pbflags[ (*plit).second[1] ] = pfvert[2];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[2]);
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[2]);
              }
          }
        pfverts[ (*plit).first ] = pfvert;
     }
 
-  typename unordered_map<size_t,long64>::const_iterator  bflit;
-  if ( debug ) 
+  if ( debug )
     {
-       cout <<"\nDetermined boundary flags:"<< endl; 
-       for ( bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++ )
-         cout <<"\nNode: "<< (*bflit).first <<" flagged: "<< (*bflit).second;
+       cout <<"\nDetermined boundary flags:"<< endl;
+       size_t counter(0U);
+       for ( auto bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++, counter++ )
+         if ( (*bflit) < 0 )
+           cout <<"\nNode: "<< counter <<" flagged: "<< (*bflit);
+           
        cout << endl; 
     }
     
@@ -723,14 +726,14 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
             csmp::Index  setting(SCALAR,NODE,0);
             PropertyData  data( setting.place, setting.type, dim );
             data.Reserve( vset.Vertices() );
-            // map<size_t,vector<double64> >::const_iterator
+            // map<size_t,vector<double> >::const_iterator
             for ( auto nprop_it=node_properties.begin(); nprop_it!=node_properties.end(); nprop_it++ )
               pushBack( data, makeScalar( PLAIN, (*nprop_it).second[ data_entry ] ) );
             // adding scalars to the VSet
             vset.AddData( (*propit).Property().c_str(), data );
             data_entry++;
          }
-       // vector<double64> node properties (3 components in 3D)
+       // vector<double> node properties (3 components in 3D)
        if ( (*propit).ESize() == 3 ) {
             csmp::Index  setting(VECTOR,NODE,0);
             PropertyData  data( setting.place, setting.type, dim );
@@ -1087,7 +1090,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 //  The tetrahedra for each TVolume object are stored as groups with unique
 //  id numbers. Statistics of these are printed after the reading process
 //  is finished.
-    map<size_t,size_t >  tvolume_map;
+    map<size_t,size_t>  tvolume_map;
     size_t                  tvolume_key = 1;
 //
 // ------------------------------------------------------------------------- 
@@ -1104,14 +1107,14 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
    // 2. Reading node data VRTX (here nodes are still consecutively numbered)
     // -------------------------
     //   id      attr   node xyz
-    map<size_t,pair<int32,vector<double64> > >                  nodes;
-    typename map<size_t,pair<int32,vector<double64> > >::const_iterator  nit;
-    map<size_t,double64>                                     node_property;
-    typename map<size_t,double64>::const_iterator                     prit;
-    vector<double64>             xyz(3);
+    map<size_t,pair<int32_t,vector<double> > >                  nodes;
+    typename map<size_t,pair<int32_t,vector<double> > >::const_iterator  nit;
+    map<size_t,double>                                     node_property;
+    typename map<size_t,double>::const_iterator                     prit;
+    vector<double>             xyz(3);
     size_t                  nodeID; 
-    int32                        attr;
-    pair<int32,vector<double64> >  node;
+    int32_t                        attr;
+    pair<int32_t,vector<double> >  node;
 
     // reading line by line 
     while ( ifs.getline( text_line, 256 ) )
@@ -1179,8 +1182,8 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
     // 3. Reading tetrahedral elements TETRA
     // -------------------------------------
     //   id      attr   node xyz
-    map<size_t,vector<size_t> >  tetrahedra;
-    vector<size_t>  node_ids(4);
+    map<size_t,vector<int64_t> >  tetrahedra;
+    vector<int64_t>  node_ids(4);
     size_t          tetraID = 1;
 
     // reading line by line 
@@ -1232,9 +1235,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 //
 // ------------------------------------------------------------------------- 
    // newid oldid
-   map<size_t,size_t>                  shared_vtrx;
-   typename map<size_t,size_t>::const_iterator  shit;
-   size_t                                 newID;
+   map<int64_t ,int64_t>                  shared_vtrx;
+   typename map<int64_t ,int64_t>::const_iterator  shit;
+   int64_t                                  newID;
    bool                                      cnp_data_read;
 
    // filling node ID's from first TVOLUME into 'shared_vtrx' map
@@ -1260,10 +1263,10 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                {
                   // new vertex id
                   token  = strtok( NULL, delims );
-                  newID  = static_cast<size_t>(atol( token )); 
+                  newID  = static_cast<int64_t>(atol( token ));
                   // collocated old vertex id
                   token  = strtok( NULL, delims );
-                  nodeID = static_cast<size_t>(atol( token )); 
+                  nodeID = static_cast<int64_t>(atol( token ));
                   // if there is property information, it is ignored since it
                   // duplicates already existing node data.
                   
@@ -1389,7 +1392,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 
     // 4. Testing whether input was read correctly
     // -------------------------------------------
-    typename map<size_t,vector<size_t> >::iterator  plit;
+    typename map<size_t,vector<int64_t> >::iterator  plit;
     size_t n;
     
     if ( verbose )
@@ -1508,10 +1511,10 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
    //    The boundary nodes at corresponding faces are flagged exactly as the 
    //    as the faceverts.
    // --------------------------------------------------------------------------------------
-   deque<vector<long64> > pfverts( tetrahedra.size() );
-   vector<long64>         pfvert(  tetrahedron.Neighbors() );
-   unordered_map<size_t,long64> pbflags;
-   vector<double64>       nd1(3), nd2(3), nd3(3), nd4(3);
+   deque<vector<int64_t> > pfverts( tetrahedra.size() );
+   vector<int64_t>         pfvert(  tetrahedron.Neighbors() );
+   vector<int8_t>         pbflags( vset.Vertices() );
+   vector<double>       nd1(3), nd2(3), nd3(3), nd4(3);
    char                   face_key[30];
 
    cout <<"\nGoCadInterface::ReadTSolid:Identifying the neighbors of each element..." << endl;
@@ -1568,7 +1571,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        // ----------------------------------------------------
        if ( verbose ) cout <<"\nTest1 face1: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[0] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[0] = ((*face_it).second);
        // if the face belongs to the same element one searches for
        // the next occurrence of the key in the multimap
        // ----------------------------------------------
@@ -1577,7 +1580,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        // -----------------------
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[0] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[0] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 1: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
@@ -1589,9 +1592,9 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                   
                 // flagging the boudary nodes as such
                 // ----------------------------------
-                pbflags[ (*plit).second[1] ] = pfvert[0];
-                pbflags[ (*plit).second[2] ] = pfvert[0];
-                pbflags[ (*plit).second[3] ] = pfvert[0];
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[0]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[0]);
+                pbflags[ (*plit).second[3] ] = static_cast<int8_t>(pfvert[0]);
              }
          }
        // ------
@@ -1607,18 +1610,18 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face2: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[1] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[1] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[1] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[1] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 2: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[1] = IdentifyTetrahedronBoundary( nd1, nd4, nd3 );
-                pbflags[ (*plit).second[0] ] = pfvert[1];
-                pbflags[ (*plit).second[3] ] = pfvert[1];
-                pbflags[ (*plit).second[2] ] = pfvert[1];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[1]);
+                pbflags[ (*plit).second[3] ] = static_cast<int8_t>(pfvert[1]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[1]);
              }
          }
        // ------
@@ -1634,18 +1637,18 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face3: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[2] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[2] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[2] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[2] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 3: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[2] = IdentifyTetrahedronBoundary( nd1, nd2, nd4 );
-                pbflags[ (*plit).second[0] ] = pfvert[2];
-                pbflags[ (*plit).second[1] ] = pfvert[2];
-                pbflags[ (*plit).second[3] ] = pfvert[2];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[2]);
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[2]);
+                pbflags[ (*plit).second[3] ] = static_cast<int8_t>(pfvert[2]);
              }
          }
        // ------
@@ -1661,18 +1664,18 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
        if ( verbose ) cout <<"\nTest1 face4: Element ID recovered for key: "<< face_key;
        if ( verbose ) cout <<" from map vs. plist iterator elmt ID: "<< (*face_it).second <<" "<< (*plit).first << endl;
-       if ( (*face_it).second != (*plit).first ) pfvert[3] = static_cast<int32>((*face_it).second);
+       if ( (*face_it).second != (*plit).first ) pfvert[3] = ((*face_it).second);
        else
          {
             face_it++;
-            if ( (*face_it).first == face_key ) pfvert[3] = static_cast<int32>((*face_it).second);
+            if ( (*face_it).first == face_key ) pfvert[3] = ((*face_it).second);
             else {
                 if ( verbose ) cout <<"\nElement: "<< (*plit).first <<" Test face 4: failed comparison: list-face key: ";
                 if ( verbose ) cout <<(*face_it).first <<" vs. hash key: "<< face_key << endl;
                 pfvert[3] = IdentifyTetrahedronBoundary( nd1, nd3, nd2 );
-                pbflags[ (*plit).second[0] ] = pfvert[3];
-                pbflags[ (*plit).second[2] ] = pfvert[3];
-                pbflags[ (*plit).second[1] ] = pfvert[3];
+                pbflags[ (*plit).second[0] ] = static_cast<int8_t>(pfvert[3]);
+                pbflags[ (*plit).second[2] ] = static_cast<int8_t>(pfvert[3]);
+                pbflags[ (*plit).second[1] ] = static_cast<int8_t>(pfvert[3]);
              }
          }
        pfverts[ (*plit).first ] = pfvert;
@@ -1680,9 +1683,11 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 
   if ( verbose )
     {
-       cout <<"\nDetermined boundary flags:"<< endl; 
-       for ( auto bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++ )
-         cout <<"\nNode: "<< (*bflit).first <<" flagged: "<< (*bflit).second;
+       cout <<"\nDetermined boundary flags:"<< endl;
+       size_t counter(0U);
+       for ( auto bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++, counter++ )
+         if ( (*bflit) < 0 )
+           cout <<"\nNode: "<< counter <<" flagged: "<< (*bflit);
        cout << endl; 
     }
     
@@ -1735,23 +1740,10 @@ template<size_t dim>
 void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
  {
     // 1. finding coordinate extrema for the boundary nodes
-    double64 xmin, xmax, ymin, ymax, zmin, zmax, xco, yco, zco;
-    
-    xmin = xmax = vset.Px( (*vset.BFlagsBegin()).first );
-    ymin = ymax = vset.Py( (*vset.BFlagsBegin()).first );
-    zmin = zmax = vset.Pz( (*vset.BFlagsBegin()).first );
-    
-    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
-      { 
-         if ( xmin > vset.Px( (*bit).first ) ) xmin = vset.Px( (*bit).first );
-         if ( xmax < vset.Px( (*bit).first ) ) xmax = vset.Px( (*bit).first );
-
-         if ( ymin > vset.Py( (*bit).first ) ) ymin = vset.Py( (*bit).first );
-         if ( ymax < vset.Py( (*bit).first ) ) ymax = vset.Py( (*bit).first );
-
-         if ( zmin > vset.Pz( (*bit).first ) ) zmin = vset.Pz( (*bit).first );
-         if ( zmax < vset.Pz( (*bit).first ) ) zmax = vset.Pz( (*bit).first );
-      }
+    double xmin, xmax, ymin, ymax, zmin, zmax, xco, yco, zco;
+    vset.CoordinateRange( 0, xmin, xmax );
+    vset.CoordinateRange( 1, ymin, ymax );
+    vset.CoordinateRange( 2, zmin, zmax );
     
     // 2. checking whether the model is actually 3-dimensional
     if ( xmin == xmax || ymin == ymax || zmin == zmax ) {
@@ -1760,41 +1752,42 @@ void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
          return;
       }
       
-    // 3. Flagging the edge nodes according to their coordinates 
-    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+    // 3. Flagging the edge nodes according to their coordinates
+    size_t counter(0U);
+    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, counter++ )
       // ignoring nodes which were already identified as model corners 
-      if ( (*bit).second != CNR_MIN      && (*bit).second != CNR_MAX &&
-           (*bit).second != CNR_MIN_MAXX && (*bit).second != CNR_MIN_MAXXZ &&
-           (*bit).second != CNR_MIN_MAXZ && (*bit).second != CNR_MAX_MINXZ &&
-           (*bit).second != CNR_MAX_MAXX && (*bit).second != CNR_MAX_MAXZ ) 
+      if ( (*bit) != CNR_MIN      && (*bit) != CNR_MAX &&
+           (*bit) != CNR_MIN_MAXX && (*bit) != CNR_MIN_MAXXZ &&
+           (*bit) != CNR_MIN_MAXZ && (*bit) != CNR_MAX_MINXZ &&
+           (*bit) != CNR_MAX_MAXX && (*bit) != CNR_MAX_MAXZ )
         {
-           xco = vset.Px( (*bit).first );
-           yco = vset.Py( (*bit).first );
-           zco = vset.Pz( (*bit).first );
+           xco = vset.Px( counter );
+           yco = vset.Py( counter );
+           zco = vset.Pz( counter );
         
            // 3.1 back wall (z=zmin)
            if ( zco == zmin )
              {
-                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit).second = BACK_BOTTOM; 
-                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit).second = BACK_TOP; 
-                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit).second = BACK_LEFT; 
-                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit).second = BACK_RIGHT; 
+                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit) = BACK_BOTTOM;
+                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit) = BACK_TOP;
+                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit) = BACK_LEFT;
+                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit) = BACK_RIGHT;
              }
            // 3.2 front wall (z=zmax)
            else if ( zco == zmax )
              {
-                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit).second = FRONT_BOTTOM; 
-                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit).second = FRONT_TOP; 
-                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit).second = FRONT_LEFT; 
-                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit).second = FRONT_RIGHT; 
+                if ( yco == ymin && (xmin < xco && xco < xmax) ) (*bit) = FRONT_BOTTOM;
+                if ( yco == ymax && (xmin < xco && xco < xmax) ) (*bit) = FRONT_TOP;
+                if ( xco == xmin && (ymin < yco && yco < ymax) ) (*bit) = FRONT_LEFT;
+                if ( xco == xmax && (ymin < yco && yco < ymax) ) (*bit) = FRONT_RIGHT;
              }
            // 3.3 side edges ( zmin < z < zmax )
            else if ( zco > zmin && zco < zmax )
              {
-                if ( xco == xmin && yco == ymin ) (*bit).second = BOTTOM_LEFT; 
-                if ( xco == xmax && yco == ymin ) (*bit).second = BOTTOM_RIGHT; 
-                if ( xco == xmax && yco == ymax ) (*bit).second = TOP_RIGHT; 
-                if ( xco == xmin && yco == ymax ) (*bit).second = TOP_LEFT; 
+                if ( xco == xmin && yco == ymin ) (*bit) = BOTTOM_LEFT;
+                if ( xco == xmax && yco == ymin ) (*bit) = BOTTOM_RIGHT;
+                if ( xco == xmax && yco == ymax ) (*bit) = TOP_RIGHT;
+                if ( xco == xmin && yco == ymax ) (*bit) = TOP_LEFT;
              }
       }
  
@@ -1889,7 +1882,7 @@ const
 
    // 4. writing the file header
    // --------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    char object_name[200];
    strcpy( object_name, "CSP_object" );
    if ( timestep > 0 ) strcat( object_name, step );
@@ -1903,8 +1896,6 @@ const
 
    // 4.2 Writing the vertex=Node data to file
    // ----------------------------------------
-   typename vector<Node<dim>*>::const_iterator     nit =  sg.NodesBegin();
-   typename vector<Element<dim>*>::const_iterator  eit;
    ScalarVariable                       sc;
    VectorVariable<dim>                   vc;
    TensorVariable<dim>                   ts;
@@ -1934,7 +1925,7 @@ const
              ts_elmt_data.reserve( sg.Nodes() );
              for ( i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
+        for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
           {
               switch ( prop_key.type )
                 {
@@ -1958,7 +1949,7 @@ const
    
    // outputting
    // ----------
-   while ( nit != sg.NodesEnd() )
+   for ( auto nit=sg.NodesBegin(); nit != sg.NodesEnd(); ++nit )
      {
         ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
         ofs << (*nit)->x() <<" "<< (*nit)->y() <<" "<< 0.0 <<" ";
@@ -2004,12 +1995,11 @@ const
            }
         if ( (*nit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
         ofs << endl;
-        nit++;
-     } 
+     }
 
     // 4.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    for ( eit = sg.ElementsBegin(); eit != sg.ElementsEnd(); eit++ )
+    for ( auto eit = sg.ElementsBegin(); eit != sg.ElementsEnd(); eit++ )
       {
          ofs <<"TRGL ";
          for ( j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
@@ -2125,7 +2115,7 @@ const
    // -----------------------
    // 4.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    gref.MinMaxOf( var, pmin, pmax );
    char object_name[200];
    strcpy( object_name, group_name );
@@ -2144,8 +2134,7 @@ const
    vector<size_t>  nodes(   gref.Nodes() );
    vector<size_t>  cpoints( gref.IntegrationPoints() );
 
-   for ( typename vector<Node<dim>*>::const_iterator
-         it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) nodes[i++] = (*it)->Idx();
+   for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) nodes[i++] = (*it)->Idx();
 
    // 4.4 making a list of element properties if these are required
    // -------------------------------------------------------------
@@ -2180,8 +2169,7 @@ const
              ts_elmt_data.reserve( gref.Nodes() );
              for ( i=0; i<gref.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( typename vector<Element<dim>*>::const_iterator
-              it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+        for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
           {
               for ( j=0; j<(*it)->Nodes(); j++ ) elmts.insert( (*it)->N(j)->Idx() );
               switch ( prop_key.type )
@@ -2221,8 +2209,7 @@ const
                } 
           break;
         case ELEMENT_INTEGRATION_POINT:
-             for ( typename vector<Element<dim>*>::const_iterator
-                   it= gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+             for ( auto it= gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
                for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                {
                   // getting constraint point coordinates
@@ -2233,7 +2220,7 @@ const
                   if ( dim == 3U ) ofs << xyz[0] <<" "<< xyz[1] <<" "<< xyz[2] <<" ";
                   else ofs << xyz[0] <<" "<< xyz[1] <<" "<< 0. <<" ";
                   ofs << val();
-                  if ( (*it)->AtBoundary() != NOT ) ofs <<" CNXYZ";
+                  if ( atBoundary(*it) != NOT ) ofs <<" CNXYZ";
                   ofs << endl;
                } 
            break;
@@ -2273,8 +2260,7 @@ const
     map<size_t,size_t> new_node_ids;
     for ( i=0; i<nodes.size(); i++ ) new_node_ids[ nodes[i] ] = i+1;
 
-    for ( typename vector<Element<dim>*>::const_iterator 
-          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       {
          ofs <<"TRGL ";
          for ( size_t j=0U; j<(*it)->Nodes(); j++ ) 
@@ -2332,8 +2318,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
    // 1. Property Access in the Model
    // ------------------------------------
-   map<string,Index>            prop_list;
-   typename map<string,Index>::iterator  pit;
+   map<string,Index>  prop_list;
    sgroup.Database().ListProperties( prop_list );
 
    if ( prop_list.empty() )
@@ -2373,13 +2358,13 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
    // -----------------------
    // 4.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    char object_name[200];
    strcpy( object_name, "CSP_object" );
    strcat( object_name, step );
    GocadHeader  header( "TSurf", object_name, fname );
 
-   for ( pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
+   for ( auto pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
      {
         if ( (*pit).second.place == NODE )
           {
@@ -2397,11 +2382,11 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
    // 4.2 Writing the vertex=Node data to file
    // ----------------------------------------
-   typename vector<Node<dim>*>::const_iterator   nit =  sg.NodesBegin();
    ScalarVariable                                val;
    VectorVariable<dim>                           vc;
    TensorVariable<dim>                           ts;
    size_t                                        i, j;
+   auto nit = sg.NodesBegin();
 
    // All properties are output as NODE Properties
    // --------------------------------------------
@@ -2410,7 +2395,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
         ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
         ofs << (*nit)->x() <<" "<< (*nit)->y() <<" "<< 0.0 <<" ";
                 
-        for ( pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
+        for ( auto pit=prop_list.begin(); pit!=prop_list.end(); pit++ )
           {
              csmp::Index  prop_key((*pit).second);
              if ( prop_key.place == NODE )
@@ -2441,14 +2426,11 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
     // 4.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    typename vector<Element<dim>*>::const_iterator  eit(sg.ElementsBegin());
-
-    while ( eit != sg.ElementsEnd() )
+    for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
       {
          ofs <<"TRGL ";
          for ( j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
          ofs << endl;
-         eit++;
       }
     ofs << "END"<< endl;    
 
@@ -2553,7 +2535,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    // -----------------------
    // 3.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    sg.MinMaxOf( var, pmin, pmax );
    char object_name[200];
    strcpy( object_name, "CSMP_object" );
@@ -2566,12 +2548,10 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
 
    // 3.2 Writing the vertex=Node data to file
    // ----------------------------------------
-   typename vector<Node<dim>*>::const_iterator    nit =  sg.NodesBegin();
-   typename vector<Element<dim>*>::const_iterator eit;
    ScalarVariable                               sc;
    VectorVariable<dim>                           vc;
    TensorVariable<dim>                           ts;
-   vector<double64>                                       xyz;
+   vector<double>                                xyz;
    size_t                                        i, j;
 
    // 3.3 All properties are output as NODE Properties
@@ -2597,7 +2577,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
              ts_elmt_data.reserve( sg.Nodes() );
              for ( i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
+        for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
           {
               switch ( prop_key.type )
                 {
@@ -2624,7 +2604,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    switch( prop_key.place )
      {
         case NODE:
-             while ( nit != sg.NodesEnd() )
+             for ( auto nit=sg.NodesBegin(); nit != sg.NodesEnd(); ++nit )
                {
                   (*nit)->Read(prop_key, sc );
                   ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
@@ -2632,12 +2612,11 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                   ofs << sc();
                   if ( (*nit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
                   ofs << endl;
-                  nit++;
-               } 
+               }
           break;
         case ELEMENT_INTEGRATION_POINT: {
                size_t  counter(0U);
-               while ( eit != sg.ElementsEnd() )
+               for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
                  {
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         // getting constraint point coordinates
@@ -2646,16 +2625,15 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                         ofs <<"PVRTX "<< counter++ <<" ";
                         ofs << xyz[0] <<" "<< xyz[1] <<" "<< xyz[2] <<" ";
                         ofs << sc();
-                        if ( (*eit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
+                        if ( atBoundary(*eit) != NOT ) ofs <<" CNXYZ";
                         ofs << endl;
                       }
-                    eit++;
-                 } 
+                 }
              }
            break;
         case ELEMENT:
-             while ( nit != sg.NodesEnd() )
-               {             
+             for ( auto nit=sg.NodesBegin(); nit != sg.NodesEnd(); ++nit )
+               {
                    ofs <<"PVRTX "<< (*nit)->Idx() <<" ";
                    ofs << (*nit)->x() <<" "<< (*nit)->y() <<" "<< (*nit)->z() <<" ";
                    switch( prop_key.type )
@@ -2676,7 +2654,6 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                     }
                   if ( (*nit)->AtBoundary() != NOT ) ofs <<" CNXYZ";
                   ofs << endl;
-                  nit++;
               }
           break;
         default:
@@ -2687,7 +2664,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
 
     // 5.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    for ( eit=sg.ElementsBegin(); eit!= sg.ElementsEnd(); eit++ )
+    for ( auto eit=sg.ElementsBegin(); eit!= sg.ElementsEnd(); eit++ )
       {
          ofs <<"TETRA ";
          for ( size_t j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
@@ -2815,7 +2792,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    // -----------------------
    // 4.1 writing the file header
    // ---------------------------
-   double64  pmin, pmax;
+   double  pmin, pmax;
    gref.MinMaxOf( var, pmin, pmax );
    char object_name[200];
    strcpy( object_name, group_name );
@@ -2832,11 +2809,9 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    vector<size_t>    nodes(   gref.Nodes() );
    vector<size_t>    elmts(   gref.Elements() );
 
-   for ( typename vector<Node<dim>*>::const_iterator
-         nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++, i++ ) nodes[i] = (*nit)->Idx();
+   for ( auto nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++, i++ ) nodes[i] = (*nit)->Idx();
      
-   for ( typename vector<Element<dim>*>::const_iterator 
-         it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++, i++ ) elmts[i] = (*it)->Idx();
+   for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++, i++ ) elmts[i] = (*it)->Idx();
 
    // 4.4 making a list of element properties if these are required
    // -------------------------------------------------------------
@@ -2871,8 +2846,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
              ts_elmt_data.reserve(gref.Nodes() );
              for ( i=0; i<gref.Nodes(); i++ ) ts_elmt_data.push_back( ts );
           }
-        for ( typename vector<Element<dim>*>::const_iterator
-              it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+        for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
           {
               for ( j=0; j<(*it)->Nodes(); j++ ) elmt_nds.insert( (*it)->N(j)->Idx() );
               switch ( prop_key.type )
@@ -2927,8 +2901,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                } 
           break;
         case ELEMENT_INTEGRATION_POINT: 
-             for ( typename vector<Element<dim>*>::const_iterator
-                   it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+             for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
                {
                   for ( j=0; j<(*it)->IntegrationPoints(); j++ ) {
                         // getting constraint point coordinates
@@ -2937,7 +2910,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                         ofs <<"PVRTX "<< i+1 <<" ";
                         ofs << xyz[0] <<" "<< xyz[1] <<" "<< xyz[2] <<" ";
                         ofs << sc();
-                        if ( (*it)->AtBoundary() != NOT ) ofs <<" CNXYZ";
+                        if ( atBoundary(*it) != NOT ) ofs <<" CNXYZ";
                         ofs << endl;
                     }
                } 
@@ -3072,13 +3045,13 @@ Loops through plist making a map of node numbers. If this map has jumps
 in the numbering, these are detected when looping through it again. 
  */
 template<size_t dim>
-bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<size_t> >& plist ) 
+bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<int64_t> >& plist )
  const 
  {
-    map<size_t,vector<size_t> >::const_iterator  it;
-    vector<size_t>::const_iterator                  nit;
-    set<size_t>                                     node_numbers;
-    set<size_t>::const_iterator                     sit;
+    map<size_t,vector<int64_t> >::const_iterator  it;
+    vector<int64_t>::const_iterator                  nit;
+    set<int64_t>                                     node_numbers;
+    set<int64_t>::const_iterator                     sit;
     size_t                                          counter(1);
     
     for ( it=plist.begin(); it!=plist.end(); it++ )

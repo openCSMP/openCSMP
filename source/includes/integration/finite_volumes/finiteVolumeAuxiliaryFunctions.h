@@ -11,12 +11,18 @@ namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
+template<size_t dim, template<size_t> class CELL> class ModelSubDomain;
 template<size_t> class Region;
 template<size_t> class Model;
+
 
 /**
 @addtogroup CSMPglobalFunctions
 */
+
+    /// identifies "halo" elements/faces/interfaces, i.e. which contribute to domain FVs, but are outside of domain, returns number
+template<size_t dim, template<size_t> class CELL>
+size_t collectHaloStencils( const ModelSubDomain<dim,CELL>&, std::vector<CELL<dim>*>& halo_stencils );
 
 /**
     taking into account element thickness and total velocity, initialises:
@@ -29,43 +35,43 @@ template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<
 template<size_t dim> void initializeBasicFiniteVolumeProperties( Model<dim>&, Region<dim>& );
 
 /// sums precomputed fluxes over the facets that surround the FE - FV sector; thickness of dim-1 elements is taken into account
-template<size_t dim> double64 sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key );
+template<size_t dim> double sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key );
 
 template<size_t dim>
-double64 fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey );
+double fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey );
 
 template<size_t dim, typename ForwardIt>
-double64 fluxThroughFiniteVolumes( ForwardIt nodesBegin, ForwardIt nodesEnd, Index const& velocityKey );
+double fluxThroughFiniteVolumes( ForwardIt nodesBegin, ForwardIt nodesEnd, Index const& velocityKey );
 
 
-double64  diffusionVelocity( const Region<1>& super_group,
+double  diffusionVelocity( const Region<1>& super_group,
                              const Node<1U>* const nd,
                              const std::set<size_t>& ngraph_entry,
                              const csmp::Index& advected_var_key );
 
-double64  diffusionVelocity( const Region<2>&,
+double  diffusionVelocity( const Region<2>&,
                              const Node<2U>* const,
                              const std::set<size_t>&,
                              const csmp::Index& );
 
-double64  diffusionVelocity( const Region<3>&,
+double  diffusionVelocity( const Region<3>&,
                              const Node<3U>* const,
                              const std::set<size_t>&,
                              const csmp::Index& );
 
-double64 delta_X_FromFV_Volume( double64 FV_volume, size_t dim );
+double delta_X_FromFV_Volume( double FV_volume, size_t dim );
 
-double64 omega( double64 dt, double64 pore_vol, double64 src );
+double omega( double dt, double pore_vol, double src );
 
-double64 NVD_Function( double64 xi, double64 U_f, double64 U_c );
+double NVD_Function( double xi, double U_f, double U_c );
 
 /// minmod limiter with coefficient xi that controls maximum permissible gradient
-double64 limitProperty( double64 psi_hat_c, double64 psi_hat_d, double64 psi_facet,
-                        const std::pair<double64,double64>& SMINMAX_at_upstream_node,
-                        double64 limiter_value_xi=2. );
+double limitProperty( double psi_hat_c, double psi_hat_d, double psi_facet,
+                        const std::pair<double,double>& SMINMAX_at_upstream_node,
+                        double limiter_value_xi=2. );
 
-double64 limitProperty( double64 psi_hat_c, double64 psi_hat_u,
-                        double64 min, double64 max );
+double limitProperty( double psi_hat_c, double psi_hat_u,
+                        double min, double max );
 
 /// limiting with node-based property gradients, see Geiger et al. (2004, Geofluids)
 template <size_t dim>
@@ -74,27 +80,27 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
                             const csmp::Index& grad_sn_key,
                             const csmp::Index& grad_sn_limiter_key,
                             size_t inside_node, size_t outside_node, size_t iFacet,
-                            const double64 sn_inside_node, const double64 sn_outside_node,
-                            double64& limited_sn_inside_node, double64& limited_sn_outside_node );
+                            const double sn_inside_node, const double sn_outside_node,
+                            double& limited_sn_inside_node, double& limited_sn_outside_node );
 
 /// limiting with node-based property gradients, see Geiger et al. (2004, Geofluids)
 template <size_t dim>
-double64 limitProperty_LSMGRAD( const Element<dim>& e,
+double limitProperty_LSMGRAD( const Element<dim>& e,
                             const csmp::Index& mass_center_key,
                             const csmp::Index& grad_sn_key,
                             const csmp::Index& grad_sn_limiter_key,
                             size_t ustream_node, size_t iFacet,
-                            const double64 sn_upstream_node);
+                            const double sn_upstream_node);
 
 /// Matthai et al. 2009 (TIPM) explains theta limiting concept
-double64 thetaLimiter( double64 hf_t0, double64 hf_t1,
-                       double64 vol_upstr, double64 vol_dwstr,
-                       double64 psi_hat_c_t1_minus_psi_hat_c_t0,
-                       double64 psi_hat_d_t1_minus_psi_hat_d_t0,
-                       double64 dt ); 
+double thetaLimiter( double hf_t0, double hf_t1,
+                       double vol_upstr, double vol_dwstr,
+                       double psi_hat_c_t1_minus_psi_hat_c_t0,
+                       double psi_hat_d_t1_minus_psi_hat_d_t0,
+                       double dt ); 
 
 /// gradient limiter for the solution of diffusion equations with the FVM method
-double64 diffusionLimiter( double64 grad_psi_O1, double64 grad_psi_O2 );
+double diffusionLimiter( double grad_psi_O1, double grad_psi_O2 );
 
 /**
 @}

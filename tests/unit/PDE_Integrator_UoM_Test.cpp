@@ -15,8 +15,7 @@ namespace csmp {
 
     string mesh_name(modelName);
     const bool binary_file(true);
-    const bool irregular_mesh(false); // irregular_boundary! BOX SHAPE or IRREGULAR SHAPE
-    mesh_interface.Read_ANSYS_Mesh(mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh);
+    mesh_interface.Read_ANSYS_Mesh(mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
     cout << "Finished reading mesh..." << endl;
     cout << "Building Model..." << endl;
     model = new Model<2U>(mesh_topology, mesh_container, "PDE_Integrate_UoM_2phase-variables.txt");
@@ -323,14 +322,14 @@ void PDE_Integrator_UoM_Test::TestTwoScalarVariables() {
     pde_test->Add(sourceVolume);    
     pde_test->EstablishMatrixSetupTest(region);
     pde_test->EnumerateAndFixMatrixSize(region);
-    std::map<size_t, double64> result;
+    std::map<size_t, double> result;
     for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       if ((*nIter)->Status(pressureKey) != DIRICH) {
         result[(*nIter)->Idx()] = (*nIter)->Read(pressureKey);
       } 
     }
 
-    std::vector<double64>* valid_x = pde_test->GetX();
+    std::vector<double>* valid_x = pde_test->GetX();
     size_t idx(0);
     for (auto& it : result) {
       (*valid_x)[idx] = it.second;

@@ -196,8 +196,8 @@ void Geothermal_Example::Run()
   //! 4. Pressure, temperature, mass and enthalpy transfer computation
   //! ------------------------------------------------------------------
   //! time
-  double64 max_time = 3.15e9 * 30; //3000 years
-  double64 time_increment = 3.15e7; //1 year
+  double max_time = 3.15e9 * 30; //3000 years
+  double time_increment = 3.15e7; //1 year
   size_t time_step = 0;
 
   //! definition of output properties - comment out if not wanted
@@ -248,7 +248,7 @@ void Geothermal_Example::Run()
   //! ------------------------------------------------------------------
   //! 5. PT-equlibration loop
   //! ------------------------------------------------------------------
-  double64& global_time( ModelTime::Instance().modelTime );
+  double& global_time( ModelTime::Instance().modelTime );
   global_time = 0.;
 
   while ( global_time <= max_time )
@@ -258,10 +258,10 @@ void Geothermal_Example::Run()
     model.Apply( temperature_diffusion );
 
     //! enthalphy transport
-    double64 time_advection( 0. );
+    double time_advection( 0. );
     while ( time_advection < time_increment )
     {
-      double64 time_increment_advection( mass_advection.AnisotropicCourantIncrement() );
+      double time_increment_advection( mass_advection.AnisotropicCourantIncrement() );
       if ( time_advection + time_increment_advection > time_increment )
         time_increment_advection = time_increment - time_advection;
 
@@ -353,8 +353,8 @@ bool Geothermal_Example::Compare( Model<DIM>& model, const string& file ) const
   size_t flag( 0 );
   size_t nPoints;
   ScalarVariable result( PLAIN, 0.0 );
-  map<size_t, std::vector<double64> > points;
-  vector<double64>  values;
+  map<size_t, std::vector<double> > points;
+  vector<double>  values;
 
   fin = fopen( file.c_str(), "r" );
   if ( fin == NULL ) {

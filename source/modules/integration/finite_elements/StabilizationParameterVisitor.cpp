@@ -7,7 +7,7 @@ namespace csmp {
 
 template<size_t dim>
 StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& mdl,
-                                                                   double64 mu, double64 coeff,
+                                                                   double mu, double coeff,
                                                                    const char* stab_param)
   : pref(mdl.Database()),
     viscosity(mu), coefficient(coeff),
@@ -21,7 +21,7 @@ StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& m
 
 template<size_t dim>
 StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& mdl,
-                                                                   double64 coeff,
+                                                                   double coeff,
                                                                    const char* stab_param)
   : pref(mdl.Database()),
     viscosity(1.6e-3), // water at room temperature

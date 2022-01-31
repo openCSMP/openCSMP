@@ -63,7 +63,7 @@ void ErrorMetric_Example::Run()
    // -----------------------------------------------------------------------
    // 1. hydraulic conductivity and other interrelations
    // -----------------------------------------------------------------------
-    const double64 fluid_viscosity(1.0e-03);
+    const double fluid_viscosity(1.0e-03);
     ConstantFactor<3U,divides>  conductivity( model.Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );
@@ -180,11 +180,11 @@ void ErrorMetric_Example::discretizationError3D( Model<3U>& sg, const char* hess
 
          // computing the element length in the directions of the eigenvectors
          vc(0) = evecs(0,0), vc(1) = evecs(0,1), vc(2) = evecs(0,2);
-         const double64  d1 = (*eit)->LengthInDirection( vc );
+         const double  d1 = (*eit)->LengthInDirection( vc );
          vc(0) = evecs(1,0), vc(1) = evecs(1,1), vc(2) = evecs(1,2);
-         const double64  d2 = (*eit)->LengthInDirection( vc );
+         const double  d2 = (*eit)->LengthInDirection( vc );
          vc(0) = evecs(2,0), vc(1) = evecs(2,1), vc(2) = evecs(2,2);
-         const double64  d3 = (*eit)->LengthInDirection( vc );
+         const double  d3 = (*eit)->LengthInDirection( vc );
 
          // computing e = vT |H| v
          vc(0) = d1, vc(1) = d2, vc(2) = d3;

@@ -434,7 +434,7 @@ namespace csmp {
 	}
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::MultiplyBy(double64 multiplication_factor)
+	void MathOperatorLHS<dim>::MultiplyBy(double multiplication_factor)
 	{
 		factor_ = multiplication_factor;
 	}
@@ -502,7 +502,7 @@ namespace csmp {
 	}
 
 	template<size_t dim>
-	double64   MathOperatorLHS<dim>::MultiplyBy() const
+	double   MathOperatorLHS<dim>::MultiplyBy() const
 	{
 		return factor_;
 	}
@@ -755,7 +755,7 @@ namespace csmp {
 	  first vector entry MTRL[0].
 	  */
 	template<size_t dim>
-	void MathOperatorLHS<dim>::GetOperands(Element<dim>& e_ref)
+	void MathOperatorLHS<dim>::GetOperands( const Element<dim>& e_ref )
 	{
 		// if operand property is an element property
 		if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
@@ -835,7 +835,7 @@ namespace csmp {
 	} // end GetOperands(Element)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::GetOperands(Face<dim>&  e_ref)
+	void MathOperatorLHS<dim>::GetOperands( const Face<dim>&  e_ref )
 	{
 		// if operand property is an element property
 		if (MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == BOUNDARY)
@@ -915,7 +915,7 @@ namespace csmp {
 	} // end GetOperands(Face)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::GetOperands(InterFace<dim>& f)
+	void MathOperatorLHS<dim>::GetOperands( const InterFace<dim>& f)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::GetOperands: ";
 		std::cerr << " Overload to get LHS operands from interface: " << f.Idx() << std::endl;
@@ -949,7 +949,7 @@ namespace csmp {
 	} // end WriteOperands(InterFace)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::ComputeContribution(Element<dim>& e)
+	void MathOperatorLHS<dim>::ComputeContribution( const Element<dim>& e)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
 		std::cerr << " Overload to calculate LHS contribution from Element: " << e.Idx() << std::endl;
@@ -957,7 +957,7 @@ namespace csmp {
 	}// end ComputeContribution(Element)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::ComputeContribution(Face<dim>& f)
+	void MathOperatorLHS<dim>::ComputeContribution( const Face<dim>& f)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
 		std::cerr << " Overload to calculate LHS constribution from face: " << f.Idx() << std::endl;
@@ -965,7 +965,7 @@ namespace csmp {
 	}// end ComputeContribution(Face)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::ComputeContribution(InterFace<dim>& f)
+	void MathOperatorLHS<dim>::ComputeContribution( const InterFace<dim>& f)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
 		std::cerr << " Overload to calculate LHS constribution from interface: " << f.Idx() << std::endl;
@@ -974,14 +974,14 @@ namespace csmp {
 
 
 	template<size_t dim>
-	inline void MathOperatorLHS<dim>::MultiplyWithTimeFactor(double64 dt)
+	inline void MathOperatorLHS<dim>::MultiplyWithTimeFactor(double dt)
 	{
 		LHS *= dt;
 	}
 
 	/// AssignToGlobal matrix function
 	template<size_t dim>
-	void MathOperatorLHS<dim>::AssignToGlobal(const Element<dim>& e, SparseMatrix& G, std::vector<double64>& pivotVector, const  std::vector<size_t>& DOF_indexes)
+	void MathOperatorLHS<dim>::AssignToGlobal(const Element<dim>& e, SparseMatrix& G, std::vector<double>& pivotVector, const  std::vector<size_t>& DOF_indexes)
 	{
 		// map local to global indexes for test and basic operands
 		IDT.resize(e.Nodes()); // ii
@@ -1008,7 +1008,7 @@ namespace csmp {
 		}
 
 		// get (component of) local value of a local node 
-		std::vector<double64> nodal_values(IDB.size());
+		std::vector<double> nodal_values(IDB.size());
 		{
 			if (this->TestOperandType() == SCALAR) {
 				for (size_t nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
@@ -1142,7 +1142,7 @@ namespace csmp {
 	} // end AssignToGlobal (Element)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::AssignToGlobal(const Face<dim>& e, SparseMatrix& G, std::vector<double64>& pivotVector, const  std::vector<size_t>& DOF_indexes)
+	void MathOperatorLHS<dim>::AssignToGlobal(const Face<dim>& e, SparseMatrix& G, std::vector<double>& pivotVector, const  std::vector<size_t>& DOF_indexes)
 	{
 		// map local to global indexes for test and basic operands
 		IDT.resize(e.Nodes());
@@ -1170,7 +1170,7 @@ namespace csmp {
 		}
 
 		// get (component of) local value of a local node 
-		std::vector<double64> nodal_values(IDB.size());
+		std::vector<double> nodal_values(IDB.size());
 		{
 			if (this->TestOperandType() == SCALAR) {
 				for (size_t nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
@@ -1302,7 +1302,7 @@ namespace csmp {
 	} // end AssignToGlobal (Face)
 
 	template<size_t dim>
-	void MathOperatorLHS<dim>::AssignToGlobal(const InterFace<dim>& f, SparseMatrix& G, std::vector<double64>& pivotVector, const  std::vector<size_t>& DOF_indexes)
+	void MathOperatorLHS<dim>::AssignToGlobal(const InterFace<dim>& f, SparseMatrix& G, std::vector<double>& pivotVector, const  std::vector<size_t>& DOF_indexes)
 	{
 		std::cerr << "\nMathOperatorLHS<dim>::AssignToGlobal(InterFace): ";
 		std::cerr << " Overload to assign LHS local entries to global matrix: " << f.Idx() << std::endl;

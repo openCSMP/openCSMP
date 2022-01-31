@@ -142,7 +142,7 @@ points and multiplied with the n- and e-multipliers. These must be
 nodal and element variables, respectively.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -239,7 +239,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( CELL& e )
 In linear elasticity computations.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
@@ -255,7 +255,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( CELL& e
          // -----------------------------------------
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (DN is already in global coordinates)
-         double64 detJ = e.dN_AtIntegrationPoint( DN, i, 1 );
+         double detJ = e.dN_AtIntegrationPoint( DN, i, 1 );
 
          // transposing DN -> DNT and saving it in DIFF (diffusion matrix)
          DN.Transposed( DNT );
@@ -312,8 +312,8 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( CELL& e
 
 
 template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( CELL& e,
-                                                                         DenseMatrix<DM_MIN>& MULT )
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( const CELL& e,
+                                                                           DenseMatrix<DM_MIN>& MULT )
  {
     MULT.Resize(dim,dim);
  

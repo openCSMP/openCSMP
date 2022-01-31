@@ -1,4 +1,7 @@
 #include "CVFEM_Visitor.h"
+#include "ErrorHandler.h"
+#include "Exception.h"
+
 
 using namespace std;
 
@@ -247,10 +250,10 @@ void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOpera
  } // Add
  
 template<size_t dim>
-void CVFEM_Visitor<dim>::SetTimeIncrement( double64 time_increment )
+void CVFEM_Visitor<dim>::SetTimeIncrement( double time_increment )
  {
    dt = time_increment;
- } // SetTimeIncrement( double64 time_increment )
+ } // SetTimeIncrement( double time_increment )
 
 template<size_t dim>
 CVFEM_Visitor<dim>::Operator_LHS::Operator_LHS( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorLHS<dim>* lhs_op )

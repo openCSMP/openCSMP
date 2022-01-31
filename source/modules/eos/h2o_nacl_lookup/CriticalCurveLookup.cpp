@@ -14,7 +14,7 @@ using namespace std;
 namespace csmp
 {
 
-  CriticalCurveLookup::CriticalCurveLookup(const double64& externaltemperature)
+  CriticalCurveLookup::CriticalCurveLookup(const double& externaltemperature)
     : temperature(externaltemperature),
       tcurrent(0.0),
       pcurrent(0.0),
@@ -55,7 +55,7 @@ namespace csmp
         cout <<"\nCriticalCurveLookup: file "<< filename;
         cout <<" could not be opened, computing ..."<< endl;
 	
-        double64        xcurrent(0.0);
+        double        xcurrent(0.0);
 
         CriticalCurve   critcurve(tcurrent);
         Brine           brine(tcurrent,pcurrent,xcurrent); 
@@ -81,7 +81,7 @@ namespace csmp
         GetTemperatureIndex(374.0001);
         for(tcurrent = 374.0e0; tcurrent < 1000.1e0; tcurrent += t_res)
           {
-            GetTemperatureIndexCriticalCurve(tcurrent+2.0*numeric_limits<double64>::epsilon());
+            GetTemperatureIndexCriticalCurve(tcurrent+2.0*numeric_limits<double>::epsilon());
             cout << "computing for t = " << tcurrent << ", t_res = " << t_res << ", data set " << it << "\t" << myit << endl;
             if(it > t_dim+it_min-1) break;
 
@@ -112,16 +112,16 @@ namespace csmp
         else
           {
             cout << "writing file " << filename << " ... ";
-            skm_C_fwrite( outfile, storage_vector );
-			outfile.close();
+            binaryFileWrite( outfile, storage_vector );
+			      outfile.close();
             cout << "done!\n";
           }
       }
     else
       {
         cout << "reading file " << filename << " ... ";
-        skm_C_fread( infile, storage_vector );
-		infile.close();
+        binaryFileRead( infile, storage_vector );
+        infile.close();
         cout << "done!\n";
       }
     cout << "CriticalCurveLookup, leaving constructor ...\n\n";
@@ -134,18 +134,18 @@ namespace csmp
 
 
   // The public interface
-  double64 CriticalCurveLookup::Temperature(){      return ValueOf(temperature_index);                     }
-  double64 CriticalCurveLookup::Pressure(){         return ValueOf(pressure_index);                        }
-  double64 CriticalCurveLookup::MassFractionNaCl(){ return ValueOf(composition_index);                     }
-  //  double64 CriticalCurveLookup::MoleFractionNaCl(){ return Massfraction2XNaCl(ValueOf(composition_index)); }
-  double64 CriticalCurveLookup::Density(){          return ValueOf(density_index);                         }
-  double64 CriticalCurveLookup::Enthalpy(){         return ValueOf(enthalpy_index);                        }
-  double64 CriticalCurveLookup::HeatCapacity(){     return ValueOf(heatcapacity_index);                    }
-  double64 CriticalCurveLookup::Compressibility(){  return ValueOf(compressibility_index);                 }
-  double64 CriticalCurveLookup::Viscosity(){        return ValueOf(viscosity_index);                       }
+  double CriticalCurveLookup::Temperature(){      return ValueOf(temperature_index);                     }
+  double CriticalCurveLookup::Pressure(){         return ValueOf(pressure_index);                        }
+  double CriticalCurveLookup::MassFractionNaCl(){ return ValueOf(composition_index);                     }
+  //  double CriticalCurveLookup::MoleFractionNaCl(){ return Massfraction2XNaCl(ValueOf(composition_index)); }
+  double CriticalCurveLookup::Density(){          return ValueOf(density_index);                         }
+  double CriticalCurveLookup::Enthalpy(){         return ValueOf(enthalpy_index);                        }
+  double CriticalCurveLookup::HeatCapacity(){     return ValueOf(heatcapacity_index);                    }
+  double CriticalCurveLookup::Compressibility(){  return ValueOf(compressibility_index);                 }
+  double CriticalCurveLookup::Viscosity(){        return ValueOf(viscosity_index);                       }
 
 
-  double64 CriticalCurveLookup::ValueOf( const int& property_index)
+  double CriticalCurveLookup::ValueOf( const int& property_index)
   {
     tcurrent = temperature;
     GetTemperatureIndexCriticalCurve(tcurrent);
@@ -174,11 +174,11 @@ namespace csmp
     // t_dim is therefore (1000-550)/10+285 + 1 = 331
   }
 
-  void CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double64& t)
+  void CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double& t)
   {
     // the if-statements could be enclosed with preprocessor-idefs (e.g. referring to "verbose")
-    if(!definitelyLessThan(    t, cp_h2o.Temperature(), numeric_limits<double64>::epsilon() ) && 
-       !definitelyGreaterThan( t, 1000.0e0, 10.0*numeric_limits<double64>::epsilon() ) )
+    if(!definitelyLessThan(    t, cp_h2o.Temperature(), numeric_limits<double>::epsilon() ) && 
+       !definitelyGreaterThan( t, 1000.0e0, 10.0*numeric_limits<double>::epsilon() ) )
       {
         GetTemperatureIndex(t);
         it -= it_min;
@@ -186,24 +186,24 @@ namespace csmp
       }
     else
       {
-        if( definitelyLessThan (t, cp_h2o.Temperature(),numeric_limits<double64>::epsilon() ) )
+        if( definitelyLessThan (t, cp_h2o.Temperature(),numeric_limits<double>::epsilon() ) )
           {
             csmp_error.notice( FATAL_ERROR, 
-                             "CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double64& t) -",
+                             "CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double& t) -",
                              "temperature is less than critical temperature for H2O and therefore out of range, terminating ...\n");
           }
-        if( definitelyGreaterThan (t, 1000.0,10.0*numeric_limits<double64>::epsilon() ) )
+        if( definitelyGreaterThan (t, 1000.0,10.0*numeric_limits<double>::epsilon() ) )
           {
             cerr << "delta is " << t-1000.0e0 << " for t = " << t << endl;
             csmp_error.notice( FATAL_ERROR, 
-                             "CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double64& t) -",
+                             "CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double& t) -",
                              "temperature is higher than 1000 C and therefore out of range, terminating ...\n");
           }
       }
     return;
   }
 
-  double64 CriticalCurveLookup::TfromP(const double64& press)
+  double CriticalCurveLookup::TfromP(const double& press)
   {
     double mypress = press;
     tcurrent = temperature; // debugging only

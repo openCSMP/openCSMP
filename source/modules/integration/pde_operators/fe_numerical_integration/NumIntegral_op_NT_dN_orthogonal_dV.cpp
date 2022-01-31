@@ -55,7 +55,7 @@ nodal and element variables, respectively.
 The operand is read
 */
 template<size_t dim,class CELL>
-void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( CELL& e )
+void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -80,9 +80,9 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( CELL& e )
 In linear elasticity computations.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
-    double64  detJ;
+    double  detJ;
 
     // resizing and initializing RHS vector to zero
     MathOperatorRHS<dim>::RHS.resize( e.Nodes() );

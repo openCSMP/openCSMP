@@ -13,31 +13,23 @@ namespace csmp {
 */
 
 /// triangle area
-double64 triangleArea( const Point<3U>&, 
+double triangleArea( const Point<3U>&, 
                        const Point<3U>&, 
                        const Point<3U>& );
-
-double64 triangleArea( const Point<2U>&,
+/// area  in 2D
+double triangleArea( const Point<2U>&,
                        const Point<2U>&,
                        const Point<2U>& );
-
-double64 triangleArea( const Point<1U>&,
-                       const Point<1U>&,
-                       const Point<1U>& );
 
 /// returns the normal of a triangle
 Point<3U>  normalOfTriangle( const Point<3U>&, 
                              const Point<3U>&, 
-                             const Point<3U>& );                      
-
+                             const Point<3U>& );      
+                                             
+/// returns zero because the normal is not captured by coordinate system
 Point<2U>  normalOfTriangle( const Point<2U>&, 
                              const Point<2U>&, 
                              const Point<2U>& ); 
-
-Point<1U>  normalOfTriangle( const Point<1U>&,
-                             const Point<1U>&,
-                             const Point<1U>& );
-
 
 /**
 @}

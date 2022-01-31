@@ -15,13 +15,13 @@ class Integral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim> {
                                      const char* basic,            // e.g., fluid pressure
                                      const char* test );           // streamfunction
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
 
   private:
     DenseMatrix<DM_MIN>  M, DNORTHO, NT; 
-    std::vector<double64>         NPROP, IPOL, UNITY, RES;
-    const double64                zero, one;
+    std::vector<double>         NPROP, IPOL, UNITY, RES;
+    const double                zero, one;
 };
 
 } // csmp

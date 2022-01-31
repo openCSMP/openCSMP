@@ -44,10 +44,10 @@ namespace csmp
         Point<2> Point2U;
         Point<3> Point3U;
 
-        std::vector<double64> x, y, sol_y, solB, solD;
+        std::vector<double> x, y, sol_y, solB, solD;
         std::vector<size_t> sizetVector;
 
-        double64   fTolerance;
+        double   fTolerance;
         const bool verbose_;
     };
 }

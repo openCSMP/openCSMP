@@ -4,27 +4,27 @@ using namespace std;
 
 namespace csmp {
 
-double64& TensorVariable<1U>::operator()( size_t, size_t ) 
+double& TensorVariable<1U>::operator()( size_t, size_t ) 
  {
     return data; 
  }
 
 
-const double64& TensorVariable<1U>::operator()( size_t, size_t ) const
- {
-    return data; 
- }
-
-
-
-double64 TensorVariable<1U>::Component( size_t ) const
+const double& TensorVariable<1U>::operator()( size_t, size_t ) const
  {
     return data; 
  }
 
 
 
-void  TensorVariable<1U>::Component( size_t, double64 val ) 
+double TensorVariable<1U>::Component( size_t ) const
+ {
+    return data; 
+ }
+
+
+
+void  TensorVariable<1U>::Component( size_t, double val ) 
  {
     data = val; 
  }
@@ -48,14 +48,14 @@ size_t TensorVariable<1U>::Size() const
     return 1U;
   }
 
-void TensorVariable<1U>::Resize( size_t, double64 newValue )
+void TensorVariable<1U>::Resize( size_t, double newValue )
   {
     data = newValue;
   }
 
 
 TensorVariable<1U>::TensorVariable()
-   : flag(ANY), data(std::numeric_limits<double64>::quiet_NaN())
+   : flag(ANY), data(std::numeric_limits<double>::quiet_NaN())
   {
   }
 
@@ -81,7 +81,7 @@ TensorVariable<1U>::TensorVariable( const TensorVariable<1U>& t )
 
 
 
-TensorVariable<1U>::TensorVariable( VARIABLE_FLAG f, double64 val )
+TensorVariable<1U>::TensorVariable( VARIABLE_FLAG f, double val )
  : flag(f), data(val)
  {
  } 
@@ -109,28 +109,28 @@ TensorVariable<1U>  TensorVariable<1U>::operator-( const TensorVariable<1U>& t )
  }
 
 
-TensorVariable<1U>  TensorVariable<1U>::operator+( double64 val ) const
+TensorVariable<1U>  TensorVariable<1U>::operator+( double val ) const
  {
       return TensorVariable<1U>( flag, data+val );
  }
  
  
 
-TensorVariable<1U>  TensorVariable<1U>::operator-( double64 val ) const
+TensorVariable<1U>  TensorVariable<1U>::operator-( double val ) const
  {
       return TensorVariable<1U>( flag, data-val );
  }
  
  
 
-TensorVariable<1U>  TensorVariable<1U>::operator*( double64 val ) const
+TensorVariable<1U>  TensorVariable<1U>::operator*( double val ) const
  {
       return TensorVariable<1U>( flag, data*val );
  }
  
  
 
-TensorVariable<1U>  TensorVariable<1U>::operator/( double64 val ) const
+TensorVariable<1U>  TensorVariable<1U>::operator/( double val ) const
  {
       return TensorVariable<1U>( flag, data/val );
  }
@@ -243,7 +243,7 @@ TensorVariable<1U>&  TensorVariable<1U>::operator*=( const TensorVariable<1U>& t
 
 
 
-TensorVariable<1U>&  TensorVariable<1U>::operator+=( double64 val )
+TensorVariable<1U>&  TensorVariable<1U>::operator+=( double val )
  {
     data += val;
     return *this; 
@@ -251,7 +251,7 @@ TensorVariable<1U>&  TensorVariable<1U>::operator+=( double64 val )
 
 
 
-TensorVariable<1U>&  TensorVariable<1U>::operator-=( double64 val )
+TensorVariable<1U>&  TensorVariable<1U>::operator-=( double val )
  {
     data -= val;
     return *this; 
@@ -259,7 +259,7 @@ TensorVariable<1U>&  TensorVariable<1U>::operator-=( double64 val )
 
 
 
-TensorVariable<1U>&  TensorVariable<1U>::operator*=( double64 val )
+TensorVariable<1U>&  TensorVariable<1U>::operator*=( double val )
  {
     data *= val;
     return *this; 
@@ -267,7 +267,7 @@ TensorVariable<1U>&  TensorVariable<1U>::operator*=( double64 val )
 
 
 
-TensorVariable<1U>&  TensorVariable<1U>::operator/=( double64 val )
+TensorVariable<1U>&  TensorVariable<1U>::operator/=( double val )
  {
     data /= val;
     return *this; 
@@ -278,7 +278,7 @@ TensorVariable<1U>&  TensorVariable<1U>::operator/=( double64 val )
 // --------------------
 
 
-TensorVariable<1U>&  TensorVariable<1U>::operator=( double64 val )
+TensorVariable<1U>&  TensorVariable<1U>::operator=( double val )
  {
     data = val;
     return *this; 
@@ -338,7 +338,7 @@ bool  TensorVariable<1U>::operator<( const TensorVariable<1U>& t ) const
 
 void TensorVariable<1U>::Identity()
  {
-    data = static_cast<double64>(1.0);
+    data = static_cast<double>(1.0);
  }
 
 
@@ -350,12 +350,12 @@ TensorVariable<1U>  TensorVariable<1U>::Transposed() const
 
 
 
-double64 TensorVariable<1U>::Determinant() const
+double TensorVariable<1U>::Determinant() const
  {
     return data;
  }
  
-double64 TensorVariable<1U>::Trace() const
+double TensorVariable<1U>::Trace() const
  {
     return data;
  }
@@ -368,7 +368,7 @@ TensorVariable<1U> TensorVariable<1U>::Inverse() const
  
 
 
- double64  TensorVariable<1U>::MinElement() const
+ double  TensorVariable<1U>::MinElement() const
  {
     return data;
  }
@@ -376,7 +376,7 @@ TensorVariable<1U> TensorVariable<1U>::Inverse() const
   
 
 
- double64  TensorVariable<1U>::MaxElement() const
+ double  TensorVariable<1U>::MaxElement() const
  {
     return data;
  }
@@ -384,7 +384,7 @@ TensorVariable<1U> TensorVariable<1U>::Inverse() const
  
 
 
-bool  TensorVariable<1U>::IsWithinRange( double64 vmin, double64 vmax ) const
+bool  TensorVariable<1U>::IsWithinRange( double vmin, double vmax ) const
  {
     if ( data < vmin || data > vmax ) return false;
     return true;
@@ -437,16 +437,16 @@ VectorVariable<1U> TensorVariable<1U>::Column( size_t ) const
 
 bool TensorVariable<1U>::Out( std::fstream& fp ) const
 {
-  const int32 flag_0( flag );
-  fp.write( (char*)&flag_0, sizeof( int32 ) ); // VARIABLE_FLAG
-  fp.write( (char*)&data, sizeof( double64 ) );
+  const int32_t flag_0( flag );
+  fp.write( (char*)&flag_0, sizeof( int32_t ) ); // VARIABLE_FLAG
+  fp.write( (char*)&data, sizeof( double ) );
   return true;
 }
 
 bool TensorVariable<1U>::In( std::fstream& fp )
 {
-  fp.read( (char*)&flag, sizeof( int32 ) ); // VARIABLE_FLAG
-  fp.read( (char*)&data, sizeof( double64 ) );
+  fp.read( (char*)&flag, sizeof( int32_t ) ); // VARIABLE_FLAG
+  fp.read( (char*)&data, sizeof( double ) );
   return true;
 }
 

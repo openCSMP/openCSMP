@@ -46,12 +46,12 @@ class MohrCoulombFailure_Visitor : public Visitor<dim> {
 
     TensorVariable<dim>     Cartesian_stress_;
 
-    const double64 degrees_to_radians_;
-    const double64 sqrt3_;
-    const double64 sqrt32_;
-    double64       fluid_pressure_;
-    double64       biot_coefficient_alpha_;
-    double64       sign_of_tensile_stress_;
+    const double degrees_to_radians_;
+    const double sqrt3_;
+    const double sqrt32_;
+    double       fluid_pressure_;
+    double       biot_coefficient_alpha_;
+    double       sign_of_tensile_stress_;
 };
 
 } // end csmp

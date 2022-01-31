@@ -7,8 +7,8 @@ namespace csmp {
 
 void printVector( const std::vector<size_t>& array );
 void printVector( const std::vector<double>& array );
-void printVector( const std::vector<std::vector<double64> >& array );
-void printVector( const char* headline, const std::vector<std::vector<double64> >& array );
+void printVector( const std::vector<std::vector<double> >& array );
+void printVector( const char* headline, const std::vector<std::vector<double> >& array );
 
 template<typename T1, typename T2>
 void printMap( const std::map<T1,T2>& );

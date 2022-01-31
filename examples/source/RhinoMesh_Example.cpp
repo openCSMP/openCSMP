@@ -39,7 +39,7 @@ void RhinoMesh_Example::Specifications()
   AddDescription( "source in: RhinoMesh_Example.cpp" );
   AddDescription( "3D fracture-only flow & transport simulation using Rhino meshes as input" );
   AddDescription( "transport is computed with the higher-order theta-limited implicit scheme" );
-  AddRequirement( "file set: Rhino output '.raw' file called 'Rhino_fault'; variables file: 'example20.txt'");
+  AddRequirement( "file set: Rhino output '.raw' file called 'example20.raw'; variables file: 'example20.txt'");
 } 
 
 
@@ -71,8 +71,7 @@ void RhinoMesh_Example::Run()
       mesh_container.AddData( "permeability", permdata );
 
       const bool isoparametric(true);
-      const bool binaryVariablesFile(false);
-      Model<3U>  model3D( mesh_container, "example20.txt", isoparametric, binaryVariablesFile );
+      Model<3U>  model3D( mesh_container, "example20.txt", isoparametric );
       mesh_container.Erase();
 
       printModelDimensions( model3D, true );
@@ -82,7 +81,7 @@ void RhinoMesh_Example::Run()
       model3D.InputPropertyValue( "nodal fluid volume source", makeScalar(PLAIN,0.) );
       model3D.InputPropertyValue( "fluid pressure",      makeScalar(PLAIN,0.) );
       // parallel plate permeability of a 1-mm fracture
-      const double64 frac_perm(std::pow(0.001,2.)/12.);
+      const double frac_perm(std::pow(0.001,2.)/12.);
       model3D.InputPropertyValue( "permeability",        makeScalar(PLAIN,frac_perm) );
       model3D.InputPropertyValue( "porosity",            makeScalar(PLAIN,1.) );
       model3D.InputPropertyValue( "concentration",       makeScalar(PLAIN,0.) );
@@ -106,7 +105,7 @@ void RhinoMesh_Example::Run()
      // -----------------------------------------------------------------------
      // 0. hydraulic conductivity and other interrelations
      // -----------------------------------------------------------------------
-      const double64 fluid_viscosity(1.6e-3);
+      const double fluid_viscosity(1.6e-3);
       ConstantFactor<3U,divides>  conductivity( model3D.Database(),
                                                "conductivity", "permeability",
                                                 fluid_viscosity );
@@ -150,7 +149,7 @@ void RhinoMesh_Example::Run()
       NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", model3D, "porosity", "concentration",
                                                        "velocity", "nodal fluid volume source", true, true );
 
-      double64 duration, cfl_mult, time_increment = advector.AnisotropicCourantIncrement();
+      double duration, cfl_mult, time_increment = advector.AnisotropicCourantIncrement();
       cout <<"\nmain: Enter advection time and CFL overstepping multiplier (CFL="<< time_increment <<" s): ";
       cin >> duration >> cfl_mult;
 
@@ -181,7 +180,7 @@ void RhinoMesh_Example::SideBoundaryConditions( Model<3U>& sg )
    const csmp::Index  Skey = sg.Database().StorageKey("concentration");
    const csmp::Index  pkey = sg.Database().StorageKey("fluid pressure");
    Region<3>&   gref(sg.Region("Model"));
-   const double64 tol(5.0e-1); // 50-cm match of the position of the nodes
+   const double tol(5.0e-1); // 50-cm match of the position of the nodes
 
    for ( vector<Node<3U>*>::iterator
          nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ )
@@ -212,7 +211,7 @@ void RhinoMesh_Example::SideBoundaryConditions( Model<3U>& sg )
      Creates a rectangular high concentration region for later
      advection on the Rhino surface object.
 */
-void  RhinoMesh_Example::ConcentrationRectangle( Model<3U>& sg, double64 concentration )
+void  RhinoMesh_Example::ConcentrationRectangle( Model<3U>& sg, double concentration )
  {
    csmp::Index  Skey = sg.Database().StorageKey("concentration");
    Region<3>&  gref(sg.Region("Model"));

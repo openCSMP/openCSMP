@@ -14,7 +14,7 @@ discretization.
 */
 template<size_t dim,class SIMPLEX>
 Integral_NT_M_dV_Triangle<dim,SIMPLEX>::Integral_NT_M_dV_Triangle( const PropertyDatabase<dim>& pref,
-                                                              const char* test )
+                                                                   const char* test )
   : MathOperatorRHS<dim>(pref,"permeability",test),
     NPROP(3),
     xyz(dim),
@@ -37,7 +37,7 @@ Integral_NT_M_dV_Triangle<dim,SIMPLEX>::Integral_NT_M_dV_Triangle( const Propert
 /** Reads the Operand values from the elements.
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_M_dV_Triangle<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_NT_M_dV_Triangle<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -58,7 +58,7 @@ multiplied with the Operand.
 N Phi_CV = sum_j Ni(at area barycenter) * area_j * Phi_i
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_M_dV_Triangle<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_NT_M_dV_Triangle<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
   {
      MathOperatorRHS<dim>::RHS.resize(e.Nodes());
 

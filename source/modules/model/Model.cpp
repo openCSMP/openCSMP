@@ -14,14 +14,15 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "Standard_IO_Handler.h"
+#include "variableOperations.h"
 #include "CSMP_highLevelUtilities.h"
+#include "MeshManagementUtilities.h"
 #include "binaryReadWrite.h"
 #include "ModelTime.h"
 #include "FiniteVolumeStencilManager.h"
 #include "UnionFind.h"
-
-#include <cstring>
-#include <unordered_set>
+#include "plf_colony.h"
+#include "VTK_Interface.h"
 
 using namespace std;
 
@@ -30,37 +31,35 @@ namespace csmp {
 // PROTECTED CONSTRUCTORS
 
 /**
-Constructs a completely empty model.
-It is used by one of the ANSYS Model interfaces.
-
-@note model will contain a single region called 'model' and it will be considered unique.
-
-@todo SKM deprecate; make the default constructor private to comply with inheritance principles
+    Constructs a completely empty model.
+    It is used by one of the ANSYS Model interfaces.
+ 
+    @note model will contain a single region called 'model' and it will be considered unique.
+    
+    @todo SKM deprecate; make the default constructor private to comply with inheritance principles
 */
 template<size_t dim>
 Model<dim>::Model()
-  : model_name_( "undefined" ),
-  database_(),
-  fvStencilManager_( nullptr ),
-  verbose_( true )
-{
-}
+  : model_name_("undefined"),
+    database_(),
+    verbose_(true)
+  {
+  }
 
 
 /**
 Constructor used for base class construction in subclasses of the model.
 Example: ANSYS_Model3D where model construction input data are read from
-file, initializing VSet and ModelTopology classes that serve as an input
+text file, initializing VSet and ModelTopology classes that serve as an input
 for model construction.
 
 @note this is not a stand-alone constructor and leaves the model in an incomplete state.
 */
 template<size_t dim>
-Model<dim>::Model( const std::string& varFile, bool binary )
+Model<dim>::Model( const char* varTextFile )
   : model_name_( "undefined" ),
-  database_( varFile.c_str(), binary ),
-  fvStencilManager_( nullptr ),
-  verbose_( true )
+    database_( varTextFile ),
+    verbose_( true )
 {
   InitializeLocalVariableStorage();
 }
@@ -71,7 +70,7 @@ Model<dim>::Model( const std::string& varFile, bool binary )
 
 
 /**
-    Builds model from binary file set with a binary variables file that has the same name as the Model.
+    Re-constructor: builds model from binary file set with a binary variables file that has the same name as the Model.
     
     @author SKM
     @date 11/9/2019
@@ -80,12 +79,11 @@ Model<dim>::Model( const std::string& varFile, bool binary )
 template<size_t dim>
 Model<dim>::Model( const std::string& binaryFileName )
   : model_name_( binaryFileName ),
-    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), true, NULL ),
-    fvStencilManager_( nullptr )
+    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), set<string>() )
 {
   InitializeLocalVariableStorage();
-  // TODO: this is just a quick fix to a proper solution, InputFromBinaryFile must check whether subset is empty
-  InputFromBinaryFile( binaryFileName.c_str(), nullptr );
+  set<string> empty_set;
+  InputFromBinaryFile( binaryFileName.c_str(), empty_set );
 }
 
 
@@ -99,14 +97,10 @@ Full input from CSMP-native binary file.
 template<size_t dim>
 Model<dim>::Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables )
   : model_name_( binaryFileName ),
-    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), true, &subset_variables ),
-    fvStencilManager_( nullptr )
+    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), subset_variables )
 {
   InitializeLocalVariableStorage();
-  if ( subset_variables.empty() )
-    InputFromBinaryFile( binaryFileName.c_str(), &subset_variables );
-  else
-    InputFromBinaryFile( binaryFileName.c_str(), nullptr );
+  InputFromBinaryFile( binaryFileName.c_str(), subset_variables );
 }
 
 
@@ -127,13 +121,14 @@ to the properties specified in the Property input file
 @section application Application
 
 Constructor is used when an ANSYS Model is built from topology and VData.
+
+@attention VSet is mutable because it may be shrunk in construction process.
 */
 template<size_t dim>
-Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_elements, bool binaryVariablesFile )
+Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_elements )
   : model_name_( "undefined" ),
-  database_( var_file, binaryVariablesFile ),
-  fvStencilManager_( nullptr ),
-  verbose_( true )
+    database_( var_file ),
+    verbose_( true )
 {
   Initialize( isoparametric_elements, vset,
               false /* do not create boundaries */,
@@ -142,11 +137,13 @@ Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_ele
 } // end VSet constructor
 
 
+
+
 template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
   : model_name_( "undefined" ),
-  database_(),
-  fvStencilManager_( nullptr )
+    database_(),
+    verbose_(true)
 {
   Initialize( isoparametric_elements, vset,
               false /* do not create boundaries */,
@@ -196,11 +193,10 @@ by default.
 */
 template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* var_file,
-                   bool binaryVariablesFile, bool create_boundary_objects, bool box_shaped )
-  : model_name_( "undefined" ),
-  database_( var_file, binaryVariablesFile ),
-  fvStencilManager_( nullptr ),
-  verbose_( true )
+                   bool create_boundary_objects, bool box_shaped )
+  : model_name_( mesh_topology.ModelName() ),
+    database_( var_file ),
+    verbose_( true )
 {
   Initialize( mesh_topology, vset,
               create_boundary_objects,
@@ -212,8 +208,7 @@ Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* va
 
 template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, bool create_boundary_objects, bool box_shaped )
-  : model_name_( "undefined" ),
-  fvStencilManager_( nullptr )
+  : model_name_( mesh_topology.ModelName() )
 {
   Initialize( mesh_topology, vset,
               create_boundary_objects,
@@ -242,7 +237,7 @@ Performs the following steps:
 
 3. builds finite element mesh and property storage -> done by MeshManager
 
-4. forms unique root Region called Model (is in unique regions if there are no other unique regions)
+4. forms unique Region called Model (is in unique regions if there are no other unique regions) else in non-unique Regions
 
 5. Tests with a flood-fill whether the model is contiguous
 
@@ -250,11 +245,11 @@ Performs the following steps:
 
 7. Associates supplied subregions with regions (model subdomains) -> done by FormRegionsFrom(topology)
 
-8. Forming Boundaries -> done by EstablishBoundaries()
+8. Forms Boundaries -> done by EstablishBoundaries()
 
-9. Adding potentially required property storage for regions and boundaries (however these properties are not initialised here
+9. Adds required property storage for regions and boundaries (however their properties are not initialised here)
 
-@attention MOST COMMONLY USED MODEL CONSTRUCTION  FROM EXTERNAL DATA METHOD - including ANSYS_Model3D
+@attention MOST COMMONLY USED MODEL CONSTRUCTION METHOD FOR  EXTERNAL DATA  - including ANSYS_Model3D, SKUA etc.
 */
 template<size_t dim>
 void Model<dim>::Initialize( const char* regions_file_prefix,
@@ -263,7 +258,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
                              bool create_boundaries,
                              bool fully_irregular_mesh )
 {
-  // 1. eliminating the unwanted mesh regions from topology and vset
+  // 1. eliminates unwanted mesh regions from topology and vset, rebuild boundary flags, checks element numbering etc.
   mesh_topology.ReduceToRegions( regions_file_prefix );
 
   // 2. building the model with variable storage
@@ -272,8 +267,15 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 } // end Initialize (with regions from file)
 
 
+
+
 /**
-custom constructor
+ Actual Initialise() method used by previous method
+ 
+ @attention MOST COMMONLY USED MODEL CONSTRUCTION  FROM EXTERNAL DATA METHOD - including ANSYS_Model3D
+ 
+ @attention a fully valid VSet is expected by this method.
+
 @note should only be used for models created externally.
 */
 template<size_t dim>
@@ -284,88 +286,85 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    // 1. reducing the mesh data to the desired element types as specified
-    //    by the topology object
-    map<size_t,size_t>  old_and_new_elmtids;
-    mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
-    vset.ReduceTo( old_and_new_elmtids );
-    old_and_new_elmtids.clear();
+    if ( !vset.WithNeighbourConnectivity() )
+      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
 
-    // 2. initializing the finite-element manager true=isoparametric
-    fem_manager_.InitializeElements( dim,
-                                     mesh_topology.InterpolationOrder(),
-                                     mesh_topology.IsoparametricElements() );
+    // 1. reducing the element data to the desired elements specified in the topology object
+    //    if the element numbers in the two are different.
+    if ( mesh_topology.Elements() != vset.Elements() ) {
+        map<size_t,size_t>  old_and_new_elmtids;
+        mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+        vset.ReduceTo( old_and_new_elmtids );
+        old_and_new_elmtids.clear();
+      }
+     // the VSet must be correct calling initialise
+     if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
+         csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
 
-    // 3. building the finite element mesh (finite volume mesh) and property storage
-    mesh_manager_.Initialize( Database(), FE_Manager(), vset );
-	
-    if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
-         Database().VariableCount(FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACE_FACET_INTEGRATION_POINT) or
-         Database().VariableCount(INTER_FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(INTER_FACE_FACET_INTEGRATION_POINT) or
-         vset.ContainsFiniteVolumeIntegrationPointData() )
-      InstantiateFiniteVolumes();
+    // 3. building the finite element mesh and property storage
+    mesh_manager_.Initialize( Database(), vset );
+    const bool contiguous_model( mesh_manager_.IsContiguous() );
+    if ( !contiguous_model )
+      csmp_error.notice( INFO, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                         "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
 
-    // assigning properties to mesh; this does not depend on regions,
-    // so this is safe to do before we have established them.
+    // 4. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
     InputVariablesFrom( vset );
 
-    // 4. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
-    const bool withNeighborConnectivity( vset.WithNeighbourConnectivity() );
-
-    const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
-
-    // if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-    bool contiguous_model(false);
-    bool valid_model_region = this->CreateRegionFromRootNode("Model", place_in_unique_regions, !withNeighborConnectivity);
-    if ( valid_model_region ) contiguous_model = true;
-    else valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
-
-    if ( !valid_model_region ) {
-      csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-        "model appears to contain domains that are not connected to one another!");
-    }
-
-    cout <<"\nModel<dim>::Initialize: ";
-    if ( contiguous_model ) cout << "Contiguous model has been built successfully..." << endl;
-    else cout << "Discontiguous model has been built successfully..." << endl;
+    // 5. forming default computational domain called "Model" and regions
+    const bool place_into_unique_regions( (mesh_topology.ModelRegions() == 0) );
+    const size_t elmts = this->FormModelRegion( place_into_unique_regions );
+    if ( elmts == 0U )
+      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
 
     // 6. associating supplied subregions with regions (model subdomains)
-    this->FormRegionsFrom( mesh_topology );	
+    this->FormRegionsFrom( mesh_topology );
 	
-    if ( mesh_topology.BoxShapedModel() ) {
-		if (fully_irregular_mesh)
-			ErrorHandler::Instance().notice(WARNING, "Model<dim>::Initialize:",
-				"ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic.");
-      }
-
     // 7. forming Boundaries
+    if ( mesh_topology.BoxShapedModel() )
+      if ( fully_irregular_mesh )
+        csmp_error.notice( WARNING, "Model<dim>::Initialize:",
+                          "ModelTopology indicates Box-shaped model; ignoring this characteristic.");
+
     if ( create_boundaries ) {
-          const bool remove_original_lower_dimensional_regions(true);
           // if the model is box-shaped (albeit perhaps with irregular top surface)
-          if (!fully_irregular_mesh) {
-            this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */);
-            // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-            cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
-            recreateBoxBoundaryFlags(*this);
-            UpdateIndices();
-          }
+          if ( !fully_irregular_mesh ) {
+              this->EstablishBoxBoundaries();
+              // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+              cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
+            }
           // irregularly shaped models
           else {
-            if(contiguous_model)
-              this->EstablishBoundariesFromRegions(remove_original_lower_dimensional_regions);
-            else
-              this->EstablishBoundariesFromDiscontiguousModel(remove_original_lower_dimensional_regions);
-            UpdateIndices();
-          }          
+              if( contiguous_model ) this->EstablishBoundariesFromRegions();
+              else
+                // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
+                // but we do want to create them on the outside of the model where the names of the input regions contain
+                // the string "BOUNDARY"
+                if ( this->ContainsBoundary("Model_Boundary") )
+                this->RemoveBoundary( this->Boundary("Model_Boundary") );
+            }
+         this->BoundariesOut();
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
+    
+    // 8. forming SplitBoundaries if a discontiguous model was detected
+    if ( !contiguous_model ) {
+        this->DetectAndCreateSplitBoundaries();
+        // reporting which boundaries were created
+        this->SplitBoundariesOut();
+      }
 
-    // 8. adding property storage to the Model
+    // 9. adding property storage to the Model
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
-    // 10. final sanity check
-    CheckElementsAfterBuilding();
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
 
     cout << "\n============================================================================";
     cout << "\nModel '"<< Name() <<"' has been established successfully!";
@@ -375,11 +374,15 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 } // end Initialize (VSet / ModelTopology)
 
 
-/**
-Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
-the creation of regions other than 'Model'.
 
-@note this version of Initialise() is called when the model is build from ANSYS input data
+
+
+/**
+    Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
+    the creation of regions other than 'Model'.
+
+ @attention a fully valid VSet is expected by this method.
+
 */
 template<size_t dim>
 void Model<dim>::Initialize( bool isoparametric_elements,
@@ -389,79 +392,81 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  // 0. initializing the finite-element manager true=isoparametric
-  fem_manager_.InitializeElements( dim,
-                                   vset.OrderOfFiniteElementInterpolationFunctions(),
-                                   isoparametric_elements );
+  // 1. checking for neighbor connectivity if necessary
+  // the VSet must be correct calling initialise
+  if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
+    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
+                                              
+  // 2. building the finite element mesh and property storage
+  mesh_manager_.Initialize( Database(), vset );
+  
+  // 3. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
+  const bool unique(true);
+  const size_t elmts = this->FormModelRegion( unique );
+  if ( elmts == 0U )
+    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
+  
+  cout << "\nModel<dim>::Initialize: mesh has been built successfully..." << endl;
 
-  // 1. building the finite element mesh and property storage
-  mesh_manager_.Initialize( Database(), FE_Manager(), vset );
-
-  // 2. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
-  const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
-  const bool place_in_unique_regions( true ); // if there is no neighbor connectivity, it has to be re-established (!)
-
-                                              // if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-  bool contiguous_model( false );
-  bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
-  if ( valid_model_region ) contiguous_model = true;
-  else valid_model_region = this->CreateRegions( place_in_unique_regions, !withNeighborConnectivity );
-
-  if ( !valid_model_region ) {
-    csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                       "model appears to contain domains that are not connected to one another!" );
-  }
-
-  cout << "\nModel<dim>::Initialize: ";
-  if ( contiguous_model )
-    cout << "Contiguous mesh has been built successfully..." << endl;
-  else
-    cout << "Discontiguous mesh has been built successfully..." << endl;
-
-  // 4. creating the finite volume mesh if necessary
-  if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACE_FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( INTER_FACE_FACET_INTEGRATION_POINT ) or
-       vset.ContainsFiniteVolumeIntegrationPointData() )
-    InstantiateFiniteVolumes();
-
-  // 5. assigning properties to mesh
+  // 4. assigning properties to mesh
   InputVariablesFrom( vset );
 
   cout << "\nModel<dim>::Initialize(VSet): ";
   cout << "Mesh has been built successfully..." << endl;
 
-  // 6. Forming Boundaries
+  // 5. Forming Boundaries
   if ( create_boundaries ) {
-    if ( !non_box_shaped_model && this->BoxShaped() ) {
-      this->EstablishBoxBoundaries();
-      if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
+      if ( !non_box_shaped_model && this->BoxShaped() ) {
+           this->EstablishBoxBoundaries();
+           if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
+        }
+      else {
+          const bool contiguous_model( mesh_manager_.IsContiguous() );
+          if ( !contiguous_model  )
+            csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                               "model appears to contain domains that are not connected to one another and there are no SplitBoundaries!" );
+
+          if ( contiguous_model ) this->EstablishBoundariesFromRegions();
+          else
+            // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
+            // but we do want to create them on the outside of the model where the names of the input regions contain
+            // the string "BOUNDARY"
+            if ( this->ContainsBoundary("Model_Boundary") )
+            this->RemoveBoundary( this->Boundary("Model_Boundary") );
+        }
     }
-    else {
-      if ( contiguous_model )
-        this->EstablishBoundariesFromRegions( true );
-      else
-        this->EstablishBoundariesFromDiscontiguousModel( true );
-    }    
-  }
   else cout << "\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
-  // 7. Adding potentially required property storage
+  // 6. Adding potentially required property storage
   InitializeLocalVariableStorage();
   UpdateSubdomainPropertyStorage();
 
-  // 8. final sanity check
-  CheckElementsAfterBuilding();
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
 
   cout << "\n================================================";
   cout << "\nModel has been established successfully!";
   cout << "\n================================================";
   cout << endl;
-}
+  
+} // end Initialize
+
+
+
 
 
 /**
-custom initialization for split boundaries
+      Custom initialization for split boundaries.
+      
+      @todo Is this really needed?
+      
+      @author ?
+      
 @note should only be used for models created externally.
 */
 template<size_t dim>
@@ -481,9 +486,20 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 } // end Initialize (with regions from file)
 
 
+
+
+
 /**
-custom initialization for split boundaries
+      Custom initialization for split boundaries from a  source external to CSMP.
+            
+      @todo Is this really needed?
+
+      @author ?
+      
 @note should only be used for models created externally.
+
+ @attention a fully valid VSet is expected by this method.
+
 */
 template<size_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology,
@@ -494,6 +510,10 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+  // 0. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
+  if ( !vset.WithNeighbourConnectivity() )
+    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
+
   // 1. reducing the mesh data to the desired element types as specified
   //    by the topology object
   map<size_t, size_t>  old_and_new_elmtids;
@@ -501,84 +521,67 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
   vset.ReduceTo( old_and_new_elmtids );
   old_and_new_elmtids.clear();
 
-  // 2. initializing the finite-element manager true=isoparametric
-  fem_manager_.InitializeElements( dim,
-                                   mesh_topology.InterpolationOrder(),
-                                   mesh_topology.IsoparametricElements() );
-
+  // 2. checking for neighbor connectivity if necessary
+  //    the VSet must be correct when calling initialise
+  if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
+    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(Toplogy,VSet):", "'pfverts' array is missing.");
+                                              
   // 3. building the finite element mesh (finite volume mesh) and property storage
-  mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+  mesh_manager_.Initialize( Database(), vset );
+  cout << "\nModel<dim>::Initialize: model has been built successfully..." << endl;
 
-  if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACE_FACET_INTEGRATION_POINT ) or
-       Database().VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( INTER_FACE_FACET_INTEGRATION_POINT ) or
-       vset.ContainsFiniteVolumeIntegrationPointData() )
-    InstantiateFiniteVolumes();
-
-  // assigning properties to mesh; this does not depend on regions,
-  // so this is safe to do before we have established them.
+  // 4. assigning properties to mesh; this does not depend on regions,
+  //    so this is safe to do before we have established them.
   InputVariablesFrom( vset );
 
-  // 4. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
-  const bool withNeighborConnectivity( vset.WithNeighbourConnectivity() );
-
-  const bool place_in_unique_regions( (mesh_topology.ModelRegions() == 0) );
-
-  // if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-  bool contiguous_model( false );
-  bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
-  if ( valid_model_region ) contiguous_model = true;
-  else valid_model_region = this->CreateRegions( place_in_unique_regions, !withNeighborConnectivity );
-
-  if ( !valid_model_region ) {
-    csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                       "model appears to contain domains that are not connected to one another!" );
-  }
-
-  cout << "\nModel<dim>::Initialize: ";
-  if ( contiguous_model ) cout << "Contiguous model has been built successfully..." << endl;
-  else cout << "Discontiguous model has been built successfully..." << endl;
-
-  // 6. associating supplied subregions with regions (model subdomains)
+  // 5. Model and subregions (model subdomains)
+  const bool place_into_unique_regions( (mesh_topology.ModelRegions() == 0) );
+  size_t elmts = this->FormModelRegion( place_into_unique_regions );
+  if ( elmts == 0U ) csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
   this->FormRegionsFrom( mesh_topology );
 
-  if ( mesh_topology.BoxShapedModel() ) {
+  if ( mesh_topology.BoxShapedModel() )
     if ( fully_irregular_mesh )
       ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
                                        "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
-  }
 
-  // 7. forming Boundaries
-  if ( create_boundaries ) {
-    const bool remove_original_lower_dimensional_regions( true );
-    // if the model is box-shaped (albeit perhaps with irregular top surface)
-    if ( !fully_irregular_mesh ) {
-      this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
-      // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-      cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
-      recreateBoxBoundaryFlags( *this );
-      UpdateIndices();
-    }
-    // irregularly shaped models
-    else {
-      if ( contiguous_model )
-        this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
-      else
-        this->EstablishBoundariesFromDiscontiguousModel( remove_original_lower_dimensional_regions );
-      UpdateIndices();
-    }
+  // 6. forming Boundaries
+  if ( create_boundaries )
+    {
+      // box-shaped models (albeit perhaps with irregular top surface)
+      if ( !fully_irregular_mesh ) this->EstablishBoxBoundaries();
+    
+      // irregularly shaped models, albeit still allowing for potential box boundary parts
+      else this->EstablishBoundariesFromRegions();
 
-    if ( create_splitboundaries )
-      this->DetectAndCreateSplitBoundaries();
-  }
+      // split boundaries
+      if ( create_splitboundaries ) {
+          this->DetectAndCreateSplitBoundaries();
+          this->SplitBoundariesOut();
+        }
+        
+       // rebuilding the model region
+       this->RemoveRegion("Model");
+       elmts = this->FormModelRegion( place_into_unique_regions );
+       
+       // making sure no other non-unique regions are affected
+       if ( distance( this->RegionsBegin(), this->RegionsEnd() ) > 1 )
+         csmp_error.notice( ERROR, "Model::Initialize: for box boundaries",
+                           "this method assumes that Model is the only non-unique region at this point ");
+   }
   else cout << "\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
   // 8. adding property storage to the Model
   InitializeLocalVariableStorage();  // for the model
   UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
-                                     // 10. final sanity check
-  CheckElementsAfterBuilding();
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
 
   cout << "\n============================================================================";
   cout << "\nModel '" << Name() << "' has been established successfully!";
@@ -586,6 +589,26 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
   cout << endl;
 
 } // end Initialize (VSet / ModelTopology)
+
+
+// Testing the Regions that will become boundaries OK
+//this->Region("BACK").NodeAttributesToCSV();
+//this->Region("RIGHT").NodeAttributesToCSV();
+//this->Region("TOP").NodeAttributesToCSV();
+//this->Region("LEFT").NodeAttributesToCSV();
+//this->Region("BOTTOM").NodeAttributesToCSV();
+//this->Region("FRONT").NodeAttributesToCSV();
+
+// DEBUGGING
+// -----------------------------------------------------------------------------------------
+//VTK_Interface<dim>  vtk_output;
+//if ( this->Database().IsDefined("permeability") )
+//  vtk_output.OutputDataToVTK( *this, this->Name(), string("permeability"), 1, true );
+//else
+//  vtk_output.OutputDataToVTK( *this, this->Name(), string("element variable 1"), 1, true );
+// -----------------------------------------------------------------------------------------
+
+
 
 
 template<size_t dim>
@@ -604,31 +627,12 @@ void Model<dim>::Name( const char* new_name )
 
 
 
-/**
-Instantiates FiniteVolumeStencilManager and initialises FiniteVolumeStencils
-if correpoding pointers are NULL.
-
-delegates this step to MeshManager::InitializeFiniteVolumeStencils()
-*/
-template<size_t dim>
-void Model<dim>::InstantiateFiniteVolumes()
-{
-  if ( !fvStencilManager_ )
-  {
-    fvStencilManager_ = new FiniteVolumeStencilManager<dim>();
-    cout << "\nModel<dim>::InstantiateFiniteVolumeStencilManager: Created local FiniteVolumeStencilManager\n";
-  }
-  Mesh().InitializeFiniteVolumeStencils( Database(), fem_manager_, *fvStencilManager_ );
-}
-
 
 /// removes dynamically allocated finite volume stencil manager
 template<size_t dim>
 Model<dim>::~Model()
 {
-  if ( fvStencilManager_ )
-    delete fvStencilManager_;
-} // end
+}
 
 
 
@@ -688,6 +692,28 @@ string Model<dim>::BinaryVariablesFileName( const char* base_file_name )
 
 
 
+
+/// attempts to return the spatial dimension of the model stored in the file (1-3D)
+size_t spatialDimensionOfModel( const char* csmp_binary )
+ {
+    throw csmp::Exception( ERROR, "spatialDimensionOfModel(binary file)", "method not implemented yet.");
+    return 3U;
+    
+ } // end dimensionModelInBinaryFile
+
+
+
+  /// computes deques of numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
+template<size_t dim>
+void  Model<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stored_variables )
+ {
+    this->IndexByPropertyValues();
+    mesh_manager_.OutputMeshTo( vset,  get_indices_from_stored_variables );
+ }
+
+
+
+
 /**
 OutputVariableTo() is an overloaded method which will output any kind
 of property to the supplied FEM_Data object.
@@ -740,6 +766,9 @@ template void Model<3U>::OutputVariableTo( const char*, FEM_Data<FlaggedArrayVar
 
 
 
+
+
+
 /**
 Reads the values of scalar, vector, tensor, array and flagged array variables stored
 in the VSet and assigns them to the current model.
@@ -757,9 +786,6 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
   if ( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
   else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputVariablesFrom:", "No properties found in VSet." );
 
-  // checking whether there a finite volumes properties that require the generation of stencils
-  if ( vset.ContainsFiniteVolumeIntegrationPointData() and !fvStencilManager_ ) InstantiateFiniteVolumes();
-
   // properties and values stored on the model itself
   for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
   {
@@ -772,43 +798,44 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
     assert( (*pit).second.Size() / key.dataDepth == 1U );
 
     switch ( key.type )
-    {
-      case SCALAR: {
-        ScalarVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
+      {
+        case SCALAR: {
+              ScalarVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case VECTOR: {
+              VectorVariable<dim> value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case TENSOR: {
+              TensorVariable<dim> value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case ARRAY: {
+              ArrayVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case FLAGGEDARRAY: {
+              FlaggedArrayVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        default:
+          csmp_error.notice( ERROR, "Model<dim>::InputVariablesFrom:",
+                             (*pit).first, "type of Model variable not recognized." );
       }
-                   break;
-      case VECTOR: {
-        VectorVariable<dim> value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                   break;
-      case TENSOR: {
-        TensorVariable<dim> value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                   break;
-      case ARRAY: {
-        ArrayVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                  break;
-      case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                         break;
-      default:
-        csmp_error.notice( ERROR, "Model<dim>::InputVariablesFrom:",
-                           (*pit).first, "type of Model variable not recognized." );
-    }
   }
-}
+  
+} // end InputVariablesFrom
 
 
 
@@ -816,7 +843,7 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
 /**
 InputVariableFrom() lets you input variable data stored in a FEM_Data
 template class object to a Model variable. class T here is a place
-holder for the data type which may be a double64 or any basic CSP variable.
+holder for the data type which may be a double or any basic CSP variable.
 
 @param input_prop the name of the variable to which the data
 are to be assigned.
@@ -876,75 +903,108 @@ template void Model<3U>::InputVariableFrom( const char*, const FEM_Data<FlaggedA
 
 
 
-// Renumbers nodes, elements, faces & interfaces. Nodes and Element/Face/Interface may have same values, but the latter may not.
-template<size_t dim>
-size_t Model<dim>::UpdateIndices() const
-{
-  // elements and nodes
-  this->Region( "Model" ).UpdateMemberIndexes();
-  size_t runningIndex( this->Region( "Model" ).Elements() );
-
-  // boundaries  
-  for ( typename Model<dim>::boundaryConstIterator bit( this->BoundariesBegin() ); bit != this->BoundariesEnd(); ++bit )
-  {
-    for ( typename vector<Face<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
-  for ( typename Model<dim>::splitBoundaryConstIterator bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
-  {
-    for ( typename vector<InterFace<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
-  return runningIndex;
-}
-
-
-// Renumbers nodes, elements, faces & interfaces. Nodes and Element/Face/Interface may have same values, but the latter may not.
-template<size_t dim>
-size_t Model<dim>::UpdateIndices( const char* region_name ) const
-{
-  // elements and nodes
-  this->Region( region_name ).UpdateMemberIndexes();
-  size_t runningIndex( this->Region( region_name ).Elements() );
-
-  // boundaries  
-  for ( typename Model<dim>::boundaryConstIterator bit( this->BoundariesBegin() ); bit != this->BoundariesEnd(); ++bit )
-  {
-    for ( typename vector<Face<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
-  for ( typename Model<dim>::splitBoundaryConstIterator bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
-  {
-    for ( typename vector<InterFace<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
-  return runningIndex;
-}
-
 
 /**
-The copy-constructor permits to duplicate models which may come in handy
-if one wants to compare the results of slightly different computations
-at runtime. This has, for instance, the advantage that large datasets
-must not be written to file first before they can be compared.
+     Sets the Idx values of the nodes, elements, faces, and interfaces of the model according to the stored values, if any.
+     @code
+     "node number", "element number", "face number", "interface number"
+     @endcode
+     
+     @attention if elements were created or deleted, then there may now be gaps in the numbering.
 */
 template<size_t dim>
-Model<dim>& Model<dim>::operator=( const Model<dim>& model )
-{
-  if ( &model != this )
-  {
-    database_ = model.database_;
-    fem_manager_ = model.fem_manager_;
-    mesh_manager_ = model.mesh_manager_;
-    this->uniqueGroupMap_ = model.uniqueGroupMap_;
-    this->groupMap_ = model.groupMap_;
-    this->faceBoundaryMap_ = model.faceBoundaryMap_;
-    this->splitBoundaryMap_ = model.splitBoundaryMap_;
-    this->LVS( model.LVS() );
-  }
-  return *this;
+void Model<dim>::IndexByPropertyValues()
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-} // end assignment operator
+    MeshManager<dim>& mesh(this->Mesh());
+    const bool in_a_single_sequence{true};
+    
+    if ( Database().IsDefined( "node number" ) ) {
+         const csmp::Index key = this->Database().StorageKey("node number");
+         const size_t n_nodes{mesh.Nodes()};
+         const typename plf::colony<csmp::Node<dim>>::iterator nodes_end(mesh.NodesEnd());
+         for ( auto nit=mesh.NodesBegin(); nit!=nodes_end; ++nit ) {
+              const size_t node_number = static_cast<size_t>((*nit).Read(key));
+              if ( node_number >= n_nodes )
+                csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                            "'node number' exceeds range of available nodes:", to_string(node_number) );
+              (*nit).Idx( node_number );
+           }
+      }
+    else {
+         csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                  "'node number' is not defined; default unique contiguous numbering will be used" );
+         mesh.AssignUniqueNumbers( in_a_single_sequence );
+         return;
+      }
+    
+    if ( Database().IsDefined( "element number" ) ) {
+         const csmp::Index key = this->Database().StorageKey("element number");
+         const size_t n_elmts{mesh.Elements()};
+         const typename plf::colony<csmp::Element<dim>>::iterator elmts_end(mesh.ElementsEnd());
+         for ( auto it=mesh.ElementsBegin(); it!=elmts_end; ++it ) {
+              const size_t elmt_number = static_cast<size_t>((*it).Read(key));
+              if ( elmt_number >= n_elmts )
+                csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                  "'element number' exceeds range of available elements:", to_string(elmt_number) );
+              (*it).Idx( elmt_number );
+           }
+      }
+    else {
+         csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                  "'element number' is not defined; default unique contiguous numbering will be used" );
+         mesh.AssignUniqueNumbers( in_a_single_sequence );
+         return;
+      }
+    
+    // faces
+    if ( Mesh().Faces() > 0 ) {
+        if ( Database().IsDefined( "face number" ) ) {
+             const csmp::Index key = this->Database().StorageKey("face number");
+             const size_t n_faces{mesh.Faces()};
+             const typename plf::colony<csmp::Face<dim>>::iterator faces_end(mesh.FacesEnd());
+             for ( auto it=mesh.FacesBegin(); it!=faces_end; ++it ) {
+                  const size_t face_number = static_cast<size_t>((*it).Read(key));
+                  if ( face_number >= n_faces + mesh.Elements() )
+                    csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                      "'face number' exceeds range of available faces:",
+                                             to_string(face_number) );
+                  (*it).Idx( face_number );
+               }
+          }
+        else {
+             csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                      "'face number' is not defined; default unique contiguous numbering will be used" );
+             mesh.AssignUniqueNumbers( in_a_single_sequence );
+             return;
+          }
+      }
+
+    // interfaces
+    if ( Mesh().InterFaces() > 0 ) {
+        if ( Database().IsDefined( "interface number" ) ) {
+             const csmp::Index key = this->Database().StorageKey("interface number");
+             const size_t n_ifaces{mesh.InterFaces()};
+             const size_t n_all_cells{ n_ifaces + mesh.Faces() + mesh.Elements() };
+             const typename plf::colony<csmp::InterFace<dim>>::iterator ifaces_end(mesh.InterFacesEnd());
+             for ( auto it=mesh.InterFacesBegin(); it!=ifaces_end; ++it ) {
+                  const size_t iface_number = static_cast<size_t>((*it).Read(key));
+                  if ( iface_number >= n_all_cells )
+                    csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                                      "'interface number' exceeds range of available faces:",
+                                            to_string(iface_number) );
+                  (*it).Idx( iface_number );
+               }
+          }
+        else {
+             csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+                                      "'interface number' is not defined; default unique contiguous numbering will be used" );
+             mesh.AssignUniqueNumbers( in_a_single_sequence );
+          }
+      }
+
+ } // end IndexByPropertyValues
 
 
 
@@ -961,8 +1021,8 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
                                          VARIABLE_TYPE vtype,
                                          PLACEMENT vplace,
                                          size_t vsize,
-                                         double64 vmin,
-                                         double64 vmax,
+                                         double vmin,
+                                         double vmax,
                                          string usage )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1002,7 +1062,7 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
         (*eit)->AddProperty( prop_key );
   }
   else if ( vplace == MODEL ) {
-    LocalVariableStorage<dim, Model<dim> >::AddProperty( prop_key );
+     LocalVariableStorage<dim,Model>::AddProperty( prop_key );
   }
   else if ( vplace == REGION ) {
     // each region has its unique property value even if they are overlapping!
@@ -1081,7 +1141,7 @@ void  Model<dim>::DeleteProperty( const char* property )
         (*eit)->DeleteProperty( prop_key );
   }
   else if ( prop_key.place == MODEL ) {
-    LocalVariableStorage<dim, Model<dim> >::DeleteProperty( prop_key );
+     LocalVariableStorage<dim,Model>::DeleteProperty( prop_key );
   }
   else if ( prop_key.place == REGION ) {
     // each region has its unique property value even if they are overlapping!
@@ -1106,6 +1166,9 @@ void  Model<dim>::DeleteProperty( const char* property )
   database_.DeleteProperty( property );
 
 } // end DeleteProperty
+
+
+
 
 /**
 In a finite-element mesh, each node is shared by a variable number of
@@ -1154,6 +1217,9 @@ void  Model<dim>::ExtrapolateElementToNodeProperty( const char* eprop, const cha
   this->Region( "Model" ).ExtrapolateElementToNodeProperty( eprop, nprop, by_distance );
 
 } // end ExtrapolateElementToNodeProperty
+
+
+
 
 
 /**
@@ -1211,7 +1277,7 @@ Also if no status changes were made, the method will report this.
 */
 template<size_t dim>
 void Model<dim>::ChangePropertyStatusWhere( const char* var,
-                                            double64 vmin, double64 vmax,
+                                            double vmin, double vmax,
                                             VARIABLE_FLAG new_status )
 {
   this->Region( "Model" ).ChangePropertyStatusWhere( var, new_status, vmin, vmax );
@@ -1348,14 +1414,13 @@ void Model<dim>::Accept( csmp::Visitor<dim>& v )
 
 
 /**
-Allows the input of properties via the basic CSP variable types
-ScalarVariable, VectorVariable and TensorVariable. Any previous
-values are overwritten irrespective of the flags that the current
-values had. Thus, boundary conditions need to be reassigned after this
-method has been called.
+
+Allows assignment of uniform property values  for all CSMP variable types.
+Any previous values are overwritten irrespective of their flags and will receive the flag of the input variable.
+It follows that  potential boundary conditions need to be reassigned after this method has been called.
 
 Note that the method checks the input variables against the ranges
-specified in the variables database '*.txt' file. If the values
+specified in the variables database (see '*-variables.txt' file). If the values
 fall out of these ranges, the method will reset values to the
 nearest range bound.
 
@@ -1372,41 +1437,79 @@ the method will report errors.
 Similarly when the property placement (i.e. element, node etc.) is
 not recognized, an error will be reported.
 
-@todo (1-F) New placements not supported?
 */
 template<size_t dim>
 template<class T>
 void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
 {
-  csmp::Index prop_key = this->database_.StorageKey( input_prop );
-  if ( prop_key.place == FACE || prop_key.place == BOUNDARY || prop_key.place == FACE_INTEGRATION_POINT ||
+  const csmp::Index prop_key = this->database_.StorageKey( input_prop );
+  // properties stored on the model
+  if ( prop_key.place == MODEL ) {
+       this->Store( prop_key, value );
+       return;
+    }
+    
+  // all regions
+  if ( prop_key.place == REGION ) {
+      for ( typename map<string, csmp::Region<dim> >::iterator
+            it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
+        (*it).second.Store( prop_key, value );
+      for ( typename map<string, csmp::Region<dim> >::iterator
+            it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
+        (*it).second.Store( prop_key, value );
+      return;
+    }
+    
+  // all boundaries  
+  if ( prop_key.place == BOUNDARY ) {
+       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
+             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+         (*it).second.Store( prop_key, value );
+      return;
+   }
+  
+  // split boundaries 
+  if ( prop_key.place == SPLIT_BOUNDARY ) {
+       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
+             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+         (*it).second.Store( prop_key, value );
+      return;
+   }
+   
+  // node and element properties are handled by direct access to model domain 
+  if ( prop_key.place == ELEMENT || prop_key.place == ELEMENT_INTEGRATION_POINT ||
+       prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == SECTOR_INTEGRATION_POINT ||
+       prop_key.place == NODE ) {
+      this->Region( "Model" ).InputPropertyValue( input_prop, value, COMPLETE );
+      return;
+   }
+  
+  // properties discretised only on boundaries
+  if ( prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT )
-  {
-    for ( typename map<std::string, csmp::Boundary<dim> >::iterator
-          it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
-      (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
-  }
-  else if ( prop_key.place == INTER_FACE || prop_key.place == SPLIT_BOUNDARY || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
-            prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
-  {
-    throw csmp::Exception( ERROR, "Model<dim>::InputPropertyValue", "SplitBoundary/InterFace properties not supported here yet" );
-  }
-  else if ( prop_key.place == MODEL )
-  {
-    this->Store( prop_key, value );
-  }
-  else if ( prop_key.place == REGION )
-  {
-    for ( typename map<string, csmp::Region<dim> >::iterator
-          it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
-      (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
-    for ( typename map<string, csmp::Region<dim> >::iterator
-          it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
-      (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
-  }
-  else
-    this->Region( "Model" ).InputPropertyValue( input_prop, value, COMPLETE );
+    {
+       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
+             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+         (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
+       return;
+    }
+  
+  // properties discretised on split boundaries  
+  if ( prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
+       prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
+    {
+       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
+             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+         (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
+       return;
+    }
+  
+  // if something fell through the cracks
+  throw csmp::Exception( ERROR, "Model<dim>::InputPropertyValue", input_prop,
+                        "placement was not recognised. No assignments were made");
+  
 } // end InputPropertyValue
+
 
 
   // instantiations of extra member function templates
@@ -1645,8 +1748,8 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   csmp::Region<dim>&  super_group( this->Region( "Model" ) );
 
   assert( bvalues.size() >= 2U );
-  double64  v1 = bvalues[0]();
-  double64  v2 = bvalues[1]();
+  double  v1 = bvalues[0]();
+  double  v2 = bvalues[1]();
 
   csmp::Point<dim>  xyz_min, xyz_max;
   MinMaxCoordinates( xyz_min, xyz_max );
@@ -1668,8 +1771,8 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
   if ( isSide( side ) ) {
     assert( bvalues.size() == 4U );
-    double64  v3 = bvalues[2]();
-    double64  v4 = bvalues[3]();
+    double  v3 = bvalues[2]();
+    double  v4 = bvalues[3]();
 
     switch ( side )
     {
@@ -2163,7 +2266,6 @@ void Model<dim>::Out() const
 {
   cout << "\n\n\n\nModel<" << dim << ">::Out: ";
   database_.Out();
-  fem_manager_.Out();
   mesh_manager_.Out();
 
   cout << "\nunique Regions: ";
@@ -2582,45 +2684,6 @@ void Model<dim>::OutputVariableToScreen( const char* prop ) const
 
 
 
-bool isDiagonalTensor( const TensorVariable<1U>& ts ) { return true; }
-
-/// 2D version
-bool isDiagonalTensor( const TensorVariable<2U>& ts )
-{
-  // if the off-diagonal elements are numerically zero
-  if ( ts( 0, 1 ) <= numeric_limits<double64>::epsilon() &&
-       ts( 1, 0 ) <= numeric_limits<double64>::epsilon() ) return true;
-  return false;
-}
-
-/// 3D version
-bool isDiagonalTensor( const TensorVariable<3U>& ts )
-{
-  // if the off-diagonal elements are numerically zero
-  if ( ts( 0, 1 ) <= numeric_limits<double64>::epsilon() &&
-       ts( 0, 2 ) <= numeric_limits<double64>::epsilon() &&
-       ts( 1, 2 ) <= numeric_limits<double64>::epsilon() &&
-       ts( 1, 0 ) <= numeric_limits<double64>::epsilon() &&
-       ts( 2, 0 ) <= numeric_limits<double64>::epsilon() &&
-       ts( 2, 1 ) <= numeric_limits<double64>::epsilon() ) return true;
-  return false;
-}
-
-// this wants to be a lambda function in the next method
-/// recovering and sorting to find minimum and maximum Eigen values
-template<size_t dim>
-void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64& tmax )
-{
-  VectorVariable<dim>  evals;
-
-  // doing simple case first
-  if ( isDiagonalTensor( ts ) ) for ( size_t i = 0U; i<dim; ++i ) evals( i ) = ts( i, i );
-  else ts.EigenValues( evals );
-  std::set<double64> min_max;
-  for ( size_t i = 0U; i<dim; i++ ) min_max.insert( evals[i] );
-  tmin = (*min_max.begin());
-  tmax = (*min_max.rbegin());
-}
 
 
 
@@ -2649,7 +2712,7 @@ MinMaxOf() will report an error if the property of interest is unknown
 to the PropertyDatabase.
 */
 template<size_t dim>
-void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) const
+void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2699,7 +2762,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
   if ( prop_key.place == REGION ) {
     typename std::map<std::string, csmp::Region<dim> >::const_iterator  git( this->UniqueRegionsBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
-    double64  gmin( vmin ), gmax( vmax );
+    double  gmin( vmin ), gmax( vmax );
     while ( git != this->UniqueRegionsEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
       gmin = std::min( gmin, vmin );
@@ -2723,7 +2786,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ) {
     typename map<std::string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
-    double64  gmin( vmin ), gmax( vmax );
+    double  gmin( vmin ), gmax( vmax );
     while ( git != this->BoundariesEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
       gmin = std::min( gmin, vmin );
@@ -2741,7 +2804,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
        prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
     typename map<std::string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
-    double64  gmin( vmin ), gmax( vmax );
+    double  gmin( vmin ), gmax( vmax );
     while ( git != this->SplitBoundariesEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
       gmin = std::min( gmin, vmin );
@@ -2753,6 +2816,34 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
   }
 
 } // end MinMaxOf
+
+
+
+
+/**
+      For vector and tensor variables, this method uses the length and the range of Eigenvalues as a measure.
+      For array variables, the min and max values (L1 norm) are used.
+*/
+template<size_t dim>
+bool Model<dim>::IsWithinRange( const char* var_name, const char* model_subdomain ) const
+ {
+    double  omin(DBL_MAX), omax(DBL_MIN), pmin, pmax;
+    
+    // is the subdomain a region, boundary, or split boundary?
+    if ( this->ContainsRegion( string(model_subdomain) ) )
+      this->Region(model_subdomain).MinMaxOf( var_name, omin, omax );
+    else if ( this->ContainsBoundary( string(model_subdomain) ) )
+      this->Boundary(model_subdomain).MinMaxOf( var_name, omin, omax );
+    else if ( this->ContainsSplitBoundary( string(model_subdomain) ) )
+      this->SplitBoundary(model_subdomain).MinMaxOf( var_name, omin, omax );    
+    
+    Database().RangeOf(  var_name, pmin, pmax );
+    if ( omin >= pmin && omax <= pmax ) return true;
+
+    return false;
+    
+ } // end IsWithinRange
+
 
 
 
@@ -2824,20 +2915,8 @@ const PropertyDatabase<dim>& Model<dim>::Database() const { return database_; }
 
 template<size_t dim>
 const FiniteElementManager&  Model<dim>::FE_Manager() const
-{ return fem_manager_; }
+{ return mesh_manager_.FiniteElements(); }
 
-template<size_t dim>
-FiniteElementManager&  Model<dim>::FE_Manager()
-{ return fem_manager_; }
-
-
-template<size_t dim>
-const FiniteVolumeStencilManager<dim>* Model<dim>::FV_Manager() const
-{ return fvStencilManager_; }
-
-template<size_t dim>
-FiniteVolumeStencilManager<dim>*  Model<dim>::FV_Manager()
-{ return fvStencilManager_; }
 
 
 /**
@@ -2870,89 +2949,91 @@ const MeshManager<dim>&  Model<dim>::Mesh() const { return mesh_manager_; }
 writes entire model with associated properties / variables to CSMP native set of binary files.
 */
 template<size_t dim>
-void Model<dim>::OutputToBinaryFile( const char* file_string ) const
+void Model<dim>::OutputToBinaryFile( const char* file_string )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  // 0. IO & resetting of indices
-  double64& model_time( ModelTime::Instance().modelTime );
+  // 0. reporting
+  double& model_time( ModelTime::Instance().modelTime );
   cout << "\nModel<" << dim << ">::OutputToBinaryFile: Saving model '" << Name();
   cout << "' at current time level, t = " << model_time << " secs." << endl;
 
   // 1. mesh output: creating a VSet including Face and InterFace objects
-  VSet<dim> vset;
-  const bool simplices_numbered_in_a_single_sequence( true );
-  mesh_manager_.AssignUniqueNumbers( simplices_numbered_in_a_single_sequence );
+  //   (elements, faces, and interfaces are numbered in a single continous sequence)
+  VSet<dim>  vset;
   mesh_manager_.OutputMeshTo( vset );
 
   // 2. property output into VSet including Face and InterFace data
   mesh_manager_.OutputStoredVariablesTo( Database(), vset );
 
-  // model properties
+  // adding properties stored on "Model"
   map<string, Index>  properties;
   Database().ListProperties( MODEL, properties );
 
   // for all model properties
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
-  {
-    // setting the specifications for the property storage (no memory allocation yet)
-    PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-    // for the given property type
-    const size_t flag_capacity( (*pit).second.flagDepth );
-    const size_t data_capacity( (*pit).second.dataDepth );
-    // allocating memory to store the property flags and values
-    data.Reserve( flag_capacity, data_capacity );
-
-    switch ( (*pit).second.type )
     {
-      case SCALAR: {
-        ScalarVariable value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                   break;
-      case VECTOR: {
-        VectorVariable<dim> value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                   break;
-      case TENSOR: {
-        TensorVariable<dim> value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                   break;
-      case ARRAY: {
-        ArrayVariable value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                  break;
-      case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
-        this->Read( (*pit).second, value );
-        pushBack( data, value );
-      }
-                         break;
-      default:
-        csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
-                           (*pit).first, "type of Model variable not recognized." );
-    }
-    // storing the data in the VSet
-    vset.AddData( (*pit).first.c_str(), data );
-  }
+      // setting the specifications for the property storage (no memory allocation yet)
+      PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+      // for the given property type
+      const size_t flag_capacity( (*pit).second.flagDepth );
+      const size_t data_capacity( (*pit).second.dataDepth );
+      // allocating memory to store the property flags and values
+      data.Reserve( flag_capacity, data_capacity );
 
+      switch ( (*pit).second.type )
+        {
+          case SCALAR: {
+                ScalarVariable value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+                break;
+          case VECTOR: {
+                VectorVariable<dim> value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          case TENSOR: {
+                TensorVariable<dim> value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          case ARRAY: {
+                ArrayVariable value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          case FLAGGEDARRAY: {
+                FlaggedArrayVariable value;
+                this->Read( (*pit).second, value );
+                pushBack( data, value );
+              }
+            break;
+          default:
+            csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
+                               (*pit).first, "type of Model variable not recognized." );
+        }
+      // storing the data in the VSet
+      vset.AddData( (*pit).first.c_str(), data );
+    }
+
+  // writing the VSet to binary file
   vset.OutputTo( BinaryVsetFileName( file_string ).c_str(), model_time );
 
   // 3. regions: unique and then the non-unique regions
-  this->OutputAllRegionsToBinary( BinaryRegionsFileName( file_string ).c_str() );
+  this->OutputRegionsToBinary( BinaryRegionsFileName( file_string ).c_str() );
 
-  // 4. boundaries "All Faces"
-  this->OutputAllBoundariesToBinary( BinaryBoundariesFileName( file_string ).c_str() );
+  // 4. boundaries
+  this->OutputBoundariesToBinary( BinaryBoundariesFileName( file_string ).c_str() );
 
-  // 5. splitboundaries "AllInterFaces"
+  // 5. splitboundaries
   this->OutputSplitBoundariesToBinary( BinarySplitBoundariesFileName(file_string).c_str() );
+  
+  // node manifolds are deduced from the connectivty stored in the VSet and handled inside the MeshManager
 
   // 6. variable specifications through the database
   Database().BinaryOut( BinaryVariablesFileName( file_string ).c_str() );
@@ -2962,38 +3043,32 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
 } // end OutputToBinaryFile
 
 
+
+
 /**
 reads model written by OutputToBinaryFile() including all associated properties or a subset of variables
 */
 template<size_t dim>
-void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std::string>* subset_variables )
+void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std::string>& subset_variables )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   // 1. The binary data are read into VSet
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   VSet<dim>  vset;
   cout << "\nModel<" << dim;
   cout << ">::InputFromBinaryFile: Reading '" << model_name;
   cout << "' from VSet... " << endl;
   vset.InputFrom( BinaryVsetFileName( model_name ).c_str(), model_time, subset_variables );
 
-  // 2. initializing the finite-element manager true=isoparametric
-  fem_manager_.InitializeElements( dim, vset.OrderOfFiniteElementInterpolationFunctions(), true );
-  cout << "\nModel<" << dim << ">::InputFromBinaryFile: it is assumed that the model is based on 'isoparametric' finite elements.\n\n";
+  // 2. rebuilds finite element mesh and associated property storage, initialising 'mtrl' identifiers and boundary flags
+  mesh_manager_.Initialize( database_, vset );
 
-  // 3. rebuilds finite element mesh and associated property storage
-  mesh_manager_.Initialize( database_, fem_manager_, vset );
-
-  // 4. checking whether the FV stencils need to be initialised
-  if ( vset.ContainsFiniteVolumeIntegrationPointData() )
-    InstantiateFiniteVolumes();
-
-  // 5. assigning properties to mesh (this reads in the properties output to file via Region::OutputTo(VSet) )
+  // 3. assigning properties to mesh (this reads in the properties output to file via Region::OutputTo(VSet) )
   if ( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
   else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputFromBinaryFile:", "No properties found in VSet." );
 
-  // properties and values stored on the model itself
+  // 4. properties and values stored on the model itself
   for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
   {
     // apart from the name string key in the map, PropertyData contains the most important variable specifications
@@ -3005,224 +3080,64 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
     assert( (*pit).second.Size() / key.dataDepth == 1U );
 
     switch ( key.type )
-    {
-      case SCALAR: {
-        ScalarVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
+      {
+        case SCALAR: {
+              ScalarVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case VECTOR: {
+              VectorVariable<dim> value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case TENSOR: {
+              TensorVariable<dim> value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case ARRAY: {
+              ArrayVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        case FLAGGEDARRAY: {
+              FlaggedArrayVariable value;
+              read( (*pit).second, 0, value );
+              this->Store( key, value );
+            }
+          break;
+        default:
+          csmp_error.notice( ERROR, "Model<dim>::InputFromBinaryFile:",
+                             (*pit).first, "type of Model variable not recognized." );
       }
-                   break;
-      case VECTOR: {
-        VectorVariable<dim> value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                   break;
-      case TENSOR: {
-        TensorVariable<dim> value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                   break;
-      case ARRAY: {
-        ArrayVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                  break;
-      case FLAGGEDARRAY: {
-        FlaggedArrayVariable value;
-        read( (*pit).second, 0, value );
-        this->Store( key, value );
-      }
-                         break;
-      default:
-        csmp_error.notice( ERROR, "Model<dim>::InputFromBinaryFile:",
-                           (*pit).first, "type of Model variable not recognized." );
-    }
   }
 
-  // 6. reconstruction of the regions
-  this->InputAllRegionsFromBinary( BinaryRegionsFileName( model_name ).c_str(), subset_variables );
+  // 5. reconstruction of the regions
+  this->InputRegionsFromBinary( BinaryRegionsFileName( model_name ).c_str(), subset_variables );
 
   // making sure that the computational region has been built
-  const bool contiguous_model( mesh_manager_.ElementGroups() == 1 );
-  if ( contiguous_model )
+  if ( mesh_manager_.IsContiguous() )
     if ( !this->ContainsRegion( "Model" ) )
       throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
 
-  // 7. reconstructing the boundaries (TODO: what if there are no boundaries?)
-  this->InputAllBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
-
-  // 8. reconstructing the splitboundaries
-  this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
-
-  // 9. do a final sanity check
-  CheckElementsAfterBuilding();
+  // 6. reconstructing the boundaries, if any
+  if ( vset.Faces() > 0 )
+    this->InputBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
+  
+  // 7. reconstructing the splitboundaries, if any
+  if ( vset.InterFaces() > 0 )
+    this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
 
   cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";
 
 } // end InputFromBinaryFile
 
 
-
-
-
-
-
-template<size_t dim>
-void  Model<dim>::CheckElementsAfterBuilding()
-{
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  MeshManager<dim>& mesh = Mesh();
-
-  if ( !mesh.Elements() )
-    throw csmp::Exception( ERROR, "Model<dim>::CheckElementsAfterBuilding", "the model contains no elements" );
-
-  // 1. traversal of the existing each region's nodes to find all its elements
-  deque<csmp::Element<dim>*>		elmts;
-  deque<csmp::Node<dim>*>	nodes;
-  exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
-  sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-  sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  size_t found_elements = elmts.size();
-  size_t expected_elements = mesh.Elements();
-
-  if ( found_elements < expected_elements ) {
-    std::cerr << "\n\n\tdiscovered only " << found_elements << " versus " << expected_elements << " elements.\n\n";
-    csmp_error.notice( ERROR, "Model<dim>::CheckElementsAfterBuilding:",
-                       "mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?" );
-  }
-
-  // --------------------------------------------------------------------
-  // 3. detecting whether this region contains lower-dimensional elements
-  // --------------------------------------------------------------------
-  int32 dimension_counter( 0 );
-  int32 highest_spatial_dim( 1 );
-
-  bool with_volume_elements( false );
-  bool with_surface_elements( false );
-  bool with_line_elements( false );
-
-  for ( auto it : elmts ) {
-    if ( !with_line_elements && it->IsLineElement() )			with_line_elements = true;
-    else if ( !with_surface_elements && it->IsSurfaceElement() )	with_surface_elements = true;
-    else if ( !with_volume_elements && it->IsVolumeElement() )		with_volume_elements = true;
-  }
-
-  if ( with_volume_elements )  dimension_counter++;
-  if ( with_surface_elements ) dimension_counter++;
-  if ( with_line_elements )    dimension_counter++;
-  if ( with_volume_elements )  highest_spatial_dim = 3;
-  else if ( with_surface_elements ) highest_spatial_dim = 2;
-
-  // -----------------------------------------------------------------
-  // 4. distinguishing boundary from interior elements, same for nodes
-  //   (at this point the elements and nodes are already known)
-  // -----------------------------------------------------------------
-  size_t interior_elmts( 0 );
-  size_t boundary_elmts( 0 );
-  set<Node<dim>*> boundary_nodes;
-  vector<size_t>  fnids;
-
-  // 4.1 If all elements have the same spatial dimension
-  // ---------------------------------------------------
-  if ( dimension_counter == 1 ) {
-    for ( auto eit : elmts ) {
-      // identifying the boundary faces and their nodes
-      // (each face potentially has a neighbor element)
-      long  nbors_that_belong_to_group( eit->Neighbors() );
-      for ( size_t i = 0U; i<eit->Faces(); i++ )
-        // if the face is at a model boundary
-        if ( eit->Neighbor( i ) == NULL )
-        {
-          // boundary nodes
-          assert( eit->FE() != NULL );
-          eit->FE()->NodesOfFace( i, fnids );
-          for ( size_t j = 0U; j<fnids.size(); ++j )
-            boundary_nodes.insert( eit->N( fnids[j] ) );
-          // counting neighbors
-          nbors_that_belong_to_group--;
-        }
-
-      // storing the distinguished elements in the respective vectors
-      // ------------------------------------------------------------
-      // interior elements
-      if ( nbors_that_belong_to_group == eit->Neighbors() )
-        ++interior_elmts;
-      // elements with at least one face on the region boundary
-      else
-        ++boundary_elmts;
-    }
-  }
-  // 4.2 If there are elements with different spatial dimensions
-  // -----------------------------------------------------------
-  //     the ones with highest dimensions are used to define perimeter
-  //     all lower dimensional mesh that sticks out is flagged as perimeter as well.
-  else {
-    // a. identify the boundary elements among the highest dimensional elements,
-    //    also collecting all their node pointers into a set.
-    set<Element<dim>*> lesser_dim_elmts;
-    set<Node<dim>*>    highest_dim_elmt_nodes;
-
-    for ( auto eit : elmts ) {
-      // elements of the highest spatial dimension are used to define the boundary
-      assert( parseFiniteElementDimension( eit->FE_Type() ) != 0 );
-      if ( parseFiniteElementDimension( eit->FE_Type() ) == highest_spatial_dim )
-      {
-        // creating a subset with their nodes
-        for ( size_t i = 0U; i<eit->Nodes(); ++i ) {
-          assert( eit->N( i ) != NULL );
-          highest_dim_elmt_nodes.insert( eit->N( i ) );
-        }
-        // if the element has faces that lie on the region boundary
-        // it is considered a boudary element
-        long  nbors_that_belong_to_group( eit->Neighbors() );
-        for ( size_t i = 0U; i<eit->Faces(); ++i )
-          // 1) the element is on model boundary  or  2) one of its neighbors does not belong to its parent region
-          if ( eit->Neighbor( i ) == NULL )
-          {
-            nbors_that_belong_to_group--;
-          }
-        if ( nbors_that_belong_to_group == eit->Neighbors() ) ++interior_elmts;
-        else ++boundary_elmts;
-      }
-      else lesser_dim_elmts.insert( eit );
-    }
-    assert( /* all elements are accounted for */ mesh.Elements() == interior_elmts + boundary_elmts + lesser_dim_elmts.size() );
-
-    set<Element<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
-
-    for ( auto e : lesser_dim_elmts )
-    {
-      // a) lower-dim elements sticking out
-      // ----------------------------------
-      // lower-dimensional elements with nodes that do not belong to the node set of the
-      // higher dimensional elements must be boundary elements
-      size_t  exterior_nodes( 0U );
-      for ( size_t i = 0U; i<e->Nodes(); ++i )
-        if ( !highest_dim_elmt_nodes.count( e->N( i ) ) )
-          exterior_nodes++;
-
-      // if individual nodes stick out the parent element sticks out as well.
-      if ( exterior_nodes == e->Nodes() )
-        lesser_dim_elmts_detached.insert( e );
-    }
-
-    if ( !lesser_dim_elmts_detached.empty() ) {
-      csmp_error.notice( WARNING, "Model<dim>::CheckElementsAfterBuilding:",
-                         "model contains lower-dimensional elements detached from higher dimensional elements" );
-      // do some additional diagnostics on these elements
-      // ------------------------------------------------
-      cerr << "\n\tdetached elements: " << lesser_dim_elmts_detached.size() << ":";
-      for ( auto e : lesser_dim_elmts_detached )
-        cerr << " " << e->Idx();
-      cerr << endl;
-    }
-  } // end multi-dim element region   
-} // end PartitionElementVector
 
 
 
@@ -3241,7 +3156,7 @@ void  Model<dim>::CheckElementsAfterBuilding()
 Calculates the x, y, z extent of the model and returns these lengths into its arguments.
 The return value is a string that contains the dimensions with explanations.
 */
-std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z )
+std::string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z )
 {
   Point<3U>  xyz_min, xyz_max;
   sg.MinMaxCoordinates( xyz_min, xyz_max );
@@ -3267,6 +3182,959 @@ std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y,
   return dimensions;
 
 } // end boundingBox
+
+
+
+/**
+
+Method obtains the range of values for the physical variable that it
+is prompted for by the user. For vector and tensor variables, the
+length and the minimum/maximum eigenvalues are returned (check whether
+the latter actually happens).
+
+With the optional boolean argument (default=true), the user can determin
+the return value. As the default, the maximum obtained value is returned;
+else the minimum.
+
+@section arguments Input Arguments
+
+The model to be examined, the name of the target physical variable, and
+targeted return value (true->maximum, false->minimum of target variable).
+
+The second version of this method also takes an I/O handler as argument
+in order to log the calculated values to file etc.
+
+@return Either the maximum (default) or the minimum value of the target variable.
+The result is printed to the screen.
+
+*/
+template<size_t  dim>
+double printRangeOfVariable( const Model<dim>& sg,
+                               const char* var, bool max_or_min )
+ {
+     double pmin, pmax;
+     sg.MinMaxOf( var, pmin, pmax );
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
+     cout << var <<"': "<< pmin <<" to "<< pmax << endl;
+          
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+template<size_t  dim>
+double printRangeOfVariable( const Model<dim>& sg,
+                               Standard_IO_Handler& io,
+                               const char* var, bool max_or_min )
+ {
+     double  pmin, pmax;
+     sg.MinMaxOf( var, pmin, pmax );
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
+     cout << var <<"': "<< pmin <<" to "<< pmax << endl;
+     
+     // recording the measured variable value range at given timestep
+     double& model_time( ModelTime::Instance().modelTime );
+     char   info[100];
+     sprintf( info, "%lf", model_time );
+     string var_info(info);
+     var_info += " secs, range of'";
+     var_info += var;
+     var_info += "' [";
+     var_info += sg.Database().Unit(var);
+     var_info += "]: ";
+     sprintf( info, "%lf", pmin );
+     var_info += info;
+     var_info += " to ";
+     sprintf( info, "%lf", pmax );
+     var_info += info;
+     
+     io.RecordInformation( var_info );
+     
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+
+/// as above, but for individual model regions
+template<size_t  dim>
+double printRangeOfVariable( const Model<dim>& sg,
+                               const char* group, const char* var, bool max_or_min )
+ {
+     double  pmin, pmax;
+     const PropertyDatabase<dim>& p_ref = sg.Database();
+     const PLACEMENT place = sg.Database().Placement(var);
+     
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
+       sg.Region( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
+     else {
+          cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
+          return std::numeric_limits<double>::signaling_NaN();
+       }
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << var <<"' in subdomain of model '"<< group <<"': "<< pmin <<" to "<< pmax << endl;
+          
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+
+template<size_t  dim>
+double printRangeOfVariable( const Model<dim>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group,
+                                const char* var, bool max_or_min )
+ {
+     double& model_time( ModelTime::Instance().modelTime );
+     double         pmin, pmax;
+     const PropertyDatabase<dim>& p_ref = sg.Database();
+     const PLACEMENT place = sg.Database().Placement(var);
+
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
+       sg.Region( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
+     else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
+     else {
+          cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
+          return std::numeric_limits<double>::signaling_NaN();
+       }
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << var <<"': "<< pmin <<" to "<< pmax <<" in subdomain of model '"<< group <<"'"<< endl;
+     
+     // recording the measured variable value range at given timestep
+     char info[100];
+     sprintf( info, "%lf", model_time );
+     string var_info(info);
+     var_info += info;
+     var_info += ", region: ";
+     var_info += group;
+     var_info += ", secs, range of '";
+     var_info += var;
+     var_info += "' [";
+     var_info += p_ref.Unit(var);
+     var_info += "]: ";
+     sprintf( info, "%lf", pmin );
+     var_info += info;
+     var_info += " to ";
+     sprintf( info, "%lf", pmax );
+     var_info += info;
+     
+     io.RecordInformation( var_info );
+     
+     if ( !max_or_min ) return pmin;
+     return pmax;
+ }
+
+
+
+
+
+
+/**
+
+Method prints the physical dimensions of the model and returns either
+the maximum or the intermediate axis, depending on the value of its
+second argument.
+
+returns intermediate (true) or maximum (false) model dimensions.
+
+@section arguments Input Arguments
+
+The current model and a boolean flag. For 'true' the intermediate axis
+is returned, if 'false' the long axis is returned.
+
+@return The intermediate or long axis of the current model.
+*/
+template<size_t  dim>
+double  printModelDimensions( const Model<dim>& sg, bool intermed_or_max )
+ {
+    Point<dim> xyz_min, xyz_max;
+    sg.MinMaxCoordinates( xyz_min, xyz_max );
+    cout <<"\nprintModelDimensions: Dimensions of model (meters): "<< endl;
+    cout <<"xmin, xmax (horizontal right):    "<< xyz_min[0] <<" "<< xyz_max[0] << endl;
+    if ( dim != 1U ) cout <<"ymin, ymax (vertical upward):     "<< xyz_min[1] <<" "<< xyz_max[1] << endl;
+    if ( dim == 3U ) cout <<"zmin, zmax (horizontal to front): "<< xyz_min[2] <<" "<< xyz_max[2] << endl << endl;
+
+    set<double,greater<double> >  axis;
+    axis.insert( xyz_max[0] - xyz_min[0] );
+    if ( dim != 1U ) axis.insert( xyz_max[1] - xyz_min[1] );
+    if ( dim == 3U ) axis.insert( xyz_max[2] - xyz_min[2] );
+    
+    set<double,greater<double> >::const_iterator  it = axis.begin();
+    
+    if ( !intermed_or_max ) return *it;
+    
+    if ( axis.size() >= 2U ) it++;
+    
+    return *it;
+
+ } // end printModelDimensions
+
+
+
+
+/**
+    calculates the center of gravity of the model by averaging
+    the barycenter locations of all highest-dimensional elements.
+*/
+template<size_t  dim>
+Point<dim>  centerOfGravity( const Model<dim>& model )
+ {
+    const Region<dim>& mref(model.Region("Model"));
+    auto it(mref.ElementsBegin());
+    Point<dim>  center((*it)->BaryCenter());
+    double    counter(0.);
+    it++;
+   
+    while( it != mref.ElementsEnd() ) {
+         if ( dim == 3U ) {
+               if ( (*it)->FE()->IsVolumeElement() ) {
+                    center += (*it)->BaryCenter();
+                    counter += 1.;
+                 }
+            }
+         else if ( dim == 2U ) {
+               if ( (*it)->FE()->IsSurfaceElement() ) {
+                    center += (*it)->BaryCenter();
+                    counter += 1.;
+                 }
+            }
+         else /* 1D */ {
+                    center += (*it)->BaryCenter();
+                    counter += 1.;
+            }
+         it++;
+      }
+    center /= counter;
+    return center;
+
+ } // end CenterOfGravity
+
+template Point<1U>  centerOfGravity( const Model<1U>& );
+template Point<2U>  centerOfGravity( const Model<2U>& );
+template Point<3U>  centerOfGravity( const Model<3U>& );
+
+
+
+// template instantiations
+template
+double  printModelDimensions( const Model<1U>& sg, bool intermed_or_max );
+
+template
+double  printRangeOfVariable( const Model<1U>& sg,
+                                const char* var, bool max_or_min );
+template
+double  printRangeOfVariable( const Model<1U>& sg,
+	                              Standard_IO_Handler& io, const char* var,
+	                              bool max_instead_of_min );
+template
+double  printRangeOfVariable( const Model<1U>& sg,
+                                const char* group, const char* var, bool max_or_min );
+template
+double  printRangeOfVariable( const Model<1U>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group, const char* var,
+                                bool max_instead_of_min );
+
+template
+double  printModelDimensions( const Model<2U>& sg, bool intermed_or_max );
+
+template
+double  printRangeOfVariable( const Model<2U>& sg,
+                                const char* var, bool max_or_min );
+template
+double  printRangeOfVariable( const Model<2U>& sg,
+                                Standard_IO_Handler& io, const char* var,
+                                bool max_instead_of_min );
+template
+double  printRangeOfVariable( const Model<2U>& sg,
+                                const char* group, const char* var, bool max_or_min );
+template
+double  printRangeOfVariable( const Model<2U>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group, const char* var,
+                                bool max_instead_of_min );
+
+template
+double  printModelDimensions( const Model<3U>& sg, bool intermed_or_max );
+
+template
+double  printRangeOfVariable( const Model<3U>& sg,
+                                const char* var, bool max_or_min );
+template
+double  printRangeOfVariable( const Model<3U>& sg,
+                                Standard_IO_Handler& io, const char* var,
+                                bool max_instead_of_min );
+template
+double  printRangeOfVariable( const Model<3U>& sg,
+                                const char* group, const char* var, bool max_or_min );
+template
+double  printRangeOfVariable( const Model<3U>& sg,
+                                Standard_IO_Handler& io,
+                                const char* group, const char* var,
+                                bool max_instead_of_min );
+
+
+
+
+
+
+
+/**
+     Smoothes scalar element variable by extrapolating it to the nodes and back-interpolating it to barycenters
+     Apart from the mname of element variable to be smoothed, the name of the temporary node variable needs to be specified.
+     Uses the dummy variable 'dummy node' to store the interim result
+*/
+template<size_t dim>
+void smoothElementVariable( Model<dim>& model, const char* region, const char* element_var, const char* temp_node_var, size_t n_smoothing_cycles )
+ {
+    csmp::Index eprop_key = model.Database().StorageKey(element_var);
+    csmp::Index nprop_key = model.Database().StorageKey(temp_node_var);
+    assert( nprop_key.place == NODE );
+
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+    if ( eprop_key.place != ELEMENT ) {
+         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed variable must be placed on the element" );
+         return;
+      }
+    if ( nprop_key.place != NODE ) {
+         csmp_error.notice( ERROR, "smoothElementVariable", "Temporary variable must be placed on the node" );
+         return;
+      }
+    if ( nprop_key.type != eprop_key.type ) {
+         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed and temporary variable must have the same type" );
+         return;
+      }
+    if ( n_smoothing_cycles == 0 ) {
+         csmp_error.notice( WARNING, "smoothElementVariable", "smoothing cycles=0; nothing was done" );
+         return;
+      }
+   
+    // smoothing
+    Region<dim> ref = model.Region(region);
+   
+    for ( size_t i=0U; i<n_smoothing_cycles; i++ ) {
+         ref.ExtrapolateElementToNodeProperty( element_var, temp_node_var );
+         ref.InterpolateNodeToElementProperty( temp_node_var, element_var );
+      }
+
+ } // end smoothElementVariable
+
+template void smoothElementVariable( Model<1U>&, const char*, const char*, const char*, size_t );
+template void smoothElementVariable( Model<2U>&, const char*, const char*, const char*, size_t );
+template void smoothElementVariable( Model<3U>&, const char*, const char*, const char*, size_t );
+
+
+
+
+/**
+
+Randomly perturbs the values of a scalar target property by subtracting an
+amount which varies between minus zero and the specified percentage of the
+original maximum value of the target property.
+
+@section arguments Input Arguments
+
+RandomPerturb() requires the name of the property which shall be perturbed
+and the percentage of the original maximum value of the property by which
+the property shall be perturbed, in order to operate.
+
+@section application Application
+
+Processes which are critically dependent on initial conditions can profit
+from a 'noisy' input signal when one tries to simulate natural behaviour.
+
+@section messages Messages
+
+RandomPerturb() only handles scalar variables and it will therefore report
+an error and return without executing when one tries to perturb a vector or
+tensor variable.
+
+*/
+template<size_t dim>
+void randomPerturb( Model<dim>& sg, const char* prop, double by_percent_of_max_value )
+ {
+    csmp::Index prop_key = sg.Database().StorageKey(prop);
+    Region<dim>&  sgroup(sg.Region("Model"));
+    
+    if ( prop_key.type != SCALAR )
+      throw csmp::Exception( ERROR, "Model::RandomPerturb",
+                                     "Can only perturb scalar values so far" );
+
+    double dmin, dmax;
+    ScalarVariable  sc;
+    sgroup.MinMaxOf( prop, dmin, dmax );
+    
+    std::random_device rd;
+    // seed value is designed specifically to make initialization
+    // parameters of std::mt19937 (instance of std::mersenne_twister_engine<>)
+    // different across executions of application
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+    std::mt19937 gen(seed);
+
+    // generating floating point values
+    std::uniform_real_distribution<double> rngen(0, by_percent_of_max_value * dmax * 0.01);
+
+    switch( prop_key.place )
+      {
+         case NODE:
+              for ( typename vector<Node<dim>*>::iterator
+                    nit=sgroup.NodesBegin(); nit!=sgroup.NodesEnd(); nit++ )
+                {
+                   (*nit)->Read( prop_key, sc );
+                   sc -= rngen(gen);
+                   (*nit)->Store( prop_key, sc );
+                }
+           break;
+         case ELEMENT_INTEGRATION_POINT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+                for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+                {
+                   (*eit)->Read( i, prop_key, sc );
+                   sc -= rngen(gen);
+                   (*eit)->Store( i, prop_key, sc );
+                }
+           break;
+         case ELEMENT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+                {
+                   (*eit)->Read( prop_key, sc );
+                   sc -= rngen(gen);
+                   (*eit)->Store( prop_key, sc );
+                }
+           break;
+         default:
+           cout <<"\nrandomPerturb: property placement not handled."<< endl;
+      }
+      
+ } // end RandomPerturb
+
+template void randomPerturb( Model<1U>&, const char*, double );
+template void randomPerturb( Model<2U>&, const char*, double );
+template void randomPerturb( Model<3U>&, const char*, double );
+
+
+
+
+
+
+/**
+    convert the flag(s) of a variable into integer values stored in its number part
+    
+    @attention works only for scalars and basic property placements.
+    
+    @author SKM 21/5/2014
+*/
+template<size_t dim>
+void flagToNumber( Model<dim>& model, const char* variable )
+ {
+    csmp::Region<dim>&  mref(model.Region("Model"));
+    csmp::Index  prop_key = model.Database().StorageKey(variable);
+   
+    if ( prop_key.type != SCALAR )
+      throw csmp::Exception( ERROR, "flagToNumber:", "method has not been implemented yet" );
+
+    switch( prop_key.place )
+      {
+         case NODE:
+              for ( typename vector<Node<dim>*>::iterator
+                    nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                {
+                   // overwrites variable value with integer value of its flag enum
+                   double value = static_cast<double>( (*nit)->Status(prop_key) );
+                   (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
+                }
+           break;
+         case ELEMENT_INTEGRATION_POINT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
+                for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+                {
+                   double value = static_cast<double>( (*eit)->Status(prop_key) );
+                   (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
+                }
+           break;
+         case ELEMENT:
+              for ( typename vector<Element<dim>*>::iterator
+                    eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
+                {
+                   double value = static_cast<double>( (*eit)->Status(prop_key) );
+                   (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
+                }
+           break;
+         default:
+           cout <<"\nflagToNumber: property placement not handled."<< endl;
+      }
+   
+ } // end flagToNumber
+
+template void flagToNumber( Model<1U>&, const char* );
+template void flagToNumber( Model<2U>&, const char* );
+template void flagToNumber( Model<3U>&, const char* );
+
+
+
+
+/**
+    convert the flag(s) of first variable into double values stored in the second variable
+    
+    @attention works only for node-property placement.
+    
+    @author SKM 8/12/2016
+*/
+template<size_t dim>
+void flagToNumber( Model<dim>& model, const char* flag_variable, const char* value_variable )
+ {
+    csmp::Region<dim>&  mref(model.Region("Model"));
+    csmp::Index  flag_key = model.Database().StorageKey(flag_variable);  // input
+    csmp::Index  prop_key = model.Database().StorageKey(value_variable); // output
+ 
+    if ( flag_key.type != prop_key.type )
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must be of the same type." );
+
+    if ( flag_key.place != prop_key.place )
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must have the same placement." );
+
+    if ( flag_key.type != SCALAR and flag_key.type != VECTOR )
+      throw csmp::Exception( ERROR, "flagToNumber:", "method handles only scalar and vector variables." );
+  
+    switch( prop_key.place )
+      {
+         case NODE:
+              if ( flag_key.type == SCALAR ) {
+                  for ( typename vector<Node<dim>*>::iterator
+                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                    {
+                       // retrieves status of the flag variable
+                       double value = static_cast<double>( (*nit)->Status(flag_key) );
+                       // overwrites value of value variable with integer value of its flag enum
+                       (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
+                    }
+                }
+              else if ( flag_key.type == VECTOR ) {
+                  VectorVariable<dim> vc;
+                  for ( typename vector<Node<dim>*>::iterator
+                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                    {
+                       (*nit)->Read( flag_key, vc );
+                       for ( size_t i=0U; i<dim; ++ i )
+                         vc(i) = static_cast<double>( vc.Flag(i) );
+                       (*nit)->Store( prop_key, vc );
+                    }
+                }
+           break;
+         default:
+           throw csmp::Exception( ERROR, "flagToNumber:", "property placement not handled." );
+      }
+   
+ } // end flagToNumber
+
+template void flagToNumber( Model<1U>&, const char*, const char* );
+template void flagToNumber( Model<2U>&, const char*, const char* );
+template void flagToNumber( Model<3U>&, const char*, const char* );
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+
+StripDomainEdgesFor() tests the spatial distribution of a scalar input element
+property for outliers and removes these. Property outliers are elements
+that constitute a property value boundary with >=two of their faces.
+When such elements are detected, their property value is set to the
+average of the surrounding elements. The property is changed only if
+the outside property is either smaller or greater than the element
+property.
+
+@section arguments Input Arguments
+
+The name of the property whose variations over the mesh shall be defined
+by relatively smooth boundaries.
+
+@section implementation Implementation
+
+The method using the connections among elements to test whether the
+element represents a property outlier.
+
+@section application Application
+
+The method is used for regular meshes which were created from pixel-type
+input data. In this case the method allows to capitalize on the element
+splits which were created by the Triangulator meshing tool along
+property boundaries. The result are boundaries with 45o segments that
+superseed the stepwise property boundaries of the original mesh.
+
+Numerous calls to StripDomainEdgesFor() also allow to erode regions
+defined by stepwise property variations.
+
+@section messages Messages
+
+The method will always warn the user that the model properties are
+modified. If the target property is not an element property, the
+simulation will be halted by a fatal error.
+
+If the target property is not a scalar variable the method will return
+without modifying the target property and it will report a warning.
+
+ */
+void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
+ {
+     const csmp::Index  prop_key = sg.Database().StorageKey(el_prop);
+
+     if ( prop_key.place != ELEMENT )
+       throw csmp::Exception( FATAL_ERROR, "stripDomainEdgesFor<2U>::StripDomainEdgesFor",
+                                    "The requested property is not an element variable");
+
+     if ( prop_key.type != SCALAR ) {
+          throw csmp::Exception( WARNING, "stripDomainEdgesFor<doubleoat,2U>::StripDomainEdgesFor",
+                                   "only SCALAR variables are handled so far");
+          return;
+       }
+     
+    map<size_t,ScalarVariable > new_sc_data;
+    ScalarVariable              sc;
+
+    csmp::Region<2>&  super_group(sg.Region("Model"));
+
+    for ( size_t n=0U; n<super_group.Elements(); n++ )
+       {
+          //  for elements that are not located at model boundary
+          if ( atBoundary( super_group.E(n) ) == NOT )
+            {
+               // getting the scalar variable data
+               super_group.E(n)->Read( prop_key, sc );
+              
+               // checking whether element-property should be changed
+               // because the element is located at a region boundary
+               // ---------------------------------------------------
+               // 1. counting the surrounding values that are different from el-value
+               double     sc_sum(0U);
+               unsigned int counter(0U);
+               for ( size_t i=0U; i<super_group.E(n)->Neighbors(); i++ ) {
+                   assert( super_group.E(n)->Neighbor(i) != nullptr );
+                   if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) {
+                        sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
+                        counter++;
+                     }
+                 }
+               // if more than 2 neighbors have a different property value, this value
+               // is assigned to the element
+               // TODO: if were are not dealing with triangular elements, this number (2U) is not correct
+               if ( counter >= 2U ) sc = sc_sum / static_cast<double>(counter);
+          
+               // storing the new values of only those elements that must be changed
+               new_sc_data[ n ] = sc;
+            }
+       }
+    
+     // modyfying those elements that were found to be isolated
+     // this implies that isolated squares are removed
+     for ( map<size_t,ScalarVariable >::iterator
+           sc_it=new_sc_data.begin(); sc_it!=new_sc_data.end(); sc_it++ )
+       super_group.E( (*sc_it).first )->Store( prop_key, (*sc_it).second );
+       
+     cout <<"\n\nstripDomainEdgesFor<2U>::StripDomainEdgesFor: "<< new_sc_data.size() <<" '"<< el_prop;
+     cout <<"' domain-edge elements have been modified to create a smoother boundary."<< endl;
+            
+   } // end StripRoughDomainEdgesFor
+
+
+
+
+
+
+
+
+
+
+
+/**
+     Assigns chosen node coordinate (x or y or z) to the target node variable.
+*/
+template<size_t dim>
+void assignNodeCoordinatesTo( Model<dim>& sg, const char coordinate, const char* node_var )
+ {
+      csmp::Index nvar_key = sg. Database().StorageKey(node_var);
+      assert( nvar_key.place == NODE );
+      
+      Region<dim>&  sgref(sg.Region("Model"));
+
+      const typename vector<Node<dim>* >::iterator  nodesEnd(sgref.NodesEnd());
+      
+      if ( coordinate == 'x' or coordinate == 'X' )
+        for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->x() ) );
+        
+      if ( dim > 1 and (coordinate == 'y' or coordinate == 'Y') )
+        for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->y() ) );
+
+      if ( dim > 2 and (coordinate == 'z' or coordinate == 'Z') )
+        for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key ), (*nit)->z() ) );
+ 
+ }  // end
+
+template void assignNodeCoordinatesTo( Model<1U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<2U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<3U>&, const char, const char* );
+
+
+
+
+/**
+
+Function evaluates that the VSet connectivity is exactly the same
+as the data in the current Model!
+
+The Model is used as the reference case.
+
+*/
+template<size_t dim>
+bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
+ {
+    bool correct(true);
+   
+    const Region<dim>&  gref(sg.Region("Model"));
+    if ( gref.Elements() != vset.Elements() ) cout <<"\ncompareConnectivity: element number mismatch."<< endl;
+    if ( gref.Nodes() != vset.Vertices() ) cout <<"\ncompareConnectivity: node number mismatch."<< endl;
+  
+    // 1. plist
+    for ( uint32_t i=0U; i<gref.Elements(); i++ )
+      {
+         for ( uint32_t j=0U; j<gref.E(i)->Nodes(); j++ )
+           if ( gref.E(i)->N(j)->Idx() != vset.Plist( gref.E(i)->Idx(), j ) ) {
+                 cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->N(j)->Idx();
+                 cerr <<" vs. vset nid: "<< vset.Plist( gref.E(i)->Idx(), j );
+                 correct = false;
+             }
+      }
+    
+    // 2. pfverts
+    for ( uint32_t i=0U; i<gref.Elements(); i++ )
+      {
+         for ( uint32_t j=0U; j<gref.E(i)->Neighbors(); j++ )
+           if ( gref.E(i)->Neighbor(j) and
+                static_cast<int32_t>(gref.E(i)->Neighbor(j)->Idx()) != vset.Pfvert( gref.E(i)->Idx(), j ) ) {
+                 cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->Neighbor(j)->Idx();
+                 cerr <<" vs. vset nid: "<< vset.Pfvert( gref.E(i)->Idx(), j );
+                 correct = false;
+             }
+      }
+   
+   return correct;
+    
+ } // end compare
+
+template bool compareConnectivity<2U>( const Model<2U>&, const VSet<2U>& );
+template bool compareConnectivity<3U>( const Model<3U>&, const VSet<3U>& );
+
+
+
+
+
+
+
+
+/**
+    Imposes a user-defined upper or lower limit on the value of the variable of interest.
+    
+    For a vector variable, its length gets scaled to the limit value.
+    For a tensor variable nothing can be done yet, so an exception is thrown.
+    
+    @author SKM 7/9/2014
+*/
+template<size_t dim>
+void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double limit_value )
+ {
+    Region<dim>&  rref(model.Region(region));
+    csmp::Index   prop_key(model.Database().StorageKey(variable));
+    double      min, max;
+    model.Database().RangeOf( variable, min, max );
+   
+    if ( upper_limit && limit_value > max ) {
+         cerr <<"\nIntended upper limit on variable '"<< variable <<"' exceeds that defined in database: ";
+         cerr << limit_value <<" vs. "<< max << endl;
+         throw csmp::Exception( ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
+      }
+    if ( !upper_limit && limit_value < min ) {
+         cerr <<"\nIntended lower limit on variable '"<< variable <<"' is lower than that defined in database: ";
+         cerr << limit_value <<" vs. "<< min << endl;
+         throw csmp::Exception( ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
+      }
+   
+    if ( prop_key.type == SCALAR ) {
+        ScalarVariable  sc;
+        if ( upper_limit )
+          switch( prop_key.place )
+            {
+               case MODEL:
+                  model.Store( prop_key, makeScalar( model.Status(prop_key), std::min(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case REGION:
+                  rref.Store( prop_key, makeScalar( rref.Status(prop_key), std::min(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case ELEMENT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                      double val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::min(limit_value,val) ) );
+                   }
+                 break;
+               case ELEMENT_INTEGRATION_POINT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                    for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
+                         double val = (*it)->Read( i, prop_key );
+                         (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::min(limit_value,val) ) );
+                      }
+                 break;
+               case NODE:
+                  for ( typename vector<Node<dim>*>::iterator
+                        it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
+                      double val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::min(limit_value,val) ) );
+                   }
+                 break;
+               default:
+                 throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
+            }
+          else // if a lower limit shall be imposed
+          switch( prop_key.place )
+            {
+               case MODEL:
+                  model.Store( prop_key, makeScalar( model.Status(prop_key), std::max(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case REGION:
+                  rref.Store( prop_key, makeScalar( rref.Status(prop_key), std::max(limit_value,rref.Read(prop_key)) ) );
+                 break;
+               case ELEMENT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                      double val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::max(limit_value,val) ) );
+                   }
+                 break;
+               case ELEMENT_INTEGRATION_POINT:
+                  for ( typename vector<Element<dim>*>::iterator
+                        it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                    for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
+                         double val = (*it)->Read( i, prop_key );
+                         (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::max(limit_value,val) ) );
+                      }
+                 break;
+               case NODE:
+                  for ( typename vector<Node<dim>*>::iterator
+                        it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
+                      double val = (*it)->Read( prop_key );
+                      (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::max(limit_value,val) ) );
+                   }
+                 break;
+               default:
+                 throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
+            }
+      }
+   
+    // for a vector variable, its length gets scaled to the limit value
+    else if ( prop_key.type == VECTOR ) {
+        VectorVariable<dim>  vc;
+        switch( prop_key.place )
+          {
+             case MODEL: {
+                    model.Read( prop_key, vc );
+                    const double vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    // if the vector is too long it gets scaled back
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    model.Store( prop_key, vc );
+                 }
+               break;
+             case REGION: {
+                    rref.Read( prop_key, vc );
+                    const double vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    rref.Store( prop_key, vc );
+                 }
+               break;
+             case ELEMENT:
+                for ( typename vector<Element<dim>*>::iterator
+                      it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                    (*it)->Read( prop_key, vc );
+                    const double vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    (*it)->Store( prop_key, vc );
+                 }
+               break;
+             case ELEMENT_INTEGRATION_POINT:
+                for ( typename vector<Element<dim>*>::iterator
+                      it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                  for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ ) {
+                       (*it)->Read( i, prop_key, vc );
+                        const double vmagnitude = vc.Length();
+                        assert( vmagnitude > 0. );
+                        if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                        else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                       (*it)->Store( i, prop_key, vc );
+                    }
+               break;
+             case NODE:
+                for ( typename vector<Node<dim>*>::iterator
+                      it=rref.NodesBegin(); it!=rref.NodesEnd(); ++it ) {
+                    (*it)->Read( prop_key, vc );
+                    const double vmagnitude = vc.Length();
+                    assert( vmagnitude > 0. );
+                    if ( upper_limit and vmagnitude > max ) vc /= (vmagnitude / max);
+                    else if ( vmagnitude < min ) vc *= (min / vmagnitude);
+                    (*it)->Store( prop_key, vc );
+                 }
+               break;
+             default:
+               throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
+          }
+      }
+    else throw csmp::Exception( ERROR, "imposeLimitOn:", "variable type not recognized." );
+
+ } // end imposeLimitOn
+
+template void imposeLimitOn( Model<1U>&, const char*, const char*, bool, double );
+template void imposeLimitOn( Model<2U>&, const char*, const char*, bool, double );
+template void imposeLimitOn( Model<3U>&, const char*, const char*, bool, double );
+
+
+
+
+
 
 
 

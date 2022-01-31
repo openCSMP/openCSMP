@@ -9,6 +9,7 @@
 #include "EffectiveStressDilatation2D_Example.h"
 
 #include "Model.h"
+#include "ModelTopology.h"
 #include "SplitBoundary.h"
 #include "Region.h"
 #include "ModelTime.h"
@@ -112,8 +113,7 @@ void EffectiveStressDilatation2D_Example::Run()
 
   // reading mesh
   const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( bin_file, mesh_container, mesh_topology, binary_file, irregular_mesh );
+  mesh_interface.Read_ANSYS_Mesh( bin_file, mesh_container, mesh_topology, binary_file, true );
   // mesh_topology.Out();
   // eliminating potentially unwanted regions
   mesh_topology.ReduceToRegions( bin_file );
@@ -133,10 +133,10 @@ void EffectiveStressDilatation2D_Example::Run()
   mesh_container.Erase();
   mesh_topology.Erase();
   
-  // 2.1 split Boundaries
-  model.InsertSplitBoundary("SET1");
-  model.InsertSplitBoundary("SET2");
-  model.InsertSplitBoundary("WELL_FRACTURE");
+  // 2.1 create Boundaries and convert them into SplitBoundary objects
+  model.CreateSplitBoundaryFrom("SET1");
+  model.CreateSplitBoundaryFrom("SET2");
+  model.CreateSplitBoundaryFrom("WELL_FRACTURE");
   
   cout <<"\nmain: created split boundaries: ";
   for ( Model<2>::splitBoundaryConstIterator it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); it++ )
@@ -172,10 +172,10 @@ void EffectiveStressDilatation2D_Example::Run()
   // 4. Initial uniform fluid pressure in reservoir layer
   // ---------------------------------------------------------------
   // hydrostatic pressure at 2300 m depth
-  const double64 pf(2300. * 9.81 * 1000. + 100325.);
+  const double pf(2300. * 9.81 * 1000. + 100325.);
   model.InputPropertyValue( "fluid pressure", makeScalar(PLAIN,pf) );
   // gas static pressure in the well
-  const double64 pg(2300. * 9.81 * 100. + 100325.);
+  const double pg(2300. * 9.81 * 100. + 100325.);
   well.InputNodePropertyValue( "fluid pressure", makeScalar(PLAIN,pg), COMPLETE, INSIDE );
   well.ChangePropertyStatus( "fluid pressure", DIRICH );
   well.InputPropertyValue( "fracture permeability", makeScalar(PLAIN,1.0e-7) );
@@ -211,9 +211,9 @@ void EffectiveStressDilatation2D_Example::Run()
   // ___________________________________________________________________________
 
     // watch out with the time unit because spurious oscillations may result...
-    const double64 well_life(86400000.), time_unit(600.); // 1000 days vs. 10-min
-    double64       time_increment(60.);       // 60 sec to start with
-    double64&      model_time( ModelTime::Instance().modelTime );
+    const double well_life(86400000.), time_unit(600.); // 1000 days vs. 10-min
+    double       time_increment(60.);       // 60 sec to start with
+    double&      model_time( ModelTime::Instance().modelTime );
 
     // to invoke the finite-volume framework a transport algorithm is constructed
     NodeCenteredFiniteVolumeTransport<DIM>  solute_transport( "fractures", model, "porosity", "concentration",
@@ -221,7 +221,7 @@ void EffectiveStressDilatation2D_Example::Run()
 
     RegionBoundaryFluxVisitor<DIM,Region> well_influx( model, "WELL_FRACTURE", "velocity" );
     cout <<"\nRun: length of the well (m): "<< well.Area() <<"\n";
-    double64 cumulative_production(0.); // m3 at well pressure
+    double cumulative_production(0.); // m3 at well pressure
   
     while ( model_time <= well_life )
       {
@@ -248,7 +248,7 @@ void EffectiveStressDilatation2D_Example::Run()
 /**
     Slightly compressible formulation for pressure equation, using total system compressibility-based hydraulic diffusivity.
 */
-void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<DIM>& model, double64 time_increment )
+void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<DIM>& model, double time_increment )
  {
     static bool first_call(true);
     
@@ -290,7 +290,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
          #endif
        }
 
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
 
 #ifdef SAMG_OUTPUT_TO_FILE
     // trigger output to file
@@ -349,7 +349,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
 /**
     For SplitBoundary computations.
 */
-void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2U>& model, const char* split_boundary_name, double64 time_increment )
+void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2U>& model, const char* split_boundary_name, double time_increment )
  {
     static bool first_call(true);
 
@@ -424,7 +424,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
 #endif
        }
 
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
 
     if ( verbose_ ) {
          cout <<"\nComputeTransientFluidPressure: Input parameter ranges: "<< endl;
@@ -521,15 +521,15 @@ void computeGasFlowProperties( Model<DIM>& model, const char* target_region )
           it=mref.ElementsBegin(); it!=mref.ElementsEnd(); ++it )
       {
          // retrieve input properties (knowing where they are placed)
-         double64 phi = (*it)->Read( phi_key );
-         double64 k   = (*it)->Read( k_key );
-         double64 cr   = (*it)->Read( cr_key );
+         double phi = (*it)->Read( phi_key );
+         double k   = (*it)->Read( k_key );
+         double cr   = (*it)->Read( cr_key );
          (*it)->PropertyValueAtBaryCenter( cf_key, cf );
          (*it)->PropertyValueAtBaryCenter( mu_key, mu );
         
          // calculation
-         double64 ct = phi * cf() + (1 - phi) * cr;
-         double64 K  = k / mu();
+         double ct = phi * cf() + (1 - phi) * cr;
+         double K  = k / mu();
         
          // store results
          (*it)->Store( ct_key, makeScalar(INIT_GUESS,ct) );

@@ -18,38 +18,38 @@ namespace csmp
   class HaliteLiquidus
   {
     public:
-      HaliteLiquidus( const double64& externaltemperature, 
-                      const double64& externalpressure );
+      HaliteLiquidus( const double& externaltemperature, 
+                      const double& externalpressure );
 			~HaliteLiquidus();
       
-      double64         MassFractionNaCl();
-      double64         MoleFractionNaCl();
+      double         MassFractionNaCl();
+      double         MoleFractionNaCl();
 
     private:
       HaliteLiquidus(); // disable default construction
 
-      const double64&  temperature_;        ///< reference to temperature [C] in flow code
-      const double64&  pressure_;           ///< reference to fluid pressure [Pa] in flow code
+      const double&  temperature_;        ///< reference to temperature [C] in flow code
+      const double&  pressure_;           ///< reference to fluid pressure [Pa] in flow code
 
-      double64         tcurrent_;           ///< temperature [C] for internal use
-      double64         pcurrent_;           ///< fluid pressure [bar] for internal use
-      double64         molefraction_nacl_;  ///< mole fraction NaCl, based on molar mass in ConvertConcentrationUnitsNaCl.h
+      double         tcurrent_;           ///< temperature [C] for internal use
+      double         pcurrent_;           ///< fluid pressure [bar] for internal use
+      double         molefraction_nacl_;  ///< mole fraction NaCl, based on molar mass in ConvertConcentrationUnitsNaCl.h
 
-      double64         tmelt_;              ///< halite melting temperature for given pressure
-      double64         myt_;                ///< nomalized temperature for internal use
-      double64         e0_;                 ///< parameter e0 for eq. 8 in Driesner&Heinrich (2007)
-      double64         e1_;                 ///< parameter e1 for eq. 8 in Driesner&Heinrich (2007)
-      double64         e2_;                 ///< parameter e2 for eq. 8 in Driesner&Heinrich (2007)
-      double64         e3_;                 ///< parameter e3 for eq. 8 in Driesner&Heinrich (2007)
-      double64         e4_;                 ///< parameter e4 for eq. 8 in Driesner&Heinrich (2007)
-      double64         e5_;                 ///< parameter e5 for eq. 8 in Driesner&Heinrich (2007)
+      double         tmelt_;              ///< halite melting temperature for given pressure
+      double         myt_;                ///< nomalized temperature for internal use
+      double         e0_;                 ///< parameter e0 for eq. 8 in Driesner&Heinrich (2007)
+      double         e1_;                 ///< parameter e1 for eq. 8 in Driesner&Heinrich (2007)
+      double         e2_;                 ///< parameter e2 for eq. 8 in Driesner&Heinrich (2007)
+      double         e3_;                 ///< parameter e3 for eq. 8 in Driesner&Heinrich (2007)
+      double         e4_;                 ///< parameter e4 for eq. 8 in Driesner&Heinrich (2007)
+      double         e5_;                 ///< parameter e5 for eq. 8 in Driesner&Heinrich (2007)
 
       NaClMeltingCurve naclmelting;
 
       void             CheckState();
       void             UpdateParameters();
 
-      double64         MolefractionNaCl( const double64& myt_ ); 
+      double         MolefractionNaCl( const double& myt_ ); 
   };
 
   /**
@@ -72,7 +72,7 @@ namespace csmp
 
      @code
 
-     double64 t(somevalue), p(anothervalue); // temperature [C] and pressure [in Pa] in user's application
+     double t(somevalue), p(anothervalue); // temperature [C] and pressure [in Pa] in user's application
      ...
      HaliteLiquidus liquidus(t,p); 
      ...

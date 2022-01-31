@@ -104,7 +104,7 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
  // 2. Calculating hydraulic conductivity from permeability using Interrelation subclass
  // ------------------------------------------------------------------------------------
-   const double64 fluid_viscosity(1.0e-03);
+   const double fluid_viscosity(1.0e-03);
    ConstantFactor<2U,divides>  conductivity( model.Database(),
                                                      "conductivity", "permeability",
                                                       fluid_viscosity );
@@ -135,8 +135,8 @@ void StreamFunction_Example::Run()
  // 3.1 Analysis of results
  // ------------------------------------------------------------------------------------
    StatisticalAnalyzer<2U>                                     flux_histogram( model );
-   vector<pair<double64,double64> >                            bins;
-   map<string,pair<vector<pair<double64,double64> >,size_t> >  results;
+   vector<pair<double,double> >                            bins;
+   map<string,pair<vector<pair<double,double> >,size_t> >  results;
 
    flux_histogram.DefineBins( "example21_histogram.bins", bins );
    flux_histogram.RegionPropertyHistograms( "volume flux", bins, results );
@@ -152,7 +152,7 @@ void StreamFunction_Example::Run()
    RegionMonitor<2U>  monitor( model, integral_properties, range_properties );
    bool normalize_integrated_values = false;
  //	    stdio.RecordLogicalChoice("Would you like to normalize region integral by region volume");
-   double64& model_time( ModelTime::Instance().modelTime );  model_time = 0.;
+   double& model_time( ModelTime::Instance().modelTime );  model_time = 0.;
    monitor.DivideIntegralPropertiesByRegionVolumes( normalize_integrated_values );
    monitor.ScalarPropertyIntegrals( model, model_time );
    monitor.ScalarPropertyRanges( model, model_time );
@@ -178,13 +178,13 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
    cin >> flow_direction;
    Point<2U>  xyz_min, xyz_max;
    model.Region("Model").MinMaxCoordinates( xyz_min, xyz_max );
-   const double64  xsec_X = xyz_max[0] - xyz_min[0];
-   const double64  xsec_Y = xyz_max[1] - xyz_min[1];
-   double64  pmin, pmax, farfield_pf_gradient,
+   const double  xsec_X = xyz_max[0] - xyz_min[0];
+   const double  xsec_Y = xyz_max[1] - xyz_min[1];
+   double  pmin, pmax, farfield_pf_gradient,
              // non signalling initialization to NAN value
-             k_effective(std::numeric_limits<double64>::quiet_NaN());
+             k_effective(std::numeric_limits<double>::quiet_NaN());
 
-   double64  model_throughput = integrateDomainBoundaryFlux( model );
+   double  model_throughput = integrateDomainBoundaryFlux( model );
 
    model.MinMaxOf( "fluid pressure", pmin, pmax );
 
@@ -220,7 +220,7 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
  // ------------------------------------------------------------------------------------
    if ( flow_direction == 1 ) computeStreamFunction( model, BOTTOM, TOP, model_throughput, "stream function" );
    else                       computeStreamFunction( model, LEFT, RIGHT, model_throughput, "stream function" );
-   double64 max_stream = printRangeOfVariable( model, stdio, "stream function", true );
+   double max_stream = printRangeOfVariable( model, stdio, "stream function", true );
    cout <<"\nmain: Total throughput versus max indicated by streamfunction solution: ";
    cout << model_throughput <<" vs. "<< max_stream <<" (should be the same)."<< endl;
 
@@ -236,7 +236,7 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
    // output results for visualization using VTK
    vtk_output.OutputDataToVTK( model, "stream-function", "stream function",  0 );
 
- //  BinaryFileInterface<double64,2U>  bin_output;
+ //  BinaryFileInterface<double,2U>  bin_output;
  //  bin_output.WriteConnectivityFile( model, "model_connectivity" );
  //  bin_output.WriteDataTo( model, "fluid-pressure", "fluid pressure", 0 );
 
@@ -281,7 +281,7 @@ void  StreamFunction_Example::analyze_sensitivity( Model<2U>& sg, const char* gr
  {
     assert( sg.Database().Type("permeability") == SCALAR );
     for ( ;; ) {
-          double64 average_k = sg.Region(group).Average( "permeability" );
+          double average_k = sg.Region(group).Average( "permeability" );
           cout <<"\nanalyze_sensitivity: Current average permeability, k = "<< average_k;
           cout <<"; enter new k value (-1. to break loop): ";
           ScalarVariable  perm;
@@ -299,7 +299,7 @@ void  StreamFunction_Example::analyze_sensitivity( Model<2U>& sg, const char* gr
 /**
 
 bool integrateDomainBoundaryFlux( Region<3>& sg,
-                                  double64& inflow, double64& outflow )
+                                  double& inflow, double& outflow )
 
 @section description Description
 
@@ -322,7 +322,7 @@ of the model domain.
 
 tested: */
 template<size_t dim>
-double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
+double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -355,17 +355,16 @@ double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   // ------------------------------------------------------------------------------
   vector<ScalarVariable>  PF(10);
   ScalarVariable          K; // hydraulic conductivity
-  vector<double64>        IPVF(4), NVF(10);
+  vector<double>        IPVF(4), NVF(10);
   DenseMatrix<DM_MIN>     DERIV;
   // storage for the extrapolated nodal velocities for each individual element
   // elements nodes velocity components
-  map<size_t,vector<vector<double64> > >  NVELO;
-  vector<vector<double64> >               dummy;
-  pair<typename map<size_t,vector<vector<double64> > >::iterator,bool>  mit;
+  map<size_t,vector<vector<double> > >  NVELO;
+  vector<vector<double> >               dummy;
+  pair<typename map<size_t,vector<vector<double> > >::iterator,bool>  mit;
 
-  for ( typename vector<Element<dim>*>::const_iterator
-        eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
-    if ( (*eit)->AtBoundary() != NOT )
+  for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+    if ( atBoundary(*eit) != NOT )
       {
          // collecting nodal fluid pressures and elemental hydraulic conductivities from
          // each element
@@ -409,17 +408,15 @@ double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   // integrating fluxes over the faces and adding ensuing contributions to flux balances
   // -----------------------------------------------------------------------------------
   VectorVariable<dim>  normal, velo;
-  double64             velocity, flux(0U);
+  double             velocity, flux(0U);
   bool                 first_found(false), second_found(false);
-  double64             sum_influx(0.), sum_outflux(0.);
+  double             sum_influx(0.), sum_outflux(0.);
 
   cout <<"\nintegrateDomainBoundaryFlux: Computing fluxes across faces..."<< endl;
   clock_t ticks = clock();
 
-  for ( typename std::map<std::string,csmp::Boundary<dim> >::const_iterator
-        bit=sg.BoundariesBegin(); bit!=sg.BoundariesEnd(); bit++ )
-    for ( typename vector<Face<dim>*>::const_iterator
-          fit=(*bit).second.ElementsBegin(); fit!=(*bit).second.ElementsEnd(); fit++ )
+  for ( auto bit=sg.BoundariesBegin(); bit!=sg.BoundariesEnd(); bit++ )
+    for ( auto fit=(*bit).second.ElementsBegin(); fit!=(*bit).second.ElementsEnd(); fit++ )
       /// Roman, 2014 ( Face&InterFace ): Should Face contain AtBoundary flag?
       //if ( (*fit)->AtBoundary() != NOT )
         {
@@ -448,13 +445,13 @@ double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
            // is going, else we are dealing with an influx
            // if there is no second element
            if ( first_found ) {
-                if      ( flux > static_cast<double64>(0.) ) sum_outflux += flux;
-                else if ( flux < static_cast<double64>(0.) ) sum_influx  += fabs(flux);
+                if      ( flux > static_cast<double>(0.) ) sum_outflux += flux;
+                else if ( flux < static_cast<double>(0.) ) sum_influx  += fabs(flux);
              }
            // second element, everything is just opposite
            else if ( second_found ) {
-                if      ( flux > static_cast<double64>(0.) ) sum_outflux += flux;
-                else if ( flux < static_cast<double64>(0.) ) sum_influx  += fabs(flux);
+                if      ( flux > static_cast<double>(0.) ) sum_outflux += flux;
+                else if ( flux < static_cast<double>(0.) ) sum_influx  += fabs(flux);
              }
 
       } // end for if faces
@@ -476,7 +473,7 @@ double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
 // @test tested: O.K.
 void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
                             BOX_BOUNDARY boundary0, BOX_BOUNDARY boundary1,
-                            double64 total_flux, const char* stream_func_var )
+                            double total_flux, const char* stream_func_var )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();

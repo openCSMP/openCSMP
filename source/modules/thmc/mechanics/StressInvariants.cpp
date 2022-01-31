@@ -66,12 +66,12 @@ StressInvariants::StressInvariants( const TensorVariable<3U>& ts )
     @attention original angle(theta), is in radians (Smith & Griffiths, eq. 6.3. p. 227
  
 */
-double64 StressInvariants::LodeAngle( const TensorVariable<3U>& ts ) const
+double StressInvariants::LodeAngle( const TensorVariable<3U>& ts ) const
  {
-    const double64 sx  = (2. * ts(0,0) - ts(1,1) - ts(2,2)) / 3.;
-    const double64 sy  = (2. * ts(1,1) - ts(2,2) - ts(0,0)) / 3.;
-    const double64 sz  = (2. * ts(2,2) - ts(0,0) - ts(1,1)) / 3.;
-    double64 J3(sx * sy * sz);
+    const double sx  = (2. * ts(0,0) - ts(1,1) - ts(2,2)) / 3.;
+    const double sy  = (2. * ts(1,1) - ts(2,2) - ts(0,0)) / 3.;
+    const double sz  = (2. * ts(2,2) - ts(0,0) - ts(1,1)) / 3.;
+    double J3(sx * sy * sz);
     J3 -= sx * (ts(1,2) * ts(1,2));
     J3 -= sy * (ts(0,2) * ts(0,2));
     J3 -= sz * (ts(0,1) * ts(0,1));
@@ -83,11 +83,11 @@ double64 StressInvariants::LodeAngle( const TensorVariable<3U>& ts ) const
  } // end LodeAngle
 
 /// 2D version
-double64 StressInvariants::LodeAngle( const TensorVariable<2U>& ts ) const
+double StressInvariants::LodeAngle( const TensorVariable<2U>& ts ) const
  {
-    const double64 sx  = (2. * ts(0,0) - ts(1,1)) / 2.;
-    const double64 sy  = (2. * ts(1,1) - ts(2,2)) / 2.;
-    const double64 J3(sx * sy * ts(0,1));
+    const double sx  = (2. * ts(0,0) - ts(1,1)) / 2.;
+    const double sy  = (2. * ts(1,1) - ts(2,2)) / 2.;
+    const double J3(sx * sy * ts(0,1));
    
     // theta
     return 1./3. * asin( (-3.* sqrt(6.) * J3) / (t_ * t_ * t_) );
@@ -96,13 +96,13 @@ double64 StressInvariants::LodeAngle( const TensorVariable<2U>& ts ) const
 
 
 /// mean stress = average of principal stresses
-double64 StressInvariants::MeanStress() const
+double StressInvariants::MeanStress() const
  {
     return s_ / sqrt3_;
  }
   
 /// maximum of the deviatoric stresses = nonisostatic stresses
-double64 StressInvariants::DeviatoricStress() const
+double StressInvariants::DeviatoricStress() const
  {
     return t_ * sqrt32_;
  }
@@ -112,19 +112,19 @@ double64 StressInvariants::DeviatoricStress() const
     sigma1 = maximum principal stress (Pa)
     as obtained from the modified deviatoric and mean stresses, see Smith & Griffith, p. 234
 */
-double64 StressInvariants::MaximumPrincipalStress1() const
+double StressInvariants::MaximumPrincipalStress1() const
  {
     return MeanStress() + 2./3. * DeviatoricStress() * sin( theta_ - (2.*CSMP_PI)/3. );
  }
 
 /// sigma2
-double64 StressInvariants::IntermediatePrincipalStress2() const
+double StressInvariants::IntermediatePrincipalStress2() const
  {
     return MeanStress() + 2./3. * DeviatoricStress() * sin( theta_ );
  }
 
 /// sigma3
-double64 StressInvariants::LeastPrincipalStress3() const
+double StressInvariants::LeastPrincipalStress3() const
  {
     return MeanStress() + 2./3. * DeviatoricStress() * sin( theta_ + (2.*CSMP_PI)/3. );
  }
@@ -138,9 +138,9 @@ double64 StressInvariants::LeastPrincipalStress3() const
     are contained in this assessment. However, these need to enter failure
     calculations that are handled in other classes, such as BrittleFailure.
 */
-double64 StressInvariants::MohrCoulombYieldEnvelope( double64 alpha ) const
+double StressInvariants::MohrCoulombYieldEnvelope( double alpha ) const
  {
-    double64 K_OfTheta = -sin(alpha * degrees_to_radians_);
+    double K_OfTheta = -sin(alpha * degrees_to_radians_);
     K_OfTheta *= sin(theta_);
     K_OfTheta /= sqrt3_;
     K_OfTheta += cos(theta_);
@@ -160,12 +160,12 @@ double64 StressInvariants::MohrCoulombYieldEnvelope( double64 alpha ) const
     are contained in this assessment. However, these need to enter failure
     calculations that are handled in other classes, such as BrittleFailure.
 */
-double64 StressInvariants::SmoothMohrCoulombYieldEnvelope( double64 alpha ) const
+double StressInvariants::SmoothMohrCoulombYieldEnvelope( double alpha ) const
  {
-    double64 K(sin(alpha * degrees_to_radians_));
+    double K(sin(alpha * degrees_to_radians_));
     K = (3. - K) / (3. + K);
-    const double64 G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta_) * (1-K));
-    const double64 K_OfTheta = 1.0/ G_OfTheta;
+    const double G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta_) * (1-K));
+    const double K_OfTheta = 1.0/ G_OfTheta;
 
     return K_OfTheta;
  }

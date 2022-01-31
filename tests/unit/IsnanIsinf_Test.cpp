@@ -15,7 +15,7 @@ IsnanIsinf_Test::~IsnanIsinf_Test()
 	
 void IsnanIsinf_Test::run()
 {
-	double64 zero = 0.0;
+	double zero = 0.0;
 
 	// isnan tests
 	_info("isnan(0.0) = "	<< isnan(0.0));

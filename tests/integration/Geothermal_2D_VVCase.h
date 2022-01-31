@@ -10,7 +10,6 @@
 #include "LinearSolver.h"
 #include "LUdcmp_Solver.h"
 #include "CSMP_definitions.h"
-#include "CSMP_number_types.h"
 #include "GlobalVerbose.h"
 
 // finite volumes 

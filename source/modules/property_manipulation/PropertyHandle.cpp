@@ -9,6 +9,7 @@
 #include "Model.h"
 #include "Exception.h"
 #include "CSMP_highLevelUtilities.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -254,8 +255,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
                return *this;
             }
     
-       VectorVariable<dim>  vc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-       TensorVariable<dim>  ts(flag_output,std::numeric_limits<double64>::quiet_NaN());
+       VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
+       TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
        csmp::Index  key   = super_group.Database().StorageKey( var_name.c_str() );
        csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
     
@@ -396,7 +397,7 @@ to the output flag.
 
 @section arguments Input Arguments
 
-Variables of the types double64, ScalarVariable, VectorVariable, or
+Variables of the types double, ScalarVariable, VectorVariable, or
 TensorVariable may be assigned. 
 
 @return The assignment returns the value into the PropertyHandle to the left of the
@@ -433,7 +434,7 @@ a vector or the determinant of a tensor is assigned to a scalar,
 a warning will be issued which specifies the type of assignment made. 
 */
 template<size_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double64 val )
+PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
  {
     switch( key_.type )
       {
@@ -464,7 +465,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double64 val )
              }
            break;
          case VECTOR: {
-              VectorVariable<dim>  vc(flag_output,std::numeric_limits<double64>::quiet_NaN());
+              VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
               vc = val;
               switch( key_.place )
                 {
@@ -491,7 +492,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double64 val )
              }
            break;
          case TENSOR: {
-              TensorVariable<dim>  ts(flag_output,std::numeric_limits<double64>::quiet_NaN());
+              TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
               ts = val;  
               switch( key_.place )
                 {
@@ -532,9 +533,9 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
  {
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
-    ScalarVariable                         sc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double64>::quiet_NaN());
+    ScalarVariable                         sc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     sc = s;
     vc = s;
     ts = s;
@@ -883,13 +884,13 @@ my_operand += 5.2;
 @endcode
  */
 template<size_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
+PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
  {
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
-    ScalarVariable                         sc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double64>::quiet_NaN());
+    ScalarVariable                         sc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     size_t i, j; 
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
 
@@ -1010,13 +1011,13 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
 
 
 template<size_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
+PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
  {
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
-    ScalarVariable      sc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double64>::quiet_NaN());
+    ScalarVariable      sc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     size_t i, j; 
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
 
@@ -1140,13 +1141,13 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
     its value is multiplied by the argument value.
 */
 template<size_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
+PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
  {
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
-    ScalarVariable      sc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double64>::quiet_NaN());
+    ScalarVariable      sc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     size_t i, j; 
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
 
@@ -1266,13 +1267,13 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
 
 
 template<size_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double64 val )
+PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
  {
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
-    ScalarVariable      sc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double64>::quiet_NaN());
-    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double64>::quiet_NaN());   
+    ScalarVariable      sc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
+    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());   
     size_t i, j; 
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
 
@@ -2928,7 +2929,7 @@ PropertyHandle to the power of its first argument.
 @param raised_to The power to which the variable shall be raised.
 */
 template<size_t dim>
-void  PropertyHandle<dim>::Pow( double64 raised_to )
+void  PropertyHandle<dim>::Pow( double raised_to )
  {
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
@@ -3068,7 +3069,7 @@ argument.
 @param with The floating point number with which NAN values shall be replaced.
 */
 template<size_t dim>
-void  PropertyHandle<dim>::ZapNAN( double64 with )
+void  PropertyHandle<dim>::ZapNAN( double with )
  {
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
@@ -3225,7 +3226,7 @@ void  PropertyHandle<dim>::Sin()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     size_t i, j;
-    double64        omin, omax;
+    double        omin, omax;
     Range( omin, omax );
     if ( omin < 0.0 || omax > (3.1415927*2.0) )
       {
@@ -3378,7 +3379,7 @@ void  PropertyHandle<dim>::Cos()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     size_t i, j;
-    double64                             omin, omax;
+    double                             omin, omax;
     Range( omin, omax );
     if ( omin < 0.0 || omax > (3.1415927*2.0) )
       {
@@ -3531,7 +3532,7 @@ void  PropertyHandle<dim>::Tan()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     size_t i, j;
-    double64                             omin, omax;
+    double                             omin, omax;
     Range( omin, omax );
     if ( omin < 0.0 || omax > (3.1415927*2.0) )
       {
@@ -3681,7 +3682,7 @@ void  PropertyHandle<dim>::Acos()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     size_t i, j;
-    double64                             omin, omax;
+    double                             omin, omax;
     Range( omin, omax );
     if ( omin < -1.0 || omax > 1.0 )
       {
@@ -3831,7 +3832,7 @@ void  PropertyHandle<dim>::Asin()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     size_t i, j;
-    double64                             omin, omax;
+    double                             omin, omax;
     Range( omin, omax );
     if ( omin < -1.0 || omax > 1.0 )
       {
@@ -3982,7 +3983,7 @@ void  PropertyHandle<dim>::Atan()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     size_t i, j;
-    double64                             omin, omax;
+    double                             omin, omax;
     Range( omin, omax );
     if ( omin < -1.0 || omax > 1.0 )
       {
@@ -4126,7 +4127,7 @@ second argument.
 Range() calls the MinMaxOf() interface of the Model. 
 */
 template<size_t dim>
-void  PropertyHandle<dim>::Range( double64& omin, double64& omax ) const
+void  PropertyHandle<dim>::Range( double& omin, double& omax ) const
  {
     super_group.MinMaxOf( var_name.c_str(), omin, omax );
  }
@@ -4166,7 +4167,7 @@ bool  PropertyHandle<dim>::IsWithinRange() const
                            "cannot return range of arbitrary tensors for which Eigenvalues cannot be found.");
          return true;
       }
-    double64  omin, omax, pmin, pmax;
+    double  omin, omax, pmin, pmax;
     group.MinMaxOf( var_name.c_str(), omin, omax );
     super_group.Database().RangeOf(  var_name.c_str(), pmin, pmax );
     if ( omin >= pmin && omax <= pmax ) return true;

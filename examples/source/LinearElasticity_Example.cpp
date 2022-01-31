@@ -101,7 +101,7 @@ void LinearElasticity_Example::Run()
   // 2. Making group of entire model to monitor volume change
   // ---------------------------------------------------------------------------------------
     Region<2U>& model_domain(model.Region("Model"));
-    double64  volume = model_domain.Volume();
+    double  volume = model_domain.Volume();
     cout <<"\nmain: The model has a volume of: "<< volume <<" m^3."<< endl;
 
 
@@ -134,7 +134,7 @@ void LinearElasticity_Example::Run()
   // ---------------------------------------------------------------------------------------
   // NB: interrelations are deprecated now; nonetheless this demontrates use of STL unary functions
     if ( with_pore_pressure ) {
-         const double64 fluid_viscosity(1.0e-03);
+         const double fluid_viscosity(1.0e-03);
          ConstantFactor<2U,divides>  conductivity( model.Database(),
                                                   "conductivity", "permeability",
                                                    fluid_viscosity );
@@ -277,7 +277,7 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
 #endif
    pressure.ComputeSteadyState( model.Region("Model") );
 
-   double64  fmin, fmax;
+   double  fmin, fmax;
    model.MinMaxOf( "velocity", fmin, fmax );
    cout <<"\nsteadyStatePressure: computed 'Darcy velocity' range (min/max, m s-1): "<< fmin <<", "<< fmax << endl;
    model.MinMaxOf( "fluid pressure", fmin, fmax );

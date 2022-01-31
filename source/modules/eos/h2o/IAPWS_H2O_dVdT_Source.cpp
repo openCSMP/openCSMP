@@ -6,7 +6,7 @@ namespace csmp {
 
 template<size_t dim>
 IAPWS_H2O_dVdT_Source<dim>::IAPWS_H2O_dVdT_Source( const PropertyDatabase<dim>& pref,
-                                                   double64 dt, double64 eL_rock ) 
+                                                   double dt, double eL_rock ) 
       : Interrelation<dim>(pref),
         T( Interrelation<dim>::GlobalProperty("temperature") ),
         preT( Interrelation<dim>::GlobalProperty("previous temperature") ),
@@ -26,7 +26,7 @@ IAPWS_H2O_dVdT_Source<dim>::IAPWS_H2O_dVdT_Source( const PropertyDatabase<dim>& 
 
 
 template<size_t dim>
-void IAPWS_H2O_dVdT_Source<dim>::SetTimeIncrement( double64 dt ) { delta_t = dt; }
+void IAPWS_H2O_dVdT_Source<dim>::SetTimeIncrement( double dt ) { delta_t = dt; }
 
 
 template<size_t dim>

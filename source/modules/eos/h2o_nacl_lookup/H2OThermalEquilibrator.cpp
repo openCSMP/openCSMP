@@ -4,18 +4,18 @@
 
 namespace csmp{
 
-  H2OThermalEquilibrator::H2OThermalEquilibrator(const double64& external_mass_rock,  // [kg]
-                                                 const double64& external_cp_rock,    // [J/kg/K]
-                                                 const double64& external_rho_rock,   // [kg/m^3]
-                                                 const double64& external_porosity,   // [dimensionless]
-                                                 const double64& external_mass_fluid, // [kg]
-                                                 const double64& external_t_previous, // [C]
-                                                 const double64& external_p_current,  // [bar]
-                                                 const double64& external_H_current,  // [J] NOT [J/kg]
-                                                 const double64& external_H_previous, // [J]
+  H2OThermalEquilibrator::H2OThermalEquilibrator(const double& external_mass_rock,  // [kg]
+                                                 const double& external_cp_rock,    // [J/kg/K]
+                                                 const double& external_rho_rock,   // [kg/m^3]
+                                                 const double& external_porosity,   // [dimensionless]
+                                                 const double& external_mass_fluid, // [kg]
+                                                 const double& external_t_previous, // [C]
+                                                 const double& external_p_current,  // [bar]
+                                                 const double& external_H_current,  // [J] NOT [J/kg]
+                                                 const double& external_H_previous, // [J]
                                                  const bool&      fixed_external_t,
-                                                 const double64& t_fix,
-                                                 const double64& external_t_diff)
+                                                 const double& t_fix,
+                                                 const double& external_t_diff)
   : mass_rock(external_mass_rock),
     cp_rock(external_cp_rock),
     rho_rock(external_rho_rock),
@@ -66,8 +66,8 @@ namespace csmp{
   {
     // compute number of bisections (icrit_max) that would lead to reaching numerical precision
     //     following the formula (tmax-tmin) * 0.5^icrit_max <= epsilon;
-    double64 dummy;
-    dummy               = log(numeric_limits<double64>::epsilon()/(tmax-tmin));
+    double dummy;
+    dummy               = log(numeric_limits<double>::epsilon()/(tmax-tmin));
     dummy              /= log(0.5);
     icrit_max           = int(dummy)+1; // +1 for possible rounding problem
     icrit_max          += 1;            // +1 to ensure above formula works properly
@@ -207,7 +207,7 @@ namespace csmp{
         resid     = H_current_eq-H_test;
         //	cout << icrit << "\t" << resid << endl;
         // 2b. Check for convergence
-        if( definitelyLessThan( fabs(resid), convergence_criterion*bulkprops.h, numeric_limits<double64>::epsilon()) )
+        if( definitelyLessThan( fabs(resid), convergence_criterion*bulkprops.h, numeric_limits<double>::epsilon()) )
           {
             AssignAllPropertiesViaReport();
             equilibrated = true;
@@ -215,7 +215,7 @@ namespace csmp{
           }
 
         // 2c. If not converged, check if tmin = tmax, that'd be definite non-convergence
-        if( essentiallyEqual( tmin, tmax, numeric_limits<double64>::epsilon()) )
+        if( essentiallyEqual( tmin, tmax, numeric_limits<double>::epsilon()) )
           {
             cerr << "---------------------------------------------------------------------------------\n";
             cerr << "Upcoming non-convergence message for H2OThermalEquilibrator::Equilibrate(), this \n";
@@ -245,7 +245,7 @@ namespace csmp{
         //     However, there remains a vague chance that tmin ot tmax may essentially be
         //     equal to t_eq, which may eventually show up either as an error at 2c or as
         //     icrit > icrit_max. I guess this remains to be seen by just running the code.
-        if( definitelyLessThan( H_test, H_current_eq, numeric_limits<double64>::epsilon()) ) 
+        if( definitelyLessThan( H_test, H_current_eq, numeric_limits<double>::epsilon()) ) 
           tmin = t_eq;
         else  
           tmax = t_eq;
@@ -259,7 +259,7 @@ namespace csmp{
 	
         // 2e. It shouldn't happen but let's nevertheless check if tmin accidentally got larger than
         //     tmax, that's be fatal
-        if( definitelyGreaterThan( tmin, tmax, numeric_limits<double64>::epsilon()) )
+        if( definitelyGreaterThan( tmin, tmax, numeric_limits<double>::epsilon()) )
           {	    
             csmp_error.notice( FATAL_ERROR, 
                             "H2OThermalEquilibrator::Equilibrate() -",
@@ -309,8 +309,8 @@ namespace csmp{
   }
 
   // JPW Nov 2010
-  void H2OThermalEquilibrator::TemperatureDependentHeatCapacityRock( double64 cpr_min_ext, double64 t_min_ext,
-                                                                     double64 cpr_max_ext, double64 t_max_ext )
+  void H2OThermalEquilibrator::TemperatureDependentHeatCapacityRock( double cpr_min_ext, double t_min_ext,
+                                                                     double cpr_max_ext, double t_max_ext )
   {
     t_dependent_cpr = true;
     cpr_min = cpr_min_ext;
@@ -320,7 +320,7 @@ namespace csmp{
   }
 
   // JPW Nov 2010
-  double64 H2OThermalEquilibrator::TemperatureDependent_cpr( double64 T )
+  double H2OThermalEquilibrator::TemperatureDependent_cpr( double T )
   {
 
     if (T < t_min)
@@ -332,7 +332,7 @@ namespace csmp{
 
   }
 
-  double64 H2OThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double64& t )
+  double H2OThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double& t )
   {
     tdummy    =  t;
     hdummy    = (H_current_eq - mass_rock_eq*rock.Enthalpy(tdummy)/*cp_rock_eq*t*/); 
@@ -347,7 +347,7 @@ namespace csmp{
 
   void H2OThermalEquilibrator::ErrorCheckHmin(const int& i)
   {
-    if( definitelyLessThan( H_current_eq, Hmin, numeric_limits<double64>::epsilon()) )
+    if( definitelyLessThan( H_current_eq, Hmin, numeric_limits<double>::epsilon()) )
       {
         cout << "tmin = " << tmin << endl;
         cout << "tmax = " << tmax << endl;
@@ -367,7 +367,7 @@ namespace csmp{
 
   void H2OThermalEquilibrator::ErrorCheckHmax(const int& i)
   {
-    if( definitelyGreaterThan( H_current_eq, Hmax, numeric_limits<double64>::epsilon()) )
+    if( definitelyGreaterThan( H_current_eq, Hmax, numeric_limits<double>::epsilon()) )
       {
         std::stringstream istring;
         istring << i;
@@ -384,77 +384,77 @@ namespace csmp{
   void H2OThermalEquilibrator::FluidPropertiesErrorCheck()
   { 
     if( 
-       definitelyLessThan( bulkprops.t, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.t, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.p, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.p, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.x, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.x, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.wt, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.wt, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.rho, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.rho, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.cp, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.cp, 0.0, numeric_limits<double>::epsilon())
        ||
-       // definitelyLessThan( bulkprops.dhdt, 0.0, numeric_limits<double64>::epsilon())
+       // definitelyLessThan( bulkprops.dhdt, 0.0, numeric_limits<double>::epsilon())
        // ||
-       definitelyLessThan( bulkprops.beta, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.beta, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.s, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.s, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.mf, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.mf, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( bulkprops.mu, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( bulkprops.mu, 0.0, numeric_limits<double>::epsilon())
        ||
 
-       definitelyLessThan( liquidprops.t, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.t, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.p, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.p, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.x, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.x, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.wt, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.wt, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.rho, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.rho, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.h, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.h, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.cp, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.cp, 0.0, numeric_limits<double>::epsilon())
        ||
-       // definitelyLessThan( liquidprops.dhdt, 0.0, numeric_limits<double64>::epsilon())
+       // definitelyLessThan( liquidprops.dhdt, 0.0, numeric_limits<double>::epsilon())
        // ||
-       definitelyLessThan( liquidprops.beta, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.beta, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.s, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.s, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.mf, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.mf, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( liquidprops.mu, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( liquidprops.mu, 0.0, numeric_limits<double>::epsilon())
        ||
 
-       definitelyLessThan( vaporprops.t, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.t, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.p, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.p, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.x, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.x, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.wt, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.wt, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.rho, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.rho, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.h, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.h, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.cp, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.cp, 0.0, numeric_limits<double>::epsilon())
        ||
-       // definitelyLessThan( vaporprops.dhdt, 0.0, numeric_limits<double64>::epsilon())
+       // definitelyLessThan( vaporprops.dhdt, 0.0, numeric_limits<double>::epsilon())
        // ||
-       definitelyLessThan( vaporprops.beta, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.beta, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.s, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.s, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.mf, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.mf, 0.0, numeric_limits<double>::epsilon())
        ||
-       definitelyLessThan( vaporprops.mu, 0.0, numeric_limits<double64>::epsilon())
+       definitelyLessThan( vaporprops.mu, 0.0, numeric_limits<double>::epsilon())
         )
       {
         cerr << "bulkprops.t"      << bulkprops.t      << endl;
@@ -501,7 +501,7 @@ namespace csmp{
 
 
 
-  Fluidproperties H2OThermalEquilibrator::ReportLiquidProperties(const double64& t, const double64& p, const double64& h)
+  Fluidproperties H2OThermalEquilibrator::ReportLiquidProperties(const double& t, const double& p, const double& h)
   {
     h_fluid_eq    = h;
     t_eq          = t;
@@ -510,7 +510,7 @@ namespace csmp{
     return fluid.LiquidPropertiesFromTHP();
   }
 
-  Fluidproperties H2OThermalEquilibrator::ReportVaporProperties(const double64& t, const double64& p, const double64& h)
+  Fluidproperties H2OThermalEquilibrator::ReportVaporProperties(const double& t, const double& p, const double& h)
   {
     h_fluid_eq    = h;
     t_eq          = t;
@@ -519,7 +519,7 @@ namespace csmp{
     return fluid.VaporPropertiesFromTHP();
   }
 
-  Fluidproperties H2OThermalEquilibrator::ReportBulkProperties(const double64& t, const double64& p, const double64& h)
+  Fluidproperties H2OThermalEquilibrator::ReportBulkProperties(const double& t, const double& p, const double& h)
   {
     h_fluid_eq    = h;
     t_eq          = t;

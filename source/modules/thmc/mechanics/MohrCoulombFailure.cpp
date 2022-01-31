@@ -6,7 +6,7 @@ namespace csmp {
 
 template<size_t dim>
 MohrCoulombFailure<dim>::MohrCoulombFailure( const PropertyDatabase<dim>& p,
-                                             double64 friction_angle ) 
+                                             double friction_angle ) 
       : Interrelation<dim>(p),
         STRESS( Interrelation<dim>::GlobalProperty("stress") ),
         MS( Interrelation<dim>::GlobalProperty("mean stress") ),
@@ -19,7 +19,7 @@ MohrCoulombFailure<dim>::MohrCoulombFailure( const PropertyDatabase<dim>& p,
     Interrelation<dim>::ResultProperty("failure");
     
     // converting the friction angle in 'degrees' to 'radians'
-    double64  degrees_to_radians( (2*3.14159265358979)/360. );
+    double  degrees_to_radians( (2*3.14159265358979)/360. );
     
     phi = friction_angle * degrees_to_radians;
  }
@@ -40,13 +40,13 @@ void MohrCoulombFailure<dim>::Calculate()
     STRESS.AssignTo( ts );
     COH.AssignTo( ch );
     
-    double64  sm   = MeanStress( ts );
-    double64  t;
-    double64  sd   = DeviatoricStress( ts, t );
-    double64  ta   = Theta( ts, t );
-    double64  gt   = G_OfTheta( ta );
+    double  sm   = MeanStress( ts );
+    double  t;
+    double  sd   = DeviatoricStress( ts, t );
+    double  ta   = Theta( ts, t );
+    double  gt   = G_OfTheta( ta );
     
-    double64  F = sm * sin(phi) - ch() * cos(phi) + sd / gt;
+    double  F = sm * sin(phi) - ch() * cos(phi) + sd / gt;
     
     CRIT = 1.0;
     
@@ -64,9 +64,9 @@ void MohrCoulombFailure<dim>::Calculate()
 
 /// calculate lode angle, Smith & Griffiths, p. 233, computed in radians
 template<size_t dim>
-double64 MohrCoulombFailure<dim>::Theta( const TensorVariable<dim>& ts, double64 t )
+double MohrCoulombFailure<dim>::Theta( const TensorVariable<dim>& ts, double t )
  {
-    double64 sx, sy, sz, J3;
+    double sx, sy, sz, J3;
     
     if ( dim == 2 )
       {
@@ -93,9 +93,9 @@ double64 MohrCoulombFailure<dim>::Theta( const TensorVariable<dim>& ts, double64
 
 /// Zienkiewitz II, p. 89
 template<size_t dim>
-double64  MohrCoulombFailure<dim>::G_OfTheta( double64 theta ) 
+double  MohrCoulombFailure<dim>::G_OfTheta( double theta ) 
  {
-    double64 K(std::sin(phi));
+    double K(std::sin(phi));
     
     K = (3. - K) / (3. + K);
 
@@ -108,7 +108,7 @@ double64  MohrCoulombFailure<dim>::G_OfTheta( double64 theta )
 
 /// Smith & Griffiths, p. 233
 template<size_t dim>
-double64  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts ) 
+double  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts ) 
  {
     // Smith & Griffiths, p. 233
     if ( dim == 2 ) return (ts(0,0) + ts(1,1)) / std::sqrt(3.);
@@ -120,7 +120,7 @@ double64  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts )
 
 /// Zienkiewitz II, p. 61 bottom, p. 62 top, sigma-dash = deviatoric stress
 template<size_t dim>
-double64  MohrCoulombFailure<dim>::DeviatoricStress( const TensorVariable<dim>& ts, double64& t ) 
+double  MohrCoulombFailure<dim>::DeviatoricStress( const TensorVariable<dim>& ts, double& t ) 
  {
     // Smith & Griffiths, p. 233
     if ( dim == 2 )

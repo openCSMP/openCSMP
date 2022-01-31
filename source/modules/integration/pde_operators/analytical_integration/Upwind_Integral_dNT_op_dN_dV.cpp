@@ -21,7 +21,7 @@ Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Upwind_Integral_dNT_op_dN_dV( const P
                                                             				const char* test,
                                                             				const char* upwind,
                                                             				const char* trigger,
-                                                            				const double64 prefactor)
+                                                            				const double prefactor)
  
   : MathOperatorLHS<dim>(pref,oper,basic,test),
     DN(2,3),
@@ -71,7 +71,7 @@ Operand is.
 When the property is an element property, it will be put into the
 first vector entry MTRL[0]. */
 template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -91,7 +91,7 @@ void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 
 template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -106,12 +106,12 @@ void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e 
     for (size_t i = 0; i < e.Nodes(); ++i) {
     	for (size_t j = 0; j < e.Nodes(); ++j) {
     		if (i != j) {
-    			const double64 decision = DNT(i, j)*(el_tvar[j]() - el_tvar[i]());
+    			const double decision = DNT(i, j)*(el_tvar[j]() - el_tvar[i]());
     			if      (decision > 0) DNT(i, j) *= el_uvar[i]();
     			else if (decision < 0) DNT(i, j) *= el_uvar[j]();
     			else                   DNT(i, j) *= 0.5*(el_uvar[i]() + el_uvar[j]());
     		}
-    		else                     DNT(i, j) = static_cast<double64>(0.0);
+    		else                     DNT(i, j) = static_cast<double>(0.0);
     	}
     }
     

@@ -39,14 +39,14 @@ The result is returned into the MathOperatorRHS vector<fT> 'rhs'.
 
 tested: O.K.  */
 template<size_t dim,class CELL>
-void NumIntegral_SetRHS_to_One<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_SetRHS_to_One<dim,CELL>::ComputeContribution( const CELL& e )
 {
    // this integral is only for numerically integrated isoparametric finite elements
    assert( e.FE()->Isoparametric() == true );
 
    // create a RHS vector of zeros
    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-   for ( size_t i=0; i<e.Nodes(); i++ ) MathOperatorRHS<dim>::RHS[i] = 1.0/static_cast<double64>(e.N(i)->Parents());
+   for ( size_t i=0; i<e.Nodes(); i++ ) MathOperatorRHS<dim>::RHS[i] = 1.0/static_cast<double>(e.N(i)->Parents());
 
 } // end ComputeContribution
 

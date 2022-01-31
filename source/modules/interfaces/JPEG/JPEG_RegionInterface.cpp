@@ -25,8 +25,8 @@ JPEG_RegionInterface::JPEG_RegionInterface( Model<2U>& sg, const char* group_nam
                                     "Element property 'inner radius' does not exist but is needed by this object! Terminating....");
 
     // get the dimensions of the group
-    double64          rmin, rmax, temp, vmin, vmax;
-    double64          xy[4];
+    double          rmin, rmax, temp, vmin, vmax;
+    double          xy[4];
 
     Region<2>&  group(sg.Region( name_.c_str() ));
      
@@ -157,7 +157,7 @@ bool JPEG_RegionInterface::OutputRegionDataToJPG( Model<2U>& sg,
      
     // 3. Writing data onto grid 
     // -------------------------
-    regular_grid = std::numeric_limits<double64>::quiet_NaN();
+    regular_grid = std::numeric_limits<double>::quiet_NaN();
     sg.Region(name_).Accept( writer );
     
     // 4. Writing grid to JPG file
@@ -167,7 +167,7 @@ bool JPEG_RegionInterface::OutputRegionDataToJPG( Model<2U>& sg,
     outfile += file_name;
     replaceWhiteSpaceBy( outfile, '_' );
     
-    regular_grid.SaveToJPGWithoutNAN( outfile.c_str(), static_cast<int32>(timestep), gray, sqrt_of_value );
+    regular_grid.SaveToJPGWithoutNAN( outfile.c_str(), static_cast<int32_t>(timestep), gray, sqrt_of_value );
 
     return true;
 
@@ -183,15 +183,15 @@ values to prevent missing a part of the spectrum.
 
 @section arguments Input Arguments 
 
-As above, except for 2 double64 arguments permitting the user to 
+As above, except for 2 double arguments permitting the user to 
 specify the output range.  
 */
 bool JPEG_RegionInterface::OutputRegionDataToJPG( Model<2U>& sg,
                                                 const char* file_name, 
                                                 const char* var_name, 
                                                 long   timestep, 
-                                                double64    data_min, 
-                                                double64    data_max,
+                                                double    data_min, 
+                                                double    data_max,
                                                 bool        gray,  
                                                 bool        sqrt_of_value )
  {
@@ -214,7 +214,7 @@ bool JPEG_RegionInterface::OutputRegionDataToJPG( Model<2U>& sg,
      
     // 3. Writing data onto grid 
     // -------------------------
-    regular_grid = std::numeric_limits<double64>::quiet_NaN();
+    regular_grid = std::numeric_limits<double>::quiet_NaN();
     sg.Region(name_).Accept( writer );
     
     // 4. Writing grid to JPG file
@@ -224,7 +224,7 @@ bool JPEG_RegionInterface::OutputRegionDataToJPG( Model<2U>& sg,
     outfile += file_name;
     replaceWhiteSpaceBy( outfile, '_' );
     
-    regular_grid.SaveToJPGWithoutNAN( outfile.c_str(), static_cast<int32>(timestep), data_min, data_max, gray, sqrt_of_value );
+    regular_grid.SaveToJPGWithoutNAN( outfile.c_str(), static_cast<int32_t>(timestep), data_min, data_max, gray, sqrt_of_value );
 
     return true;
 

@@ -15,7 +15,7 @@ class TwoPhaseModelwithHysteresis_Test : public Test {
     
   private:
   
-    enum TestCases { CapillaryPressure, DerivativeOfCapillaryPressure, krw, krn };
+    enum TestCases : std::int8_t { CapillaryPressure, DerivativeOfCapillaryPressure, krw, krn };
   
     std::string parseTestCases( TestCases cases)
     {

@@ -96,19 +96,19 @@ public:
   TensorVariable( TensorVariable&& ) = default;
 
   /// creates isotropic diagonal tensor with diagonal elements equal to supplied value
-  TensorVariable( VARIABLE_FLAG flag, double64 val );
+  TensorVariable( VARIABLE_FLAG flag, double val );
 
   /// full initialisation where all diagonal elements have the same flag
   TensorVariable( VARIABLE_FLAG f,
-                  double64 v11, double64 v12, double64 v13,
-                  double64 v21, double64 v22, double64 v23,
-                  double64 v31, double64 v32, double64 v33 );
+                  double v11, double v12, double v13,
+                  double v21, double v22, double v23,
+                  double v31, double v32, double v33 );
 
   /// full initialisation
   TensorVariable( const VARIABLE_FLAG f11, const VARIABLE_FLAG f22, const VARIABLE_FLAG f33,
-                  const double64  v11, const double64  v12, const double64  v13,
-                  const double64  v21, const double64  v22, const double64  v23,
-                  const double64  v31, const double64  v32, const double64  v33 );
+                  const double  v11, const double  v12, const double  v13,
+                  const double  v21, const double  v22, const double  v23,
+                  const double  v31, const double  v32, const double  v33 );
 
   ~TensorVariable();
 
@@ -117,32 +117,32 @@ public:
   TensorVariable&  operator=( TensorVariable&& ) = default;
 
   /// read/write access to the elements of the tensor
-  double64&        operator()( size_t i, size_t j );
+  double&        operator()( size_t i, size_t j );
 
   /// read-only access to the elements of the tensor
-  const double64&  operator()( size_t i, size_t j ) const;
+  const double&  operator()( size_t i, size_t j ) const;
 
   /// alternative mutator of tensor elements 0..8 accessing them sequentially row by row
-  void      Component( size_t, double64 );
+  void      Component( size_t, double );
 
   /// alternative accessor of tensor elements 0..8 accessing them sequentially row by row
-  double64  Component( size_t i ) const;
+  double  Component( size_t i ) const;
 
   /// number of entries in tensor (dim x dim = 9 in this 3D case)
   size_t  Size() const { return 9U; }
 
   /// assigns second argument to all elements of the tensor, first argument is not used; @todo remove
-  void Resize( size_t, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
+  void Resize( size_t, double newValue = std::numeric_limits<double>::quiet_NaN() );
 
-  TensorVariable   operator+( double64 val ) const;
-  TensorVariable   operator-( double64 val ) const;
-  TensorVariable   operator*( double64 val ) const;
-  TensorVariable   operator/( double64 val ) const;
+  TensorVariable   operator+( double val ) const;
+  TensorVariable   operator-( double val ) const;
+  TensorVariable   operator*( double val ) const;
+  TensorVariable   operator/( double val ) const;
 
-  TensorVariable&  operator+=( double64 val );
-  TensorVariable&  operator-=( double64 val );
-  TensorVariable&  operator*=( double64 val );
-  TensorVariable&  operator/=( double64 val );
+  TensorVariable&  operator+=( double val );
+  TensorVariable&  operator-=( double val );
+  TensorVariable&  operator*=( double val );
+  TensorVariable&  operator/=( double val );
 
   TensorVariable&  operator+=( const ScalarVariable& );
   TensorVariable&  operator-=( const ScalarVariable& );
@@ -174,7 +174,7 @@ public:
   TensorVariable&  operator*=( const TensorVariable& );
 
   /// sets all ij values to val or sc
-  TensorVariable&  operator=( double64 val );
+  TensorVariable&  operator=( double val );
 
   /// sets all ij values to sc (value and flags of diagonal elements)
   TensorVariable&  operator=( const ScalarVariable& );
@@ -192,21 +192,21 @@ public:
   bool             operator<( const TensorVariable& ) const;
 
   /// compares the individual elements of the tensor with the ranges specified in PropertyDatabase file
-  bool              IsWithinRange( double64 vmin, double64 vmax ) const;
+  bool              IsWithinRange( double vmin, double vmax ) const;
 
   /// returns the flag of the diagonal tensor element of choice
   VARIABLE_FLAG     Flag( size_t i = 0 ) const;
 
   /// returns smallest element in tensor (this is zero if the tensor is diagonal)
-  double64          MinElement() const;
+  double          MinElement() const;
 
   /// returns largest element in tensor
-  double64          MaxElement() const;
+  double          MaxElement() const;
 
-  double64          Determinant() const;
+  double          Determinant() const;
 
   /// returns the sum of the diagonal values of the tensor
-  double64          Trace() const;
+  double          Trace() const;
 
   /// returns the conjugate transpose of the tensor (commonly denoted M^(H))
   TensorVariable    Adjoint()     const;
@@ -218,7 +218,7 @@ public:
   TensorVariable    Transposed()  const;
 
   /// assuming that the tensor is symmetric and positive definite, method returns its sorted Eigen values (largest to smallest)
-  bool              EigenValuesPositiveDefiniteSymmetricMatrix( double64& eigenValue0, double64& eigenValue1, double64& eigenValue2 ) const;
+  bool              EigenValuesPositiveDefiniteSymmetricMatrix( double& eigenValue0, double& eigenValue1, double& eigenValue2 ) const;
 
   /// alternative Eigen decomposition that should also work for non-symmetric matrices
   bool              EigenNonSymmetric( VectorVariable<3U>& eigenVals, TensorVariable<3U>& eigenVecs ) const;
@@ -227,16 +227,16 @@ public:
   bool              EigenValues( VectorVariable<3U>& vecEigenvalues ) const;
 
   /// assuming that the tensor is symmetric and positive definite, its Eigenvalues are returned into the supplied STL vector
-  bool              EigenValues( std::vector<double64>& vecEigenvalues ) const;
+  bool              EigenValues( std::vector<double>& vecEigenvalues ) const;
 
   /// assuming that the tensor is symmetric and positive definite, method returns Eigenvalues and vectors that can be normalised to 1
   bool              Eigen( VectorVariable<3U>& vvEigenvalues, TensorVariable<3U>& tvEigenvectors, bool bNormalize ) const;
 
   /// assigns diagonal values to tensor (off-diagonal elements are not touched)
-  void              DiagonalValues( double64 f_00, double64 f_11, double64 f_22 );
+  void              DiagonalValues( double f_00, double f_11, double f_22 );
 
   /// assigns diagonal values to tensor from STL vector
-  void              DiagonalValues( const std::vector<double64>& );
+  void              DiagonalValues( const std::vector<double>& );
 
   /// assigns diagonal values to tensor
   void              DiagonalValues( const VectorVariable<3U>& );
@@ -273,7 +273,7 @@ public:
 
 private:
   std::array<VARIABLE_FLAG, 3U>            flag;
-  std::array<std::array<double64, 3U>, 3U>  data;
+  std::array<std::array<double, 3U>, 3U>  data;
 };
 
 
@@ -291,13 +291,13 @@ std::ostream&  operator<<( std::ostream& stream, const TensorVariable<dim>& o );
 
 /// fastest way to insert a tensor into an STL container
 TensorVariable<2U> makeTensor( VARIABLE_FLAG, VARIABLE_FLAG,
-                               double64, double64,
-                               double64, double64 );
+                               double, double,
+                               double, double );
 
 TensorVariable<3U> makeTensor( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG,
-                               double64, double64, double64,
-                               double64, double64, double64,
-                               double64, double64, double64 );
+                               double, double, double,
+                               double, double, double,
+                               double, double, double );
 
 
 } // csmp 

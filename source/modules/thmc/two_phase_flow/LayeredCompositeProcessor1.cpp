@@ -79,7 +79,7 @@ void LayeredCompositeProcessor1::ReadRockTypeData( const char* datafile )
     RRT_.reserve(rocktypes);
     vector<int> RRT_identifiers;
     RRT_identifiers.reserve(rocktypes);
-    double64 value;
+    double value;
    
     while ( rocktype_counter < rocktypes and !ifs.eof() )
       {
@@ -100,7 +100,7 @@ void LayeredCompositeProcessor1::ReadRockTypeData( const char* datafile )
          assert( columns >= 6 );
 
          const int extra_columns(3);
-         vector<vector<double64> > table(rows,vector<double64>(columns + extra_columns));
+         vector<vector<double> > table(rows,vector<double>(columns + extra_columns));
       
         // reading the table, swallowing the heading
         advancePastCommentLine( ifs );
@@ -138,7 +138,7 @@ void LayeredCompositeProcessor1::ReadRockTypeData( const char* datafile )
     The following table entries are expected: f(sw), Sw_VL, Sw_CL, Sw_CL_low_k, Sw_CL_high_k, Sfactor
  
 */
-double64 LayeredCompositeProcessor1::krw( double64 sw, double64 Nc, int rocktype )
+double LayeredCompositeProcessor1::krw( double sw, double Nc, int rocktype )
 {
    assert( rocktype >= 0 );
    assert( rocktype < RRT_.size() );
@@ -148,10 +148,10 @@ double64 LayeredCompositeProcessor1::krw( double64 sw, double64 Nc, int rocktype
    const size_t table_rows(RRT_[rocktype].size());
    for ( int i=0U; i<table_rows; ++i )
      {
-         const double64 sw_at_Nc        = SwAtNc( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL], RRT_[rocktype][i][Sfactor] );
-         const double64 sw_at_Nc_low_k  = SwAtNc_Low_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_low_k], RRT_[rocktype][i][Sfactor] );
-         const double64 sw_at_Nc_high_k = SwAtNc_High_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_high_k], RRT_[rocktype][i][Sfactor] );
-         const double64 krw_comp        = KrwComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
+         const double sw_at_Nc        = SwAtNc( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL], RRT_[rocktype][i][Sfactor] );
+         const double sw_at_Nc_low_k  = SwAtNc_Low_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_low_k], RRT_[rocktype][i][Sfactor] );
+         const double sw_at_Nc_high_k = SwAtNc_High_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_high_k], RRT_[rocktype][i][Sfactor] );
+         const double krw_comp        = KrwComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
          //storing the result values in the 3 last columns of the table
          RRT_[rocktype][i][table_columns]    = sw_at_Nc;
          RRT_[rocktype][i][table_columns+1U] = krw_comp;
@@ -168,20 +168,20 @@ double64 LayeredCompositeProcessor1::krw( double64 sw, double64 Nc, int rocktype
         for ( int i=static_cast<int>(table_rows-1U); i>0; --i )
           if ( sw < RRT_[rocktype][i][table_columns] ) { lower_row = i; break; }
         // interpolating the kri values
-        const double64 delta_sw = RRT_[rocktype][lower_row][table_columns] - RRT_[rocktype][lower_row+1][table_columns];
-        const double64 ds = (sw - RRT_[rocktype][lower_row+1][table_columns]) / delta_sw;
+        const double delta_sw = RRT_[rocktype][lower_row][table_columns] - RRT_[rocktype][lower_row+1][table_columns];
+        const double ds = (sw - RRT_[rocktype][lower_row+1][table_columns]) / delta_sw;
         // weighting the kri's to find the interpolated value
         return ds * RRT_[rocktype][lower_row+1U][table_columns+1U] + (1. - ds) * RRT_[rocktype][lower_row][table_columns+1U];
      }
   
    // in case an error occurred
-   return std::numeric_limits<double64>::quiet_NaN();
+   return std::numeric_limits<double>::signaling_NaN();
   
 } // end krw
 
 
 
-double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype )
+double LayeredCompositeProcessor1::krn( double sw, double Nc, int rocktype )
  {
    assert( rocktype >= 0 );
    assert( rocktype < RRT_.size() );
@@ -191,10 +191,10 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
    const size_t table_rows(RRT_[rocktype].size());
    for ( int i=0U; i<table_rows; ++i )
      {
-         const double64 sw_at_Nc        = SwAtNc( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL], RRT_[rocktype][i][Sfactor] );
-         const double64 sw_at_Nc_low_k  = SwAtNc_Low_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_low_k], RRT_[rocktype][i][Sfactor] );
-         const double64 sw_at_Nc_high_k = SwAtNc_High_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_high_k], RRT_[rocktype][i][Sfactor] );
-         const double64 krn_comp        = KrnComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
+         const double sw_at_Nc        = SwAtNc( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL], RRT_[rocktype][i][Sfactor] );
+         const double sw_at_Nc_low_k  = SwAtNc_Low_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_low_k], RRT_[rocktype][i][Sfactor] );
+         const double sw_at_Nc_high_k = SwAtNc_High_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_high_k], RRT_[rocktype][i][Sfactor] );
+         const double krn_comp        = KrnComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
          //storing the result values in the 3 last columns of the table
          RRT_[rocktype][i][table_columns]    = sw_at_Nc;
          RRT_[rocktype][i][table_columns+2U] = krn_comp;
@@ -211,14 +211,14 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
         for ( int i=static_cast<int>(table_rows-1U); i>0; --i )
           if ( sw < RRT_[rocktype][i][table_columns] ) { lower_row = i; break; }
         // interpolating the kri values
-        const double64 delta_sw = RRT_[rocktype][lower_row][table_columns] - RRT_[rocktype][lower_row+1][table_columns];
-        const double64 ds = (sw - RRT_[rocktype][lower_row+1][table_columns]) / delta_sw;
+        const double delta_sw = RRT_[rocktype][lower_row][table_columns] - RRT_[rocktype][lower_row+1][table_columns];
+        const double ds = (sw - RRT_[rocktype][lower_row+1][table_columns]) / delta_sw;
         // weighting the kri's to find the interpolated value
         return ds * RRT_[rocktype][lower_row+1U][table_columns+2U] + (1. - ds) * RRT_[rocktype][lower_row][table_columns+2U];
      }
   
    // in case an error occurred
-   return std::numeric_limits<double64>::quiet_NaN();
+   return std::numeric_limits<double>::signaling_NaN();
  }
  
  
@@ -229,7 +229,7 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
   
      @return pair of krw,krn
  */
- pair<double64,double64>  LayeredCompositeProcessor1::RelativePermeability( double64 sw, double64 Nc, int rocktype )
+ pair<double,double>  LayeredCompositeProcessor1::RelativePermeability( double sw, double Nc, int rocktype )
 {
    assert( rocktype >= 0 );
    assert( rocktype < RRT_.size() );
@@ -239,11 +239,11 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
    const size_t table_rows(RRT_[rocktype].size());
    for ( int i=0U; i<table_rows; ++i )
      {
-         const double64 sw_at_Nc        = SwAtNc( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL], RRT_[rocktype][i][Sfactor] );
-         const double64 sw_at_Nc_low_k  = SwAtNc_Low_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_low_k], RRT_[rocktype][i][Sfactor] );
-         const double64 sw_at_Nc_high_k = SwAtNc_High_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_high_k], RRT_[rocktype][i][Sfactor] );
-         const double64 krw_comp        = KrwComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
-         const double64 krn_comp        = KrnComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
+         const double sw_at_Nc        = SwAtNc( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL], RRT_[rocktype][i][Sfactor] );
+         const double sw_at_Nc_low_k  = SwAtNc_Low_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_low_k], RRT_[rocktype][i][Sfactor] );
+         const double sw_at_Nc_high_k = SwAtNc_High_k_Layer( Nc, RRT_[rocktype][i][Sw_VL], RRT_[rocktype][i][Sw_CL_high_k], RRT_[rocktype][i][Sfactor] );
+         const double krw_comp        = KrwComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
+         const double krn_comp        = KrnComposite( sw_at_Nc_low_k, sw_at_Nc_high_k );
          //storing the result values in the 3 last columns of the table
          RRT_[rocktype][i][table_columns]    = sw_at_Nc;
          RRT_[rocktype][i][table_columns+1U] = krw_comp;
@@ -263,15 +263,15 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
         for ( int i=static_cast<int>(table_rows-1U); i>0; --i )
           if ( sw < RRT_[rocktype][i][table_columns] ) { lower_row = i; break; }
         // interpolating the kri values
-        const double64 delta_sw = RRT_[rocktype][lower_row][table_columns] - RRT_[rocktype][lower_row+1][table_columns];
-        const double64 ds = (sw - RRT_[rocktype][lower_row+1][table_columns]) / delta_sw;
+        const double delta_sw = RRT_[rocktype][lower_row][table_columns] - RRT_[rocktype][lower_row+1][table_columns];
+        const double ds = (sw - RRT_[rocktype][lower_row+1][table_columns]) / delta_sw;
         // weighting the kri's to find the interpolated value
         return make_pair( ds * RRT_[rocktype][lower_row+1U][table_columns+1U] + (1. - ds) * RRT_[rocktype][lower_row][table_columns+1U],
                           ds * RRT_[rocktype][lower_row+1U][table_columns+2U] + (1. - ds) * RRT_[rocktype][lower_row][table_columns+2U] );
      }
   
    // in case an error occurred
-   return make_pair( std::numeric_limits<double64>::quiet_NaN(), std::numeric_limits<double64>::quiet_NaN() );
+   return make_pair( std::numeric_limits<double>::signaling_NaN(), std::numeric_limits<double>::signaling_NaN() );
   
 } // end RelativePermeability
 
@@ -280,14 +280,14 @@ double64 LayeredCompositeProcessor1::krn( double64 sw, double64 Nc, int rocktype
 /**
     writes textfile with sw, krw(sw,Nc), krn(sw,Nc), and pc(sw) values computed for (composite) rocktype in 0.05 saturation increments
 */
-void LayeredCompositeProcessor1::WriteRelativePermeabilityTable( const char* filename, int rocktype, double64 Nc )
+void LayeredCompositeProcessor1::WriteRelativePermeabilityTable( const char* filename, int rocktype, double Nc )
  {
     ofstream  ofs( string(filename) + ".txt" );
     assert( rocktype < RRT_.size() );
     assert( Nc > 0. );
    
     ofs <<"sw(Nc="<< Nc <<")\t krw(sw,Nc,rocktype="<< rocktype <<")\t krnw(sw,Nc)\n";
-    for ( double64 sw(0.); sw<=1.0; sw+=0.05 ) {
+    for ( double sw(0.); sw<=1.0; sw+=0.05 ) {
          ofs << sw << "\t"<< krw( sw, Nc, rocktype );
          ofs <<"\t"<< krn( sw, Nc, rocktype );
 //         ofs <<"\t"<< pc( sw, rocktype );
@@ -333,11 +333,11 @@ void LayeredCompositeProcessor1::Out() const
       - first the high-k layer gets saturated
       - now the low key layer gets saturated once its entry pressure is overcome
 */
-double64 LayeredCompositeProcessor1::pc( double64 sw, int rocktype ) const
+double LayeredCompositeProcessor1::pc( double sw, int rocktype ) const
  {
-    double64 PV_low  = LY_low_ * phi_low_;
-    double64 PV_high = LY_high_ * phi_high_;
-    double64 sw_threshold = PV_high / (PV_high + PV_low); // saturation at which low-k-layer will start saturating
+    double PV_low  = LY_low_ * phi_low_;
+    double PV_high = LY_high_ * phi_high_;
+    double sw_threshold = PV_high / (PV_high + PV_low); // saturation at which low-k-layer will start saturating
    
     // Brooks-Corey relations for the layers, pc = pd * sw_eff^(-1/lambda)
     if ( sw < sw_threshold ){
@@ -352,7 +352,7 @@ double64 LayeredCompositeProcessor1::pc( double64 sw, int rocktype ) const
 // permeability averages
 
 /// vertical thickness weighted (harmonic) mean of the vertical layer permeabilities
-double64 LayeredCompositeProcessor1::k_AverageY() const
+double LayeredCompositeProcessor1::k_AverageY() const
  {
     return (LY_low_ + LY_high_) / ( LY_low_/k_low_  + LY_high_/k_high_ );
  }
@@ -360,7 +360,7 @@ double64 LayeredCompositeProcessor1::k_AverageY() const
  
  
 /// horizontal thickness-weighted average of the horizontal layer permeabilities
-double64 LayeredCompositeProcessor1::k_AverageX() const
+double LayeredCompositeProcessor1::k_AverageX() const
  {
     return k_low_ * LY_low_ + k_high_ * LY_high_;
  }
@@ -368,7 +368,7 @@ double64 LayeredCompositeProcessor1::k_AverageX() const
  
  
 /// water saturation in cell at given capillary number; calculated from entries in table
-double64 LayeredCompositeProcessor1::SwAtNc(  double64 Nc, double64 Sw_VL, double64 Sw_CL, double64 Sfactor ) const
+double LayeredCompositeProcessor1::SwAtNc(  double Nc, double Sw_VL, double Sw_CL, double Sfactor ) const
  {
     return (Nc * Sfactor * Sw_VL + Sw_CL) / (Nc * Sfactor + 1.);
  }
@@ -376,7 +376,7 @@ double64 LayeredCompositeProcessor1::SwAtNc(  double64 Nc, double64 Sw_VL, doubl
  
  
 /// corresponding sw in low-k laminations
-double64 LayeredCompositeProcessor1::SwAtNc_Low_k_Layer( double64 Nc, double64 Sw_VL, double64 Sw_low_CL, double64 Sfactor ) const
+double LayeredCompositeProcessor1::SwAtNc_Low_k_Layer( double Nc, double Sw_VL, double Sw_low_CL, double Sfactor ) const
  {
     return (Nc * Sfactor * Sw_VL + Sw_low_CL) / (Nc * Sfactor + 1.);
  }
@@ -384,7 +384,7 @@ double64 LayeredCompositeProcessor1::SwAtNc_Low_k_Layer( double64 Nc, double64 S
  
  
 /// corresponding sw in high-k laminations
-double64 LayeredCompositeProcessor1::SwAtNc_High_k_Layer( double64 Nc, double64 Sw_VL, double64 Sw_high_CL, double64 Sfactor ) const
+double LayeredCompositeProcessor1::SwAtNc_High_k_Layer( double Nc, double Sw_VL, double Sw_high_CL, double Sfactor ) const
  {
     return (Nc * Sfactor * Sw_VL + Sw_high_CL) / (Nc * Sfactor + 1.);
  }
@@ -392,7 +392,7 @@ double64 LayeredCompositeProcessor1::SwAtNc_High_k_Layer( double64 Nc, double64 
  
  
 /// effective sw in low-k laminations
-double64 LayeredCompositeProcessor1::SwStarLow( double64 Sw_low_at_Nc ) const
+double LayeredCompositeProcessor1::SwStarLow( double Sw_low_at_Nc ) const
  {
     return (Sw_low_at_Nc - Swi_low_) / (1. - Swi_low_);
  }
@@ -400,7 +400,7 @@ double64 LayeredCompositeProcessor1::SwStarLow( double64 Sw_low_at_Nc ) const
  
  
 /// effective sw in low-k laminations
-double64 LayeredCompositeProcessor1::SwStarHigh( double64 Sw_high_at_Nc ) const
+double LayeredCompositeProcessor1::SwStarHigh( double Sw_high_at_Nc ) const
  {
     return (Sw_high_at_Nc - Swi_high_) / (1. - Swi_high_);
  }
@@ -411,12 +411,12 @@ double64 LayeredCompositeProcessor1::SwStarHigh( double64 Sw_high_at_Nc ) const
     krw relperm of low-k layer at given saturation and capillary number
     (uses van Genuchten model - with m parameter)
 */
-double64 LayeredCompositeProcessor1::KrwLow( double64 SwStar_low ) const
+double LayeredCompositeProcessor1::KrwLow( double SwStar_low ) const
  {
-    double64 t1 = sqrt(SwStar_low);
-    double64 t4 = pow(SwStar_low, 1. / m_low_);
-    double64 t6 = pow(1. - t4, m_low_);
-    double64 t8 = pow(1. - t6, m_low_);
+    double t1 = sqrt(SwStar_low);
+    double t4 = pow(SwStar_low, 1. / m_low_);
+    double t6 = pow(1. - t4, m_low_);
+    double t8 = pow(1. - t6, m_low_);
     return(t8 * t1);
  }
  
@@ -427,12 +427,12 @@ double64 LayeredCompositeProcessor1::KrwLow( double64 SwStar_low ) const
     krw relperm of high-k layer at given saturation and capillary number
     (uses van Genuchten model - with m parameter)
 */
-double64 LayeredCompositeProcessor1::KrwHigh( double64 SwStar_high ) const
+double LayeredCompositeProcessor1::KrwHigh( double SwStar_high ) const
  {
-    double64 t1 = sqrt(SwStar_high);
-    double64 t4 = pow(SwStar_high, 0.1e1 / m_high_);
-    double64 t6 = pow(0.1e1 - t4, m_high_);
-    double64 t8 = pow(0.1e1 - t6, m_high_ );
+    double t1 = sqrt(SwStar_high);
+    double t4 = pow(SwStar_high, 0.1e1 / m_high_);
+    double t6 = pow(0.1e1 - t4, m_high_);
+    double t8 = pow(0.1e1 - t6, m_high_ );
     return(t8 * t1);
  }
  
@@ -443,10 +443,10 @@ double64 LayeredCompositeProcessor1::KrwHigh( double64 SwStar_high ) const
     krn relperm of low-k layer at given saturation and capillary number
     (uses Brooks-Corey model - with bcp parameter)
 */
-double64 LayeredCompositeProcessor1::KrnLow( double64 SwStar_low ) const
+double LayeredCompositeProcessor1::KrnLow( double SwStar_low ) const
  {
-    double64 t2 = pow(1. - SwStar_low, bcp_low_);
-    double64 t3 = SwStar_low * SwStar_low;
+    double t2 = pow(1. - SwStar_low, bcp_low_);
+    double t3 = SwStar_low * SwStar_low;
     return((0.1e1 - t3) * t2);
  }
  
@@ -456,10 +456,10 @@ double64 LayeredCompositeProcessor1::KrnLow( double64 SwStar_low ) const
     krn relperm of high-k layer at given saturation and capillary number
     (uses Brooks-Corey model - with bcp parameter)
 */
-double64 LayeredCompositeProcessor1::KrnHigh( double64 SwStar_high ) const
+double LayeredCompositeProcessor1::KrnHigh( double SwStar_high ) const
  {
-    double64 t2 = pow(1. - SwStar_high, bcp_high_);
-    double64 t3 = SwStar_high * SwStar_high;
+    double t2 = pow(1. - SwStar_high, bcp_high_);
+    double t3 = SwStar_high * SwStar_high;
     return((0.1e1 - t3) * t2);
  }
  
@@ -469,24 +469,24 @@ double64 LayeredCompositeProcessor1::KrnHigh( double64 SwStar_high ) const
     relative permeability at the given water saturation and capillary number
     (uses van Genuchten model - with m parameter)
 */
-double64 LayeredCompositeProcessor1::KrwComposite( double64 swAtNc_Low_k_Layer, double64 swAtNc_High_k_Layer ) const
+double LayeredCompositeProcessor1::KrwComposite( double swAtNc_Low_k_Layer, double swAtNc_High_k_Layer ) const
  {
-    double64 t2 = SwStarLow(swAtNc_Low_k_Layer);
-    double64 t3 = KrwLow(t2);
-    double64 t6 = SwStarHigh(swAtNc_High_k_Layer);
-    double64 t7 = KrwHigh(t6);
+    double t2 = SwStarLow(swAtNc_Low_k_Layer);
+    double t3 = KrwLow(t2);
+    double t6 = SwStarHigh(swAtNc_High_k_Layer);
+    double t7 = KrwHigh(t6);
     return(1. / k_AverageX() / (LY_low_ + LY_high_) * (LY_high_ * k_high_ * t7 + LY_low_ * k_low_ * t3));
 
  }
  
  
  
-double64 LayeredCompositeProcessor1::KrnComposite( double64 swAtNc_Low_k_Layer, double64 swAtNc_High_k_Layer ) const
+double LayeredCompositeProcessor1::KrnComposite( double swAtNc_Low_k_Layer, double swAtNc_High_k_Layer ) const
  {
-    double64 t2 = SwStarLow(swAtNc_Low_k_Layer);
-    double64 t3 = KrnLow(t2);
-    double64 t6 = SwStarHigh(swAtNc_High_k_Layer);
-    double64 t7 = KrnHigh(t6);
+    double t2 = SwStarLow(swAtNc_Low_k_Layer);
+    double t3 = KrnLow(t2);
+    double t6 = SwStarHigh(swAtNc_High_k_Layer);
+    double t7 = KrnHigh(t6);
     return(1. / k_AverageX() / (LY_low_ + LY_high_) * (LY_high_ * k_high_ * t7 + LY_low_ * k_low_ * t3));
  }
  

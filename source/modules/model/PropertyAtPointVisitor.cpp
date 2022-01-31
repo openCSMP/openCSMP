@@ -11,7 +11,7 @@ namespace csmp {
 */
 template<size_t dim>
 PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
-                                                     const map <size_t, vector<double64> > & inXYZ,
+                                                     const map <size_t, vector<double> > & inXYZ,
                                                      const char *propertyName )
     : pref_(m.Database()),
       maxElementsInTheMesh_(m.Region("Model").Elements()),  // Number of elements in the mesh
@@ -43,7 +43,7 @@ PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
 
     // Set targets to -1 index
 
-    for( typename map <size_t,vector<double64> >::iterator itX = xyz_.begin(); itX!=xyz_.end(); itX++)
+    for( typename map <size_t,vector<double> >::iterator itX = xyz_.begin(); itX!=xyz_.end(); itX++)
     {
         numberOfPoints_++;
         elements_ids_found_[itX->first] = (size_t)-1;
@@ -205,15 +205,15 @@ void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
 
 
 template<size_t dim>
-bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double64> currXyz,
+bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double> currXyz,
                                                        Element<dim>* e, VectorVariable<dim> bc )
 {
 
     // Check whether point is lying inside the neghborghood of the element BaryCenter
 	e->CoordinateMatrix( );
 
-    double64 distance(0.0);
-    double64 max_distance(0.0);
+    double distance(0.0);
+    double max_distance(0.0);
     for ( size_t i=0; i<e->Nodes(); i++ )
     {
         distance = 0.0;
@@ -228,7 +228,7 @@ bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double64> cu
         distance += (currXyz[j]- bc[j])*(currXyz[j]- bc[j]);
     distance = sqrt (distance );
 
-    double64 distance_factor( 1.1 );
+    double distance_factor( 1.1 );
 
     if( distance <= distance_factor*max_distance )
         return true;
@@ -238,7 +238,7 @@ bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double64> cu
 
 
 template<size_t dim>
-bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<double64> currXyz,
+bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<double> currXyz,
                                                               Element<dim>* e,
                                                               VectorVariable<dim> bc )
 {
@@ -249,8 +249,8 @@ bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<doubl
         e->CoordinateMatrix( );
         e->FE()->N(NI_,currXyz);
 
-        typename vector<double64>::const_iterator Nmin = min_element( NI_.begin(), NI_.end() );
-        typename vector<double64>::const_iterator Nmax = max_element( NI_.begin(), NI_.end() );
+        typename vector<double>::const_iterator Nmin = min_element( NI_.begin(), NI_.end() );
+        typename vector<double>::const_iterator Nmax = max_element( NI_.begin(), NI_.end() );
 
         if (debug_)
         {
@@ -274,7 +274,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<doubl
                 else
                     std::cout<<"Point: x="<<currXyz[0]<<"; y="<<currXyz[1]<<std::endl;
 
-                vector<double64> xyz(dim,0.0);
+                vector<double> xyz(dim,0.0);
                 for ( size_t i=0; i<e->Nodes(); i++ ) {
                     for ( size_t j=0; j<dim; j++ )
                         xyz[j] += NI_[i] * e->FE()->XYZ(i,j);
@@ -301,7 +301,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<doubl
 
 
 template<size_t dim>
-bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double64> currXyz,Element<dim>* e, VectorVariable<dim> bc )
+bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double> currXyz,Element<dim>* e, VectorVariable<dim> bc )
 {
 
     if( isCloseToBarycenter(currXyz,e,bc) )
@@ -313,9 +313,9 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double6
         set<size_t> listOfCheckedElements;  // set of previously checked elements for a given point
         typename set<size_t>::iterator itChd;
         VectorVariable<dim> current_bc;
-        typename vector<double64>::const_iterator Nmin;
-        typename vector<double64>::const_iterator Nmax;
-        double64 minimumNi;
+        typename vector<double>::const_iterator Nmin;
+        typename vector<double>::const_iterator Nmax;
+        double minimumNi;
 
         bool stopFlag   = false;
         bool Find       = false;
@@ -485,7 +485,7 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
         //e->CoordinateMatrix();
         bc = e->BaryCenter();
 
-        for( typename map <size_t,vector<double64> >::iterator itX = xyz_.begin(); itX != xyz_.end(); itX++ )
+        for( typename map <size_t,vector<double> >::iterator itX = xyz_.begin(); itX != xyz_.end(); itX++ )
         {
             if(debug_)
                 cout<<" Visit(Element): point N="<< itX->first<<" targetFound="<< elements_ids_found_[itX->first]<<endl;

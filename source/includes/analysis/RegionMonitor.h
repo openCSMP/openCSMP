@@ -53,10 +53,10 @@ class RegionMonitor {
     bool  DataExists() const { return ( !integrals_.empty() || !ranges_.empty() ); }
   
     /// calculates integrals over current property values and stores these for the current time-step and property name
-    void  ScalarPropertyIntegrals( const Model<dim>&, double64 current_time=0. );
+    void  ScalarPropertyIntegrals( const Model<dim>&, double current_time=0. );
   
     /// monitors current ranges of the the scalar values
-    void  ScalarPropertyRanges( const Model<dim>&, double64 current_time=0. );
+    void  ScalarPropertyRanges( const Model<dim>&, double current_time=0. );
 
     /** adds in values in a separate container, to be output to a separate file
         with the same prefix name as the other monitoring file, except with the "_ext" added to its name.
@@ -64,14 +64,14 @@ class RegionMonitor {
     void  InsertExternallyCalculatedProperty( std::string property, std::string regionname );
     void  InsertExternallyCalculatedProperty( std::string property_regionname );
 
-    void  InsertPreCalculatedPropertyValue( double64 time,
+    void  InsertPreCalculatedPropertyValue( double time,
                                             std::string property,
                                             std::string regionname,
-                                            double64 value);
+                                            double value);
   
-    void  InsertPreCalculatedPropertyValue( double64 time,
+    void  InsertPreCalculatedPropertyValue( double time,
                                             std::string property_regionname,
-                                            double64 value);
+                                            double value);
 
     void  Reset(); ///< zap all recorded values and property names
     void  EraseData(); ///< zap all recorded values
@@ -84,21 +84,21 @@ class RegionMonitor {
   
     // geometric group properties
     //         groupname,          volume,   surface area
-    std::map<std::string,std::pair<double64,double64> >  group_specs_;
+    std::map<std::string,std::pair<double,double> >  group_specs_;
     // properties which are monitored
     std::list<std::string>  integral_properties_;
     std::list<std::string>  range_properties_;
     //    model_time,          property,             groupname, property value
-    std::map<double64,std::map<std::string,std::map<std::string,double64> > >  integrals_;
+    std::map<double,std::map<std::string,std::map<std::string,double> > >  integrals_;
 
     //    model_time,          property,              groupname,          property range
-    std::map<double64,std::map<std::string,std::map<std::string,std::pair<double64,double64> > > >  ranges_;
+    std::map<double,std::map<std::string,std::map<std::string,std::pair<double,double> > > >  ranges_;
 
     // for externally calculated monitored properties
     std::set<std::string>  ext_calc_properties_column_headers_;
 
     //    model_time,          property_groupname,   property value
-    std::map<double64,std::map<std::string,double64> >  ext_properties_;
+    std::map<double,std::map<std::string,double> >  ext_properties_;
 
     bool divide_by_volume_,
          pore_volume_integral_,

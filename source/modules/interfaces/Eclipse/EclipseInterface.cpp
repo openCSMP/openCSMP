@@ -121,7 +121,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
   std::set<std::string> fem_types;
   for ( size_t i = 0U; i < vset_->Elements(); i++ ) {
     elmts.push_back( i );
-    fem_types.insert( csmp::parseFiniteElementType( (vset_->ElementType( i )) ) );
+    fem_types.insert( csmp::parseFiniteElementType( vset_->ElementType(i) ) );
   }
   model_topology_->AddRegion( "ALL_CELLS", fem_types, elmts );
 
@@ -178,10 +178,10 @@ void EclipseInterface::WritePropertiesToVSet()
     // The ‘Eclipse model’ is exported from Petrel which works only in miliDarcy. 
     // The unit is converted to m2 according to the equation: Perm_M2 = ( Perm_mD1  / 1000.00) * (9.869233 * pow(10, -13.0))    
     // Simply, the unit is mD (milliDarcy = 0.001 Darcy), 1D = 10^-12 m2
-    double64 conversion_factor = 1.0e-15;
+    double conversion_factor = 1.0e-15;
     const size_t num_cells( perm_.size() );
-    double64 min = properties_[ECLIPSE_PERM].min;
-    double64 max = properties_[ECLIPSE_PERM].max;
+    double min = properties_[ECLIPSE_PERM].min;
+    double max = properties_[ECLIPSE_PERM].max;
     size_t invalid_value_count = 0U;
 
     /// check value whether it is in the valid		
@@ -208,11 +208,11 @@ void EclipseInterface::WritePropertiesToVSet()
   {
     // The ‘Eclipse model’ is exported from Petrel which works only in miliDarcy. 
     // The unit is mD (milliDarcy = 0.001 Darcy),  1D = 10^-12 m2
-    double64 conversion_factor = 1.0e-15;
+    double conversion_factor = 1.0e-15;
     const size_t num_cells( permxyz_.size() );
         
-    double64 min = properties_[ECLIPSE_PERM].min;
-    double64 max = properties_[ECLIPSE_PERM].max;
+    double min = properties_[ECLIPSE_PERM].min;
+    double max = properties_[ECLIPSE_PERM].max;
     size_t invalid_value_count = 0U;
 
     /// check value whether it is in the valid		
@@ -1268,7 +1268,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
         }
         else
         {
-          double64 z = atof( token );
+          double z = atof( token );
           assert( pidy < NY );
           assert( pidx < NX );
           grid( pidx, pidy ).AddZCoord( z );
@@ -2462,7 +2462,7 @@ EclipseModelSettings::EclipseModelSettings( const std::string& mesh_file_prefix 
   create_boundaries_( false ),
   tetra_mesh_( false )
 {
-  if ( csmp::isRegionsFileExist( mesh_file_prefix.c_str() ) ) {
+  if ( csmp::doesRegionsFileExist( mesh_file_prefix.c_str() ) ) {
     regions_.clear();
     csmp::readDesiredRegions( mesh_file_prefix.c_str(), regions_ );
   }
@@ -2492,7 +2492,7 @@ void EclipseModelSettings
   exclude_inactive_cells_ = exclude_inactive_cells;
   tetra_mesh_ = tetra_mesh;
   create_boundaries_ = create_boundaries;
-  if ( csmp::isRegionsFileExist( regions_file_prefix.c_str() ) )
+  if ( csmp::doesRegionsFileExist( regions_file_prefix.c_str() ) )
   {
     regions_.clear();
     csmp::readDesiredRegions( regions_file_prefix.c_str(), regions_ );
@@ -2798,12 +2798,12 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     for ( size_t i = 0U; i<i_stride; i++ )
     {
       // read pillar top
-      double64 pillar_top_x = atof( popToken( ifs, text_line, line_length ) );
-      double64 pillar_top_y = atof( popToken( ifs, text_line, line_length ) );
-      double64 pillar_top_z = atof( popToken( ifs, text_line, line_length ) );
-      double64 pillar_bot_x = atof( popToken( ifs, text_line, line_length ) );
-      double64 pillar_bot_y = atof( popToken( ifs, text_line, line_length ) );
-      double64 pillar_bot_z = atof( popToken( ifs, text_line, line_length ) );
+      double pillar_top_x = atof( popToken( ifs, text_line, line_length ) );
+      double pillar_top_y = atof( popToken( ifs, text_line, line_length ) );
+      double pillar_top_z = atof( popToken( ifs, text_line, line_length ) );
+      double pillar_bot_x = atof( popToken( ifs, text_line, line_length ) );
+      double pillar_bot_y = atof( popToken( ifs, text_line, line_length ) );
+      double pillar_bot_z = atof( popToken( ifs, text_line, line_length ) );
 
       // creating pillar
       Pillar pillar( Point<3u>( pillar_top_x, pillar_top_y, pillar_top_z ),
@@ -2875,14 +2875,14 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
   assert( NY_ > 0 );
 
   zcorn_.clear();
-  zcorn_.resize( NX_ * NY_ * NZ_ * 8, std::numeric_limits<double64>::quiet_NaN() );
+  zcorn_.resize( NX_ * NY_ * NZ_ * 8, std::numeric_limits<double>::quiet_NaN() );
 
   // 1. Read z coordinates
   struct ZCoords {
-    double64 z[8];
+    double z[8];
   };
   size_t NXxNY = NX_ * NY_;
-  std::vector<double64> values;
+  std::vector<double> values;
 
   char*       token( 0 );
   const char* delims = " ,:,\t,\n,\r";
@@ -2901,7 +2901,7 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
     {
       token = strtok( text_line, delims );
       do {
-        if ( !readEclipseValue<double64>( std::string( token ), default_value, num, value ) )
+        if ( !readEclipseValue<double>( std::string( token ), default_value, num, value ) )
         {
           std::cout << "\n" << token << std::endl;
           csmp_error.notice( csmp::ERROR,
@@ -2950,15 +2950,15 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
     {
       for ( size_t i = 0U; i<NX_; i++ )
       {
-        double64 t_nw = values.at( pos++ );
-        double64 t_ne = values.at( pos++ );
+        double t_nw = values.at( pos++ );
+        double t_ne = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 0] = t_nw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 1] = t_ne;
       }
       for ( size_t i = 0U; i<NX_; i++ )
       {
-        double64 t_sw = values.at( pos++ );
-        double64 t_se = values.at( pos++ );
+        double t_sw = values.at( pos++ );
+        double t_se = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 2] = t_sw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 3] = t_se;
       }
@@ -2967,15 +2967,15 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
     {
       for ( size_t i = 0U; i<NX_; i++ )
       {
-        double64 b_nw = values.at( pos++ );
-        double64 b_ne = values.at( pos++ );
+        double b_nw = values.at( pos++ );
+        double b_ne = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 4] = b_nw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 5] = b_ne;
       }
       for ( size_t i = 0U; i<NX_; i++ )
       {
-        double64 b_sw = values.at( pos++ );
-        double64 b_se = values.at( pos++ );
+        double b_sw = values.at( pos++ );
+        double b_se = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 6] = b_sw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 7] = b_se;
       }

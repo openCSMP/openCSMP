@@ -124,7 +124,7 @@ PropertyData::~PropertyData()
 
 void PropertyData::PushBack( VARIABLE_FLAG flag ) { flags_.push_back( flag ); }
 
-void PropertyData::PushBack( double64 val ) { data_.push_back( val ); }
+void PropertyData::PushBack( double val ) { data_.push_back( val ); }
 
 
 void PropertyData::PushBackFrom( const PropertyData& prop, size_t nth_value ) {
@@ -206,7 +206,7 @@ VARIABLE_FLAG PropertyData::Flag( size_t nth_value, size_t ith_row, size_t jth_c
 
 
 /// scalars
-double64& PropertyData::Value( size_t nth_value ) {
+double& PropertyData::Value( size_t nth_value ) {
     assert( Type() == SCALAR );
     assert( !data_.empty() );
     assert( nth_value < data_.size() );
@@ -214,7 +214,7 @@ double64& PropertyData::Value( size_t nth_value ) {
  }
  
  
-double64  PropertyData::Value( size_t nth_value ) const {
+double  PropertyData::Value( size_t nth_value ) const {
     assert( Type() == SCALAR );
     assert( !data_.empty() );
     assert( nth_value < data_.size() );
@@ -223,7 +223,7 @@ double64  PropertyData::Value( size_t nth_value ) const {
  
  
 /// assign values: vectors and array variables
-double64& PropertyData::Value( size_t nth_value, size_t ith_dim ) {
+double& PropertyData::Value( size_t nth_value, size_t ith_dim ) {
     assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
     assert( !data_.empty() );
     assert( nth_value < data_.size() );
@@ -232,7 +232,7 @@ double64& PropertyData::Value( size_t nth_value, size_t ith_dim ) {
  }
  
 /// retrieve values: vectors and array variables
-double64  PropertyData::Value( size_t nth_value, size_t ith_dim ) const {
+double  PropertyData::Value( size_t nth_value, size_t ith_dim ) const {
     assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
     assert( !data_.empty() );
     assert( nth_value < data_.size() );
@@ -242,7 +242,7 @@ double64  PropertyData::Value( size_t nth_value, size_t ith_dim ) const {
 
  
 /// tensors
-double64& PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col ) {
+double& PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col ) {
     assert( Type() == TENSOR );
     assert( !data_.empty() );
     assert( nth_value < data_.size() );
@@ -252,7 +252,7 @@ double64& PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col 
  }
  
  
-double64  PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col ) const {
+double  PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col ) const {
     assert( Type() == TENSOR );
     assert( !data_.empty() );
     assert( nth_value < data_.size() );
@@ -304,7 +304,7 @@ void PropertyData::Reserve( size_t flag_capacity, size_t value_capacity )
 void PropertyData::Resize( size_t n_objects )
  {
     flags_.resize( n_objects * flag_stride_, ANY );
-    data_.resize( n_objects * data_stride_, std::numeric_limits<double64>::quiet_NaN() );
+    data_.resize( n_objects * data_stride_, std::numeric_limits<double>::quiet_NaN() );
  }
 
 
@@ -314,7 +314,7 @@ void PropertyData::Resize( size_t n_objects )
 void PropertyData::Resize( size_t n_flags, size_t n_values )
  {
     flags_.resize( n_flags, ANY );
-    data_.resize( n_values, std::numeric_limits<double64>::quiet_NaN() );
+    data_.resize( n_values, std::numeric_limits<double>::quiet_NaN() );
  }
 
 
@@ -337,7 +337,7 @@ void PropertyData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
    
     // values
     vector<VARIABLE_FLAG>  new_flags( o_n_elmt_ids.size() * flag_stride_ );
-    vector<double64>       new_data( o_n_elmt_ids.size() * data_stride_ );
+    vector<double>       new_data( o_n_elmt_ids.size() * data_stride_ );
    
     if ( type_ == SCALAR or type_ == ARRAY ) {
          for ( map<size_t,size_t>::const_iterator
@@ -375,14 +375,14 @@ void PropertyData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
     data_  = new_data;
     // trimming excess storage
     vector<VARIABLE_FLAG>( flags_ ).swap( flags_ );
-    vector<double64>( data_ ).swap( data_ );
+    vector<double>( data_ ).swap( data_ );
 
  } // end ReduceTo
  
  
 
 
-void  PropertyData::MinMaxOf( double64& tmin, double64& tmax ) const
+void  PropertyData::MinMaxOf( double& tmin, double& tmax ) const
 {
     tmin = (*min_element( data_.begin(), data_.end() ));
     tmax = (*max_element( data_.begin(), data_.end() ));
@@ -390,25 +390,25 @@ void  PropertyData::MinMaxOf( double64& tmin, double64& tmax ) const
 
 
 // O.K.
-void PropertyData::ScaleRangeTo( double64 tmin, double64 tmax )
+void PropertyData::ScaleRangeTo( double tmin, double tmax )
  {
-    double64  old_min, old_max;
+    double  old_min, old_max;
     MinMaxOf( old_min, old_max );
 
     // test whether we are already O.K.
-    if ( fabs(fabs(tmax) - fabs(old_max)) < numeric_limits<double64>::epsilon() &&
-         fabs(fabs(tmin) - fabs(old_min)) < numeric_limits<double64>::epsilon() )
+    if ( fabs(fabs(tmax) - fabs(old_max)) < numeric_limits<double>::epsilon() &&
+         fabs(fabs(tmin) - fabs(old_min)) < numeric_limits<double>::epsilon() )
       return;
   
-    const double64  old_range = old_max - old_min;
-    const double64  new_range = tmax - tmin;
+    const double  old_range = old_max - old_min;
+    const double  new_range = tmax - tmin;
 
     transform( data_.begin(), data_.end(), data_.begin(),
-              [tmin,tmax,old_min,old_range,new_range](double64 val)
+              [tmin,tmax,old_min,old_range,new_range](double val)
                { return tmin + ((val - old_min)/old_range) * new_range; } );
 
     // testing for correctness
-    double64 new_min, new_max;
+    double new_min, new_max;
     MinMaxOf( new_min, new_max );
     if ( new_min != tmin || new_max != tmax ) {
          cout <<"\nPropertyData<T>::ScaleRangeTo: Scaling failed."<< endl;
@@ -425,9 +425,9 @@ void PropertyData::ScaleRangeTo( double64 tmin, double64 tmax )
  
     TODO: make sure that this is done only where it makes sense!
 */
-void PropertyData::OffsetRangeBy( double64 offset )
+void PropertyData::OffsetRangeBy( double offset )
  {
-    transform( data_.begin(), data_.end(), data_.begin(), [offset](double64 val){ return val + offset; } );
+    transform( data_.begin(), data_.end(), data_.begin(), [offset](double val){ return val + offset; } );
 
  } // end OffsetRangeBy 
 
@@ -435,11 +435,11 @@ void PropertyData::OffsetRangeBy( double64 offset )
 
 /**
     Applies any kind of function with the syntax  double f(double) to
-    the double64 entries of the stored data.
+    the double entries of the stored data.
     
     TODO: make sure that this is done only where it makes sense!
 */
-void PropertyData::TransformValues( double64 (*f)(double64) )
+void PropertyData::TransformValues( double (*f)(double) )
  {
      transform( data_.begin(), data_.end(), data_.begin(), (*f) );
  }
@@ -458,38 +458,38 @@ void PropertyData::TransformValues( double64 (*f)(double64) )
     const size_t                flag_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
     const size_t                data_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
     std::vector<VARIABLE_FLAG>  flags_;        ///< variable flags
-    std::vector<double64>       data_;         ///< variable values
+    std::vector<double>       data_;         ///< variable values
 
  */
 bool PropertyData::OutBinary( fstream& fp ) const
  {
      // writing the variable placement
-     int32  var_placement = static_cast<int32>(place_);
-     fp.write( (char*) &var_placement, sizeof(int32));
+     int8_t  var_placement = static_cast<int8_t>(place_);
+     fp.write( reinterpret_cast<const char*>(&var_placement), sizeof(int8_t));
 
      // writing the variable type
-     int32  var_type = static_cast<int32>(type_);
-     fp.write( (char*) &var_type, sizeof(int32));
+     int8_t  var_type = static_cast<int8_t>(type_);
+     fp.write( reinterpret_cast<const char*>(&var_type), sizeof(int8_t));
 
      // writing the spatial dimension
-     int32  var_dim = static_cast<int32>(dim_);
-     fp.write( (char*) &var_dim, sizeof(int32));
+     int32_t  var_dim = static_cast<int32_t>(dim_);
+     fp.write( reinterpret_cast<const char*>(&var_dim), sizeof(int32_t));
 
      // writing the flag stride
-     int32  var_flag_stride = static_cast<int32>(flag_stride_);
-     fp.write( (char*) &var_flag_stride, sizeof(int32));
+     int32_t  var_flag_stride = static_cast<int32_t>(flag_stride_);
+     fp.write( reinterpret_cast<const char*>(&var_flag_stride), sizeof(int32_t));
 
      // writing the data stride
-     int32  var_data_stride = static_cast<int32>(data_stride_);
-     fp.write( (char*) &var_data_stride, sizeof(int32));
+     int32_t  var_data_stride = static_cast<int32_t>(data_stride_);
+     fp.write( reinterpret_cast<const char*>(&var_data_stride), sizeof(int32_t));
    
      // writing the number of records followed by flag values
-     std::vector<uint32>  flags; //VARIABLE_FLAG
-     std::transform( flags_.begin(), flags_.end(), std::back_inserter( flags ), []( VARIABLE_FLAG flag ) -> uint32 { return flag; } );
-     bool return_value = skm_C_fwrite( fp, flags );
+     std::vector<int8_t>  flags; //VARIABLE_FLAG
+     std::transform( flags_.begin(), flags_.end(), back_inserter( flags ), []( VARIABLE_FLAG flag ) -> int8_t { return flag; } );
+     bool return_value = binaryFileWrite( fp, flags );
    
      // writing the data values
-     return_value = skm_C_fwrite( fp, data_ );
+     return_value = binaryFileWrite( fp, data_ );
    
      return return_value;
  }
@@ -504,28 +504,28 @@ bool PropertyData::OutBinary( fstream& fp ) const
 PropertyData inBinaryPropertyData( fstream& fp )
  {
      // reading the variable placement
-     int32  var_placement(UNSPECIFIED);
-     fp.read( (char*) &var_placement, sizeof(int32));
+     int8_t  var_placement(UNSPECIFIED);
+     fp.read( reinterpret_cast<char*>(&var_placement), sizeof(int8_t));
      //assert( place_ == static_cast<PLACEMENT>(var_placement) );
 
      // reading the variable type
-     int32  var_type(UNSPECIFIED);
-     fp.read( (char*) &var_type, sizeof(int32));
+     int8_t  var_type(UNSPECIFIED);
+     fp.read( reinterpret_cast<char*>(&var_type), sizeof(int8_t));
      //assert( type_ == static_cast<VARIABLE_TYPE>(var_type) );
 
      // reading the spatial dimension
-     int32  var_dim(UNSPECIFIED);
-     fp.read( (char*) &var_dim, sizeof(int32));
+     int32_t  var_dim(UNSPECIFIED);
+     fp.read( reinterpret_cast<char*>(&var_dim), sizeof(int32_t));
      //assert( dim_ == static_cast<size_t>(var_dim) );
 
      // reading the flag stride
-     int32  var_flag_stride(UNSPECIFIED);
-     fp.read( (char*) &var_flag_stride, sizeof(int32));
+     int32_t  var_flag_stride(UNSPECIFIED);
+     fp.read( reinterpret_cast<char*>(&var_flag_stride), sizeof(int32_t));
      //assert( flag_stride_ == static_cast<size_t>(var_flag_stride) );
 
      // reading the data stride
-     int32  var_data_stride(UNSPECIFIED);
-     fp.read( (char*) &var_data_stride, sizeof(int32));
+     int32_t  var_data_stride(UNSPECIFIED);
+     fp.read( reinterpret_cast<char*>(&var_data_stride), sizeof(int32_t));
      //assert( data_stride_ == static_cast<size_t>(var_data_stride) );
    
      // calculating the array length
@@ -534,16 +534,16 @@ PropertyData inBinaryPropertyData( fstream& fp )
      PropertyData data( static_cast<PLACEMENT>(var_placement), static_cast<VARIABLE_TYPE>(var_type), var_dim, array_length );
 
      // reading the number of records followed by flag values
-     std::vector<uint32>  flags; //VARIABLE_FLAG
-     skm_C_fread( fp, flags );
+     std::vector<int8_t> flags; //VARIABLE_FLAG
+     binaryFileRead( fp, flags );
    
      // reading the data values
-     std::vector<double64> values;
-     skm_C_fread( fp, values );
+     std::vector<double> values;
+     binaryFileRead( fp, values );
    
      // pushing the data into Property record
      std::vector<VARIABLE_FLAG>  flags_tr;
-     std::transform( flags.begin(), flags.end(), std::back_inserter( flags_tr ), []( uint32 flag ) -> VARIABLE_FLAG { return static_cast<VARIABLE_FLAG>(flag); } );
+     std::transform( flags.begin(), flags.end(), std::back_inserter( flags_tr ), []( int8_t flag ) -> VARIABLE_FLAG { return static_cast<VARIABLE_FLAG>(flag); } );
      data.Reserve( flags_tr.size(), values.size() );
      for ( auto it= flags_tr.begin(); it!= flags_tr.end(); ++it ) data.PushBack( (*it) );
      for ( auto it=values.begin(); it!=values.end(); ++it ) data.PushBack( (*it) );

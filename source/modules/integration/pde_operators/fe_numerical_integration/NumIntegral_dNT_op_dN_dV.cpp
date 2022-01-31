@@ -49,7 +49,7 @@ NumIntegral_dNT_op_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV( const PropertyData
     the computation of DN for these elements simplifies greatly.
 */
 template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -65,7 +65,7 @@ void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
                                            this->MaterialOperandPlacement() == FACE);
    
     if ( is_simplex_element_type && piecewise_constant_material ) {
-         const double64 detJ = e.dN_AtBaryCenter( B_ );
+         const double detJ = e.dN_AtBaryCenter( B_ );
          // transposing B -> BT  O.K.
          B_.Transposed( BT_ );
          // multiply  BT . MTRL
@@ -87,7 +87,7 @@ void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
         for ( size_t i=0U; i<e.IntegrationPoints(); i++ ) {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
-             const double64 detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
+             const double detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
              // transposing B -> BT
              B_.Transposed( BT_ );
              // multiply  BT . MTRL
@@ -102,7 +102,7 @@ void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
           }
       }
     else { // NODE or ELEMENT_INTEGRATION_POINT material placements
-        double64 detJ = ( is_simplex_element_type ) ? e.dN_AtBaryCenter( B_ ) : 0.;
+        double detJ = ( is_simplex_element_type ) ? e.dN_AtBaryCenter( B_ ) : 0.;
         for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
              if ( !is_simplex_element_type ) detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
              B_.Transposed( BT_ );

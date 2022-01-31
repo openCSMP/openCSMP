@@ -16,9 +16,9 @@ DES2PhaseTransport<dim,FLOW_FUNCTIONS>::DES2PhaseTransport(  Model<dim>& m,
                                                              const char* target_region,
                                                              bool with_gravity_forces,
                                                              bool with_capillary_spreading,
-                                                             double64 cfl_multiplier,
-                                                             double64 PEP_multiplier, 
-                                                             double64 relaxing_factor,                                             
+                                                             double cfl_multiplier,
+                                                             double PEP_multiplier, 
+                                                             double relaxing_factor,                                             
                                                              bool tensor_k,
                                                              FLOW_FUNCTIONS<dim>& ff )
   : sg_(m), 
@@ -35,7 +35,6 @@ DES2PhaseTransport<dim,FLOW_FUNCTIONS>::DES2PhaseTransport(  Model<dim>& m,
     T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.)
 {
     InitializeBasicVariablsAndKeys();
-    m.InstantiateFiniteVolumes();
     InitializeFiniteVolumeProperties();
     cout<<"DES2PhaseTransport constructed"<<endl;
 } // end constructor 
@@ -153,12 +152,13 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
         "The 'permeability' variable must be SCALAR and placed on ELEMENT"  );
 
     // model-wide initialisation
-    sg_.Region("Model").InputPropertyValue( "update count", makeScalar(PLAIN,0.), COMPLETE );
-    sg_.Region("Model").InputPropertyValue( "rate count", makeScalar(PLAIN,0.), COMPLETE );   
-    sg_.Region("Model").InputPropertyValue( "schedule count", makeScalar(PLAIN,0.), COMPLETE ); 
-    sg_.Region("Model").InputPropertyValue( "synchronize count", makeScalar(PLAIN,0.), COMPLETE ); 
-    sg_.Region("Model").InputPropertyValue( "DES array", ArrayVariable(7,0.,PLAIN), COMPLETE); 
-    sg_.Region("Model").InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE);
+    Region<dim> region(sg_.Region("Model"));
+    region.InputPropertyValue( "update count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "rate count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "schedule count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "synchronize count", makeScalar(PLAIN,0.), COMPLETE );
+    region.InputPropertyValue( "DES array", ArrayVariable(7,0.,PLAIN), COMPLETE);
+    region.InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE);
     db_.RangeOf( db_.Name(key_sCO2), lower_limit_, upper_limit_ );    
 }
 
@@ -177,20 +177,20 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          const size_t facets((*it)->Facets());
 
          // computing sector pore volumes
-         double64 phi = (*it)->Read( key_phi);
-         const double64 thickness = (*it)->Read( key_thi );
+         double phi = (*it)->Read( key_phi);
+         const double thickness = (*it)->Read( key_thi );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
          for ( size_t i=0U; i<sectors; ++i ) {
-              const double64 sector_volume = (*it)->SectorVolume(i);  
-              double64 pore_volume   = (*it)->N(i)->Read( key_fvPV );
+              const double sector_volume = (*it)->SectorVolume(i);  
+              double pore_volume   = (*it)->N(i)->Read( key_fvPV );
               pore_volume   += phi * sector_volume;
               (*it)->N(i)->Store( key_fvPV, makeScalar(PLAIN,pore_volume) );
          }
 
          // computing facet normals and areas
          for ( size_t j=0U; j<facets; ++j ) {
-              const double64 facet_area = (*it)->FacetArea(j);
+              const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
               Point<dim> nrml = (*it)->FacetNormal(j);
               VectorVariable<dim>  fnrml;
@@ -201,7 +201,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          }     
          
          //compute wetting phase saturation at shock
-         double64 sw_shock = flowfunctions_.ShockHeight(*it);
+         double sw_shock = flowfunctions_.ShockHeight(*it);
          (*it)->Store( key_ssH2O, makeScalar( (*it)->Status( key_ssH2O), sw_shock ) );                  
    }
 
@@ -216,7 +216,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
              // computing facet normals and areas
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
-                  const double64 facet_area = eptr->FacetArea(j);
+                  const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
                   Point<dim> nrml = eptr->FacetNormal(j);
                   VectorVariable<dim>  fnrml;
@@ -227,7 +227,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
              }    
              
              //compute wetting phase saturation at shock
-             double64 sw_shock = flowfunctions_.ShockHeight(eptr);
+             double sw_shock = flowfunctions_.ShockHeight(eptr);
              eptr->Store( key_ssH2O, makeScalar( eptr->Status( key_ssH2O), sw_shock ) );  
                
              //determine whether FV node is truncated
@@ -284,6 +284,10 @@ template class DES2PhaseTransport<3U,FlowFunctionsModule5>;
 template class DES2PhaseTransport<1U,FlowFunctionsModule6>;
 template class DES2PhaseTransport<2U,FlowFunctionsModule6>;
 template class DES2PhaseTransport<3U,FlowFunctionsModule6>;
+
+template class DES2PhaseTransport<1U,FlowFunctionsModule7>;
+template class DES2PhaseTransport<2U,FlowFunctionsModule7>;
+template class DES2PhaseTransport<3U,FlowFunctionsModule7>;
 
 } // end csmp  
     

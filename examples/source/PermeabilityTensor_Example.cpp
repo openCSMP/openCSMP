@@ -1,5 +1,4 @@
 #include "PermeabilityTensor_Example.h"
-#include "CSMP_number_types.h"
 #include "ScalarVariable.h"
 #include "TensorVariable.h"
 #include "VectorVariable.h"
@@ -45,7 +44,7 @@ void PermeabilityTensor_Example::Run()
 
   // now we prepare for establishing the permeability tensor by creating a
   // cache variable, which will represent our horizontal permeability
-  double64 kHorizontal( 1.0e-12 );
+  double kHorizontal( 1.0e-12 );
   //                    ^^^^^^ [m2] ~ 1 Darcy
 
   // now we establish the permeability tensor, filled with (PLAIN, 0.) values
@@ -63,9 +62,9 @@ void PermeabilityTensor_Example::Run()
   // dPHI / dX
   grad( 0 ) = 10.;
   // dPHI / dY
-  grad( 0 ) = 0.;
+  grad( 1 ) = 0.;
   // dPHI / dZ
-  grad( 0 ) = 0.1;
+  grad( 2 ) = 0.1;
 
   // calculating flow vector
   for( size_t i = 0; i < 3; ++i )

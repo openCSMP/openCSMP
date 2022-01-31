@@ -1,6 +1,7 @@
 #include "SteadyStatePressureToVset_Example.h"
 
 #include "Model.h"
+#include "ModelTopology.h"
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "ConstantFactor.h"
@@ -10,7 +11,6 @@
 #include "TRIANGLE_Interface.h"
 #include "VSetConverter.h"
 #include "VTK_Interface.h"
-#include "BinaryFileInterface.h"
 
 // fluid pressure algorithm and velocity computation
 #include "NumIntegral_NT_op_N_dV.h"
@@ -96,8 +96,7 @@ void SteadyStatePressureToVset_Example::Run()
     else {
          ANSYS_Interface  mesh_interface(isoparametric);
          const bool binary_file( true );
-         const bool irregular_mesh( false );
-         mesh_interface.Read_ANSYS_Mesh( file_name, mesh_container, mesh_topology, binary_file, irregular_mesh );
+         mesh_interface.Read_ANSYS_Mesh( file_name, mesh_container, mesh_topology, binary_file, true );
          mesh_topology.ReduceToRegions( file_name );
          map<size_t,size_t>  old_and_new_elmtids;
          mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
@@ -144,7 +143,7 @@ void SteadyStatePressureToVset_Example::Run()
     //   (note that this works variably well depending on the number of FE that span across
     //    the fractures)
     // -------------------------------------------------------------------------------------
-    const double64 minimum_channel_width( 1.0e-6 ); // one micrometer
+    const double minimum_channel_width( 1.0e-6 ); // one micrometer
     parallelPlatePermeabilityFromChannelWidth( *model, "fractures", "aperture", minimum_channel_width );
     printRangeOfVariable( *model, "permeability" );
 
@@ -158,7 +157,7 @@ void SteadyStatePressureToVset_Example::Run()
 
     // 6. Calculating hydraulic conductivity from permeability using Interrelation subclass
     // ------------------------------------------------------------------------------------
-    const double64 fluid_viscosity(1.0e-03);
+    const double fluid_viscosity(1.0e-03);
     ConstantFactor<2U,divides>  conductivity( model->Database(),
                                              "conductivity", "permeability",
                                               fluid_viscosity );
@@ -206,6 +205,7 @@ void SteadyStatePressureToVset_Example::Run()
     // 8. Pass the FE algorithm to the Region and solve [K]{p} = {Q}
     // --------------------------------------------------------------------
     model->Apply( total_pressure_quadratic );
+    model->ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
 
 
     // 9. Output the range of the variables "fluid pressure", "velocity",
@@ -213,6 +213,7 @@ void SteadyStatePressureToVset_Example::Run()
     // -------------------------------------------------------------------
     printRangeOfVariable( *model, "fluid pressure" );
     printRangeOfVariable( *model, "velocity" );
+    printRangeOfVariable( *model, "nodal velocity" );
     printRangeOfVariable( *model, "pore velocity" );
     printRangeOfVariable( *model, "volume flux" );
     printRangeOfVariable( *model, "conductivity" );
@@ -222,12 +223,13 @@ void SteadyStatePressureToVset_Example::Run()
     // --------------------------------------------
     vtk_output.OutputDataToVTK( *model, "fluid-pressure", "fluid pressure",    1 );
     vtk_output.OutputDataToVTK( *model, "velocity",       "velocity",          1 );
+    vtk_output.OutputDataToVTK( *model, "nvelocity",      "nodal velocity",    1 );
     vtk_output.OutputDataToVTK( *model, "volume-flux",    "volume flux",       1 );
 
 
     // 11. Write the entire model to a CSMP binary VSet file
     // ------------------------------------------------------
-    double64& model_time( ModelTime::Instance().modelTime );
+    double& model_time( ModelTime::Instance().modelTime );
     VSet<2U> saved_model, input_model;
     cout << "\nSaving model to VSet... " << endl;
     model->Region("Model").OutputTo( saved_model );
@@ -243,7 +245,7 @@ void SteadyStatePressureToVset_Example::Run()
     // 13. Change Dirichlet boundary condition on the left side and assing pressure
     //     that varies linearly from 1.0e+02 to 1.0e+05
     // ---------------------------------------------------------------------------
-    model->InputBoundaryValue( LEFT, "fluid pressure", makeScalar(DIRICH,1.0e+5) );
+    model_from_vset.InputBoundaryValue( LEFT, "fluid pressure", makeScalar(DIRICH,1.0e+5) );
 
 
     // 14. Reuse the fluid pressure algorithm and compute new fluid pressure
@@ -257,6 +259,8 @@ void SteadyStatePressureToVset_Example::Run()
     // --------------------------------------------------------------------
     printRangeOfVariable( model_from_vset, "fluid pressure" );
     printRangeOfVariable( model_from_vset, "velocity" );
+    model_from_vset.ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
+    printRangeOfVariable( model_from_vset, "nodal velocity" );
     printRangeOfVariable( model_from_vset, "pore velocity" );
     printRangeOfVariable( model_from_vset, "volume flux" );
     printRangeOfVariable( model_from_vset, "conductivity" );
@@ -269,16 +273,6 @@ void SteadyStatePressureToVset_Example::Run()
     vtk_output.OutputDataToVTK( model_from_vset, "velocity",       "velocity",       2 );
     vtk_output.OutputDataToVTK( model_from_vset, "nvelocity",      "nodal velocity", 2 );
     vtk_output.OutputDataToVTK( model_from_vset, "volume-flux",    "volume flux",    2 );
-
-    // Binary file output
-    BinaryFileInterface<2U>  binary_interface;
-    model_time = 86400.; // a day is done
-
-    binary_interface.WriteConnectivityFile( model_from_vset, "model_example2" );
-
-    binary_interface.WriteDataTo( model_from_vset, "fluid-pressure", "fluid pressure", 2 );
-    binary_interface.WriteDataTo( model_from_vset, "velocity",       "velocity",       2 );
-    binary_interface.WriteDataTo( model_from_vset, "volume-flux",    "volume flux",    2 );
 
 
     // 17. Analysis of results using StatisticalAnalyzer

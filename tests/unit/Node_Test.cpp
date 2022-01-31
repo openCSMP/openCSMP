@@ -1,6 +1,7 @@
 #include "Node_Test.h"
 #include "Node.h"
 #include "Element.h"
+#include "LinearTriangle.h"
 
 using namespace std;
 
@@ -8,8 +9,8 @@ namespace csmp{
 
 void Node_Test::run()
 {
-
-  Element<3U> e1,e2,e3;
+  LinearTriangle triangle;
+  Element<3U>    e1(&triangle), e2(&triangle), e3(&triangle);
   e1.Idx( 999 );
   e2.Idx( 9999 );
   e3.Idx( 99999 );
@@ -53,7 +54,7 @@ void Node_Test::run()
   _test( n1.AtBoundary() == LEFT );
 
   // .) COORDINATE / POINT
-  vector<double64> p1Coordinates( 3, 9.9 );
+  vector<double> p1Coordinates( 3, 9.9 );
   p1Coordinates.at( 1 ) = 99.9;
   p1Coordinates.at( 2 ) = 999.9;
   Point<3> p1( p1Coordinates );
@@ -71,7 +72,7 @@ void Node_Test::run()
   n1[0] = 2.2;
   n1[1] = 22.2;
   n1[2] = 222.2;
-  double64 n1x( n1[0] ), n1y( n1[1] ), n1z( n1[2] );
+  double n1x( n1[0] ), n1y( n1[1] ), n1z( n1[2] );
   _test( n1x == n1.x() );
   _test( n1y == n1.y() );
   _test( n1z == n1.z() );

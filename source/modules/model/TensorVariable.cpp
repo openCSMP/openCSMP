@@ -15,9 +15,9 @@ TensorVariable<3U>::TensorVariable( const TensorVariable<3U>& t )
 
 TensorVariable<3U>::TensorVariable()
   : flag{ { ANY,ANY,ANY } },
-  data{ numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN(),
-  numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN(),
-  numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN(),numeric_limits<double64>::quiet_NaN() }
+  data{ numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),
+  numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),
+  numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() }
 {
 }
 
@@ -38,7 +38,7 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const TensorVariable<3U>& ts
 initialises variable as diagonal isotropic tensor with flag and value
 SKM 17/6/2015
 */
-TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, double64 val )
+TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, double val )
   : flag{ { f,f,f } },
   data{ { val,0.,0.,0.,val,0.,0.,0.,val } }
 {
@@ -53,7 +53,7 @@ TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, double64 val )
 TensorVariable<3U>::~TensorVariable() {}
 
 
-double64& TensorVariable<3U>::operator()( size_t i, size_t j )
+double& TensorVariable<3U>::operator()( size_t i, size_t j )
 {
 #ifndef NDEBUG 
   if ( i >= 3U ) {
@@ -71,7 +71,7 @@ double64& TensorVariable<3U>::operator()( size_t i, size_t j )
 
 
 
-const double64& TensorVariable<3U>::operator()( size_t i, size_t j ) const
+const double& TensorVariable<3U>::operator()( size_t i, size_t j ) const
 {
 #ifndef NDEBUG 
   if ( i >= 3U ) {
@@ -88,7 +88,7 @@ const double64& TensorVariable<3U>::operator()( size_t i, size_t j ) const
 
 
 
-void TensorVariable<3U>::Component( size_t i, double64 val )
+void TensorVariable<3U>::Component( size_t i, double val )
 {
   assert( i < Size() );
   // row by row
@@ -109,7 +109,7 @@ void TensorVariable<3U>::Component( size_t i, double64 val )
 
 
 
-double64 TensorVariable<3U>::Component( size_t i ) const
+double TensorVariable<3U>::Component( size_t i ) const
 {
   assert( i < Size() );
   // row by row
@@ -163,7 +163,7 @@ bool TensorVariable<3U>::EigenValues( VectorVariable<3U>& Ev ) const
 }
 
 
-bool TensorVariable<3U>::EigenValues( std::vector<double64>& Ev ) const
+bool TensorVariable<3U>::EigenValues( std::vector<double>& Ev ) const
 {
   return EigenValuesPositiveDefiniteSymmetricMatrix( Ev[0], Ev[1], Ev[2] );
 }
@@ -174,7 +174,7 @@ bool TensorVariable<3U>::EigenValues( std::vector<double64>& Ev ) const
 /**
 Initialiser for tensor variable, index is not used.
 */
-void TensorVariable<3U>::Resize( size_t, double64 newValue )
+void TensorVariable<3U>::Resize( size_t, double newValue )
 {
   data[0][0] = newValue;
   data[0][1] = newValue;
@@ -189,7 +189,7 @@ void TensorVariable<3U>::Resize( size_t, double64 newValue )
 
 
 
-double64 TensorVariable<3U>::Trace() const
+double TensorVariable<3U>::Trace() const
 {
   return data[0][0] + data[1][1] + data[2][2];
 }
@@ -262,14 +262,14 @@ bool  TensorVariable<3U>::operator<( const TensorVariable<3U>& t ) const
 
 bool TensorVariable<3U>::Out( std::fstream& fp ) const
 {
-  const int32 flag_0( this->flag[0] );
-  const int32 flag_1( this->flag[1] );
-  const int32 flag_2( this->flag[2] );
-  const size_t flag_size = sizeof( int32 );
+  const int32_t flag_0( this->flag[0] );
+  const int32_t flag_1( this->flag[1] );
+  const int32_t flag_2( this->flag[2] );
+  const size_t flag_size = sizeof( int32_t );
   fp.write( (char*)&flag_0, flag_size );
   fp.write( (char*)&flag_1, flag_size );
   fp.write( (char*)&flag_2, flag_size );
-  const size_t data_size = sizeof( double64 );
+  const size_t data_size = sizeof( double );
   fp.write( (char*)&this->data[0][0], data_size );
   fp.write( (char*)&this->data[1][0], data_size );
   fp.write( (char*)&this->data[2][0], data_size );
@@ -284,11 +284,11 @@ bool TensorVariable<3U>::Out( std::fstream& fp ) const
 
 bool TensorVariable<3U>::In( std::fstream& fp )
 {
-  const size_t flag_size = sizeof( int32 );
+  const size_t flag_size = sizeof( int32_t );
   fp.read( (char*)&this->flag[0], flag_size );
   fp.read( (char*)&this->flag[1], flag_size );
   fp.read( (char*)&this->flag[2], flag_size );
-  const size_t data_size = sizeof( double64 );
+  const size_t data_size = sizeof( double );
   fp.read( (char*)&this->data[0][0], data_size );
   fp.read( (char*)&this->data[1][0], data_size );
   fp.read( (char*)&this->data[2][0], data_size );
@@ -304,8 +304,8 @@ bool TensorVariable<3U>::In( std::fstream& fp )
 
 /// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
 TensorVariable<2U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2,
-                               double64 v11, double64 v12,
-                               double64 v21, double64 v22 )
+                               double v11, double v12,
+                               double v21, double v22 )
 {
   return std::move( TensorVariable<2U>( f1, f2, v11, v12, v21, v22 ) );
 }
@@ -313,9 +313,9 @@ TensorVariable<2U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2,
 
 /// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
 TensorVariable<3U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
-                               double64 v11, double64 v12, double64 v13,
-                               double64 v21, double64 v22, double64 v23,
-                               double64 v31, double64 v32, double64 v33 )
+                               double v11, double v12, double v13,
+                               double v21, double v22, double v23,
+                               double v31, double v32, double v33 )
 {
   return std::move( TensorVariable<3U>( f1, f2, f3, v11, v12, v13, v21, v22, v23, v31, v32, v33 ) );
 }
@@ -324,9 +324,9 @@ TensorVariable<3U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG
 
 
 TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f,
-                                    double64 v11, double64 v12, double64 v13,
-                                    double64 v21, double64 v22, double64 v23,
-                                    double64 v31, double64 v32, double64 v33 )
+                                    double v11, double v12, double v13,
+                                    double v21, double v22, double v23,
+                                    double v31, double v32, double v33 )
   : flag{ { f,f,f } },
   data{ { v11,v12,v13,v21,v22,v23,v31,v32,v33 } }
 {
@@ -335,9 +335,9 @@ TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f,
 
 
 TensorVariable<3U>::TensorVariable( const VARIABLE_FLAG f11, const VARIABLE_FLAG f22, const VARIABLE_FLAG f33,
-                                    const double64  v11, const double64  v12, const double64  v13,
-                                    const double64  v21, const double64  v22, const double64  v23,
-                                    const double64  v31, const double64  v32, const double64  v33 )
+                                    const double  v11, const double  v12, const double  v13,
+                                    const double  v21, const double  v22, const double  v23,
+                                    const double  v31, const double  v32, const double  v33 )
   : flag{ { f11,f22,f33 } },
   data{ { v11,v12,v13,v21,v22,v23,v31,v32,v33 } }
 {
@@ -366,7 +366,7 @@ TensorVariable<3U>  TensorVariable<3U>::operator-( const TensorVariable<3U>& t )
 }
 
 
-TensorVariable<3U>  TensorVariable<3U>::operator+( double64 val ) const
+TensorVariable<3U>  TensorVariable<3U>::operator+( double val ) const
 {
   return std::move( TensorVariable( flag[0], flag[1], flag[2],
                     data[0][0] + val, data[0][1] + val, data[0][2] + val,
@@ -376,7 +376,7 @@ TensorVariable<3U>  TensorVariable<3U>::operator+( double64 val ) const
 
 
 
-TensorVariable<3U>  TensorVariable<3U>::operator-( double64 val ) const
+TensorVariable<3U>  TensorVariable<3U>::operator-( double val ) const
 {
   return std::move( TensorVariable( flag[0], flag[1], flag[2],
                     data[0][0] - val, data[0][1] - val, data[0][2] - val,
@@ -386,7 +386,7 @@ TensorVariable<3U>  TensorVariable<3U>::operator-( double64 val ) const
 
 
 
-TensorVariable<3U>  TensorVariable<3U>::operator*( double64 val ) const
+TensorVariable<3U>  TensorVariable<3U>::operator*( double val ) const
 {
   return std::move( TensorVariable( flag[0], flag[1], flag[2],
                     data[0][0] * val, data[0][1] * val, data[0][2] * val,
@@ -396,7 +396,7 @@ TensorVariable<3U>  TensorVariable<3U>::operator*( double64 val ) const
 
 
 
-TensorVariable<3U>  TensorVariable<3U>::operator/( double64 val ) const
+TensorVariable<3U>  TensorVariable<3U>::operator/( double val ) const
 {
   return std::move( TensorVariable( flag[0], flag[1], flag[2],
                     data[0][0] / val, data[0][1] / val, data[0][2] / val,
@@ -645,7 +645,7 @@ TensorVariable<3U>&  TensorVariable<3U>::operator*=( const TensorVariable<3U>& t
 
 
 
-TensorVariable<3U>&  TensorVariable<3U>::operator+=( double64 val )
+TensorVariable<3U>&  TensorVariable<3U>::operator+=( double val )
 {
   data[0][0] += val;
   data[0][1] += val;
@@ -662,7 +662,7 @@ TensorVariable<3U>&  TensorVariable<3U>::operator+=( double64 val )
 
 
 
-TensorVariable<3U>&  TensorVariable<3U>::operator-=( double64 val )
+TensorVariable<3U>&  TensorVariable<3U>::operator-=( double val )
 {
   data[0][0] -= val;
   data[0][1] -= val;
@@ -679,7 +679,7 @@ TensorVariable<3U>&  TensorVariable<3U>::operator-=( double64 val )
 
 
 
-TensorVariable<3U>&  TensorVariable<3U>::operator*=( double64 val )
+TensorVariable<3U>&  TensorVariable<3U>::operator*=( double val )
 {
   data[0][0] *= val;
   data[0][1] *= val;
@@ -696,7 +696,7 @@ TensorVariable<3U>&  TensorVariable<3U>::operator*=( double64 val )
 
 
 
-TensorVariable<3U>&  TensorVariable<3U>::operator/=( double64 val )
+TensorVariable<3U>&  TensorVariable<3U>::operator/=( double val )
 {
   data[0][0] /= val;
   data[0][1] /= val;
@@ -717,7 +717,7 @@ TensorVariable<3U>&  TensorVariable<3U>::operator/=( double64 val )
 // --------------------
 
 
-TensorVariable<3U>&  TensorVariable<3U>::operator=( double64 val )
+TensorVariable<3U>&  TensorVariable<3U>::operator=( double val )
 {
   data[0][0] = val;
   data[0][1] = val;
@@ -761,13 +761,13 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const VectorVariable<3U>& vc
   flag[2] = vc.Flag( 2 );
 
   data[0][0] = vc( 0 );
-  data[0][1] = static_cast<double64>(0.0);
-  data[1][0] = static_cast<double64>(0.0);
+  data[0][1] = static_cast<double>(0.0);
+  data[1][0] = static_cast<double>(0.0);
   data[1][1] = vc( 1 );
-  data[0][2] = static_cast<double64>(0.0);
-  data[1][2] = static_cast<double64>(0.0);
-  data[2][0] = static_cast<double64>(0.0);
-  data[2][1] = static_cast<double64>(0.0);
+  data[0][2] = static_cast<double>(0.0);
+  data[1][2] = static_cast<double>(0.0);
+  data[2][0] = static_cast<double>(0.0);
+  data[2][1] = static_cast<double>(0.0);
   data[2][2] = vc( 2 );
 
   return *this;
@@ -788,22 +788,22 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const VectorVariable<3U>& vc
 
 void TensorVariable<3U>::Identity()
 {
-  data[0][0] = static_cast<double64>(1.0);
-  data[0][1] = static_cast<double64>(0.0);
-  data[0][2] = static_cast<double64>(0.0);
+  data[0][0] = static_cast<double>(1.0);
+  data[0][1] = static_cast<double>(0.0);
+  data[0][2] = static_cast<double>(0.0);
 
-  data[1][0] = static_cast<double64>(0.0);
-  data[1][1] = static_cast<double64>(1.0);
-  data[1][2] = static_cast<double64>(0.0);
+  data[1][0] = static_cast<double>(0.0);
+  data[1][1] = static_cast<double>(1.0);
+  data[1][2] = static_cast<double>(0.0);
 
-  data[2][0] = static_cast<double64>(0.0);
-  data[2][1] = static_cast<double64>(0.0);
-  data[2][2] = static_cast<double64>(1.0);
+  data[2][0] = static_cast<double>(0.0);
+  data[2][1] = static_cast<double>(0.0);
+  data[2][2] = static_cast<double>(1.0);
 }
 
 
 
-void TensorVariable<3U>::DiagonalValues( double64 f_00, double64 f_11, double64 f_22 )
+void TensorVariable<3U>::DiagonalValues( double f_00, double f_11, double f_22 )
 {
   data[0][0] = f_00;
   data[1][1] = f_11;
@@ -812,7 +812,7 @@ void TensorVariable<3U>::DiagonalValues( double64 f_00, double64 f_11, double64 
 
 
 
-void TensorVariable<3U>::DiagonalValues( const vector<double64>& vecDiags )
+void TensorVariable<3U>::DiagonalValues( const vector<double>& vecDiags )
 {
   data[0][0] = vecDiags[0];
   data[1][1] = vecDiags[1];
@@ -846,9 +846,9 @@ TensorVariable<3U>  TensorVariable<3U>::Transposed() const
 // re-tested: SKM 29-9-2001
 /// @test tested: O.K.
 
-double64 TensorVariable<3U>::Determinant() const
+double TensorVariable<3U>::Determinant() const
 {
-  double64 det = data[0][0] * (data[1][1] * data[2][2] - data[2][1] * data[1][2]);
+  double det = data[0][0] * (data[1][1] * data[2][2] - data[2][1] * data[1][2]);
   det -= data[0][1] * (data[1][0] * data[2][2] - data[2][0] * data[1][2]);
   det += data[0][2] * (data[1][0] * data[2][1] - data[2][0] * data[1][1]);
 
@@ -861,9 +861,9 @@ double64 TensorVariable<3U>::Determinant() const
 
 TensorVariable<3U> TensorVariable<3U>::Inverse() const
 {
-  double64  det = Determinant();
+  double  det = Determinant();
 
-  if ( det == static_cast<double64>(0.) ) {
+  if ( det == static_cast<double>(0.) ) {
     std::cerr << "\nTensorVariable<dim>::Inverse: Determinant = 0" << std::endl;
     return TensorVariable<3U>();
   }
@@ -898,9 +898,9 @@ TensorVariable<3U> TensorVariable<3U>::Inverse() const
 
 /// @test re-tested: SKM 29-9-2001
 
-double64  TensorVariable<3U>::MinElement() const
+double  TensorVariable<3U>::MinElement() const
 {
-  double64 me = data[0][0];
+  double me = data[0][0];
 
   if ( data[0][1] < me ) me = data[0][1];
   if ( data[1][0] < me ) me = data[1][0];
@@ -917,9 +917,9 @@ double64  TensorVariable<3U>::MinElement() const
 
 /// @test re-tested: SKM 29-9-2001
 
-double64  TensorVariable<3U>::MaxElement() const
+double  TensorVariable<3U>::MaxElement() const
 {
-  double64 me = data[0][0];
+  double me = data[0][0];
 
   if ( data[0][1] > me ) me = data[0][1];
   if ( data[1][0] > me ) me = data[1][0];
@@ -937,7 +937,7 @@ double64  TensorVariable<3U>::MaxElement() const
 
 /// @test re-tested: SKM 29-9-2001
 
-bool  TensorVariable<3U>::IsWithinRange( double64 vmin, double64 vmax ) const
+bool  TensorVariable<3U>::IsWithinRange( double vmin, double vmax ) const
 {
   if ( data[0][0] < vmin || data[0][0] > vmax ) return false;
   //if ( data[0][1] < vmin || data[0][1] > vmax ) return false;
@@ -1080,9 +1080,9 @@ bool TensorVariable<3U>::Eigen( VectorVariable<3U>& evals, TensorVariable<3U>& e
   if ( !EigenValues( evals ) ) return false;
 
   //suppose tensor is symmetric, by averaging the non diagonal elements
-  const double64 f_0_1( (data[1][0] + data[0][1]) / 2. ); //=1_0
-  const double64 f_0_2( (data[2][0] + data[0][2]) / 2. ); //=2_0
-  const double64 f_1_2( (data[1][2] + data[2][1]) / 2. ); //=1_2
+  const double f_0_1( (data[1][0] + data[0][1]) / 2. ); //=1_0
+  const double f_0_2( (data[2][0] + data[0][2]) / 2. ); //=2_0
+  const double f_1_2( (data[1][2] + data[2][1]) / 2. ); //=1_2
 
                                                           //EigenValueCalculation(Ev0_, Ev1_, Ev2_);
   TensorVariable<3U> Ev0_I( ANY, evals( 0 ) );
@@ -1108,11 +1108,11 @@ bool TensorVariable<3U>::Eigen( VectorVariable<3U>& evals, TensorVariable<3U>& e
 
   for ( size_t i( 0 ); i < 3; i++ ) {
     size_t j = i;
-    if ( LEvec( i ) < numeric_limits<double64>::epsilon() ) {
+    if ( LEvec( i ) < numeric_limits<double>::epsilon() ) {
       j++;
       if ( j > 2 ) { j = 0; }
       LEvec( i ) = sqrt( AEv1byAEv2( 0, j )*AEv1byAEv2( 0, j ) + AEv1byAEv2( 1, j )*AEv1byAEv2( 1, j ) + AEv1byAEv2( 2, j )*AEv1byAEv2( 2, j ) );
-      if ( LEvec( i ) < numeric_limits<double64>::epsilon() ) {
+      if ( LEvec( i ) < numeric_limits<double>::epsilon() ) {
         j++;
         if ( j > 2 ) { j = 0; }
         LEvec( i ) = sqrt( AEv1byAEv2( 0, j )*AEv1byAEv2( 0, j ) + AEv1byAEv2( 1, j )*AEv1byAEv2( 1, j ) + AEv1byAEv2( 2, j )*AEv1byAEv2( 2, j ) );
@@ -1444,30 +1444,30 @@ Also all the pow (1./3.) calls are replaced with cbrt(). The pow (1./.3) does no
 The source for solving the cubic equation is: http://mathworld.wolfram.com/CubicFormula.html
 
 */
-bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double64& eigenValue0, double64& eigenValue1, double64& eigenValue2 ) const
+bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double& eigenValue0, double& eigenValue1, double& eigenValue2 ) const
 {
-  const double64 PI( 3.14159265358979323846 );
+  const double PI( 3.14159265358979323846 );
 
   //HA: The tensor is expected to be symmetric. However, The symmetry of the matrix is ensured by averaging non diagonal elements.
-  const double64 f_0_1( (data[1][0] + data[0][1]) / 2. ); //=1_0
-  const double64 f_0_2( (data[2][0] + data[0][2]) / 2. ); //=2_0
-  const double64 f_1_2( (data[1][2] + data[2][1]) / 2. ); //=1_2
+  const double f_0_1( (data[1][0] + data[0][1]) / 2. ); //=1_0
+  const double f_0_2( (data[2][0] + data[0][2]) / 2. ); //=2_0
+  const double f_1_2( (data[1][2] + data[2][1]) / 2. ); //=1_2
 
                                                           // a0, a1 and a2 are coefficients of cubic equation " x^3 + a2 * x^2 + a1 * x + a0 = 0". The roots of this equation are 
                                                           // the Eigen values of the tensor
-  const double64 a2 = -(data[0][0] + data[1][1] + data[2][2]);
-  const double64 a1 = -(f_0_1 * f_0_1 + f_0_2 * f_0_2 +
+  const double a2 = -(data[0][0] + data[1][1] + data[2][2]);
+  const double a1 = -(f_0_1 * f_0_1 + f_0_2 * f_0_2 +
                          f_1_2 * f_1_2 - data[0][0] * data[1][1] -
                          data[0][0] * data[2][2] - data[1][1] * data[2][2]);
-  const double64 a0 = -(data[0][0] * data[1][1] * data[2][2] -
+  const double a0 = -(data[0][0] * data[1][1] * data[2][2] -
                          data[0][0] * f_1_2 * f_1_2 -
                          f_0_1 * f_0_1 * data[2][2] +
                          f_0_1 * f_0_2 * f_1_2 +
                          f_0_2  * f_0_1 * f_1_2 -
                          f_0_2 * f_0_2 * data[1][1]);
-  const double64 R = (9 * a2 * a1 - 27 * a0 - 2 * a2 * a2 * a2) / 54.0;
-  const double64 Q = (3 * a1 - a2 * a2) / 9.0;
-  const double64 D = Q * Q * Q + R * R;
+  const double R = (9 * a2 * a1 - 27 * a0 - 2 * a2 * a2 * a2) / 54.0;
+  const double Q = (3 * a1 - a2 * a2) / 9.0;
+  const double D = Q * Q * Q + R * R;
 
   if ( D > 0. ) // One real root and pair of complex conjugate roots
   {
@@ -1476,8 +1476,8 @@ bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double64& e
     (1) A has exactly n(not necessarily distinct) eigenvalues.
     (2) Sets of n eigenvectors exist for each of eigenvalues, and they are mututally orthogonal.
     */
-    double64 m = R + std::sqrt( D );
-    double64 n = R - std::sqrt( D );
+    double m = R + std::sqrt( D );
+    double n = R - std::sqrt( D );
     m = (m > 0) ? std::cbrt( m ) : -1 * std::cbrt( -1 * m );
     n = (n > 0) ? std::cbrt( n ) : -1 * std::cbrt( -1 * n );
     eigenValue0 = m + n - a2 / 3.0;
@@ -1489,7 +1489,7 @@ bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double64& e
     return false;
   }
 
-  if ( fabs( D ) <= numeric_limits<double64>::epsilon() ) // The equation has three real roots, at least two of them are equal
+  if ( fabs( D ) <= numeric_limits<double>::epsilon() ) // The equation has three real roots, at least two of them are equal
   {
 
     eigenValue0 = 2 * std::cbrt( R ) - a2 / 3.0;
@@ -1497,7 +1497,7 @@ bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double64& e
 
     if ( eigenValue0 < eigenValue1 ) // to return the roots in descending order
     {
-      double64 temp = eigenValue0;
+      double temp = eigenValue0;
       eigenValue0 = eigenValue1;
       eigenValue2 = temp;
     }
@@ -1505,19 +1505,19 @@ bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double64& e
 
   if ( D < 0. ) // The equation has three real roots
   {
-    double64 teta = std::acos( R / (std::abs( Q ) * std::sqrt( -1 * Q )) );
+    double teta = std::acos( R / (std::abs( Q ) * std::sqrt( -1 * Q )) );
     eigenValue0 = 2 * std::sqrt( -1 * Q ) * std::cos( teta / 3.0 ) - a2 / 3.0;
     eigenValue1 = 2 * std::sqrt( -1 * Q ) * std::cos( teta / 3.0 + 120.0 / 180.0 * PI ) - a2 / 3.0;
     eigenValue2 = 2 * std::sqrt( -1 * Q ) * std::cos( teta / 3.0 + 240.0 / 180.0 * PI ) - a2 / 3.0;
 
     // returns the roots in descending order
     if ( eigenValue2 > eigenValue1 ) {
-      double64 temp = eigenValue1;
+      double temp = eigenValue1;
       eigenValue1 = eigenValue2;
       eigenValue2 = temp;
     }
     else if ( eigenValue1 > eigenValue0 ) {
-      double64 temp = eigenValue0;
+      double temp = eigenValue0;
       eigenValue0 = eigenValue1;
       eigenValue1 = temp;
     }

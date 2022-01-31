@@ -14,33 +14,33 @@ namespace csmp
 
   public:
 
-    NaClMeltingCurveLiquidLookup(const double64& externaltemperature,
-                                 const double64& externalpressure);
+    NaClMeltingCurveLiquidLookup(const double& externaltemperature,
+                                 const double& externalpressure);
     ~NaClMeltingCurveLiquidLookup();
 
-    double64                TmeltFromP();
-    double64                PmeltFromT();
-    double64                MassFractionNaCl();
-    double64                Density();
-    double64                Enthalpy();
-    double64                HeatCapacity();
-    double64                Compressibility();
-    double64                Viscosity();
-    double64                TfromP(const double64& press); 
-    double64                ValueOf(const int& property_index);
+    double                TmeltFromP();
+    double                PmeltFromT();
+    double                MassFractionNaCl();
+    double                Density();
+    double                Enthalpy();
+    double                HeatCapacity();
+    double                Compressibility();
+    double                Viscosity();
+    double                TfromP(const double& press); 
+    double                ValueOf(const int& property_index);
 
   private:
 
-    const double64&         temperature;
-    const double64&         pressure;
+    const double&         temperature;
+    const double&         pressure;
 
-    double64                tcurrent;
-    double64                pcurrent;
-    double64                xcurrent;
-    double64                t_res;
-    double64                tnorm;
-    double64                pnorm;
-    double64                tmin;
+    double                tcurrent;
+    double                pcurrent;
+    double                xcurrent;
+    double                t_res;
+    double                tnorm;
+    double                pnorm;
+    double                tmin;
 
     long                    it;
     long                    t_dim;
@@ -52,11 +52,11 @@ namespace csmp
     States                  state;
 
 
-    std::vector<double64>   storage_vector; // stores data in sequence t-p-x-rho-h at each lookup point
+    std::vector<double>   storage_vector; // stores data in sequence t-p-x-rho-h at each lookup point
 
     TriplePointNaCl         tp_nacl;
 
-    void                    GetTemperatureIndex(const double64& myt);
+    void                    GetTemperatureIndex(const double& myt);
 
   };
 

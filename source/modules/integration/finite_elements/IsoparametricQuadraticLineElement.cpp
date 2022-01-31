@@ -10,7 +10,7 @@ namespace csmp {
 IsoparametricQuadraticLineElement::IsoparametricQuadraticLineElement( size_t dimensions )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_QUADRATIC_BAR, true, true, 2U ),
-    current_detJ(std::numeric_limits<double64>::quiet_NaN())
+    current_detJ(std::numeric_limits<double>::quiet_NaN())
  {
     dim = dimensions;
     itp = 2;
@@ -58,18 +58,18 @@ IsoparametricQuadraticLineElement::~IsoparametricQuadraticLineElement()
 
 
 /// Cheung et al. p. 26, Cook et al., p. 164
-void IsoparametricQuadraticLineElement::Nr( double64 r, std::vector<double64>& N ) const
+void IsoparametricQuadraticLineElement::Nr( double r, std::vector<double>& N ) const
 {
    N.resize(npe);
-   double64 r2 = r * r;
+   double r2 = r * r;
    N[0] = 0.5 * (-r + r2);
    N[1] = 0.5 * ( r + r2);
    N[2] = 1. - r2;
 }
 
-void IsoparametricQuadraticLineElement::Nr( double64 r, double64* N ) const
+void IsoparametricQuadraticLineElement::Nr( double r, double* N ) const
 {
-   double64 r2 = r * r;
+   double r2 = r * r;
    N[0] = 0.5 * (-r + r2);
    N[1] = 0.5 * ( r + r2);
    N[2] = 1. - r2;
@@ -77,16 +77,16 @@ void IsoparametricQuadraticLineElement::Nr( double64 r, double64* N ) const
 
 
 /// Cheung et al. p. 26
-void IsoparametricQuadraticLineElement::dNr( double64 r, std::vector<double64>& dnr ) const
+void IsoparametricQuadraticLineElement::dNr( double r, std::vector<double>& dnr ) const
 {
-   double64 rr = 2. * r;
+   double rr = 2. * r;
    dnr[0] = 0.5 * (-1. + rr);
    dnr[1] = 0.5 * ( 1. + rr);
    dnr[2] = -rr;
 }
 
 
-double64 IsoparametricQuadraticLineElement::JacobianFor( const std::vector<double64>& DNR, size_t coord ) const
+double IsoparametricQuadraticLineElement::JacobianFor( const std::vector<double>& DNR, size_t coord ) const
  {
     assert( coord < dim );
     return DNR[0] * XY(0,coord) + DNR[1] * XY(1,coord) + DNR[2] * XY(2,coord);
@@ -94,16 +94,16 @@ double64 IsoparametricQuadraticLineElement::JacobianFor( const std::vector<doubl
 
 
 // these next 3 auxiliary methods are all used by the Volume() function
-double64 IsoparametricQuadraticLineElement::Jacobian1D( const std::vector<double64>& DNR ) const
+double IsoparametricQuadraticLineElement::Jacobian1D( const std::vector<double>& DNR ) const
  {
     return DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
  }
 
 
-double64 IsoparametricQuadraticLineElement::Jacobian2D( const std::vector<double64>& DNR ) const
+double IsoparametricQuadraticLineElement::Jacobian2D( const std::vector<double>& DNR ) const
  {
-    double64 jac_x = DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
-    double64 jac_y = DNR[0] * XY(0,1) + DNR[1] * XY(1,1) + DNR[2] * XY(2,1);
+    double jac_x = DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
+    double jac_y = DNR[0] * XY(0,1) + DNR[1] * XY(1,1) + DNR[2] * XY(2,1);
     
     // compute a length-like expression for the transformation
     return std::sqrt( jac_x*jac_x + jac_y*jac_y );
@@ -111,11 +111,11 @@ double64 IsoparametricQuadraticLineElement::Jacobian2D( const std::vector<double
  } // end 
 
 
-double64 IsoparametricQuadraticLineElement::Jacobian3D( const std::vector<double64>& DNR ) const
+double IsoparametricQuadraticLineElement::Jacobian3D( const std::vector<double>& DNR ) const
  {
-    double64 jac_x = DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
-    double64 jac_y = DNR[0] * XY(0,1) + DNR[1] * XY(1,1) + DNR[2] * XY(2,1);
-    double64 jac_z = DNR[0] * XY(0,2) + DNR[1] * XY(1,2) + DNR[2] * XY(2,2);
+    double jac_x = DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
+    double jac_y = DNR[0] * XY(0,1) + DNR[1] * XY(1,1) + DNR[2] * XY(2,1);
+    double jac_z = DNR[0] * XY(0,2) + DNR[1] * XY(1,2) + DNR[2] * XY(2,2);
     
     return std::sqrt( jac_x*jac_x + jac_y*jac_y + jac_z*jac_z );
     
@@ -124,7 +124,7 @@ double64 IsoparametricQuadraticLineElement::Jacobian3D( const std::vector<double
 
 // Next 2 methods belong together
 /// return determinant J for values of previous function
-double64 IsoparametricQuadraticLineElement::JacobianInverse() { return current_detJ; }
+double IsoparametricQuadraticLineElement::JacobianInverse() { return current_detJ; }
 
 
 void IsoparametricQuadraticLineElement::JacobianAtIntegrationPoint( size_t ipoint )
@@ -132,7 +132,7 @@ void IsoparametricQuadraticLineElement::JacobianAtIntegrationPoint( size_t ipoin
     if ( ipoint > 1 ) {
          std::cerr <<"\nIsoparametricQuadraticLineElement::JacobianAtIntegrationPoint: ";
          std::cerr <<"Element has only 2 integration points.\n";
-         current_detJ = std::numeric_limits<double64>::quiet_NaN();
+         current_detJ = std::numeric_limits<double>::quiet_NaN();
          return;
       }
       
@@ -145,17 +145,17 @@ void IsoparametricQuadraticLineElement::JacobianAtIntegrationPoint( size_t ipoin
  
 
 
-double64 IsoparametricQuadraticLineElement::WeightAtIntegrationPoint( size_t i ) const
+double IsoparametricQuadraticLineElement::WeightAtIntegrationPoint( size_t i ) const
  {
     if      ( i == 0 ) return W[0];
     else if ( i == 1 ) return W[1];
     
-    return std::numeric_limits<double64>::quiet_NaN();
+    return std::numeric_limits<double>::signaling_NaN();
  }
 
 
 
-void IsoparametricQuadraticLineElement::N_AtIntegrationPoint( size_t gauss_point, std::vector<double64>& N )
+void IsoparametricQuadraticLineElement::N_AtIntegrationPoint( size_t gauss_point, std::vector<double>& N )
  {
     assert( gauss_point < gpe );
 
@@ -163,7 +163,7 @@ void IsoparametricQuadraticLineElement::N_AtIntegrationPoint( size_t gauss_point
     Nr( IP[gauss_point], N );
  }
 
-void IsoparametricQuadraticLineElement::N_AtBaryCenter( std::vector<double64>& N )
+void IsoparametricQuadraticLineElement::N_AtBaryCenter( std::vector<double>& N )
   {
     // barycenter is located at 0. as the element extends from -1 to 1 in local coordinate space
     Nr( 0., N );
@@ -199,7 +199,7 @@ void  IsoparametricQuadraticLineElement::MidSideNodes( std::vector<size_t>& ids 
 void IsoparametricQuadraticLineElement::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
  {
     if ( segm_id > 1U )
-      std::cout <<"\nIsoparametricQuadraticLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
+      std::cerr <<"\nIsoparametricQuadraticLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
     snids.resize(3);
     snids[0] = 0;
     snids[1] = 1;  
@@ -215,14 +215,34 @@ void IsoparametricQuadraticLineElement::NodesOfSegment( size_t segm_id, std::vec
 void  IsoparametricQuadraticLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
     if ( face_id > 1U )
-      std::cout <<"\nIsoparametricQuadraticLineElement::NodesOfFace: There are only 2 faces present."<< std::endl;
+      std::cerr <<"\nIsoparametricQuadraticLineElement::NodesOfFace: There are only 2 faces present."<< std::endl;
     fnids.resize(1U);
     fnids[0] = face_id;
  }
 
 
+vector<size_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( size_t face_id ) const
+ {
+    assert( face_id <= 1 );
+    return vector<size_t>{face_id};
+ }
+
+
+vector<size_t>  IsoparametricQuadraticLineElement::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1};
+        case 1: return vector<size_t>{0};
+        default:
+          cerr <<"\nIsoparametricQuadraticLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
 /// assuming straight segments between the nodes
-void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double64>& vec ) 
+void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double>& vec ) 
  {
     vec.resize(2);
     
@@ -234,8 +254,8 @@ void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double64>& vec )
     
     if ( dim == 2U ) {
 	     // segment node 1,3
-	     double64 lenx = XY(2,0) - XY(0,0);
-	     double64 leny = XY(2,1) - XY(0,1);
+	     double lenx = XY(2,0) - XY(0,0);
+	     double leny = XY(2,1) - XY(0,1);
 	     vec[0] = hypot( lenx, leny );
 	     // segment node 3,2
 	     lenx = XY(1,0) - XY(2,0);
@@ -246,9 +266,9 @@ void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double64>& vec )
 
     if ( dim == 3U ) {
 	     // segment node 1,3
-	     double64 lenx = XY(2,0) - XY(0,0);
-	     double64 leny = XY(2,1) - XY(0,1);
-	     double64 lenz = XY(2,2) - XY(0,2);
+	     double lenx = XY(2,0) - XY(0,0);
+	     double leny = XY(2,1) - XY(0,1);
+	     double lenz = XY(2,2) - XY(0,2);
 	     vec[0] = sqrt( lenx*lenx + leny*leny + lenz*lenz );
 	     // segment node 3,2
 	     lenx = XY(1,0) - XY(2,0);
@@ -308,9 +328,9 @@ the area is computed.
 
 @return The volume (m3) of the finite element.  
  */
-double64 IsoparametricQuadraticLineElement::Volume()
+double IsoparametricQuadraticLineElement::Volume()
 {
-   double64  len(0.);
+   double  len(0.);
 
    // 2-dimensional models
    if ( dim == 2 )
@@ -354,7 +374,7 @@ global coordinates as
 
 DN_global = DN^T J-1^T  ops J-1 DN
 */
-double64 IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& DN,
+double IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& DN,
                                                        size_t gauss_point )
  {
      DN.Resize(dim,npe);
@@ -363,8 +383,8 @@ double64 IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<D
      if ( dim == 1 ) {
           // node 1
           dNr( IP[gauss_point], DNR );
-          double64 dxdr = JacobianFor( DNR, 0 );
-          double64 detJinv = 1. / dxdr;
+          double dxdr = JacobianFor( DNR, 0 );
+          double detJinv = 1. / dxdr;
           // as in Cook et al. p. 166, eqn 6.2-7
           DN(0,0) = DNR[0] * detJinv; 
           // node 2
@@ -378,12 +398,12 @@ double64 IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<D
           // the dxi_i need to be multiplied with global coordinates
           dNr( IP[gauss_point], DNR );
           // getting dx/dr
-          double64 dxdr = JacobianFor( DNR, 0 );
-          double64 dydr = JacobianFor( DNR, 1 );
+          double dxdr = JacobianFor( DNR, 0 );
+          double dydr = JacobianFor( DNR, 1 );
           // 1 / detJ = detJinv
-          double64 detJinv = 1. / hypot( dxdr, dydr );
-          double64 cosa = detJinv * dxdr;
-          double64 sina = detJinv * dydr;
+          double detJinv = 1. / hypot( dxdr, dydr );
+          double cosa = detJinv * dxdr;
+          double sina = detJinv * dydr;
           // row 1 = x-derivatives
           DN(0,0) = DNR[0] * cosa * detJinv; 
           DN(0,1) = DNR[1] * cosa * detJinv;
@@ -397,13 +417,13 @@ double64 IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<D
        
      if ( dim == 3 ) {
           dNr( IP[gauss_point], DNR );
-          double64 dxdr = JacobianFor( DNR, 0 );
-          double64 dydr = JacobianFor( DNR, 1 );
-          double64 dzdr = JacobianFor( DNR, 2 );
-          double64 detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr + dzdr*dzdr );
-          double64 cosa = detJinv * dxdr;
-          double64 sina = detJinv * dydr;
-          double64 sinb = detJinv * dzdr;
+          double dxdr = JacobianFor( DNR, 0 );
+          double dydr = JacobianFor( DNR, 1 );
+          double dzdr = JacobianFor( DNR, 2 );
+          double detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr + dzdr*dzdr );
+          double cosa = detJinv * dxdr;
+          double sina = detJinv * dydr;
+          double sinb = detJinv * dzdr;
           // row 1 = x-derivatives
           DN(0,0) = DNR[0] * cosa * detJinv; 
           DN(0,1) = DNR[1] * cosa * detJinv;
@@ -452,7 +472,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.  
 */
-double64 IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t nd )
+double IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t nd )
  {
      DN.Resize(dim,npe);
      
@@ -460,7 +480,7 @@ double64 IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, 
      if ( dim == 1 ) {
           // node 1
           dNr( NX[nd], DNR );
-          double64 detJinv = 1. / JacobianFor( DNR, 0 );
+          double detJinv = 1. / JacobianFor( DNR, 0 );
           DN(0,0) = DNR[0] * detJinv; 
           // node 2
           DN(0,1) = DNR[1] * detJinv; 
@@ -472,12 +492,12 @@ double64 IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, 
      if ( dim == 2 ) {
           dNr( NX[nd], DNR );
           // getting dx/dr
-          double64 dxdr = JacobianFor( DNR, 0 );
-          double64 dydr = JacobianFor( DNR, 1 );
+          double dxdr = JacobianFor( DNR, 0 );
+          double dydr = JacobianFor( DNR, 1 );
           // 1 / detJ = detJinv
-          double64 detJinv = 1. / hypot( dxdr, dydr );
-          double64 cosa = detJinv * dxdr;
-          double64 sina = detJinv * dydr;
+          double detJinv = 1. / hypot( dxdr, dydr );
+          double cosa = detJinv * dxdr;
+          double sina = detJinv * dydr;
           // row 1 = x-derivatives
           DN(0,0) = DNR[0] * cosa * detJinv; 
           DN(0,1) = DNR[1] * cosa * detJinv;
@@ -491,13 +511,13 @@ double64 IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, 
        
      if ( dim == 3 ) {
           dNr( NX[nd], DNR );
-          double64 dxdr = JacobianFor( DNR, 0 );
-          double64 dydr = JacobianFor( DNR, 1 );
-          double64 dzdr = JacobianFor( DNR, 2 );
-          double64 detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr + dzdr*dzdr );
-          double64 cosa = detJinv * dxdr;
-          double64 sina = detJinv * dydr;
-          double64 sinb = detJinv * dzdr;
+          double dxdr = JacobianFor( DNR, 0 );
+          double dydr = JacobianFor( DNR, 1 );
+          double dzdr = JacobianFor( DNR, 2 );
+          double detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr + dzdr*dzdr );
+          double cosa = detJinv * dxdr;
+          double sina = detJinv * dydr;
+          double sinb = detJinv * dzdr;
           // row 1 = x-derivatives
           DN(0,0) = DNR[0] * cosa * detJinv; 
           DN(0,1) = DNR[1] * cosa * detJinv;
@@ -522,7 +542,7 @@ double64 IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, 
 
 
 
-double64 IsoparametricQuadraticLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN )
+double IsoparametricQuadraticLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN )
  {
     // the middle node is equivalent to the barycenter
     return dN_AtNode( DN, 2 );
@@ -532,7 +552,7 @@ double64 IsoparametricQuadraticLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>
 
 /// here the normal is calculated using the derivative of the shape function
 /// at the middle node
-void  IsoparametricQuadraticLineElement::UnitNormal( vector<double64>& vc ) const
+void  IsoparametricQuadraticLineElement::UnitNormal( vector<double>& vc ) const
  {
     if ( dim == 1 ) {
          vc[0] = 1.;
@@ -560,12 +580,12 @@ void  IsoparametricQuadraticLineElement::UnitNormal( vector<double64>& vc ) cons
          vc[0] = JacobianFor( DNR, 0 ); // dx
          vc[1] = JacobianFor( DNR, 1 ); // dy
          vc[2] = JacobianFor( DNR, 2 ); // dz
-         double64 sum = vc[0] + vc[1] + vc[2];
+         double sum = vc[0] + vc[1] + vc[2];
          // normalizing the normal
          vc[0] /= sum;
          vc[1] /= sum;
          vc[2] /= sum;
-         cout <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
+         cerr <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
          return;
       }
 
@@ -614,8 +634,8 @@ void  IsoparametricQuadraticLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
 
  
 void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars, 
-                                                                  const std::vector<double64>& IVAR, 
-                                                                  std::vector<double64>& NVAR ) const
+                                                                  const std::vector<double>& IVAR, 
+                                                                  std::vector<double>& NVAR ) const
 {
    // 0. Decide which case is dealt with in terms of the integration points 
    //    which are used (rr and ss contain the integr.p. locations)
@@ -623,10 +643,10 @@ void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNo
    NVAR.resize( npe * nvars );
 
    // 1. Compute the slope of the linear interpolation function defined by the 2 integration points.
-   double64 dx  = IP[1] - IP[0];
-   double64 xn1 = fabs(NX[0]) - fabs(IP[0]);
-   double64 xn2 = NX[1] - IP[1];
-   double64 xn3 = NX[2] - IP[0];
+   double dx  = IP[1] - IP[0];
+   double xn1 = fabs(NX[0]) - fabs(IP[0]);
+   double xn2 = NX[1] - IP[1];
+   double xn3 = NX[2] - IP[0];
    
    // 2. For each node point compute the values of the interpolation functions
    //    and use these to extrapolate the values of the variables at the nodes.
@@ -634,7 +654,7 @@ void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNo
    // node 1
    for ( size_t k=0; k<nvars; k++ ) {
         // compute the slope of the interpolation function
-        double64 m = (IVAR[1*nvars + k] - IVAR[0*nvars + k]) / dx;
+        double m = (IVAR[1*nvars + k] - IVAR[0*nvars + k]) / dx;
         // extrapolate value from IP1 to node 1
         NVAR[0*nvars + k] = IVAR[0*nvars + k] - m * xn1;
         // node 2
@@ -652,7 +672,7 @@ void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNo
 
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
-void  IsoparametricQuadraticLineElement::IntegrationPoint( size_t i, vector<double64>& xyz ) const
+void  IsoparametricQuadraticLineElement::IntegrationPoint( size_t i, vector<double>& xyz ) const
  {
     assert( i < gpe );
     xyz.resize(dim); 
@@ -741,8 +761,8 @@ void IsoparametricQuadraticLineElement::OutputNodeDataToVTK( const char* file_na
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricQuadraticLineElement::OutputNodeDataToVTK "; 
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricQuadraticLineElement::OutputNodeDataToVTK "; 
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }  
        

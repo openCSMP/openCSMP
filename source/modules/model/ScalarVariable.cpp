@@ -2,8 +2,8 @@
 
 namespace csmp {
 
-double64& ScalarVariable::operator()( void ) { return data_; }
-double64  ScalarVariable::operator()( void ) const { return data_; }
+double& ScalarVariable::operator()( void ) { return data_; }
+double  ScalarVariable::operator()( void ) const { return data_; }
 
 VARIABLE_FLAG&  ScalarVariable::Flag() { return flag_; }
 
@@ -14,15 +14,15 @@ VARIABLE_FLAG   ScalarVariable::Flag() const { return flag_; }
 size_t ScalarVariable::Size() const { return 1U; }
 
 
-void ScalarVariable::Resize( size_t, double64 newValue ) { data_ = newValue; }
+void ScalarVariable::Resize( size_t, double newValue ) { data_ = newValue; }
 
 
 
-ScalarVariable::ScalarVariable() : flag_( ANY ), data_( std::numeric_limits<double64>::quiet_NaN() ) {}
+ScalarVariable::ScalarVariable() : flag_( ANY ), data_( std::numeric_limits<double>::quiet_NaN() ) {}
 
 
 
-ScalarVariable::ScalarVariable( VARIABLE_FLAG f, double64 val )
+ScalarVariable::ScalarVariable( VARIABLE_FLAG f, double val )
   : flag_( f ), data_( val )
 {
 }
@@ -140,7 +140,7 @@ bool  ScalarVariable::operator!=( const ScalarVariable& s ) const
 
 
 
-bool  ScalarVariable::IsWithinRange( double64 vmin, double64 vmax ) const
+bool  ScalarVariable::IsWithinRange( double vmin, double vmax ) const
 {
   if ( data_ < vmin || data_ > vmax ) return false;
   return true;
@@ -148,56 +148,56 @@ bool  ScalarVariable::IsWithinRange( double64 vmin, double64 vmax ) const
 
 
 
-ScalarVariable  operator+( const ScalarVariable& l, const double64& r )
+ScalarVariable  operator+( const ScalarVariable& l, const double& r )
 {
   return ScalarVariable( l.Flag(), l() + r );
 }
 
 
 
-ScalarVariable  operator-( const ScalarVariable& l, const double64& r )
+ScalarVariable  operator-( const ScalarVariable& l, const double& r )
 {
   return ScalarVariable( l.Flag(), l() - r );
 }
 
 
 
-ScalarVariable  operator*( const ScalarVariable& l, const double64& r )
+ScalarVariable  operator*( const ScalarVariable& l, const double& r )
 {
   return ScalarVariable( l.Flag(), l() * r );
 }
 
 
 
-ScalarVariable  operator/( const ScalarVariable& l, const double64& r )
+ScalarVariable  operator/( const ScalarVariable& l, const double& r )
 {
   return ScalarVariable( l.Flag(), l() / r );
 }
 
 
 
-ScalarVariable  operator+( const double64& l, const ScalarVariable& r )
+ScalarVariable  operator+( const double& l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l + r() );
 }
 
 
 
-ScalarVariable  operator-( const double64& l, const ScalarVariable& r )
+ScalarVariable  operator-( const double& l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l - r() );
 }
 
 
 
-ScalarVariable  operator*( const double64& l, const ScalarVariable& r )
+ScalarVariable  operator*( const double& l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l * r() );
 }
 
 
 
-ScalarVariable  operator/( const double64& l, const ScalarVariable& r )
+ScalarVariable  operator/( const double& l, const ScalarVariable& r )
 {
   return ScalarVariable( r.Flag(), l / r() );
 }
@@ -244,7 +244,7 @@ TensorVariable<dim>  operator*( const ScalarVariable& l, const TensorVariable<di
 }
 
 // extensively tested fastest version that does not generate any temporaries
-ScalarVariable  makeScalar( VARIABLE_FLAG flag, double64 val )
+ScalarVariable  makeScalar( VARIABLE_FLAG flag, double val )
 {
   return ScalarVariable( flag, val );
 }
@@ -252,17 +252,17 @@ ScalarVariable  makeScalar( VARIABLE_FLAG flag, double64 val )
 
 bool ScalarVariable::Out( std::fstream& fp ) const
 {
-  const int32 flag( flag_ );
-  fp.write( (char*)&flag, sizeof( int32 ) ); // VARIABLE_FLAG
-  fp.write( (char*)&data_, sizeof( double64 ) );
+  const int32_t flag( flag_ );
+  fp.write( (char*)&flag, sizeof( int32_t ) ); // VARIABLE_FLAG
+  fp.write( (char*)&data_, sizeof( double ) );
   return true;
 }
 
 
 bool ScalarVariable::In( std::fstream& fp )
 {
-  fp.read( (char*)&flag_, sizeof( int32 ) ); // VARIABLE_FLAG
-  fp.read( (char*)&data_, sizeof( double64 ) );
+  fp.read( (char*)&flag_, sizeof( int32_t ) ); // VARIABLE_FLAG
+  fp.read( (char*)&data_, sizeof( double ) );
   return true;
 }
 

@@ -63,7 +63,7 @@ void Operand_Test::run()
     _test(opvc_from_key.Key()==vc_key);
     _test(opts_from_key.Key()==ts_key);
 
-    double64 val=1.;
+    double val=1.;
     Operand<2U> opsc_from_sc(sc_key,s);
     Operand<2U> opvc_from_vc(vc_key,v);
     Operand<2U> opts_from_ts(ts_key,t);
@@ -271,7 +271,7 @@ void Operand_Test::run()
     _test(opvc_from_key.Key()==vc_key);
     _test(opts_from_key.Key()==ts_key);
 
-    double64 val=1.;
+    double val=1.;
     Operand<3U> opsc_from_sc(sc_key,s);
     Operand<3U> opvc_from_vc(vc_key,v);
     Operand<3U> opts_from_ts(ts_key,t);

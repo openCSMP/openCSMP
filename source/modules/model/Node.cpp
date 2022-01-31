@@ -1,6 +1,9 @@
 #include "Node.h"
 #include "Element.h"
 #include "Visitor.h"
+#include "NodeManifold.h"
+#include "ErrorHandler.h"
+#include "MeshManagementUtilities.h"
 
 using namespace std;
 
@@ -26,8 +29,8 @@ Node<dim>::Node()
 template<size_t dim>
 Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BOX_BOUNDARY boundary_flag )
  : LocalVariableStorage<dim,Node>(lvs),
-   idx_(idx),
    xyz_(pt),
+   idx_(idx),
    at_boundary_(boundary_flag)
  {
  }
@@ -39,11 +42,11 @@ Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BO
 */
 template<size_t dim>
 Node<dim>::Node( const Node<dim>& nd )
-  : idx_(nd.idx_),
-    at_boundary_(nd.at_boundary_),
-    xyz_(nd.xyz_),
+  : xyz_(nd.xyz_), idx_(nd.idx_),
+    parent_element_pointers_(nd.parent_element_pointers_),
+    neighbor_node_pointers_(nd.neighbor_node_pointers_),
     parent_node_indexes_(nd.parent_node_indexes_),
-    parent_element_pointers_(nd.parent_element_pointers_)
+    at_boundary_(nd.at_boundary_)
   {
     this->LVS( nd.LVS() );
   }
@@ -55,11 +58,12 @@ Node<dim>::Node( const Node<dim>& nd )
 */
 template<size_t dim>
 Node<dim>::Node( Node<dim>&& nd )
-  : idx_{nd.idx_},
-    at_boundary_{nd.at_boundary_},
-    xyz_{nd.xyz_},
-    parent_node_indexes_{nd.parent_node_indexes_},
-    parent_element_pointers_{nd.parent_element_pointers_}
+  : xyz_{ move(nd.xyz_) },
+    idx_{nd.idx_},
+    parent_element_pointers_{ move(nd.parent_element_pointers_) },
+    neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
+    parent_node_indexes_{ move(nd.parent_node_indexes_) },
+    at_boundary_{nd.at_boundary_}
   {
     this->LVS( move(nd.LVS()) );
   }
@@ -70,6 +74,10 @@ Node<dim>::Node( Node<dim>&& nd )
 template<size_t dim>
 Node<dim>::~Node()
  {
+    if ( manifold_ != nullptr )
+      manifold_->Remove( this );
+      
+//    cerr <<"\nNode "<< Idx() <<": called destructor.";
  }
 
 
@@ -80,12 +88,13 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
  {
     if ( &nd != this ) 
       {
+         xyz_                     = nd.xyz_;
          idx_                     = nd.idx_;
          at_boundary_             = nd.at_boundary_;
+         parent_element_pointers_ = nd.parent_element_pointers_;
+         neighbor_node_pointers_  = nd.neighbor_node_pointers_;
          parent_node_indexes_     = nd.parent_node_indexes_;
-         parent_element_pointers_ = nd.parent_element_pointers_; 
-         xyz_                     = nd.xyz_; 
-         this->LVS( nd.LVS() );
+         this->LVS( move( nd.LVS() ) );
       }
     return *this;
  }
@@ -102,11 +111,12 @@ template<size_t dim>
 Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
  {
     assert( this != &nd );
+    xyz_                     = nd.xyz_;
     idx_                     = nd.idx_;
     at_boundary_             = nd.at_boundary_;
-    parent_node_indexes_     = nd.parent_node_indexes_;
-    parent_element_pointers_ = nd.parent_element_pointers_;
-    xyz_                     = nd.xyz_;
+    parent_element_pointers_ = move( nd.parent_element_pointers_ );
+    neighbor_node_pointers_  = move( nd.neighbor_node_pointers_ );
+    parent_node_indexes_     = move( nd.parent_node_indexes_ );
     this->LVS( nd.LVS() );
  
     return *this;
@@ -126,6 +136,8 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
 template<size_t dim>
 bool  Node<dim>::operator==( const Node<dim>& nd )
  {
+    // TODO: fix Node comparitor
+    cerr <<"Node<"<< dim <<">: called operato== Node comparitor, extremely costly and of questionable value\n";
     if ( &nd != this )
     {
         if( Coordinate() == nd.Coordinate() )
@@ -156,11 +168,35 @@ bool  Node<dim>::operator==( const Node<dim>& nd )
     }
     return true;
  }
+ 
+ 
+ // private operators
+
+template<size_t dim>
+void* Node<dim>::operator new( size_t size )
+  {
+//      std::cout<< "\nNode<"<< dim <<">: called overloaded new operator.\n";
+      //void * p = malloc(size); will also work fine
+      return ::operator new(size);
+  }
+ 
+
+template<size_t dim>
+void Node<dim>::operator delete( void* p )
+  {
+//     std::cout<< "\nNode<"<< dim <<">: called overloaded delete operator.\n";
+     free(p);
+     p = nullptr;
+  }
+
 
 /**
  
 Assigns parent element pointer and remembers which node (local idx)
-of the parent element this node is.  
+of the parent element this node is.
+
+@param pnode is the node number in the parent element of the assigned node.
+@param element is pointer to the parent element that gets assigned.
 
 @section arguments Input Arguments
 
@@ -171,10 +207,10 @@ A pointer to the parent Element which shall be added.
 template<size_t dim>
 void Node<dim>::Assign( size_t pnode, Element<dim>* element )
  {
-    assert( element != NULL );
     assert( parent_node_indexes_.size() == parent_element_pointers_.size() );
+    assert( pnode <= FIFTY );
     
-    for ( size_t parent=0U; parent<parent_node_indexes_.size(); parent++ )
+    for ( size_t parent{0}; parent<parent_node_indexes_.size(); parent++ )
       if ( parent_node_indexes_[parent] == NOT_INITIALIZED ) {
            parent_node_indexes_[parent]     = static_cast<ONE_BYTE_NUMBER>(pnode);
            parent_element_pointers_[parent] = element;
@@ -183,30 +219,169 @@ void Node<dim>::Assign( size_t pnode, Element<dim>* element )
 
  } // end Assign
 
-/// Removes the provided element as parent and returns true, false if not found
+
+
+
+/**
+    Sets the pointer to the target element to zero, and the corresponding node number to NOT_INITIALIZED.
+*/
 template<size_t dim>
 bool Node<dim>::Unassign( Element<dim>* element )
  {
     assert( parent_node_indexes_.size() ==  parent_element_pointers_.size() );
-    for( size_t parent(0); parent < Parents(); ++parent )
-      if( element == Parent(parent) )
+    for ( size_t parent(0); parent < Parents(); ++parent )
+      if ( Parent(parent) == element )
         {
-          parent_node_indexes_.erase( parent_node_indexes_.begin()+parent );
-          parent_element_pointers_.erase( parent_element_pointers_.begin()+parent );
-          // free memory
-          parent_node_indexes_.swap( parent_node_indexes_ );
-          parent_element_pointers_.swap( parent_element_pointers_ );
+          parent_node_indexes_[parent]     = NOT_INITIALIZED;
+          parent_element_pointers_[parent] = nullptr;
           return true;
         }
     return false;
+    
  } // end Unassign
+
+
+
+
+/**
+    Removes parent elements pointers that were set to nullptr.
+*/
+template<size_t dim>
+void Node<dim>::EraseNullPointerParents()
+ {
+    assert( parent_node_indexes_.size() ==  parent_element_pointers_.size() );
+    const size_t  n_parents{Parents()};
+    size_t        n_new_parents{0};
+
+    for ( size_t parent{0}; parent < n_parents; ++parent ) {
+         if ( parent_element_pointers_[parent] == nullptr )
+           parent_node_indexes_[parent] = NOT_INITIALIZED;
+         else n_new_parents++;
+      }
+
+    // if nullptr parents were detected, the parent storage needs to be rebuild
+    if ( n_new_parents < n_parents ) {
+        parent_element_pointers_.erase( remove( parent_element_pointers_.begin(),
+                                                parent_element_pointers_.end(), nullptr ),
+                                                parent_element_pointers_.end() );
+
+        parent_node_indexes_.erase( remove( parent_node_indexes_.begin(),
+                                            parent_node_indexes_.end(), NOT_INITIALIZED ),
+                                            parent_node_indexes_.end() );
+      }
+    
+ } // end EraseNullPointerParents
+
+
 
 
 template<size_t dim>
 void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 {
+// TODO: implement dispatching of visitor to neighbor nodes
     v.Visit(this);
 }
+
+
+// node neighbor functionality
+
+/// initialises the corner-node to neighbor corner node pointer vector
+template<size_t dim>
+void  Node<dim>::Assign( std::set<Node<dim>*>& neighbor_nodes )
+ {
+    neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
+ }
+ 
+ 
+ 
+template<size_t dim>
+void  Node<dim>::Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors )
+ {
+    neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
+    if ( sort_neighbors )
+      sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
+ }
+
+
+/**
+   Remove duplicates, nullptrs, and sort the vector again.
+*/
+template<size_t dim>
+size_t  Node<dim>::ReassignNeighbors()
+ {
+    set<Node<dim>*>  current_nbors;
+    const size_t     n_parents{ Parents() };
+    
+    for ( size_t i{0}; i < n_parents; ++i )
+      if ( Parent(i) != nullptr &&
+           Parent(i)->IsEquidimensional() ) {
+           for ( auto& i :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
+             current_nbors.insert( i );
+        }
+    
+    neighbor_node_pointers_.assign( current_nbors.begin(), current_nbors.end() );
+    neighbor_node_pointers_.shrink_to_fit();
+    
+    return neighbor_node_pointers_.size();
+ }
+
+
+
+
+/**
+   Sorts vector and removes duplicates and nullptrs.
+   The vector is trimmed so that size matches capacity.
+*/
+template<size_t dim>
+size_t  Node<dim>::UpdateNeighbors()
+ {
+    sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
+    
+    neighbor_node_pointers_.erase( unique( neighbor_node_pointers_.begin(),
+                                           neighbor_node_pointers_.end() ),
+                                   neighbor_node_pointers_.end() );
+                                   
+    neighbor_node_pointers_.erase( remove( neighbor_node_pointers_.begin(),
+                                           neighbor_node_pointers_.end(), nullptr ),
+                                   neighbor_node_pointers_.end() );
+                                   
+    neighbor_node_pointers_.shrink_to_fit();
+    
+    return neighbor_node_pointers_.size();
+ }
+
+
+ 
+template<size_t dim>
+bool  Node<dim>::IsNeighbor( const Node<dim>* const nptr ) const
+ {
+    return binary_search( neighbor_node_pointers_.begin(),
+                          neighbor_node_pointers_.end(), nptr );
+ }
+
+
+template<size_t dim>
+void  Node<dim>::AddNeighbor( Node<dim>* neighbor_node )
+ {
+    // grow the vector in small increments only
+    if ( neighbor_node_pointers_.size() == neighbor_node_pointers_.capacity() )
+      neighbor_node_pointers_.reserve( neighbor_node_pointers_.size() + 2 );
+      
+    neighbor_node_pointers_.push_back( neighbor_node );
+    sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );
+ }
+
+
+/// just moves the unwanted element to the end of the vector, use UpdateNeighbors to shrink vector to new size
+template<size_t dim>
+void  Node<dim>::RemoveNeighbor( const Node<dim>* const neighbor_node )
+ {
+    remove( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), neighbor_node );
+ }
+ 
+ 
+
+
 
 
 /**
@@ -221,45 +396,20 @@ void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 template<size_t dim>
 size_t  Node<dim>::Neighbors() const
  {
-    size_t  node_neighbors(parent_node_indexes_.size());
-    
-    // subtracting number of lower dimensional parent elements as these node sharing
-    // but otherwise inconsequential elements would lead to a wrong node count
-    if ( dim == 3U ) {
-         for ( typename vector<Element<dim>*>::const_iterator
-               it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); it++ )
-           if ( (*it)->FE()->IsSurfaceElement() or (*it)->FE()->IsLineElement() ) node_neighbors--; 
-         return node_neighbors;
-      }
-    if ( dim == 2U ) {
-         for ( typename vector<Element<dim>*>::const_iterator
-               it=parent_element_pointers_.begin(); it!=parent_element_pointers_.end(); it++ )
-           if ( (*it)->FE()->IsLineElement() ) node_neighbors--; 
-         return node_neighbors;
-      }
-      
-    // 1D version
-    return node_neighbors;
+   return neighbor_node_pointers_.size();
  }
 
 
 /**
     Implements node connectivity graph.
- 
-    Counter-clockwise node-numbering convention of the parent 
-    elements is used.
     
-    @test OK - unit test, see NodeNeighborConnectivity_Test
+    Nodes are enlisted in the order of their pointers (the new vector is maintained searchable).
 */
 template<size_t dim>
 Node<dim>*  Node<dim>::Neighbor( size_t neighbor_node ) const
  {
-    assert( neighbor_node < Neighbors() );
-   
-    size_t next_node(ParentNodeNumber(neighbor_node) + 1U);
-    if ( next_node == Parent( neighbor_node )->Nodes() ) next_node = 0U;
-    
-    return parent_element_pointers_[ neighbor_node ]->N( next_node );
+    assert( neighbor_node < neighbor_node_pointers_.size() );
+    return neighbor_node_pointers_[ neighbor_node ];
  }
 
 
@@ -271,13 +421,13 @@ Node<dim>*  Node<dim>::Neighbor( size_t neighbor_node ) const
 
 
 template<size_t dim>
-double64  Node<dim>::operator[]( size_t i ) const { return xyz_[i]; }
+double  Node<dim>::operator[]( size_t i ) const { return xyz_[i]; }
 
 template<size_t dim>
-double64&  Node<dim>::operator[]( size_t i ) { return xyz_[i]; }
+double&  Node<dim>::operator[]( size_t i ) { return xyz_[i]; }
 
 template<size_t dim>
-double64&  Node<dim>::operator()( size_t i ) { return xyz_[i]; }
+double&  Node<dim>::operator()( size_t i ) { return xyz_[i]; }
 
 template<size_t dim>
 Point<dim>  Node<dim>::Coordinate() const { return xyz_; }
@@ -299,7 +449,7 @@ void  Node<dim>::ResizeParentStorage( size_t n )
   {
      parent_node_indexes_.resize( n, NOT_INITIALIZED );
      std::vector<ONE_BYTE_NUMBER>( parent_node_indexes_ ).swap( parent_node_indexes_ );
-     parent_element_pointers_.resize( n, NULL );
+     parent_element_pointers_.resize( n, nullptr );
      std::vector<Element<dim>*>( parent_element_pointers_ ).swap( parent_element_pointers_ );
   }
 
@@ -336,6 +486,54 @@ Element<dim>*  Node<dim>::Parent( size_t parent_element_number ) const
   }
 
 
+    /// checks whether Element is a parent of the node
+template<size_t dim>
+bool  Node<dim>::IsParent( const Element<dim>* const eptr ) const
+  {
+     return binary_search( parent_element_pointers_.begin(),
+                           parent_element_pointers_.end(), eptr );
+  }
+
+
+
+
+/**
+     sorts parent vector for searching.
+     
+     @attention parent vector must not contain any nullptrs.
+*/
+template<size_t dim>
+void  Node<dim>::SortParents() {
+     assert( parent_element_pointers_.size() == parent_node_indexes_.size() );
+
+     // sorting
+     // creating indices
+     vector<int> indices(parent_element_pointers_.size());
+     iota( indices.begin(), indices.end(), 0 );
+    
+     // organising indices in the order that 'b' will have once it is sorted
+     sort( indices.begin(), indices.end(),
+           [&]( int i, int j ) -> bool {
+                assert( parent_element_pointers_[i] != nullptr );
+                return parent_element_pointers_[i] < parent_element_pointers_[j];
+             }
+        );
+  
+    // sorting the vectors
+    sort( parent_element_pointers_.begin(), parent_element_pointers_.end() );
+  
+    // extra vector needed for tempory
+    vector<ONE_BYTE_NUMBER> temp{ parent_node_indexes_.size() };
+    int n{0};
+    for ( auto& i : indices ) temp[n++] = parent_node_indexes_[i];
+    parent_node_indexes_ = temp;
+
+  } // end UpdateParents
+
+
+
+
+
 template<size_t dim>
 void  Node<dim>::Idx( size_t idx_to_assign ) const
  { idx_ = idx_to_assign; }
@@ -347,7 +545,9 @@ size_t   Node<dim>::Idx() const
 
 
 
-/// Set or return the global boundary flag of the Node. <p.
+/**
+   Set or return the global boundary flag of the Node.
+*/
 template<size_t dim>
 void Node<dim>::AtBoundary( BOX_BOUNDARY b ) { at_boundary_ = b; }
 
@@ -357,24 +557,42 @@ BOX_BOUNDARY  Node<dim>::AtBoundary() const { return at_boundary_; }
 
 /// Set or return the coordinates of the current node.
 template<size_t dim>
-void            Node<dim>::x( double64 xc )  { xyz_[0u] = xc; }
+void            Node<dim>::x( double xc )  { xyz_[0u] = xc; }
 
 template<size_t dim>
-void            Node<dim>::y( double64 yc )  { xyz_[1u] = yc; }
+void            Node<dim>::y( double yc )  { xyz_[1u] = yc; }
 
 template<size_t dim>
-void            Node<dim>::z( double64 zc )  { xyz_[2u] = zc; }
+void            Node<dim>::z( double zc )  { xyz_[2u] = zc; }
 
 
 template<size_t dim>
-double64          Node<dim>::x() const { return xyz_[0u]; }
+double          Node<dim>::x() const { return xyz_[0u]; }
 
 template<size_t dim>
-double64          Node<dim>::y() const { return xyz_[1u]; }
+double          Node<dim>::y() const { return xyz_[1u]; }
 
 template<size_t dim>
-double64          Node<dim>::z() const { return xyz_[2u]; }
+double          Node<dim>::z() const { return xyz_[2u]; }
 
+
+// MANIFOLDS
+
+/// access to manifold if any; returns nullptr if the node is not a manifold
+template<size_t dim>
+bool Node<dim>::IsManifold() const { return (manifold_ == nullptr); }
+
+
+template<size_t dim>
+NodeManifold<dim>* const Node<dim>::Manifold() const { return manifold_; }
+
+
+template<size_t dim>
+void Node<dim>::Assign( NodeManifold<dim>* const md )
+ {
+    assert( md != nullptr );
+    manifold_ = md;
+ }
 
 
 
@@ -405,11 +623,449 @@ void Node<dim>::Out() const
          cout << endl;
       } 
 #endif
- } // end out 
+    if ( manifold_ != nullptr ) {
+         cout <<"\nconnected nodes: ";
+         manifold_->Out();
+      }
+    
+ } // end Out
+ 
 
 template class Node<1U>;
 template class Node<2U>;
 template class Node<3U>;
+ 
+ 
+ 
+ // NON-MEMBER FUNCTIONS
+ 
+/**
+   returns parent elements shared by nodes of face, inner side is reported first; outer next else application: give nodes of lower-dimensional face to find element on either side
+   
+   @todo method probably sill contains a large number of redundant operations.
+*/
+template<size_t dim>
+pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<Node<dim>*>::const_iterator first,
+                                                               typename vector<Node<dim>*>::const_iterator last )
+ {
+    assert( first != last );
+    // create sets of the parent elements of the face nodes checking which ones are shared
+    const typename vector<Node<dim>*>::const_iterator nodesEnd{last};
+    typename vector<Node<dim>*>::const_iterator nit{first};
+
+    // creating a set of the parent elements of the first node
+    assert( (*nit)->Parents() > 0 );
+    const size_t n_parents{(*nit)->Parents()};
+    set<Element<dim>*> shared_parents;
+    for ( size_t i{0}; i<n_parents; ++i ) {
+         assert( (*nit)->Parent(i) != nullptr );
+         if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
+         if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+         shared_parents.insert( (*nit)->Parent(i) );
+      }
+      
+    // advancing the node iterator
+    nit++;
+
+    // searching for shared parent elements in the following nodes
+    while ( nit != nodesEnd ) {
+         set<Element<dim>*> temp;
+         const size_t n_parents{(*nit)->Parents()};
+         for ( size_t i{0}; i<n_parents; ++i ) {
+              assert( (*nit)->Parent(i) != nullptr );
+              if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
+              if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+              if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
+                temp.insert( (*nit)->Parent(i) );
+           }
+         shared_parents = temp;
+         nit++;
+      }
+      
+    // drawing the results together
+    assert( !shared_parents.empty() );
+    if ( shared_parents.size() == 1 ) return make_pair( (*shared_parents.begin()), nullptr );
+    
+    // if two parent elements were found, the one on the inside needs to be determined
+    assert( shared_parents.size() == 2 );
+    // initial guess
+    pair<Element<dim>*,Element<dim>*> result( (*shared_parents.begin()), (*shared_parents.rbegin()) );
+    
+    // 3D case where face is either a triangle or a quadrilateral
+    if constexpr ( dim == 3 ) {
+         vector<Node<3>*> face_nodes( first, last );
+         assert( face_nodes.size() >= 3 );
+         // getting normal to face from the first 3 node coordinates
+         Point<3> vec1(face_nodes[0]->Coordinate() - face_nodes[1]->Coordinate()); // cw
+         Point<3> vec2(face_nodes[2]->Coordinate() - face_nodes[1]->Coordinate()); // ccw
+         Point<3> nrml =  crossProduct( vec2, vec1 );
+         // checking whether a vector from the second element barycentre to the first parent element center yields a negative or positive dot product
+         Point<3> bvec = (*shared_parents.rbegin())->BaryCenter() - (*shared_parents.begin())->BaryCenter();
+         // using dot-product to find inner element: if normal is pointing toward barycentre of first element, initial order needs to be reversed
+         if ( dotProduct( nrml, bvec ) < 0. ) {
+              auto swap     = result.second;
+              result.second = result.first;
+              result.first  = swap;
+           }
+      }
+    
+    // 2D case where the face is line and the non-existing normal points out of the plane
+    if constexpr ( dim == 2 ) {
+         vector<Node<2>*> face_nodes( first, last );
+         assert( face_nodes.size() == 2 );
+         Point<2> vec(face_nodes[1]->Coordinate() - face_nodes[0]->Coordinate()); // line element node numbering
+         // rotating this line clockwise to get the normal
+         Point<2> nrml( -vec[1] /* -y */, vec[0] /* x */ );
+         // checking whether a vector from the faces barycentre to the parent element center yields a negative or positive dot product
+         Point<2> bvec = (*shared_parents.rbegin())->BaryCenter() - (*shared_parents.begin())->BaryCenter();
+         // using the dot-product to find inner element, if the normal is pointing toward first barycentre, initial order needs to be reversed
+         if ( dotProduct( nrml, bvec ) < 0. ) {
+              auto swap     = result.second;
+              result.second = result.first;
+              result.first  = swap;
+           }
+      }
+ 
+     // in a 1D model faces coincide with nodes and have just a single node
+     if constexpr ( dim == 1 ) {
+         // the inside element is that for which the node is node 2
+         const size_t parent_element{0};
+         if ( (*first)->ParentNodeNumber( parent_element ) == 0 ) {
+              auto swap     = result.second;
+              result.second = result.first;
+              result.first  = swap;
+           }
+      }
+
+    return result;
+    
+ } // end parentElementsSharedByFace
+
+template pair<Element<3>*,Element<3>*>  parentElementsSharedByFace( typename vector<Node<3>*>::const_iterator, typename std::vector<Node<3>*>::const_iterator );
+template pair<Element<2>*,Element<2>*>  parentElementsSharedByFace( typename vector<Node<2>*>::const_iterator, typename std::vector<Node<2>*>::const_iterator );
+template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( typename vector<Node<1>*>::const_iterator, typename std::vector<Node<1>*>::const_iterator );
+
+
+
+
+/**
+       Returns pointer to element with the supplied face nodes.
+       For use in the case where only one parent is expected, for instance, when the Face is at a model boundary.
+       
+       @param first and last are iterators to the nodes of the Face.
+       
+       @return pair of Element and the face or segment of the element that has the same nodes.
+*/
+template<size_t dim>
+pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_iterator first,
+                                           typename vector<Node<dim>*>::const_iterator last )
+ {
+    // ascertain that there are multiple nodes
+    assert( first != last );
+    
+    // 1. create set of higher-dimensional parent elements that share all face nodes
+    // -----------------------------------------------------------------------------
+    const typename vector<Node<dim>*>::const_iterator nodesEnd{last};
+    typename vector<Node<dim>*>::const_iterator       nit{first};
+
+    // for all equidimensional parents elements of first node, select the ones that also are parents of the other nodes
+    assert( nit != nodesEnd );
+    assert( (*nit)->Parents() > 0 );
+    const size_t       n_parents{(*nit)->Parents()};
+    set<Element<dim>*> shared_parents;
+
+    // creating set of parent elements shared by first and second node
+    for ( size_t i{0}; i<n_parents; ++i )
+      if ( (*nit)->Parent(i) ) {
+           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
+           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+           // is this parent also one of the first node
+           bool parent_to_all{true};
+           for ( auto nit2=first; nit2!=nodesEnd; ++nit2 )
+             if ( !(*nit2)->IsParent( (*nit)->Parent(i) ) ) {
+                  parent_to_all = false;
+                  break;
+               }
+           if ( parent_to_all )
+             shared_parents.insert( (*nit)->Parent(i) );
+        }
+      
+    // verifying that the results are as expected
+    if (  shared_parents.empty() ) {
+          for ( ; first!=last; ++first )
+            printParents( (*first) );
+          ErrorHandler::Instance().notice( ERROR, "parentElement", "no suitable parent element was found" );
+
+          return make_pair( (*shared_parents.begin()), UINT_MAX );
+       }
+    if (  shared_parents.size() > 1 ) {
+    
+// DEBUGGING - visualising the discovered higher dimensional elements
+Element<dim>* elmt1 = (*shared_parents.begin());
+elmt1->Idx( 1 );
+elmt1->CoordinateMatrix();
+DenseMatrix<DM_MIN>  DATA1( 1, elmt1->Nodes() );
+for ( int i{0}; i<elmt1->Nodes(); ++i ) DATA1(0,i) = static_cast<double>(elmt1->N(i)->AtBoundary());
+elmt1->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA1 );
+Element<dim>* elmt2 = (*shared_parents.rbegin());
+elmt2->Idx( 2 );
+elmt2->CoordinateMatrix();
+DenseMatrix<DM_MIN>  DATA2( 1, elmt2->Nodes() );
+for ( int i{0}; i<elmt2->Nodes(); ++i ) DATA2(0,i) = static_cast<double>(elmt2->N(i)->AtBoundary());
+elmt2->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA2 );
+// if there are two elements, are they overlapping?
+if ( interPenetrating<dim>( elmt1, elmt2 ) )
+  ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
+                                         "and they are interpenetrating (=partially or fully overlapping)");
+
+         ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
+                                         "this may be the case for a lower-dimensional element inside the model; use other function");
+
+         return make_pair( (*shared_parents.begin()), UINT_MAX );
+      }
+    
+    
+    // 2. find the element's face that matches the nodes
+    // -------------------------------------------------
+    Element<dim>*  eptr{ (*shared_parents.begin()) };
+    vector <Node<dim>*> face_nodes( first, last );
+    sort( face_nodes.begin(), face_nodes.end() );
+    
+    // are the corner nodes of the faces contained in the input node pointer range?
+    const size_t n_faces{ eptr->Faces() };
+    for ( size_t face{0}; face < n_faces; ++face ) {
+         vector<size_t> fnids = eptr->FE()->CornerNodesOfFace(face);
+         const size_t n_cnr_nodes{ fnids.size() };
+         bool all_nodes_are_contained{true};
+         for ( size_t j{0}; j<n_cnr_nodes; ++j )
+           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( fnids[j] ) ) ) {
+                all_nodes_are_contained = false;
+                break;
+             }
+         // when the face has been found the result is returned
+         if ( all_nodes_are_contained )
+           return make_pair( eptr, face );
+             
+      }
+    
+     // 3. if none of the faces contains all nodes, perhaps a segment will
+    // -------------------------------------------------------------------
+    const size_t n_segments{ eptr->Segments() };
+    for ( size_t segm{0}; segm < n_segments; ++segm ) {
+         vector<size_t> snids;
+         eptr->FE()->NodesOfSegment( segm, snids );
+         const size_t n_segm_nodes{ snids.size() };
+         bool all_nodes_are_contained{true};
+         for ( size_t j{0}; j<n_segm_nodes; ++j )
+           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( snids[j] ) ) ) {
+                all_nodes_are_contained = false;
+                break;
+             }
+         // when the face has been found the result is returned
+         if ( all_nodes_are_contained )
+           return make_pair( eptr, segm );
+      }
+   
+    return make_pair( nullptr, UINT_MAX );
+    
+ } // end parentElement
+
+template pair<Element<3>*,size_t> parentElement( typename vector<Node<3>*>::const_iterator,
+                                                 typename vector<Node<3>*>::const_iterator );
+template pair<Element<2>*,size_t> parentElement( typename vector<Node<2>*>::const_iterator,
+                                                 typename vector<Node<2>*>::const_iterator );
+template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::const_iterator,
+                                                 typename vector<Node<1>*>::const_iterator );
+
+/*
+template<size_t dim>
+pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_iterator first,
+                                           typename vector<Node<dim>*>::const_iterator last )
+ {
+    // ascertain that there are multiple nodes
+    assert( first != last );
+    
+    // 1. create set of higher-dimensional parent elements that share all face nodes
+    // -----------------------------------------------------------------------------
+    const typename vector<Node<dim>*>::const_iterator nodesEnd{last};
+    typename vector<Node<dim>*>::const_iterator nit{first};
+    nit++; // advance to second node
+
+    // creating set of parent elements shared by first and second node
+    assert( nit != nodesEnd );
+    assert( (*nit)->Parents() > 0 );
+    const size_t n_parents{(*nit)->Parents()};
+    set<Element<dim>*> shared_parents;
+    for ( size_t i{0}; i<n_parents; ++i )
+      if ( (*nit)->Parent(i) ) {
+           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
+           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+           // is this parent also one of the first node
+           if ( (*first)->IsParent( (*nit)->Parent(i) ) )
+             shared_parents.insert( (*nit)->Parent(i) );
+        }
+      
+    // advancing the node pointer to third node
+    nit++;
+
+    // deleting elements that aren't parents of remaining node(s)
+    while ( nit != nodesEnd ) {
+         for ( auto it=shared_parents.begin(); it!=shared_parents.end(); ) {
+              if ( !(*nit)->IsParent(*it) )
+                it = shared_parents.erase( it );
+              else it++;
+           }
+         nit++;
+      }
+      
+    // verifying that the results are as expected
+    if (  shared_parents.empty() ) {
+          for ( ; first!=last; ++first )
+            printParents( (*first) );
+          ErrorHandler::Instance().notice( ERROR, "parentElement", "no suitable parent element was found" );
+
+          return make_pair( (*shared_parents.begin()), UINT_MAX );
+       }
+    if (  shared_parents.size() > 1 ) {
+         ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
+                                         "this may be the case for a lower-dimensional element inside the model; use other function");
+
+         return make_pair( (*shared_parents.begin()), UINT_MAX );
+      }
+    
+    
+    // 2. find the element's face that matches the nodes
+    // -------------------------------------------------
+    Element<dim>*  eptr{ (*shared_parents.begin()) };
+    vector <Node<dim>*> face_nodes( first, last );
+    sort( face_nodes.begin(), face_nodes.end() );
+    
+    // are the corner nodes of the faces contained in the input node pointer range?
+    const size_t n_faces{ eptr->Faces() };
+    for ( size_t face{0}; face < n_faces; ++face ) {
+         vector<size_t> fnids = eptr->FE()->CornerNodesOfFace(face);
+         const size_t n_cnr_nodes{ fnids.size() };
+         bool all_nodes_are_contained{true};
+         for ( size_t j{0}; j<n_cnr_nodes; ++j )
+           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( fnids[j] ) ) ) {
+                all_nodes_are_contained = false;
+                break;
+             }
+         // when the face has been found the result is returned
+         if ( all_nodes_are_contained )
+           return make_pair( eptr, face );
+             
+      }
+    
+     // 3. if none of the faces contains all nodes, perhaps a segment will
+    // -------------------------------------------------------------------
+    const size_t n_segments{ eptr->Segments() };
+    for ( size_t segm{0}; segm < n_segments; ++segm ) {
+         vector<size_t> snids;
+         eptr->FE()->NodesOfSegment( segm, snids );
+         const size_t n_segm_nodes{ snids.size() };
+         bool all_nodes_are_contained{true};
+         for ( size_t j{0}; j<n_segm_nodes; ++j )
+           if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( snids[j] ) ) ) {
+                all_nodes_are_contained = false;
+                break;
+             }
+         // when the face has been found the result is returned
+         if ( all_nodes_are_contained )
+           return make_pair( eptr, segm );
+      }
+   
+    return make_pair( nullptr, UINT_MAX );
+    
+ } // end parentElement
+
+template pair<Element<3>*,size_t> parentElement( typename vector<Node<3>*>::const_iterator,
+                                                 typename vector<Node<3>*>::const_iterator );
+template pair<Element<2>*,size_t> parentElement( typename vector<Node<2>*>::const_iterator,
+                                                 typename vector<Node<2>*>::const_iterator );
+template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::const_iterator,
+                                                 typename vector<Node<1>*>::const_iterator );
+*/
+
+
+template<size_t dim>
+void printNeighbors( const Node<dim>* const nptr )
+ {
+    assert( nptr != nullptr );
+    const size_t n_nbors{nptr->Neighbors()};
+    assert( nptr->Parents() > 0 );
+    
+    cout <<"\nnode "<< nptr->Idx() <<":";
+    for ( size_t i{0}; i<n_nbors; ++i ) {
+         const Node<dim>* const nd_nbor = nptr->Neighbor(i);
+         if ( nd_nbor == nullptr ) cout <<" NULL";
+         else cout <<" "<< nd_nbor->Idx(); // <<":"<< parseBoundary( nd_nbor->AtBoundary() );
+      }
+      
+    cout <<" ("<< parseBoundary( nptr->AtBoundary() ) <<")";
+      
+ } // end printParents
+
+template void printNeighbors( const Node<3>* const );
+template void printNeighbors( const Node<2>* const );
+template void printNeighbors( const Node<1>* const );
+
+
+
+
+
+template<size_t dim>
+void printParents( const Node<dim>* const nptr )
+ {
+    assert( nptr != nullptr );
+    assert( nptr->Parents() > 0 );
+    const size_t n_parents{nptr->Parents()};
+    set<Element<dim>*> parents;
+    
+    cout <<"\nNode "<< nptr->Idx();
+    for ( size_t i{0}; i<n_parents; ++i ) {
+         if ( nptr->Parent(i) == nullptr ) cout <<" NULL";
+         else {
+              cout <<" "<< parseAbbreviated_FE_Type( nptr->Parent(i)->FE_Type() );
+              cout <<":"<< nptr->Parent(i)->Idx() <<"(n"<< nptr->ParentNodeNumber(i) <<")";
+           }
+         parents.insert( nptr->Parent(i) );
+      }
+      
+    const size_t n_duplicates = n_parents - parents.size();
+    if ( n_duplicates > 0 )
+      cout <<" parent vector contains "<< n_duplicates << " duplicates.";
+      
+    cout << endl;
+      
+ } // end printParents
+ 
+ 
+template void printParents( const Node<3>* const );
+template void printParents( const Node<2>* const );
+template void printParents( const Node<1>* const );
+
+
+
+// calculates the size of the Node excluding the stored variables
+template<size_t dim>
+size_t sizeOf( const Node<dim>* const nptr )
+  {
+    size_t total_size = sizeof( *nptr ); // padded static store of object
+    // dynamic allocation
+    total_size += nptr->Parents() * sizeof( Element<dim>* );
+    total_size += nptr->Parents() * sizeof( ONE_BYTE_NUMBER );
+    // + local variable storage
+    
+    return total_size;
+
+  } // end sizeOf
+
+template size_t sizeOf( const Node<3>* const );
+template size_t sizeOf( const Node<2>* const );
+template size_t sizeOf( const Node<1>* const );
+
+
 
 } // end namespace csmp
 

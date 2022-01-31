@@ -47,13 +47,13 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	int dimension;
 
 	map< string, std::set<std::string> > fem_types;
-	map< string, vector<size_t> > regions; // key: name of the region, value: list of vertices
-	vector<int> element_types;
-	deque< vector< size_t > > elements;
-	vector<int32> element_type;
-	deque<size_t> mixed_ele_plist;      // number of nodes per element
-	deque<size_t> mixed_ele_pfverts;    // number of neighbours per element
-	std::deque<std::vector<long64> > pfverts; // neighbour elements
+	map< string, vector<size_t> >    regions; // key: name of the region, value: list of vertices
+	vector<int8_t>                   element_types;
+	deque< vector< int64_t  > >        elements;
+	vector<int8_t>                   element_type;
+	deque<size_t>                    mixed_ele_plist;      // number of nodes per element
+	deque<size_t>                    mixed_ele_pfverts;    // number of neighbours per element
+	std::deque<std::vector<int64_t> > pfverts; // neighbour elements
 
 	size_t n_vertices = 0;
 	size_t n_elements = 0;
@@ -86,8 +86,9 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 
 	size_t region, npe, fpe, n_elem, inode;
 	string stype;
-	int etype;
-	int elem_idx = 0;
+	int8_t etype;
+	int64_t  elem_idx = 0;
+  
 	while (true)
 	{
 		string fem_string, csmp_fem;
@@ -116,7 +117,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 		if (n_elem <= 0) throw out_of_range(str+"value not expected");
 		n_elements += n_elem;
 
-		vector<size_t> elem(npe);
+		vector<int64_t> elem(npe);
 
 		for (int i = 0; i<n_elem; i++)
       {
@@ -155,7 +156,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	// mixed_ele_pfverts: size=n_elements, each item contains the number of face of the corresponding element
 	vset.ResizePfverts(mixed_ele_pfverts);
 
-	vector<long64> neighbours;
+	vector<int64_t> neighbours;
 	for (int i = 0; i<n_elements; i++)
 	{
 		size_t fpe = mixed_ele_pfverts[i];
@@ -167,9 +168,10 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	// for each element contains for each face the neighbour element
 	vset.AddPfverts(pfverts.begin(), pfverts.end());
 
-	unordered_map< size_t, long64> pbflags; // boundary type
+	vector<std::int8_t> pbflags; // boundary type
+  pbflags.reserve(n_vertices);
 	for (int i = 0; i<n_vertices; i++)
-		pbflags.insert(make_pair(i, IRREGULAR_OUTSIDE));
+		pbflags.push_back(IRREGULAR_OUTSIDE);
 	vset.AddBFlags(pbflags.begin(), pbflags.end());
 	
 	// vset.OutASCII("c:\\test\\test");
@@ -203,11 +205,11 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 	map< string, std::set<std::string> > fem_types;
 	map< string, vector<size_t> > regions; // key: name of the region, value: list of vertices
 	vector<int> element_types;
-	deque< vector< size_t > > elements;
-	vector<int32> element_type;
+	deque< vector< size_t> > elements;
+	vector<int32_t> element_type;
 	deque<size_t> mixed_ele_plist;      // number of nodes per element
 	deque<size_t> mixed_ele_pfverts;    // number of neighbours per element
-	std::deque<std::vector<long64> > pfverts; // neighbour elements
+	std::deque<std::vector<int64_t> > pfverts; // neighbour elements
 
 	VSet<3U> vset;
 
@@ -299,7 +301,7 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 	// mixed_ele_pfverts: size=n_elements, each item contains the number of face of the corresponding element
 	vset.ResizePfverts(mixed_ele_pfverts);
 
-	vector<long64> neighbours;
+	vector<int64_t> neighbours;
 	for (int i = 0; i<n_elements; i++)
 	{
 		size_t fpe = mixed_ele_pfverts[i];
@@ -311,9 +313,8 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 	// for each element contains for each face the neighbour element
 	vset.AddPfverts(pfverts.begin(), pfverts.end());
 
-	map< size_t, long64> pbflags; // boundary type
-	for (int i = 0; i<n_vertices; i++)
-		pbflags.insert(make_pair(i, IRREGULAR_OUTSIDE));
+	vector<std::int8_t> pbflags; // boundary type
+  pbflags.reserve(n_vertices);
 	vset.AddBFlags(pbflags.begin(), pbflags.end());
 	
 	// vset.OutASCII("c:\\test\\test");
@@ -369,7 +370,7 @@ void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
                 // reassigning the nodes to the plist in opposite order (first getting the global node numbers
                 for ( vector<size_t>::iterator it=ids.begin(); it!=ids.end(); ++it ) (*it) = vset.Plist( elmt, (*it) );
                 size_t counter(0U);
-                for ( vector<size_t>::iterator nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
+                for ( vector<int64_t>::iterator nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
                   (*nit) = ids[counter++];
                 repaired_elmts++;
               }

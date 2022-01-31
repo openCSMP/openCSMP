@@ -28,23 +28,23 @@ size_t Pillar::GetNumPoints() const
     return points_.size();
 }
 
-void Pillar::AddZCoord( double64 z )
+void Pillar::AddZCoord( double z )
 {
    points_.push_back( z );
 }
   
-void Pillar::SetZCoords(const std::vector<double64> &zcoords)
+void Pillar::SetZCoords(const std::vector<double> &zcoords)
 {
-  std::vector<double64> newzcoords(zcoords.begin(), zcoords.end());
+  std::vector<double> newzcoords(zcoords.begin(), zcoords.end());
   points_ = std::move(newzcoords);
 }
   
-double64 Pillar::GetZCoord( size_t zid ) const
+double Pillar::GetZCoord( size_t zid ) const
 {
   return points_[zid];
 }
   
-size_t Pillar::FindPoint(double64 z) const
+size_t Pillar::FindPoint(double z) const
 {
 auto it = std::lower_bound(points_.begin(), points_.end(), z);
 if (it != points_.end() && *it == z) {
@@ -70,8 +70,8 @@ csmp::Point<3U> Pillar::GetPoint( size_t zid ) const
 {
   Point<3U> p;
   assert( zid < points_.size() );
-  double64 z = points_[zid];
-  double64 t = (z - start_[2]) / (end_[2] - start_[2]);
+  double z = points_[zid];
+  double t = (z - start_[2]) / (end_[2] - start_[2]);
   p[0] = start_[0] * (1.0 - t) + end_[0] * t;
   p[1] = start_[1] * (1.0 - t) + end_[1] * t;
   p[2] = z;

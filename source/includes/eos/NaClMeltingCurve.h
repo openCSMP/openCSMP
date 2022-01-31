@@ -18,21 +18,21 @@ namespace csmp
   {
     
   public:
-    NaClMeltingCurve( const double64& externaltemperature, 
-                      const double64& externalpressure );
+    NaClMeltingCurve( const double& externaltemperature, 
+                      const double& externalpressure );
     ~NaClMeltingCurve();
     
-    double64 TmeltFromP();           ///< returns melting temperature [C] for given p [Pa]
-    double64 PmeltFromT();           ///< returns melting pressure [Pa] for given T [C]
+    double TmeltFromP();           ///< returns melting temperature [C] for given p [Pa]
+    double PmeltFromT();           ///< returns melting pressure [Pa] for given T [C]
     
   private:
     NaClMeltingCurve(); // disable default construction
 
-    const double64& temperature_;   ///< reference to temperature [C] in flow code
-    const double64& pressure_;      ///< reference to fluid pressure [Pa] in flow code
+    const double& temperature_;   ///< reference to temperature [C] in flow code
+    const double& pressure_;      ///< reference to fluid pressure [Pa] in flow code
 
-    double64        tcurrent_;      ///< temperature [C] for internal use
-    double64        pcurrent_;      ///< fluid pressure [bar] for internal use
+    double        tcurrent_;      ///< temperature [C] for internal use
+    double        pcurrent_;      ///< fluid pressure [bar] for internal use
 
     TriplePointNaCl tp_nacl;
   };
@@ -56,7 +56,7 @@ namespace csmp
 
      @code
 
-     double64 t(somevalue), p(anothervalue); // temperature [C] and pressure [in Pa] in user's application
+     double t(somevalue), p(anothervalue); // temperature [C] and pressure [in Pa] in user's application
      ...
      NaClMeltingCurve naclmelt(t,p); 
      ...

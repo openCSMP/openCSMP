@@ -1,6 +1,7 @@
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Interface.h"
 #include "Element.h"
+#include "NodeManifold.h"
 #include "Region.h"
 #include "Box.h"
 #include "Exception.h"
@@ -28,7 +29,7 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<3U>( variable_file, false )
+  : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,
@@ -55,7 +56,7 @@ ANSYS_Model3D::ANSYS_Model3D( bool isoparametric,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<3U>( variable_file, false )
+  : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( isoparametric,
@@ -80,7 +81,7 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               bool use_regions_file,
                               bool create_boundaries,
                               bool create_splitboundaries )
-  : Model<3U>( variable_file, false )
+  : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,
@@ -158,7 +159,7 @@ void ANSYS_Model3D::Initialize( bool isoparametric,
                                 bool create_boundaries,
                                 bool create_splitboundaries )
 {
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
   // -------------------------------------------------
@@ -173,7 +174,7 @@ void ANSYS_Model3D::Initialize( bool isoparametric,
     ANSYS_Interface mesh_interface( isoparametric_elements );
 
     // 0. reading the mesh from ANSYS-CSMP-input files
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
+    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
@@ -188,14 +189,14 @@ void ANSYS_Model3D::Initialize( bool isoparametric,
       PropertyData node_nums( NODE, SCALAR, 3U );
       node_nums.Reserve( vset.Vertices() );
       for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", node_nums );
+      vset.AddData( "node number", node_nums );
     }
 
     // 2. preserving numbered node coordinates in a vector
     const size_t vertices( vset.Vertices() );
     node_coords_.reserve( vertices );
     for ( size_t i = 0U; i<vertices; ++i )
-      node_coords_.emplace_back( Point<3U>( vset.Px( i ), vset.Py( i ), vset.Pz( i ) ) );
+      node_coords_.push_back( Point<3U>{ vset.Px( i ), vset.Py( i ), vset.Pz( i ) } );
 
     // 3. construct model based on obtained model topology and vset
     if ( use_regions_file )
@@ -270,7 +271,7 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
                                 bool create_boundaries,
                                 bool create_splitboundaries )
 {
-  double64& model_time( ModelTime::Instance().modelTime );
+  double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
   // -------------------------------------------------
@@ -285,11 +286,13 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
     ANSYS_Interface mesh_interface( isoparametric_elements );
 
     // 0. reading the mesh from ANSYS-CSMP-input files
-    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
+    const bool recreate_node_boundary_flags{true};
+    mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
     // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
     // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
     // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
     vset.RemovePfverts();
+    vset.EstablishElementConnectivity3D(); // tested: OK
 
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
@@ -304,14 +307,14 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
       PropertyData node_nums( NODE, SCALAR, 3U );
       node_nums.Reserve( vset.Vertices() );
       for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", node_nums );
+      vset.AddData( "node number", node_nums );
     }
 
     // 2. preserving originally numbered node coordinates in a vector
     const size_t vertices( vset.Vertices() );
     node_coords_.reserve( vertices );
     for ( size_t i = 0U; i<vertices; ++i )
-      node_coords_.emplace_back( Point<3U>( vset.Px( i ), vset.Py( i ), vset.Pz( i ) ) );
+      node_coords_.emplace_back( Point<3U>{ vset.Px( i ), vset.Py( i ), vset.Pz( i ) } );
 
     // 3. construct model based on obtained model topology and vset
     if ( use_regions_file )
@@ -389,6 +392,7 @@ Renumbers the nodes (0..n) as in the original ANSYS model.
 */
 bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
 {
+  assert( !node_coords_.empty() );
   // making a binary tree of the original node numbers, searchable for point coordinates
   map<Point<3U>, size_t>  original_node_numbers;
   for ( size_t i = 0U; i<node_coords_.size(); ++i )
@@ -399,23 +403,18 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
   const auto onodesEnd( original_node_numbers.end() );
 
   // traversal of the existing mesh nodes to find all its elements	
-  deque<Node<3U>*> nodes;
-  deque<Element<3U>*> elmts;
-  exploreNodesAndElementsFromMesh( &Mesh(), nodes, elmts );
-  sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
-  for ( auto nit : nodes ) {
-    auto onit( original_node_numbers.find( nit->Coordinate() ) );
+  for ( auto nit=Mesh().NodesBegin();  nit!=Mesh().NodesEnd(); ++nit ) {
+    auto onit( original_node_numbers.find( (*nit).Coordinate() ) );
     if ( onit != onodesEnd ) {
-      if ( nit->Idx() != (*onit).second ) {
+      if ( (*nit).Idx() != (*onit).second ) {
         if ( first_call ) {
           if ( verbose ) cout << "\nANSYS_Model3D::RestoreOriginalNodeNumbering: changed indices of following nodes:";
           first_call = false;
           made_changes = true;
         }
-        if ( verbose ) cout << "\n\t" << nit->Idx() << " -> " << (*onit).second;
+        if ( verbose ) cout << "\n\t" << (*nit).Idx() << " -> " << (*onit).second;
       }
-      nit->Idx( (*onit).second );
+      (*nit).Idx( (*onit).second );
     }
     else
       throw csmp::Exception( ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
@@ -427,8 +426,9 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
 } // end RestoreOriginalNodeNumbering 
 
 
-/// inline functions
+/// node coordinate iterators 
 std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesBegin() const { return node_coords_.begin(); }
+
 std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesEnd() const { return node_coords_.end(); }
 
 

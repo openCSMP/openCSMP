@@ -18,27 +18,27 @@ namespace csmp
     TriplePointNaCl();
     ~TriplePointNaCl();
     
-    double64 Temperature()       const;
-    double64 Pressure()          const;
+    double Temperature()       const;
+    double Pressure()          const;
 
-    double64 CompositionVapor()  const;
-    double64 CompositionLiquid() const;
-    double64 CompositionHalite() const;
+    double CompositionVapor()  const;
+    double CompositionLiquid() const;
+    double CompositionHalite() const;
 
   private :
 	
-    const double64 ttriple_nacl; 
-    const double64 ptriple_nacl; 
-    const double64 xtriple_nacl;
+    const double ttriple_nacl; 
+    const double ptriple_nacl; 
+    const double xtriple_nacl;
 
   };
 
-  inline double64 TriplePointNaCl::Temperature()          const { return ttriple_nacl; }
-  inline double64 TriplePointNaCl::Pressure()             const { return ptriple_nacl; }
+  inline double TriplePointNaCl::Temperature()          const { return ttriple_nacl; }
+  inline double TriplePointNaCl::Pressure()             const { return ptriple_nacl; }
 
-  inline double64 TriplePointNaCl::CompositionVapor()     const { return xtriple_nacl; }
-  inline double64 TriplePointNaCl::CompositionLiquid()    const { return xtriple_nacl; }
-  inline double64 TriplePointNaCl::CompositionHalite()    const { return xtriple_nacl; }
+  inline double TriplePointNaCl::CompositionVapor()     const { return xtriple_nacl; }
+  inline double TriplePointNaCl::CompositionLiquid()    const { return xtriple_nacl; }
+  inline double TriplePointNaCl::CompositionHalite()    const { return xtriple_nacl; }
 
   /**
      @class CriticalPointH2O CriticalPointH2O.h "eos/h2o_nacl/CriticalPointH2O.h"                                              

@@ -43,8 +43,7 @@ void Visitor_Example::Run()
   cout <<"\nEnter name of model: ";
   cin >> model_name;
   const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
+  mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, true );
 
   Model<2U> reservoir_model( mesh_topology, mesh_container, "VisitorExample-var.txt" );
 
@@ -63,6 +62,7 @@ void Visitor_Example::Run()
   vtk_output.OutputDataToVTK( reservoir_model, "water-pressure", "water pressure", 0 );
   vtk_output.OutputDataToVTK( reservoir_model, "saturation-oil", "saturation oil", 0 );
   vtk_output.OutputDataToVTK( reservoir_model, "saturation-water", "saturation water", 0 );
+  
 } // Run()
 
 } // csmp

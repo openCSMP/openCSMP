@@ -26,9 +26,9 @@ using namespace std;
 namespace csmp
 {
     
-  H2ONaClLookup::H2ONaClLookup(const double64& externaltemperature, 
-                               const double64& externalpressure, 
-                               const double64& externalcomposition)
+  H2ONaClLookup::H2ONaClLookup(const double& externaltemperature, 
+                               const double& externalpressure, 
+                               const double& externalcomposition)
     : t_dim(0), // to be re-computed in constructor body
       p_dim(0), // to be re-computed in constructor body
       x_dim(83),
@@ -203,48 +203,48 @@ namespace csmp
   }
     
   // need if statements to determine table_id
-  double64 H2ONaClLookup::Temperature(){                      return Interpolate( temperature, temperature_index     );}
-  double64 H2ONaClLookup::Pressure(){                         return Interpolate( temperature, pressure_index        );}
-  double64 H2ONaClLookup::MassFractionNaCl(){                      return Interpolate( temperature, composition_index     );}
-  double64 H2ONaClLookup::Density(){                          return Interpolate( temperature, density_index         );}
-  double64 H2ONaClLookup::Enthalpy(){                         return Interpolate( temperature, enthalpy_index        );}
-  double64 H2ONaClLookup::HeatCapacity(){                     return Interpolate( temperature, heatcapacity_index    );}
-  double64 H2ONaClLookup::Compressibility(){                  return Interpolate( temperature, compressibility_index );}
-  double64 H2ONaClLookup::Viscosity(){                        return Interpolate( temperature, viscosity_index       );}
+  double H2ONaClLookup::Temperature(){                      return Interpolate( temperature, temperature_index     );}
+  double H2ONaClLookup::Pressure(){                         return Interpolate( temperature, pressure_index        );}
+  double H2ONaClLookup::MassFractionNaCl(){                      return Interpolate( temperature, composition_index     );}
+  double H2ONaClLookup::Density(){                          return Interpolate( temperature, density_index         );}
+  double H2ONaClLookup::Enthalpy(){                         return Interpolate( temperature, enthalpy_index        );}
+  double H2ONaClLookup::HeatCapacity(){                     return Interpolate( temperature, heatcapacity_index    );}
+  double H2ONaClLookup::Compressibility(){                  return Interpolate( temperature, compressibility_index );}
+  double H2ONaClLookup::Viscosity(){                        return Interpolate( temperature, viscosity_index       );}
 
-  double64 H2ONaClLookup::SubcriticalVaporDensity(){          return TrilinearInterpolation( 0, table0, density_index         );}
-  double64 H2ONaClLookup::SubcriticalVaporEnthalpy(){         return TrilinearInterpolation( 0, table0, enthalpy_index        );}
-  double64 H2ONaClLookup::SubcriticalVaporHeatCapacity(){     return TrilinearInterpolation( 0, table0, heatcapacity_index    );}
-  double64 H2ONaClLookup::SubcriticalVaporCompressibility(){  return TrilinearInterpolation( 0, table0, compressibility_index );}
-  double64 H2ONaClLookup::SubcriticalVaporViscosity(){        return TrilinearInterpolation( 0, table0, viscosity_index       );}
+  double H2ONaClLookup::SubcriticalVaporDensity(){          return TrilinearInterpolation( 0, table0, density_index         );}
+  double H2ONaClLookup::SubcriticalVaporEnthalpy(){         return TrilinearInterpolation( 0, table0, enthalpy_index        );}
+  double H2ONaClLookup::SubcriticalVaporHeatCapacity(){     return TrilinearInterpolation( 0, table0, heatcapacity_index    );}
+  double H2ONaClLookup::SubcriticalVaporCompressibility(){  return TrilinearInterpolation( 0, table0, compressibility_index );}
+  double H2ONaClLookup::SubcriticalVaporViscosity(){        return TrilinearInterpolation( 0, table0, viscosity_index       );}
 
-  double64 H2ONaClLookup::SubcriticalLiquidDensity()
+  double H2ONaClLookup::SubcriticalLiquidDensity()
   {         
     if(tcurrent < 200.0e0) return TrilinearInterpolation( 1, table1, density_index         );
     else                   return TrilinearInterpolation( 2, table2, density_index         );
   }
-  double64 H2ONaClLookup::SubcriticalLiquidEnthalpy()
+  double H2ONaClLookup::SubcriticalLiquidEnthalpy()
   {
     if(tcurrent < 200.0e0) return TrilinearInterpolation( 1, table1, enthalpy_index        );
     else                   return TrilinearInterpolation( 2, table2, enthalpy_index        );
   }
-  double64 H2ONaClLookup::SubcriticalLiquidHeatCapacity()
+  double H2ONaClLookup::SubcriticalLiquidHeatCapacity()
   {
     if(tcurrent < 200.0e0) return TrilinearInterpolation( 1, table1, heatcapacity_index    );
     else                   return TrilinearInterpolation( 2, table2, heatcapacity_index    );
   }
-  double64 H2ONaClLookup::SubcriticalLiquidCompressibility()
+  double H2ONaClLookup::SubcriticalLiquidCompressibility()
   {
     if(tcurrent < 200.0e0) return TrilinearInterpolation( 1, table1, compressibility_index );
     else                   return TrilinearInterpolation( 2, table2, compressibility_index );
   }
-  double64 H2ONaClLookup::SubcriticalLiquidViscosity()
+  double H2ONaClLookup::SubcriticalLiquidViscosity()
   {
     if(tcurrent < 200.0e0) return TrilinearInterpolation( 1, table1, viscosity_index       );
     else                   return TrilinearInterpolation( 2, table2, viscosity_index       );
   }
     
-  double64 H2ONaClLookup::Interpolate( const double64& t,  const int& property_index )
+  double H2ONaClLookup::Interpolate( const double& t,  const int& property_index )
   {
     if(     t < 200.0e0){ table_id = 1; return TrilinearInterpolation( table_id, table1, property_index ); }
     else if(t < 400.0e0){ table_id = 2; return TrilinearInterpolation( table_id, table2, property_index ); }
@@ -255,7 +255,7 @@ namespace csmp
   // ***** the "throw out of range ?" comment below needs really the "?" because at least the t_res info is queried when constructing the table
 
 
-  void H2ONaClLookup::GetTemperatureIndex(const double64& t)
+  void H2ONaClLookup::GetTemperatureIndex(const double& t)
   {
     if(     t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-  0.0)/t_res ); }
     else if(t <= 350.0e0){  t_res =  2.0; it =  50+static_cast<long>( (t-250.0)/t_res ); }
@@ -273,7 +273,7 @@ namespace csmp
     return;
   }
     
-  void H2ONaClLookup::GetPressureIndex(const double64& p)
+  void H2ONaClLookup::GetPressureIndex(const double& p)
   {
     if(     p <=   20.0e5){ p_res =   0.5e5; ip =     static_cast<long>( (p-   0.5e5)/p_res ); }    
     else if(p <=  210.0e5){ p_res =   1.0e5; ip =  39+static_cast<long>( (p-  20.0e5)/p_res ); }
@@ -292,10 +292,10 @@ namespace csmp
   }
 
 
-  long H2ONaClLookup::ComputeTemperatureIndex(const double64& t)
+  long H2ONaClLookup::ComputeTemperatureIndex(const double& t)
   {
     // new version
-    double64 t_res;
+    double t_res;
     long      it;
     if(     t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-  0.0)/t_res ); }
     else if(t <= 350.0e0){  t_res =  2.0; it =  50+static_cast<long>( (t-250.0)/t_res ); }
@@ -314,10 +314,10 @@ namespace csmp
     return it;
   }
     
-  long H2ONaClLookup::ComputePressureIndex(const double64& p)
+  long H2ONaClLookup::ComputePressureIndex(const double& p)
   {
     // new version
-    double64 p_res;
+    double p_res;
     long      ip;
     if(     p <=   20.0e5){ p_res =   0.5e5; ip =     static_cast<long>( (p-   0.5e5)/p_res ); }    
     else if(p <=  210.0e5){ p_res =   1.0e5; ip =  39+static_cast<long>( (p-  20.0e5)/p_res ); }
@@ -337,7 +337,7 @@ namespace csmp
   }
     
   //CAUTION, THE NEXT TO ARE STILL MOLE-FRACTION-BASED!!!
-  void H2ONaClLookup::GetCompositionIndex(const double64& x)
+  void H2ONaClLookup::GetCompositionIndex(const double& x)
   {
     if(     x <= 1.0e-3){ x_res = 1.0e-4; ix =    static_cast<long>((x-0.0e0 )/x_res); }
     else if(x <= 1.0e-2){ x_res = 1.0e-3; ix = 10+static_cast<long>((x-1.0e-3)/x_res); }
@@ -348,7 +348,7 @@ namespace csmp
     return;
   }
 
-  long H2ONaClLookup::ComputeCompositionIndex(const double64& x)
+  long H2ONaClLookup::ComputeCompositionIndex(const double& x)
   {
     long myix;
     if(     x <= 1.0e-3){ x_res = 1.0e-4; myix =    static_cast<long>((x-0.0e0 )/x_res); }
@@ -363,8 +363,8 @@ namespace csmp
   
   
   
-  double64 H2ONaClLookup::TrilinearInterpolation( const long& table_id, 
-                                                  const std::vector<double64>& storage_vector, 
+  double H2ONaClLookup::TrilinearInterpolation( const long& table_id, 
+                                                  const std::vector<double>& storage_vector, 
                                                   const int& property_index )
   {
     // maybe get rid of if-statement anyhow
@@ -803,7 +803,7 @@ namespace csmp
 
 
 
-  void H2ONaClLookup::BuildSimpleTable( const long& i, std::vector<double64>& table )
+  void H2ONaClLookup::BuildSimpleTable( const long& i, std::vector<double>& table )
   {
     table_id   = i;    
 	fstream infile(filename[table_id], ios::in | ios::binary);
@@ -813,7 +813,7 @@ namespace csmp
         cerr << "H2ONaClLookup : Lookup file \"" << filename[table_id] << "\" missing, computing ...\n\n";
         it = 0;
 
-        double64 xbrine(XNaCl2Massfraction(xcurrent));
+        double xbrine(XNaCl2Massfraction(xcurrent));
 	
         H2OLookup                              water;
         Brine                                  brine(tcurrent,pcurrent,xbrine);
@@ -883,16 +883,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[table_id] << " ... ";
-            skm_C_fwrite( outfile, table );
-			outfile.close();
+            binaryFileWrite( outfile, table );
+			      outfile.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[table_id] << " ... ";
-        skm_C_fread( infile, table );
-		infile.close();
+        binaryFileRead( infile, table );
+		    infile.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildSimpleTable" << table_id << " ...\n\n";
@@ -913,7 +913,7 @@ namespace csmp
         cerr << "H2ONaClLookup : Lookup file " << filename[1] << " missing, computing ...\n\n";
         it = 0;
 
-        double64                               xbrine(XNaCl2Massfraction(xcurrent));
+        double                               xbrine(XNaCl2Massfraction(xcurrent));
 
         H2OLookup                              water;
         CriticalPointH2O                       cp_h2o;
@@ -1130,16 +1130,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[1] << " ... ";
-            skm_C_fwrite( outfile1, table1 );
-			outfile1.close();
+            binaryFileWrite( outfile1, table1 );
+			      outfile1.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[1] << " ... ";
-        skm_C_fread( infile1, table1 );
-		infile1.close();
+        binaryFileRead( infile1, table1 );
+		    infile1.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable1 ...\n\n";
@@ -1161,7 +1161,7 @@ namespace csmp
 	
         it = 0;
 
-        double64                               xbrine(0.0);
+        double                               xbrine(0.0);
 	
         H2OLookup                              water;
         CriticalPointH2O                       cp_h2o;
@@ -1511,16 +1511,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[2] << " ... ";
-            skm_C_fwrite( outfile2, table2 );
-			outfile2.close();
+            binaryFileWrite( outfile2, table2 );
+			      outfile2.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[2] << " ... ";
-        skm_C_fread( infile2, table2 );
-		infile2.close();
+        binaryFileRead( infile2, table2 );
+		    infile2.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable2 ...\n\n";
@@ -1561,7 +1561,7 @@ namespace csmp
         cerr << "H2ONaClLookup : Lookup file " << filename[0] << " missing, computing ...\n\n";
         it = 0;
 	
-        double64                               xbrine(0.0);
+        double                               xbrine(0.0);
 
         H2OLookup                              water;
         CriticalPointH2O                       cp_h2o;
@@ -1734,16 +1734,16 @@ namespace csmp
         else
           {
             cerr << "writing file " << filename[0] << " ... ";
-            skm_C_fwrite( outfile0, table0 );
-			outfile0.close();
+            binaryFileWrite( outfile0, table0 );
+			      outfile0.close();
             cerr << "done!\n";
           }
       }
     else
       {
         cerr << "reading file " << filename[0] << " ... ";
-        skm_C_fread( infile0, table0 );
-		infile0.close();
+        binaryFileRead( infile0, table0 );
+		    infile0.close();
         cerr << "done!\n";
       }
     cerr << "H2ONaClLookup, leaving BuildTable0 ...\n\n";

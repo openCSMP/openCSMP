@@ -96,11 +96,11 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
       PDE_Integrator<2U,Region> deformation( new CSMP_DEFAULT_LINEAR_SOLVER() );
       #endif
       PT_op<2U,Element<2U> > bforces( model.Database(), "force", "displacement" );
-      NumIntegral_BT_D_B_dV<2U,Element<2U> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+      NumIntegral_BT_D_B_dV<2U> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
 
-      NumIntegral_PT_op_dV<2U,Element<2U> >     AppliedStress( model.Database(), "Neumann stress", "displacement");
+      NumIntegral_PT_op_dV<2U>  AppliedStress( model.Database(), "Neumann stress", "displacement");
 
-      NumIntegral_BT_op_dV<2U,Element<2U> >     WellBorePressure( model.Database(),"fluid pressure", "displacement");
+      NumIntegral_BT_op_dV<2U>  WellBorePressure( model.Database(),"fluid pressure", "displacement");
 
       deformation.Add( &stiffness );
       deformation.Add( &bforces );
@@ -147,7 +147,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
       string str;
 
       int NumCompPoint(40);// 41 points were used for comparaison
-      double64 tolerance( 10E-6 );
+      double tolerance( 10E-6 );
 
       int test1(0);
       int test2(0);
@@ -170,17 +170,17 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        cout << "test Point " << compit << endl;
 
-       std::vector<double64> xy(2);
+       std::vector<double> xy(2);
 
        getline(fin,str,'\t');
-       double64 xcoord=atof(str.c_str());
+       double xcoord=atof(str.c_str());
 
        xy[0] = xcoord;
 
 //       cout << "xy[0] " << xy[0] <<endl;
 
        getline(fin,str,'\t');
-       double64 ycoord=atof(str.c_str());
+       double ycoord=atof(str.c_str());
 
        xy[1] = ycoord;
 
@@ -188,7 +188,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        getline(fin,str,'\n');
 
-       double64 valmeanstress(atof(str.c_str()));
+       double valmeanstress(atof(str.c_str()));
 
        cout << " valmeanstress " << valmeanstress <<endl;
 
@@ -215,7 +215,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        (*it)->FE()->N( (*it)->FE()->NRST ,xy);
 
-       double64 area(0.);
+       double area(0.);
        bool bvar=true;
        for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] < -0.001) bvar=false;
@@ -226,7 +226,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
                     cout<<"THIS IS THE RIGHT ELEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
 
-           double64 ms(0.);
+           double ms(0.);
 
            for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
               ms += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("mean stress"));
@@ -256,17 +256,17 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        cout << "test Point " << compit << endl;
 
-       std::vector<double64> xy(2);
+       std::vector<double> xy(2);
 
        getline(fin,str,'\t');
-       double64 xcoord=atof(str.c_str());
+       double xcoord=atof(str.c_str());
 
        xy[0] = xcoord;
 
 //       cout << "xy[0] " << xy[0] <<endl;
 
        getline(fin,str,'\t');
-       double64 ycoord=atof(str.c_str());
+       double ycoord=atof(str.c_str());
 
        xy[1] = ycoord;
 
@@ -274,14 +274,14 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        getline(fin,str,'\n');
 
-       double64 valmeanstress(atof(str.c_str()));
+       double valmeanstress(atof(str.c_str()));
 
        cout << " valmeanstress " << valmeanstress <<endl;
 
        // checking the element that contains this point
+       Region<2U>& model_domain(model.Region("Model"));
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       for ( vector<Element<2U>*>::iterator it( model_domain.ElementsBegin() ); it != model_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -302,7 +302,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        (*it)->FE()->N( (*it)->FE()->NRST ,xy);
 
-       double64 area(0.);
+       double area(0.);
        bool bvar=true;
        for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] < -0.001 ) bvar=false;
@@ -313,7 +313,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
                     cout<<"THIS IS THE RIGHT ELEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
 
-           double64 ms(0.);
+           double ms(0.);
 
            for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
               ms += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("mean stress"));
@@ -346,17 +346,17 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        cout << "test Point " << compit << endl;
 
-       std::vector<double64> xy(2);
+       std::vector<double> xy(2);
 
        getline(fin,str,'\t');
-       double64 xcoord=atof(str.c_str());
+       double xcoord=atof(str.c_str());
 
        xy[0] = xcoord;
 
 //       cout << "xy[0] " << xy[0] <<endl;
 
        getline(fin,str,'\t');
-       double64 ycoord=atof(str.c_str());
+       double ycoord=atof(str.c_str());
 
        xy[1] = ycoord;
 
@@ -364,7 +364,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        getline(fin,str,'\n');
 
-       double64 valstressx(atof(str.c_str()));
+       double valstressx(atof(str.c_str()));
 
        cout << " valstressx " << valstressx <<endl;
 
@@ -393,7 +393,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        (*it)->FE()->N( (*it)->FE()->NRST ,xy);
 
-       double64 area(0.);
+       double area(0.);
        bool bvar=true;
        for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
@@ -404,7 +404,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
                     cout<<"THIS IS THE RIGHT ELEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
 
-           double64 sigmax(0.);
+           double sigmax(0.);
 
            for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
               sigmax += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-x"));
@@ -433,17 +433,17 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        cout << "test Point " << compit << endl;
 
-       std::vector<double64> xy(2);
+       std::vector<double> xy(2);
 
        getline(fin,str,'\t');
-       double64 xcoord=atof(str.c_str());
+       double xcoord=atof(str.c_str());
 
        xy[0] = xcoord;
 
 //       cout << "xy[0]  " << xy[0] <<endl;
 
        getline(fin,str,'\t');
-       double64 ycoord=atof(str.c_str());
+       double ycoord=atof(str.c_str());
 
        xy[1] = ycoord;
 
@@ -451,7 +451,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        getline(fin,str,'\n');
 
-       double64 valstressx(atof(str.c_str()));
+       double valstressx(atof(str.c_str()));
 
          cout << " valstressx " << valstressx <<endl;
 
@@ -480,7 +480,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        (*it)->FE()->N( (*it)->FE()->NRST ,xy);
 
-       double64 area(0.);
+       double area(0.);
        bool bvar=true;
        for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
@@ -491,7 +491,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
                     cout<<"THIS IS THE RIGHT ELEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
 
-           double64 sigmax(0.);
+           double sigmax(0.);
 
            for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
               sigmax += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-x"));
@@ -524,17 +524,17 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        cout << "test Point " << compit << endl;
 
-       std::vector<double64> xy(2);
+       std::vector<double> xy(2);
 
        getline(fin,str,'\t');
-       double64 xcoord=atof(str.c_str());
+       double xcoord=atof(str.c_str());
 
        xy[0] = xcoord;
 
 //       cout << "xy[0]  " << xy[0] <<endl;
 
        getline(fin,str,'\t');
-       double64 ycoord=atof(str.c_str());
+       double ycoord=atof(str.c_str());
 
        xy[1] = ycoord;
 
@@ -542,7 +542,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        getline(fin,str,'\n');
 
-       double64 valstressxy(atof(str.c_str()));
+       double valstressxy(atof(str.c_str()));
 
           cout << " valstressxy " << valstressxy <<endl;
 
@@ -571,7 +571,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        (*it)->FE()->N( (*it)->FE()->NRST ,xy);
 
-       double64 area(0.);
+       double area(0.);
        bool bvar=true;
        for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
@@ -582,7 +582,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
                     cout<<"THIS IS THE RIGHT ELEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
 
-           double64 sigmaxy(0.);
+           double sigmaxy(0.);
 
            for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
               sigmaxy += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-xy"));
@@ -613,17 +613,17 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        cout << "test Point " << compit << endl;
 
-       std::vector<double64> xy(2);
+       std::vector<double> xy(2);
 
        getline(fin,str,'\t');
-       double64 xcoord=atof(str.c_str());
+       double xcoord=atof(str.c_str());
 
        xy[0] = xcoord;
 
 //       cout << "xy[0]  " << xy[0] <<endl;
 
        getline(fin,str,'\t');
-       double64 ycoord=atof(str.c_str());
+       double ycoord=atof(str.c_str());
 
        xy[1] = ycoord;
 
@@ -631,7 +631,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        getline(fin,str,'\n');
 
-       double64 valstressxy(atof(str.c_str()));
+       double valstressxy(atof(str.c_str()));
 
        cout << " valstressxy " << valstressxy <<endl;
 
@@ -659,7 +659,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        (*it)->FE()->N( (*it)->FE()->NRST ,xy);
 
-       double64 area(0.);
+       double area(0.);
        bool bvar=true;
        for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
@@ -670,7 +670,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
                     cout<<"THIS IS THE RIGHT ELEMENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
 
-           double64 sigmaxy(0.);
+           double sigmaxy(0.);
 
            for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
               sigmaxy += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-xy"));

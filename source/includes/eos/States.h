@@ -1,10 +1,12 @@
 #ifndef STATES_H
 #define STATES_H
 
+#include "CSMP_definitions.h"
+
 /// enum to characterize possible phase states in the H2O-NaCl phase diagram
 namespace csmp
 {
-  enum States
+  enum States : std::int8_t 
   {
     none,    // 0 i.e. state undefined!
     L,       // 1 liquid, for convenience only, use rather 'F'

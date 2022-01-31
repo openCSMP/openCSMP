@@ -23,7 +23,7 @@ BoundaryFluxVisitor<dim>::BoundaryFluxVisitor( const PropertyDatabase<dim>& pdb,
 template <size_t dim>
 void BoundaryFluxVisitor<dim>::Visit(Boundary<dim>* bd)
 {
-  double64 total_flux(0.);
+  double total_flux(0.);
   VectorVariable<dim> v(PLAIN, 0.), face_unit_normal(PLAIN, 0.);
   typename vector<Face<dim>*>::const_iterator facesEnd( bd->ElementsEnd() );
 

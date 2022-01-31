@@ -9,6 +9,7 @@
  
 namespace csmp {
 
+template<size_t> class Region;
 /**
 
 @brief Computes the gradient of a node variable at the node using a least-squares approach.
@@ -26,11 +27,8 @@ template<size_t dim>
 class GenericNodePropertyGradient {
 
 public:
-    GenericNodePropertyGradient(  Model<dim>&, const FiniteVolumeStencilManager<dim>&,
-                                  const char* prop="node property gradient");
-    
-    GenericNodePropertyGradient(  Model<dim>&,
-                                  const FiniteVolumeStencilManager<dim>&, std::vector<char*> advected_props );
+    GenericNodePropertyGradient( Model<dim>&, const char* region, const char* prop="node property gradient");
+    GenericNodePropertyGradient( Model<dim>&, const char* region, std::vector<char*> advected_props );
     
     ~GenericNodePropertyGradient(); 
     
@@ -39,9 +37,9 @@ public:
   
     /// provide public access to distance between facet and mass centre:
     void GenericDistanceFacetFVBarycenter( size_t global_el_id,
-                                         size_t local_facet_id,
-                                         size_t local_node_id,
-                                         VectorVariable<dim>& distance ) const;
+                                           size_t local_facet_id,
+                                           size_t local_node_id,
+                                           VectorVariable<dim>& distance ) const;
 
     /// computation of property gradient
     void CalculateGenericLeastSquareSums();
@@ -53,36 +51,35 @@ public:
     void SetPropertyKey( csmp::Index& key );
     
     // storage requirements
-    double64 SizeOf() const;
+    double SizeOf() const;
     
-    double64                                       tolerance;
-    csmp::Index                                    u_key;
-    std::vector<PropertyHandle<dim>* >             gradient;
-    PropertyHandle<dim>                            mass_center;
-    std::vector<double64>                          det, sum_x2, sum_y2, sum_z2, sum_xy,sum_xz, sum_yz;
-    std::vector<size_t>                            zero_grad_index_;
-    std::vector<std::vector<size_t> >  neighbors_; // global indices of parent nodes; [node_id] -> vector with id's
+    // TODO: why are these not private?
+    Region<dim>&                        gref_;
+    double                            tolerance;
+    csmp::Index                         u_key;
+    const csmp::Index                   grad_key, mctr_key;
+    std::vector<PropertyHandle<dim>* >  gradient;
+    PropertyHandle<dim>                 mass_center;
+    std::vector<double>               det, sum_x2, sum_y2, sum_z2, sum_xy,sum_xz, sum_yz;
+    std::vector<size_t>                 zero_grad_index_;
+    std::vector<std::vector<size_t> >   neighbors_; ///< global indices of parent nodes; [node_id] -> vector with id's
     
     // 
     /// [EL_Id] [local_facet_id] [local_node_id], distance between facet with ID local_facet_id and node with ID local_node_id
     std::vector<std::vector<std::vector<VectorVariable<dim> > > > distance_facet_FVBarycenter_;
     
  private:
-    Model<dim>&        sg_;
-    const FiniteVolumeStencilManager<dim>& fcv;
-     
     /// computation of centers of masses of all FV's
-    void CalculateCenterOfMass( const FiniteVolumeStencilManager<dim>& fvc );
+    void CalculateCenterOfMass();
      
-    void CalculateDistanceFacetFVBary( const FiniteVolumeStencilManager<dim>& fvc,
-                                        std::vector<std::vector<std::vector<VectorVariable<dim> > > >& d_facet_FVBarycenter  );
+    void CalculateDistanceFacetFVBary( std::vector<std::vector<std::vector<VectorVariable<dim> > > >& d_facet_FVBarycenter );
      
     void PushBackAvoidDuplicate( std::vector<size_t>& old_vector, std::vector<size_t>& possible_new_entries );
      
-    void ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c, std::vector<double64>& global_c );
+    void ConvertToGlobalCoordinates( Element<dim>& el, const Point<dim>& local_c, std::vector<double>& global_c );
      
     std::vector<std::vector<VectorVariable<dim> > >  distance;
-    std::vector<std::pair<VectorVariable<dim>, double64> > center_of_mass_;
+    std::vector<std::pair<VectorVariable<dim>, double> > center_of_mass_;
     std::vector<VectorVariable<dim> >                 inner_;
     std::vector< std::vector<VectorVariable<dim> > >  middle_;
 };

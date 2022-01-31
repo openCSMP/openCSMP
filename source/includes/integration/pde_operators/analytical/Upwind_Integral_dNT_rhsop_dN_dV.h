@@ -15,10 +15,10 @@ class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
                                      const char* test,
                                      const char* upwind,
                                      const char* trigger,
-                                     const double64 prefactor = 1. );
+                                     const double prefactor = 1. );
     
-    virtual void GetOperands(  SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& );
+    virtual void ComputeContribution( const SIMPLEX& );
   
   private:
     DenseMatrix<DM_MIN>  DN, DNT;
@@ -28,7 +28,7 @@ class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
     std::vector<ScalarVariable > basic_var_;
     std::vector<ScalarVariable > upwind_var_;
     std::vector<ScalarVariable > trigger_var_;
-    const double64 prefactor_;
+    const double prefactor_;
 };
 
 

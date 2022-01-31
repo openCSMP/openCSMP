@@ -326,7 +326,7 @@ const Point<dim>&  FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFace
 template<size_t dim>
 void FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFacet, 
                                                              size_t ip, 
-                                                             std::vector<double64>& rst ) const
+                                                             std::vector<double>& rst ) const
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -337,7 +337,7 @@ void FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFacet,
 
 // SKM addon
 template<size_t dim>
-double64 FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFacet, 
+double FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFacet, 
                                                                  size_t ip, 
                                                                  size_t rst ) const
  {
@@ -429,7 +429,7 @@ const Point<dim>&  FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSec
 template<size_t dim>
 void FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSector, 
                                                               size_t ip, 
-                                                              std::vector<double64>& rst ) const
+                                                              std::vector<double>& rst ) const
 {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -440,7 +440,7 @@ void FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSector,
 
 
 template<size_t dim>
-double64 FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSector, 
+double FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSector, 
                                                                   size_t ip, 
                                                                   size_t rst ) const
 {
@@ -471,7 +471,7 @@ For current implementation index ip is constrained to 0 only, i.e. the
 FVPEM method is working with 1 facet integration point only.
 */    
 template<size_t dim>
-double64 FiniteVolumeStencil<dim>::FacetIntegrationWeight( size_t iFacet, 
+double FiniteVolumeStencil<dim>::FacetIntegrationWeight( size_t iFacet, 
                                                            size_t ip ) const
  {
     assert( iFacet < Facets() );
@@ -504,7 +504,7 @@ FVPEM method is working with 1 facet integration point only.
 */
  
 template<size_t dim>
-double64 FiniteVolumeStencil<dim>::FacetProjectionWeight( size_t iFacet, size_t ip ) const
+double FiniteVolumeStencil<dim>::FacetProjectionWeight( size_t iFacet, size_t ip ) const
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -534,7 +534,7 @@ For current implementation index ip is constrained to 0 only, i.e. the
 FVPEM method is working with 1 facet integration point only.
 */
 template<size_t dim>
-double64 FiniteVolumeStencil<dim>::SectorIntegrationWeight( size_t iSector, size_t ip ) const
+double FiniteVolumeStencil<dim>::SectorIntegrationWeight( size_t iSector, size_t ip ) const
  {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -586,7 +586,7 @@ const Point<dim>& FiniteVolumeStencil<dim>::UnitParametricNormalTo( size_t iFace
 
 
 template<size_t dim>
-double64 FiniteVolumeStencil<dim>::UnitParametricNormalComponent( size_t iFacet, 
+double FiniteVolumeStencil<dim>::UnitParametricNormalComponent( size_t iFacet, 
                                                                          size_t x_or_y_or_z ) const
 {
     assert( iFacet < edges_of_element.size() );
@@ -612,7 +612,7 @@ Accesses the private data of the class, retreiving tabulated vector.
 */
 
 template<size_t dim>
-std::pair<double64,double64>
+std::pair<double,double>
 FiniteVolumeStencil<dim>::FacetNormalTransformationNodeWeights( size_t iFacet, size_t iNode ) const
 {
     assert( iFacet < facet_normal_xforms.size() );

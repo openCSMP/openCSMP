@@ -8,24 +8,24 @@ namespace csmp {
 
 class IAPWS_H2O_Density {
     Prop           *props, *lprops, *sprops;   // PROST output structures
-    double64       t, p, d, h;
-    const double64 dp;
+    double       t, p, d, h;
+    const double dp;
   public:
     IAPWS_H2O_Density();
     ~IAPWS_H2O_Density();
-    double64 Density( double64 T, double64 P );
-    double64 Viscosity( double64 T, double64 P );
-    double64 Density_P_MPa( double64 T, double64 P );
-    double64 VapourDensity( double64 T, double64 P );
-    double64 LiquidDensity( double64 T, double64 P );
-    double64 Pressure( double64 T, double64 rho );
-    double64 HeatCapacity( double64 T, double64 P );
-    double64 HeatCapacityDensTemp( double64 rho, double64 T );
-    double64 EnthalpyDensTemp( double64 rho, double64 T );
-    double64 Enthalpy( double64 P, double64 T );
-    double64 LiquidSaturation( double64 T, double64 P );
-    double64 SaturationTemperature( double64 P );
-    double64 SaturationPressure( double64 T );
+    double Density( double T, double P );
+    double Viscosity( double T, double P );
+    double Density_P_MPa( double T, double P );
+    double VapourDensity( double T, double P );
+    double LiquidDensity( double T, double P );
+    double Pressure( double T, double rho );
+    double HeatCapacity( double T, double P );
+    double HeatCapacityDensTemp( double rho, double T );
+    double EnthalpyDensTemp( double rho, double T );
+    double Enthalpy( double P, double T );
+    double LiquidSaturation( double T, double P );
+    double SaturationTemperature( double P );
+    double SaturationPressure( double T );
 };
 
 } // end namespace csmp

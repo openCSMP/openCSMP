@@ -13,9 +13,9 @@ namespace csmp
       
 @attention Use only this conctructor. Brine computes thermodynamic properties of H2O-NaCl solutions as a function of temperature, pressure, and composition. These governing parameters are typically computed somewhere outside this class. By using const refs to those external variables as constructor argument, Brine is able to decipher their current values when being queried for fluid properties. Only this constructor is allowed to ensure that functionality, default constructor has been made private.
   */
-  Brine::Brine(const double64&    externaltemperature,
-               const double64&    externalpressure,
-               const double64&    externalcomposition) 
+  Brine::Brine(const double&    externaltemperature,
+               const double&    externalpressure,
+               const double&    externalcomposition) 
     : 
     temperature_(externaltemperature),
     pressure_(externalpressure),
@@ -93,70 +93,70 @@ namespace csmp
 
 
   /** Molar volume of H2O-NaCl solution in [cm3 mol-1] */
-  double64 Brine::MolarVolume()
+  double Brine::MolarVolume()
   { 
     CheckStatus(); 
     return  molarvolume_;
   }  
 
   /** Temperature derivative of molar volume of H2O-NaCl solution in [cm3 mol-1 C-1] */
-  double64 Brine::DMolarVolumeDT()
+  double Brine::DMolarVolumeDT()
   { 
     CheckStatus(); 
     return  dmolarvolumedt_; 
   }    
 
   /** Isothermal compressibility of H2O-NaCl solution in [bar-1] */
-  double64 Brine::CompressibilityBar()
+  double Brine::CompressibilityBar()
   { 
     CheckStatus(); 
     return -dmolarvolumedp_/molarvolume_; 
   }
 
   /** Isothermal compressibility of H2O-NaCl solution in [Pa-1] */
-  double64 Brine::Compressibility()
+  double Brine::Compressibility()
   { 
     CheckStatus(); 
     return -dmolarvolumedp_/molarvolume_*1.0e-5; 
   }
 
   /** Thermal expansivity of H2O-NaCl solution in [C-1] */
-  double64 Brine::Expansivity()
+  double Brine::Expansivity()
   { 
     CheckStatus(); 
     return  dmolarvolumedt_/molarvolume_; 
   }
 
   /** Density of H2O-NaCl solution in [kg m-3] */
-  double64 Brine::Density()
+  double Brine::Density()
   { 
     CheckStatus(); 
     return  MolarVolumeAndX2Density(molarvolume_,xcurrent_); 
   }
 
   /** Isochore slope (dP/dT)_V of H2O-NaCl solution in [Pa C-1] */
-  double64 Brine::IsochoreSlope()
+  double Brine::IsochoreSlope()
   { 
     CheckStatus(); 
     return -dmolarvolumedt_/(dmolarvolumedp_*1.0e-5);
   }
 
   /** Specific enthalpy of H2O-NaCl solution in [J kg-1] */
-  double64 Brine::Enthalpy()
+  double Brine::Enthalpy()
   { 
     CheckStatus(); 
     return  enthalpy_;    
   }
 
   /** Specific heat capacity of H2O-NaCl solution in [J kg-1 C-1] */
-  double64 Brine::HeatCapacity()
+  double Brine::HeatCapacity()
   { 
     CheckStatus(); 
     return  heatcapacity_;    
   }    
 
   /** Dynamic viscosity of H2O-NaCl solution in [Pa s] */
-  double64 Brine::Viscosity()
+  double Brine::Viscosity()
   { 
     CheckStatus(); 
     return  viscosity_;
@@ -226,7 +226,7 @@ namespace csmp
 
   @attention Notice that many expressions in the following memeber functions have been copy/pasted "as is" from Maple I have never checked them for possible numerical pitfalls such as adding/subtracting small and large numbers etc. or for any performance issues
   */
-  void Brine::UpdateParameters(const double64& t_, const double64& p_, const double64& x_)
+  void Brine::UpdateParameters(const double& t_, const double& p_, const double& x_)
   {
     // linear parameters
     nacl_a0_    =  330.47 + 0.942876*sqrt(p_) + 0.0817193*p_ - 2.47556e-08*p_*p_ + 3.45052e-10*p_*p_*p_;
@@ -311,23 +311,23 @@ namespace csmp
 
 
   /** Molar volume from equation 7 of Driesner, GCA, 2007 */
-  double64 Brine::MolarVolumeFromWater()
+  double Brine::MolarVolumeFromWater()
   { 
     return dummywater.MolarVolume();
   }
 
 
   /** Molar volume from equation 18 of Driesner, GCA, 2007 */
-  double64 Brine::MolarVolumeHighTX(const double64& t_, const double64& p_, const double64& x_)
+  double Brine::MolarVolumeHighTX(const double& t_, const double& p_, const double& x_)
   {
-    double64 pmax_    = hlv.Pmax()*1.0e-5;
+    double pmax_    = hlv.Pmax()*1.0e-5;
     UpdateParameters( t_, pmax_ , x_ );
-    double64 vpmax_   = MolarVolumeFromWater(); //check
-    double64 dvdpmax_ = DMolarVolumeDP( t_ ); //check
+    double vpmax_   = MolarVolumeFromWater(); //check
+    double dvdpmax_ = DMolarVolumeDP( t_ ); //check
     UpdateParameters( t_, 1000.0e0, x_ );
-    double64 v1000_   = MolarVolumeFromWater(); //check
-    double64 a2_      = 1000.0;//pow(10.0e0,(794.405+x*(-3909.85+x*(6262.01-3116.54*x)))+(-0.554022+x*(3.13968+x*(-5.58252+2.96633*x)))*t);
-    double64 dummy_ = 
+    double v1000_   = MolarVolumeFromWater(); //check
+    double a2_      = 1000.0;//pow(10.0e0,(794.405+x*(-3909.85+x*(6262.01-3116.54*x)))+(-0.554022+x*(3.13968+x*(-5.58252+2.96633*x)))*t);
+    double dummy_ = 
       ((- log(pmax_+a2_)*dvdpmax_*pmax_ 
         - log(pmax_+a2_)*dvdpmax_*a2_ 
         + vpmax_
@@ -358,7 +358,7 @@ namespace csmp
          - 1000.0
          )
       * pmax_;
-    double64 v_ = 
+    double v_ = 
       dummy_ 
       + vpmax_
       - ((- log(pmax_+a2_)*dvdpmax_*pmax_
@@ -399,17 +399,17 @@ namespace csmp
   
 
   /** Molar volume from equation 17 of Driesner, GCA, 2007 */
-  double64 Brine::MolarVolumeLowT()
+  double Brine::MolarVolumeLowT()
   {
-    double64 tsat_    = dummywater.SaturationTemperature();
-    double64 v0_      = dummywater.LiquidSaturationMolarVolumeForP();
-    double64 rho0_    = dummywater.LiquidSaturationDensityForP();
+    double tsat_    = dummywater.SaturationTemperature();
+    double v0_      = dummywater.LiquidSaturationMolarVolumeForP();
+    double rho0_    = dummywater.LiquidSaturationDensityForP();
     //        in the next line, the expression in brackets is an empirical fit 
     //        to PROST data for drhol/dt at water Saturation curve
-    double64 dvdtsat_ = -1000*mh2o*( 151.142-151.848* pow( pcurrent_+2.13768e-07,0.000792594 )
+    double dvdtsat_ = -1000*mh2o*( 151.142-151.848* pow( pcurrent_+2.13768e-07,0.000792594 )
                                      -0.00992859*pcurrent_)/rho0_/rho0_;
-    double64 logp_    = log10(pcurrent_);
-    double64 lowT_a2_ = 2.0125e-07+3.29977e-09*exp(-4.31279*logp_)-1.17748e-07*logp_+7.58009e-08*logp_*logp_;
+    double logp_    = log10(pcurrent_);
+    double lowT_a2_ = 2.0125e-07+3.29977e-09*exp(-4.31279*logp_)-1.17748e-07*logp_+7.58009e-08*logp_*logp_;
     return  2.0*lowT_a2_*tsat_*tsat_*tsat_
       -tsat_*dvdtsat_+v0_
       -3.0*tdummy_*lowT_a2_*tsat_*tsat_
@@ -418,14 +418,14 @@ namespace csmp
 
 
   /** Temperature derivative of eq. 7 of Driesner, GCA, 2007 */
-  double64 Brine::DMolarVolumeDT(const double64& t_)
+  double Brine::DMolarVolumeDT(const double& t_)
   { 
     return dummywater.Dvdt()*(a1_+dev_a0_*dev_a1_*exp(dev_a1_*t_));
   }
   
 
   /** Temperature derivative of eq. 7 of Driesner, GCA, 2007 */
-  double64 Brine::DMolarVolumeDP(const double64& t_)
+  double Brine::DMolarVolumeDP(const double& t_)
   {
     return dummywater.Dvdpbar()
       + dummywater.Dvdt()*(da0dp_+da1dp_*t_+ddev_a0dp_*exp(dev_a1_*t_)
@@ -434,7 +434,7 @@ namespace csmp
   
 
   /** Specific enthalpy, equation 21 of Driesner, GCA, 2007 */
-  double64 Brine::Enthalpy(const double64& t_, const double64& p_, const double64& x_)
+  double Brine::Enthalpy(const double& t_, const double& p_, const double& x_)
   { 
     h_nacl_a0_ = 47.9048 - 0.00936994*p_ + 6.51059e-6*p_*p_;
     h_a0_1_    = -32.1724 + 0.0621255*p_;
@@ -458,14 +458,14 @@ namespace csmp
 
 
   /** Specific isobaric heat capacity, temperature derivative of Driesner, GCA, 2007 */
-  double64 Brine::HeatCapacity(const double64& x_){ 
+  double Brine::HeatCapacity(const double& x_){ 
     //TD: adjusted to correct version!!!
     return dummywater.HeatCapacity()*h_a1_/(1.0+x_); //CAUTION!!!!!, didn't I remove the /(1.0+x)?
   }
 
 
   /** Dynamic viscosity, using Palliser & McKibbin, 1998 */
-  double64 Brine::Viscosity(const double64& t_, const double64& x_, const double64& muw_){
+  double Brine::Viscosity(const double& t_, const double& x_, const double& muw_){
     // pure water, use shortcut
     if(x_ == 0.0e0){
       return muw_;

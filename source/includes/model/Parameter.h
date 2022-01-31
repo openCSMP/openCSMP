@@ -1,7 +1,6 @@
 #ifndef CSMP_PARAMETER_H
 #define CSMP_PARAMETER_H
 
-#include "CSMP_number_types.h"
 #include "Index.h"
 
 namespace csmp {
@@ -41,10 +40,12 @@ struct Parameter {
     void           DefineFromStdin();
   
     /// checks whether the supplied value lies within min/max defined for this parameter
-    bool           IsWithinRange( double64 ) const;
+    bool           IsWithinRange( double ) const;
   
     /// expected range of this parameter in the specific simulation
-    void           Range( double64& vmin, double64& vmax ) const;
+    void           Range( double& vmin, double& vmax ) const;
+    double       MinValue() const { return min; }
+    double       MaxValue() const { return max; }
   
     /// prints parameter record to screen
     void           Out() const;
@@ -58,7 +59,7 @@ struct Parameter {
     std::string    name;        ///< typically a human-readable name like 'fluid pressure' that can contain blanks (no tabs or line breaks)
     std::string    notation;    ///< e.g., k for permeability, v for velocity etc.
     std::string    unit;        ///< normally SI unit like kg/m2
-    double64       min, max;    ///< physically meaningful value range, specific to simulation problem
+    double       min, max;    ///< physically meaningful value range, specific to simulation problem
     std::string    usage;       ///< with regard to computation: INPUT, COMPUTED etc.
     std::string    explanation; ///< how property is used, e.g., stress calculation etc.
     std::string    reference;   ///< to a paper that describes a related calculation

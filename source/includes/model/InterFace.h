@@ -60,8 +60,8 @@ to an intervening lower-dimensional element mesh once the InterFace has been cre
 */
 template<size_t dim>
 class InterFace : public FiniteElementPolicy<dim,InterFace>,
-                  public FiniteVolumePolicy<dim,InterFace>,
-                  public LocalVariableStorage<dim,InterFace<dim> >
+                  public FiniteVolumePolicy<dim,InterFace>, // TODO: what for? - flow parallel to interface on either side?
+                  public LocalVariableStorage<dim,InterFace>
 {
   public:
 
@@ -74,18 +74,20 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     explicit InterFace( FiniteElement* );
 
     InterFace( FiniteElement*,
-               FiniteVolumeStencil<dim>* );
+               const FiniteVolumeStencil<dim>* );
     
+    /// default: incomplete construction without connection to nodes
     InterFace( csmp::FiniteElement*, 
-               csmp::FiniteVolumeStencil<dim>*, 
-               const LocalVariables& interface_props, 
-               const IntegrationPointVariables& integration_point_props );
+               const csmp::FiniteVolumeStencil<dim>*,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props );
 
-    /// for reconstruction of model from native binary file
+    /// incomplete reconstruction of model from native binary file
     InterFace( size_t index,
                csmp::FiniteElement*,
-               const LocalVariables& interface_props,
-               const IntegrationPointVariables& integration_point_props );
+               const csmp::FiniteVolumeStencil<dim>*,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props );
 
     InterFace( const InterFace& );
   
@@ -94,14 +96,22 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
   
     ~InterFace();
 
-    /// connect InterFace to its equidimensional neighbors
-    void Assign( size_t nbor, InterFace<dim>* const );
-  
-    /// connect interface to the element that it was created from
-    void Assign( Element<dim>* const base_elmt );
+    /// reference to provide efficiency hack in MeshManager
+    typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
 
-    /// connect interface to its higher-dimensional neighbors
-    void Assign( Element<dim>* const inner_elmt, Element<dim>* const outer_elmt, bool assign_nodes = true );
+    /// connect InterFace to its equidimensional neighbors (=number of finite-element faces)
+    void Assign( size_t nbor, InterFace<dim>* const );
+    
+    /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
+    void Unassign( const InterFace<dim>* const );
+  
+    /// connect interface to a lower dimensional element that shall act as intervening element in triple-layer boundary representations
+    void Assign( Element<dim>* const intervening_elmt );
+
+    /// connect interface to its higher-dimensional neighbors, finding the matching nodes automatically
+    void Assign( Element<dim>* const inner_elmt,
+                 Element<dim>* const outer_elmt,
+                 bool assign_nodes = true );
   
     /// as Assign, for the case that the shared faces are already known
     void Assign( Element<dim>* const inner_elmt, size_t inner_local_face_id,
@@ -111,18 +121,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// connect interface to its higher-dimensional neighbor on the given side
     void Assign( Element<dim>* const parent, size_t faceId, INTERFACE_SIDE side );
 
-    void Assign( size_t n_local, size_t parent_node, INTERFACE_SIDE side );
-    void Assign( size_t n_local, std::pair<size_t, size_t> parent_nodes );
-
-    /// assign the corresponding node of the higher-dimensional neigbor element
+    /// assign node of the higher-dimensional neigbor element (order as on corresponding InterFace sides)
     void Assign( size_t n_local, Node<dim>*, INTERFACE_SIDE side );
   
-    /// TODO: just provide iterators to begin() and end(), or, still better, just tell Interface which neighbors to disconnect
-    typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
-
-	  /// unassigns interface neighbors
-	  bool DisconnectNeighbor( InterFace<dim>* );
-
     InterFace& operator=( const InterFace& );
 
     /// hand-coded move assignment that deals with the pointers
@@ -139,7 +140,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// to apply visitors whose application level is Boundary and target is Face
     void Accept( csmp::Visitor<dim>& vis );
 
-    /// of variables that are discretised on interfaces
+    /// of variables that are discretised on interfaces; required by LocalVariableStorage
     PLACEMENT Placement() const { return INTER_FACE; }
 
     /// node_connector_.size() = total nodes on both sides of InterFace
@@ -153,22 +154,33 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// the InterFace object neighbors which are connected with the InterFace and not null.
     size_t  ConnectedNeighbors() const;
 
+    /// dependent on CurrentSide, either the inside nodes or the outside nodes will be iterated over
+    typename std::vector<csmp::Node<dim>*>::iterator            NodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator            NodesEnd();
+    typename std::vector<csmp::InterFace<dim>*>::iterator       NeighborsBegin();
+    typename std::vector<csmp::InterFace<dim>*>::iterator       NeighborsEnd();
+
+    typename std::vector<const csmp::Node<dim>*>::const_iterator        NodesBegin()     const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator        NodesEnd()       const;
+    typename std::vector<const csmp::InterFace<dim>*>::const_iterator   NeighborsBegin() const;
+    typename std::vector<const csmp::InterFace<dim>*>::const_iterator   NeighborsEnd()   const;
+
     /// access to all nodes connected to the InterFace (inside nodes first)
-    csmp::Node<dim>* N( size_t n_local ) const;
+    csmp::Node<dim>* N( size_t n_local );
+    const csmp::Node<dim>* N( size_t n_local ) const;
     
     /// access the nodes that are connected to either, the inside or the outside of the Face
-    csmp::Node<dim>* N( size_t n_local, INTERFACE_SIDE side ) const;
+    csmp::Node<dim>* N( size_t n_local, INTERFACE_SIDE side );
+    const csmp::Node<dim>* N( size_t n_local, INTERFACE_SIDE side ) const;
 
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
     INTERFACE_SIDE  CurrentSide() const;
 
-    /// standard interface returns neighbor on current side of interface
-    csmp::InterFace<dim>*  Neighbor( size_t ) const;
+    /// returns neighbor InterFace of interface
+    csmp::InterFace<dim>*  Neighbor( size_t );
+    const csmp::InterFace<dim>*  Neighbor( size_t ) const;
     
-    /// neighbor on choosen side of interface is returned
-    csmp::InterFace<dim>*  Neighbor( size_t, INTERFACE_SIDE ) const;
-
     /// on-the-fly 0..n-1 numbering stored in mutable local variable and used for computations in interfaces (displacement gradients etc.)
     void           Idx( size_t ) const;
     size_t         Idx() const;
@@ -182,17 +194,17 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// higher-dimensional element located on the side of the interface to which the unit normal points; @attention does not exist on model boundary
     Element<dim>*  OuterParent() const;
 
-    /// access to the Element object from which the original face was created if it still is there (use HasBase()
-    Element<dim>*  BaseElement() const;
-
     /// Local node numbers in higher-dimensional adjacent elements; costly to compute
     size_t         ParentNodeNumber( size_t n_local, INTERFACE_SIDE side ) const;
 
+    /// access to the Element object from which the original face was created if it still is there (use HasBase()
+    Element<dim>*  InterveningElement() const;
+
     /// is an equi-dimensional element connected to the MIDDLE element pointer of this InterFace
-    bool           HasBase() const { return baseElement_!=nullptr; }
+    bool           HasInterveningElement() const { return middleElement_!=nullptr; }
   
-    // TODO: review this functionality, included SharedElementFaces()
     /// local number of the face in the inner parent element, which borders against the interface
+    void           ParentFaceID( INTERFACE_SIDE, size_t idx );
     size_t         InnerParentFaceID() const;
     size_t         OuterParentFaceID() const;
     size_t         ParentFaceID( INTERFACE_SIDE side ) const;
@@ -201,34 +213,37 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     //  InterFace geometric properties
     // ------------------------------------------------------------------------
 
-    /// returns area of the face; method assumes same role as Volume() for the element
-    double64       Area( INTERFACE_SIDE=MIDDLE ) const;
+    /// returns area of the interface; MIDDLE case is returned only if there is an intervening element
+    double       Area( INTERFACE_SIDE=MIDDLE ) const;
     
     /// unit normals on either side point from INSIDE to OUTSIDE, but have different orientation when nodes are spatially separated 
     void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
   
-    /// returns normal to 'current' side of interface
+    /// returns normal to original side of interface (the one of the surface element from which the InterFace was constructed originally)
     void           UnitNormal( VectorVariable<dim>& ) const;
   
-    /// returns the normal pointing from the inside to the outside higher-dimensional Element of the InterFace, calculated for bisector plane.
+    /// returns normal pointing from inside to outside higher-dimensional Element of InterFace, calculated for bisector plane if intervening element is present
     csmp::Point<dim>  UnitNormal() const;
 
     /// computes distance between corresponding pairs of nodes; @return false if nodes overlap, true if they are separated
-    // TODO: review this functionality
+    // TODO: review this functionality / adapt to manifolds
     bool           NodeSpacing( size_t n_local, VectorVariable<dim>& ) const;
 
     /// returns a vector of the property of interest discretized on the node
     template<class Var>
     void           NodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE=INSIDE ) const;
 
-    /// inputs node coordinates into supplied matrix; for MIDDLE the midpoints between the nodes on either side are used
-    void           NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE=MIDDLE ) const;
+    /// inputs node coordinates into supplied matrix; for MIDDLE the nodes of the intervening element are used if this is present
+    void           NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE ) const;
+
+    /// inputs node coordinates into supplied matrix; treating the Interface like a volumetric element; @note makes  sense only if there is a finite node separation, else degenerate
+    void           NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
 
     /// the centre of gravity of the element (returns the mid-point of the 2-sides if detached)
     Point<dim>     BaryCenter() const;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
-    double64       LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    double       LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
 
     // ------------------------------------------------------------------------
     // Screen Output
@@ -237,6 +252,11 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void Out() const;
 
   private:
+    /// for exclusive use by MeshManager
+    template<size_t> friend class MeshManager;
+    void* operator new( size_t size );
+    void operator delete( void* p );
+
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
     std::pair<size_t,size_t>  SharedElementFaces();
   
@@ -250,23 +270,18 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // Data members
     // ------------------------------------------------------------------------
 
-    mutable size_t                idx_;                 ///< unique identifier for indexing operations
+    mutable size_t idx_;                                ///< unique identifier for indexing operations
+    size_t         inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
+    size_t         outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
+    Element<dim>*  innerParent_;                 ///< higher-dimensional parent element on side opposite to normal direction
+    Element<dim>*  outerParent_;                 ///< higher-dimensional neighbor element in direction of interface normal
+    Element<dim>*  middleElement_ = nullptr;     ///< pointer to lower-dimensional element that may have been inserted between the sides of InterFace.
     std::vector<Node<dim>*>       node_connector_;      ///< pointers to the nodes on inside followed by those on the outside
-    std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces on inside followed by those on outside
-    bool                          collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
-  
+    std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces; inside ones first, outside ones next, order determined by interface normal
     // used for compatibility with Element and Face methods (Neighbor etc.)
-    INTERFACE_SIDE  current_side_;  ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
+    INTERFACE_SIDE  current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
+    bool            collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
 
-    // pointers to the higher-dimensional elements this face sits in between
-    // the (same dimensional) neighbors are stored by the base class
-    Element<dim>* innerParent_;            ///< higher-dimensional parent element on side opposite to normal direction
-    size_t        inner_parent_face_id_;   ///< face number of inside higher-dimensional parent element
-
-    Element<dim>* outerParent_;            ///< higher-dimensional neighbor element in direction of interface normal
-    size_t        outer_parent_face_id_;   ///< face number of outside higher-dimensional parent element
-
-    Element<dim>* baseElement_ = nullptr;  ///< pointer to lower-dimensional element that sits between sides of InterFace.
 };
 
 

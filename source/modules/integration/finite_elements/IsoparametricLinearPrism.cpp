@@ -110,7 +110,7 @@ IsoparametricLinearPrism::~IsoparametricLinearPrism()
 
 /**
 
-  void IsoparametricLinearPrism::Nrst( double64 r, double64 s, vector<double64>& N ) const
+  void IsoparametricLinearPrism::Nrst( double r, double s, vector<double>& N ) const
 
 
 
@@ -137,18 +137,18 @@ Method is used to compute property values at the integration points of
 the element.
 */
 void IsoparametricLinearPrism::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    std::vector<double64>& N ) const
+                    double r,
+                    double s,
+                    double t,
+                    std::vector<double>& N ) const
 {
    N.resize(npe);
 
-   const double64 tPlus   = 1.0+t;
-   const double64 tMinus  = 1.0-t;
-   const double64 L1      = 1.0-r-s;
-   const double64 L2      = r;
-   const double64 L3      = s;
+   const double tPlus   = 1.0+t;
+   const double tMinus  = 1.0-t;
+   const double L1      = 1.0-r-s;
+   const double L2      = r;
+   const double L3      = s;
 
    //cout<<" IsoparametricLinearPrism::Nrst L1="<<L1<<", L2="<<L2<<", L3="<<L3<<" Sum="<<L1+L2+L3<<endl;
 
@@ -161,16 +161,16 @@ void IsoparametricLinearPrism::Nrst(
  }
 
 void IsoparametricLinearPrism::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    double64* N ) const
+                    double r,
+                    double s,
+                    double t,
+                    double* N ) const
 {
-   const double64 tPlus   = 1.0+t;
-   const double64 tMinus  = 1.0-t;
-   const double64 L1      = 1.0-r-s;
-   const double64 L2      = r;
-   const double64 L3      = s;
+   const double tPlus   = 1.0+t;
+   const double tMinus  = 1.0-t;
+   const double L1      = 1.0-r-s;
+   const double L2      = r;
+   const double L3      = s;
 
    //cout<<" IsoparametricLinearPrism::Nrst L1="<<L1<<", L2="<<L2<<", L3="<<L3<<" Sum="<<L1+L2+L3<<endl;
 
@@ -206,13 +206,13 @@ The shape function derivatives are needed in most integration
 procedures for elements.
 */
 void IsoparametricLinearPrism::dNr (
-                double64,
-                double64,
-                double64 t,
-                std::vector<double64>& DNR ) const
+                double,
+                double,
+                double t,
+                std::vector<double>& DNR ) const
 {
-   double64 tPlus   = 1.0+t;
-   double64 tMinus  = 1.0-t;
+   double tPlus   = 1.0+t;
+   double tMinus  = 1.0-t;
 
    DNR.resize(npe);
 
@@ -226,13 +226,13 @@ void IsoparametricLinearPrism::dNr (
 }
 
 void IsoparametricLinearPrism::dNs(
-                double64,
-                double64,
-                double64 t,
-                std::vector<double64>& DNS ) const
+                double,
+                double,
+                double t,
+                std::vector<double>& DNS ) const
 {
-   double64 tPlus   = 1.0+t;
-   double64 tMinus  = 1.0-t;
+   double tPlus   = 1.0+t;
+   double tMinus  = 1.0-t;
 
    DNS.resize(npe);
 
@@ -247,15 +247,15 @@ void IsoparametricLinearPrism::dNs(
 
 
 void IsoparametricLinearPrism::dNt(
-                double64 r,
-                double64 s,
-                double64,
-                std::vector<double64>& DNT ) const
+                double r,
+                double s,
+                double,
+                std::vector<double>& DNT ) const
 {
 
    DNT.resize(npe);
 
-   const double64 rMinus  =   1.0-r;
+   const double rMinus  =   1.0-r;
 
    DNT[0] = -0.5*(rMinus-s);
    DNT[1] = -0.5*r;
@@ -284,11 +284,11 @@ void
 
 
 void
-IsoparametricLinearPrism::N_AtBaryCenter( std::vector<double64>& N )
+IsoparametricLinearPrism::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
 
-    double64 OneThird=1.0/3.0;
+    double OneThird=1.0/3.0;
     Nrst(OneThird,OneThird,0.0,N);
 
  }
@@ -302,7 +302,7 @@ point 'ip'.
 @param N The interpolation function values are returned into the third argument.
 */
 void
-IsoparametricLinearPrism::N_AtIntegrationPoint( size_t ip, std::vector<double64>& N )
+IsoparametricLinearPrism::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
      // local interpolation function values
@@ -458,6 +458,42 @@ void IsoparametricLinearPrism::NodesOfFace( size_t face_id, std::vector<size_t>&
  }
 
 
+
+vector<size_t>  IsoparametricLinearPrism::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,2,1};
+        case 1: return vector<size_t>{0,1,4,3};
+        case 2: return vector<size_t>{1,2,5,4};
+        case 3: return vector<size_t>{0,3,5,2};
+        case 4: return vector<size_t>{3,4,5};
+      }
+    cerr <<"\nIsoparametricLinearPrism::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+std::vector<size_t>  IsoparametricLinearPrism::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,2,3};
+        case 1: return vector<size_t>{0,2,4};
+        case 2: return vector<size_t>{0,1,5};
+        case 3: return vector<size_t>{0,4,5};
+        case 4: return vector<size_t>{1,3,5};
+        case 5: return vector<size_t>{2,3,4};
+        default:
+          cerr <<"\nIsoparametricLinearPrism::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
+
+
 CSMP_FEM_TYPE  IsoparametricLinearPrism::ElementTypeOfFace( size_t face )  const
  {
     assert( face < fpe );
@@ -467,7 +503,7 @@ CSMP_FEM_TYPE  IsoparametricLinearPrism::ElementTypeOfFace( size_t face )  const
     return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
  }
 
-double64 IsoparametricLinearPrism::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearPrism::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
 
 
 
@@ -475,25 +511,25 @@ double64 IsoparametricLinearPrism::WeightAtIntegrationPoint( size_t i ) const { 
 void
 IsoparametricLinearPrism::GenerateIntegrationPoints(
                                                     DenseMatrix<DM_MIN> &Ip,
-                                                    std::vector<double64>& We)
+                                                    std::vector<double>& We)
 {
     const size_t numberOfTriaIntegrationPoints=3; // order 2
     const size_t numberOfDimensionsInPlane=2;
     DenseMatrix<DM_MIN> IPTRIA(numberOfTriaIntegrationPoints,numberOfDimensionsInPlane);
-    const double64 constA=0.577350269189626, constT1=0.66666666666667, constT2=0.16666666666667;
+    const double constA=0.577350269189626, constT1=0.66666666666667, constT2=0.16666666666667;
 
     IPTRIA(0,0)=constT1; IPTRIA(0,1)=constT2;
     IPTRIA(1,0)=constT2; IPTRIA(1,1)=constT1;
     IPTRIA(2,0)=constT2; IPTRIA(2,1)=constT2;
 
-    vector<double64> WTRIA(numberOfTriaIntegrationPoints);
+    vector<double> WTRIA(numberOfTriaIntegrationPoints);
     // Weights for the base integration
     WTRIA[0]=constT2;
     WTRIA[1]=constT2;
     WTRIA[2]=constT2;
 
     const size_t numberOfLineIntegrationPoints=2;
-    vector<double64> IPLINE(numberOfLineIntegrationPoints),WLINE(numberOfLineIntegrationPoints);
+    vector<double> IPLINE(numberOfLineIntegrationPoints),WLINE(numberOfLineIntegrationPoints);
 
     IPLINE[0]=-constA;  IPLINE[1]=constA;
     WLINE [0]= 1.0;     WLINE [1]=1.0;
@@ -511,17 +547,17 @@ IsoparametricLinearPrism::GenerateIntegrationPoints(
     }
 }
 
-double64
+double
 IsoparametricLinearPrism::AreaOfBase(
-                            std::vector<double64> &V1XYZ,
-                            std::vector<double64> &V2XYZ,
-                            std::vector<double64> &V3XYZ
+                            std::vector<double> &V1XYZ,
+                            std::vector<double> &V2XYZ,
+                            std::vector<double> &V3XYZ
                             )
 {
 
-    double64 Det1=V1XYZ[1]*(V2XYZ[2]-V3XYZ[2])-V2XYZ[1]*(V1XYZ[2]-V3XYZ[2])+V3XYZ[1]*(V1XYZ[2]-V2XYZ[2]);
-    double64 Det2=V1XYZ[2]*(V2XYZ[0]-V3XYZ[0])-V2XYZ[2]*(V1XYZ[0]-V3XYZ[0])+V3XYZ[2]*(V1XYZ[0]-V2XYZ[0]);
-    double64 Det3=V1XYZ[0]*(V2XYZ[1]-V3XYZ[1])-V2XYZ[0]*(V1XYZ[1]-V3XYZ[1])+V3XYZ[0]*(V1XYZ[1]-V2XYZ[1]);
+    double Det1=V1XYZ[1]*(V2XYZ[2]-V3XYZ[2])-V2XYZ[1]*(V1XYZ[2]-V3XYZ[2])+V3XYZ[1]*(V1XYZ[2]-V2XYZ[2]);
+    double Det2=V1XYZ[2]*(V2XYZ[0]-V3XYZ[0])-V2XYZ[2]*(V1XYZ[0]-V3XYZ[0])+V3XYZ[2]*(V1XYZ[0]-V2XYZ[0]);
+    double Det3=V1XYZ[0]*(V2XYZ[1]-V3XYZ[1])-V2XYZ[0]*(V1XYZ[1]-V3XYZ[1])+V3XYZ[0]*(V1XYZ[1]-V2XYZ[1]);
 
 
     return 0.5*sqrt	(Det1*Det1+Det2*Det2+Det3*Det3);
@@ -598,12 +634,12 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 @return The interpolation-function derivative matrix is returned into the
 second method argument.
 */
-double64
+double
 IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN2,
-                              const vector<double64>& xyz  )
+                              const vector<double>& xyz  )
   {
 
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -613,7 +649,7 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN2,
     dNt( rst[0], rst[1], rst[2], DNT );
 
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     DN2.Resize(dim,dim);
     DN2  = JINV;
@@ -641,11 +677,11 @@ within the Prism.
 */
 void
 IsoparametricLinearPrism::N(
-                    std::vector<double64>& N,
-                    const std::vector<double64>& xyz
+                    std::vector<double>& N,
+                    const std::vector<double>& xyz
                     )
 {
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -678,7 +714,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double64
+double
 IsoparametricLinearPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
  {
     assert( nd < npe );
@@ -688,7 +724,7 @@ IsoparametricLinearPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 6 in global coordinates
     // by multiplication of JINV with local DN
@@ -709,7 +745,7 @@ IsoparametricLinearPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 
 /// Projection function from rst->xyz
 void
-IsoparametricLinearPrism::ParametricToPhysical(std::vector<double64> &rst, std::vector<double64>& xyz)
+IsoparametricLinearPrism::ParametricToPhysical(std::vector<double> &rst, std::vector<double>& xyz)
 {
     Nrst(rst[0],rst[1],rst[2], NRST );
 
@@ -730,28 +766,28 @@ IsoparametricLinearPrism::ParametricToPhysical(std::vector<double64> &rst, std::
  */
 void
 IsoparametricLinearPrism::PhysicalToParametric(
-                                       std::vector<double64>& rSt,
-                                       const std::vector<double64>& xyz
+                                       std::vector<double>& rSt,
+                                       const std::vector<double>& xyz
                                        )
 {
 
-    vector<double64> outxyz(dim);
-    vector<double64> rstHatK(dim);
+    vector<double> outxyz(dim);
+    vector<double> rstHatK(dim);
 
-    std::vector<double64> distanceFromGivenPointLinf(dim,0.0);
-    double64 distanceFromGivenPointL2;
+    std::vector<double> distanceFromGivenPointLinf(dim,0.0);
+    double distanceFromGivenPointL2;
 
     // Find largest and smallest segments in order to define precision
-    vector<double64> vec(spe);
+    vector<double> vec(spe);
     EdgeLengths( vec );
-    double64 seg_max(vec[0]), seg_min(vec[0]);
+    double seg_max(vec[0]), seg_min(vec[0]);
     for ( size_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
     }
 
-    const double64 geometricTolerance = 0.005*seg_min;
+    const double geometricTolerance = 0.005*seg_min;
 
     // First guess as BaryCenter
     rstHatK[0] = 1.0/3.0;
@@ -774,17 +810,17 @@ IsoparametricLinearPrism::PhysicalToParametric(
     //    (distanceFromGivenPointLinf[2] > geometricTolerance)  )
     {
 
-        vector<double64> rstHatK_PlusOne(dim);
-        double64 minDistanceFromGivenPoint;
+        vector<double> rstHatK_PlusOne(dim);
+        double minDistanceFromGivenPoint;
 
-        const double64 constantMu               = 1.0;
+        const double constantMu               = 1.0;
         const size_t numberOfFirstIterrations   = 5;
         const size_t maxNumberOfIterrations     = 20;
         const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
-        const double64 incrementR = 1.0/(numberOfFirstIterrations-1);
-        const double64 incrementS = 1.0/(numberOfFirstIterrations-1);
-        const double64 incrementT = 2.0/(numberOfFirstIterrations-1);
+        const double incrementR = 1.0/(numberOfFirstIterrations-1);
+        const double incrementS = 1.0/(numberOfFirstIterrations-1);
+        const double incrementT = 2.0/(numberOfFirstIterrations-1);
 
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
@@ -861,7 +897,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
                 dNt( rstHatK[0], rstHatK[1], rstHatK[2], DNT );
                 Jacobian( DNR, DNS, DNT );
                 // Check whether Jacobian is positive ( might be not true for the point outside the element )
-                //const double64 detJ = JacobianDeterminant();
+                //const double detJ = JacobianDeterminant();
                 //if( detJ > 0.0 )
                 JacobianInverse();
             }
@@ -910,7 +946,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
                <<"s = "<<rstHatK[1]<<" ;\t"
                <<"t = "<<rstHatK[2]<<"\n";
 
-            std::vector<double64> N(npe,0.0);
+            std::vector<double> N(npe,0.0);
             Nrst(rstHatK[0], rstHatK[1], rstHatK[2], N );
             cout<<" IsoparametricLinearPrism::PhysicalToParametric: Shape functions:\t"
                 <<"N[0] = "<<N[0]<<" ;\t"
@@ -941,7 +977,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
      
      @test OK
 */
-void  IsoparametricLinearPrism::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  IsoparametricLinearPrism::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);
@@ -1021,13 +1057,13 @@ and the shortest boundary segment.
 
 The Element is consulted for its global coordinates.
 \*/
-double64  IsoparametricLinearPrism::AspectRatio()
+double  IsoparametricLinearPrism::AspectRatio()
 {
-   vector<double64> vec(spe);
+   vector<double> vec(spe);
 
    EdgeLengths( vec );
 
-   double64 seg_max(vec[0]), seg_min(vec[0]);
+   double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
    for ( size_t i=1; i<spe; i++ ) {
@@ -1049,9 +1085,9 @@ The segment lengths are computed as simple Euclidian distance between corner
 vertices of the edge.
 */
 void
-IsoparametricLinearPrism::EdgeLengths( std::vector<double64>& len )
+IsoparametricLinearPrism::EdgeLengths( std::vector<double>& len )
 {
-    double64 sum;
+    double sum;
     len.resize(spe);
 
     // segment 1
@@ -1117,10 +1153,10 @@ the area is computed.
 
 @return The area (m2) of the finite element.
 */
-double64
+double
 IsoparametricLinearPrism::Volume()
 {
-    double64   area; // determinant
+    double   area; // determinant
     size_t  i;
 
     // numerical integration:
@@ -1146,34 +1182,34 @@ IsoparametricLinearPrism::Volume()
 
 
 
-double64
+double
 IsoparametricLinearPrism::VolumeOfRegularPrism()
 {
-     vector<double64> V1XYZ(dim), V2XYZ(dim), V3XYZ(dim);
+     vector<double> V1XYZ(dim), V2XYZ(dim), V3XYZ(dim);
      for(size_t i=0; i<dim; i++)
         {
             V1XYZ[i]=XY(0,i);V2XYZ[i]=XY(1,i);V3XYZ[i]=XY(2,i);
         }
-     double64  areaBottom=AreaOfBase(V1XYZ,V2XYZ,V3XYZ);
+     double  areaBottom=AreaOfBase(V1XYZ,V2XYZ,V3XYZ);
 
     for(size_t i=0; i<dim; i++)
         {
             V1XYZ[i]=XY(3,i);V2XYZ[i]=XY(4,i);V3XYZ[i]=XY(5,i);
         }
 
-    double64  areaTop=AreaOfBase(V1XYZ,V2XYZ,V3XYZ);
+    double  areaTop=AreaOfBase(V1XYZ,V2XYZ,V3XYZ);
     //cout<<"IsoparametricLinearPrism::Volume Base area="<<areaBottom<<"Top Area="<<areaTop<<endl;
 
     if(areaTop!=areaBottom)
         cout<<" IsoparametricLinearPrism::Volume ***WARNING: Irregular prism: => Volume aproximate ..."<<endl;
 
-    vector<double64> len(9);
+    vector<double> len(9);
     EdgeLengths(len);
 
     if(len[6]!=len[7] && len[7]!=len[8] && len[6]!=len[8])
         cout<<" IsoparametricLinearPrism::Volume ***WARNING: Irregular prism => Volume is aproximate ..."<<endl;
 
-    double64 avergeHeight=(len[6]+len[7]+len[8])/3.0;
+    double avergeHeight=(len[6]+len[7]+len[8])/3.0;
 
     return areaBottom*avergeHeight;
 }
@@ -1203,7 +1239,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 
 */
-double64
+double
 IsoparametricLinearPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
@@ -1216,7 +1252,7 @@ IsoparametricLinearPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t 
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
@@ -1235,12 +1271,12 @@ IsoparametricLinearPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t 
 
 
 
-double64
+double
 IsoparametricLinearPrism::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
-    //double64 TwoThirds=2.0*sqrt(0.5)/3.0;
+    //double TwoThirds=2.0*sqrt(0.5)/3.0;
 
-    double64 OneThird=1.0/3.0;
+    double OneThird=1.0/3.0;
 
     dNr( OneThird,OneThird, 0.0, DNR );
     dNs( OneThird,OneThird, 0.0, DNS );
@@ -1248,7 +1284,7 @@ IsoparametricLinearPrism::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -1280,11 +1316,11 @@ are relatively even-sided and have straight edges.
 The parent element is queried for its node coordinates.
 
 */
-double64
+double
 IsoparametricLinearPrism::InnerRadius()
 {
-   vector<double64> segms(spe);
-   double64         sum(0.0);
+   vector<double> segms(spe);
+   double         sum(0.0);
 
    EdgeLengths( segms );
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
@@ -1292,7 +1328,7 @@ IsoparametricLinearPrism::InnerRadius()
    //cout<<" IsoparametricLinearPrism::InnerRadius: WARNING: function not tetsted"<<endl;
 
    if(AspectRatio()>4.0)
-   cout<<" IsoparametricLinearPrism::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
+     cerr<<"\nIsoparametricLinearPrism::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
 
    return Volume() / (sum/6.);
@@ -1311,7 +1347,7 @@ for the element.
 void
 IsoparametricLinearPrism::MidSideNodes(std::vector<size_t>& ids) const
  {
-    cout<<" IsoparametricLinearPrism::MidSideNodes WARNING: MidSideNodes not present "<<endl;
+    cerr<<"\nIsoparametricLinearPrism::MidSideNodes WARNING: MidSideNodes not present.\n"<<endl;
     ids[0]=0;
  }
 
@@ -1379,8 +1415,8 @@ to the nodes.  This involves the steps:
 */
 void
 IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
-                                                                      const vector<double64>& IVAR,
-                                                                      vector<double64>& NVAR )
+                                                                      const vector<double>& IVAR,
+                                                                      vector<double>& NVAR )
 const
 {
   if(gpe!=1) throw csmp::Exception( ERROR,	 "IsoparametricLinearPrism::PhysicalToParametric",
@@ -1410,7 +1446,7 @@ const
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
 void  IsoparametricLinearPrism::IntegrationPoint( size_t ip,
-                                                  vector<double64>& xyz ) const
+                                                  vector<double>& xyz ) const
  {
     assert( ip < gpe );
     xyz.resize(3U);
@@ -1436,7 +1472,7 @@ IsoparametricLinearPrism::ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoords) 
     matCoords = NXYZ;
 }
 
-void IsoparametricLinearPrism::JacobianAt( const std::vector<double64>& rst )
+void IsoparametricLinearPrism::JacobianAt( const std::vector<double>& rst )
 {
     dNr( rst[0], rst[1], rst[2], DNR );
     dNs( rst[0], rst[1], rst[2], DNS );
@@ -1463,8 +1499,8 @@ IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nIsoparametricLinearPrism::OutputNodeDataToVTK ";
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nIsoparametricLinearPrism::OutputNodeDataToVTK ";
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }
 

@@ -1,9 +1,15 @@
 #ifndef CSMP_MATRIX_OPERATOR_H
 #define CSMP_MATRIX_OPERATOR_H
 
-#include "GenericTransportScheme.h"
+#include "CSMP_definitions.h"
+#include "SparseMatrix.h"
 
 namespace csmp {
+
+template<size_t> class Element;
+template<size_t> class Face;
+template<size_t> class InterFace;
+template<size_t> class Node;
 
 /**
 
@@ -12,57 +18,37 @@ namespace csmp {
 \version   0a
 \date      6/12/2017
 \pre       base class for matrix operators
-\warning
+
 \copyright The University of Melbourne
 
-@section motivation Motivation
-
-
-@section design Design Intent
-
-
-@section applicability Applicability
-
-
-@section collaborations Collaborations
-
-
-@section implementation Implementation
-
-
-@section examples Application Examples
-
-@code
-
-@endcode
+TODO: move MultiplyWithDt etc to operation
+TODO: find way of treating terms in equation as groups in a specific way
+TODO: perhaps chain operations like mathematic expressions
+TODO: perhaps perform multiple sequential operations in an element by element fashion
 
 */
 template<size_t dim>
-class MatrixOperator
-{
-public:
-    size_t Stage() const { return stage_; }
-  
-    void Stage( size_t stage ) { stage_ = stage; }
+class MatrixOperator {
+  public:
+    MatrixOperator() : factor_(1.) {}
+    virtual ~MatrixOperator() {}
 
-    bool MultiplyWithTimeIncrement() const { return multiply_with_dt_; }
-    void MultiplyWithTimeIncrement( bool multiply_with_dt ) { multiply_with_dt_ = multiply_with_dt; }
+    virtual void AccumulateFiniteVolume( const Node<dim>& fv, SparseMatrix& lhs ) const = 0;
 
-    void TimeIncrement( double64 dt ) { dt_ = dt; }
-    virtual void AccumulateStencil( Element<dim>& fe, SparseMatrix& lhs ) const = 0;
-    virtual void AccumulateFiniteVolume( Node<dim>& fv, SparseMatrix& lhs ) const = 0;
+    virtual void AccumulateStencil( const Element<dim>& fe, SparseMatrix& lhs ) const = 0;
+//    virtual void AccumulateStencil( Face<dim>& fe, SparseMatrix& lhs ) const = 0;
 
-    virtual ~MatrixOperator() { }
+    /// includes the time increment in the multiplication factor for this operator
+    void MultiplyWithTimeIncrement( double dt ) { factor_ *= dt; }
 
-protected:
-    explicit MatrixOperator( size_t stage )
-      : stage_(stage), multiply_with_dt_(false), dt_(std::numeric_limits<double64>::quiet_NaN())
-    {
-    }
-  
-    size_t stage_;
-    bool multiply_with_dt_;
-    double64 dt_;
+    /// set factor to achieve multiplication with time increment (fac=dt), subtraction (fac=-1), multiplication or division (fac=1/value)
+    void     Factor( double value ) { factor_ = value; }
+    double Factor() const { return factor_; }
+
+    // virtual void Out() const = 0; TODO: rather use verbose function to print term to be accumulated
+
+  private:
+    double factor_ = 1.; ///<  1=add, -1=subtract, factor=val = multiply, factor=1/val divide,  factor=time_increment if so needed
 };
 
 

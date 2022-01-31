@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-HydraulicHead<dim>::HydraulicHead( const PropertyDatabase<dim>& p, double64 ref_density ) 
+HydraulicHead<dim>::HydraulicHead( const PropertyDatabase<dim>& p, double ref_density ) 
       : Interrelation<dim>(p),
         P( Interrelation<dim>::GlobalProperty("absolute fluid pressure") ),
         E( Interrelation<dim>::GlobalProperty("elevation") ),

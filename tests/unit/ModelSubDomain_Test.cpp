@@ -8,6 +8,7 @@
 
 #include "ModelSubDomain_Test.h"
 #include "Model.h"
+#include "Region.h"
 #include "Boundary.h"
 #include "ANSYS_Model3D.h"
 #include "CSMP_highLevelUtilities.h"
@@ -37,6 +38,10 @@ namespace csmp {
 */
 void ModelSubDomain_Test::run()
   {
+     // Test 0: methods of subdomain in live model
+     // ------------------------------------------
+     _test( Test_EstablishNeighborConnectivity() );
+  
      bool test_binary_file_recovery1(true),
           test_binary_file_recovery2(true), // with boundaries
           test_binary_file_recovery3(true), // complex model with multiple regions
@@ -261,14 +266,14 @@ void ModelSubDomain_Test::run()
          // checking whether the side boundary interior and boundary flags are identified correctly
          //const csmp::Index  prop_key(model1.Database().StorageKey("box flag"));
          Boundary<3U>&      bref(model1.Boundary("FRONT"));
-         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(FRONT)), INTERIOR );
-         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(REGION_BOUNDARY)), PERIMETER );
+         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(FRONT)), INTERIOR );
+         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
 
          vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 1 );
 
          Boundary<3U>&      brefl(model1.Boundary("LEFT"));
-         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(LEFT)), INTERIOR );
-         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double64>(REGION_BOUNDARY)), PERIMETER );
+         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(LEFT)), INTERIOR );
+         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
 
          vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 2 );
         
@@ -299,10 +304,66 @@ void ModelSubDomain_Test::run()
          _test( CompareModelSubdomains( model1.Region("FRAC_VOLUMES"),
                                         model2.Region("FRAC_VOLUMES"), verbose ) );
       }
-
-
     
   } // end run
+
+
+
+/**
+    Using vsets from 'vset_makers' as input data, this tests weither     ModelSubDoman::EstablishNeighborConnectivity()  recreates the correct neighbor connectivity
+    
+        @author SKM 5/12/20
+
+*/
+bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity() 
+ {
+    // 0. creating the test model
+    // --------------------------
+    string varFileName("ModelSubDomain_Test-variables.txt");
+    const bool   skewed_elements(false); // otherwise model is not a box anymore
+    VSet<3U>     vset;
+    test_Create_Pyramid_Hexa_VSet( vset, skewed_elements );
+    // adding 'node number' as a variable
+    PropertyData node_nums( NODE, SCALAR, 3U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+    // adding 'element number' as a variable
+    PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
+    node_nums.Reserve( vset.Elements() );
+    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    vset.AddData( "element number", elmt_nums );
+
+    Model<3U> model( vset, varFileName.c_str(), true );
+
+    // 1. recreating the neighbor connectivity and comparing
+    // -----------------------------------------------------
+    const csmp::Index eid_key(model.Database().StorageKey("element number"));
+    Region<3U> domain = model.Region("Model");
+    model.Mesh().UpdateConnectivity();
+    
+    bool no_mismatch(true);
+    for ( vector<Element<3U>*>::const_iterator it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
+      for ( size_t i=0U; i<(*it)->Neighbors(); ++i ) {
+           if ( (*it)->Neighbor(i) != nullptr ) {
+                const size_t elmt_id = static_cast<size_t>((*it)->Read( eid_key ));
+                const size_t nbor_id = static_cast<size_t>((*it)->Neighbor(i)->Read( eid_key ));
+               _test( nbor_id == vset.Pfvert( elmt_id, i ) );
+                if ( nbor_id != vset.Pfvert( elmt_id, i ) ) {
+                     cerr <<"\nelmt "<< elmt_id <<":"<< i <<": vset vs. reconstructed neighbor: ";
+                     cerr << vset.Pfvert( elmt_id, i ) <<" vs. "<< nbor_id;
+                     no_mismatch = false;
+                  }
+             }
+           if ( no_mismatch == false ) cerr << endl;
+        }
+
+    return no_mismatch;
+    
+ } // end Test_EstablishNeighborConnectivity
+     
+
+
 
 
 } // end csmp

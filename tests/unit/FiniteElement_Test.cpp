@@ -225,8 +225,8 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing unit normal...\n";
   if( femPtr_->IsSurfaceElement() )
   {
-    std::vector<double64> unitNormal;
-    std::vector<double64> unitNormalTest( femData_.UnitNormal() );
+    std::vector<double> unitNormal;
+    std::vector<double> unitNormalTest( femData_.UnitNormal() );
     femPtr_->UnitNormal( unitNormal );
     for( size_t i = 0; i < femData_.Dim(); ++i )
       _equal( unitNormal.at( i ), unitNormalTest.at( i ) ,femData_.Tolerance());
@@ -241,7 +241,7 @@ void FiniteElement_Test::run()
       _test( femPtr_->XYZ( row, dim ) == femData_.NodePtr( row )->operator []( dim ) );
     }
   }
-  double64 cache( femPtr_->XYZ( 1,0 ) );
+  double cache( femPtr_->XYZ( 1,0 ) );
   femPtr_->XYZ( 1,0, 999.999 );
   _test( femPtr_->XYZ( 1,0 ) == 999.999 );
   _test( femPtr_->XYZ( 0,1 ) != 999.999 );
@@ -252,8 +252,8 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing gp to node extrapolation...\n";
   if( femData_.ExtrapolationVariableCount() != 0 )
   {
-    vector<double64> ivars( femPtr_->IntegrationPoints() * femData_.ExtrapolationVariableCount() );
-    vector<double64> nvars( femPtr_->Nodes() * femData_.ExtrapolationVariableCount() );
+    vector<double> ivars( femPtr_->IntegrationPoints() * femData_.ExtrapolationVariableCount() );
+    vector<double> nvars( femPtr_->Nodes() * femData_.ExtrapolationVariableCount() );
     size_t index( 0 );
     for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     {
@@ -274,7 +274,7 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing local-global transformation(integration points)...\n";
   if( femPtr_->IntegrationPoints() != 0 )
   {
-    vector<double64> ipGlobal;
+    vector<double> ipGlobal;
     for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     {
       femPtr_->IntegrationPoint( ip, ipGlobal );
@@ -298,8 +298,8 @@ void FiniteElement_Test::run()
 
   // .) SHAPE FUNCTION: N AT POINT
   if ( verbose_ ) cout << "Testing shape function N at point...\n";
-  std::vector<double64> shapeFunctionN;
-  std::vector<double64> shapeFunctionXYZ;
+  std::vector<double> shapeFunctionN;
+  std::vector<double> shapeFunctionXYZ;
   for( size_t xyz = 0; xyz < femPtr_->Dim(); ++xyz )
     shapeFunctionXYZ.push_back( femData_.ShapeFunctionXYZ( xyz ) );
   femPtr_->N( shapeFunctionN, shapeFunctionXYZ );

@@ -9,7 +9,7 @@ namespace csmp {
 
 template<size_t dim,class CELL>
 NumIntegral_NT_op_N_dV<dim,CELL>::NumIntegral_NT_op_N_dV( const PropertyDatabase<dim>& pref,
-                                                     const char* oper, const char* test )
+                                                          const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
     nodal_degrees_of_freedom(1)
  {
@@ -44,7 +44,7 @@ times the Operand. If the Operand is 1 over the element, then the volume
 integral is naturally 1 as well.  
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -55,7 +55,7 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
     // lumped formulation: only the midside nodes are used in the lumped approach
     if ( MathOperatorRHS<dim>::LumpedFormulation() ) 
       {
-         const double64 volume(e.Volume()); // NT . N
+         const double volume(e.Volume()); // NT . N
          
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ||
               MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE ||
@@ -63,14 +63,14 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
            {
              for ( size_t j=0U; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] = 
-                 (MathOperatorRHS<dim>::MTRL[0](0,0)*volume) / static_cast<double64>(e.Nodes());
+                 (MathOperatorRHS<dim>::MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
            {
              for ( size_t j=0U; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] = 
-                 (MathOperatorRHS<dim>::MTRL[j](0,0)*volume) / static_cast<double64>(e.Nodes());
+                 (MathOperatorRHS<dim>::MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
       }  
 
@@ -83,7 +83,7 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
          for ( size_t i=0U; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
-              const double64 det(e.det_JINV_AtIntegrationPoint( i ));
+              const double det(e.det_JINV_AtIntegrationPoint( i ));
               // forming NT * mtrl
               NT.Resize(e.Nodes(),1U);
               if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT or

@@ -73,69 +73,69 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
     BrooksCoreySaturationFunctionsWithHysteresis( PropertyDatabase<dim>& );
   
     /// Effective saturation function
-    double64 EffectiveSaturation( Element<dim>* const ) const;
+    double EffectiveSaturation( Element<dim>* const ) const;
   
     /// Effective saturation function for saturation S
-    double64 EffectiveSaturation_at( Element<dim>* const, double64 s1 ) const;
+    double EffectiveSaturation_at( Element<dim>* const, double s1 ) const;
   
     /// Capillary pressure Eq. (2) from Skjaeveland et al. 2000
-    double64 pc( Element<dim>* const ) const;
+    double pc( Element<dim>* const ) const;
   
     /// Capillary pressure Eq. (2) from Skjaeveland et al. 2000 for saturation S
-    double64 pc_at( Element<dim>* const , double64 s1 ) const;
+    double pc_at( Element<dim>* const , double s1 ) const;
   
     /// First derivative of capillary pressure as a function of saturation
-    double64 dpcds( Element<dim>* const ) const;
+    double dpcds( Element<dim>* const ) const;
   
-    double64 dpcds_at( Element<dim>* const, double64 ) const;
+    double dpcds_at( Element<dim>* const, double ) const;
   
     /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 krw( Element<dim>* const ) const ;
+    double krw( Element<dim>* const ) const ;
 
-    double64 krw_at( Element<dim>* const , double64 S) const ;
+    double krw_at( Element<dim>* const , double S) const ;
   
     /// The CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 krn( Element<dim>* const ) const ;
+    double krn( Element<dim>* const ) const ;
 
-    double64 krn_at( Element<dim>* const, double64 S) const ;
+    double krn_at( Element<dim>* const, double S) const ;
   
     /// The first relative of water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 dkrwds( Element<dim>* const ) const ;
+    double dkrwds( Element<dim>* const ) const ;
 
-    double64 dkrwds_at( Element<dim>* const, double64 S) const ;
+    double dkrwds_at( Element<dim>* const, double S) const ;
   
     /// The first relative of CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 dkrnds( Element<dim>* const ) const ;
+    double dkrnds( Element<dim>* const ) const ;
 
-    double64 dkrnds_at( Element<dim>* const, double64 S) const ;
+    double dkrnds_at( Element<dim>* const, double S) const ;
   
     /// Numerical derivatives of first derivatives of relative permeability of water and CO2
-    double64 dkrwds_Numerical( Element<dim>* const, double64 delta_s ) const ;
+    double dkrwds_Numerical( Element<dim>* const, double delta_s ) const ;
 
-    double64 dkrwds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
+    double dkrwds_at_Numerical( Element<dim>* const, double sw, double delta_s ) const ;
 
-    double64 dkrnds_Numerical( Element<dim>* const, double64 delta_s ) const ;
+    double dkrnds_Numerical( Element<dim>* const, double delta_s ) const ;
 
-    double64 dkrnds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
+    double dkrnds_at_Numerical( Element<dim>* const, double sw, double delta_s ) const ;
   
     // -----------------------
     // NON-STANDARD INTERFACES
     // -----------------------
   
     /// Oil residual saturation estimated from Land's formula.
-    double64 OilResidualSaturation( Element<dim>* const ) const;
+    double OilResidualSaturation( Element<dim>* const ) const;
   
     /// Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
-    double64 WaterResidualSaturation( Element<dim>* const, double64 Sor ) const;
+    double WaterResidualSaturation( Element<dim>* const, double Sor ) const;
 
     /// Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
-    void WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double64& Swr, double64& Sor )  const;
+    void WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double& Swr, double& Sor )  const;
 
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
   
-    void SetBrooksCoreyCurvesParameters( const Element<dim>* const e, std::array<double64, 2>& a,std::array<double64, 2>& c ) const ;
+    void SetBrooksCoreyCurvesParameters( const Element<dim>* const e, std::array<double, 2>& a,std::array<double, 2>& c ) const ;
   
     void UpdatePseudoResidualAndEndpointSaturations( Element<dim>* ) const;
   
@@ -143,23 +143,23 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
     TWO_PHASE_FLOW_PROCESS FlowProcess( const Element<dim>* const ) const;
   
     /// print out the capillary function bounds upper and lowwer limits..
-    std::pair<double64,double64> CapillaryPressureLimits( Element<dim>* const ) const;
+    std::pair<double,double> CapillaryPressureLimits( Element<dim>* const ) const;
   
     /// Check the capillary pressure is in the limits and reset the pseduo residual water (newSrH2O) and CO2 saturations (newSrCO2)
-    void CheckPcLimitsAndResetResiduals( Element<dim>* const, double64& newSrH2O, double64& newSrCO2, std::array<double64, 2>& a,std::array<double64, 2>& c) const;
+    void CheckPcLimitsAndResetResiduals( Element<dim>* const, double& newSrH2O, double& newSrCO2, std::array<double, 2>& a,std::array<double, 2>& c) const;
   
     /// Land's parameter for Air and CO2 "Prather Bray Seymour Codd 2016" paper
-    const double64  C_land_ = 0.89;
+    const double  C_land_ = 0.89;
   
     /// Maximum Capillary pressure for the Sw < Srw
-    const double64  MaxCapillaryPressure = 1e7; // Pa
-    const double64  MaxCapillaryPressureDerivative = 1e6; //Pa
+    const double  MaxCapillaryPressure = 1e7; // Pa
+    const double  MaxCapillaryPressureDerivative = 1e6; //Pa
   
     /// print out the water (wet phase) relative permeability function bounds upper and lowwer limits..
-    std::pair<double64,double64> krwLimits_at( Element<dim>* const , double64 const ) const;
+    std::pair<double,double> krwLimits_at( Element<dim>* const , double const ) const;
   
     /// print out the co2 (non-wet phase) relative permeability function bounds upper and lowwer limits..
-    std::pair<double64,double64> krnLimits_at( Element<dim>* const , double64 const ) const;
+    std::pair<double,double> krnLimits_at( Element<dim>* const , double const ) const;
   
   private:
     csmp::Index key_SwImbToDr_, key_SwDrToImb_, key_prsH2O_, key_prsCO2_ ;

@@ -54,7 +54,7 @@ void NumIntegral_NT_dNi_dV<dim,CELL>::Transposed()
     Computes IPOL * DN_i product weighted by the determinant of Jacobian matrix.
 */
 template<size_t dim,class CELL>
-void NumIntegral_NT_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
+void NumIntegral_NT_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -70,7 +70,7 @@ void NumIntegral_NT_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
     for ( size_t i=0; i<ipoints; i++ )
       {
          e.N_AtIntegrationPoint( i, this->IPOL );
-         double64 det = e.dN_AtIntegrationPoint( this->DERIV, i );
+         double det = e.dN_AtIntegrationPoint( this->DERIV, i );
          for ( size_t j=0; j<nodes; j++ )
             for ( size_t k=0; k<nodes; k++ )
               transp_ ? TEMP(j,k) = this->IPOL[j] * this->DERIV(xyz_,k) :

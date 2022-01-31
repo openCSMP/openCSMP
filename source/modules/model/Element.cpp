@@ -12,32 +12,6 @@ using namespace std;
 namespace csmp {
 
 
-/**
-Element stub used to model an element at the model boundary. The key
-information here is the boundary flag.
-
-Default constructor associates Element with instance of
-fem_manager.DefaultElement() pointing to the default Element as specified in main.
-Also, vectors of pointers to nodes, constraint points and neighbor elements
-are constructed.
-
-@section application Application
-
-Elements are constructed inside the MeshManager. There are 2 methods
-for VSets and VSets respectively. VSets (a class that will be
-phased out in 1999) cannot hold different element types in one mesh. In
-this case the Element default constructor will initialize the FiniteElement
-pointer to zero.
-*/
-template<size_t dim>
-Element<dim>::Element( BOX_BOUNDARY bflag )
-  : idx_( UINT_MAX ),
-    at_boundary_( bflag ),
-    material_id_(UNSPECIFIED)
-{
-}
-
-
 
 /**
 Constructor associates Element with instance of specific finite element.
@@ -63,54 +37,47 @@ them properly.
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  at_boundary_( NOT ),
-  idx_( UINT_MAX ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  material_id_(UNSPECIFIED)
+    idx_( UINT_MAX ),
+    material_id_(UNSPECIFIED),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr )
 {
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
+  assert( f != nullptr );
 }
 
 
 
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f,
-                       csmp::FiniteVolumeStencil<dim>* fvs )
+                       const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-  at_boundary_( NOT ),
-  idx_( UINT_MAX ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
+    idx_( UINT_MAX ),
+    material_id_(UNSPECIFIED),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr )
 {
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
+  assert( f   != nullptr );
+  assert( fvs != nullptr );
 }
 
 
 
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f,
-                       csmp::FiniteVolumeStencil<dim>* fvs,
+                       const csmp::FiniteVolumeStencil<dim>* fvs,
                        const LocalVariables& ep,
                        const IntegrationPointVariables& cp )
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-  at_boundary_( NOT ),
-  idx_( UINT_MAX ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
+    idx_( UINT_MAX ),
+    material_id_(UNSPECIFIED),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr )
 {
-  // variable storage is resized here because the
-  // finite element pointer must be initialised first
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
-
+  assert( f   != nullptr );
+  assert( fvs != nullptr );
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );
   else
@@ -121,24 +88,25 @@ Element<dim>::Element( csmp::FiniteElement* f,
 
 /**
 For model reconstruction from binary file
+
 */
 template<size_t dim>
 Element<dim>::Element( size_t idx,
                        csmp::FiniteElement* f,
+                       const FiniteVolumeStencil<dim>* s,
                        const LocalVariables& ep,
                        const IntegrationPointVariables& cp,
-                       BOX_BOUNDARY boundary_flag )
+                       int32_t material )
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-  idx_( idx ),
-  elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr ),
-  at_boundary_( boundary_flag ),
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, ::csmp::Element>( s ),
+    idx_( idx ),
+    material_id_(material),
+    elmt_connector_( f->Neighbors(), nullptr ),
+    node_connector_( f->Nodes(), nullptr )
 {
-  elmt_connector_.resize( f->Neighbors(), nullptr );
-  node_connector_.resize( f->Nodes(), nullptr );
-
+  assert( f != nullptr );
+  assert( s != nullptr );
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, cp );
   else
@@ -151,12 +119,11 @@ Element<dim>::Element( size_t idx,
 template<size_t dim>
 Element<dim>::Element( const Element<dim>& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
-  FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-  at_boundary_( el.at_boundary_ ),
-  idx_( el.idx_ ),
-  elmt_connector_( el.elmt_connector_ ), // watch out where the pointers point to
-  node_connector_( el.node_connector_ ),  // watch out where the pointers point to
-  material_id_(UNSPECIFIED)
+    FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
+    idx_( el.idx_ ),
+    material_id_(el.material_id_),
+    elmt_connector_( el.elmt_connector_ ), // the pointers point to the same elements as for the original element
+    node_connector_( el.node_connector_ )
 {
   assert( !node_connector_.empty() /* detected unitialized element*/ );
   assert( !elmt_connector_.empty() /* detected unitialized element*/ );
@@ -169,28 +136,54 @@ Element<dim>::Element( const Element<dim>& el )
 /// move constructor
 template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
-  : FiniteElementPolicy<dim, csmp::Element>( move( el.FE() ) ),
-  FiniteVolumePolicy<dim, csmp::Element>( move( el.FV() ) ),
-  at_boundary_( move( el.at_boundary_ ) ),
-  idx_( move( el.idx_ ) ),
-  elmt_connector_( move( el.elmt_connector_ ) ),
-  node_connector_( move( el.node_connector_ ) ),
-  material_id_(UNSPECIFIED)
+  : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
+    FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
+// does not work. Why?    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),
+    idx_(el.idx_),
+    material_id_(el.material_id_),
+    // calling move() is important, else elmt destructor has to do more work!
+    elmt_connector_( move(el.elmt_connector_) ),
+    node_connector_( move(el.node_connector_) )
 {
-  this->LVS( move( el.LVS() ) );
-  el.AssignFiniteElementNullPtr();
-  el.AssignFiniteVolumeNullPtr();
+  this->LVS( move(el.LVS()) );
+    
+//  cerr <<"\nElement(ctor): moved element: "<< Idx();
 }
 
 
 
 
+/**
+     Since the element does not manage any memory,
+     the only thing that is necessary is that all pointers to this element are set to NULL before its destruction.
+     This allows the objects (Node, Element, Face, InterFace, Region etc.)
+     that survive the element to update themselves  as necessary.
+     
+     @test SKM 15/12/21.
+     
+*/
 template<size_t dim>
 Element<dim>::~Element()
-{
-  //    if ( idx_ == UINT_MAX ) cerr <<"x ";
-  //    else cerr << idx_ <<" ";
-}
+ {
+    // disconnecting the neighbor elements that are connected to this element
+    // (neighbor pointer to this element is nulled)
+    if ( !elmt_connector_.empty() )
+      for ( auto& it : elmt_connector_ )
+        if ( it != nullptr && !it->elmt_connector_.empty() )
+          it->Unassign( this );
+    
+    // disconnecting the node that this element might be a parent of
+    // (parent pointer to this element is nulled)
+    if ( !node_connector_.empty() )
+      for ( auto& nit : node_connector_ )
+        if ( nit != nullptr )
+          nit->Unassign( this );
+          
+     // TODO: Face and InterFace objects that may have pointers to the element need to be updated too!
+
+//    cerr <<"\nElement(dtor): destructed element: "<< Idx();
+          
+ } // end destructor
 
 
 
@@ -200,7 +193,6 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
   if ( &el != this ) {
     if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
     if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
-    at_boundary_ = el.at_boundary_;
     idx_ = el.idx_;
     elmt_connector_ = el.elmt_connector_;
     node_connector_ = el.node_connector_;
@@ -221,18 +213,15 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   // should never happen because a temporary variable cannot be an lvalue
   assert( &el != this );
 
-  if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( move( el.FE() ) );
-  if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( move( el.FV() ) );
+  if ( el.FE() ) FiniteElementPolicy<dim, csmp::Element>::Assign( el.FE() );
+  if ( el.FV() ) FiniteVolumePolicy<dim, csmp::Element>::AssignFiniteVolume( el.FV() );
 
-  at_boundary_ = move( el.at_boundary_ );
   idx_ = move( el.idx_ );
   elmt_connector_ = move( el.elmt_connector_ );
   node_connector_ = move( el.node_connector_ );
-  material_id_    = move(el.material_id_ );
+  material_id_    = el.material_id_;
+  
   this->LVS( move( el.LVS() ) );
-
-  el.AssignFiniteElementNullPtr();
-  el.AssignFiniteVolumeNullPtr();
 
   return *this;
 }
@@ -240,43 +229,73 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 
 
 /// Roman, 2014
-/// WARNING: this operator is used specifically in the process of creation of particular Region.
+/// WARNING: this operator is used specifically in the process of creation of particular ??? Region ???
 /// Therefore only important infromation for that process is taken into account in order to distinguish two Element's.
 /// That must be FE_Type and attached Nodes
-// TODO: check whether this is still needed after refactoring
+///   SKM revised 2021
 template<size_t dim>
-bool  Element<dim>::operator==( const Element<dim>& el )
+bool  Element<dim>::operator==( const Element<dim>& el ) const
 {
   if ( &el != this )
-  {
-    if ( this->FE_Type() == el.FE_Type() )
     {
-      if ( node_connector_.size() == el.node_connector_.size() )
-      {
-        if ( node_connector_.empty() )
-        {
-          if ( idx_ == el.idx_ )
-            return true;
-          return false;
-        }
-
-        std::set<Node<dim>*> nodes1( node_connector_.begin(), node_connector_.end() );
-        std::set<Node<dim>*> nodes2( el.node_connector_.begin(), el.node_connector_.end() );
-        std::vector<Node<dim>*> nodes_intersect;
-        std::set_intersection( nodes1.begin(), nodes1.end(),
-                               nodes2.begin(), nodes2.end(),
-                               std::back_inserter( nodes_intersect ) );
+       if ( this->FE_Type() != el.FE_Type() ) return false;
+       if ( node_connector_.size() != el.node_connector_.size() ) return false;
+       // ignored: if ( idx_ == el.idx_ ) return true;
+       set<Node<dim>*> nodes1( node_connector_.begin(), node_connector_.end() );
+       set<Node<dim>*> nodes2( el.node_connector_.begin(), el.node_connector_.end() );
+       vector<Node<dim>*> nodes_intersect;
+       set_intersection( nodes1.begin(), nodes1.end(),
+                         nodes2.begin(), nodes2.end(),
+                         back_inserter( nodes_intersect ) );
         if ( nodes_intersect.size() == node_connector_.size() )
           return true;
-
-        return false;
-      }
-      return false;
     }
-    return false;
-  }
   return true;
 }
+
+
+/**
+  less_than<> predicate for storage of Elements in STL container objects, including equal comparisons.
+  
+  @note Uses comparitor on barycentre point object to order the elements.
+  
+    @author SKM
+    @date 6/9/2021
+*/
+template<size_t dim>
+bool  Element<dim>::operator<( const Element<dim>& el ) const
+{
+  if ( &el != this )
+    {
+       Point<dim> barycentre(BaryCenter());
+       Point<dim> barycentre_el(el.BaryCenter());
+       return barycentre < barycentre_el;
+    }
+  return false;
+}
+
+
+// privatized to avoid use outside of MeshManager
+template<size_t dim>
+void* Element<dim>::operator new( size_t size )
+  {
+//      std::cout<< "\nElement<"<< dim <<">: called overloaded new operator.\n";
+      //void * p = malloc(size); will also work fine
+      return ::operator new(size);
+  }
+ 
+
+// privatized to avoid use outside of MeshManager
+template<size_t dim>
+void Element<dim>::operator delete( void* p )
+  {
+//     std::cout<< "\nElement<"<< dim <<">: called overloaded delete operator.\n";
+     free(p);
+     p = nullptr;
+  }
+
+
+
 
 
 /**
@@ -335,7 +354,7 @@ template<size_t dim>
 size_t  Element<dim>::ConnectedNeighbors() const
 {
   size_t nulls( 0 );
-  for ( auto f : elmt_connector_ )
+  for ( auto& f : elmt_connector_ )
     if ( !f ) nulls++;
   return (elmt_connector_.size() - nulls);
 }
@@ -375,25 +394,25 @@ typename std::vector<Element<dim>*>::iterator  Element<dim>::NeighborsEnd()
 }
 
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
 {
   return node_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const
 {
   return node_connector_.end();
 }
 
 template<size_t dim>
-typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
+typename std::vector<const Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
 {
   return elmt_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const
+typename std::vector<const Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const
 {
   return elmt_connector_.end();
 }
@@ -406,55 +425,56 @@ typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd(
 // CONSTRUCTION PROCESS
 
 
+/**
+     Assign equidimensional neighbor elements to element.
+*/
 template<size_t dim>
-void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor elements
+void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr )
 {
-  assert( elmt_connector_.size() == this->Neighbors() );
-  assert( i < this->Neighbors() );
-
+  assert( i < elmt_connector_.size() );
   elmt_connector_[i] = e_ptr;
 }
 
 
+
+/**
+    unassigns the neighbor element, setting the pointer in the 'elmt_connector' vector to null
+*/
 template<size_t dim>
-void Element<dim>::Unassign( Element<dim>* e_ptr ) // unassigns the neighbor element
-{
-  for ( size_t i = 0U; i < elmt_connector_.size(); i++ ) {
-    if ( e_ptr == NULL || elmt_connector_[i] == NULL )
-      continue;
-    if ( (*e_ptr) == (*elmt_connector_[i]) ) {
-      elmt_connector_.erase( elmt_connector_.begin() + i );
-      elmt_connector_.swap( elmt_connector_ );
-      break;
-    }
+void Element<dim>::Unassign( const Element<dim>* const e_ptr )
+  {
+    if ( e_ptr == nullptr ) return;
+    for ( size_t i = 0U; i < elmt_connector_.size(); ++i )
+      if ( e_ptr == elmt_connector_[i] ) {
+          elmt_connector_[i] = nullptr;
+          break;
+        }
   }
-}
+
+
 
 
 template<size_t dim>
 void Element<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 {
-  assert( node_connector_.size() == this->Nodes() );
-  assert( i < this->Nodes() );
-  assert( nd_ptr != nullptr );
-
+  assert( i < node_connector_.size() );
   node_connector_[i] = nd_ptr;
 }
 
 
+
+
 template<size_t dim>
-void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
-{
-  for ( size_t i = 0U; i < node_connector_.size(); i++ ) {
-    if ( nd_ptr == NULL || node_connector_[i] == NULL )
-      continue;
-    if ( (*nd_ptr) == (*node_connector_[i]) ) {
-      node_connector_.erase( node_connector_.begin() + i );
-      node_connector_.swap( node_connector_ );
-      break;
-    }
+void Element<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
+  {
+    if ( nd_ptr == nullptr ) return;
+    for ( size_t i = 0U; i < node_connector_.size(); i++ )
+      if ( nd_ptr == node_connector_[i] ) {
+          node_connector_[i] = nullptr;
+          break;
+        }
   }
-}
+
 
 
 template<size_t dim>
@@ -463,23 +483,17 @@ void  Element<dim>::Idx( size_t idx_to_assign ) const
   idx_ = idx_to_assign;
 }
 
-template<size_t dim>
-void  Element<dim>::AtBoundary( BOX_BOUNDARY b )
-{
-  at_boundary_ = b;
-}
-
 
 /// unique material identifier that matches number of parent unique region
 template<size_t dim>
-int32 Element<dim>::Material_ID() const
+int32_t Element<dim>::Material_ID() const
  {
     return material_id_;
  }
  
  
 template<size_t dim>
-void Element<dim>::Material_ID( int32 id )
+void Element<dim>::Material_ID( int32_t id )
  {
     material_id_ = id;
  }
@@ -495,9 +509,9 @@ size_t   Element<dim>::Idx() const
 }
 
 template<size_t dim>
-BOX_BOUNDARY  Element<dim>::AtBoundary() const
+BOX_BOUNDARY  Element<dim>::AtBoundary( size_t boundary_face ) const
 {
-  return at_boundary_;
+   return atBoundary( this, boundary_face );
 }
 
 template<size_t dim>
@@ -543,16 +557,22 @@ information about the target object. For instance when you want to retrieve
 a Node coordinate:
 
 @code
-double64 x = (*element.N(2))->x();
+double x = (*element.N(2))->x();
 @endcode
 
 @return return A pointer to the Target object, e.g. a Node.
 */
 template<size_t dim>
-csmp::Node<dim>*  Element<dim>::N( size_t n ) const
+const csmp::Node<dim>*  Element<dim>::N( size_t n ) const
 {
-  assert( node_connector_.size() == this->Nodes() );
-  assert( n < this->Nodes() );
+  assert( n < node_connector_.size() );
+  return node_connector_[n];
+}
+
+template<size_t dim>
+csmp::Node<dim>*  Element<dim>::N( size_t n )
+{
+  assert( n < node_connector_.size() );
   return node_connector_[n];
 }
 
@@ -566,12 +586,19 @@ numbering scheme).
 before you are trying to use it.
 */
 template<size_t dim>
-csmp::Element<dim>*  Element<dim>::Neighbor( size_t n ) const
+const csmp::Element<dim>*  Element<dim>::Neighbor( size_t n ) const
 {
-  assert( elmt_connector_.size() == this->Neighbors() );
-  assert( n < this->Neighbors() );
+  assert( n < elmt_connector_.size() );
   return elmt_connector_[n];
 }
+
+template<size_t dim>
+csmp::Element<dim>*  Element<dim>::Neighbor( size_t n )
+{
+  assert( n < elmt_connector_.size() );
+  return elmt_connector_[n];
+}
+
 
 
 /**
@@ -585,7 +612,7 @@ also vary from element to element.
 resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
-@return The node coordinates are returned into the supplied matrix.
+@note Element The node coordinates are returned into the supplied matrix.
 
 @section application Application
 
@@ -643,7 +670,7 @@ Point<dim>  Element<dim>::BaryCenter() const
   for ( size_t i = 1U; i<n_nodes; ++i )
     pt += N( i )->Coordinate();
 
-  return pt / static_cast<double64>(Nodes());
+  return pt / static_cast<double>(Nodes());
 }
 
 
@@ -672,21 +699,21 @@ when evaluating the quality of a certain mesh.
 
 */
 template<size_t dim>
-double64  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
+double  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
 {
-  double64 fMinTemp( static_cast<double64>(DBL_MAX) );
-  double64 fMaxTemp( static_cast<double64>(-DBL_MAX) );
+  double fMinTemp( static_cast<double>(DBL_MAX) );
+  double fMaxTemp( static_cast<double>(-DBL_MAX) );
 
   // this normalisation is necessary because the vector variable
   // being any physical quantity may have any magnitude
-  const double64 fMagnitudeOfDirection( vecDirection.Length() );
+  const double fMagnitudeOfDirection( vecDirection.Length() );
   // avoid division by zero
-  assert( fMagnitudeOfDirection >= numeric_limits<double64>::epsilon() );
+  assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
   const size_t n_nodes( Nodes() );
   for ( size_t i = 0; i<n_nodes; ++i ) {
     // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
-    double64 fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
+    double fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
     fTemp /= fMagnitudeOfDirection;
 
     // update minimum value
@@ -754,16 +781,16 @@ template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<
 template<size_t dim>
 void Element<dim>::Out() const
 {
-  string str( parseBoundary( at_boundary_ ) );
   cout << "\n\nElement<" << dim << ">::Out: number: " << idx_;
   cout <<"\n\tMaterial ID: "<< material_id_;
   cout << " (" << parseFiniteElementType( this->FE_Type() ) << " = ";
   if ( this->IsLineElement() )    cout << "line element";
   else if ( this->IsSurfaceElement() ) cout << "surface element";
   else if ( this->IsVolumeElement() )  cout << "volume element";
-  cout << "), boundary flag: " << str << "\n";
+  cout <<"\n";
 
   cout << "\n\tconnected nodes (indices : boundary flags):  ";
+  string str("undefined");
   for ( size_t i = 0U; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i )->AtBoundary() );
     cout << N( i )->Idx() << ":" << str << "  ";
@@ -772,10 +799,10 @@ void Element<dim>::Out() const
 
   cout << "\n\tconnected neighbors (finite element types : boundary flags):\n";
   for ( size_t i = 0U; i<this->Neighbors(); i++ )
-    if ( Neighbor( i ) != NULL ) {
+    if ( Neighbor( i ) != nullptr ) {
       cout << "\t\t" << Neighbor( i )->Idx() << ": ";
       cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
-      str = parseBoundary( Neighbor( i )->AtBoundary() );
+      str = parseBoundary( Neighbor( i )->AtBoundary(i) );
       cout << str << endl;
     }
     else cout << "\t\tnone.\n";
@@ -790,7 +817,7 @@ void Element<dim>::Out() const
       cout << "\n\tbarycentre at (xyz): " << pt[0] << ", " << pt[1] << ", " << pt[2] << endl;
 
     // length, area, volue
-    const double64 volume( this->Volume() );
+    const double volume( this->Volume() );
     if ( this->IsLineElement() ) {
       if ( volume > 0. ) cout << "\n\tlength: " << volume << endl;
       else cerr << "\n\tlength: ERROR (negative value indicates numbering problem): " << volume << endl;

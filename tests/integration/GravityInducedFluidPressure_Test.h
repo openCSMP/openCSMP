@@ -42,48 +42,48 @@ class GravityInducedFluidPressure_Test : public Test {
     void OutputResultsToText( const char* file_name ) const;
   
   private:
-    void InitialiseModel1D( double64 model_height );
+    void InitialiseModel1D( double model_height );
     void InitialiseModel3D( const char* model );
   
-    void InitialiseTemperatureProfile1D( double64 T_top, double64 grad_T_K_per_m );
-    void InitialiseTemperatureProfile3D( double64 T_top, double64 grad_T_K_per_m );
+    void InitialiseTemperatureProfile1D( double T_top, double grad_T_K_per_m );
+    void InitialiseTemperatureProfile3D( double T_top, double grad_T_K_per_m );
   
-    void InitialisePressure3D( double64 pf_top, double64 fluid_density );
+    void InitialisePressure3D( double pf_top, double fluid_density );
 
-    void ReferencePressureByTopDownIntegration( double64 fluid_density );
-    void ReferencePressureByTopDownIntegrationCO2( double64 pf_top );
-    void ReferencePressureForFixedDensity( double64 ref_density );
+    void ReferencePressureByTopDownIntegration( double fluid_density );
+    void ReferencePressureByTopDownIntegrationCO2( double pf_top );
+    void ReferencePressureForFixedDensity( double ref_density );
   
     bool TestComputedWithReferencePressure();
   
     template<size_t dim>
-    bool TestResultsByComparison( const Model<dim>* const, const char* test_variable, const char* reference_variable, double64 tolerance );
+    bool TestResultsByComparison( const Model<dim>* const, const char* test_variable, const char* reference_variable, double tolerance );
   
     /// like in vertical fluid pressure example
-    void ComputeCO2Pressure_PDE_Integrator( double64 pf_top );
+    void ComputeCO2Pressure_PDE_Integrator( double pf_top );
     // TODO: remove when errors are fixed
-    void ComputeCO2Pressure_PDE_Integrator_CRM( double64 pf_top );
+    void ComputeCO2Pressure_PDE_Integrator_CRM( double pf_top );
 
     /// total pressure like in simulator
-    void ComputeCO2Pressure_PDE_Integrator2( double64 pf_top );
+    void ComputeCO2Pressure_PDE_Integrator2( double pf_top );
 
     /// reduced pressure based on deviations from a reference density
-    void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( Model<1U>* const, double64 pf_top );
+    void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( Model<1U>* const, double pf_top );
 
     /// templatised version for 2D and 3D (small models, Gauss-Jordan solver)
     template<size_t dim>
-    void ComputeCO2PressureFromReducedPressure_PDE_Integrator_GaussJordan( Model<dim>* const, double64 pf_top );
+    void ComputeCO2PressureFromReducedPressure_PDE_Integrator_GaussJordan( Model<dim>* const, double pf_top );
 
     /// templatised version for 2D and 3D (big models, SAMG)
     template<size_t dim>
-    void ComputeCO2PressureFromReducedPressure_PDE_IntegratorCRM_SAMG( Model<dim>* const, double64 pf_top );
+    void ComputeCO2PressureFromReducedPressure_PDE_IntegratorCRM_SAMG( Model<dim>* const, double pf_top );
 
   private:
     Model<1U>* model1D_  = nullptr;
     Model<3U>* model3D_  = nullptr;
-    const double64 patm_ = 100325.;  ///< Pa
-    const double64 ptol_ = 5e3;      ///< tolerance for tests (5 kPa)
-    double64       top_;             ///< elevation of model top relevative to sea level, will be set in run
+    const double patm_ = 100325.;  ///< Pa
+    const double ptol_ = 5e3;      ///< tolerance for tests (5 kPa)
+    double       top_;             ///< elevation of model top relevative to sea level, will be set in run
     const bool     verbose_;
 };
 

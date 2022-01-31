@@ -11,30 +11,30 @@ class CompressedRowMatrixParallel : public CompressedRowMatrix
 public:
     CompressedRowMatrixParallel();
 private:
-    void RemoveHalo( int32& );
-    void CreatePartitions( uint32 n_blocks, std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >&  ) const;
+    void RemoveHalo( int32_t& );
+    void CreatePartitions( uint32_t n_blocks, std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&  ) const;
 
     // vector mu st be initialized with the partition ranges
-    void ScanHaloOfPartition( uint32, std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >& ) const;
+    void ScanHaloOfPartition( uint32_t, std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >& ) const;
 
     // returns those rows as true in the corresponding boolean vector
-    uint32 RowsWithHaloElements( int32, std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >&  ) const;
+    uint32_t RowsWithHaloElements( int32_t, std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&  ) const;
 
-    void ComputeVariableIndicesForBroadcast( uint32, const std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >&,
-                                             std::vector<int32>&, std::vector<int32>&, std::vector<int32>&  ) const;
+    void ComputeVariableIndicesForBroadcast( uint32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
+                                             std::vector<int32_t>&, std::vector<int32_t>&, std::vector<int32_t>&  ) const;
 
-    void CreateReceiveList( uint32, const std  ::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >&,
-                            std::vector<int32>&, std::vector<int32>&, std::vector<int32>&  ) const;
+    void CreateReceiveList( uint32_t, const std  ::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
+                            std::vector<int32_t>&, std::vector<int32_t>&, std::vector<int32_t>&  ) const;
 
-    void CreateIpts( int32, const std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >&,
-                     std::vector<int32>&, std::vector<int32>&, std::vector<int32>&  ) const;
+    void CreateIpts( int32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
+                     std::vector<int32_t>&, std::vector<int32_t>&, std::vector<int32_t>&  ) const;
 
-    void CreateIptr(int32, const std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >&,
-                          std::vector<int32>&, std::vector<int32>&, std::vector<int32>&  ) const;
+    void CreateIptr(int32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
+                          std::vector<int32_t>&, std::vector<int32_t>&, std::vector<int32_t>&  ) const;
 
 
-    void Renumber( uint32, const std::vector<std::pair<std::pair<uint32,uint32>,std::vector<bool> > >&,
-                        std::vector<int32>&, std::vector<int32>& ) const;
+    void Renumber( uint32_t, const std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&,
+                        std::vector<int32_t>&, std::vector<int32_t>& ) const;
 };
 }
 #endif // COMPRESSEDROWMATRIXPARALLEL_H

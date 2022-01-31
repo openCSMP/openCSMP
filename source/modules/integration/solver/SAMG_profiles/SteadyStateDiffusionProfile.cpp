@@ -26,7 +26,7 @@ SteadyStateDiffusionProfile<dim>::SteadyStateDiffusionProfile( Model<dim>& model
                                                                const char* diffusingVariable,
                                                                const char* spatialSourceVariable,
                                                                const char* gradientVariable,
-                                                               double64 gradient_multiplier )
+                                                               double gradient_multiplier )
 : model_( model ),
   ssds_( model, diffusivity, diffusingVariable, spatialSourceVariable, gradientVariable, gradient_multiplier),
   dumpFileName_( "SAMG_Diffusion_" ),
@@ -154,7 +154,7 @@ bool SteadyStateDiffusionProfile<dim>::AdjustSolverSettings()
     ad.4 Relative convergence is defined by "res <= eps.res0" (res0 = starting residual).
     */
 template<size_t dim>
-bool SteadyStateDiffusionProfile<dim>::Solve( double64 modelTime )
+bool SteadyStateDiffusionProfile<dim>::Solve( double modelTime )
 { 
     /// SAMG output to file
     #ifdef SAMG_OUTPUT_TO_FILE

@@ -17,7 +17,7 @@ namespace csmp {
     /// specifies the dimensions of the target grid
 RectangularGrid::RectangularGrid( size_t n_cells_x, size_t n_cells_y )
  : n_cells_x_(n_cells_x), n_cells_y_(n_cells_y),
-   dx_(2./static_cast<double64>(n_cells_x)), dy_(2./static_cast<double64>(n_cells_y))
+   dx_(2./static_cast<double>(n_cells_x)), dy_(2./static_cast<double>(n_cells_y))
  {
  }
 
@@ -37,9 +37,9 @@ Point<3U> RectangularGrid::operator()( size_t i, size_t j ) const
 
     // shift for local coordinate system and offset of barycentre
     // from grid edge.
-    const double64 offset_x(-1. + dx_/2.), offset_y(1. - dy_/2.);
-    const double64 r = j * dx_ + offset_x;
-    const double64 s = offset_y - i * dy_;
+    const double offset_x(-1. + dx_/2.), offset_y(1. - dy_/2.);
+    const double r = j * dx_ + offset_x;
+    const double s = offset_y - i * dy_;
  
     assert( r >= -1. );
     assert( r <=  1. );
@@ -160,7 +160,7 @@ void RectangularGrid::Out( const char* file_name, const std::vector<Point<3U> >&
     ofs << "element-number,x,y,z\n";
  
     size_t cell_number(0U);
-    typedef numeric_limits<double64> dbl;
+    typedef numeric_limits<double> dbl;
     for ( auto it = cell_center_coordinates.begin(); it != cell_center_coordinates.end(); ++it, ++cell_number )
       {
          // element number

@@ -20,6 +20,7 @@
 #include "VTK_Interface.h"
 #include"ScalarVariable.h"
 #include "PropertyHandle.h"
+#include "NodeManifold.h"
 
 
 using namespace std;
@@ -75,7 +76,7 @@ const double SV( 67000000. );
 const double Pp( 28000000. );
 
 const ScalarVariable zeroScalar( PLAIN, 0. );
-const double64 displacement( 0. );
+const double displacement( 0. );
 const VectorVariable<3U> zeroVector( PLAIN, 0. );
 //    const VectorVariable<3U> zeroVectorDirichlet( DIRICH, 0. );
 const VectorVariable<3U> DisplacementVectorBOTTOM(PLAIN, DIRICH ,PLAIN,0., displacement, 0.); // it can not move in the Y direction
@@ -159,13 +160,13 @@ const VectorVariable<3U> Rho_g( PLAIN, PLAIN ,PLAIN, 0. , - 2.4e+4 , 0.);
 
     PT_op<3U,Element<3U> > bforces( model.Database(), "force", "displacement" );
 
-    NumIntegral_BT_D_B_dV<3U,Element<3U> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+    NumIntegral_BT_D_B_dV<3U> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
 
-    NumIntegral_PT_op_dV<3U,Element<3U> >     bodyforce(  model.Database(), "gravity force", "displacement");
+    NumIntegral_PT_op_dV<3U>     bodyforce(  model.Database(), "gravity force", "displacement");
 
-    NumIntegral_PT_op_dV<3U,Element<3U> >     AppliedStress( model.Database(), "Neumann stress", "displacement");
+    NumIntegral_PT_op_dV<3U>     AppliedStress( model.Database(), "Neumann stress", "displacement");
 
-    NumIntegral_BT_op_dV<3U,Element<3U> >     WellBorePressure( model.Database(),"fluid pressure", "displacement");
+    NumIntegral_BT_op_dV<3U>     WellBorePressure( model.Database(),"fluid pressure", "displacement");
 
 
     deformation.Add( &stiffness );

@@ -11,11 +11,11 @@ class FluidDensityFromConcentration : public Interrelation<dim> {
     Operand<dim>&   DENS;    
     Operand<dim>&   CONC;    
     ScalarVariable  conc;
-    const double64  rho_zero;
-    double64        increment;
+    const double  rho_zero;
+    double        increment;
     
   public:
-    FluidDensityFromConcentration( const PropertyDatabase<dim>& p, double64 rho_max );
+    FluidDensityFromConcentration( const PropertyDatabase<dim>& p, double rho_max );
     ~FluidDensityFromConcentration() {};
     void Calculate();
 };

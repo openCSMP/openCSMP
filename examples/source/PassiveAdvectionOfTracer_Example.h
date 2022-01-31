@@ -3,8 +3,6 @@
 
 #include "Example.h"
 
-#include "CSMP_number_types.h"
-
 namespace csmp {
 
   template<size_t dim> class Model;
@@ -19,7 +17,7 @@ class  PassiveAdvectionOfTracer_Example : public Example {
   private:
     bool     NCFVT_methods( Model<3U>& , NodeCenteredFiniteVolumeTransport<3U>&, VTK_Interface<3U>& );
     
-    double64 TestNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& );
+    double TestNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& );
     void     TestNodeCenteredFiniteVolumeStencil( Model<3U>&, VTK_Interface<3U>& );
     void     TestNodeCenteredFiniteVolumeTransport( Model<3U>& );
     

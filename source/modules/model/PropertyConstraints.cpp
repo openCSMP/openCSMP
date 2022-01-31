@@ -21,12 +21,12 @@ PropertyConstraints::PropertyConstraints( const PropertyConstraints& cr )
  }
  
 
-PropertyConstraints::PropertyConstraints( const char* prop_name, double64 pmin, double64 pmax )
+PropertyConstraints::PropertyConstraints( const char* prop_name, double pmin, double pmax )
  : vector_length_check(false),
    one_node_only(false),
    nodal_average(false)
  {
-    criteria[ prop_name ] = pair<double64,double64>(pmin,pmax);
+    criteria[ prop_name ] = pair<double,double>(pmin,pmax);
  }
  
 
@@ -68,9 +68,9 @@ void PropertyConstraints::SatisfyConstraintsForNodalAverage( bool satisfy )
 
   
 
-bool PropertyConstraints::AddConstraint( const char* prop_name, double64 pmin, double64 pmax )
+bool PropertyConstraints::AddConstraint( const char* prop_name, double pmin, double pmax )
  {
-    pair<map<string,pair<double64,double64>,less<string> >::iterator,bool>  it;
+    pair<map<string,pair<double,double>,less<string> >::iterator,bool>  it;
     string  property(prop_name);
     
     it=criteria.insert( make_pair(property,make_pair(pmin,pmax)) );
@@ -79,10 +79,10 @@ bool PropertyConstraints::AddConstraint( const char* prop_name, double64 pmin, d
  }
 
 
-void PropertyConstraints::ChangeConstraint( const char* prop_name, double64 pmin, double64 pmax )
+void PropertyConstraints::ChangeConstraint( const char* prop_name, double pmin, double pmax )
  {
-    map<string,pair<double64,double64> >::iterator     it;
-    map<Index,pair<double64,double64> >::iterator  cit;
+    map<string,pair<double,double> >::iterator     it;
+    map<Index,pair<double,double> >::iterator  cit;
 
     if ( (it=criteria.find(prop_name)) != criteria.end() ) {
          for ( it=criteria.begin(), cit=check_list.begin(); it!=criteria.end(); it++, cit++ )
@@ -109,7 +109,7 @@ bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<dim>
 
     if ( !check_list.empty() && check_list.size() == criteria.size() ) return true; 
 
-    std::map<std::string,std::pair<double64,double64> >::const_iterator  it;
+    std::map<std::string,std::pair<double,double> >::const_iterator  it;
 
     for ( it=criteria.begin(); it!=criteria.end(); it++ )
       check_list[ pref.StorageKey( (*it).first.c_str() ) ] =
@@ -159,7 +159,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e,
 
     
     // in this process, the actual variable ranges could be collected into the criteria map
-    for ( typename map<csmp::Index,pair<double64,double64> >::const_iterator 
+    for ( typename map<csmp::Index,pair<double,double> >::const_iterator 
           it=check_list.begin(); it!=check_list.end(); it++ )
       {
          if ( vector_length_check && (*it).first.place )
@@ -322,7 +322,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e ) const
       return CheckNodeAverageConstraints( e );
 
     // in this process, the actual variable ranges could be collected into the criteria map
-    for ( typename map<Index,pair<double64,double64> >::const_iterator
+    for ( typename map<Index,pair<double,double> >::const_iterator
           it=check_list.begin(); it!=check_list.end(); it++ )
       {
          if ( vector_length_check && (*it).first.place )
@@ -377,7 +377,7 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const Element<dim>& e ) co
  {
     size_t i, counter;
     
-    for ( typename map<Index,pair<double64,double64> >::const_iterator
+    for ( typename map<Index,pair<double,double> >::const_iterator
           it=check_list.begin(); it!=check_list.end(); it++ )
       {
          if ( vector_length_check && (*it).first.place )
@@ -412,7 +412,7 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const Element<dim>& e ) co
 template<size_t dim>
 bool PropertyConstraints::CheckNodeAverageConstraints( const Element<dim>& e ) const
  {
-    for ( typename map<Index,pair<double64,double64> >::const_iterator
+    for ( typename map<Index,pair<double,double> >::const_iterator
           it=check_list.begin(); it!=check_list.end(); it++ )
       {
          if ( vector_length_check && (*it).first.place )
@@ -461,7 +461,7 @@ bool PropertyConstraints::CheckNodeAverageConstraints( const Element<dim>& e ) c
 template<size_t dim>
 bool PropertyConstraints::VectorLengthCheck( const Element<dim>& e, 
                                              const csmp::Index& idx,
-                                             double64 vmin, double64 vmax ) const
+                                             double vmin, double vmax ) const
  {
     VectorVariable<dim>  vc;
  
@@ -510,7 +510,7 @@ void PropertyConstraints::Out() const
     if ( check_list.empty() )       cout <<"\tIndex data are not established yet."<< endl;
     else                            cout <<"\tIndex data have been established."<< endl;
 
-    map<string,pair<double64,double64> >::const_iterator  crit;       
+    map<string,pair<double,double> >::const_iterator  crit;       
     
     cout <<"\tAssigned property constraints, and their ranges:";
     for ( crit=criteria.begin(); crit!=criteria.end(); crit++ )
@@ -528,7 +528,7 @@ template bool PropertyConstraints::CheckNodeAverageConstraints<1U>(
 
 template bool PropertyConstraints::VectorLengthCheck<1U>( 
                                               const Element<1U>& e,
-                                              const csmp::Index& idx, double64 vmin, double64 vmax ) const;
+                                              const csmp::Index& idx, double vmin, double vmax ) const;
 
 template bool PropertyConstraints::CheckConstraints<1U>( 
                                              const Element<1U>& e ) const;
@@ -545,7 +545,7 @@ template bool PropertyConstraints::CheckNodeAverageConstraints<2U>(
 
 template bool PropertyConstraints::VectorLengthCheck<2U>( 
                                               const Element<2U>& e,
-                                              const csmp::Index& idx, double64 vmin, double64 vmax ) const;
+                                              const csmp::Index& idx, double vmin, double vmax ) const;
 
 template bool PropertyConstraints::CheckConstraints<2U>( 
                                              const Element<2U>& e ) const;
@@ -562,7 +562,7 @@ template bool PropertyConstraints::CheckNodeAverageConstraints<3U>(
     
 template bool PropertyConstraints::VectorLengthCheck<3U>( 
                                               const Element<3U>& e, 
-                                              const csmp::Index& idx, double64 vmin, double64 vmax ) const;
+                                              const csmp::Index& idx, double vmin, double vmax ) const;
 
 template bool PropertyConstraints::CheckConstraints<3U>( 
                                              const Element<3U>& e ) const;

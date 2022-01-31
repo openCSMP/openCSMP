@@ -19,14 +19,14 @@ template<size_t dim>
 class VSetConverter {
   public:
     /// the coordinates of the bounding box are initialized to Not A Number
-    VSetConverter() : xmin(std::numeric_limits<double64>::quiet_NaN()), xmax(std::numeric_limits<double64>::quiet_NaN()),
-                      ymin(std::numeric_limits<double64>::quiet_NaN()), ymax(std::numeric_limits<double64>::quiet_NaN()),
-                      zmin(std::numeric_limits<double64>::quiet_NaN()), zmax(std::numeric_limits<double64>::quiet_NaN()) {};
+    VSetConverter() : xmin(std::numeric_limits<double>::quiet_NaN()), xmax(std::numeric_limits<double>::quiet_NaN()),
+                      ymin(std::numeric_limits<double>::quiet_NaN()), ymax(std::numeric_limits<double>::quiet_NaN()),
+                      zmin(std::numeric_limits<double>::quiet_NaN()), zmax(std::numeric_limits<double>::quiet_NaN()) {};
 
     ~VSetConverter() {};
   
     /// applies the naming conventions TOP, BOTTOM etc. to sides, edges and cornier points of the box
-    void EstablishBoundaryFlagsForBoxModel( VSet<dim>&, double64 tolerance=0.2 );
+    void EstablishBoundaryFlagsForBoxModel( VSet<dim>&, double tolerance=0.2 );
     
     /// turn triangular element mesh data to target element data
     void ConvertLinearToQuadraticTriangles( VSet<dim>& );
@@ -44,7 +44,7 @@ class VSetConverter {
     void ConvertLinearToBarycentricTetrahedra( VSet<dim>& );
     
   private:
-    double64 xmin, xmax, ymin, ymax, zmin, zmax; ///< coordinates values of bounding box of model
+    double xmin, xmax, ymin, ymax, zmin, zmax; ///< coordinates values of bounding box of model
   
     // 2D triangular meshes
     // --------------------
@@ -53,15 +53,15 @@ class VSetConverter {
     void FlagCornerNodes( VSet<dim>&, bool three_dimensional=false ) const;
     
     /// returns 0 if face is not at the model boundary
-    int32  TestForBoundaryFlags( const std::unordered_map<size_t,long64>& bflags,
-                                 size_t nID1, size_t nID2 ) const;
+    int8_t  TestForBoundaryFlags( const std::vector<std::int8_t>& bflags,
+                                  size_t nID1, size_t nID2 ) const;
   
     /// interpolation between value pairs
-    double64 BoundaryValue( const std::map<size_t,double64>& bvals, 
+    double BoundaryValue( const std::map<size_t,double>& bvals, 
                             size_t nID1, size_t nID2 ) const;
   
     // from linear to quadratic mesh
-    //void InterpolateNodeProperties( size_t nodes, int32 enodes, VSet<dim>& ) const;
+    //void InterpolateNodeProperties( size_t nodes, int32_t enodes, VSet<dim>& ) const;
     
     void OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& ) const;
 
@@ -69,14 +69,14 @@ class VSetConverter {
     
     // 3D tetrahedral meshes
     // ---------------------                    default as in most Rhino models
-    void   FlagEdges( VSet<dim>& vset, double64 tolerance=1.0e-4 ) const;
+    void   FlagEdges( VSet<dim>& vset, double tolerance=1.0e-4 ) const;
 
     /// flag-based check
-    long64  BoundaryFlags3D( const std::unordered_map<size_t,long64>& bflags,
+    int8_t  BoundaryFlags3D( const std::vector<std::int8_t>& bflags,
                              size_t nID1, size_t nID2 ) const;
   
     /// coordinate-based check of whether a node is in on the boundary of a box shaped model
-    long64  TestForBoundaryFlags3D( double64 x, double64 y, double64 z ) const;
+    int8_t  TestForBoundaryFlags3D( double x, double y, double z ) const;
  };
 
 
@@ -87,11 +87,11 @@ class VSetConverter {
     of the coordinate planes.
 */
 template<size_t dim>
-inline double64 VSetConverter<dim>::BoundaryValue( const std::map<size_t,double64>& bvals, 
+inline double VSetConverter<dim>::BoundaryValue( const std::map<size_t,double>& bvals, 
                                                    size_t nID1, size_t nID2 ) 
  const
   {
-      typename std::map<size_t,double64>::const_iterator  bvit1(bvals.find(nID1)), 
+      typename std::map<size_t,double>::const_iterator  bvit1(bvals.find(nID1)), 
                                                           bvit2(bvals.find(nID2));
       assert( bvit1 != bvals.end() );
       assert( bvit2 != bvals.end() );

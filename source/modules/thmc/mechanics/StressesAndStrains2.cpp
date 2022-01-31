@@ -8,6 +8,7 @@
 #include "CSMP_mathUtilities.h"
 #include "vectorOperations.h"
 #include "Element.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -321,7 +322,7 @@ void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
               for ( size_t j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
               avg         += NVAR[i];
            }
-         avg /= static_cast<double64>(e.Nodes());
+         avg /= static_cast<double>(e.Nodes());
 
          if ( verbose_ ) {     
               cout <<"\nStressesAndStrains<"<< 2U;
@@ -465,19 +466,19 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
                for ( size_t j=0U; j<components_; j++ ) 
                  {  
                     // averaging strain components
-                    double64 sum(0.);
-                    for ( deque<vector<double64> >::const_iterator 
+                    double sum(0.);
+                    for ( deque<vector<double> >::const_iterator 
                           lit=temp_strains_[ e.N(i)->Idx() ].begin();
                           lit!=temp_strains_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
-                    sum /= static_cast<double64>(temp_strains_[ e.N(i)->Idx() ].size());
+                    sum /= static_cast<double>(temp_strains_[ e.N(i)->Idx() ].size());
                     STRAIN_(j,i) = sum;
 
                     // averaging stress components
                     sum = 0.;
-                    for ( deque<vector<double64> >::const_iterator
+                    for ( deque<vector<double> >::const_iterator
                           lit=temp_stresses_[ e.N(i)->Idx() ].begin();
                           lit!=temp_stresses_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
-                    sum /= static_cast<double64>(temp_stresses_[ e.N(i)->Idx() ].size());
+                    sum /= static_cast<double>(temp_stresses_[ e.N(i)->Idx() ].size());
                     STRESS_(j,i) = sum;
                  }
              }

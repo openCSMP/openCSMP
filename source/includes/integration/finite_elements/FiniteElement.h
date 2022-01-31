@@ -21,7 +21,7 @@ namespace csmp {
 //                  CSMP TYPE                                             ANSYS - ICEMTYPE
 //                  =========                                             ================
 
-enum CSMP_FEM_TYPE{ UNKNOWN,
+enum CSMP_FEM_TYPE : std::int8_t { UNKNOWN,
                     LINEAR_BAR,    										                  // BAR_2            = 2,
                     QUADRATIC_BAR, 										                  // BAR_3            = 3,
                     CUBIC_BAR, 										                      // BAR_4  
@@ -75,10 +75,10 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     EXPERIMENTAL_ELEMENT,
 };
 
-enum ELEMENT_DIMENSION { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
+enum ELEMENT_DIMENSION : std::int8_t { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
 
 
-enum FV_FACET_TYPE {
+enum FV_FACET_TYPE : std::int8_t {
         POINT_FACET,
         UNIT_LINEAR_FACET,
         TRIANGULAR_FACET,
@@ -92,13 +92,21 @@ enum FV_FACET_TYPE {
 bool isTriangularElement( CSMP_FEM_TYPE );
 bool isQuadrilateralElement( CSMP_FEM_TYPE );
 bool isLineElement( CSMP_FEM_TYPE );
+bool isTriangular( CSMP_FEM_TYPE );
+bool isQuadrilateral( CSMP_FEM_TYPE );
+bool isTetrahedral( CSMP_FEM_TYPE );
+bool isHexahedral( CSMP_FEM_TYPE );
 
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE );
-CSMP_FEM_TYPE      parseFiniteElementTypeEnum( int32 csp_etype );
+CSMP_FEM_TYPE      parseFiniteElementTypeEnum( int8_t csp_etype );
 CSMP_FEM_TYPE      parseFiniteElementType( const std::string& etype );
-const char*        parseFiniteElementType( int32 etype );
+const char*        parseFiniteElementType( int8_t etype );
+const char*        parseAbbreviated_FE_Type( int8_t etype );
 FV_FACET_TYPE      parseFacetType( const std::string& ftype );
-const char*        parseFacetType( int32 ftype );
+const char*        parseFacetType( int8_t ftype );
+
+/// returns UNKNOWN if more information is required
+CSMP_FEM_TYPE      finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true );
 
 
 /**
@@ -194,16 +202,16 @@ class FiniteElement {
     CSMP_FEM_TYPE      ElementType() const;
   
     /// computes and returns the volume of the element which is an area for a surface- and a length for a line element
-    virtual double64   Volume();
+    virtual double     Volume();
   
     /// returns the ratio between the maximum and minimum spatial extent of the element
-    virtual double64   AspectRatio();
+    virtual double     AspectRatio();
   
     /// returns the radius of the largest sphere that could be inscribed in the element
-    virtual double64   InnerRadius();
+    virtual double     InnerRadius();
   
     /// reports the lengths of all edges (connections between nodes) in the currrent element
-    virtual void       EdgeLengths( std::vector<double64>& vec );
+    virtual void       EdgeLengths( std::vector<double>& vec );
   
     /// returns 0..nodes-1 (local) node numbers of the supplied boundary nodes, i.e., reports the actual ordering
     virtual void       ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes, 
@@ -215,6 +223,12 @@ class FiniteElement {
   
     /// reports the face nodes (0..nodes-1) of the given face
     virtual void       NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    
+    /// returns the local  numbers of the corner nodes of the face
+    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+    
+    /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+    virtual std::vector<size_t>  NodesConnectedTo( size_t node ) const;
   
     /// reports only the corner nodes (0..nodes-1) of the element
     virtual void       CornerNodes( std::vector<size_t>& ids ) const;
@@ -236,34 +250,34 @@ class FiniteElement {
     virtual CSMP_FEM_TYPE ElementTypeOfSegment( size_t segment ) const;
 
     /// returns the unit normal where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates
-    virtual void       UnitNormal( std::vector<double64>& unrml ) const;
+    virtual void       UnitNormal( std::vector<double>& unrml ) const;
 
     // TODO: SKM: add more efficient unit-normal calculation that returns point 
     /// returns the unit normal to element face (for planar elements, normal lies in that plane; expects XY matrix to be initialised with node coordinates
-    virtual void       UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const;
+    virtual void       UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
   
     /// computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework
-    virtual void       UnitNormalAtFaceBarycenter( size_t face, std::vector<double64>& nrml );
+    virtual void       UnitNormalAtFaceBarycenter( size_t face, std::vector<double>& nrml );
   
     /// accessor for coordinate matrix which is associated with the element
-    double64           XYZ( size_t i, size_t j ) const;
+    double           XYZ( size_t i, size_t j ) const;
 
     /// mutator for coordinate matrix which is associated with the element
-    void               XYZ( size_t i, size_t j, double64 val );
+    void               XYZ( size_t i, size_t j, double val );
 
     /// for element types defined using a local coordinate system, returns the node coordinates into the argument matrix
     virtual void       ReferenceCoordinates( DenseMatrix<DM_MIN>& matCoords ) const;
 
     /// using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes
     virtual   void      ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
-                                                                    const std::vector<double64>& IVAR,
-                                                                    std::vector<double64>&       NVAR ) const;
+                                                                    const std::vector<double>& IVAR,
+                                                                    std::vector<double>&       NVAR ) const;
 
     /// returns the global coordinates of the element integration point
-    virtual   void      IntegrationPoint( size_t i, std::vector<double64>& xyz ) const;
+    virtual   void      IntegrationPoint( size_t i, std::vector<double>& xyz ) const;
   
     /// returns the integration weight of the desired quadrature point
-    virtual   double64  WeightAtIntegrationPoint( size_t i ) const;
+    virtual   double  WeightAtIntegrationPoint( size_t i ) const;
   
     /// reports the local node numbers in counter clockwise order
     // DEPRECATE, but check whether this is used by any of ther applications
@@ -271,31 +285,31 @@ class FiniteElement {
 
     /// reports the values of the interpolation functions at the point given in global coordinates; @attention slow for numerically integrated elements
     // REMOVE: use XYZtoRST(); to find the point of interest
-    virtual   void      N( std::vector<double64>& N, const std::vector<double64>& xyz );
+    virtual   void      N( std::vector<double>& N, const std::vector<double>& xyz );
   
     /// reports the values of the interpolation functions at the given quadrature point
     // RENAME: N_AtPoint();
-    virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double64>& N );
+    virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double>& N );
   
     /// reports the values of the interpolation functions at the center of gravity of the element
-    virtual   void      N_AtBaryCenter( std::vector<double64>& N );
+    virtual   void      N_AtBaryCenter( std::vector<double>& N );
     
     /// first derivatives of interpolation functions for elements where this is a single constant value
     virtual   void      dN( DenseMatrix<DM_MIN>& );
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well
     // REMOVE: only RST should be supported; use XYZtoRST to compute point location
-    virtual   double64  dN_At( DenseMatrix<DM_MIN>&, const std::vector<double64>& xyz );
+    virtual   double  dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
 
     /// returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well
     // RENAME dN_AtPoint();
-    virtual   double64  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&, size_t gauss_point );
+    virtual   double  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&, size_t gauss_point );
 
     /// returns first derivative of interpolaton functions at node; determinant of the Jacobian is returned as well
-    virtual   double64  dN_AtNode( DenseMatrix<DM_MIN>&, size_t node );
+    virtual   double  dN_AtNode( DenseMatrix<DM_MIN>&, size_t node );
 
     /// returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well
-    virtual   double64  dN_AtBarycenter( DenseMatrix<DM_MIN>& );
+    virtual   double  dN_AtBarycenter( DenseMatrix<DM_MIN>& );
     
     // for isoparametric elements Jacobian coordinate transformations (at a point within the element)
     // are returned into the protected matrices JAC and JINV
@@ -304,23 +318,23 @@ class FiniteElement {
     virtual   void      JacobianAtIntegrationPoint( size_t ip );
 
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t)
-    virtual   void      JacobianAt( const std::vector<double64>& rst );
+    virtual   void      JacobianAt( const std::vector<double>& rst );
   
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for 1D element using the supplied intpol.f.derivatives
-    virtual   void      Jacobian( const std::vector<double64>& dnr ); // 1D
+    virtual   void      Jacobian( const std::vector<double>& dnr ); // 1D
 
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for 2D element using the supplied intpol.f.derivatives
-    virtual   void      Jacobian( const std::vector<double64>& dnr, const std::vector<double64>& dns ); // 2D
+    virtual   void      Jacobian( const std::vector<double>& dnr, const std::vector<double>& dns ); // 2D
 
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for 3D element using the supplied intpol.f.derivatives
-    virtual   void      Jacobian( const std::vector<double64>& dnr, const std::vector<double64>& dns,
-                                  const std::vector<double64>& dnt ); // 3D
+    virtual   void      Jacobian( const std::vector<double>& dnr, const std::vector<double>& dns,
+                                  const std::vector<double>& dnt ); // 3D
   
     /// initializes the member matrix JINV
-    virtual   double64  JacobianInverse();
+    virtual   double  JacobianInverse();
   
     /// returns the determinant of the member Jacobian matrix JAC that must have been initialised before
-    virtual   double64  JacobianDeterminant();
+    virtual   double  JacobianDeterminant();
 	
     /// initialises interpolation function product matrix N^T x N for analytically integrated elements
     virtual   void      IntegralNN( DenseMatrix<DM_MIN>& );
@@ -336,31 +350,31 @@ class FiniteElement {
   
 
     /// 1D element interpolation functions N(r)
-    virtual void  Nr(  double64 r, std::vector<double64>& NRST ) const;
-    virtual void  Nr(  double64 r, double64* NRST ) const;
+    virtual void  Nr(  double r, std::vector<double>& NRST ) const;
+    virtual void  Nr(  double r, double* NRST ) const;
 
     /// 1D element interpolation functions derivatives N(r)/dr
-    virtual void  dNr( double64 r, std::vector<double64>& DNR ) const;
+    virtual void  dNr( double r, std::vector<double>& DNR ) const;
 
     /// 2D element interpolation functions N(r,s)
-    virtual void  Nrs( double64 r, double64 s, std::vector<double64>& NRST ) const;
-    virtual void  Nrs( double64 r, double64 s, double64* NRST ) const;
+    virtual void  Nrs( double r, double s, std::vector<double>& NRST ) const;
+    virtual void  Nrs( double r, double s, double* NRST ) const;
 
     /// 2D element interpolation functions derivatives N(r,s)/dr
-    virtual void  dNr( double64 r, double64 s, std::vector<double64>& DNR ) const;
+    virtual void  dNr( double r, double s, std::vector<double>& DNR ) const;
     /// 2D element interpolation functions derivatives N(r,s)/ds
-    virtual void  dNs( double64 r, double64 s, std::vector<double64>& DNS ) const;
+    virtual void  dNs( double r, double s, std::vector<double>& DNS ) const;
 
     /// 3D element interpolation functions N(r,s,t)
-    virtual void  Nrst( double64 r, double64 s, double64 t, std::vector<double64>& NRST ) const;
-    virtual void  Nrst( double64 r, double64 s, double64 t, double64* NRST ) const;
+    virtual void  Nrst( double r, double s, double t, std::vector<double>& NRST ) const;
+    virtual void  Nrst( double r, double s, double t, double* NRST ) const;
 
     /// 2D element interpolation functions derivatives N(r,s,t)/dr
-    virtual void  dNr( double64 r,  double64 s, double64 t, std::vector<double64>& DNR ) const;
+    virtual void  dNr( double r,  double s, double t, std::vector<double>& DNR ) const;
     /// 2D element interpolation functions derivatives N(r,s,t)/ds
-    virtual void  dNs( double64 r,  double64 s, double64 t, std::vector<double64>& DNS ) const;
+    virtual void  dNs( double r,  double s, double t, std::vector<double>& DNS ) const;
     /// 2D element interpolation functions derivatives N(r,s,t)/dt
-    virtual void  dNt( double64 r,  double64 s, double64 t, std::vector<double64>& DNT ) const;
+    virtual void  dNt( double r,  double s, double t, std::vector<double>& DNT ) const;
     
     /// prints finite element properties to screen
     virtual void  Out() const;
@@ -397,7 +411,7 @@ class FiniteElement {
     DenseMatrix<DM_MIN>   JAC;       /**< Jacobian matrix */
     DenseMatrix<DM_MIN>   JINV;      /**< the Jacobians inverse */
 
-    mutable std::vector<double64>  NRST, ///< convenience storage for interpolation function values
+    mutable std::vector<double>  NRST, ///< convenience storage for interpolation function values
                                    DNR,  ///< convenience storage for interpolation function derivatives
                                    DNS,  ///< convenience storage for interpolation function derivatives
                                    DNT;  ///< convenience storage for interpolation function derivatives

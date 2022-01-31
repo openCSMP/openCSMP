@@ -92,7 +92,7 @@
 // new tests from SKM
 #include "ANSYS_SplitBoundaryMatch_Test.h"
 
-#include "Vset_TestCase.h"
+#include "VSet_TestCase.h"
 
 //variable placement tests
 //#include "Placement_Test_2D.h"

@@ -110,8 +110,8 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( size_t integ
 
         // Location of the integration points in r-s-t coordinates see Lo, p. 68
         // note that L1 = 1 - r - s - t
-        const double64 oneDivSqrtThree=1./sqrt(3.0);
-        const double64 sqrtTwoThirds=sqrt(2.0/3.0);
+        const double oneDivSqrtThree=1./sqrt(3.0);
+        const double sqrtTwoThirds=sqrt(2.0/3.0);
 
         IP(0,0) = 0.0, 			IP(0,1) = -sqrtTwoThirds, 	IP(0,2) = -oneDivSqrtThree;
         IP(1,0) = 0.0, 			IP(1,1) = sqrtTwoThirds,	IP(1,2) = -oneDivSqrtThree;
@@ -123,7 +123,7 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( size_t integ
         //Numeric integration 3rd order, number of point m=6
         // Weights of the interpolation functions are 4/3, see Lo, p. 68
 
-        double64 fourThirds=4.0/3.0;
+        double fourThirds=4.0/3.0;
 
         W[0] = fourThirds;
         W[1] = fourThirds;
@@ -159,7 +159,7 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( size_t integ
         for(size_t i=0; i<integrationPoints;i++)
             W[i]=1.0;
 
-        const double64 a1=0.577350269189626;
+        const double a1=0.577350269189626;
 
         IP(0,0) =-a1,	IP(0,1) =-a1, 	IP(0,2) =-a1;
         IP(1,0) = a1,	IP(1,1) =-a1, 	IP(1,2) =-a1;
@@ -346,83 +346,115 @@ IsoparametricQuadraticHexahedron::NodesOfSegment( size_t segm_id, std::vector<si
 void
 IsoparametricQuadraticHexahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
-    fnids.resize(9);
+    fnids.resize(8);
 
-    if      ( face_id == 0 )
+    if ( face_id == 0 )
       {
          fnids[0] = 0;
-         fnids[1] = 8;
-         fnids[2] = 1;
-         fnids[3] = 9;
-         fnids[4] = 2;
-         fnids[5] = 10;
-         fnids[6] = 3;
-         fnids[7] = 11;
-         fnids[8] = 20;
+         fnids[1] = 3;
+         fnids[2] = 2;
+         fnids[3] = 1;
+         fnids[4] = 8;
+         fnids[5] = 11;
+         fnids[6] = 10;
+         fnids[7] = 9;
       }
     else if ( face_id == 1 )
       {
          fnids[0] = 0;
-         fnids[1] = 8;
-         fnids[2] = 1;
-         fnids[3] = 13;
-         fnids[4] = 5;
-         fnids[5] = 16;
-         fnids[6] = 4;
-         fnids[7] = 12;
-         fnids[8] = 21;
+         fnids[1] = 1;
+         fnids[2] = 5;
+         fnids[3] = 4;
+         fnids[4] = 12;
+         fnids[5] = 8;
+         fnids[6] = 10;
+         fnids[7] = 15;
       }
     else if ( face_id == 2 )
       {
          fnids[0] = 1;
-         fnids[1] = 9;
-         fnids[2] = 2;
-         fnids[3] = 14;
-         fnids[4] = 6;
-         fnids[5] = 17;
-         fnids[6] = 5;
-         fnids[7] = 13;
-         fnids[8] = 22;
+         fnids[1] = 2;
+         fnids[2] = 6;
+         fnids[3] = 5;
+         fnids[4] = 10;
+         fnids[5] = 9;
+         fnids[6] = 14;
+         fnids[7] = 17;
       }
     else if ( face_id == 3 )
       {
          fnids[0] = 2;
-         fnids[1] = 14;
-         fnids[2] = 6;
-         fnids[3] = 18;
-         fnids[4] = 7;
-         fnids[5] = 15;
-         fnids[6] = 3;
-         fnids[7] = 10;
-         fnids[8] = 23;
+         fnids[1] = 3;
+         fnids[2] = 7;
+         fnids[3] = 6;
+         fnids[4] = 14;
+         fnids[5] = 13;
+         fnids[6] = 15;
+         fnids[7] = 18;
       }
     else if ( face_id == 4 )
       {
          fnids[0] = 0;
-         fnids[1] = 11;
-         fnids[2] = 3;
-         fnids[3] = 15;
-         fnids[4] = 7;
-         fnids[5] = 19;
-         fnids[6] = 4;
-         fnids[7] = 12;
-         fnids[8] = 24;
+         fnids[1] = 4;
+         fnids[2] = 7;
+         fnids[3] = 3;
+         fnids[4] = 11;
+         fnids[5] = 12;
+         fnids[6] = 19;
+         fnids[7] = 15;
       }
     else if ( face_id == 5 )
       {
          fnids[0] = 4;
-         fnids[1] = 16;
-         fnids[2] = 5;
-         fnids[3] = 17;
-         fnids[4] = 6;
-         fnids[5] = 18;
-         fnids[6] = 7;
-         fnids[7] = 19;
-         fnids[8] = 25;
+         fnids[1] = 5;
+         fnids[2] = 6;
+         fnids[3] = 7;
+         fnids[4] = 19;
+         fnids[5] = 16;
+         fnids[6] = 17;
+         fnids[7] = 18;
       }
     else
     std::cerr <<"\nIsoparametricQuadraticHexahedron::NodesOfFace: Invalid Face ID requested: "<< face_id <<std::endl;
  }
+
+
+
+
+vector<size_t>  IsoparametricQuadraticHexahedron::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,3,2,1};
+        case 1: return vector<size_t>{0,1,5,4};
+        case 2: return vector<size_t>{1,2,6,5};
+        case 3: return vector<size_t>{2,3,7,6};
+        case 4: return vector<size_t>{0,4,7,3};
+        case 5: return vector<size_t>{4,5,6,7};
+      }
+    cerr <<"\nIsoparametricQuadraticHexahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+/// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+std::vector<size_t>  IsoparametricQuadraticHexahedron::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,3,4};
+        case 1: return vector<size_t>{0,2,5};
+        case 2: return vector<size_t>{1,3,6};
+        case 3: return vector<size_t>{0,2,7};
+        case 4: return vector<size_t>{0,5,7};
+        case 5: return vector<size_t>{1,4,6};
+        case 6: return vector<size_t>{2,5,7};
+        case 7: return vector<size_t>{3,4,6};
+        default:
+          cerr <<"\nIsoparametricQuadraticHexahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
 
 
 CSMP_FEM_TYPE
@@ -431,7 +463,7 @@ IsoparametricQuadraticHexahedron::ElementTypeOfFace( size_t )  const
     return ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9;
  }
 
-double64 IsoparametricQuadraticHexahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricQuadraticHexahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
 
 
 void
@@ -570,17 +602,17 @@ Method is used to compute property values at the integration points of
 the element.
 */
 void IsoparametricQuadraticHexahedron::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    std::vector<double64>& N ) const
+                    double r,
+                    double s,
+                    double t,
+                    std::vector<double>& N ) const
 {
-   const double64 rPlus=1.0+r;
-   const double64 sPlus=1.0+s;
-   const double64 tPlus=1.0+t;
-   const double64 rMinus=1.0-r;
-   const double64 sMinus=1.0-s;
-   const double64 tMinus=1.0-t;
+   const double rPlus=1.0+r;
+   const double sPlus=1.0+s;
+   const double tPlus=1.0+t;
+   const double rMinus=1.0-r;
+   const double sMinus=1.0-s;
+   const double tMinus=1.0-t;
 
    N.resize(npe);
     // corner nodes
@@ -625,17 +657,17 @@ void IsoparametricQuadraticHexahedron::Nrst(
 }
 
 void IsoparametricQuadraticHexahedron::Nrst(
-                    double64 r,
-                    double64 s,
-                    double64 t,
-                    double64* N ) const
+                    double r,
+                    double s,
+                    double t,
+                    double* N ) const
 {
-   const double64 rPlus=1.0+r;
-   const double64 sPlus=1.0+s;
-   const double64 tPlus=1.0+t;
-   const double64 rMinus=1.0-r;
-   const double64 sMinus=1.0-s;
-   const double64 tMinus=1.0-t;
+   const double rPlus=1.0+r;
+   const double sPlus=1.0+s;
+   const double tPlus=1.0+t;
+   const double rMinus=1.0-r;
+   const double sMinus=1.0-s;
+   const double tMinus=1.0-t;
 
     // corner nodes
    N[0] = -0.125*r*s*t*rMinus*sMinus*tMinus;
@@ -704,10 +736,10 @@ see inlined source code in the header file.
 The shape function derivatives are needed in most integration
 procedures for elements.
 */
-void IsoparametricQuadraticHexahedron::dNr (  double64 r,
-                                              double64 s,
-                                              double64 t,
-                                              std::vector<double64>& DNR ) const
+void IsoparametricQuadraticHexahedron::dNr (  double r,
+                                              double s,
+                                              double t,
+                                              std::vector<double>& DNR ) const
 {
    DNR.resize(npe);
 
@@ -769,17 +801,17 @@ void IsoparametricQuadraticHexahedron::dNr (  double64 r,
 
 
 
-void IsoparametricQuadraticHexahedron::dNs( double64 r,
-                                            double64 s,
-                                            double64 t,
-                                            std::vector<double64>& DNS ) const
+void IsoparametricQuadraticHexahedron::dNs( double r,
+                                            double s,
+                                            double t,
+                                            std::vector<double>& DNS ) const
 {
-   const double64 rPlus=1.0+r;
-   const double64 sPlus=1.0+s;
-   const double64 tPlus=1.0+t;
-   const double64 rMinus=1.0-r;
-   const double64 sMinus=1.0-s;
-   const double64 tMinus=1.0-t;
+   const double rPlus=1.0+r;
+   const double sPlus=1.0+s;
+   const double tPlus=1.0+t;
+   const double rMinus=1.0-r;
+   const double sMinus=1.0-s;
+   const double tMinus=1.0-t;
 
    DNS.resize(npe);
    DNS[0] =-.125*r*t*(1-r)*(1-s)*(1-t)+.125*r*s*t*(1-r)*(1-t);
@@ -820,16 +852,16 @@ void IsoparametricQuadraticHexahedron::dNs( double64 r,
 }
 
 
-void IsoparametricQuadraticHexahedron::dNt( double64 r,
-                                            double64 s,
-                                            double64 t,
-                                            std::vector<double64>& DNT ) const
+void IsoparametricQuadraticHexahedron::dNt( double r,
+                                            double s,
+                                            double t,
+                                            std::vector<double>& DNT ) const
 {
-   const double64 rPlus=1.0+r;
-   const double64 sPlus=1.0+s;
-   const double64 tPlus=1.0+t;
-   const double64 rMinus=1.0-r;
-   const double64 sMinus=1.0-s;
+   const double rPlus=1.0+r;
+   const double sPlus=1.0+s;
+   const double tPlus=1.0+t;
+   const double rMinus=1.0-r;
+   const double sMinus=1.0-s;
 
    DNT.resize(npe);
    DNT[0] =-.125*r*s*(1-r)*(1-s)*(1-t)+.125*r*s*t*(1-r)*(1-s);
@@ -981,12 +1013,12 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 @return The interpolation-function derivative matrix is returned into the
 second method argument.
 */
-double64
+double
 IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN2,
-                                const vector<double64>& xyz  )
+                                const vector<double>& xyz  )
   {
 
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -996,7 +1028,7 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN2,
     dNt( rst[0], rst[1], rst[2], DNT );
 
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     DN2.Resize(dim,dim);
     DN2  = JINV;
@@ -1017,11 +1049,11 @@ within the Hexahedron.
 */
 void
 IsoparametricQuadraticHexahedron::N(
-                    std::vector<double64>& N,
-                    const std::vector<double64>& xyz
+                    std::vector<double>& N,
+                    const std::vector<double>& xyz
                     )
 {
-    vector<double64> rst(dim);
+    vector<double> rst(dim);
 
     PhysicalToParametric(rst, xyz);
 
@@ -1051,7 +1083,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double64
+double
 IsoparametricQuadraticHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
  {
     assert( nd < npe );
@@ -1061,7 +1093,7 @@ IsoparametricQuadraticHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -1077,7 +1109,7 @@ IsoparametricQuadraticHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
 /** Projection function from rst->xyz
 */
 void
-IsoparametricQuadraticHexahedron::ParametricToPhysical(std::vector<double64> &rst, std::vector<double64>& xyz)
+IsoparametricQuadraticHexahedron::ParametricToPhysical(std::vector<double> &rst, std::vector<double>& xyz)
 {
 Nrst(rst[0],rst[1],rst[2], NRST );
 
@@ -1095,27 +1127,27 @@ for(size_t i=0; i<npe; i++)
  */
 void
 IsoparametricQuadraticHexahedron::PhysicalToParametric(
-                                       std::vector<double64>& rSt,
-                                       const std::vector<double64>& xyz
+                                       std::vector<double>& rSt,
+                                       const std::vector<double>& xyz
                                         )
 {
-    vector<double64> outxyz(dim);
-    vector<double64> rstHatK(dim);
+    vector<double> outxyz(dim);
+    vector<double> rstHatK(dim);
 
-    std::vector<double64> distanceFromGivenPointLinf(dim,0.0);
-    double64 distanceFromGivenPointL2;
+    std::vector<double> distanceFromGivenPointLinf(dim,0.0);
+    double distanceFromGivenPointL2;
 
     // Find largest and smallest segments in order to define precision
-    vector<double64> vec(spe);
+    vector<double> vec(spe);
     EdgeLengths( vec );
-    double64 seg_max(vec[0]), seg_min(vec[0]);
+    double seg_max(vec[0]), seg_min(vec[0]);
     for ( size_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
     }
 
-    const double64 geometricTolerance = 0.005*seg_min;
+    const double geometricTolerance = 0.005*seg_min;
 
     // First guess as BaryCenter
     rstHatK[0] = 0.0;
@@ -1138,17 +1170,17 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
     //    (distanceFromGivenPointLinf[2] > geometricTolerance)  )
     {
 
-        vector<double64> rstHatK_PlusOne(dim);
-        double64 minDistanceFromGivenPoint;
+        vector<double> rstHatK_PlusOne(dim);
+        double minDistanceFromGivenPoint;
 
-        const double64 constantMu               = 1.0;
+        const double constantMu               = 1.0;
         const size_t numberOfFirstIterrations   = 5;
         const size_t maxNumberOfIterrations     = 20;
         const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
-        const double64 incrementR = 2.0/(numberOfFirstIterrations-1);
-        const double64 incrementS = 2.0/(numberOfFirstIterrations-1);
-        const double64 incrementT = 2.0/(numberOfFirstIterrations-1);
+        const double incrementR = 2.0/(numberOfFirstIterrations-1);
+        const double incrementS = 2.0/(numberOfFirstIterrations-1);
+        const double incrementT = 2.0/(numberOfFirstIterrations-1);
 
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
@@ -1225,7 +1257,7 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
                 dNt( rstHatK[0], rstHatK[1], rstHatK[2], DNT );
                 Jacobian( DNR, DNS, DNT );
                 // Check whether Jacobian is positive ( might be not true for the point outside the element )
-                //const double64 detJ = JacobianDeterminant();
+                //const double detJ = JacobianDeterminant();
                 //if( detJ > 0.0 )
                 JacobianInverse();
             }
@@ -1274,7 +1306,7 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
                <<"s = "<<rstHatK[1]<<" ;\t"
                <<"t = "<<rstHatK[2]<<"\n";
 
-            std::vector<double64> N(npe,0.0);
+            std::vector<double> N(npe,0.0);
             Nrst(rstHatK[0], rstHatK[1], rstHatK[2], N );
             cout<<" IsoparametricQuadraticHexahedron::PhysicalToParametric: Shape functions:\t"
                 <<"N[0] = "<<N[0]<<" ;\t"
@@ -1324,13 +1356,13 @@ and the shortest boundary segment.
 
 The Element is consulted for its global coordinates.
 */
-double64  IsoparametricQuadraticHexahedron::AspectRatio()
+double  IsoparametricQuadraticHexahedron::AspectRatio()
 {
-   vector<double64> vec(spe);
+   vector<double> vec(spe);
 
    EdgeLengths( vec );
 
-   double64 seg_max(vec[0]), seg_min(vec[0]);
+   double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
    for ( size_t i=1; i<spe; i++ ) {
@@ -1353,9 +1385,9 @@ The segment lengths are computed as simple Euclidian distance between corner
 vertices of the edge.
 */
 void
-IsoparametricQuadraticHexahedron::EdgeLengths( std::vector<double64>& len )
+IsoparametricQuadraticHexahedron::EdgeLengths( std::vector<double>& len )
 {
-    double64 sum;
+    double sum;
     len.resize(spe);
 
     // segment 1
@@ -1435,10 +1467,10 @@ the area is computed.
 
 @return The area (m2) of the finite element.
 */
-double64
+double
 IsoparametricQuadraticHexahedron::Volume()
 {
-    double64   area; // determinant
+    double   area; // determinant
     size_t  i;
 
     // numerical integration:
@@ -1475,7 +1507,7 @@ The interpolation function values are returned into the third argument.
 
 */
 inline void
-IsoparametricQuadraticHexahedron::N_AtIntegrationPoint( size_t ip, std::vector<double64>& N )
+IsoparametricQuadraticHexahedron::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
      // local interpolation function values
@@ -1512,7 +1544,7 @@ returns the determinantof the Jacobian matrix since it is often needed
 in integration procedures.
 
 */
-double64
+double
 IsoparametricQuadraticHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
  {
     //
@@ -1525,7 +1557,7 @@ IsoparametricQuadraticHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B,
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 27 in global coordinates
     // by multiplication of JINV with local DN
@@ -1612,7 +1644,7 @@ IsoparametricQuadraticHexahedron::MidSideNodes( std::vector<size_t>& ids ) const
  }
 
 
-double64
+double
 IsoparametricQuadraticHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
 
@@ -1622,7 +1654,7 @@ IsoparametricQuadraticHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
-    double64 detJ = JacobianInverse();
+    double detJ = JacobianInverse();
 
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
@@ -1656,25 +1688,24 @@ are relatively even-sided and have straight edges.
 
 The parent element is queried for its node coordinates.
 */
-double64
+double
 IsoparametricQuadraticHexahedron::InnerRadius()
 {
-   vector<double64> segms(spe);
-   double64                 sum(0.0);
+   vector<double> segms(spe);
+   double                 sum(0.0);
 
    EdgeLengths( segms );
    for ( size_t i=0; i<spe; i++ ) sum += segms[i];
 
    // Function will produce unrelible value for high aspect ratio elements
    if(AspectRatio()>4.0)
-   cout<<" IsoparametricLinearHexahedron::InnerRadius: ***WARNING: function not applicable for CURRENT HAR element"<<endl;
-
+     cerr<<"\nIsoparametricLinearHexahedron::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
 
    return Volume() / (sum/6.);
 }
 
 void
-IsoparametricQuadraticHexahedron::N_AtBaryCenter( std::vector<double64>& N )
+IsoparametricQuadraticHexahedron::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
 
@@ -1714,8 +1745,8 @@ nodes.
 void
 IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
                                                                size_t nvars,
-                                                               const vector<double64>& IVAR,
-                                                               vector<double64>&       NVAR )
+                                                               const vector<double>& IVAR,
+                                                               vector<double>&       NVAR )
  const
 {
    static bool  first_call(true);
@@ -1742,7 +1773,7 @@ IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
 
   DenseMatrix<DM_MIN> MATRIX_A(gpe,gpe), TEMP_IP(gpe,1), TEMP_N(npe,1);
   // coefficients of the matrix A
-  double64 a=0.25*(5+3.0*sqrt(3.0)), b=-0.25*(sqrt(3.0)+1), c=0.25*(sqrt(3.0)-1.0), d=0.25*(5-3.*sqrt(3.));
+  double a=0.25*(5+3.0*sqrt(3.0)), b=-0.25*(sqrt(3.0)+1), c=0.25*(sqrt(3.0)-1.0), d=0.25*(5-3.*sqrt(3.));
 
       MATRIX_A(0,0)=MATRIX_A(1,1)=MATRIX_A(2,2)=MATRIX_A(3,3)
      =MATRIX_A(4,4)=MATRIX_A(5,5)=MATRIX_A(6,6)=MATRIX_A(7,7) =a;
@@ -1811,10 +1842,10 @@ IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
 void
 IsoparametricQuadraticHexahedron::IntegralNN( DenseMatrix<DM_MIN>& IntNN )
 {
-    double64   area=0.0;
+    double   area=0.0;
     size_t  i, index;
     IntNN.Resize(gpe,gpe);
-    vector<double64> Ni(npe);
+    vector<double> Ni(npe);
     static DenseMatrix<DM_MIN>  BEHAT(gpe,gpe);
     static DenseMatrix<DM_MIN>  GDER(dim,gpe); //global der at IP
 
@@ -1828,7 +1859,7 @@ IsoparametricQuadraticHexahedron::IntegralNN( DenseMatrix<DM_MIN>& IntNN )
         N_AtIntegrationPoint(i,Ni);
         //global derivatevs of interpolation functions at IP
         // Step 5. Calculate first order global derivateves of the interpolation functions
-        double64 ValOfJacobian=dN_AtIntegrationPoint(GDER,i);
+        double ValOfJacobian=dN_AtIntegrationPoint(GDER,i);
         // Step 6. For properties PROP(x,i) with local variation use nodal values and interpolation functions to
         //         calculate (interpolate) the properties to integration points;
         // Here integration points coincide with nodes: 0-24, 1-22, 2-21, 3-23, 4-20, 5-25
@@ -1878,7 +1909,7 @@ IsoparametricQuadraticHexahedron::IntegralNN( DenseMatrix<DM_MIN>& IntNN )
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
 void  IsoparametricQuadraticHexahedron::IntegrationPoint( size_t ip,
-                                                          vector<double64>& xyz ) const
+                                                          vector<double>& xyz ) const
  {
     assert( ip < gpe );
     xyz.resize(3U); xyz[0]=xyz[1]=xyz[2]=0.;

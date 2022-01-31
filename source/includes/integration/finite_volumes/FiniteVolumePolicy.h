@@ -81,7 +81,6 @@ class FiniteVolumePolicy<3U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
 
     /// connect policy to a finite-volume stencil that must match the parent element
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<3U>* );
@@ -110,13 +109,13 @@ class FiniteVolumePolicy<3U, CELL> {
     void       Local_dN_At( const Point<3U>& rst ) const;
   
     /// interpolation function derivatives at point specified in local coordinates returned into NRST vector of current finite element + detJ for integration
-    double64   dN_At( const Point<3U>& rst, DenseMatrix<DM_MIN>& DN )  const;
+    double   dN_At( const Point<3U>& rst, DenseMatrix<DM_MIN>& DN )  const;
 
     /// interpolates value of scalar node variable to facet integration point (XYZ)
-    double64   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& ) const;
+    double   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& ) const;
 
     /// interpolates value of scalar node variable to sector integration point (XYZ)
-    double64   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& ) const;
+    double   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& ) const;
   
     /// interpolate values of any node variable to facet integration point (XYZ)
     template<class Var>
@@ -127,25 +126,25 @@ class FiniteVolumePolicy<3U, CELL> {
     void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, size_t iSector, size_t ip,  Var& )   const;
 
     /// integrates value of property over the area of the facet
-    double64   FacetIntegral(  size_t iFacet,  const csmp::Index& ) const;
+    double   FacetIntegral(  size_t iFacet,  const csmp::Index& ) const;
 
     /// integrates value of property over the sector
-    double64   SectorIntegral( size_t iSector, const csmp::Index& ) const;
+    double   SectorIntegral( size_t iSector, const csmp::Index& ) const;
 
     /// reads value of vector property and projects it onto facet normal in physical space; returns projected value
-    double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& )  const;
+    double   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& )  const;
 
     /// projects value of vector property onto facet normal in physical space; returns projection
-    double64   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<3U>& ) const;
+    double   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<3U>& ) const;
 
     /// returns subvolume of finite element that corresponds to the requested finite volume sector
-    double64   SectorVolume( size_t iSector )     const;
+    double   SectorVolume( size_t iSector )     const;
   
     /// returns the area of the finite-volume facet in physical space as obtained by construction of facet in physical space
-    double64   FacetArea( size_t iFacet )         const;
+    double   FacetArea( size_t iFacet )         const;
   
     /// returns the area of the finite volume facet in physical space as obtained by Jacobian transformation of area in parametric space
-    double64   FacetAreaMapped( size_t iFacet )   const;
+    double   FacetAreaMapped( size_t iFacet )   const;
 
     /// returns the unit normal to the finite-volume facet
     Point<3U>  FacetNormal( size_t iFacet )       const;
@@ -154,13 +153,13 @@ class FiniteVolumePolicy<3U, CELL> {
     Point<3U>  FacetNormalMapped( size_t iFacet ) const;
 
     /// returns the facet area in parametric space
-    double64   ParametricFacetArea( size_t iFacet ) const;
+    double   ParametricFacetArea( size_t iFacet ) const;
   
     /// returns the normal to the facet in parametric space
     Point<3U>  ParametricFacetNormal( size_t iFacet ) const;
     
-    // XXX Delete me
-    Point<3U>  FacetPoint(size_t iFacet, size_t iPoint) const;
+    /// returns facet corner point in physical coordinates using RST_to_XYX
+    Point<3U>  FacetPoint( size_t iFacet, size_t iPoint ) const;
 
     // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:
@@ -175,7 +174,6 @@ class FiniteVolumePolicy<2U,CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<2U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<2U>* );
     void       AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
     const FiniteVolumeStencil<2U>* const FV() const;
@@ -186,23 +184,23 @@ class FiniteVolumePolicy<2U,CELL> {
     void       N_AtFacetIntegrationPoint(  size_t iFacet,  size_t ip ) const;
     void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
     void       Local_dN_At( const Point<2U>& rst ) const;
-    double64   dN_At( const Point<2U>& rst, DenseMatrix<DM_MIN>& DN )  const;
-    double64   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& prop_key ) const;
-    double64   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& prop_key ) const;
+    double   dN_At( const Point<2U>& rst, DenseMatrix<DM_MIN>& DN )  const;
+    double   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& prop_key ) const;
+    double   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& prop_key ) const;
     template<class Var>
     void       PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, size_t iFacet, size_t ip,  Var& )    const;
     template<class Var>
     void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, size_t iSector, size_t ip, Var& )    const;
-    double64   FacetIntegral(  size_t iFacet,  const csmp::Index& prop_key ) const;
-    double64   SectorIntegral( size_t iSector, const csmp::Index& prop_key ) const;
-    double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& prop_key )  const;
-    double64   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<2U>& vc ) const;
-    double64   SectorVolume( size_t iSector )     const;
-    double64   FacetArea( size_t iFacet )         const;
-    double64   FacetAreaMapped( size_t iFacet )   const;
+    double   FacetIntegral(  size_t iFacet,  const csmp::Index& prop_key ) const;
+    double   SectorIntegral( size_t iSector, const csmp::Index& prop_key ) const;
+    double   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& prop_key )  const;
+    double   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<2U>& vc ) const;
+    double   SectorVolume( size_t iSector )     const;
+    double   FacetArea( size_t iFacet )         const;
+    double   FacetAreaMapped( size_t iFacet )   const;
     Point<2U>  FacetNormal( size_t iFacet )       const;
     Point<2U>  FacetNormalMapped( size_t iFacet ) const;
-    double64   ParametricFacetArea( size_t iFacet ) const;
+    double   ParametricFacetArea( size_t iFacet ) const;
     Point<2U>  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
@@ -218,39 +216,38 @@ class FiniteVolumePolicy<1U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<1U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
-    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
-    void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<1U>* );
-    void       AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
+    void     AssignFiniteVolume( const csmp::FiniteVolumeStencil<1U>* );
+    void     AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
     const FiniteVolumeStencil<1U>* const FV() const;
-    size_t     Facets()  const;
-    size_t     Sectors() const;
-    size_t     IntegrationPointsPerSector() const;
-    size_t     IntegrationPointsPerFacet()  const;
-    void       N_AtFacetIntegrationPoint( size_t iFacet, size_t ip )   const;
-    void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
-    void       Local_dN_At( const Point<1U>& rst ) const;
-    double64   dN_At( const Point<1U>& rst, DenseMatrix<DM_MIN>& DN )  const;
-    double64   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& prop_key ) const;
-    double64   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& prop_key ) const;
+    size_t   Facets()  const;
+    size_t   Sectors() const;
+    size_t   IntegrationPointsPerSector() const;
+    size_t   IntegrationPointsPerFacet()  const;
+    void     N_AtFacetIntegrationPoint( size_t iFacet, size_t ip )   const;
+    void     N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
+    void     Local_dN_At( const Point<1U>& rst ) const;
+    double   dN_At( const Point<1U>& rst, DenseMatrix<DM_MIN>& DN )  const;
+    double   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& prop_key ) const;
+    double   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& prop_key ) const;
     template<class Var>
-    void       PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, size_t iFacet, size_t ip,  Var& )    const;
+    void     PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, size_t iFacet, size_t ip,  Var& )    const;
     template<class Var>
-    void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, size_t iSector, size_t ip,  Var& )   const;
-    double64   FacetIntegral(  size_t iFacet,  const csmp::Index& prop_key ) const;
-    double64   SectorIntegral( size_t iSector, const csmp::Index& prop_key ) const;
-    double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& prop_key )  const;
-    double64   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<1U>& vc ) const;
-    double64   SectorVolume( size_t iSector )     const;
-    double64   FacetArea( size_t iFacet )         const;
-    double64   FacetAreaMapped( size_t iFacet )   const;
+    void     PropertyValueAtSectorIntegrationPoint( const csmp::Index&, size_t iSector, size_t ip,  Var& )   const;
+    double   FacetIntegral(  size_t iFacet,  const csmp::Index& prop_key ) const;
+    double   SectorIntegral( size_t iSector, const csmp::Index& prop_key ) const;
+    double   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& prop_key )  const;
+    double   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<1U>& vc ) const;
+    double   SectorVolume( size_t iSector )     const;
+    double   FacetArea( size_t iFacet )         const;
+    double   FacetAreaMapped( size_t iFacet )   const;
     Point<1U>  FacetNormal( size_t iFacet )       const;
     Point<1U>  FacetNormalMapped( size_t iFacet ) const;
-    double64   ParametricFacetArea( size_t iFacet ) const;
+    double     ParametricFacetArea( size_t iFacet ) const;
     Point<1U>  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
     FiniteVolumePolicy( const CELL<1U>& );
-    const csmp::FiniteVolumeStencil<1U>*  fvptr_;
+    const csmp::FiniteVolumeStencil<1U>*  fvptr_ = nullptr;
 };
 
 } // end namespace 

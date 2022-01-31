@@ -18,7 +18,7 @@ template<size_t dim, template <typename> class operation>
 ConstantFactor<dim,operation >::ConstantFactor( const PropertyDatabase<dim>& p, 
                                                 const char* resultProperty,
                                                 const char* argumentProperty,
-                                                const double64 factor )
+                                                const double factor )
       : Interrelation<dim>(p),
         res_(Interrelation<dim>::GlobalProperty(resultProperty)),
         arg_(Interrelation<dim>::GlobalProperty(argumentProperty)),
@@ -47,7 +47,7 @@ ConstantFactor<dim,operation >::ConstantFactor( const PropertyDatabase<dim>& p,
  /** Changes the factor.
  */
 template<size_t dim, template <typename> class operation>
-void ConstantFactor<dim,operation>::ChangeFactor(double64 factor) {
+void ConstantFactor<dim,operation>::ChangeFactor(double factor) {
   factor_ = factor;
 }
 
@@ -59,7 +59,7 @@ template<size_t dim, template <typename> class operation>
 void ConstantFactor<dim,operation>::Calculate()
  {
     if ( !res_prop_equal_to_arg_prop_ ) {
-        res_ = static_cast<double64>(1.);
+        res_ = static_cast<double>(1.);
         res_ *= arg_;
       }
     res_.AssignTo(val_);

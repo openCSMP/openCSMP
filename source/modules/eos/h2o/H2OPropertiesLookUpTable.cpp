@@ -27,10 +27,10 @@ H2OPropertiesLookUpTable<fT>::H2OPropertiesLookUpTable( bool use_lookup_tables )
     t_rows(996.0), // t(i)
     pc_cols(1001.0),
     tc_rows(501.0),
-    cols(static_cast<int32>(p_cols)),
-    rows(static_cast<int32>(t_rows)),
-    c_cols(static_cast<int32>(pc_cols)),
-    c_rows(static_cast<int32>(tc_rows)),
+    cols(static_cast<int32_t>(p_cols)),
+    rows(static_cast<int32_t>(t_rows)),
+    c_cols(static_cast<int32_t>(pc_cols)),
+    c_rows(static_cast<int32_t>(tc_rows)),
     t_sat_rows(3691.0), // 5.0 oC to 373.9 oC in 0.1 oC steps plus 2 entries for t_atm and tcrit
     p_sat_rows(2197.0), // 1.05e+05 to 22.05e+06 Pa in 5.0e+03 Pa stest plus 2 entries for p_atm and pcrit
     sat_cols(17.0)  // p or t, rl, rv, hl, hv, cpl, cpv, ml, muv, bl, bv, al, av, dp_d_CTl, dp_d_CTv, dp_T_Cdl, dp_T_Cdv
@@ -127,10 +127,10 @@ H2OPropertiesLookUpTable<fT>::H2OPropertiesLookUpTable( const H2OPropertiesLookU
     t_rows(996.0), // t(i)
     pc_cols(1001.0),
     tc_rows(501.0),
-    cols(static_cast<int32>(p_cols)),
-    rows(static_cast<int32>(t_rows)),
-    c_cols(static_cast<int32>(pc_cols)),
-    c_rows(static_cast<int32>(tc_rows)),
+    cols(static_cast<int32_t>(p_cols)),
+    rows(static_cast<int32_t>(t_rows)),
+    c_cols(static_cast<int32_t>(pc_cols)),
+    c_rows(static_cast<int32_t>(tc_rows)),
     t_sat_rows(3691.0), // 5.0 oC to 373.9 oC in 0.1 oC steps plus 2 entries for t_atm and tcrit
     p_sat_rows(2197.0), // 1.05e+05 to 22.05e+06 Pa in 5.0e+03 Pa stest plus 2 entries for p_atm and pcrit
     sat_cols(17.0)  // p or t, rl, rv, hl, hv, cpl, cpv, ml, muv, bl, bv, al, av, dp_d_CTl, dp_d_CTv, dp_T_Cdl, dp_T_Cdv
@@ -418,11 +418,11 @@ void H2OPropertiesLookUpTable<fT>::ComputeLookupTables()
     cout << "and from " << patm << " to " << pmax << " Pa " << endl;
 
     // loop over rows (temperature)
-    for ( int32 i=0; i<rows; i++ ) {
+    for ( int32_t i=0; i<rows; i++ ) {
         t   = tatm + (dT * static_cast<fT>(i));
         t0  = t + kelvin;
         // loop over columns (pressure)
-        for ( int32 j=0; j<cols; j++ ) {
+        for ( int32_t j=0; j<cols; j++ ) {
             if ( j == 0 ) p0 = patm;
             else          p0 = dP * static_cast<fT>(j);
             // properties at given t and p
@@ -522,11 +522,11 @@ void H2OPropertiesLookUpTable<fT>::ComputeLookupTablesCriticalPoint()
     cout << "and from " << pmin_c << " to " << pmax_c << " Pa " << endl;
 
     // loop over rows (temperature)
-    for ( int32 i=0; i<c_rows; i++ ) {
+    for ( int32_t i=0; i<c_rows; i++ ) {
         t   = tmin_c + (dT_fine * static_cast<fT>(i));
         t0  = t + kelvin;
         // loop over columns (pressure)
-        for ( int32 j=0; j<c_cols; j++ ) {
+        for ( int32_t j=0; j<c_cols; j++ ) {
             p0 = pmin_c + (dP_fine * static_cast<fT>(j));
             // properties at given t and p
             if ( t == 374.0 || t == 374.1 ) water_tp( t0, p0, 500.0, dp, properties );
@@ -650,7 +650,7 @@ void H2OPropertiesLookUpTable<fT>::ComputeLookupTablesTwoPhase()
        
     cout << "\nH2OPropertiesLookUpTable<fT>::ComputeLookupTablesTwoPhase(): Computing lookup tables along 2-phase curve. " << endl;
     
-    for ( int32 i=0; i<t_sat.Rows(); i++ ) {
+    for ( int32_t i=0; i<t_sat.Rows(); i++ ) {
         if ( i < t_sat.Rows()-1) t = tatm + (dT_fine * static_cast<fT>(i)) + kelvin;
         else                     t = tcrit + kelvin;
         
@@ -731,7 +731,7 @@ void H2OPropertiesLookUpTable<fT>::ComputeLookupTablesTwoPhase()
        
 
     // get properties for pcrit from above 
-    for ( int32 i=0; i<p_sat.Rows()-1; i++ ) {
+    for ( int32_t i=0; i<p_sat.Rows()-1; i++ ) {
         if ( i == 0 )  p = patm;
         else           p = p_sat_min + (dP_fine * static_cast<fT>(i));
         
@@ -803,8 +803,8 @@ void H2OPropertiesLookUpTable<fT>::ComputeLookupTablesTwoPhase()
       
       // properties at pcrit from t_sat
       p_sat(p_sat.Rows()-1,0) = tcrit;
-      for ( int32 i=1; i<sat_cols; i++ ) p_sat(p_sat.Rows()-1,i) = t_sat(t_sat.Rows()-1,i);
-      //for ( int32 i=0; i<sat_cols; i++ ) cout << "\nValue: " << p_sat(p_sat.Rows()-1,i);
+      for ( int32_t i=1; i<sat_cols; i++ ) p_sat(p_sat.Rows()-1,i) = t_sat(t_sat.Rows()-1,i);
+      //for ( int32_t i=0; i<sat_cols; i++ ) cout << "\nValue: " << p_sat(p_sat.Rows()-1,i);
       
       freeProp( properties );
       freeProp( liqprops );
@@ -831,10 +831,10 @@ void H2OPropertiesLookUpTable<fT>::GetLookupTableEntries( fT t, fT p )
    if ( t < tmax && t > tatm && p < pmax && p > patm ) {
        // 1.a get row and column entries for bilinear interpolation
        // first column entry -> t at first node (i1)
-       ij[0][0] = static_cast<int32>((t-tatm)/dT);
+       ij[0][0] = static_cast<int32_t>((t-tatm)/dT);
        // second column entry -> p at first node (j1)
        if ( p < dP ) ij[0][1] = 0;
-       else          ij[0][1] = static_cast<int32>(p/dP);
+       else          ij[0][1] = static_cast<int32_t>(p/dP);
        // now increment ij in a counter-clockwise fashion (see NumRec in C p. 123)
        ij[1][0] = ij[0][0]+1; // i2
        ij[1][1] = ij[0][1];   // j2
@@ -937,13 +937,13 @@ void H2OPropertiesLookUpTable<fT>::GetLookupTableEntries( fT t, fT p )
    else {
        interpolation_type = boundary;
        if ( t < tmax && t > tatm && p >= pmax ) {
-           ij[0][0] = ij[3][0] = static_cast<int32>((t-tatm)/dT);  
+           ij[0][0] = ij[3][0] = static_cast<int32_t>((t-tatm)/dT);  
            ij[1][0] = ij[2][0] = ij[0][0]+1;  
            ij[0][1] = ij[1][1] = ij[2][1] = ij[3][1] = cols-1;
            return;
          }
        if ( t < tmax && t > tatm && p <= patm ) {
-           ij[0][0] = ij[3][0] = static_cast<int32>((t-tatm)/dT);  
+           ij[0][0] = ij[3][0] = static_cast<int32_t>((t-tatm)/dT);  
            ij[1][0] = ij[2][0] = ij[0][0]+1;  
            ij[0][1] = ij[1][1] = ij[2][1] = ij[3][1] = 0;
            // needs a check to make sure that 2-phase curve is not crossed at 1bar
@@ -958,13 +958,13 @@ void H2OPropertiesLookUpTable<fT>::GetLookupTableEntries( fT t, fT p )
 
          }
        if ( t >= tmax && p > patm && p < pmax ) {
-           ij[0][1] = ij[1][1] = static_cast<int32>(p/dP);  
+           ij[0][1] = ij[1][1] = static_cast<int32_t>(p/dP);  
            ij[2][1] = ij[3][1] = ij[0][1]+1;  
            ij[0][0] = ij[1][0] = ij[2][0] = ij[3][0] = rows-1;
            return;
          }
        if ( t <= tatm && p > patm && p < pmax ) {
-           ij[0][1] = ij[1][1] = static_cast<int32>(p/dP);  
+           ij[0][1] = ij[1][1] = static_cast<int32_t>(p/dP);  
            ij[2][1] = ij[3][1] = ij[0][1]+1;  
            ij[0][0] = ij[1][0] = ij[2][0] = ij[3][0] = 0;
            return;
@@ -1004,9 +1004,9 @@ void H2OPropertiesLookUpTable<fT>::GetLookupTableEntriesCriticalPoint( fT t, fT 
    // using a ccw numbering of points, point 1 is at t_min, p_min
    // 1.a get row and column entries for bilinear interpolation
    // first column entry -> t at first node (i1)
-   ij[0][0] = static_cast<int32>((t-tmin_c)/dT_fine);
+   ij[0][0] = static_cast<int32_t>((t-tmin_c)/dT_fine);
    // second column entry -> p at first node (j1)
-   ij[0][1] = static_cast<int32>((p-pmin_c)/dP_fine);
+   ij[0][1] = static_cast<int32_t>((p-pmin_c)/dP_fine);
    // now increment ij in a counter-clockwise fashion (see NumRec in C p. 123)
    ij[1][0] = ij[0][0]+1; // i2
    ij[1][1] = ij[0][1];   // j2
@@ -1240,7 +1240,7 @@ template<typename fT>
 void H2OPropertiesLookUpTable<fT>::GetPropertyValues( property p )  
  {
    fT t, press, psat1, psat2, dist;
-   for ( int32 i=0; i<4; i++ ) {
+   for ( int32_t i=0; i<4; i++ ) {
        if ( ij[i][0] != -1 && ij[i][1] != -1 ) {
            if      ( p == cp )     prop[i] = heat_capacity( ij[i][0], ij[i][1] ); 
            else if ( p == h )      prop[i] = enthalpy( ij[i][0], ij[i][1] ); 
@@ -1379,7 +1379,7 @@ template<typename fT>
 void H2OPropertiesLookUpTable<fT>::GetPropertyValuesCriticalPoint( property pr )  
  {
    fT t, p, press, temp, psat1, psat2, tsat1, tsat2;
-   for ( int32 i=0; i<4; i++ ) {
+   for ( int32_t i=0; i<4; i++ ) {
        if ( ij[i][0] != -1 && ij[i][1] != -1 ) {
            if      ( pr == cp )       prop[i] = crit_heat_capacity( ij[i][0], ij[i][1] ); 
            else if ( pr == h )        prop[i] = crit_enthalpy( ij[i][0], ij[i][1] ); 
@@ -1637,6 +1637,6 @@ fT H2OPropertiesLookUpTable<fT>::DynamicViscosity( fT t, fT input_density )  con
 }
 
 
-template class H2OPropertiesLookUpTable<double64>;
+template class H2OPropertiesLookUpTable<double>;
 
 } // end name space csmp

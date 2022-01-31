@@ -22,32 +22,32 @@ namespace csmp
   {
 
   public:
-    CriticalCurveLookup(const double64& externaltemperature);
+    CriticalCurveLookup(const double& externaltemperature);
     ~CriticalCurveLookup();
 
-    double64                Temperature();
-    double64                Pressure();
-    double64                MassFractionNaCl();
-    double64                TfromP(const double64& press); 
+    double                Temperature();
+    double                Pressure();
+    double                MassFractionNaCl();
+    double                TfromP(const double& press); 
 
     // the following ones may become obsolete in the course of code clean-up    
-    //    double64                MoleFractionNaCl();
-    double64                Density();
-    double64                Enthalpy();
-    double64                HeatCapacity();
-    double64                Compressibility();
-    double64                Viscosity();
-    double64                ValueOf(const int& property_index);
+    //    double                MoleFractionNaCl();
+    double                Density();
+    double                Enthalpy();
+    double                HeatCapacity();
+    double                Compressibility();
+    double                Viscosity();
+    double                ValueOf(const int& property_index);
 
   private:
 
-    const double64&         temperature;
+    const double&         temperature;
 
-    double64                tcurrent;        ///< temperature [C] for internal use
-    double64                pcurrent;        ///< pressure [Pa] for internal use
-    double64                t_res; 
-    double64                tnorm; 
-    double64                pnorm;
+    double                tcurrent;        ///< temperature [C] for internal use
+    double                pcurrent;        ///< pressure [Pa] for internal use
+    double                t_res; 
+    double                tnorm; 
+    double                pnorm;
 
     long                    it; 
     long                    it_min; 
@@ -57,11 +57,11 @@ namespace csmp
     long                    i_max; 
     long                    i_min;
 
-    std::vector<double64>   storage_vector;
+    std::vector<double>   storage_vector;
 
     CriticalPointH2O        cp_h2o;
     void                    GetTemperatureIndex(const double& t);
-    void                    GetTemperatureIndexCriticalCurve(const double64& t);
+    void                    GetTemperatureIndexCriticalCurve(const double& t);
     ErrorHandler&           csmp_error;
   };
 
@@ -83,7 +83,7 @@ namespace csmp
 
      at the temperature-pressure-composition coordinates of the critical curve.
 
-     The lookup table "CriticalCurveLookupTable.bin" is written as a binary file, and stores the properties listed above in a single, 1-dimensional std::vector<double64>, named storage_vector. storage_vector comprises subsequent blocks in each of which the values for the one property are stored in sequence of ascending temperature from the critical temperature of water (see file CriticalPointH2O.cpp) to 1000.0e0 degrees Celsius. Each block is of size t_dim (the number of entries, the first thing that is computed in the constructor), the sequence is defined in the file "LookupPropertyIndex.h". The temperature spacing is variable (see member GetTemperatureIndex for details), being densest near the critical temperature of water and largest at the highest temperatures.
+     The lookup table "CriticalCurveLookupTable.bin" is written as a binary file, and stores the properties listed above in a single, 1-dimensional std::vector<double>, named storage_vector. storage_vector comprises subsequent blocks in each of which the values for the one property are stored in sequence of ascending temperature from the critical temperature of water (see file CriticalPointH2O.cpp) to 1000.0e0 degrees Celsius. Each block is of size t_dim (the number of entries, the first thing that is computed in the constructor), the sequence is defined in the file "LookupPropertyIndex.h". The temperature spacing is variable (see member GetTemperatureIndex for details), being densest near the critical temperature of water and largest at the highest temperatures.
    
      @section testing Testing
      =======

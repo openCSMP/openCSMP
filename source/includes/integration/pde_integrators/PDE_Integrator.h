@@ -292,7 +292,7 @@ class PDE_Integrator {
     void          Add( MathOperatorRHS<dim>* );
     void          AddPostProcess( MathOperatorLHS<dim>* );
 
-    void          TimeIncrement( double64 dt );
+    void          TimeIncrement( double dt );
     bool          Transient() const;
     
     void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
@@ -302,14 +302,14 @@ class PDE_Integrator {
     virtual void  AdjustSolverSettings();
   
     /// applies scale factor to Dirichlet matrix-diagonal entries as applied by AssignEssentialConditions() and the rhs entries
-    void          ScaleEssentialConditions( double64 scale_factor);
+    void          ScaleEssentialConditions( double scale_factor);
 
     virtual void  Reset( bool delete_math_operators=true );
 
     void          ListMathOperatorsLHS() const;
     void          ListMathOperatorsRHS() const;
-    void          SolutionVector( std::vector<double64>& ) const;
-    void          FirstGuess( const std::vector<double64>& );
+    void          SolutionVector( std::vector<double>& ) const;
+    void          FirstGuess( const std::vector<double>& );
     void          RetainGlobalSolutionMatrix( bool yes_or_no );
     void          WriteGlobalMatrixBitMapToText( const char* file_name );
     void          OutputGlobals( int precision=1 );
@@ -332,7 +332,7 @@ class PDE_Integrator {
 
     virtual void  Solve();
 
-    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
+    virtual void  PostProcess( COMPUTATION_DOMAIN<dim>& );
 
     virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
 
@@ -345,15 +345,15 @@ class PDE_Integrator {
     std::map<Parameter,size_t>                   test_operands_;
 
     SparseMatrix            G_;
-    std::vector<double64>   rh_;
-    std::vector<double64>   x_;
+    std::vector<double>   rh_;
+    std::vector<double>   x_;
     Solver*                 solver_;
 
     const size_t            dim2_;
     size_t                  dof_per_node_;
     bool                    setup_established_, retain_matrix_;
     bool                    newed_Solver_object;
-    double64                time_increment_;
+    double                time_increment_;
 
     struct SIZES {
         size_t nodes;
@@ -362,14 +362,14 @@ class PDE_Integrator {
 
   private:
 
-    double64                scale_factor_; ///< for essential conditions
+    double                scale_factor_; ///< for essential conditions
     bool                    verbose_;
 #if defined(_OPENMP )
     std::vector<FiniteElementManager> femgrs_; // one manager per thread
     std::vector<std::map<std::string,MathOperatorLHS<dim>*> > thread_lhs_operators_;
     std::vector<std::map<std::string,MathOperatorRHS<dim>*> > thread_rhs_operators_;
     std::vector<SparseMatrix> thread_G_;
-    std::vector<std::vector<double64> > thread_rh_;
+    std::vector<std::vector<double> > thread_rh_;
 #endif
 };
 

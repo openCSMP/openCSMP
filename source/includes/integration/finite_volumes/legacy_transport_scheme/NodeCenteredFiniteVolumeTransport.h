@@ -53,51 +53,51 @@ class NodeCenteredFiniteVolumeTransport {
     virtual ~NodeCenteredFiniteVolumeTransport();
 
     /// single-phase passive advection, returns Courant increment
-    virtual double64 AdvectVariable( double64 time_interval,
-                                     double64 cfl_multiplication_factor=1.,
+    virtual double AdvectVariable( double time_interval,
+                                     double cfl_multiplication_factor=1.,
                                      bool apply_flux_balance_correction=true, // if there are poro-elastic sources or sinks
                                      bool update_pore_volumes=false);
   
     /// single-phase passive advection, does NOT return courant increment, single timestep calculation
     /// no checks are made for courant condition.  Assumes external checks.
-    virtual void AdvectVariableSingleStep( double64 time_increment,
-                                      bool apply_flux_balance_correction=true,
-                                      bool update_pore_volumes=false);
+    virtual void AdvectVariableSingleStep( double time_increment,
+                                           bool apply_flux_balance_correction=true,
+                                           bool update_pore_volumes=false);
 
     /// advection of one of two phases in two-phase flow handled by subclasses
-    virtual double64 TransportPhase( TwoPhaseModel<dim>&, double64 time_interval );
+    virtual double TransportPhase( TwoPhaseModel<dim>&, double time_interval );
 
     // bijective mapping
     // void MapFiniteVolumeVariableToFiniteElementSpace( const char* variable );
 
     /// evaluation of Courant-Friedrich-Levy condition, i.e., grid Courant number
-    //virtual double64 CourantIncrement();
+    //virtual double CourantIncrement();
 
     /// single phase, takes into account element shape in 3D
-    virtual double64 AnisotropicCourantIncrement();
+    virtual double AnisotropicCourantIncrement();
 
     /// advection, capillary diffusion and gravitational flow
-    //virtual double64 CourantIncrement( TwoPhaseModel<dim>& );
+    //virtual double CourantIncrement( TwoPhaseModel<dim>& );
 
     /// two-phase, takes into account element shape in 3D
-    virtual double64 AnisotropicCourantIncrement( TwoPhaseModel<dim>&,
-                                                  double64 max_time_increment=3153600000. ); // 100 years
+    virtual double AnisotropicCourantIncrement( TwoPhaseModel<dim>&,
+                                                  double max_time_increment=3153600000. ); // 100 years
 
     /// to set scaling (default=1)
-    void     CFL_Multiplier( double64 desired_value );
-    double64 CFL_Multiplier() const;    
+    void     CFL_Multiplier( double desired_value );
+    double CFL_Multiplier() const;    
 
     /// to apply the gradient limiter
     void  WithLsmGradientLimiter(Model<dim>&);
     void  MaxNonlinear2ndOrderIterations(size_t max_nonlinear_iterations);
-    void  TargetNonlinear2ndOrderResidual(double64 target_residual);
+    void  TargetNonlinear2ndOrderResidual(double target_residual);
 
-    double64 ModelInflow() const;
-    double64 ModelOutflow() const;
+    double ModelInflow() const;
+    double ModelOutflow() const;
 
     /// returns inflow, outflow, and mismatch between these; calculation can FVs where variable is flagged with exclude_flag
-    double64 BoundaryFluxes( double64& inflow,
-                             double64& out_flow,
+    double BoundaryFluxes( double& inflow,
+                             double& out_flow,
                              bool box_shaped_model                      = true,
                              bool use_advected_variable                 = false,
                              const char* advected_variable              = "no advected variable",
@@ -106,7 +106,7 @@ class NodeCenteredFiniteVolumeTransport {
                            ) const;
   
     /// for each finite volume it sums up incoming and outgoing fluxes reporting the extrema
-    void FluxBalance( double64& fmin, double64& fmax ) const;
+    void FluxBalance( double& fmin, double& fmax ) const;
 
     /// as previous method, but assigns surface integrals to the result property
     void Divergence( const char* div_property, const char* result_prop ) const;
@@ -115,11 +115,11 @@ class NodeCenteredFiniteVolumeTransport {
     void MultiplyScalarNodePropertyByFiniteVolume( const char* property );
 
     /// integrates scalar node and element variables
-    double64 VolumeIntegrateScalarFiniteVolumeVariable( const char* property, bool consider_porosity ) const;
-    double64 VolumeIntegrateScalarFiniteElementVariable( const char* property, bool take_porosity_into_account = false, const char *region=NULL ) const;
+    double VolumeIntegrateScalarFiniteVolumeVariable( const char* property, bool consider_porosity ) const;
+    double VolumeIntegrateScalarFiniteElementVariable( const char* property, bool take_porosity_into_account = false, const char *region=NULL ) const;
 
     /// integrates target property over a region of interest, result can be scaled by porosity
-    double64 VolumeIntegrateScalarFiniteVolumeVariable( const char* group, const Model<dim>&,
+    double VolumeIntegrateScalarFiniteVolumeVariable( const char* group, const Model<dim>&,
                                                         const char* property, bool consider_porosity ) const;
     /// integrals for finite-element computations
     void     VolumeIntegrate( const char* integrand_property, const char* result_prop ) const;
@@ -136,11 +136,11 @@ class NodeCenteredFiniteVolumeTransport {
 
     /// assignment of a single specific value that is projected on outward point normal
     void AssignScalarBoundaryValues( BOX_BOUNDARY, const char* property, VARIABLE_FLAG bcond,
-                                     double64 val, bool distribute_total_amount );
+                                     double val, bool distribute_total_amount );
 
     /// returns the actual volume of the finite volume i
-    double64 FiniteVolume( const char* volume_property ) const;
-    double64 PoreVolume( size_t iFv_cell ) const;
+    double FiniteVolume( const char* volume_property ) const;
+    double PoreVolume( size_t iFv_cell ) const;
 
     /// Adjust flexible samg solver settings
     virtual void AdjustSolverSettings();
@@ -148,11 +148,6 @@ class NodeCenteredFiniteVolumeTransport {
     /// Access to advector's solver settings
     virtual CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS& GetSolverSettings();
     virtual CSMP_DEFAULT_LINEAR_SOLVER* GetSolver();
-
-#if defined(_OPENMP )
-    std::vector<FiniteVolumeStencilManager<dim> > fvmgrs_; // one manager per thread
-    std::vector<FiniteElementManager> femgrs_; // one manager per thread
-#endif
 
     virtual void  Out() const;
 
@@ -177,7 +172,7 @@ class NodeCenteredFiniteVolumeTransport {
     void InitialAdvectedPropertyValues( const csmp::Index& adv_key );
 
     void InitialAdvectedPropertyValues( const csmp::Index& adv_key,
-                                        double64& smin, double64& smax );
+                                        double& smin, double& smax );
 
     void MinMaxAdvectedProperty();
 
@@ -185,23 +180,23 @@ class NodeCenteredFiniteVolumeTransport {
 
     void UpdateProjectedVelocitiesAndFluxBalances();
 
-    bool FluxThroughBoundaryFiniteVolume( const Node<dim>* fv_ptr, double64& inflow, double64& flux_balance ) const;
+    bool FluxThroughBoundaryFiniteVolume( const Node<dim>* fv_ptr, double& inflow, double& flux_balance ) const;
 
     void AssignFluxBoundaryConditions( NodeCenteredFiniteVolumeAlgorithm<dim>& advection_algorithm,
                                        bool use_t0_saturation ) const;
 
     // outputs the flux balance in each FV cell to the variable 'balance var' and integrates it
     void RecordFluxBalances( const char* balance_var,
-                             double64& total_surplus, double64& total_deficit ) const;
+                             double& total_surplus, double& total_deficit ) const;
 
     void AdvectVariable1stOrder( NodeCenteredFiniteVolumeAlgorithm<dim>&,
-                                 double64 time_interval, bool with_flux_balance_correction );
+                                 double time_interval, bool with_flux_balance_correction );
     // 2nd-order in space
     void AdvectVariable2ndOrder( NodeCenteredFiniteVolumeAlgorithm<dim>&,
-                                   double64 time_increment, bool with_flux_balance_correction );
+                                 double time_increment, bool with_flux_balance_correction );
 
     void AdvectVariable2ndOrderInSpaceAndTime( NodeCenteredFiniteVolumeAlgorithm<dim>&,
-                                                 double64 time_increment, bool with_flux_balance_correction );
+                                                 double time_increment, bool with_flux_balance_correction );
 
 protected:
     const PropertyDatabase<dim>& pref_;
@@ -211,13 +206,13 @@ protected:
     bool                         verbose_;
 
     std::vector<FV_Parameter>           STENCIL_DATA;  ///< finite-volume data for fast calculations
-    std::vector<double64>               FVPOREVOL,     ///< pore volumes of finite-volume cells for theta calculation etc.
+    std::vector<double>               FVPOREVOL,     ///< pore volumes of finite-volume cells for theta calculation etc.
                                         SAT0,          ///< advected variable at t0
                                         FLUX_BALANCE;  ///< for each FV, but excluding truncated FV at global model boundaries
 
     // arrays for second-order accurate calculations
-    std::vector<std::pair<double64,double64> >  SMINMAX; ///< min, max values of advected property at neighbor FV's of current FV    
-    std::vector<std::vector<double64> > FACETFLUXES0,  ///< at time, t (at last time step)
+    std::vector<std::pair<double,double> >  SMINMAX; ///< min, max values of advected property at neighbor FV's of current FV    
+    std::vector<std::vector<double> > FACETFLUXES0,  ///< at time, t (at last time step)
                                         LTDSATS0;      ///< ltd values of advected property
 
     const csmp::Index                   phi_key_;       ///< porosity
@@ -231,25 +226,24 @@ protected:
     csmp::Index                         grad_advprop_key_;			///< gradient of the advacted property
     csmp::Index                         grad_advprop_limiter_key_;	///< limiter for the gradient of the advected property
     std::string                         advected_variable_;
-    double64                            cfl_multiplier_;
+    double                            cfl_multiplier_;
     size_t                              var_ncomponents_; /// default size is 1 if only a scalar is being advected. (Julian)
 
-    FiniteVolumeStencilManager<dim>*    stencils_;     ///< the finite volumes; build the stencil manager
     StencilProcessor<dim>               stencil_;
     bool                                firstCall_;
     bool                                with_lsmgrad_limiter_;
 
-    double64 target_nonlinear_limiting_case_residual_; ///< targed residual in order to get correct 2nd order approximations
+    double target_nonlinear_limiting_case_residual_; ///< targed residual in order to get correct 2nd order approximations
     size_t max_nonlinear_limiting_case_iterations_;    ///< maximum number of nonlinear iterations in 2nd order scheme
 
-    NodeCenteredFiniteVolumeAlgorithm<dim>*  baseAdvector_;
-    GenericNodePropertyGradientLimiter<dim>*  grad_advprop_limiter_;
+    NodeCenteredFiniteVolumeAlgorithm<dim>*  baseAdvector_ = nullptr;
+    GenericNodePropertyGradientLimiter<dim>*  grad_advprop_limiter_ = nullptr;
 };
 
 
 
 template<size_t dim>
-inline double64 NodeCenteredFiniteVolumeTransport<dim>::PoreVolume( size_t fv_cell ) const
+inline double NodeCenteredFiniteVolumeTransport<dim>::PoreVolume( size_t fv_cell ) const
  {
     assert( fv_cell < FVPOREVOL.size() );
     return FVPOREVOL[fv_cell];

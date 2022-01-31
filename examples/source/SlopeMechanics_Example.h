@@ -29,7 +29,7 @@ void dilatationInducedChangeInPorePressure( Model<DIM>& model );
 
 void permeabilityPorosityCorrelation( Model<DIM>& model );
 
-void gravityForce( Model<DIM>& model, double64 acc_gravity );
+void gravityForce( Model<DIM>& model, double acc_gravity );
 
 
 } // end csmp

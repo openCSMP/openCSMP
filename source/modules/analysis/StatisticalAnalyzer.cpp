@@ -63,10 +63,10 @@ const
 
      // vector<pair<double,double> >
      HistogramBins        result( bins.size(), make_pair(0.,0.) );
-     double64             volume;
+     double             volume;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     double64             val;
+     double             val;
      
      // defining upper bin limits in result vector (lowest limit is 0.0)
      typename HistogramBins::iterator rit=result.begin();
@@ -83,10 +83,9 @@ const
      for ( typename map<std::string,Region<dim> >::const_iterator
            grit=sref.UniqueRegionsBegin(); grit!=sref.UniqueRegionsEnd(); grit++ )
        {  
-          double64 total_volume = 0.; 
-          uint32  n(0);
-           for ( typename vector<Element<dim>*>::const_iterator  
-                 it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+          double total_volume = 0.; 
+          uint32_t  n(0);
+           for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
              {
                 total_volume += volume = (*it)->Volume();
                 if ( prop_key.type == SCALAR ) {
@@ -105,7 +104,7 @@ const
                                       "Array variables are not handled yet.");
                
                 // adding the value to the corresponding column of the histogram
-                uint32  i(0U);
+                uint32_t  i(0U);
                 for ( typename HistogramBins::const_iterator
                       vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                   {
@@ -123,11 +122,11 @@ const
 
            // normalizing by area, i.e. how much of total area has this characteristic
            // ------------------------------------------------------------------------
-           for ( uint32 i=0; i<result.size(); i++ ) result[i].second /= total_volume;
+           for ( uint32_t i=0; i<result.size(); i++ ) result[i].second /= total_volume;
             
            // 3. storing result map and zeroing vector for next region
            //---------------------------------------------------------
-           results[ (*grit).first ] = pair<HistogramBins,uint32>(result,n);
+           results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,n);
          
            // zeroing out the column values
            for ( typename HistogramBins::iterator
@@ -170,7 +169,7 @@ const
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     double64             val;
+     double             val;
      size_t               n(1U);
 
      // defining upper bin limits in result vector (lowest limit is always 0.)
@@ -189,8 +188,7 @@ const
           switch ( prop_key.place )
             {
                 case NODE:
-                     for ( typename vector<Node<dim>*>::const_iterator
-                           it=(*grit).second.NodesBegin(); it!=(*grit).second.NodesEnd(); it++ )
+                     for ( auto it=(*grit).second.NodesBegin(); it!=(*grit).second.NodesEnd(); it++ )
                        {
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
                           // ------------------------------------------------------------------------------------
@@ -228,8 +226,7 @@ const
                      n = (*grit).second.Nodes();
                    break;
                 case ELEMENT_INTEGRATION_POINT:
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        for ( size_t j=0U; j<(*it)->IntegrationPoints(); j++ )
                          {
                             if ( prop_key.type == SCALAR ) {
@@ -265,8 +262,7 @@ const
                    break;
                 case ELEMENT: 
 
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
 
                           if ( prop_key.type == SCALAR ) {
@@ -315,7 +311,7 @@ const
 
          // 3. storing result map and zeroing vector for next group
          //--------------------------------------------------------
-         results[ (*grit).first ] = pair<HistogramBins,uint32>(result,n);
+         results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,n);
          for ( typename HistogramBins::iterator
                rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
 
@@ -345,11 +341,11 @@ const
  {
      csmp::Index  prop_key = pref.StorageKey(prop);
      HistogramBins        result( bins.size() );
-     double64             total_volume, volume;
+     double             total_volume, volume;
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     double64             val;
+     double             val;
 
      // defining upper bin limits in result vector (lowest limit is always 0.)
      HistogramBins::iterator rit=result.begin();
@@ -370,8 +366,7 @@ const
             {
                 case NODE:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -413,8 +408,7 @@ const
 
                 case ELEMENT_INTEGRATION_POINT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -425,7 +419,7 @@ const
                                      val += (*it)->PropertyValueAtIntegrationPoint( prop_key, n );
                                   }
                                 // averaging the ip values
-                                val /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                val /= static_cast<double>((*it)->FE()->IntegrationPoints());
                              }
                           else if ( prop_key.type == VECTOR ) {
                                 val = 0.;
@@ -433,7 +427,7 @@ const
                                      (*it)->PropertyValueAtIntegrationPoint( prop_key, n, vc );
                                      val += vc.Length();
                                   }
-                                val /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                val /= static_cast<double>((*it)->FE()->IntegrationPoints());
                              }
                           else { // TENSOR
                                 val = 0.;
@@ -441,7 +435,7 @@ const
                                      (*it)->PropertyValueAtIntegrationPoint( prop_key, n, ts );
                                      val += ts.Determinant();
                                   }
-                                val /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                val /= static_cast<double>((*it)->FE()->IntegrationPoints());
                              }
                           // 1.2 binning the value
                           // ---------------------
@@ -468,8 +462,7 @@ const
 
                 case ELEMENT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -515,7 +508,7 @@ const
 
           // 2. storing result map and zeroing vector for next group
           //--------------------------------------------------------
-          results[ (*grit).first ] = pair<HistogramBins,uint32>(result,(*grit).second.Elements());
+          results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,(*grit).second.Elements());
           for ( HistogramBins::iterator
                 rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
 
@@ -542,16 +535,16 @@ const
     {
         csmp::Index  prop_key = pref.StorageKey(prop);
         HistogramBins        result( bins.size() );
-        double64             total_volume(0.), volume, element_vol(0.);
+        double             total_volume(0.), volume, element_vol(0.);
         VectorVariable<dim>  vc;
-        double64             val;
+        double             val;
         int count(0);
         
         // for tubes
-        double64 patm(100325.);
+        double patm(100325.);
         const csmp::Index p_key(pref.StorageKey("fluid pressure"));
         
-        double64 max(0.), min(1e300);
+        double max(0.), min(1e300);
         
         cout<<"RegionPropertyHistogramsIntegrationPoint: "<<prop<<endl;
         
@@ -569,8 +562,7 @@ const
         // -------------------------------------------
         const Region<dim>& subdomain(sref.Region(flow_domain));
         //    cout<<"velocity"<<endl;
-        for ( typename vector<Element<dim>*>::const_iterator
-             it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); it++ )
+        for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); it++ )
         {
             // will work for BCC but not for tubes
             //total_volume += fabs( volume = (*it)->Volume() );
@@ -582,14 +574,14 @@ const
             for ( size_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
                 if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
                     (*it)->PropertyValueAtIntegrationPoint( prop_key, n, vc );
-                    double64 det_J((*it)->det_JINV_AtIntegrationPoint(n));
+                    double det_J((*it)->det_JINV_AtIntegrationPoint(n));
                     //total_volume += fabs( volume );
                     volume = det_J * (*it)->WeightAtIntegrationPoint(n);
                     val += vc.Length() * volume;
                     element_vol += volume;
                 } //if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
             } // for ( size_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
-            //val /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+            //val /= static_cast<double>((*it)->FE()->IntegrationPoints());
             if (element_vol > 0.) {
                 val /= element_vol;
                 total_volume += element_vol;
@@ -629,7 +621,7 @@ const
         cout<<endl;
         // 2. storing result map and zeroing vector for next group
         //--------------------------------------------------------
-        results[ flow_domain ] = pair<HistogramBins,uint32>(result,subdomain.Elements());
+        results[ flow_domain ] = pair<HistogramBins,uint32_t>(result,subdomain.Elements());
         for ( HistogramBins::iterator
              rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
         
@@ -658,12 +650,12 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
      csmp::Index  poro_key( (weighted_by_porosity==true) ? pref.StorageKey("porosity") : csmp::Index() );
      HistogramBins        result1( bins.size() );
      HistogramBins        result2( bins.size() );
-     double64             total_volume, volume;
+     double             total_volume, volume;
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     double64             val1(0.), val2(0.);
-     double64             porosity(1.);
+     double             val1(0.), val2(0.);
+     double             porosity(1.);
 
      // defining upper bin limits in result vector (lowest limit is always 0.)
      HistogramBins::iterator rit1=result1.begin();
@@ -685,8 +677,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
             {
                 case NODE:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -717,7 +708,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    val2 += (*it)->PropertyValueAtIntegrationPoint( prop2_key, n );
                                                 }
                                               // averaging the ip values
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               val2 = 0.;
@@ -725,7 +716,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, vc );
                                                    val2 += vc.Length();
                                                 }
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                         else { // TENSOR
                                               val2 = 0.;
@@ -733,7 +724,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, ts );
                                                    val2 += ts.Determinant();
                                                 }
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                    break;
 
@@ -804,8 +795,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                 case ELEMENT_INTEGRATION_POINT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -835,7 +825,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    val2 += (*it)->PropertyValueAtIntegrationPoint( prop2_key, n );
                                                 }
                                               // averaging the ip values
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               val2 = 0.;
@@ -843,7 +833,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, vc );
                                                    val2 += vc.Length();
                                                 }
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                         else { // TENSOR
                                               val2 = 0.;
@@ -851,7 +841,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, ts );
                                                    val2 += ts.Determinant();
                                                 }
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                    break;
 
@@ -883,7 +873,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                      val1 += (*it)->PropertyValueAtIntegrationPoint( prop1_key, n );
                                   }
                                 // averaging the ip values
-                                val1 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                val1 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                              }
                           else if ( prop1_key.type == VECTOR ) {
                                 val1 = 0.;
@@ -891,7 +881,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                      (*it)->PropertyValueAtIntegrationPoint( prop1_key, n, vc );
                                      val1 += vc.Length();
                                   }
-                                val1 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                val1 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                              }
                           else { // TENSOR
                                 val1 = 0.;
@@ -899,7 +889,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                      (*it)->PropertyValueAtIntegrationPoint( prop1_key, n, ts );
                                      val1 += ts.Determinant();
                                   }
-                                val1 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                val1 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                              }
 
                           // 1.2 binning the value
@@ -936,8 +926,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                 case ELEMENT:
                      total_volume = 0.;
-                     for ( typename vector<Element<dim>*>::const_iterator
-                           it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -968,7 +957,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    val2 += (*it)->PropertyValueAtIntegrationPoint( prop2_key, n );
                                                 }
                                               // averaging the ip values
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               val2 = 0.;
@@ -976,7 +965,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, vc );
                                                    val2 += vc.Length();
                                                 }
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                         else { // TENSOR
                                               val2 = 0.;
@@ -984,7 +973,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, ts );
                                                    val2 += ts.Determinant();
                                                 }
-                                              val2 /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+                                              val2 /= static_cast<double>((*it)->FE()->IntegrationPoints());
                                            }
                                    break;
 
@@ -1060,11 +1049,11 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
           // 2. storing result map and zeroing vector for next group
           //--------------------------------------------------------
-          results1[ (*grit).first ] = pair<HistogramBins,uint32>(result1,(*grit).second.Elements());
+          results1[ (*grit).first ] = pair<HistogramBins,uint32_t>(result1,(*grit).second.Elements());
           for ( HistogramBins::iterator
                 rit=result1.begin(); rit!=result1.end(); rit++ ) (*rit).second = 0.;
 
-          results2[ (*grit).first ] = pair<HistogramBins,uint32>(result2,(*grit).second.Elements());
+          results2[ (*grit).first ] = pair<HistogramBins,uint32_t>(result2,(*grit).second.Elements());
           for ( HistogramBins::iterator
                 rit=result2.begin(); rit!=result2.end(); rit++ ) (*rit).second = 0.;
 
@@ -1122,7 +1111,7 @@ const
     strcpy( file, fname );
     strcat( file, ".txt" );
     ofstream  ofs( file );
-    double64 binval1, binval2;
+    double binval1, binval2;
 
     ofs <<"StatisticalAnalyzer::WriteHistogramToMapleTextfile: "<< fname <<", N samples: "<< points << endl;
     ofs << endl << endl;
@@ -1186,7 +1175,7 @@ const
     strcpy( file, fname );
     strcat( file, ".txt" );
     ofstream  ofs( file );
-    double64 binval1, binval2, bin_center;
+    double binval1, binval2, bin_center;
 
     ofs <<"StatisticalAnalyzer::WriteCurvePointsToMapleTextfile: "<< fname <<", N samples: "<< points << endl;
     ofs << endl << endl;
@@ -1434,7 +1423,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const char* bin_file,
                                            HistogramBins& data ) const
  {
     data.erase( data.begin(), data.end() );
-    double64  first_val, val;
+    double  first_val, val;
 
     ifstream ifs( bin_file );
 
@@ -1450,7 +1439,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const char* bin_file,
     cout <<"\nStatisticalAnalyzer::DefineBins: File header: "<< title << endl;
 
     // number of bin boundaries to read
-    uint32 bins;
+    uint32_t bins;
     ifs >> bins;
 
     if ( bins > 100 )
@@ -1489,11 +1478,11 @@ void StatisticalAnalyzer<dim>::DefineBins( const char* bin_file,
 
 
 template<size_t dim>
-void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double64 first_val, ... ) const
+void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double first_val, ... ) const
  {
     //bins.erase( bins.begin(), bins.end() );
     bins.clear();
-    double64  val;
+    double  val;
 
     // unamed argument pointer
     va_list  ap;
@@ -1501,7 +1490,7 @@ void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double64 first_v
     // point ap to last named argument in function
     va_start( ap, first_val );
     int isize(0);
-    while ( (val=va_arg(ap,double64)) != 0. )
+    while ( (val=va_arg(ap,double)) != 0. )
       {
          isize++;
       }
@@ -1509,7 +1498,7 @@ void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double64 first_v
     bins.reserve( isize );
     // go through un-named argument list
     va_start( ap, first_val );
-    while ( (val=va_arg(ap,double64)) != 0. )
+    while ( (val=va_arg(ap,double)) != 0. )
       {
 //cout<<"Val ."<<val<<endl;
          // put here the minimum and maximum values allowed in Property database
@@ -1521,7 +1510,7 @@ void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double64 first_v
 
     cout <<"\nStatisticalAnalyzer::DefineBins: defined the bins (ranges): "<< endl;
     cout.setf( ios::scientific );
-    int32 i(1);
+    int32_t i(1);
     for ( typename HistogramBins::const_iterator it=bins.begin(); it!=bins.end(); it++ )
      cout << i++ <<": "<< (*it).first <<" to "<< (*it).second << endl;
     cout << endl;
@@ -1530,8 +1519,8 @@ void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double64 first_v
 
 
 template<size_t dim>
-void StatisticalAnalyzer<dim>::DefineBins( const double64 minimum, 
-                                           const double64 maximum, 
+void StatisticalAnalyzer<dim>::DefineBins( const double minimum, 
+                                           const double maximum, 
                                            const size_t number_of_bins,
                                            HistogramBins& data ) const
  {
@@ -1545,9 +1534,9 @@ void StatisticalAnalyzer<dim>::DefineBins( const double64 minimum,
       
     data.erase( data.begin(), data.end() );
     data.reserve( number_of_bins + 1 );
-    double64 bin_size ( ( maximum - minimum ) / static_cast<double64>(number_of_bins) );
+    double bin_size ( ( maximum - minimum ) / static_cast<double>(number_of_bins) );
 
-    double64  first_val, val;
+    double  first_val, val;
 
 
     for ( size_t n=0U; n < (number_of_bins + 1); n++ ) {

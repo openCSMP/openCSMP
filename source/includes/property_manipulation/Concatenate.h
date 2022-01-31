@@ -79,7 +79,7 @@ inline void Concatenate<dim,operation>::Calculate()
   if (it == Interrelation< dim>::result_) ++it;
  	
  	if (!result_is_argument) {
- 	  res_ = static_cast<double64>(1.);
+ 	  res_ = static_cast<double>(1.);
  	  res_ *= it->second;
  	  ++it;
  	}

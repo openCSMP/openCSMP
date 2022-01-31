@@ -241,10 +241,10 @@ Criterion:
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     //! time
-    double64 global_time        = 0.;
-    double64 max_time           = 31536000; // 1 year
-    double64 time_increment     = 86400; // 1 day
-	double64 time_increment_advection, time_advection;
+    double global_time        = 0.;
+    double max_time           = 31536000; // 1 year
+    double time_increment     = 86400; // 1 day
+	double time_increment_advection, time_advection;
     size_t time_step            = 0;
       
     //! Initial equalibration

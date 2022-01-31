@@ -47,8 +47,8 @@ bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_ol
     char*                  token;
     mjl::Point3D           p1, p2, p3;
     list<mjl::Triangle3D>  triangles;
-    double64               x, y, z;
-    long64                 triangle_counter(0);
+    double               x, y, z;
+    int64_t                  triangle_counter(0);
     string                 oname;
     
     strcpy( fname, raw_file );
@@ -154,7 +154,7 @@ bool SKM_RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_ol
 
 void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                                             map<size_t,mjl::Point3D>&  points,
-                                            map<size_t,vector<size_t> >& plist,
+                                            map<size_t,vector<int64_t> >& plist,
                                             size_t poffset ) const
   {
      // finding the desired object in the map 
@@ -172,12 +172,12 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
     // zooming through the triangle list, 
     // creating a unique set of nodes ordered by hashkeys created from the node coordinates
     // for this, the node coordinates are converted to strings 
-    map<string,vector<double64> >          pxyz;
-    vector<double64>                       coord(3);
+    map<string,vector<double> >          pxyz;
+    vector<double>                       coord(3);
     list<mjl::Triangle3D>::const_iterator  lit;
     string                                 key;
     char                                   num[20];
-    int32                                  i, j;
+    int32_t                                  i, j;
      
     for ( lit=(*it).second.begin(); lit!=(*it).second.end(); lit++ )
       {
@@ -189,7 +189,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               for ( j=0; j<3; j++ )
                 {
                    coord[static_cast<size_t>(j)] = (*lit)[i][j];
-                   // convert double64 coordinate value to string and add to hash key
+                   // convert double coordinate value to string and add to hash key
                    sprintf( num, "%lf", (*lit)[i][j] );
                    key += num;
                 }
@@ -202,8 +202,8 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
     // and assigning the vertex points to the output map
     map<string,size_t>                              pxyz_ids;
     size_t                                          n;
-    vector<size_t>                                  ids(3);
-    map<string,vector<double64> >::const_iterator  pit;
+    vector<int64_t>                                  ids(3);
+    map<string,vector<double> >::const_iterator  pit;
     
     for ( n=poffset, pit=pxyz.begin(); pit!=pxyz.end(); pit++ )
       { 
@@ -226,7 +226,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               for ( j=0; j<3; j++ )
                 {
                    coord[static_cast<size_t>(j)] = (*lit)[i][j];
-                   // convert double64 coordinate value to string and add to hash key
+                   // convert double coordinate value to string and add to hash key
                    sprintf( num, "%lf", (*lit)[i][j] );
                    key += num;
                 }
@@ -252,13 +252,13 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
 
 
 
-void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t> >& plist,
-                                                  map<size_t,vector<long64> >& pfverts,
-                                                  unordered_map<size_t,long64>& pbflags ) const
+void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_t> >& plist,
+                                                  map<size_t,vector<int64_t> >& pfverts,
+                                                  vector<std::int8_t>& pbflags ) const
  {
      //  parent element id,  edge of p1 < p2
-     map<pair<size_t,size_t>,long64>              edge_map;
-     map<size_t,vector<size_t> >::const_iterator  pit;
+     map<pair<size_t,size_t>,int64_t>              edge_map;
+     map<size_t,vector<int64_t> >::const_iterator  pit;
      
      // just in case
      if ( !pfverts.empty() ) pfverts.erase( pfverts.begin(), pfverts.end() );
@@ -268,39 +268,39 @@ void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t
      // have opposite node id numbers
      for ( pit=plist.begin(); pit!=plist.end(); pit++ ) {
           // edge 1 (01) counter-clockwise nodes
-          edge_map.insert( make_pair( make_pair((*pit).second[0], (*pit).second[1]), static_cast<int32>((*pit).first) ) );
+          edge_map.insert( make_pair( make_pair((*pit).second[0], (*pit).second[1]), static_cast<int32_t>((*pit).first) ) );
           // edge 2 (12)
-          edge_map.insert( make_pair( make_pair((*pit).second[1], (*pit).second[2]), static_cast<int32>((*pit).first) ) );
+          edge_map.insert( make_pair( make_pair((*pit).second[1], (*pit).second[2]), static_cast<int32_t>((*pit).first) ) );
           // edge 3 (20)
-          edge_map.insert( make_pair( make_pair((*pit).second[2], (*pit).second[0]), static_cast<int32>((*pit).first) ) );
+          edge_map.insert( make_pair( make_pair((*pit).second[2], (*pit).second[0]), static_cast<int32_t>((*pit).first) ) );
        }
  
      // finding the neighbor id's by using the opposite edge definition now to retrieve the neighbor edges
      // if there is no such neighbor, the edge is located on the model boundary and is flagged as IRREGULAR_OUTSIDE
-     map<pair<size_t,size_t>,long64>::const_iterator  eit;
-     vector<long64>                                   nbors(3);
+     map<pair<size_t,size_t>,int64_t>::const_iterator  eit;
+     vector<int64_t> nbors(3);
 
-     for ( pit=plist.begin(); pit!=plist.end(); pit++ ) {
+     for ( auto pit=plist.begin(); pit!=plist.end(); pit++ ) {
           // initializing neighbor ids
           // neighbor 1 (12)                              clockwise nodes 
           if ( (eit=edge_map.find( make_pair((*pit).second[2],(*pit).second[1]))) == edge_map.end() ) {
                nbors[0] = IRREGULAR_OUTSIDE;
-               pbflags.insert( make_pair( (*pit).second[2],nbors[0] ) );
-               pbflags.insert( make_pair( (*pit).second[1],nbors[0] ) );
+               pbflags[ (*pit).second[2] ] = nbors[0];
+               pbflags[ (*pit).second[1] ] = nbors[0];
             }
           else nbors[0] = (*eit).second;
           // neighbor 2 (20)
           if ( (eit=edge_map.find( make_pair((*pit).second[0],(*pit).second[2]))) == edge_map.end() ) {
                nbors[1] = IRREGULAR_OUTSIDE;
-               pbflags.insert( make_pair( (*pit).second[0],nbors[1] ) );
-               pbflags.insert( make_pair( (*pit).second[2],nbors[1] ) );
+               pbflags[ (*pit).second[0] ] = nbors[1];
+               pbflags[ (*pit).second[2] ] = nbors[1];
             }
           else nbors[1] = (*eit).second;
           // neighbor 3 (01)
           if ( (eit=edge_map.find( make_pair((*pit).second[1],(*pit).second[0]))) == edge_map.end() ) {
                nbors[2] = IRREGULAR_OUTSIDE;
-               pbflags.insert( make_pair( (*pit).second[1],nbors[2] ) );
-               pbflags.insert( make_pair( (*pit).second[0],nbors[2] ) );
+               pbflags[ (*pit).second[1] ] = nbors[2];
+               pbflags[ (*pit).second[0] ] = nbors[2];
             }
           else nbors[2] = (*eit).second;
           // adding new neighbor vector to map
@@ -395,7 +395,7 @@ which make up each triangle.
 */
 bool SKM_RhinoSurfaceReader::PopObject( const char *obj_name,
                                         map<size_t,mjl::Point3D >&  points,
-                                        map<size_t,vector<size_t> >& plist,
+                                        map<size_t,vector<int64_t> >& plist,
                                         size_t poffset ) const
  {
      ObjectToPData( string(obj_name), points, plist, poffset );
@@ -490,13 +490,13 @@ void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) c
 
     // find object and create pxyz and plist arrays for the desired object
     map<size_t,mjl::Point3D>     points;
-    map<size_t,vector<size_t> >  plist;
+    map<size_t,vector<int64_t> >  plist;
 
     PopObject( object.c_str(), points, plist );
     
     // create 'pfverts' data
-    unordered_map<size_t,long64>  pbflags;
-    map<size_t,vector<long64> >  pfverts;
+    vector<std::int8_t>         pbflags;
+    map<size_t,vector<int64_t> > pfverts;
 
     CreateNeighborPData( plist, pfverts, pbflags );
 
@@ -664,9 +664,9 @@ void SKM_RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs 
     assert( ofs.is_open() );
  
     map<size_t,mjl::Point3D>                     points;
-    map<size_t,vector<size_t> >                  plist;
+    map<size_t,vector<int64_t> >                  plist;
     map<size_t,mjl::Point3D>::const_iterator     it;
-    map<size_t,vector<size_t> >::const_iterator  pit;
+    map<size_t,vector<int64_t> >::const_iterator  pit;
 
     // find object and create pxyz and plist arrays for the desired object
     PopObject( obj, points, plist, 0 );
@@ -748,15 +748,15 @@ void SKM_RhinoSurfaceReader::ExchangeCoordinateAxes( int axis_a, int axis_b )
 
     // looping over the objects 
     mjl::Point3D  pt[3];
-    double64      swap;
-    long64        pid;
+    double      swap;
+    int64_t         pid;
     
     for ( map<string,list<mjl::Triangle3D> >::iterator
           oit=objects.begin(); oit!=objects.end(); oit++ )
       for ( list<mjl::Triangle3D>::iterator
             tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
         {
-           for ( int32 i=0; i<3; i++ )
+           for ( int32_t i=0; i<3; i++ )
              {
                 // changing point by point 
                 // 1. getting the point 
@@ -796,7 +796,7 @@ To scale an object for a new frame of reference.
 
 Nothing is done if no objects are present. 
  */
-void SKM_RhinoSurfaceReader::ScaleCoordinates( double64 x_fac, double64 y_fac, double64 z_fac )
+void SKM_RhinoSurfaceReader::ScaleCoordinates( double x_fac, double y_fac, double z_fac )
  {
     if ( objects.empty() )
       {
@@ -811,7 +811,7 @@ void SKM_RhinoSurfaceReader::ScaleCoordinates( double64 x_fac, double64 y_fac, d
     for ( map<string,list<mjl::Triangle3D> >::iterator oit = objects.begin(); oit!=objects.end(); oit++ )
       for ( list<mjl::Triangle3D>::iterator tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
         {
-           for ( int32 i=0; i<3; i++ )
+           for ( int32_t i=0; i<3; i++ )
              {
                 // changing point by point 
                 // 1. getting the point 
@@ -848,7 +848,7 @@ To transform the stored surfaces to another space position.
 
 If no objects are stored, Nothing is done.  
 */
-void SKM_RhinoSurfaceReader::MoveCoordinates( double64 x_move, double64 y_move, double64 z_move )
+void SKM_RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z_move )
  {
     if ( objects.empty() )
       {
@@ -861,12 +861,12 @@ void SKM_RhinoSurfaceReader::MoveCoordinates( double64 x_move, double64 y_move, 
     map<string,list<mjl::Triangle3D> >::iterator  oit;  
     list<mjl::Triangle3D>::iterator                            tit;
     mjl::Point3D                                               pt[3];
-    int32                                                     pid;
+    int32_t                                                     pid;
     
     for ( oit = objects.begin(); oit!=objects.end(); oit++ )
       for ( tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
         {
-           for ( int32 i=0; i<3; i++ )
+           for ( int32_t i=0; i<3; i++ )
              {
                 // changing point by point 
                 // 1. getting the point 

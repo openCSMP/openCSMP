@@ -20,34 +20,46 @@ namespace csmp {
 */
 class MeshManager_Test : public Test {
   public:
-    MeshManager_Test( bool reconstruct_model_from_CSMP_binary_file );
-    MeshManager_Test( /* vset maker based model */ );
-    ~MeshManager_Test() { delete model3d_; }
+    MeshManager_Test();
+    virtual ~MeshManager_Test() { delete model2d_; delete model3d_; }
+    
     virtual void run();
   
   private:
-    void TestBasics();
+    // create test models that are subsequently used for the testing
+    void Create_ANSYS2D_Model( bool reconstruct_from_CSMP_binary_file );
+    void Create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_CSMP_binary_file );
+    // checks whether all nodes, elements etc can be reached 
+    void CheckModel3D();
     
-	bool TestEntityNumberingFunction_2D();
-	bool TestElementDeletionAndInsertion_2D();
-	bool TestFaceDeletionAndInsertion_2D();
-	bool TestInterFaceDeletionAndInsertion_2D();
-	bool TestEraseAllPrimitives_2D();
-  
-	bool TestEntityNumberingFunction_3D();
-	bool TestElementDeletionAndInsertion_3D();
-	bool TestFaceDeletionAndInsertion_3D();
-	bool TestInterFaceDeletionAndInsertion_3D();
-	bool TestEraseAllPrimitives_3D();
+    void TestBasics();
+    bool TestEntityNumberingFunction();
+    bool TestElementDeletionAndInsertion();
+    bool TestFaceDeletionAndInsertion();
+    bool TestInterFaceDeletionAndInsertion();
+    bool TestEraseAllPrimitives();
+    
+    // method with the same name
+    bool Test_parentElementsSharedByFace();
+    
+    // using VSetMakers to create and compare input data
+    bool Test_BuiltElementConnectivity2D();
+    bool Test_BuiltElementConnectivity3D();
+    
+    // floodfill etc.
+    bool Test_MeshTraversal3D();
+
 
   private:
-	std::string model2d_name_;
-	std::string model3d_name_;
+    std::string model2d_name_;
+    std::string model3d_name_;
 
     Model<2U>*  model2d_ = nullptr;
-	Model<3U>*  model3d_ = nullptr;
+    Model<3U>*  model3d_ = nullptr;
 };
 
+// build sparsity pattern for testing the connectivity among nodes
+template<size_t dim> void nodeNeighbors( const Region<dim>&, std::vector<std::set<size_t>>& node_neighbors );
 
 } // end csmp
 

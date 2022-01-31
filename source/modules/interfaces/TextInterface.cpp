@@ -1,5 +1,6 @@
 #include "TextInterface.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "Matrix.h"
 #include "ArrayVariable.h"
 #include "Region.h"
@@ -320,9 +321,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
      ScalarVariable                                  sc;
      VectorVariable<dim>                             vc, center;
      TensorVariable<dim>                             ts;
-     vector<double64>                                xyz;
-     typename vector<Node<dim>*>::const_iterator     nit;
-     typename vector<Element<dim>*>::const_iterator  eit;
+     vector<double>                                xyz;
 
      // 2. Getting the file ready
      if ((fp = fopen ( file_name,"wt")) == NULL )
@@ -341,7 +340,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Node\tX\t %s\n", s );
             else if ( dim == 2U ) fprintf( fp, "Node\tX\tY\t %s\n", s );
             else if ( dim == 3U ) fprintf( fp, "Node\tX\tY\tZ\t %s\n", s );
-            for ( nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ )
+            for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ )
               {
                 fprintf( fp, "%E\t", (*nit)->x() );
                 if ( dim != 1U ) fprintf( fp, "%E\t", (*nit)->y() );
@@ -388,11 +387,11 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
               for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
-                fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
+                fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                 
                 // printing the constraint point coordinates
                 Point<dim> xyz((*eit)->IntegrationPoint(i));
@@ -442,13 +441,13 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
+            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
                 for ( size_t i=0U; i<(*eit)->Nodes(); ++i )
                 {
                   // printing the element id first
-                  fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
+                  fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                   
                   // printing the sector integration point coordinates in global coordinates
                   for ( size_t j=1U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
@@ -516,13 +515,13 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
+            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
                 for ( size_t i=0U; i<(*eit)->FV()->Facets(); ++i )
                 {
                   // printing the element id first
-                  fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
+                  fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                   
                   // printing the facet integration point locations in global coordinates
                   for ( size_t j=1U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
@@ -590,7 +589,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
              if ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
              else if ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
              else if ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
-             for ( eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
               {
                  Point<dim>  center((*eit)->BaryCenter());
                  fprintf( fp, "%E\t", center[0] );
@@ -740,13 +739,12 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
      TensorVariable<dim>  ts;
      ArrayVariable        ary;
      FlaggedArrayVariable fary;
-     vector<double64>     xyz;
+     vector<double>     xyz;
 
      switch( key.place )
        {
          case NODE:
-             for ( typename vector<Node<dim>*>::const_iterator
-                  nit=output_region.NodesBegin(); nit!=output_region.NodesEnd(); nit++ )
+             for ( auto nit=output_region.NodesBegin(); nit!=output_region.NodesEnd(); nit++ )
                {
                   // 1. coordinates
                   Point<dim>  p((*nit)->Coordinate());
@@ -791,8 +789,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
             break;
           
          case ELEMENT:
-             for ( typename vector<Element<dim>*>::const_iterator
-                   eit=output_region.ElementsBegin(); eit!=output_region.ElementsEnd(); eit++ )
+             for ( auto eit=output_region.ElementsBegin(); eit!=output_region.ElementsEnd(); eit++ )
                {
                    // 1. coordinate of element barycenter
                    Point<dim>  center((*eit)->BaryCenter());
@@ -890,7 +887,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     vector<double64>     xyz;
+     vector<double>     xyz;
 
      // 2. Getting the file ready
      if ((fp = fopen ( file_name,"wt")) == NULL ) {
@@ -908,8 +905,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             if      ( dim == 1U ) fprintf( fp, "Node\tX\t %s\n", s );
             else if ( dim == 2U ) fprintf( fp, "Node\tX\tY\t %s\n", s );
             else if ( dim == 3U ) fprintf( fp, "Node\tX\tY\tZ\t %s\n", s );
-            for ( typename vector<Node<dim>*>::const_iterator
-                  nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ )
+            for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ )
               {
                 fprintf( fp, "%6.0lu\t",  (*nit)->Idx() );
                 fprintf( fp, "%E\t", (*nit)->x() );
@@ -942,16 +938,15 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             if ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( typename vector<Element<dim>*>::const_iterator
-                  eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
               for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
-                fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
+                fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                 
                 Point<dim>  xyz((*eit)->IntegrationPoint(i));
 
-                fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
+                fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                 fprintf( fp, "%E\t", xyz[0] );
                 if ( dim != 1U ) fprintf( fp, "%E\t", xyz[1] );
                 if ( dim == 3U ) fprintf( fp, "%E\t", xyz[2] );
@@ -983,10 +978,9 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
              if      ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
              else if ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
              else if ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
-             for ( typename vector<Element<dim>*>::const_iterator
-                   eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
               {
-                 fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
+                 fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                  xyz = ((*eit)->BaryCenter()).Coordinates();
                  fprintf( fp, "%E\t", xyz[0] );
                  if ( dim != 1U ) fprintf( fp, "%E\t", xyz[1] );
@@ -1233,7 +1227,7 @@ void TextInterface::SizeofPixelTextImage256( const char* fname, size_t& m, size_
 void  TextInterface::ReadPixelTextImage256( const char* fname, Matrix& data )
  {
     ifstream  ifs;
-    double64  value;
+    double  value;
    
     // opening the output file 
     ifs.open ( fname, ios::in );
@@ -1348,7 +1342,7 @@ void TextInterface::WriteMatrixToTextfile( const char* fname,
 
 
 
-void  TextInterface::AppendDataToText( const char* fname, double64 time, long idx, double64 value )
+void  TextInterface::AppendDataToText( const char* fname, double time, long idx, double value )
  {
     ofstream  ofs;
 

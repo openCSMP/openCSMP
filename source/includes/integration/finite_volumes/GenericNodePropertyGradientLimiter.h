@@ -39,13 +39,8 @@ template<size_t dim>
 class GenericNodePropertyGradientLimiter {
        
   public:
-    GenericNodePropertyGradientLimiter( Model<dim>&, const FiniteVolumeStencilManager<dim>&,
-                                        const char* prop ="node property gradient"  );
-                                        
-  
-    GenericNodePropertyGradientLimiter( Model<dim>&,
-                                        const FiniteVolumeStencilManager<dim>&,
-                                        std::vector<char* > prop_names   );
+    GenericNodePropertyGradientLimiter( Model<dim>&, const char* region, const char* prop ="node property gradient" );
+    GenericNodePropertyGradientLimiter( Model<dim>&, const char* region, std::vector<char*> prop_names );
   
     ~GenericNodePropertyGradientLimiter(); 
     
@@ -53,23 +48,22 @@ class GenericNodePropertyGradientLimiter {
     void CalculateGenericNodalGradient();
 
     // compute the gradient limiter
-    void CalculateSlopeLimiter( const std::vector<std::pair<double64,double64> >& MINMAX, int counter = 1 );
+    void CalculateSlopeLimiter( const std::vector<std::pair<double,double> >& MINMAX, int counter = 1 );
 
     // setting the property key
     void SetPropertyKey( csmp::Index& key );
     
     // returning the size of the object
-    double64 SizeOf() const;
+    double SizeOf() const;
 
     
   private:
-    Model<dim>&            sg_;
-    const FiniteVolumeStencilManager<dim>&      fcv_;
-    std::vector<PropertyHandle<dim>* >   limiter;
-    GenericNodePropertyGradient<dim>     node_prop_grad;
-    double64                             tolerance;
-    csmp::Index                          u_key;
-
+    Region<dim>                        gref_; ///< handle to the application domain of the limiter
+    std::vector<PropertyHandle<dim>*>  limiter;
+    GenericNodePropertyGradient<dim>   node_prop_grad;
+    double                           tolerance;
+    csmp::Index                        u_key;
+    const csmp::Index                  grad_key, lim_key, mctr_key;
  };
 
 }

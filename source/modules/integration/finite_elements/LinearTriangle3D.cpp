@@ -80,8 +80,38 @@ void LinearTriangle3D::NodesOfFace( size_t face_id, std::vector<size_t>& fnids )
          fnids[1] = 1;
       }
     else
-    std::cout <<"\nLinearTriangle3D::NodesOfFace: Erratic face ID: "<< face_id << std::endl;
+    std::cerr <<"\nLinearTriangle3D::NodesOfFace: Erratic face ID: "<< face_id << std::endl;
  }
+
+
+
+vector<size_t>  LinearTriangle3D::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{1,2};
+        case 1: return vector<size_t>{2,0};
+        case 2: return vector<size_t>{0,1};
+      }
+    cerr <<"\nLinearTriangle3D::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+
+
+/// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+std::vector<size_t>  LinearTriangle3D::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        case 0: return vector<size_t>{1,2};
+        case 1: return vector<size_t>{2,0};
+        case 2: return vector<size_t>{0,1};
+      }
+    cerr <<"\nLinearTriangle3D::NodesConnectedTo: node "<< node_id <<" does not exist.";
+    return vector<size_t>{};
+  }
+
 
 
 
@@ -124,7 +154,7 @@ of the longest and shortest boundary segments of the triangle.
 
 The node coordinates are retrieved from the parent element.  
 
-@return The method returns the computed aspect ratio as a double64 value.  
+@return The method returns the computed aspect ratio as a double value.  
 
 @section application Application
 
@@ -133,18 +163,18 @@ is too skewed in shape for the interpolation functions to give realistic
 values of the interpolated property. It is therefore used to assess the
 quality of a finiteelement mesh.  
  */
-double64  LinearTriangle3D::AspectRatio()
+double  LinearTriangle3D::AspectRatio()
 {
-   vector<double64>  vec(spe);
+   vector<double>  vec(spe);
 
    EdgeLengths( vec );
 
    // order segment
-   set<double64> segms;
+   set<double> segms;
 
    for ( size_t i=0; i<spe; i++ ) segms.insert( vec[i] );
 
-   double64 segm1 = (*segms.begin()), 
+   double segm1 = (*segms.begin()), 
              segm2 = (*segms.rbegin());
    
    return segm2 / segm1;
@@ -174,10 +204,10 @@ bounding the triangle.
 The inner circle is a useful measure for defining the coarseness of grids
 onto which finite element data are mapped and vice versa.  
 */
-double64  LinearTriangle3D::InnerRadius()
+double  LinearTriangle3D::InnerRadius()
 {
-   vector<double64> segms(npe);
-   double64         sum(0.0), vol;
+   vector<double> segms(npe);
+   double         sum(0.0), vol;
 
    EdgeLengths( segms );
    for ( size_t i=0; i<segms.size(); i++ ) sum += segms[i];
@@ -202,9 +232,9 @@ The parent 'Element' object is queried for the node coordinates.
 
 @return The method returns the computed area.  
  */
-double64 LinearTriangle3D::Volume()
+double LinearTriangle3D::Volume()
 {
-  double64 X12 = XY(1,0) - XY(0,0), // X
+  double X12 = XY(1,0) - XY(0,0), // X
            X31 = XY(0,0) - XY(2,0),
            Y12 = XY(1,1) - XY(0,1), // Y
            Y31 = XY(0,1) - XY(2,1),
@@ -212,7 +242,7 @@ double64 LinearTriangle3D::Volume()
            Z31 = XY(0,2) - XY(2,2);
 
   // XNRM,YNRM,ZNRM is normal to triangle (not unit normal!)
-  double64 XNRM = -Y12*Z31 + Z12*Y31,
+  double XNRM = -Y12*Z31 + Z12*Y31,
            YNRM = -Z12*X31 + X12*Z31,
            ZNRM = -X12*Y31 + Y12*X31;
 
@@ -223,10 +253,10 @@ double64 LinearTriangle3D::Volume()
 
 
 
-void LinearTriangle3D::UnitNormal( std::vector<double64>& vc ) const
+void LinearTriangle3D::UnitNormal( std::vector<double>& vc ) const
  {
     // triangle is defined by two vectors a and b
-    double64 a1 = XY(1,0) - XY(0,0), 
+    double a1 = XY(1,0) - XY(0,0), 
 			  a2 = XY(1,1) - XY(0,1),
 			  a3 = XY(1,2) - XY(0,2),
 			  b1 = XY(2,0) - XY(0,0), 
@@ -239,7 +269,7 @@ void LinearTriangle3D::UnitNormal( std::vector<double64>& vc ) const
     vc[1]  = a3*b1 - a1*b3;
     vc[2]  = a1*b2 - a2*b1;
     // normalization to unit length and orienting normal CCW
-    double64 length = -sqrt( vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2] );
+    double length = -sqrt( vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2] );
     vc[0] /= length;
     vc[1] /= length;
     vc[2] /= length;
@@ -263,7 +293,7 @@ The method uses the data of the 'Element' to retrieve nodal coordinates,
 and the point location supplied as third method argument.  
 
 @param N The values of the 3 linear interpolation functions at the point 'xyz' are
-returned into the second method argument which is a Meschpp double64 
+returned into the second method argument which is a Meschpp double 
 vector.  
 
 @section implementation Implementation
@@ -272,9 +302,9 @@ The interpolation functions are calculated using an approach by Adrian
 Umpleby (Imperial College) which is based on normals to planes through
 faces perpendicular to the triangles plane.  
  */
-void LinearTriangle3D::N( vector<double64>& N, const vector<double64>& xyz ) 
+void LinearTriangle3D::N( vector<double>& N, const vector<double>& xyz ) 
 {
-  const double64 X12 = XY(1,0) - XY(0,0), // X
+  const double X12 = XY(1,0) - XY(0,0), // X
          X23 = XY(2,0) - XY(1,0),
          X31 = XY(0,0) - XY(2,0),
          Y12 = XY(1,1) - XY(0,1), // Y
@@ -284,7 +314,7 @@ void LinearTriangle3D::N( vector<double64>& N, const vector<double64>& xyz )
          Z23 = XY(2,2) - XY(1,2),
          Z31 = XY(0,2) - XY(2,2);
 
-  const double64 XP1 = XY(0,0) - xyz[0],
+  const double XP1 = XY(0,0) - xyz[0],
          XP2 = XY(1,0) - xyz[0],
          XP3 = XY(2,0) - xyz[0],
          YP1 = XY(0,1) - xyz[1],
@@ -295,7 +325,7 @@ void LinearTriangle3D::N( vector<double64>& N, const vector<double64>& xyz )
          ZP3 = XY(2,2) - xyz[2];
 
   // XNRM,YNRM,ZNRM is normal to triangle (not unit normal!)
-  const double64 XNRM = -Y12*Z31 + Z12*Y31,
+  const double XNRM = -Y12*Z31 + Z12*Y31,
          YNRM = -Z12*X31 + X12*Z31,
          ZNRM = -X12*Y31 + Y12*X31,
 
@@ -332,9 +362,9 @@ void LinearTriangle3D::N( vector<double64>& N, const vector<double64>& xyz )
 
 
 
-void LinearTriangle3D::N_AtBaryCenter( std::vector<double64>& IPOL )
+void LinearTriangle3D::N_AtBaryCenter( std::vector<double>& IPOL )
  {
-    vector<double64>  xyz(3);
+    vector<double>  xyz(3);
     xyz[0] = (XY(0,0) + XY(1,0) + XY(2,0)) / 3.;
     xyz[1] = (XY(0,1) + XY(1,1) + XY(2,1)) / 3.;
     xyz[2] = (XY(0,2) + XY(1,2) + XY(2,2)) / 3.;
@@ -378,7 +408,7 @@ node points 12.
 */
 void LinearTriangle3D::dN( DenseMatrix<DM_MIN>& B )
 {
-  double64 X12 = XY(1,0) - XY(0,0), // X
+  double X12 = XY(1,0) - XY(0,0), // X
            X23 = XY(2,0) - XY(1,0),
            X31 = XY(0,0) - XY(2,0),
            Y12 = XY(1,1) - XY(0,1), // Y
@@ -389,7 +419,7 @@ void LinearTriangle3D::dN( DenseMatrix<DM_MIN>& B )
            Z31 = XY(0,2) - XY(2,2);
 
   // XNRM,YNRM,ZNRM is normal to triangle (not unit normal!)
-  double64 XNRM = -Y12*Z31 + Z12*Y31,
+  double XNRM = -Y12*Z31 + Z12*Y31,
            YNRM = -Z12*X31 + X12*Z31,
            ZNRM = -X12*Y31 + Y12*X31,
 
@@ -432,9 +462,9 @@ void LinearTriangle3D::dN( DenseMatrix<DM_MIN>& B )
     
     Method returns the element volume.
 */
-double64  LinearTriangle3D::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
+double  LinearTriangle3D::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
-    double64 X12 = XY(1,0) - XY(0,0), // X
+    double X12 = XY(1,0) - XY(0,0), // X
              X23 = XY(2,0) - XY(1,0),
              X31 = XY(0,0) - XY(2,0),
              Y12 = XY(1,1) - XY(0,1), // Y
@@ -445,7 +475,7 @@ double64  LinearTriangle3D::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
              Z31 = XY(0,2) - XY(2,2);
 
     // XNRM,YNRM,ZNRM is normal to triangle (not unit normal!)
-    double64 XNRM = -Y12*Z31 + Z12*Y31,
+    double XNRM = -Y12*Z31 + Z12*Y31,
              YNRM = -Z12*X31 + X12*Z31,
              ZNRM = -X12*Y31 + Y12*X31,
 
@@ -488,7 +518,7 @@ double64  LinearTriangle3D::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     Note that the derivative is constant so that the point location is ignored.
     method returns the element volume.
 */
-double64  LinearTriangle3D::dN_At( DenseMatrix<DM_MIN>& B, const std::vector<double64>& )
+double  LinearTriangle3D::dN_At( DenseMatrix<DM_MIN>& B, const std::vector<double>& )
  {
     return dN_AtBarycenter( B );
  }
@@ -512,9 +542,9 @@ node2, segment 2 from node2 to 3, and segment 3 from node3 to 1.
 @param len vector into which the lengths will be stored.  
 
 */
-void  LinearTriangle3D::EdgeLengths( vector<double64>& len )
+void  LinearTriangle3D::EdgeLengths( vector<double>& len )
 {
-    double64 sum;
+    double sum;
     len.resize(npe);
 
     // segment 1
@@ -571,7 +601,7 @@ fluid flow.
 */
 void LinearTriangle3D::IntegralNN( DenseMatrix<DM_MIN>& CE )
 {
-   double64 area = Volume();
+   double area = Volume();
    
    CE.Resize(npe,npe);
    
@@ -621,8 +651,8 @@ void LinearTriangle3D::OutputNodeDataToVTK( const char* file_name,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nLinearTriangle3D::OutputNodeDataToVTK "; 
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nLinearTriangle3D::OutputNodeDataToVTK "; 
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }  
        
@@ -723,8 +753,8 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           cout <<"\nLinearTriangle3D::OutputToVTK "; 
-           cout <<"Output file could not be opened."<< endl;
+           cerr <<"\nLinearTriangle3D::OutputToVTK "; 
+           cerr <<"Output file could not be opened."<< endl;
            return;
        }  
        
@@ -766,8 +796,8 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
      ofs.setf( ios::scientific );
      
      // sum of shape functions
-     vector<double64> IPOL(npe), xyz(dim);
-     double64  sum;
+     vector<double> IPOL(npe), xyz(dim);
+     double  sum;
      
      ofs <<"SCALARS "<< "sum_N" <<" float"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
@@ -805,7 +835,7 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
     
     @test OK - for 3D version
 */
-void  LinearTriangle3D::UnitNormalToFace( size_t face, std::vector<double64>& unrml ) const
+void  LinearTriangle3D::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);

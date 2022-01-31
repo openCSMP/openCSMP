@@ -19,6 +19,9 @@ class ModelSubDomain_Test : public Test {
   public:
     virtual void run();
 
+    /// tests method that creates neighbor connectivity inside of CSMP
+    bool Test_EstablishNeighborConnectivity();
+
     /// compares node locations and connectivity
     template<size_t dim,template<size_t> class simplicial_complex>
     bool CompareModelSubdomains( const ModelSubDomain<dim,simplicial_complex>&,

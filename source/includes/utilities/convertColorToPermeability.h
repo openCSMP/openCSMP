@@ -9,14 +9,14 @@
 #ifndef CONVERT_COLOR_TO_PERMEABILITY_H
 #define CONVERT_COLOR_TO_PERMEABILITY_H
 
-#include "CSMP_number_types.h"
+#include <iostream>
 
 namespace csmp {
 
   class Matrix;
 
   /// converts 256-color bitmap values into permeability, see documentation for values
-  void convertColorToPermeability( double64, Matrix& );
+  void convertColorToPermeability( double, Matrix& );
   
  } // end
 

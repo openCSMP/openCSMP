@@ -17,13 +17,14 @@ class Integral_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
     Integral_NT_lhsop_N_dV( const PropertyDatabase<dim>& p, 
                             const char* oper, const char* basic, const char* test );
 
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& e );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& e );
+    
     virtual Integral_NT_lhsop_N_dV<dim,SIMPLEX>* clone() const { return new Integral_NT_lhsop_N_dV<dim,SIMPLEX> (*this); }
 
   private:
-    double64 scalar_value_;
+    double scalar_value_;
 };
 
 

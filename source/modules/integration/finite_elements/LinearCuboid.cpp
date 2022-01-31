@@ -34,25 +34,25 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 
 	 LinearCuboid::~LinearCuboid() {}
 
-	 double64 LinearCuboid::Volume()
+	 double LinearCuboid::Volume()
 	 {
 		 return (XY(5, 0) - XY(3, 0))*(XY(5, 1) - XY(3, 1))*(XY(5, 2) - XY(3, 2));
 	 }
 
-	 double64 LinearCuboid::AspectRatio()
+	 double LinearCuboid::AspectRatio()
 	 {
-		 double64 dx = XY(5, 0) - XY(3, 0);
-		 double64 dy = XY(5, 1) - XY(3, 1);
-		 double64 dz = XY(5, 2) - XY(3, 2);
+		 double dx = XY(5, 0) - XY(3, 0);
+		 double dy = XY(5, 1) - XY(3, 1);
+		 double dz = XY(5, 2) - XY(3, 2);
 		 return max({dx,dy,dz}) / min({dx,dy,dz}) / 2.0;
 	 }
 
 	 /** In cuboid diameter of the biggest inside sphere is the minimum edge length */
-	 double64 LinearCuboid::InnerRadius()
+	 double LinearCuboid::InnerRadius()
 	 {
-		 double64 dx = XY(5, 0) - XY(3, 0);
-		 double64 dy = XY(5, 1) - XY(3, 1);
-		 double64 dz = XY(5, 2) - XY(3, 2);
+		 double dx = XY(5, 0) - XY(3, 0);
+		 double dy = XY(5, 1) - XY(3, 1);
+		 double dz = XY(5, 2) - XY(3, 2);
 		 return min({ dx,dy,dz }) / 2.0;
 	 }
 
@@ -79,15 +79,15 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 
 		// M : Values of Shapes at center of element
-		vector<double64>& M = V_;
+		vector<double>& M = V_;
 		N(M, { 0.5*(XY(3,0) + XY(5, 0)), 0.5*(XY(3,1) + XY(5, 1)), 0.5*(XY(3,2) + XY(5, 2)) });
 	
 		//--- Computing integral N_i*N_j
-		double64 vol = Volume();
+		double vol = Volume();
 		V.Resize(8, 8);
 		for (auto i = 0; i < 8 ; ++i)
 			for (auto j = i; j < 8; ++j) {
-				double64 sum = 64*M[i]*M[j]; // for center
+				double sum = 64*M[i]*M[j]; // for center
 				// if (i == j) sum += 1; // for nodes ! We add a for loop instead of this if
 				for (auto k = 0; k < 12; ++k) sum += 4 * VS(k, i)*VS(k, j); // for mid-segment
 				for (auto k = 0; k < 6; ++k) sum += 16 * VF(k, i)*VF(k, j); // for center of face
@@ -128,16 +128,16 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 			}		
 
 			// M = Values of Partial Shapes at center of element
-			vector<double64>& M = V_;
+			vector<double>& M = V_;
 			dN_Partial_At(M, { 0.5*(XY(3,0) + XY(5, 0)), 0.5*(XY(3,1) + XY(5, 1)), 0.5*(XY(3,2) + XY(5, 2)) }, partial);
 
 			//--- Computing integral grad N_i dot grad N_j
 			V.Resize(8, 8);
 			V.Zero();
-			double64 vol = Volume();
+			double vol = Volume();
 			for (auto i = 0; i < 8; ++i)
 				for (auto j = i; j < 8; ++j) {
-					double64 sum = 64 * M[i] * M[j]; // for center
+					double sum = 64 * M[i] * M[j]; // for center
 					for (auto k = 0; k < 8; ++k) sum += DN(k, i)*DN(k, j); // for nodes
 					for (auto k = 0; k < 12; ++k) sum += 4 * DS(k, i)*DS(k, j); // for mid-segment
 					for (auto k = 0; k < 6; ++k) sum += 16 * DF(k, i)*DF(k, j); // for center of face
@@ -151,9 +151,9 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	To calculate each shape function corresponding to a node, we use the symmetric point (with
 	respect to barycenter) and care about sign of it. Dividing by volume() gives one at that node.
 	*/
-	void LinearCuboid::N(std::vector<double64>& N, const std::vector<double64>& xyz) 
+	void LinearCuboid::N(std::vector<double>& N, const std::vector<double>& xyz) 
 	{
-		double64 vol = Volume();
+		double vol = Volume();
 		for(auto i = 0; i < 8; ++i)
 			V_[i] = (xyz[0] - XY(i, 0))*(xyz[1] - XY(i, 1))*(xyz[2] - XY(i, 2)) / vol;
 		// 0->6 1->(-7) 2->4 3->(-5)
@@ -163,16 +163,16 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		N[3] = -V_[5]; N[5] =  V_[3];
 	}
 
-	void LinearCuboid::N_AtGlobalPoint(std::vector<double64>& M, const std::vector<double64>& xyz)
+	void LinearCuboid::N_AtGlobalPoint(std::vector<double>& M, const std::vector<double>& xyz)
 	{
 		return N(M, xyz);
 	}
 
-	void LinearCuboid::N_AtBaryCenter(std::vector<double64>& N)
+	void LinearCuboid::N_AtBaryCenter(std::vector<double>& N)
 	{
 		// xyz Center of cuboid or center of gravity
-		double64 xyz[] = { 0.5*(XY(3, 0) + XY(5, 0)), 0.5*(XY(3, 1) + XY(5, 1)), 0.5*(XY(3, 2) + XY(5, 2)) };
-		double64 vol = Volume();
+		double xyz[] = { 0.5*(XY(3, 0) + XY(5, 0)), 0.5*(XY(3, 1) + XY(5, 1)), 0.5*(XY(3, 2) + XY(5, 2)) };
+		double vol = Volume();
 		for (auto i = 0; i<8; ++i)
 			V_[i] = (xyz[0] - XY(i, 0))*(xyz[1] - XY(i, 1))*(xyz[2] - XY(i, 2)) / vol;
 		N.resize(8);
@@ -188,11 +188,11 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	DN = dN0dy ... dN7dy
 		dN0dz ... dN7dz
 	*/
-	double64 LinearCuboid::dN_At(DenseMatrix<DM_MIN>& DN, const vector<double64>& xyz) 
+	double LinearCuboid::dN_At(DenseMatrix<DM_MIN>& DN, const vector<double>& xyz) 
 	{
 		// 0->6 1->(-7) 2->4 3->(-5) for N0 use node6 ....
 		DN.Resize(3, 8); //DN_size = dim x npe
-		const double64 vol = Volume(), sgn[] = {1.,-1.,-1.,1.,1.,-1.,-1.,1.};
+		const double vol = Volume(), sgn[] = {1.,-1.,-1.,1.,1.,-1.,-1.,1.};
 		size_t ind[] = {6,7,4,5,2,3,0,1};
 		for (auto k = 0; k < 8; ++k) {
 			DN(0, k) = sgn[k]*(xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
@@ -210,9 +210,9 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		ids[4] = 4; ids[5] = 7; ids[6] = 6; ids[7] = 5;
 	}
 
-	void LinearCuboid::dN_Partial_At(vector<double64>& DN, const vector<double64>& xyz, size_t partial) 
+	void LinearCuboid::dN_Partial_At(vector<double>& DN, const vector<double>& xyz, size_t partial) 
 	{
-		const double64 vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
+		const double vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
 		const size_t ind[] = { 6,7,4,5,2,3,0,1 };
 		switch (partial) {
 			case 0:	for (auto k = 0; k < 8; ++k)
@@ -265,11 +265,11 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	}
 
 	/** for cuboid and with standard ordering */
-	void LinearCuboid::EdgeLengths(std::vector<double64>& v )
+	void LinearCuboid::EdgeLengths(std::vector<double>& v )
 	{
-		const double64 dx = XY(5, 0) - XY(3, 0);
-		const double64 dy = XY(5, 1) - XY(3, 1);
-		const double64 dz = XY(5, 2) - XY(3, 2);
+		const double dx = XY(5, 0) - XY(3, 0);
+		const double dy = XY(5, 1) - XY(3, 1);
+		const double dz = XY(5, 2) - XY(3, 2);
 		v = {dx,dz,dx,dz,dy,dy,dy,dy,dx,dz,dx,dz};
 	}
 
@@ -280,7 +280,8 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		ids[4] = 4; ids[5] = 5; ids[6] = 6; ids[7] = 7;
 	}
 
-	void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
+
+void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
 	{
 		snids.resize(2);
 		switch (segm_id) {
@@ -299,7 +300,30 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 	}
 
-	void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
+
+/// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
+std::vector<size_t>  LinearCuboid::NodesConnectedTo( size_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<size_t>{1,3,4};
+        case 1: return vector<size_t>{0,2,5};
+        case 2: return vector<size_t>{1,3,6};
+        case 3: return vector<size_t>{0,2,7};
+        case 4: return vector<size_t>{0,5,7};
+        case 5: return vector<size_t>{1,4,6};
+        case 6: return vector<size_t>{2,5,7};
+        case 7: return vector<size_t>{3,4,6};
+        default:
+          cerr <<"\nLinearCuboid::NodesConnectedTo: node "<< node_id <<" does not exist.";
+      }
+    return vector<size_t>{};
+  }
+
+
+
+// TODO: this is different from IsoparamLinHex - check basic conventions
+void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
 	{
 		fnids.resize(4);
 		switch (face_id) {
@@ -312,7 +336,24 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 	}
 
-	void LinearCuboid::UnitNormalToFace(size_t face, std::vector<double64>& unrml) const
+
+vector<size_t>  LinearCuboid::CornerNodesOfFace( size_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<size_t>{0,3,2,1};
+        case 1: return vector<size_t>{0,1,5,4};
+        case 2: return vector<size_t>{1,2,6,5};
+        case 3: return vector<size_t>{2,3,7,6};
+        case 4: return vector<size_t>{0,3,7,3};
+        case 5: return vector<size_t>{4,5,6,7};
+      }
+    cerr <<"\nLinearCuboid::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<size_t>{};
+ }
+
+
+
+void LinearCuboid::UnitNormalToFace(size_t face, std::vector<double>& unrml ) const
 	{
 		unrml.resize(3);
 		switch (face) {
@@ -325,8 +366,9 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}
 	}
 
-	void LinearCuboid::OutputNodeDataToVTK(const char* file_name, const char* var_name,
-		DenseMatrix<DM_MIN>& DATA) const
+
+void LinearCuboid::OutputNodeDataToVTK( const char* file_name, const char* var_name,
+		                                    DenseMatrix<DM_MIN>& DATA ) const
 	{
 		char  outfile[NAME_STRING], elmt[30];
 		strcpy(outfile, file_name);
@@ -414,10 +456,10 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		XY = tXY;
 		cout << "Nodes Position\n";
 		XY.Out();
-		double64 dx = XY(5, 0) - XY(3, 0);
-		double64 dy = XY(5, 1) - XY(3, 1);
-		double64 dz = XY(5, 2) - XY(3, 2);
-		double64 vol = dx*dy*dz;
+		double dx = XY(5, 0) - XY(3, 0);
+		double dy = XY(5, 1) - XY(3, 1);
+		double dz = XY(5, 2) - XY(3, 2);
+		double vol = dx*dy*dz;
 
 		// IntegralNN over Element
 		DenseMatrix<DM_MIN> V;

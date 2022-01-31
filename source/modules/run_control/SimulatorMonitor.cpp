@@ -1,4 +1,5 @@
 #include "SimulatorMonitor.h"
+#include "ErrorHandler.h"
 #include "Node.h"
 #include "InterFace.h"
 #include "Element.h"
@@ -6,6 +7,8 @@
 #include "Model.h"
 #include "Exception.h"
 #include "PL_Utilities.h"
+#include "CSMP_highLevelUtilities.h"
+
 #include "Boundary.h"
 
 using namespace std;
@@ -52,12 +55,11 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
       subdomains_to_calculate_perimeter_(subdomains_to_calculate_perimeter),
       first_monitor_call_(true),
       include_thickness_attribute_(model.Database().IsDefined("thickness")),
-      error_handler_( ErrorHandler::Instance() ),
       verbose_(verbose)
 {
     // check that "model time" is defined.
     if (!mref_.Database().IsDefined("model time"))
-        error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", "'model time' needs to be defined as a MODEL variable",
+        ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", "'model time' needs to be defined as a MODEL variable",
                                "the simulator monitor needs to know the model time!");
 
     this->InsertValueHeader("model time",dimensional_header_indexes_);
@@ -77,15 +79,15 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
     for ( typename list<string>::const_iterator
           it=integrated_property_names_.begin(); it!=integrated_property_names_.end(); it++ ) {
         if ( !mref_.Database().IsDefined( (*it).c_str() ) )
-            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "integral property is not defined in the database (file)");
 
         if ( mref_.Database().Type( (*it).c_str() ) != SCALAR )
-            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "integral property must be a scalar property");
 
         if ( mref_.Database().Placement( (*it).c_str() ) == INTER_FACE )
-            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "properties placed on the FACE cannot be integrated over the Region volume");
     }
 
@@ -93,7 +95,7 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
     for ( typename list<string>::const_iterator
           it=ranged_property_names_.begin(); it!=ranged_property_names_.end(); it++ )
         if ( !mref_.Database().IsDefined( (*it).c_str() ) )
-            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "range property is not defined in the database (file)");
     // ------------------------------------------------------------
     // FOR MONITORING VOLUMES AND AREAS OF REGIONS
@@ -146,11 +148,11 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
     for ( typename list<string>::const_iterator
           lit=single_value_property_names_.begin(); lit!=single_value_property_names_.end(); lit++ ) {
         if ( !mref_.Database().IsDefined( (*lit).c_str() ) )
-            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
+            ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
                                    "integral property is not defined in the database (file)");
 
         if ( mref_.Database().Type( (*lit).c_str() ) != SCALAR )
-            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
+            ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
                                    "integral property must be a scalar property");
 
         set<PLACEMENT> placements_accepted;
@@ -163,7 +165,7 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
         if ( placements_accepted.find(mref_.Database().Placement( (*lit).c_str() )) != placements_accepted.end() )
             this->InsertValueHeader((*lit)+"_"+regionname,single_value_header_indexes_);
         else
-            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
+            ErrorHandler::Instance().notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
                                    " Externally calculated properties should be placed on MODEL (for now)");
     }
 
@@ -202,7 +204,7 @@ void SimulatorMonitor<dim>::CheckForDuplicateHeaders(){
         }
         i++;
 //        else
-//            error_handler_.notice(FATAL_ERROR,"SimulatorMonitor::CheckForDuplicateHeaders()",(*it).c_str(),"Found duplicate monitor header.");
+//            ErrorHandler::Instance().notice(FATAL_ERROR,"SimulatorMonitor::CheckForDuplicateHeaders()",(*it).c_str(),"Found duplicate monitor header.");
     }
     for (auto it = single_value_header_indexes_.begin();it != single_value_header_indexes_.end();it++){
         cout<<" pre-calc header "<<*it<<endl;
@@ -215,7 +217,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
 
     ifstream  ifs(file_name);
     string text_line,token;
-    vector<vector<double64> > data;
+    vector<vector<double> > data;
     vector<string> columnheaders;
 
     static bool first_call(true);
@@ -249,7 +251,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
             while (!ifs.eof() && (text_line[0] != '#')){
 
                 vector<string> listoftokens;
-                vector<double64> dataline;
+                vector<double> dataline;
                 stringstream iss(text_line);
                 while (getline(iss,token,'\t'))
                     listoftokens.push_back(token);
@@ -340,7 +342,7 @@ void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector
             this->model_time_indexes_.push_back(j);
     }
     else
-        error_handler_.notice(FATAL_ERROR,"SimulatorMonitor::InsertValueHeader()",property_column_header_entry.c_str(),"Found duplicate monitor header.");
+        ErrorHandler::Instance().notice(FATAL_ERROR,"SimulatorMonitor::InsertValueHeader()",property_column_header_entry.c_str(),"Found duplicate monitor header.");
 }
 
 /**
@@ -349,9 +351,9 @@ void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector
     the element by element integrals.
 */
 template<size_t dim>
-void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
 {
-    double64  integral;
+    double  integral;
     
     // for all properties which shall be integrated over the groups
     for ( typename list<string>::const_iterator
@@ -440,9 +442,9 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double64>& rowdata)
 } // end ScalarPropertyIntegrals
 
 template<size_t dim>
-void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double>& rowdata)
 {
-    double64  rmin, rmax;
+    double  rmin, rmax;
     // for all properties for which ranges shall be monitored
     for ( typename list<string>::const_iterator
           lit=ranged_property_names_.begin(); lit!=ranged_property_names_.end(); lit++ )
@@ -492,7 +494,7 @@ void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double64>& rowdata)
 /// this method reads values directly from the model
 ///
 template<size_t dim>
-void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double>& rowdata)
 {
     string read_value_key;
     string regionname="Model";
@@ -502,21 +504,21 @@ void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double64>& rowdata)
         vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
         if (ith!=values_column_headers_.end()){
             size_t j = ith - values_column_headers_.begin();
-            double64 value=mref_.Read(mref_.Database().StorageKey((*lit).c_str()));
+            double value=mref_.Read(mref_.Database().StorageKey((*lit).c_str()));
             rowdata[j]=value;
         }
     }
 }
 
 template<size_t dim>
-void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& rowdata){
+void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double>& rowdata){
 
     bool hasVolumeElements( HasVolumeElements( mref_ ) );
 
     for (auto sbdmit = subdomains_to_calculate_dimension_.begin() ; sbdmit != subdomains_to_calculate_dimension_.end();sbdmit++){
 
-        double64 void_dim(0.0);
-        double64 bulk_dim(0.0);
+        double void_dim(0.0);
+        double bulk_dim(0.0);
 
         if (mref_.ContainsRegion(sbdmit->c_str())){
             Region<dim> & rref = mref_.Region(sbdmit->c_str());
@@ -530,7 +532,7 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& r
             bulk_dim = bref.Area(); /// @todo multiplication with porosity is not supported as with regions. To be resolved later on.
         }
 
-        map<string,double64> read_value_keys;
+        map<string,double> read_value_keys;
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_VOID_DIM"),void_dim));
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_BULK_DIM"),bulk_dim));
 
@@ -545,8 +547,8 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& r
 
     for (auto sbdmit = subdomains_to_calculate_perimeter_.begin() ; sbdmit != subdomains_to_calculate_perimeter_.end();sbdmit++){
 
-        double64 void_peri(0.0);
-        double64 bulk_peri(0.0);
+        double void_peri(0.0);
+        double bulk_peri(0.0);
 
         if (mref_.ContainsRegion(sbdmit->c_str())){
             Region<dim> & rref = mref_.Region(sbdmit->c_str());
@@ -560,7 +562,7 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double64>& r
             bulk_peri = ( !hasVolumeElements ) ? bref.Area() : bref.Area();///@todo multiplication with porosity is not supported as with regions. To be resolved later on.
         }
 
-        map<string,double64> read_value_keys;
+        map<string,double> read_value_keys;
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_VOID_PERI"),void_peri));
         read_value_keys.insert(make_pair(UScoreForSpace(*sbdmit+"_BULK_PERI"),bulk_peri));
 
@@ -598,9 +600,9 @@ void SimulatorMonitor<dim>::Monitor()
 }
 
 template<size_t dim>
-void SimulatorMonitor<dim>::ReadModelTime(vector<double64>& rowdata)
+void SimulatorMonitor<dim>::ReadModelTime(vector<double>& rowdata)
 {
-    double64 time = mref_.Read(mref_.Database().StorageKey("model time"));
+    double time = mref_.Read(mref_.Database().StorageKey("model time"));
 
     current_requested_monitor_time_=time;
     for (size_t i = 0 ; i < model_time_indexes_.size();i++) {
@@ -756,10 +758,10 @@ bool  SimulatorMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 
     const Region<dim>&  rref( mref.Region("Model") );
 
-    typename vector<Element<dim>*>::const_iterator  elementsEnd = rref.ElementsEnd();
-    for ( typename vector<Element<dim>*>::const_iterator eit=rref.ElementsBegin(); eit!=elementsEnd; ++eit )
+    const auto elementsEnd = rref.ElementsEnd();
+    for ( auto eit=rref.ElementsBegin(); eit!=elementsEnd; ++eit )
         if ( (*(*eit)->FE()).IsVolumeElement() )
-            return true;
+          return true;
 
     return false;
 }

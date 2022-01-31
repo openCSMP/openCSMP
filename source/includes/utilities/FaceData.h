@@ -18,13 +18,13 @@ class FaceData {
     
     void      AssignKey( const std:: vector<size_t>& );
     void      AssignNodeIDs( const std::vector<size_t>& );
-    void      AssignFirstNeighbor( int32 );
-    void      AssignSecondNeighbor( int32 );
+    void      AssignFirstNeighbor( int32_t );
+    void      AssignSecondNeighbor( int32_t );
     void      AssignFirstNeighborFaceNumber( size_t );
     void      AssignSecondNeighborFaceNumber( size_t );
     
-    int32     FirstNeighbor() const;
-    int32     SecondNeighbor() const;
+    int32_t     FirstNeighbor() const;
+    int32_t     SecondNeighbor() const;
     size_t    FirstNeighborFaceNumber() const;
     size_t    SecondNeighborFaceNumber( ) const;
 
@@ -37,7 +37,7 @@ class FaceData {
     std::set<size_t>          key;      // ordered face-node IDs
     std::vector<size_t>       nodes;    // node IDs in CCW order
     std::pair<size_t,size_t>  efnumber; // face-number of connected elements
-    std::pair<int32,int32>    nbors;    // ID numbers of connected elements
+    std::pair<int32_t,int32_t>    nbors;    // ID numbers of connected elements
     CSMP_FEM_TYPE             etype;    // type of finite-element for the face
 };
 
@@ -92,13 +92,13 @@ inline void FaceData::AssignSecondNeighborFaceNumber( size_t e2face_n )
 
 
 
-inline void FaceData::AssignFirstNeighbor( int32 nbor1 )
+inline void FaceData::AssignFirstNeighbor( int32_t nbor1 )
  {
     nbors.first = nbor1;
  }
  
  
-inline void FaceData::AssignSecondNeighbor( int32 nbor2 )
+inline void FaceData::AssignSecondNeighbor( int32_t nbor2 )
  {
     nbors.second = nbor2;
  }
@@ -116,8 +116,8 @@ inline CSMP_FEM_TYPE  FaceData::FiniteElementType() const
  }
 
 
-inline int32   FaceData::FirstNeighbor() const { return nbors.first; }
-inline int32   FaceData::SecondNeighbor() const { return nbors.second; }
+inline int32_t   FaceData::FirstNeighbor() const { return nbors.first; }
+inline int32_t   FaceData::SecondNeighbor() const { return nbors.second; }
 inline size_t  FaceData::FirstNeighborFaceNumber() const { return efnumber.first; }
 inline size_t  FaceData::SecondNeighborFaceNumber( ) const { return efnumber.second; }
 

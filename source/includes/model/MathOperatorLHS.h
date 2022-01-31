@@ -98,7 +98,7 @@ class MathOperatorLHS {
     bool          LumpedFormulation()           const;
     size_t        ApplicationCycle()            const;
     size_t        ApplicationCycles()           const;
-    double64      MultiplyBy()                  const;
+    double        MultiplyBy()                  const;
     bool          MultiplyWithTimeIncrement()   const;
     bool          DivideByTimeIncrement()       const;
 
@@ -111,7 +111,7 @@ class MathOperatorLHS {
     void          LumpedFormulation ( bool );
     void          ApplicationCycle  ( size_t );
     void          ApplicationCycles ( size_t );
-    void          MultiplyBy( double64 factor );
+    void          MultiplyBy( double factor );
     void          MultiplyWithTimeIncrement( bool multiply );
     void          DivideByTimeIncrement( bool divide );
 
@@ -126,22 +126,22 @@ class MathOperatorLHS {
                                               DenseMatrix<DM_MIN>& );
 
     /// getting data from the Element, Face, InterFace
-    virtual void  GetOperands        ( Element<dim>&  );
-    virtual void  GetOperands        ( Face<dim>&  );
-    virtual void  GetOperands        ( InterFace<dim>&  );
-
-    /// writing data to the Element, Face, InterFace
-    virtual void  WriteOperands      ( Element<dim>& );
-    virtual void  WriteOperands      ( Face<dim>&  );
-    virtual void  WriteOperands      ( InterFace<dim>& );
+    virtual void  GetOperands( const Element<dim>&  );
+    virtual void  GetOperands( const Face<dim>&  );
+    virtual void  GetOperands( const InterFace<dim>&  );
 
     /// integration performed on Element, Face, InterFace
-    virtual void  ComputeContribution( Element<dim>&  );
-    virtual void  ComputeContribution( Face<dim>&  );
-    virtual void  ComputeContribution( InterFace<dim>& );
+    virtual void  ComputeContribution( const Element<dim>&  );
+    virtual void  ComputeContribution( const Face<dim>&  );
+    virtual void  ComputeContribution( const InterFace<dim>& );
+
+    /// writing data to the Element, Face, InterFace
+    virtual void  WriteOperands( Element<dim>& );
+    virtual void  WriteOperands( Face<dim>&  );
+    virtual void  WriteOperands( InterFace<dim>& );
 
     /// multiply with time increment if this is desired
-    virtual void  MultiplyWithTimeFactor( double64 dt );
+    virtual void  MultiplyWithTimeFactor( double dt );
 
     /// assigment to the left hand side global matrix (after everything was calculated )
     virtual void  AssignToGlobal( const Element<dim>&, SparseMatrix& );
@@ -149,9 +149,9 @@ class MathOperatorLHS {
     virtual void  AssignToGlobal( const InterFace<dim>&, SparseMatrix& );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void AssignToGlobal( const Element<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
-    virtual void AssignToGlobal( const Face<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
-    virtual void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const Element<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const Face<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
 
     virtual MathOperatorLHS<dim>* clone() const = 0;
 
@@ -163,8 +163,8 @@ class MathOperatorLHS {
     std::string                         name_;   ///< name of operator
 
     Parameter                           op;      ///< material property operand
-    std::pair<Parameter, size_t >       bop;     ///< basic function operand and calculation offset
-    std::pair<Parameter, size_t >       top;     ///< test function operand and calculation offset
+    std::pair<Parameter, size_t>       bop;     ///< basic function operand and calculation offset
+    std::pair<Parameter, size_t>       top;     ///< test function operand and calculation offset
 
     DenseMatrix<DM_MIN>                 LHS;     ///< solution matrix to be accumulated
     std::vector<size_t>                 IDT;     ///< node-ID & global constraint points vector ( test operand )
@@ -172,14 +172,14 @@ class MathOperatorLHS {
 
     std::vector<DenseMatrix<DM_MIN> >   MTRL;    ///< material property matrix(es) needed for PDE operand
     DenseMatrix<DM_MIN>                 DERIV;   ///< shape function derivative matrix
-    std::vector<double64>               IPOL;    ///< shape function vector
-    std::vector<ScalarVariable >        SC;      ///< node property vector<double64> of scalars
+    std::vector<double>               IPOL;    ///< shape function vector
+    std::vector<ScalarVariable >        SC;      ///< node property vector<double> of scalars
     std::vector<VectorVariable<dim> >   VC;      ///< vectors
     std::vector<TensorVariable<dim> >   TS;      ///< tensors
     std::vector<ArrayVariable >         AR;      ///< arrays
     std::vector<FlaggedArrayVariable >  FR;      ///< flagged arrays
 
-    double64                            factor_; ///< constant scaling factor
+    double                            factor_; ///< constant scaling factor
 
     // constraints on the accumulation procedure
     bool                                add_accumulate_;

@@ -22,7 +22,7 @@ class Standard_IO_Handler {
     bool        YesNo( const char question[150] );
   
     /// prompts user to enter a floating point value which is collected from stdin returned
-    double64    RecordChoice( const char* question );
+    double    RecordChoice( const char* question );
   
     /// prompts user to enter an integer value which is collected from stdin returned
     long        RecordIntChoice( const char* question );
@@ -43,7 +43,7 @@ class Standard_IO_Handler {
     void        Protocol( const char* info );
   
     /// appends info string + numeric value to doc_file
-    void        Protocol( const char* info, double64 parameter );
+    void        Protocol( const char* info, double parameter );
   
     /// prints all the recorded information to the output text file 'doc_file'
     void        Out() const;

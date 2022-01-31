@@ -13,16 +13,16 @@ class LinearTwoPhaseModel : public TwoPhaseModel<dim>{
     /// constructor for constant capillary pressure equal to entry pressure
     LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                         const char* permeability, 
-                        double64 viscosity_nw, double64 viscosity_w,
-                        double64 density_nw, double64 density_w,
+                        double viscosity_nw, double viscosity_w,
+                        double density_nw, double density_w,
                         const char* pc_entry,
                         const bool sw_ro_mu_placement = true); // NODE=true ELEMENT=false
 
     /// constructor for constant capillary pressure equal to entry pressure
     LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                         const char* permeability, 
-                        double64 viscosity_nw, double64 viscosity_w,
-                        double64 density_nw, double64 density_w,
+                        double viscosity_nw, double viscosity_w,
+                        double density_nw, double density_w,
                         const char* pc_entry, const char* sw, const char* rsnw, const char* rsw,
                         const bool sw_ro_mu_placement = true); // NODE=true ELEMENT=false
 
@@ -38,8 +38,8 @@ class LinearTwoPhaseModel : public TwoPhaseModel<dim>{
     /// constructor for linear capillary pressure
     LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                         const char* permeability,
-                        double64 viscosity_nw, double64 viscosity_w,
-                        double64 density_nw, double64 density_w,
+                        double viscosity_nw, double viscosity_w,
+                        double density_nw, double density_w,
                         const char* pc_entry,
                         const char* maximum_pc,
                         const bool sw_ro_mu_placement = true); // NODE=true ELEMENT=false
@@ -60,38 +60,38 @@ class LinearTwoPhaseModel : public TwoPhaseModel<dim>{
     virtual void Initialize( const Element<dim>& e );
     
     // relative permeabilities
-    virtual double64 krn_Phase() const;
-    virtual double64 krw_Phase() const;
+    virtual double krn_Phase() const;
+    virtual double krw_Phase() const;
 
     // derivatives of relative permeabilities
-    virtual double64 dkrnds_Phase() const;
-    virtual double64 dkrwds_Phase() const;
+    virtual double dkrnds_Phase() const;
+    virtual double dkrwds_Phase() const;
 
     // capillary pressure
-    virtual double64 pc_Phase( ) const;
+    virtual double pc_Phase( ) const;
 
     // capillary pressure derivatives
-    virtual double64 dpcds_Phase( ) const;
+    virtual double dpcds_Phase( ) const;
 
     // inverse capillary pressure function
-    virtual double64 Sw_Phase( double64 pc_Phase ) const;
+    virtual double Sw_Phase( double pc_Phase ) const;
 
     // inverse capillary pressure derivative
-    virtual double64 dsdpc_Phase( double64 pc_Phase ) const;
+    virtual double dsdpc_Phase( double pc_Phase ) const;
 
     // derivative of fractional flow (advection multipliers)
-    virtual double64 dfds() const;
+    virtual double dfds() const;
 
     // derivatives of gravitational flow (advection multipliers)
-    virtual double64 dGds( ) const;
+    virtual double dGds( ) const;
 
     // maximum absolute value returned by dfdS
-    virtual double64 MaxFractionalFlowDerivative() const;
+    virtual double MaxFractionalFlowDerivative() const;
 
   private:
     LinearTwoPhaseModel();
     csmp::Index pd_key_, pc_max_key_;
-    double64    entry_pressure_,pc_max_;
+    double    entry_pressure_,pc_max_;
     bool        default_capillary_pressure_max_;
 };
  

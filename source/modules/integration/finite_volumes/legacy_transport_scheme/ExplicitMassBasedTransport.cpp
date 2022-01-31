@@ -35,8 +35,8 @@ template<size_t dim,template<size_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
 {
     /// unneccessary for compressible flow(??) (there needs to be a better comment here! julian, july 2014)
-    double64        inflow, flux_balance;
-    const double64  zero(0.);
+    double        inflow, flux_balance;
+    const double  zero(0.);
 
     if (this->Verbose())
         cout<<" Correcting fluxes in ExplicitMassBasedTransport"<<endl;
@@ -99,14 +99,14 @@ void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions(const siz
 } // end AssignFluxBoundaryConditions
 
 template<size_t dim,template<size_t> class STP>
-double64  ExplicitMassBasedTransport<dim, STP>::AnisotropicCourantIncrement()
+double  ExplicitMassBasedTransport<dim, STP>::AnisotropicCourantIncrement()
 {
     this->UpdateProjectedVelocitiesAndFluxBalances();
 
     VectorVariable<dim>         vc;
-    const double64              zero(0.);
-    double64                    courant_increment(8640000.); // 100 days
-    double64                    velocity;
+    const double              zero(0.);
+    double                    courant_increment(8640000.); // 100 days
+    double                    velocity;
     
     // loop over the elements finding their transsect length in the direction of flow
     for ( typename vector<Element<dim>*>::const_iterator
@@ -116,7 +116,7 @@ double64  ExplicitMassBasedTransport<dim, STP>::AnisotropicCourantIncrement()
         velocity = vc.Length();
 
         vc       /= velocity; // normalize vc to avoid round-off error during geometrical projection
-        double64 ediameter((*eit)->LengthInDirection( vc ) * (*eit)->Read( this->phi_key_ ) );
+        double ediameter((*eit)->LengthInDirection( vc ) * (*eit)->Read( this->phi_key_ ) );
 
         // guarding against degenerate cases
         if ( velocity > zero and ediameter > zero ) {
@@ -166,7 +166,7 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProducts()
 }
 
 template<size_t dim,template<size_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector<double64>& RESULT)
+void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector<double>& RESULT)
 {
 #if defined(_OPENMP )
     size_t tid = omp_get_thread_num();
@@ -202,13 +202,13 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector
 } // end AccumulateFluxUpwindProductsOMP
 
 template<size_t dim,template<size_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double64 time_interval , const size_t var_comp_nr)
+void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double time_interval , const size_t var_comp_nr)
 {
     if (this->adv1_key_.type == SCALAR)
         for ( size_t nidx=0U; nidx<this->gref_.Nodes(); nidx++ )
         {
             // reading the transported variable value
-            double64 solution = this->gref_.N(nidx)->Read( this->adv1_key_ );
+            double solution = this->gref_.N(nidx)->Read( this->adv1_key_ );
             // subtracting the flux time-interval product
             this->RESULT[nidx] = solution - (time_interval / this->FVPOREVOL[nidx]) * this->RESULT[nidx];
             // adding externally assigned source or sink terms
@@ -242,7 +242,7 @@ void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double64 time_interval
 } // end ComposeSolution (passive advection case)
 
 template<size_t dim,template<size_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::AdvectVariable( double64 time_interval)
+void ExplicitMassBasedTransport<dim,STP>::AdvectVariable( double time_interval)
 {
     //TODO if porevolume changes -> updateporevolumes
     this->gref_.RenumberNodes();
@@ -262,11 +262,11 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable( double64 time_interval
 
 template<size_t dim,template<size_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
-        double64 time_increment, bool output_result_range )
+        double time_increment, bool output_result_range )
 {
     for (size_t ncom = 0 ; ncom < this->var_ncomponents_;ncom++){
         if (this->Verbose()) cout<<" Advecting component (mass based): "<<ncom<<" time increment used: "<<time_increment<<endl;
-        std::fill( this->RESULT.begin(), this->RESULT.end(), static_cast<double64>(0.) );
+        std::fill( this->RESULT.begin(), this->RESULT.end(), static_cast<double>(0.) );
 
 #if !defined(_OPENMP)
         /// IMPORTANT NOTE: If you every change/improve this loop, make sure you
@@ -286,10 +286,10 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
 
         } // end of accumulation
 #else
-        vector<vector<double64> > RESULT(omp_get_max_threads());
+        vector<vector<double> > RESULT(omp_get_max_threads());
         for (size_t tid = 0 ; tid < omp_get_max_threads();tid++){
             RESULT[tid].resize(this->gref_.Nodes());
-            std::fill( RESULT[tid].begin(), RESULT[tid].end(), static_cast<double64>(0.) );
+            std::fill( RESULT[tid].begin(), RESULT[tid].end(), static_cast<double>(0.) );
         }
 
 #pragma omp parallel
@@ -303,7 +303,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
             /// Julian - 02/09/2015
 
 #pragma omp for
-            for ( int32 e = 0 ; e < this->gref_.Elements() ; e++ )
+            for ( int32_t e = 0 ; e < this->gref_.Elements() ; e++ )
             {
                 ep = this->gref_.E(e);
                 this->thread_stencil_processor_[tid]->eidx_ = ep->Idx();
@@ -369,7 +369,7 @@ contain subcycling of time intervals.  This statement is valid only for Explicit
 
  */
 template<size_t dim,template<size_t> class STP>
-void ExplicitMassBasedTransport<dim,STP>::AdvectVariableSingleStep( double64 time_increment,
+void ExplicitMassBasedTransport<dim,STP>::AdvectVariableSingleStep( double time_increment,
                                                                     bool apply_flux_balance_correction,
                                                                     bool update_pore_volumes )
 {

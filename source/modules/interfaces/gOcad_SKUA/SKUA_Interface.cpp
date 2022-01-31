@@ -11,6 +11,8 @@
 #include "Region.h"
 #include "Boundary.h"
 #include "Point.h"
+#include "CSMP_highLevelUtilities.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -94,11 +96,13 @@ void SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion( const Mod
      @author SKM
 */
 template<size_t dim>
-bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
+bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, const std::string& data_file )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     string  bc_file_name( model.Name() );
     bc_file_name += "-element_barycentre_properties.txt";
+    // overwrite the default file name if a name argument was supplied to method
+    if ( !data_file.empty() ) bc_file_name = data_file;
 
     ifstream  bc_ifs( bc_file_name );
     if ( !bc_ifs.is_open() ) {
@@ -136,23 +140,23 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
          return false;
       }
     // getting bounds for the property values to be read
-    vector<pair<double64,double64> > valid_ranges(items_per_line-first_prop,make_pair(-1.0e30,1.0e30));
-    double64 min_val, max_val;
+    vector<pair<double,double> > valid_ranges(items_per_line-first_prop,make_pair(-1.0e30,1.0e30));
+    double min_val, max_val;
     for ( size_t i=first_prop; i<items_per_line; i++ ) {
          model.Database().RangeOf( properties[i].c_str(), min_val, max_val );
          valid_ranges[i-first_prop] = make_pair( min_val, max_val ); // ATTENTION - different range
       }
     // containers
     //  elmt-id, values of properties in order given in property string and boolean to tell whether value is to be mapped
-    pair<size_t, vector<pair<bool, double64> > > elmt_prop_values; //(UINT_MAX, items_per_line - first_prop);
+    pair<size_t, vector<pair<bool, double> > > elmt_prop_values; //(UINT_MAX, items_per_line - first_prop);
     elmt_prop_values.second.resize( items_per_line - first_prop );
 
     // region by region values
     // region name, set of property values
-    map<string,deque<pair<size_t,vector<pair<bool,double64> > > > > region_data;
+    map<string,deque<pair<size_t,vector<pair<bool,double> > > > > region_data;
     // keeping statistics of range checks that failed and which properties were affected
     // property name, number of failures
-    map<string,size_t> range_ckeck_failures;
+    map<string,size_t> range_check_failures;
    
     // start to read properties
     bc_ifs.getline( text_line, LMAX );
@@ -168,7 +172,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
 
         // reading the property values and performing range checks on the way
         for ( size_t i=first_prop; i<items_per_line; ++i ) {
-              const double64 prop_value = stod( data_tokens[i] );
+              const double prop_value = stod( data_tokens[i] );
               // checking the range, including no-data values
               assert( !isnan(prop_value) );
               if ( prop_value < valid_ranges[i-first_prop].first || prop_value > valid_ranges[i-first_prop].second ||
@@ -177,11 +181,9 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
                    if ( static_cast<long>(prop_value) != -9999 && static_cast<long>(prop_value) != -99999 ) {
                         cerr <<"\nOut-of-range value of '"<< properties[i] <<"' = "<< std::scientific << prop_value;
                         cerr <<" (region "<< region_name <<", element "<< elmt_num <<"), will be ignored.\n";
-                     }
-                   else {
-                        pair<map<string,size_t>::iterator,bool> it=range_ckeck_failures.insert( make_pair(properties[i],1) );
+                        pair<map<string,size_t>::iterator,bool> it=range_check_failures.insert( make_pair(properties[i],1) );
                         if ( it.second == false ) (*it.first).second++; // incrementing the failure count
-                     }
+                     }                                             // false means that value will not be mapped
                    elmt_prop_values.second[i-first_prop] = make_pair( false, prop_value );
                 }
               else elmt_prop_values.second[i-first_prop] = make_pair( true, prop_value );
@@ -189,11 +191,11 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
         
         // inserting the record into a new or existing map entry
         // region name, elements inside with their associated data
-        // map<string,deque<pair<size_t,vector<pair<bool,double64> > > > >
-        map<string,deque<pair<size_t,vector<pair<bool,double64> > > > >::iterator it = region_data.find(region_name);
+        // map<string,deque<pair<size_t,vector<pair<bool,double> > > > >
+        map<string,deque<pair<size_t,vector<pair<bool,double> > > > >::iterator it = region_data.find(region_name);
         // if this is first element data set in the region data map
         if ( it == region_data.end() ) {
-             deque<pair<size_t,vector<pair<bool,double64> > > > new_data_set;
+             deque<pair<size_t,vector<pair<bool,double> > > > new_data_set;
              new_data_set.push_back( elmt_prop_values );
              region_data.insert( make_pair(region_name,new_data_set) );
           }
@@ -219,7 +221,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
     // 1.2 establishing a mapping between current elements and id numbers
     const csmp::Index e_key = model.Database().StorageKey("element number");
    
-    for ( map<string,deque<pair<size_t,vector<pair<bool,double64> > > > >::iterator
+    for ( map<string,deque<pair<size_t,vector<pair<bool,double> > > > >::iterator
           it=region_data.begin(); it!=region_data.end(); ++it )
       {
           // ignoring regions that do not exist in model
@@ -239,7 +241,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
                   elmt_correspondance_map.insert( make_pair( (*eit)->Read(e_key), (*eit) ) );
             
                // assign properties element by element if these are valid
-               for ( deque<pair<size_t,vector<pair<bool,double64> > > >::iterator
+               for ( deque<pair<size_t,vector<pair<bool,double> > > >::iterator
                      et=(*it).second.begin(); et!=(*it).second.end(); ++et ) {
                      // searching for 'element number' in map
                      typename map<size_t,Element<dim>*>::iterator elmt_it = elmt_correspondance_map.find( (*et).first );
@@ -259,10 +261,10 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
       } // end loop over the regions
    
    // reporting
-   if ( !range_ckeck_failures.empty() ) {
+   if ( !range_check_failures.empty() ) {
         csmp_error.notice( WARNING, "importElementPropertyValuesFromSKUA:",
                               "range checks failed for several variable values." );
-        for ( auto it=range_ckeck_failures.begin(); it!=range_ckeck_failures.end(); ++it )
+        for ( auto it=range_check_failures.begin(); it!=range_check_failures.end(); ++it )
           cerr <<"\n\t"<< (*it).second <<" range check failures occured for variable '"<< (*it).first <<"'";
         cerr << endl;
         return false;
@@ -274,8 +276,8 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model )
    
 } // end ImportElementPropertyValuesFromSKUA
 
-template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<2U>&  );
-template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<3U>&  );
+template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<2U>&, const std::string& );
+template bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<3U>&, const std::string& );
 
 
 
@@ -332,8 +334,7 @@ void SKUA_Interface::VariableToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( vector<Element<3U>*>::const_iterator
-               it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
            {
               ofs << (*rt) <<"\t";
               Point<3U> xyz((*it)->BaryCenter());
@@ -414,8 +415,7 @@ void SKUA_Interface::VariablesToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( vector<Element<3U>*>::const_iterator
-               it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
            {
               ofs << (*rt) <<"\t";
               Point<3U> xyz((*it)->BaryCenter());
@@ -479,8 +479,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( vector<Element<3U>*>::const_iterator
-               it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
            {
               // each array variable entry is output as a singe line 
               assert( (*it)->FE()->IsSurfaceElement() );
@@ -505,7 +504,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
 
               // doing all subsequent points, assuming that values are symmetrically distributed around surface
               // and using the unit normal
-              const double64 dx = (*it)->Read( fth_key ) / static_cast<double64>(ary.Size()*2);
+              const double dx = (*it)->Read( fth_key ) / static_cast<double>(ary.Size()*2);
               for ( size_t i=1U; i<ary.Size(); i++ )
                 {
                    Point<3U> out_pt =  (dx * i) * nrml;
@@ -553,7 +552,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
 */
 bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& input_txt_file,
                                                                const string& target_region,
-                                                               std::set<long>& no_data_elmt_numbers )
+                                                               std::set<size_t>& no_data_elmt_numbers )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     string datafile = input_txt_file + "-element_barycentres_properties.txt";
@@ -607,7 +606,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
         // reading the property values and performing range checks on the way
         int no_data_count = 0.;
         for ( size_t i=first_prop; i<items_per_line; ++i ) {
-              const double64 prop_value = stod( data_tokens[i] );
+              const double prop_value = stod( data_tokens[i] );
               // checking the value range, including no-data values
               assert( !isnan(prop_value) );
               if ( static_cast<long>(prop_value) == -9999 || static_cast<long>(prop_value) == -99999  )
@@ -615,7 +614,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
           }
         if ( no_data_count == (items_per_line - first_prop) )
           // for any NO_DATA element record insert element number into the element number set
-          no_data_elmt_numbers.insert( elmt_num );
+          no_data_elmt_numbers.insert( static_cast<size_t>(elmt_num) );
 
         // reading next line
         bc_ifs.getline( text_line, LMAX );
@@ -645,47 +644,63 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
 removes the elements for which NO_DATA values (-9999, -99999) in the target region of the model.
 After removing the elements, the unique regions, boundaries, and split boundaries are updated accordingly.
 
-@author JC
+@author JC revised by SKM
 @date 26/2/2019
+@date 22/5/2021
+
 */
-void SKUA_Interface::Remove_NO_DATA_ElementsInModel( Model<3U>& model, const string& target_region, std::set<long>& no_data_elmt_numbers )
+void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const string& target_region, std::set<size_t>& no_data_elmt_numbers )
 {
   csmp::Region<3U>& region = model.Region( target_region );
   
-  size_t n_removed_elmts = model.RemoveElements( target_region.c_str(), no_data_elmt_numbers );
-
+  vector<size_t>              element_ids( no_data_elmt_numbers.begin(), no_data_elmt_numbers.end() );
+  vector<csmp::Element<3U>*>  ptrs_to_removed_elements;
+  size_t n_removed_elmts    = region.RemoveByNumber( element_ids, ptrs_to_removed_elements );
+  
   // reporting
   std::cout << "\nremove_NO_DATA_ElementsInModel: " << region.Name() << " (removed elements: " << n_removed_elmts << ")";
   std::cout << "\t" << region.Elements() << " elements remaining in '" << region.Name() << "'.\n";
 
+  // updating the model, dependent on wether the removed elements were located only in a single unique region or across regions
+  // if the region is unique ony that region needs to be modified
+  if ( model.IsUnique(target_region) ) {
+       // finding the target elements
+       vector<Element<3U>*> elmt_ptrs;
+       model.Mesh().Delete( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       return;
+    }
+
+  // if the region was non-unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
   // updating regions
+  model.Mesh().UpdateConnectivity();
+  
+  /*
   for ( auto rit = model.RegionsBegin(); rit != model.RegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector();
+    rit->second.CreateNodePointerVector2();
     rit->second.EstablishNeighborConnectivity();
     rit->second.IdentifyPerimeter();
   }
 
   // updating unique regions
   for ( auto rit = model.UniqueRegionsBegin(); rit != model.UniqueRegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector();
+    rit->second.CreateNodePointerVector2();
     rit->second.EstablishNeighborConnectivity();
     rit->second.IdentifyPerimeter();
   }
   // updating boundaries
   for ( auto bit = model.BoundariesBegin(); bit != model.BoundariesEnd(); ++bit ) {
     //bit->second.UpdateElementPointerVector( model.Mesh() );
-    bit->second.CreateNodePointerVector();
+    bit->second.CreateNodePointerVector2();
     bit->second.EstablishNeighborConnectivity();
     bit->second.IdentifyPerimeter();
   }
   // updating split boundaries
   for ( auto sbit = model.SplitBoundariesBegin(); sbit != model.SplitBoundariesEnd(); ++sbit ) {
-    sbit->second.CreateNodePointerVector();
+    sbit->second.CreateNodePointerVector2();
     sbit->second.EstablishNeighborConnectivity();
     sbit->second.IdentifyPerimeter();
   }
-  // updating indexes
-  model.UpdateIndices();
+  */
   
 } // end Remove_NO_DATA_ElementsInModel
 
@@ -739,7 +754,7 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
   cout << "\n\t" << text_line << endl;
 
   // 1.3 reading the rocktype identifiers from file
-  map<int32, string>  rocktype_identifiers;
+  map<int32_t, string>  rocktype_identifiers;
 
   while ( !ifs.eof() )
     {
@@ -748,10 +763,10 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
       // only the first 2 tokens are used alllowing the user to add comments afterwards
       // rocktype
       token = strtok( text_line, delims );
-      int32 rocktype = (token != NULL) ? atoi( token ) : UNSPECIFIED;
+      int32_t rocktype = (token != NULL) ? atoi( token ) : UNSPECIFIED;
       // facies name / association
       token = strtok( NULL, delims );
-      string rocktype_name = (token != NULL) ? to_string( token ) : "UNSPECIFIED";
+      string rocktype_name = (token != NULL) ? token : "UNSPECIFIED";
 
       rocktype_identifiers.insert( make_pair( rocktype, rocktype_name ) );
     }
@@ -770,11 +785,11 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
   }
   cout << "\n\n";
 
-  set<int32>   unknown_identifiers;
+  set<int32_t>   unknown_identifiers;
   Region<3U>&  model_domain( model.Region( "Model" ) );
   for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
     {
-      const int32 rocktype = static_cast<int32>((*it)->Read( rrt_key ));
+      const int32_t rocktype = static_cast<int32_t>((*it)->Read( rrt_key ));
       // if the rocktype can be identified, we store the element id for the later creation of a region
       if ( rocktype_identifiers.find( rocktype ) == rocktype_identifiers.end() )
         unknown_identifiers.insert( rocktype );

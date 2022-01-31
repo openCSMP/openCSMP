@@ -18,9 +18,9 @@ class Integral_dNT_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim> {
                                     const char* oper,  const char* velo, 
                                     const char* basic, const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( const SIMPLEX& e );
     
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( const SIMPLEX& e );
   
   private:
     DenseMatrix<DM_MIN>  B, BT;

@@ -31,7 +31,7 @@ class ElementToNodePropertyVisitor : public Visitor<dim> {
     csmp::Index       eprop_key_, nprop_key_;
     Var               evariable_, nvariable_;
     std::vector<Var>  vars_vector_; 
-    std::vector<double64>   summed_weights_;
+    std::vector<double>   summed_weights_;
     BoolVector        weighting_completed_;
 };
 

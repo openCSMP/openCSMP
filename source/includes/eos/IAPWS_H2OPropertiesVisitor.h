@@ -86,8 +86,8 @@ class IAPWS_H2OPropertiesVisitor : public Visitor<dim> {
                         alpha_key, ///< fluid expansivity
                         beta_key,  ///< fluid compressibility
                         rho_key;   ///< fluid density
-    double64            temk, dens;
-    const double64      dp, dt, kelvin, bar; ///< convergence for PROST         
+    double            temk, dens;
+    const double      dp, dt, kelvin, bar; ///< convergence for PROST         
 };
 
 

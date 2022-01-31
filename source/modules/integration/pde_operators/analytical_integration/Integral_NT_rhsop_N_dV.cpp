@@ -46,7 +46,7 @@ Integral_NT_rhsop_N_dV<dim,SIMPLEX>::Integral_NT_rhsop_N_dV( const PropertyDatab
 /** Reads the Operand values from the elements.
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_rhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+void Integral_NT_rhsop_N_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -64,7 +64,7 @@ multiplied with the Operand and stores the result in the test function
 part of the right hand side vector.  
 */
 template<size_t dim,class SIMPLEX>
-void Integral_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void Integral_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
 
@@ -81,7 +81,7 @@ void Integral_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     }
     // lumped formulation  
     else {
-      double64 res = (e.Volume() * sc()) / static_cast<double64>(e.Nodes());
+      double res = (e.Volume() * sc()) / static_cast<double>(e.Nodes());
       for (size_t i = 0; i < e.Nodes(); ++i) {
         MathOperatorRHS<dim>::RHS[i] = basic_var_[i]() * res;
       }

@@ -13,18 +13,18 @@ class SumOfProducts {
    SumOfProducts& operator=(const SumOfProducts& s );
    
 // negative indexed terms are regarded as constants 
-   void       AddProduct( const std::map<int32,double64>& product );
-   double64  Sum( const double64 a[] ) const;
+   void       AddProduct( const std::map<int32_t,double>& product );
+   double  Sum( const double a[] ) const;
    void       Erase();
 
    void       InitializeFrom( const char* s, 
-                              std::map<std::string,std::pair<int,double64> >& withval,
+                              std::map<std::string,std::pair<int,double> >& withval,
                               std::map<std::string,int>& withoutval );
 
    void       TokenizeString( char* s, const char* delim, std::list<std::string>& li ) const;
 
-   std::vector<std::map<int,double64> >::iterator  Begin() { return sumproducts.begin(); };
-   std::vector<std::map<int,double64> >::iterator  End()   { return sumproducts.end(); };
+   std::vector<std::map<int,double> >::iterator  Begin() { return sumproducts.begin(); };
+   std::vector<std::map<int,double> >::iterator  End()   { return sumproducts.end(); };
 
    void       Out() const;
  
@@ -32,7 +32,7 @@ class SumOfProducts {
    // terms that make up sum, e.g.,
    // a1 c2 - b2^2 c1 ...
    // terms:  spec.idx  product term   
-   std::vector<std::map<int,double64> >  sumproducts;
+   std::vector<std::map<int,double> >  sumproducts;
 };
 
 } // end namespace csp

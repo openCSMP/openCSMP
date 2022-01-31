@@ -99,7 +99,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim>::LHS.Zero();
 
-    const double64 fv_integration_weight(1./e.FV()->Facets());
+    const double fv_integration_weight(1./e.FV()->Facets());
 
      // for all finite-volume facets
     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
@@ -109,7 +109,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                 outside_node = e.FV()->OutsideNode(i);
 
          Point<dim> rst  = e.FV()->FacetIntegrationPoint( i, 0U );
-         double64   detJ = (e).dN_At( rst, DN_ );
+         double   detJ = (e).dN_At( rst, DN_ );
 
          LK_ = MathOperatorLHS<dim>::MTRL[i] * DN_;
 

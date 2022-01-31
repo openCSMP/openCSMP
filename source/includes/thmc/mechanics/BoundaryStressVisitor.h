@@ -91,7 +91,7 @@ class BoundaryStressVisitor : public Visitor<dim> {
 	  VectorVariable<dim>  vc_, force_;           ///< forces read from the nodes
 	  VectorVariable<dim>  nrml_, bstress_;
 	  TensorVariable<dim>  stressTensor_;
-    double64             SHmax_, Shmin_;        ///< stress ratios read from the boundary
+    double             SHmax_, Shmin_;        ///< stress ratios read from the boundary
     BOUNDARY_STRESS      stress_computation_;
 	  bool                 overwrite_previous_forces_;
 };

@@ -37,7 +37,7 @@ void ConstraintPointToNodePropertyVisitor_Test::run()
   model_.Region("Model").Accept(test);
   //test.ApplyWeightingToExtrapolatedValues();
 
-  double64 nodevalue(0.);
+  double nodevalue(0.);
   for (vector<Node<DIM>*>::iterator
        it=  model_.Region("Model").NodesBegin();it!=model_.Region("Model").NodesEnd();it++)
   {

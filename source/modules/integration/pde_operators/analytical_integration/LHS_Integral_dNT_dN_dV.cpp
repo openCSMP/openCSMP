@@ -36,7 +36,7 @@ LHS_Integral_dNT_dN_dV<dim,SIMPLEX>::LHS_Integral_dNT_dN_dV( const PropertyDatab
    Computes the product of the interpolation function derivatives.
 */
 template<size_t dim,class SIMPLEX>
-void LHS_Integral_dNT_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+void LHS_Integral_dNT_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );

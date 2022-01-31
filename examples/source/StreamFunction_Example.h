@@ -21,12 +21,12 @@ public:
 private:
   void computeStreamFunction( Model<2U>& sg,
                               BOX_BOUNDARY boundary0, BOX_BOUNDARY boundary1,
-                              double64 total_flux, const char* stream_func_var );
+                              double total_flux, const char* stream_func_var );
 
   void analyze_sensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
                             Interrelation<2U>& itr, PDE_Integrator<2U,Region>& algo );
 
-  template<size_t dim> double64 integrateDomainBoundaryFlux( Model<dim>& sg );
+  template<size_t dim> double integrateDomainBoundaryFlux( Model<dim>& sg );
 
 
 };

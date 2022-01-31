@@ -18,34 +18,34 @@ class FV_Parameter {
   
     // mutators
     void Resize( size_t sectors, size_t facets, size_t dim, bool with_normals=false );
-    void SectorVolume( size_t sector, double64 vol );
-    void FacetArea( size_t facet, double64 area );
-    void FacetNormal( size_t facet, const std::vector<double64>& fnxyz );
-    void FacetNormalVelocity( size_t facet, double64 flux );
-    void Initialize( size_t facet, double64 flux, double64 area );
+    void SectorVolume( size_t sector, double vol );
+    void FacetArea( size_t facet, double area );
+    void FacetNormal( size_t facet, const std::vector<double>& fnxyz );
+    void FacetNormalVelocity( size_t facet, double flux );
+    void Initialize( size_t facet, double flux, double area );
     
     // accessors
     size_t Sectors() const;
     size_t Facets() const;
-    double64 SectorVolume( size_t sector ) const;
-    double64 FacetArea( size_t facet ) const;
-    double64 FacetNormalVelocity( size_t facet ) const;
-    double64 FacetNormalComponent( size_t facet, size_t x_or_y_or_z ) const;
-    double64 FacetNormalProjection( size_t facet, const std::vector<double64>& cxyz ) const;
+    double SectorVolume( size_t sector ) const;
+    double FacetArea( size_t facet ) const;
+    double FacetNormalVelocity( size_t facet ) const;
+    double FacetNormalComponent( size_t facet, size_t x_or_y_or_z ) const;
+    double FacetNormalProjection( size_t facet, const std::vector<double>& cxyz ) const;
     // universal versions
-    double64 FacetNormalProjection( size_t facet, const VectorVariable<1U>& cxyz ) const;
-    double64 FacetNormalProjection( size_t facet, const VectorVariable<2U>& cxyz ) const;
-    double64 FacetNormalProjection( size_t facet, const VectorVariable<3U>& cxyz ) const;
+    double FacetNormalProjection( size_t facet, const VectorVariable<1U>& cxyz ) const;
+    double FacetNormalProjection( size_t facet, const VectorVariable<2U>& cxyz ) const;
+    double FacetNormalProjection( size_t facet, const VectorVariable<3U>& cxyz ) const;
 
     size_t Bytes() const;
     void   Out() const;
     
   private:
     ///< velocites projected on facet normals and facet areas
-    std::vector<double64>                       sector_volume_;
+    std::vector<double>                       sector_volume_;
     ///< velocites projected on facet normals and facet areas
-    std::vector<std::pair<double64,double64> >  facet_v_and_A_;
-    std::vector<std::vector<double64> >         facet_unit_normal_;
+    std::vector<std::pair<double,double> >  facet_v_and_A_;
+    std::vector<std::vector<double> >         facet_unit_normal_;
 };
 
 
@@ -87,25 +87,25 @@ inline FV_Parameter& FV_Parameter::operator=( FV_Parameter&& param )
  }
 
 
-inline void FV_Parameter::SectorVolume( size_t sector, double64 vol )
+inline void FV_Parameter::SectorVolume( size_t sector, double vol )
  { sector_volume_[sector] = vol; }
 
 
-inline void FV_Parameter::FacetNormalVelocity( size_t facet, double64 flux )
+inline void FV_Parameter::FacetNormalVelocity( size_t facet, double flux )
  { facet_v_and_A_[facet].first = flux; }
 
 
-inline void FV_Parameter::FacetArea( size_t facet, double64 area )
+inline void FV_Parameter::FacetArea( size_t facet, double area )
  { facet_v_and_A_[facet].second = area; }
 
 
 // assign the facet unit normal for the facet
-inline void FV_Parameter::FacetNormal( size_t facet, const std::vector<double64>& fnxyz )
+inline void FV_Parameter::FacetNormal( size_t facet, const std::vector<double>& fnxyz )
  {
     facet_unit_normal_[facet] = fnxyz;
  }
 
-inline void FV_Parameter::Initialize( size_t facet, double64 flux, double64 area )
+inline void FV_Parameter::Initialize( size_t facet, double flux, double area )
  { 
     facet_v_and_A_[facet].first  = flux;
     facet_v_and_A_[facet].second = area; 
@@ -120,34 +120,34 @@ inline size_t FV_Parameter::Facets() const
  { return facet_v_and_A_.size(); }
 
 
-inline double64 FV_Parameter::SectorVolume( size_t sector ) const
+inline double FV_Parameter::SectorVolume( size_t sector ) const
  { return sector_volume_[sector]; }
 
 
-inline double64 FV_Parameter::FacetNormalVelocity( size_t facet ) const
+inline double FV_Parameter::FacetNormalVelocity( size_t facet ) const
  { return facet_v_and_A_[facet].first; }
 
 
-inline double64 FV_Parameter::FacetNormalComponent( size_t facet, size_t x_or_y_or_z ) const
+inline double FV_Parameter::FacetNormalComponent( size_t facet, size_t x_or_y_or_z ) const
  {
     return facet_unit_normal_[facet][x_or_y_or_z];
  }
 
 
 /// universal versions of projection functions
-inline double64 FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<1U>& vc ) const
+inline double FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<1U>& vc ) const
  {
     // dot product fn . vc
     return facet_unit_normal_[facet][0] * vc[0];
  }
 
-inline double64 FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<2U>& vc ) const
+inline double FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<2U>& vc ) const
  {
     // dot product fn . vc
     return facet_unit_normal_[facet][0] * vc[0] + facet_unit_normal_[facet][1] * vc[1];
  }
 
-inline double64 FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<3U>& vc ) const
+inline double FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<3U>& vc ) const
  {
     // dot product fn . vc
     return facet_unit_normal_[facet][0] * vc[0] + facet_unit_normal_[facet][1] * vc[1] + facet_unit_normal_[facet][2] * vc[2];
@@ -155,7 +155,7 @@ inline double64 FV_Parameter::FacetNormalProjection( size_t facet, const VectorV
 
 
 
-inline double64 FV_Parameter::FacetArea( size_t facet ) const
+inline double FV_Parameter::FacetArea( size_t facet ) const
  { return facet_v_and_A_[facet].second; }
 
 
