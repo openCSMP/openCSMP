@@ -32,7 +32,7 @@ Provide the compiler with the flags
 
 -DCSMP_WITH_SAMG_SOLVER -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE
 
-Compilation for different platforms;
+Compilation on different platforms:
 
 Apple:
 ======
@@ -41,6 +41,8 @@ Apple:
 -march=core2 \
 -std=c++14
  -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal
+
+ XCode - see csmp-api-library/development/XCode-creating-CSMP-examples-project.pdf
 
 for debug add: -O0
 for release add: -O3
