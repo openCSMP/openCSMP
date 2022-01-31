@@ -1,4 +1,5 @@
 README.txt - Welcome to Open Source version of the Complex Systems Modelling Platform (CSMP++)
+(last updated SKM 31/1/2022)
 
 Organisation of this repository:
 - source/include        header files from the API library
