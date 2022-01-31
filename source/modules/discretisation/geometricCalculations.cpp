@@ -1,4 +1,4 @@
-#include "GeometricCalculations.h"
+#include "geometricCalculations.h"
 #include "CSMP_mathUtilities.h"
 #include "algorithm"
 
@@ -737,18 +737,18 @@ bool isTetrahedron( const std::vector<Point<3U> >& vertexList ) {
 			//   1  2  3
 
 // using Equiangular Skewness, using Degree
-  double64 q01 = dihedralDegAngle( vertexList[0], vertexList[1], vertexList[2], vertexList[3] );
-  double64 q12 = dihedralDegAngle( vertexList[1], vertexList[2], vertexList[3], vertexList[0] );
-  double64 q23 = dihedralDegAngle( vertexList[2], vertexList[3], vertexList[0], vertexList[1] );
-  double64 q31 = dihedralDegAngle( vertexList[3], vertexList[1], vertexList[0], vertexList[2] );
-  double64 q30 = dihedralDegAngle( vertexList[3], vertexList[0], vertexList[1], vertexList[2] );
+  double q01 = dihedralDegAngle( vertexList[0], vertexList[1], vertexList[2], vertexList[3] );
+  double q12 = dihedralDegAngle( vertexList[1], vertexList[2], vertexList[3], vertexList[0] );
+  double q23 = dihedralDegAngle( vertexList[2], vertexList[3], vertexList[0], vertexList[1] );
+  double q31 = dihedralDegAngle( vertexList[3], vertexList[1], vertexList[0], vertexList[2] );
+  double q30 = dihedralDegAngle( vertexList[3], vertexList[0], vertexList[1], vertexList[2] );
 
-  std::vector<double64> dihedraAngle{ q01, q12, q23, q30, q31 };
-  double64 qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
-  double64 qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
+  std::vector<double> dihedraAngle{ q01, q12, q23, q30, q31 };
+  double qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
+  double qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
 
-  double64 qe = 60.;
-  double64 q = std::max( (qmax - qe) / (180 - qe), (qe - qmin) / qe );
+  double qe = 60.;
+  double q = std::max( (qmax - qe) / (180 - qe), (qe - qmin) / qe );
 
   // 0.95 - 0.99: sliver, 0.99-1.00 degenerated
   if ( q > 0.95 ) {
@@ -764,24 +764,24 @@ bool isPyramid( const std::vector<Point<3U> >& vertexList ) {
   // using Equiangular Skewness, using Degree
   // check if the nodes at bottom face form a quadilateral
   // using Equiangular Skewness, using Degree
-  double64 q01 = dihedralDegAngle( vertexList[0], vertexList[1], vertexList[3], vertexList[4] );
-  double64 q12 = dihedralDegAngle( vertexList[1], vertexList[2], vertexList[0], vertexList[4] );
-  double64 q23 = dihedralDegAngle( vertexList[2], vertexList[3], vertexList[1], vertexList[4] );
-  double64 q30 = dihedralDegAngle( vertexList[3], vertexList[0], vertexList[2], vertexList[4] );
+  double q01 = dihedralDegAngle( vertexList[0], vertexList[1], vertexList[3], vertexList[4] );
+  double q12 = dihedralDegAngle( vertexList[1], vertexList[2], vertexList[0], vertexList[4] );
+  double q23 = dihedralDegAngle( vertexList[2], vertexList[3], vertexList[1], vertexList[4] );
+  double q30 = dihedralDegAngle( vertexList[3], vertexList[0], vertexList[2], vertexList[4] );
 
-  double64 q04 = dihedralDegAngle( vertexList[3], vertexList[1], vertexList[0], vertexList[4] );
-  double64 q14 = dihedralDegAngle( vertexList[0], vertexList[2], vertexList[1], vertexList[4] );
-  double64 q24 = dihedralDegAngle( vertexList[1], vertexList[3], vertexList[2], vertexList[4] );
-  double64 q34 = dihedralDegAngle( vertexList[2], vertexList[0], vertexList[3], vertexList[4] );
+  double q04 = dihedralDegAngle( vertexList[3], vertexList[1], vertexList[0], vertexList[4] );
+  double q14 = dihedralDegAngle( vertexList[0], vertexList[2], vertexList[1], vertexList[4] );
+  double q24 = dihedralDegAngle( vertexList[1], vertexList[3], vertexList[2], vertexList[4] );
+  double q34 = dihedralDegAngle( vertexList[2], vertexList[0], vertexList[3], vertexList[4] );
 
-  std::vector<double64> dihedraAngle{ q01, q12, q23, q30, q04, q14, q24, q34 };
-  double64 qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
-  double64 qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
+  std::vector<double> dihedraAngle{ q01, q12, q23, q30, q04, q14, q24, q34 };
+  double qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
+  double qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
 
-  double64 qe = 60.; // for equilateral triangle side face
-  double64 qv = 90.; // for square bootom face 
-  double64 qSide = std::max( (qmax - qe) / (180 - qe), (qe - qmin) / qe );
-  double64 qBottom = std::max( (qmax - qv) / (180 - qv), (qv - qmin) / qv );
+  double qe = 60.; // for equilateral triangle side face
+  double qv = 90.; // for square bootom face 
+  double qSide = std::max( (qmax - qe) / (180 - qe), (qe - qmin) / qe );
+  double qBottom = std::max( (qmax - qv) / (180 - qv), (qv - qmin) / qv );
 
   // 0.95 - 0.99: sliver, 0.99-1.00 degenerated
   if ( std::max( qSide, qBottom ) > 0.95 ) {
@@ -795,28 +795,28 @@ bool isPrism( const std::vector<Point<3U> >& vertexList ) {
   // using Equiangular Skewness, using Degree
   // check if the nodes at bottom face form a quadilateral
   // using Equiangular Skewness, using Degree
-  double64 q01 = dihedralDegAngle( vertexList[2], vertexList[3], vertexList[0], vertexList[1] );
-  double64 q12 = dihedralDegAngle( vertexList[0], vertexList[4], vertexList[1], vertexList[2] );
-  double64 q20 = dihedralDegAngle( vertexList[1], vertexList[5], vertexList[2], vertexList[0] );
+  double q01 = dihedralDegAngle( vertexList[2], vertexList[3], vertexList[0], vertexList[1] );
+  double q12 = dihedralDegAngle( vertexList[0], vertexList[4], vertexList[1], vertexList[2] );
+  double q20 = dihedralDegAngle( vertexList[1], vertexList[5], vertexList[2], vertexList[0] );
 
 
-  double64 q34 = dihedralDegAngle( vertexList[5], vertexList[0], vertexList[3], vertexList[4] );
-  double64 q45 = dihedralDegAngle( vertexList[3], vertexList[1], vertexList[4], vertexList[5] );
-  double64 q53 = dihedralDegAngle( vertexList[4], vertexList[2], vertexList[5], vertexList[3] );
+  double q34 = dihedralDegAngle( vertexList[5], vertexList[0], vertexList[3], vertexList[4] );
+  double q45 = dihedralDegAngle( vertexList[3], vertexList[1], vertexList[4], vertexList[5] );
+  double q53 = dihedralDegAngle( vertexList[4], vertexList[2], vertexList[5], vertexList[3] );
 
-  double64 q03 = dihedralDegAngle( vertexList[2], vertexList[1], vertexList[0], vertexList[3] );
-  double64 q14 = dihedralDegAngle( vertexList[0], vertexList[2], vertexList[1], vertexList[4] );
-  double64 q25 = dihedralDegAngle( vertexList[1], vertexList[0], vertexList[2], vertexList[5] );
+  double q03 = dihedralDegAngle( vertexList[2], vertexList[1], vertexList[0], vertexList[3] );
+  double q14 = dihedralDegAngle( vertexList[0], vertexList[2], vertexList[1], vertexList[4] );
+  double q25 = dihedralDegAngle( vertexList[1], vertexList[0], vertexList[2], vertexList[5] );
 
 
-  std::vector<double64> dihedraAngle{ q01, q12, q20, q34, q45, q53, q03, q14, q25 };
-  double64 qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
-  double64 qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
+  std::vector<double> dihedraAngle{ q01, q12, q20, q34, q45, q53, q03, q14, q25 };
+  double qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
+  double qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
 
-  double64 qe = 60.; // for equilateral triangle top and bottom faces
-  double64 qv = 90.; // for square side faces
-  double64 qSide = std::max( (qmax - qe) / (180 - qe), (qe - qmin) / qe );
-  double64 qBottom = std::max( (qmax - qv) / (180 - qv), (qv - qmin) / qv );
+  double qe = 60.; // for equilateral triangle top and bottom faces
+  double qv = 90.; // for square side faces
+  double qSide = std::max( (qmax - qe) / (180 - qe), (qe - qmin) / qe );
+  double qBottom = std::max( (qmax - qv) / (180 - qv), (qv - qmin) / qv );
 
   // 0.95 - 0.99: sliver, 0.99-1.00 degenerated
   if ( std::max( qSide, qBottom ) > 0.95 ) {
@@ -833,26 +833,26 @@ bool isPrism( const std::vector<Point<3U> >& vertexList ) {
 */
 bool isHexahedron( const std::vector<Point<3U> >& vertexList ) {
   assert( vertexList.size() == 8 );
-  double64 q01 = dihedralDegAngle( vertexList[3], vertexList[4], vertexList[0], vertexList[1] );
-  double64 q12 = dihedralDegAngle( vertexList[0], vertexList[5], vertexList[1], vertexList[2] );
-  double64 q23 = dihedralDegAngle( vertexList[1], vertexList[6], vertexList[2], vertexList[3] );
-  double64 q30 = dihedralDegAngle( vertexList[2], vertexList[7], vertexList[3], vertexList[0] );
+  double q01 = dihedralDegAngle( vertexList[3], vertexList[4], vertexList[0], vertexList[1] );
+  double q12 = dihedralDegAngle( vertexList[0], vertexList[5], vertexList[1], vertexList[2] );
+  double q23 = dihedralDegAngle( vertexList[1], vertexList[6], vertexList[2], vertexList[3] );
+  double q30 = dihedralDegAngle( vertexList[2], vertexList[7], vertexList[3], vertexList[0] );
 
-  double64 q45 = dihedralDegAngle( vertexList[0], vertexList[7], vertexList[4], vertexList[5] );
-  double64 q56 = dihedralDegAngle( vertexList[1], vertexList[4], vertexList[5], vertexList[6] );
-  double64 q67 = dihedralDegAngle( vertexList[2], vertexList[5], vertexList[6], vertexList[7] );
-  double64 q74 = dihedralDegAngle( vertexList[3], vertexList[6], vertexList[7], vertexList[4] );
+  double q45 = dihedralDegAngle( vertexList[0], vertexList[7], vertexList[4], vertexList[5] );
+  double q56 = dihedralDegAngle( vertexList[1], vertexList[4], vertexList[5], vertexList[6] );
+  double q67 = dihedralDegAngle( vertexList[2], vertexList[5], vertexList[6], vertexList[7] );
+  double q74 = dihedralDegAngle( vertexList[3], vertexList[6], vertexList[7], vertexList[4] );
 
-  double64 q04 = dihedralDegAngle( vertexList[7], vertexList[5], vertexList[0], vertexList[4] );
-  double64 q15 = dihedralDegAngle( vertexList[4], vertexList[6], vertexList[1], vertexList[5] );
-  double64 q26 = dihedralDegAngle( vertexList[5], vertexList[7], vertexList[2], vertexList[6] );
-  double64 q37 = dihedralDegAngle( vertexList[4], vertexList[6], vertexList[3], vertexList[7] );
+  double q04 = dihedralDegAngle( vertexList[7], vertexList[5], vertexList[0], vertexList[4] );
+  double q15 = dihedralDegAngle( vertexList[4], vertexList[6], vertexList[1], vertexList[5] );
+  double q26 = dihedralDegAngle( vertexList[5], vertexList[7], vertexList[2], vertexList[6] );
+  double q37 = dihedralDegAngle( vertexList[4], vertexList[6], vertexList[3], vertexList[7] );
 
-  std::vector<double64> dihedraAngle{ q01, q12, q23, q30, q45, q56, q67, q74, q04, q15, q26, q37 };
-  double64 qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
-  double64 qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
-  double64 qv = 90.; // for square side faces
-  double64 q = std::max( (qmax - qv) / (180 - qv), (qv - qmin) / qv );
+  std::vector<double> dihedraAngle{ q01, q12, q23, q30, q45, q56, q67, q74, q04, q15, q26, q37 };
+  double qmax = *std::max_element( dihedraAngle.begin(), dihedraAngle.end() );
+  double qmin = *std::min_element( dihedraAngle.begin(), dihedraAngle.end() );
+  double qv = 90.; // for square side faces
+  double q = std::max( (qmax - qv) / (180 - qv), (qv - qmin) / qv );
 
   // 0.95 - 0.99: sliver, 0.99-1.00 degenerated
   if ( q > 0.95 ) {

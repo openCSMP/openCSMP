@@ -2419,7 +2419,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       const size_t higherDimParents( 2U );
       const size_t higherDimParentsFaceNum( 2U );
       const size_t interfaceMultiplier( 2U );
-      const size_t interfaceExtras( 3U ); // 2 face IDs and 1 entry for potential high dim element
+      const size_t interfaceExtras( 1U ); // 1 entry for potential high dim element
 
       deque<size_t>  nodes_per_element;
       deque<size_t>  neighbors_per_element;
@@ -2445,7 +2445,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
         for ( const auto& f : interfaces_ ) {
             // multiplier takes care of the multiplicated interface nodes that the InterFace will be connected to
             nodes_per_element.push_back( f.Nodes() * interfaceMultiplier );
-            neighbors_per_element.push_back( f.Neighbors() + higherDimParents + interfaceExtras );
+            neighbors_per_element.push_back( f.Neighbors() + higherDimParents + higherDimParentsFaceNum + interfaceExtras );
             csmp_fem_types.push_back( f.FE_Type() );
           }
 
@@ -2473,26 +2473,31 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // ------------------------------------------------------------
   size_t i( 0U );
   if constexpr ( dim == 1U ) {
-    for ( const auto& n : nodes_ ) {
-      vset.Px( i, n.x() );
-      ++i;
+      for ( const auto& n : nodes_ ) {
+        vset.Px( i, n.x() );
+        ++i;
+      }
     }
-  }
   else if constexpr ( dim == 2U ) {
-    for ( const auto& n : nodes_ ) {
-      vset.Px( i, n.x() );
-      vset.Py( i, n.y() );
-      ++i;
+      for ( const auto& n : nodes_ ) {
+        vset.Px( i, n.x() );
+        vset.Py( i, n.y() );
+        ++i;
+      }
     }
-  }
   else {
     for ( const auto& n : nodes_ ) {
-      vset.Px( i, n.x() );
-      vset.Py( i, n.y() );
-      vset.Pz( i, n.z() );
-      ++i;
-    }
-  }
+        vset.Px( i, n.x() );
+        vset.Py( i, n.y() );
+        vset.Pz( i, n.z() );
+        ++i;
+      }
+   }
+  // boundary flags
+  vset.ResizeBFlags( /* nodes */ );
+  for ( const auto& n : nodes_ )
+    vset.AddBFlag( n.Idx(), n.AtBoundary() );
+  
   
   // 'pelmt' was already set above
   
@@ -2508,22 +2513,26 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       pmtrl[eidx] = e.Material_ID();
       ++eidx;
     }
+  // adding the material identifiers
+  vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
   // faces
-  for ( const auto& f : faces_ ) {
-      const size_t n_nodes{f.Nodes()};
-      for ( size_t j = 0U; j<n_nodes; ++j )
-        vset.Plist( eidx, j, (f.N( j )->Idx()) );
-      ++eidx;
-    }
+  if ( !faces_.empty() )
+    for ( const auto& f : faces_ ) {
+        const size_t n_nodes{f.Nodes()};
+        for ( size_t j = 0U; j<n_nodes; ++j )
+          vset.Plist( eidx, j, (f.N( j )->Idx()) );
+        ++eidx;
+      }
 
   // interfaces
-  for ( const auto& f : interfaces_ ) {
-      const size_t n_nodes{f.Nodes()};
-      for ( size_t j = 0U; j<n_nodes; ++j )
-        vset.Plist( eidx, j, (f.N( j )->Idx()) );
-      ++eidx;
-    }
+  if ( !interfaces_.empty() )
+    for ( const auto& f : interfaces_ ) {
+        const size_t n_nodes{f.Nodes()};
+        for ( size_t j = 0U; j<n_nodes; ++j )
+          vset.Plist( eidx, j, (f.N( j )->Idx()) );
+        ++eidx;
+      }
 
 
   // 4. adding 'pfverts' neighbors per element list
@@ -2621,14 +2630,6 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     ++eidx;
   }
   
-  // 5. adding the material identifiers
-  // ----------------------------------
-  vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
-  
-  // 6. adding boundary flags
-  // ------------------------
-  for ( const auto& n : nodes_ ) vset.AddBFlag( n.Idx(), n.AtBoundary() );
-
   cout << "\nMeshManager<" << dim << ">::OutputMeshTo: MeshManager successfully output to VSet..." << endl;
 
 } // end OutputMeshTo( VSet )

@@ -98,7 +98,7 @@ template<size_t dim>
 void VSet<dim>::Resize( const deque<int8_t>& etypes,
                         const deque<size_t>& npes,
                         const deque<size_t>& epes,
-                        size_t nodes, size_t faces, size_t interfaces)
+                        size_t nodes, size_t faces, size_t interfaces )
 {
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
   if ( !pmtrl_.empty() || !property_map_.empty() ) {
@@ -386,12 +386,12 @@ template<size_t dim>
 bool  VSet<dim>::ContainsFiniteVolumeIntegrationPointData() const
 {
 	for (auto it = property_map_.begin(); it != property_map_.end(); ++it)
-		if ((*it).second.Placement() == SECTOR_INTEGRATION_POINT or
-			(*it).second.Placement() == FACET_INTEGRATION_POINT or
-			(*it).second.Placement() == FACE_SECTOR_INTEGRATION_POINT or
-			(*it).second.Placement() == FACE_FACET_INTEGRATION_POINT or
-			(*it).second.Placement() == INTER_FACE_SECTOR_INTEGRATION_POINT or
-			(*it).second.Placement() == INTER_FACE_FACET_INTEGRATION_POINT) return true;
+		if ( (*it).second.Placement() == SECTOR_INTEGRATION_POINT or
+			   (*it).second.Placement() == FACET_INTEGRATION_POINT or
+			   (*it).second.Placement() == FACE_SECTOR_INTEGRATION_POINT or
+			   (*it).second.Placement() == FACE_FACET_INTEGRATION_POINT or
+			   (*it).second.Placement() == INTER_FACE_SECTOR_INTEGRATION_POINT or
+			   (*it).second.Placement() == INTER_FACE_FACET_INTEGRATION_POINT) return true;
 	return false;
 }
 

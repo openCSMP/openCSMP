@@ -352,7 +352,13 @@ class VData {
 
 /// converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
 void splitCornerTetrahedron( VData&, size_t cnr, size_t only_neighbor );
-    
+
+/// returns the 3D bounding box of the element
+std::array<double,3>  boundingBox( const VData&, size_t elmt );
+
+/// thus far, only writes tetrahedra to file, appending the element number to the name
+void elementToVTK( const VData& vdata, size_t eidx, const char* outfile );
+
 
 } // csmp
 

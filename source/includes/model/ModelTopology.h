@@ -205,8 +205,7 @@ class ModelTopology {
     void  Out( const char* output_file ) const;
 
 
-  private:
-  
+  private:  
     template<size_t dim>
     void  RenumberElements( VSet<dim>& vset, bool check_whether_already_correct );
     void  RenumberElements( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
@@ -220,7 +219,7 @@ class ModelTopology {
 
 
   private:
-    //       region name          etypes-of-region       ids of elements in region
+    //       region name           etypes-of-region      ids of elements in region
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >  model_regions;
     // public information on csmp element types
     typedef CSMP_ElementSpecifications  fem_specs;

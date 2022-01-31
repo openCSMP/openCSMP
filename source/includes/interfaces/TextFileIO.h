@@ -1,13 +1,9 @@
-#ifndef TEXT_FILE_IO_H
-#define TEXT_FILE_IO_H
+#ifndef CSMP_TEXT_FILE_IO_H
+#define CSMP_TEXT_FILE_IO_H
 
 #include "Exception.h"
 #include "ErrorHandler.h"
-
-#include "Node.h"
-#include "Element.h"
-#include "Face.h"
-#include "InterFace.h"
+#include "ComputationalSettings.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -15,11 +11,9 @@
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
 
-#include "Model.h"
-
-#include "ComputationalSettings.h"
-
 namespace csmp {
+
+template<size_t> class Model;
 
 /**
 

@@ -1379,7 +1379,9 @@ size_t createUniqueCombinations( std::vector<int64_t>& sequence, size_t samples,
 } // end createUniqueCombinations
  
 
-// usage example for createUniqueCombinations()
+
+
+/// usage example for createUniqueCombinations()
 static void test_createUniqueCombinations()
  {
    vector<int64_t>          sequence{0,123,20,43,17,5,8};

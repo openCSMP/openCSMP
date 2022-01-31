@@ -625,7 +625,7 @@ size_t  Face<dim>::Faces() const
 
 /**
     Connects face to the higher-dimensional parent elements which it may be sandwiched between.
-    The node pointers are reassigned if they were already pointing to other nodes.
+    Node pointers are reassigned if they were already pointing to other nodes.
     
     @note method assumes that the Face object already has valid node pointers
     

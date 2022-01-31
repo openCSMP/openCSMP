@@ -161,7 +161,7 @@ class PropertyData {
     const size_t                flag_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
     const size_t                data_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
     std::vector<VARIABLE_FLAG>  flags_;        ///< variable flags
-    std::vector<double>       data_;         ///< variable values
+    std::vector<double>         data_;         ///< variable values
  };
 
 

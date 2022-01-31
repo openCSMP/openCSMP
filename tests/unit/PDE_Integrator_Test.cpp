@@ -31,36 +31,16 @@ PDE_Integrator_Test::PDE_Integrator_Test()
     sg_->InputBoundaryValue( TOP, "fluid pressure", makeScalar(DIRICH, 0.0) );
     sg_->InputBoundaryValue( LEFT, "fluid pressure", makeScalar(DIRICH, 0.0) );
 
-    // Create pde-operators
-    source_ = new NumIntegral_NT_op_N_dV<2U>(sg_->Database(), "diffusivity", "fluid pressure");
-                                                                               
-    stiff_ = new NumIntegral_dNT_op_dN_dV<2U>(sg_->Database(), "permeability", "fluid pressure", "fluid pressure");
-    
-    // Create algorithm object and add pde-operators
-    #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings  settings;
-    settings.SetSolverInstance(1);
-    settings.Set_eps(0.);
-    alg_=new PDE_Integrator<2U,Region>(new SAMG_Solver(&settings));
-    #else
-    alg_=new PDE_Integrator<2U,Region>(new CSMP_DEFAULT_LINEAR_SOLVER() );
-    #endif
-    alg_->Add(source_);
-    alg_->Add(stiff_);
 }
 
 
 
 PDE_Integrator_Test::~PDE_Integrator_Test()
 {
-  if( sg_ != 0 )
-    delete sg_;
-  if( source_ != 0 )
-      delete source_;
-  if( stiff_ != 0 )
-      delete stiff_;
-  if( alg_ != 0 )
-    delete alg_;
+   delete sg_;
+   delete source_;
+   delete stiff_;
+   delete alg_;
 }
 
 
@@ -68,8 +48,6 @@ PDE_Integrator_Test::~PDE_Integrator_Test()
 void PDE_Integrator_Test::run()
 {
     SolveMatrixEquationWithSAMG();
-//    exchangeSolverTest();
-    sameSolverTest();
 }
 
 
@@ -95,34 +73,5 @@ void PDE_Integrator_Test::SolveMatrixEquationWithSAMG()
     #endif
  }
 
-
-
-/*
-void PDE_Integrator_Test::exchangeSolverTest() {
-  try {
-    alg_->SetSolver(new SAMG_Solver());
-    sg_->Apply(*alg_);
-    alg_->SetSolver(new SAMG_Solver());
-    sg_->Apply(*alg_);
-
-  } catch(...) {
-    _fail("Error while calling solver in exchangeSolverTest");
-  }
-  _succeed();
-}
-*/
-
-void PDE_Integrator_Test::sameSolverTest()
-{
-  #ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Solver* samg = new SAMG_Solver();
-  #else
-  CSMP_DEFAULT_LINEAR_SOLVER* samg = new CSMP_DEFAULT_LINEAR_SOLVER();
-  #endif
-  alg_->SetSolver(samg);
-  alg_->SetSolver(samg);
-  _test(samg != NULL);
-  delete samg;
-}
 
 } // end namespace csmp

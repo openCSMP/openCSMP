@@ -21,12 +21,14 @@ namespace csmp {
 
 class PDE_Integrator_Test : public Test {
 public:
+    /// builds a test model that gets assigned to sg_
     PDE_Integrator_Test();
     ~PDE_Integrator_Test();
+    
+    // TODO: test is not developed yet, nothing gets tested for
     virtual void run();
+    
     void SolveMatrixEquationWithSAMG();
-    //void exchangeSolverTest();
-    void sameSolverTest();
 
 private:
 

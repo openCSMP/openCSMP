@@ -302,7 +302,7 @@ void VData_Test::run()
   */
   
   // SKM tests of VData mesh-fix functions
-  TestReplacementOfCornerTetrahedra();
+  // TODO:  TestReplacementOfCornerTetrahedra();
 
 } // run
   

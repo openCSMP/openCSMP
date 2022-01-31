@@ -1,4 +1,5 @@
 #include "TextFileIO.h"
+#include "Model.h"
 #include "Region.h"
 #include "Boundary.h"
 

@@ -545,15 +545,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
                                        "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
 
-// DEBUGGING
-// -----------------------------------------------------------------------------------------
-VTK_Interface<dim>  vtk_output;
-if ( this->Database().IsDefined("permeability") )
-  vtk_output.OutputDataToVTK( *this, this->Name(), string("permeability"), 1, true );
-else
-  vtk_output.OutputDataToVTK( *this, this->Name(), string("element variable 1"), 1, true );
-// -----------------------------------------------------------------------------------------
-
   // 6. forming Boundaries
   if ( create_boundaries )
     {
@@ -573,7 +564,7 @@ else
        this->RemoveRegion("Model");
        elmts = this->FormModelRegion( place_into_unique_regions );
        
-       // making sure no other regions are affected
+       // making sure no other non-unique regions are affected
        if ( distance( this->RegionsBegin(), this->RegionsEnd() ) > 1 )
          csmp_error.notice( ERROR, "Model::Initialize: for box boundaries",
                            "this method assumes that Model is the only non-unique region at this point ");
@@ -607,6 +598,15 @@ if ( mesh_manager_.InterFaces() > 0 )
 //this->Region("LEFT").NodeAttributesToCSV();
 //this->Region("BOTTOM").NodeAttributesToCSV();
 //this->Region("FRONT").NodeAttributesToCSV();
+
+// DEBUGGING
+// -----------------------------------------------------------------------------------------
+//VTK_Interface<dim>  vtk_output;
+//if ( this->Database().IsDefined("permeability") )
+//  vtk_output.OutputDataToVTK( *this, this->Name(), string("permeability"), 1, true );
+//else
+//  vtk_output.OutputDataToVTK( *this, this->Name(), string("element variable 1"), 1, true );
+// -----------------------------------------------------------------------------------------
 
 
 
