@@ -12,6 +12,10 @@ Organisation of this repository:
 Remarks:
 - In most cases there is a compilation unit (*.h and *.cpp files) for each class 
 
+Issues:
+- have a look at the trackers in Trello: https://trello.com/invite/b/Tcpg8IpD/1fb97a2da7c35fa3349f388915b20098/csmp-development
+- https://trello.com/invite/b/WvR3rTvV/8bd188de9876be7443a7751053b54750/csmp-current-issues
+
 Please start with the source code of the examples which required data from the respective /data
 directory.
 
