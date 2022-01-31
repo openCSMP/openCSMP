@@ -5,16 +5,25 @@ Welcome to CSMP++
 Please start with the source code of the examples which required data from the respective /data
 directory.
 
-How the libraries were compiled (S.K.M., 8-3-2017), define DEBUG for the debug
-and NDEBUG for the release editions. Note that the debug version contains many assert
-statements that will safe-guard you in the development of new code.
-These are not contained in the release version.
+Compile the libraries in versions for debugging and running the code. 
+For the former define DEBUG and NDEBUG for the release version. 
+Note that the debug version contains many assert
+statements that will safe-guard you when developing new code, highlighting when assumptions 
+made in the design of CSMP are violated.
+These are not contained in the release version, which merely error handles the contained 
+and throws csmp::Exception and standard exception objects.
+
+Compilation with the commercial Algebraic Multigrid Solver for Systems (SAMG), Fraunhofer Gesellschaft, Germany,
+Provide the compiler with the flags
+
+-DCSMP_WITH_SAMG_SOLVER -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE
+
+Compilation for different platforms;
 
 Apple:
 ======
 
--DCSMP_WITH_SAMG_SOLVER
- -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE -DPYRAMID_TRIANGULAR_FACETS
+ -DPYRAMID_TRIANGULAR_FACETS
 -march=core2 \
 -std=c++14
  -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal
