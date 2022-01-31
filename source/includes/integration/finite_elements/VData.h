@@ -359,7 +359,6 @@ std::array<double,3>  boundingBox( const VData&, size_t elmt );
 /// thus far, only writes tetrahedra to file, appending the element number to the name
 void elementToVTK( const VData& vdata, size_t eidx, const char* outfile );
 
-
 } // csmp
 
 #endif 

@@ -3833,9 +3833,7 @@ array<double,3>  boundingBox( const VData& vdata, size_t elmt )
       }
       
     // determining the ranges
-    array<double,3> ranges{ (*dx.rbegin()) - (*dx.begin()), (*dy.rbegin()) - (*dy.begin()), (*dz.rbegin()) - (*dz.begin()) };
-    
-    return ranges;
+    return array<double,3>{ (*dx.rbegin()) - (*dx.begin()), (*dy.rbegin()) - (*dy.begin()), (*dz.rbegin()) - (*dz.begin()) };
  
  } // end boundingBox
 
