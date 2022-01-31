@@ -10,7 +10,8 @@ Organisation of this repository:
 - doc                   documentation : CSMP User Guide, FEM_conventions etc.
 
 Remarks:
-- In most cases there is a compilation unit (*.h and *.cpp files) for each class 
+- In most the compilation unit (*.h (declarations) and *.cpp files (definitions)) has the same name as the class
+- explicit template instantiation is used to keep the template definitions in the .cpp files 
 
 Issues:
 - have a look at the trackers in Trello: https://trello.com/invite/b/Tcpg8IpD/1fb97a2da7c35fa3349f388915b20098/csmp-development
@@ -33,6 +34,8 @@ Provide the compiler with the flags
 -DCSMP_WITH_SAMG_SOLVER -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE
 
 Compilation on different platforms:
+- tracking C++17 standard
+- compiles with CLang, GNU, Intel C++, MS Vis Studio
 
 Apple:
 ======
