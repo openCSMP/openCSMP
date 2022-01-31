@@ -4,9 +4,9 @@ README.txt - Welcome to Open Source version of the Complex Systems Modelling Pla
 Organisation of this repository:
 - source/include        header files from the API library
 - source/modules        source files
-- tests/unit            unit tests illutrating the functionality of classes and functions
+- tests/unit            unit tests illutrating the functionality of classes and functions (there are data & fixture directories to get necessary inputs)
 - tests/integration     tests demonstrating the functionality of classes working together
-- examples              START HERE - then use ExperimentalExamnple.cpp to write your own first code therein
+- examples              START HERE - use data/fixtures as inputs; when comfortable, start with ExperimentalExamnple.cpp to create your own
 - doc                   documentation : CSMP User Guide, FEM_conventions etc.
 
 Remarks:
