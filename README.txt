@@ -1,6 +1,4 @@
-README.txt
-
-Welcome to CSMP++
+README.txt - Welcome to Open Source version of the Complex Systems Modelling Platform (CSMP++)
 
 Please start with the source code of the examples which required data from the respective /data
 directory.
