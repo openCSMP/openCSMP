@@ -417,7 +417,7 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     // -----------------------------------------------
     
     // are all elements of the contiguous model region discovered
-    set<Element<3U>* const>  discovered_elements;
+    set<Element<3U>*>  discovered_elements;
     
     floodFill( model_domain.E(0), discovered_elements ); // OK
     _test( discovered_elements.size() == model_domain.Elements() );

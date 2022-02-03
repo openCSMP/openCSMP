@@ -51,7 +51,7 @@ double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_incr
  
      // 1. processing interior and FVs for which all facet fluxes have been initialised
      const auto interior_nodes_end(subdomain_.PerimeterNodesBegin());
-     for ( auto nit=subdomain_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
+     for ( auto nit=subdomain_.NodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
           const double out_flow = this->FluxBalanceAndOutFlow( (*nit) );
@@ -61,7 +61,7 @@ double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_incr
        }
 
      // 2. collecting time-stepping constraints from FVs on region perimeter
-     const auto nodes_end(ComputationDomain().PerimeterNodesEnd());
+     const auto nodes_end(ComputationDomain().NodesEnd());
      for ( auto nit=subdomain_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
           const double out_flow = this->FluxBalanceAndOutFlow( (*nit) );

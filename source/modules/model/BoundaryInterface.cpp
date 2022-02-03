@@ -1945,8 +1945,10 @@ static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& mod
 
 
 /**
-     Forms boundaries of CSMP box-shaped model if corresponding regions are present.
-     These regions are given the standard names and are flagged correspondingly.
+     Forms boundaries considering names of Box.h-defined strings only, e.g.,
+     BACK, BOTTOM, RIGHT, TOP, FRONT, IRREGULAR and INTERNAL. Regions with these names are converted to boundaries
+     removing them and their Elements that are replaced by Face objects.
+     The new boundaries are given the standard names and are flagged correspondingly.
      
      @remark input regions must be lower-dimensional (surfaces in 3D and lines in 1D)
      @remark input regions must be unique (space exclusive)
@@ -1956,11 +1958,11 @@ static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& mod
      @note if the TOP region is missing, but a IRREGULAR region is there in stead, this is converted into the corresponding boundary.
      In this case, the model is still regarded as BOX_SHAPED.
      
-     @note Boundary creation itself does not deal with the generation of BOX_BOUNDARY flags for the model
+     @note Boundary creation itself does not deal with the generation of BOX_BOUNDARY flags for the model edges and
      corners. This is accomplished subsequently (in this method) by calling recreateBoxBoundaryFlags().
      
      @attention this method does not take care of the updating of the non-unique regions that are affected by the conversion
-     of Regions into boundaries. This has to be done afterwards.
+     of Regions into boundaries. This is done afterwards by methods of the Model class.
      
      @author refactored by SKM 2016
      @author refactored by SKM 2018
@@ -2164,7 +2166,10 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
     // -----------------------------------------------------------------------
     for ( auto& it : eligibleRegions )
        model->RemoveRegion( it.first.c_str() );
-      
+
+	  // 5. rebuilding potentially affected (non)-unique regions
+    // -----------------------------------------------------------------------
+
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     
     // if there are some unattributed faces left the method returs false

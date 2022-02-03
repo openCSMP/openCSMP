@@ -90,6 +90,7 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
           elmt_vec_       = ed.elmt_vec_;
           node_vec_       = ed.node_vec_;
           first_bd_node_  = ed.first_bd_node_;
+          idx_            = ed.idx_;
           bd_face_vec_    = ed.bd_face_vec_;
           verbose_        = ed.verbose_;
           subdomain_name_ = ed.subdomain_name_;
@@ -226,57 +227,30 @@ const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() 
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
  { return node_vec_.begin(); }
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin() const
- { return node_vec_.begin(); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
- { return std::next( node_vec_.begin(), InteriorNodes() ); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd() const
- { return node_vec_.end(); }
-
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
+typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
  { return elmt_vec_.begin(); }
 
-
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
+typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
  { return elmt_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsBegin() const
-  { return elmt_vec_.begin(); }
-   
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsEnd() const
-  { return std::next( elmt_vec_.begin(), InteriorElements() ); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
+typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
   { return std::next( elmt_vec_.begin(), InteriorElements() ); }
    
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsEnd() const
-  { return elmt_vec_.end(); }
-
-
 template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::NodesBegin()
  { return node_vec_.begin(); }
@@ -287,22 +261,10 @@ typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::Node
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin()
- { return node_vec_.begin(); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd()
- { return std::next( node_vec_.begin(), InteriorNodes() ); }
-
-template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin()
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd()
- { return node_vec_.end(); }
- 
 // const forms
 
 template<size_t dim, template<size_t> class CELL>
@@ -846,29 +808,6 @@ cout.flush();
 
 
 
-/**
-    Uses set to create unique node vector.
-*/
-template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::CreateNodePointerVector1()
-{
-  assert( !this->elmt_vec_.empty() );
-
-  if ( !this->node_vec_.empty() )
-    this->node_vec_.clear();
-
-  // creating the node index vector
-  set<csmp::Node<dim>*>  nodes_set;
-  for ( auto it : this->elmt_vec_ ) {
-       const size_t nodes{ it->Nodes() };
-       for ( size_t i = 0U; i<nodes; i++ ) {
-            assert( it->N( i ) != nullptr );
-            nodes_set.insert( it->N( i ) );
-         }
-    }
-
-  this->node_vec_.assign( nodes_set.begin(), nodes_set.end() );
-}
 
 
 
@@ -876,7 +815,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector1()
     Uses vector to create unique node vector.
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
 {
   assert( !this->elmt_vec_.empty() );
 
@@ -884,9 +823,9 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
     this->node_vec_.clear();
 
   // creating the node index vector
-  this->node_vec_.reserve( elmt_vec_.size() );
+  this->node_vec_.reserve( elmt_vec_.size() * 4 );
   for ( auto it : this->elmt_vec_ ) {
-       const size_t nodes={ it->Nodes() };
+       const size_t nodes{ it->Nodes() };
        for ( size_t i = 0U; i<nodes; i++ ) {
             assert( it->N( i ) != nullptr );
             this->node_vec_.push_back( it->N( i ) );
@@ -896,6 +835,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
   // removing duplicates and trimming excess memory from node vector
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+  this->node_vec_.shrink_to_fit();
 }
 
 
@@ -1071,7 +1011,18 @@ size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
 
 // INDEXES
 
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::Idx( size_t idx_to_assign )
+{
+  idx_ = idx_to_assign;
+}
 
+
+template<size_t dim, template<size_t> class CELL>
+size_t  ModelSubDomain<dim,CELL>::Idx() const
+{
+  return idx_;
+}
 
 /**
 
@@ -1218,7 +1169,7 @@ void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim
     xyz_min = xyz_max = (*node_vec_.begin())->Coordinate();
 
     // only nodes at the group boundary have to be checked
-    for ( auto bit=PerimeterNodesBegin(); bit!=PerimeterNodesEnd(); bit++ )
+    for ( auto bit=PerimeterNodesBegin(); bit!=NodesEnd(); bit++ )
       {
          csmp::Point<dim> p = (*bit)->Coordinate();
          xyz_min[0] = std::min( p[0], xyz_min[0] );
@@ -4960,14 +4911,14 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
     binaryFileWrite( fp, Name().c_str() );
    
     // 2. writing the interior element records of the region
-    std::vector<size_t> IDs( distance(InteriorElementsBegin(), InteriorElementsEnd() ) );
-    transform( InteriorElementsBegin(), InteriorElementsEnd(),
+    std::vector<size_t> IDs( distance(ElementsBegin(), PerimeterElementsBegin() ) );
+    transform( ElementsBegin(), PerimeterElementsBegin(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
 
     // 3. writing the perimeter element records of the region
-    IDs.resize( distance(PerimeterElementsBegin(), PerimeterElementsEnd()) );
-    transform( PerimeterElementsBegin(), PerimeterElementsEnd(),
+    IDs.resize( distance(PerimeterElementsBegin(), ElementsEnd()) );
+    transform( PerimeterElementsBegin(), ElementsEnd(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
    
@@ -5118,8 +5069,8 @@ size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
     @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
 */
 template<size_t dim, template<size_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<const csmp::Node<dim>* const>::const_iterator start,
-                                                       typename vector<const csmp::Node<dim>* const>::const_iterator end ) const
+size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<const csmp::Node<dim>*>::const_iterator start,
+                                                       typename vector<const csmp::Node<dim>*>::const_iterator end ) const
  {
     if ( start == end ) return 0U;
  

@@ -381,7 +381,9 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 // -------------------------------------------------------------------
 
 
-
+/**
+       Indiscriminately accumulates inside, outside and intervening nodes, if any.
+*/
 template<size_t dim>
 void SplitBoundary<dim>::CreateNodePointerVector()
 {

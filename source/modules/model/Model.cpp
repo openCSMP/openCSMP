@@ -330,18 +330,22 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
           // if the model is box-shaped (albeit perhaps with irregular top surface)
           if ( !fully_irregular_mesh ) {
               this->EstablishBoxBoundaries();
+              this->RebuildRegions();
               // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-              cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
+              cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
             }
           // irregularly shaped models
           else {
-              if( contiguous_model ) this->EstablishBoundariesFromRegions();
+              if ( contiguous_model ) {
+                  this->EstablishBoundariesFromRegions();
+                  this->RebuildRegions();
+                }
               else
                 // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
                 // but we do want to create them on the outside of the model where the names of the input regions contain
                 // the string "BOUNDARY"
                 if ( this->ContainsBoundary("Model_Boundary") )
-                this->RemoveBoundary( this->Boundary("Model_Boundary") );
+                  this->RemoveBoundary( this->Boundary("Model_Boundary") );
             }
          this->BoundariesOut();
       }

@@ -54,16 +54,8 @@ struct SubDomainInfo {
 template<size_t dim,template<size_t> class CELL>
 class ModelSubDomain {
   public:
-    // any kind of finite elements; simplex or other types
-    typedef CELL<dim>                                  CellType;
-    // vertices
-    typedef Node<dim>                                  Vertex;
-    typedef std::vector<Vertex*>                       VertexContainer;
-    typedef std::vector<Node<dim>*>                    NodeContainer;
-    typedef typename VertexContainer::iterator         vertexIterator;
-    typedef typename VertexContainer::const_iterator   vertexConstIterator;
-
-  public:
+    typedef CELL<dim> CellType; // used by SteadyStateDiffusor and others
+    
     /// constructs incomplete subregion for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
 
@@ -71,6 +63,7 @@ class ModelSubDomain {
     ModelSubDomain( ModelSubDomain&& );
   
     virtual ~ModelSubDomain();
+    
     ModelSubDomain<dim,CELL>&  operator=( const ModelSubDomain& );
 
     std::string Name() const;
@@ -86,11 +79,8 @@ class ModelSubDomain {
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
     
-    /// creates node vector from element vector, using a set to achieve uniqueness
-    void CreateNodePointerVector1();
-    
     /// creates node vector from element vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
-    void CreateNodePointerVector2();
+    void CreateNodePointerVector();
 
     /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
     void SortVectors( size_t interior_cells, size_t interior_nodes );
@@ -104,6 +94,10 @@ class ModelSubDomain {
     // ----------------------------------------
     // Indexes
     // ----------------------------------------
+
+    /// on-the-fly 0..n-1 domain numbering stored in a mutable local variable, like for Element, Face and InterFace
+    void         Idx( size_t );
+    size_t       Idx() const;
 
     /// renumbers nodes in domain 0..n-1
     size_t  RenumberNodes() const;
@@ -119,6 +113,7 @@ class ModelSubDomain {
 
     /// reference to container of finite element pointers to either Element, Face or InterFace objects; @note used for boolean operations
     const typename std::vector<CELL<dim>*>&  CellVector() const;
+    
     /// do not remove!;  used for boolean operations
     typename std::vector<CELL<dim>*>&        CellVector();
   
@@ -126,33 +121,27 @@ class ModelSubDomain {
     const typename std::vector<Node<dim>*>&  NodeVector() const;
 
     // iterators
+    /// each vector begins with the interior nodes
     typename std::vector<csmp::Node<dim>*>::iterator     NodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator     NodesEnd();
-    typename std::vector<csmp::Node<dim>*>::iterator     InteriorNodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator     InteriorNodesEnd();
+    /// start of the perimeter nodes = interior nodes end
     typename std::vector<csmp::Node<dim>*>::iterator     PerimeterNodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator     PerimeterNodesEnd();
+    /// end of all nodes = end of perimeter nodes
+    typename std::vector<csmp::Node<dim>*>::iterator     NodesEnd();
     typename std::vector<CELL<dim>*>::iterator           ElementsBegin();
     typename std::vector<CELL<dim>*>::iterator           PerimeterElementsBegin();
     typename std::vector<CELL<dim>*>::iterator           ElementsEnd();
 
     // const iterators (pointer and object that is pointed to cannot be modified)
-    typename std::vector<const csmp::Node<dim>* const>::const_iterator  NodesBegin() const;
-    typename std::vector<const csmp::Node<dim>* const>::const_iterator  NodesEnd() const;
-    typename std::vector<const csmp::Node<dim>* const>::const_iterator  InteriorNodesBegin() const;
-    typename std::vector<const csmp::Node<dim>* const>::const_iterator  InteriorNodesEnd() const;
-    typename std::vector<const csmp::Node<dim>* const>::const_iterator  PerimeterNodesBegin() const;
-    typename std::vector<const csmp::Node<dim>* const>::const_iterator  PerimeterNodesEnd() const;
-    typename std::vector<const CELL<dim>* const>::const_iterator  ElementsBegin() const;
-    typename std::vector<const CELL<dim>* const>::const_iterator  ElementsEnd() const;
-    typename std::vector<const CELL<dim>* const>::const_iterator  PerimeterElementsBegin() const;
-    typename std::vector<const CELL<dim>* const>::const_iterator  PerimeterElementsEnd() const;
-    typename std::vector<const CELL<dim>* const>::const_iterator  InteriorElementsBegin() const;
-    typename std::vector<const CELL<dim>* const>::const_iterator  InteriorElementsEnd() const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator  NodesBegin() const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
+    typename std::vector<const csmp::Node<dim>*>::const_iterator  NodesEnd() const;
+    typename std::vector<const CELL<dim>*>::const_iterator  ElementsBegin() const;
+    typename std::vector<const CELL<dim>*>::const_iterator  PerimeterElementsBegin() const;
+    typename std::vector<const CELL<dim>*>::const_iterator  ElementsEnd() const;
 
     /// returns the nodes that the region shares with the given range
-    size_t SharedPerimeterNodes( typename std::vector<const csmp::Node<dim>* const>::const_iterator start,
-                                 typename std::vector<const csmp::Node<dim>* const>::const_iterator end ) const;
+    size_t SharedPerimeterNodes( typename std::vector<const csmp::Node<dim>*>::const_iterator start,
+                                 typename std::vector<const csmp::Node<dim>*>::const_iterator end ) const;
 
     /// check whether subdomain conatains any elements
     bool              Empty() const;
@@ -310,7 +299,8 @@ class ModelSubDomain {
     std::vector<CELL<dim>*>                     elmt_vec_;       ///< doubly sorted, interior elements first
     std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;    ///< as in second segment of elmt_vec_
     std::vector<csmp::Node<dim>*>               node_vec_;       ///< doubly sorted, interior nodes first
-    size_t                                      first_bd_node_;
+    size_t                                      first_bd_node_;  ///< begin of the perimeter nodes
+    mutable size_t  idx_ = std::numeric_limits<size_t>::max();   ///< unique identifier of the subdomain used for its recreation after modification; initialised to UINTMAX
     bool                                        verbose_;
 
   private:

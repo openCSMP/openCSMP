@@ -130,10 +130,10 @@ size_t  findNode( const Model<3U>& sg, double nx, double ny, double nz,
  
     stringstream  out("The targeted node with the coordinate (x,y,z): ");
     out << nx <<" "<< ny <<" "<< nz <<" could not be found; ";
-    out <<" returning node index="<< UINT_MAX << endl;
+    out <<" returning node index="<< std::numeric_limits<size_t>::max() << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
      
 } // end find_node
 
@@ -155,7 +155,7 @@ size_t  findNode( const Model<2U>& sg, double nx, double ny,
     out <<" returning node index="<< UINT_MAX << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
      
 } // end find_node
 
@@ -173,7 +173,7 @@ size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
     out <<" returning node index="<< UINT_MAX << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
      
 } // end find_node
 

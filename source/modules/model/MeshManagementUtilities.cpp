@@ -846,7 +846,7 @@ To break regions into contiguous subdomains.
 
 */
 template<size_t dim>
-void floodFill( Element<dim>* const eptr, set<Element<dim>* const>& elements_contiguous_subset )
+void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
@@ -894,9 +894,9 @@ void floodFill( Element<dim>* const eptr, set<Element<dim>* const>& elements_con
  } // end floodFill
 
 
-template void floodFill( Element<1U>* const, set<Element<1U>* const>& );
-template void floodFill( Element<2U>* const, set<Element<2U>* const>& );
-template void floodFill( Element<3U>* const, set<Element<3U>* const>& );
+template void floodFill( Element<1U>* const, set<Element<1U>*>& );
+template void floodFill( Element<2U>* const, set<Element<2U>*>& );
+template void floodFill( Element<3U>* const, set<Element<3U>*>& );
 
 
 

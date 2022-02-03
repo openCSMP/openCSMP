@@ -87,7 +87,7 @@ size_t DataTable::ColumnIndex( std::string variable ) const
       if ( col_titles_[idx] == variable )
         return idx;
         
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
  }
 
 

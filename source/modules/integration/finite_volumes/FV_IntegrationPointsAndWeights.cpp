@@ -998,8 +998,6 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     // Normal 7, +t    // start -0.5,0.5,0.0
     m_facet_normals[7][0]=0.0; m_facet_normals[7][1]=0.0; m_facet_normals[7][2]=1.0;
 
-    
-
     // Normal 8,+r start 0.0,-0.5,0.5
     m_facet_normals[8][0]=1.0; m_facet_normals[8][1]=0.0; m_facet_normals[8][2]=0.0;
     // Normal 9, +s  start -0.5,0.0,0.5

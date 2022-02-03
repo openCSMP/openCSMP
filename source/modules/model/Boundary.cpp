@@ -711,7 +711,7 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   AtBoundary( boxBoundary );
 
   // establishing boundary node container
-  this->CreateNodePointerVector2();
+  this->CreateNodePointerVector();
   
   // sorts node and cell vectors into interior and exterior ranges;
   // initialises boundary face vector bd_face_vec_
