@@ -24,9 +24,6 @@ void SKUA_FiniteElementMeshInterface_Test::run()
     SKUA_Model  model( "V6_SOLID2_withwells_BINARY",   // V6_SOLID2_with_wells, "V6_SOLID2", ,"V1_SOLID2_ASCII", "V6_SOLID2_withwells_ASCII", "EW01_100ftBAND_10ft"
                        "CSMP-variables.txt",
                        true,   ///< true = binary, false = ascii */
-                       true,    ///< true = reduce regions according to regions file, false = does not redure regions
-                       false,   ///< true = creates boundaries around model, false = does not create boundaries 
-                       false,   ///< true = creates splitboundaries around model, false = does not create splitboundaries 
                        true );  ///< isoparametric is the only option if model does not only consist of simplex elements
 
     printModelDimensions( model, true );

@@ -201,7 +201,7 @@ public:
   Model( VSet<dim>&, bool isoparametric = false );
 
   /// constructs model with regions supplied as labeled element lists, variables file name is "*-variables.txt" where * is the name of the model
-  Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects = false, bool box_shaped = true );
+  Model( ModelTopology&, VSet<dim>&, bool create_boundaries_from_surface_regions = false, bool box_shaped = true );
 
   /// constructs model with regions supplied as labeled element lists and with the possibility to specific a variables file with unique name
   Model( ModelTopology&, VSet<dim>&, const char* var_file,
@@ -412,21 +412,6 @@ protected:
   void Initialize( ModelTopology& mesh_topology,
                    VSet<dim>& vset,
                    bool create_boundaries,
-                   bool non_box_shaped_model );
-
-  /// builds model for split boundaries from scratch including region information from file (this method is used by ANSYS_Model3D) 
-  void Initialize( const char* regions_file_prefix,
-                   ModelTopology& mesh_topology,
-                   VSet<dim>& vset,
-                   bool create_boundaries,
-                   bool create_splitboundaries,
-                   bool non_box_shaped_model );
-
-  /// builds model for split boundaries from scratch without any region information; the only (unique) region will be 'Model'
-  void Initialize( ModelTopology& mesh_topology,
-                   VSet<dim>& vset,
-                   bool create_boundaries,
-                   bool create_splitboundaries,
                    bool non_box_shaped_model );
 
   void InitializeLocalVariableStorage();

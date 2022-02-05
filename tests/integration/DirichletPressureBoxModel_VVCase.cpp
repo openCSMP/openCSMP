@@ -56,12 +56,10 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
 
     ANSYS_Model3D  model( model_name_.c_str(), "DirichletPressureBoxModel_VVCase-variables.txt",
-                          irregular_mesh, binary_file, use_regions_file, create_boundaries );
+                          irregular_mesh, binary_file, use_regions_file );
     printModelDimensions( model, true );
-    // recreateBoxBoundaryFlags( model );
   
     // configuration and steady-state pressure computation
     // ----------------------------------------------------------------------

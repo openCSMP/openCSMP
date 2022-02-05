@@ -21,6 +21,10 @@ class ModelBasics_Test: public Test {
       ~ModelBasics_Test();
       
       virtual void run();
+      
+  private:
+     bool TestWriteModelToDiskAndReadBack( bool create_boundaries_from_faces );
+     bool TestRebuiltRegionsFromPropertyConstraints();
   
   private:
     bool verbose_;

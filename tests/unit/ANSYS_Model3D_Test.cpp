@@ -141,7 +141,7 @@ namespace csmp
       TensorVariable<3> tvPlain;
       
       if ( verbose ) cout <<"Building ModelOutput..."<<endl;
-      ANSYS_Model3D modelOutput2( "FracBox", "Vset_TestCase.txt",true,true,true,true);
+      ANSYS_Model3D modelOutput2( "FracBox", "Vset_TestCase.txt",true,true,true );
       ArrayVariable na( "nodal array", modelOutput2.Database(), 2., ROBIN );
       Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
       Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");

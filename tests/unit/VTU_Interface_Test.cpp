@@ -108,7 +108,7 @@ void VTU_Interface_Test::run()
   vtu.OutputDataToVTU( "VTU_TestArray3D",  outputPropsArrays, "Model", static_cast<int>(0) );
 
   // planar model in 3D space (do not create boundaries, else model will fail)
-  ANSYS_Model3D modelB( "BoxHalfs2D", "CSMP-variables.txt", true, true, true, false );
+  ANSYS_Model3D modelB( "BoxHalfs2D", "CSMP-variables.txt", true, true, true ); //  TODO: test does not require boundaries
   VTU_Interface<DIM> vtuB( modelB );
   vtuB.OmitZeroInFileName( true );
   modelB.InputPropertyValue( "nodal vector", vectorA );

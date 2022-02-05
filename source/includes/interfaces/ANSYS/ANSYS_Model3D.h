@@ -17,6 +17,8 @@ namespace csmp {
     @note if elements are elimitated from the model in the build process, corresponding ID values dissappear.
     However, the sequence of the element is not changed which means that "element number" can be collapsed
     to achieve a consecutive range again.
+    
+    @attention boudaries will always be created because they belong to intact CSMP models.
 */
 class ANSYS_Model3D : public Model<3U> {
 public:
@@ -28,9 +30,7 @@ public:
                  const char* variable_file,
                  bool irregular_mesh = false,           /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                  bool binary_file = true,               /* true = binary, false = ascii */
-                 bool use_regions_file = true,          /* true = reduce regions according to regions file, false = does not redure regions */
-                 bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
-                 bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
+                 bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
 
   /// (non-)isoparametric input from ANSYS *.asc, *.dat and *-variable.txt files
   ANSYS_Model3D( bool isoparametric,
@@ -38,27 +38,21 @@ public:
                  const char* variable_file,
                  bool irregular_mesh = false,           /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                  bool binary_file = true,               /* true = binary, false = ascii */
-                 bool use_regions_file = true,          /* true = reduce regions according to regions file, false = does not redure regions */
-                 bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
-                 bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
+                 bool use_regions_file = true  );       /* true = reduce regions according to regions file, false = does not redure regions */
 
   /// input from ANSYS *.asc, *.dat and *-variable.txt files
   ANSYS_Model3D( const char* icem_file_set,
                  const char* variable_file,
                  bool irregular_mesh = false,           /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                  bool binary_file = true,               /* true = binary, false = ascii */
-                 bool use_regions_file = true,          /* true = reduce regions according to regions file, false = does not redure regions */
-                 bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
-                 bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
+                 bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
 
   /// input from ANSYS *.asc, *.dat files
   /// creates empty property database
   ANSYS_Model3D( const char* icem_file_set,
                  bool irregular_mesh = false,           /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
                  bool binary_file = true,               /* true = binary, false = ascii */
-                 bool use_regions_file = true,          /* true = reduce regions according to regions file, false = does not redure regions */
-                 bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
-                 bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
+                 bool use_regions_file = true );        /* true = reduce regions according to regions file, false = does not redure regions */
 
   // To rebuild model from CSMP native binary file do not use an ANSYS model
   virtual ~ANSYS_Model3D();
@@ -72,22 +66,18 @@ public:
 
 private:
 
-  void Initialize( const char* mesh_file_set,
-                   const char* regions_file_prefix,
-                   bool irregular_mesh,
-                   bool binary_input_file,
-                   bool use_regions_file,
-                   bool create_boundaries,
-                   bool create_splitboundaries );
+  void InitializeANSYS( const char* mesh_file_set,
+                         const char* regions_file_prefix,
+                         bool irregular_mesh,
+                         bool binary_input_file,
+                         bool use_regions_file );
 
-  void Initialize( bool isoparametric,
-                   const char* mesh_file_set,
-                   const char* regions_file_prefix,
-                   bool irregular_mesh,
-                   bool binary_file,
-                   bool use_regions_file,
-                   bool create_boundaries,
-                   bool create_splitboundaries );
+  void InitializeANSYS( bool isoparametric,
+                         const char* mesh_file_set,
+                         const char* regions_file_prefix,
+                         bool irregular_mesh,
+                         bool binary_file,
+                         bool use_regions_file );
 
   std::vector<Point<3U> > node_coords_;        ///< node coordinates in VSet order to re-establish original node numbering if necessary
 };

@@ -2031,7 +2031,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
        }
       
       // 5. removing the input regions
-      // -------------------------------------------------
+      // ------------------------------------------------------------------------------------
+      // (no flagging for rebuilt of regions is necessary as they will be completely removed)
       if ( top.first != top.second ) model->RemoveRegion( "TOP" );
       if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR" );
       model->RemoveRegion( "BOTTOM" );
@@ -2163,12 +2164,10 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
       }
 
 	  // 4. removing the original regions from which the boundaries were created
-    // -----------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------
+    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
     for ( auto& it : eligibleRegions )
        model->RemoveRegion( it.first.c_str() );
-
-	  // 5. rebuilding potentially affected (non)-unique regions
-    // -----------------------------------------------------------------------
 
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     
@@ -2299,6 +2298,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     if ( n_faces_assigned != mesh.Faces() - n_initial_faces )
       csmp_error.notice( WARNING, "BoundaryInterFace::EstablishBoundaryFlagsFromOrientation",
                          "Not all boundary Face faces could be assigned to standard boundaries");
+    
     
     // 5. adjusting flag if TOP boundary was originally flagged as irregular
     // ---------------------------------------------------------------------

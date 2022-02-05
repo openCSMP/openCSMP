@@ -85,7 +85,7 @@ void Experimental_Example::Run()
       bool quarterpoint = false;
   
       // Model configuration:
-      ANSYS_Model2D  model( "Fluid_Flower", false, true, false, true, false);    // Constractor for empty variables
+      ANSYS_Model2D  model( "Fluid_Flower", false, true, false );    // Constractor for empty variables
       for ( auto& E : model.Region("FRACTURE").CellVector() ) {
           std::cout << "Nbrs -> " << E->ConnectedNeighbors() << std::endl;
           if (E->ConnectedNeighbors() == 1){

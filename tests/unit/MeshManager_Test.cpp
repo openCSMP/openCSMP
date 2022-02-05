@@ -130,7 +130,7 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
         cout << "\n-------------------------------------------------------";
         string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
         model3d_name_ = "ModelDykeAllLayersSplit";
-        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true, true);
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true );
         
         CheckModel3D();
  

@@ -1384,7 +1384,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
 {
   if ( constraints.Constraints() == 0U )
     throw csmp::Exception( ERROR, "Region<dim>::AccumulateWithinRange",
-                           "No property constraints are supplied" );
+                           "No property constraints in supplied PropertyConstraints object" );
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1400,7 +1400,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
   set<Node<dim>*> node_set;
   
   for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it )
-    if ( constraints.CheckConstraints( (*it) ) )
+    if ( constraints.CheckConstraints( &(*it) ) )
       {
         this->elmt_vec_.push_back( &(*it) );
         const size_t n_nodes{ (*it).Nodes() };
@@ -1415,6 +1415,9 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
     }
   else
     csmp_error.notice( ERROR, "Region<dim>::AccumulateWithinRange", "no elements in the desired property range were found.");
+  
+  this->elmt_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
   
   return this->elmt_vec_.size();
 

@@ -25,6 +25,7 @@ template<size_t> class Node;
 template<size_t> class Element;
 template<size_t> class Interrelation;
 template<size_t> class Visitor;
+class PropertyConstraints;
 
 /**
     Complete index specifications of a ModelSubDomain
@@ -58,7 +59,6 @@ class ModelSubDomain {
     
     /// constructs incomplete subregion for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
-
     ModelSubDomain( const ModelSubDomain& );
     ModelSubDomain( ModelSubDomain&& );
   
@@ -75,6 +75,14 @@ class ModelSubDomain {
 
     virtual void Accept( Visitor<dim>& );
     void Apply( Interrelation<dim>& );
+    
+    /// deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells
+    void RebuildSubDomainAfterChangeOfCellVector();
+    
+    /// rebuilds subdomain on the basis of the elements that will be selected according to the supplied property constraints
+    void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::iterator master_domain_start,
+                                                  typename std::vector<CELL<dim>*>::iterator master_domain_end,
+                                                  const PropertyConstraints& );
 
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
@@ -90,14 +98,17 @@ class ModelSubDomain {
     
     /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
     size_t RemoveNullPointerCells();
+    
+    /// flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
+    void ScheduleForRebuilt();
+    bool NeedsRebuilt() const;
 
     // ----------------------------------------
     // Indexes
     // ----------------------------------------
 
-    /// on-the-fly 0..n-1 domain numbering stored in a mutable local variable, like for Element, Face and InterFace
-    void         Idx( size_t );
-    size_t       Idx() const;
+    /// reference counting-based unique domain identifier  (0..n-1)
+    size_t DomainIndex() const;
 
     /// renumbers nodes in domain 0..n-1
     size_t  RenumberNodes() const;
@@ -295,13 +306,15 @@ class ModelSubDomain {
     size_t  PartitionCellVector();
 
     const PropertyDatabase<dim>&                pref_;
-    std::string                                 subdomain_name_; ///< passed down when region is created so that it can be referred to
-    std::vector<CELL<dim>*>                     elmt_vec_;       ///< doubly sorted, interior elements first
-    std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;    ///< as in second segment of elmt_vec_
-    std::vector<csmp::Node<dim>*>               node_vec_;       ///< doubly sorted, interior nodes first
-    size_t                                      first_bd_node_;  ///< begin of the perimeter nodes
-    mutable size_t  idx_ = std::numeric_limits<size_t>::max();   ///< unique identifier of the subdomain used for its recreation after modification; initialised to UINTMAX
-    bool                                        verbose_;
+    std::string                                 subdomain_name_;         ///< passed down when region is created so that it can be referred to
+    std::vector<CELL<dim>*>                     elmt_vec_;               ///< doubly sorted, interior elements first
+    std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;            ///< as in second segment of elmt_vec_
+    std::vector<csmp::Node<dim>*>               node_vec_;               ///< doubly sorted, interior nodes first
+    size_t          first_bd_node_ = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
+    inline static int32_t                       domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains
+    int32_t                                     domain_idx_;             ///< created during construction from domain_count_
+    bool                                        rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
+    bool                                        verbose_ = false;
 
   private:
     ModelSubDomain();

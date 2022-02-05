@@ -642,10 +642,10 @@ void SplitBoundaryInterface_Test::LoadModel( const std::string& model_name )
   // Model initialization
   const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
-  if ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
-  else if ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
 
   // visualization
   VTU_Interface<dim> vtu( *model );
@@ -675,10 +675,10 @@ void SplitBoundaryInterface_Test::LoadModel( const std::string& model_name,
   // Model initialization
   const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
-  if ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
-  else if ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
 
   // visualization
   VTU_Interface<dim> vtu( *model );
@@ -716,10 +716,10 @@ void SplitBoundaryInterface_Test::LoadContiguousModel( const std::string& model_
   // 0. Model initialization
   const string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model(nullptr);
-  if ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
-  else if ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
 
   string  spliboundary_regions_file( model_name );
 
@@ -966,11 +966,11 @@ void SplitBoundaryInterface_Test::Test_splitboundary_between_regions( const std:
 
   Model<dim>* modelIN(nullptr);
 
-  if ( dim == 2U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
-  else if ( dim == 3U )
+  if constexpr ( dim == 2U )
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+  else if constexpr ( dim == 3U )
     // SKM FIX: irregular = true
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true ));
 
   // validating the model
   if ( verbose_ ) cout << "\nSplitBoundary_Test<" << dim << ">::test_splitboundary_between_regions: model contains the regions:";
@@ -1120,15 +1120,14 @@ void SplitBoundaryInterface_Test::Test_splitboundary_around_regions( const std::
 template<size_t dim>
 void SplitBoundaryInterface_Test::Detect_and_create_splitboundaries( const std::string& model_name )
 {
-  const bool verbose( false );
   const string variables_file( "SplitBoundary_Test-variables.txt" );
 
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;
-  if ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
-  else if ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
 
   // 2. build CSMP SplitBoundary
   // ---------------------------------------------------------------------------------------
@@ -1165,10 +1164,10 @@ void SplitBoundaryInterface_Test::Detect_and_create_splitboundaries_from_constru
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;
   const bool create_splitboundaries( true );
-  if ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
-  else if ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
   
   // 2. create lower - dimensional stand - alone meshes from SplitBoundary objects, and
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')

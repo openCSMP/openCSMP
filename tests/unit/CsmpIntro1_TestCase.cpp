@@ -73,6 +73,7 @@ void CsmpIntro1_TestCase::run()
     // establishing a box shaped csmp::Model providing icem mesh & regions file and variables file
     const string modelName( "BoxHalfs3D" );
     const string varFileName( "RSP-variables.txt" );
+    
     ANSYS_Model3D model( modelName.data(), varFileName.data() );
 
 

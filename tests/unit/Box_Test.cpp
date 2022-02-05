@@ -263,10 +263,9 @@ bool Box_Test::TestBoundaryFlagging()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
     const bool debug(true);
    
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
    
     string node_variable("nodal box flag"), elmt_variable("element box flag");
     model.CreateProperty( node_variable.c_str(), "flag", SCALAR, NODE );
@@ -303,10 +302,9 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
     const bool debug(true), verbose(true);
    
-    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
     Region<3U>    model_domain(model.Region("Model"));
 
     // 1. testing the unit normals of the (volumetric elements)
@@ -447,8 +445,7 @@ bool Box_Test::TestWhetherSideBoundaryFlagsArePresent()
     const bool irregular_mesh(false);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
     return hasAllSideBoundaries( model );
 }
 
@@ -462,8 +459,7 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
     return isStrictlyBoxShaped( model );
 }
   
@@ -476,10 +472,9 @@ bool Box_Test::TestBoundaryFlagRecreation()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
    
     // build a model with valid boundaries
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
 
     // testing whether the reflagging works correctly
     recreateBoxBoundaryFlags( model );
@@ -497,9 +492,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
 
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
     const Region<3>&  mregion(model.Region("Model"));
    
     // storing the flags in node and element order in a list for comparison
@@ -544,9 +538,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
 
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
     const Region<3>&  mregion(model.Region("Model"));
    
     // storing the flags in node and element order in a list for comparison

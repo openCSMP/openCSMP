@@ -238,6 +238,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
       Forms unique regions called MATERIAL1..n from the material IDs assigned to the elements.
       
       @attention this method assumes that the unique numbers of elements, faces, and interfaces via the MeshManage
+      
+      TODO: add a PropertyConstraint here
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity )
@@ -659,7 +661,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !HasValidModelRegion() )
+  if ( !ContainsRegion("Model") )
     csmp_error.notice( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues:",
                       "method relies on the existence of region 'Model', which does not exist");
 
@@ -760,7 +762,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !HasValidModelRegion() )
+  if ( !ContainsRegion("Model") )
     csmp_error.notice( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues:",
                       "method relies on the existence of region 'Model', which does not exist");
 
@@ -863,7 +865,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupna
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !HasValidModelRegion() )
+  if ( !ContainsRegion("Model") )
     csmp_error.notice( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues:",
                       "method relies on the existence of region 'Model', which does not exist");
 
@@ -886,7 +888,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupna
     {
       REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
       constraints.InitializePropertyIndices( regionComplex->Database() );
-      csmp::Region<dim>& model_domain(Region("Model"));
+      groupTraits_.insert( make_pair( groupname, constraints ) );
       (*it.first).second.AccumulateWithinRange( regionComplex->Mesh(), constraints );
 
       // removing the group if it contains no elements
@@ -2538,35 +2540,62 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
 
 
 
+
+
+
 /**
-      if the mesh changed this brute-force method rebuild the node and element vectors of all regions
-      TODO: find way to do this more selectively
+     Rebuilds modified regions. Region 'Model' will always be rebuilt.
+     Any model subdomain that has been ScheduledForRebuilt()  will also be rebuilt, whether unique or non-unique.
       
       @attention the assumption is made the inter-element connectivity has was updated before
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
  {
-    // since this region may now contain a different number of elements
-    RemoveRegion("Model" );
+     // since this region may now contain a different number of elements
+     RemoveRegion("Model");
 
      // rebuilding the region 'Model'
      const bool is_unique = ( distance(UniqueRegionsBegin(), UniqueRegionsEnd()) > 0 ) ? false : true;
      FormModelRegion( is_unique );
 
-     for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
-           rit->second.CreateNodePointerVector();
-           rit->second.IdentifyPerimeter();
-        }
+     csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
 
-/* unique regions have already been dealt with
-     for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
-           rit->second.CreateNodePointerVector();
-           rit->second.IdentifyPerimeter(); // calls PartitionCellVector
-        }
-*/
+     // 1. non-unique, potentially overlapping regions
+     //    (they get rebuilt efficiently using the original creation constraints, but only if new elements
+     //     lie within them)
+     for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit )
+       if ( (*rit).second.NeedsRebuilt() && (*rit).first != "Model" ) {
+             auto crit = groupTraits_.find( (*rit).first );
+             PropertyConstraints region_traits = ( crit == groupTraits_.end() )
+                                                    ? PropertyConstraints("permeability", 1e-21,1e-5) : (*crit).second;
+                                                    
+             (*rit).second.UpdateCellMembershipApplyingConstraints( model_domain.ElementsBegin(), model_domain.ElementsEnd(), region_traits );
+             
+             // assuming the the element neighbor connectivity was updated before by the MeshManager
+             (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
+          }
+
+     // 2. unique regions: only get modified if they have been ScheduledForRebuilt()
+     for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
+       if ( (*rit).second.NeedsRebuilt() )
+         // assuming the the element neighbor connectivity was updated before by the MeshManager
+         (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
        
  } // end RebuildRegions
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -508,17 +508,12 @@ void Boundary_Test::runLegacy()
 
   void Boundary_Test::runCurrent()
     {      
-      //ANSYS_Model3D m00( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt", true, true, false );
-      //m00.InsertBoundary("HALF");
-      //m00.RemoveRegion("HALF", true /* delete elements */ );
-      //NoSurfaceElementsAsNodeParents( m00.Region("Model") );
-
       ANSYS_Model3D m0( "BoxHalfs3D", "BoxHalfs3DirregularNoHalf", "CSMP-variables.txt", true, true, true );
       NoSurfaceElementsAsNodeParents( m0.Region("Model") );
       
       // this are a redundant checks to make sure the ANSYS_Model no csmp::Boundary constructor works
       // for both legacy box and irregular models (legacy functionality)    
-      ANSYS_Model3D m01( "BoxHalfs3D", "CSMP-variables.txt", false, true, true, false );
+      ANSYS_Model3D m01( "BoxHalfs3D", "CSMP-variables.txt", false, true, true ); // TODO: test does not require boundaries
         _test( m01.Boundaries() == 0 );
  
       const bool irregular_mesh(true);      /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
@@ -526,7 +521,7 @@ void Boundary_Test::runLegacy()
       const bool use_regions_file(false);   /* true = reduce regions according to regions file, false = does not redure regions */
       const bool create_boundaries(false);  /* true = creates boundaries around model, false = does not create boundaries */
       ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt",
-                          irregular_mesh, binary_file, use_regions_file, create_boundaries );
+                          irregular_mesh, binary_file, use_regions_file ); // TODO: test does not require boundaries
                           
       _test( m02.Boundaries() == 0 );
         
