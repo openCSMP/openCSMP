@@ -476,8 +476,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
               boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
           // storing the boundary face vector for the current element
           if ( boundary_faces.size() == faces ) {
-               if ( (dim == 2 && (*it)->FE()->IsSurfaceElement()) ||
-                    (dim == 3 && (*it)->FE()->IsVolumeElement()) ) {
+               if ( (dim == 2 && (*it)->IsSurfaceElement()) ||
+                    (dim == 3 && (*it)->IsVolumeElement()) ) {
                     cout <<"\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"<< Name();
                     cout <<"', cell: "<< (*it)->Idx() <<"("<< parseFiniteElementType((*it)->FE_Type()) <<")";
                     cout <<" is a stand-alone element in this subdomain.";

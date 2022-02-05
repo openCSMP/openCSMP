@@ -443,12 +443,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                            cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + n_faces << endl;
                            csmp_error.notice( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
                         }
-                      assert( index >= vset.Elements() );
-                      assert( index < vset.Elements() + vset.Faces() ); // (-) elements because face container is numbered from 0..n-1
+                      // if the Face neighbor has an index smaller than n_elmts it must be a boundary indicator
                       if ( index >= n_elmts )
                         e.Assign( j, &(*next(faces_.begin(),index - n_elmts)) );
-                      else
-                        e.Assign( j, static_cast<Face<dim>*>(nullptr) );
+                      else {
+                           assert( index < 0 );
+                           e.Assign( j, static_cast<Face<dim>*>(nullptr) );
+                        }
                    }
               
                  // Higher-dimensional Element neighbors (2) of Face
@@ -2582,37 +2583,36 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // the faces are stored after the elements including connections to their higher-dimensional neighbors
   // add the end of the pfverts entries
   for ( const auto& f : faces_ ) {
-    // equidimensional neighbors first
-    const size_t neighbors{ f.Neighbors() };
-    for ( size_t j = 0U; j<neighbors; ++j ) {
-        const Face<dim>* const ptr = f.Neighbor(j);
-        // if the neighbor exists (which it must on the inside of the Face)
-        if ( ptr != nullptr )
-          vset.Pfvert( eidx, j, ptr->Idx() );
-        else
-          vset.Pfvert( eidx, j, f.InnerParent()->AtBoundary(j) );
-      }
-    // higher-dimensional neighbors second
-    // inner neighbor
-    assert( f.InnerParent()->IsEquidimensional() );
-    assert( f.InnerParent()->Idx() < Elements() );
-    vset.Pfvert( eidx, neighbors, f.InnerParent()->Idx() );
-    // outer neighbor
-    if ( f.OuterParent() != nullptr ) {
-        assert( f.OuterParent()->IsEquidimensional() );
-        assert( f.OuterParent()->Idx() < Elements() );
-        vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
-      }
-    else {
-        // getting the boundary placement of the inner element
-        vset.Pfvert( eidx, neighbors + 1U, atBoundary( f.InnerParent(), f.InnerParentFaceID() ) );
-      }
-    // adding the local numbers of the faces that the Face is collocated with if any
-    vset.Pfvert( eidx, neighbors + 2U, f.InnerParentFaceID() );
-    // if there is no outer element, the face idx will initialised with NULL_IDX
-    vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
-    ++eidx;
-  }
+      // equidimensional neighbors first
+      const size_t neighbors{ f.Neighbors() };
+      for ( size_t j = 0U; j<neighbors; ++j ) {
+           const Face<dim>* const ptr = f.Neighbor(j);
+           // if the neighbor exists (which it must on the inside of the Face)
+           if ( ptr != nullptr )
+             vset.Pfvert( eidx, j, ptr->Idx() );
+           else vset.Pfvert( eidx, j, IRREGULAR );
+        }
+      // higher-dimensional neighbors second
+      // inner neighbor
+      assert( f.InnerParent()->IsEquidimensional() );
+      assert( f.InnerParent()->Idx() < Elements() );
+      vset.Pfvert( eidx, neighbors, f.InnerParent()->Idx() );
+      // outer neighbor
+      if ( f.OuterParent() != nullptr ) {
+          assert( f.OuterParent()->IsEquidimensional() );
+          assert( f.OuterParent()->Idx() < Elements() );
+          vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
+        }
+      else {
+          // getting the boundary placement of the inner element
+          vset.Pfvert( eidx, neighbors + 1U, atBoundary( f.InnerParent(), f.InnerParentFaceID() ) );
+        }
+      // adding the local numbers of the faces that the Face is collocated with if any
+      vset.Pfvert( eidx, neighbors + 2U, f.InnerParentFaceID() );
+      // if there is no outer element, the face idx will initialised with NULL_IDX
+      vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
+      ++eidx;
+   }
 
   // 'pfverts' interfaces (which must always have two higher-dimensional neighbors)
   // ------------------------------------------------------------------------------
