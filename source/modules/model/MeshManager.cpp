@@ -1456,7 +1456,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          // 1.2 collecting pointers to the elements that will be deleted
          elmt_iterators.emplace_back( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
          
-         // 1.3 much simplified construction of Face at model boundary
+         // 1.3 simplified construction of Face at model boundary
          bool boundary_face{true};
          for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit ) {
               if ( (*nit)->AtBoundary() == NOT ) boundary_face = false;
@@ -1470,7 +1470,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
               face_ptrs.back()->Idx( face_idx++ );
            }
            
-         // 1.4 more complicated construction of Face objects ub the interior of models
+         // 1.4 more involved construction of Face object in the interior of a model
          //    (both neighbors are present)
          else { // finding higher-dimensional neighbors (2)
               pair<Element<dim>*,Element<dim>*>  pelmts = parentElementsSharedByFace<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
@@ -1493,7 +1493,16 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      // -------------------------------------------
 // FAIL    elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) ); // DOES NOT WORK YET
 //cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting elements...\n";
-     while ( erase_it != last ) {
+     while ( erase_it != last )
+       {
+          // nulling the connections of neighbor neighbor elements to this element
+          // (neighbor pointer to this element is nulled)
+          for ( size_t i{0}; i<(*erase_it)->Neighbors(); ++i )
+            if ( (*erase_it)->Neighbor(i) != nullptr )
+              for ( size_t j{0}; j<(*erase_it)->Neighbor(i)->Neighbors(); ++j )
+              if ( (*erase_it)->Neighbor(i)->Neighbor(j) == (*erase_it) )
+                (*erase_it)->Neighbor(i)->Neighbor(j)->Unassign( (*erase_it) );
+          
           // erase element and null the current element pointer
           //  cerr <<" "<< (*erase_it)->Idx();
           elements_.erase( elements_.get_iterator( (*erase_it) ) ); // const_cast<Element<dim>* const>(*first)) does not help either

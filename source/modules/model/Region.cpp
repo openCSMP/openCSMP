@@ -48,8 +48,8 @@ Region<dim>::Region( const Region& g )
 
 template<size_t dim>
 Region<dim>::Region( Region&& g )
-  : ModelSubDomain<dim, Element>( g ),
-    LocalVariableStorage<dim,Region>(g)
+  : ModelSubDomain<dim, Element>( move(g) ),
+    LocalVariableStorage<dim,Region>( move(g) )
 {
 }
 

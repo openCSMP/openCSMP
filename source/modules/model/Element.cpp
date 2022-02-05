@@ -165,6 +165,7 @@ Element<dim>::Element( Element<dim>&& el )
 template<size_t dim>
 Element<dim>::~Element()
  {
+/*
     // disconnecting the neighbor elements that are connected to this element
     // (neighbor pointer to this element is nulled)
     if ( !elmt_connector_.empty() )
@@ -178,7 +179,7 @@ Element<dim>::~Element()
       for ( auto& nit : node_connector_ )
         if ( nit != nullptr )
           nit->Unassign( this );
-          
+*/
      // TODO: Face and InterFace objects that may have pointers to the element need to be updated too!
 
 //    cerr <<"\nElement(dtor): destructed element: "<< Idx();

@@ -242,7 +242,7 @@ class RegionInterface {
     //       region name  region / creation constraints
     std::map<std::string, csmp::Region<dim> >   uniqueGroupMap_;  ///<  map of unique regions that do not overlap
     std::map<std::string, csmp::Region<dim> >   groupMap_;        ///<  map of non-unique (potentially overlapping) regions
-    std::map<std::string, PropertyConstraints>  groupTraits_;     ///<  criteria how the non-unique regions were created
+    std::map<std::string, PropertyConstraints>  groupTraits_;     ///<  criteria how non-unique regions were created
 };
 
 } // csmp

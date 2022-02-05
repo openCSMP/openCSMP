@@ -65,6 +65,7 @@ class ModelSubDomain {
     virtual ~ModelSubDomain();
     
     ModelSubDomain<dim,CELL>&  operator=( const ModelSubDomain& );
+    ModelSubDomain<dim,CELL>&  operator=( ModelSubDomain&& );
 
     std::string Name() const;
     void Name( const std::string& );
@@ -297,9 +298,6 @@ class ModelSubDomain {
     void      OutputVariableToScreen( const char* prop ) const;
     void      Out() const;
 
-    bool      Verbose();
-    void      Verbose(bool verbose);
-
   protected:
 
     /// establishes interior vs. exterior simplices and nodes; returns index of first boundary element
@@ -314,7 +312,7 @@ class ModelSubDomain {
     inline static int32_t                       domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains
     int32_t                                     domain_idx_;             ///< created during construction from domain_count_
     bool                                        rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
-    bool                                        verbose_ = false;
+    static constexpr bool                       verbose_ = false;
 
   private:
     ModelSubDomain();

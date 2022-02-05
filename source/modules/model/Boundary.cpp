@@ -56,9 +56,9 @@ Boundary<dim>::Boundary( const Boundary& ed )
 /// move constructor
 template<size_t dim>
 Boundary<dim>::Boundary( Boundary&& ed )
-  : ModelSubDomain<dim, Face>( ed ),
-    LocalVariableStorage<dim,Boundary>(ed),
-    boundaryFlag_( ed.boundaryFlag_ )
+  : ModelSubDomain<dim, Face>( move(ed) ),
+    LocalVariableStorage<dim,Boundary>( move(ed) ),
+    boundaryFlag_( move(ed.boundaryFlag_) )
 {
 }
 

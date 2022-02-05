@@ -105,7 +105,7 @@ bool ModelBasics_Test::TestRebuiltRegionsFromPropertyConstraints()
      VSet<3U>      vset;
      test_Create_FracBox( vset, topology );
 
-     const bool create_boundaries_from_faces{false}, box_shaped{false};
+     const bool create_boundaries_from_faces{true}, box_shaped{false};
      Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", create_boundaries_from_faces, box_shaped );
      
      // assigning some dummy values to verify functionality

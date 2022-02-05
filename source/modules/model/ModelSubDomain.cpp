@@ -42,9 +42,9 @@ template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim, CELL>::ModelSubDomain( const string& subdomain_name, const PropertyDatabase<dim>& pref )
 	: pref_(pref),
 	  subdomain_name_(subdomain_name),
-    domain_idx_(domain_count_++),
-	  verbose_(true)
+    domain_idx_(++domain_count_)
  {
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called custom constructor.\n";
  }
 
 
@@ -57,25 +57,26 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
     bd_face_vec_(ed.bd_face_vec_),
     subdomain_name_(ed.subdomain_name_),
     rebuilt_needed_(ed.rebuilt_needed_),
-    domain_idx_(domain_count_++),
-    verbose_(true)
+    domain_idx_(++domain_count_)
  {
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called copy constructor.\n";
  }
 
 
 /// move constructor; @attention remove verbose output after testing
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
- : pref_{ move(ed.pref_) },
-   elmt_vec_{ move(ed.elmt_vec_) },
-   node_vec_{ move(ed.node_vec_) },
-   first_bd_node_{ed.first_bd_node_},
-   bd_face_vec_{ move(ed.bd_face_vec_) },
-   subdomain_name_{ed.subdomain_name_},
-   rebuilt_needed_(ed.rebuilt_needed_),
-    domain_idx_(domain_count_++),
-   verbose_{true}
+ : pref_( move(ed.pref_) ),
+   elmt_vec_( move(ed.elmt_vec_) ),
+   node_vec_( move(ed.node_vec_) ),
+   first_bd_node_( move(ed.first_bd_node_) ),
+   bd_face_vec_( move(ed.bd_face_vec_) ),
+   subdomain_name_( move(ed.subdomain_name_) ),
+   rebuilt_needed_(move(ed.rebuilt_needed_) ),
+   domain_idx_( move(ed.domain_idx_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
  {
+    domain_count_++; // needed because when destructor is called on 'ed' the object count will be decremented!
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move constructor.\n";
  }
 
 
@@ -84,6 +85,7 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::~ModelSubDomain()
  {
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called destructor.\n";
     domain_count_--;
  }
 
@@ -96,11 +98,28 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
           elmt_vec_       = ed.elmt_vec_;
           node_vec_       = ed.node_vec_;
           first_bd_node_  = ed.first_bd_node_;
-          domain_idx_     = ed.domain_idx_;
+          //domain_idx_     = ed.domain_idx_; - keep the domain index unique!
           bd_face_vec_    = ed.bd_face_vec_;
           subdomain_name_ = ed.subdomain_name_;
           rebuilt_needed_ = ed.rebuilt_needed_;
-          verbose_        = ed.verbose_;
+          if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called assignment operator.\n";
+       }
+     return *this;
+ }
+
+
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&& ed )
+ {
+     if ( &ed != this ) {
+         elmt_vec_       = move( ed.elmt_vec_ );
+         node_vec_       = move( ed.node_vec_ );
+         first_bd_node_  = move( ed.first_bd_node_ );
+         domain_idx_     = move( ed.domain_idx_ );
+         bd_face_vec_    = move( ed.bd_face_vec_ );
+         subdomain_name_ = move( ed.subdomain_name_ );
+         rebuilt_needed_ = move( ed.rebuilt_needed_ );
+         if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move assignment operator.\n";
        }
      return *this;
  }
@@ -133,22 +152,6 @@ bool  ModelSubDomain<dim,CELL>::NeedsRebuilt() const
  }
 
 
-
-template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::Verbose( bool verbose )
-{
-    this->verbose_ = verbose;
-}
-
-template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Verbose()
-{
-    return this->verbose_;
-}
-
-
-
-// inlined methods
 
 template<size_t dim, template<size_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::Nodes() const
@@ -3973,7 +3976,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                (*nit)->Store( n_key, ts );
             }
        }
-    if (this->Verbose()){
+    if ( verbose_ ) {
         cout <<"\nModel<"<<dim<<">::ExtrapolateElementToNodeProperty: ";
         cout <<"'" << eprop <<"' has been successfully extrapolated to '"<< nprop <<"'." << endl;
     }

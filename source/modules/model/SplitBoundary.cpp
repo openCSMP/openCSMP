@@ -47,8 +47,8 @@ SplitBoundary<dim>::SplitBoundary( const SplitBoundary& ed )
 
 template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( SplitBoundary&& ed )
-  : ModelSubDomain<dim, InterFace>( ed ),
-    LocalVariableStorage<dim,SplitBoundary>( ed )
+  : ModelSubDomain<dim, InterFace>( move(ed) ),
+    LocalVariableStorage<dim,SplitBoundary>( move(ed) )
 {
 }
 

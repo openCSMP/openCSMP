@@ -1010,8 +1010,6 @@ void SimulatorSetup<dim>::LoadModel()
     }
 
     this->GetModel()->Verbose(this->Verbose());
-    this->GetModel()->Region("Model").Verbose(this->Verbose());
-    this->GetModel()->Database().Verbose(this->Verbose());
     if (this->Restart()) {
         cout <<" Finished loading the model from restart files."<<endl;
 //        cin.get();

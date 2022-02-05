@@ -312,7 +312,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     InputVariablesFrom( vset );
 
     // 5. forming default computational domain called "Model" and regions
-    const bool place_into_unique_regions( (mesh_topology.ModelRegions() == 0) );
+    const bool place_into_unique_regions{ mesh_topology.ModelRegions() == 0 };
     const size_t elmts = this->FormModelRegion( place_into_unique_regions );
     if ( elmts == 0U )
       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
