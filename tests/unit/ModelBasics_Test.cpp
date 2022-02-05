@@ -36,12 +36,11 @@ ModelBasics_Test::~ModelBasics_Test()
 */
 void ModelBasics_Test::run()
   {
-/*
     bool create_boundaries_from_faces{false};
     _test( TestWriteModelToDiskAndReadBack( create_boundaries_from_faces ) );
     create_boundaries_from_faces = true;
      _test( TestWriteModelToDiskAndReadBack( create_boundaries_from_faces ) );
-*/
+
     // testing the repair of non-unique regions built using property constraints
     TestRebuiltRegionsFromPropertyConstraints();
  
@@ -55,10 +54,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      ModelTopology topology;
      test_Create_FracBox( vset, topology );
 
-     // creating a model
-     // Model( ModelTopology&, VSet<dim>&, const char* var_file,
-     //        bool create_boundary_objects = false, bool box_shaped = true );
-
+     // creating model with boundaries
      Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", create_boundaries_from_faces, false );
      model.Name("FracBox");
      

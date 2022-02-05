@@ -153,37 +153,9 @@ Element<dim>::Element( Element<dim>&& el )
 
 
 
-/**
-     Since the element does not manage any memory,
-     the only thing that is necessary is that all pointers to this element are set to NULL before its destruction.
-     This allows the objects (Node, Element, Face, InterFace, Region etc.)
-     that survive the element to update themselves  as necessary.
-     
-     @test SKM 15/12/21.
-     
-*/
 template<size_t dim>
 Element<dim>::~Element()
- {
-/*
-    // disconnecting the neighbor elements that are connected to this element
-    // (neighbor pointer to this element is nulled)
-    if ( !elmt_connector_.empty() )
-      for ( auto& it : elmt_connector_ )
-        if ( it != nullptr && !it->elmt_connector_.empty() )
-          it->Unassign( this );
-    
-    // disconnecting the node that this element might be a parent of
-    // (parent pointer to this element is nulled)
-    if ( !node_connector_.empty() )
-      for ( auto& nit : node_connector_ )
-        if ( nit != nullptr )
-          nit->Unassign( this );
-*/
-     // TODO: Face and InterFace objects that may have pointers to the element need to be updated too!
-
-//    cerr <<"\nElement(dtor): destructed element: "<< Idx();
-          
+ {          
  } // end destructor
 
 

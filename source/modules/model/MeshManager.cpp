@@ -407,12 +407,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             typename plf::colony<Face<dim>>::iterator
                fit = faces_.emplace( Face<dim>( face_idx, fem_manager_.E( csmpElementType ),
                                                           fvm_manager_.Stencil( csmpElementType ), evars, cvars ) );
-            const size_t nodes( (*fit).Nodes() );
             // assigning nodes to faces
+            const size_t nodes( (*fit).Nodes() );
             for ( size_t j = 0U; j<nodes; ++j ) {
                 const size_t node = vset.Plist( face_idx, j );
                 assert( node < n_nodes );
-                (*fit).Assign( j, &(*next(faces_.begin(),node)) );
+                (*fit).Assign( j, &(*next(nodes_.begin(),node)) );
               }
             ++face_idx;
             ++first;
@@ -479,7 +479,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  e.Assign( innerElement, outerElement );
                  // and the corresponding face numbers
                  e.ParentFaceID( INSIDE,  vset.Pfvert( e.Idx(), neighbors + 2U ) );
-                 e.ParentFaceID( OUTSIDE, vset.Pfvert( e.Idx(), neighbors + 3U ) );
+                 if ( outerElement ) e.ParentFaceID( OUTSIDE, vset.Pfvert( e.Idx(), neighbors + 3U ) );
                  
                } // end face loop
               
