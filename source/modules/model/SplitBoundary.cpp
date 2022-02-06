@@ -81,13 +81,10 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
 {
   // building the interface vector (for this particular region)
   // ----------------------------------------------------------
-  if ( info.interior_elmts[0] != mesh.Elements() + mesh.Faces() )
-    throw csmp::Exception( ERROR, "SplitBoundary(reconstructor)",
-                          "InterFace numbering is expected to start at the number of elements + faces");
-
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-  for ( auto i : info.interior_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i)) );
-  for ( auto i : info.perimeter_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i)) );
+  const size_t n_elements_plus_faces{ mesh.Elements() + mesh.Faces() };
+  for ( auto i : info.interior_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
+  for ( auto i : info.perimeter_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
 
   // building the node vector
   // ------------------------

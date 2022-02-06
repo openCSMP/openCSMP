@@ -1498,11 +1498,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
        {
           // nulling the connections of neighbor neighbor elements to this element
           // (neighbor pointer to this element is nulled)
-          for ( size_t i{0}; i<(*erase_it)->Neighbors(); ++i )
-            if ( (*erase_it)->Neighbor(i) != nullptr )
-              for ( size_t j{0}; j<(*erase_it)->Neighbor(i)->Neighbors(); ++j )
-              if ( (*erase_it)->Neighbor(i)->Neighbor(j) == (*erase_it) )
-                (*erase_it)->Neighbor(i)->Neighbor(j)->Unassign( (*erase_it) );
+          detachNeighborsFrom( (*erase_it) );
           
           // erase element and null the current element pointer
           //  cerr <<" "<< (*erase_it)->Idx();

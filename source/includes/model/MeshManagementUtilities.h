@@ -62,6 +62,60 @@ size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::c
                                              typename std::vector<CELL<dim>*>::const_iterator end,
                                              std::map<Element<dim>*,MeshPatchAttributes>& );
 
+
+// DIAGNOSTICS
+
+/// determines whether mesh in model is built from finite elements with a local coordinate system
+template<size_t dim>
+bool isoparametricElementMesh( const Model<dim>& );
+
+/// checks region for whether it contains elements of the same dimensionality
+template<size_t dim>
+bool containsElementsOfType( const Region<dim>&, ELEMENT_DIMENSION );
+
+/// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
+template<size_t dim>
+size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
+
+/// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
+template<size_t dim>
+void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
+                          typename std::vector<Node<dim>*>::const_iterator nodes_end,
+                          std::vector<std::vector<double> >& distances_and_weight );
+
+/// container of element pointers and local face ids of elements contacting each other across a split boundary
+typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_t> > OppositeElements;
+
+/// find all elements in a model that contact eachother across split interfaces and are node-matched
+template<size_t dim>
+bool findSplitInterfaceElements( const Region<dim>&,
+                                 std::set<std::pair<std::pair<Element<dim>*, size_t>,
+                                 std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
+
+/// for supplied edge nodes, find their volumetric parent elements; if find segment ids is on, their local numbers are assigned to Idx of the parent elements
+size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  edge_nodes,
+                                               std::map<Element<3>*,std::vector<Node<3>*> >& segm_parents,
+                                               bool find_segment_ids );
+
+
+// UTILITIES INVOLVING INDIVIDUAL ELEMENTS/FACES/INTERFACES
+
+// TODO: implement
+//template<size_t dim,template<size_t> class CELL>
+//size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<size_t>& );
+
+/// loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
+template<size_t dim, template<size_t> class CELL>
+void detachNeighborsFrom( CELL<dim>* const cell_to_detach_neighbors_from );
+
+/// returns angle (in degrees) between the normals of the two cells, which must be surfaces (only in 3D)
+template<template<size_t> class CELL>
+double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 );
+
+/// Line elements can exist in all 3 spatial dimensions.
+template<size_t dim, template<size_t> class CELL>
+double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
+
 /// traverses mesh via node neighbors and collects nodes into argument set; @return number of discovered nodes; requires node to parent connectivity
 template<size_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
@@ -97,42 +151,6 @@ void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Ele
 
 /// by comparison of node locations, finds overlapping cells and reports them
 bool findCollocatedCells(); // TODO: not implemented yet
-
-// DIAGNOSTICS
-
-/// determines whether mesh in model is built from finite elements with a local coordinate system
-template<size_t dim>
-bool isoparametricElementMesh( const Model<dim>& );
-
-/// checks region for whether it contains elements of the same dimensionality
-template<size_t dim>
-bool containsElementsOfType( const Region<dim>&, ELEMENT_DIMENSION );
-
-/// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
-template<size_t dim>
-size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
-
-// TODO: implement
-template<size_t dim,template<size_t> class CELL>
-size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<size_t>& );
-
-/// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
-bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double tolerance=1.0e-5 );
-
-/// returns angle (in degrees) between the normals of the two cells, which must be surfaces
-template<template<size_t> class CELL>
-double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 );
-
-/// Line elements can exist in all 3 spatial dimensions.
-template<size_t dim, template<size_t> class CELL>
-double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
-
-/// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
-template<size_t dim>
-void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
-                          typename std::vector<Node<dim>*>::const_iterator nodes_end,
-                          std::vector<std::vector<double> >& distances_and_weight );
-
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
 template<size_t dim>
 std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
@@ -141,26 +159,15 @@ std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const ept
 template<size_t dim>
 std::pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
-/// container of element pointers and local face ids of elements contacting each other across a split boundary
-typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_t> > OppositeElements;
-
-/// find all elements in a model that contact eachother across split interfaces and are node-matched
-template<size_t dim>
-bool findSplitInterfaceElements( const Region<dim>&,
-                                 std::set<std::pair<std::pair<Element<dim>*, size_t>,
-                                 std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
-
-/// for supplied edge nodes, find their volumetric parent elements; if find segment ids is on, their local numbers are assigned to Idx of the parent elements
-size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  edge_nodes,
-                                               std::map<Element<3>*,std::vector<Node<3>*> >& segm_parents,
-                                               bool find_segment_ids );
-
-
-// UTILITIES FOR TESTING ETC
-
 /// returns true if the elements contain each others barycentre
 template<size_t dim>
 bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
+
+/// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
+bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double tolerance=1.0e-5 );
+
+
+// UTILITIES FOR TESTING ETC
 
 ///  captures a snapshot of the current cell connectivity for the range of cells; developed for testing
 template<size_t dim, template<size_t> class CELL>

@@ -43,6 +43,10 @@ void ModelBasics_Test::run()
 
     // testing the repair of non-unique regions built using property constraints
     TestRebuiltRegionsFromPropertyConstraints();
+    
+    cout <<"\nModelBasics_Test::run: raw size of local variable storage of Model: ";
+    cout << sizeof(LocalVariableStorage<3,Model>) << endl;
+    // around 100-bytes for empty storage!
  
    } // end run
 

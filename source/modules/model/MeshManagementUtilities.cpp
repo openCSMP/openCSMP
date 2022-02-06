@@ -148,6 +148,33 @@ template size_t findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>
 
 
 
+/** loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
+ */
+template<size_t dim, template<size_t> class CELL>
+void detachNeighborsFrom( CELL<dim>* const eptr )
+ {
+    // nulling the connections of neighbor neighbor elements to this element
+    // (neighbor pointer to this element is nulled)
+    for ( size_t i{0}; i<eptr->Neighbors(); ++i )
+      if ( eptr->Neighbor(i) != nullptr )
+        for ( size_t j{0}; j<eptr->Neighbor(i)->Neighbors(); ++j )
+        if ( eptr->Neighbor(i)->Neighbor(j) == eptr )
+          eptr->Neighbor(i)->Neighbor(j)->Unassign( eptr );
+ }
+
+template void detachNeighborsFrom( Element<1>* const );
+template void detachNeighborsFrom( Element<2>* const );
+template void detachNeighborsFrom( Element<3>* const );
+
+template void detachNeighborsFrom( Face<1>* const );
+template void detachNeighborsFrom( Face<2>* const );
+template void detachNeighborsFrom( Face<3>* const );
+
+template void detachNeighborsFrom( InterFace<1>* const );
+template void detachNeighborsFrom( InterFace<2>* const );
+template void detachNeighborsFrom( InterFace<3>* const );
+
+
 
 /**
       Traversing mesh to find patches that cannot be reached by neighborhood traversal.

@@ -87,19 +87,16 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 {
   // building the face vector
   // ------------------------
-  if ( info.interior_elmts[0] != mesh.Elements() )
-    throw csmp::Exception( ERROR, "Boundary(reconstructor)",
-                          "error Face numbering is expected to start at the number of elements.");
-
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
   // assigning pointers to the interior faces
+  const size_t  n_elements{ mesh.Elements() }; // needs to be subtracted accessing the face container
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i)) );
+    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i)) );
+    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
 
   // building the node vector
   // ------------------------
