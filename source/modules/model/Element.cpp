@@ -138,14 +138,14 @@ template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-// does not work. Why?    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),
+//    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),  does not compile, why?
     idx_(el.idx_),
     material_id_(el.material_id_),
     // calling move() is important, else elmt destructor has to do more work!
     elmt_connector_( move(el.elmt_connector_) ),
     node_connector_( move(el.node_connector_) )
 {
-  this->LVS( move(el.LVS()) );
+   this->LVS( move(el.LVS()) );
     
 //  cerr <<"\nElement(ctor): moved element: "<< Idx();
 }
@@ -195,6 +195,8 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   material_id_    = el.material_id_;
   
   this->LVS( move( el.LVS() ) );
+
+//  cerr <<"\nElement: move-assigned element: "<< Idx();
 
   return *this;
 }

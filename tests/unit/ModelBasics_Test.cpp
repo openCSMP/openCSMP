@@ -6,7 +6,6 @@
  *
  */
 
-#include <type_traits>
 #include "ModelBasics_Test.h"
 
 #include "vsetMakers.h"
@@ -16,6 +15,8 @@
 #include "PropertyConstraints.h"
 #include "VSet.h"
 #include "VTK_Interface.h"
+#include "ANSYS_Model3D.h"
+#include "MeshManagementUtilities.h"
 #include "compareFloats.h"
 
 using namespace std;
@@ -133,6 +134,41 @@ bool ModelBasics_Test::TestRebuiltRegionsFromPropertyConstraints()
 
      return true;
  }
+
+
+
+
+ /**
+   Tests pointInVolumeElement:
+   
+   Tests prism_test model because it contains elements of all
+   types.
+   */
+  bool ModelBasics_Test::PointInVolumeElementTest()
+  {
+    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", true, true, true );
+    
+    Point<3u> query(2434.0f, -1510.0f, 5400.0f);
+    
+    auto& gref = model.Region("Model");
+    
+    auto eend = gref.ElementsEnd();
+    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
+      if (!(*eit)->IsVolumeElement()) {
+        continue;
+      }
+      const Point<3u> bctr = (*eit)->BaryCenter();
+      
+      Element<3u>* e = pointInVolumeElement(gref, bctr);
+      _test(e == *eit);
+    }
+    return true;
+  }
+  
+
+
+
+
 
 
   

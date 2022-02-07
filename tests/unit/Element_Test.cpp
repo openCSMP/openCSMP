@@ -1,16 +1,13 @@
 #include "Element_Test.h"
 #include "IsoparametricLinearQuadrilateral.h"
-#include "ANSYS_Model3D.h"
-#include "Region.h"
-#include "CSMP_highLevelUtilities.h"
+#include "IsoparametricLinearTriangle.h"
+#include "Element.h"
 
 using namespace std;
 
 namespace csmp {
 
-/// TODO: @todo check why the tolerance must be so high for the test to pass
-Element_Test::Element_Test( bool verbose )
- : fTolerance(1.0e-3), verbose_(verbose)
+Element_Test::Element_Test()
 {
 }
 	
@@ -32,16 +29,154 @@ Element_Test::~Element_Test()
  
 */
 void Element_Test::run()
-{
-  ElementLengthTest2D();
-  ElementLengthTest3D();
+  {
+    MoveSemanticsTest();
+
+    ElementLengthTest2D();
+    ElementLengthTest3D();
+  }
+
+
+
+
+void Element_Test::MoveSemanticsTest()
+ {
+  // 0. creating a mini-element patch for testing
+  // --------------------------------------------
+  // making sure that everything is like in a simulation
+  const LocalVariables evars( 1, // scalarsVars,
+                              2, // vectorVars,
+                              1, // tensorVars,
+                              0, // array_count,
+                              0, // array_length,
+                              0, // flag_array_count,
+                              0, // flag_array_length,
+                              9, // total_data_depth,
+                              6 ); // total_flag_depth
+                              
+  const IntegrationPointVariables ivars;
+
+// Element<dim>( elmt_idx, fem, stencil, evars, cvars, mtrl_idx );
+  FiniteVolumeStencil<2>  quad( "ISOPARAMETRIC_LINEAR_QUADRILATERAL" );
+  FiniteVolumeStencil<2>  tria( "ISOPARAMETRIC_LINEAR_TRIANGLE" );
+ 
+    // creating some elements
+  IsoparametricLinearQuadrilateral fe_q(2U);
+  IsoparametricLinearTriangle      fe_t;
+  int32_t                          mtrl_idx{0};
+  // this is the constructor used by the MeshManager
+  csmp::Element<2U>  e0( 0, &fe_q, &quad, evars, ivars, mtrl_idx ),
+                     e1( 1, &fe_q, &quad, evars, ivars, mtrl_idx ),
+                     e2( 2, &fe_t, &tria, evars, ivars, mtrl_idx ),
+                     e3( 3, &fe_t, &tria, evars, ivars, mtrl_idx ),
+                     e4( 4, &fe_t, &tria, evars, ivars, mtrl_idx );
+ 
+  csmp::Node<2U> n0, n1, n2, n3, n4, n5, n6, n7;
+  // quad 1
+  n0.x(0.); n0.y(0.);
+  n1.x(2.); n1.y(0.);
+  n2.x(2.); n2.y(2.);
+  n3.x(0.); n3.y(2.);
+  e0.Idx( 0 );
+  e0.Assign( 0, &n0 );
+  e0.Assign( 1, &n1 );
+  e0.Assign( 2, &n2 );
+  e0.Assign( 3, &n3 );
+  // adjacent quad
+  n4.x(7.5); n4.y(0.);
+  n5.x(7.5); n5.y(2.);
+  e1.Idx( 1 );
+  e1.Assign( 0, &n1 );
+  e1.Assign( 1, &n4 );
+  e1.Assign( 2, &n5 );
+  e1.Assign( 3, &n2 );
+  // tria above
+  n6.x(7.5); n6.y(3.);
+  n7.x(0.5); n7.y(3.);
+  e2.Idx( 2 );
+  e2.Assign( 0, &n5 );
+  e2.Assign( 1, &n6 );
+  e2.Assign( 2, &n7 );
+  // tria left of the previous one
+  e3.Idx( 3 );
+  e3.Assign( 0, &n2 );
+  e3.Assign( 1, &n5 );
+  e3.Assign( 2, &n7 );
+  // tria top left
+  e4.Idx( 4 );
+  e4.Assign( 0, &n2 );
+  e4.Assign( 1, &n7 );
+  e4.Assign( 2, &n3 );
   
-  UnitNormalTest();
+  // node indexes
+  n0.Idx(0); n1.Idx(1); n2.Idx(2); n3.Idx(3); n4.Idx(4); n5.Idx(5); n6.Idx(6); n7.Idx(7);
+  // and boundary flags
+  n0.AtBoundary(CNR1); n1.AtBoundary(BOTTOM); n2.AtBoundary(NOT); n3.AtBoundary(LEFT);
+  n4.AtBoundary(CNR2); n5.AtBoundary(RIGHT); n6.AtBoundary(CNR3); n7.AtBoundary(CNR4);
   
-  // A. Bromage test that does not rely of FE functionality (takes very long)
-  //PointInVolumeElementTest();
-}
-	
+  // neighbors (only the non-null ones need to be assigned)
+  e0.Assign( 1, &e1 ); e0.Assign( 2, &e4 );
+  e1.Assign( 2, &e3 ); e1.Assign( 3, &e0 );
+  e2.Assign( 1, &e3 );
+  e3.Assign( 0, &e2 ); e3.Assign( 1, &e4 ); e3.Assign( 2, &e1 );
+  e4.Assign( 1, &e0 ); e4.Assign( 2, &e3 );
+  
+  
+  // 1. testing the copy and move assigments and constructors
+  // --------------------------------------------------------
+  // copy constructor
+  // ----------------
+  csmp::Element<2U> e1_copy( e1 );
+  _test( e1 == e1_copy );
+  // are they having the same nodes & neighbors ?
+  for ( size_t i{0}; i<e1.Nodes(); ++i ) {
+       _test( e1.N(i) == e1_copy.N(i) );
+       _test( e1.N(i)->AtBoundary() == e1_copy.N(i)->AtBoundary() );
+    }
+  for ( size_t i{0}; i<e1.Neighbors(); ++i )
+    _test( e1.Neighbor(i) == e1_copy.Neighbor(i) );
+    
+  // assignment
+  csmp::Element<2U> e1_copy2 = e1;
+  _test( e1 == e1_copy2 );
+  // are they having the same nodes & neighbors ?
+  for ( size_t i{0}; i<e1.Nodes(); ++i )
+    _test( e1.N(i) == e1_copy2.N(i) );
+  for ( size_t i{0}; i<e1.Neighbors(); ++i )
+    _test( e1.Neighbor(i) == e1_copy2.Neighbor(i) );
+    
+  // move constructor & assigment operator
+  // -------------------------------------
+  // forced call of of move constructor
+  // most comprehensive constructor but without nodes and neighbors
+  csmp::Element<2U> e1_moved( move( Element<2>( 1, &fe_q, &quad, evars, ivars, mtrl_idx ) ) );
+  _test( e1_moved.Idx() == e1.Idx() );
+  _test( e1_moved.Material_ID() == e1.Material_ID() );
+  _test( e1_moved.IsSurfaceElement() == e1.IsSurfaceElement() );
+  _test( e1_moved.FE_Type() == e1.FE_Type() );
+  
+  if ( verbose_ ) e1_moved.OutLVS();
+  
+  // forced move assignment to get a completely initialised element
+  csmp::Element<2U> e0_move_assigned( &fe_q, &quad );
+  e0_move_assigned = move( e0 );
+  _test( e0_move_assigned.Idx() == 0 );
+  _test( e0_move_assigned.N(0) == &n0 );
+  _test( e0_move_assigned.N(1) == &n1 );
+  _test( e0_move_assigned.N(2) == &n2 );
+  _test( e0_move_assigned.N(3) == &n3 );
+  _test( e0_move_assigned.N(0)->AtBoundary() == CNR1 );
+  _test( e0_move_assigned.N(1)->AtBoundary() == BOTTOM );
+  _test( e0_move_assigned.N(2)->AtBoundary() == NOT );
+  _test( e0_move_assigned.N(3)->AtBoundary() == LEFT );
+  _test( e0_move_assigned.Neighbor(0) == nullptr );
+  _test( e0_move_assigned.Neighbor(1) == &e1 );
+  _test( e0_move_assigned.Neighbor(2) == &e4 );
+  _test( e0_move_assigned.Neighbor(3) == nullptr );
+
+  
+ } // end MoveSemanticsTest
+
   
   
 void Element_Test::ElementLengthTest2D()
@@ -157,84 +292,12 @@ void Element_Test::ElementLengthTest3D()
   
   
   
-/**
-    Tests FiniteVolumePolicy:
-       - UnitNormalToFace( size_t face, std::vector<double>& );
- 
-    Tests prism_test model because it contains elements of all
-    types.
- 
-    @todo 2D model has to be tested as well
-*/
-void Element_Test::UnitNormalTest()
- {
-     // ------------------------------------------------------------
-     // 1. building model from ANSYS data files
-     // ------------------------------------------------------------
-      string  model_name("prism_test");
-      // TODO: UnitNormalTest does not require any variables; remove property file
-      ANSYS_Model3D  model( model_name.c_str(), "example25.txt");
 
-     // ------------------------------------------------------------
-     // 2. looping over all highest-dimensional elements
-     //    testing whether normals are aligned with vectors
-     //    between barycenter and face barycenters
-     // ------------------------------------------------------------
-     std::vector<double> unrml;
-     const Region<3U>& model_domain(model.Region("Model"));
-     if ( verbose_ ) cout <<"\nElement_Test::UnitNormalTest: testing normal directions...\n";
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
-       {
-          Point<3U> bctr((*it)->BaryCenter());
-          // for all the faces of the element
-          for ( size_t face=0U; face<(*it)->Faces(); ++face ) {
-               // constructing a vector from element to face barycenter
-               Point<3U> fbctr((*it)->FaceBaryCenter( face ));
-               Point<3U> outward_vec(fbctr - bctr);
-               // testing that the face unit normal is aligned with the outward
-               // pointing vector
-               (*it)->UnitNormalToFace( face, unrml );
-               Point<3U> unitnormal(unrml);
-               // the normals are aligned if dotproduct is positive
-               double dotproduct = dotProduct( outward_vec, unitnormal );
-               _test( dotproduct > 0. );
-               if ( verbose_ and dotproduct < 0. ) {
-                    cerr <<"\nunit normal to face "<< face <<" is inward pointing:";
-                    (*it)->Out();
-                 }
-            }
-       }
-   
- } // end UnitNormalTest
-  
-  /**
-   Tests pointInVolumeElement:
-   
-   Tests prism_test model because it contains elements of all
-   types.
-   */
-  void Element_Test::PointInVolumeElementTest()
-  {
-    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", true, true, true );
-    
-    Point<3u> query(2434.0f, -1510.0f, 5400.0f);
-    
-    auto& gref = model.Region("Model");
-    
-    auto eend = gref.ElementsEnd();
-    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
-      if (!(*eit)->IsVolumeElement()) {
-        continue;
-      }
-      const Point<3u> bctr = (*eit)->BaryCenter();
-      
-      Element<3u>* e = pointInVolumeElement(gref, bctr);
-      _test(e == *eit);
-    }
-  }
-  
 
-  
+
+
+
+   
   
   
 } //end namespace csmp

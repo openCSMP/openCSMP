@@ -72,7 +72,7 @@ class LocalVariableStorage {
 
     // local variables access
     bool            IsWithinRange( const csmp::Index&, double, double ) const;
-    double        Read    ( const csmp::Index& )                          const;
+    double          Read    ( const csmp::Index& )                          const;
     void            Read    ( const csmp::Index&, ScalarVariable& )         const;
     void            Read    ( const csmp::Index&, VectorVariable<dim>& )    const;
     void            Read    ( const csmp::Index&, TensorVariable<dim>& )    const;
@@ -90,7 +90,7 @@ class LocalVariableStorage {
 
     // integration point variables (will fail at COMPILE TIME when used for storees without integration points)
     bool            IsWithinRange( size_t ip, const csmp::Index&, double, double )  const;
-    double        Read    ( size_t ip, const csmp::Index& )                           const;
+    double          Read    ( size_t ip, const csmp::Index& )                           const;
     void            Read    ( size_t ip, const csmp::Index&, ScalarVariable& )          const;
     void            Read    ( size_t ip, const csmp::Index&, VectorVariable<dim>& )     const;
     void            Read    ( size_t ip, const csmp::Index&, TensorVariable<dim>& )     const;
@@ -108,7 +108,7 @@ class LocalVariableStorage {
 
     // finite volume integration point variables (will fail at COMPILE TIME when used for storees without fv integration points)
     bool            IsWithinRange( size_t sector_or_facet, size_t ip, const csmp::Index&, double, double )  const;
-    double        Read    ( size_t sector_or_facet, size_t ip, const csmp::Index& )                           const;
+    double          Read    ( size_t sector_or_facet, size_t ip, const csmp::Index& )                           const;
     void            Read    ( size_t sector_or_facet, size_t ip, const csmp::Index&, ScalarVariable& )          const;
     void            Read    ( size_t sector_or_facet, size_t ip, const csmp::Index&, VectorVariable<dim>& )     const;
     void            Read    ( size_t sector_or_facet, size_t ip, const csmp::Index&, TensorVariable<dim>& )     const;

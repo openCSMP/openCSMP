@@ -25,6 +25,8 @@ class ModelBasics_Test: public Test {
   private:
      bool TestWriteModelToDiskAndReadBack( bool create_boundaries_from_faces );
      bool TestRebuiltRegionsFromPropertyConstraints();
+     /// tests that 'pointInVolumeElement()'  actually works using 'prism_test'
+     bool PointInVolumeElementTest();
   
   private:
     bool verbose_;

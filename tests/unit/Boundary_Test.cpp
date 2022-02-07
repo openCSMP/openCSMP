@@ -71,6 +71,7 @@ void Boundary_Test::run()
 {
   runLegacy();
   runCurrent();
+  UnitNormalTest3D();
 }
 
 
@@ -81,6 +82,7 @@ void Boundary_Test::ElementNodes( const Region<dim>& region )
   for ( typename vector<Element<dim>*>::const_iterator element( region.ElementsBegin() ); element != elementsEnd; ++element )
     _test( (*element)->Nodes() > 1 );
   }
+
 
 template<size_t dim>
 void Boundary_Test::NoSurfaceElementsAsNodeParents( const Region<dim>& region )
@@ -142,6 +144,7 @@ size_t Boundary_Test::InputElementAreaAsVolumeVariable( Model<dim>& model, Bound
     (*it)->Store( areaKey, area );
     ++surfaceElementCount;
   }
+  
 
   return surfaceElementCount;
   }
@@ -151,6 +154,7 @@ size_t Boundary_Test::InputElementAreaAsVolumeVariable( Model<dim>& model, Bound
 template <size_t dim>
 void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
   {
+
 
   const auto domainElementsEnd( boundary.ElementsEnd() );
   for( auto it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
@@ -200,6 +204,64 @@ void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundar
       }
     _test( inward_pointing_normals == 0 );
   }
+
+
+
+/**
+    Tests FiniteVolumePolicy:
+       - UnitNormalToFace( size_t face, std::vector<double>& );
+ 
+    Tests prism_test model because it contains elements of all
+    types.
+ 
+    @todo 2D model has to be tested as well
+*/
+void Boundary_Test::UnitNormalTest3D()
+ {
+// TODO: create a FiniteVolumePolicy_Test
+     // ------------------------------------------------------------
+     // 1. building model from ANSYS data files
+     // ------------------------------------------------------------
+      string  model_name("prism_test");
+      // TODO: UnitNormalTest does not require any variables; remove property file
+      ANSYS_Model3D  model( model_name.c_str(), "example25.txt");
+
+     // ------------------------------------------------------------
+     // 2. looping over all highest-dimensional elements
+     //    testing whether normals are aligned with vectors
+     //    between barycenter and face barycenters
+     // ------------------------------------------------------------
+     std::vector<double> unrml;
+     const Region<3U>& model_domain(model.Region("Model"));
+     if ( verbose_ ) cout <<"\nElement_Test::UnitNormalTest: testing normal directions...\n";
+     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+       {
+          Point<3U> bctr((*it)->BaryCenter());
+          // for all the faces of the element
+          for ( size_t face=0U; face<(*it)->Faces(); ++face ) {
+               // constructing a vector from element to face barycenter
+               Point<3U> fbctr((*it)->FaceBaryCenter( face ));
+               Point<3U> outward_vec(fbctr - bctr);
+               // testing that the face unit normal is aligned with the outward
+               // pointing vector
+               (*it)->UnitNormalToFace( face, unrml );
+               Point<3U> unitnormal(unrml);
+               // the normals are aligned if dotproduct is positive
+               double dotproduct = dotProduct( outward_vec, unitnormal );
+               _test( dotproduct > 0. );
+               if ( verbose_ and dotproduct < 0. ) {
+                    cerr <<"\nunit normal to face "<< face <<" is inward pointing:";
+                    (*it)->Out();
+                 }
+            }
+       }
+   
+ } // end UnitNormalTest
+
+
+
+
+
 
 
 /// checks for flags of the boundary nodes

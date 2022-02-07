@@ -166,6 +166,9 @@ bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
 /// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
 bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double tolerance=1.0e-5 );
 
+/// detects whether the point is contained in any of the elements of the region
+csmp::Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query );
+
 
 // UTILITIES FOR TESTING ETC
 
