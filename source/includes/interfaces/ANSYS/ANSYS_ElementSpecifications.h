@@ -133,10 +133,10 @@ class ANSYS_ElementSpecifications {
     ANSYS_ElementSpecifications() = delete;
     ~ANSYS_ElementSpecifications() = delete;
 
-    static CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_Type( int8_t ANSYS_finite_element_type, bool isoparametric, uint32_t dim );
-    static CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, uint32_t dim );
-    static std::string    CSMP_TypeNameFrom_ANSYS_Type( int8_t ANSYS_finite_element_type, bool isoparametric, uint32_t dim );
-    static std::string    CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, uint32_t dim );
+    static CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_Type( int8_t ANSYS_finite_element_type, bool isoparametric, size_t dim );
+    static CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, size_t dim );
+    static std::string    CSMP_TypeNameFrom_ANSYS_Type( int8_t ANSYS_finite_element_type, bool isoparametric, size_t dim );
+    static std::string    CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, size_t dim );
 
     static int8_t        ANSYS_Type( const std::string& FEtype );
     static size_t        NodesPerElementOfType( int8_t ANSYS_finite_element_type );

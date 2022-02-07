@@ -188,7 +188,7 @@ void    FiniteElement::CurrentID( size_t id ) { object_id = id; }
 size_t  FiniteElement::CurrentID() const      { return object_id; }
 
 /// initalizing to a value that makes sure that ID does not equal initial element idx
-size_t  FiniteElement::InitialID() { return UINT_MAX; }
+size_t  FiniteElement::InitialID() { return std::numeric_limits<size_t>::max(); }
 
 
 bool  FiniteElement::Isoparametric() const        { return isoparametric; }

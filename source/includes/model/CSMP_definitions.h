@@ -90,19 +90,33 @@ to create images etc.
 /**
 @mainpage About
 
-The Complex Systems Modeling Platform (CSMP++) is an application programmer interface (API) for the simulation of THMC processes and their interactions in
-complex space and time domains trough applicaton of combinations of FEM and FVM methods.
-It was created in 1995 by Stephan K. Matthai and Stephen G. Roberts at Stanford University.
+The Complex Systems Modeling Platform (Open CSMP++) is an application programmer interface (API)
+for the simulation of THMC processes and their interactions in complex space and time domains.
+It primarily relies on combinations of finite element (FEM) and finite volue (FVM) methods for this purpose.
+Open CSMP++  was created as CSP in 1995 by Stephan K. Matthai and Stephen G. Roberts at Stanford University.
 
-CSMP++ has been designed for the simulation of complex physics in geometrically complex and scale-variant domains.
+Open CSMP++ has been designed for the simulation of complex physics in geometrically complex and scale-variant domains.
 Its modular structure aims to support analysis of the emergent properties of the studied system via mathematical simulations.
 Governing PDEs are integrated using FEM and FVM methods and combinations thereof. 
 
-This core library of CSMP++ is  distributed under the L-GPL license for general and including commercial use.
+This core library of Open CSMP++ is  distributed under the L-GPL license for general and including commercial use.
 Until Dezember 2021,  CSMP++ had to be licensed and the official contact point was the Technology Transfer of the ETHZ, Switzerland
 ("Meyns Silke (F&W)" <silke.meyns@sl.ethz.ch>).
 
 */
+
+
+ /**
+     Tests wheter a  size_t   or any other unsigned integer has been assigned a maximum value to signify that it has not been initialised.
+     (example: raw size_t's in CSMP are initialised to UINT_MAX, just as floating point values are initialised to a quiet NaN).
+ */
+ template<typename T>
+ bool constexpr hasDefaultValueForUnassignedInteger( T i ) {
+     static_assert( std::is_integral<T>::value, "hasIntegerUnitialisedDefaultValue: inappropriate argument type for this function." );
+     static_assert( std::is_arithmetic<T>::value, "hasIntegerUnitialisedDefaultValue: inappropriate argument type for this function." );
+     static_assert( std::is_unsigned<T>::value, "hasIntegerUnitialisedDefaultValue: inappropriate argument type for this function." );
+     return ( i == std::numeric_limits<T>::max() );
+  }
 
 
 /**

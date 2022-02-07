@@ -1397,8 +1397,11 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
 
     // now the vset can be resized according to the new information
     std::deque<size_t>  ndele(nelements);
-    for ( size_t i=0U; i<nelements; ++i )
-      ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
+    size_t              n_plist_entries_expected{0};
+    for ( size_t i=0U; i<nelements; ++i ) {
+         ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
+         n_plist_entries_expected += ndele[i];
+      }
     vset.ResizePlist( ndele );
 
     // reading nodes connected to elements 'plist' (unsigned int)
@@ -1406,20 +1409,22 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     // --------------------------------------------------------------
     // reading the size of the plist array
     fread( (void*) &entries, uibytes, 1U, fp );
+    
     assert( entries > 0 );
     assert( entries < ULONG_MAX );
-    if( csmp_error.Verbose() )
-    {
-        std::cout <<"\n\treading "<< nelements <<" nodes-per-element records from 'plist' (size="<< entries <<")..."<< std::endl;
-        std::cout.flush();
-    }
+    assert( entries == n_plist_entries_expected );
+    
+    if ( csmp_error.Verbose() ) {
+          std::cout <<"\n\treading "<< nelements <<" nodes-per-element records from 'plist' (size="<< entries <<")..."<< std::endl;
+          std::cout.flush();
+      }
   
     // reading the plist
     uint32_t*  plist = new uint32_t[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
     std::deque<std::vector<int64_t> >::iterator  it(vset.PlistBegin());
-    size_t                                      nentry(0U);
+    size_t  nentry(0U);
 
     // the elements of the plist (node ids) are assigned
     for ( size_t i=0U; i<nelements; i++, it++ )
@@ -1446,41 +1451,68 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 
     const size_t  ibytes  = sizeof(int32_t);
     const size_t  uibytes = sizeof(uint32_t);
-    int64_t         entries(0);
+    int64_t       entries(0);
 
     // setting up the storage for 'pfverts' in VSet
     const size_t   nelements(vset.ElementTypes());
 
-    // making an array of numbers of neighbors of each element
+    // making an array of with the number of neighbors for each element
     std::deque<size_t>  nbors( nelements );
-    for ( size_t i=0U; i<nelements; ++i )
-      nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
+    size_t              n_pfverts_entries_expected{0};
+    for ( size_t i=0U; i<nelements; ++i ) {
+         assert( vset.ElementType(i) >= -128 );
+         assert( vset.ElementType(i) <=  128 );
+         nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
+         n_pfverts_entries_expected += nbors[i];
+//         std::cout << nbors[i] <<":"<< parseAbbreviated_FE_Type( vset.ElementType(i) ) <<" ";
+      }
+    assert( nbors.size() == vset.Elements() );
     vset.ResizePfverts( nbors );
 
     // reading neighbors connected to elements 'pfverts' (int)
     // -----------------------------------------------------------
     // size of pfverts array
     fread( (void*) &entries, uibytes, 1U, fp );
+    
     assert( entries > 0 );
     assert( entries < ULONG_MAX );
+    
+    if ( entries != n_pfverts_entries_expected ) {
+         std::cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
+         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt");
+      }
     if ( csmp_error.Verbose() ) {
          std::cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< std::endl;
          std::cout.flush();
       }
     if ( entries >= 2147483647 )
       csmp_error.notice( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "too many elements in file to be read by this reader");
+      
     int32_t*  pfverts = new int32_t[ entries ];
     fread( (void*) pfverts, ibytes, entries, fp );
+
+
+// DEBUGGING - what is actually been read
+/*
+std::cerr <<"\npfverts read from ANSYS file:\n";
+for ( size_t i{0}; i<n_pfverts_entries_expected; ++i )
+  std::cerr << pfverts[i] <<" ";
+std::cerr << std::endl;
+*/
 
     // reading the C array into the resized pfverts deque inside VData
     // ---------------------------------------------------------------
     std::deque<std::vector<int64_t> >::iterator it(vset.PfvertsBegin());
-    size_t  nentry(0U);
+    size_t  n_entry(0U);
     for ( size_t i=0; i<nelements; i++, ++it ) {
         // minimum number of neighbors per element
         assert( nbors[i] >= 2 );
-        for ( size_t j=0U; j<nbors[i]; j++ )
-          (*it)[j] = pfverts[nentry++];
+        for ( size_t j=0U; j<nbors[i]; j++ ) {
+             // ignoring extra entries if ANSYS pfverts array is too short
+             // later uses VData::EstablishNeighborConnectivity3D() to fix things up
+             if ( n_entry >= entries ) break;
+             (*it)[j] = pfverts[n_entry++];
+          }
       }
 
     delete[] pfverts;

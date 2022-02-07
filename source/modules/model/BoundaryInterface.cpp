@@ -2007,7 +2007,19 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
            front = collectLowerDimensionalElementsFrom( *model, "FRONT", elmts_to_become_faces );
            back  = collectLowerDimensionalElementsFrom( *model, "BACK", elmts_to_become_faces );
         }
-       
+
+
+// DEBUGGING
+// checking input vector for duplicates (OK for prism_test
+/*
+sort( elmts_to_become_faces.begin(), elmts_to_become_faces.end() );
+bool hasDuplicates = adjacent_find( elmts_to_become_faces.begin(), elmts_to_become_faces.end()) !=
+                                                                                 elmts_to_become_faces.end();
+// contains null pointers ?
+bool hasNullPointer = find( elmts_to_become_faces.begin(), elmts_to_become_faces.end(), nullptr) !=
+                                                                  elmts_to_become_faces.end();
+*/
+
       // 3. getting MeshManager to create faces and delete pre-cursor elements
       // ---------------------------------------------------------------------
       vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
@@ -2137,6 +2149,7 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
                                      "unable to find eligible lower-dimensional regions to create Boundary objects from");
          return set<string>{};
       }
+
 
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------

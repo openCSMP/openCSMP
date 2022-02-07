@@ -2620,7 +2620,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
      std::cout <<"\n\tNon-unique regions of model:\n";
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
-          std::cout <<" "<< (*rit).second.Elements() <<" elements,"<< (*rit).second.Volume();
+          std::cout <<" "<< (*rit).second.Elements() <<" elements,";
           std::pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3 )
             std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();

@@ -1391,7 +1391,7 @@ size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
          else face_key_n.clear();
       }
 
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
  }
 */
 

@@ -6,6 +6,7 @@
  *
  */
 
+#include <type_traits>
 #include "ModelBasics_Test.h"
 
 #include "vsetMakers.h"
@@ -15,6 +16,7 @@
 #include "PropertyConstraints.h"
 #include "VSet.h"
 #include "VTK_Interface.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -52,6 +54,7 @@ void ModelBasics_Test::run()
 
 
 
+
 bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_from_faces )
  {
      VSet<3U>      vset;
@@ -80,11 +83,13 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      double       pmin, pmax;
      restored_model.MinMaxOf( "permeability", pmin, pmax );
      
-     const double tolerance( 1.0e-17 );
-     _equal( pmin, 1.0e-15, tolerance );
-     _equal( pmax, 1.0e-12, tolerance );
+     _test( approximatelyEqual( pmin, 1.0e-15 ) );
+     _test( approximatelyEqual( pmax, 1.0e-12 ) );
      
-     _test( std::numeric_limits<size_t>::max() == UINT_MAX );
+     // testing fundamental assumption made working with default initialisations of 'size_t'
+     size_t default_uint = std::numeric_limits<size_t>::max();
+     _test( default_uint != UINT_MAX ); // should be false because UINT_MAX is not for size_t
+     _test( hasDefaultValueForUnassignedInteger( default_uint ) );
      
      // some visual QC, using VTK
      restored_model.RegionsOut();
@@ -93,7 +98,6 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      
      return true;
  }
- 
  
  
  

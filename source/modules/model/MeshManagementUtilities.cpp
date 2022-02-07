@@ -1899,7 +1899,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                   cerr <<"\n"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
                   issues++;
                }
-             // the valid neighbors should not be corrupt
+             // valid neighbors should not be corrupt
              const long one_billion{1000000000};
              for ( size_t i{0}; i<(*first).Neighbors(); ++i )
                if ( (*first).Neighbor(i) != nullptr ) {

@@ -347,6 +347,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                 this->RemoveBoundary( this->Boundary("Model_Boundary") );
             }
          this->RebuildRegions();
+         this->RegionsOut();
          this->BoundariesOut();
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;

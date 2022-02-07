@@ -1421,15 +1421,10 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
+    else face_ptrs.reserve( n_faces_to_build );
     
     const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
     const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
-    vector<Face<dim>*>               faces; faces.reserve( distance(first,last) );
-    vector<Face<dim>*>               nbor_faces; // empty for now, will be assigned in second pass
-
-    // the established range of lower-dimensional input elements is now indexed consecutively
-    // and their connectivity pattern is remembered for later assignment of faces to their neighbors
-    auto                             erase_it( first );  // iterator copies
 
     vector<typename plf::colony<Element<dim>>::const_iterator>  elmt_iterators;
     elmt_iterators.reserve( distance(first,last) );
@@ -1455,7 +1450,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
              }
         
          // 1.2 collecting pointers to the elements that will be deleted
-         elmt_iterators.emplace_back( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
+         elmt_iterators.emplace_back( elements_.get_iterator( *first) );
          
          // 1.3 simplified construction of Face at model boundary
          bool boundary_face{true};
@@ -1492,22 +1487,22 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
       
      // 2. remove elements replaced by Face objects
      // -------------------------------------------
-// FAIL    elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) ); // DOES NOT WORK YET
-//cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting elements...\n";
+     // (no attention needs to be paid to neighbor connectivity because the whole lower dimensional regions will be removed)
+/*
      while ( erase_it != last )
        {
-          // nulling the connections of neighbor neighbor elements to this element
-          // (neighbor pointer to this element is nulled)
-          detachNeighborsFrom( (*erase_it) );
-          
           // erase element and null the current element pointer
-          //  cerr <<" "<< (*erase_it)->Idx();
-          elements_.erase( elements_.get_iterator( (*erase_it) ) ); // const_cast<Element<dim>* const>(*first)) does not help either
+          elements_.erase( elements_.get_iterator( (*erase_it) ) );
           (*erase_it) = nullptr;
           erase_it++;
        }
-//cerr <<"\n\tremaining elements: "<< elements_.size() << endl;
- 
+*/
+     cout <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size();
+     cout <<") deleting "<< elmt_iterators.size() <<" elements...\n";
+     elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) ); // DOES NOT WORK YET
+     // TODO: elements are not set to nullptr
+
+
      
      // 3. cleaning up the node to parent connectivity
      // ----------------------------------------------
