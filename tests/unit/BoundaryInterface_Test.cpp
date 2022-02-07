@@ -44,9 +44,8 @@ void BoundaryInterface_Test::run()
       const bool irregular_mesh(true);
       const bool binary_file(true);
       const bool use_regions_file(true);
-      const bool create_boundaries(true);
 
-      ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+      ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
       printModelDimensions(model, true);
 
       /// assuming a dim-1 region, label and count material juxtaposition relationships
@@ -258,10 +257,9 @@ void BoundaryInterface_Test::TestBoxShapedModel()
       const bool irregular_mesh(false);
       const bool binary_file(true);
       const bool use_regions_file(true);
-      const bool create_boundaries(true);
 
       ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt",
-                           irregular_mesh, binary_file, use_regions_file, create_boundaries );
+                           irregular_mesh, binary_file, use_regions_file );
 
  } // end TestBoxShapedModel
 

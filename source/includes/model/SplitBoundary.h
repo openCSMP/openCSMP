@@ -123,6 +123,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( MeshManager<dim>&, Boundary<dim>& );
   
+    /// reestablishes the pointers to the nodes associated with the stored elements
+    void CreateNodePointerVector();
+
     // ----------------------------------------
     // user interface
     // ----------------------------------------
@@ -161,9 +164,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     void Out() const;
 
   protected:
-
-    /// reestablishes the pointers to the nodes associated with the stored elements
-    void CreateNodePointerVector();
 
     /// return physical variable count at given integration points
     IntegrationPointVariables  InterFaceIntegrationPointVariables() const;

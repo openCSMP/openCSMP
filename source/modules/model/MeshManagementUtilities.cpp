@@ -148,6 +148,33 @@ template size_t findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>
 
 
 
+/** loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
+ */
+template<size_t dim, template<size_t> class CELL>
+void detachNeighborsFrom( CELL<dim>* const eptr )
+ {
+    // nulling the connections of neighbor neighbor elements to this element
+    // (neighbor pointer to this element is nulled)
+    for ( size_t i{0}; i<eptr->Neighbors(); ++i )
+      if ( eptr->Neighbor(i) != nullptr )
+        for ( size_t j{0}; j<eptr->Neighbor(i)->Neighbors(); ++j )
+        if ( eptr->Neighbor(i)->Neighbor(j) == eptr )
+          eptr->Neighbor(i)->Neighbor(j)->Unassign( eptr );
+ }
+
+template void detachNeighborsFrom( Element<1>* const );
+template void detachNeighborsFrom( Element<2>* const );
+template void detachNeighborsFrom( Element<3>* const );
+
+template void detachNeighborsFrom( Face<1>* const );
+template void detachNeighborsFrom( Face<2>* const );
+template void detachNeighborsFrom( Face<3>* const );
+
+template void detachNeighborsFrom( InterFace<1>* const );
+template void detachNeighborsFrom( InterFace<2>* const );
+template void detachNeighborsFrom( InterFace<3>* const );
+
+
 
 /**
       Traversing mesh to find patches that cannot be reached by neighborhood traversal.
@@ -846,7 +873,7 @@ To break regions into contiguous subdomains.
 
 */
 template<size_t dim>
-void floodFill( Element<dim>* const eptr, set<Element<dim>* const>& elements_contiguous_subset )
+void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
@@ -894,9 +921,9 @@ void floodFill( Element<dim>* const eptr, set<Element<dim>* const>& elements_con
  } // end floodFill
 
 
-template void floodFill( Element<1U>* const, set<Element<1U>* const>& );
-template void floodFill( Element<2U>* const, set<Element<2U>* const>& );
-template void floodFill( Element<3U>* const, set<Element<3U>* const>& );
+template void floodFill( Element<1U>* const, set<Element<1U>*>& );
+template void floodFill( Element<2U>* const, set<Element<2U>*>& );
+template void floodFill( Element<3U>* const, set<Element<3U>*>& );
 
 
 
@@ -1872,7 +1899,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                   cerr <<"\n"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
                   issues++;
                }
-             // the valid neighbors should not be corrupt
+             // valid neighbors should not be corrupt
              const long one_billion{1000000000};
              for ( size_t i{0}; i<(*first).Neighbors(); ++i )
                if ( (*first).Neighbor(i) != nullptr ) {
@@ -2059,6 +2086,95 @@ bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* cons
 template bool interPenetrating( const Element<3>* const, const Element<3>* const );
 template bool interPenetrating( const Element<2>* const, const Element<2>* const );
 template bool interPenetrating( const Element<1>* const, const Element<1>* const );
+
+
+/**
+@brief Find element which contains a given point.
+
+Note that this only searches volumetric elements. It is not recommended
+that you use this function if you need to search for many points. It also
+may not work if any elements are concave (possible in the case of hexahedra).
+
+@author  A.J. Bromage
+@date    11/04/2018
+
+@param [in] region  region to search
+@param [in] query   query point
+
+@return  the element which contains the point, or NULL if no element does
+
+*/
+Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query )
+    {
+      std::vector<size_t> fnids;
+      fnids.reserve(4);
+
+      const auto eend = region.ElementsEnd();
+      for (auto eit = region.ElementsBegin(); eit != eend; ++eit) {
+
+        // 1. Volume elements only
+        
+        if (!(*eit)->IsVolumeElement()) continue;
+
+        // 2. Test against axis-aligned bounding box
+
+        double minx = +std::numeric_limits<double>::max();
+        double miny = +std::numeric_limits<double>::max();
+        double minz = +std::numeric_limits<double>::max();
+        double maxx = -std::numeric_limits<double>::max();
+        double maxy = -std::numeric_limits<double>::max();
+        double maxz = -std::numeric_limits<double>::max();
+        const size_t iNrNodes = (*eit)->Nodes();
+        for ( size_t iNode = 0; iNode < iNrNodes; ++iNode ) {
+          auto n = (*eit)->N(iNode);
+          minx = std::min(minx, n->x());
+          maxx = std::max(maxx, n->x());
+          miny = std::min(miny, n->y());
+          maxy = std::max(maxy, n->y());
+          minz = std::min(minz, n->z());
+          maxz = std::max(maxz, n->z());
+        }
+
+        if (query[0] < minx || query[0] > maxx
+            || query[1] < miny || query[1] > maxy
+            || query[2] < minz || query[2] > maxz) {
+          continue;
+        }
+
+        // 3. Test against all faces
+
+        bool reject = false;
+        auto fe = (*eit)->FE();
+        const size_t iNrFaces = (*eit)->Faces();
+        for (size_t iFace = 0; iFace < iNrFaces && !reject; ++iFace) {
+          fe->NodesOfFace(iFace, fnids);
+          const size_t iNrFacePts = fnids.size();
+          for (size_t iFacePt = 0; iFacePt < iNrFacePts; iFacePt += 2) {
+            auto p0 = (*eit)->N(fnids[(iFacePt+0) % iNrFacePts])->Coordinate();
+            auto p1 = (*eit)->N(fnids[(iFacePt+1) % iNrFacePts])->Coordinate();
+            auto p2 = (*eit)->N(fnids[(iFacePt+2) % iNrFacePts])->Coordinate();
+
+            auto normal = crossProduct(p2-p0, p1-p0);
+            normal.NormalizeLengthTo(1.0f);
+            const double queryDotNormal = dotProduct(query, normal);
+            const double p0DotNormal = dotProduct(p0, normal);
+
+            if (queryDotNormal < p0DotNormal) {
+              reject = true;
+              break;
+            }
+          }
+        }
+        if (!reject) {
+          return *eit;
+        }
+        fnids.clear();
+      }
+
+      return 0;
+    
+  } // end pointInVolumeElement
+
 
 
 } // end csmp

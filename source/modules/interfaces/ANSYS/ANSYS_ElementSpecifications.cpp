@@ -880,12 +880,12 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
 */
-std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_Type( int8_t etype, bool isoparametric, uint32_t dim )
+std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_Type( int8_t etype, bool isoparametric, size_t dim )
 {
     return parseFiniteElementType( CSMP_TypeFrom_ANSYS_Type( etype, isoparametric, dim ) );
 }
 
-std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& etype, bool isoparametric, uint32_t dim )
+std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& etype, bool isoparametric, size_t dim )
 {
     return parseFiniteElementType( CSMP_TypeFrom_ANSYS_TypeName( etype, isoparametric, dim ) );
 }
@@ -938,7 +938,7 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
  */
-CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int8_t etype, bool isoparametric, uint32_t dim )
+CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int8_t etype, bool isoparametric, size_t dim )
  {
     if ( isoparametric ) {
 	    // bar elements
@@ -1027,7 +1027,7 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
  */
-CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_element_type, bool isoparametric, uint32_t dim )
+CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_element_type, bool isoparametric, size_t dim )
  {
     string etype(ANSYS_element_type);
  

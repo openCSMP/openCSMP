@@ -46,6 +46,10 @@ namespace csmp {
     void test_Create_Pyramid_Hexa_VSet( VSet<3U>&, bool bSkewed=false );
 
     void test_Create_Prism_Hexa_VSet( VSet<3U>&, bool bSkewed=false );
+    
+    // more complex models created externally but available as VSets
+    // -------------------------------------------------------------
+    void test_Create_FracBox( VSet<3U>&, ModelTopology&  );
 }
 
 #endif

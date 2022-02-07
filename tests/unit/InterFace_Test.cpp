@@ -57,9 +57,12 @@ void InterFace_Test::Assign_tests(){
     size_t faceID_of_e2 = 1;
 
     //Interface Construction
+    // ---------------------
+    // simplemost
     IsoparametricLinearLineElement face_FE;
-    InterFace<2> if_obj0( &face_FE, nullptr ), if_obj1( &face_FE, nullptr ),
-                 if_obj2( &face_FE, nullptr ), if_obj3( &face_FE, nullptr );
+    FiniteVolumeStencil<2>         line_stencil("ISOPARAMETRIC_LINEAR_BAR");
+    InterFace<2> if_obj0( &face_FE, &line_stencil ), if_obj1( &face_FE, &line_stencil ),
+                 if_obj2( &face_FE, &line_stencil ), if_obj3( &face_FE, &line_stencil );
 
 
     ///Beginning Use and Tests
@@ -164,7 +167,8 @@ void InterFace_Test::Geometry_tests(){
 
     //Construc InterFace objects
     IsoparametricLinearLineElement face_FE;
-    InterFace<2> if_obj0( &face_FE, nullptr), if_obj1( &face_FE, nullptr), if_obj2( &face_FE, nullptr);
+    FiniteVolumeStencil<2>         line_stencil("ISOPARAMETRIC_LINEAR_BAR");
+    InterFace<2> if_obj0( &face_FE, &line_stencil ), if_obj1( &face_FE, &line_stencil ), if_obj2( &face_FE, &line_stencil );
 
     //Assign 0
     if_obj0.Assign(&e1, &e2, true);

@@ -49,8 +49,7 @@ void ErrorMetric_Example::Run()
     const bool irregular_mesh(false);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool create_boundaries(true);
-    ANSYS_Model3D  model( model_name.c_str(), "example25.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    ANSYS_Model3D  model( model_name.c_str(), "example25.txt", irregular_mesh, binary_file, use_regions_file );
 
     printModelDimensions( model, true );
 

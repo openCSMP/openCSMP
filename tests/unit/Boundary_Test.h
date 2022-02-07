@@ -36,6 +36,9 @@ private:
 
   template<size_t dim>
   void CheckFaceUnitNormalOrientation( const Boundary<dim>& boundary );
+  
+  /// using prism_test because it has a host of element types
+  void UnitNormalTest3D();
 
   template<size_t dim>
   void CheckNodeParents( const Boundary<dim>& boundary );

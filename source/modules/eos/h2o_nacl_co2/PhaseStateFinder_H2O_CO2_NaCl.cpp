@@ -106,7 +106,7 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
             massAqueousPhase_   = total_mass;
             massCarbonicPhase_  = 0.0;
             massHalite_         = 0.0;
-            rho_aq_    = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, 0. ),xco2);
+            rho_aq_    = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, 0. ),bulk_xco2);
             mu_aq_     = eos.mu_AqueousPhase( p, t, 0. );
             beta_aq_   = eos.C_AqueousPhase(p,t,0.);
             X_h2o_     = bulk_xh2o*molar_mass_h2o;

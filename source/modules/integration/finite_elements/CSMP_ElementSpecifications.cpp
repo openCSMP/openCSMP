@@ -655,7 +655,7 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int8_t etype )
 
     std::cerr <<"\nCSMP_ElementSpecifications::NodesPerElementOfType: ";
     std::cerr <<"unable to parse element type, returning 0"<< std::endl;
-    return ULONG_MAX; // unknown element type
+    return std::numeric_limits<size_t>::max(); // unknown element type
 
  } // end
 
@@ -722,7 +722,7 @@ size_t CSMP_ElementSpecifications::SegmentsPerElementOfType( int8_t etype )
 
     std::cerr <<"\nCSMP_ElementSpecifications::SegmentsPerElementOfType: ";
     std::cerr <<"unable to parse element type, returning 0"<< std::endl;
-    return ULONG_MAX; // unknown element type
+    return std::numeric_limits<size_t>::max(); // unknown element type
  } // end
 
 
@@ -741,12 +741,6 @@ size_t CSMP_ElementSpecifications::FacesPerElementOfType( int8_t CSMP_finite_ele
 */
 size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
  {
-    // bar
-    if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR ||
-         etype == ISOPARAMETRIC_QUADRATIC_BAR || etype == QUADRATIC_BAR ||
-         etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
-        return 2U;
-
     // tetrahedron
     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype == LINEAR_TETRAHEDRON ||
          etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON || etype == QUADRATIC_TETRAHEDRON ||
@@ -794,9 +788,16 @@ size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
          etype == ISOPARAMETRIC_CUBIC_PYRAMID )
         return 5U;
 
+    // bar
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR ||
+         etype == ISOPARAMETRIC_QUADRATIC_BAR || etype == QUADRATIC_BAR ||
+         etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
+        return 2U;
+
     std::cerr <<"\nCSMP_ElementSpecifications::NeighborsPerElementOfType: ";
     std::cerr <<"unable to parse element type, returning 0"<< std::endl;
-    return ULONG_MAX; // unknown element type
+    return std::numeric_limits<size_t>::max(); // unknown element type
+    
  } // end
 
 
@@ -942,7 +943,7 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
 
     std::cerr <<"\nCSMP_ElementSpecifications::NodesPerFaceForElementOfType: ";
     std::cerr <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
-    return ULONG_MAX; // unknown number of faces
+    return std::numeric_limits<size_t>::max(); // unknown number of faces
 
  } // end NodesPerFaceForElementOfType
 
@@ -1504,7 +1505,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int8_t etype,
                             "pyramid elements with quadratic or cubic interpolation functions are not handled yet");
       }
 
-    return ULONG_MAX;
+    return std::numeric_limits<size_t>::max();
 
  } // end FaceNodeForElementOfType
 

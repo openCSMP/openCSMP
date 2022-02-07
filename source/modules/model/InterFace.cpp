@@ -146,15 +146,21 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
 
 
 
-
-template<size_t dim>
-InterFace<dim>::~InterFace()
- {
+/**
+        Before destructing an InterFace make sure:
+        
     // disconnecting the neighbor interfaces that are connected to this element
     if ( !interface_connector_.empty() )
       for ( auto& it : interface_connector_ )
         if ( it != nullptr  && !it->interface_connector_.empty() )
           it->Unassign( this );
+          
+          and update the NodeManifolds.
+
+*/
+template<size_t dim>
+InterFace<dim>::~InterFace()
+ {
  }
 
 

@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-#define CATCH_CONFIG_RUNNER
-#define RUNNING_UNDER_CATCH // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
+//#define CATCH_CONFIG_RUNNER
+//#define RUNNING_UNDER_CATCH // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
 
 #include "Test.h" // includes catch.hpp
 #include "TestSuite.h"
@@ -42,6 +42,7 @@
 #include "Element_Test.h"
 #include "Face_Test.h"
 #include "InterFace_Test.h"
+#include "Colony_Test.h"
 #include "MeshManager_Test.h"
 
 #include "FiniteElement_Test.h"
@@ -82,7 +83,7 @@
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 
-#include "BinaryFileInterface_Test.h"
+// #include "BinaryFileInterface_Test.h"
 #include "VTU_Interface_Test.h"
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"
@@ -157,8 +158,10 @@ using namespace csmp;
      - after Boundary construction, the parent regions are moved to non-unique, but are kept, is this what we want?
 */
 
-TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
- {
+//TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
+// {
+int main()
+  {
   const bool verbose(false);
 
   const bool test_fundamentals(true),
@@ -192,6 +195,7 @@ TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
       basic.addTest( new Index_Test());
       basic.addTest( new Parameter_Test());
       basic.addTest( new PropertyData_Test());
+      basic.addTest( new Colony_Test());
       
       // Model
       basic.addTest( new Node_Test() );
@@ -202,7 +206,7 @@ TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
       basic.addTest( new Region_Test(false) );          
       basic.addTest( new BoundaryInterface_Test(false) ); 
       //mesh manager    
-      basic.addTest(new MeshManager_Test(true));
+      basic.addTest(new MeshManager_Test());
       basic.addTest(new BoundaryInterface_Test(true));
       basic.addTest(new Boundary_Test());
 //      basic.addTest(new SplitBoundaryInterface_Test());
@@ -296,7 +300,7 @@ TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
       interdependent2.addTest( new ANSYS_Model3D_Test() );        // XCode OK (SKM)
       interdependent2.addTest( new PropertyHandle_Test() );       // XCode OK (SKM)
       // interfaces
-      interdependent2.addTest( new BinaryFileInterface_Test() );  // XCode OK (SKM)
+//      interdependent2.addTest( new BinaryFileInterface_Test() );  // XCode OK (SKM)
       interdependent2.addTest( new VTU_Interface_Test() );
       interdependent2.addTest( new StatisticalAnalyzer_Test() );
       // running unit tests and reporting errors
@@ -448,13 +452,14 @@ TEST_CASE("CSMP unit tests", "[CSMP unit tests]")
   
   std::exit(total_failures);
 
-} // end TEST_CASE
+} // end main // TEST_CASE
 
 
 
 // -----------------------------------------
 // RUNNING THE SUITES OF TESTS THROUGH CATCH
 // -----------------------------------------
+/*
 int main(int argc, char* argv[])
 {
   Catch::Session session;
@@ -467,4 +472,4 @@ int main(int argc, char* argv[])
   // Run Catch tests.
   session.run();
 } // end main
-
+*/

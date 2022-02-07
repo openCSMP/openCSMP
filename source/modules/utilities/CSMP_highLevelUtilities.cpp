@@ -130,10 +130,10 @@ size_t  findNode( const Model<3U>& sg, double nx, double ny, double nz,
  
     stringstream  out("The targeted node with the coordinate (x,y,z): ");
     out << nx <<" "<< ny <<" "<< nz <<" could not be found; ";
-    out <<" returning node index="<< UINT_MAX << endl;
+    out <<" returning node index="<< std::numeric_limits<size_t>::max() << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
      
 } // end find_node
 
@@ -155,7 +155,7 @@ size_t  findNode( const Model<2U>& sg, double nx, double ny,
     out <<" returning node index="<< UINT_MAX << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
      
 } // end find_node
 
@@ -173,7 +173,7 @@ size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
     out <<" returning node index="<< UINT_MAX << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
      
 } // end find_node
 
@@ -1191,92 +1191,6 @@ char * strptime(const char *s, const char *format, struct tm *tm)
 #endif // _MSC_VER
 
 
-
-/**
- @brief Find element which contains a given point.
-
- Note that this only searches volumetric elements. It is not recommended
- that you use this function if you need to search for many points.
-
- @author  A.J. Bromage
- @date    11/04/2018
-
- @param [in] region  region to search
- @param [in] query   query point
-
- @return  the element which contains the point, or NULL if no element does
- */
-Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query )
-    {
-      std::vector<size_t> fnids;
-      fnids.reserve(4);
-
-      auto eend = region.ElementsEnd();
-      for (auto eit = region.ElementsBegin(); eit != eend; ++eit) {
-
-        // 1. Volume elements only
- 
-        if (!(*eit)->IsVolumeElement()) {
-          continue;
-        }
-
-        // 2. Test against axis-aligned bounding box
-
-        double minx = +std::numeric_limits<double>::max();
-        double miny = +std::numeric_limits<double>::max();
-        double minz = +std::numeric_limits<double>::max();
-        double maxx = -std::numeric_limits<double>::max();
-        double maxy = -std::numeric_limits<double>::max();
-        double maxz = -std::numeric_limits<double>::max();
-        const size_t iNrNodes = (*eit)->Nodes();
-        for ( size_t iNode = 0; iNode < iNrNodes; ++iNode ) {
-          auto n = (*eit)->N(iNode);
-          minx = std::min(minx, n->x());
-          maxx = std::max(maxx, n->x());
-          miny = std::min(miny, n->y());
-          maxy = std::max(maxy, n->y());
-          minz = std::min(minz, n->z());
-          maxz = std::max(maxz, n->z());
-        }
-
-        if (query[0] < minx || query[0] > maxx
-            || query[1] < miny || query[1] > maxy
-            || query[2] < minz || query[2] > maxz) {
-          continue;
-        }
-
-        // 3. Test against all faces
-
-        bool reject = false;
-        auto fe = (*eit)->FE();
-        const size_t iNrFaces = (*eit)->Faces();
-        for (size_t iFace = 0; iFace < iNrFaces && !reject; ++iFace) {
-          fe->NodesOfFace(iFace, fnids);
-          const size_t iNrFacePts = fnids.size();
-          for (size_t iFacePt = 0; iFacePt < iNrFacePts; iFacePt += 2) {
-            auto p0 = (*eit)->N(fnids[(iFacePt+0) % iNrFacePts])->Coordinate();
-            auto p1 = (*eit)->N(fnids[(iFacePt+1) % iNrFacePts])->Coordinate();
-            auto p2 = (*eit)->N(fnids[(iFacePt+2) % iNrFacePts])->Coordinate();
-
-            auto normal = crossProduct(p2-p0, p1-p0);
-            normal.NormalizeLengthTo(1.0f);
-            const double queryDotNormal = dotProduct(query, normal);
-            const double p0DotNormal = dotProduct(p0, normal);
-
-            if (queryDotNormal < p0DotNormal) {
-              reject = true;
-              break;
-            }
-          }
-        }
-        if (!reject) {
-          return *eit;
-        }
-        fnids.clear();
-      }
-
-      return 0;
-    }
 
 
 

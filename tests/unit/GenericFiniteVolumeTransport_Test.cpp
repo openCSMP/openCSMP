@@ -439,7 +439,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          cross_section[(*it)->Idx()] = csa * 0.5;
      }
  
-     for ( auto pit = model_domain.PerimeterNodesBegin(); pit != model_domain.PerimeterNodesEnd(); ++pit )
+     for ( auto pit = model_domain.PerimeterNodesBegin(); pit != model_domain.NodesEnd(); ++pit )
      {
          _test( (*pit)->Idx() < model_domain.Nodes() );
          cross_section[(*pit)->Idx()] = 0.;
@@ -583,7 +583,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
      
      std::cerr << "maxtheta = " << maxtheta << '\n';
      
-     for ( auto pit = model_domain.PerimeterNodesBegin(); pit != model_domain.PerimeterNodesEnd(); ++pit )
+     for ( auto pit = model_domain.PerimeterNodesBegin(); pit != model_domain.NodesEnd(); ++pit )
      {
          _test( (*pit)->Idx() < model_domain.Nodes() );
          flux_balance_physical[(*pit)->Idx()] = 0.;

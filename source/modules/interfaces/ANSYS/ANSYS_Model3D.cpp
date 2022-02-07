@@ -26,19 +26,15 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               const char* variable_file,
                               bool irregular_mesh,
                               bool binary_file,
-                              bool use_regions_file,
-                              bool create_boundaries,
-                              bool create_splitboundaries )
+                              bool use_regions_file )
   : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
-  Initialize( icem_file_set,
-              regions_file_prefix,
-              irregular_mesh,
-              binary_file,
-              use_regions_file,
-              create_boundaries,
-              create_splitboundaries );
+  InitializeANSYS( icem_file_set,
+                  regions_file_prefix,
+                  irregular_mesh,
+                  binary_file,
+                  use_regions_file );
 }
 
 /**
@@ -53,20 +49,16 @@ ANSYS_Model3D::ANSYS_Model3D( bool isoparametric,
                               const char* variable_file,
                               bool irregular_mesh,
                               bool binary_file,
-                              bool use_regions_file,
-                              bool create_boundaries,
-                              bool create_splitboundaries )
+                              bool use_regions_file )
   : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
-  Initialize( isoparametric,
-              icem_file_set,
-              icem_file_set,
-              irregular_mesh,
-              binary_file,
-              use_regions_file,
-              create_boundaries,
-              create_splitboundaries );
+  InitializeANSYS( isoparametric,
+                  icem_file_set,
+                  icem_file_set,
+                  irregular_mesh,
+                  binary_file,
+                  use_regions_file );
 }
 /**
 Default constructor of Model is called. Then the model is build
@@ -78,19 +70,15 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               const char* variable_file,
                               bool irregular_mesh,
                               bool binary_file,
-                              bool use_regions_file,
-                              bool create_boundaries,
-                              bool create_splitboundaries )
+                              bool use_regions_file )
   : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
-  Initialize( icem_file_set,
-              icem_file_set,
-              irregular_mesh,
-              binary_file,
-              use_regions_file,
-              create_boundaries,
-              create_splitboundaries );
+  InitializeANSYS( icem_file_set,
+                  icem_file_set,
+                  irregular_mesh,
+                  binary_file,
+                  use_regions_file );
 }
 
 
@@ -107,18 +95,14 @@ Uses the method Initialize.
 ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                               bool irregular_mesh,
                               bool binary_file,
-                              bool use_regions_file,
-                              bool create_boundaries,
-                              bool create_splitboundaries )
+                              bool use_regions_file )
 {
   this->Name( icem_file_set );
-  Initialize( icem_file_set,
-              icem_file_set,
-              irregular_mesh,
-              binary_file,
-              use_regions_file,
-              create_boundaries,
-              create_splitboundaries );
+  InitializeANSYS( icem_file_set,
+                  icem_file_set,
+                  irregular_mesh,
+                  binary_file,
+                  use_regions_file );
 }
 
 
@@ -150,14 +134,12 @@ The initialisation process involves the following steps:
 @attention per default isoparametric is true and the connectivity information
 between the elements from ANSYS is not used, but this data is recreated
 */
-void ANSYS_Model3D::Initialize( bool isoparametric,
-                                const char* mesh_file_set,
-                                const char* regions_file_prefix,
-                                bool irregular_mesh,
-                                bool binary_input_file,
-                                bool use_regions_file,
-                                bool create_boundaries,
-                                bool create_splitboundaries )
+void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
+                                      const char* mesh_file_set,
+                                      const char* regions_file_prefix,
+                                      bool irregular_mesh,
+                                      bool binary_input_file,
+                                      bool use_regions_file )
 {
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
@@ -203,13 +185,12 @@ void ANSYS_Model3D::Initialize( bool isoparametric,
       Model<3U>::Initialize( regions_file_prefix,
                              mesh_topology,
                              vset,
-                             create_boundaries,
-                             create_splitboundaries,
+                             true, // create boundaries
                              irregular_mesh );
     else
       Model<3U>::Initialize( mesh_topology,
                              vset,
-                             create_boundaries,
+                             true, // create_boundaries
                              irregular_mesh );
   }
 
@@ -263,13 +244,11 @@ void ANSYS_Model3D::Initialize( bool isoparametric,
 } // end Initialize
 
 
-void ANSYS_Model3D::Initialize( const char* mesh_file_set,
-                                const char* regions_file_prefix,
-                                bool irregular_mesh,
-                                bool binary_input_file,
-                                bool use_regions_file,
-                                bool create_boundaries,
-                                bool create_splitboundaries )
+void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
+                                      const char* regions_file_prefix,
+                                      bool irregular_mesh,
+                                      bool binary_input_file,
+                                      bool use_regions_file )
 {
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
@@ -321,13 +300,12 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
       Model<3U>::Initialize( regions_file_prefix,
                              mesh_topology,
                              vset,
-                             create_boundaries,
-                             create_splitboundaries,
+                             true, // create_boundaries
                              irregular_mesh );
     else
       Model<3U>::Initialize( mesh_topology,
                              vset,
-                             create_boundaries,
+                             true, // create_boundaries
                              irregular_mesh );
 
   }

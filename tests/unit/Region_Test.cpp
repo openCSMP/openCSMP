@@ -510,7 +510,7 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
      Region<3>&  domain(model.Region(region));
      for ( auto nit=domain.NodesBegin(); nit!=domain.PerimeterNodesBegin(); nit++ ) interior_nodes.insert( (*nit) );
      for ( auto nit=domain.PerimeterNodesBegin(); nit!=domain.NodesEnd(); nit++ )   perimeter_nodes.insert( (*nit) );
-     for ( auto eit=domain.ElementsBegin(); eit!=domain.PerimeterElementsEnd(); eit++ ) interior_elements.insert( (*eit) );
+     for ( auto eit=domain.ElementsBegin(); eit!=domain.PerimeterElementsBegin(); eit++ ) interior_elements.insert( (*eit) );
      for ( auto eit=domain.PerimeterElementsBegin(); eit!=domain.ElementsEnd(); eit++ ) perimeter_elements.insert( (*eit) );
    
      size_t n_perimeter_nodes(domain.PerimeterNodes());
@@ -539,7 +539,7 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
 
      for ( auto nit=domain2.NodesBegin(); nit!=domain2.PerimeterNodesBegin(); nit++ ) interior_nodes2.insert( (*nit) );
      for ( auto nit=domain2.PerimeterNodesBegin(); nit!=domain2.NodesEnd(); nit++ )   perimeter_nodes2.insert( (*nit) );
-     for ( auto eit=domain2.ElementsBegin(); eit!=domain2.PerimeterElementsEnd(); eit++ ) interior_elements2.insert( (*eit) );
+     for ( auto eit=domain2.ElementsBegin(); eit!=domain2.PerimeterElementsBegin(); eit++ ) interior_elements2.insert( (*eit) );
      for ( auto eit=domain2.PerimeterElementsBegin(); eit!=domain2.ElementsEnd(); eit++ ) perimeter_elements2.insert( (*eit) );
    
      size_t n_perimeter_nodes2(domain2.PerimeterNodes());

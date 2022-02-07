@@ -94,7 +94,7 @@ void SplitBoundary_Example::Run()
   // Ansys model
   const string model_name("BoxHalfs2D");
   ANSYS_Model2D ansys_model("BoxHalfs2D", "BoxHalfs2D", "THMC_shear_zone-variables.txt",
-                             irregular_mesh, binary_file, use_regions_file, create_boundaries, create_splitboundaries );
+                             irregular_mesh, binary_file, use_regions_file );
                              
   // testing region insertion here
   Region<2> region1_before(ansys_model.Region("MATRIX_RIGHT"));

@@ -89,8 +89,8 @@ void ModelSubDomain_Test::run()
          ANSYS_Model3D model1( "cube_flag", "CSMP-variables.txt",
                                  false, /* irregular_mesh */
                                  true,  /* binary_file */
-                                 true,  /* use_regions_file */
-                                 true   /* create_boundaries */ );
+                                 true  /* use_regions_file */
+                             );
         
          // loop over model boundary verifying consistency between AtBoundary() and region flags
          bool left_fail(false), right_fail(false), bottom_fail(false), top_fail(false), front_fail(false), back_fail(false);
@@ -295,8 +295,8 @@ void ModelSubDomain_Test::run()
          ANSYS_Model3D model1( "prism_test", "CSMP-variables.txt",
                                  false, /* irregular_mesh */
                                  true,  /* binary_file */
-                                 true,  /* use_regions_file */
-                                 true   /* create_boundaries */ );
+                                 true  /* use_regions_file */
+                             );
         
          model1.OutputToBinaryFile("ModelSubDomain_Test3");
          Model<3U>  model2( string("ModelSubDomain_Test3") );

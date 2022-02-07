@@ -2,9 +2,14 @@
 #define PROPERTY_CONSTRAINTS_H
 
 #include "CSMP_definitions.h"
-#include "Element.h"
 
 namespace csmp {
+
+template<size_t> class Element;
+template<size_t> class Face;
+template<size_t> class InterFace;
+template<size_t> class Node;
+template<size_t> class PropertyDatabase;
 
 /**
     @brief PropertyConstraints permits to combine multiple criteria on the 
@@ -31,44 +36,45 @@ class PropertyConstraints {
     size_t  Constraints() const;
     void    CheckLengthOfVectorVariables( bool check );
     
-    // default: void SatisfyConstraintsForAllNodes( bool satisfy );
-    void SatisfyConstraintsForAtLeastOneNode( bool satisfy );
-    void SatisfyConstraintsForNodalAverage( bool satisfy );
-
     bool AddConstraint( const char* prop_name, double pmin, double pmax );
     void ChangeConstraint( const char* prop_name, double pmin, double pmax );
 
     template<size_t dim>
-    bool InitializePropertyIndices( const PropertyDatabase<dim>& pref ); 
+    bool InitializePropertyIndices( const PropertyDatabase<dim>& );
 
     template<size_t dim>
-    void DeleteConstraint( const PropertyDatabase<dim>& pref, const char* prop_name );
+    void DeleteConstraint( const PropertyDatabase<dim>&, const char* prop_name );
     
-    template<size_t dim>
-    bool CheckConstraints( const Element<dim>& e ) const;
+    template<size_t dim, template<size_t> class CELL>
+    bool CheckConstraints( const CELL<dim>* const ) const;
     
-    template<size_t dim>
-    bool CheckConstraints( const Element<dim>& e, Index& idx ) const;
+    template<size_t dim, template<size_t> class CELL>
+    bool CheckConstraints( const CELL<dim>* const, Index& idx ) const;
     
+    // default: void SatisfyConstraintsForAllNodes( bool satisfy );
+    void SatisfyConstraintsForAtLeastOneNode( bool satisfy );
+    void SatisfyConstraintsForNodalAverage( bool satisfy );
+
     void Erase();
+    
     void Out() const;
   
   private:
+    template<size_t dim, template<size_t> class CELL>
+    bool CheckSingleNodeConstraints( const CELL<dim>* const ) const;
+    
+    template<size_t dim, template<size_t> class CELL>
+    bool CheckNodeAverageConstraints( const CELL<dim>* const ) const;
+    
+    template<size_t dim, template<size_t> class CELL>
+    bool VectorLengthCheck( const CELL<dim>* const,
+                            const csmp::Index&, double vmin, double vmax ) const;
+
     std::map<std::string,std::pair<double,double> >  criteria;
     std::map<Index,std::pair<double,double> >        check_list;
-    bool                                                   vector_length_check;
-    bool                                                   one_node_only;
-    bool                                                   nodal_average;
-
-    template<size_t dim>
-    bool CheckSingleNodeConstraints( const Element<dim>& e ) const;
-    
-    template<size_t dim>
-    bool CheckNodeAverageConstraints( const Element<dim>& e ) const;
-    
-    template<size_t dim>
-    bool VectorLengthCheck( const Element<dim>& e, 
-                            const csmp::Index& idx, double vmin, double vmax ) const;
+    bool                                             vector_length_check = true;  ///< for VectorVariable uses length as constraint
+    bool                                             one_node_only       = false; ///< will include elements even if only a single node falls into range
+    bool                                             nodal_average       = false; ///< will use the average of node properties to apply constraints
 };
 
 } // csmp

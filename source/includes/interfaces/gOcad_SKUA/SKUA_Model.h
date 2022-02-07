@@ -29,10 +29,7 @@ public:
   /// also loads -regions file using prefix from the configuration file
   SKUA_Model( const char* input_file_set,
               const char* variable_file,
-              bool binary_file = true,             ///< true = binary, false = ascii */
-              bool use_regions_file = true,        ///< true = reduce regions according to regions file, false = does not redure regions
-              bool create_boundaries = true,       ///< true = creates boundaries around model, false = does not create boundaries 
-              bool create_splitboundaries = false, ///< TODO: true = creates splitboundaries around model, false = does not create splitboundaries 
+              bool binary_file = true,
               bool isoparametric = true );         ///< only option if model does not only consist of simplex elements
 
   virtual ~SKUA_Model();
@@ -47,11 +44,7 @@ public:
 private:
 
   void Initialize( const char* mesh_file_set,
-                   bool binary_file,
-                   bool use_regions_file,
-                   bool create_boundaries,
-                   bool create_splitboundaries,
-                   bool isoparametric );
+                   bool binary_file, bool isoparametric );
 
   std::vector<Point<3U> > node_coords_;        ///< node coordinates in VSet order to re-establish original node numbering if necessary
 };

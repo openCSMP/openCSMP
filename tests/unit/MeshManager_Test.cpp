@@ -130,7 +130,7 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
         cout << "\n-------------------------------------------------------";
         string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
         model3d_name_ = "ModelDykeAllLayersSplit";
-        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true, true);
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true );
         
         CheckModel3D();
  
@@ -417,7 +417,7 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     // -----------------------------------------------
     
     // are all elements of the contiguous model region discovered
-    set<Element<3U>* const>  discovered_elements;
+    set<Element<3U>*>  discovered_elements;
     
     floodFill( model_domain.E(0), discovered_elements ); // OK
     _test( discovered_elements.size() == model_domain.Elements() );

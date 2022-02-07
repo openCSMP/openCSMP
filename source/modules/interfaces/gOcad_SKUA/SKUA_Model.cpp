@@ -25,18 +25,12 @@ Initialize. Notice that - while similar - the internal structure of these files 
 SKUA_Model::SKUA_Model( const char* icem_file_set,
                         const char* variable_file,
                         bool binary_file,
-                        bool use_regions_file,
-                        bool create_boundaries,
-                        bool create_splitboundaries,
                         bool isoparametric )
   : Model<3U>( variable_file )
 {
   this->Name( icem_file_set );
   Initialize( icem_file_set,
               binary_file,
-              use_regions_file,
-              create_boundaries,
-              create_splitboundaries,
               isoparametric );
 }
 
@@ -72,9 +66,6 @@ between the elements from SKUA is not used, but this data is recreated
 */
 void SKUA_Model::Initialize( const char* mesh_file_set,
                              bool binary_input_file,
-                             bool use_regions_file,
-                             bool create_boundaries,
-                             bool create_splitboundaries,
                              bool isoparametric )
 {
   double& model_time( ModelTime::Instance().modelTime );
@@ -118,19 +109,9 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
       node_coords_.emplace_back( Point<3U>( vset.Px( i ), vset.Py( i ), vset.Pz( i ) ) );
 
     // 3. construct model based on obtained model topology and vset
-    if ( use_regions_file )
-      Model<3U>::Initialize( mesh_file_set, // expects a regions file with the model name as prefix
-                             mesh_topology,
-                             vset,
-                             create_boundaries,
-                             create_splitboundaries,
-                            !mesh_topology.BoxShapedModel() );
-    else 
-      Model<3U>::Initialize( mesh_topology,
-                             vset,
-                             create_boundaries,
-                             create_splitboundaries,
-                            !mesh_topology.BoxShapedModel() );
+    Model<3U>::Initialize( mesh_topology,
+                           vset, true,
+                          !mesh_topology.BoxShapedModel() );
                             
     // 4. Performing range check on the inmported properties
     ErrorHandler& csmp_error(ErrorHandler::Instance());

@@ -483,15 +483,18 @@ Face<dim>::Face( Face<dim>&& fc )
 
 
 
-
-template<size_t dim>
-Face<dim>::~Face()
- {
+/**
+     Before deleting the Face make sure that:
+     
     // disconnecting the neighbor faces that are connected to this element
     if ( !face_connector_.empty() )
       for ( auto& it : face_connector_ )
         if ( it != nullptr  && !it->face_connector_.empty() )
           it->Unassign( this );
+*/
+template<size_t dim>
+Face<dim>::~Face()
+ {
  }
 
 
@@ -635,12 +638,6 @@ size_t  Face<dim>::Faces() const
     Here the convention is assumed that the first parent element is that on the inside
     of the Face with regard to the outward pointing normal and the second element is on
     the outside. It follows that the node sequences are the same.
-    
-    TODO: @todo (1) store the number of face or edge of the higher-dimensional inner
-    element for future reference; return it from the function InnerParentFaceNumber().
-    
-    TODO: @todo (1) check code-coverage and remove all constructors and functions 
-    that are not used BEFORE working up the InterFace class.
 */
 template<size_t dim>
 void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const outerElement )
@@ -995,16 +992,17 @@ size_t  Face<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 template<size_t dim>
 void  Face<dim>::ParentFaceID( INTERFACE_SIDE side, size_t idx )
 {
-  if ( side == INSIDE )
-  {
-    assert( innerParent_ != nullptr );
-    inner_parent_face_id_ = idx;
-  }
-  else if ( side == OUTSIDE )
-  {
-    assert( outerParent_ != nullptr );
-    outer_parent_face_id_ = idx;
-  }
+  if ( side == INSIDE ) {
+      assert( innerParent_ != nullptr );
+      inner_parent_face_id_ = idx;
+      return;
+    }
+  
+  if ( side == OUTSIDE ) {
+      assert( outerParent_ != nullptr );
+      outer_parent_face_id_ = idx;
+      return;
+    }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   csmp_error.notice( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
@@ -1393,7 +1391,7 @@ size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
          else face_key_n.clear();
       }
 
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
  }
 */
 

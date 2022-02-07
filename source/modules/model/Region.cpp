@@ -48,8 +48,8 @@ Region<dim>::Region( const Region& g )
 
 template<size_t dim>
 Region<dim>::Region( Region&& g )
-  : ModelSubDomain<dim, Element>( g ),
-    LocalVariableStorage<dim,Region>(g)
+  : ModelSubDomain<dim, Element>( move(g) ),
+    LocalVariableStorage<dim,Region>( move(g) )
 {
 }
 
@@ -1326,8 +1326,8 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
         @attention uses vector rather than set to create nodes vector.
 */
 template<size_t dim>
-size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>* const>::const_iterator start,
-                                typename vector<csmp::Element<dim>* const>::const_iterator end )
+size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iterator start,
+                                typename vector<csmp::Element<dim>*>::const_iterator end )
 {
   if ( start == end )
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (vector)",
@@ -1336,7 +1336,7 @@ size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>* const>::cons
   this->elmt_vec_.assign( start, end );
   
   // uses vector in creation
-  this->CreateNodePointerVector2();
+  this->CreateNodePointerVector();
   
   this->IdentifyPerimeter();
 
@@ -1348,8 +1348,8 @@ size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>* const>::cons
 
 
 template<size_t dim>
-size_t Region<dim>::Accumulate( typename set<csmp::Element<dim>* const>::const_iterator start,
-                                typename set<csmp::Element<dim>* const>::const_iterator end )
+size_t Region<dim>::Accumulate( typename set<csmp::Element<dim>*>::const_iterator start,
+                                typename set<csmp::Element<dim>*>::const_iterator end )
 {
   if ( start == end )
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (set)",
@@ -1358,7 +1358,7 @@ size_t Region<dim>::Accumulate( typename set<csmp::Element<dim>* const>::const_i
   this->elmt_vec_.assign( start, end );
 
     // uses vector in creation
-  this->CreateNodePointerVector2();
+  this->CreateNodePointerVector();
 
   this->IdentifyPerimeter();
 
@@ -1384,7 +1384,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
 {
   if ( constraints.Constraints() == 0U )
     throw csmp::Exception( ERROR, "Region<dim>::AccumulateWithinRange",
-                           "No property constraints are supplied" );
+                           "No property constraints in supplied PropertyConstraints object" );
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1400,7 +1400,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
   set<Node<dim>*> node_set;
   
   for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it )
-    if ( constraints.CheckConstraints( (*it) ) )
+    if ( constraints.CheckConstraints( &(*it) ) )
       {
         this->elmt_vec_.push_back( &(*it) );
         const size_t n_nodes{ (*it).Nodes() };
@@ -1415,6 +1415,9 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
     }
   else
     csmp_error.notice( ERROR, "Region<dim>::AccumulateWithinRange", "no elements in the desired property range were found.");
+  
+  this->elmt_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
   
   return this->elmt_vec_.size();
 
@@ -1709,8 +1712,8 @@ Method will detect if the supplied vector<double> is empty or if a group by
 that name already exists.
 */
 template<size_t dim>
-size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>* const>::const_iterator start,
-                                         typename vector<Element<dim>* const>::const_iterator end,
+size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_iterator start,
+                                         typename vector<Element<dim>*>::const_iterator end,
                                          vector<size_t>& element_ids )
 {
   if ( start == end )
@@ -1820,7 +1823,7 @@ size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<
     this->elmt_vec_.assign( elmts_to_retain.begin(), elmts_to_retain.end() );
     elmts_to_retain.clear();
 
-    this->CreateNodePointerVector2();
+    this->CreateNodePointerVector();
 
     this->IdentifyPerimeter();
     
@@ -1858,7 +1861,7 @@ size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>* const>::ite
                                       [&](auto x) { return binary_search( begin, end, x ); }),
                            this->elmt_vec_.end() );
     
-    this->CreateNodePointerVector2();
+    this->CreateNodePointerVector();
 
     this->IdentifyPerimeter();
       
@@ -1894,7 +1897,7 @@ void  Region<dim>::Add( const Region<dim>& grp )
   this->elmt_vec_.erase( unique( this->elmt_vec_.begin(), this->elmt_vec_.end() ), this->elmt_vec_.end() );
   vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
-  this->CreateNodePointerVector2();
+  this->CreateNodePointerVector();
   
   this->IdentifyPerimeter();
 
@@ -1985,7 +1988,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
     // free
   vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
-  this->CreateNodePointerVector2();
+  this->CreateNodePointerVector();
   establishNeighborConnectivity( this->elmt_vec_ );
   this->IdentifyPerimeter();
   this->UpdateMemberIndexes();
@@ -2032,7 +2035,7 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   res.CellVector().erase( unique(res.ElementsBegin(), res.ElementsEnd()), res.ElementsEnd() );
   res.CellVector().shrink_to_fit();
 
-  res.CreateNodePointerVector2();
+  res.CreateNodePointerVector();
   res.IdentifyPerimeter();
 
   return res.Elements();
@@ -2066,7 +2069,7 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
   res.CellVector().shrink_to_fit();
 
   if ( !res.Empty() ) {
-      res.CreateNodePointerVector2();
+      res.CreateNodePointerVector();
       res.IdentifyPerimeter();
     }
 
@@ -2103,7 +2106,7 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   res.CellVector().shrink_to_fit();
 
   if ( !res.Empty() ) {
-      res.CreateNodePointerVector2();
+      res.CreateNodePointerVector();
       res.IdentifyPerimeter();
     }
 
@@ -2150,7 +2153,7 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
   res.CellVector().shrink_to_fit();
 
   if ( !res.Empty() ) {
-    res.CreateNodePointerVector2();
+    res.CreateNodePointerVector();
     res.IdentifyPerimeter();
   }
   return res.Elements();

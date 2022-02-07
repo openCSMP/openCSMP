@@ -191,13 +191,14 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
   // -----------------
   const string regionname("Model");
   if ( ContainsRegion( "Model" ) ) {
-    csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
-                       regionname, "'Model' region already exists; nothing was done." );
-    return false;
-  }
+      csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
+                         regionname, "'Model' region already exists; nothing was done." );
+      return false;
+    }
 
   // 1. building the 'Model' region
   // ------------------------------
+  // TODO: since Region has no move constructor, multiple copies of the empty region are made here
   std::pair<typename map<string,csmp::Region<dim> >::iterator, bool>
     newRegion = (is_unique) ?
     uniqueGroupMap_.insert( make_pair( regionname, csmp::Region<dim>( regionname,
@@ -222,7 +223,10 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
   // checking that all elements and nodes were discovered
   if ( (*newRegion.first).second.Elements() != static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() or
        (*newRegion.first).second.Nodes() != static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Nodes() )
-    return false;
+    {
+       csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
+                          regionname, "'Model' not all elements were incorporated into the new 'Model' region." );
+    }
 
   return (*newRegion.first).second.Elements();
   
@@ -235,6 +239,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
       Forms unique regions called MATERIAL1..n from the material IDs assigned to the elements.
       
       @attention this method assumes that the unique numbers of elements, faces, and interfaces via the MeshManage
+      
+      TODO: add a PropertyConstraint here
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity )
@@ -656,7 +662,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !HasValidModelRegion() )
+  if ( !ContainsRegion("Model") )
     csmp_error.notice( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues:",
                       "method relies on the existence of region 'Model', which does not exist");
 
@@ -757,7 +763,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !HasValidModelRegion() )
+  if ( !ContainsRegion("Model") )
     csmp_error.notice( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues:",
                       "method relies on the existence of region 'Model', which does not exist");
 
@@ -860,7 +866,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupna
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !HasValidModelRegion() )
+  if ( !ContainsRegion("Model") )
     csmp_error.notice( FATAL_ERROR, "RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues:",
                       "method relies on the existence of region 'Model', which does not exist");
 
@@ -883,7 +889,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupna
     {
       REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
       constraints.InitializePropertyIndices( regionComplex->Database() );
-      csmp::Region<dim>& model_domain(Region("Model"));
+      groupTraits_.insert( make_pair( groupname, constraints ) );
       (*it.first).second.AccumulateWithinRange( regionComplex->Mesh(), constraints );
 
       // removing the group if it contains no elements
@@ -1191,7 +1197,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& regi
       return false;
     }
 
-  set<Element<dim>* const> contiguous_elmts;
+  set<Element<dim>*> contiguous_elmts;
 
   floodFill( const_cast<Element<dim>* const>(*mref.ElementsBegin()), contiguous_elmts );
   if ( contiguous_elmts.size() != mref.Elements() ) return false;
@@ -1255,14 +1261,11 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
       const bool          unique_group(IsUnique(group));
 
       // getting a set of the element numbers of the target group
-      std::set<Element<dim>*>  elements;
-      for ( typename std::vector<csmp::Element<dim>*>::const_iterator
-            eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
-        elements.insert( (*eit) );
+      set<Element<dim>*>  elements( gref.ElementsBegin(), gref.ElementsEnd() );
 
       // detecting via a flood-fill whether the group can be partitioned, else nothing is done
-      set<Element<dim>* const>  elements_contiguous_subset;
-      floodFill( (*elements.begin()), elements_contiguous_subset );
+      set<Element<dim>*>  elements_contiguous_subset;
+      floodFill( gref.E(0), elements_contiguous_subset );
       // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
       if ( elements.size() <= elements_contiguous_subset.size() ) {
            std::cout <<"\nModel<" << dim << ">::PartitionRegionIntoContiguousSubRegions: ";
@@ -1306,7 +1309,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
              }
          
            // subtracting the elements that constitute the new group from the remaining element list
-           for ( typename std::set<Element<dim>* const>::const_iterator
+           for ( typename std::set<Element<dim>*>::const_iterator
                  sit=elements_contiguous_subset.begin(); sit!=elements_contiguous_subset.end(); ++sit )
              elements.erase( (*sit) );
 
@@ -2346,7 +2349,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
   // rebuilding the decimated region
   r1_ref.CellVector() = std::move( new_region1 );
 // NOT AFFECTED  r1_ref.EstablishNeighborConnectivity( false ); // TODO: needed, but this connectivity should have been established long ago !
-  r1_ref.CreateNodePointerVector2();
+  r1_ref.CreateNodePointerVector();
   r1_ref.IdentifyPerimeter();
 
   // reporting
@@ -2538,33 +2541,62 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
 
 
 
+
+
+
 /**
-      if the mesh changed this brute-force method rebuild the node and element vectors of all regions
-      TODO: find way to do this more selectively
+     Rebuilds modified regions. Region 'Model' will always be rebuilt.
+     Any model subdomain that has been ScheduledForRebuilt()  will also be rebuilt, whether unique or non-unique.
       
-      @attention the assumption is made the inter-element connectivity has already been updated
+      @attention the assumption is made the inter-element connectivity has was updated before
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
  {
-    // since this region may now contain a different number of elements
-    RemoveRegion("Model" );
- 
-     for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
-           rit->second.CreateNodePointerVector2();
-           rit->second.IdentifyPerimeter(); // calls PartitionCellVector
-        }
-       
-     for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
-           rit->second.CreateNodePointerVector2();
-           rit->second.IdentifyPerimeter();
-        }
-        
-     // rebuild Model
-     const bool is_unique(false);
+     // since this region may now contain a different number of elements
+     RemoveRegion("Model");
+
+     // rebuilding the region 'Model'
+     const bool is_unique = ( distance(UniqueRegionsBegin(), UniqueRegionsEnd()) > 0 ) ? false : true;
      FormModelRegion( is_unique );
+
+     csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
+
+     // 1. non-unique, potentially overlapping regions
+     //    (they get rebuilt efficiently using the original creation constraints, but only if new elements
+     //     lie within them)
+     for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit )
+       if ( (*rit).second.NeedsRebuilt() && (*rit).first != "Model" ) {
+             auto crit = groupTraits_.find( (*rit).first );
+             PropertyConstraints region_traits = ( crit == groupTraits_.end() )
+                                                    ? PropertyConstraints("permeability", 1e-21,1e-5) : (*crit).second;
+                                                    
+             (*rit).second.UpdateCellMembershipApplyingConstraints( model_domain.ElementsBegin(), model_domain.ElementsEnd(), region_traits );
+             
+             // assuming the the element neighbor connectivity was updated before by the MeshManager
+             (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
+          }
+
+     // 2. unique regions: only get modified if they have been ScheduledForRebuilt()
+     for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
+       if ( (*rit).second.NeedsRebuilt() )
+         // assuming the the element neighbor connectivity was updated before by the MeshManager
+         (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
        
  } // end RebuildRegions
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2588,7 +2620,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
      std::cout <<"\n\tNon-unique regions of model:\n";
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
-          std::cout <<" "<< (*rit).second.Elements() <<" elements,"<< (*rit).second.Volume();
+          std::cout <<" "<< (*rit).second.Elements() <<" elements,";
           std::pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3 )
             std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();

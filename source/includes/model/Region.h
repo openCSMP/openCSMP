@@ -165,17 +165,17 @@ class Region : public ModelSubDomain<dim, Element>,
     // Accumulate based on pointers to elements
 
     /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids' using binary_search; @attention use after mesh modification
-    size_t AccumulateByNumber( typename std::vector<csmp::Element<dim>* const>::const_iterator start,
-                               typename std::vector<csmp::Element<dim>* const>::const_iterator end,
+    size_t AccumulateByNumber( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                               typename std::vector<csmp::Element<dim>*>::const_iterator end,
                                std::vector<size_t>& element_ids );
 
     /// accumulates range of elements into a region identified by constant pointers created by AccumulateAll; returns # of accumulated elements
-    size_t Accumulate( typename std::vector<csmp::Element<dim>* const>::const_iterator start,
-                       typename std::vector<csmp::Element<dim>* const>::const_iterator end );
+    size_t Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                       typename std::vector<csmp::Element<dim>*>::const_iterator end );
 
     /// accumulate a range of elements into a region identified by constant pointers created by AccumulateAll; returns # of accumulated elements
-    size_t Accumulate( typename std::set<csmp::Element<dim>* const>::const_iterator start,
-                       typename std::set<csmp::Element<dim>* const>::const_iterator end );
+    size_t Accumulate( typename std::set<csmp::Element<dim>*>::const_iterator start,
+                       typename std::set<csmp::Element<dim>*>::const_iterator end );
 
     // Accumulate based on property values
 

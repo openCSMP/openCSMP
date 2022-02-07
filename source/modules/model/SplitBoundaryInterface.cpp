@@ -629,7 +629,7 @@ void  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::UpdateSplitBoundaryCom
 
     for ( typename SPLITBOUNDARY_COMPLEX<dim>::splitBoundaryIterator
           sbit = splitboundaryComplex->SplitBoundariesBegin(); sbit != splitboundaryComplex->SplitBoundariesEnd(); ++sbit ) {
-        sbit->second.CreateNodePointerVector2();
+        sbit->second.CreateNodePointerVector();
         sbit->second.IdentifyPerimeter();
       }
     

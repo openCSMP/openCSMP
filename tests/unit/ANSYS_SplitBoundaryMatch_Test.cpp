@@ -37,7 +37,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
 //      ANSYS_Model3D model( "Model_Split_wall", "Model_Split_wall", variablesFile.c_str(), true );
 //      ANSYS_Model3D model( "NotSplitWall", "NotSplitWall", variablesFile.c_str(), true );
       const string  model_name("Split_Edges");
-      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true );
+      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true, true, true );
       Region<3U>    model_domain(model.Region("Model"));
 
     // 0. visualising the model and its regions

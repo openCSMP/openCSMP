@@ -980,10 +980,11 @@ ostream&  operator<<( ostream& stream, const TensorVariable<dim>& o )
 {
   for ( size_t i = 0U; i<dim; i++ )
   {
-    stream << "flag " << i + 1U << " : " << parseStatus( o.Flag( i ) );
-    stream << " row" << i + 1U << ": ";
+    stream << "flag" << i + 1U << ": " << parseStatus( o.Flag( i ) );
+    stream << ", row" << i + 1U << ":";
     for ( size_t j = 0U; j<dim; j++ )
-      stream << o( i, j );
+      stream <<" "<< o( i, j );
+    stream <<"; ";
 
   }
 

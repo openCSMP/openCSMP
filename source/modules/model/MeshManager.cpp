@@ -407,12 +407,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             typename plf::colony<Face<dim>>::iterator
                fit = faces_.emplace( Face<dim>( face_idx, fem_manager_.E( csmpElementType ),
                                                           fvm_manager_.Stencil( csmpElementType ), evars, cvars ) );
-            const size_t nodes( (*fit).Nodes() );
             // assigning nodes to faces
+            const size_t nodes( (*fit).Nodes() );
             for ( size_t j = 0U; j<nodes; ++j ) {
                 const size_t node = vset.Plist( face_idx, j );
                 assert( node < n_nodes );
-                (*fit).Assign( j, &(*next(faces_.begin(),node)) );
+                (*fit).Assign( j, &(*next(nodes_.begin(),node)) );
               }
             ++face_idx;
             ++first;
@@ -443,12 +443,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                            cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + n_faces << endl;
                            csmp_error.notice( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
                         }
-                      assert( index >= vset.Elements() );
-                      assert( index < vset.Elements() + vset.Faces() ); // (-) elements because face container is numbered from 0..n-1
+                      // if the Face neighbor has an index smaller than n_elmts it must be a boundary indicator
                       if ( index >= n_elmts )
                         e.Assign( j, &(*next(faces_.begin(),index - n_elmts)) );
-                      else
-                        e.Assign( j, static_cast<Face<dim>*>(nullptr) );
+                      else {
+                           assert( index < 0 );
+                           e.Assign( j, static_cast<Face<dim>*>(nullptr) );
+                        }
                    }
               
                  // Higher-dimensional Element neighbors (2) of Face
@@ -479,7 +480,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  e.Assign( innerElement, outerElement );
                  // and the corresponding face numbers
                  e.ParentFaceID( INSIDE,  vset.Pfvert( e.Idx(), neighbors + 2U ) );
-                 e.ParentFaceID( OUTSIDE, vset.Pfvert( e.Idx(), neighbors + 3U ) );
+                 if ( outerElement ) e.ParentFaceID( OUTSIDE, vset.Pfvert( e.Idx(), neighbors + 3U ) );
                  
                } // end face loop
               
@@ -1420,20 +1421,16 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
+    else face_ptrs.reserve( n_faces_to_build );
     
     const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
     const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
-    vector<Face<dim>*>               faces; faces.reserve( distance(first,last) );
-    vector<Face<dim>*>               nbor_faces; // empty for now, will be assigned in second pass
-
-    // the established range of lower-dimensional input elements is now indexed consecutively
-    // and their connectivity pattern is remembered for later assignment of faces to their neighbors
-    auto                             erase_it( first );  // iterator copies
 
     vector<typename plf::colony<Element<dim>>::const_iterator>  elmt_iterators;
     elmt_iterators.reserve( distance(first,last) );
     
     // 1. converting Elements into Faces
+    // ---------------------------------
     size_t face_idx{0};
     
     while( first != last )
@@ -1441,66 +1438,89 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          // 1.1 initial checks and labeling
          // (input range must not contain any nullptrs)
          assert( (*first) != nullptr );
-         if constexpr ( dim == 3 ) assert( (*first)->IsSurfaceElement() );
-         if constexpr ( dim == 2 ) assert( (*first)->IsLineElement() );
-         
+         if constexpr ( dim == 3 )
+           if ( !(*first)->IsSurfaceElement() ) {
+                (*first)->Out();
+                throw csmp::Exception( ERROR, "MeshManager<3>::ReplaceElementsByFaces", "supplied element is not a surface element and cannot be converted to Face.");
+             }
+         if constexpr ( dim == 2 )
+           if ( !(*first)->IsLineElement() ) {
+                (*first)->Out();
+                throw csmp::Exception( ERROR, "MeshManager<2>::ReplaceElementsByFaces", "supplied element is not a line element and cannot be converted to Face.");
+             }
+        
          // 1.2 collecting pointers to the elements that will be deleted
-         elmt_iterators.emplace_back( elements_.get_iterator( const_cast<Element<dim>* const>(*first)) );
+         elmt_iterators.emplace_back( elements_.get_iterator( *first) );
          
+         // 1.3 simplified construction of Face at model boundary
          bool boundary_face{true};
          for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit ) {
               if ( (*nit)->AtBoundary() == NOT ) boundary_face = false;
               break;
            }
-         
-         // 1.3 much simplified construction of Face at model boundary
-         if ( boundary_face ) {
+         if ( boundary_face ) { // finding higher dimensional neighbor and its face idx
               pair<Element<dim>* const,size_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+              // creating Face, storing a pointer to it
               face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
-              // recovering the subdomain identifier
+              // numbering new Face consecutively
               face_ptrs.back()->Idx( face_idx++ );
            }
            
-         // 1.4 more complicated construction of interior face
-         else {
+         // 1.4 more involved construction of Face object in the interior of a model
+         //    (both neighbors are present)
+         else { // finding higher-dimensional neighbors (2)
               pair<Element<dim>*,Element<dim>*>  pelmts = parentElementsSharedByFace<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
               assert( pelmts.first  != nullptr );
               assert( pelmts.second != nullptr );
+              // finding the face numbers of the parent elements
               pair<size_t,size_t> face_ids = findAdjacentElementFaces( pelmts.first, pelmts.second );
-              
+              // creating Face, storing a pointer to it
               face_ptrs.push_back( ConstructFaceFromElement( (*first), pelmts.first, pelmts.second,
                                                              face_ids.first, face_ids.second, lvars, ivars ) );
-              // recovering the subdomain identifier
+              // numbering new Face consecutively
               face_ptrs.back()->Idx( face_idx++ );
            }
        
-         // NOTE: no erasure here because this would add nullptrs to the nodes parents, corrupting their functionality
+         // NOTE: no Element erasure yet because this would invalidate node parent vector, corrupting this functionality
          first++;
       }
       
-     // 2. remove the elements
-     // FAIL    elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) ); // DOES NOT WORK YET
-//cerr <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size() <<") deleting elements...\n";
-     while ( erase_it != last ) {
+     // 2. remove elements replaced by Face objects
+     // -------------------------------------------
+     // (no attention needs to be paid to neighbor connectivity because the whole lower dimensional regions will be removed)
+/*
+     while ( erase_it != last )
+       {
           // erase element and null the current element pointer
-          //  cerr <<" "<< (*erase_it)->Idx();
-          elements_.erase( elements_.get_iterator( (*erase_it) ) ); // const_cast<Element<dim>* const>(*first)) does not help either
+          elements_.erase( elements_.get_iterator( (*erase_it) ) );
           (*erase_it) = nullptr;
           erase_it++;
        }
-//cerr <<"\n\tremaining elements: "<< elements_.size() << endl;
- 
+*/
+     cout <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size();
+     cout <<") deleting "<< elmt_iterators.size() <<" elements...\n";
+     elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) ); // DOES NOT WORK YET
+     // TODO: elements are not set to nullptr
+
+
      
      // 3. cleaning up the node to parent connectivity
+     // ----------------------------------------------
      for ( auto& nit : nodes_ ) {
           nit.EraseNullPointerParents(); // element parents
           nit.UpdateNeighbors();         // node neighbors
        }
 
-     // 4. connecting Faces among each other
+     // 4. connecting Faces to each other (Face neighbors)
+     // --------------------------------------------------
      if constexpr( dim == 3 ) BuildSurfaceConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
      if constexpr( dim == 2 ) BuildLineConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
      
+     return face_ptrs;
+     
+ } // end ReplaceElementsByFaces
+
+/*
 #ifdef MESH_MANAGER_DEBUG
 integrityCheck<dim,Element>( ElementsBegin(), ElementsEnd() );
 if ( Faces() > 0 )
@@ -1510,12 +1530,7 @@ if ( InterFaces() > 0 ) {
      // add test for node manifolds
   }
 #endif
-   
-     return face_ptrs;
-     
- } // end ReplaceElementsByFaces
-
-
+*/
 
 
 
@@ -2559,37 +2574,36 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // the faces are stored after the elements including connections to their higher-dimensional neighbors
   // add the end of the pfverts entries
   for ( const auto& f : faces_ ) {
-    // equidimensional neighbors first
-    const size_t neighbors{ f.Neighbors() };
-    for ( size_t j = 0U; j<neighbors; ++j ) {
-        const Face<dim>* const ptr = f.Neighbor(j);
-        // if the neighbor exists (which it must on the inside of the Face)
-        if ( ptr != nullptr )
-          vset.Pfvert( eidx, j, ptr->Idx() );
-        else
-          vset.Pfvert( eidx, j, f.InnerParent()->AtBoundary(j) );
-      }
-    // higher-dimensional neighbors second
-    // inner neighbor
-    assert( f.InnerParent()->IsEquidimensional() );
-    assert( f.InnerParent()->Idx() < Elements() );
-    vset.Pfvert( eidx, neighbors, f.InnerParent()->Idx() );
-    // outer neighbor
-    if ( f.OuterParent() != nullptr ) {
-        assert( f.OuterParent()->IsEquidimensional() );
-        assert( f.OuterParent()->Idx() < Elements() );
-        vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
-      }
-    else {
-        // getting the boundary placement of the inner element
-        vset.Pfvert( eidx, neighbors + 1U, atBoundary( f.InnerParent(), f.InnerParentFaceID() ) );
-      }
-    // adding the local numbers of the faces that the Face is collocated with if any
-    vset.Pfvert( eidx, neighbors + 2U, f.InnerParentFaceID() );
-    // if there is no outer element, the face idx will initialised with NULL_IDX
-    vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
-    ++eidx;
-  }
+      // equidimensional neighbors first
+      const size_t neighbors{ f.Neighbors() };
+      for ( size_t j = 0U; j<neighbors; ++j ) {
+           const Face<dim>* const ptr = f.Neighbor(j);
+           // if the neighbor exists (which it must on the inside of the Face)
+           if ( ptr != nullptr )
+             vset.Pfvert( eidx, j, ptr->Idx() );
+           else vset.Pfvert( eidx, j, IRREGULAR );
+        }
+      // higher-dimensional neighbors second
+      // inner neighbor
+      assert( f.InnerParent()->IsEquidimensional() );
+      assert( f.InnerParent()->Idx() < Elements() );
+      vset.Pfvert( eidx, neighbors, f.InnerParent()->Idx() );
+      // outer neighbor
+      if ( f.OuterParent() != nullptr ) {
+          assert( f.OuterParent()->IsEquidimensional() );
+          assert( f.OuterParent()->Idx() < Elements() );
+          vset.Pfvert( eidx, neighbors + 1U, f.OuterParent()->Idx() );
+        }
+      else {
+          // getting the boundary placement of the inner element
+          vset.Pfvert( eidx, neighbors + 1U, atBoundary( f.InnerParent(), f.InnerParentFaceID() ) );
+        }
+      // adding the local numbers of the faces that the Face is collocated with if any
+      vset.Pfvert( eidx, neighbors + 2U, f.InnerParentFaceID() );
+      // if there is no outer element, the face idx will initialised with NULL_IDX
+      vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
+      ++eidx;
+   }
 
   // 'pfverts' interfaces (which must always have two higher-dimensional neighbors)
   // ------------------------------------------------------------------------------

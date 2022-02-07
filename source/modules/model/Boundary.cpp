@@ -56,9 +56,9 @@ Boundary<dim>::Boundary( const Boundary& ed )
 /// move constructor
 template<size_t dim>
 Boundary<dim>::Boundary( Boundary&& ed )
-  : ModelSubDomain<dim, Face>( ed ),
-    LocalVariableStorage<dim,Boundary>(ed),
-    boundaryFlag_( ed.boundaryFlag_ )
+  : ModelSubDomain<dim, Face>( move(ed) ),
+    LocalVariableStorage<dim,Boundary>( move(ed) ),
+    boundaryFlag_( move(ed.boundaryFlag_) )
 {
 }
 
@@ -87,19 +87,16 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 {
   // building the face vector
   // ------------------------
-  if ( info.interior_elmts[0] != mesh.Elements() )
-    throw csmp::Exception( ERROR, "Boundary(reconstructor)",
-                          "error Face numbering is expected to start at the number of elements.");
-
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
   // assigning pointers to the interior faces
+  const size_t  n_elements{ mesh.Elements() }; // needs to be subtracted accessing the face container
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i)) );
+    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i)) );
+    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
 
   // building the node vector
   // ------------------------
@@ -711,7 +708,7 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   AtBoundary( boxBoundary );
 
   // establishing boundary node container
-  this->CreateNodePointerVector2();
+  this->CreateNodePointerVector();
   
   // sorts node and cell vectors into interior and exterior ranges;
   // initialises boundary face vector bd_face_vec_

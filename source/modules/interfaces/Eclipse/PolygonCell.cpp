@@ -173,8 +173,7 @@ size_t PolygonCell
 {
     if( !extra_nodes_.empty() )
         return extra_nodes_[0]->GetIdx();
-// SKM FIX    return NULL_IDX;
-    return UINT_MAX;
+    return std::numeric_limits<size_t>::max();
 }
 
 

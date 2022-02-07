@@ -1945,8 +1945,10 @@ static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& mod
 
 
 /**
-     Forms boundaries of CSMP box-shaped model if corresponding regions are present.
-     These regions are given the standard names and are flagged correspondingly.
+     Forms boundaries considering names of Box.h-defined strings only, e.g.,
+     BACK, BOTTOM, RIGHT, TOP, FRONT, IRREGULAR and INTERNAL. Regions with these names are converted to boundaries
+     removing them and their Elements that are replaced by Face objects.
+     The new boundaries are given the standard names and are flagged correspondingly.
      
      @remark input regions must be lower-dimensional (surfaces in 3D and lines in 1D)
      @remark input regions must be unique (space exclusive)
@@ -1956,11 +1958,11 @@ static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& mod
      @note if the TOP region is missing, but a IRREGULAR region is there in stead, this is converted into the corresponding boundary.
      In this case, the model is still regarded as BOX_SHAPED.
      
-     @note Boundary creation itself does not deal with the generation of BOX_BOUNDARY flags for the model
+     @note Boundary creation itself does not deal with the generation of BOX_BOUNDARY flags for the model edges and
      corners. This is accomplished subsequently (in this method) by calling recreateBoxBoundaryFlags().
      
      @attention this method does not take care of the updating of the non-unique regions that are affected by the conversion
-     of Regions into boundaries. This has to be done afterwards.
+     of Regions into boundaries. This is done afterwards by methods of the Model class.
      
      @author refactored by SKM 2016
      @author refactored by SKM 2018
@@ -2005,7 +2007,19 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
            front = collectLowerDimensionalElementsFrom( *model, "FRONT", elmts_to_become_faces );
            back  = collectLowerDimensionalElementsFrom( *model, "BACK", elmts_to_become_faces );
         }
-       
+
+
+// DEBUGGING
+// checking input vector for duplicates (OK for prism_test
+/*
+sort( elmts_to_become_faces.begin(), elmts_to_become_faces.end() );
+bool hasDuplicates = adjacent_find( elmts_to_become_faces.begin(), elmts_to_become_faces.end()) !=
+                                                                                 elmts_to_become_faces.end();
+// contains null pointers ?
+bool hasNullPointer = find( elmts_to_become_faces.begin(), elmts_to_become_faces.end(), nullptr) !=
+                                                                  elmts_to_become_faces.end();
+*/
+
       // 3. getting MeshManager to create faces and delete pre-cursor elements
       // ---------------------------------------------------------------------
       vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
@@ -2029,7 +2043,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
        }
       
       // 5. removing the input regions
-      // -------------------------------------------------
+      // ------------------------------------------------------------------------------------
+      // (no flagging for rebuilt of regions is necessary as they will be completely removed)
       if ( top.first != top.second ) model->RemoveRegion( "TOP" );
       if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR" );
       model->RemoveRegion( "BOTTOM" );
@@ -2135,6 +2150,7 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
          return set<string>{};
       }
 
+
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
     vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
@@ -2161,10 +2177,11 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
       }
 
 	  // 4. removing the original regions from which the boundaries were created
-    // -----------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------
+    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
     for ( auto& it : eligibleRegions )
        model->RemoveRegion( it.first.c_str() );
-      
+
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     
     // if there are some unattributed faces left the method returs false
@@ -2294,6 +2311,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     if ( n_faces_assigned != mesh.Faces() - n_initial_faces )
       csmp_error.notice( WARNING, "BoundaryInterFace::EstablishBoundaryFlagsFromOrientation",
                          "Not all boundary Face faces could be assigned to standard boundaries");
+    
     
     // 5. adjusting flag if TOP boundary was originally flagged as irregular
     // ---------------------------------------------------------------------

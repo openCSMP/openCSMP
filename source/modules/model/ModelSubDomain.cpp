@@ -23,6 +23,7 @@
 #include "PropertyDatabase.h"
 #include "Interrelation.h"
 #include "CopyReplaceVisitor.h"
+#include "PropertyConstraints.h"
 
 #include "Exception.h"
 #include "ErrorHandler.h"
@@ -38,39 +39,44 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim, template<size_t> class CELL>
-ModelSubDomain<dim, CELL>::ModelSubDomain(const string& subdomain_name,
-	const PropertyDatabase<dim>& pref)
+ModelSubDomain<dim, CELL>::ModelSubDomain( const string& subdomain_name, const PropertyDatabase<dim>& pref )
 	: pref_(pref),
-	subdomain_name_(subdomain_name),
-	verbose_(true)
+	  subdomain_name_(subdomain_name),
+    domain_idx_(++domain_count_)
  {
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called custom constructor.\n";
  }
 
 
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
- : pref_(ed.pref_),
-   elmt_vec_(ed.elmt_vec_),
-   node_vec_(ed.node_vec_),
-   first_bd_node_(ed.first_bd_node_),
-   bd_face_vec_(ed.bd_face_vec_),
-   subdomain_name_(ed.subdomain_name_),
-   verbose_(true)
+  : pref_(ed.pref_),
+    elmt_vec_(ed.elmt_vec_),
+    node_vec_(ed.node_vec_),
+    first_bd_node_(ed.first_bd_node_),
+    bd_face_vec_(ed.bd_face_vec_),
+    subdomain_name_(ed.subdomain_name_),
+    rebuilt_needed_(ed.rebuilt_needed_),
+    domain_idx_(++domain_count_)
  {
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called copy constructor.\n";
  }
 
 
 /// move constructor; @attention remove verbose output after testing
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
- : pref_{ed.pref_},
-   elmt_vec_{ed.elmt_vec_},
-   node_vec_{ed.node_vec_},
-   first_bd_node_{ed.first_bd_node_},
-   bd_face_vec_{ed.bd_face_vec_},
-   subdomain_name_{ed.subdomain_name_},
-   verbose_{true}
+ : pref_( move(ed.pref_) ),
+   elmt_vec_( move(ed.elmt_vec_) ),
+   node_vec_( move(ed.node_vec_) ),
+   first_bd_node_( move(ed.first_bd_node_) ),
+   bd_face_vec_( move(ed.bd_face_vec_) ),
+   subdomain_name_( move(ed.subdomain_name_) ),
+   rebuilt_needed_(move(ed.rebuilt_needed_) ),
+   domain_idx_( move(ed.domain_idx_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
  {
+    domain_count_++; // needed because when destructor is called on 'ed' the object count will be decremented!
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move constructor.\n";
  }
 
 
@@ -79,6 +85,8 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::~ModelSubDomain()
  {
+    if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called destructor.\n";
+    domain_count_--;
  }
 
 
@@ -90,12 +98,32 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
           elmt_vec_       = ed.elmt_vec_;
           node_vec_       = ed.node_vec_;
           first_bd_node_  = ed.first_bd_node_;
+          //domain_idx_     = ed.domain_idx_; - keep the domain index unique!
           bd_face_vec_    = ed.bd_face_vec_;
-          verbose_        = ed.verbose_;
           subdomain_name_ = ed.subdomain_name_;
+          rebuilt_needed_ = ed.rebuilt_needed_;
+          if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called assignment operator.\n";
        }
      return *this;
  }
+
+
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&& ed )
+ {
+     if ( &ed != this ) {
+         elmt_vec_       = move( ed.elmt_vec_ );
+         node_vec_       = move( ed.node_vec_ );
+         first_bd_node_  = move( ed.first_bd_node_ );
+         domain_idx_     = move( ed.domain_idx_ );
+         bd_face_vec_    = move( ed.bd_face_vec_ );
+         subdomain_name_ = move( ed.subdomain_name_ );
+         rebuilt_needed_ = move( ed.rebuilt_needed_ );
+         if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move assignment operator.\n";
+       }
+     return *this;
+ }
+
 
 template<size_t dim, template<size_t> class CELL>
 string  ModelSubDomain<dim,CELL>::Name() const
@@ -112,20 +140,18 @@ void  ModelSubDomain<dim,CELL>::Name( const string& name )
 
 
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::Verbose( bool verbose )
-{
-    this->verbose_ = verbose;
-}
+void  ModelSubDomain<dim,CELL>::ScheduleForRebuilt()
+ {
+    rebuilt_needed_ = true;
+ }
 
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Verbose()
-{
-    return this->verbose_;
-}
+bool  ModelSubDomain<dim,CELL>::NeedsRebuilt() const
+ {
+    return rebuilt_needed_;
+ }
 
 
-
-// inlined methods
 
 template<size_t dim, template<size_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::Nodes() const
@@ -226,57 +252,30 @@ const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() 
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
  { return node_vec_.begin(); }
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin() const
- { return node_vec_.begin(); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd() const
+typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
- { return std::next( node_vec_.begin(), InteriorNodes() ); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd() const
- { return node_vec_.end(); }
-
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
+typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
  { return elmt_vec_.begin(); }
 
-
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
+typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
  { return elmt_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsBegin() const
-  { return elmt_vec_.begin(); }
-   
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsEnd() const
-  { return std::next( elmt_vec_.begin(), InteriorElements() ); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
+typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
   { return std::next( elmt_vec_.begin(), InteriorElements() ); }
    
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>* const>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsEnd() const
-  { return elmt_vec_.end(); }
-
-
 template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::NodesBegin()
  { return node_vec_.begin(); }
@@ -287,22 +286,10 @@ typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::Node
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin()
- { return node_vec_.begin(); }
-
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd()
- { return std::next( node_vec_.begin(), InteriorNodes() ); }
-
-template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin()
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 
-template<size_t dim, template<size_t> class CELL>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd()
- { return node_vec_.end(); }
- 
 // const forms
 
 template<size_t dim, template<size_t> class CELL>
@@ -489,8 +476,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
               boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
           // storing the boundary face vector for the current element
           if ( boundary_faces.size() == faces ) {
-               if ( (dim == 2 && (*it)->FE()->IsSurfaceElement()) ||
-                    (dim == 3 && (*it)->FE()->IsVolumeElement()) ) {
+               if ( (dim == 2 && (*it)->IsSurfaceElement()) ||
+                    (dim == 3 && (*it)->IsVolumeElement()) ) {
                     cout <<"\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"<< Name();
                     cout <<"', cell: "<< (*it)->Idx() <<"("<< parseFiniteElementType((*it)->FE_Type()) <<")";
                     cout <<" is a stand-alone element in this subdomain.";
@@ -846,29 +833,6 @@ cout.flush();
 
 
 
-/**
-    Uses set to create unique node vector.
-*/
-template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::CreateNodePointerVector1()
-{
-  assert( !this->elmt_vec_.empty() );
-
-  if ( !this->node_vec_.empty() )
-    this->node_vec_.clear();
-
-  // creating the node index vector
-  set<csmp::Node<dim>*>  nodes_set;
-  for ( auto it : this->elmt_vec_ ) {
-       const size_t nodes{ it->Nodes() };
-       for ( size_t i = 0U; i<nodes; i++ ) {
-            assert( it->N( i ) != nullptr );
-            nodes_set.insert( it->N( i ) );
-         }
-    }
-
-  this->node_vec_.assign( nodes_set.begin(), nodes_set.end() );
-}
 
 
 
@@ -876,7 +840,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector1()
     Uses vector to create unique node vector.
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
 {
   assert( !this->elmt_vec_.empty() );
 
@@ -884,9 +848,9 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
     this->node_vec_.clear();
 
   // creating the node index vector
-  this->node_vec_.reserve( elmt_vec_.size() );
+  this->node_vec_.reserve( elmt_vec_.size() * 4 );
   for ( auto it : this->elmt_vec_ ) {
-       const size_t nodes={ it->Nodes() };
+       const size_t nodes{ it->Nodes() };
        for ( size_t i = 0U; i<nodes; i++ ) {
             assert( it->N( i ) != nullptr );
             this->node_vec_.push_back( it->N( i ) );
@@ -896,6 +860,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector2()
   // removing duplicates and trimming excess memory from node vector
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+  this->node_vec_.shrink_to_fit();
 }
 
 
@@ -1071,7 +1036,11 @@ size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
 
 // INDEXES
 
-
+template<size_t dim, template<size_t> class CELL>
+size_t  ModelSubDomain<dim,CELL>::DomainIndex() const
+{
+  return domain_idx_;
+}
 
 /**
 
@@ -1218,7 +1187,7 @@ void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim
     xyz_min = xyz_max = (*node_vec_.begin())->Coordinate();
 
     // only nodes at the group boundary have to be checked
-    for ( auto bit=PerimeterNodesBegin(); bit!=PerimeterNodesEnd(); bit++ )
+    for ( auto bit=PerimeterNodesBegin(); bit!=NodesEnd(); bit++ )
       {
          csmp::Point<dim> p = (*bit)->Coordinate();
          xyz_min[0] = std::min( p[0], xyz_min[0] );
@@ -1282,9 +1251,9 @@ template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* characteristic,
                                                                   const char* var )
  {
-     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-     csmp::Index     prop_key = pref_.StorageKey(var);
-     ScalarVariable  sc;
+     ErrorHandler&     csmp_error( ErrorHandler::Instance() );
+     const csmp::Index prop_key = pref_.StorageKey(var);
+     ScalarVariable    sc;
 
      if ( prop_key.place != ELEMENT and prop_key.type != SCALAR ) {
           csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo",
@@ -1396,7 +1365,7 @@ correct type.
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo(  const char* vector_variable )
  {
-     csmp::Index          prop_key = pref_.StorageKey(vector_variable);
+     const csmp::Index  prop_key = pref_.StorageKey(vector_variable);
      VectorVariable<dim>  vc;
 
       if ( prop_key.type != VECTOR )
@@ -1420,7 +1389,7 @@ void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo(  const char* vector_vari
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo( const char* scalar_variable, char c )
  {
-     csmp::Index     prop_key = pref_.StorageKey(scalar_variable);
+     const csmp::Index prop_key = pref_.StorageKey(scalar_variable);
      ScalarVariable  sc;
 
      if ( c != 'x' && c != 'y' && c != 'z' &&
@@ -2978,7 +2947,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              const std::vector<VARIABLE_FLAG>& status,
                                                              double pmin, double pmax )
  {
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
@@ -3179,7 +3148,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              VARIABLE_FLAG status,
                                                              double pmin, double pmax )
  {
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
@@ -3407,8 +3376,8 @@ return without completing its task.
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::InterpolateNodeToElementProperty( const char* nprop, const char* eprop )
  {
-     csmp::Index  e_key = pref_.StorageKey(eprop),
-                  n_key = pref_.StorageKey(nprop);
+     const csmp::Index  e_key = pref_.StorageKey(eprop),
+                        n_key = pref_.StorageKey(nprop);
 
      // 1. check whether conditions for operation are O.K.
      if ( e_key.place != ELEMENT ) {
@@ -3474,8 +3443,8 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToElementProperty( const char* np
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* cprop )
  {
-     csmp::Index  c_key = pref_.StorageKey(cprop),
-                  n_key = pref_.StorageKey(nprop);
+     const csmp::Index  c_key = pref_.StorageKey(cprop),
+                        n_key = pref_.StorageKey(nprop);
 
      // 1. check whether conditions for operation are O.K.
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
@@ -3592,8 +3561,8 @@ input variables.
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToElementProperty( const char* cprop, const char* eprop )
  {
-     csmp::Index  e_key = pref_.StorageKey(eprop);
-     csmp::Index  c_key = pref_.StorageKey(cprop);
+     const csmp::Index  e_key = pref_.StorageKey(eprop);
+     const csmp::Index  c_key = pref_.StorageKey(cprop);
 
      if ( e_key.place != ELEMENT ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToElementProperty",
@@ -3646,12 +3615,12 @@ void  ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToElementProperty( co
 
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::ExtrapolateElementToIntegrationPointProperty( const char* eprop,
-                                                                                const char* cprop )
+                                                                              const char* cprop )
 {
     assert( !elmt_vec_.empty() );
 
-    csmp::Index  e_key = pref_.StorageKey(eprop);
-    csmp::Index  c_key = pref_.StorageKey(cprop);
+    const csmp::Index  e_key = pref_.StorageKey(eprop);
+    const csmp::Index  c_key = pref_.StorageKey(cprop);
 
     // 1. check whether conditions for operation are O.K.
     if ( e_key.place != ELEMENT ) {
@@ -3730,8 +3699,8 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToFacetIntegrationPointPropert
 {
     assert( !elmt_vec_.empty() );
 
-    csmp::Index  e_key = pref_.StorageKey(eprop);
-    csmp::Index  fip_key = pref_.StorageKey(fipprop);
+    const csmp::Index  e_key = pref_.StorageKey(eprop);
+    const csmp::Index  fip_key = pref_.StorageKey(fipprop);
 
     // 1. check whether conditions for operation are O.K.
     if ( e_key.place != ELEMENT ) {
@@ -3830,8 +3799,8 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
      assert( !node_vec_.empty() );
      assert( !elmt_vec_.empty() );
 
-     csmp::Index  e_key = pref_.StorageKey(eprop),
-                  n_key = pref_.StorageKey(nprop);
+     const csmp::Index  e_key = pref_.StorageKey(eprop),
+                        n_key = pref_.StorageKey(nprop);
 
      // 1. check whether conditions for operation are O.K.
      if ( e_key.place != ELEMENT ) {
@@ -4007,7 +3976,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* ep
                (*nit)->Store( n_key, ts );
             }
        }
-    if (this->Verbose()){
+    if ( verbose_ ) {
         cout <<"\nModel<"<<dim<<">::ExtrapolateElementToNodeProperty: ";
         cout <<"'" << eprop <<"' has been successfully extrapolated to '"<< nprop <<"'." << endl;
     }
@@ -4052,8 +4021,7 @@ A consistency check on variable type and placement is performed.
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop )
  {
-     csmp::Index  n_key = pref_.StorageKey(nprop);
-     csmp::Index c_key = pref_.StorageKey(cprop);
+     const csmp::Index  n_key = pref_.StorageKey(nprop), c_key = pref_.StorageKey(cprop);
 
      ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
@@ -4387,8 +4355,7 @@ outlined above.
 template<size_t dim, template<size_t> class CELL>
 bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, const char* b )
  {
-    csmp::Index  a_key = pref_.StorageKey(a),
-                 b_key = pref_.StorageKey(b);
+    const csmp::Index  a_key = pref_.StorageKey(a), b_key = pref_.StorageKey(b);
 
     // 1. testing variable A for suitability
     // -------------------------------------
@@ -4548,116 +4515,7 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
 
  }  // end CopyGradientOfProperty_A_To_B
  
-/* ORIGINAL
 
-template<size_t dim, template<size_t> class CELL>
-bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, const char* b )
- {
-    csmp::Index  a_key = pref_.StorageKey(a),
-                 b_key = pref_.StorageKey(b);
-
-    // 1. testing variable A for suitability
-    // -------------------------------------
-    if ( !pref_.IsDefined(a) )
-      {
-         cout << "ModelSubDomain<"<< dim << ">::CopyGradientOfProperty_A_To_B: "<< endl;
-         cout << "Property A does not exist. Now exciting..." << endl;
-         return false;
-      }
-    if ( a_key.place != NODE )
-      {
-         cout << "ModelSubDomain<"<< dim << ">::CopyGradientOfProperty_A_To_B: "<< endl;
-         cout << "Property A is not a NODE variable. Gradient can't be calculated..." << endl;
-         return false;
-      }
-    if ( a_key.type == TENSOR )
-      {
-         cout << "ModelSubDomain<"<< dim << ">::CopyGradientOfProperty_A_To_B: "<< endl;
-         cout << "Property A is a TENSOR variable. Nothing is done..." << endl;
-         return false;
-      }
-
-    // 2. testing variable B for suitability
-    // -------------------------------------
-    if ( !pref_.IsDefined(b) )
-      {
-         cout << "ModelSubDomain<"<< dim << ">::CopyGradientOfProperty_A_To_B: "<< endl;
-         cout << "Property B does not exist. Now exciting..." << endl;
-         return false;
-      }
-    if ( b_key.place != ELEMENT )
-      {
-         cout << "ModelSubDomain<"<< dim << ">::CopyGradientOfProperty_A_To_B: "<< endl;
-         cout << "Property B is not an ELEMENT variable. Gradient can't be calculated..." << endl;
-         return false;
-      }
-
-    DenseMatrix<DM_MIN>  DN;
-
-    if ( a_key.type == SCALAR ) {
-        if ( b_key.type != VECTOR )
-          {
-             cout << "ModelSubDomain<"<< dim << ">::CopyGradientOfProperty_A_To_B: "<< endl;
-             cout << "Property B is not a VECTOR variable. Nothing is done..." << endl;
-             return false;
-          }
-
-      vector<ScalarVariable >  SC;
-      VectorVariable<dim>      vc;
-
-        for ( typename vector<CELL<dim>*>::iterator
-              eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
-          {
-             if ( (*eit)->FE()->UsesLocalCoordinates() ) (*eit)->dN_AtBaryCenter( DN );
-             else (*eit)->dN( DN );
-             (*eit)->NodePropertyVector( a_key, SC );
-
-             vc = 0.;
-
-             for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
-               for ( size_t j=0U; j<dim; j++ )
-                 vc(j) += DN(j,i) * SC[i]();
-
-             // saving the resulting vector<double>
-             (*eit)->Store( b_key, vc );
-          }
-      }
-    else if ( a_key.type == VECTOR ) {
-        if ( b_key.type != TENSOR ) {
-             cout << "ModelSubDomain<"<<dim<<">::CopyGradientOfProperty_A_To_B: "<< endl;
-             cout << "Property A is a VECTOR so Property B should be a TENSOR variable. Nothing is done..." << endl;
-             return false;
-          }
-
-      vector<VectorVariable<dim> > VC;
-      TensorVariable<dim>          ts;
-
-        for ( typename vector<CELL<dim>*>::iterator
-              eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
-          {
-             if ( (*eit)->FE()->UsesLocalCoordinates() ) (*eit)->dN_AtBaryCenter( DN );
-             else (*eit)->dN( DN );
-             (*eit)->NodePropertyVector( a_key, VC );
-
-             ts = 0.;
-
-             // the gradients become rows of the tensor
-             for ( size_t n=0U; n<(*eit)->Nodes(); n++ )
-               for ( size_t i=0U; i<dim; i++ )
-                 for ( size_t j=0U; j<dim; j++ )
-                   ts(i,j) += DN(i,n) * VC[n][j];
-
-             // saving the resulting vector<double>
-             (*eit)->Store( b_key, ts );
-          }
-      }
-
-   return true;
-
- }  // end CopyGradientOfProperty_A_To_B
-
-*/
- 
  
  
 
@@ -4908,7 +4766,7 @@ void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::Out() const
  {
-    cout <<"\nModelSubDomain<dim,CELL>::Out(): name: '"<< subdomain_name_ <<"'";
+    cout <<"\nModelSubDomain<dim,CELL>::Out(): name: '"<< subdomain_name_ <<"', unique subdomain index: "<< DomainIndex();
     cout <<"\n\tmember elements("<< elmt_vec_.size() <<"): interior="<< InteriorElements();
     cout <<", perimeter="<< elmt_vec_.size()-InteriorElements();
     cout <<"\n\tmember nodes ("<< node_vec_.size() <<"): interior nodes="<< node_vec_.size() - PerimeterNodes();
@@ -4960,14 +4818,14 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
     binaryFileWrite( fp, Name().c_str() );
    
     // 2. writing the interior element records of the region
-    std::vector<size_t> IDs( distance(InteriorElementsBegin(), InteriorElementsEnd() ) );
-    transform( InteriorElementsBegin(), InteriorElementsEnd(),
+    std::vector<size_t> IDs( distance(ElementsBegin(), PerimeterElementsBegin() ) );
+    transform( ElementsBegin(), PerimeterElementsBegin(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
 
     // 3. writing the perimeter element records of the region
-    IDs.resize( distance(PerimeterElementsBegin(), PerimeterElementsEnd()) );
-    transform( PerimeterElementsBegin(), PerimeterElementsEnd(),
+    IDs.resize( distance(PerimeterElementsBegin(), ElementsEnd()) );
+    transform( PerimeterElementsBegin(), ElementsEnd(),
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );
    
@@ -5079,7 +4937,8 @@ void ModelSubDomain<dim,CELL>::NodeAttributesToCSV()
 
 
 /**
-       Removes elements and nodes and rebuilds bd_face_vec_  if necessary.
+    Removes elements and nodes and rebuilds the    bd_face_vec_  and   node_vec_ if necessary.
+    @return size_t  the number of cells removed.
 */
 template<size_t dim, template<size_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
@@ -5115,11 +4974,71 @@ size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
 
 
 /**
+    Deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells.
+    
+    @attention method also deals with the case where the new cells have been added to the subdomain.
+*/
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfCellVector()
+ {
+    // erasing cell vector without changing the relative number of its elements
+    elmt_vec_.erase( remove( elmt_vec_.begin(), elmt_vec_.end(), nullptr ), elmt_vec_.end() );
+    elmt_vec_.shrink_to_fit();
+    
+    // rebuild the node vector
+    CreateNodePointerVector();
+    // includes shrink to fit
+    
+    // sorting vectors and identifying perimeter cells and nodes
+    IdentifyPerimeter();
+    // the following happens inside of IdentifyPerimeter()->PartitionVectors()
+    // BuildPerimeterFaceVector( InteriorElements() );
+    
+    rebuilt_needed_ = false;
+    
+ } // end RebuildSubDomainAfterChangeOfCellVector
+
+
+
+
+    /// rebuilds subdomain on the basis of the elements that will be selected according to the supplied property constraints
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename vector<CELL<dim>*>::iterator start,
+                                                                        typename vector<CELL<dim>*>::iterator end,
+                                                                        const PropertyConstraints& constraints )
+ {
+    elmt_vec_.clear();
+    
+    // selecting the elements on the basis of the criteria specified in PropertyContraints
+    while( start != end ) {
+         if ( constraints.CheckConstraints( (*start) ) )
+           elmt_vec_.push_back( (*start) );
+         ++start;
+      }
+    
+    // rebuild the node vector
+    CreateNodePointerVector();
+    // includes shrink to fit
+    
+    // sorting vectors and identifying perimeter cells and nodes
+    IdentifyPerimeter();
+    // the following happens inside of IdentifyPerimeter()->PartitionVectors()
+    // BuildPerimeterFaceVector( InteriorElements() );
+    
+    rebuilt_needed_ = false;
+
+ } // end UpdateCellMembershipApplyingConstraints
+
+
+
+
+
+/**
     @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
 */
 template<size_t dim, template<size_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<const csmp::Node<dim>* const>::const_iterator start,
-                                                       typename vector<const csmp::Node<dim>* const>::const_iterator end ) const
+size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<const csmp::Node<dim>*>::const_iterator start,
+                                                       typename vector<const csmp::Node<dim>*>::const_iterator end ) const
  {
     if ( start == end ) return 0U;
  

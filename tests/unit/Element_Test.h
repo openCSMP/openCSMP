@@ -11,30 +11,26 @@ class Element_Test : public Test
 {
 
   public:
-	explicit Element_Test( bool verbose=false );
-	~Element_Test();
+	  Element_Test();
+	 ~Element_Test();
   
-	virtual void run();
-  
-  /// using a quadrilateral element for testing 
-	void ElementLengthTest2D();
-	void ElementLengthTest3D();
-  
-  /// is it correctly located
-  void FaceBaryCenterTest();
+    virtual void run();
+    
+    /// using a quadrilateral element for testing 
+    void ElementLengthTest2D();
+    void ElementLengthTest3D();
+    
+    /// is it correctly located
+    void FaceBaryCenterTest();
 
-  /// is it correctly located
-  void BaryCenterTest();
-  
-  /// for all element types tests wether the face normals are outward pointing
-  void UnitNormalTest();
-  
-  /// for all element types does pointInVolumeElement work
-  void PointInVolumeElementTest();
+    /// is it correctly located
+    void BaryCenterTest();
+    
+    void MoveSemanticsTest();
   
   private:
-    double fTolerance;
-    const bool verbose_;
+    double fTolerance   = 1.0e-3;
+    const bool verbose_ = true;
 };
 
 } //end csmp

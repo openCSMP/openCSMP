@@ -138,14 +138,14 @@ template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
   : FiniteElementPolicy<dim, csmp::Element>( el.FE() ),
     FiniteVolumePolicy<dim, csmp::Element>( el.FV() ),
-// does not work. Why?    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),
+//    LocalVariableStorage<dim, csmp::Element>( el.LVS() ),  does not compile, why?
     idx_(el.idx_),
     material_id_(el.material_id_),
     // calling move() is important, else elmt destructor has to do more work!
     elmt_connector_( move(el.elmt_connector_) ),
     node_connector_( move(el.node_connector_) )
 {
-  this->LVS( move(el.LVS()) );
+   this->LVS( move(el.LVS()) );
     
 //  cerr <<"\nElement(ctor): moved element: "<< Idx();
 }
@@ -153,36 +153,9 @@ Element<dim>::Element( Element<dim>&& el )
 
 
 
-/**
-     Since the element does not manage any memory,
-     the only thing that is necessary is that all pointers to this element are set to NULL before its destruction.
-     This allows the objects (Node, Element, Face, InterFace, Region etc.)
-     that survive the element to update themselves  as necessary.
-     
-     @test SKM 15/12/21.
-     
-*/
 template<size_t dim>
 Element<dim>::~Element()
- {
-    // disconnecting the neighbor elements that are connected to this element
-    // (neighbor pointer to this element is nulled)
-    if ( !elmt_connector_.empty() )
-      for ( auto& it : elmt_connector_ )
-        if ( it != nullptr && !it->elmt_connector_.empty() )
-          it->Unassign( this );
-    
-    // disconnecting the node that this element might be a parent of
-    // (parent pointer to this element is nulled)
-    if ( !node_connector_.empty() )
-      for ( auto& nit : node_connector_ )
-        if ( nit != nullptr )
-          nit->Unassign( this );
-          
-     // TODO: Face and InterFace objects that may have pointers to the element need to be updated too!
-
-//    cerr <<"\nElement(dtor): destructed element: "<< Idx();
-          
+ {          
  } // end destructor
 
 
@@ -222,6 +195,8 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   material_id_    = el.material_id_;
   
   this->LVS( move( el.LVS() ) );
+
+//  cerr <<"\nElement: move-assigned element: "<< Idx();
 
   return *this;
 }
@@ -507,6 +482,9 @@ size_t   Element<dim>::Idx() const
 {
   return idx_;
 }
+
+
+
 
 template<size_t dim>
 BOX_BOUNDARY  Element<dim>::AtBoundary( size_t boundary_face ) const
