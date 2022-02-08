@@ -6834,6 +6834,16 @@ deque<vector<int64_t> >  pfverts( 1872 );
 	pfverts[1870] = { 1854, 1857 };
 	pfverts[1871] = { 1859, 1865 };
 
+// checking whether pfverts has the expected size
+size_t n_pfvert_entries{0};
+for ( auto et : etypes )
+  n_pfvert_entries += CSMP_ElementSpecifications::NodesPerElementOfType( et );
+
+size_t n_pfvert_entries_actual{0};
+for ( auto pt : pfverts )
+  n_pfvert_entries_actual += pt.size();
+assert( n_pfvert_entries_actual == n_pfvert_entries ); // all good 
+
 vset.AddPfverts( pfverts.begin(), pfverts.end());
 
 const int32_t  material_identifier{1};
