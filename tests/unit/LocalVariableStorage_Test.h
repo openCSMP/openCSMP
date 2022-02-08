@@ -6,6 +6,7 @@
 namespace csmp
   {
 
+// TODO: add test of the move constructor
   class LocalVariableStorage_Test : public Test
     {
     public:

@@ -8,10 +8,8 @@ using namespace std;
 
 namespace csmp {
 
-InterFace_Test::InterFace_Test( bool verbose )
- : verbose_(verbose)
+InterFace_Test::InterFace_Test()
 {
-
 }
 
 InterFace_Test::~InterFace_Test(){

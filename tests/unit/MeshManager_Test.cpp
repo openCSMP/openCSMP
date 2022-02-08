@@ -186,7 +186,6 @@ THE MASTER TEST FUNCTION
 void MeshManager_Test::run()
 {
   // basics
-  /*
    {
       cout << "\n----------------------------";
       cout << "\nMeshManager_Test::TestBasics";
@@ -197,7 +196,10 @@ void MeshManager_Test::run()
       VSet<3U>     vset;
       test_Create_Pyramid_Hexa_VSet(vset, skewed_elements);
       model3d_ = new Model<3U>(vset, varFileName.c_str(), true);
+      // TEST
+      // ==========
       TestBasics();
+      // ==========
       delete model3d_;
       model3d_ = nullptr;
    }
@@ -205,9 +207,8 @@ void MeshManager_Test::run()
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
   _test(Test_parentElementsSharedByFace()); // OK
-*/
 
-//  _test( Test_MeshTraversal3D() );
+  _test( Test_MeshTraversal3D() );
 
 
 	cout << "\n------------------------------------------------";
