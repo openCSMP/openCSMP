@@ -220,6 +220,7 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${CMAKE_SOURCE_DIR}/thirdparty/meschach/source
     ${CMAKE_SOURCE_DIR}/thirdparty/jpeg
     ${CMAKE_SOURCE_DIR}/thirdparty/samg
+    ${CMAKE_SOURCE_DIR}/thirdparty/plf_colony
     ${CMAKE_SOURCE_DIR}/examples/source
 )
 
