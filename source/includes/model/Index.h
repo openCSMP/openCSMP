@@ -145,7 +145,7 @@ struct INDEX : public Index {
     : Index( ty, pl, idx, dataDepth, flagDepth, dataOffset,
              flagOffset, offsetFactorSimplex, offsetFactorSector,
              ipFactorSimplex, ipFactorSector, ipFactorFacet,
-             localVariables, integrationPointVariables, indexTracker(nullptr) ) {}
+             localVariables, integrationPointVariables, indexTracker ) {}
   
    explicit INDEX( ) : Index() {}
    explicit INDEX( size_t i ) : Index(ty,pl,i) {}
