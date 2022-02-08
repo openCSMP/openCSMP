@@ -2177,4 +2177,26 @@ Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& qu
 
 
 
+
+template<size_t dim>
+size_t collocatedNodes( const Element<dim>* const eptr )
+ {
+    assert( eptr != nullptr );
+    const size_t n_nodes{ eptr->Nodes() };
+    set<Point<dim> > node_points;
+    
+    // set admits only unique node coordinates
+    for ( size_t i{0}; i<n_nodes; ++i )
+      node_points.insert( eptr->N(i)->Coordinate() );
+ 
+    return n_nodes - node_points.size();
+    
+ } // end collocatedNodes
+
+template size_t collocatedNodes( const Element<1>* const );
+template size_t collocatedNodes( const Element<2>* const );
+template size_t collocatedNodes( const Element<3>* const );
+
+
+
 } // end csmp

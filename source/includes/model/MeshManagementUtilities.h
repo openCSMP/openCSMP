@@ -169,6 +169,10 @@ bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double toleranc
 /// detects whether the point is contained in any of the elements of the region
 csmp::Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query );
 
+/// detect degenerate elements by using the node coordinates to check whether some nodes have the same location 
+template<size_t dim>
+size_t collocatedNodes( const Element<dim>* const );
+
 
 // UTILITIES FOR TESTING ETC
 

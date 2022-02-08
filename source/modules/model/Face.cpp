@@ -63,7 +63,8 @@ Face<dim>::Face( Element<dim>& elmt,
     if constexpr ( dim == 2 ) assert( elmt.IsLineElement() );
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
-    assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_->Neighbor(outer_parent_face_id_) );
+    assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
+    assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
    
     // 0. verification that the lower-dimensional element and the element that will be transformed
     //    into a face have indeed matching nodes
@@ -153,6 +154,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     bool  matching_face_found{false};
     const size_t n_faces_inner{innerParent_->Faces()};
     for ( size_t i{0}; i<n_faces_inner; ++i )
+      // if the faces match
       if ( inner_parent->Neighbor(i) == outer_parent ) {
            inner_parent_face_id_ = i;
            // assigning the finite element
@@ -189,8 +191,11 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
          return;
       }
 
-    assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_->Neighbor(outer_parent_face_id_) );
-
+    // pointers should point to the adjacent element
+    assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
+    if ( outerParent_ )
+      assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
+    
     // creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
@@ -449,8 +454,8 @@ Face<dim>::Face( const Face<dim>& fc )
     inner_parent_face_id_(fc.inner_parent_face_id_),
     outer_parent_face_id_(fc.outer_parent_face_id_)
   {
-    assert( this->FE() != nullptr /* detected unitialized element*/ );
-    assert( !face_connector_.empty() /* detected unitialized element*/ );
+    assert( this->FE() != nullptr /* detect unitialized element*/ );
+    assert( !face_connector_.empty() /* detect unitialized element*/ );
     // variable storage: call of initialization function
     this->LVS( fc.LVS() );
   }
@@ -463,21 +468,17 @@ template<size_t dim>
 Face<dim>::Face( Face<dim>&& fc )
   : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
     FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
-    idx_(fc.idx_),
-    inner_parent_face_id_(fc.inner_parent_face_id_),
-    outer_parent_face_id_(fc.outer_parent_face_id_),
-    innerParent_(fc.innerParent_),
-    outerParent_(fc.outerParent_),
+    idx_(move(fc.idx_)),
+    inner_parent_face_id_(move(fc.inner_parent_face_id_)),
+    outer_parent_face_id_(move(fc.outer_parent_face_id_)),
+    innerParent_(move(fc.innerParent_)),
+    outerParent_(move(fc.outerParent_)),
     node_connector_(move(fc.node_connector_)),
     face_connector_(move(fc.face_connector_))
  {
     this->LVS( move(fc.LVS()) );
-
-    fc.AssignFiniteElementNullPtr();
-    fc.AssignFiniteVolumeNullPtr();
-
-    fc.innerParent_ = nullptr;
-    fc.outerParent_ = nullptr;
+    
+//    cerr <<"\nFace: called move constructor.";
  }
 
 
@@ -510,8 +511,8 @@ template<size_t dim>
 Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
  {
     if ( &fc != this ) {
-		if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
-		if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
+        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+        FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
         idx_                  = fc.idx_;
         face_connector_       = fc.face_connector_;
         node_connector_       = fc.node_connector_;
@@ -521,7 +522,9 @@ Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
         outer_parent_face_id_ = fc.outer_parent_face_id_;
         this->LVS( fc.LVS() );
       }
-cerr <<"\nFace::operator= called.";
+      
+//    cerr <<"\nFace::operator=  called assignment operator.";
+    
     return *this;
  }
 
@@ -534,20 +537,20 @@ cerr <<"\nFace::operator= called.";
 template<size_t dim>
 Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
  {
-    assert( &fc != this );
-
-    if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
-    if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
-   
-    idx_                  = fc.idx_;
-    inner_parent_face_id_ = fc.inner_parent_face_id_;
-    outer_parent_face_id_ = fc.outer_parent_face_id_;
-    innerParent_          = fc.innerParent_;
-    outerParent_          = fc.outerParent_;
-    face_connector_       = move(fc.face_connector_);
-    node_connector_       = move(fc.node_connector_);
-
-    this->LVS( move(fc.LVS()) );
+    if ( &fc != this ) {
+        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+        FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
+        idx_                  = move( fc.idx_ );
+        inner_parent_face_id_ = move( fc.inner_parent_face_id_ );
+        outer_parent_face_id_ = move( fc.outer_parent_face_id_ );
+        innerParent_          = move( fc.innerParent_ );
+        outerParent_          = move( fc.outerParent_ );
+        face_connector_       = move(fc.face_connector_);
+        node_connector_       = move(fc.node_connector_);
+        this->LVS( move(fc.LVS()) );
+     }
+    
+//    cerr <<"\nFace::operator=  called move-assignment operator.";
 
     return *this;
  }
@@ -577,7 +580,14 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  }
 
 
-
+/**
+      Removes the first occurrence of the neighbor pointed to by f_ptr from the neighbor array.
+      Any further occurrence is ignored.
+      
+      @note call twice if there are multple occurrences.
+      
+      @note if called with a nullptr argument method will return false.
+*/
 template<size_t dim>
 bool Face<dim>::Unassign( const Face<dim>* const f_ptr )
 {
@@ -696,7 +706,7 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
              for ( size_t i=0U; i<faces; ++i ) {
                   outerParent_->FE()->NodesOfFace( i, nodes_of_face );
                   for ( size_t j=0U; j<nodes_of_face.size(); ++j )
-                    parent_nds.insert( innerParent_->N( nodes_of_face[j] ) );
+                    parent_nds.insert( outerParent_->N( nodes_of_face[j] ) );
                   // checking
                   if ( face_nds == parent_nds ) {
                         matching_face_found = true;
@@ -1293,22 +1303,27 @@ void  Face<dim>::Out() const
 // TO DEPRECATE
 // ==========================================================================================================
 
-
-/// Roman, 2014
-/// WARNING: this operator is used specifically in the process of creation of particular Boundary.
-/// Therefore only important infromation for that process is taken into account in order to distinguish two Face's.
-/// That must be reference to inner and outer parent Elements and inner parent face ID
+/**
+  SKM revised 8/02/22
+*/
 template<size_t dim>
 bool  Face<dim>::operator==( const Face<dim>& fc ) const
  {
 	 if (&fc != this) {
-		 if (node_connector_.size() != fc.node_connector_.size()) return false;
-		 if (innerParent_ != fc.innerParent_ || outerParent_ != fc.outerParent_) return false;
-		 for (size_t i = 0U; i < node_connector_.size(); i++)
-			 if (node_connector_[i]->Idx() != fc.node_connector_[i]->Idx()) return false;
-	 }
-     return true;
+       // do they have the same higher-dimensional neighbors
+       if ( innerParent_ != fc.innerParent_ || outerParent_ != fc.outerParent_ ) return false;
+       // are these neighbors adjacent to the same faces
+       if ( inner_parent_face_id_ != fc.inner_parent_face_id_ ||
+            outer_parent_face_id_ != fc.outer_parent_face_id_ ) return false;
+       // do they have the same nodes
+       if ( node_connector_ != fc.node_connector_ ) return false;
+       // do they have the same neighbors
+       if ( face_connector_ != fc.face_connector_ ) return false;
+     }
+    return true;
  }
+
+
 
 
 template<size_t dim>

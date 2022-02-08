@@ -1414,6 +1414,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
+    const size_t       n_original_elements{ elements_.size() };
     vector<Face<dim>*> face_ptrs;
     const long         n_faces_to_build{ distance(first,last) };
 
@@ -1425,9 +1426,9 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
     
     const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
     const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
-
-    vector<typename plf::colony<Element<dim>>::const_iterator>  elmt_iterators;
-    elmt_iterators.reserve( distance(first,last) );
+    
+    // backup copy used later for the deletion
+    typename vector<Element<dim>*>::iterator  erase_it{ first };
     
     // 1. converting Elements into Faces
     // ---------------------------------
@@ -1449,10 +1450,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
                 throw csmp::Exception( ERROR, "MeshManager<2>::ReplaceElementsByFaces", "supplied element is not a line element and cannot be converted to Face.");
              }
         
-         // 1.2 collecting pointers to the elements that will be deleted
-         elmt_iterators.emplace_back( elements_.get_iterator( *first) );
-         
-         // 1.3 simplified construction of Face at model boundary
+         // 1.2 simplified construction of Face at model boundary
          bool boundary_face{true};
          for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit ) {
               if ( (*nit)->AtBoundary() == NOT ) boundary_face = false;
@@ -1466,7 +1464,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
               face_ptrs.back()->Idx( face_idx++ );
            }
            
-         // 1.4 more involved construction of Face object in the interior of a model
+         // 1.3 more involved construction of Face object in the interior of a model
          //    (both neighbors are present)
          else { // finding higher-dimensional neighbors (2)
               pair<Element<dim>*,Element<dim>*>  pelmts = parentElementsSharedByFace<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
@@ -1488,19 +1486,23 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      // 2. remove elements replaced by Face objects
      // -------------------------------------------
      // (no attention needs to be paid to neighbor connectivity because the whole lower dimensional regions will be removed)
-/*
+     cout <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size();
+     cout <<") deleting "<< n_faces_to_build <<" elements...\n";
      while ( erase_it != last )
        {
-          // erase element and null the current element pointer
-          elements_.erase( elements_.get_iterator( (*erase_it) ) );
-          (*erase_it) = nullptr;
+          // get element pointer for colony
+          auto colony_it = elements_.get_iterator( *erase_it );
+          // set the supplied element pointer to null
+          (*erase_it)    = nullptr;
+          // delete the element
+          elements_.erase( colony_it );
+          // increment iterator
           erase_it++;
        }
-*/
-     cout <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size();
-     cout <<") deleting "<< elmt_iterators.size() <<" elements...\n";
-     elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) ); // DOES NOT WORK YET
-     // TODO: elements are not set to nullptr
+     assert( n_original_elements - elements_.size() == n_faces_to_build );
+     
+     // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
+     //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
 
 
      
