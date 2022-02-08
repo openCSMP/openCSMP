@@ -15,25 +15,32 @@ class FiniteElementManager;
 template<size_t> class FiniteVolumeStencilManager;
 
 /**
-    Lower dimensional surface (3D) or line (2D) element that serves as interface (Face) or connector (InterFace)
-    between higher dimensional mesh domains. The Face is used for material interfaces that are welded
-    together. Boundary objects of a CSMP model consist of Face objects.
+    Lower dimensional surface (in 3D) or line (2D) elements  serve as boundaries (Face) or connect disconnected mesh domains (InterFace).
+    The Face is used for material interfaces that are welded together by sharing nodes. Boundary objects of a CSMP model consist of Face objects.
     
     The Face is rather similar in its functionality to the Element with many member functions
-    sharing their names. However, Face objects know their higher-dimensional neighbors which are Elemen objects.
-    This means that Face objects have an extra set of pointers that connect them to Element objects.
+    sharing their names. As an important difference, Face objects know their higher-dimensional neighbor Element objects.
+    This means that Face objects are not only connected to each other, but have an extra set of pointers that connect them to Element objects.
     
     Face objects also have a unit normal that helps with the application of tractions etc.
+    Since the Face is not inherited from Element, it constitutes a separate type and can store unique variables, especially ones like tractions,
+    influxes or transfer coefficients, which would unnecessarily consume storage if discretised evenly over a domain.
+    Element variables like permeability can still be accessed easily because the Face has pointers to its inner and outer Element neighbors.
     
-    Use Face objects for operations targeted on internal or external model boundaries.
-    For external boundaries only the higher-dimensional neighbor 0 will be defined.
-    For internal boundaries the Face provides access to both neighbors, distinguishing
-    inside from outside neighbors. This distinction is made with regard to the Face normal.
-    
-    The Element objects that the Face normal points to are referred to as outside
-    and the ones on the opposite side are the internal ones.
+    Face objects have been designed to support operations on internal or external model boundaries.
+    If a Face is located at an external (Model) boundary its normal will point outward and only the inner higher-dimensional neighbor 0 will be initialised.
+    Representing internal boundaries, Face objects provide access to both neighbors, also helping to distinguish inside from outside domains.
+    This distinction is possible and indicated by to the Face normal that points to the outside.
+    Thus, the Element objects that the Face normal points to are referred to as outside and the ones on the opposite side are the internal ones.
     This also means that the sense of node numbering of the Face matches that of
     the face of the Element on the inside.
+    
+    @note without a topology it is impossible to "compute" what the inside or outside of a surface in a boundary representation is. This info
+    comes from CAD or geomodel into CSMP++ which can only perform consistency checks.
+    
+    @attention Since so much information is required to construct complete Face objects, this is done in 2 steps:
+    1) the various constructors establish  Face connectivity with higher-dimensional neighbors, associated indices and policies.
+    2) separate operations assign idx, nodes, neighbors, etc.
     
     @author Stephan Matthai
     @date 3/3/2016

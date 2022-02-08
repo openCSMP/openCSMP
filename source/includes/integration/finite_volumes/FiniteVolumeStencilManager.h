@@ -8,19 +8,27 @@ namespace csmp {
 
 class FiniteElementManager;
 
+/**
+@brief Finite element - finite volume stencils with a parametric space representation, see Paluszny et al. (2007, Geofluids).
+
+@author SKM
+@author Adriana Paluszny
+@date 2001
+*/
 template<size_t dim>
 class FiniteVolumeStencilManager {
   public:
-    FiniteVolumeStencilManager();
+    /// creates finite volume stencil objects for the element types supported by the current finite-element manager
     FiniteVolumeStencilManager( const FiniteElementManager& fem_manager );
     ~FiniteVolumeStencilManager();
-    void Initialize( const FiniteElementManager& fem_manager );
     
     /// returns pointer to corresponding FV stencil type
     const FiniteVolumeStencil<dim>* const Stencil( CSMP_FEM_TYPE etype ) const;
   
   private:
-    // there is a fixed number of stencils as there is a fixed number of element types
+    FiniteVolumeStencilManager() = delete;
+    void Initialize( const FiniteElementManager& fem_manager );
+    // currently the number of supported stencils is fixed to 7
     enum { STENCIL_POLYTYPES = 7 };
     FiniteVolumeStencil<dim>        stencils[STENCIL_POLYTYPES];
     std::map<CSMP_FEM_TYPE,size_t>  type_mapping;

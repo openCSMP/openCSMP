@@ -7,13 +7,13 @@ namespace csmp{
 
   template<size_t> class Face;
 
-  // PL2011
-  class Face_Test : public Test
-  {
+  class Face_Test : public Test {
     enum{DIM=3};
+    
   public:
     virtual void run();
 
+    // PL2011
     static bool FaceUnitNormalPointsOutward( const Face<3>& f );
 
   };

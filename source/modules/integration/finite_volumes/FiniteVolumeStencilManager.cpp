@@ -7,12 +7,6 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-FiniteVolumeStencilManager<dim>::FiniteVolumeStencilManager()
- {
- }
-
-
-template<size_t dim>
 FiniteVolumeStencilManager<dim>::FiniteVolumeStencilManager( const FiniteElementManager& fem_manager )
  {
     Initialize( fem_manager );
