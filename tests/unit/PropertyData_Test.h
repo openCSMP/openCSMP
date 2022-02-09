@@ -17,6 +17,7 @@ namespace csmp {
 class PropertyData_Test : public Test {
 public:
     virtual void run();
+    const static bool verbose_ = false;
 };
  
  } // end csmp

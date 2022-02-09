@@ -28,7 +28,7 @@ namespace csmp {
     void Store( Element<dim>* e, const Index& i, double v )
       {
         cache() = v;
-        for( typename vector<Node<dim>*>::iterator it = e->NodesBegin(); it != e->NodesEnd(); ++it )
+        for( typename vector<Node<dim>*>::const_iterator it = e->NodesBegin(); it != e->NodesEnd(); ++it )
           (*it)->Store( i,cache );
       }
   private:

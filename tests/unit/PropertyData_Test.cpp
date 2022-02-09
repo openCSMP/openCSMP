@@ -34,8 +34,8 @@ void PropertyData_Test::run()
     // a copy
     PropertyData dataset2( dataset1 );
     // comparison
-    dataset1.Out();
-    dataset2.Out();
+    if ( verbose_ ) dataset1.Out();
+    if ( verbose_ ) dataset2.Out();
     // are they the same? (operator==) - should be false because the dataset contains NAN values
     _test( !(dataset1 == dataset2) );
     // and a third one (asignment operator)
@@ -47,7 +47,7 @@ void PropertyData_Test::run()
     // resizing
     dataset1.Resize( 5, 5 );
     _info("PropertyData_Test::run: dataset1 after resizing to 5:");
-    dataset1.Out();
+    if ( verbose_ ) dataset1.Out();
     _test( dataset1.Size() == 5 );
  
     /// loosing entry 2 and 4, 5
@@ -55,7 +55,7 @@ void PropertyData_Test::run()
     o_n_elmt_ids.insert( make_pair(0,0) ); // keep first value: PLAIN:2
     o_n_elmt_ids.insert( make_pair(2,1) ); // keep third value: ANY:NaN
     dataset1.ReduceTo( o_n_elmt_ids );
-    dataset1.Out();
+    if ( verbose_ ) dataset1.Out();
     _test( dataset1.Size() == 2 );
  
     // accessors / mutators for values (operator[] cannot be overloaded for this)
@@ -105,12 +105,12 @@ void PropertyData_Test::run()
     _equal( tmax, 35., 1e-10 );
   
     _info("PropertyData_Test::run: scaled and offset dataset1:");
-    dataset1.Out();
+    if ( verbose_ ) dataset1.Out();
     _info("PropertyData_Test::run: sqrt of values in dataset1:");
     dataset1.TransformValues( std::sqrt );
     // eliminating the nan value
     dataset1.Value(1) = -1.;
-    dataset1.Out();
+    if ( verbose_ ) dataset1.Out();
    
     /// writing stored flag and data values to file
     _info("PropertyData_Test::run: dataset1 written to file and read back to memory:");
@@ -118,13 +118,13 @@ void PropertyData_Test::run()
 
     std::fstream out_fp( "PropertyData_Test", ios::out | ios::binary );
     dataset1.OutBinary( out_fp );
-	out_fp.close();
+	  out_fp.close();
   
     /// reading stored flag and data vaues from file
     std::fstream in_fp("PropertyData_Test", ios::in | ios::binary);
     datasetN = inBinaryPropertyData( in_fp );
-	in_fp.close();
-    datasetN.Out();
+	  in_fp.close();
+    if ( verbose_ ) datasetN.Out();
     _test( datasetN == dataset1 );
 
 
@@ -141,21 +141,21 @@ void PropertyData_Test::run()
     pushBack( dataset4, vc1 );
     pushBack( dataset4, vc2 );
     pushBack( dataset4, vc3 );
-    dataset4.Out();
+    if ( verbose_ ) dataset4.Out();
     // a copy
     PropertyData dataset5( dataset4 );
     // comparison
-    dataset5.Out();
+    if ( verbose_ ) dataset5.Out();
     // are they the same? (operator==) - should be the same
     _test( (dataset4 == dataset5) == true );
     // reading element vc2
     VectorVariable<DIM3> vc_test;
     read( dataset5, 1, vc_test );
-    vc_test.Out();
+    if ( verbose_ ) vc_test.Out();
     _test( (vc_test == vc2) == true );
     // writing vc1 into position 3
     store( dataset5, 2, vc1 );
-    dataset5.Out();
+    if ( verbose_ ) dataset5.Out();
     _test( (dataset4 == dataset5) == false );
    
 
@@ -174,18 +174,18 @@ void PropertyData_Test::run()
     pushBack( dataset6, ts1 );
     pushBack( dataset6, ts2 );
     pushBack( dataset6, ts3 );
-    dataset6.Out();
+    if ( verbose_ ) dataset6.Out();
     // a copy
     PropertyData dataset7( dataset6 );
     // comparison
-    dataset7.Out();
+    if ( verbose_ ) dataset7.Out();
     // are they the same? (operator==) - should be the same
     _test( (dataset6 == dataset7) == true );
 
     // reading element ts3
     TensorVariable<DIM3> ts_test;
     read( dataset7, 2, ts_test );
-    ts_test.Out();
+    if ( verbose_ ) ts_test.Out();
     _test( (ts_test == ts3) == true );
     // (over) writing ts3 into position 3
     store( dataset7, 2, ts_test );
@@ -205,11 +205,11 @@ void PropertyData_Test::run()
     dataset8.Reserve( 2 );
     pushBack( dataset8, ary1 );
     pushBack( dataset8, ary2 );
-    dataset8.Out();
+    if ( verbose_ ) dataset8.Out();
     // a copy
     PropertyData dataset9( dataset8 );
     // comparison
-    dataset9.Out();
+    if ( verbose_ ) dataset9.Out();
     // are they the same? (operator==) - should be the same
     _test( (dataset8 == dataset9) == true );
     // changing last element of ary1 to 4

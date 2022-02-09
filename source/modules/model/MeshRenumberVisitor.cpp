@@ -25,7 +25,7 @@ void MeshRenumberVisitor<dim>::Visit( Element<dim>* eptr )
  { 
     eptr->Idx( e_counter_++ );
 
-    for ( typename std::vector<csmp::Node<dim>*>::iterator  
+    for ( typename std::vector<csmp::Node<dim>*>::const_iterator  
           nit=eptr->NodesBegin(); nit!=eptr->NodesEnd(); nit++ )
       {
          pair<typename set<csmp::Node<dim>*>::iterator,bool>  np(node_ptrs_.insert(*nit));

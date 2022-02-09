@@ -319,6 +319,11 @@ Removes named Region object and its elements and nodes.
 
 @attention to delete underlying elements, the MeshManager had to be called upon.
 
+@attention this call in itself is not enough to remove the elements defining a regiion, but its perimeter elements need to be disconnected from their
+neighbors and deleted. These tasks are done by the MeshManager:
+
+Mesh().DetachOutsideNeighborsAlongPerimeter(  ModelSubdomain&  );
+
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName )
@@ -336,10 +341,12 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName 
     iterUniqueRegion( uniqueGroupMap_.find( string( regionName ) ) );
 
   // if the region was found in the respective map, it is erased
-  if ( iterRegion != groupMap_.end() )
-    groupMap_.erase( std::string( regionName ) );
-  if ( iterUniqueRegion != uniqueGroupMap_.end() )
-    uniqueGroupMap_.erase( std::string( regionName ) );
+  if ( iterRegion != groupMap_.end() ) {
+       groupMap_.erase( std::string( regionName ) );
+    }
+  if ( iterUniqueRegion != uniqueGroupMap_.end() ) {
+       uniqueGroupMap_.erase( std::string( regionName ) );
+    }
 
 } // end RemoveRegion
 

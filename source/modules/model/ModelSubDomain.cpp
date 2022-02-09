@@ -2,7 +2,7 @@
  *  ModelSubDomain.cpp
  *
  *  Created by Stephan Matthai on 7/18/10.
- *  Copyright 2010 SKM private. All rights reserved.
+ *  Copyright 2010 SKM. All rights reserved.
  *
  */
 #include <type_traits>

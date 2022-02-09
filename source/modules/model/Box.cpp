@@ -159,6 +159,9 @@ bool isBACK( BOX_BOUNDARY bd )
 
 
 
+/**
+   Parses the BOX_BOUNDARY identifier (see Box.h). If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative.
+*/
 BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
 {
   if ( i == 0 )                 return NOT;
@@ -191,12 +194,18 @@ BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
   if ( i == FRONT_LEFT )      return EDGE12;
   if ( i == REGION_BOUNDARY ) return INTERNAL;
   if ( i == MULTIPLE_BOUNDARIES ) return MULTIPLE;
+  if ( i < 0 ) return IRREGULAR;
 
   //cout <<"\nintToSG_BOUNDARY(int): unable to parse integer: "<< i << endl;
-  return MULTIPLE;
+  return NOT;
 }
 
 
+
+
+/**
+   Parses the BOX_BOUNDARY identifier (see Box.h). If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative.
+*/
 std::string  parseBoundary( BOX_BOUNDARY i )
 {
   if ( i == NOT )      return string( "NOT" );
@@ -229,9 +238,10 @@ std::string  parseBoundary( BOX_BOUNDARY i )
   if ( i == EDGE12 )   return string( "EDGE12" );
   if ( i == INTERNAL ) return string( "INTERNAL" );
   if ( i == MULTIPLE ) return string( "MULTIPLE" );
+  if ( i < 0 ) return string( "IRREGULAR" );
 
 //  cerr << "\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: " << i << endl;
-  return string( "UNDEFINED" );
+  return string( "NOT" );
 }
 
 

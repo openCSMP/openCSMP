@@ -212,21 +212,21 @@ class LocalVariableStorage {
 #endif
 
   public:
-    struct Data
-      {
+    struct Data {
         typedef std::vector<VARIABLE_FLAG> FlagContainer; 
-        typedef std::vector<double>      DataContainer;
-
+        typedef std::vector<double>        DataContainer;
         FlagContainer flags;
         DataContainer data;
 #ifdef NDEBUG
         Data() : flags(0U), data(0U) {}
         Data( const Data& d ) : flags( d.flags ), data( d.data ) {}
+        Data( Data&& d ) : flags( std::move(d.flags) ), data( std::move(d.data) ) {}
         Data& operator=( const Data& d )
           { if ( &d != this ) 
              { flags = d.flags; data = d.data; }
           return *this; }
-#else // a lot more information is kept in storage to allow debugging
+        Data& operator=( Data&& ) = default;
+#else // debugging: a lot more information is kept in storage
         size_t  scalars,            ///< scalar variables stored at the site this policy is associated with
                 vectors,            ///< vector variables at this site
                 tensors,            ///< tensor variables at this site
@@ -275,12 +275,14 @@ class LocalVariableStorage {
              }
             return *this;
          }
-#endif
+#endif /* debugging of Data */
       };
 
-    /// copys supplied data into storage
+    /// copy or move supplied data into storage
     void LVS( const Data& data ) { data_ = data; }
-    /// returns a copy of the data container for operations
+    void LVS( Data&& data ) { data_ = std::move(data); }
+    
+    /// return copy of the data container for misc operations
     const Data LVS() const { return data_; }
   
   private:

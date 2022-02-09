@@ -91,8 +91,9 @@ struct Index {
     Index( VARIABLE_TYPE, PLACEMENT, size_t idx );
   
     Index( VARIABLE_TYPE, PLACEMENT, size_t idx, size_t dataDepth, size_t flagDepth, size_t dataOffset, size_t flagOffset, 
-           const LocalVariables&, const IntegrationPointVariables& = IntegrationPointVariables(), size_t offsetFactorSimplex = 0,
-           size_t offsetFactorSector = 0, size_t ipFactorSimplex = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 );
+           const LocalVariables&, const IntegrationPointVariables& = IntegrationPointVariables(),
+           size_t offsetFactorObject = 0, size_t offsetFactorSector = 0,
+           size_t ipFactorObject = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 );
   
     Index( const csmp::Index& );
     Index( csmp::Index&& );
@@ -140,12 +141,13 @@ struct INDEX : public Index {
 
    /// compile time construction of index to be used in factory implementations
    INDEX( size_t idx, size_t dataDepth, size_t flagDepth, size_t dataOffset, size_t flagOffset,
-          const LocalVariables& localVariables, const IntegrationPointVariables& integrationPointVariables, size_t offsetFactorElement,
-          size_t offsetFactorSector, size_t ipFactorSimplex, size_t ipFactorSector, size_t ipFactorFacet )
-    : Index( ty, pl, idx, dataDepth, flagDepth, dataOffset,
-             flagOffset, offsetFactorSimplex, offsetFactorSector,
-             ipFactorSimplex, ipFactorSector, ipFactorFacet,
-             localVariables, integrationPointVariables, indexTracker(nullptr) ) {}
+          const LocalVariables& localVariables, const IntegrationPointVariables& integrationPointVariables,
+          size_t offsetFactorObject = 0, size_t offsetFactorSector = 0,
+          size_t ipFactorObject = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 )
+    : Index( ty, pl, idx, dataDepth, flagDepth, dataOffset, flagOffset,
+             localVariables, integrationPointVariables,
+             offsetFactorObject, offsetFactorSector,
+             ipFactorObject, ipFactorSector, ipFactorFacet ) {}
   
    explicit INDEX( ) : Index() {}
    explicit INDEX( size_t i ) : Index(ty,pl,i) {}

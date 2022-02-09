@@ -4,6 +4,7 @@
 #include "PropertyDatabase.h"
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
+#include "ModelSubDomain.h"
 #include "VSet.h"
 #include "ErrorHandler.h"
 #include "PropertyData.h"
@@ -302,7 +303,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
           for ( size_t j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
-          nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, NOT ) );
+          nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, static_cast<BOX_BOUNDARY>(vset.BFlag(idx)) ) );
         }
     }
 
@@ -621,13 +622,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   // ---------------------------------------------------------------------
   // 5. Flagging nodes at model boundary with BOX_BOUNDARY flags
   // ---------------------------------------------------------------------
-  if ( csmp_error.Verbose() )
-    cout << "\nMeshManager<" << dim << ">::Initialize: flagging boundary objects..." << endl;
-  if ( vset.BFlags() > 0 ) {
-       // nodes were initially constructed as not located at the model boundary
-       for ( auto& nit : nodes_ )
-         nit.AtBoundary( static_cast<BOX_BOUNDARY>(vset.BFlag(nit.Idx())) );
-    }
+  // NB: the node flags were already assigned further above where the nodes were created!
     
     
   // ------------------------------------------------------------------------------
@@ -695,7 +690,11 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        node_manifold_manager_ = new NodeManifoldManager( indexes, nodes_ );
      }
 
+   return true;
+  
+} // end Initialise
 
+/*
 #ifdef MESH_MANAGER_DEBUG
 integrityCheck<dim,Element>( ElementsBegin(), ElementsEnd() );
 if ( Faces() > 0 )
@@ -705,12 +704,7 @@ if ( InterFaces() > 0 ) {
      // add test for node manifolds
   }
 #endif
-
-   return true;
-  
-} // end Initialise
-
-
+*/
 
 
 
@@ -1490,10 +1484,13 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      cout <<") deleting "<< n_faces_to_build <<" elements...\n";
      while ( erase_it != last )
        {
+          // null the element in the parent arrays of its nodes
+          for ( size_t i{0}; i<(*erase_it)->Nodes(); ++i )
+            (*erase_it)->N(i)->Unassign( (*erase_it) );
           // get element pointer for colony
           auto colony_it = elements_.get_iterator( *erase_it );
-          // set the supplied element pointer to null
-          (*erase_it)    = nullptr;
+          // set the supplied element pointer to null TODO: this needs to be communicated to pointers of input regions?
+          (*erase_it) = nullptr;
           // delete the element
           elements_.erase( colony_it );
           // increment iterator
@@ -1508,6 +1505,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      
      // 3. cleaning up the node to parent connectivity
      // ----------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
      for ( auto& nit : nodes_ ) {
           nit.EraseNullPointerParents(); // element parents
           nit.UpdateNeighbors();         // node neighbors
@@ -1533,6 +1531,49 @@ if ( InterFaces() > 0 ) {
   }
 #endif
 */
+
+
+
+
+
+/**
+      Set pointers of elements surrounding the region which point to cells within the region to 'nullptr' so that these will not be accidentiall used
+      after the subdomain was deleted.
+*/
+template<size_t dim>
+template<template<size_t> class CELL>
+size_t MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& subdomain )
+ {
+    size_t n_detachments{0};
+    const size_t n_cells{ subdomain.Elements() };
+    for ( size_t i=subdomain.InteriorElements(); i < n_cells; ++i ) {
+         const size_t n_perim_faces{ subdomain.PerimeterFaces(i) };
+         for ( size_t j{0}; j < n_perim_faces; ++j ) {
+              size_t p_face = subdomain.PerimeterFace( i, j );
+              // detaching outside neighbor, if any
+              if ( subdomain.E(i)->Neighbor(p_face) != nullptr ) {
+                   const size_t n_nbor_nbors{ subdomain.E(i)->Neighbor(p_face)->Neighbors() };
+                   for ( size_t k{0}; k<n_nbor_nbors; ++k )
+                     if ( subdomain.E(i)->Neighbor(p_face)->Neighbor(k) == subdomain.E(i) ) {
+                          // detach subdomain cell
+                          subdomain.E(i)->Neighbor(p_face)->Neighbor(k)->Unassign( subdomain.E(i) );
+                          n_detachments++;
+                       }
+                }
+           }
+      }
+      
+   return n_detachments;
+  
+ } // end DetachOutsideNeighborsAlongPerimeter
+  
+template size_t MeshManager<1>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<1,Element>& );
+template size_t MeshManager<2>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<2,Element>& );
+template size_t MeshManager<3>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<3,Element>& );
+
+template size_t MeshManager<1>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<1,Face>& );
+template size_t MeshManager<2>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<2,Face>& );
+template size_t MeshManager<3>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<3,Face>& );
 
 
 

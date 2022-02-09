@@ -232,8 +232,10 @@ bool Colony_Test::TestColonyWith_Element2()
   eptr[2] = &( *elmt_colony.insert( e2 ) );
   eptr[3] = &( *elmt_colony.insert( e3 ) );
   eptr[4] = &( *elmt_colony.insert( e4 ) );
-  if ( verbose_ ) cout <<"\nTestColonyWith_Element2: initial elements.\n";
-  for ( auto i : elmt_colony ) i.Out();
+  if ( verbose_ ) {
+       cout <<"\nTestColonyWith_Element2: initial elements.\n";
+       for ( auto i : elmt_colony ) i.Out();
+    }
   
   // copy construction of some more colonies
   plf::colony< Element<2> >  elmt_colony2( elmt_colony ), elmt_colony3( elmt_colony );
@@ -265,8 +267,10 @@ bool Colony_Test::TestColonyWith_Element2()
   elmt_colony.insert( e3 );
   elmt_colony.insert( e4 );
   
-  if ( verbose_ ) cout <<"\nTestColonyWith_Element2: rebuild colony with all original elements.\n";
-  for ( auto i : elmt_colony ) i.Out();
+  if ( verbose_ ) {
+      cout <<"\nTestColonyWith_Element2: rebuilt colony with all original elements.\n";
+      for ( auto i : elmt_colony ) i.Out();
+    }
   
   return true;
 

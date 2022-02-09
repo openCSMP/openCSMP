@@ -174,10 +174,65 @@ void Element_Test::MoveSemanticsTest()
   _test( e0_move_assigned.Neighbor(2) == &e4 );
   _test( e0_move_assigned.Neighbor(3) == nullptr );
 
-  
  } // end MoveSemanticsTest
 
-  
+
+
+/**
+    Create a fully-constructed element, including variable storage and ascertaining
+    that variables cannot be written to when a constant iterator is used.
+*/
+void Element_Test::VariableAccessAndIterators()
+ {
+    // making sure that everything is like in a simulation
+    const LocalVariables evars( 1, // scalarsVars,
+                                2, // vectorVars,
+                                1, // tensorVars,
+                                0, // array_count,
+                                0, // array_length,
+                                0, // flag_array_count,
+                                0, // flag_array_length,
+                                9, // total_data_depth,
+                                6 ); // total_flag_depth
+                                
+    const IntegrationPointVariables ivars;
+
+  // Element<dim>( elmt_idx, fem, stencil, evars, cvars, mtrl_idx );
+    FiniteVolumeStencil<2>  quad_fv( "ISOPARAMETRIC_LINEAR_QUADRILATERAL" );
+   
+      // creating some elements
+    IsoparametricLinearQuadrilateral fe_q(2U);
+    int32_t                          mtrl_idx{0};
+    // this is the constructor used by the MeshManager
+    csmp::Element<2U>  quad( 0, &fe_q, &quad_fv, evars, ivars, mtrl_idx );
+   
+    // Nodes - constructor: Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
+    csmp::Node<2U> n0( 0, Point<2>(0.,0.), evars, CNR1 ),
+                   n1( 1, Point<2>(0.,0.), evars, CNR2 ),
+                   n2( 2, Point<2>(0.,0.), evars, CNR3 ),
+                   n3( 3, Point<2>(0.,0.), evars, CNR4 );
+    
+    // assigning the nodes
+    quad.Assign( 0, &n0 );
+    quad.Assign( 1, &n1 );
+    quad.Assign( 2, &n2 );
+    quad.Assign( 3, &n3 );
+    
+    // testing write access to node variable (should not be OK)
+    /*
+    csmp::Index               var_key;
+    const csmp::Element<2U>&  quad_ref = quad;
+    
+    for ( vector<const csmp::Node<2>*>::const_iterator
+          nit=quad_ref.NodesBegin(); nit!=quad_ref.NodesEnd(); nit++  ) {
+          double var = (*nit)->Read( var_key );
+          (*nit)->Store( var_key, makeScalar(ANY,3.) ); // should not compile
+      }
+    */
+} // end VariableAccessAndIterators
+
+
+
   
 void Element_Test::ElementLengthTest2D()
 {
@@ -190,7 +245,6 @@ void Element_Test::ElementLengthTest2D()
   n3.x(5.37741); n3.y(-4.71625);
   n4.x(5.90634); n4.y(4.27548);
     
-  
   e.Idx( 1 );
   e.Assign( 0, &n1 );
   e.Assign( 1, &n2 );
@@ -244,7 +298,8 @@ void Element_Test::ElementLengthTest2D()
   fLength = e.LengthInDirection(direction);
   if ( verbose_ ) std:: cout << "\nLength: " << fLength << std::endl;
   _equal(fLength, 13.311, fTolerance);
-}
+  
+} // end ElementLengthTest2D
   
   
   
