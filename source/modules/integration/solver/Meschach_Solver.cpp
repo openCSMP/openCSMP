@@ -89,8 +89,7 @@ double Meschach_Solver::GuessResidual(const SparseMatrix& A,
     const size_t   len(b.size());
     vector<double> tvec(len,0.);
 
-    random_generator rng;
-    vector_randomize( rng, x );
+    vector_randomize( x );
     
     // calculating residual for potential solution
     for ( size_t i=0; i<len; i++ ) {

@@ -1840,8 +1840,8 @@ size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<
     Removes those element pointers from the region which match the ones in the supplied range.
 */
 template<size_t dim>
-size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>* const>::iterator begin,
-                                 typename vector<csmp::Element<dim>* const>::iterator end )
+size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>*>::iterator begin,
+                                 typename vector<csmp::Element<dim>*>::iterator end )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

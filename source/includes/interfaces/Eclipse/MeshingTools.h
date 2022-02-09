@@ -5,7 +5,7 @@
 #include "CSMP_ElementSpecifications.h"
 #include "Point.h"
 #include "PolygonGrid.h"
-#include "GeometricCalculations.h"
+#include "geometricCalculations.h"
 
 
 /**

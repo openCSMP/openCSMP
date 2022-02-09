@@ -141,7 +141,7 @@ struct INDEX : public Index {
 
    /// compile time construction of index to be used in factory implementations
    INDEX( size_t idx, size_t dataDepth, size_t flagDepth, size_t dataOffset, size_t flagOffset,
-          const LocalVariables& localVariables, const IntegrationPointVariables& integrationPointVariables,
+          const LocalVariables&, const IntegrationPointVariables&,
           size_t offsetFactorObject = 0, size_t offsetFactorSector = 0,
           size_t ipFactorObject = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 )
     : Index( ty, pl, idx, dataDepth, flagDepth, dataOffset, flagOffset,

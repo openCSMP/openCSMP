@@ -38,13 +38,13 @@ IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim
    const bool mult_with_dt(true);
    
    mat_operators_.insert( make_pair( Operation("PoreVolumeLHS",csmp::ADD,1,mult_with_dt), 
-                                     new PoreVolumeLHS<dim>(Notation.key_SPV,Notation.key_FVPV)) );
+                                     new PoreVolumeLHS<dim>(Notation.key_sPV,Notation.key_FVPV)) );
                                      
    mat_operators_.insert( make_pair( Operation("UpwindFluxLHS",csmp::ADD,1,false), 
                                      new UpwindFluxLHS<dim>(Notation.key_ff)) );
                                      
    vec_operators_.insert( make_pair( Operation("PoreVolumeRHS",csmp::ADD,1,mult_with_dt), 
-                                     new PoreVolumeRHS<dim>(Notation.key_SPV,Notation.key_FVPV,Notation.key_C1)) );
+                                     new PoreVolumeRHS<dim>(Notation.key_sPV,Notation.key_FVPV,Notation.key_C1)) );
 
    vec_operators_.insert( make_pair( Operation("SourceTermRHS",csmp::ADD,2,false), 
                                      new SourceTermRHS<dim>( Notation.key_QV,
@@ -89,13 +89,13 @@ IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim
                    const bool mult_with_dt(true);
                    // upstream weighted first-order space-time fluxes
                    mat_operators_.insert( make_pair( Operation("PoreVolumeLHS",csmp::ADD,1,mult_with_dt), 
-                                                     new PoreVolumeLHS<dim>(Notation.key_SPV,Notation.key_FVPV)) );
+                                                     new PoreVolumeLHS<dim>(Notation.key_sPV,Notation.key_FVPV)) );
                                                      
                    mat_operators_.insert( make_pair( Operation("UpwindFluxLHS",csmp::ADD,1,false), 
                                                      new UpwindFluxLHS<dim>(Notation.key_ff)) );
                                                      
                    vec_operators_.insert( make_pair( Operation("PoreVolumeRHS",csmp::ADD,1,mult_with_dt), 
-                                                     new PoreVolumeRHS<dim>(Notation.key_SPV,Notation.key_FVPV,Notation.key_C1)) );
+                                                     new PoreVolumeRHS<dim>(Notation.key_sPV,Notation.key_FVPV,Notation.key_C1)) );
                 }
               break;
             case FE_DIFFUSION:
@@ -113,10 +113,10 @@ IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim
               break;
             case COMPRESSIBILITY:
                  mat_operators_.insert( make_pair( Operation("FluidCompressibilitySourceLHS",csmp::ADD,2,false), 
-                                                   new FluidCompressibilitySourceLHS<dim>( Notation.key_SPV,
+                                                   new FluidCompressibilitySourceLHS<dim>( Notation.key_sPV,
                                                                                            Notation.key_PHI,
-                                                                                           Notation.key_CT,
-                                                                                           Notation.key_PF0,
+                                                                                           Notation.key_ct,
+                                                                                           Notation.key_pf0,
                                                                                            Notation.key_PF,
                                                                                            true /* interpolate_pf_to_sector_ip */ )) );
               break;

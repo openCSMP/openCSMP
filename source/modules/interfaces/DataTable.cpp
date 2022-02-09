@@ -8,6 +8,8 @@
 
 #include "DataTable.h"
 #include "Exception.h"
+#include <cassert>
+#include <cstring>
 #include <limits>
 #include <fstream>
 #include <ostream>
