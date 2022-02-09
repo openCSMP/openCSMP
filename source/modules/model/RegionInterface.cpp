@@ -2375,7 +2375,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
     This version removes the pointers to the supplied elements from the target region.
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region, const set<Element<dim>* const>& elmt_set )
+bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region, const set<Element<dim>*>& elmt_set )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

@@ -252,30 +252,34 @@ const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() 
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
  { return node_vec_.begin(); }
 
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
  { return elmt_vec_.begin(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
  { return elmt_vec_.end(); }
 
 template<size_t dim, template<size_t> class CELL>
-typename std::vector<const CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
   { return std::next( elmt_vec_.begin(), InteriorElements() ); }
    
+
+
+// non-const forms
+
 template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::NodesBegin()
  { return node_vec_.begin(); }
@@ -289,8 +293,6 @@ template<size_t dim, template<size_t> class CELL>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin()
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
-
-// const forms
 
 template<size_t dim, template<size_t> class CELL>
 typename std::vector<CELL<dim>*>::iterator  ModelSubDomain<dim,CELL>::ElementsBegin()
@@ -5037,8 +5039,8 @@ void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename
     @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
 */
 template<size_t dim, template<size_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<const csmp::Node<dim>*>::const_iterator start,
-                                                       typename vector<const csmp::Node<dim>*>::const_iterator end ) const
+size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<csmp::Node<dim>*>::const_iterator start,
+                                                       typename vector<csmp::Node<dim>*>::const_iterator end ) const
  {
     if ( start == end ) return 0U;
  
