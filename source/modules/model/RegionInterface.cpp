@@ -2391,8 +2391,8 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
     }
 
   // finding the elements that are shared among the 2 regions
-  csmp::Region<dim>&   subdomain( Region(region) );
-  vector<Element<dim>* const> elmts_to_remove( elmt_set.begin(), elmt_set.end() );
+  csmp::Region<dim>&    subdomain( Region(region) );
+  vector<Element<dim>*> elmts_to_remove( elmt_set.begin(), elmt_set.end() );
   
   const size_t elmts_removed = subdomain.RemoveRange( elmts_to_remove.begin(), elmts_to_remove.end() );
   
