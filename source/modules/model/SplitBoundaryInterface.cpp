@@ -651,7 +651,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
  {
    SPLITBOUNDARY_COMPLEX<dim>*  splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
    
-   pair<string,bool> result = splitboundaryComplex->BoundaryInterface::CreateBoundaryBetween( region1, region2 );
+   pair<string,bool> result = splitboundaryComplex->BoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateBoundaryBetween( region1, region2 );
    
    return CreateSplitBoundaryFrom( splitboundaryComplex->Boundary(result.first) );
 

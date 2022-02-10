@@ -1437,7 +1437,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
     const csmp::Region<dim>&  gref1(boundaryComplex->Region(group1));
     const csmp::Region<dim>&  gref2(boundaryComplex->Region(group2));
    
-    string boundary_name = FindBoundaryName( set{string{group1},string{group2}} );
+    string boundary_name = FindBoundaryName( set<string>{string{group1},string{group2}} );
 
     // attempt to create a (Face-based) boundary, appending numbers as necessary
     pair<typename map<string,csmp::Boundary<dim> >::iterator,bool>

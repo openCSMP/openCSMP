@@ -215,12 +215,12 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${MODULES_DIR}/run_control
     ${MODULES_DIR}/thmc
     ${MODULES_DIR}/utilities
-    ${CMAKE_SOURCE_DIR}/lib/catch/include
     ${CMAKE_SOURCE_DIR}/thirdparty/iaps_h2o_eos
     ${CMAKE_SOURCE_DIR}/thirdparty/meschach/source
     ${CMAKE_SOURCE_DIR}/thirdparty/jpeg
     ${CMAKE_SOURCE_DIR}/thirdparty/samg
     ${CMAKE_SOURCE_DIR}/thirdparty/plf_colony
+    ${CMAKE_SOURCE_DIR}/thirdparty/catch2
     ${CMAKE_SOURCE_DIR}/examples/source
 )
 

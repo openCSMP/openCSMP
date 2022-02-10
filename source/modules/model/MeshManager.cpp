@@ -687,7 +687,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
    if ( !interfaces_.empty() ) {
        VData::vertexManifoldIndices  indexes;
        vset.ExtractNodeManifolds( indexes );
-       node_manifold_manager_ = new NodeManifoldManager( indexes, nodes_ );
+       node_manifold_manager_ = new NodeManifoldManager<dim>( indexes, nodes_ );
      }
 
    return true;
@@ -1888,7 +1888,7 @@ void MeshManager<3>::BuildVolumeConnectivity( typename std::vector<CELL<3U>*>::i
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<Element<3>*,size_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2022,7 +2022,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<2>*,size_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2112,7 +2112,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<dim>*,size_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2178,7 +2178,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                 const size_t n_faces{ (*first)->Faces() };
                 for ( size_t face{0}; face < n_faces; ++face ) {
                      // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<1>*,size_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2270,7 +2270,7 @@ void MeshManager<dim>::UpdateConnectivity()
         const auto nodes_end{it.NodesEnd()};
         for ( auto nit = it.NodesBegin(); nit != nodes_end; ++nit ) {
              pair<typename map<Node<dim>*,set<Element<dim>*> >::iterator,bool>
-               mit = parent_elmts_per_node.insert( make_pair( (*nit), set{ &it } ) );
+               mit = parent_elmts_per_node.insert( make_pair( (*nit), set<Element<dim>*>{ &it } ) );
              if ( mit.second == false )
                (*mit.first).second.insert( &it );
           }

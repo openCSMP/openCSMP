@@ -143,17 +143,17 @@ class ModelSubDomain {
     typename std::vector<CELL<dim>*>::iterator           PerimeterElementsBegin();
     typename std::vector<CELL<dim>*>::iterator           ElementsEnd();
 
-    // const iterators (pointer and object that is pointed to cannot be modified)
-    typename std::vector<const csmp::Node<dim>*>::const_iterator  NodesBegin() const;
-    typename std::vector<const csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
-    typename std::vector<const csmp::Node<dim>*>::const_iterator  NodesEnd() const;
-    typename std::vector<const CELL<dim>*>::const_iterator  ElementsBegin() const;
-    typename std::vector<const CELL<dim>*>::const_iterator  PerimeterElementsBegin() const;
-    typename std::vector<const CELL<dim>*>::const_iterator  ElementsEnd() const;
+    // const iterators
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
+    typename std::vector<CELL<dim>*>::const_iterator  ElementsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator  PerimeterElementsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator  ElementsEnd() const;
 
     /// returns the nodes that the region shares with the given range
-    size_t SharedPerimeterNodes( typename std::vector<const csmp::Node<dim>*>::const_iterator start,
-                                 typename std::vector<const csmp::Node<dim>*>::const_iterator end ) const;
+    size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
+                                 typename std::vector<csmp::Node<dim>*>::const_iterator end ) const;
 
     /// check whether subdomain conatains any elements
     bool              Empty() const;

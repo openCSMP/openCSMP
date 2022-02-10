@@ -204,7 +204,7 @@ class RegionInterface {
     bool    RemoveFromRegion( const char* region, const char* region_to_subtract );
 
     /// removes the elements shared with the supplied set from the region
-    bool    RemoveFromRegion( const char* region, const std::set<Element<dim>* const>& elmt_set );
+    bool    RemoveFromRegion( const char* region, const std::set<Element<dim>*>& elmt_set );
 
     /// moves region to from the unique- to the non-unique regions map
     bool    MoveToNonUniqueRegions( const char* unique_region );
