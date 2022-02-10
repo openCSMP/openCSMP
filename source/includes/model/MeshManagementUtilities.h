@@ -60,7 +60,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 template<size_t dim, template<size_t> class CELL>
 size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::const_iterator begin,
                                              typename std::vector<CELL<dim>*>::const_iterator end,
-                                             std::map<Element<dim>*,MeshPatchAttributes>& );
+                                             std::map<CELL<dim>*,MeshPatchAttributes>& ); 
 
 
 // DIAGNOSTICS
@@ -68,10 +68,6 @@ size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::c
 /// determines whether mesh in model is built from finite elements with a local coordinate system
 template<size_t dim>
 bool isoparametricElementMesh( const Model<dim>& );
-
-/// checks region for whether it contains elements of the same dimensionality
-template<size_t dim>
-bool containsElementsOfType( const Region<dim>&, ELEMENT_DIMENSION );
 
 /// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
 template<size_t dim>
@@ -151,6 +147,7 @@ void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Ele
 
 /// by comparison of node locations, finds overlapping cells and reports them
 bool findCollocatedCells(); // TODO: not implemented yet
+
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
 template<size_t dim>
 std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
@@ -169,7 +166,7 @@ bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double toleranc
 /// detects whether the point is contained in any of the elements of the region
 csmp::Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query );
 
-/// detect degenerate elements by using the node coordinates to check whether some nodes have the same location 
+/// detect degenerate elements by using the node coordinates to check whether some nodes have the same location
 template<size_t dim>
 size_t collocatedNodes( const Element<dim>* const );
 

@@ -1061,7 +1061,7 @@ void  FiniteElement::Out() const
 /**
       Ordered in sequence of most common queries to speed up
 */
-ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
+CELL_SHAPE  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
   {
      if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return SURFACE;
      if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return SURFACE;
@@ -1110,7 +1110,7 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
      if ( etype == CUBIC_TETRAHEDRON ) return VOLUME;
 
      cerr <<"\nparseFiniteElementDimension: Could not identify dimension of element type: "<< etype << endl;
-     return static_cast<ELEMENT_DIMENSION>(0);
+     return static_cast<CELL_SHAPE>(UNSPECIFIED);
 
  } // end parseFiniteElementDimension
 

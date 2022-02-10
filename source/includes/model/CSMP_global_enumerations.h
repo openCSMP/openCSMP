@@ -88,6 +88,8 @@ enum PLACEMENT : std::int8_t { UNDEFINED, // default
                                NODE
                             };
 
+/// to classify 
+enum CELL_SHAPE : std::int8_t { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
 
 /// Side of lower-dimensional face or interface between two higher-dimensional elements ( INSIDE or OUTSIDE ) and a potential lower-dimensional parent element ( MIDDLE )
 enum INTERFACE_SIDE : std::int8_t

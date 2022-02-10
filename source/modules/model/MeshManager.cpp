@@ -1400,6 +1400,12 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
    replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
    
       the Node flags of the Element are used to determine whether this is a boundary face
+      
+     @note RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
+     @code
+     elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+     @endcode
+
 */
 template<size_t dim>
 vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyDatabase<dim>& pref,
@@ -1537,8 +1543,12 @@ if ( InterFaces() > 0 ) {
 
 
 /**
-      Set pointers of elements surrounding the region which point to cells within the region to 'nullptr' so that these will not be accidentiall used
+      Sets neighbor pointers of cells surrounding the domain to 'nullptr' if they were pointing to cells within the domain.
+      
+      The intention of this method is to avoid that these pointers wil accidentially be derefefenced causing crashes
       after the subdomain was deleted.
+      
+      SKM 9/2/2022
 */
 template<size_t dim>
 template<template<size_t> class CELL>

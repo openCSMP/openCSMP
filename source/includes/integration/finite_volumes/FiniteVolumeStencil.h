@@ -151,7 +151,7 @@ class FiniteVolumeStencil {
     const std::string& ParentElement() const { return parent_element_; }
 
     /// reports whether the parent element of the stencil is a line, surface or volume
-    ELEMENT_DIMENSION  Geometry() const;
+    CELL_SHAPE  Geometry() const;
 
     /// returns the data (private members) stored in this finite volume stencil
     void  Out() const;
@@ -178,7 +178,7 @@ class FiniteVolumeStencil {
     ///< for each sector, for each sector edge, the indices of the end points
     std::vector<std::vector<std::pair<size_t,size_t> > >  sector_edges_;   
     std::string                             parent_element_;              ///< name of parent finite element
-    ELEMENT_DIMENSION                       space_dimension_;             ///< line, surface, or volumetric parent element
+    CELL_SHAPE                              space_dimension_;             ///< line, surface, or volumetric parent element
     
     friend class FiniteVolumeStencilManager<dim>;
 };

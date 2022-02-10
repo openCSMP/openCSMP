@@ -322,11 +322,10 @@ pair<int32_t,int32_t>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
     bool with_surface_elements(false);
     bool with_line_elements(false);
 
-    for( typename vector<CELL<dim>*>::const_iterator
-         it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
-         if      ( (*it)->IsLineElement() )    with_line_elements = true;
-         else if ( (*it)->IsSurfaceElement() ) with_surface_elements = true;
-         else if ( (*it)->IsVolumeElement() )  with_volume_elements = true;
+    for( const auto& it : elmt_vec_ ) {
+         if      ( it->IsLineElement() )    with_line_elements = true;
+         else if ( it->IsSurfaceElement() ) with_surface_elements = true;
+         else if ( it->IsVolumeElement() )  with_volume_elements = true;
       }
 
     int32_t counter(0);
@@ -343,6 +342,16 @@ pair<int32_t,int32_t>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
 
 
 
+
+template<size_t dim, template<size_t> class CELL>
+pair<CELL_SHAPE,bool>  ModelSubDomain<dim,CELL>::SingleCellTypeDomain() const
+ {
+    const auto cell_dim = SpatialDimensions();
+    const bool single_elmt_domain = ( cell_dim.first == 1 ) ? true : false;
+    const CELL_SHAPE shape = cell_dim.second;
+    
+    return make_pair( shape, single_elmt_domain );
+ }
 
 
 

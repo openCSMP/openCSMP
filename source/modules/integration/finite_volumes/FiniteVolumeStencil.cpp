@@ -181,7 +181,7 @@ void FiniteVolumeStencil<dim>::Resize( size_t n_isrf,
     finite element.
 */
 template<size_t dim>
-ELEMENT_DIMENSION FiniteVolumeStencil<dim>::Geometry() const
+CELL_SHAPE FiniteVolumeStencil<dim>::Geometry() const
  {
     return space_dimension_;
  }

@@ -192,6 +192,9 @@ class ModelSubDomain {
     // geometry
     // ----------------------------------------
 
+    /// if the model subdomain consists of a single element type this method returns true and tells whether these are volumes, surfaces or lines
+    std::pair<CELL_SHAPE,bool>  SingleCellTypeDomain() const;
+
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in subdomain
     std::pair<int32_t,int32_t>  SpatialDimensions() const;
 

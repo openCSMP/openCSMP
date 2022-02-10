@@ -75,9 +75,6 @@ enum CSMP_FEM_TYPE : std::int8_t { UNKNOWN,
                     EXPERIMENTAL_ELEMENT,
 };
 
-enum ELEMENT_DIMENSION : std::int8_t { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
-
-
 enum FV_FACET_TYPE : std::int8_t {
         POINT_FACET,
         UNIT_LINEAR_FACET,
@@ -97,13 +94,13 @@ bool isQuadrilateral( CSMP_FEM_TYPE );
 bool isTetrahedral( CSMP_FEM_TYPE );
 bool isHexahedral( CSMP_FEM_TYPE );
 
-ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE );
-CSMP_FEM_TYPE      parseFiniteElementTypeEnum( int8_t csp_etype );
-CSMP_FEM_TYPE      parseFiniteElementType( const std::string& etype );
-const char*        parseFiniteElementType( int8_t etype );
-const char*        parseAbbreviated_FE_Type( int8_t etype );
-FV_FACET_TYPE      parseFacetType( const std::string& ftype );
-const char*        parseFacetType( int8_t ftype );
+CELL_SHAPE      parseFiniteElementDimension( CSMP_FEM_TYPE );
+CSMP_FEM_TYPE   parseFiniteElementTypeEnum( int8_t csp_etype );
+CSMP_FEM_TYPE   parseFiniteElementType( const std::string& etype );
+const char*     parseFiniteElementType( int8_t etype );
+const char*     parseAbbreviated_FE_Type( int8_t etype );
+FV_FACET_TYPE   parseFacetType( const std::string& ftype );
+const char*     parseFacetType( int8_t ftype );
 
 /// returns UNKNOWN if more information is required
 CSMP_FEM_TYPE      finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true );
