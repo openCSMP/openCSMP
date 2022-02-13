@@ -782,7 +782,7 @@ void TPINCFVT3D_VVCase::OutputVTU( Model<3>& model,
   list<string> props;
   props.push_back( "saturation water" );
   props.push_back( "nodal velocity" );
-  vtu.OutputDataToVTU( fileName, "saturation water","Model", static_cast<uint32_t>(time) );
+  vtu.OutputDataToVTU( fileName, "saturation water","Model", static_cast<int32_t>(time) );
 }//OutputVTU
 
 

@@ -67,7 +67,7 @@
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 
-#include "BinaryFileInterface_Test.h"
+//#include "BinaryFileInterface_Test.h"  // alt: missing from repository
 #include "VTU_Interface_Test.h"
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"

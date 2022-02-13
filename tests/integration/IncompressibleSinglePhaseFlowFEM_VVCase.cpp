@@ -139,10 +139,10 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   //------------------------------------
   // VERIFICATION SECTION
   csmp::Index  p_key(model.Database().StorageKey("fluid pressure"));
-  vector<Node<DIM>*>::iterator nodes_end=model.Region("Model").NodesEnd();
-  vector<Node<DIM>*>::iterator nodes_begin=model.Region("Model").NodesBegin();
+  vector<Node<DIM>*>::const_iterator nodes_end=model.Region("Model").NodesEnd();
+  vector<Node<DIM>*>::const_iterator nodes_begin=model.Region("Model").NodesBegin();
   double press;
-  for (vector<Node<DIM>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++)
+  for (vector<Node<DIM>*>::const_iterator npit= nodes_begin; npit!=nodes_end;npit++)
   {
     press=(*npit)->Read(p_key);
     if(verbose_)

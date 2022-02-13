@@ -22,10 +22,10 @@ void ANSYS_Model2D_Test::run()
 
 
     DenseMatrix<DM_MIN> dm;
-    const vector<Element<2>*>::iterator elementsEnd( rref.ElementsEnd() );    
+    const vector<Element<2>*>::const_iterator elementsEnd( rref.ElementsEnd() );    
     try
       {    
-        for( vector<Element<2>*>::iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
+        for( vector<Element<2>*>::const_iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
           (*it)->CoordinateMatrix();
       }
     catch(...)
@@ -39,8 +39,8 @@ void ANSYS_Model2D_Test::run()
     Index nodalKey( model.Database().StorageKey( "nodal variable" ) );
     rref.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 0. ) );
     size_t boundaryNodeCount( 0 );
-    const vector<Node<2>*>::iterator nodesEnd( rref.NodesEnd() );
-    for( vector<Node<2>*>::iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
+    const vector<Node<2>*>::const_iterator nodesEnd( rref.NodesEnd() );
+    for( vector<Node<2>*>::const_iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
       {
         const BOX_BOUNDARY boxBoundary( (*it)->AtBoundary() );
         if( boxBoundary != NOT )

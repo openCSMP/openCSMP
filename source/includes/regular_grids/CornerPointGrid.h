@@ -28,7 +28,7 @@ struct ijk {
 namespace std { // extending standard by template specialisation
 
 /** Hashtable support for ijk */
-template<> struct std::hash<ijk> {
+template<> struct hash<ijk> {
   size_t operator()( const ijk& key ) const
     {
       hash<size_t> h;
