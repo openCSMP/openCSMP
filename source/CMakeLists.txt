@@ -5,11 +5,6 @@ SET(GEN_INCLUDES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_includes")
 FILE(MAKE_DIRECTORY ${GEN_INCLUDES_DIR})
 
 # Preprocessors and generators
-SET_SOURCE_FILES_PROPERTIES(CSMP_number_types_main PROPERTIES GENERATED TRUE)
-ADD_EXECUTABLE(CSMP_number_types_main
-	${CMAKE_CURRENT_SOURCE_DIR}/generate_number_types.cpp
-)
-
 SET_SOURCE_FILES_PROPERTIES(CSMP_variable_set_processor PROPERTIES GENERATED TRUE)
 ADD_EXECUTABLE(CSMP_variable_set_processor
 	variable_set_processor.cpp csv.h
@@ -19,20 +14,6 @@ ADD_EXECUTABLE(CSMP_variable_set_processor
 ADD_CUSTOM_TARGET(GeneratedIncludes)
 SET_SOURCE_FILES_PROPERTIES(GeneratedIncludes PROPERTIES SYMBOLIC TRUE)
 
-# CSMP number types header
-
-SET_SOURCE_FILES_PROPERTIES(CSMP_number_types.h PROPERTIES GENERATED TRUE)
-# SET_SOURCE_FILES_PROPERTIES(GenerateNumberTypes PROPERTIES SYMBOLIC TRUE)
-ADD_CUSTOM_TARGET(GenerateNumberTypes DEPENDS ${GEN_INCLUDES_DIR}/CSMP_number_types.h)
-ADD_CUSTOM_COMMAND(
-    OUTPUT ${GEN_INCLUDES_DIR}/CSMP_number_types.h
-    COMMAND $<TARGET_FILE:CSMP_number_types_main>
-    MAIN_DEPENDENCY CSMP_number_types_main
-    WORKING_DIRECTORY ${GEN_INCLUDES_DIR}
-    COMMENT "Generating CSMP_number_types.h"
-)
-ADD_DEPENDENCIES(GeneratedIncludes GenerateNumberTypes)
-INSTALL(FILES "${GEN_INCLUDES_DIR}/CSMP_number_types.h" DESTINATION include)
 
 
 # Variables
